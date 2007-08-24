@@ -113,20 +113,18 @@ void Simple::CreateRoom ()
 
   room = engine-&gt;CreateSector (&quot;room&quot;);
 
-  // First we make the factory containing our geometry.
+  // First we make a primitive for our geometry.
   using namespace CS::Geometry;
-  csRef&lt;iMeshFactoryWrapper&gt; walls_fact = GeneralMeshBuilder::CreateFactory (
-  	engine, &quot;walls_factory&quot;);
-  csRef&lt;iGeneralFactoryState&gt; fact_state = scfQueryInterface&lt;
-    iGeneralFactoryState&gt; (walls_fact-&gt;GetMeshObjectFactory ());
   DensityTextureMapper mapper (0.3f);
-  GeneralMeshBuilder::TesselatedBox (fact_state, false,
-      csVector3 (-5, 0, -5), csVector3 (5, 20, 5),
-      3, Primitives::CS_PRIMBOX_INSIDE, &amp;mapper);
+  TesselatedBox box (csVector3 (-5, 0, -5), csVector3 (5, 20, 5));
+  box.SetLevel (3);
+  box.SetMapper (&amp;mapper);
+  box.SetFlags (Primitives::CS_PRIMBOX_INSIDE);
 
-  // Now we make a single mesh from that factory.
-  csRef&lt;iMeshWrapper&gt; walls = GeneralMeshBuilder::CreateMesh (engine,
-  	room, &quot;walls&quot;, &quot;walls_factory&quot;);
+  // Now we make a factory and a mesh at once.
+  csRef&lt;iMeshWrapper&gt; walls = GeneralMeshBuilder::CreateFactoryAndMesh (
+      engine, room, &quot;walls&quot;, &quot;walls_factory&quot;, &amp;box);
+
   csRef&lt;iGeneralMeshState&gt; mesh_state = scfQueryInterface&lt;
     iGeneralMeshState&gt; (walls-&gt;GetMeshObject ());
   mesh_state-&gt;SetShadowReceiving (true);
@@ -174,34 +172,42 @@ objects don't contain any geometry. The geometry definition is actually
 contained in the mesh factory. So that's why we first create a factory for
 our walls.
 </p>
-<p>Now, we want to create the six walls of our room. First, we make our genmesh
-factory. Because this is a very common case there is a convenience class
-called <samp>&lsquo;CS::Geometry::GeneralMeshBuilder&rsquo;</samp>. This class has various
-methods for creating genmesh factories and objects and also for generating
-geometry inside the genmeshes. In this example we first create a factory
-using <code>GeneralMeshBuilder::CreateFactory()</code> and then we fill that
-factory with a box that is visible from the inside using
-<code>GeneralMeshBuilder::TesselatedBox()</code>. We use a tesselated box so that
-our lighting is more accurate. If you don't use lightmaps (like in this
-example) then genmeshes are only lit at vertices of the model and lighting
-for the rest of the surface is interpolated. So to get accurate lighting
-you need a model that has sufficient vertices. We use a tesselation
-level so that every face has 16 vertices (3 times 3 quads or eighteen triangles
-for every face). You can increase the value '3' even more to get even better
-lighting resolution but that will increase the number of triangles in the
-model too much and it is not needed in this simple example.
+<p>Now, we want to create the six walls of our room. For this the best object
+to use is the GenMesh object (see section <a href="MeshObject-Genmesh.html#0">Genmesh Mesh Object</a>). With genmeshes
+the geometry is represented in the factory. From that factory you can then
+create multiple meshes. In our case we only need one mesh for the walls (which
+will be a box visible from the inside). So we will create one factory and
+one mesh from that factory.
 </p>
-<p>From that factory we can now make our mesh object which is the object that
-will be actually visible on screen. Note that from one factory you can create
-as many objects as you want. In this case we only need one. To create the
-genmesh object we use <code>GeneralMeshBuilder::CreateMesh()</code>. To make the
-model really usable we now have to set a material on it
-(using <code>SetMaterialWrapper()</code> and we also call
-<code>iGeneralMeshState::SetShadowReceiving(true)</code>. The <samp>&lsquo;iGeneralMeshState&rsquo;</samp>
+<p>There is a <samp>&lsquo;CS::Geometry&rsquo;</samp> namespace where there are several conveniance
+classes to help you build genmeshes. In our case we need a box that is visible
+from the inside. We will use the <samp>&lsquo;TesselatedBox&rsquo;</samp> class for that purpose.
+We use a tesselated box (as opposed to a normal box) so that our lighting is
+more accurate. If you don't use lightmaps (like in this example) then genmeshes
+are only lit at vertices of the model and lighting for the rest of the
+surface is interpolated. So to get accurate lighting you need a model that
+has sufficient vertices. We use a tesselation level so that every face has
+16 vertices (3 times 3 quads or eighteen triangles for every face). You can
+increase the value in the <code>TesselatedBox::SetLevel()</code> call even more to
+get even better lighting resolution but that will increase the number of
+triangles in the model too much and it is not needed in this simple example.
+</p>
+<p>From this primitive we can now create both the factory and the mesh at once
+using the <code>GeneralMeshBuilder::CreateFactoryAndMesh()</code> method. In
+the <samp>&lsquo;GeneralMeshBuilder&rsquo;</samp> class there are other methods that you can use
+to create only factories or meshes but in our case we use the simple method
+of creating both at once. Because we give it a pointer to our tesselated box
+it will immediatelly populate the factory with the triangles and vertices
+required for this box. The <code>CreateFactoryAndMesh()</code> method places the
+object at the origin in the sector (i.e. <samp>&lsquo;0,0,0&rsquo;</samp>). If you want to change
+that you have to use <code>iMeshWrapper::GetMovable()</code>. But in this example
+the origin is fine.
+</p>
+<p>There are only two more things to be done before our object is good for us. First
+we call <code>iGeneralMeshState::SetShadowReceiving(true)</code>. The <samp>&lsquo;iGeneralMeshState&rsquo;</samp>
 interface is the interface containing genmesh specific functions for genmesh
 objects. <samp>&lsquo;iGeneralFactoryState&rsquo;</samp> was the interface for genmesh specific
-functions for factories.
-To get access to these special interfaces we use the function
+functions for factories. To get access to these special interfaces we use the function
 <code>scfQueryInterface&lt;&gt;()</code> which is part of <small>SCF</small> (see section <a href="SCF.html#0">Shared Class Facility (<small>SCF</small>)</a>). This
 will see if the mesh object actually implements <samp>&lsquo;iGeneralMeshState&rsquo;</samp> (which
 should be the case here) and, if so, it will return a pointer to the
@@ -216,6 +222,11 @@ reference to the interface is released once it is no longer needed.
 object will be lit by a more accurate per-vertex method. If we don't use
 this then the genmesh will be lit according to the light that it receives
 at the center of the model.
+</p>
+<p>The last thing we have to do is to set a material to use for this mesh. You can
+set a material both on the factory (in which case all objects that are created
+from this factory will share it) or on the mesh. In this case we set it on the
+mesh by using <code>SetMaterialWrapper()</code>.
 </p>
 <p>Finally, we create some lights in our room to make sure that we actually are
 able to see the walls.  The interface <samp>&lsquo;iLight&rsquo;</samp> represents a light.

@@ -100,9 +100,10 @@ public:
   bool IsSpaceFree (const RoomCoordinate&amp; rc) const;
 
   bool CreateGeometry ();
-  bool CreateWallOrPortal (iThingFactoryState* factory_state,
+  bool CreateWallOrPortal (iGeneralFactoryState* factory_state,
   	const csVector3&amp; v1, const csVector3&amp; v2,
   	const csVector3&amp; v3, const csVector3&amp; v4,
+	CS::Geometry::TextureMapper* mapper,
 	bool do_portal,
 	const RoomCoordinate&amp; source,
 	const RoomCoordinate&amp; dest);
@@ -193,9 +194,10 @@ compiled in debug mode.
   return rooms[x][y][z] != 0;
 }
 
-bool Maze::CreateWallOrPortal (iThingFactoryState* factory_state,
+bool Maze::CreateWallOrPortal (iGeneralFactoryState* factory_state,
   	const csVector3&amp; v1, const csVector3&amp; v2,
   	const csVector3&amp; v3, const csVector3&amp; v4,
+	CS::Geometry::TextureMapper* mapper,
 	bool do_portal,
 	const RoomCoordinate&amp; source,
 	const RoomCoordinate&amp; dest)
@@ -218,7 +220,10 @@ bool Maze::CreateWallOrPortal (iThingFactoryState* factory_state,
   }
   else
   {
-    factory_state-&gt;AddQuad (v1, v2, v3, v4);
+    CS::Geometry::TesselatedQuad (v1, v2, v4);
+    quad.SetLevel (5);
+    quad.SetMapper (mapper);
+    quad.Append (factory_state);
   }
   return true;
 }
@@ -227,15 +232,24 @@ bool Maze::CreateRoom (iMaterialWrapper* wall_material,
 	int x, int y, int z, char* portals)
 {
   iSector* room = GetSector (x, y, z);
-  csRef&lt;iMeshWrapper&gt; walls = app-&gt;GetEngine ()
-  	-&gt;CreateSectorWallsMesh (room, &quot;walls&quot;);
+
+  using namespace CS::Geometry;
+  csRef&lt;iMeshFactoryWrapper&gt; walls_factory = GeneralMeshBuilder::
+    CreateFactory (app-&gt;GetEngine (), &quot;walls_factory&quot;);
+  csRef&lt;iMeshWrapper&gt; walls = GeneralMeshBuilder::CreateMesh (
+      app-&gt;GetEngine (), room, &quot;walls&quot;, walls_factory);
   if (!walls)
     return app-&gt;ReportError (&quot;Couldn't create the walls for the room!&quot;);
 
-  csRef&lt;iThingState&gt; object_state = scfQueryInterface&lt;iThingState&gt; (
-  	walls-&gt;GetMeshObject ());
-  csRef&lt;iThingFactoryState&gt; factory_state = scfQueryInterface&lt;
-  	iThingFactoryState&gt; (walls-&gt;GetMeshObject ()-&gt;GetFactory ());
+  csRef&lt;iGeneralMeshState&gt; object_state = scfQueryInterface&lt;
+    iGeneralMeshState&gt; (walls-&gt;GetMeshObject ());
+  object_state-&gt;SetShadowReceiving (true);
+  walls-&gt;GetMeshObject ()-&gt;SetMaterialWrapper (wall_material);
+  csRef&lt;iGeneralFactoryState&gt; factory_state = scfQueryInterface&lt;
+    iGeneralFactoryState&gt; (walls_factory-&gt;GetMeshObjectFactory ());
+
+  DensityTextureMapper mapper (.3);
+
   float sx = float (x) * ROOM_DIMENSION;
   float sy = float (y) * ROOM_DIMENSION;
   float sz = float (z) * ROOM_DIMENSION;
@@ -250,6 +264,7 @@ bool Maze::CreateRoom (iMaterialWrapper* wall_material,
     	box.GetCorner (CS_BOX_CORNER_XYz),
     	box.GetCorner (CS_BOX_CORNER_XYZ),
     	box.GetCorner (CS_BOX_CORNER_xYZ),
+	&amp;mapper,
 	portals[PORTAL_UP] == '#',
 	start_rc, RoomCoordinate (x+0, y+1, z+0)))
     return false;
@@ -258,6 +273,7 @@ bool Maze::CreateRoom (iMaterialWrapper* wall_material,
     	box.GetCorner (CS_BOX_CORNER_XyZ),
     	box.GetCorner (CS_BOX_CORNER_Xyz),
     	box.GetCorner (CS_BOX_CORNER_xyz),
+	&amp;mapper,
 	portals[PORTAL_DOWN] == '#',
 	start_rc, RoomCoordinate (x+0, y-1, z+0)))
     return false;
@@ -266,6 +282,7 @@ bool Maze::CreateRoom (iMaterialWrapper* wall_material,
     	box.GetCorner (CS_BOX_CORNER_xyZ),
     	box.GetCorner (CS_BOX_CORNER_xYZ),
     	box.GetCorner (CS_BOX_CORNER_XYZ),
+	&amp;mapper,
 	portals[PORTAL_FRONT] == '#',
 	start_rc, RoomCoordinate (x+0, y+0, z+1)))
     return false;
@@ -274,6 +291,7 @@ bool Maze::CreateRoom (iMaterialWrapper* wall_material,
     	box.GetCorner (CS_BOX_CORNER_Xyz),
     	box.GetCorner (CS_BOX_CORNER_XYz),
     	box.GetCorner (CS_BOX_CORNER_xYz),
+	&amp;mapper,
 	portals[PORTAL_BACK] == '#',
 	start_rc, RoomCoordinate (x+0, y+0, z-1)))
     return false;
@@ -282,6 +300,7 @@ bool Maze::CreateRoom (iMaterialWrapper* wall_material,
     	box.GetCorner (CS_BOX_CORNER_xyz),
     	box.GetCorner (CS_BOX_CORNER_xYz),
     	box.GetCorner (CS_BOX_CORNER_xYZ),
+	&amp;mapper,
 	portals[PORTAL_LEFT] == '#',
 	start_rc, RoomCoordinate (x-1, y+0, z+0)))
     return false;
@@ -290,12 +309,10 @@ bool Maze::CreateRoom (iMaterialWrapper* wall_material,
     	box.GetCorner (CS_BOX_CORNER_XyZ),
     	box.GetCorner (CS_BOX_CORNER_XYZ),
     	box.GetCorner (CS_BOX_CORNER_XYz),
+	&amp;mapper,
 	portals[PORTAL_RIGHT] == '#',
 	start_rc, RoomCoordinate (x+1, y+0, z+0)))
     return false;
-
-  factory_state-&gt;SetPolygonMaterial (CS_POLYRANGE_ALL, wall_material);
-  factory_state-&gt;SetPolygonTextureMapping (CS_POLYRANGE_ALL, rd);
 
   return true;
 }
@@ -383,11 +400,11 @@ of <code>CreateRoom()</code> is a string describing the connections to neighbour
 nodes. Finally this function will also create a few lights using the
 <code>CreateLight()</code> method.
 </p>
-<p>The <code>CreateRoom()</code> function will create one thing mesh (see section <a href="MeshObject-Thing.html#0">Thing Mesh Object</a>)
+<p>The <code>CreateRoom()</code> function will create one genmesh mesh (see section <a href="MeshObject-Genmesh.html#0">Genmesh Mesh Object</a>)
 for the solid walls and then it will use <code>iEngine::CreatePortal()</code> to create
 the individual portals to neighbour nodes wherever there needs to be a connection.
 This is done in the <code>CreateWallOrPortal()</code> function. This function will
-either add a wall polygon to the wall thing or else it will create a portal.
+either add a wall polygon to the wall genmesh or else it will create a portal.
 </p>
 <hr size="1">
 <table cellpadding="1" cellspacing="1" border="0">

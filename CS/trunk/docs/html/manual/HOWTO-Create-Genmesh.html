@@ -183,12 +183,27 @@ meshstate-&gt;SetLighting (true);
 </pre></td></tr></table>
 <p>This will basically create the same cube as in the map file example.
 </p>
+<p>However, there is a much easier way by using the <samp>&lsquo;GeneralMeshBuilder&rsquo;</samp>
+class:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">using namespace CS::Geometry;
+Box box (csVector3 (-.1, -.1, -.1), csVector3 (.1, .1, .1));
+
+// Now we make a factory and a mesh at once.
+csRef&lt;iMeshWrapper&gt; mesh = GeneralMeshBuilder::CreateFactoryAndMesh (
+      engine, room, &quot;cube&quot;, &quot;cubeFact&quot;, &amp;box);
+mesh-&gt;GetMeshObject ()-&gt;SetMaterialWrapper (myMaterial);
+csRef&lt;iGeneralMeshState&gt; meshstate = scfQueryInterface&lt;iGeneralMeshState&gt; (
+  mesh-&gt;GetMeshObject ());
+meshstate-&gt;SetLighting (true);
+</pre></td></tr></table>
 <a name="4"></a>
 <h4 class="subsubheading"> Include Files </h4>
 
 <p>The include files useful for this section are:
 </p>
 <table><tr><td>&nbsp;</td><td><pre class="example">#include &lt;imesh/genmesh.h&gt;
+#include &lt;cstool/genmeshbuilder.h&gt;
 </pre></td></tr></table>
 <hr size="1">
 <table cellpadding="1" cellspacing="1" border="0">
