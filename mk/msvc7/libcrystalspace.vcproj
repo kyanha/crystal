@@ -11,8 +11,8 @@
 			Name="Win32"/>
 	</Platforms>
 	<Configurations>
-		<Configuration
-			Name="Release|Win32"
+  		<Configuration
+			Name="Release (with static libs)|Win32"
 			OutputDirectory="..\..\out\release7\build\libcrystalspace\"
 			IntermediateDirectory="..\..\out\release7\build\libcrystalspace\"
 			ConfigurationType="4"
@@ -26,7 +26,7 @@
 				RuntimeLibrary="2"
 				DebugInformationFormat="3"
 				BufferSecurityCheck="FALSE"
-				PreprocessorDefinitions="NDEBUG;CS_WIN32_CSCONFIG;__CRYSTAL_SPACE__;CS_SUPPORTS_MMX;_LIB;_WINDOWS;CS_CRYSTALSPACE_LIB;WIN32"
+				PreprocessorDefinitions="NDEBUG;CS_WIN32_CSCONFIG;__CRYSTAL_SPACE__;CS_SUPPORTS_MMX;CS_CRYSTALSPACE_LIB;WIN32"
 				OptimizeForProcessor="1"
 				AdditionalOptions=" "
 				AdditionalIncludeDirectories=".;..\..;..\..\include;..\..\include\csutil\win32;..\..\libs\csutil\ptmalloc\sysdeps\win32"
@@ -51,10 +51,8 @@
 				IgnoreDefaultLibraryNames="LIBC,LIBCD,LIBCMT,LIBCMTD"
 				AdditionalOptions=" "
 				AdditionalDependencies="zlib.lib"
-				IgnoreImportLibrary="TRUE"
 				SuppressStartupBanner="TRUE"
 				AdditionalLibraryDirectories="..\..\libs\csutil\win32\libs"
-				ProgramDatabaseFile="..\..\out\release7\build\libcrystalspace\crystalspace.pdb"
 				TargetMachine="1"/>
 			<Tool
 				Name="VCLibrarianTool"
@@ -62,13 +60,14 @@
 				SuppressStartupBanner="TRUE"/>
 			<Tool
 				Name="VCMIDLTool"
-				PreprocessorDefinitions="NDEBUG;CS_WIN32_CSCONFIG;__CRYSTAL_SPACE__;CS_SUPPORTS_MMX;_LIB;_WINDOWS;CS_CRYSTALSPACE_LIB"
+				PreprocessorDefinitions="NDEBUG;CS_WIN32_CSCONFIG;__CRYSTAL_SPACE__;CS_SUPPORTS_MMX;CS_CRYSTALSPACE_LIB"
 				MkTypLibCompatible="TRUE"
 				SuppressStartupBanner="TRUE"
 				TargetEnvironment="1"
 				TypeLibraryName="..\..\out\release7\build\libcrystalspace\libcrystalspace.tlb"/>
 			<Tool
 				Name="VCPostBuildEventTool"
+				CommandLine="md ..\..\out\release7\bin 2&gt; nul&#x0D;&#x0A;copy /y &quot;$(TargetPath)&quot; ..\..\out\release7\bin\&#x0D;&#x0A;"
 				/>
 			<Tool
 				Name="VCPreBuildEventTool"/>
@@ -76,7 +75,7 @@
 				Name="VCPreLinkEventTool"/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="NDEBUG;CS_WIN32_CSCONFIG;__CRYSTAL_SPACE__;CS_SUPPORTS_MMX;_LIB;_WINDOWS;CS_CRYSTALSPACE_LIB;PROJECTGEN_VERSION=7"
+				PreprocessorDefinitions="NDEBUG;CS_WIN32_CSCONFIG;__CRYSTAL_SPACE__;CS_SUPPORTS_MMX;CS_CRYSTALSPACE_LIB;PROJECTGEN_VERSION=7"
 				AdditionalIncludeDirectories=".;..\..\libs;..\..;..\..\include;..\..\include\csutil\win32;..\..\libs\csutil\ptmalloc\sysdeps\win32"
 				Culture="1033"/>
 			<Tool
@@ -84,8 +83,83 @@
 			<Tool
 				Name="VCWebDeploymentTool"/>
 		</Configuration>
-		<Configuration
-			Name="Debug|Win32"
+  		<Configuration
+			Name="Release (with DLLs)|Win32"
+			OutputDirectory="..\..\out\release7\build\libcrystalspace\"
+			IntermediateDirectory="..\..\out\release7\build\libcrystalspace\"
+			ConfigurationType="2"
+			WholeProgramOptimization="1"
+			UseOfMFC="0"
+			ATLMinimizesCRunTimeLibraryUsage="FALSE">
+			<Tool
+				Name="VCCLCompilerTool"
+				Optimization="2"
+				StringPooling="TRUE"
+				EnableFunctionLevelLinking="TRUE"
+				RuntimeLibrary="2"
+				DebugInformationFormat="3"
+				BufferSecurityCheck="FALSE"
+				PreprocessorDefinitions="NDEBUG;CS_WIN32_CSCONFIG;__CRYSTAL_SPACE__;CS_SUPPORTS_MMX;_WINDOWS;CS_CRYSTALSPACE_LIB;WIN32;CS_BUILD_SHARED_LIBS"
+				OptimizeForProcessor="1"
+				AdditionalOptions=" "
+				AdditionalIncludeDirectories=".;..\..;..\..\include;..\..\include\csutil\win32;..\..\libs\csutil\ptmalloc\sysdeps\win32"
+				PrecompiledHeaderFile="..\..\out\release7\build\libcrystalspace\libcrystalspace.pch"
+				AssemblerListingLocation="..\..\out\release7\build\libcrystalspace\"
+				ObjectFile="..\..\out\release7\build\libcrystalspace\"
+				ProgramDataBaseFileName="..\..\out\release7\build\libcrystalspace\crystalspace.pdb"
+				WarningLevel="3"
+				SuppressStartupBanner="TRUE"
+				Detect64BitPortabilityProblems="TRUE"
+				TreatWChar_tAsBuiltInType="false"
+				ForceConformanceInForLoopScope="true"
+				CompileAs="0"/>
+			<Tool
+				Name="VCCustomBuildTool"/>
+			<Tool
+				Name="VCLinkerTool"
+				LinkIncremental="1"
+				OptimizeReferences="2"
+				EnableCOMDATFolding="2"
+				GenerateDebugInformation="TRUE"
+				IgnoreDefaultLibraryNames="LIBC,LIBCD,LIBCMT,LIBCMTD"
+                                OutputFile="..\..\crystalspace-1.3-vc7.dll"
+				ImportLibrary="..\..\out\release7\libs\libcrystalspace.lib"
+				ProgramDatabaseFile="..\..\out\release7\build\libcrystalspace\crystalspace-1.3-vc7.pdb"
+				AdditionalOptions=" "
+				AdditionalDependencies="zlib.lib"
+				SuppressStartupBanner="TRUE"
+				AdditionalLibraryDirectories="..\..\libs\csutil\win32\libs"
+				TargetMachine="1"/>
+			<Tool
+				Name="VCLibrarianTool"
+				SuppressStartupBanner="TRUE"/>
+			<Tool
+				Name="VCMIDLTool"
+				PreprocessorDefinitions="NDEBUG;CS_WIN32_CSCONFIG;__CRYSTAL_SPACE__;CS_SUPPORTS_MMX;_WINDOWS;CS_CRYSTALSPACE_LIB"
+				MkTypLibCompatible="TRUE"
+				SuppressStartupBanner="TRUE"
+				TargetEnvironment="1"
+				TypeLibraryName="..\..\out\release7\build\libcrystalspace\libcrystalspace.tlb"/>
+			<Tool
+				Name="VCPostBuildEventTool"
+				CommandLine="md ..\..\out\release7\bin 2&gt; nul&#x0D;&#x0A;copy /y &quot;$(TargetPath)&quot; ..\..\out\release7\bin\&#x0D;&#x0A;"
+				/>
+			<Tool
+				Name="VCPreBuildEventTool"/>
+			<Tool
+				Name="VCPreLinkEventTool"/>
+			<Tool
+				Name="VCResourceCompilerTool"
+				PreprocessorDefinitions="NDEBUG;CS_WIN32_CSCONFIG;__CRYSTAL_SPACE__;CS_SUPPORTS_MMX;_WINDOWS;CS_CRYSTALSPACE_LIB;PROJECTGEN_VERSION=7"
+				AdditionalIncludeDirectories=".;..\..\libs;..\..;..\..\include;..\..\include\csutil\win32;..\..\libs\csutil\ptmalloc\sysdeps\win32"
+				Culture="1033"/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"/>
+			<Tool
+				Name="VCWebDeploymentTool"/>
+		</Configuration>
+    		<Configuration
+			Name="Debug (with static libs)|Win32"
 			OutputDirectory="..\..\out\debug7\build\libcrystalspace\"
 			IntermediateDirectory="..\..\out\debug7\build\libcrystalspace\"
 			ConfigurationType="4"
@@ -99,7 +173,7 @@
 				RuntimeTypeInfo="TRUE"
 				RuntimeLibrary="3"
 
-				PreprocessorDefinitions="_DEBUG;CS_DEBUG;CS_WIN32_CSCONFIG;__CRYSTAL_SPACE__;CS_SUPPORTS_MMX;_LIB;_WINDOWS;CS_CRYSTALSPACE_LIB;WIN32"
+				PreprocessorDefinitions="_DEBUG;CS_DEBUG;CS_WIN32_CSCONFIG;__CRYSTAL_SPACE__;CS_SUPPORTS_MMX;CS_CRYSTALSPACE_LIB;WIN32"
 				OptimizeForProcessor="1"
 				AdditionalOptions=" "
 				AdditionalIncludeDirectories=".;..\..;..\..\include;..\..\include\csutil\win32;..\..\libs\csutil\ptmalloc\sysdeps\win32"
@@ -122,10 +196,8 @@
 				IgnoreDefaultLibraryNames="LIBC,LIBCD,LIBCMT,LIBCMTD,MSVCRT"
 				AdditionalOptions=" "
 				AdditionalDependencies="zlib.lib"
-				IgnoreImportLibrary="TRUE"
 				SuppressStartupBanner="TRUE"
 				AdditionalLibraryDirectories="..\..\libs\csutil\win32\libs"
-				ProgramDatabaseFile="..\..\out\debug7\build\libcrystalspace\crystalspace.pdb"
 				TargetMachine="1"/>
 			<Tool
 				Name="VCLibrarianTool"
@@ -133,13 +205,14 @@
 				SuppressStartupBanner="TRUE"/>
 			<Tool
 				Name="VCMIDLTool"
-				PreprocessorDefinitions="_DEBUG;CS_DEBUG;CS_WIN32_CSCONFIG;__CRYSTAL_SPACE__;CS_SUPPORTS_MMX;_LIB;_WINDOWS;CS_CRYSTALSPACE_LIB"
+				PreprocessorDefinitions="_DEBUG;CS_DEBUG;CS_WIN32_CSCONFIG;__CRYSTAL_SPACE__;CS_SUPPORTS_MMX;CS_CRYSTALSPACE_LIB"
 				MkTypLibCompatible="TRUE"
 				SuppressStartupBanner="TRUE"
 				TargetEnvironment="1"
 				TypeLibraryName="..\..\out\debug7\build\libcrystalspace\libcrystalspace.tlb"/>
 			<Tool
 				Name="VCPostBuildEventTool"
+				CommandLine="md ..\..\out\debug7\bin 2&gt; nul&#x0D;&#x0A;copy /y &quot;$(TargetPath)&quot; ..\..\out\debug7\bin\&#x0D;&#x0A;"
 				/>
 			<Tool
 				Name="VCPreBuildEventTool"/>
@@ -147,7 +220,7 @@
 				Name="VCPreLinkEventTool"/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="_DEBUG;CS_DEBUG;CS_WIN32_CSCONFIG;__CRYSTAL_SPACE__;CS_SUPPORTS_MMX;_LIB;_WINDOWS;CS_CRYSTALSPACE_LIB;PROJECTGEN_VERSION=7"
+				PreprocessorDefinitions="_DEBUG;CS_DEBUG;CS_WIN32_CSCONFIG;__CRYSTAL_SPACE__;CS_SUPPORTS_MMX;CS_CRYSTALSPACE_LIB;PROJECTGEN_VERSION=7"
 				AdditionalIncludeDirectories=".;..\..\libs;..\..;..\..\include;..\..\include\csutil\win32;..\..\libs\csutil\ptmalloc\sysdeps\win32"
 				Culture="1033"/>
 			<Tool
@@ -155,8 +228,80 @@
 			<Tool
 				Name="VCWebDeploymentTool"/>
 		</Configuration>
-		<Configuration
-			Name="MemoryTracker|Win32"
+  		<Configuration
+			Name="Debug (with DLLs)|Win32"
+			OutputDirectory="..\..\out\debug7\build\libcrystalspace\"
+			IntermediateDirectory="..\..\out\debug7\build\libcrystalspace\"
+			ConfigurationType="2"
+			UseOfMFC="0"
+			ATLMinimizesCRunTimeLibraryUsage="FALSE">
+			<Tool
+				Name="VCCLCompilerTool"
+				Optimization="0"
+				MinimalRebuild="TRUE"
+				DebugInformationFormat="4"
+				RuntimeTypeInfo="TRUE"
+				RuntimeLibrary="3"
+
+				PreprocessorDefinitions="_DEBUG;CS_DEBUG;CS_WIN32_CSCONFIG;__CRYSTAL_SPACE__;CS_SUPPORTS_MMX;_WINDOWS;CS_CRYSTALSPACE_LIB;WIN32;CS_BUILD_SHARED_LIBS"
+				OptimizeForProcessor="1"
+				AdditionalOptions=" "
+				AdditionalIncludeDirectories=".;..\..;..\..\include;..\..\include\csutil\win32;..\..\libs\csutil\ptmalloc\sysdeps\win32"
+				PrecompiledHeaderFile="..\..\out\debug7\build\libcrystalspace\libcrystalspace.pch"
+				AssemblerListingLocation="..\..\out\debug7\build\libcrystalspace\"
+				ObjectFile="..\..\out\debug7\build\libcrystalspace\"
+				ProgramDataBaseFileName="..\..\out\debug7\build\libcrystalspace\crystalspace.pdb"
+				WarningLevel="3"
+				SuppressStartupBanner="TRUE"
+				Detect64BitPortabilityProblems="TRUE"
+				TreatWChar_tAsBuiltInType="false"
+				ForceConformanceInForLoopScope="true"
+				CompileAs="0"/>
+			<Tool
+				Name="VCCustomBuildTool"/>
+			<Tool
+				Name="VCLinkerTool"
+				LinkIncremental="2"
+				GenerateDebugInformation="TRUE"
+				IgnoreDefaultLibraryNames="LIBC,LIBCD,LIBCMT,LIBCMTD,MSVCRT"
+                                OutputFile="..\..\crystalspace-1.3-vc7_d.dll"
+				ImportLibrary="..\..\out\debug7\libs\libcrystalspace_d.lib"
+				ProgramDatabaseFile="..\..\out\debug7\build\libcrystalspace\crystalspace-1.3-vc7_d.pdb"
+				AdditionalOptions=" "
+				AdditionalDependencies="zlib.lib"
+				SuppressStartupBanner="TRUE"
+				AdditionalLibraryDirectories="..\..\libs\csutil\win32\libs"
+				TargetMachine="1"/>
+			<Tool
+				Name="VCLibrarianTool"
+				SuppressStartupBanner="TRUE"/>
+			<Tool
+				Name="VCMIDLTool"
+				PreprocessorDefinitions="_DEBUG;CS_DEBUG;CS_WIN32_CSCONFIG;__CRYSTAL_SPACE__;CS_SUPPORTS_MMX;_WINDOWS;CS_CRYSTALSPACE_LIB"
+				MkTypLibCompatible="TRUE"
+				SuppressStartupBanner="TRUE"
+				TargetEnvironment="1"
+				TypeLibraryName="..\..\out\debug7\build\libcrystalspace\libcrystalspace.tlb"/>
+			<Tool
+				Name="VCPostBuildEventTool"
+				CommandLine="md ..\..\out\debug7\bin 2&gt; nul&#x0D;&#x0A;copy /y &quot;$(TargetPath)&quot; ..\..\out\debug7\bin\&#x0D;&#x0A;"
+				/>
+			<Tool
+				Name="VCPreBuildEventTool"/>
+			<Tool
+				Name="VCPreLinkEventTool"/>
+			<Tool
+				Name="VCResourceCompilerTool"
+				PreprocessorDefinitions="_DEBUG;CS_DEBUG;CS_WIN32_CSCONFIG;__CRYSTAL_SPACE__;CS_SUPPORTS_MMX;_WINDOWS;CS_CRYSTALSPACE_LIB;PROJECTGEN_VERSION=7"
+				AdditionalIncludeDirectories=".;..\..\libs;..\..;..\..\include;..\..\include\csutil\win32;..\..\libs\csutil\ptmalloc\sysdeps\win32"
+				Culture="1033"/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"/>
+			<Tool
+				Name="VCWebDeploymentTool"/>
+		</Configuration>
+    		<Configuration
+			Name="MemoryTracker (with static libs)|Win32"
 			OutputDirectory="..\..\out\debug7\build\libcrystalspace\"
 			IntermediateDirectory="..\..\out\debug7\build\libcrystalspace\"
 			ConfigurationType="4"
@@ -170,7 +315,7 @@
 				RuntimeTypeInfo="TRUE"
 				RuntimeLibrary="3"
 
-				PreprocessorDefinitions="_DEBUG;CS_DEBUG;CS_WIN32_CSCONFIG;__CRYSTAL_SPACE__;CS_SUPPORTS_MMX;CS_MEMORY_TRACKER;_LIB;_WINDOWS;CS_CRYSTALSPACE_LIB;WIN32"
+				PreprocessorDefinitions="_DEBUG;CS_DEBUG;CS_WIN32_CSCONFIG;__CRYSTAL_SPACE__;CS_SUPPORTS_MMX;CS_MEMORY_TRACKER;CS_CRYSTALSPACE_LIB;WIN32"
 				OptimizeForProcessor="1"
 				AdditionalOptions=" "
 				AdditionalIncludeDirectories=".;..\..;..\..\include;..\..\include\csutil\win32;..\..\libs\csutil\ptmalloc\sysdeps\win32"
@@ -193,10 +338,8 @@
 				IgnoreDefaultLibraryNames="LIBC,LIBCD,LIBCMT,LIBCMTD,MSVCRT"
 				AdditionalOptions=" "
 				AdditionalDependencies="zlib.lib"
-				IgnoreImportLibrary="TRUE"
 				SuppressStartupBanner="TRUE"
 				AdditionalLibraryDirectories="..\..\libs\csutil\win32\libs"
-				ProgramDatabaseFile="..\..\out\debug7\build\libcrystalspace\crystalspace.pdb"
 				TargetMachine="1"/>
 			<Tool
 				Name="VCLibrarianTool"
@@ -204,13 +347,14 @@
 				SuppressStartupBanner="TRUE"/>
 			<Tool
 				Name="VCMIDLTool"
-				PreprocessorDefinitions="_DEBUG;CS_DEBUG;CS_WIN32_CSCONFIG;__CRYSTAL_SPACE__;CS_SUPPORTS_MMX;CS_MEMORY_TRACKER;_LIB;_WINDOWS;CS_CRYSTALSPACE_LIB"
+				PreprocessorDefinitions="_DEBUG;CS_DEBUG;CS_WIN32_CSCONFIG;__CRYSTAL_SPACE__;CS_SUPPORTS_MMX;CS_MEMORY_TRACKER;CS_CRYSTALSPACE_LIB"
 				MkTypLibCompatible="TRUE"
 				SuppressStartupBanner="TRUE"
 				TargetEnvironment="1"
 				TypeLibraryName="..\..\out\debug7\build\libcrystalspace\libcrystalspace.tlb"/>
 			<Tool
 				Name="VCPostBuildEventTool"
+				CommandLine="md ..\..\out\debug7\bin 2&gt; nul&#x0D;&#x0A;copy /y &quot;$(TargetPath)&quot; ..\..\out\debug7\bin\&#x0D;&#x0A;"
 				/>
 			<Tool
 				Name="VCPreBuildEventTool"/>
@@ -218,7 +362,7 @@
 				Name="VCPreLinkEventTool"/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="_DEBUG;CS_DEBUG;CS_WIN32_CSCONFIG;__CRYSTAL_SPACE__;CS_SUPPORTS_MMX;CS_MEMORY_TRACKER;_LIB;_WINDOWS;CS_CRYSTALSPACE_LIB;PROJECTGEN_VERSION=7"
+				PreprocessorDefinitions="_DEBUG;CS_DEBUG;CS_WIN32_CSCONFIG;__CRYSTAL_SPACE__;CS_SUPPORTS_MMX;CS_MEMORY_TRACKER;CS_CRYSTALSPACE_LIB;PROJECTGEN_VERSION=7"
 				AdditionalIncludeDirectories=".;..\..\libs;..\..;..\..\include;..\..\include\csutil\win32;..\..\libs\csutil\ptmalloc\sysdeps\win32"
 				Culture="1033"/>
 			<Tool
@@ -226,8 +370,80 @@
 			<Tool
 				Name="VCWebDeploymentTool"/>
 		</Configuration>
-		<Configuration
-			Name="RefTracker|Win32"
+  		<Configuration
+			Name="MemoryTracker (with DLLs)|Win32"
+			OutputDirectory="..\..\out\debug7\build\libcrystalspace\"
+			IntermediateDirectory="..\..\out\debug7\build\libcrystalspace\"
+			ConfigurationType="2"
+			UseOfMFC="0"
+			ATLMinimizesCRunTimeLibraryUsage="FALSE">
+			<Tool
+				Name="VCCLCompilerTool"
+				Optimization="0"
+				MinimalRebuild="TRUE"
+				DebugInformationFormat="4"
+				RuntimeTypeInfo="TRUE"
+				RuntimeLibrary="3"
+
+				PreprocessorDefinitions="_DEBUG;CS_DEBUG;CS_WIN32_CSCONFIG;__CRYSTAL_SPACE__;CS_SUPPORTS_MMX;CS_MEMORY_TRACKER;_WINDOWS;CS_CRYSTALSPACE_LIB;WIN32;CS_BUILD_SHARED_LIBS"
+				OptimizeForProcessor="1"
+				AdditionalOptions=" "
+				AdditionalIncludeDirectories=".;..\..;..\..\include;..\..\include\csutil\win32;..\..\libs\csutil\ptmalloc\sysdeps\win32"
+				PrecompiledHeaderFile="..\..\out\debug7\build\libcrystalspace\libcrystalspace.pch"
+				AssemblerListingLocation="..\..\out\debug7\build\libcrystalspace\"
+				ObjectFile="..\..\out\debug7\build\libcrystalspace\"
+				ProgramDataBaseFileName="..\..\out\debug7\build\libcrystalspace\crystalspace.pdb"
+				WarningLevel="3"
+				SuppressStartupBanner="TRUE"
+				Detect64BitPortabilityProblems="TRUE"
+				TreatWChar_tAsBuiltInType="false"
+				ForceConformanceInForLoopScope="true"
+				CompileAs="0"/>
+			<Tool
+				Name="VCCustomBuildTool"/>
+			<Tool
+				Name="VCLinkerTool"
+				LinkIncremental="2"
+				GenerateDebugInformation="TRUE"
+				IgnoreDefaultLibraryNames="LIBC,LIBCD,LIBCMT,LIBCMTD,MSVCRT"
+                                OutputFile="..\..\crystalspace-1.3-vc7_d.dll"
+				ImportLibrary="..\..\out\debug7\libs\libcrystalspace_d.lib"
+				ProgramDatabaseFile="..\..\out\debug7\build\libcrystalspace\crystalspace-1.3-vc7_d.pdb"
+				AdditionalOptions=" "
+				AdditionalDependencies="zlib.lib"
+				SuppressStartupBanner="TRUE"
+				AdditionalLibraryDirectories="..\..\libs\csutil\win32\libs"
+				TargetMachine="1"/>
+			<Tool
+				Name="VCLibrarianTool"
+				SuppressStartupBanner="TRUE"/>
+			<Tool
+				Name="VCMIDLTool"
+				PreprocessorDefinitions="_DEBUG;CS_DEBUG;CS_WIN32_CSCONFIG;__CRYSTAL_SPACE__;CS_SUPPORTS_MMX;CS_MEMORY_TRACKER;_WINDOWS;CS_CRYSTALSPACE_LIB"
+				MkTypLibCompatible="TRUE"
+				SuppressStartupBanner="TRUE"
+				TargetEnvironment="1"
+				TypeLibraryName="..\..\out\debug7\build\libcrystalspace\libcrystalspace.tlb"/>
+			<Tool
+				Name="VCPostBuildEventTool"
+				CommandLine="md ..\..\out\debug7\bin 2&gt; nul&#x0D;&#x0A;copy /y &quot;$(TargetPath)&quot; ..\..\out\debug7\bin\&#x0D;&#x0A;"
+				/>
+			<Tool
+				Name="VCPreBuildEventTool"/>
+			<Tool
+				Name="VCPreLinkEventTool"/>
+			<Tool
+				Name="VCResourceCompilerTool"
+				PreprocessorDefinitions="_DEBUG;CS_DEBUG;CS_WIN32_CSCONFIG;__CRYSTAL_SPACE__;CS_SUPPORTS_MMX;CS_MEMORY_TRACKER;_WINDOWS;CS_CRYSTALSPACE_LIB;PROJECTGEN_VERSION=7"
+				AdditionalIncludeDirectories=".;..\..\libs;..\..;..\..\include;..\..\include\csutil\win32;..\..\libs\csutil\ptmalloc\sysdeps\win32"
+				Culture="1033"/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"/>
+			<Tool
+				Name="VCWebDeploymentTool"/>
+		</Configuration>
+    		<Configuration
+			Name="RefTracker (with static libs)|Win32"
 			OutputDirectory="..\..\out\debug7\build\libcrystalspace\"
 			IntermediateDirectory="..\..\out\debug7\build\libcrystalspace\"
 			ConfigurationType="4"
@@ -241,7 +457,7 @@
 				RuntimeTypeInfo="TRUE"
 				RuntimeLibrary="3"
 
-				PreprocessorDefinitions="_DEBUG;CS_DEBUG;CS_WIN32_CSCONFIG;__CRYSTAL_SPACE__;CS_SUPPORTS_MMX;CS_REF_TRACKER;_LIB;_WINDOWS;CS_CRYSTALSPACE_LIB;WIN32"
+				PreprocessorDefinitions="_DEBUG;CS_DEBUG;CS_WIN32_CSCONFIG;__CRYSTAL_SPACE__;CS_SUPPORTS_MMX;CS_REF_TRACKER;CS_CRYSTALSPACE_LIB;WIN32"
 				OptimizeForProcessor="1"
 				AdditionalOptions=" "
 				AdditionalIncludeDirectories=".;..\..;..\..\include;..\..\include\csutil\win32;..\..\libs\csutil\ptmalloc\sysdeps\win32"
@@ -264,10 +480,8 @@
 				IgnoreDefaultLibraryNames="LIBC,LIBCD,LIBCMT,LIBCMTD,MSVCRT"
 				AdditionalOptions=" "
 				AdditionalDependencies="zlib.lib"
-				IgnoreImportLibrary="TRUE"
 				SuppressStartupBanner="TRUE"
 				AdditionalLibraryDirectories="..\..\libs\csutil\win32\libs"
-				ProgramDatabaseFile="..\..\out\debug7\build\libcrystalspace\crystalspace.pdb"
 				TargetMachine="1"/>
 			<Tool
 				Name="VCLibrarianTool"
@@ -275,13 +489,14 @@
 				SuppressStartupBanner="TRUE"/>
 			<Tool
 				Name="VCMIDLTool"
-				PreprocessorDefinitions="_DEBUG;CS_DEBUG;CS_WIN32_CSCONFIG;__CRYSTAL_SPACE__;CS_SUPPORTS_MMX;CS_REF_TRACKER;_LIB;_WINDOWS;CS_CRYSTALSPACE_LIB"
+				PreprocessorDefinitions="_DEBUG;CS_DEBUG;CS_WIN32_CSCONFIG;__CRYSTAL_SPACE__;CS_SUPPORTS_MMX;CS_REF_TRACKER;CS_CRYSTALSPACE_LIB"
 				MkTypLibCompatible="TRUE"
 				SuppressStartupBanner="TRUE"
 				TargetEnvironment="1"
 				TypeLibraryName="..\..\out\debug7\build\libcrystalspace\libcrystalspace.tlb"/>
 			<Tool
 				Name="VCPostBuildEventTool"
+				CommandLine="md ..\..\out\debug7\bin 2&gt; nul&#x0D;&#x0A;copy /y &quot;$(TargetPath)&quot; ..\..\out\debug7\bin\&#x0D;&#x0A;"
 				/>
 			<Tool
 				Name="VCPreBuildEventTool"/>
@@ -289,7 +504,7 @@
 				Name="VCPreLinkEventTool"/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="_DEBUG;CS_DEBUG;CS_WIN32_CSCONFIG;__CRYSTAL_SPACE__;CS_SUPPORTS_MMX;CS_REF_TRACKER;_LIB;_WINDOWS;CS_CRYSTALSPACE_LIB;PROJECTGEN_VERSION=7"
+				PreprocessorDefinitions="_DEBUG;CS_DEBUG;CS_WIN32_CSCONFIG;__CRYSTAL_SPACE__;CS_SUPPORTS_MMX;CS_REF_TRACKER;CS_CRYSTALSPACE_LIB;PROJECTGEN_VERSION=7"
 				AdditionalIncludeDirectories=".;..\..\libs;..\..;..\..\include;..\..\include\csutil\win32;..\..\libs\csutil\ptmalloc\sysdeps\win32"
 				Culture="1033"/>
 			<Tool
@@ -297,7 +512,79 @@
 			<Tool
 				Name="VCWebDeploymentTool"/>
 		</Configuration>
-	</Configurations>
+  		<Configuration
+			Name="RefTracker (with DLLs)|Win32"
+			OutputDirectory="..\..\out\debug7\build\libcrystalspace\"
+			IntermediateDirectory="..\..\out\debug7\build\libcrystalspace\"
+			ConfigurationType="2"
+			UseOfMFC="0"
+			ATLMinimizesCRunTimeLibraryUsage="FALSE">
+			<Tool
+				Name="VCCLCompilerTool"
+				Optimization="0"
+				MinimalRebuild="TRUE"
+				DebugInformationFormat="4"
+				RuntimeTypeInfo="TRUE"
+				RuntimeLibrary="3"
+
+				PreprocessorDefinitions="_DEBUG;CS_DEBUG;CS_WIN32_CSCONFIG;__CRYSTAL_SPACE__;CS_SUPPORTS_MMX;CS_REF_TRACKER;_WINDOWS;CS_CRYSTALSPACE_LIB;WIN32;CS_BUILD_SHARED_LIBS"
+				OptimizeForProcessor="1"
+				AdditionalOptions=" "
+				AdditionalIncludeDirectories=".;..\..;..\..\include;..\..\include\csutil\win32;..\..\libs\csutil\ptmalloc\sysdeps\win32"
+				PrecompiledHeaderFile="..\..\out\debug7\build\libcrystalspace\libcrystalspace.pch"
+				AssemblerListingLocation="..\..\out\debug7\build\libcrystalspace\"
+				ObjectFile="..\..\out\debug7\build\libcrystalspace\"
+				ProgramDataBaseFileName="..\..\out\debug7\build\libcrystalspace\crystalspace.pdb"
+				WarningLevel="3"
+				SuppressStartupBanner="TRUE"
+				Detect64BitPortabilityProblems="TRUE"
+				TreatWChar_tAsBuiltInType="false"
+				ForceConformanceInForLoopScope="true"
+				CompileAs="0"/>
+			<Tool
+				Name="VCCustomBuildTool"/>
+			<Tool
+				Name="VCLinkerTool"
+				LinkIncremental="2"
+				GenerateDebugInformation="TRUE"
+				IgnoreDefaultLibraryNames="LIBC,LIBCD,LIBCMT,LIBCMTD,MSVCRT"
+                                OutputFile="..\..\crystalspace-1.3-vc7_d.dll"
+				ImportLibrary="..\..\out\debug7\libs\libcrystalspace_d.lib"
+				ProgramDatabaseFile="..\..\out\debug7\build\libcrystalspace\crystalspace-1.3-vc7_d.pdb"
+				AdditionalOptions=" "
+				AdditionalDependencies="zlib.lib"
+				SuppressStartupBanner="TRUE"
+				AdditionalLibraryDirectories="..\..\libs\csutil\win32\libs"
+				TargetMachine="1"/>
+			<Tool
+				Name="VCLibrarianTool"
+				SuppressStartupBanner="TRUE"/>
+			<Tool
+				Name="VCMIDLTool"
+				PreprocessorDefinitions="_DEBUG;CS_DEBUG;CS_WIN32_CSCONFIG;__CRYSTAL_SPACE__;CS_SUPPORTS_MMX;CS_REF_TRACKER;_WINDOWS;CS_CRYSTALSPACE_LIB"
+				MkTypLibCompatible="TRUE"
+				SuppressStartupBanner="TRUE"
+				TargetEnvironment="1"
+				TypeLibraryName="..\..\out\debug7\build\libcrystalspace\libcrystalspace.tlb"/>
+			<Tool
+				Name="VCPostBuildEventTool"
+				CommandLine="md ..\..\out\debug7\bin 2&gt; nul&#x0D;&#x0A;copy /y &quot;$(TargetPath)&quot; ..\..\out\debug7\bin\&#x0D;&#x0A;"
+				/>
+			<Tool
+				Name="VCPreBuildEventTool"/>
+			<Tool
+				Name="VCPreLinkEventTool"/>
+			<Tool
+				Name="VCResourceCompilerTool"
+				PreprocessorDefinitions="_DEBUG;CS_DEBUG;CS_WIN32_CSCONFIG;__CRYSTAL_SPACE__;CS_SUPPORTS_MMX;CS_REF_TRACKER;_WINDOWS;CS_CRYSTALSPACE_LIB;PROJECTGEN_VERSION=7"
+				AdditionalIncludeDirectories=".;..\..\libs;..\..;..\..\include;..\..\include\csutil\win32;..\..\libs\csutil\ptmalloc\sysdeps\win32"
+				Culture="1033"/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"/>
+			<Tool
+				Name="VCWebDeploymentTool"/>
+		</Configuration>
+  	</Configurations>
 	<Files>
 		<Filter
 			Name="Source Files"
