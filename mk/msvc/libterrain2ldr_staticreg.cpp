@@ -23,37 +23,37 @@ static char const metainfo_terrain2ldr[] =
 "    <classes>"
 "      <class>"
 "        <name>crystalspace.mesh.loader.factory.terrain2</name>"
-"        <implementation>csTerrainFactoryLoader</implementation>"
+"        <implementation>csTerrain2FactoryLoader</implementation>"
 "        <description>Terrain Factory Loader</description>"
 "      </class>"
 "      <class>"
 "        <name>crystalspace.mesh.loader.terrain2</name>"
-"        <implementation>csTerrainObjectLoader</implementation>"
+"        <implementation>csTerrain2ObjectLoader</implementation>"
 "        <description>Terrain Object Loader</description>"
 "      </class>"
 "    </classes>"
 "  </scf>"
 "</plugin>"
 ;
-  #ifndef csTerrainFactoryLoader_FACTORY_REGISTER_DEFINED 
-  #define csTerrainFactoryLoader_FACTORY_REGISTER_DEFINED 
-    SCF_DEFINE_FACTORY_FUNC_REGISTRATION(csTerrainFactoryLoader) 
+  #ifndef csTerrain2FactoryLoader_FACTORY_REGISTER_DEFINED 
+  #define csTerrain2FactoryLoader_FACTORY_REGISTER_DEFINED 
+    SCF_DEFINE_FACTORY_FUNC_REGISTRATION(csTerrain2FactoryLoader) 
   #endif
-  #ifndef csTerrainObjectLoader_FACTORY_REGISTER_DEFINED 
-  #define csTerrainObjectLoader_FACTORY_REGISTER_DEFINED 
-    SCF_DEFINE_FACTORY_FUNC_REGISTRATION(csTerrainObjectLoader) 
+  #ifndef csTerrain2ObjectLoader_FACTORY_REGISTER_DEFINED 
+  #define csTerrain2ObjectLoader_FACTORY_REGISTER_DEFINED 
+    SCF_DEFINE_FACTORY_FUNC_REGISTRATION(csTerrain2ObjectLoader) 
   #endif
 
 class terrain2ldr
 {
 SCF_REGISTER_STATIC_LIBRARY(terrain2ldr,metainfo_terrain2ldr)
-  #ifndef csTerrainFactoryLoader_FACTORY_REGISTERED 
-  #define csTerrainFactoryLoader_FACTORY_REGISTERED 
-    csTerrainFactoryLoader_StaticInit csTerrainFactoryLoader_static_init__; 
+  #ifndef csTerrain2FactoryLoader_FACTORY_REGISTERED 
+  #define csTerrain2FactoryLoader_FACTORY_REGISTERED 
+    csTerrain2FactoryLoader_StaticInit csTerrain2FactoryLoader_static_init__; 
   #endif
-  #ifndef csTerrainObjectLoader_FACTORY_REGISTERED 
-  #define csTerrainObjectLoader_FACTORY_REGISTERED 
-    csTerrainObjectLoader_StaticInit csTerrainObjectLoader_static_init__; 
+  #ifndef csTerrain2ObjectLoader_FACTORY_REGISTERED 
+  #define csTerrain2ObjectLoader_FACTORY_REGISTERED 
+    csTerrain2ObjectLoader_StaticInit csTerrain2ObjectLoader_static_init__; 
   #endif
 public:
  terrain2ldr();
