@@ -86,39 +86,36 @@ if (!csInitializer::RequestPlugins(object_reg,
   CS_REQUEST_END))
 ...
 
-csRef&lt;iLoader&gt; loader = csQueryRegistry&lt;iLoader&gt; (object_reg);
-csRef&lt;iSndSysRenderer&gt; sndrdr =
-  csQueryRegistry&lt;iSndSysRenderer&gt; (object_reg);
-if (sndrdr)
-{
-  iSndSysWrapper* w_boom = loader-&gt;LoadSoundWrapper (
-    &lt;sound name&gt;, &lt;sound file&gt;, CS_SND3D_DISABLE);
-  if (w_boom)
-  {
-    csRef&lt;iSoundSource&gt; sndsrc =
-      w_boom-&gt;GetSound()-&gt;CreateSource(w_boom-&gt;GetStream());
-    w_boom-&gt;GetStream ()-&gt;SetLoopState (CS_SNDSYS_STREAM_DONTLOOP);
-    w_boom-&gt;GetStream ()-&gt;Unpause();
-  }
-}
+  csRef&lt;iSndSysRenderer&gt; sndrenderer = csQueryRegistry&lt;iSndSysRenderer&gt; (GetObjectRegistry());
+  if (!sndrenderer) return ReportError(&quot;Failed to locate Sound renderer!&quot;); 
+  
+  csRef&lt;iSndSysWrapper&gt; w_boom = loader-&gt;LoadSoundWrapper(&quot;buzz&quot;,&quot;/lib/std/loopbzzt.wav&quot;);
+  if(!w_boom) ReportError(&quot;No Wrapper&quot;);
+
+  csRef&lt;iSndSysData&gt; snddata = w_boom-&gt;GetData();
+  if(!snddata) ReportError(&quot;No Sound Data&quot;);
+
+  csRef&lt;iSndSysStream&gt; sndstream = sndrenderer-&gt;CreateStream (snddata, CS_SND3D_ABSOLUTE);
+
+  if(!sndstream) ReportError(&quot;No Stream&quot;);
+  
+  sndstream-&gt;SetLoopState (CS_SNDSYS_STREAM_DONTLOOP);
+  sndstream-&gt;Unpause ();
+  
+  csRef&lt;iSndSysSource&gt; sndsrc = sndrenderer-&gt;CreateSource (sndstream);
+  if(!sndsrc)ReportError(&quot;No Source&quot;);
+
+   sndsrc-&gt;SetVolume( 1.0 );
 </pre></td></tr></table>
 <a name="2"></a>
 <h4 class="subsubheading"> Looping Background Music </h4>
 
-<p>Here is how you can play a looping sound:
+<p>Here is how you can specify a looping sound:
 </p>
-<table><tr><td>&nbsp;</td><td><pre class="example">csRef&lt;iSndSysRenderer&gt; sndrdr =
-  csQueryRegistry&lt;iSndSysRenderer&gt; (object_reg);
-if (sndrdr)
-{
-  iSndSysWrapper* w_music = loader-&gt;LoadSoundWrapper (
-    &lt;sound name&gt;, &lt;sound file&gt;, CS_SND3D_DISABLE);
-  if (w_music)
-  {
-    w_music-&gt;GetStream ()-&gt;SetLoopState (CS_SNDSYS_STREAM_LOOP);
-    w_music-&gt;GetStream ()-&gt;Unpause();
-  }
-}
+<table><tr><td>&nbsp;</td><td><pre class="example">@dots()
+  sndstream-&gt;SetLoopState (CS_SNDSYS_STREAM_DONTLOOP);
+  sndstream-&gt;Unpause ();
+@dots()
 </pre></td></tr></table>
 
 
