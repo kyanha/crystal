@@ -81,8 +81,7 @@ has clicked.
   // z=100 that directly corresponds to the 2D position we
   // clicked on.  We use z=100 to ensure that we will at least
   // hit all objects that are before that distance.
-  csVector3 v3d;
-  camera-&gt;InvPerspective (v2d, 100, v3d);
+  csVector3 v3d = camera-&gt;InvPerspective (v2d, 100);
 
   // We are going to cast a beam in the current sector of the
   // camera from our camera position in the direction of the
@@ -90,13 +89,12 @@ has clicked.
   // location to world space.
   csVector3 startbeam = camera-&gt;GetTransform ().GetOrigin ();
   csVector3 endbeam = camera-&gt;GetTransform ().This2Other (v3d);
-  csVector3 intersect;
-
-  // Now do the actual intersection.
-  int poly = -1;
   iSector* beamsector = camera-&gt;GetSector ();
-  iMeshWrapper* mesh =
-    beamsector-&gt;HitBeamPortals(startbeam, endbeam, intersect, &amp;poly);
+  // Now do the actual intersection.
+  csSectorHitBeamResult result =
+   beamsector-&gt;HitBeamPortals(startbeam, endbeam);
+  //From the result object, return the intersected mesh.
+  iMeshWrapper* mesh = result.mesh;
   return mesh;
 }
 </pre></td></tr></table>
