@@ -31,6 +31,16 @@ static char const metainfo_terrain2ldr[] =
 "        <implementation>csTerrain2ObjectLoader</implementation>"
 "        <description>Terrain Object Loader</description>"
 "      </class>"
+"      <class>"
+"        <name>crystalspace.mesh.saver.factory.terrain2</name>"
+"        <implementation>Terrain2FactorySaver</implementation>"
+"        <description>Terrain Factory Saver</description>"
+"      </class>"
+"      <class>"
+"        <name>crystalspace.mesh.saver.terrain2</name>"
+"        <implementation>Terrain2ObjectSaver</implementation>"
+"        <description>Terrain Object Saver</description>"
+"      </class>"
 "    </classes>"
 "  </scf>"
 "</plugin>"
@@ -43,6 +53,14 @@ static char const metainfo_terrain2ldr[] =
   #define csTerrain2ObjectLoader_FACTORY_REGISTER_DEFINED 
     SCF_DEFINE_FACTORY_FUNC_REGISTRATION(csTerrain2ObjectLoader) 
   #endif
+  #ifndef Terrain2FactorySaver_FACTORY_REGISTER_DEFINED 
+  #define Terrain2FactorySaver_FACTORY_REGISTER_DEFINED 
+    SCF_DEFINE_FACTORY_FUNC_REGISTRATION(Terrain2FactorySaver) 
+  #endif
+  #ifndef Terrain2ObjectSaver_FACTORY_REGISTER_DEFINED 
+  #define Terrain2ObjectSaver_FACTORY_REGISTER_DEFINED 
+    SCF_DEFINE_FACTORY_FUNC_REGISTRATION(Terrain2ObjectSaver) 
+  #endif
 
 class terrain2ldr
 {
@@ -54,6 +72,14 @@ SCF_REGISTER_STATIC_LIBRARY(terrain2ldr,metainfo_terrain2ldr)
   #ifndef csTerrain2ObjectLoader_FACTORY_REGISTERED 
   #define csTerrain2ObjectLoader_FACTORY_REGISTERED 
     csTerrain2ObjectLoader_StaticInit csTerrain2ObjectLoader_static_init__; 
+  #endif
+  #ifndef Terrain2FactorySaver_FACTORY_REGISTERED 
+  #define Terrain2FactorySaver_FACTORY_REGISTERED 
+    Terrain2FactorySaver_StaticInit Terrain2FactorySaver_static_init__; 
+  #endif
+  #ifndef Terrain2ObjectSaver_FACTORY_REGISTERED 
+  #define Terrain2ObjectSaver_FACTORY_REGISTERED 
+    Terrain2ObjectSaver_StaticInit Terrain2ObjectSaver_static_init__; 
   #endif
 public:
  terrain2ldr();
