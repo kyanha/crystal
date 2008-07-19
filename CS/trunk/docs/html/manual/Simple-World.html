@@ -70,9 +70,7 @@ wanted to have?  No?  Ok then, let's create some 3D stuff.
 sector and a function <code>CreateRoom()</code> to the <samp>&lsquo;Simple&rsquo;</samp> class
 header file:
 </p>
-<table><tr><td>&nbsp;</td><td><pre class="example">...
-struct iSector;
-...
+<table><tr><td>&nbsp;</td><td><pre class="example">
 class Simple
 {
 private:
@@ -86,7 +84,7 @@ private:
 <p>Now add these chunks of code (texture manager, room, lights) to
 <tt>&lsquo;simple.cpp&rsquo;</tt>:
 </p>
-<table><tr><td>&nbsp;</td><td><pre class="example">bool Simple::Application ()
+<table><tr><td>&nbsp;</td><td><pre class="example">bool Simple::SetupModules ()
 {
   ...
   // First disable the lighting cache. Our app is simple enough
@@ -97,19 +95,30 @@ private:
   rotY = rotX = 0;
   ...
   CreateRoom ()
+  
+  engine-&gt;Prepare ();
+  rm = engine-&gt;GetRenderManager();
   ...
 }
 ...
 void Simple::CreateRoom ()
 {
-  // Load the texture from the standard library.  This is located in
-  // CS/data/standard.zip and mounted as /lib/std using the Virtual
-  // File System (VFS) plugin.
-  if (!loader-&gt;LoadTexture (&quot;stone&quot;, &quot;/lib/std/stone4.gif&quot;))
-    ReportError(&quot;Error loading 'stone4' texture!&quot;);
+  if (!loader-&gt;LoadTexture (&quot;brick&quot;, &quot;/lib/std/castle/brick1_d.jpg&quot;))
+    ReportError(&quot;Error loading 'brick1_d' texture!&quot;);
 
-  iMaterialWrapper* tm =
-    engine-&gt;GetMaterialList ()-&gt;FindByName (&quot;stone&quot;);
+  iMaterialWrapper* tm = engine-&gt;GetMaterialList ()-&gt;FindByName (&quot;brick&quot;);
+  
+  {
+    csRef&lt;iShaderVarStringSet&gt; svStrings =
+      csQueryRegistryTagInterface&lt;iShaderVarStringSet&gt; (GetObjectRegistry(),
+        &quot;crystalspace.shader.variablenameset&quot;);
+    csRef&lt;iTextureHandle&gt; normalMap = loader-&gt;LoadTexture (
+      &quot;/lib/std/castle/brick1_n.jpg&quot;);
+    normalMap-&gt;SetTextureClass (&quot;normalmap&quot;);
+    csShaderVariable* svNormalMap =
+      tm-&gt;GetMaterial()-&gt;GetVariableAdd (svStrings-&gt;Request (&quot;tex normal&quot;));
+    svNormalMap-&gt;SetValue (normalMap);
+  }
 
   room = engine-&gt;CreateSector (&quot;room&quot;);
 
@@ -144,21 +153,18 @@ void Simple::CreateRoom ()
   light = engine-&gt;CreateLight (0, csVector3 (0, 5, -3), 10,
         csColor (0, 1, 0));
   ll-&gt;Add (light);
-
-  engine-&gt;Prepare ();
 }
 </pre></td></tr></table>
 <p>This extra code first loads a texture with <code>LoadTexture()</code>.
 The first parameter is the name of the texture as it will be known in the
 engine; and the second is the
-actual filename on the <small>VFS</small> volume (see section <a href="VFS.html#0">Virtual File System (<small>VFS</small>)</a>).  Note, if you don't have
-the <tt>&lsquo;stone4.gif&rsquo;</tt> texture you can use another one.  The only requirement
-is that it must have sizes which are a power of 2 (e.g. 64x64); note that
-Crystal Space will scale them automatically if this requirement is not met
-but this can
-reduce quality. This function returns a <samp>&lsquo;iTextureWrapper&rsquo;</samp> which we
+actual filename on the <small>VFS</small> volume (see section <a href="VFS.html#0">Virtual File System (<small>VFS</small>)</a>). This function returns
+a <samp>&lsquo;iTextureWrapper&rsquo;</samp> which we
 don't use.  Instead we use the <samp>&lsquo;iMaterialWrapper&rsquo;</samp> which is created
 automatically by <code>LoadTexture()</code>.
+</p>
+<p>The next block of code shows how to add a normal map to the texture we just
+loaded.
 </p>
 <p>Then, we create our room with <code>CreateSector()</code>.  This room will initially
 be empty.  A room in Crystal Space is represented by <samp>&lsquo;iSector&rsquo;</samp> which is

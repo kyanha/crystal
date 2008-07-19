@@ -73,14 +73,13 @@ private:
   ...
   csRef&lt;iView&gt; view;
   ...
-  void ProcessFrame ();
-  void FinishFrame ();
+  void Frame ();
   ...
 </pre></td></tr></table>
 <p>Then, edit <tt>&lsquo;simple.cpp&rsquo;</tt> and make the following changes at the end of
-our <code>Application()</code> function:
+our <code>SetupModules()</code> function:
 </p>
-<table><tr><td>&nbsp;</td><td><pre class="example">bool Simple::Application ()
+<table><tr><td>&nbsp;</td><td><pre class="example">bool Simple::SetupModules ()
 {
   ...
   view.AttachNew(new csView (engine, g3d));
@@ -89,6 +88,8 @@ our <code>Application()</code> function:
   ...
   view-&gt;GetCamera ()-&gt;SetSector (room);
   view-&gt;GetCamera ()-&gt;GetTransform ().SetOrigin (csVector3 (0, 5, -3));
+  
+  printer.AttachNew (new FramePrinter (GetObjectRegistry ()));
 
   return true;
 }
@@ -113,59 +114,20 @@ in the functions <code>ProcessFrame()</code> and <code>FinishFrame()</code>. Not
 Crystal Space is event driven so the actual drawing needs to be triggered
 by the event handler. Add the following code somewhere in the source file:
 </p>
-<table><tr><td>&nbsp;</td><td><pre class="example">void Simple::ProcessFrame ()
+<table><tr><td>&nbsp;</td><td><pre class="example">void Simple::Frame ()
 {
-  // Tell 3D driver we're going to display 3D things.
-  if (!g3d-&gt;BeginDraw(
-    engine-&gt;GetBeginDrawFlags() | CSDRAW_3DGRAPHICS))
-    return;
-
-  // Tell the camera to render into the frame buffer.
-  view-&gt;Draw ();
-}
-
-void Simple::FinishFrame ()
-{
-  g3d-&gt;FinishDraw ();
-  g3d-&gt;Print (0);
+  rm-&gt;RenderView (view);
 }
 </pre></td></tr></table>
 <p>Drawing the screen is done in two steps. First there is the part that
-is done in <code>ProcessFrame()</code>. Here, we will actually fill the display.
+is done in <code>Frame()</code>. Here, we will actually fill the display.
 In this case we let the engine do most of that work by calling
-<code>view-&gt;Draw()</code>. But, in principle, you can do any kind of drawing here.
+<code>rm-&gt;RenderView (view)</code>. But, in principle, you can do any kind of
+drawing here.
 </p>
-<p>In <code>ProcessFrame()</code> we first have to indicate to the 3D rasterizer that
-we want to start drawing 3D graphics.  This call makes sure that the
-needed buffers are set up and
-performs all necessary initialization. The engine often needs extra settings
-for this as well so you <em>must</em> call <code>engine-&gt;GetBeginDrawFlags()</code> to
-get these flags and bitwise-or them with the ones that you want.
+<p>The <code>FramePrinter</code> instance we created earlier will take care of updating
+the display.
 </p>
-<p>The second part is in <code>FinishFrame()</code> where we actually dump the
-frame to the screen. The reason this is split is that other components
-(plugins) in Crystal Space may choose to listen to events and draw additional
-things on top of the 3D view rendered in <code>ProcessFrame()</code>. When a frame
-needs to be rendered, the Crystal Space framework will send four messages:
-</p>
-<ul>
-<li>
-<samp>&lsquo;csevPreProcess&rsquo;</samp> is sent first. This allows plugins to preprocess
-things before drawing can happen.
-
-</li><li>
-<samp>&lsquo;csevProcess&rsquo;</samp> follows. In this pass the application will render.
-
-</li><li>
-<samp>&lsquo;csevPostProcess&rsquo;</samp> is after that. This is the pass that can be used
-by external components to render on top of the view rendered by the
-application.
-
-</li><li>
-<samp>&lsquo;csevFinalProcess&rsquo;</samp> is last. In this pass the application will display
-the frame on screen.
-</li></ul>
-
 <p>Compile and run this example.  For the first time you should see something: A
 solid wall.  Congratulations, you have created your first almost useful
 Crystal Space application.
