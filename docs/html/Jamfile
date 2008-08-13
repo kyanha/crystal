@@ -1,5 +1,15 @@
 SubDir TOP docs html ;
 
+rule FilelistEntryManual
+{
+  FileListEntriesData $(1) : $(2) : doc-manual ;
+}
+
+rule FilelistEntryAPI
+{
+  FileListEntriesData $(1) : $(2) : doc-api ;
+}
+
 CSDOCFILES_HTML = .html .jpg .jpeg .png .gif .css ;
 
 # The 'manual' and 'api' subdirectories are generated automatically by
@@ -12,6 +22,9 @@ CSDOCFILES_HTML = .html .jpg .jpeg .png .gif .css ;
 
 SubDir TOP docs html manual ;
 Recurse InstallDoc : $(CSDOCFILES_HTML) : html manual ;
+Recurse FilelistEntryManual : $(CSDOCFILES_HTML) ;
 
 SubDir TOP docs html api ;
 Recurse InstallDoc : $(CSDOCFILES_HTML) : html api ;
+Recurse FilelistEntryAPI : $(CSDOCFILES_HTML) ;
+
