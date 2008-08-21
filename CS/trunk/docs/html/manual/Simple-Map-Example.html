@@ -78,38 +78,15 @@ and explains a few of the concepts in it.
     &lt;/material&gt;
   &lt;/materials&gt;
   &lt;plugins&gt;
-    &lt;plugin name=&quot;thing&quot;&gt;crystalspace.mesh.loader.thing&lt;/plugin&gt;
+    &lt;plugin name=&quot;genmesh&quot;&gt;crystalspace.mesh.loader.genmesh&lt;/plugin&gt;
   &lt;/plugins&gt;
 
   &lt;sector name=&quot;room&quot;&gt;
     &lt;meshobj name=&quot;walls&quot;&gt;
-      &lt;plugin&gt;thing&lt;/plugin&gt;
+      &lt;plugin&gt;genmesh&lt;/plugin&gt;
       &lt;zfill /&gt;
       &lt;params&gt;
-        &lt;v x=&quot;-10&quot; y=&quot;-1&quot; z=&quot;10&quot;/&gt; &lt;v x=&quot;10&quot; y=&quot;-1&quot; z=&quot;10&quot;/&gt;
-        &lt;v x=&quot;-10&quot; y=&quot;-1&quot; z=&quot;-10&quot;/&gt; &lt;v x=&quot;10&quot; y=&quot;-1&quot; z=&quot;-10&quot;/&gt;
-        &lt;v x=&quot;-10&quot; y=&quot;4&quot; z=&quot;10&quot;/&gt; &lt;v x=&quot;10&quot; y=&quot;4&quot; z=&quot;10&quot;/&gt;
-        &lt;v x=&quot;-10&quot; y=&quot;4&quot; z=&quot;-10&quot;/&gt; &lt;v x=&quot;10&quot; y=&quot;4&quot; z=&quot;-10&quot;/&gt;
-        &lt;material&gt;wood&lt;/material&gt;
-        &lt;texlen&gt;4&lt;/texlen&gt;
-        &lt;p name=&quot;up&quot;&gt;
-          &lt;v&gt;6&lt;/v&gt; &lt;v&gt;7&lt;/v&gt; &lt;v&gt;5&lt;/v&gt; &lt;v&gt;4&lt;/v&gt;
-        &lt;/p&gt;
-        &lt;p name=&quot;down&quot;&gt;
-          &lt;v&gt;3&lt;/v&gt; &lt;v&gt;2&lt;/v&gt; &lt;v&gt;0&lt;/v&gt; &lt;v&gt;1&lt;/v&gt;
-        &lt;/p&gt;
-        &lt;p name=&quot;back&quot;&gt;
-          &lt;v&gt;7&lt;/v&gt; &lt;v&gt;6&lt;/v&gt; &lt;v&gt;2&lt;/v&gt; &lt;v&gt;3&lt;/v&gt;
-        &lt;/p&gt;
-        &lt;p name=&quot;front&quot;&gt;
-          &lt;v&gt;4&lt;/v&gt; &lt;v&gt;5&lt;/v&gt; &lt;v&gt;1&lt;/v&gt; &lt;v&gt;0&lt;/v&gt;
-        &lt;/p&gt;
-        &lt;p name=&quot;left&quot;&gt;
-          &lt;v&gt;6&lt;/v&gt; &lt;v&gt;4&lt;/v&gt; &lt;v&gt;0&lt;/v&gt; &lt;v&gt;2&lt;/v&gt;
-        &lt;/p&gt;
-        &lt;p name=&quot;right&quot;&gt;
-          &lt;v&gt;5&lt;/v&gt; &lt;v&gt;7&lt;/v&gt; &lt;v&gt;3&lt;/v&gt; &lt;v&gt;1&lt;/v&gt;
-        &lt;/p&gt;
+        ...
       &lt;/params&gt;
     &lt;/meshobj&gt;
     &lt;light&gt;
@@ -139,9 +116,9 @@ also present in the map loader. The map loader itself does not know how
 to parse geometrical objects. It will delegate the loading of mesh objects
 to mesh object loaders (again separate plugins). In the <samp>&lsquo;PLUGINS&rsquo;</samp>
 section we indicate what plugins we are going to use in this map file. In
-this case we are only going to use the <samp>&lsquo;crystalspace.mesh.loader.thing&rsquo;</samp>
+this case we are only going to use the <samp>&lsquo;crystalspace.mesh.loader.genmesh&rsquo;</samp>
 loader which loads generic polygon based objects. We call this plugin
-<samp>&lsquo;thing&rsquo;</samp>.
+<samp>&lsquo;genmesh&rsquo;</samp>.
 </p>
 <p>In this simple example we only have one sector in the world called <samp>&lsquo;room&rsquo;</samp>.
 If you need multiple sectors you can use multiple <samp>&lsquo;sector&rsquo;</samp> statements.
@@ -155,16 +132,16 @@ the <samp>&lsquo;params&rsquo;</samp> block is given to the plugin loader. So th
 know about that. Everything that is outside <samp>&lsquo;params&rsquo;</samp> is handled by
 the engine itself. The first thing that has to be said in the <samp>&lsquo;meshobj&rsquo;</samp>
 block is which plugin is going to be used for loading this object. In this
-case we use the <samp>&lsquo;thing&rsquo;</samp> plugin. Then we tell the engine that we would
+case we use the <samp>&lsquo;genmesh&rsquo;</samp> plugin. Then we tell the engine that we would
 like to use <samp>&lsquo;ZFILL&rsquo;</samp> mode for rendering this object. This means that
 the Z-buffer will be filled but not read. This is usually used for exterior
 walls because Crystal Space does not clear the Z-buffer at the start of
 every frame (by default). See section <a href="HOWTO-Render-Priorities.html#0">Render Priorities and Objects in Sectors</a>.
 </p>
 <p>The rest of the mesh object is defined inside the <samp>&lsquo;params&rsquo;</samp> block and
-this is what will be parsed by the thing loader plugin. Keep in mind that
+this is what will be parsed by the genmesh loader plugin. Keep in mind that
 different types of plugins will have different syntax. So the discussion
-following here is only relevant for <samp>&lsquo;thing&rsquo;</samp> mesh objects.
+following here is only relevant for <samp>&lsquo;genmesh&rsquo;</samp> mesh objects.
 </p>
 <p>First we define all vertices that we are going to use in this mesh object.
 In this case we use eight vertices for the eight corners of the room that

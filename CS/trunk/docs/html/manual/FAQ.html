@@ -286,7 +286,7 @@ There is a tutorial on this subject at:
 
 <p><a href="http://www.cs.indiana.edu/~joellis/CSIntro.html">http://www.cs.indiana.edu/~joellis/CSIntro.html</a>
 </p>
-<p><strong>A3</strong>: For maps and objects using either <samp>&lsquo;genmesh&rsquo;</samp> or <samp>&lsquo;thing&rsquo;</samp>
+<p><strong>A3</strong>: For maps and objects using <samp>&lsquo;genmesh&rsquo;</samp>
 you can also use 3dsMax.  There is a 3dsMax exporter plugin
 included with Crystal Space (<tt>&lsquo;CS/scripts/max&rsquo;</tt>) with associated
 documentation which works very well.  This script is made and used by the 
@@ -441,7 +441,7 @@ space coordinate system is used with (0,0) in the top-left corner.
 </p>
 </li><li>
 <strong>Q</strong>: Why can't I get the
-<code>iThingState</code> / <code>iSprite3DState</code> / <small class="dots">...</small> from my mesh wrapper?  I
+<code>iGeneralMeshState</code> / <code>iSprite3DState</code> / <small class="dots">...</small> from my mesh wrapper?  I
 do <code>scfQueryInterface</code> from the mesh and it returns <samp>&lsquo;0&rsquo;</samp>.
 
 <p><strong>A</strong>: A common error is to try to query the state interface for
@@ -460,15 +460,15 @@ not.  Can you explain this reference counting to me?
 make it easier for you to keep track of references.  They will automatically
 <code>DecRef()</code> when they are ready.  Here is an example of their usage:
 </p>
-<table><tr><td>&nbsp;</td><td><pre class="example">csRef&lt;iThingState&gt; st =
-  scfQueryInterface&lt;iThingState&gt; (mesh-&gt;GetMeshObject());
+<table><tr><td>&nbsp;</td><td><pre class="example">csRef&lt;iGeneralMeshState&gt; st =
+  scfQueryInterface&lt;iGeneralMeshState&gt; (mesh-&gt;GetMeshObject());
 if (st)
 {
   st-&gt;blabla ...;
 }
 </pre></td></tr></table>
 <p>You can use the <samp>&lsquo;st&rsquo;</samp> variable just like you would use the normal
-<code>iThingState</code> reference. The only difference with code that doesn't use
+<code>iGeneralMeshState</code> reference. The only difference with code that doesn't use
 smart pointers is that you don't have to take care of calling
 <code>DecRef</code>.  See section <a href="Smart-Pointers.html#0">Correctly Using Smart Pointers</a>.
 </p>
@@ -499,21 +499,6 @@ using the <samp>&lsquo;settings&rsquo;</samp> block and enabling the <samp>&lsqu
 your call to <code>g3d-&gt;BeginDraw()</code> to ensure that this Z-buffer clearing will
 actually work (in fact you should <em>always</em> use
 <code>GetBeginDrawFlags()</code>).
-</p>
-</li><li>
-<strong>Q</strong>: I'm using a <samp>&lsquo;thing&rsquo;</samp> mesh object and some of the polygons
-are rendered completely wrong.
-
-<p><strong>A1</strong>: Polygons in Crystal Space must be convex (meaning that every
-line between two random vertices of the polygon is fully contained in
-the polygon).
-</p>
-<p><strong>A2</strong>: The vertices of the polygon must all be on the same plane.
-For a triangle that is automatically the case.
-</p>
-<p><strong>A3</strong>: If you specify texture coordinates using <samp>&lsquo;uv&rsquo;</samp> on three
-of the polygon vertices then those three texture coordinates must be
-different.
 </p>
 </li><li>
 <strong>Q</strong>: I'm trying to use some plugin but it says that it cannot find it
