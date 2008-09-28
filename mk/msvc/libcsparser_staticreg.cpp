@@ -22,9 +22,9 @@ static char const metainfo_csparser[] =
 "  <scf>"
 "    <classes>"
 "      <class>"
-"        <name>crystalspace.level.loader</name>"
-"        <implementation>csLoader</implementation>"
-"        <description>Level and library file loader</description>"
+"        <name>crystalspace.level.threadedloader</name>"
+"        <implementation>csThreadedLoader</implementation>"
+"        <description>Threaded level and library file loader</description>"
 "        <requires>"
 "          <class>crystalspace.kernel.</class>"
 "          <class>crystalspace.sound.loader.</class>"
@@ -39,11 +39,19 @@ static char const metainfo_csparser[] =
 "        </requires>"
 "      </class>"
 "      <class>"
+"        <name>crystalspace.level.loader</name>"
+"        <implementation>csLoader</implementation>"
+"        <description>Old level and library file loader</description>"
+"        <requires>"
+"          <class>crystalspace.level.threadedloader</class>"
+"        </requires>"
+"      </class>"
+"      <class>"
 "        <name>crystalspace.texture.loader.checkerboard</name>"
 "        <implementation>csCheckerTextureLoader</implementation>"
 "        <description>Checkerboard texture loader</description>"
 "        <requires>"
-"          <class>crystalspace.level.loader</class>"
+"          <class>crystalspace.level.threadedloader</class>"
 "        </requires>"
 "      </class>"
 "      <class>"
@@ -51,7 +59,7 @@ static char const metainfo_csparser[] =
 "        <implementation>csImageTextureLoader</implementation>"
 "        <description>Image texture loader</description>"
 "        <requires>"
-"          <class>crystalspace.level.loader</class>"
+"          <class>crystalspace.level.threadedloader</class>"
 "        </requires>"
 "      </class>"
 "      <class>"
@@ -59,7 +67,7 @@ static char const metainfo_csparser[] =
 "        <implementation>csCubemapTextureLoader</implementation>"
 "        <description>Cube map texture loader</description>"
 "        <requires>"
-"          <class>crystalspace.level.loader</class>"
+"          <class>crystalspace.level.threadedloader</class>"
 "        </requires>"
 "      </class>"
 "      <class>"
@@ -67,21 +75,17 @@ static char const metainfo_csparser[] =
 "        <implementation>csTexture3DLoader</implementation>"
 "        <description>3D texture loader</description>"
 "        <requires>"
-"          <class>crystalspace.level.loader</class>"
+"          <class>crystalspace.level.threadedloader</class>"
 "        </requires>"
 "      </class>"
-"       <class>"
-"         <name>crystalspace.level.loader.threaded</name>"
-"         <implementation>csThreadedLoader</implementation>"
-"         <description>Threaded level and library file loader</description>"
-"         <requires>"
-"           <class>crystalspace.level.loader</class>"
-"         </requires>"
-"       </class>"
 "    </classes>"
 "  </scf>"
 "</plugin>"
 ;
+  #ifndef csThreadedLoader_FACTORY_REGISTER_DEFINED 
+  #define csThreadedLoader_FACTORY_REGISTER_DEFINED 
+    SCF_DEFINE_FACTORY_FUNC_REGISTRATION(csThreadedLoader) 
+  #endif
   #ifndef csLoader_FACTORY_REGISTER_DEFINED 
   #define csLoader_FACTORY_REGISTER_DEFINED 
     SCF_DEFINE_FACTORY_FUNC_REGISTRATION(csLoader) 
@@ -102,14 +106,14 @@ static char const metainfo_csparser[] =
   #define csTexture3DLoader_FACTORY_REGISTER_DEFINED 
     SCF_DEFINE_FACTORY_FUNC_REGISTRATION(csTexture3DLoader) 
   #endif
-  #ifndef csThreadedLoader_FACTORY_REGISTER_DEFINED 
-  #define csThreadedLoader_FACTORY_REGISTER_DEFINED 
-    SCF_DEFINE_FACTORY_FUNC_REGISTRATION(csThreadedLoader) 
-  #endif
 
 class csparser
 {
 SCF_REGISTER_STATIC_LIBRARY(csparser,metainfo_csparser)
+  #ifndef csThreadedLoader_FACTORY_REGISTERED 
+  #define csThreadedLoader_FACTORY_REGISTERED 
+    csThreadedLoader_StaticInit csThreadedLoader_static_init__; 
+  #endif
   #ifndef csLoader_FACTORY_REGISTERED 
   #define csLoader_FACTORY_REGISTERED 
     csLoader_StaticInit csLoader_static_init__; 
@@ -129,10 +133,6 @@ SCF_REGISTER_STATIC_LIBRARY(csparser,metainfo_csparser)
   #ifndef csTexture3DLoader_FACTORY_REGISTERED 
   #define csTexture3DLoader_FACTORY_REGISTERED 
     csTexture3DLoader_StaticInit csTexture3DLoader_static_init__; 
-  #endif
-  #ifndef csThreadedLoader_FACTORY_REGISTERED 
-  #define csThreadedLoader_FACTORY_REGISTERED 
-    csThreadedLoader_StaticInit csThreadedLoader_static_init__; 
   #endif
 public:
  csparser();
