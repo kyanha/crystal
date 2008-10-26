@@ -191,6 +191,9 @@ It takes multiple parameters:
 </li><li> The final parameter is a boolean value which determines whether or not the method will return immediately (false), or if it will wait until the call is finished(true).
 </li></ul>
 
+<p>Be very careful when dispatching to the main thread and waiting on it to finish.
+E.g. If you're holding a lock which the main thread is currently waiting on, you will cause a deadlock by calling such a method.
+</p>
 <table><tr><td>&nbsp;</td><td><pre class="example">#include &quot;csutil/threadmanager.h&quot;
 
 class csThreadTest :
