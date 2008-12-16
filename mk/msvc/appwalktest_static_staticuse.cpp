@@ -16,6 +16,7 @@ struct _static_use { _static_use (); };
 _static_use::_static_use () {}
 SCF_USE_STATIC_PLUGIN(animesh)
 SCF_USE_STATIC_PLUGIN(animeshldr)
+SCF_USE_STATIC_PLUGIN(bindoc)
 SCF_USE_STATIC_PLUGIN(bugplug)
 SCF_USE_STATIC_PLUGIN(csconin)
 SCF_USE_STATIC_PLUGIN(csconout)
@@ -84,7 +85,6 @@ SCF_USE_STATIC_PLUGIN(glshader_arb)
 SCF_USE_STATIC_PLUGIN(glshader_fixed)
 SCF_USE_STATIC_PLUGIN(glwin32)
 SCF_USE_STATIC_PLUGIN(glshader_cg)
-SCF_USE_STATIC_PLUGIN(bindoc)
 SCF_USE_STATIC_PLUGIN(csbmpimg)
 SCF_USE_STATIC_PLUGIN(rendstep_stencil)
 
