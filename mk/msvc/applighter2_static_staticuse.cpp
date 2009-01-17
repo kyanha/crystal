@@ -14,8 +14,6 @@
 #endif
 struct _static_use { _static_use (); };
 _static_use::_static_use () {}
-SCF_USE_STATIC_PLUGIN(bezier)
-SCF_USE_STATIC_PLUGIN(bezierldr)
 SCF_USE_STATIC_PLUGIN(bindoc)
 SCF_USE_STATIC_PLUGIN(csbmpimg)
 SCF_USE_STATIC_PLUGIN(csddsimg)

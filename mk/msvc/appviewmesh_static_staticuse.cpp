@@ -16,8 +16,6 @@ struct _static_use { _static_use (); };
 _static_use::_static_use () {}
 SCF_USE_STATIC_PLUGIN(animesh)
 SCF_USE_STATIC_PLUGIN(animeshldr)
-SCF_USE_STATIC_PLUGIN(bezier)
-SCF_USE_STATIC_PLUGIN(bezierldr)
 SCF_USE_STATIC_PLUGIN(bruteblock)
 SCF_USE_STATIC_PLUGIN(bugplug)
 SCF_USE_STATIC_PLUGIN(csbmpimg)
