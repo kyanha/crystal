@@ -11,10 +11,10 @@ Send bugs and suggestions to <users@texi2html.cvshome.org>
 
 -->
 <head>
-<title>Crystal Space 1.9.0: 4.10.16 Haze Mesh Object</title>
+<title>Crystal Space 1.9.0: 4.10.17 Watermesh Mesh Object</title>
 
-<meta name="description" content="Crystal Space 1.9.0: 4.10.16 Haze Mesh Object">
-<meta name="keywords" content="Crystal Space 1.9.0: 4.10.16 Haze Mesh Object">
+<meta name="description" content="Crystal Space 1.9.0: 4.10.17 Watermesh Mesh Object">
+<meta name="keywords" content="Crystal Space 1.9.0: 4.10.17 Watermesh Mesh Object">
 <meta name="resource-type" content="document">
 <meta name="distribution" content="global">
 <meta name="Generator" content="texi2html 1.76">
@@ -40,11 +40,11 @@ ul.toc {list-style: none}
 
 <body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
 
-<a name="MeshObject-Haze"></a>
+<a name="MeshObject-Watermesh"></a>
 <a name="0"></a>
 <table cellpadding="1" cellspacing="1" border="0">
-<tr><td valign="middle" align="left">[<a href="MeshObject-Emit.html#0" title="Previous section in reading order"> &lt; </a>]</td>
-<td valign="middle" align="left">[<a href="MeshObject-Watermesh.html#0" title="Next section in reading order"> &gt; </a>]</td>
+<tr><td valign="middle" align="left">[<a href="MeshObject-Haze.html#0" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="Lighting-System.html#0" title="Next section in reading order"> &gt; </a>]</td>
 <td valign="middle" align="left"> &nbsp; </td>
 <td valign="middle" align="left">[<a href="Using-Crystal-Space.html#0" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
 <td valign="middle" align="left">[<a href="MeshObject.html#0" title="Up section"> Up </a>]</td>
@@ -59,11 +59,15 @@ ul.toc {list-style: none}
 <td valign="middle" align="left">[<a href="cs_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
 </tr></table>
 <hr size="1">
-<h3 class="subsection"> 4.10.16 Haze Mesh Object </h3>
+<h3 class="subsection"> 4.10.17 Watermesh Mesh Object </h3>
 
-<p>This mesh object represents a 'haze' which is a bit like
-volumetric light. For example you can show this way moody
-rays from church windows.
+<p><em>Written by Pavel Krajcevski,
+<a href="mailto:Krajcevski@gmail.com">Krajcevski@gmail.com</a>.</em>
+</p>
+<p>A watermesh is a simple mesh representing a grid. In its simplest form it can
+be used to render a square. It requires a specific shader to make it look like
+water. A watermesh is generally preferred since it is very simple to define the
+bounds and furthermore it supports ocean creation with very basic LOD calculations.
 </p>
 <a name="1"></a>
 <h4 class="subsubheading"> Basic Structure </h4>
@@ -72,11 +76,11 @@ rays from church windows.
 </p>
 <ul>
 <li>
-Type plugin: <code>crystalspace.mesh.object.haze</code>
+Type plugin: <code>crystalspace.mesh.object.watermesh</code>
 </li><li>
-Loader plugin: <code>crystalspace.mesh.loader.haze</code>
+Loader plugin: <code>crystalspace.mesh.loader.watermesh</code>
 </li><li>
-Factory loader plugin: <code>crystalspace.mesh.loader.factory.haze</code>
+Factory loader plugin: <code>crystalspace.mesh.loader.factory.watermesh</code>
 </li></ul>
 
 <p>Objects in this plugin implement the following <small>SCF</small> interfaces, which you
@@ -89,7 +93,7 @@ can retrieve with <code>scfQueryInterface</code>:
 <li>
 Implements <samp>&lsquo;iMeshObject&rsquo;</samp>
 </li><li>
-Implements <samp>&lsquo;iHazeState&rsquo;</samp>
+Implements <samp>&lsquo;iWaterMeshState&rsquo;</samp>
 </li></ul>
 </li><li>
 <em>MeshObjectFactory</em>
@@ -97,7 +101,7 @@ Implements <samp>&lsquo;iHazeState&rsquo;</samp>
 <li>
 Implements <samp>&lsquo;iMeshObjectFactory&rsquo;</samp>
 </li><li>
-Implements <samp>&lsquo;iHazeFactoryState&rsquo;</samp>
+Implements <samp>&lsquo;iWaterFactoryState&rsquo;</samp>
 </li></ul>
 </li><li>
 <em>MeshObjectType</em>
@@ -110,88 +114,68 @@ Implements <samp>&lsquo;iMeshObjectType&rsquo;</samp>
 <a name="2"></a>
 <h4 class="subsubheading"> Factory State Interface </h4>
 
-<p>Use the <samp>&lsquo;iHazeFactoryState&rsquo;</samp> <small>SCF</small> interface to access settings for
-a haze factory.  The definition of this interface can be found in
-<tt>&lsquo;CS/include/imesh/haze.h&rsquo;</tt> and that is also the include file you need
+<p>Use the <samp>&lsquo;iWaterFactoryState&rsquo;</samp> <small>SCF</small> interface to access settings for
+a watermesh factory.  The definition of this interface can be found in
+<tt>&lsquo;CS/include/imesh/watermesh.h&rsquo;</tt> and that is also the include file you need
 to include in your applications to use this plugin.  Using this interface you
-can access the direction, origin, layers, scale and various other 
-configuration parameters for a haze factory.
+can access the material, dimensions, murkiness, and whether or not you want an
+ocean for your watermesh factory.
 </p>
 <a name="3"></a>
 <h4 class="subsubheading"> Factory Loader </h4>
 
-<p>The haze mesh factory loader has no parameters.
-</p>
+<p>Here is a list of all the tags supported by a watermesh factory and their
+meaning:
+</p><ul>
+<li> <samp>&lsquo;width&rsquo;</samp>
+Determine the width of the watermesh in the x direction. This must be an integer.
+</li><li> <samp>&lsquo;length&rsquo;</samp>
+Determine the length of the watermesh in the z direction. This must be an integer.
+</li><li> <samp>&lsquo;gran&rsquo;</samp>
+Determine the granularity of the mesh, i.e. the amount of vertices per unit length.
+For example, a granularity of two would make vertex coordinates at 0, 0.5, 1, 1.5, etc.
+</li><li> <samp>&lsquo;murk&rsquo;</samp>
+Set the murkiness of the water. This determines how transparent the water is. Must be a number
+between zero and one. Default is 0.3.
+</li><li> <samp>&lsquo;isocean&rsquo;</samp>
+Boolean value for whether or not you want the factory to define an ocean. If the mesh is an
+ocean then the values for <samp>&lsquo;width&rsquo;</samp>, <samp>&lsquo;length&rsquo;</samp>, and <samp>&lsquo;gran&rsquo;</samp> are ignored.
+</li></ul>
+
 <a name="4"></a>
 <h4 class="subsubheading"> Object State Interface </h4>
 
-<p><samp>&lsquo;iHazeState&rsquo;</samp> (residing in <tt>&lsquo;CS/include/imesh/haze.h&rsquo;</tt>) is
-an empty <small>SCF</small> interface.
+<p><samp>&lsquo;iWaterMeshState&rsquo;</samp> (residing in <tt>&lsquo;CS/include/imesh/watermesh.h&rsquo;</tt>) is
+the <small>SCF</small> interface that you can use to manipulate settings for a watermesh
+object.  By using this interface you can access the material for a watermesh object.
 </p>
 <a name="5"></a>
 <h4 class="subsubheading"> Object Loader </h4>
 
-<dl compact="compact">
-<dt> <code>&lt;material&gt; <small class="dots">...</small> &lt;/material&gt;</code></dt>
-<dd><p>Material name.
-</p></dd>
-<dt> <code>&lt;mixmode&gt; <small class="dots">...</small> &lt;/mixmode&gt;</code></dt>
-<dd><p>Color mixing mode.
-</p></dd>
-<dt> <code>&lt;origin x=&quot;&quot; y=&quot;&quot; z=&quot;&quot; /&gt;</code></dt>
-<dd><p>Set the origin of the texture.
-</p></dd>
-<dt> <code>&lt;directional x=&quot;&quot; y=&quot;&quot; z=&quot;&quot; /&gt;</code></dt>
-<dd><p>Set the direction of the texture.
-</p></dd>
-<dt> <code>&lt;layer&gt; <small class="dots">...</small> &lt;/layer&gt;</code></dt>
-<dd><p>Layer of the haze mesh.
-Inside layer:
-</p></dd>
-<dt> <code>&lt;scale&gt; <small class="dots">...</small> &lt;/scale&gt;</code></dt>
-<dd><p>Scale of the texture.
-</p></dd>
-<dt> <code>&lt;hazebox&gt; <small class="dots">...</small> &lt;/hazebox&gt;</code></dt>
-<dd><p>Draws box shape.
-Inside hazebox:
-</p></dd>
-<dt> <code>&lt;min x=&quot;&quot; y=&quot;&quot; z=&quot;&quot; /&gt;</code></dt>
-<dd><p>First corner of the box.
-</p></dd>
-<dt> <code>&lt;max x=&quot;&quot; y=&quot;&quot; z=&quot;&quot; /&gt;</code></dt>
-<dd><p>Last corner if the box.
-</p><table><tr><td>&nbsp;</td><td><pre class="example">&lt;layer&gt;
-  &lt;scale&gt;&lt;/scale&gt;
-  &lt;hazebox&gt;
-    &lt;min x=&quot;&quot; y=&quot;&quot; z=&quot;&quot; /&gt;
-    &lt;max x=&quot;&quot; y=&quot;&quot; z=&quot;&quot; /&gt;
-  &lt;/hazecone&gt;
-&lt;/layer&gt;
-</pre></td></tr></table></dd>
-<dt> <code>&lt;hazecone p=&quot;&quot; q=&quot;&quot; number=&quot;&quot;&gt; <small class="dots">...</small> &lt;/hazecone&gt;</code></dt>
-<dd><p>Draws cone shape. Give p - radius of the top, q - radius of the bottom
-and number of faces to create cone mesh.
-Inside hazecone:
-</p></dd>
-<dt> <code>&lt;min x=&quot;&quot; y=&quot;&quot; z=&quot;&quot; /&gt;</code></dt>
-<dd><p>Position of the cone's tip.
-</p></dd>
-<dt> <code>&lt;max x=&quot;&quot; y=&quot;&quot; z=&quot;&quot; /&gt;</code></dt>
-<dd><p>Position of the cone's bottom.
-</p><table><tr><td>&nbsp;</td><td><pre class="example">&lt;layer&gt;
-  &lt;scale&gt;&lt;/scale&gt;
-  &lt;hazecone p=&quot;&quot; q=&quot;&quot; number=&quot;&quot;&gt;
-    &lt;min x=&quot;&quot; y=&quot;&quot; z=&quot;&quot; /&gt;
-    &lt;max x=&quot;&quot; y=&quot;&quot; z=&quot;&quot; /&gt;
-  &lt;/hazecone&gt;
-&lt;/layer&gt;
-</pre></td></tr></table></dd>
-</dl>
+<p>Here is a list of all the tags supported by a watermesh object and their
+meaning:
+</p><ul>
+<li> <samp>&lsquo;factory&rsquo;</samp>
+The name of the factory to use.
+</li><li> <samp>&lsquo;material&rsquo;</samp>
+For this object, override the material from the factory.
+</li></ul>
+
+<a name="6"></a>
+<h4 class="subsubheading"> Water Shaders </h4>
+
+<p>Currently, most of the work into rendering realistic water is determined by the shaders
+associated with the mesh. For this there is a predefined shader in 
+<tt>&lsquo;CS/data/shader/water/water.xml&rsquo;</tt>. Also, the shader currently supports the use of
+multisampling a normal map to create a rippling effect on the water. This requires a
+normal map defined in tangent space, some of which can be found in <tt>&lsquo;CS/data/water/&rsquo;</tt>
+</p>
+
 
 <hr size="1">
 <table cellpadding="1" cellspacing="1" border="0">
-<tr><td valign="middle" align="left">[<a href="MeshObject-Emit.html#0" title="Previous section in reading order"> &lt; </a>]</td>
-<td valign="middle" align="left">[<a href="MeshObject-Watermesh.html#0" title="Next section in reading order"> &gt; </a>]</td>
+<tr><td valign="middle" align="left">[<a href="MeshObject-Haze.html#0" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="Lighting-System.html#0" title="Next section in reading order"> &gt; </a>]</td>
 <td valign="middle" align="left"> &nbsp; </td>
 <td valign="middle" align="left">[<a href="Using-Crystal-Space.html#0" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
 <td valign="middle" align="left">[<a href="MeshObject.html#0" title="Up section"> Up </a>]</td>
