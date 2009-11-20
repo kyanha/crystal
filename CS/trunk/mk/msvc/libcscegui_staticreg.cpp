@@ -23,7 +23,7 @@ static char const metainfo_cscegui[] =
 "    <classes>"
 "      <class>"
 "        <name>crystalspace.cegui.wrapper</name>"
-"        <implementation>csCEGUIRenderer</implementation>"
+"        <implementation>Renderer</implementation>"
 "        <description>Crystal Space CEGUI Wrapper</description>"
 "        <requires>"
 "          <class>crystalspace.graphics3d.</class>"
@@ -34,17 +34,17 @@ static char const metainfo_cscegui[] =
 "  </scf>"
 "</plugin>"
 ;
-  #ifndef csCEGUIRenderer_FACTORY_REGISTER_DEFINED 
-  #define csCEGUIRenderer_FACTORY_REGISTER_DEFINED 
-    SCF_DEFINE_FACTORY_FUNC_REGISTRATION(csCEGUIRenderer) 
+  #ifndef Renderer_FACTORY_REGISTER_DEFINED 
+  #define Renderer_FACTORY_REGISTER_DEFINED 
+    SCF_DEFINE_FACTORY_FUNC_REGISTRATION(Renderer) 
   #endif
 
 class cscegui
 {
 SCF_REGISTER_STATIC_LIBRARY(cscegui,metainfo_cscegui)
-  #ifndef csCEGUIRenderer_FACTORY_REGISTERED 
-  #define csCEGUIRenderer_FACTORY_REGISTERED 
-    csCEGUIRenderer_StaticInit csCEGUIRenderer_static_init__; 
+  #ifndef Renderer_FACTORY_REGISTERED 
+  #define Renderer_FACTORY_REGISTERED 
+    Renderer_StaticInit Renderer_static_init__; 
   #endif
 public:
  cscegui();
