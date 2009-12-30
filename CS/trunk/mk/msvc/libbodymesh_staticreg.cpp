@@ -22,7 +22,7 @@ static char const metainfo_bodymesh[] =
 "  <scf>"
 "    <classes>"
 "      <class>"
-"        <name>crystalspace.mesh.object.animesh.body</name>"
+"        <name>crystalspace.mesh.animesh.body</name>"
 "        <implementation>BodyManager</implementation>"
 "        <description>Crystal Space Physical Description of an Animated Mesh</description>"
 "      </class>"
