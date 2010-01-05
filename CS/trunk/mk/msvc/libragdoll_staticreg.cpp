@@ -24,7 +24,7 @@ static char const metainfo_ragdoll[] =
 "      <class>"
 "        <name>crystalspace.mesh.animesh.controllers.ragdoll</name>"
 "        <implementation>RagdollManager</implementation>"
-"        <description>Crystal Space Ragdoll Controller of an Animated Mesh</description>"
+"        <description>Crystal Space ragdoll animation node of an animated Mesh</description>"
 "      </class>"
 "    </classes>"
 "  </scf>"
