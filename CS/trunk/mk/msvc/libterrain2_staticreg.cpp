@@ -42,6 +42,11 @@ static char const metainfo_terrain2[] =
 "        <description>Terrain simple data feeder</description>"
 "      </class>"
 "      <class>"
+"        <name>crystalspace.mesh.object.terrain2.modifiabledatafeeder</name>"
+"        <implementation>csTerrainModifiableDataFeeder</implementation>"
+"        <description>Terrain modifiable data feeder</description>"
+"      </class>"
+"      <class>"
 "        <name>crystalspace.mesh.object.terrain2</name>"
 "        <implementation>csTerrainMeshObjectType</implementation>"
 "        <description>Terrain mesh type</description>"
@@ -66,6 +71,10 @@ static char const metainfo_terrain2[] =
   #define csTerrainSimpleDataFeeder_FACTORY_REGISTER_DEFINED 
     SCF_DEFINE_FACTORY_FUNC_REGISTRATION(csTerrainSimpleDataFeeder) 
   #endif
+  #ifndef csTerrainModifiableDataFeeder_FACTORY_REGISTER_DEFINED 
+  #define csTerrainModifiableDataFeeder_FACTORY_REGISTER_DEFINED 
+    SCF_DEFINE_FACTORY_FUNC_REGISTRATION(csTerrainModifiableDataFeeder) 
+  #endif
   #ifndef csTerrainMeshObjectType_FACTORY_REGISTER_DEFINED 
   #define csTerrainMeshObjectType_FACTORY_REGISTER_DEFINED 
     SCF_DEFINE_FACTORY_FUNC_REGISTRATION(csTerrainMeshObjectType) 
@@ -89,6 +98,10 @@ SCF_REGISTER_STATIC_LIBRARY(terrain2,metainfo_terrain2)
   #ifndef csTerrainSimpleDataFeeder_FACTORY_REGISTERED 
   #define csTerrainSimpleDataFeeder_FACTORY_REGISTERED 
     csTerrainSimpleDataFeeder_StaticInit csTerrainSimpleDataFeeder_static_init__; 
+  #endif
+  #ifndef csTerrainModifiableDataFeeder_FACTORY_REGISTERED 
+  #define csTerrainModifiableDataFeeder_FACTORY_REGISTERED 
+    csTerrainModifiableDataFeeder_StaticInit csTerrainModifiableDataFeeder_static_init__; 
   #endif
   #ifndef csTerrainMeshObjectType_FACTORY_REGISTERED 
   #define csTerrainMeshObjectType_FACTORY_REGISTERED 
