@@ -1,0 +1,339 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html401/loose.dtd">
+<html>
+<!-- Created by texi2html 1.76 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Many creative people <dev@texi2html.cvshome.org>
+Send bugs and suggestions to <users@texi2html.cvshome.org>
+
+-->
+<head>
+<title>Crystal Space 1.9.0: 4.9.13.2 Using the Deferred Shading Render Manager</title>
+
+<meta name="description" content="Crystal Space 1.9.0: 4.9.13.2 Using the Deferred Shading Render Manager">
+<meta name="keywords" content="Crystal Space 1.9.0: 4.9.13.2 Using the Deferred Shading Render Manager">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="texi2html 1.76">
+<meta http-equiv="Content-Type" content="text/html; charset=us-ascii">
+<style type="text/css">
+<!--
+a.summary-letter {text-decoration: none}
+pre.display {font-family: serif}
+pre.format {font-family: serif}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: serif; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: serif; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.sansserif {font-family:sans-serif; font-weight:normal;}
+ul.toc {list-style: none}
+-->
+</style>
+
+
+</head>
+
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
+
+<a name="Using-Deferred"></a>
+<a name="0"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="About-Deferred.html#0" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="MeshObject.html#0" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="Using-Crystal-Space.html#0" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="Deferred-Shading.html#0" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="Working-with-Engine-Content.html#0" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="index.html#SEC_Top" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="cs_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="cs_Index.html#0" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="cs_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<hr size="1">
+<h4 class="subsubsection"> 4.9.13.2 Using the Deferred Shading Render Manager </h4>
+
+<a name="1"></a>
+<h4 class="subsubheading"> Selecting the Deferred Render Manager </h4>
+
+<p>The simplest method to select the deferred render manager is to use the
+following configuration option:
+</p><table><tr><td>&nbsp;</td><td><pre class="example">Engine.RenderManager.Default = crystalspace.rendermanager.deferred
+</pre></td></tr></table>
+<p>Alternately, the deferred render manager can also be loaded manually as follows:
+</p><table><tr><td>&nbsp;</td><td><pre class="example">rm = csLoadPlugin&lt;iRenderManager&gt; (objectRegistry,
+  &quot;crystalspace.rendermanager.deferred&quot;);
+</pre></td></tr></table>
+<p><em>Note</em>: When loading the deferred render manager manually the
+'CS/data/config/engine.cfg' configuration file will not, by default, be present
+in the configuration manager. This file specifies configuration options used by
+the deferred render manager. Be sure to define these configurations option prior
+to loading the deferred render manager. 
+</p>
+<p>After being loaded, the engine must be instructed to use the deferred render
+manager as follows:
+</p><table><tr><td>&nbsp;</td><td><pre class="example">engine-&gt;SetRenderManager (rm);
+</pre></td></tr></table>
+<a name="2"></a>
+<h4 class="subsubheading"> Filling the GBuffer </h4>
+
+<p>Before lighting can be computed the deferred render manager will fill the
+GBuffer with the current sectors geometry information using the <samp>&lsquo;gbuffer
+fill&rsquo;</samp> shader type. Each material can specify its own <samp>&lsquo;gbuffer fill&rsquo;</samp> shader
+type that will be used by the deferred render manager. If no such shader type is
+specified then a default shader
+(<samp>&lsquo;CS/data/shader/deferred/fill_gbuffer.xml&rsquo;</samp>) will be used.
+</p>
+<a name="3"></a>
+<h4 class="subsubheading"> Using the GBuffer </h4>
+
+<p>After the GBuffer is filled with the relevant information the deferred render
+manager will compute lighting information. To do this the render manager will
+iterate through all visible lights in the sector and draws proxy geometry that
+approximates the size and shape of the light source. Each light proxy is drawn
+using a shader that reads data from the GBuffer, computes the lighting equation,
+and adds it to the accumulation buffer.
+</p>
+<p>The following types of light sources are supported: 
+</p>
+<dl compact="compact">
+<dt> <code>point light</code></dt>
+<dd><p>Represented as a sphere. The detail of the sphere can be controlled using the
+<samp>&lsquo;RenderManager.Deferred.SphereDetail&rsquo;</samp> configuration option (defaults to
+16). The proxy geometry is drawn using the
+<samp>&lsquo;CS/data/shader/deferred/point_light.xml&rsquo;</samp> shader.
+</p>
+</dd>
+<dt> <code>spot light</code></dt>
+<dd><p>Represented as a cone. The detail of the sphere can be controlled using the
+<samp>&lsquo;RenderManager.Deferred.ConeDetail&rsquo;</samp> configuration option (defaults to 16).
+The proxy geometry is drawn using the
+<samp>&lsquo;CS/data/shader/deferred/spot_light.xml&rsquo;</samp> shader.
+</p>
+</dd>
+<dt> <code>directional light</code></dt>
+<dd><p>Represented as a cube. The proxy geometry is drawn using the
+<samp>&lsquo;CS/data/shader/deferred/directional_light.xml&rsquo;</samp> shader.
+</p>
+</dd>
+</dl>
+
+<p>The deferred render manager will also output ambient light for the entire sector
+by drawing a single fullscreen quad with the
+<samp>&lsquo;CS/data/shader/deferred/ambient_light.xml&rsquo;</samp> shader. This shader will
+modulate the GBuffers ambient and diffuse color at each pixel. 
+</p>
+<p><em>Note</em>: The shader include
+<samp>&lsquo;CS/data/shader/deferred/light_common.cginc&rsquo;</samp> file contains a number of
+useful functions for use with light proxy shaders.
+</p>
+<a name="4"></a>
+<h4 class="subsubheading"> Default GBuffer Layout </h4>
+
+<p>The default GBuffer consists of three 16-bit floating-point RGBA color buffers
+along with one 32-bit depth and stencil buffer.
+</p>
+<p><em>Note</em>: Depending on hardware support the depth buffer might not contain
+any stencil bits.
+</p>
+<p>The default data layout is presented in the following table:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">               +-----+-------+------+--------------+
+               | Red | Green | Blue |    Alpha     |
++--------------+-----+-------+------+--------------+
+| buffer 0     |   diffuse (RGB)    | specular (R) |
++--------------+--------------------+--------------+
+| buffer 1     |   normal (XYZ)     | specular (G) |
++--------------+--------------------+--------------+
+| buffer 2     |   ambient (RGB)    | specular (B) |
++--------------+--------------------+--------------+
+| depth buffer |      depth and stencil value      |
++--------------+-----------------------------------+
+</pre></td></tr></table>
+<p>The data stored in the GBuffer is described below:
+</p>
+<dl compact="compact">
+<dt> <code>diffuse (RGB)</code></dt>
+<dd><p>The red, green, and blue components of the geometries diffuse color.
+</p></dd>
+<dt> <code>specular (RGB)</code></dt>
+<dd><p>The red, green, and blue components of the geometries specular color.
+</p></dd>
+<dt> <code>diffuse (RGB)</code></dt>
+<dd><p>The red, green, and blue components of the geometries ambient color.
+</p></dd>
+<dt> <code>normal (XYZ)</code></dt>
+<dd><p>The xyz components of the geometries normal vector in view space. Normalized and
+mapped into the range [0,1].
+</p></dd>
+<dt> <code>depth and stencil value</code></dt>
+<dd><p>The nonlinear post projection depth value and an optional stencil value. 
+</p></dd>
+</dl>
+
+<a name="5"></a>
+<h4 class="subsubheading"> Changing the GBuffer Layout </h4>
+
+<p>The layout of the GBuffer can be changed using the following configuration
+options: 
+</p>
+<dl compact="compact">
+<dt> <code>RenderManager.Deferred.GBuffer.BufferCount</code></dt>
+<dd><p>Controls the number of color buffers present in the GBuffer (defaults to 3).
+The maximum number of color buffers can be queried from the <code>iGraphics3D</code>
+device as follows:
+</p><table><tr><td>&nbsp;</td><td><pre class="example">const csGraphics3DCaps *caps = G3D-&gt;GetCaps ();
+int maxColorBuffers = caps-&gt;MaxRTColorAttachments;
+</pre></td></tr></table>
+</dd>
+<dt> <code>RenderManager.Deferred.GBuffer.BufferFormat</code></dt>
+<dd><p>Controls the format of the color buffers (defaults to <code>rbga16_f</code>).
+</p>
+<p><em>Note</em>: Using 8-bits per color channel to store the view space normals can
+cause noticeable banding.
+</p>
+</dd>
+<dt> <code>RenderManager.Deferred.GBuffer.DepthBuffer</code></dt>
+<dd><p>Controls if the GBuffers depth buffer is present (defaults to <code>true</code>).
+</p></dd>
+</dl>
+
+<p><em>Note</em>: It is the responsibility of the 'gbuffer fill' and light proxy
+shaders to account for changes in the GBuffer layout.
+</p>
+<a name="6"></a>
+<h4 class="subsubheading"> Light Proxy Shader Variables </h4>
+
+<p>The deferred render manager provides additional shader variables that are only
+available to the light proxy shaders:
+</p>
+<dl compact="compact">
+<dt> <code>tex gbuffer N</code></dt>
+<dd><p>Specifies the Nth color buffer where N is between 0 and
+<code>RenderManager.Deferred.GBuffer.BufferCount - 1</code>.
+</p>
+</dd>
+<dt> <code>tex gbuffer depth</code></dt>
+<dd><p>Specifies the GBuffers depth buffer. Only available if the GBuffer has a depth
+buffer.
+</p>
+</dd>
+<dt> <code>light position view</code></dt>
+<dd><p>The position of the light in view space. Only available for point lights and
+spot lights.
+</p>
+</dd>
+<dt> <code>light direction view</code></dt>
+<dd><p>The direction of the light in view space. Only available for spot lights and
+directional lights.
+</p></dd>
+</dl>
+
+<a name="7"></a>
+<h4 class="subsubheading"> The Accumulation Buffer </h4>
+
+<p>The accumulation buffer used by the deferred render manager to store lighting
+results is fixed to be the same size as the GBuffer. However, the format of the
+accumulation buffer can be controlled through the
+<samp>&lsquo;RenderManager.Deferred.AccumBufferFormat&rsquo;</samp> configuration options (defaults
+to <code>rgb16_f</code>). Using a more compact format (<code>rgb8</code> for instance) may
+be useful if high precision is not needed or memory is an issue. 
+</p>
+<p><em>Note</em>: Each heavy portal (a portal that requires its sector to be rendered
+to an offscreen buffer) that is visible in the current frame will have its own
+accumulation buffer. Take this into consideration when choosing the accumulation
+buffer format.
+</p>
+<a name="8"></a>
+<h4 class="subsubheading"> Forward Shading Fallback </h4>
+
+<p>Due to the limitations of the deferred shading technique it is necessary for the
+deferred render manager to allow for some objects to be drawn using forward
+shading. The deferred render manager uses a meshes render priority (see section <a href="HOWTO-Render-Priorities.html#0">Render Priorities and Objects in Sectors</a>) to determine if the mesh should be drawn using forward
+shading. The render priorities that the deferred render manager considers
+forward shading priorities can be controlled through the
+<samp>&lsquo;RenderManager.Deferred.ForwardPriorities&rsquo;</samp> configuration option. This
+configuration option contains a comma separated list of render priority names
+(defaults to <samp>&lsquo;alpha,transp,portal&rsquo;</samp>). Any mesh belonging to one of these
+render priorities will be drawn using forward shading.
+</p>
+<p><em>Note</em>: Heavy portals must belong to a render priority that will be drawn
+using forward shading. Any heavy portal that is not drawn using forward shading
+will appear as solid black polygons.
+</p>
+<a name="9"></a>
+<h4 class="subsubheading"> Render Layers </h4>
+
+<p>In general the use of render layers is unnecessary for deferred shading because
+there is only one well defined layer. However, the deferred render manager must
+also support forward shading and, as a result, more complex render layers are
+needed. The render layers can be controlled through the
+<samp>&lsquo;RenderManager.Deferred.Layers&rsquo;</samp> configuration option (defaults to
+<samp>&lsquo;/data/renderlayers/lighting_default_deferred.xml&rsquo;</samp>). The deferred render
+manager expects there to be one render layer that specifies the <samp>&lsquo;gbuffer
+fill&rsquo;</samp> shader type. This layer is reserved for deferred shading and will not be
+used during forward shading. All other render layers will be used for forward
+shading only.
+</p>
+<p><em>Note</em>: If no render layer is specified with a <samp>&lsquo;gbuffer fill&rsquo;</samp> shader
+type then a default layer will be added that uses the
+<samp>&lsquo;CS/data/shader/deferred/fill_gbuffer.xml&rsquo;</samp> shader.
+</p>
+<a name="10"></a>
+<h4 class="subsubheading"> Debug Commands </h4>
+
+<p>The deferred render manager implements the <code>iDebugHelper</code> interface and
+responds to the following debug commands:
+</p>
+<dl compact="compact">
+<dt> <code>toggle_visualize_gbuffer</code></dt>
+<dd><p>Toggles a display of the GBuffer at the bottom of the screen. The GBuffers color
+buffers will be displayed in order from left to right followed by the GBuffers
+depth buffer. The debug command can be activated through BugPlug (see section <a href="BugPlug.html#0">Using the BugPlug Debugging Plugin</a>) using the
+command <code>ctrl+d, ctrl+shift+alt+g</code>.
+</p>
+</dd>
+<dt> <code>toggle_visualize_lightvolumes</code></dt>
+<dd><p>Toggles a display of the light proxy geometry drawn for each light. The debug
+command can be activated through BugPlug using the command <code>ctrl+d,
+ctrl+shift+alt+l</code>.
+</p></dd>
+</dl>
+
+
+
+
+<hr size="1">
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="About-Deferred.html#0" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="MeshObject.html#0" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="Using-Crystal-Space.html#0" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="Deferred-Shading.html#0" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="Working-with-Engine-Content.html#0" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="index.html#SEC_Top" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="cs_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="cs_Index.html#0" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="cs_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<p>
+ <font size="-1">
+  This document was generated using <a href="http://texi2html.cvshome.org/"><em>texi2html 1.76</em></a>.
+ </font>
+ <br>
+
+</p>
+</body>
+</html>
