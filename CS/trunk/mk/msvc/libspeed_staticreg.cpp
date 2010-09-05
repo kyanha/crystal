@@ -15,36 +15,36 @@
 
 namespace csStaticPluginInit
 {
-static char const metainfo_basic[] =
+static char const metainfo_speed[] =
 "<?xml version=\"1.0\"?>"
-"<!-- basic.csplugin -->"
+"<!-- speed.csplugin -->"
 "<plugin>"
 "  <scf>"
 "    <classes>"
 "      <class>"
-"        <name>crystalspace.mesh.animesh.controllers.basic</name>"
-"        <implementation>BasicNodesManager</implementation>"
-"        <description>Crystal Space basic animation nodes of an animated mesh</description>"
+"        <name>crystalspace.mesh.animesh.animnode.speed</name>"
+"        <implementation>SpeedNodeManager</implementation>"
+"        <description>Crystal Space speed animation nodes of an animated mesh</description>"
 "      </class>"
 "    </classes>"
 "  </scf>"
 "</plugin>"
 ;
-  #ifndef BasicNodesManager_FACTORY_REGISTER_DEFINED 
-  #define BasicNodesManager_FACTORY_REGISTER_DEFINED 
-    SCF_DEFINE_FACTORY_FUNC_REGISTRATION(BasicNodesManager) 
+  #ifndef SpeedNodeManager_FACTORY_REGISTER_DEFINED 
+  #define SpeedNodeManager_FACTORY_REGISTER_DEFINED 
+    SCF_DEFINE_FACTORY_FUNC_REGISTRATION(SpeedNodeManager) 
   #endif
 
-class basic
+class speed
 {
-SCF_REGISTER_STATIC_LIBRARY(basic,metainfo_basic)
-  #ifndef BasicNodesManager_FACTORY_REGISTERED 
-  #define BasicNodesManager_FACTORY_REGISTERED 
-    BasicNodesManager_StaticInit BasicNodesManager_static_init__; 
+SCF_REGISTER_STATIC_LIBRARY(speed,metainfo_speed)
+  #ifndef SpeedNodeManager_FACTORY_REGISTERED 
+  #define SpeedNodeManager_FACTORY_REGISTERED 
+    SpeedNodeManager_StaticInit SpeedNodeManager_static_init__; 
   #endif
 public:
- basic();
+ speed();
 };
-basic::basic() {}
+speed::speed() {}
 
 }

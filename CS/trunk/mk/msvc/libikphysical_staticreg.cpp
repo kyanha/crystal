@@ -22,7 +22,7 @@ static char const metainfo_ikphysical[] =
 "  <scf>"
 "    <classes>"
 "      <class>"
-"        <name>crystalspace.mesh.animesh.controllers.ik.physical</name>"
+"        <name>crystalspace.mesh.animesh.animnode.ik.physical</name>"
 "        <implementation>IKPhysicalManager</implementation>"
 "        <description>Physics based implementation of the inverse kinematics animation node</description>"
 "      </class>"
