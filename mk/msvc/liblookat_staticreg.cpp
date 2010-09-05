@@ -22,7 +22,7 @@ static char const metainfo_lookat[] =
 "  <scf>"
 "    <classes>"
 "      <class>"
-"        <name>crystalspace.mesh.animesh.controllers.lookat</name>"
+"        <name>crystalspace.mesh.animesh.animnode.lookat</name>"
 "        <implementation>LookAtManager</implementation>"
 "        <description>Crystal Space LookAt animation node of an animated mesh</description>"
 "      </class>"
