@@ -23,24 +23,24 @@ static char const metainfo_lookat[] =
 "    <classes>"
 "      <class>"
 "        <name>crystalspace.mesh.animesh.animnode.lookat</name>"
-"        <implementation>LookAtManager</implementation>"
+"        <implementation>LookAtNodeManager</implementation>"
 "        <description>Crystal Space LookAt animation node of an animated mesh</description>"
 "      </class>"
 "    </classes>"
 "  </scf>"
 "</plugin>"
 ;
-  #ifndef LookAtManager_FACTORY_REGISTER_DEFINED 
-  #define LookAtManager_FACTORY_REGISTER_DEFINED 
-    SCF_DEFINE_FACTORY_FUNC_REGISTRATION(LookAtManager) 
+  #ifndef LookAtNodeManager_FACTORY_REGISTER_DEFINED 
+  #define LookAtNodeManager_FACTORY_REGISTER_DEFINED 
+    SCF_DEFINE_FACTORY_FUNC_REGISTRATION(LookAtNodeManager) 
   #endif
 
 class lookat
 {
 SCF_REGISTER_STATIC_LIBRARY(lookat,metainfo_lookat)
-  #ifndef LookAtManager_FACTORY_REGISTERED 
-  #define LookAtManager_FACTORY_REGISTERED 
-    LookAtManager_StaticInit LookAtManager_static_init__; 
+  #ifndef LookAtNodeManager_FACTORY_REGISTERED 
+  #define LookAtNodeManager_FACTORY_REGISTERED 
+    LookAtNodeManager_StaticInit LookAtNodeManager_static_init__; 
   #endif
 public:
  lookat();
