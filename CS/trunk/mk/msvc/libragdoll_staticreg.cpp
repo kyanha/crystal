@@ -23,24 +23,24 @@ static char const metainfo_ragdoll[] =
 "    <classes>"
 "      <class>"
 "        <name>crystalspace.mesh.animesh.animnode.ragdoll</name>"
-"        <implementation>RagdollManager</implementation>"
+"        <implementation>RagdollNodeManager</implementation>"
 "        <description>Crystal Space ragdoll animation node of an animated Mesh</description>"
 "      </class>"
 "    </classes>"
 "  </scf>"
 "</plugin>"
 ;
-  #ifndef RagdollManager_FACTORY_REGISTER_DEFINED 
-  #define RagdollManager_FACTORY_REGISTER_DEFINED 
-    SCF_DEFINE_FACTORY_FUNC_REGISTRATION(RagdollManager) 
+  #ifndef RagdollNodeManager_FACTORY_REGISTER_DEFINED 
+  #define RagdollNodeManager_FACTORY_REGISTER_DEFINED 
+    SCF_DEFINE_FACTORY_FUNC_REGISTRATION(RagdollNodeManager) 
   #endif
 
 class ragdoll
 {
 SCF_REGISTER_STATIC_LIBRARY(ragdoll,metainfo_ragdoll)
-  #ifndef RagdollManager_FACTORY_REGISTERED 
-  #define RagdollManager_FACTORY_REGISTERED 
-    RagdollManager_StaticInit RagdollManager_static_init__; 
+  #ifndef RagdollNodeManager_FACTORY_REGISTERED 
+  #define RagdollNodeManager_FACTORY_REGISTERED 
+    RagdollNodeManager_StaticInit RagdollNodeManager_static_init__; 
   #endif
 public:
  ragdoll();
