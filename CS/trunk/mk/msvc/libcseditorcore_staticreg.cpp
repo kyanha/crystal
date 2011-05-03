@@ -22,6 +22,11 @@ static char const metainfo_cseditorcore[] =
 "  <scf>"
 "    <classes>"
 "      <class>"
+"        <name>crystalspace.editor.plugin.core.gui</name>"
+"        <implementation>Editor</implementation>"
+"        <description>CSEditor GUI</description>"
+"      </class>"
+"      <class>"
 "        <name>crystalspace.editor.plugin.core.cs3dpanel</name>"
 "        <implementation>CS3DPanel</implementation>"
 "        <description>CSEditor 3D Panel</description>"
@@ -50,6 +55,10 @@ static char const metainfo_cseditorcore[] =
 "  </scf>"
 "</plugin>"
 ;
+  #ifndef Editor_FACTORY_REGISTER_DEFINED 
+  #define Editor_FACTORY_REGISTER_DEFINED 
+    SCF_DEFINE_FACTORY_FUNC_REGISTRATION(Editor) 
+  #endif
   #ifndef CS3DPanel_FACTORY_REGISTER_DEFINED 
   #define CS3DPanel_FACTORY_REGISTER_DEFINED 
     SCF_DEFINE_FACTORY_FUNC_REGISTRATION(CS3DPanel) 
@@ -74,6 +83,10 @@ static char const metainfo_cseditorcore[] =
 class cseditorcore
 {
 SCF_REGISTER_STATIC_LIBRARY(cseditorcore,metainfo_cseditorcore)
+  #ifndef Editor_FACTORY_REGISTERED 
+  #define Editor_FACTORY_REGISTERED 
+    Editor_StaticInit Editor_static_init__; 
+  #endif
   #ifndef CS3DPanel_FACTORY_REGISTERED 
   #define CS3DPanel_FACTORY_REGISTERED 
     CS3DPanel_StaticInit CS3DPanel_static_init__; 
