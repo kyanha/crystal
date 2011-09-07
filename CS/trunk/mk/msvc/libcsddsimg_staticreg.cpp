@@ -26,6 +26,11 @@ static char const metainfo_csddsimg[] =
 "        <implementation>csDDSImageIO</implementation>"
 "        <description>DDS image format I/O plugin</description>"
 "      </class>"
+"      <class>"
+"        <name>crystalspace.graphic.dxt.decompress.default</name>"
+"        <implementation>DXTDecompressor</implementation>"
+"        <description>Default DXT decompressor plugin</description>"
+"      </class>"
 "    </classes>"
 "  </scf>"
 "</plugin>"
@@ -34,6 +39,10 @@ static char const metainfo_csddsimg[] =
   #define csDDSImageIO_FACTORY_REGISTER_DEFINED 
     SCF_DEFINE_FACTORY_FUNC_REGISTRATION(csDDSImageIO) 
   #endif
+  #ifndef DXTDecompressor_FACTORY_REGISTER_DEFINED 
+  #define DXTDecompressor_FACTORY_REGISTER_DEFINED 
+    SCF_DEFINE_FACTORY_FUNC_REGISTRATION(DXTDecompressor) 
+  #endif
 
 class csddsimg
 {
@@ -41,6 +50,10 @@ SCF_REGISTER_STATIC_LIBRARY(csddsimg,metainfo_csddsimg)
   #ifndef csDDSImageIO_FACTORY_REGISTERED 
   #define csDDSImageIO_FACTORY_REGISTERED 
     csDDSImageIO_StaticInit csDDSImageIO_static_init__; 
+  #endif
+  #ifndef DXTDecompressor_FACTORY_REGISTERED 
+  #define DXTDecompressor_FACTORY_REGISTERED 
+    DXTDecompressor_StaticInit DXTDecompressor_static_init__; 
   #endif
 public:
  csddsimg();
