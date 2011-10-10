@@ -26,11 +26,6 @@ static char const metainfo_glshader_cg[] =
 "        <implementation>csGLShader_CG</implementation>"
 "        <description>OpenGL specific shaderprogram provider for Graphics3D</description>"
 "      </class>"
-"      <class>"
-"        <name>crystalspace.graphics3d.shader.combiner.glcg</name>"
-"        <implementation>ShaderCombinerLoaderCg</implementation>"
-"        <description>Cg-specific combiner for shader snippets</description>"
-"      </class>"
 "    </classes>"
 "  </scf>"
 "</plugin>"
@@ -39,10 +34,6 @@ static char const metainfo_glshader_cg[] =
   #define csGLShader_CG_FACTORY_REGISTER_DEFINED 
     SCF_DEFINE_FACTORY_FUNC_REGISTRATION(csGLShader_CG) 
   #endif
-  #ifndef ShaderCombinerLoaderCg_FACTORY_REGISTER_DEFINED 
-  #define ShaderCombinerLoaderCg_FACTORY_REGISTER_DEFINED 
-    SCF_DEFINE_FACTORY_FUNC_REGISTRATION(ShaderCombinerLoaderCg) 
-  #endif
 
 class glshader_cg
 {
@@ -50,10 +41,6 @@ SCF_REGISTER_STATIC_LIBRARY(glshader_cg,metainfo_glshader_cg)
   #ifndef csGLShader_CG_FACTORY_REGISTERED 
   #define csGLShader_CG_FACTORY_REGISTERED 
     csGLShader_CG_StaticInit csGLShader_CG_static_init__; 
-  #endif
-  #ifndef ShaderCombinerLoaderCg_FACTORY_REGISTERED 
-  #define ShaderCombinerLoaderCg_FACTORY_REGISTERED 
-    ShaderCombinerLoaderCg_StaticInit ShaderCombinerLoaderCg_static_init__; 
   #endif
 public:
  glshader_cg();
