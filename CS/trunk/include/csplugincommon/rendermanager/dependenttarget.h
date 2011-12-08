@@ -351,8 +351,9 @@ namespace RenderManager
 	  int subtexture;
 	  const typename RenderTargetInfo::ViewInfo& viewInfo (
 	    viewsIt.Next (subtexture));
-    int drawFlags = 0;
-    if (viewInfo.flags & iRenderManagerTargets::clearScreen) drawFlags |= CSDRAW_CLEARSCREEN;
+	  int drawFlags = 0;
+	  if (viewInfo.flags & iRenderManagerTargets::clearScreen)
+	    drawFlags |= CSDRAW_CLEARSCREEN | CSDRAW_CLEARZBUFFER;
 	  HandleView (viewInfo.view, textureHandle, subtexture, drawFlags);
 	}
       }
