@@ -24,12 +24,99 @@
 
 #define MESH_TYPE(a) ((flags & CS_PEN_FILL) ? a : pen_width>1 ? CS_MESHTYPE_QUADS : CS_MESHTYPE_LINESTRIP)
 
+//--------------------------------------------------------------------
+
+bool csPenCache::IsMergeable (csSimpleRenderMesh* mesh1,
+    csSimpleRenderMesh* mesh2)
+{
+  if (mesh1->meshtype != mesh2->meshtype) return false;
+  if (mesh1->texture != mesh2->texture) return false;
+  if (mesh1->shader != mesh2->shader) return false;
+  if (mesh1->dynDomain != mesh2->dynDomain) return false;
+  if (mesh1->alphaType.autoAlphaMode != mesh2->alphaType.autoAlphaMode) return false;
+  if (mesh1->alphaType.alphaType != mesh2->alphaType.alphaType) return false;
+  if (mesh1->z_buf_mode != mesh2->z_buf_mode) return false;
+  if (mesh1->mixmode != mesh2->mixmode) return false;
+  if (mesh1->object2world.GetO2T () != mesh2->object2world.GetO2T ()) return false;
+  if (mesh1->object2world.GetO2TTranslation () != mesh2->object2world.GetO2TTranslation ()) return false;
+  return true;
+}
+
+void csPenCache::MergeMesh (csSimpleRenderMesh* mesh)
+{
+  size_t idx = meshes.GetSize ()-1;
+  csSimpleRenderMesh& last = meshes[idx].mesh;
+  last.meshtype = mesh->meshtype;
+  last.texture = mesh->texture;
+  last.shader = mesh->shader;
+  last.dynDomain = mesh->dynDomain;
+  last.alphaType = mesh->alphaType;
+  last.z_buf_mode = mesh->z_buf_mode;
+  last.mixmode = mesh->mixmode;
+  last.object2world = mesh->object2world;
+
+  meshes[idx].vertexCount += mesh->vertexCount;
+  for (size_t i = 0 ; i < mesh->vertexCount ; i++)
+  {
+    vertices.Push (mesh->vertices[i]);
+    if (mesh->texcoords) texcoords.Push (mesh->texcoords[i]);
+    else texcoords.Push (csVector2 (0, 0));
+    if (mesh->colors) colors.Push (mesh->colors[i]);
+    else colors.Push (csVector4 (1.0f, 1.0f, 1.0f, 1.0f));
+  }
+  meshes[idx].indexCount += mesh->indexCount;
+  for (size_t i = 0 ; i < mesh->indexCount ; i++)
+    vertexIndices.Push (mesh->indices[i]);
+}
+
+void csPenCache::Render (iGraphics3D* g3d)
+{
+  for (size_t i = 0 ; i < meshes.GetSize () ; i++)
+  {
+    csSimpleRenderMesh& mesh = meshes[i].mesh;
+
+    mesh.vertices = vertices.GetArray () + meshes[i].offsetVertices;
+    mesh.vertexCount = meshes[i].vertexCount;
+    mesh.colors = colors.GetArray () + meshes[i].offsetVertices;
+    mesh.texcoords = texcoords.GetArray () + meshes[i].offsetVertices;
+
+    mesh.indices = vertexIndices.GetArray () + meshes[i].offsetIndices;
+    mesh.indexCount = meshes[i].indexCount;
+
+    g3d->DrawSimpleMesh (mesh, csSimpleMeshScreenspace);
+  }
+}
+
+void csPenCache::PushMesh (csSimpleRenderMesh* mesh)
+{
+  if (meshes.GetSize () <= 0 ||
+      !IsMergeable (&meshes[meshes.GetSize ()-1].mesh, mesh))
+  {
+    PRMesh prm;
+    prm.offsetVertices = vertices.GetSize ();
+    prm.offsetIndices = vertexIndices.GetSize ();
+    meshes.Push (prm);
+  }
+  MergeMesh (mesh);
+}
+
+void csPenCache::Clear ()
+{
+  meshes.DeleteAll ();
+  vertices.DeleteAll ();
+  vertexIndices.DeleteAll ();
+  colors.DeleteAll ();
+  texcoords.DeleteAll ();
+}
+
+//--------------------------------------------------------------------
 
 csPen::csPen (iGraphics2D *_g2d, iGraphics3D *_g3d) : g3d (_g3d), g2d(_g2d), pen_width(1.0), flags(0), gen_tex_coords(false)
 {
   mesh.object2world.Identity();
   mesh.mixmode = CS_FX_ALPHA;
   tt.Set(0,0,0);
+  penCache = 0;
 }
 
 csPen::~csPen ()
@@ -99,7 +186,10 @@ void csPen::SetupMesh ()
 void csPen::DrawMesh (csRenderMeshType mesh_type)
 {
   mesh.meshtype = mesh_type;
-  g3d->DrawSimpleMesh (mesh, csSimpleMeshScreenspace);
+  if (penCache)
+    penCache->PushMesh (&mesh);
+  else
+    g3d->DrawSimpleMesh (mesh, csSimpleMeshScreenspace);
 }
 
 void csPen::SetMixMode(uint mode)
@@ -169,7 +259,7 @@ void csPen::SetColor(const csColor4 &c)
   color.w=c.alpha;
 }
 
-void csPen::SetTexture(csRef<iTextureHandle> _tex)
+void csPen::SetTexture (iTextureHandle* _tex)
 {
   tex=_tex;
 }
@@ -216,6 +306,11 @@ void csPen::SetOrigin(const csVector3 &o)
   mesh.object2world.SetOrigin(o);
 }
 
+void csPen::SetTransform (const csReversibleTransform& trans)
+{
+  mesh.object2world = trans;
+}
+
 void csPen::Translate(const csVector3 &t)
 {
   csTransform tr;
@@ -243,6 +338,17 @@ void csPen::DrawThickLine(uint x1, uint y1, uint x2, uint y2)
   DrawMesh(CS_MESHTYPE_QUADS);
 }
 
+void csPen::DrawThickLines (const csArray<csPenCoordinatePair>& pairs)
+{
+  Start();
+
+  for (size_t i = 0 ; i < pairs.GetSize () ; i++)
+    AddThickPoints(pairs[i].c1.x,pairs[i].c1.y,pairs[i].c2.x,pairs[i].c2.y);
+
+  SetupMesh();
+  DrawMesh(CS_MESHTYPE_QUADS);
+}
+
 /** Draws a single line. */
 void csPen::DrawLine (uint x1, uint y1, uint x2, uint y2)
 {
@@ -254,6 +360,26 @@ void csPen::DrawLine (uint x1, uint y1, uint x2, uint y2)
   if (flags & CS_PEN_SWAPCOLORS) SwapColors();
 
   AddVertex (x2,y2);
+
+  SetupMesh ();
+  DrawMesh (CS_MESHTYPE_LINES);
+}
+
+void csPen::DrawLines (const csArray<csPenCoordinatePair>& pairs)
+{
+  if (pen_width>1) { DrawThickLines (pairs); return; }
+
+  Start ();
+  for (size_t i = 0 ; i < pairs.GetSize () ; i++)
+  {
+    AddVertex (pairs[i].c1.x,pairs[i].c1.y);
+
+    if (flags & CS_PEN_SWAPCOLORS) SwapColors();
+
+    AddVertex (pairs[i].c2.x,pairs[i].c2.y);
+
+    if (flags & CS_PEN_SWAPCOLORS) SwapColors();
+  }
 
   SetupMesh ();
   DrawMesh (CS_MESHTYPE_LINES);
