@@ -22349,36 +22349,115 @@ sub ACQUIRE {
 }
 
 
-############# Class : cspace::iPen ##############
+############# Class : cspace::csPenCoordinate ##############
 
-package cspace::iPen;
+package cspace::csPenCoordinate;
 use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 @ISA = qw( cspace );
 %OWNER = ();
-*SetFlag = *cspacec::iPen_SetFlag;
-*ClearFlag = *cspacec::iPen_ClearFlag;
-*SetMixMode = *cspacec::iPen_SetMixMode;
-*SetColor = *cspacec::iPen_SetColor;
-*SetTexture = *cspacec::iPen_SetTexture;
-*SwapColors = *cspacec::iPen_SwapColors;
-*SetPenWidth = *cspacec::iPen_SetPenWidth;
-*ClearTransform = *cspacec::iPen_ClearTransform;
-*PushTransform = *cspacec::iPen_PushTransform;
-*PopTransform = *cspacec::iPen_PopTransform;
-*SetOrigin = *cspacec::iPen_SetOrigin;
-*Translate = *cspacec::iPen_Translate;
-*DrawLine = *cspacec::iPen_DrawLine;
-*DrawPoint = *cspacec::iPen_DrawPoint;
-*DrawRect = *cspacec::iPen_DrawRect;
-*DrawMiteredRect = *cspacec::iPen_DrawMiteredRect;
-*DrawRoundedRect = *cspacec::iPen_DrawRoundedRect;
-*DrawArc = *cspacec::iPen_DrawArc;
-*DrawTriangle = *cspacec::iPen_DrawTriangle;
-*Write = *cspacec::iPen_Write;
-*WriteLines = *cspacec::iPen_WriteLines;
-*WriteBoxed = *cspacec::iPen_WriteBoxed;
-*WriteLinesBoxed = *cspacec::iPen_WriteLinesBoxed;
-*_Rotate = *cspacec::iPen__Rotate;
+%ITERATORS = ();
+*swig_x_get = *cspacec::csPenCoordinate_x_get;
+*swig_x_set = *cspacec::csPenCoordinate_x_set;
+*swig_y_get = *cspacec::csPenCoordinate_y_get;
+*swig_y_set = *cspacec::csPenCoordinate_y_set;
+sub new {
+    my $pkg = shift;
+    my $self = cspacec::new_csPenCoordinate(@_);
+    bless $self, $pkg if defined($self);
+}
+
+sub DESTROY {
+    return unless $_[0]->isa('HASH');
+    my $self = tied(%{$_[0]});
+    return unless defined $self;
+    delete $ITERATORS{$self};
+    if (exists $OWNER{$self}) {
+        cspacec::delete_csPenCoordinate($self);
+        delete $OWNER{$self};
+    }
+}
+
+sub DISOWN {
+    my $self = shift;
+    my $ptr = tied(%$self);
+    delete $OWNER{$ptr};
+}
+
+sub ACQUIRE {
+    my $self = shift;
+    my $ptr = tied(%$self);
+    $OWNER{$ptr} = 1;
+}
+
+
+############# Class : cspace::csPenCoordinatePair ##############
+
+package cspace::csPenCoordinatePair;
+use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
+@ISA = qw( cspace );
+%OWNER = ();
+%ITERATORS = ();
+*swig_c1_get = *cspacec::csPenCoordinatePair_c1_get;
+*swig_c1_set = *cspacec::csPenCoordinatePair_c1_set;
+*swig_c2_get = *cspacec::csPenCoordinatePair_c2_get;
+*swig_c2_set = *cspacec::csPenCoordinatePair_c2_set;
+sub new {
+    my $pkg = shift;
+    my $self = cspacec::new_csPenCoordinatePair(@_);
+    bless $self, $pkg if defined($self);
+}
+
+sub DESTROY {
+    return unless $_[0]->isa('HASH');
+    my $self = tied(%{$_[0]});
+    return unless defined $self;
+    delete $ITERATORS{$self};
+    if (exists $OWNER{$self}) {
+        cspacec::delete_csPenCoordinatePair($self);
+        delete $OWNER{$self};
+    }
+}
+
+sub DISOWN {
+    my $self = shift;
+    my $ptr = tied(%$self);
+    delete $OWNER{$ptr};
+}
+
+sub ACQUIRE {
+    my $self = shift;
+    my $ptr = tied(%$self);
+    $OWNER{$ptr} = 1;
+}
+
+
+############# Class : cspace::csPenCache ##############
+
+package cspace::csPenCache;
+use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
+@ISA = qw( cspace );
+%OWNER = ();
+%ITERATORS = ();
+*PushMesh = *cspacec::csPenCache_PushMesh;
+*Render = *cspacec::csPenCache_Render;
+*Clear = *cspacec::csPenCache_Clear;
+sub new {
+    my $pkg = shift;
+    my $self = cspacec::new_csPenCache(@_);
+    bless $self, $pkg if defined($self);
+}
+
+sub DESTROY {
+    return unless $_[0]->isa('HASH');
+    my $self = tied(%{$_[0]});
+    return unless defined $self;
+    delete $ITERATORS{$self};
+    if (exists $OWNER{$self}) {
+        cspacec::delete_csPenCache($self);
+        delete $OWNER{$self};
+    }
+}
+
 sub DISOWN {
     my $self = shift;
     my $ptr = tied(%$self);
@@ -22396,7 +22475,7 @@ sub ACQUIRE {
 
 package cspace::csPen;
 use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
-@ISA = qw( cspace::iPen cspace );
+@ISA = qw( cspace );
 %OWNER = ();
 %ITERATORS = ();
 sub new {
@@ -22416,6 +22495,7 @@ sub DESTROY {
     }
 }
 
+*SetActiveCache = *cspacec::csPen_SetActiveCache;
 *SetFlag = *cspacec::csPen_SetFlag;
 *ClearFlag = *cspacec::csPen_ClearFlag;
 *SetMixMode = *cspacec::csPen_SetMixMode;
@@ -22428,8 +22508,12 @@ sub DESTROY {
 *PopTransform = *cspacec::csPen_PopTransform;
 *SetOrigin = *cspacec::csPen_SetOrigin;
 *Translate = *cspacec::csPen_Translate;
+*Rotate = *cspacec::csPen_Rotate;
+*SetTransform = *cspacec::csPen_SetTransform;
 *DrawLine = *cspacec::csPen_DrawLine;
 *DrawThickLine = *cspacec::csPen_DrawThickLine;
+*DrawLines = *cspacec::csPen_DrawLines;
+*DrawThickLines = *cspacec::csPen_DrawThickLines;
 *DrawPoint = *cspacec::csPen_DrawPoint;
 *DrawRect = *cspacec::csPen_DrawRect;
 *DrawMiteredRect = *cspacec::csPen_DrawMiteredRect;
