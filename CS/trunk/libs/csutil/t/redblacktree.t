@@ -263,7 +263,7 @@ static const int sequenceSparse[] = {-20, -10, 0, 10, 20};
 void RedBlackTreeTest::testGSE ()
 {
   RBTree rbtree;
-  InsertSequence (rbtree, sequenceSparse, ARRAY_SIZE(sequenceDupes));
+  InsertSequence (rbtree, sequenceSparse, ARRAY_SIZE(sequenceSparse));
   
   const int* p;
   p = rbtree.FindGreatestSmallerEqual (10);
@@ -282,7 +282,7 @@ void RedBlackTreeTest::testGSE ()
 void RedBlackTreeTest::testSGE ()
 {
   RBTree rbtree;
-  InsertSequence (rbtree, sequenceSparse, ARRAY_SIZE(sequenceDupes));
+  InsertSequence (rbtree, sequenceSparse, ARRAY_SIZE(sequenceSparse));
   
   const int* p;
   p = rbtree.FindSmallestGreaterEqual (10);
