@@ -1,4 +1,5 @@
 /*
+  Copyright (C) 2011 by Jorrit Tyberghein
   Copyright (C) 2005 by Christopher Nelson
 
   This library is free software; you can redistribute it and/or
@@ -87,6 +88,7 @@ private:
   struct PRMesh
   {
     csSimpleRenderMesh mesh;
+    csSimpleMeshFlags flags;
     size_t offsetVertices;
     size_t offsetIndices;
     size_t vertexCount;
@@ -124,7 +126,7 @@ public:
    * Push a new mesh to this renderer. If this mesh is compatible
    * with the previous one then they will be merged.
    */
-  void PushMesh (csSimpleRenderMesh* mesh);
+  void PushMesh (csSimpleRenderMesh* mesh, csSimpleMeshFlags flags);
 
   /**
    * Render this cached pen.
@@ -479,5 +481,129 @@ public:
 	h_align, v_align, lines);
   }
 };
+
+/**
+ * A coordinate pair
+ */
+struct csPen3DCoordinatePair
+{
+  csVector3 c1, c2;
+  csPen3DCoordinatePair (const csVector3& c1, const csVector3& c2) :
+    c1 (c1), c2 (c2) { }
+};
+
+/**
+ * A pen implementation with which you can do various
+ * kinds of 3D line rendering.
+ */
+class CS_CRYSTALSPACE_EXPORT csPen3D
+{
+private:
+  /** The 3d context for drawing. */
+  csRef<iGraphics3D> g3d;
+
+  /** The 2d context for drawing. */
+  csRef<iGraphics2D> g2d;
+
+  /** The mesh that we reuse in developing the shapes we're making. */
+  csSimpleRenderMesh mesh;
+
+  /** The color we use. */
+  csVector4 color;
+
+  /** The polygon index that we're generating. */
+  csPolyIndexed poly_idx;
+
+  /** The polygon that we're generating. */
+  csPoly3D poly;
+
+  /** The color array generated for verts as we render. */
+  csDirtyAccessArray<csVector4> colors;
+
+  /** The texture coordinates are generated as we render too. */
+  csDirtyAccessArray<csVector2> texcoords;
+
+  /** A cache that can be used to store intermediate results */
+  csPenCache* penCache;
+
+protected:
+  /**
+   * Initializes our working objects.
+   */
+  void Start();
+
+  /**
+   * Adds a vertex.
+   * @param v is the vertex
+   */
+  void AddVertex (const csVector3& v);
+
+  /**
+   * Worker, sets up the mesh with the vertices, color and other information.
+   */
+  void SetupMesh();
+
+  /**
+   * Worker, draws the mesh.
+   */
+  void DrawMesh (csRenderMeshType mesh_type);
+
+public:
+  csPen3D (iGraphics2D *_g2d, iGraphics3D *_g3d);
+  ~csPen3D ();
+
+  /**
+   * Set an active pen cache. After this call all drawing calls to
+   * this pen will be cached on the cache until you clear the pen
+   * cache again.
+   * At that point the pen cache can be used to do cached drawings.
+   * Note that the pen cache does not work for text.
+   * Also note that the pen cache can be updated later with new
+   * commands if you set it again onto a pen. It is also safe to
+   * use the same pencache with different pens.
+   */
+  void SetActiveCache (csPenCache* cache) { penCache = cache; }
+
+  /**
+   * Sets the given mix (blending) mode.
+   * @param mode The mixmode to set.
+   */
+  void SetMixMode (uint mode);
+
+  /**
+   * Sets the current color.
+   * @param r The red component.
+   * @param g The green component.
+   * @param b The blue component.
+   * @param a The alpha component.
+   */
+  void SetColor (float r, float g, float b, float a);
+  void SetColor (const csColor4 &color);
+
+  /**
+   * Set a transform.
+   */
+  void SetTransform (const csReversibleTransform& trans);
+
+  /**
+   * Draws a single line.
+   */
+  void DrawLine (const csVector3& v1, const csVector3& v2);
+  void DrawLine (const csPen3DCoordinatePair& coords)
+  {
+    DrawLine (coords.c1, coords.c2);
+  }
+
+  /**
+   * Draws a series of lines.
+   */
+  void DrawLines (const csArray<csPen3DCoordinatePair>& pairs);
+
+  /**
+   * Draw a box.
+   */
+  void DrawBox (const csBox3& box);
+};
+
 
 #endif
