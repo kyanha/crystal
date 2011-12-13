@@ -137,6 +137,11 @@ public:
    * Clear this cache.
    */
   void Clear ();
+
+  /**
+   * Set a transform.
+   */
+  void SetTransform (const csReversibleTransform& trans);
 };
 
 
@@ -414,8 +419,8 @@ public:
    * Draws an elliptical arc from start angle to end angle.  Angle must be
    * specified in radians. The arc will be made to fit in the given box.
    * If you want a circular arc, make sure the box is a square.  If you want
-   * a full circle or ellipse, specify 0 as the start angle and 2*PI as the end
-   * angle.
+   * a full circle or ellipse, specify 0 as the start angle and 2*PI as the
+   * end angle.
    */
   void DrawArc (uint x1, uint y1, uint x2, uint y2,
   	float start_angle = 0, float end_angle = 6.2831853);
@@ -603,6 +608,24 @@ public:
    * Draw a box.
    */
   void DrawBox (const csBox3& box);
+
+  /**
+   * Draws an elliptical arc from start angle to end angle.  Angle must be
+   * specified in radians. The arc will be made to fit in the given plane
+   * as defined by c1-c2 and on the specific axis. c1 and c2 must be on
+   * the same plane as defined by axis.
+   * If you want a circular arc, make sure the box is a square.  If you want
+   * a full circle or ellipse, specify 0 as the start angle and 2*PI as the
+   * end angle.
+   */
+  void DrawArc (const csVector3& c1, const csVector3& c2,
+	int axis, float start_angle = 0, float end_angle = 6.2831853);
+
+  /**
+   * Draw a cylinder. The axis specifies the top and bottom of the
+   * cylinder.
+   */
+  void DrawCylinder (const csBox3& box, int axis);
 };
 
 

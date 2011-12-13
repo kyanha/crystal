@@ -57,6 +57,7 @@ void csPenCache::MergeMesh (csSimpleRenderMesh* mesh)
   last.mixmode = mesh->mixmode;
   last.object2world = mesh->object2world;
 
+  size_t vtoffset = meshes[idx].vertexCount;
   meshes[idx].vertexCount += mesh->vertexCount;
   for (size_t i = 0 ; i < mesh->vertexCount ; i++)
   {
@@ -68,7 +69,7 @@ void csPenCache::MergeMesh (csSimpleRenderMesh* mesh)
   }
   meshes[idx].indexCount += mesh->indexCount;
   for (size_t i = 0 ; i < mesh->indexCount ; i++)
-    vertexIndices.Push (mesh->indices[i]);
+    vertexIndices.Push (mesh->indices[i] + vtoffset);
 }
 
 void csPenCache::Render (iGraphics3D* g3d)
@@ -111,6 +112,12 @@ void csPenCache::Clear ()
   vertexIndices.DeleteAll ();
   colors.DeleteAll ();
   texcoords.DeleteAll ();
+}
+
+void csPenCache::SetTransform (const csReversibleTransform& trans)
+{
+  for (size_t i = 0 ; i < meshes.GetSize () ; i++)
+    meshes[i].mesh.object2world = trans;
 }
 
 //--------------------------------------------------------------------
@@ -544,12 +551,14 @@ void csPen::DrawRoundedRect (uint x1, uint y1, uint x2, uint y2,
 }
 
 /**
-   * Draws an elliptical arc from start angle to end angle.  Angle must be specified in radians.
-   * The arc will be made to fit in the given box.  If you want a circular arc, make sure the box is
-   * a square.  If you want a full circle or ellipse, specify 0 as the start angle and 2*PI as the end
-   * angle.
-   */
-void csPen::DrawArc(uint x1, uint y1, uint x2, uint y2, float start_angle, float end_angle)
+ * Draws an elliptical arc from start angle to end angle.  Angle must be
+ * specified in radians. The arc will be made to fit in the given box.
+ * If you want a circular arc, make sure the box is a square.  If you
+ * want a full circle or ellipse, specify 0 as the start angle and 2*PI
+ * as the end angle.
+ */
+void csPen::DrawArc(uint x1, uint y1, uint x2, uint y2,
+    float start_angle, float end_angle)
 {
   // Check to make sure that the arc is not in a negative box.
   if (x2<x1) { x2^=x1; x1^=x2; x2^=x1; }
@@ -874,4 +883,139 @@ void csPen3D::DrawBox (const csBox3& b)
   DrawLines (pairs);
 }
 
+/**
+ * Draws an elliptical arc from start angle to end angle.  Angle must be
+ * specified in radians. The arc will be made to fit in the given box.
+ * If you want a circular arc, make sure the box is a square.  If you
+ * want a full circle or ellipse, specify 0 as the start angle and 2*PI
+ * as the end angle.
+ */
+void csPen3D::DrawArc (const csVector3& c1, const csVector3& c2,
+    int axis, float start_angle, float end_angle)
+{
+  // If start angle and end_angle are too close, abort.
+  if (fabs(end_angle-start_angle) < 0.0001) return;
+
+  float x1, y1, x2, y2;
+  switch (axis)
+  {
+    case CS_AXIS_X: x1 = c1.y; y1 = c1.z; x2 = c2.y; y2 = c2.z; break;
+    case CS_AXIS_Y: x1 = c1.x; y1 = c1.z; x2 = c2.x; y2 = c2.z; break;
+    case CS_AXIS_Z: x1 = c1.x; y1 = c1.y; x2 = c2.x; y2 = c2.y; break;
+    default: CS_ASSERT (false);
+  }
+
+  // Check to make sure that the arc is not in a negative box.
+  if (x2 < x1) { float x = x1; x1 = x2; x2 = x; }
+  if (y2 < y1) { float y = y1; y1 = y2; y2 = y; }
+
+  float width = x2-x1;
+  float height = y2-y1;
+
+  if (fabs (width) < .0001 || fabs (height) < .0001) return;
+
+  float x_radius = width/2;
+  float y_radius = height/2;
+
+  float center_x = x1+(x_radius);
+  float center_y = y1+(y_radius);
+
+  // Set the delta to be two degrees.
+  float delta = 0.0384f;
+
+  Start ();
+
+  //if ((flags & CS_PEN_FILL)) AddVertex(center_x, center_y);
+
+  for (float angle=start_angle; angle<=end_angle; angle+=delta)
+  {
+    float rx = center_x+(cos(angle)*x_radius);
+    float ry = center_y+(sin(angle)*y_radius);
+    csVector3 v;
+    switch (axis)
+    {
+      case CS_AXIS_X: v.x = c1.x; v.y = rx; v.z = ry; break;
+      case CS_AXIS_Y: v.x = rx; v.y = c1.y; v.z = ry; break;
+      case CS_AXIS_Z: v.x = rx; v.y = ry; v.z = c1.z; break;
+      default: CS_ASSERT (false);
+    }
+    AddVertex (v);
+  }
+
+  SetupMesh ();
+  DrawMesh (CS_MESHTYPE_LINESTRIP);
+}
+
+static void SetXYOnVector (csVector3& v, int axis,
+    float rx, float ry, const csVector3& orig)
+{
+  switch (axis)
+  {
+    case CS_AXIS_X: v.x = orig.x; v.y = rx; v.z = ry; break;
+    case CS_AXIS_Y: v.x = rx; v.y = orig.y; v.z = ry; break;
+    case CS_AXIS_Z: v.x = rx; v.y = ry; v.z = orig.z; break;
+    default: CS_ASSERT (false);
+  }
+}
+
+static void Get4PointsOnArc (const csVector3& c1, const csVector3& c2,
+    int axis, csVector3& v1, csVector3& v2, csVector3& v3, csVector3& v4)
+{
+  float x1, y1, x2, y2;
+  switch (axis)
+  {
+    case CS_AXIS_X: x1 = c1.y; y1 = c1.z; x2 = c2.y; y2 = c2.z; break;
+    case CS_AXIS_Y: x1 = c1.x; y1 = c1.z; x2 = c2.x; y2 = c2.z; break;
+    case CS_AXIS_Z: x1 = c1.x; y1 = c1.y; x2 = c2.x; y2 = c2.y; break;
+    default: CS_ASSERT (false);
+  }
+
+  float width = x2-x1;
+  float height = y2-y1;
+
+  float x_radius = width/2;
+  float y_radius = height/2;
+  float center_x = x1 + x_radius;
+  float center_y = y1 + y_radius;
+
+  SetXYOnVector (v1, axis, center_x+x_radius, center_y, c1);	// 0
+  SetXYOnVector (v2, axis, center_x, center_y+y_radius, c1);	// PI/2
+  SetXYOnVector (v3, axis, center_x-x_radius, center_y, c1);	// PI
+  SetXYOnVector (v4, axis, center_x, center_y-y_radius, c1);	// 1.5*PI
+}
+
+void csPen3D::DrawCylinder (const csBox3& box, int axis)
+{
+  csVector3 c1, c2;
+  csVector3 minv1, minv2, minv3, minv4;
+  csVector3 maxv1, maxv2, maxv3, maxv4;
+  float m;
+
+  m = box.GetMin (axis);
+  c1[axis] = m;
+  c2[axis] = m;
+  m = box.GetMin ((axis+1)%3);
+  c1[(axis+1)%3] = m;
+  m = box.GetMax ((axis+1)%3);
+  c2[(axis+1)%3] = m;
+  m = box.GetMin ((axis+2)%3);
+  c1[(axis+2)%3] = m;
+  m = box.GetMax ((axis+2)%3);
+  c2[(axis+2)%3] = m;
+  DrawArc (c1, c2, axis);
+
+  Get4PointsOnArc (c1, c2, axis, minv1, minv2, minv3, minv4);
+
+  m = box.GetMax (axis);
+  c1[axis] = m;
+  c2[axis] = m;
+  DrawArc (c1, c2, axis);
+
+  Get4PointsOnArc (c1, c2, axis, maxv1, maxv2, maxv3, maxv4);
+
+  DrawLine (minv1, maxv1);
+  DrawLine (minv2, maxv2);
+  DrawLine (minv3, maxv3);
+  DrawLine (minv4, maxv4);
+}
 
