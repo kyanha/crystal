@@ -1,4 +1,5 @@
 /*
+  Copyright (C) 2011 by Jorrit Tyberghein
   Copyright (C) 2005 by Christopher Nelson
 
   This library is free software; you can redistribute it and/or
@@ -17,6 +18,7 @@
 */
 
 #include "cssysdef.h"
+#include "csgeom/box.h"
 #include "cstool/pen.h"
 #include "csutil/stringarray.h"
 #include "ivideo/fontserv.h"
@@ -83,16 +85,18 @@ void csPenCache::Render (iGraphics3D* g3d)
     mesh.indices = vertexIndices.GetArray () + meshes[i].offsetIndices;
     mesh.indexCount = meshes[i].indexCount;
 
-    g3d->DrawSimpleMesh (mesh, csSimpleMeshScreenspace);
+    g3d->DrawSimpleMesh (mesh, meshes[i].flags);
   }
 }
 
-void csPenCache::PushMesh (csSimpleRenderMesh* mesh)
+void csPenCache::PushMesh (csSimpleRenderMesh* mesh, csSimpleMeshFlags flags)
 {
   if (meshes.GetSize () <= 0 ||
+      meshes[meshes.GetSize ()-1].flags != flags ||
       !IsMergeable (&meshes[meshes.GetSize ()-1].mesh, mesh))
   {
     PRMesh prm;
+    prm.flags = flags;
     prm.offsetVertices = vertices.GetSize ();
     prm.offsetIndices = vertexIndices.GetSize ();
     meshes.Push (prm);
@@ -187,7 +191,7 @@ void csPen::DrawMesh (csRenderMeshType mesh_type)
 {
   mesh.meshtype = mesh_type;
   if (penCache)
-    penCache->PushMesh (&mesh);
+    penCache->PushMesh (&mesh, csSimpleMeshScreenspace);
   else
     g3d->DrawSimpleMesh (mesh, csSimpleMeshScreenspace);
 }
@@ -745,3 +749,129 @@ void csPen::WriteLinesBoxed(iFont *font, uint x1, uint y1, uint x2, uint y2,
     y += txtHeight;
   }
 }
+
+// --------------------------------------------------------------------------
+
+csPen3D::csPen3D (iGraphics2D *_g2d, iGraphics3D *_g3d) :
+  g3d (_g3d), g2d(_g2d)
+{
+  mesh.object2world.Identity();
+  mesh.mixmode = CS_FX_ALPHA;
+  penCache = 0;
+}
+
+csPen3D::~csPen3D ()
+{
+}
+
+void csPen3D::SetMixMode (uint mode)
+{
+  mesh.mixmode = mode;
+}
+
+void csPen3D::SetColor (float r, float g, float b, float a)
+{
+  color.x = r;
+  color.y = g;
+  color.z = b;
+  color.w = a;
+}
+
+void csPen3D::SetColor (const csColor4 &c)
+{
+  color.x = c.red;
+  color.y = c.green;
+  color.z = c.blue;
+  color.w = c.alpha;
+}
+
+void csPen3D::Start ()
+{
+  poly.MakeEmpty();
+  poly_idx.MakeEmpty();
+  colors.SetSize (0);
+  texcoords.SetSize (0);
+}
+
+void csPen3D::AddVertex (const csVector3& v)
+{
+  poly_idx.AddVertex((int)poly.AddVertex(v));
+  colors.Push(color);
+}
+
+void csPen3D::SetupMesh ()
+{
+  mesh.vertices = poly.GetVertices ();
+  mesh.vertexCount = (uint)poly.GetVertexCount ();
+
+  mesh.indices = (uint *)poly_idx.GetVertexIndices ();
+  mesh.indexCount = (uint)poly_idx.GetVertexCount ();
+
+  mesh.colors = colors.GetArray ();
+  mesh.texcoords = texcoords.GetArray();
+}
+
+void csPen3D::DrawMesh (csRenderMeshType mesh_type)
+{
+  mesh.meshtype = mesh_type;
+  if (penCache)
+    penCache->PushMesh (&mesh, (csSimpleMeshFlags)0);
+  else
+    g3d->DrawSimpleMesh (mesh, (csSimpleMeshFlags)0);
+}
+
+void csPen3D::SetTransform (const csReversibleTransform& trans)
+{
+  mesh.object2world = trans;
+}
+
+void csPen3D::DrawLine (const csVector3& v1, const csVector3& v2)
+{
+  Start ();
+  AddVertex (v1);
+  AddVertex (v2);
+
+  SetupMesh ();
+  DrawMesh (CS_MESHTYPE_LINES);
+}
+
+void csPen3D::DrawLines (const csArray<csPen3DCoordinatePair>& pairs)
+{
+  Start ();
+  for (size_t i = 0 ; i < pairs.GetSize () ; i++)
+  {
+    AddVertex (pairs[i].c1);
+    AddVertex (pairs[i].c2);
+  }
+
+  SetupMesh ();
+  DrawMesh (CS_MESHTYPE_LINES);
+}
+
+void csPen3D::DrawBox (const csBox3& b)
+{
+  csVector3 xyz = b.GetCorner (CS_BOX_CORNER_xyz);
+  csVector3 Xyz = b.GetCorner (CS_BOX_CORNER_Xyz);
+  csVector3 xYz = b.GetCorner (CS_BOX_CORNER_xYz);
+  csVector3 xyZ = b.GetCorner (CS_BOX_CORNER_xyZ);
+  csVector3 XYz = b.GetCorner (CS_BOX_CORNER_XYz);
+  csVector3 XyZ = b.GetCorner (CS_BOX_CORNER_XyZ);
+  csVector3 xYZ = b.GetCorner (CS_BOX_CORNER_xYZ);
+  csVector3 XYZ = b.GetCorner (CS_BOX_CORNER_XYZ);
+  csArray<csPen3DCoordinatePair> pairs;
+  pairs.Push (csPen3DCoordinatePair (xyz, Xyz));
+  pairs.Push (csPen3DCoordinatePair (Xyz, XYz));
+  pairs.Push (csPen3DCoordinatePair (XYz, xYz));
+  pairs.Push (csPen3DCoordinatePair (xYz, xyz));
+  pairs.Push (csPen3DCoordinatePair (xyZ, XyZ));
+  pairs.Push (csPen3DCoordinatePair (XyZ, XYZ));
+  pairs.Push (csPen3DCoordinatePair (XYZ, xYZ));
+  pairs.Push (csPen3DCoordinatePair (xYZ, xyZ));
+  pairs.Push (csPen3DCoordinatePair (xyz, xyZ));
+  pairs.Push (csPen3DCoordinatePair (xYz, xYZ));
+  pairs.Push (csPen3DCoordinatePair (Xyz, XyZ));
+  pairs.Push (csPen3DCoordinatePair (XYz, XYZ));
+  DrawLines (pairs);
+}
+
+
