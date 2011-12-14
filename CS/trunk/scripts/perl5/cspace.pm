@@ -22441,6 +22441,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *PushMesh = *cspacec::csPenCache_PushMesh;
 *Render = *cspacec::csPenCache_Render;
 *Clear = *cspacec::csPenCache_Clear;
+*SetTransform = *cspacec::csPenCache_SetTransform;
 sub new {
     my $pkg = shift;
     my $self = cspacec::new_csPenCache(@_);
@@ -22524,6 +22525,93 @@ sub DESTROY {
 *WriteLines = *cspacec::csPen_WriteLines;
 *WriteBoxed = *cspacec::csPen_WriteBoxed;
 *WriteLinesBoxed = *cspacec::csPen_WriteLinesBoxed;
+sub DISOWN {
+    my $self = shift;
+    my $ptr = tied(%$self);
+    delete $OWNER{$ptr};
+}
+
+sub ACQUIRE {
+    my $self = shift;
+    my $ptr = tied(%$self);
+    $OWNER{$ptr} = 1;
+}
+
+
+############# Class : cspace::csPen3DCoordinatePair ##############
+
+package cspace::csPen3DCoordinatePair;
+use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
+@ISA = qw( cspace );
+%OWNER = ();
+%ITERATORS = ();
+*swig_c1_get = *cspacec::csPen3DCoordinatePair_c1_get;
+*swig_c1_set = *cspacec::csPen3DCoordinatePair_c1_set;
+*swig_c2_get = *cspacec::csPen3DCoordinatePair_c2_get;
+*swig_c2_set = *cspacec::csPen3DCoordinatePair_c2_set;
+sub new {
+    my $pkg = shift;
+    my $self = cspacec::new_csPen3DCoordinatePair(@_);
+    bless $self, $pkg if defined($self);
+}
+
+sub DESTROY {
+    return unless $_[0]->isa('HASH');
+    my $self = tied(%{$_[0]});
+    return unless defined $self;
+    delete $ITERATORS{$self};
+    if (exists $OWNER{$self}) {
+        cspacec::delete_csPen3DCoordinatePair($self);
+        delete $OWNER{$self};
+    }
+}
+
+sub DISOWN {
+    my $self = shift;
+    my $ptr = tied(%$self);
+    delete $OWNER{$ptr};
+}
+
+sub ACQUIRE {
+    my $self = shift;
+    my $ptr = tied(%$self);
+    $OWNER{$ptr} = 1;
+}
+
+
+############# Class : cspace::csPen3D ##############
+
+package cspace::csPen3D;
+use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
+@ISA = qw( cspace );
+%OWNER = ();
+%ITERATORS = ();
+sub new {
+    my $pkg = shift;
+    my $self = cspacec::new_csPen3D(@_);
+    bless $self, $pkg if defined($self);
+}
+
+sub DESTROY {
+    return unless $_[0]->isa('HASH');
+    my $self = tied(%{$_[0]});
+    return unless defined $self;
+    delete $ITERATORS{$self};
+    if (exists $OWNER{$self}) {
+        cspacec::delete_csPen3D($self);
+        delete $OWNER{$self};
+    }
+}
+
+*SetActiveCache = *cspacec::csPen3D_SetActiveCache;
+*SetMixMode = *cspacec::csPen3D_SetMixMode;
+*SetColor = *cspacec::csPen3D_SetColor;
+*SetTransform = *cspacec::csPen3D_SetTransform;
+*DrawLine = *cspacec::csPen3D_DrawLine;
+*DrawLines = *cspacec::csPen3D_DrawLines;
+*DrawBox = *cspacec::csPen3D_DrawBox;
+*DrawArc = *cspacec::csPen3D_DrawArc;
+*DrawCylinder = *cspacec::csPen3D_DrawCylinder;
 sub DISOWN {
     my $self = shift;
     my $ptr = tied(%$self);

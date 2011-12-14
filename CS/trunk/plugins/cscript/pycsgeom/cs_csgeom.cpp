@@ -38903,7 +38903,7 @@ SWIGINTERN PyObject *_wrap_csBox3_GetMin(PyObject *SWIGUNUSEDPARM(self), PyObjec
   if(!PyArg_UnpackTuple(args,(char *)"csBox3_GetMin",2,2,&obj0,&obj1)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_csBox3, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "csBox3_GetMin" "', argument " "1"" of type '" "csBox3 *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "csBox3_GetMin" "', argument " "1"" of type '" "csBox3 const *""'"); 
   }
   arg1 = reinterpret_cast< csBox3 * >(argp1);
   ecode2 = SWIG_AsVal_size_t(obj1, &val2);
@@ -38911,7 +38911,7 @@ SWIGINTERN PyObject *_wrap_csBox3_GetMin(PyObject *SWIGUNUSEDPARM(self), PyObjec
     SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "csBox3_GetMin" "', argument " "2"" of type '" "size_t""'");
   } 
   arg2 = static_cast< size_t >(val2);
-  result = (float)(arg1)->GetMin(arg2);
+  result = (float)((csBox3 const *)arg1)->GetMin(arg2);
   resultobj = SWIG_From_float(static_cast< float >(result));
   return resultobj;
 fail:
@@ -38934,7 +38934,7 @@ SWIGINTERN PyObject *_wrap_csBox3_GetMax(PyObject *SWIGUNUSEDPARM(self), PyObjec
   if(!PyArg_UnpackTuple(args,(char *)"csBox3_GetMax",2,2,&obj0,&obj1)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_csBox3, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "csBox3_GetMax" "', argument " "1"" of type '" "csBox3 *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "csBox3_GetMax" "', argument " "1"" of type '" "csBox3 const *""'"); 
   }
   arg1 = reinterpret_cast< csBox3 * >(argp1);
   ecode2 = SWIG_AsVal_size_t(obj1, &val2);
@@ -38942,7 +38942,7 @@ SWIGINTERN PyObject *_wrap_csBox3_GetMax(PyObject *SWIGUNUSEDPARM(self), PyObjec
     SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "csBox3_GetMax" "', argument " "2"" of type '" "size_t""'");
   } 
   arg2 = static_cast< size_t >(val2);
-  result = (float)(arg1)->GetMax(arg2);
+  result = (float)((csBox3 const *)arg1)->GetMax(arg2);
   resultobj = SWIG_From_float(static_cast< float >(result));
   return resultobj;
 fail:
