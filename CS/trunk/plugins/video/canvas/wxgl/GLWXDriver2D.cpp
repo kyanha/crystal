@@ -85,16 +85,16 @@ void csGraphics2DWX::AlertV (int type, const char* title,
   switch (type)
   {
     case CS_ALERT_ERROR:
-      wxMessageBox (wxString::FromUTF8 (message), wxT("Error!"),
+      wxMessageBox (wxString (message, wxConvUTF8), wxT("Error!"),
 	  wxICON_ERROR, myParent);
       break;
     case CS_ALERT_WARNING:
-      wxMessageBox (wxString::FromUTF8 (message), wxT("Warning!"),
+      wxMessageBox (wxString (message, wxConvUTF8), wxT("Warning!"),
 	  wxICON_EXCLAMATION, myParent);
       break;
     default:
     case CS_ALERT_NOTE:
-      wxMessageBox (wxString::FromUTF8 (message), wxT("Note!"),
+      wxMessageBox (wxString (message, wxConvUTF8), wxT("Note!"),
 	  wxICON_INFORMATION, myParent);
       break;
   }
