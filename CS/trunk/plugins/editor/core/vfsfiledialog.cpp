@@ -162,9 +162,9 @@ wxDialog( parent, id, title, position, size, style), vfs (vfs)
     curdvpath = GetPathByTreeItem(rootId);
   else
     curdvpath = startpath;
-  LoadVFSDirView(curdvpath);
-  thepath->SetValue(wxString(curdvpath.GetData(), wxConvUTF8));
-  InitViewTypeList();
+  LoadVFSDirView (curdvpath);
+  thepath->SetValue (wxString::FromUTF8 (curdvpath.GetData()));
+  InitViewTypeList ();
 
   // Open the tree until the given path
   if (startpath != "/")
@@ -178,7 +178,7 @@ wxDialog( parent, id, title, position, size, style), vfs (vfs)
       if (index == (size_t) -1) break;
       csString dir = path.Slice (0, index);
       path = path.Slice (index + 1);
-      OpenTreeItemChild(wxString(dir.GetData(), wxConvUTF8));
+      OpenTreeItemChild (wxString::FromUTF8 (dir.GetData()));
     }
   }
 }
@@ -297,7 +297,7 @@ bool cssVFSFileDlg :: LoadVFSDirView(const char *path)
   for(long i = 0; i < nentries; i++)
   {
     //  char *curentry = (char*)entry->Get(i);
-    wxString name = wxString(entry->Get(i), wxConvUTF8);	
+    wxString name = wxString::FromUTF8 (entry->Get (i));	
 
     if( name.Last() == '/' ) //if DIR
     {
@@ -336,7 +336,7 @@ bool cssVFSFileDlg :: LoadVFSTreeBranch(wxTreeItemId parent, const char *path)
 
   for( entryIndex = 0; entryIndex < numberEntries; entryIndex++ )
   {
-    wxString curTestPath = wxString(childList->Get( entryIndex ), wxConvUTF8);
+    wxString curTestPath = wxString::FromUTF8 (childList->Get (entryIndex));
     if( curTestPath.Last() == '/' )
     {
       curTestPath.RemoveLast();
@@ -426,7 +426,7 @@ void cssVFSFileDlg :: OnDirTreeSelChange(wxTreeEvent& event)
 {
   curdvpath = GetPathByTreeItem(event.GetItem());
   LoadVFSDirView(curdvpath);
-  thepath->SetValue(wxString(curdvpath.GetData(), wxConvUTF8));
+  thepath->SetValue (wxString::FromUTF8 (curdvpath.GetData()));
 }
 
 
@@ -448,16 +448,16 @@ void cssVFSFileDlg :: OnDirViewActivated( wxListEvent & event )
 
 void cssVFSFileDlg :: OnDirViewSelChange(wxListEvent& event)
 {
-  filename = (const char*)event.GetText().mb_str(wxConvUTF8);
+  filename = (const char*) event.GetText ().mb_str (wxConvUTF8);
 
-  wxString fullpath (curdvpath, wxConvUTF8);
-  fullpath.Append(wxString(filename, wxConvUTF8));
+  wxString fullpath = wxString::FromUTF8 (curdvpath);
+  fullpath.Append (wxString::FromUTF8 (filename));
 
   thepath->SetValue(fullpath);
 }
 void cssVFSFileDlg :: OnOk( wxCommandEvent& event )
 {
-  filename = (const char*)thepath->GetValue().mb_str(wxConvUTF8);
+  filename = (const char*) thepath->GetValue ().mb_str (wxConvUTF8);
   
   if (!filename)
     return;
