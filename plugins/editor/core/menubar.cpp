@@ -133,7 +133,7 @@ wxMenu* Menu::GetwxMenu () const
 
 csPtr<iMenuItem> Menu::AppendItem (const char* item)
 {
-  wxString str(item, wxConvUTF8);
+  wxString str = wxString::FromUTF8 (item);
   wxMenuItem* i = menu->Append(wxID_ANY, str);
 
   csRef<iMenuItem> ref;
@@ -144,7 +144,7 @@ csPtr<iMenuItem> Menu::AppendItem (const char* item)
   
 csPtr<iMenuCheckItem> Menu::AppendCheckItem (const char* item)
 {
-  wxString str(item, wxConvUTF8);
+  wxString str = wxString::FromUTF8 (item);
   wxMenuItem* i = menu->AppendCheckItem(wxID_ANY, str);
 
   csRef<iMenuCheckItem> ref;
@@ -166,7 +166,7 @@ csPtr<iMenuItem> Menu::AppendSeparator ()
 csPtr<iMenu> Menu::AppendSubMenu (const char* item)
 {
   wxMenu* m = new wxMenu();
-  wxString str(item, wxConvUTF8);
+  wxString str = wxString::FromUTF8 (item);
   menu->AppendSubMenu(m, str);
 
   csRef<iMenu> ref;
@@ -197,7 +197,7 @@ csPtr<iMenu> MenuBar::Append (const char* item)
 {
   assert(menuBar);
   wxMenu* menu = new wxMenu();
-  wxString str(item, wxConvUTF8);
+  wxString str = wxString::FromUTF8 (item);
   menuBar->Append(menu, str);
 
   csRef<iMenu> ref;

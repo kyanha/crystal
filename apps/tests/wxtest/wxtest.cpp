@@ -324,7 +324,7 @@ bool Simple::Initialize ()
   for (size_t i = 0; i < installPaths->GetSize(); i++)
   {
     if (!searchPath.IsEmpty()) searchPath.Append (wxPATH_SEP);
-    searchPath.Append (wxString ((*installPaths)[i].path, wxConvUTF8));
+    searchPath.Append (wxString::FromUTF8 ((*installPaths)[i].path));
   }
   delete installPaths;
   wxString resourceLocation;
