@@ -59,6 +59,8 @@ CS_PLUGIN_NAMESPACE_BEGIN(LookAt)
     virtual void SetMaximumSpeed (float speed);
     virtual void SetAlwaysRotate (bool alwaysRotate);
     virtual void SetListenerDelay (float delay);
+    virtual void SetDirection (const csMatrix3& direction);
+    virtual void GetDirection (csMatrix3& direction) const;
 
     inline virtual void SetChildNode (CS::Animation::iSkeletonAnimNodeFactory* factory)
     { CS::Animation::SkeletonAnimNodeFactorySingle::SetChildNode (factory); }
@@ -73,6 +75,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(LookAt)
     csRef<CS::Animation::iBodySkeleton> skeleton;
     CS::Animation::BoneID boneID;
     csRef<CS::Animation::iBodyBoneJoint> bodyJoint;
+    csQuaternion direction;
     float maximumSpeed;
     bool alwaysRotate;
     float listenerMinimumDelay;

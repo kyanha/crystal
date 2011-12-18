@@ -1,5 +1,5 @@
 /*
-  Copyright (C) 2009 Christian Van Brussel, Institute of Information
+  Copyright (C) 2009-11 Christian Van Brussel, Institute of Information
       and Communication Technologies, Electronics and Applied Mathematics
       at Universite catholique de Louvain, Belgium
       http://www.uclouvain.be/en-icteam.html
@@ -98,6 +98,16 @@ CS_PLUGIN_NAMESPACE_BEGIN(LookAt)
   {
     CS_ASSERT (delay >= 0.0f);
     listenerMinimumDelay = delay;
+  }
+
+  void LookAtNodeFactory::SetDirection (const csMatrix3& direction)
+  {
+    this->direction.SetMatrix (direction);
+  }
+
+  void LookAtNodeFactory::GetDirection (csMatrix3& direction) const
+  {
+    direction = this->direction.GetMatrix ();
   }
 
   csPtr<CS::Animation::SkeletonAnimNodeSingleBase> LookAtNodeFactory::ActualCreateInstance (
@@ -295,15 +305,16 @@ CS_PLUGIN_NAMESPACE_BEGIN(LookAt)
     csVector3 skeletonOffset;
     skeleton->GetFactory ()->GetTransformBoneSpace (factory->boneID, skeletonRotation,
 						    skeletonOffset);
+    skeletonRotation = skeletonRotation * factory->direction;
 
     // check if a child bone has already set this bone
     bool transformAlreadySet = state->IsBoneUsed (factory->boneID);
+    if (transformAlreadySet)
+      skeletonOffset += skeletonRotation.Rotate (state->GetVector (factory->boneID));
 
     // compute current transform of bone
     // (don't change position if a child node has already made it)
-    csOrthoTransform boneTransform (csMatrix3 (skeletonRotation),
-				    transformAlreadySet ?
-				    state->GetVector (factory->boneID) : skeletonOffset);
+    csOrthoTransform boneTransform (csMatrix3 (skeletonRotation.GetConjugate ()), skeletonOffset);
     boneTransform = boneTransform * parentTransform;
 
     // compute target position
