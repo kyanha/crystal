@@ -1319,6 +1319,14 @@ CS_PLUGIN_NAMESPACE_BEGIN(Skeleton2Ldr)
 	}
 	break;
 
+      case XMLTOKEN_DIRECTION:
+        {
+          csMatrix3 direction;
+          synldr->ParseMatrix (child, direction);
+	  factnode->SetDirection (direction);
+	}
+	break;
+
       default:
         synldr->ReportBadToken (child);
         return 0;
