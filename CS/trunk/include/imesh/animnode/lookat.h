@@ -54,7 +54,7 @@ struct iSkeletonLookAtNodeManager
 
 /**
  * Factory for the 'LookAt' animation node. This node can control a bone of an animesh in
- * order to make it look at a target.
+ * order to make it look at a target. The direction to look at is defined by SetDirection().
  *
  * There are three types of constraints that will modify the 'LookAt' control:
  * - Whether or not a CS::Animation::iBodyBoneJoint for the bone controlled has been defined
@@ -70,14 +70,17 @@ struct iSkeletonLookAtNodeManager
  */
 struct iSkeletonLookAtNodeFactory : public virtual iSkeletonAnimNodeFactory
 {
-  SCF_INTERFACE(CS::Animation::iSkeletonLookAtNodeFactory, 2, 0, 0);
+  SCF_INTERFACE(CS::Animation::iSkeletonLookAtNodeFactory, 2, 0, 1);
 
   /**
-   * Set the body skeleton that is used to specify the geometrical constraints of the animated
+   * Set the body skeleton that is used to specify the rotational constraints of the animated
    * bone. A CS::Animation::iBodyBone and a CS::Animation::iBodyBoneJoint must be defined for
    * the bone animated by the 'LookAt' node. If \a skeleton is nullptr or if there is no
-   * CS::Animation::iBodyBoneJoint defined, then the animation won't have any geometrical
+   * CS::Animation::iBodyBoneJoint defined, then the animation won't have any rotational
    * constraints.
+   *
+   * The rotational constraints are specified relatively to the 'LookAt' direction defined
+   * through SetDirection().
    */
   virtual void SetBodySkeleton (iBodySkeleton* skeleton) = 0;
 
@@ -123,6 +126,17 @@ struct iSkeletonLookAtNodeFactory : public virtual iSkeletonAnimNodeFactory
    * Return the child animation node of this node.
    */
   virtual iSkeletonAnimNodeFactory* GetChildNode () const = 0;
+
+  /**
+   * Set the direction to look at, in bone space. The Z axis should be aligned with the
+   * direction to look at, and the Y axis should be upward.
+   */
+  virtual void SetDirection (const csMatrix3& direction) = 0;
+
+  /**
+   * Get the direction to look at, in bone space.
+   */
+  virtual void GetDirection (csMatrix3& direction) const = 0;
 };
 
 /**
