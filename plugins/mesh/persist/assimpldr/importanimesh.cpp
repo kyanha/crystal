@@ -607,10 +607,6 @@ CS_PLUGIN_NAMESPACE_BEGIN(AssimpLoader)
       {
 	aiQuatKey& key = channel->mRotationKeys[i];
 
-	// Don't accept negative time values
-	if (key.mTime < 0.0f)
-	  continue;
-
 	// Check ticks are not null
 	float time = animation->mTicksPerSecond > SMALL_EPSILON ?
 	  key.mTime / animation->mTicksPerSecond : key.mTime;
@@ -624,10 +620,6 @@ CS_PLUGIN_NAMESPACE_BEGIN(AssimpLoader)
       for (unsigned int i = 0; i < channel->mNumPositionKeys; i++)
       {
 	aiVectorKey& key = channel->mPositionKeys[i];
-
-	// Don't accept negative time values
-	if (key.mTime < 0.0f)
-	  continue;
 
 	// Check ticks are not null
 	float time = animation->mTicksPerSecond > SMALL_EPSILON ?
