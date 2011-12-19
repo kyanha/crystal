@@ -32,8 +32,8 @@ CS_PLUGIN_NAMESPACE_BEGIN(Skeleton2)
 {
   CS_LEAKGUARD_IMPLEMENT(AnimationPacketFactory);
   
-  AnimationPacketFactory::AnimationPacketFactory ()
-    : scfImplementationType (this)
+  AnimationPacketFactory::AnimationPacketFactory (const char* name)
+    : scfImplementationType (this), name (name)
   {
   }
 
@@ -48,6 +48,11 @@ CS_PLUGIN_NAMESPACE_BEGIN(Skeleton2)
       newP->animRoot = animRoot->CreateInstance (newP, skeleton);
 
     return csPtr<CS::Animation::iSkeletonAnimPacket> (newP);
+  }
+
+  const char* AnimationPacketFactory::GetName () const
+  {
+    return name;
   }
 
   CS::Animation::iSkeletonAnimation* AnimationPacketFactory::CreateAnimation (

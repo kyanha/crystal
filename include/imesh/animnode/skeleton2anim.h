@@ -116,7 +116,7 @@ enum SynchronizationMode
  */
 struct iSkeletonAnimPacketFactory : public virtual iBase
 {
-  SCF_INTERFACE(CS::Animation::iSkeletonAnimPacketFactory, 2, 0, 2);
+  SCF_INTERFACE(CS::Animation::iSkeletonAnimPacketFactory, 2, 0, 3);
   
   /**
    * Create an instance of this animation packet
@@ -199,6 +199,11 @@ struct iSkeletonAnimPacketFactory : public virtual iBase
    * \return The index of the animation, if found, else (size_t) -1.
    */
   virtual size_t FindAnimationIndex (const char* name) = 0;
+
+  /**
+   * Get the name of this animation packet factory
+   */
+  virtual const char* GetName () const = 0;
 };
 
 /**

@@ -62,7 +62,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(Skeleton2)
   {
     // Check name uniqueness
     csRef<CS::Animation::iSkeletonAnimPacketFactory> newFact = 
-      csPtr<CS::Animation::iSkeletonAnimPacketFactory> (new AnimationPacketFactory);
+      csPtr<CS::Animation::iSkeletonAnimPacketFactory> (new AnimationPacketFactory (name));
 
     return animPackets.PutUnique (name, newFact);
   }
