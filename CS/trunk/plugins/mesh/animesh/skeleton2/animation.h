@@ -38,11 +38,12 @@ CS_PLUGIN_NAMESPACE_BEGIN(Skeleton2)
   public:
     CS_LEAKGUARD_DECLARE(AnimationPacketFactory);
   
-    AnimationPacketFactory ();
+    AnimationPacketFactory (const char* name);
 
     //-- CS::Animation::iSkeletonAnimPacketFactory
     virtual csPtr<CS::Animation::iSkeletonAnimPacket> CreateInstance (CS::Animation::iSkeleton* skeleton);
 
+    virtual const char* GetName () const;
     virtual CS::Animation::iSkeletonAnimation* CreateAnimation (const char* name);
     virtual CS::Animation::iSkeletonAnimation* FindAnimation (const char* name);
     virtual size_t FindAnimationIndex (const char* name);
@@ -62,6 +63,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(Skeleton2)
     virtual csPtr<CS::Animation::iSkeletonFSMNodeFactory> CreateFSMNode (const char* name);
 
   private:
+    csString name;
     csRefArray<Animation> animationList;
     csRef<CS::Animation::iSkeletonAnimNodeFactory> animRoot;
   };
