@@ -107,6 +107,38 @@ CS_PLUGIN_NAMESPACE_BEGIN(Skeleton2Ldr)
   };
 
 
+  class SkeletonSaver :
+    public scfImplementation2<SkeletonSaver,
+                              iSaverPlugin,
+                              iComponent>
+  {
+  private:
+    iObjectRegistry* object_reg;
+    csRef<iReporter> reporter;
+    csRef<iSyntaxService> synldr;
+
+    void WriteAnimPacket (CS::Animation::iSkeletonAnimPacketFactory* packet,
+			iDocumentNode* parent);
+    void WriteAnimation (CS::Animation::iSkeletonAnimation* animation,
+			 iDocumentNode* parent);
+    void WriteAnimNode (CS::Animation::iSkeletonAnimNodeFactory* animNode,
+			iDocumentNode* parent);
+    void WriteSkeleton (CS::Animation::iSkeletonFactory* factory,
+			iDocumentNode* parent);
+    void WriteBone (CS::Animation::iSkeletonFactory* factory,
+		    CS::Animation::BoneID boneID,
+		    iDocumentNode* parent);
+
+  public:
+    SkeletonSaver (iBase* parent);
+
+    //-- iSaverPlugin
+    virtual bool WriteDown (iBase *obj, iDocumentNode* parent,
+      iStreamSource*);
+
+    //-- iComponent
+    virtual bool Initialize (iObjectRegistry*);
+  };
 
 }
 CS_PLUGIN_NAMESPACE_END(Skeleton2Ldr)
