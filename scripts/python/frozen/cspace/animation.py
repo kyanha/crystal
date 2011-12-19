@@ -831,6 +831,8 @@ class iSkeletonLookAtNodeFactory(iSkeletonAnimNodeFactory):
     def SetListenerDelay(*args): return _animation.iSkeletonLookAtNodeFactory_SetListenerDelay(*args)
     def SetChildNode(*args): return _animation.iSkeletonLookAtNodeFactory_SetChildNode(*args)
     def GetChildNode(*args): return _animation.iSkeletonLookAtNodeFactory_GetChildNode(*args)
+    def SetDirection(*args): return _animation.iSkeletonLookAtNodeFactory_SetDirection(*args)
+    def GetDirection(*args): return _animation.iSkeletonLookAtNodeFactory_GetDirection(*args)
     scfGetVersion = staticmethod(_animation.iSkeletonLookAtNodeFactory_scfGetVersion)
     __swig_destroy__ = _animation.delete_iSkeletonLookAtNodeFactory
     __del__ = lambda self : None;
