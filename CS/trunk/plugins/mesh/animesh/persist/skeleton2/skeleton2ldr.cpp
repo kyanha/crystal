@@ -40,6 +40,7 @@
 CS_PLUGIN_NAMESPACE_BEGIN(Skeleton2Ldr)
 {
   SCF_IMPLEMENT_FACTORY(SkeletonLoader);
+  SCF_IMPLEMENT_FACTORY(SkeletonSaver);
 
 
   SkeletonLoader::SkeletonLoader (iBase* parent)
@@ -525,7 +526,10 @@ CS_PLUGIN_NAMESPACE_BEGIN(Skeleton2Ldr)
         "Could not create animation, another animation with same name already exist");
       return false;
     }
-    
+
+    if (node->GetAttributeValueAsBool ("bindspace", false))
+      fact->SetFramesInBindSpace (true);
+
     // Handle "separate-file" loading...
     csRef<iDocumentNodeIterator> it = node->GetNodes ();
     while (it->HasNext ())
@@ -579,6 +583,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(Skeleton2Ldr)
           }
         }
         break;
+
       default:
         synldr->ReportBadToken (child);
         return 0;
@@ -1632,6 +1637,174 @@ CS_PLUGIN_NAMESPACE_BEGIN(Skeleton2Ldr)
     }
 
     return csPtr<CS::Animation::iSkeletonAnimNodeFactory> (factnode);
+  }
+
+  //-------------------------------------------------------------------------
+
+  SkeletonSaver::SkeletonSaver (iBase* parent)
+    : scfImplementationType (this, parent)
+  {}
+
+  bool SkeletonSaver::Initialize (iObjectRegistry* object_reg)
+  {
+    SkeletonSaver::object_reg = object_reg;
+    reporter = csQueryRegistry<iReporter> (object_reg);
+    synldr = csQueryRegistry<iSyntaxService> (object_reg);
+
+    return true;
+  }
+
+  bool SkeletonSaver::WriteDown (iBase *obj, iDocumentNode* parent,
+    iStreamSource*)
+  {
+    if (!parent) return false; //you never know...
+
+    csRef<iDocumentNode> rootNode = 
+      parent->CreateNodeBefore (CS_NODE_ELEMENT, 0);
+    rootNode->SetValue ("addon");
+    rootNode->SetAttribute ("plugin", "crystalspace.skeletalanimation.loader");
+
+    if (!obj) return true;
+
+    csRef<CS::Animation::iSkeletonFactory> factory = 
+      scfQueryInterface<CS::Animation::iSkeletonFactory> (obj);
+    if (!factory) return false;
+
+    WriteAnimPacket (factory->GetAnimationPacket (), rootNode);
+    WriteSkeleton (factory, rootNode);
+
+    return true;
+  }
+
+  void SkeletonSaver::WriteAnimPacket
+    (CS::Animation::iSkeletonAnimPacketFactory* packet,
+     iDocumentNode* parent)
+  {
+    if (!packet) return;
+
+    csRef<iDocumentNode> rootNode = 
+      parent->CreateNodeBefore (CS_NODE_ELEMENT);
+    rootNode->SetValue ("animationpacket");
+    rootNode->SetAttribute ("name", packet->GetName ());
+
+    for (size_t i = 0; i < packet->GetAnimationCount (); i++)
+      WriteAnimation (packet->GetAnimation (i), rootNode);
+
+    WriteAnimNode (packet->GetAnimationRoot (), rootNode);
+  }
+
+  void SkeletonSaver::WriteAnimation
+    (CS::Animation::iSkeletonAnimation* animation,
+     iDocumentNode* parent)
+  {
+    csRef<iDocumentNode> rootNode = 
+      parent->CreateNodeBefore (CS_NODE_ELEMENT);
+    rootNode->SetValue ("animation");
+    rootNode->SetAttribute ("name", animation->GetName ());
+    if (animation->GetFramesInBindSpace ())
+      rootNode->SetAttribute ("bindspace", "true");
+
+    for (size_t i = 0; i < animation->GetChannelCount (); i++)
+    {
+      csRef<iDocumentNode> channelNode =
+	rootNode->CreateNodeBefore (CS_NODE_ELEMENT);
+      channelNode->SetValue ("channel");
+      channelNode->SetAttributeAsFloat ("bone", animation->GetChannelBone (i));
+
+      for (size_t j = 0; j < animation->GetKeyFrameCount (i); j++)
+      {
+	CS::Animation::BoneID bone;
+	float time;
+	csQuaternion rotation;
+	csVector3 offset;
+
+	animation->GetKeyFrame (i, j, bone, time, rotation, offset);
+
+	csRef<iDocumentNode> keyNode =
+	  channelNode->CreateNodeBefore (CS_NODE_ELEMENT);
+	keyNode->SetValue ("key");
+	keyNode->SetAttributeAsFloat ("time", time);
+	synldr->WriteVector (keyNode, offset);
+	keyNode->SetAttributeAsFloat ("qx", rotation.v.x);
+	keyNode->SetAttributeAsFloat ("qy", rotation.v.y);
+	keyNode->SetAttributeAsFloat ("qz", rotation.v.z);
+	keyNode->SetAttributeAsFloat ("qw", rotation.w);
+      }
+    }
+  }
+
+  void SkeletonSaver::WriteAnimNode
+    (CS::Animation::iSkeletonAnimNodeFactory* animNode,
+     iDocumentNode* parent)
+  {
+    // TODO
+  }
+
+  void SkeletonSaver::WriteSkeleton
+    (CS::Animation::iSkeletonFactory* factory,
+     iDocumentNode* parent)
+  {
+    csRef<iDocumentNode> rootNode = 
+      parent->CreateNodeBefore (CS_NODE_ELEMENT);
+    rootNode->SetValue ("skeleton");
+    rootNode->SetAttribute ("name", factory->GetName ());
+
+    WriteBone (factory, CS::Animation::InvalidBoneID, rootNode);
+
+    if (!factory->GetAutoStart ())
+    {
+      csRef<iDocumentNode> node = 
+	rootNode->CreateNodeBefore (CS_NODE_ELEMENT);
+      node->SetValue ("startanimation");
+      node->SetAttribute ("automatic", "false");
+    }
+
+    CS::Animation::iSkeletonAnimPacketFactory* animationPacket =
+      factory->GetAnimationPacket ();
+    if (animationPacket)
+    {
+      csRef<iDocumentNode> node = 
+	rootNode->CreateNodeBefore (CS_NODE_ELEMENT);
+      node->SetValue ("animationpacket");
+
+      csRef<iDocumentNode> nameNode = 
+	node->CreateNodeBefore (CS_NODE_TEXT, 0);
+      nameNode->SetValue (animationPacket->GetName ());
+    }
+  }
+
+  void SkeletonSaver::WriteBone (CS::Animation::iSkeletonFactory* factory,
+				 CS::Animation::BoneID boneID,
+				 iDocumentNode* parent)
+  {
+    csRef<iDocumentNode> node = parent;
+
+    // Write the data of this bone
+    if (boneID != CS::Animation::InvalidBoneID)
+    {
+      node = parent->CreateNodeBefore (CS_NODE_ELEMENT);
+      node->SetValue ("bone");
+      node->SetAttribute ("name", factory->GetBoneName (boneID));
+
+      csRef<iDocumentNode> transformNode = node->CreateNodeBefore (CS_NODE_ELEMENT);
+      transformNode->SetValue ("transform");
+
+      csQuaternion rotation;
+      csVector3 offset;
+      factory->GetTransformBoneSpace (boneID, rotation, offset);
+
+      synldr->WriteVector (transformNode, offset);
+      transformNode->SetAttributeAsFloat ("qx", rotation.v.x);
+      transformNode->SetAttributeAsFloat ("qy", rotation.v.y);
+      transformNode->SetAttributeAsFloat ("qz", rotation.v.z);
+      transformNode->SetAttributeAsFloat ("qw", rotation.w);
+    }
+
+    // Write all children bones
+    const csArray<CS::Animation::BoneID>& bones = factory->GetBoneOrderList ();
+    for (size_t i = 0; i < bones.GetSize (); i++)
+      if (factory->GetBoneParent (bones[i]) == boneID)
+	WriteBone (factory, bones[i], node);
   }
 
 }

@@ -512,13 +512,9 @@ CS_PLUGIN_NAMESPACE_BEGIN(Animeshldr)
   }
 
   bool AnimeshFactorySaver::WriteDown (iBase *obj, iDocumentNode* parent,
-    iStreamSource*)
+    iStreamSource* source)
   {
     if (!parent) return false; //you never know...
-
-    csRef<iDocumentNode> paramsNode = 
-      parent->CreateNodeBefore(CS_NODE_ELEMENT, 0);
-    paramsNode->SetValue("params");
 
     if (obj)
     {
@@ -529,7 +525,27 @@ CS_PLUGIN_NAMESPACE_BEGIN(Animeshldr)
       if (!factory) return false;
       if (!meshfact) return false;
 
-      // Write material
+      // Write the skeleton factory
+      if (factory->GetSkeletonFactory ())
+      {
+	csRef<iSaverPlugin> saver = csLoadPluginCheck<iSaverPlugin> (
+	  object_reg, "crystalspace.skeletalanimation.saver", false);
+
+	if (!saver)
+	{
+	  synldr->ReportError (msgidFactory, parent, 
+			       "Could not load the skeleton saver plugin!");
+	  return 0;
+	}
+
+	saver->WriteDown (factory->GetSkeletonFactory (), parent, source);
+      }
+
+      csRef<iDocumentNode> paramsNode = 
+	parent->CreateNodeBefore (CS_NODE_ELEMENT);
+      paramsNode->SetValue ("params");
+
+      // Write the material
       iMaterialWrapper* material = nullptr;
 
       for (size_t i = 0; i < factory->GetSubMeshCount (); i++)
@@ -550,11 +566,11 @@ CS_PLUGIN_NAMESPACE_BEGIN(Animeshldr)
 	  paramsNode->CreateNodeBefore (CS_NODE_ELEMENT, 0);
 	materialNode->SetValue ("material");
 	csRef<iDocumentNode> materialNameNode = 
-	  materialNode->CreateNodeBefore(CS_NODE_TEXT, 0);
-	materialNameNode->SetValue (material->QueryObject()->GetName());
+	  materialNode->CreateNodeBefore (CS_NODE_TEXT, 0);
+	materialNameNode->SetValue (material->QueryObject ()->GetName ());
       }
 
-      // Write vertices render buffer
+      // Write the vertex render buffer
       {
 	iRenderBuffer* buffer = factory->GetVertices ();
 	if (buffer)
