@@ -234,9 +234,8 @@ struct iSkeletonAnimPacket : public virtual iBase
 };
 
 /**
- * Data structure for raw skeletal animations. It defines the key frames of the
- * animation but not its current playing state. You need to use a
- * CS::Animation::iSkeletonAnimationNode in order to play this animation.
+ * Data structure for raw skeletal animations. It defines a base animation to be
+ * played eg by a CS::Animation::iSkeletonAnimationNode.
  *
  * Each animation is made up of one or more channels, where each channel is
  * associated to a bone of the skeleton. Each channel can contain one or more
@@ -249,16 +248,16 @@ struct iSkeletonAnimPacket : public virtual iBase
  * drawback is that the \a playbackTime parameter of the BlendState() method
  * will then be shifted, and that you must therefore use it more carefully.
  *
- * For a given channel, if there is no key frame defined before the current playing
- * time, then the last key frame
+ * When playing the animation and for a given channel, if there is no key frame
+ * defined before the current playing time, then the last key frame
  * will be used as the first closest key frame. Similarly, if there is no key frame
  * defined after the current playing time, then the first key frame will be used as
  * the second closest key frame.
  *
  * This behavior of the transition bewteen the last and the first key frames is useful
- * for cyclic animations but may be surprising for animations which are not. A good
- * practice when defining non cyclic animations is therefore to always define a
- * key frame for all channels at the first and last key frame time.
+ * for cyclic animations but may be surprising for animations that are not cyclic.
+ * Therefore, a good practice when defining non cyclic animations is to always define
+ * a key frame for all channels at the first and last key frame time.
  *
  * Main creators of instances implementing this interface:
  * - CS::Animation::iSkeletonAnimPacketFactory::CreateAnimation()

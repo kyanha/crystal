@@ -19,6 +19,10 @@
 #ifndef __CS_IENGINE_RENDERMANAGER_H__
 #define __CS_IENGINE_RENDERMANAGER_H__
 
+/**\file
+ * Render manager interfaces
+ */
+
 #include "csutil/scf_interface.h"
 #include "ivaria/view.h"
 
