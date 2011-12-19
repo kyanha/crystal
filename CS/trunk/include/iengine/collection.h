@@ -19,6 +19,10 @@ Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 #ifndef __IENGINE_COLLECTION_H__
 #define __IENGINE_COLLECTION_H__
 
+/**\file
+ * Collection management
+ */
+
 #include "iutil/array.h"
 #include "csutil/scf.h"
 

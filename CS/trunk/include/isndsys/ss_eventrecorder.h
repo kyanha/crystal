@@ -19,9 +19,16 @@ Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 #ifndef CS_SNDSYS_EVENTRECORDER_H
 #define CS_SNDSYS_EVENTRECORDER_H
 
+/**\file
+ * Sound system: debugging tools
+ */
+
+/**\addtogroup sndsys
+ * @{ */
+
 struct iSndSysEventRecorder;
 
-
+/// Sound event levels
 typedef enum
 {
   SSEL_BUG,      // This event is surely a bug in our code - think of it like a loggable assertion
@@ -31,6 +38,7 @@ typedef enum
   SSEL_DEBUG     // General information that's really good to know for debugging purposes
 } SndSysEventLevel;
 
+/// Sound event categories
 typedef enum
 {
   SSEC_DRIVER, // Event is related to the driver
@@ -40,19 +48,17 @@ typedef enum
   SSEC_DATA      // Event is relayed to a data element
 } SndSysEventCategory;
 
-
-
-
-
-/// An interface designed for the debugging needs of the sound system
-//
-//   Important events in the sound system happen many times per second.  Logging or reporting such a massive amount
-//   of data can be unweildy (and annoying if you're not debugging the sound system).
-//
-//   Additionally, sound events are often time critical - just knowing that a buffer was filled after some other action
-//   is frequently not enough.  A frequent requirement is to know the exact time between two events - as precise as possible.
-//
-//   This interface provides these services for the sound system.
+/**
+ * An interface designed for the debugging needs of the sound system
+ *
+ * Important events in the sound system happen many times per second.  Logging or reporting such a massive amount
+ * of data can be unweildy (and annoying if you're not debugging the sound system).
+ *
+ * Additionally, sound events are often time critical - just knowing that a buffer was filled after some other action
+ * is frequently not enough.  A frequent requirement is to know the exact time between two events - as precise as possible.
+ *
+ * This interface provides these services for the sound system.
+ */
 struct iSndSysEventRecorder : public virtual iBase
 {
   SCF_INTERFACE (iSndSysEventRecorder, 1, 0, 0);
@@ -65,7 +71,6 @@ struct iSndSysEventRecorder : public virtual iBase
 
 };
 
+/** @} */
 
 #endif // #ifndef CS_SNDSYS_EVENTRECORDER_H
-
-
