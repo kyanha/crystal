@@ -144,6 +144,8 @@ CS_PLUGIN_NAMESPACE_BEGIN(Skeleton2)
     virtual bool GetFramesInBindSpace () const;
     virtual void ConvertFrameSpace (CS::Animation::iSkeletonFactory* skeleton);
 
+    void UpdateDuration ();
+
   public:
     struct KeyFrame
     {
@@ -175,6 +177,8 @@ CS_PLUGIN_NAMESPACE_BEGIN(Skeleton2)
     csPDelArray<AnimationChannel> channels;
 
     float duration;
+    float startTime;
+    float stopTime;
     bool isBindSpace;
   };     
 
