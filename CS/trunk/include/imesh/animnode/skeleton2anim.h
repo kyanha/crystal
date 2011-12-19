@@ -240,24 +240,25 @@ struct iSkeletonAnimPacket : public virtual iBase
  *
  * Each animation is made up of one or more channels, where each channel is
  * associated to a bone of the skeleton. Each channel can contain one or more
- * keyframes defining the configuration of the bone at a given time. When the
- * animation is played, the configuration of the bone is blended between the two
- * closest keyframes of the given playback time.
+ * key frames defining the configuration of the bone at a given time. When the
+ * animation is played by an CS::Animation::iSkeletonAnimationNode, it
+ * calls the BlendState() method who will blend the configuration of each bone
+ * between the two closest key frames of the given playback time.
  *
- * For a given channel, if there is no keyframe defined before the current playing
- * time (ie there are no keyframe defined for the time 0), then the last keyframe
- * will be used as the first closest keyframe. Similarly, if there is no keyframe
- * defined after the current playing time, then the first keyframe will be used as
- * the second closest keyframe.
+ * It is allowed to use negative time stamps for the key frames, the main
+ * drawback is that the \a playbackTime parameter of the BlendState() method
+ * will then be shifted, and that you must therefore use it more carefully.
  *
- * This behavior of the transition bewteen the last and the first keyframes is useful
+ * For a given channel, if there is no key frame defined before the current playing
+ * time, then the last key frame
+ * will be used as the first closest key frame. Similarly, if there is no key frame
+ * defined after the current playing time, then the first key frame will be used as
+ * the second closest key frame.
+ *
+ * This behavior of the transition bewteen the last and the first key frames is useful
  * for cyclic animations but may be surprising for animations which are not. A good
  * practice when defining non cyclic animations is therefore to always define a
- * keyframe for all channels at time 0 and at the last key time.
- *
- * When this animation is played by an CS::Animation::iSkeletonAnimationNode, it
- * calls the BlendState() method who will blend the animation at a given time
- * into the state of the skeleton.
+ * key frame for all channels at the first and last key frame time.
  *
  * Main creators of instances implementing this interface:
  * - CS::Animation::iSkeletonAnimPacketFactory::CreateAnimation()
@@ -353,7 +354,8 @@ struct iSkeletonAnimation : public virtual iBase
     float baseWeight, float playbackTime, bool isPlayingCyclic) const = 0;
 
   /**
-   * Get the total duration of the animation.
+   * Get the total duration of the animation, ie the difference between
+   * the first and last key frame of the animation.
    */
   virtual float GetDuration () const = 0;
 
@@ -387,8 +389,8 @@ struct iSkeletonAnimation : public virtual iBase
   virtual bool GetFramesInBindSpace () const = 0;
 
   /**
-   * Convert the frames from bone space to bind space if needed. GetFramesInBindSpace() will
-   * now return true.
+   * Convert the frames from bone space to bind space if needed.
+   * GetFramesInBindSpace() will now return true.
    */
   virtual void ConvertFrameSpace (CS::Animation::iSkeletonFactory* skeleton) = 0;
 
@@ -404,6 +406,8 @@ struct iSkeletonAnimation : public virtual iBase
 
   /**
    * Set the id of the bone associated with the given channel.
+   * \warning Leaving an animation with more than one channel per bone is
+   * inconsistent and may lead to a random behaviour.
    */
   virtual void SetChannelBone (ChannelID channel, BoneID bone) = 0;
 
@@ -436,13 +440,18 @@ struct iSkeletonAnimation : public virtual iBase
     const csVector3& offset) = 0;
 
   /**
-   * Blend the animation into a skeletal state buffer at a specific playback 
+   * Blend the animation into an animesh state buffer at a specific playback 
    * position.
    * \param state The skeletal state where the result will be blended.
    * \param baseWeight The base weight to be used for blending.
    * \param playbackTime The current playback time.
+   * \warning The \a playbackTime will be shifted if there is any key frame
+   * defined with a negative time stamp in the animation. The amount of time
+   * shifted is equal to the smallest negative time stamp of the animation.
+   * As a result, the total time range available for the playback ranges from
+   * zero to GetDuration().
    */
-  virtual void BlendState (AnimatedMeshState* state, 
+  virtual void BlendState (AnimatedMeshState* state,
     float baseWeight, float playbackTime) const = 0;
 };
 

@@ -193,8 +193,8 @@ CS_PLUGIN_NAMESPACE_BEGIN(Skeleton2)
   CS_LEAKGUARD_IMPLEMENT(Animation);
 
   Animation::Animation (const char* name)
-    : scfImplementationType (this), name (name), duration (0),
-    isBindSpace (false)
+    : scfImplementationType (this), name (name), duration (0.0f),
+    startTime (0.0f), stopTime (0.0f), isBindSpace (false)
   {
   }
 
@@ -212,7 +212,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(Skeleton2)
     {
       AnimationChannel* channel = new AnimationChannel (bone);
 
-      channelId = (ChannelID)channels.Push (channel);
+      channelId = (ChannelID) channels.Push (channel);
     }
 
     return channelId;
@@ -222,6 +222,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(Skeleton2)
   {
     CS_ASSERT(channel < channels.GetSize ());
     channels.DeleteIndex (channel);
+    UpdateDuration ();
   }
 
   ChannelID Animation::FindChannel (CS::Animation::BoneID bone) const
@@ -229,7 +230,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(Skeleton2)
     for (size_t i = 0; i < channels.GetSize (); ++i)
     {
       if (channels[i]->bone == bone)
-        return (ChannelID)i;
+        return (ChannelID) i;
     }
 
     return InvalidChannelID;
@@ -269,8 +270,9 @@ CS_PLUGIN_NAMESPACE_BEGIN(Skeleton2)
     k.rotation = rotation;
     k.offset = offset;
 
-    if (time > duration)
-      duration = time;
+    startTime = csMin (time, startTime);
+    stopTime = csMax (time, stopTime);
+    duration = startTime < -EPSILON ? stopTime - startTime : stopTime;
 
     ch->keyFrames.InsertSorted (k, KeyFrameCompare);
   }
@@ -429,6 +431,10 @@ CS_PLUGIN_NAMESPACE_BEGIN(Skeleton2)
   void Animation::BlendState (CS::Animation::AnimatedMeshState* state, 
 			      float baseWeight, float playbackTime) const
   {
+    // Shift the playback time if the start time is negative
+    if (startTime < -EPSILON)
+      playbackTime += startTime;
+
     csArrayCmp<KeyFrame, float> cmp (playbackTime, KeyFrameTimeCompare);
 
     for (size_t c = 0; c < channels.GetSize (); ++c)
@@ -559,6 +565,22 @@ CS_PLUGIN_NAMESPACE_BEGIN(Skeleton2)
   int Animation::KeyFrameTimeCompare (KeyFrame const& k, float const& time)
   {
     return csComparator<float, float>::Compare (k.time, time);
+  }
+
+  void Animation::UpdateDuration ()
+  {
+    startTime = 0.0f;
+    stopTime = 0.0f;
+
+    for (size_t ch = 0; ch < channels.GetSize (); ch++)
+    {
+      AnimationChannel* channel = channels[ch];
+
+      startTime = csMin (channel->keyFrames[0].time, startTime);
+      stopTime = csMax (channel->keyFrames[channel->keyFrames.GetSize () - 1].time, stopTime);
+    }
+
+    duration = startTime < -EPSILON ? stopTime - startTime : stopTime;
   }
 
 }
