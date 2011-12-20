@@ -271,7 +271,7 @@ struct iSkeletonAnimPacket : public virtual iBase
  */
 struct iSkeletonAnimation : public virtual iBase
 {
-  SCF_INTERFACE(CS::Animation::iSkeletonAnimation, 2, 0, 4);
+  SCF_INTERFACE(CS::Animation::iSkeletonAnimation, 2, 0, 5);
 
   /**
    * Get the name of the animation.
@@ -452,6 +452,14 @@ struct iSkeletonAnimation : public virtual iBase
    */
   virtual void BlendState (AnimatedMeshState* state,
     float baseWeight, float playbackTime) const = 0;
+
+  /**
+   * Apply a time shift on all key frames in the given channel. The time stamp
+   * of all key frames will therefore be shifted with the given time offset.
+   * \param channel The ID of the channel to apply the time shift
+   * \param offset The time offset to apply on each time stamps, in seconds.
+   */
+  virtual void ApplyTimeShift (ChannelID channel, float offset) = 0;
 };
 
 
