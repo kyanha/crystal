@@ -295,7 +295,7 @@ struct iSkeletonAnimation : public virtual iBase
   /**
    * Add a key frame at the given time within the given channel.
    * \param channel Id of the channel.
-   * \param time The time of the key frame.
+   * \param time The time of the key frame, in seconds.
    * \param rotation The rotation of the bone for the key frame.
    * \param offset The position of the bone for the key frame.
    * \remark The rotation and offset must be in the space defined by
@@ -315,7 +315,7 @@ struct iSkeletonAnimation : public virtual iBase
    * \param channel The id of the channel.
    * \param keyframe The index of the key frame to get.
    * \param bone The id of the bone associated with the channel.
-   * \param time The time associated with the key frame.
+   * \param time The time associated with the key frame, in seconds.
    * \param rotation The rotation of the bone for the key frame.
    * \param offset The position of the bone for the key frame.
    */
@@ -354,7 +354,7 @@ struct iSkeletonAnimation : public virtual iBase
 
   /**
    * Get the total duration of the animation, ie the difference between
-   * the first and last key frame of the animation.
+   * the first and last key frame of the animation, in seconds.
    */
   virtual float GetDuration () const = 0;
 
@@ -419,7 +419,7 @@ struct iSkeletonAnimation : public virtual iBase
   /**
    * Add or reset the rotation at the given time within the given channel.
    * \param channel Id of the channel.
-   * \param time The time of the key frame.
+   * \param time The time of the key frame, in seconds.
    * \param rotation The rotation of the bone for the key frame.
    * \remark The rotation must be in the space defined by
    * GetFramesInBoneSpace().
@@ -430,7 +430,7 @@ struct iSkeletonAnimation : public virtual iBase
   /**
    * Add or reset the position at the given time within the given channel.
    * \param channel Id of the channel.
-   * \param time The time of the key frame.
+   * \param time The time of the key frame, in seconds.
    * \param offset The position of the bone for the key frame.
    * \remark The offset must be in the space defined by
    * GetFramesInBoneSpace().
@@ -443,7 +443,7 @@ struct iSkeletonAnimation : public virtual iBase
    * position.
    * \param state The skeletal state where the result will be blended.
    * \param baseWeight The base weight to be used for blending.
-   * \param playbackTime The current playback time.
+   * \param playbackTime The current playback time, in seconds.
    * \warning The \a playbackTime will be shifted if there is any key frame
    * defined with a negative time stamp in the animation. The amount of time
    * shifted is equal to the smallest negative time stamp of the animation.
