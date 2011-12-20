@@ -358,6 +358,7 @@ class iSkeletonAnimPacketFactory(core.iBase):
     def CreateFSMNode(*args): return _animation.iSkeletonAnimPacketFactory_CreateFSMNode(*args)
     def RemoveAnimation(*args): return _animation.iSkeletonAnimPacketFactory_RemoveAnimation(*args)
     def FindAnimationIndex(*args): return _animation.iSkeletonAnimPacketFactory_FindAnimationIndex(*args)
+    def GetName(*args): return _animation.iSkeletonAnimPacketFactory_GetName(*args)
     scfGetVersion = staticmethod(_animation.iSkeletonAnimPacketFactory_scfGetVersion)
     __swig_destroy__ = _animation.delete_iSkeletonAnimPacketFactory
     __del__ = lambda self : None;
