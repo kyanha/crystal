@@ -26,6 +26,11 @@ static char const metainfo_skeleton2ldr[] =
 "        <implementation>SkeletonLoader</implementation>"
 "        <description>Crystal Space Skeletal animation loader plugin</description>"
 "      </class>    "
+"      <class>"
+"        <name>crystalspace.skeletalanimation.saver</name>"
+"        <implementation>SkeletonSaver</implementation>"
+"        <description>Crystal Space Skeletal animation saver plugin</description>"
+"      </class>    "
 "    </classes>"
 "  </scf>"
 "</plugin>"
@@ -34,6 +39,10 @@ static char const metainfo_skeleton2ldr[] =
   #define SkeletonLoader_FACTORY_REGISTER_DEFINED 
     SCF_DEFINE_FACTORY_FUNC_REGISTRATION(SkeletonLoader) 
   #endif
+  #ifndef SkeletonSaver_FACTORY_REGISTER_DEFINED 
+  #define SkeletonSaver_FACTORY_REGISTER_DEFINED 
+    SCF_DEFINE_FACTORY_FUNC_REGISTRATION(SkeletonSaver) 
+  #endif
 
 class skeleton2ldr
 {
@@ -41,6 +50,10 @@ SCF_REGISTER_STATIC_LIBRARY(skeleton2ldr,metainfo_skeleton2ldr)
   #ifndef SkeletonLoader_FACTORY_REGISTERED 
   #define SkeletonLoader_FACTORY_REGISTERED 
     SkeletonLoader_StaticInit SkeletonLoader_static_init__; 
+  #endif
+  #ifndef SkeletonSaver_FACTORY_REGISTERED 
+  #define SkeletonSaver_FACTORY_REGISTERED 
+    SkeletonSaver_StaticInit SkeletonSaver_static_init__; 
   #endif
 public:
  skeleton2ldr();
