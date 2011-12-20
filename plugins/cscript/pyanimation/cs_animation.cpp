@@ -10011,6 +10011,45 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_iSkeletonAnimation_ApplyTimeShift(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  CS::Animation::iSkeletonAnimation *arg1 = (CS::Animation::iSkeletonAnimation *) 0 ;
+  CS::Animation::ChannelID arg2 ;
+  float arg3 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  unsigned int val2 ;
+  int ecode2 = 0 ;
+  float val3 ;
+  int ecode3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"iSkeletonAnimation_ApplyTimeShift",3,3,&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_CS__Animation__iSkeletonAnimation, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "iSkeletonAnimation_ApplyTimeShift" "', argument " "1"" of type '" "CS::Animation::iSkeletonAnimation *""'"); 
+  }
+  arg1 = reinterpret_cast< CS::Animation::iSkeletonAnimation * >(argp1);
+  ecode2 = SWIG_AsVal_unsigned_SS_int(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "iSkeletonAnimation_ApplyTimeShift" "', argument " "2"" of type '" "CS::Animation::ChannelID""'");
+  } 
+  arg2 = static_cast< CS::Animation::ChannelID >(val2);
+  ecode3 = SWIG_AsVal_float(obj2, &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "iSkeletonAnimation_ApplyTimeShift" "', argument " "3"" of type '" "float""'");
+  } 
+  arg3 = static_cast< float >(val3);
+  (arg1)->ApplyTimeShift(arg2,arg3);
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_iSkeletonAnimation_scfGetVersion(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   int result;
@@ -17856,6 +17895,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"iSkeletonAnimation_RemoveChannel", _wrap_iSkeletonAnimation_RemoveChannel, METH_VARARGS, NULL},
 	 { (char *)"iSkeletonAnimation_AddOrSetKeyFrame", _wrap_iSkeletonAnimation_AddOrSetKeyFrame, METH_VARARGS, NULL},
 	 { (char *)"iSkeletonAnimation_BlendState", _wrap_iSkeletonAnimation_BlendState, METH_VARARGS, NULL},
+	 { (char *)"iSkeletonAnimation_ApplyTimeShift", _wrap_iSkeletonAnimation_ApplyTimeShift, METH_VARARGS, NULL},
 	 { (char *)"iSkeletonAnimation_scfGetVersion", _wrap_iSkeletonAnimation_scfGetVersion, METH_VARARGS, NULL},
 	 { (char *)"delete_iSkeletonAnimation", _wrap_delete_iSkeletonAnimation, METH_VARARGS, NULL},
 	 { (char *)"iSkeletonAnimation_swigregister", iSkeletonAnimation_swigregister, METH_VARARGS, NULL},

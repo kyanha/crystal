@@ -404,6 +404,7 @@ class iSkeletonAnimation(core.iBase):
     def RemoveChannel(*args): return _animation.iSkeletonAnimation_RemoveChannel(*args)
     def AddOrSetKeyFrame(*args): return _animation.iSkeletonAnimation_AddOrSetKeyFrame(*args)
     def BlendState(*args): return _animation.iSkeletonAnimation_BlendState(*args)
+    def ApplyTimeShift(*args): return _animation.iSkeletonAnimation_ApplyTimeShift(*args)
     scfGetVersion = staticmethod(_animation.iSkeletonAnimation_scfGetVersion)
     __swig_destroy__ = _animation.delete_iSkeletonAnimation
     __del__ = lambda self : None;
