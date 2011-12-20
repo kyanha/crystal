@@ -567,6 +567,18 @@ CS_PLUGIN_NAMESPACE_BEGIN(Skeleton2)
     return csComparator<float, float>::Compare (k.time, time);
   }
 
+  void Animation::ApplyTimeShift (ChannelID channelID, float offset)
+  {
+    CS_ASSERT (channelID < channels.GetSize ());
+
+    AnimationChannel* channel = channels[channelID];
+
+    for (size_t keyframe = 0; keyframe < channel->keyFrames.GetSize (); keyframe++)
+      channel->keyFrames[keyframe].time += offset;
+
+    UpdateDuration ();
+  }
+
   void Animation::UpdateDuration ()
   {
     startTime = 0.0f;

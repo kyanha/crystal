@@ -144,6 +144,8 @@ CS_PLUGIN_NAMESPACE_BEGIN(Skeleton2)
     virtual bool GetFramesInBindSpace () const;
     virtual void ConvertFrameSpace (CS::Animation::iSkeletonFactory* skeleton);
 
+    virtual void ApplyTimeShift (CS::Animation::ChannelID channel, float offset);
+
     void UpdateDuration ();
 
   public:
