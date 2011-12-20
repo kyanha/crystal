@@ -1,5 +1,5 @@
 /*
-  Copyright (C) 2010 Christian Van Brussel, Institute of Information
+  Copyright (C) 2010-11 Christian Van Brussel, Institute of Information
       and Communication Technologies, Electronics and Applied Mathematics
       at Universite catholique de Louvain, Belgium
       http://www.uclouvain.be/en-icteam.html
@@ -25,14 +25,13 @@
 #include "csutil/randomgen.h"
 #include "cstool/cspixmap.h"
 #include "imesh/animesh.h"
-#include "imesh/bodymesh.h"
-#include "imesh/animnode/debug.h"
 #include "iutil/cfgmgr.h"
 #include "ivaria/movierecorder.h"
 
 MocapViewer::MocapViewer ()
   : DemoApplication ("CrystalSpace.MocapViewer"),
-    scfImplementationType (this), debugImage (nullptr), noiseScale (0.5f)
+    scfImplementationType (this), debugImage (nullptr), noiseScale (0.5f),
+    timeLength (0)
 {
 }
 
@@ -46,17 +45,34 @@ void MocapViewer::PrintHelp ()
   csCommandLineHelper commandLineHelper;
 
   // Usage examples
-  commandLineHelper.AddCommandLineExample ("csmocapviewer csmocapviewer idle01.bvh");
-  commandLineHelper.AddCommandLineExample ("csmocapviewer /lib/krystal/mocap/idle01.bvh");
-  commandLineHelper.AddCommandLineExample ("csmocapviewer C:\\CS\\data\\krystal\\mocap\\idle01.bvh");
-  commandLineHelper.AddCommandLineExample ("csmocapviewer -start=20 -end=60 -scale=0.1 idle01.bvh");
-  commandLineHelper.AddCommandLineExample ("csmocapviewer -rootmask=Hips idle01.bvh");
-  commandLineHelper.AddCommandLineExample ("csmocapviewer -rootmask=Hips -childmask=Head -childmask=LeftHand idle01.bvh");
-  commandLineHelper.AddCommandLineExample ("csmocapviewer -rootmask=Hips -childall idle01.bvh");
-  commandLineHelper.AddCommandLineExample ("csmocapviewer -pld -record -recordfile=mocap.nuv idle01.bvh");
-  commandLineHelper.AddCommandLineExample ("csmocapviewer -rotcamera=-90 idle01.bvh");
-  commandLineHelper.AddCommandLineExample ("csmocapviewer idle01.bvh -pld -ncount=200 -nfrequency=0.4 -poscamera=0.7");
-  commandLineHelper.AddCommandLineExample ("csmocapviewer -targetfile=data/krystal/krystal.xml -targetname=krystal -nobone idle01.bvh");
+  commandLineHelper.AddCommandLineExample
+    ("csmocapviewer csmocapviewer idle01.bvh");
+  commandLineHelper.AddCommandLineExample
+    ("csmocapviewer /lib/krystal/mocap/idle01.bvh");
+  commandLineHelper.AddCommandLineExample
+    ("csmocapviewer C:\\CS\\data\\krystal\\mocap\\idle01.bvh");
+  commandLineHelper.AddCommandLineExample
+    ("csmocapviewer -start=20 -end=60 -scale=0.1 idle01.bvh");
+  commandLineHelper.AddCommandLineExample
+    ("csmocapviewer -rootmask=Hips idle01.bvh");
+  commandLineHelper.AddCommandLineExample
+    ("csmocapviewer -rootmask=Hips -childmask=Head -childmask=LeftHand idle01.bvh");
+  commandLineHelper.AddCommandLineExample
+    ("csmocapviewer -rootmask=Hips -childall idle01.bvh");
+  commandLineHelper.AddCommandLineExample
+    ("csmocapviewer -pld -record -recordfile=mocap.nuv idle01.bvh");
+  commandLineHelper.AddCommandLineExample
+    ("csmocapviewer -rotcamera=-90 idle01.bvh");
+  commandLineHelper.AddCommandLineExample
+    ("csmocapviewer idle01.bvh -pld -ncount=200 -nfrequency=0.4 -poscamera=0.7");
+  commandLineHelper.AddCommandLineExample
+    ("csmocapviewer -targetfile=data/krystal/krystal.xml -targetname=krystal -nobone idle01.bvh");
+  commandLineHelper.AddCommandLineExample
+    ("csmocapviewer idle01.bvh -rootmask=Hips -childall -snoise -snfrequency=0.2 -snoctaves=2 -snratio=1.0 -pld");
+  commandLineHelper.AddCommandLineExample
+    ("csmocapviewer idle01.bvh -boneswitch=Neck:LeftArm -boneswitch=Head:RightUpLeg");
+  commandLineHelper.AddCommandLineExample
+    ("csmocapviewer idle01.bvh -timeshift=Head:1 -timeshift=Hips:-1.5");
 
   // Command line options
   size_t section = 0;
@@ -72,6 +88,9 @@ void MocapViewer::PrintHelp ()
     ("scale", "Set the global scale to apply to the distances", csVariant (0.01f), section);
   commandLineHelper.AddCommandLineOption
     ("speed", "Set the speed to play the animation", csVariant (1.0f), section);
+  commandLineHelper.AddCommandLineOption
+    ("timelength", "Set the time length to play the animation, in seconds. The application will quit afterward.",
+     csVariant (0.0f), section);
 
   section = commandLineHelper.AddCommandLineSection ("Display");
   commandLineHelper.AddCommandLineOption
@@ -102,13 +121,17 @@ void MocapViewer::PrintHelp ()
   commandLineHelper.AddCommandLineOption
     ("nobone", "Remove a bone to be displayed by its name", csVariant (""), section);
 
-  section = commandLineHelper.AddCommandLineSection ("Video recording");
+  section = commandLineHelper.AddCommandLineSection ("Animation data manipulation");
   commandLineHelper.AddCommandLineOption
-    ("record", "Record the session in a video file, then exit", csVariant (), section);
+    ("boneswitch", csString ().Format
+     ("Define two bones that will have their animation channels switched. The entry must be of the format %s", "boneName:boneName"),
+     csVariant (""), section);
   commandLineHelper.AddCommandLineOption
-    ("recordfile", "Force the name of the video file to be created", csVariant (""), section);
+    ("timeshift", csString ().Format
+     ("Define a time shift to be applied on the animation of a given bone. The entry must be of the format %s", "boneName:timeShift"),
+     csVariant (""), section);
 
-  section = commandLineHelper.AddCommandLineSection ("Noise generation");
+  section = commandLineHelper.AddCommandLineSection ("Noise cloud generation");
   commandLineHelper.AddCommandLineOption
     ("ncount", "Set the number of noise points added", csVariant (0), section);
   commandLineHelper.AddCommandLineOption
@@ -121,6 +144,27 @@ void MocapViewer::PrintHelp ()
     ("nlacunarity", "Set the lacunarity of the noise. Value is suggested to be between 1.5 and 3.5", csVariant (2.0f), section);
   commandLineHelper.AddCommandLineOption
     ("npersistence", "Set the persistence of the noise. Value is suggested to be between 0.0 and 1.0", csVariant (0.5f), section);
+
+  section = commandLineHelper.AddCommandLineSection ("Skeleton noise generation");
+  commandLineHelper.AddCommandLineOption
+    ("snoise", "Use a noise animation of the skeleton instead of the motion captured data",
+     csVariant (false), section);
+  commandLineHelper.AddCommandLineOption
+    ("snratio", "Ratio to apply on the noise skeleton animation versus the motion captured data. Value is suggested to be between 0.0 and 1.0", csVariant (1.0f), section);
+  commandLineHelper.AddCommandLineOption
+    ("snoctaves", "Set the number of octaves of the skeleton noise. Value must be between 1 and 30", csVariant (6), section);
+  commandLineHelper.AddCommandLineOption
+    ("snfrequency", "Set the frequency of the skeleton noise. Value must be positive", csVariant (1.0f), section);
+  commandLineHelper.AddCommandLineOption
+    ("snlacunarity", "Set the lacunarity of the skeleton noise. Value is suggested to be between 1.5 and 3.5", csVariant (2.0f), section);
+  commandLineHelper.AddCommandLineOption
+    ("snpersistence", "Set the persistence of the skeleton noise. Value is suggested to be between 0.0 and 1.0", csVariant (0.5f), section);
+
+  section = commandLineHelper.AddCommandLineSection ("Video recording");
+  commandLineHelper.AddCommandLineOption
+    ("record", "Record the session in a video file, then exit", csVariant (), section);
+  commandLineHelper.AddCommandLineOption
+    ("recordfile", "Force the name of the video file to be created", csVariant (""), section);
 
   // Printing help
   commandLineHelper.PrintApplicationHelp
@@ -145,12 +189,27 @@ void MocapViewer::PrintHelp ()
       " noise. The behavior of the motion of these noise points can be tweaked by several"
       " parameters. See http://libnoise.sourceforge.net/docs/classnoise_1_1module_1_1Perlin.html"
       " for more information on these parameters.\n\n"
+      "Instead of using the animation data from the motion capture file, the skeleton itself can be"
+      " animated using a Perlin noise. In this case, the rotation of each bone joint will be animated"
+      " randomly, while the distance between the joints will be kept constant. If you use this mode,"
+      " you still have to provide a motion captured data file in order to define the skeleton to be"
+      " used.\n\n"
+      "The animation data can also be manipulated by either switching some bone animation channels,"
+      " or by adding a time offset on the motion of a given bone.\n\n"
       "Finally, this application uses a configuration file. See %s"
       " for more information", CS::Quote::Double ("/config/csmocapviewer.cfg")));
 }
 
 void MocapViewer::Frame ()
 {
+  // Check for the end of the session's time length
+  if (timeLength > 0 && timeLength < vc->GetCurrentTicks () - startTime)
+  {
+    csRef<iEventQueue> q (csQueryRegistry<iEventQueue> (GetObjectRegistry ()));
+    if (q) q->GetEventOutlet()->Broadcast (csevQuit (GetObjectRegistry ()));
+    return;
+  }
+
   // Update manually the animation of the animesh since it is not in a sector
   // TODO: use engine flag ALWAYS_ANIMATE
   csVector3 position (0.0f);
@@ -195,12 +254,14 @@ void MocapViewer::Frame ()
   }
 
   // Update the HUD
-  hudManager->GetStateDescriptions ()->DeleteIndex (0);
-  csString txt;
-  txt.Format ("Frame: %i on %u",
-	      (int) (animNode->GetPlaybackPosition () / parsingResult.frameDuration),
-	      (unsigned int) parsingResult.frameCount);
-  hudManager->GetStateDescriptions ()->Insert (0, txt);
+  if (hudManager->GetEnabled ())
+  {
+    csString txt;
+    txt.Format ("Frame: %i on %u",
+		(int) (animNode->GetPlaybackPosition () / parsingResult.frameDuration),
+		(int) (animNode->GetDuration () / parsingResult.frameDuration));
+    hudManager->GetStateDescriptions ()->Put (0, txt);
+  }
 }
 
 bool MocapViewer::OnInitialize (int argc, char* argv[])
@@ -220,6 +281,8 @@ bool MocapViewer::OnInitialize (int argc, char* argv[])
 		       CS::Animation::iBodyManager),
     CS_REQUEST_PLUGIN ("crystalspace.mesh.animesh.animnode.debug",
 		       CS::Animation::iSkeletonDebugNodeManager),
+    CS_REQUEST_PLUGIN ("crystalspace.mesh.animesh.animnode.noise",
+		       CS::Animation::iSkeletonNoiseNodeManager),
     CS_REQUEST_PLUGIN ("crystalspace.mesh.animesh.animnode.retarget",
 		       CS::Animation::iSkeletonRetargetNodeManager),
     CS_REQUEST_END))
@@ -250,6 +313,11 @@ bool MocapViewer::Application ()
   if (!debugNodeManager)
     return ReportError("Failed to locate CS::Animation::iSkeletonDebugNodeManager plugin!");
 
+  noiseNodeManager =
+    csQueryRegistry<CS::Animation::iSkeletonNoiseNodeManager> (GetObjectRegistry ());
+  if (!noiseNodeManager)
+    return ReportError("Failed to locate CS::Animation::iSkeletonNoiseNodeManager plugin!");
+
   retargetNodeManager =
     csQueryRegistry<CS::Animation::iSkeletonRetargetNodeManager> (GetObjectRegistry ());
   if (!retargetNodeManager)
@@ -262,8 +330,8 @@ bool MocapViewer::Application ()
   if (!CreateRoom ())
     return false;
 
-  // Create the avatar
-  if (!CreateAvatar ())
+  // Create the scene
+  if (!CreateScene ())
     return false;
 
   // Run the application
@@ -273,8 +341,16 @@ bool MocapViewer::Application ()
   return true;
 }
 
-bool MocapViewer::CreateAvatar ()
+bool MocapViewer::CreateScene ()
 {
+  csString txt;
+  int ivalue;
+  float fvalue;
+
+  // ------------------------------
+  // Acquisition of the parameters of the scene
+  // ------------------------------
+
   // Load the configuration file
   csRef<iConfigManager> cfg = csQueryRegistry<iConfigManager> (GetObjectRegistry());
   cfg->AddDomain ("/config/csmocapviewer.cfg", vfs, iConfigManager::ConfigPriorityPlugin);
@@ -311,7 +387,7 @@ bool MocapViewer::CreateAvatar ()
   }
 
   // Read the start and end frames
-  csString txt = clp->GetOption ("start", 0);
+  txt = clp->GetOption ("start", 0);
   int startFrame = 0;
   int frame;
   if (txt && sscanf (txt.GetData (), "%i", &frame) == 1)
@@ -325,9 +401,12 @@ bool MocapViewer::CreateAvatar ()
   // Read the global scale
   txt = clp->GetOption ("scale", 0);
   float globalScale = 0.01f;
-  float fvalue;
   if (txt && sscanf (txt.GetData (), "%f", &fvalue) == 1)
     globalScale = fvalue;
+
+  // ------------------------------
+  // Parsing of the motion capture data file
+  // ------------------------------
 
   // Parse the BVH file
   CS::Animation::BVHMocapParser mocapParser (GetObjectRegistry ());
@@ -343,6 +422,10 @@ bool MocapViewer::CreateAvatar ()
   parsingResult = mocapParser.ParseData ();
   if (!parsingResult.result)
     return false;
+
+  // ------------------------------
+  // Display of the summary of the motion capture data file
+  // ------------------------------
 
   // Check if we simply need to print the mocap information then exit
   printInfo = clp->GetBoolOption ("info", false);
@@ -364,6 +447,135 @@ bool MocapViewer::CreateAvatar ()
     return true;
   }
 
+  // ------------------------------
+  // Switching of the bone animation channels
+  // ------------------------------
+
+  size_t switchIndex = 0;
+  while (true)
+  {
+    // Read the next switch entry
+    csString boneSwitch = clp->GetOption ("boneswitch", switchIndex++);
+    if (!boneSwitch || boneSwitch.Trim ().IsEmpty ()) break;
+
+    size_t index = boneSwitch.FindFirst (':');
+    if (index == (size_t) -1)
+    {
+      ReportWarning ("Invalid bone animation switch %s. The entry must be of the format %s.",
+		     CS::Quote::Single (boneSwitch), CS::Quote::Single ("bone1:bone2"));
+      continue;
+    }
+
+    else
+    {
+      // Find the bone ID's
+      csString bone1 = boneSwitch.Slice (0, index);
+      csString bone2 = boneSwitch.Slice (index + 1);
+
+      CS::Animation::BoneID boneID1 = parsingResult.skeletonFactory->FindBone (bone1);
+      if (boneID1 == CS::Animation::InvalidBoneID)
+      {
+	ReportWarning ("Could not find the bone %s for the bone animation switch %s.",
+		       CS::Quote::Single (bone1), CS::Quote::Single (boneSwitch));
+	continue;
+      }
+
+      CS::Animation::BoneID boneID2 = parsingResult.skeletonFactory->FindBone (bone2);
+      if (boneID2 == CS::Animation::InvalidBoneID)
+      {
+	ReportWarning ("Could not find the bone %s for the bone animation switch %s.",
+		       CS::Quote::Single (bone2), CS::Quote::Single (boneSwitch));
+	continue;
+      }
+
+      // Find the animation channels of the corresponding bones
+      CS::Animation::iSkeletonAnimation* animation =
+	parsingResult.animPacketFactory->GetAnimation (0);
+
+      CS::Animation::ChannelID channel1 = animation->FindChannel (boneID1);
+      if (channel1 == CS::Animation::InvalidChannelID)
+      {
+	ReportWarning ("The bone %s has no animation defined. The animation switch %s will therefore have no effect.",
+		       CS::Quote::Single (bone1), CS::Quote::Single (boneSwitch));
+	continue;
+      }
+
+      CS::Animation::ChannelID channel2 = animation->FindChannel (boneID2);
+      if (channel2 == CS::Animation::InvalidChannelID)
+      {
+	ReportWarning ("The bone %s has no animation defined. The animation switch %s will therefore have no effect.",
+		       CS::Quote::Single (bone2), CS::Quote::Single (boneSwitch));
+	continue;
+      }
+
+      // Switch the animation channels
+      animation->SetChannelBone (channel1, boneID2);
+      animation->SetChannelBone (channel2, boneID1);
+    }
+  }
+
+  // ------------------------------
+  // Time-shifting the animation channels
+  // ------------------------------
+
+  size_t shiftIndex = 0;
+  while (true)
+  {
+    // Read the next shift entry
+    csString timeShift = clp->GetOption ("timeshift", shiftIndex++);
+    if (!timeShift || timeShift.Trim ().IsEmpty ()) break;
+
+    size_t index = timeShift.FindFirst (':');
+    if (index == (size_t) -1)
+    {
+      ReportWarning ("Invalid animation time shift %s. The entry must be of the format %s.",
+		     CS::Quote::Single (timeShift), CS::Quote::Single ("bone:offset"));
+      continue;
+    }
+
+    else
+    {
+      // Find the bone ID and time offset
+      csString bone = timeShift.Slice (0, index);
+      csString offsetS = timeShift.Slice (index + 1);
+
+      CS::Animation::BoneID boneID = parsingResult.skeletonFactory->FindBone (bone);
+      if (boneID == CS::Animation::InvalidBoneID)
+      {
+	ReportWarning ("Could not find the bone %s for the animation animation time shift %s.",
+		       CS::Quote::Single (bone), CS::Quote::Single (timeShift));
+	continue;
+      }
+
+      float offset;
+      if (sscanf (offsetS.GetData (), "%f", &offset) != 1)
+      {
+	ReportWarning ("The time offset in the animation animation time shift %s is not a valid float value.",
+		       CS::Quote::Single (timeShift));
+	continue;
+      }
+
+      // Find the animation channels of the corresponding bones
+      CS::Animation::iSkeletonAnimation* animation =
+	parsingResult.animPacketFactory->GetAnimation (0);
+
+      CS::Animation::ChannelID channel = animation->FindChannel (boneID);
+      if (channel == CS::Animation::InvalidChannelID)
+      {
+	ReportWarning ("The bone %s has no animation defined. The animation time shift %s will therefore have no effect.",
+		       CS::Quote::Single (bone), CS::Quote::Single (timeShift));
+	continue;
+      }
+
+      // Apply the time shift
+      animation->ApplyTimeShift (channel, offset);
+    }
+  }
+
+  // ------------------------------
+  // Acquisition of the main remaining parameters of the scene
+  // ------------------------------
+
   // Read if we are in PLD display mode
   bool pld = clp->GetBoolOption ("pld", false)
     || pldMode == "PLD";
@@ -372,10 +584,19 @@ bool MocapViewer::CreateAvatar ()
   bool recordVideo = clp->GetBoolOption ("record", false);
   csString recordFile = clp->GetOption ("recordfile", 0);
   bool noAnimation = clp->GetBoolOption ("noanim", false);
+
   float playbackSpeed = 1.0f;
   txt = clp->GetOption ("speed", 0);
   if (txt && sscanf (txt.GetData (), "%f", &fvalue) == 1)
     playbackSpeed = fvalue;
+
+  txt = clp->GetOption ("timeLength", 0);
+  if (txt && sscanf (txt.GetData (), "%f", &fvalue) == 1)
+    timeLength = fvalue * 1000.0f;
+  
+  // ------------------------------
+  // Creation of the animated mesh
+  // ------------------------------
 
   // Load the animesh plugin
   csRef<iMeshObjectType> meshType = csLoadPluginCheck<iMeshObjectType>
@@ -407,22 +628,17 @@ bool MocapViewer::CreateAvatar ()
 
   // Create a new animation tree. The structure of the tree is:
   //   + Debug node
-  //     + Animation node with the mocap data
+  //     + Noise animation node if the skeleton noise is activated
+  //       + Animation node with the mocap data,
   csRef<CS::Animation::iSkeletonAnimPacketFactory> animPacketFactory =
     parsingResult.skeletonFactory->GetAnimationPacket ();
 
-  // Create the 'debug' animation node
-  csRef<CS::Animation::iSkeletonDebugNodeFactory> debugNodeFactory =
-    debugNodeManager->CreateAnimNodeFactory ("debug");
-  debugNodeFactory->SetDebugModes
-    (pld ? CS::Animation::DEBUG_SQUARES
-     : (CS::Animation::SkeletonDebugMode)
-     (CS::Animation::DEBUG_2DLINES | CS::Animation::DEBUG_SQUARES));
-  debugNodeFactory->SetLeafBonesDisplayed (false);
-  animPacketFactory->SetAnimationRoot (debugNodeFactory);
+  // ------------------------------
+  // Setup the bone chain mask to select the bones that are displayed
+  // ------------------------------
 
-  // Setup the bone chain mask to select which bones are displayed
-  bool hasMask = clp->GetOption ("rootmask", 0) || clp->GetOption ("bone", 0) || clp->GetOption ("nobone", 0);
+  bool hasMask = clp->GetOption ("rootmask", 0)
+    || clp->GetOption ("bone", 0) || clp->GetOption ("nobone", 0);
   csBitArray boneMask;
   boneMask.SetSize (parsingResult.skeletonFactory->GetTopBoneID () + 1);
 
@@ -443,7 +659,7 @@ bool MocapViewer::CreateAvatar ()
 
     CS::Animation::BoneID boneID = parsingResult.skeletonFactory->FindBone (txt);
     if (boneID == CS::Animation::InvalidBoneID)
-      ReportWarning ("Could not find root bone %s!", txt.GetData ());
+      ReportWarning ("Could not find root bone %s!", CS::Quote::Single (txt));
 
     else
     {
@@ -463,7 +679,7 @@ bool MocapViewer::CreateAvatar ()
       {
 	boneID = parsingResult.skeletonFactory->FindBone (txt);
 	if (boneID == CS::Animation::InvalidBoneID)
-	  ReportWarning ("Could not find child bone %s!", txt.GetData ());
+	  ReportWarning ("Could not find child bone %s!", CS::Quote::Single (txt));
 
 	else
 	  bodyChain->AddSubChain (boneID);
@@ -483,7 +699,7 @@ bool MocapViewer::CreateAvatar ()
   {
     CS::Animation::BoneID boneID = parsingResult.skeletonFactory->FindBone (txt);
     if (boneID == CS::Animation::InvalidBoneID)
-      ReportWarning ("Could not find user specified bone %s!", txt.GetData ());
+      ReportWarning ("Could not find user specified bone %s!", CS::Quote::Single (txt));
 
     else boneMask.SetBit (boneID);
 
@@ -498,7 +714,7 @@ bool MocapViewer::CreateAvatar ()
     {
       CS::Animation::BoneID boneID = parsingResult.skeletonFactory->FindBone (txt);
       if (boneID == CS::Animation::InvalidBoneID)
-	ReportWarning ("Could not find user specified bone %s!", txt.GetData ());
+	ReportWarning ("Could not find user specified bone %s!", CS::Quote::Single (txt));
 
       else boneMask.ClearBit (boneID);
     }
@@ -506,9 +722,19 @@ bool MocapViewer::CreateAvatar ()
     txt = clp->GetOption ("nobone", ++index);
   }
 
-  // Setup the bone mask
-  if (hasMask)
-    debugNodeFactory->SetBoneMask (boneMask);
+  // ------------------------------
+  // Setup of the 'debug' animation node
+  // ------------------------------
+
+  // Create the 'debug' animation node
+  csRef<CS::Animation::iSkeletonDebugNodeFactory> debugNodeFactory =
+    debugNodeManager->CreateAnimNodeFactory ("debug");
+  debugNodeFactory->SetDebugModes
+    (pld ? CS::Animation::DEBUG_SQUARES
+     : (CS::Animation::SkeletonDebugMode)
+     (CS::Animation::DEBUG_2DLINES | CS::Animation::DEBUG_SQUARES));
+  debugNodeFactory->SetLeafBonesDisplayed (false);
+  animPacketFactory->SetAnimationRoot (debugNodeFactory);
 
   // Load the debug image
   if (pld && pldImage != "")
@@ -516,7 +742,7 @@ bool MocapViewer::CreateAvatar ()
     csRef<iTextureWrapper> texture = loader->LoadTexture
       ("pld_image", pldImage.GetData (), CS_TEXTURE_2D, 0, true, true, true);
     if (!texture.IsValid ())
-      ReportWarning ("Failed to load PLD image %s!\n", pldImage.GetData ());
+      ReportWarning ("Failed to load PLD image %s!\n", CS::Quote::Single (pldImage));
 
     else
     {
@@ -531,13 +757,124 @@ bool MocapViewer::CreateAvatar ()
     }
   }
 
-  // Create the 'mocap' animation node
+  // Setup the bone mask
+  if (hasMask)
+    debugNodeFactory->SetBoneMask (boneMask);
+
+  // ------------------------------
+  // Setup of the 'mocap' animation node
+  // ------------------------------
+
   csRef<CS::Animation::iSkeletonAnimationNodeFactory> mocapNodeFactory =
     animPacketFactory->CreateAnimationNode ("mocap");
   mocapNodeFactory->SetAnimation (parsingResult.animPacketFactory->GetAnimation (0));
   mocapNodeFactory->SetCyclic (!recordVideo);
   mocapNodeFactory->SetPlaybackSpeed (playbackSpeed);
-  debugNodeFactory->SetChildNode (mocapNodeFactory);
+
+  // ------------------------------
+  // Setup of the 'noise' animation node
+  // ------------------------------
+
+  if (clp->GetBoolOption ("snoise", false))
+  {
+    // Initialize the perlin noise modules
+    csRandomGen irandomGenerator1 (76249823);
+    csRandomGen irandomGenerator2 (624395138);
+    csRandomGen irandomGenerator3 (657324684);
+    csRandomFloatGen frandomGenerator (27410573);
+    snoiseX.SetSeed (irandomGenerator1.Get (~0));
+    snoiseY.SetSeed (irandomGenerator2.Get (~0));
+    snoiseZ.SetSeed (irandomGenerator3.Get (~0));
+
+    // Read the command line parameters of the noise modules
+    float snratio = 1.0f;
+    txt = clp->GetOption ("snratio", 0);
+    if (txt && sscanf (txt.GetData (), "%f", &fvalue) == 1)
+      snratio = fvalue;
+
+    txt = clp->GetOption ("snoctaves", 0);
+    if (txt && sscanf (txt.GetData (), "%i", &ivalue) == 1)
+    {
+      ivalue = csMin (ivalue, 30);
+      ivalue = csMax (ivalue, 1);
+      snoiseX.SetOctaveCount (ivalue);
+      snoiseY.SetOctaveCount (ivalue);
+      snoiseZ.SetOctaveCount (ivalue);
+    }
+
+    txt = clp->GetOption ("snfrequency", 0);
+    if (txt && sscanf (txt.GetData (), "%f", &fvalue) == 1)
+    {
+      snoiseX.SetFrequency (fvalue);
+      snoiseY.SetFrequency (fvalue);
+      snoiseZ.SetFrequency (fvalue);
+    }
+
+    txt = clp->GetOption ("snlacunarity", 0);
+    if (txt && sscanf (txt.GetData (), "%f", &fvalue) == 1)
+    {
+      snoiseX.SetLacunarity (fvalue);
+      snoiseY.SetLacunarity (fvalue);
+      snoiseZ.SetLacunarity (fvalue);
+    }
+
+    txt = clp->GetOption ("snpersistence", 0);
+    if (txt && sscanf (txt.GetData (), "%f", &fvalue) == 1)
+    {
+      snoiseX.SetPersistence (fvalue);
+      snoiseY.SetPersistence (fvalue);
+      snoiseZ.SetPersistence (fvalue);
+    }
+
+    // Create the 'noise' animation node
+    csRef<CS::Animation::SkeletonNoise> skeletonNoise;
+    skeletonNoise.AttachNew (new CS::Animation::SkeletonNoise ());
+    skeletonNoise->SetComponent (0, &snoiseX);
+    skeletonNoise->SetComponent (1, &snoiseY);
+    skeletonNoise->SetComponent (2, &snoiseZ);
+
+    csRef<CS::Animation::iSkeletonNoiseNodeFactory> noiseNodeFactory =
+      noiseNodeManager->CreateAnimNodeFactory ("noise");
+    noiseNodeFactory->AddSkeletonNoise (skeletonNoise);
+    const csArray<CS::Animation::BoneID>& boneList =
+      parsingResult.skeletonFactory->GetBoneOrderList ();
+
+    bool foundRoot = false;
+    for (csArray<CS::Animation::BoneID>::ConstIterator it =
+	   boneList.GetIterator (); it.HasNext (); )
+    {
+      CS::Animation::BoneID boneID = it.Next ();
+
+      // Add a rotation noise if the bone is in the mask
+      if (!hasMask || boneMask.IsBitSet (boneID))
+	noiseNodeFactory->AddBoneNoise (boneID, 0, CS::Animation::NOISE_ROTATION,
+					frandomGenerator.Get (10.0f),
+					frandomGenerator.Get (10.0f));
+
+      // The root bone gets a position noise too
+      if (!foundRoot)
+      {
+	foundRoot = true;
+	noiseNodeFactory->AddBoneNoise (boneID, 0, CS::Animation::NOISE_POSITION,
+					frandomGenerator.Get (10.0f),
+					frandomGenerator.Get (10.0f),
+					csVector3 (0.2f));
+      }
+    }
+
+    csRef<CS::Animation::iSkeletonBlendNodeFactory> blendNodeFactory =
+      animPacketFactory->CreateBlendNode ("blend");
+    debugNodeFactory->SetChildNode (blendNodeFactory);
+    blendNodeFactory->AddNode (mocapNodeFactory, 1.0f);
+    blendNodeFactory->AddNode (noiseNodeFactory, snratio);
+  }
+
+  else
+    debugNodeFactory->SetChildNode (mocapNodeFactory);
+
+  // ------------------------------
+  // Creation of the animated mesh
+  // ------------------------------
 
   // Create the animated mesh
   csRef<iMeshFactoryWrapper> meshFactoryWrapper =
@@ -555,81 +892,10 @@ bool MocapViewer::CreateAvatar ()
   debugNode = scfQueryInterface<CS::Animation::iSkeletonDebugNode> (rootNode->FindNode ("debug"));
   animNode = rootNode->FindNode ("mocap");
 
-  // Register a callback for the changes of the state of the playback of the animation
-  if (recordVideo)
-    animNode->AddAnimationCallback (this);
+  // ------------------------------
+  // Setup of the retarget of the animation to an animesh
+  // ------------------------------
 
-  // Initialize the HUD
-  hudManager->GetStateDescriptions ()->Push ("Frame:");
-  csString hudTxt;
-  hudTxt.Format ("Mocap FPS: %.2f", 1.0f / parsingResult.frameDuration);
-  hudManager->GetStateDescriptions ()->Push (hudTxt);
-  hudTxt.Format ("Total length: %.2f seconds", animNode->GetDuration ());
-  hudManager->GetStateDescriptions ()->Push (hudTxt);
-
-  // Setup the noise points
-  txt = clp->GetOption ("ncount", 0);
-  int noiseCount;
-  if (txt && sscanf (txt.GetData (), "%i", &noiseCount) == 1)
-  {
-    // Initialize the perlin noise modules
-    csRandomGen irandomGenerator (406321958);
-    csRandomGen irandomGenerator2 (18974329);
-    csRandomFloatGen frandomGenerator (50963095);
-    noiseX.SetSeed (irandomGenerator.Get (~0));
-    noiseY.SetSeed (irandomGenerator2.Get (~0));
-
-    // Read the command line parameters of the noise modules
-    txt = clp->GetOption ("noctaves", 0);
-    int ivalue;
-    if (txt && sscanf (txt.GetData (), "%i", &ivalue) == 1)
-    {
-      if (ivalue < 1)
-	ivalue = 1;
-      if (ivalue > 30)
-	ivalue = 30;
-      noiseX.SetOctaveCount (ivalue);
-      noiseY.SetOctaveCount (ivalue);
-    }
-
-    txt = clp->GetOption ("nscale", 0);
-    float fvalue;
-    if (txt && sscanf (txt.GetData (), "%f", &fvalue) == 1)
-      noiseScale = fvalue;
-
-    txt = clp->GetOption ("nfrequency", 0);
-    if (txt && sscanf (txt.GetData (), "%f", &fvalue) == 1)
-    {
-      noiseX.SetFrequency (fvalue);
-      noiseY.SetFrequency (fvalue);
-    }
-
-    txt = clp->GetOption ("nlacunarity", 0);
-    if (txt && sscanf (txt.GetData (), "%f", &fvalue) == 1)
-    {
-      noiseX.SetLacunarity (fvalue);
-      noiseY.SetLacunarity (fvalue);
-    }
-
-    txt = clp->GetOption ("npersistence", 0);
-    if (txt && sscanf (txt.GetData (), "%f", &fvalue) == 1)
-    {
-      noiseX.SetPersistence (fvalue);
-      noiseY.SetPersistence (fvalue);
-    }
-
-    // Create the noise points
-    for (int i = 0; i < noiseCount; i++)
-    {
-      csVector3 point;
-      point[0] = frandomGenerator.Get (10.0f);
-      point[1] = frandomGenerator.Get (10.0f);
-      point[2] = frandomGenerator.Get (10.0f);
-      noisePoints.Push (point);
-    }
-  }
-
-  // Check if we have to retarget the animation to an animesh
   txt = clp->GetOption ("targetfile", 0);
   if (txt) targetFile = txt;
 
@@ -642,11 +908,11 @@ bool MocapViewer::CreateAvatar ()
     // Load the animesh factory
     csLoadResult rc = loader->Load (targetFile.GetData ());
     if (!rc.success)
-      return ReportError ("Can't load target library file %s!", targetFile.GetData ());
+      return ReportError ("Can't load target library file %s!", CS::Quote::Single (targetFile));
 
     csRef<iMeshFactoryWrapper> meshfact = engine->FindMeshFactory (targetName.GetData ());
     if (!meshfact)
-      return ReportError ("Can't find target mesh factory %s!", targetName.GetData ());
+      return ReportError ("Can't find target mesh factory %s!", CS::Quote::Single (targetName));
 
     animeshFactory = scfQueryInterface<CS::Mesh::iAnimatedMeshFactory>
       (meshfact->GetMeshObjectFactory ());
@@ -745,10 +1011,76 @@ bool MocapViewer::CreateAvatar ()
     mocapNodeFactory->SetPlaybackSpeed (playbackSpeed);
     retargetNodeFactory->SetChildNode (mocapNodeFactory);
 
-    // Create the animated mesh
+    // Create the 'retarget' animated mesh
     csRef<iMeshWrapper> retargetMesh =
       engine->CreateMeshWrapper (meshfact, "retarget", room, csVector3 (0.0f));
   }
+
+  // ------------------------------
+  // Setup of the noise cloud points
+  // ------------------------------
+
+  txt = clp->GetOption ("ncount", 0);
+  int noiseCount;
+  if (txt && sscanf (txt.GetData (), "%i", &noiseCount) == 1)
+  {
+    // Initialize the perlin noise modules
+    csRandomGen irandomGenerator (406321958);
+    csRandomGen irandomGenerator2 (18974329);
+    csRandomFloatGen frandomGenerator (50963095);
+    noiseX.SetSeed (irandomGenerator.Get (~0));
+    noiseY.SetSeed (irandomGenerator2.Get (~0));
+
+    // Read the command line parameters of the noise modules
+    txt = clp->GetOption ("noctaves", 0);
+    if (txt && sscanf (txt.GetData (), "%i", &ivalue) == 1)
+    {
+      ivalue = csMin (ivalue, 30);
+      ivalue = csMax (ivalue, 1);
+      noiseX.SetOctaveCount (ivalue);
+      noiseY.SetOctaveCount (ivalue);
+    }
+
+    txt = clp->GetOption ("nscale", 0);
+    float fvalue;
+    if (txt && sscanf (txt.GetData (), "%f", &fvalue) == 1)
+      noiseScale = fvalue;
+
+    txt = clp->GetOption ("nfrequency", 0);
+    if (txt && sscanf (txt.GetData (), "%f", &fvalue) == 1)
+    {
+      noiseX.SetFrequency (fvalue);
+      noiseY.SetFrequency (fvalue);
+    }
+
+    txt = clp->GetOption ("nlacunarity", 0);
+    if (txt && sscanf (txt.GetData (), "%f", &fvalue) == 1)
+    {
+      noiseX.SetLacunarity (fvalue);
+      noiseY.SetLacunarity (fvalue);
+    }
+
+    txt = clp->GetOption ("npersistence", 0);
+    if (txt && sscanf (txt.GetData (), "%f", &fvalue) == 1)
+    {
+      noiseX.SetPersistence (fvalue);
+      noiseY.SetPersistence (fvalue);
+    }
+
+    // Create the noise points
+    for (int i = 0; i < noiseCount; i++)
+    {
+      csVector3 point;
+      point[0] = frandomGenerator.Get (10.0f);
+      point[1] = frandomGenerator.Get (10.0f);
+      point[2] = frandomGenerator.Get (10.0f);
+      noisePoints.Push (point);
+    }
+  }
+
+  // ------------------------------
+  // Setup of the camera
+  // ------------------------------
 
   // Compute the position of the target of the camera
   csVector3 cameraTarget (0.0f);
@@ -818,12 +1150,13 @@ bool MocapViewer::CreateAvatar ()
 
   // Display the origin
   if (!pld)
-  {
-    csTransform transform;
-    CS::Debug::VisualDebuggerHelper::DebugTransform (GetObjectRegistry (), transform, true);
-  }
+    CS::Debug::VisualDebuggerHelper::DebugTransform
+      (GetObjectRegistry (), csTransform (), true);
 
-  // Start the video recording
+  // ------------------------------
+  // Setup of the video recording
+  // ------------------------------
+
   if (recordVideo)
   {
     // Check if a video file has been provided
@@ -850,9 +1183,30 @@ bool MocapViewer::CreateAvatar ()
     // Disable the motion of the camera
     cameraManager->SetCameraMode (CS::Utility::CAMERA_NO_MOVE);
 
+    // Register a callback for the changes of the state of the playback of the animation
+    if (timeLength < 1)
+      animNode->AddAnimationCallback (this);
+
     // Start the movie recording
     movieRecorder->Start ();
   }
+
+  // ------------------------------
+  // Initialization of the HUD
+  // ------------------------------
+
+  if (hudManager->GetEnabled ())
+  {
+    hudManager->GetStateDescriptions ()->Push ("Frame:");
+    csString hudTxt;
+    hudTxt.Format ("Mocap FPS: %.2f", 1.0f / parsingResult.frameDuration);
+    hudManager->GetStateDescriptions ()->Push (hudTxt);
+    hudTxt.Format ("Total length: %.2f seconds", animNode->GetDuration ());
+    hudManager->GetStateDescriptions ()->Push (hudTxt);
+  }
+
+  // Tag the starting time
+  startTime = vc->GetCurrentTicks ();
 
   return true;
 }
