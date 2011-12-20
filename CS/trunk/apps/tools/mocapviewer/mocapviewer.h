@@ -1,5 +1,5 @@
 /*
-  Copyright (C) 2010 Christian Van Brussel, Institute of Information
+  Copyright (C) 2010-11 Christian Van Brussel, Institute of Information
       and Communication Technologies, Electronics and Applied Mathematics
       at Universite catholique de Louvain, Belgium
       http://www.uclouvain.be/en-icteam.html
@@ -26,33 +26,26 @@
 #include "cstool/mocapparser.h"
 #include "cstool/noise/noise.h"
 #include "cstool/noise/noisegen.h"
+#include "imesh/bodymesh.h"
+#include "imesh/animnode/debug.h"
+#include "imesh/animnode/noise.h"
 #include "imesh/animnode/retarget.h"
 #include "imesh/animnode/skeleton2anim.h"
 
 struct iMovieRecorder;
 class csPixmap;
 
-namespace CS {
-namespace Animation {
-
-struct iBodyManager;
-struct iSkeletonDebugNodeManager;
-struct iSkeletonDebugNode;
-
-} // namespace Animation
-} // namespace CS
-
-
 class MocapViewer : public CS::Utility::DemoApplication,
   public scfImplementation1<MocapViewer, CS::Animation::iSkeletonAnimCallback>
 {
  private:
-  bool CreateAvatar ();
+  bool CreateScene ();
 
   // References to animesh objects
   csRef<iMovieRecorder> movieRecorder;
   csRef<CS::Animation::iBodyManager> bodyManager;
   csRef<CS::Animation::iSkeletonDebugNodeManager> debugNodeManager;
+  csRef<CS::Animation::iSkeletonNoiseNodeManager> noiseNodeManager;
   csRef<CS::Animation::iSkeletonRetargetNodeManager> retargetNodeManager;
   csRef<CS::Animation::iSkeletonDebugNode> debugNode;
   csRef<CS::Animation::iSkeletonAnimNode> animNode;
@@ -68,6 +61,15 @@ class MocapViewer : public CS::Utility::DemoApplication,
   CS::Math::Noise::Module::Perlin noiseY;
   csArray<csVector3> noisePoints;
   float noiseScale;
+
+  // Skeleton noise
+  CS::Math::Noise::Module::Perlin snoiseX;
+  CS::Math::Noise::Module::Perlin snoiseY;
+  CS::Math::Noise::Module::Perlin snoiseZ;
+
+  // Scene time length
+  csTicks startTime;
+  csTicks timeLength;
 
  public:
   MocapViewer ();
