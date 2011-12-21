@@ -104,18 +104,30 @@ struct iRenderManagerPostEffects : public virtual iBase
 {
   SCF_INTERFACE(iRenderManagerPostEffects,1,0,0);
 
+  /// Clear all active post effect layers
   virtual void ClearLayers() = 0;
+
+  /**
+   * Add the post effect layers defined in the given document node to the
+   * list of active layers
+   */
   virtual bool AddLayersFromDocument (iDocumentNode* node) = 0;
+
+  /**
+   * Add the post effect layers defined in the given file to the list of
+   * active layers
+   */
   virtual bool AddLayersFromFile (const char* filename) = 0;
 };
 
 /**
- * Interface for render managers which implement a visculler.
+ * Interface for render managers which implement a visibility culler.
  */
 struct iRenderManagerVisCull : public virtual iBase
 {
   SCF_INTERFACE(iRenderManagerVisCull,1,0,0);
 
+  /// Create a new visibility culler
   virtual csPtr<iVisibilityCuller> GetVisCuller () = 0;
 };
 
