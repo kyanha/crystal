@@ -82,12 +82,12 @@ public:
   virtual void SetName (const char* name) = 0;
   
   /**
-   * Get the 'bone to socket transform' of the socket
+   * Get the 'bone to socket' transform of the socket
    */
   virtual const csReversibleTransform& GetTransform () const = 0;
 
   /**
-   * Set the 'bone to socket transform' of the socket
+   * Set the 'bone to socket' transform of the socket
    */
   virtual void SetTransform (csReversibleTransform& transform) = 0;
   
@@ -419,7 +419,7 @@ struct iAnimatedMeshFactory : public virtual iBase
   /**
    * Create a new socket
    * \param bone ID of the bone to connect the socket
-   * \param transform Initial transform
+   * \param transform Initial transform of the socket, in 'bone to socket' coordinate
    * \param name Name of the socket, optional
    */
   virtual void CreateSocket (CS::Animation::BoneID bone, 
