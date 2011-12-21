@@ -109,7 +109,7 @@ struct iSpriteCal3DFactoryState : public virtual iBase
   virtual void ReportLastError () = 0;
 
   /**
-   * \deprecated Deprecated in 1.9. Pass load flags to Load*() functions instead.
+   * \deprecated Deprecated in 2.0. Pass load flags to Load*() functions instead.
    */
   CS_DEPRECATED_METHOD_MSG("Pass load flags to Load*() functions instead")
   virtual void SetLoadFlags(int flags) = 0;

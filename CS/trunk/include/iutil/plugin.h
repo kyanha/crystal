@@ -99,7 +99,7 @@ struct iPluginManager : public virtual iBase
    */
   virtual csPtr<iComponent> LoadPluginInstance (const char *classID,
                                                 uint loadFlags) = 0;
-  // Deprecated in 1.9
+  // Deprecated in 2.0
   CS_DEPRECATED_METHOD_MSG("Use LoadPluginInstance()")
   inline iBase* LoadPlugin (const char *classID, bool init = true, bool report = true)
   {
@@ -122,7 +122,7 @@ struct iPluginManager : public virtual iBase
    */
   virtual csPtr<iComponent> QueryPluginInstance (const char *iInterface,
                                                  int iVersion) = 0;
-  // Deprecated in 1.9
+  // Deprecated in 2.0
   CS_DEPRECATED_METHOD_MSG("Use QueryPluginInstance()")
   inline iBase* QueryPlugin (const char *iInterface, int iVersion)
   {
@@ -142,7 +142,7 @@ struct iPluginManager : public virtual iBase
   virtual csPtr<iComponent> QueryPluginInstance (const char* classID,
   	const char *iInterface, int iVersion) = 0;
   //@}
-  // Deprecated in 1.9
+  // Deprecated in 2.0
   CS_DEPRECATED_METHOD_MSG("Use QueryPluginInstance()")
   inline iBase* QueryPlugin (const char* classID,
   	const char *iInterface, int iVersion)
@@ -154,14 +154,14 @@ struct iPluginManager : public virtual iBase
   
   /// Remove a plugin from the plugin manager's plugin list.
   virtual bool UnloadPluginInstance (iComponent *obj) = 0;
-  // Deprecated in 1.9
+  // Deprecated in 2.0
   CS_DEPRECATED_METHOD_MSG("Use UnloadPluginInstance()")
   inline bool UnloadPlugin (iComponent *obj)
   { return UnloadPluginInstance (obj); }
   
   /// Register a object that implements the iComponent interface as a plugin.
   virtual bool RegisterPluginInstance (const char *classID, iComponent *obj) = 0;
-  // Deprecated in 1.9
+  // Deprecated in 2.0
   CS_DEPRECATED_METHOD_MSG("Use RegisterPluginInstance()")
   inline bool RegisterPlugin (const char *classID, iComponent *obj)
   { return RegisterPluginInstance (classID, obj); }
@@ -172,7 +172,7 @@ struct iPluginManager : public virtual iBase
    * the plugin manager while looping over the plugins.
    */
   virtual csPtr<iPluginIterator> GetPluginInstances () = 0;
-  // Deprecated in 1.9
+  // Deprecated in 2.0
   CS_DEPRECATED_METHOD_MSG("Use GetPluginInstances()")
   inline csPtr<iPluginIterator> GetPlugins ()
   { return GetPluginInstances (); }

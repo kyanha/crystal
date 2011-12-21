@@ -233,7 +233,7 @@ namespace CS
 //@{
 /**
  * Checks if a floating point value is finite.
- * \deprecated Deprecated in 1.9. Use CS::IsFinite() instead.
+ * \deprecated Deprecated in 2.0. Use CS::IsFinite() instead.
  */
 CS_DEPRECATED_METHOD_MSG("Use CS::IsFinite(x) instead")
 CS_FORCEINLINE bool csFinite (float f)
@@ -242,7 +242,7 @@ CS_FORCEINLINE bool csFinite (float f)
 }
 /**
  * Checks if a double-precision floating point value is finite.
- * \deprecated Deprecated in 1.9. Use CS::IsFinite() instead.
+ * \deprecated Deprecated in 2.0. Use CS::IsFinite() instead.
  */
 CS_DEPRECATED_METHOD_MSG("Use CS::IsFinite(x) instead")
 CS_FORCEINLINE bool csFinite (double d)
@@ -252,7 +252,7 @@ CS_FORCEINLINE bool csFinite (double d)
 
 /**
  * Checks if a floating point value is not-a-number.
- * \deprecated Deprecated in 1.9. Use CS::IsNan() instead.
+ * \deprecated Deprecated in 2.0. Use CS::IsNan() instead.
  */
 CS_DEPRECATED_METHOD_MSG("Use CS::IsNaN(x) instead")
 CS_FORCEINLINE bool csNaN (float f)
@@ -261,7 +261,7 @@ CS_FORCEINLINE bool csNaN (float f)
 }
 /**
  * Checks if a double-precision floating point value is not-a-number.
- * \deprecated Deprecated in 1.9. Use CS::IsNaN() instead.
+ * \deprecated Deprecated in 2.0. Use CS::IsNaN() instead.
  */
 CS_DEPRECATED_METHOD_MSG("Use CS::IsNaN(x) instead")
 CS_FORCEINLINE bool csNaN (double d)
@@ -271,7 +271,7 @@ CS_FORCEINLINE bool csNaN (double d)
 
 /**
  * Checks if a floating point value is normal (not infinite or nan).
- * \deprecated Deprecated in 1.9. Usage not recommended as results are
+ * \deprecated Deprecated in 2.0. Usage not recommended as results are
  *   inconsistent across platforms.
  */
 CS_DEPRECATED_METHOD_MSG("Usage not recommended, inconsistent results")
@@ -289,7 +289,7 @@ CS_FORCEINLINE bool csNormal (float f)
 }
 /**
  * Checks if a double-precision floating point value is normal.
- * \deprecated Deprecated in 1.9. Usage not recommended as results are
+ * \deprecated Deprecated in 2.0. Usage not recommended as results are
  *   inconsistent across platforms.
  */
 CS_DEPRECATED_METHOD_MSG("Usage not recommended, inconsistent results")
