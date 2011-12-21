@@ -261,13 +261,13 @@ struct iSprite3DFactoryState : public virtual iBase
   virtual bool IsTweeningEnabled () const = 0;
   /**
    * Set lighting quality (one of CS_SPR_LIGHTING_*).
-   * \deprecated Deprecated in 1.9 by change to shader-based lighting.
+   * \deprecated Deprecated in 2.0 by change to shader-based lighting.
    */
   CS_DEPRECATED_METHOD_MSG("Deprecated by change to shader-based lighting.")
   virtual void SetLightingQuality (int qual) = 0;
   /**
    * Get lighting quality (one of CS_SPR_LIGHTING_*).
-   * \deprecated Deprecated in 1.9 by change to shader-based lighting.
+   * \deprecated Deprecated in 2.0 by change to shader-based lighting.
    */
   CS_DEPRECATED_METHOD_MSG("Deprecated by change to shader-based lighting.")
   virtual int GetLightingQuality () const = 0;
@@ -278,13 +278,13 @@ struct iSprite3DFactoryState : public virtual iBase
    * - CS_SPR_LIGHT_GLOBAL (default)
    * - CS_SPR_LIGHT_TEMPLATE
    * - CS_SPR_LIGHT_LOCAL
-   * \deprecated Deprecated in 1.9 by change to shader-based lighting.
+   * \deprecated Deprecated in 2.0 by change to shader-based lighting.
    */
   CS_DEPRECATED_METHOD_MSG("Deprecated by change to shader-based lighting.")
   virtual void SetLightingQualityConfig (int qual) = 0;
   /**
    * Get the lighting quality config.
-   * \deprecated Deprecated in 1.9 by change to shader-based lighting.
+   * \deprecated Deprecated in 2.0 by change to shader-based lighting.
    */
   CS_DEPRECATED_METHOD_MSG("Deprecated by change to shader-based lighting.")
   virtual int GetLightingQualityConfig () const = 0;

@@ -335,7 +335,7 @@ struct iSkeletonAnimation : public virtual iBase
    * \param afterRot The rotation of the bone for the key frame after the given time.
    * \param afterOffset The position of the bone for the key frame after the given time.
    */
-  CS_DEPRECATED_METHOD_MSG("Deprecated in 1.9. Don't use it anymore (or complain if you found a good reason to).")
+  CS_DEPRECATED_METHOD_MSG("Deprecated in 2.0. Don't use it anymore (or complain if you found a good reason to).")
   virtual void GetTwoKeyFrames (ChannelID channel, float time, BoneID& bone,
     float& timeBefore, csQuaternion& beforeRot, csVector3& beforeOffset,
     float& timeAfter, csQuaternion& afterRot, csVector3& afterOffset) = 0;
@@ -348,7 +348,7 @@ struct iSkeletonAnimation : public virtual iBase
    * \param playbackTime The current playback time.
    * \param isPlayingCyclic If the playing should be cyclic or not. This parameter is now ignored.
    */
-  CS_DEPRECATED_METHOD_MSG("Deprecated in 1.9. Use instead the version without the 'isPlayingCyclic' parameter.")
+  CS_DEPRECATED_METHOD_MSG("Deprecated in 2.0. Use instead the version without the 'isPlayingCyclic' parameter.")
   virtual void BlendState (AnimatedMeshState* state, 
     float baseWeight, float playbackTime, bool isPlayingCyclic) const = 0;
 

@@ -105,7 +105,7 @@ namespace CS
   }
 }
 /** 
- * \deprecated Deprecated in 1.9. Use assign operator of csFileTime.
+ * \deprecated Deprecated in 2.0. Use assign operator of csFileTime.
  */
 #define ASSIGN_FILETIME(ft,tm)	\
   CS::Deprecated::ASSIGN_FILETIME(ft, tm);
