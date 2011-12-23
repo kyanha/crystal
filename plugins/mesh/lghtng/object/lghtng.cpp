@@ -76,7 +76,6 @@ csLightningMeshObject::csLightningMeshObject (
 
 csLightningMeshObject::~csLightningMeshObject ()
 {
-  if (vis_cb) vis_cb->DecRef ();
 }
 
 void csLightningMeshObject::SetupObject ()
