@@ -1361,8 +1361,8 @@ void VfsNode::FindFiles (const char *Suffix, const char *Mask,
 	{
 	  vpath << VFS_PATH_SEPARATOR;
 	}
-
-	FileList->Push (vpath);
+    if (FileList->Find (vpath) == csArrayItemNotFound)
+      FileList->Push (vpath);
       } /* endwhile */
       closedir (dh);
     }
