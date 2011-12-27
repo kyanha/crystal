@@ -21,8 +21,6 @@
 
 %include "cstool/genmeshbuilder.h"
 
-%ignore iPen::Rotate;
-
 %include "cstool/pen.h"
 
 %template(scfProcTexture) scfImplementationExt3<csProcTexture, csObject, iTextureWrapper, iProcTexture, iSelfDestruct>;
