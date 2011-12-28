@@ -165,6 +165,16 @@ MSIMergeModuleFromList_A CS.arch.$(MSM_ARCH).python : python-modules : $(MSM_VER
 MSI_UPGRADE_CODES_FOR_VERSION = 2.1 ;
 if "$(MSI_UPGRADE_CODES_FOR_VERSION)" != "$(MSI_VERSION_MAJORMINOR)"
 {
+  # ATTENTION: If the above condition triggers it means new upgrade
+  # codes may be needed for a version of CS.
+  # If the version changes, but not the upgrade code, it means the
+  # new version will override the old when installed. This is
+  # typically desired when promoting an unstable version to stable
+  # one, but not if the new version should be a unstable/development 
+  # version: in that case the upgrade codes should be updated.
+  # To do that, use an utility such as uuidgen (Linux) or
+  # guidgen (Windows) to replace *all* the UUIDs below.
+  #
   Exit "CS version was changed, please set new MSI upgrade codes" ;
 }
 
