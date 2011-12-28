@@ -603,7 +603,6 @@ class csPen(object):
     def PopTransform(*args): return _cstool.csPen_PopTransform(*args)
     def SetOrigin(*args): return _cstool.csPen_SetOrigin(*args)
     def Translate(*args): return _cstool.csPen_Translate(*args)
-    def Rotate(*args): return _cstool.csPen_Rotate(*args)
     def SetTransform(*args): return _cstool.csPen_SetTransform(*args)
     def DrawLine(*args): return _cstool.csPen_DrawLine(*args)
     def DrawThickLine(*args): return _cstool.csPen_DrawThickLine(*args)
@@ -619,6 +618,10 @@ class csPen(object):
     def WriteLines(*args): return _cstool.csPen_WriteLines(*args)
     def WriteBoxed(*args): return _cstool.csPen_WriteBoxed(*args)
     def WriteLinesBoxed(*args): return _cstool.csPen_WriteLinesBoxed(*args)
+    def _Rotate(*args): return _cstool.csPen__Rotate(*args)
+    def Rotate(self,a):
+         return _cspace.csPen__Rotate(a)
+
 csPen_swigregister = _cstool.csPen_swigregister
 csPen_swigregister(csPen)
 

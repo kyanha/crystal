@@ -22509,7 +22509,6 @@ sub DESTROY {
 *PopTransform = *cspacec::csPen_PopTransform;
 *SetOrigin = *cspacec::csPen_SetOrigin;
 *Translate = *cspacec::csPen_Translate;
-*Rotate = *cspacec::csPen_Rotate;
 *SetTransform = *cspacec::csPen_SetTransform;
 *DrawLine = *cspacec::csPen_DrawLine;
 *DrawThickLine = *cspacec::csPen_DrawThickLine;
