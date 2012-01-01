@@ -61,10 +61,10 @@ ul.toc {list-style: none}
 <hr size="1">
 <h4 class="subsubsection"> 4.2.4.9 Laser Class </h4>
 
-<p>The <code>Laser</code> class is responsible for managing the laserbeam that the
+<p><tt>The <code>Laser</code> class is responsible for managing the laserbeam that the
 player can shoot. There is only one instance of this class.
-</p>
-<table><tr><td>&nbsp;</td><td><pre class="example">class Laser
+</tt> </p>
+<table><tr><td>&nbsp;</td><td><pre class="example"><tt>class Laser
 {
 private:
   AppMazing* app;
@@ -92,13 +92,13 @@ public:
   /// Check if the laser hits anything.
   void Check ();
 };
-</pre></td></tr></table>
-<p>The three important functions in this class are: <code>Start()</code> which starts
+</tt> </pre></td></tr></table>
+<p><tt>The three important functions in this class are: <code>Start()</code> which starts
 the laser (unless it is already in progress), <code>Handle()</code> which takes
 care of the lifetime of the laser, and <code>Check()</code> which will check if
 the laser hits anything.
-</p>
-<table><tr><td>&nbsp;</td><td><pre class="example">Laser::Laser (AppMazing* app)
+</tt> </p>
+<table><tr><td>&nbsp;</td><td><pre class="example"><tt>Laser::Laser (AppMazing* app)
 {
   Laser::app = app;
   lasertime = 0;
@@ -119,8 +119,8 @@ void Laser::Start ()
   	laserend-tr.GetOrigin (), csVector3 (0, 1, 0));
   laserbeam-&gt;GetMovable ()-&gt;UpdateMove ();
 }
-</pre></td></tr></table>
-<p>This function starts the laserbeam (unless it is already in progress).
+</tt> </pre></td></tr></table>
+<p><tt>This function starts the laserbeam (unless it is already in progress).
 Starting the laser means that we basically put it at the same position
 of the camera but lowered a bit with the <samp>&lsquo;LASER_OFFSET&rsquo;</samp> offset.
 This offset is calculated in camera space that means that it will always
@@ -128,16 +128,16 @@ be below the camera as seen from the perspective of the camera. The
 <code>This2Other()</code> functions transforms the offset (as seen in camera
 space) to world space by using the camera transformation
 (<code>iCamera-&gt;GetTransform()</code>).
-</p>
-<p>We also transform a point in front of the camera (20 units in front) to
+</tt> </p>
+<p><tt>We also transform a point in front of the camera (20 units in front) to
 world space. So these two world space coordinates give us a starting and a
 direction for our laserbeam. We place the laserbeam mesh at the starting
 position and then we use <code>LookAt()</code> to change the transform of that
 mesh to look at the destination position. Then we place the mesh in the
 sector of the camera and finally we call <code>UpdateMove()</code> which is required
 after moving a mesh.
-</p>
-<table><tr><td>&nbsp;</td><td><pre class="example">void Laser::Handle (csTicks ticks)
+</tt> </p>
+<table><tr><td>&nbsp;</td><td><pre class="example"><tt>void Laser::Handle (csTicks ticks)
 {
   if (lasertime &lt;= 0) return;
   lasertime -= ticks;
@@ -157,14 +157,14 @@ after moving a mesh.
     state-&gt;SetColor (flick ? csColor (2.0, 2.0, 2.0) : csColor (.5, .5, .5));
   }
 }
-</pre></td></tr></table>
-<p>This function handles the lifetime of the laser. Again depending on the
+</tt> </pre></td></tr></table>
+<p><tt>This function handles the lifetime of the laser. Again depending on the
 elapsed ticks since previous frame. This function also makes the beam
 flicker by changing the color. Additionally, every time the laserbeam
 changes color it will check if there is an adversary hit by the laser. This
 happens with the <code>Check()</code> function below:
-</p>
-<table><tr><td>&nbsp;</td><td><pre class="example">void Laser::Check ()
+</tt> </p>
+<table><tr><td>&nbsp;</td><td><pre class="example"><tt>void Laser::Check ()
 {
   // Do a beam to check if we hit an adversary.
   csSectorHitBeamResult rc = lasersector-&gt;HitBeamPortals (
@@ -180,16 +180,16 @@ happens with the <code>Check()</code> function below:
     }
   }
 }
-</pre></td></tr></table>
-<p>Using <code>iSector::HitBeamPortals()</code> we try to find if there is an object
+</tt> </pre></td></tr></table>
+<p><tt>Using <code>iSector::HitBeamPortals()</code> we try to find if there is an object
 in the beam of the laser. We use the start and end position as calculated
 in the <code>Start()</code> function. If we hit a mesh then we will use
 <code>CS_GET_CHILD_OBJECT()</code> to get the <code>Adversary</code> instance that is
 attached to the mesh. This makes use of the fact that we added the
 adversary to the mesh using the <code>iObject</code> system.
-</p>
-<p>If we hit an adversary then we explode it by calling <code>ExplodeAdversary()</code>.
-</p>
+</tt> </p>
+<p><tt>If we hit an adversary then we explode it by calling <code>ExplodeAdversary()</code>.
+</tt> </p>
 <hr size="1">
 <table cellpadding="1" cellspacing="1" border="0">
 <tr><td valign="middle" align="left">[<a href="Mazing-Explosion-Class.html#0" title="Previous section in reading order"> &lt; </a>]</td>

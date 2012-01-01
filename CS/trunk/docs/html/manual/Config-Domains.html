@@ -62,29 +62,29 @@ ul.toc {list-style: none}
 <h3 class="subsection"> 4.5.3 Configuration Domains </h3>
 
 
-<p><em>Written by Eric Sunshine, <a href="mailto:sunshine@sunshineco.com">sunshine@sunshineco.com</a>.</em>
-</p>
-<p>When you run an application, the configuration manager collects configuration
+<p><tt><em>Written by Eric Sunshine, <a href="mailto:sunshine@sunshineco.com">sunshine@sunshineco.com</a>.</em>
+</tt> </p>
+<p><tt>When you run an application, the configuration manager collects configuration
 information from various locations, including information loaded from the
 application's own configuration file and those of plugin modules.  It is
 possible that configuration information gathered from various locations can
 contain conflicting configuration settings.  For this reason, a priority value
 is assigned configuration information from each source, and the priority value
 is used to resolve conflicts.
-</p>
-<p>Priorities are assigned to configuration information based upon the following
+</tt> </p>
+<p><tt>Priorities are assigned to configuration information based upon the following
 heuristic.  Highest priority sources (known as <em>domains</em>) are listed first;
 lowest priority sources are listed last.
-</p>
+</tt> </p>
 <ul>
 <li>
-Command-line options are given the highest priority.  They override settings
+<tt>Command-line options are given the highest priority.  They override settings
 which appear in configuration files.  For example, the <samp>&lsquo;--video=&rsquo;</samp> option
 will override the <samp>&lsquo;System.Plugins.iGraphics3D&rsquo;</samp> key in all configuration
 files.
-
+</tt> 
 </li><li>
-User-specific, application-specific settings exists at the next highest
+<tt>User-specific, application-specific settings exists at the next highest
 priority.  These are settings specific to a particular user and specific to a
 particular application.  This is the place where a user's personal settings are
 stored by a program.  For example, if a game allows a user to choose screen
@@ -92,29 +92,29 @@ resolution, or if it wants to store statistics about the user, it would store
 that information in this domain.  Such information is specific to a particular
 user of this particular application.  Such information is not relevant to other
 users or other applications.
-
-<p>Settings at this priority are stored in a platform-dependent fashion
+</tt> 
+<p><tt>Settings at this priority are stored in a platform-dependent fashion
 (see <a href="#Config-PerUser">Config PerUser</a>).  Often, these settings <em>roam</em> with a user
 automatically as the user moves from machine to machine.
-</p>
-<p>In order to associate settings with itself, an application needs to provide the
+</tt> </p>
+<p><tt>In order to associate settings with itself, an application needs to provide the
 configuration manager with a <em>unique identifier</em>.  Typically, this is
 accomplished by placing a <samp>&lsquo;System.ApplicationID&rsquo;</samp> key in the application's
 own configuration file.  It can also be set programmatically.  Given an
 application's identifer, the configuration manager can locate the user-specific
 settings associated with that application.
-</p>
-<p>It is recommended that you use the form <samp>&lsquo;&lt;Producer&gt;.&lt;ProductName&gt;&rsquo;</samp> when
+</tt> </p>
+<p><tt>It is recommended that you use the form <samp>&lsquo;&lt;Producer&gt;.&lt;ProductName&gt;&rsquo;</samp> when
 constructing an application identifier.  Crystal Space example applications use
 <samp>&lsquo;CrystalSpace&rsquo;</samp> for the <var>Producer</var> portion of the application
 identifier; for example: <samp>&lsquo;CrystalSpace.Walktest&rsquo;</samp>.  Your own application
 identifier can be composed of any suitable components.  For instance, you might
 place the following key in your application-specific configuration file.
-</p>
-<table><tr><td>&nbsp;</td><td><pre class="example">System.ApplicationID = MyCompany.MyGame
-</pre></td></tr></table>
+</tt> </p>
+<table><tr><td>&nbsp;</td><td><pre class="example"><tt>System.ApplicationID = MyCompany.MyGame
+</tt> </pre></td></tr></table>
 </li><li>
-User-specific, application-neutral settings have the next highest priority.
+<tt>User-specific, application-neutral settings have the next highest priority.
 These are settings which are specific to a particular user, but which are not
 specific to any particular application.  For instance, a user might prefer to
 use full-screen mode with all Crystal Space-derived applications, in which case
@@ -124,9 +124,9 @@ are stored in a platform-dependent fashion (see <a href="#Config-PerUser">Config
 settings in the user-specific, application-specific domain which are identified
 by the unique application identifier, settings in this domain are identified
 with the name <samp>&lsquo;CrystalSpace.Global&rsquo;</samp>.
-
+</tt> 
 </li><li>
-Application-specific settings have the next highest priority.  These settings
+<tt>Application-specific settings have the next highest priority.  These settings
 are specific to a particular application, but are shared among all users of the
 application.  User-specific settings in higher priority domains, as well as
 command-line options, can override these settings.  Conversely,
@@ -135,28 +135,28 @@ instance, if the canvas plugin configuration file specifies a default
 resolution of 640x480, an application configuration file might override that
 setting by giving its own values to the <samp>&lsquo;Video.ScreenWidth&rsquo;</samp> and
 <samp>&lsquo;Video.ScreenHeight&rsquo;</samp> keys.
-
-<p>Application-specific settings typically come from an application's
+</tt> 
+<p><tt>Application-specific settings typically come from an application's
 configuration file.  For example, the Walktest application stores its settings
 in the file <tt>&lsquo;walktest.cfg&rsquo;</tt>.  As a programmer, you typically specify the
 application's configuration file with the following code:
-</p>
-<table><tr><td>&nbsp;</td><td><pre class="example">csInitializer::SetupConfigManager(object_reg, &quot;myapp.cfg&quot;);
-</pre></td></tr></table>
+</tt> </p>
+<table><tr><td>&nbsp;</td><td><pre class="example"><tt>csInitializer::SetupConfigManager(object_reg, &quot;myapp.cfg&quot;);
+</tt> </pre></td></tr></table>
 </li><li>
-Plugin-specific settings have the lowest priority.  These settings define
+<tt>Plugin-specific settings have the lowest priority.  These settings define
 default values for options specific to plugin modules.  For example, the OpenGL
 renderer loads configuration information from the <tt>&lsquo;opengl.cfg&rsquo;</tt> file.
-</li></ul>
+</tt> </li></ul>
 
-<p>If the program allows the user to change options and settings, these changes
+<p><tt>If the program allows the user to change options and settings, these changes
 are applied to the user-specific, application-specific domain by default.  It
 is possible programmatically to change settings in other domains, but this is
 rarely useful or needed since most user settings belong in the user-specific,
 application-specific domain.
-</p>
-<p><a name="Config-PerUser"></a>
-</p><a name="1"></a>
+</tt> </p>
+<p><tt><a name="Config-PerUser"></a>
+&rsquo;</tt></p><a name="1"></a>
 <h2 class="heading"> Platform-Specific Per-User Settings Storage </h2>
 
 <p>When programs store settings for a particular user, those settings belong to
