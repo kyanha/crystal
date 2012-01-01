@@ -61,11 +61,11 @@ ul.toc {list-style: none}
 <hr size="1">
 <h3 class="subsection"> 4.4.2 Scheduling </h3>
 
-<p>The event system provides a generic mechanism for representing the order in 
+<p><tt>The event system provides a generic mechanism for representing the order in 
 which handlers of particular events should be invoked, regardless of the order 
 in which they are initialized or in which their respective plugins are loaded.
-</p>
-<p>The event scheduler takes advantage of properties exposed by the
+</tt> </p>
+<p><tt>The event scheduler takes advantage of properties exposed by the
 <code>iEventHandler</code> interface to do exactly this.  For each event name to
 which an event handler subscribes, it may also specify essentially arbitrary
 <em>happens-before</em> and <em>happens-after</em> relationships with other event
@@ -73,56 +73,56 @@ handlers, both abstractly (<em>I want to handle all input events before any
 instance of the <samp>&lsquo;crystalspace.aws&rsquo;</samp> handler</em>) and specifically (<em>I
 want to handle the mouse event only after the <samp>&lsquo;crystalspace.cel&rsquo;</samp> event
 handler</em>).
-</p>
-<p>The specific functions which all <code>iEventHandler</code> implementations must
+</tt> </p>
+<p><tt>The specific functions which all <code>iEventHandler</code> implementations must
 provide are:
-</p>
+</tt> </p>
 <ul>
 <li>
-<code>const char *GenericName()</code>: Returns a simple text name common to all 
+<tt><code>const char *GenericName()</code>: Returns a simple text name common to all 
 instances of this event handler.
-
+</tt> 
 </li><li>
-<code>csHandlerID GenericID()</code>: A <samp>&lsquo;csHandlerID&rsquo;</samp> is a lightweight way to
+<tt><code>csHandlerID GenericID()</code>: A <samp>&lsquo;csHandlerID&rsquo;</samp> is a lightweight way to
 manage generic handler names.  Under almost all circumstances, the
 implementation of this method simply is implemented as:
-
-<table><tr><td>&nbsp;</td><td><pre class="example">return csHandlerRegistry::GetID(this-&gt;GenericName());
-</pre></td></tr></table>
+</tt> 
+<table><tr><td>&nbsp;</td><td><pre class="example"><tt>return csHandlerRegistry::GetID(this-&gt;GenericName());
+</tt> </pre></td></tr></table>
 </li><li>
-<code>const csHandlerID[] GenericPrec(csEventID)</code>: Returns an array 
+<tt><code>const csHandlerID[] GenericPrec(csEventID)</code>: Returns an array 
 (terminated by <samp>&lsquo;CS_EVENTLIST_END&rsquo;</samp>) of <samp>&lsquo;csHandlerID&rsquo;</samp>s of generic 
 event handlers which, for the event name identified by the argument, should 
 always handle events with that name <em>before</em> instances of the current
 handler.
-
+</tt> 
 </li><li>
-<code>const csHandlerID[] GenericSucc(csEventID)</code>: Returns an array 
+<tt><code>const csHandlerID[] GenericSucc(csEventID)</code>: Returns an array 
 (terminated by <samp>&lsquo;CS_EVENTLIST_END&rsquo;</samp>) of <samp>&lsquo;csHandlerID&rsquo;</samp>s of generic 
 event handlers which, for the event name identified by the argument, should 
 always handle events with that name <em>after</em> instances of the current 
 handler.
-
+</tt> 
 </li><li>
-<code>const csHandlerID[] InstancePrec(csEventID)</code>: Returns an array 
+<tt><code>const csHandlerID[] InstancePrec(csEventID)</code>: Returns an array 
 (terminated by <samp>&lsquo;CS_EVENTLIST_END&rsquo;</samp>) of <samp>&lsquo;csHandlerID&rsquo;</samp>s of both generic 
 event handlers and event handler instances which, for the event name 
 identified by the argument, should always handle events with that name 
 <em>before</em> this <em>particular</em> instance of the event handler.
-
+</tt> 
 </li><li>
-<code>const csHandlerID[] InstanceSucc(csEventID)</code>: Returns an array 
+<tt><code>const csHandlerID[] InstanceSucc(csEventID)</code>: Returns an array 
 (terminated by <samp>&lsquo;CS_EVENTLIST_END&rsquo;</samp>) of <samp>&lsquo;csHandlerID&rsquo;</samp>s of both generic 
 event handlers and event handler instances which, for the event name 
 identified by the argument, should always handle event with that name 
 <em>after</em> this <em>particular</em> instance of the event handler.
-</li></ul>
+</tt> </li></ul>
 
-<p>In many simple cases, you will want to use default implementations of these 
+<p><tt>In many simple cases, you will want to use default implementations of these 
 functions provided by the <code>CS_EVENTHANDLER_NAMES()</code> and 
 <samp>&lsquo;CS_EVENTHANDLER_NIL_CONSTRAINTS&rsquo;</samp> macros, like so:
-</p>
-<table><tr><td>&nbsp;</td><td><pre class="example">struct myEventHandler : public iEventHandler
+</tt> </p>
+<table><tr><td>&nbsp;</td><td><pre class="example"><tt>struct myEventHandler : public iEventHandler
 {
   virtual bool HandleEvent (iEvent &amp;Event)
   {
@@ -133,20 +133,20 @@ functions provided by the <code>CS_EVENTHANDLER_NAMES()</code> and
   CS_EVENTHANDLER_NAMES(&quot;crystalspace.module.name&quot;)
   CS_EVENTHANDLER_NIL_CONSTRAINTS
 }
-</pre></td></tr></table>
-<p>As a convention, most <samp>&lsquo;csEventHandler&rsquo;</samp>s will implement a static method, 
+</tt> </pre></td></tr></table>
+<p><tt>As a convention, most <samp>&lsquo;csEventHandler&rsquo;</samp>s will implement a static method, 
 <samp>&lsquo;const char *StaticHandlerName()&rsquo;</samp>, which can be retrieved and converted 
 without instantiating the handler.  This name string can then be converted 
 into a <samp>&lsquo;csHandlerID&rsquo;</samp> by invoking:
-</p>
-<table><tr><td>&nbsp;</td><td><pre class="example"><code>csHandlerRegistry::GetID(myHandlerClass::StaticHandlerName())</code>
-</pre></td></tr></table>
-<p>The <samp>&lsquo;csHandlerID&rsquo;</samp> of an instance of an event handler class can be 
+</tt> </p>
+<table><tr><td>&nbsp;</td><td><pre class="example"><tt><code>csHandlerRegistry::GetID(myHandlerClass::StaticHandlerName())</code>
+</tt> </pre></td></tr></table>
+<p><tt>The <samp>&lsquo;csHandlerID&rsquo;</samp> of an instance of an event handler class can be 
 retrieved by passing a pointer to that class to 
 <code>csHandlerRegistry::GetID()</code>. For example:
-</p>
-<table><tr><td>&nbsp;</td><td><pre class="example"><code>csHandlerRegistry::GetID(new myHandlerClass())</code>
-</pre></td></tr></table>
+</tt> </p>
+<table><tr><td>&nbsp;</td><td><pre class="example"><tt><code>csHandlerRegistry::GetID(new myHandlerClass())</code>
+</tt> </pre></td></tr></table>
 <hr size="1">
 <table cellpadding="1" cellspacing="1" border="0">
 <tr><td valign="middle" align="left">[<a href="Event-Names.html#0" title="Previous section in reading order"> &lt; </a>]</td>

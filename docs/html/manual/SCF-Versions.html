@@ -61,7 +61,7 @@ ul.toc {list-style: none}
 <hr size="1">
 <h4 class="subsubsection"> 4.3.1.5 Interface Versions </h4>
 
-<p>Unlike <small>COM</small>, <small>SCF</small> supports interface versions.  That is, a shared class
+<p><tt>Unlike <small>COM</small>, <small>SCF</small> supports interface versions.  That is, a shared class
 could implement version 0.3.6 of given interface, and if client requests that
 interface of a version lower or equal than 0.3.6, a correct interface pointer
 is returned.  For this to work you need to define inside each interface header
@@ -69,47 +69,47 @@ file a specialization of the <code>scfInterface&lt;&gt;</code> template class fo
 interface.  This specialization must provide the interface's version number as
 the result of its <code>GetVersion()</code> method.  To correctly support different
 versions of interfaces you should follow these guidelines:
-</p>
+</tt> </p>
 <ul>
 <li>
-Do not insert new methods into existing interfaces.  Instead, you should
+<tt>Do not insert new methods into existing interfaces.  Instead, you should
 append them after last defined method.
-
+</tt> 
 </li><li>
-Avoid changing the signature of existing methods (i.e. don't add or remove
+<tt>Avoid changing the signature of existing methods (i.e. don't add or remove
 parameters).  Instead, consider adding a new overload of the particular
 method that should get a different signature.
-
+</tt> 
 </li><li>
-Avoid changing the return type of existing methods.  (Since you can't overload
+<tt>Avoid changing the return type of existing methods.  (Since you can't overload
 by return type the only to deal with this is to add a new method with a different
 name.)
-
+</tt> 
 </li><li>
-If your change made the interface invalid for clients that expect older
+<tt>If your change made the interface invalid for clients that expect older
 versions of interfaces (for example, you broke the previous three rules), increase
 the major version number, and set minor and micro versions to zero.
-
+</tt> 
 </li><li>
-If your changes are relatively minor, but you do a major release, increase the
+<tt>If your changes are relatively minor, but you do a major release, increase the
 minor version number and drop the micro version to zero.
-
+</tt> 
 </li><li>
-If you are in the development process, and did a minor change to the
+<tt>If you are in the development process, and did a minor change to the
 interface, increase the micro version.
-</li></ul>
+</tt> </li></ul>
 
-<p>The possible range for major and minor version numbers is 0..255, and the
+<p><tt>The possible range for major and minor version numbers is 0..255, and the
 range for micro version number is 0..65535.
-</p>
-<p>When you query an interface, you should always tell it what interface version
+</tt> </p>
+<p><tt>When you query an interface, you should always tell it what interface version
 are you looking for.  If a module cannot provide an interface compatible with
 the requested version, then <code>QueryInterface()</code> will return <samp>&lsquo;NULL&rsquo;</samp>
 (same as if interface wasn't available at all).  You can use
 <code>scfCompatibleVersion()</code> to check whether the requested version is
 compatible with interface version. To specify the version of an interface
 you can use the <code>SCF_INTERFACE()</code> macro.
-</p>
+</tt> </p>
 <hr size="1">
 <table cellpadding="1" cellspacing="1" border="0">
 <tr><td valign="middle" align="left">[<a href="SCF-Interface-and-implementation-inheritance.html#0" title="Previous section in reading order"> &lt; </a>]</td>

@@ -61,10 +61,10 @@ ul.toc {list-style: none}
 <hr size="1">
 <h4 class="subsubsection"> 4.2.4.6 Player Class </h4>
 
-<p>The <code>Player</code> class manages the player and player movement including collision
+<p><tt>The <code>Player</code> class manages the player and player movement including collision
 detection.
-</p>
-<table><tr><td>&nbsp;</td><td><pre class="example">class Player
+</tt> </p>
+<table><tr><td>&nbsp;</td><td><pre class="example"><tt>class Player
 {
 private:
   AppMazing* app;
@@ -88,8 +88,8 @@ public:
   void StartRotation (const csVector3&amp; rot);
   void MoveAndRotateCamera (float elapsed_seconds);
 };
-</pre></td></tr></table>
-<p>First it keeps track of the <samp>&lsquo;player_collider&rsquo;</samp>. This will be used for
+</tt> </pre></td></tr></table>
+<p><tt>First it keeps track of the <samp>&lsquo;player_collider&rsquo;</samp>. This will be used for
 detecting collision detection. Then it keeps track of where the player wants
 to go too and in what direction it wants to look (<samp>&lsquo;desired_location&rsquo;</samp> and
 <samp>&lsquo;desired_lookat&rsquo;</samp>). The function <code>StartMovement()</code> initiates a movement
@@ -100,8 +100,8 @@ the function <code>MoveAndRotateCamera()</code>. This function takes the elapsed
 seconds since the last frame as a parameter. This makes sure that movement speed
 will be equal on fast and slow hardware. i.e. the movement speed is independent
 from framerate. That's a very important principle to maintain in games.
-</p>
-<table><tr><td>&nbsp;</td><td><pre class="example">Player::Player (AppMazing* app)
+</tt> </p>
+<table><tr><td>&nbsp;</td><td><pre class="example"><tt>Player::Player (AppMazing* app)
 {
   Player::app = app;
 
@@ -124,14 +124,14 @@ bool Player::InitCollisionDetection ()
   if (player_collider == 0) return false;
   return true;
 }
-</pre></td></tr></table>
-<p>First we have the constructor. In this constructor we set all the defaults for
+</tt> </pre></td></tr></table>
+<p><tt>First we have the constructor. In this constructor we set all the defaults for
 the movement system. In <code>InitCollisionDetection()</code> we set up the collider
 that the collision detection system is going to use. Basically we represent
 the player as a box. The class <code>csTriangleMeshBox</code> can be used to quickly
 create an implementation of <code>iTriangleMesh</code> for a box.
-</p>
-<table><tr><td>&nbsp;</td><td><pre class="example">void Player::StartMovement (const csVector3&amp; dir)
+</tt> </p>
+<table><tr><td>&nbsp;</td><td><pre class="example"><tt>void Player::StartMovement (const csVector3&amp; dir)
 {
   iCamera* camera = app-&gt;GetCamera ();
 
@@ -206,23 +206,23 @@ void Player::StartRotation (const csVector3&amp; rot)
   desired_lookat = trans.This2OtherRelative (csVector3 (0, 0, 1));
   amount_rotated = 0;
 }
-</pre></td></tr></table>
-<p>The <code>StartMovement()</code> function will handle the movement in a certain
+</tt> </pre></td></tr></table>
+<p><tt>The <code>StartMovement()</code> function will handle the movement in a certain
 direction. It will first calculate where the relative direction would take the
 player. Based on that it will try to do collision detection to move as close
 as possible to the desired end position. If it finds a suitable spot that is
 not embedded in a wall it will then store the final desired location so that
 <code>MoveAndRotateCamera()</code> can use that to do the actual movement.
-</p>
-<p>The <code>StartRotation()</code> function is easier. It will not do any collision
+</tt> </p>
+<p><tt>The <code>StartRotation()</code> function is easier. It will not do any collision
 detection but instead just calculate where the rotation should go too.
-</p>
-<p>Note that there is actually a bug in this code. Because we are ignoring collision
+</tt> </p>
+<p><tt>Note that there is actually a bug in this code. Because we are ignoring collision
 detection when rotating and because our player is represented by a box it is
 actually possible to move and rotate at the same time and end up stuck in the
 wall.
-</p>
-<table><tr><td>&nbsp;</td><td><pre class="example">void Player::MoveAndRotateCamera (float elapsed_seconds)
+</tt> </p>
+<table><tr><td>&nbsp;</td><td><pre class="example"><tt>void Player::MoveAndRotateCamera (float elapsed_seconds)
 {
   iCamera* camera = app-&gt;GetCamera ();
 
@@ -241,12 +241,12 @@ wall.
   	+ desired_lookat * rotate_val;
   camera-&gt;GetTransform ().LookAt (new_lookat, csVector3 (0, 1, 0));
 }
-</pre></td></tr></table>
-<p>Based on the desired end position and rotation this function will actually
+</tt> </pre></td></tr></table>
+<p><tt>Based on the desired end position and rotation this function will actually
 move the player there. It will use the actual number of seconds that have
 elapsed since the previous frame to ensure that movement is the same on
 all hardware.
-</p>
+</tt> </p>
 <hr size="1">
 <table cellpadding="1" cellspacing="1" border="0">
 <tr><td valign="middle" align="left">[<a href="Mazing-Maze-Class.html#0" title="Previous section in reading order"> &lt; </a>]</td>
