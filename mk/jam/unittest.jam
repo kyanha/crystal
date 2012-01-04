@@ -211,6 +211,14 @@ rule UnitTest
       # Dynamically create the drivers for all parent directories.
       UnitTestDynamicTargets $(mod) : $(tests_obj) : $(oldsubdir) ;
     }
+    else
+    {
+      # Set up "dummy" targets when no test sources where given
+      local test_name  = [ UnitTestNameTest  $(mod) ] ;
+      local test_clean = [ UnitTestNameClean $(mod) ] ;
+      NotFile $(test_name) ;
+      NotFile $(test_clean) ;
+    }
   }
 
   SubDir TOP $(oldsubdir) ;
