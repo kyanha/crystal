@@ -123,6 +123,11 @@ if $(CSLIB.EXTERNAL_LIBS)
   ExternalLibs crystalspace : $(CSLIB.EXTERNAL_LIBS) ;
 }
 
+{
+  # Link test drivers with crystalspace lib
+  local test_drivers = $($(CSLIB.TESTS)_UNITTESTS) ;
+  LinkWith $(test_drivers) : crystalspace ;
+}
 # Add target to build/clean all crystalspace tests at once
 Depends check_crystalspace : check_$(CSLIB.TESTS) ;
 Depends check_crystalspaceclean : check_$(CSLIB.TESTS)_clean ;
