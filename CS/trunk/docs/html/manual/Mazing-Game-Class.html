@@ -61,9 +61,9 @@ ul.toc {list-style: none}
 <hr size="1">
 <h4 class="subsubsection"> 4.2.4.10 Game Class </h4>
 
-<p><tt><code>Game</code> is the main class controlling the game logic.
-</tt> </p>
-<table><tr><td>&nbsp;</td><td><pre class="example"><tt>class Game
+<p><code>Game</code> is the main class controlling the game logic.
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">class Game
 {
 private:
   AppMazing* app;
@@ -133,69 +133,69 @@ public:
    */
   bool OnKeyboard (iEvent&amp; ev);
 };
-</tt> </pre></td></tr></table>
-<p><tt>The important data structures used here are:
-</tt> </p>
+</pre></td></tr></table>
+<p>The important data structures used here are:
+</p>
 <ul>
 <li>
-<tt><samp>&lsquo;player&rsquo;</samp>: this is an instance of <code>Player</code>.
-</tt> </li><li>
-<tt><samp>&lsquo;maze&rsquo;</samp>: this is an instance of <code>Maze</code>.
-</tt> </li><li>
-<tt><samp>&lsquo;Laser&rsquo;</samp>: our laserbeam (instance of <code>Laser</code>).
-</tt> </li><li>
-<tt><samp>&lsquo;adversaries&rsquo;</samp>: this is a reference counted array containing all
+<samp>&lsquo;player&rsquo;</samp>: this is an instance of <code>Player</code>.
+</li><li>
+<samp>&lsquo;maze&rsquo;</samp>: this is an instance of <code>Maze</code>.
+</li><li>
+<samp>&lsquo;Laser&rsquo;</samp>: our laserbeam (instance of <code>Laser</code>).
+</li><li>
+<samp>&lsquo;adversaries&rsquo;</samp>: this is a reference counted array containing all
 adversaries that are currently still active. Because <code>Adversary</code> is
 a ref counted class (uses <small>SCF</small>) it is best to use <code>csRefArray</code> here.
-</tt> </li><li>
-<tt><samp>&lsquo;explosions&rsquo;</samp>: all active explosions (instances of <code>Explosion</code>)
+</li><li>
+<samp>&lsquo;explosions&rsquo;</samp>: all active explosions (instances of <code>Explosion</code>)
 are in this array.
-</tt> </li><li>
-<tt><samp>&lsquo;adversary_factory&rsquo;</samp>, <samp>&lsquo;laserbeam_factory&rsquo;</samp>, and <samp>&lsquo;explosion_factory&rsquo;</samp>:
+</li><li>
+<samp>&lsquo;adversary_factory&rsquo;</samp>, <samp>&lsquo;laserbeam_factory&rsquo;</samp>, and <samp>&lsquo;explosion_factory&rsquo;</samp>:
 these are mesh object factories for the adversary, laserbeam, and explosion
 objects.
-</tt> </li></ul>
+</li></ul>
 
-<p><tt>The important functions used in this class are:
-</tt> </p>
+<p>The important functions used in this class are:
+</p>
 <ul>
 <li>
-<tt><code>CreateFactories()</code>: this function will create the three factories
+<code>CreateFactories()</code>: this function will create the three factories
 used for the geometry. It will also create the laserbeam mesh since there
 is only one of those.
-</tt> </li><li>
-<tt><code>CreateAdversary()</code>: this will create a single adversary and place
+</li><li>
+<code>CreateAdversary()</code>: this will create a single adversary and place
 it somewhere in the game.
-</tt> </li><li>
-<tt><code>InitCollisionDetection()</code>: initialize collision detection for the loaded
+</li><li>
+<code>InitCollisionDetection()</code>: initialize collision detection for the loaded
 world.
-</tt> </li><li>
-<tt><code>SetupGame()</code>: this is the main entry point to setup the game. It will
+</li><li>
+<code>SetupGame()</code>: this is the main entry point to setup the game. It will
 call the functions above.
-</tt> </li><li>
-<tt><code>StartExplosion()</code>: start an explosion at some position.
-</tt> </li><li>
-<tt><code>HandleExplosions()</code>: handle all explosions (lifetime).
-</tt> </li><li>
-<tt><code>ExplodeAdversary()</code>: remove an adversary and replace it with an
+</li><li>
+<code>StartExplosion()</code>: start an explosion at some position.
+</li><li>
+<code>HandleExplosions()</code>: handle all explosions (lifetime).
+</li><li>
+<code>ExplodeAdversary()</code>: remove an adversary and replace it with an
 explosion.
-</tt> </li><li>
-<tt><code>Handle()</code>: this function handles game logic every frame.
-</tt> </li><li>
-<tt><code>OnKeyboard()</code>: this function handles keyboard events for the game.
-</tt> </li></ul>
+</li><li>
+<code>Handle()</code>: this function handles game logic every frame.
+</li><li>
+<code>OnKeyboard()</code>: this function handles keyboard events for the game.
+</li></ul>
 
-<table><tr><td>&nbsp;</td><td><pre class="example"><tt>Game::Game() :
+<table><tr><td>&nbsp;</td><td><pre class="example">Game::Game() :
   	app (app),
 	player (app),
 	maze (app),
 	laser (app)
 {
 }
-</tt> </pre></td></tr></table>
-<p><tt>Just the constructor.
-</tt> </p>
-<table><tr><td>&nbsp;</td><td><pre class="example"><tt>bool Game::CreateFactories ()
+</pre></td></tr></table>
+<p>Just the constructor.
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">bool Game::CreateFactories ()
 {
   csRef&lt;iGeneralFactoryState&gt; fstate;
   iEngine* engine = app-&gt;GetEngine ();
@@ -299,29 +299,29 @@ explosion.
 
   return true;
 }
-</tt> </pre></td></tr></table>
-<p><tt>We use a genmesh for both the laserbeam and the adversary sphere
+</pre></td></tr></table>
+<p>We use a genmesh for both the laserbeam and the adversary sphere
 (see section <a href="MeshObject-Genmesh.html#0">Genmesh Mesh Object</a>).The laserbeam is created in such a way that
 we can orient it easily along the camera transformation. That means that
 it is a long beam oriented in the <small>Z</small> direction.
-</tt> </p>
-<p><tt>For the explosion we use a particles mesh (see section <a href="MeshObject-Particles.html#0">Particles Mesh Object</a>).
+</p>
+<p>For the explosion we use a particles mesh (see section <a href="MeshObject-Particles.html#0">Particles Mesh Object</a>).
 With a bit of effort we're confident that you can make a better explosion
 by tweaking the parameters and using a better texture.
-</tt> </p>
-<p><tt>A few special remarks about the geometry above. On the laserbeam factory
+</p>
+<p>A few special remarks about the geometry above. On the laserbeam factory
 we use <code>iObjectModel::SetTriangleData()</code> to clear the collision
 detection mesh. The laserbeam mesh is generated at roughly the same spot
 as the camera. We don't want the collision detection system to detect hits
 with it (we use other methods to detect hits of the laserbeam with adversary).
-</tt> </p>
-<p><tt>The laserbeam mesh is also special. In the <code>Laser::Check()</code> function we
+</p>
+<p>The laserbeam mesh is also special. In the <code>Laser::Check()</code> function we
 used <code>iSector::HitBeamPortals()</code> to detect if the laser hits anything.
 We don't want that function to detect the laserbeam mesh itself (which happens
 to be at that same spot) so that's why we set the <samp>&lsquo;CS_ENTITY_NOHITBEAM&rsquo;</samp>
 flag on the mesh.
-</tt> </p>
-<table><tr><td>&nbsp;</td><td><pre class="example"><tt>bool Game::CreateAdversary (int x, int y, int z)
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">bool Game::CreateAdversary (int x, int y, int z)
 {
   float sx = float (x) * ROOM_DIMENSION;
   float sy = float (y) * ROOM_DIMENSION;
@@ -340,8 +340,8 @@ flag on the mesh.
   
   return true;
 }
-</tt> </pre></td></tr></table>
-<p><tt>Here we create an adversary. Note how we first make a new instance of
+</pre></td></tr></table>
+<p>Here we create an adversary. Note how we first make a new instance of
 <code>Adversary</code>, then we push it on the <samp>&lsquo;adversaries&rsquo;</samp> table and
 finally we call <code>DecRef()</code>. This is very important. The <samp>&lsquo;adversaries&rsquo;</samp>
 is a ref counting array (<code>csRefArray</code>). That means that it will increase
@@ -349,14 +349,14 @@ the reference count of all objects that you push on it. Also note that new
 objects automatically start with a reference count of 1. So that means that
 after pushing the object on <samp>&lsquo;adversaries&rsquo;</samp> the reference count will be 2.
 We must therefor release our own reference at the end by using <code>DecRef()</code>.
-</tt> </p>
-<p><tt>In this function we also add our adversary instance as a child of the
+</p>
+<p>In this function we also add our adversary instance as a child of the
 adversary mesh. This is possible because both the mesh and the adversary
 implement <code>iObject</code>. Note that adding our adversary to the mesh as
 a child will also increase the reference count. So finally there will be
 two references to every adversary.
-</tt> </p>
-<table><tr><td>&nbsp;</td><td><pre class="example"><tt>bool Game::InitCollisionDetection ()
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">bool Game::InitCollisionDetection ()
 {
   csColliderHelper::InitializeCollisionWrappers (
       app-&gt;GetCollisionDetectionSystem (), app-&gt;GetEngine (), 0);
@@ -383,16 +383,16 @@ bool Game::SetupGame ()
   if (!CreateAdversary (2, 2, 2)) return false;
   return true;
 }
-</tt> </pre></td></tr></table>
-<p><tt>Here we setup the game by creating the maze (<code>Maze::CreateGeometry()</code>)
+</pre></td></tr></table>
+<p>Here we setup the game by creating the maze (<code>Maze::CreateGeometry()</code>)
 and then creating all factories (<code>CreateFactories()</code>). After that
 we create <code>iEngine::Prepare()</code>.
-</tt> </p>
-<p><tt>After that setup collision detection.
-</tt> </p>
-<p><tt>And at the end we create four adversaries that will roam the game.
-</tt> </p>
-<table><tr><td>&nbsp;</td><td><pre class="example"><tt>void Game::ExplodeAdversary (Adversary* adv)
+</p>
+<p>After that setup collision detection.
+</p>
+<p>And at the end we create four adversaries that will roam the game.
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">void Game::ExplodeAdversary (Adversary* adv)
 {
   iMeshWrapper* mesh = adv-&gt;GetMesh ();
   StartExplosion (mesh-&gt;GetMovable ()-&gt;GetSectors ()-&gt;Get (0),
@@ -428,8 +428,8 @@ void Game::HandleExplosions (csTicks elapsed_ticks)
     }
   }
 }
-</tt> </pre></td></tr></table>
-<p><tt>The <code>ExplodeAdversary()</code> function is called from the <code>Laser::Check()</code>
+</pre></td></tr></table>
+<p>The <code>ExplodeAdversary()</code> function is called from the <code>Laser::Check()</code>
 function whenever an adversary needs to be exploded. To start the actual
 explosion mesh the <code>StartExplosion()</code> function is used. This function
 will just remove the adversary mesh from the engine (using
@@ -439,8 +439,8 @@ reference count of the adversary to become 0. i.e. deleting the adversary
 from the <samp>&lsquo;adversaries&rsquo;</samp> array will decrease one reference and then
 removing the mesh from the engine will remove the other since when the mesh
 is deleted it will also release the reference to its children.
-</tt> </p>
-<p><tt>The <code>StartExplosion()</code> function will create an explosion mesh out of
+</p>
+<p>The <code>StartExplosion()</code> function will create an explosion mesh out of
 the explosion factory at the given sector and position. The explosion mesh
 factory is created using <samp>&lsquo;CS_FX_ADD&rsquo;</samp> mixmode. That means that every
 particle will be added to the background. This is a kind of transparency.
@@ -449,11 +449,11 @@ from back to front (<samp>&lsquo;add&rsquo;</samp> mixmode can be done in any or
 <samp>&lsquo;CS_ZBUF_TEST&rsquo;</samp> z-buffer mode for the explosion mesh because we don't
 want the particles to update the z-buffer but just test against it (so
 particles will appear correctly clipped against walls that are near the camera).
-</tt> </p>
-<p><tt><code>HandleExplosions()</code> is called every frame and will go over all active
+</p>
+<p><code>HandleExplosions()</code> is called every frame and will go over all active
 explosions to check if they should be deleted.
-</tt> </p>
-<table><tr><td>&nbsp;</td><td><pre class="example"><tt>void Game::Handle (csTicks elapsed_ticks)
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">void Game::Handle (csTicks elapsed_ticks)
 {
   float elapsed_seconds = float (elapsed_ticks) / 1000.0;
 
@@ -471,14 +471,14 @@ explosions to check if they should be deleted.
   for (i = 0 ; i &lt; adversaries.Length () ; i++)
     adversaries[i]-&gt;ThinkAndMove (elapsed_seconds);
 }
-</tt> </pre></td></tr></table>
-<p><tt><code>Handle()</code> will be automatically called every frame. In this function
+</pre></td></tr></table>
+<p><code>Handle()</code> will be automatically called every frame. In this function
 we will handle all game logic. Handling the game logic basically means we just
 call code in <code>Laser</code>, <code>Explosion</code>, <code>Adversary</code>, and <code>Player</code>
 to calculate the logic based on the number of seconds that have ellapsed since
 the previous frame.
-</tt> </p>
-<table><tr><td>&nbsp;</td><td><pre class="example"><tt>bool Game::OnKeyboard(iEvent&amp; ev)
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">bool Game::OnKeyboard(iEvent&amp; ev)
 {
   // We got a keyboard event.
   if (csKeyEventHelper::GetEventType(&amp;ev) == csKeyEventTypeDown)
@@ -524,9 +524,9 @@ the previous frame.
   }
   return false;
 }
-</tt> </pre></td></tr></table>
-<p><tt>In this function we handle all keyboard events for the game.
-</tt> </p>
+</pre></td></tr></table>
+<p>In this function we handle all keyboard events for the game.
+</p>
 <hr size="1">
 <table cellpadding="1" cellspacing="1" border="0">
 <tr><td valign="middle" align="left">[<a href="Mazing-Laser-Class.html#0" title="Previous section in reading order"> &lt; </a>]</td>

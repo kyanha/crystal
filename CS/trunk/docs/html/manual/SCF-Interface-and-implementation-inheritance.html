@@ -61,20 +61,20 @@ ul.toc {list-style: none}
 <hr size="1">
 <h4 class="subsubsection"> 4.3.1.4 Interface and implementation inheritance </h4>
 
-<p><tt>From time to time there might be a need or want for using normal inheritance
+<p>From time to time there might be a need or want for using normal inheritance
 together with <small>SCF</small>. In practice there are two times you want to do this;
 interface deriving from another interface to add methods and deriving from an
 implementation class to add new interfaces.
-</tt> </p>
-<p><tt>In the first case where you want an interface to extend another, the declaration
+</p>
+<p>In the first case where you want an interface to extend another, the declaration
 of the interfaces is straight forward using normal C++ inheritance. However, to
 make the implementation class aware of the base interfaces it should also expose
 you need to use the <code>scfFakeInterface&lt;&gt;</code> template class in the parameter
 to <code>scfImplementationN&lt;&gt;</code>.
-</tt> </p>
-<p><tt>Example:
-</tt> </p>
-<table><tr><td>&nbsp;</td><td><pre class="example"><tt>// Abstract interface file (itest2.h)
+</p>
+<p>Example:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">// Abstract interface file (itest2.h)
 struct iTestBase : public virtual iBase
 {
   SCF_INTERFACE (iTestBase, 1, 0, 0);
@@ -97,20 +97,20 @@ class Test2 : public scfImplementation2&lt;Test2,
   ...
 };
 
-</tt> </pre></td></tr></table>
-<p><tt>The other situation is when you want to take an already existing implementation
+</pre></td></tr></table>
+<p>The other situation is when you want to take an already existing implementation
 class, derive from it and add one or more new interfaces. Using only normal C++
 inheritance and <code>scfImplementationN&lt;&gt;</code> like above is the right way to go if
 the base class does not implement any <small>SCF</small> interfaces, if they do you need
 to use the extra functionality that the template <code>scfImplementationExtN&lt;&gt;</code>.
-</tt> </p>
-<p><tt><code>scfImplementationExtN&lt;&gt;</code> have same template parameters as 
+</p>
+<p><code>scfImplementationExtN&lt;&gt;</code> have same template parameters as 
 <code>scfImplementationN&lt;&gt;</code> with one difference, the second parameter is the base
 class to use. 
-</tt> </p>
-<p><tt>Example: Lets extend Test2 from above with one more interface
-</tt> </p>
-<table><tr><td>&nbsp;</td><td><pre class="example"><tt>struct iNewIf : public virtual iBase
+</p>
+<p>Example: Lets extend Test2 from above with one more interface
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">struct iNewIf : public virtual iBase
 {
   SCF_INTERFACE (iNewIf, 1, 0, 0);
   virtual void PrintMe () = 0;
@@ -122,7 +122,7 @@ class NewTest2 : public scfImplementationExt1&lt;NewTest2, Test2, iNewIf&gt;
   void PrintMe ();
 }
 
-</tt> </pre></td></tr></table>
+</pre></td></tr></table>
 
 
 <hr size="1">

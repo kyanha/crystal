@@ -61,49 +61,49 @@ ul.toc {list-style: none}
 <hr size="1">
 <h4 class="subsubsection"> 4.3.1.6 Client Side </h4>
 
-<p><tt>Now let's explain how to use all this mess from client side.  First, we should
+<p>Now let's explain how to use all this mess from client side.  First, we should
 be able to create objects that implement the interfaces we want.  For this, you
 should use the <code>scfCreateInstance()</code> macro.  It receives two arguments:
 the name of external class, and the name of the interface it implements.  So,
 if we know class <samp>&lsquo;MyGraphics3D&rsquo;</samp> implements the <samp>&lsquo;iGraphics3D&rsquo;</samp>
 interface, we can write:
-</tt> </p>
-<table><tr><td>&nbsp;</td><td><pre class="example"><tt>csRef&lt;iGraphics3D&gt; G3D = scfCreateInstance&lt;iGraphics3D&gt; (&quot;MyGraphics3D&quot;);
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">csRef&lt;iGraphics3D&gt; G3D = scfCreateInstance&lt;iGraphics3D&gt; (&quot;MyGraphics3D&quot;);
 if (!G3D)
 {
   fprintf(stderr,
     &quot;Failed to create an instance of iGraphics3D!\n&quot;);
   abort();
 }
-</tt> </pre></td></tr></table>
-<p><tt>Now you can use the object any way you like, just like standard C++:
-</tt> </p>
-<table><tr><td>&nbsp;</td><td><pre class="example"><tt>G3D-&gt;BeginDraw();
+</pre></td></tr></table>
+<p>Now you can use the object any way you like, just like standard C++:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">G3D-&gt;BeginDraw();
 G3D-&gt;DrawLine(...);
 G3D-&gt;DrawPolygon(...);
 G3D-&gt;EndDraw();
-</tt> </pre></td></tr></table>
-<p><tt>When you are done using the <samp>&lsquo;G3D&rsquo;</samp> pointer (say, when program exits), the
+</pre></td></tr></table>
+<p>When you are done using the <samp>&lsquo;G3D&rsquo;</samp> pointer (say, when program exits), the
 reference you own for the object should be released.  This happens
 automatically when the <code>csRef&lt;&gt;</code> goes out of scope.  If you are not using
 <code>csRef&lt;&gt;</code>, but are instead using a plain pointer, <samp>&lsquo;iGraphics3D*&rsquo;</samp>,
 then you must manually release the reference when you are done with it by
 calling <code>G3D-&gt;DecRef()</code>.  After this you can not use <samp>&lsquo;G3D&rsquo;</samp> anymore;
 you should create another instance of <samp>&lsquo;iGraphics3D&rsquo;</samp> if needed.
-</tt> </p>
-<p><tt>To query an object to see if it implements an interface, you should use the
+</p>
+<p>To query an object to see if it implements an interface, you should use the
 <code>scfQueryInterface</code> macro. It also receives two arguments, first being
 the object you are querying for the embedded interface, and second being the
 name of the interface you desire. Example:
-</tt> </p>
-<table><tr><td>&nbsp;</td><td><pre class="example"><tt>csRef&lt;iHalo&gt; halo = scfQueryInterface&lt;iHalo&gt; (G3D);
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">csRef&lt;iHalo&gt; halo = scfQueryInterface&lt;iHalo&gt; (G3D);
 if (!halo)
 {
   fprintf(stderr,
     &quot;3D graphic driver doesn't support halos!\n&quot;);
   return;
 }
-</tt> </pre></td></tr></table>
+</pre></td></tr></table>
 <hr size="1">
 <p>
  <font size="-1">

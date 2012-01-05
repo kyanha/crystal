@@ -62,18 +62,18 @@ ul.toc {list-style: none}
 <h3 class="subsection"> 4.3.3 Create Your Own Plugin </h3>
 
 
-<p><tt><em>Written by Jorrit Tyberghein, <a href="mailto:jorrit.tyberghein@gmail.com">jorrit.tyberghein@gmail.com</a> and
+<p><em>Written by Jorrit Tyberghein, <a href="mailto:jorrit.tyberghein@gmail.com">jorrit.tyberghein@gmail.com</a> and
 Eric Sunshine, <a href="mailto:sunshine@sunshineco.com">sunshine@sunshineco.com</a>.</em>
-</tt> </p>
-<p><tt>Making a plugin in Crystal Space is not very hard but nevertheless
+</p>
+<p>Making a plugin in Crystal Space is not very hard but nevertheless
 there are still a few issues that are often forgotten. Here in this
 article we show you how you can write a simple plugin and use
 it in your application.
-</tt> </p>
+</p>
 <a name="1"></a>
 <h4 class="subsubheading"> Defining your Plugin <small>API</small> </h4>
 
-<p><tt>The first thing that you need to do when making a plugin is to define the
+<p>The first thing that you need to do when making a plugin is to define the
 <small>API</small> for it.  The <small>API</small> is what your application is going to use to talk
 to the plugin.  It is the interface to the plugin so it is very important to
 get this right.  In the Crystal Space framework the Shared Class Facility
@@ -82,17 +82,17 @@ abstract interface containing only the methods from the <small>API</small>.  An 
 class in C++ means that all methods are pure virtual.  This means that no
 implementation is given; only method declarations.  The implementation will
 come later in the code of the plugin.
-</tt> </p>
-<p><tt>This concept is completely analogous to the Java interface mechanism.  The
+</p>
+<p>This concept is completely analogous to the Java interface mechanism.  The
 advantage of using this paradigm is that you have a clear separation between
 the <small>API</small> and the implementation.  This allows one to easily replace an
 implementation of some <small>API</small> or even provide multiple implementations (for
 example, the Null and OpenGL renderers are two implementations of the same
 3D rendering <small>API</small>).
-</tt> </p>
-<p><tt>Here is the <small>API</small> definition for our sample plugin:
-</tt> </p>
-<table><tr><td>&nbsp;</td><td><pre class="example"><tt>#ifndef __GAME_MYAPI_H__
+</p>
+<p>Here is the <small>API</small> definition for our sample plugin:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">#ifndef __GAME_MYAPI_H__
 #define __GAME_MYAPI_H__
 
 #include &lt;csutil/scf.h&gt;
@@ -115,71 +115,71 @@ virtual int GetSomething () const = 0;
 };
 
 #endif // __GAME_MYAPI_H__
-</tt> </pre></td></tr></table>
-<p><tt>The above text should be put in a header file. Let's put it in
+</pre></td></tr></table>
+<p>The above text should be put in a header file. Let's put it in
 <tt>&lsquo;myapi.h&rsquo;</tt>.
-</tt> </p>
-<p><tt>First we include <tt>&lsquo;csutil/scf.h&rsquo;</tt>. This is a Crystal Space header
+</p>
+<p>First we include <tt>&lsquo;csutil/scf.h&rsquo;</tt>. This is a Crystal Space header
 for <small>SCF</small> which we need to get the definition of <samp>&lsquo;iBase&rsquo;</samp> and the
 definition of the <code>SCF_INTERFACE()</code> macro.
-</tt> </p>
-<p><tt>Then we declare <samp>&lsquo;csVector3&rsquo;</samp> as a class. We do this so that we
+</p>
+<p>Then we declare <samp>&lsquo;csVector3&rsquo;</samp> as a class. We do this so that we
 can later use <samp>&lsquo;csVector3&rsquo;</samp> as a parameter in one of the <small>API</small> methods.
 We do not need the complete definition of <samp>&lsquo;csVector3&rsquo;</samp> since we
 are going to define the method so that it passes the vector by
 reference.
-</tt> </p>
-<p><tt>In the interface declaration we use the <code>SCF_INTERFACE()</code> macro to
+</p>
+<p>In the interface declaration we use the <code>SCF_INTERFACE()</code> macro to
 define the version of this interface. This versioning can be used to query for
 specific versions of an interface. This can be useful later when you
 want to extend the <small>API</small> without breaking existing apps. The version
 has three parts: major, minor, and micro.
-</tt> </p>
-<p><tt>Finally we define the <small>API</small> by making a structure that inherits from
+</p>
+<p>Finally we define the <small>API</small> by making a structure that inherits from
 <samp>&lsquo;iBase&rsquo;</samp>.  We use <samp>&lsquo;struct&rsquo;</samp> instead of <samp>&lsquo;class&rsquo;</samp> simply because, for
 structures, the default visibility is <samp>&lsquo;public&rsquo;</samp> instead of <samp>&lsquo;private&rsquo;</samp>
 as for classes.  This is just a convenience.  There is no other difference
 between a <samp>&lsquo;struct&rsquo;</samp> or a <samp>&lsquo;class&rsquo;</samp> in C++. Note that you have to use
 virtual inheritance for <small>SCF</small> to work properly.
-</tt> </p>
-<p><tt>The name <samp>&lsquo;iMyApi&rsquo;</samp> is not random.  Crystal Space uses this naming
+</p>
+<p>The name <samp>&lsquo;iMyApi&rsquo;</samp> is not random.  Crystal Space uses this naming
 convention (starting a name with <samp>&lsquo;i&rsquo;</samp>) for <small>SCF</small> interfaces so that it
 is easy to see that they refer to <small>SCF</small> interfaces.
-</tt> </p>
-<p><tt>We inherit from <samp>&lsquo;iBase&rsquo;</samp> because it is the basis of all <small>SCF</small>
+</p>
+<p>We inherit from <samp>&lsquo;iBase&rsquo;</samp> because it is the basis of all <small>SCF</small>
 interfaces.  All <small>SCF</small> interfaces must inherit from <samp>&lsquo;iBase&rsquo;</samp> either
 directly or indirectly.  This will ensure that we have reference counting (more
 on that later) and also takes care of the other internal <small>SCF</small> issues.
-</tt> </p>
-<p><tt>In that structure we define two methods: <code>DoSomething()</code> and
+</p>
+<p>In that structure we define two methods: <code>DoSomething()</code> and
 <code>GetSomething()</code>. Note that every method is defined as follows:
-</tt> </p>
-<table><tr><td>&nbsp;</td><td><pre class="example"><tt>virtual ... = 0;
-</tt> </pre></td></tr></table>
-<p><tt>The <samp>&lsquo;= 0&rsquo;</samp> means that we will not give an implementation here. The
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">virtual ... = 0;
+</pre></td></tr></table>
+<p>The <samp>&lsquo;= 0&rsquo;</samp> means that we will not give an implementation here. The
 implementation will be provided by the plugin (see later).
-</tt> </p>
-<p><tt>Note that it is good practice to use <samp>&lsquo;const&rsquo;</samp> wherever applicable.  In the
+</p>
+<p>Note that it is good practice to use <samp>&lsquo;const&rsquo;</samp> wherever applicable.  In the
 declaration of <code>GetSomething()</code> we added <samp>&lsquo;const&rsquo;</samp> at the end to
 indicate that this method will not change the object.  This is useful
 for a number of reasons:
-</tt> </p>
+</p>
 <ul>
 <li> 
-<tt>It serves as documentation for the <small>API</small> reader.
-</tt> </li><li> 
-<tt>A good compiler might be able to do some optimizations if it knows that the
+It serves as documentation for the <small>API</small> reader.
+</li><li> 
+A good compiler might be able to do some optimizations if it knows that the
 method will not modify the object.
-</tt> </li></ul>
+</li></ul>
 
 <a name="2"></a>
 <h4 class="subsubheading"> Creating the Plugin Implementation (header) </h4>
 
-<p><tt>After you defined the <small>API</small> for your plugin it is now time to actually
+<p>After you defined the <small>API</small> for your plugin it is now time to actually
 make the plugin implementation. First you define a header called
 <tt>&lsquo;myplug.h&rsquo;</tt> with the following contents:
-</tt> </p>
-<table><tr><td>&nbsp;</td><td><pre class="example"><tt>#ifndef __GAME_MYPLUG_H__
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">#ifndef __GAME_MYPLUG_H__
 #define __GAME_MYPLUG_H__
 
 #include &lt;iutil/comp.h&gt;
@@ -211,8 +211,8 @@ public:
 };
 
 #endif // __GAME_MYPLUG_H__
-</tt> </pre></td></tr></table>
-<p><tt>This requires a little explanation.  The Crystal Space plugin framework
+</pre></td></tr></table>
+<p>This requires a little explanation.  The Crystal Space plugin framework
 requires that every <em>named</em> <small>SCF</small> class which will be requested by name
 from a plugin module via the Crystal Space plugin manager/loader must
 implement the <samp>&lsquo;iComponent&rsquo;</samp> interface.  This interface has a single method,
@@ -220,29 +220,29 @@ implement the <samp>&lsquo;iComponent&rsquo;</samp> interface.  This interface h
 instantiated.  This gives the instance a chance to perform various
 initialization operations and it also provides the instance with a pointer to
 the global object registry.
-</tt> </p>
-<p><tt>But, our plugin also needs to implement its own native <samp>&lsquo;iMyApi&rsquo;</samp> interface.
+</p>
+<p>But, our plugin also needs to implement its own native <samp>&lsquo;iMyApi&rsquo;</samp> interface.
 So here is a situation where the same class needs to implement two interfaces
 at the same time. By using the <samp>&lsquo;scfImplementation2&rsquo;</samp> templated class
 we can easily declare the class <samp>&lsquo;MyPlugin&rsquo;</samp> to implement both
 <samp>&lsquo;iComponent&rsquo;</samp> and <samp>&lsquo;iMyApi&rsquo;</samp>.
-</tt> </p>
-<p><tt>In the declaration of <samp>&lsquo;MyPlugin&rsquo;</samp> we then have to implement all
+</p>
+<p>In the declaration of <samp>&lsquo;MyPlugin&rsquo;</samp> we then have to implement all
 functions from both <samp>&lsquo;iComponent&rsquo;</samp> and <samp>&lsquo;iMyApi&rsquo;</samp>. To do that
 the method declarations from both interfaces are repeated here but the
 <samp>&lsquo;= 0&rsquo;</samp> is removed. This means that we'll actually give a concrete
 implementation here.
-</tt> </p>
-<p><tt>Note that <samp>&lsquo;MyPlugin&rsquo;</samp> needs a constructor that accepts an <samp>&lsquo;iBase*&rsquo;</samp>
+</p>
+<p>Note that <samp>&lsquo;MyPlugin&rsquo;</samp> needs a constructor that accepts an <samp>&lsquo;iBase*&rsquo;</samp>
 parameter. Otherwise <small>SCF</small> will not be able to intantiate this class.
-</tt> </p>
+</p>
 <a name="3"></a>
 <h4 class="subsubheading"> Creating the Plugin Implementation (source) </h4>
 
-<p><tt>Now we create the main source file containing the implementation
+<p>Now we create the main source file containing the implementation
 of our plugin. Let's call this <tt>&lsquo;myplug.cpp&rsquo;</tt>:
-</tt> </p>
-<table><tr><td>&nbsp;</td><td><pre class="example"><tt>#include &lt;cssysdef.h&gt;
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">#include &lt;cssysdef.h&gt;
 #include &lt;myplug.h&gt;
 #include &lt;iutil/objreg.h&gt;
 #include &lt;iutil/plugin.h&gt;
@@ -280,28 +280,28 @@ int MyPlugin::GetSomething () const
   return (int)store_v.x + (int)store_v.y + (int)store_v.z;
 }
 
-</tt> </pre></td></tr></table>
-<p><tt>The first macro is <code>CS_IMPLEMENT_PLUGIN</code>. This indicates to the
+</pre></td></tr></table>
+<p>The first macro is <code>CS_IMPLEMENT_PLUGIN</code>. This indicates to the
 Crystal Space framework that this module will end up as a plugin
 (as opposed to an application or library). On some platforms this
 actually makes a difference; on others it does not.  For best portability,
 you should use this macro in exactly one C++ file within each plugin
 module. (<em>Note:</em> If your project uses the Jam-based CS build system
 please also see <a href="#plugins_002din_002dcs_002dbuild_002dsystem">plugins-in-cs-build-system</a>.)
-</tt> </p>
-<p><tt>The <code>SCF_IMPLEMENT_FACTORY()</code> says that C++ class <samp>&lsquo;MyPlugin&rsquo;</samp>
+</p>
+<p>The <code>SCF_IMPLEMENT_FACTORY()</code> says that C++ class <samp>&lsquo;MyPlugin&rsquo;</samp>
 represents an <small>SCF</small> factory which allows <small>SCF</small> to instantiate objects of
 this class.  In addition to some other administrative tasks, this macro defines
 a function capable of instantiating an object of class <samp>&lsquo;MyPlugin&rsquo;</samp>.  Note
 that one plugin module can in fact define several distinct named <small>SCF</small>
 classes.  In that case you need multiple <code>SCF_IMPLEMENT_FACTORY()</code> lines;
 one for each exported <small>SCF</small> class.
-</tt> </p>
-<p><tt>In the constructor of <samp>&lsquo;MyPlugin&rsquo;</samp> you must also call the constructor
+</p>
+<p>In the constructor of <samp>&lsquo;MyPlugin&rsquo;</samp> you must also call the constructor
 of the templated superclass by using <code>scfImplementationType()</code>. The
 first parameter to <code>scfImplementationType()</code> is always <samp>&lsquo;this&rsquo;</samp>.
-</tt> </p>
-<p><tt>The rest of the plugin is very straightforward. It is important
+</p>
+<p>The rest of the plugin is very straightforward. It is important
 to realize that you should do most initialization of the plugin
 in the <code>Initialize()</code> function and not in the constructor. The reason
 for this is that, at construction time, you cannot depend on the entire
@@ -309,11 +309,11 @@ Crystal Space framework being ready. Also when <code>Initialize()</code> is
 called you get a pointer to the object registry which is essential
 for locating other modules and plugins loaded by the Crystal Space
 framework.
-</tt> </p>
+</p>
 <a name="4"></a>
 <h4 class="subsubheading"> Telling <small>SCF</small> About Your Plugin </h4>
 
-<p><tt><small>SCF</small> discovers plugins automatically and dynamically.  It determines which
+<p><small>SCF</small> discovers plugins automatically and dynamically.  It determines which
 plugin modules implement which <small>SCF</small> classes by consulting meta-information
 associated with each plugin.  The meta-information file for your plugin must
 have the same basename as your built plugin module, but with extension
@@ -323,17 +323,17 @@ meta-information file should be named <tt>&lsquo;myplugin.csplugin&rsquo;</tt>. 
 the meta-information may be embedded directly into the plugin module if
 supported by the platform and if embedding is enabled. If not, then then the
 <tt>&lsquo;.csplugin&rsquo;</tt> file will be laid down alongside the built plugin module.
-</tt> </p>
-<p><tt>The meta-information file is a structured <small>XML</small>-format document, and can
+</p>
+<p>The meta-information file is a structured <small>XML</small>-format document, and can
 contain any information relevant to the plugin module; it is not limited only
 to <small>SCF</small> information.  <small>SCF</small> itself expects to find a node named
 <code>&lt;scf&gt;</code>, which contains <small>SCF</small>-related information about the plugin
 module.
-</tt> </p>
-<p><tt>The <tt>&lsquo;myplugin.csplugin&rsquo;</tt> meta-information file for our example plugin
+</p>
+<p>The <tt>&lsquo;myplugin.csplugin&rsquo;</tt> meta-information file for our example plugin
 module might look like this:
-</tt> </p>
-<table><tr><td>&nbsp;</td><td><pre class="example"><tt>&lt;?xml version=&quot;1.0&quot;?&gt;
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">&lt;?xml version=&quot;1.0&quot;?&gt;
 &lt;!-- myplugin.csplugin --&gt;
 &lt;plugin&gt;
   &lt;scf&gt;
@@ -349,9 +349,9 @@ module might look like this:
     &lt;/classes&gt;
   &lt;/scf&gt;
 &lt;/plugin&gt;
-</tt> </pre></td></tr></table>
+</pre></td></tr></table>
 
-<p><tt>Each named <small>SCF</small> class exported by the plugin should be presented in a
+<p>Each named <small>SCF</small> class exported by the plugin should be presented in a
 <code>&lt;class&gt;</code> node within the <code>&lt;classes&gt;</code> group.  Each class has a
 <code>&lt;name&gt;</code>, which is the <small>SCF</small> name of the class; an
 <code>&lt;implementation&gt;</code>, which is the name of the C++ class implementing the
@@ -361,38 +361,38 @@ Any number of classes may appear in the <code>&lt;requires&gt;</code> group.  If
 plugin depends only upon a certain type of class, rather than a specific
 <small>SCF</small> class, then you list only the prefix portion of the desired class
 type, as shown in this example (where we desire any 3D renderer).
-</tt> </p>
+</p>
 <a name="5"></a>
 <h4 class="subsubheading"> Compiling the Plugin </h4>
 
-<p><tt>Depending on the development tools that you use, you should refer to one of the
+<p>Depending on the development tools that you use, you should refer to one of the
 <small>HOWTO</small>'s on the subject of building an external Crystal Space module.
-</tt> </p>
+</p>
 <ul>
 <li>
-<tt><a href="HOWTO-CS-Project.html#0">Creating an External Crystal Space Application</a>
-</tt> </li><li>
-<tt><a href="HOWTO-Creating-External-MSVC-Application.html#0">Creating an External <small>MSVC</small> 7, 7.1, 8 or 9 Application</a>
-</tt> </li><li>
-<tt><a href="HOWTO-Creating-External-Application-Using-KDevelop.html#0">Creating an External Application using KDevelop</a>
-</tt> </li></ul>
+<a href="HOWTO-CS-Project.html#0">Creating an External Crystal Space Application</a>
+</li><li>
+<a href="HOWTO-Creating-External-MSVC-Application.html#0">Creating an External <small>MSVC</small> 7, 7.1, 8 or 9 Application</a>
+</li><li>
+<a href="HOWTO-Creating-External-Application-Using-KDevelop.html#0">Creating an External Application using KDevelop</a>
+</li></ul>
 
 <a name="6"></a>
 <h4 class="subsubheading"> Loading the Plugin in Your Application </h4>
 
-<p><tt>First, include the header defining the <small>API</small> of the plugin:
-</tt> </p>
-<table><tr><td>&nbsp;</td><td><pre class="example"><tt>#include &lt;myapi.h&gt;
-</tt> </pre></td></tr></table>
-<p><tt>Do <em>not</em> include the <tt>&lsquo;myplug.h&rsquo;</tt> header file since it is
+<p>First, include the header defining the <small>API</small> of the plugin:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">#include &lt;myapi.h&gt;
+</pre></td></tr></table>
+<p>Do <em>not</em> include the <tt>&lsquo;myplug.h&rsquo;</tt> header file since it is
 implementation specific and you should not use the implementation of the plugin
 directly. Doing this invalidates the entire reason to use plugins in the first
 place.
-</tt> </p>
-<p><tt>To load the plugin there are a few possibilities. First, you
+</p>
+<p>To load the plugin there are a few possibilities. First, you
 can load the plugin manually using <code>csLoadPlugin</code> like this:
-</tt> </p>
-<table><tr><td>&nbsp;</td><td><pre class="example"><tt>csRef&lt;iPluginManager&gt; plugin_mgr = 
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">csRef&lt;iPluginManager&gt; plugin_mgr = 
   csQueryRegistry&lt;iPluginManager&gt; (object_reg);
 csRef&lt;iMyApi&gt; myapi = csLoadPlugin&lt;iMyApi&gt; (plugin_mgr,
   &quot;crystalspace.mygame.myplugin&quot;);        
@@ -400,16 +400,16 @@ if (myapi.IsValid())
 {
   ...
 }
-</tt> </pre></td></tr></table>
-<p><tt>This will get the plugin manager from the object registry.  This is the module
+</pre></td></tr></table>
+<p>This will get the plugin manager from the object registry.  This is the module
 that is responsible for loading and unloading plugins.  The code then uses the
 plugin manager to load your plugin. Note that this can fail. You should always
 check the returned value to see if it is valid.
-</tt> </p>
-<p><tt>Another way to load the plugin is through <code>RequestPlugins()</code>, which
+</p>
+<p>Another way to load the plugin is through <code>RequestPlugins()</code>, which
 is called at initialization time:
-</tt> </p>
-<table><tr><td>&nbsp;</td><td><pre class="example"><tt>if (!csInitializer::RequestPlugins (object_reg,
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">if (!csInitializer::RequestPlugins (object_reg,
   CS_REQUEST_VFS,
   CS_REQUEST_SOFTWARE3D,
   CS_REQUEST_ENGINE,
@@ -422,60 +422,60 @@ is called at initialization time:
 ...
 
 csRef&lt;iMyApi&gt; myapi = csQueryRegistry&lt;iMyApi&gt; (object_reg);
-</tt> </pre></td></tr></table>
-<p><tt>This way has several advantages.  First, it allows the user to override your
+</pre></td></tr></table>
+<p>This way has several advantages.  First, it allows the user to override your
 plugin at the command line or in the configuration file (if your program has
 one).  In cases where there are multiple implementations for the same <small>API</small>
 this can be an important consideration.  It is by doing this, for example, that
 it is possible to switch between Null and OpenGL renderers with the
 command-line <samp>&lsquo;--video=&rsquo;</samp> option, or via configuration file.
-</tt> </p>
-<p><tt>Secondly it registers the plugin with the object registry so that
+</p>
+<p>Secondly it registers the plugin with the object registry so that
 it is easier to find your module later. This also allows other plugins
 to find your plugin by doing a query on the object registry.
-</tt> </p>
+</p>
 <a name="7"></a>
 <h4 class="subsubheading"> Using the Plugin in Your Application </h4>
 
-<p><tt>After loading the plugin you can use the plugin simply by
+<p>After loading the plugin you can use the plugin simply by
 calling the methods defined in the <small>API</small>:
-</tt> </p>
-<table><tr><td>&nbsp;</td><td><pre class="example"><tt>myapi-&gt;DoSomething (1, csVector3 (2, 3, 4));
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">myapi-&gt;DoSomething (1, csVector3 (2, 3, 4));
 printf (&quot;%d\n&quot;, myapi-&gt;GetSomething ());
-</tt> </pre></td></tr></table>
-<p><tt>This should print out 9.
-</tt> </p>
+</pre></td></tr></table>
+<p>This should print out 9.
+</p>
 <a name="8"></a>
 <h4 class="subsubheading"> Plugins in the Crystal Space Build System </h4>
-<p><tt><a name="plugins_002din_002dcs_002dbuild_002dsystem"></a>
-</tt> </p>
-<p><tt>When writing plugins for a project that uses Crystal Space's Jam-based build
+<p><a name="plugins_002din_002dcs_002dbuild_002dsystem"></a>
+</p>
+<p>When writing plugins for a project that uses Crystal Space's Jam-based build
 system invoking the <code>CS_IMPLEMENT_PLUGIN</code> macro is <em>not</em> needed.
 A source file with an invocation will automatically be provided by the build
 system.
-</tt> </p>
-<p><tt>Neglecting to invoke <code>CS_IMPLEMENT_PLUGIN</code> if needed or wrongly invoking
+</p>
+<p>Neglecting to invoke <code>CS_IMPLEMENT_PLUGIN</code> if needed or wrongly invoking
 it when the build system already does will cause build errors; see the next
 paragraphs.
-</tt> </p>
+</p>
 <a name="9"></a>
 <h4 class="subsubheading"> Troubleshooting </h4>
 
 <ul>
 <li>
-<tt><em>Issue:</em> The symbol <samp>&lsquo;csStaticVarCleanup_local&rsquo;</samp> and/or <samp>&lsquo;main&rsquo;</samp>
+<em>Issue:</em> The symbol <samp>&lsquo;csStaticVarCleanup_local&rsquo;</samp> and/or <samp>&lsquo;main&rsquo;</samp>
 are reported missing upon linking.
-</tt> 
-<p><tt><em>Solution:</em> You need to manually invoke <code>CS_IMPLEMENT_PLUGIN</code> but
+
+<p><em>Solution:</em> You need to manually invoke <code>CS_IMPLEMENT_PLUGIN</code> but
 did not do so. Add an invocation to one source file of the plugin.
-</tt> </p>
+</p>
 </li><li>
-<tt><em>Issue:</em> The symbol <samp>&lsquo;csStaticVarCleanup_local&rsquo;</samp> and/or <samp>&lsquo;main&rsquo;</samp>
+<em>Issue:</em> The symbol <samp>&lsquo;csStaticVarCleanup_local&rsquo;</samp> and/or <samp>&lsquo;main&rsquo;</samp>
 are reported to be defined multiple times upon linking.
-</tt> 
-<p><tt><em>Solution:</em> You manually invoked <code>CS_IMPLEMENT_PLUGIN</code> although this
+
+<p><em>Solution:</em> You manually invoked <code>CS_IMPLEMENT_PLUGIN</code> although this
 was not necessary. Remove all invocations from the source code.
-</tt> </p>
+</p>
 </li></ul>
 
 

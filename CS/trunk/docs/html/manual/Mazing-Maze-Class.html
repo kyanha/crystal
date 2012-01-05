@@ -61,12 +61,12 @@ ul.toc {list-style: none}
 <hr size="1">
 <h4 class="subsubsection"> 4.2.4.5 Maze Class </h4>
 
-<p><tt>The <code>Maze</code> class is responsible for managing the game world. To do that
+<p>The <code>Maze</code> class is responsible for managing the game world. To do that
 it keeps track of a three dimensional grid of sectors. Every sector represents
 a node in the maze (a room). Nodes are connected using portals. Here is the
 class declaration:
-</tt> </p>
-<table><tr><td>&nbsp;</td><td><pre class="example"><tt>class Maze
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">class Maze
 {
 private:
   AppMazing* app;
@@ -113,31 +113,31 @@ public:
   bool CreateLight (const csColor&amp; color,
   	int x, int y, int z);
 };
-</tt> </pre></td></tr></table>
-<p><tt>The important data structures here are:
-</tt> </p>
+</pre></td></tr></table>
+<p>The important data structures here are:
+</p>
 <ul>
 <li>
-<tt><samp>&lsquo;rooms&rsquo;</samp>: this is a three dimensional arrays of pointers to <code>iSector</code>. Every
+<samp>&lsquo;rooms&rsquo;</samp>: this is a three dimensional arrays of pointers to <code>iSector</code>. Every
 sector is a node of the three dimensional maze.
-</tt> </li><li>
-<tt><samp>&lsquo;connections&rsquo;</samp>: this is a three dimensional array of arrays of connections.
+</li><li>
+<samp>&lsquo;connections&rsquo;</samp>: this is a three dimensional array of arrays of connections.
 Basically this means that for every node in the maze we keep an array (represented
 using a dynamic <code>csArray</code>) that holds coordinates of other nodes that are
 connected to this one.
-</tt> </li><li>
-<tt><samp>&lsquo;occupied&rsquo;</samp>: to make things simple we avoid having more then one adversary
+</li><li>
+<samp>&lsquo;occupied&rsquo;</samp>: to make things simple we avoid having more then one adversary
 in a single node. This three dimensional array tells us if a certain node is
 occupied or not.
-</tt> </li></ul>
+</li></ul>
 
-<p><tt>The most important setup function in this class is <code>CreateGeometry()</code>. That
+<p>The most important setup function in this class is <code>CreateGeometry()</code>. That
 one will do the actual creation of the maze. It is called from within the main
 applications <code>SetupGame()</code> method.
-</tt> </p>
-<p><tt>I will show here the code of the <code>Maze</code> class in parts.
-</tt> </p>
-<table><tr><td>&nbsp;</td><td><pre class="example"><tt>Maze::Maze (AppMazing* app)
+</p>
+<p>I will show here the code of the <code>Maze</code> class in parts.
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">Maze::Maze (AppMazing* app)
 {
   Maze::app = app;
   int x, y, z;
@@ -171,21 +171,21 @@ bool Maze::IsSpaceFree (const RoomCoordinate&amp; rc) const
   CS_ASSERT (rc.IsValid ());
   return !occupied[rc.x][rc.y][rc.z];
 }
-</tt> </pre></td></tr></table>
-<p><tt>First there is the constructor which simply initializes the <samp>&lsquo;occupied&rsquo;</samp>
+</pre></td></tr></table>
+<p>First there is the constructor which simply initializes the <samp>&lsquo;occupied&rsquo;</samp>
 table so that all nodes are free. <code>MakeConnection()</code> will make a connection
 between two nodes. It is called during the creation of the world. The other
 functions are for managing the occupied space used by adversaries.
-</tt> </p>
-<p><tt>The use of the <samp>&lsquo;CS_ASSERT&rsquo;</samp> macro is interesting. This macro will evalulate
+</p>
+<p>The use of the <samp>&lsquo;CS_ASSERT&rsquo;</samp> macro is interesting. This macro will evalulate
 the expression and cause the program to abort (even print out a callstack)
 at runtime when the expression is not true. That means that you can use this to
 validate that things are as they should be. This macro only operates in debug mode.
 If your program is compiled in optimize/release mode it will do nothing. So feel
 free to use it as much as you can. It may help find bugs when the program is
 compiled in debug mode.
-</tt> </p>
-<table><tr><td>&nbsp;</td><td><pre class="example"><tt>bool Maze::CreateSector (int x, int y, int z)
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">bool Maze::CreateSector (int x, int y, int z)
 {
   CS_ASSERT (RoomCoordinate::IsValid (x, y, z));
   char sector_name[100];
@@ -388,21 +388,21 @@ bool Maze::CreateGeometry ()
 
   return true;
 }
-</tt> </pre></td></tr></table>
-<p><tt>These functions create the actual geometry of the world. The main function
+</pre></td></tr></table>
+<p>These functions create the actual geometry of the world. The main function
 here is <code>CreateGeometry()</code>. This function will first load the wall texture
 and then it will create all the sectors for the maze. After that it will call
 <code>CreateRoom()</code> to create one of the nodes in the maze. The final parameter
 of <code>CreateRoom()</code> is a string describing the connections to neighbour
 nodes. Finally this function will also create a few lights using the
 <code>CreateLight()</code> method.
-</tt> </p>
-<p><tt>The <code>CreateRoom()</code> function will create one genmesh mesh (see section <a href="MeshObject-Genmesh.html#0">Genmesh Mesh Object</a>)
+</p>
+<p>The <code>CreateRoom()</code> function will create one genmesh mesh (see section <a href="MeshObject-Genmesh.html#0">Genmesh Mesh Object</a>)
 for the solid walls and then it will use <code>iEngine::CreatePortal()</code> to create
 the individual portals to neighbour nodes wherever there needs to be a connection.
 This is done in the <code>CreateWallOrPortal()</code> function. This function will
 either add a wall polygon to the wall genmesh or else it will create a portal.
-</tt> </p>
+</p>
 <hr size="1">
 <table cellpadding="1" cellspacing="1" border="0">
 <tr><td valign="middle" align="left">[<a href="Mazing-RoomCoordinate-Class.html#0" title="Previous section in reading order"> &lt; </a>]</td>

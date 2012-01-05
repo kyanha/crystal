@@ -61,77 +61,77 @@ ul.toc {list-style: none}
 <hr size="1">
 <h4 class="subsubsection"> 4.3.1.11 Advanced Techniques </h4>
 
-<p><tt>The <small>SCF</small> library implements some things that you will need to know about
+<p>The <small>SCF</small> library implements some things that you will need to know about
 to use some advanced techniques.  They are described in detail, below.
-</tt> </p>
+</p>
 <a name="1"></a>
 <h4 class="subsubheading"> Dynamic Class Registration </h4>
 
-<p><tt>You can register and deregister <small>SCF</small> classes at run time.  There are times
+<p>You can register and deregister <small>SCF</small> classes at run time.  There are times
 when you would like to provide a named <small>SCF</small> class in your main application,
 rather than in a plugin module.  In this case, you will need to manually
 register the class with <small>SCF</small> since it will not be discovered by the
 automatic scan for plugins.  To do this, the following method is provided:
-</tt> </p>
-<table><tr><td>&nbsp;</td><td><pre class="example"><tt>bool iSCF::RegisterClass (
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">bool iSCF::RegisterClass (
   scfFactoryFunc,
   char const* ClassName,
   char const* Description,
   char const* Dependencies,
   char const* context);
-</tt> </pre></td></tr></table>
-<p><tt>Rather than having to remember to call this method from your code, you can
+</pre></td></tr></table>
+<p>Rather than having to remember to call this method from your code, you can
 automate the registration by instead using the
 <code>SCF_REGISTER_STATIC_CLASS()</code> macro, which takes the following arguments:
-</tt> </p>
-<table><tr><td>&nbsp;</td><td><pre class="example"><tt>SCF_REGISTER_STATIC_CLASS(
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">SCF_REGISTER_STATIC_CLASS(
   C++Class,
   &quot;scf.class.name&quot;,
   &quot;description&quot;,
   &quot;comma-separated dependency list&quot; or NULL)
-</tt> </pre></td></tr></table>
+</pre></td></tr></table>
 
-<p><tt>This macro should be used at the top-level of the source file, outside of
+<p>This macro should be used at the top-level of the source file, outside of
 any function.
-</tt> </p>
-<p><tt>If a class resides in a plugin module which was not discovered by the startup
+</p>
+<p>If a class resides in a plugin module which was not discovered by the startup
 scan, and if you do not elect to have <small>SCF</small> scan for the plugin with
 <code>iSCF::ScanPluginsPath()</code> or an additional call to <code>scfInitialize()</code>,
 then you can manually tell <small>SCF</small> all about the class with the following
 method:
-</tt> </p>
-<table><tr><td>&nbsp;</td><td><pre class="example"><tt>bool iSCF:RegisterClass (
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">bool iSCF:RegisterClass (
   char const* ClassName,
   char const* PluginPath,
   char const* FactoryClass,
   char const* Description,
   char const* Dependencies,
   char const* context);
-</tt> </pre></td></tr></table>
-<p><tt>You can deregister a registered class with the following function:
-</tt> </p>
-<table><tr><td>&nbsp;</td><td><pre class="example"><tt>bool iSCF::UnregisterClass(char const* ClassIName)
-</tt> </pre></td></tr></table>
+</pre></td></tr></table>
+<p>You can deregister a registered class with the following function:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">bool iSCF::UnregisterClass(char const* ClassIName)
+</pre></td></tr></table>
 <a name="2"></a>
 <h4 class="subsubheading"> Non-Registered Classes </h4>
 
-<p><tt>Often, you do not need or want to register a class with the <small>SCF</small> kernel.
+<p>Often, you do not need or want to register a class with the <small>SCF</small> kernel.
 That is, you create your objects manually, using <samp>&lsquo;new&rsquo;</samp> or some other
 method and return them to callers of your functions as pure <small>SCF</small>
 interfaces.  This is a perfectly valid use of <small>SCF</small> classes, and is often
 employed.  It is common, for instance, for a named, published <small>SCF</small> class to
 vend unnamed classes to callers of its methods.  These classes are often helper
 classes.  In this case the unnamed object is not a part of the class registry.
-</tt> </p>
+</p>
 <a name="3"></a>
 <h4 class="subsubheading"> Non-Parented Classes </h4>
 
-<p><tt>Often, classes do not need to be parented.  This is frequently true of classes
+<p>Often, classes do not need to be parented.  This is frequently true of classes
 which are not named and part of the class registry, as noted above.  In this
 case your object is not a part of the class tree (see above) and thus does not
 have a parent.  To implement such a class, you simply don't pass a parent
 to <code>scfImplementationType()</code>.
-</tt> </p>
+</p>
 <hr size="1">
 <table cellpadding="1" cellspacing="1" border="0">
 <tr><td valign="middle" align="left">[<a href="SCF-Example.html#0" title="Previous section in reading order"> &lt; </a>]</td>
