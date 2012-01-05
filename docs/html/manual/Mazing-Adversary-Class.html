@@ -61,10 +61,10 @@ ul.toc {list-style: none}
 <hr size="1">
 <h4 class="subsubsection"> 4.2.4.7 Adversary Class </h4>
 
-<p><tt>The <code>Adversary</code> class represents an enemy. For every enemy in the game
+<p>The <code>Adversary</code> class represents an enemy. For every enemy in the game
 we will have an adversary.
-</tt> </p>
-<table><tr><td>&nbsp;</td><td><pre class="example"><tt>class Adversary : public scfImplementationExt1&lt;Adversary,
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">class Adversary : public scfImplementationExt1&lt;Adversary,
 	csObject, scfFakeInterface&lt;Adversary&gt; &gt;
 {
 private:
@@ -86,8 +86,8 @@ public:
 
   iMeshWrapper* GetMesh () const { return mesh; }
 };
-</tt> </pre></td></tr></table>
-<p><tt>This class declaration may look a bit strange. The reason for this
+</pre></td></tr></table>
+<p>This class declaration may look a bit strange. The reason for this
 is that we need to be able to find the correct <code>Adversary</code> instance
 starting from a Crystal Space mesh object. To do that Crystal Space provides
 the <code>csObject</code> system. With this system one can relate objects to each
@@ -107,17 +107,17 @@ implement <code>iObject</code>) and extend from <code>csObject</code> as well. F
 we add a <code>scfFakeInterface&lt;Adversary&gt;</code> so that we can actually find out
 if an <code>iObject</code> instance is an adversary. How to do this will be shown
 later.
-</tt> </p>
-<p><tt>In the class declaration itself we also need to specify a version of
+</p>
+<p>In the class declaration itself we also need to specify a version of
 this class using <code>SCF_INTERFACE</code>. For our simple case this is actually
 not very useful but in general these versions can allow someone to be sure
 it gets the right version of the interface.
-</tt> </p>
-<p><tt>The main function in this class is the <code>ThinkAndMove()</code> function. This
+</p>
+<p>The main function in this class is the <code>ThinkAndMove()</code> function. This
 function takes the elapsed seconds (since last frame) as a parameter and
 based on that it will calculate how and where to move the adversary.
-</tt> </p>
-<table><tr><td>&nbsp;</td><td><pre class="example"><tt>Adversary::Adversary (AppMazing* app,
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">Adversary::Adversary (AppMazing* app,
 	iMeshWrapper* mesh, const RoomCoordinate&amp; rc) :
 	scfImplementationType (this)
 {
@@ -173,21 +173,21 @@ void Adversary::ThinkAndMove (float elapsed_seconds)
     movable-&gt;UpdateMove ();
   }
 }
-</tt> </pre></td></tr></table>
-<p><tt>An adversary can be in two states: either it is moving or else it is not
+</pre></td></tr></table>
+<p>An adversary can be in two states: either it is moving or else it is not
 moving. This state is set in the <samp>&lsquo;moving&rsquo;</samp> boolean variable. If the
 adversary is not moving the <code>ThinkAndMove()</code> will attempt a random
 connection from the current node it is occupying. If the destination node
 of that connection is free then it will initiate a move to that location
 and set <samp>&lsquo;moving&rsquo;</samp> to true. Otherwise it will do nothing (in which case
 next frame the test happens again).
-</tt> </p>
-<p><tt>If the adversary is moving then <code>ThinkAndMove()</code> will calculate
+</p>
+<p>If the adversary is moving then <code>ThinkAndMove()</code> will calculate
 (based on how much time has elapsed since previous frame) how far the
 adversary should move between the original node and the new destination node.
 If it arrives at the destination the <code>moving</code> flag is set to false
 again.
-</tt> </p>
+</p>
 <hr size="1">
 <table cellpadding="1" cellspacing="1" border="0">
 <tr><td valign="middle" align="left">[<a href="Mazing-Player-Class.html#0" title="Previous section in reading order"> &lt; </a>]</td>

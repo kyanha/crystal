@@ -62,11 +62,11 @@ ul.toc {list-style: none}
 <h3 class="subsection"> 4.3.2 Correctly Using Smart Pointers </h3>
 
 
-<p><tt><em>Written by Jorrit Tyberghein,
+<p><em>Written by Jorrit Tyberghein,
 <a href="mailto:jorrit.tyberghein@gmail.com">jorrit.tyberghein@gmail.com</a>.  Updated and expanded
 significantly by Eric Sunshine, <a href="mailto:sunshine@sunshineco.com">sunshine@sunshineco.com</a>.</em>
-</tt> </p>
-<p><tt>Smart pointers were introduced in Crystal Space stable version 0.96
+</p>
+<p>Smart pointers were introduced in Crystal Space stable version 0.96
 (developmental version 0.95).  The purpose of smart pointers is to make it
 easier to manage reference counting.  Instead of manually calling
 <code>IncRef()</code> and <code>DecRef()</code> on an object, you use a smart pointer
@@ -75,36 +75,36 @@ easier to manage reference counting.  Instead of manually calling
 <code>IncRef()</code> and <code>DecRef()</code> methods, such as <samp>&lsquo;csRefCount&rsquo;</samp>, as well
 as all <small>SCF</small> classes.  The <code>csRef&lt;&gt;</code> template is defined in
 <tt>&lsquo;CS/include/csutil/ref.h&rsquo;</tt>.
-</tt> </p>
+</p>
 <a name="1"></a>
 <h4 class="subsubheading"> How to Use Smart Pointers </h4>
 
-<p><tt>This is easy. For example, often you want to keep track of a few
+<p>This is easy. For example, often you want to keep track of a few
 common objects in your main class (such as the pointer to the engine and
 so on). To do this you just declare in your main class:
-</tt> </p>
-<table><tr><td>&nbsp;</td><td><pre class="example"><tt>class MyClass
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">class MyClass
 {
   csRef&lt;iEngine&gt; engine;
   ...
 }
-</tt> </pre></td></tr></table>
-<p><tt>Smart pointers do not need to be initialized, so there is no need to write
+</pre></td></tr></table>
+<p>Smart pointers do not need to be initialized, so there is no need to write
 <samp>&lsquo;engine = 0&rsquo;</samp> in the constructor of your class.  There is also no need to
 clean them up.  The reference to the engine, in the example, will be cleaned up
 automatically when the instance of <code>MyClass</code> is destroyed.
-</tt> </p>
-<p><tt>Here is an example of assigning a valid object to the <samp>&lsquo;engine&rsquo;</samp> smart
+</p>
+<p>Here is an example of assigning a valid object to the <samp>&lsquo;engine&rsquo;</samp> smart
 pointer and then utilizing that pointer (assuming the engine plugin is loaded):
-</tt> </p>
-<table><tr><td>&nbsp;</td><td><pre class="example"><tt>iObjectRegistry* object_reg = ...;
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">iObjectRegistry* object_reg = ...;
 engine = scfQueryInterface&lt;iEngine&gt; (object_reg);
 engine-&gt;CreateSector ();
-</tt> </pre></td></tr></table>
-<p><tt>That is all there is to it.  For contrast, here is an example of how the same
+</pre></td></tr></table>
+<p>That is all there is to it.  For contrast, here is an example of how the same
 operations would have been performed before the introduction of smart pointers:
-</tt> </p>
-<table><tr><td>&nbsp;</td><td><pre class="example"><tt>class MyClass
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">class MyClass
 {
   iEngine* engine;
   ...
@@ -125,51 +125,51 @@ MyClass::~MyClass ()
 engine = csQueryRegistry&lt;iEngine&gt; (object_reg);
 engine-&gt;CreateSector (); ...
 ...
-</tt> </pre></td></tr></table>
-<p><tt>The advantage might not seem huge but, in general, it is a <em>lot</em> easier to
+</pre></td></tr></table>
+<p>The advantage might not seem huge but, in general, it is a <em>lot</em> easier to
 use smart pointers than to manually manipulate reference counts.  The nice
 thing about smart pointers is that you can use them exactly like you would use
 a normal pointer (i.e. you can do things like <code>engine-&gt;CreateSector()</code>).
-</tt> </p>
-<p><tt>Here is another example illustrating smart pointers:
-</tt> </p>
-<table><tr><td>&nbsp;</td><td><pre class="example"><tt>csRef&lt;iMeshWrapper&gt; sprite(engine-&gt;CreateMeshWrapper(...));
+</p>
+<p>Here is another example illustrating smart pointers:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">csRef&lt;iMeshWrapper&gt; sprite(engine-&gt;CreateMeshWrapper(...));
 csRef&lt;iSprite3DState&gt; state (scfQueryInterface&lt;iSprite3DState&gt; (
     sprite-&gt;GetMeshObject ()));
 state-&gt;SetAction (&quot;default&quot;);
-</tt> </pre></td></tr></table>
+</pre></td></tr></table>
 <a name="2"></a>
 <h4 class="subsubheading"> Transitioning between Smart Pointers and Normal Pointers </h4>
 
-<p><tt>Smart pointers can be assigned to normal pointers and vice versa. However, you
+<p>Smart pointers can be assigned to normal pointers and vice versa. However, you
 need to be aware of the interactions with reference counting.
-</tt> </p>
-<p><tt>Assigning a smart pointer to a normal pointer <em>does not</em> change the 
+</p>
+<p>Assigning a smart pointer to a normal pointer <em>does not</em> change the 
 reference count of the object.  This can be beneficial as the reference 
 counting overhead is avoided.  It can also be dangerous, as the normal pointer 
 will become dangling when the referenced object is destroyed!  This means that
 storing in a normal pointer is suitable for short-term storage, when it's 
 certain that the referenced object won't be released durign the lifetime of
 the normal pointer.  If that's not guaranteed use a <code>csRef&lt;&gt;</code> instead.
-</tt> </p>
-<p><tt>Assigning a normal pointer to a smart pointer <em>does</em> change the reference
+</p>
+<p>Assigning a normal pointer to a smart pointer <em>does</em> change the reference
 count: ownership is taken, ie the reference count is increased.  This can 
 cause a leaked reference in certain circumstances.  One notable instance is 
 the assignment of an object just allocated with <samp>&lsquo;new&rsquo;</samp> to a smart pointer:
 the object will start with a reference count of 1, but the assignment to the
 smart pointer will also increase the reference count, which errorneously 
-becomes 2. The last ``phantom'' reference will never be release, causing a 
+becomes 2. The last &ldquo;phantom&rdquo; reference will never be release, causing a 
 leak.
-</tt> </p>
-<p><tt>The recommend way to deal with that is to <em>never</em> assign an object 
+</p>
+<p>The recommend way to deal with that is to <em>never</em> assign an object 
 allocated with <samp>&lsquo;new&rsquo;</samp> to a smart pointer directly.  Instead use it's
 <code>AttachNew()</code> method which will take care of the proper reference
 counting.
-</tt> </p>
+</p>
 <a name="3"></a>
 <h4 class="subsubheading"> When to Use csRef&lt;&gt;? </h4>
 
-<p><tt>Use <code>csRef&lt;&gt;</code> wherever you need to own a reference to a reference-counted
+<p>Use <code>csRef&lt;&gt;</code> wherever you need to own a reference to a reference-counted
 object.  The above examples illustrate a few cases in which <code>csRef&lt;&gt;</code> is
 warranted.  If you do not need to own a reference to a reference-counted
 object, and you know positively that the object will exist for the duration of
@@ -178,13 +178,13 @@ However, for complete safety, using <code>csRef&lt;&gt;</code> will ensure that 
 reference-counted object will remain valid for as long as the <code>csRef&lt;&gt;</code>
 remains alive.  For this reason, it is often simplest to utilize <code>csRef&lt;&gt;</code>
 when dealing with reference-counted objects, rather than plain pointers.
-</tt> </p>
-<p><tt><code>csRef&lt;&gt;</code> is also a very handy and 100% safe mechanism for transferring
+</p>
+<p><code>csRef&lt;&gt;</code> is also a very handy and 100% safe mechanism for transferring
 object ownership from a function back to its caller.  This is useful in cases
 when the caller of a function wants to take ownership of a brand new object
 created by the function on the caller's behalf.  For example:
-</tt> </p>
-<table><tr><td>&nbsp;</td><td><pre class="example"><tt>csRef&lt;iFoo&gt; MyFunction ()
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">csRef&lt;iFoo&gt; MyFunction ()
 {
   csRef&lt;iFoo&gt; foo;
   foo.AttachNew(new Foo(...));
@@ -192,22 +192,22 @@ created by the function on the caller's behalf.  For example:
   ...
   return foo;
 }
-</tt> </pre></td></tr></table>
-<p><tt>The reason that this is 100% safe is that the newly created object is correctly
+</pre></td></tr></table>
+<p>The reason that this is 100% safe is that the newly created object is correctly
 destroyed (not leaked) even if the caller of <code>MyFunction()</code> forgets or
 neglects to assign it to a variable.
-</tt> </p>
+</p>
 <a name="4"></a>
 <h4 class="subsubheading"> When to Use csWeakRef&lt;&gt;? </h4>
 
-<p><tt>Another smart pointer class is <code>csWeakRef&lt;&gt;</code>.  The significant difference
-to <code>csRef&lt;&gt;</code> is that a ``weak'' reference is <em>not</em> owning.  However,
-unlike raw pointers, <code>csWeakRef&lt;&gt;</code> prevents the risk of a ``dangling
-pointer'' (a pointer referencing a freed, thus invalid, object): when the
+<p>Another smart pointer class is <code>csWeakRef&lt;&gt;</code>.  The significant difference
+to <code>csRef&lt;&gt;</code> is that a &ldquo;weak&rdquo; reference is <em>not</em> owning.  However,
+unlike raw pointers, <code>csWeakRef&lt;&gt;</code> prevents the risk of a &ldquo;dangling
+pointer&rdquo; (a pointer referencing a freed, thus invalid, object): when the
 referenced object gets destroyed, all weak references to it are automatically
 set to null.
-</tt> </p>
-<p><tt>A common application of weak references is the prevention of circular 
+</p>
+<p>A common application of weak references is the prevention of circular 
 references.  When two objects reference each other with <code>csRef&lt;&gt;</code>s 
 neither will be destructed as long as the references are held: Destruction 
 happens when the reference count of an object drops to zero -
@@ -216,19 +216,19 @@ count will not be decreased until object <samp>&lsquo;B&rsquo;</samp> is destruc
 <samp>&lsquo;B&rsquo;</samp> in turn is owned by object <samp>&lsquo;A&rsquo;</samp>, and that reference is not 
 released until object <samp>&lsquo;A&rsquo;</samp> is destructed.  This circular dependency leads
 to neither objects being released automatically.
-</tt> </p>
-<p><tt>To prevent this scenario one reference can be made a <code>csWeakRef&lt;&gt;</code> 
+</p>
+<p>To prevent this scenario one reference can be made a <code>csWeakRef&lt;&gt;</code> 
 instead.  If object <samp>&lsquo;B&rsquo;</samp> holds only a weak reference to object <samp>&lsquo;A&rsquo;</samp>, 
 this reference will become null when <samp>&lsquo;A&rsquo;</samp> is destroyed, and <samp>&lsquo;B&rsquo;</samp> may 
 also be destroyed if <samp>&lsquo;A&rsquo;</samp> held the last reference to it.
-</tt> </p>
-<p><tt>As all weak references to an object are automatically set to null when the
+</p>
+<p>As all weak references to an object are automatically set to null when the
 object gets destroyed care must be taken when accessing a weak referenced
 object: the reference may become null at any time, after all.  In practice
 that means that before dereferencing a weak reference you should check whether
 it still points to a valid object (with the <code>IsValid()</code> method or a
 comparison with <code>0</code>):
-</tt> </p><table><tr><td>&nbsp;</td><td><pre class="example"><tt>class MyClass
+</p><table><tr><td>&nbsp;</td><td><pre class="example">class MyClass
 {
   csWeakRef&lt;iFoo&gt; foo;
   ...
@@ -244,11 +244,11 @@ void MyClass::MyFunction ()
     foo-&gt;FooMethod(...);
   ...
 }
-</tt> </pre></td></tr></table>
+</pre></td></tr></table>
 <a name="5"></a>
 <h4 class="subsubheading"> What About csPtr&lt;&gt;? </h4>
 
-<p><tt><code>csPtr&lt;&gt;</code> is a companion class.  Originally, it aided in the transition
+<p><code>csPtr&lt;&gt;</code> is a companion class.  Originally, it aided in the transition
 from the old (pre-smart pointer) <small>API</small> to the new one.  The idea was that
 all functions that used to return a pointer, upon which the caller had to
 invoke <code>DecRef()</code>, now return a <code>csPtr&lt;&gt;</code>.  These days,
@@ -256,15 +256,15 @@ invoke <code>DecRef()</code>, now return a <code>csPtr&lt;&gt;</code>.  These da
 ownership from a function to its caller, and as an ugly shortcut when assigning
 a new object to a <code>csRef&lt;&gt;</code> (instead of the more obvious
 <code>csRef&lt;&gt;::AttachNew()</code> method).
-</tt> </p>
-<p><tt><code>csPtr&lt;&gt;</code> represents a single, owned, one-time-transferable reference to
+</p>
+<p><code>csPtr&lt;&gt;</code> represents a single, owned, one-time-transferable reference to
 an object and should be used only as the return value of a function, or when
 creating a brand new object which is assigned directly to a <code>csRef&lt;&gt;</code>.
 <code>csPtr&lt;&gt;</code> never invokes <code>IncRef()</code> or <code>DecRef()</code>.  It simply
 stores the pointer.  <code>csPtr&lt;&gt;</code> is very specialized, and exists solely as a
 mechanism for transferring an existing reference into a <code>csRef&lt;&gt;</code>.
-</tt> </p>
-<p><tt>Although it is safest and cleanest for a function to transfer ownership of a
+</p>
+<p>Although it is safest and cleanest for a function to transfer ownership of a
 new object back to its caller by returning a <code>csRef&lt;&gt;</code>, it is also
 possible to utilize <code>csPtr&lt;&gt;</code> for this purpose.  This can be done as a
 micro-optimization in order to avoid the very minor overhead of the extra
@@ -274,11 +274,11 @@ function.  <em>Note</em> carefully, however, that you should never return a
 ignore the returned value since that would result in a resource leak.
 Returning a <code>csRef&lt;&gt;</code> ensures that the returned object can never be
 leaked, even if the caller neglects to assign it to a variable.
-</tt> </p>
-<p><tt>There is only one valid way to use the result of a function which returns a
+</p>
+<p>There is only one valid way to use the result of a function which returns a
 <code>csPtr&lt;&gt;</code>: assign it to a <code>csRef&lt;&gt;</code>.  For example:
-</tt> </p>
-<table><tr><td>&nbsp;</td><td><pre class="example"><tt>// An example interface and method.
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">// An example interface and method.
 struct iEngine
 {
   virtual csPtr&lt;iLight&gt; CreateLight (...) = 0;
@@ -293,70 +293,70 @@ csRef&lt;iLight&gt; light = engine-&gt;CreateLight (...);
 csRef&lt;iLight&gt; light;
 ...
 light = engine-&gt;CreateLight (...);
-</tt> </pre></td></tr></table>
-<p><tt>When a <code>csPtr&lt;&gt;</code> is assigned to a <code>csRef&lt;&gt;</code>, the reference owned by
+</pre></td></tr></table>
+<p>When a <code>csPtr&lt;&gt;</code> is assigned to a <code>csRef&lt;&gt;</code>, the reference owned by
 the <code>csPtr&lt;&gt;</code> is transferred to the <code>csRef&lt;&gt;</code> without an additional
 <code>IncRef()</code>; that is, <code>csRef&lt;&gt;</code> inherits, steals, or hijacks the
 reference owned by the <code>csPtr&lt;&gt;</code>.
-</tt> </p>
-<p><tt>To make it easier for functions to actually return a <code>csPtr&lt;&gt;</code> even though
+</p>
+<p>To make it easier for functions to actually return a <code>csPtr&lt;&gt;</code> even though
 they are working internally with a <code>csRef&lt;&gt;</code> there is also an
 <em>explicit</em> conversion from <code>csRef&lt;&gt;</code> to <code>csPtr&lt;&gt;</code>; which means
 that a <code>csPtr&lt;&gt;</code> can be constructed from a <code>csRef&lt;&gt;</code> if the
 <code>csPtr&lt;&gt;</code> constructor is called explicitly with a <code>csRef&lt;&gt;</code> as its
 sole argument.  This means that the following code is valid:
-</tt> </p>
-<table><tr><td>&nbsp;</td><td><pre class="example"><tt>csPtr&lt;iFoo&gt; MyFunction ()
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">csPtr&lt;iFoo&gt; MyFunction ()
 {
   csRef&lt;iFoo&gt; foo = ...;
   ...
   return csPtr&lt;iFoo&gt; (foo);
 }
-</tt> </pre></td></tr></table>
-<p><tt>What happens, in this case, is that the <code>csPtr&lt;&gt;</code> constructor which
+</pre></td></tr></table>
+<p>What happens, in this case, is that the <code>csPtr&lt;&gt;</code> constructor which
 accepts a <code>csRef&lt;&gt;</code> will call <code>IncRef()</code> on the object.  This is
 necessary because when the <code>csRef&lt;&gt;</code> inside <code>MyFunction()</code> goes out
 of scope it will call <code>DecRef()</code> automatically; potentially destroying the
 object.
-</tt> </p>
-<p><tt>The following usage, however, is incorrect:
-</tt> </p>
-<table><tr><td>&nbsp;</td><td><pre class="example"><tt>iFoo* MyFunction ()
+</p>
+<p>The following usage, however, is incorrect:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">iFoo* MyFunction ()
 {
   csRef&lt;iFoo&gt; foo = ...;
   ...
   return foo;
 }
-</tt> </pre></td></tr></table>
-<p><tt>This is incorrect because here nothing calls <code>IncRef()</code> on the returned
+</pre></td></tr></table>
+<p>This is incorrect because here nothing calls <code>IncRef()</code> on the returned
 pointer, yet the <code>csRef&lt;&gt;</code> will still call <code>DecRef()</code> upon
 destruction, which means, at best, the function is returning ownership of an
 object even though it does not hold ownership, and, at worst, it is potentially
 returning a destroyed object.
-</tt> </p>
-<p><tt>As noted above, the transfer of object ownership
+</p>
+<p>As noted above, the transfer of object ownership
 to the caller of a function should almost always be handled by returning a
 <code>csRef&lt;&gt;</code> or a <code>csPtr&lt;&gt;</code> rather than a bare <code>iFoo*</code>.  However,
 if you really must return a normal pointer, then you have to ensure that you
 actually own a reference which you can return to the caller.  Here is how the
 above example can be re-written so that it works correctly:
-</tt> </p>
-<table><tr><td>&nbsp;</td><td><pre class="example"><tt>iFoo* MyFunction ()
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">iFoo* MyFunction ()
 {
   csRef&lt;iFoo&gt; foo = ...;
   ...
   foo-&gt;IncRef();
   return foo;
 }
-</tt> </pre></td></tr></table>
-<p><tt>If you prefer obscurity and brevity over clarity, you can also use
+</pre></td></tr></table>
+<p>If you prefer obscurity and brevity over clarity, you can also use
 <code>csPtr&lt;&gt;</code> as a shortcut, in place of <code>csRef&lt;&gt;::AttachNew()</code>, when
 assigning a newly allocated object to a <code>csRef&lt;&gt;</code>.  The following idiom
 ensures that the reference count of the new object is correctly maintained.
-</tt> </p>
-<table><tr><td>&nbsp;</td><td><pre class="example"><tt>csRef&lt;iView&gt; view = csPtr&lt;iView&gt; (new csView (...));
-</tt> </pre></td></tr></table>
-<p><tt>This works
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">csRef&lt;iView&gt; view = csPtr&lt;iView&gt; (new csView (...));
+</pre></td></tr></table>
+<p>This works
 correctly because the new object (<samp>&lsquo;new csView&rsquo;</samp>) already automatically has
 a reference-count of 1 at construction time.  By encapsulating the new object
 pointer in a <code>csPtr&lt;&gt;</code>, <code>csRef&lt;&gt;</code> is instructed to <em>not</em> invoke
@@ -366,23 +366,23 @@ is incorrect and will result in a resource leak since the object's
 reference-count will be 2, rather than one; one reference from the <samp>&lsquo;new&rsquo;</samp>
 operation, and one from the <code>IncRef()</code> invocation performed by the
 <code>csRef&lt;&gt;</code>.
-</tt> </p>
-<table><tr><td>&nbsp;</td><td><pre class="example"><tt>// Do not do this! It will cause a resource leak.
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">// Do not do this! It will cause a resource leak.
 csRef&lt;iView&gt; view = new csView (...);
-</tt> </pre></td></tr></table>
-<p><tt><em>WARNING</em>: Only use <code>csPtr&lt;&gt;</code> in the situations described above!
+</pre></td></tr></table>
+<p><em>WARNING</em>: Only use <code>csPtr&lt;&gt;</code> in the situations described above!
 <em>Never</em> use a <code>csPtr&lt;&gt;</code> to store an object.  <em>Never</em> pass
 <code>csPtr&lt;&gt;</code> instances as arguments to other functions.
-</tt> </p>
+</p>
 <a name="6"></a>
 <h4 class="subsubheading"> What to do With a Function Return Value? </h4>
 
-<p><tt>In the Crystal Space <small>API</small> there are three possible modes by which
+<p>In the Crystal Space <small>API</small> there are three possible modes by which
 reference-counted object pointers are returned:
-</tt> </p>
+</p>
 <ul>
 <li>
-<tt>The function returns a normal pointer.  This mode is used when the function is
+The function returns a normal pointer.  This mode is used when the function is
 simply returning a pointer to an existing object; and moreover an object to
 which the function is <em>not</em> transferring ownership to the caller.  In this
 case you can assign the return value to a normal pointer or to a
@@ -390,9 +390,9 @@ case you can assign the return value to a normal pointer or to a
 will not own a reference to the returned object.  If you assign it to a
 <code>csRef&lt;&gt;</code>, then the <code>csRef&lt;&gt;</code> will increment the reference count at
 assignment time, and decrement it again when the <code>csRef&lt;&gt;</code> destroyed.
-</tt> 
+
 </li><li>
-<tt>The function returns a <code>csRef&lt;&gt;</code>.  In this case the function is
+The function returns a <code>csRef&lt;&gt;</code>.  In this case the function is
 <em>requesting</em> that you take ownership of the returned object because it
 (the function) will be giving up ownership.  By taking ownership, you ensure
 that the object does not get destroyed prematurely.  You can assign the
@@ -407,9 +407,9 @@ cause destruction of the object.  Finally, it is safe to ignore the return
 value from a function returning a <code>csRef&lt;&gt;</code> since the <code>csRef&lt;&gt;</code> will
 ensure that the owned reference is properly cleaned up even if you neglect to
 assign it to a variable or use it directly.
-</tt> 
+
 </li><li>
-<tt>The function returns a <code>csPtr&lt;&gt;</code>.  In this case the function is
+The function returns a <code>csPtr&lt;&gt;</code>.  In this case the function is
 <em>demanding</em> that you take ownership of the returned object because it (the
 function) will be giving up ownership.  You must assign the returned
 <code>csPtr&lt;&gt;</code> to a <code>csRef&lt;&gt;</code> in order to utilize it.  The <code>csRef&lt;&gt;</code>
@@ -418,12 +418,12 @@ to which the <code>csPtr&lt;&gt;</code> was assigned, is finally destroyed, the 
 count will be decremented properly.  It is <em>never</em> safe to ignore the
 return value from a function returning a <code>csPtr&lt;&gt;</code> since doing so would
 result in a resource leak.
-</tt> </li></ul>
+</li></ul>
 
 <a name="7"></a>
 <h4 class="subsubheading"> What to do With a Function Parameter? </h4>
 
-<p><tt>It's not uncommon that a reference to an object is to be taken as a function
+<p>It's not uncommon that a reference to an object is to be taken as a function
 parameter.  Using a smart pointer for that is usually not necessary: consider
 that you can usually assume that an object passed in as a parameter stays 
 valid during the function execution (a scenario where this is not the case can
@@ -434,8 +434,8 @@ As smart pointers automatically convert to normal pointers it's not a problem
 to declare parameters for references as normal pointers.  Likewise, when the
 reference passed in is to be retained it's no problem to assign them to a
 <code>csRef&lt;&gt;</code> object to take ownership.
-</tt> </p>
-<table><tr><td>&nbsp;</td><td><pre class="example"><tt>// Passing a csRef&lt;iFoo&gt; as parameter: usually unnecessary
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">// Passing a csRef&lt;iFoo&gt; as parameter: usually unnecessary
 void Bar (csRef&lt;iFoo&gt;&amp; stuff) { ... }
 
 // iFoo* is usually completely adequate
@@ -447,22 +447,22 @@ void Baz (iFoo* stuff)
   csRef&lt;iFoo&gt; keepRef = stuff;
   ... 
 }
-</tt> </pre></td></tr></table>
+</pre></td></tr></table>
 <a name="8"></a>
 <h4 class="subsubheading"> Warnings About csPtr&lt;&gt;! </h4>
 
-<p><tt>As noted above, only use <code>csPtr&lt;&gt;</code> for returning already incremented
+<p>As noted above, only use <code>csPtr&lt;&gt;</code> for returning already incremented
 object references, and for wrapping a new object before storing it in a
 <code>csRef&lt;&gt;</code>.  Do <em>not</em> use <code>csPtr&lt;&gt;</code> for any other purpose.
-</tt> </p>
-<p><tt>Also, when a function returns a <code>csPtr</code> you <em>must</em> assign the result
+</p>
+<p>Also, when a function returns a <code>csPtr</code> you <em>must</em> assign the result
 to a <code>csRef&lt;&gt;</code>.  You must not ignore the returned value.  If you ignore
 it, then that will result in a resource leak because <code>DecRef()</code> will never
 be invoked for the reference owned by the returned <code>csPtr&lt;&gt;</code>.  For
 example, the following code is illegal and should be avoided because it ignores
 the returned object:
-</tt> </p>
-<table><tr><td>&nbsp;</td><td><pre class="example"><tt>// An example interface and method.
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">// An example interface and method.
 struct iEngine
 {
   virtual csPtr&lt;iLight&gt; CreateLight (...) = 0;
@@ -471,38 +471,38 @@ struct iEngine
 
 // Do not do this!  It will cause a resource leak.
 engine-&gt;CreateLight (...);
-</tt> </pre></td></tr></table>
-<p><tt>Note that if you build the project in debug mode, then Crystal Space will add a
+</pre></td></tr></table>
+<p>Note that if you build the project in debug mode, then Crystal Space will add a
 run-time test for this incorrect usage, and will throw an exception if you
 neglect to assign a returned <code>csPtr&lt;&gt;</code> to a <code>csRef&lt;&gt;</code>.
-</tt> </p>
+</p>
 <a name="9"></a>
 <h4 class="subsubheading"> Warning About IncRef() and DecRef()! </h4>
 
-<p><tt>When using smart pointers (<code>csRef&lt;&gt;</code>) correctly you should avoid invoking
+<p>When using smart pointers (<code>csRef&lt;&gt;</code>) correctly you should avoid invoking
 <code>IncRef()</code> and <code>DecRef()</code> on the managed pointer, except in very
 specialized cases, and only when you know exactly what you are doing and why
 you are doing it.  Avoid constructs like this:
-</tt> </p>
-<table><tr><td>&nbsp;</td><td><pre class="example"><tt>csRef&lt;iMeshWrapper&gt; mesh = ...;
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">csRef&lt;iMeshWrapper&gt; mesh = ...;
 ...
 mesh-&gt;DecRef ();
 mesh = 0;
-</tt> </pre></td></tr></table>
-<p><tt>The bogus code in this example will cause the reference-count to be decremented
-<em>twice</em>---once when <code>DecRef()</code> is invoked explicitly, and once when 0
-is assigned to <samp>&lsquo;mesh&rsquo;</samp>)--which is almost certainly not what was intended.
-</tt> </p>
+</pre></td></tr></table>
+<p>The bogus code in this example will cause the reference-count to be decremented
+<em>twice</em>&mdash;once when <code>DecRef()</code> is invoked explicitly, and once when 0
+is assigned to <samp>&lsquo;mesh&rsquo;</samp>)&ndash;which is almost certainly not what was intended.
+</p>
 <a name="10"></a>
 <h4 class="subsubheading"> Warning About DestroyApplication()! </h4>
 
-<p><tt>Due to the way the current implementation of
+<p>Due to the way the current implementation of
 <code>csInitializer::DestroyApplication()</code> works, you <em>must</em> ensure that
 all of your references to Crystal Space objects are released <em>before</em>
 invoking <code>DestroyApplication()</code>.  Therefore, the following code is
 <em>not</em> legal:
-</tt> </p>
-<table><tr><td>&nbsp;</td><td><pre class="example"><tt>int main (int argc, char* argv[])
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">int main (int argc, char* argv[])
 {
   iObjectRegistry* object_reg =
     csInitializer::CreateEnvironment(argc, argv);
@@ -513,8 +513,8 @@ invoking <code>DestroyApplication()</code>.  Therefore, the following code is
   csInitializer::DestroyApplication (object_reg);
   return 0;
 }
-</tt> </pre></td></tr></table>
-<p><tt>The reason this doesn't work correctly is that the <samp>&lsquo;plugin_mgr&rsquo;</samp> reference
+</pre></td></tr></table>
+<p>The reason this doesn't work correctly is that the <samp>&lsquo;plugin_mgr&rsquo;</samp> reference
 will be cleaned up at the end of <code>main()</code>, which occurs after
 <code>DestroyApplication()</code> is invoked.  To fix this you can use several
 techniques.  Manually setting <samp>&lsquo;plugin_mgr&rsquo;</samp> to 0 just before calling
@@ -522,13 +522,13 @@ techniques.  Manually setting <samp>&lsquo;plugin_mgr&rsquo;</samp> to 0 just be
 initialization into another routine so that <samp>&lsquo;plugin_mgr&rsquo;</samp> is created in
 another scope; a scope which is destroyed before <code>DestroyApplication()</code> is
 invoked.
-</tt> </p>
-<p><tt>For the same reason it also is not wise to call <code>DestroyApplication()</code>
+</p>
+<p>For the same reason it also is not wise to call <code>DestroyApplication()</code>
 from within the destructor of your main class.  This is because any
 <code>csRef&lt;&gt;</code> instance variables of your main class will not be destroyed
 until the very end of the destructor, which is <em>after</em> the invocation of
 <code>DestroyApplication()</code> in the body of the destructor.
-</tt> </p>
+</p>
 <hr size="1">
 <table cellpadding="1" cellspacing="1" border="0">
 <tr><td valign="middle" align="left">[<a href="SCF-Advanced.html#0" title="Previous section in reading order"> &lt; </a>]</td>

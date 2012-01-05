@@ -61,13 +61,13 @@ ul.toc {list-style: none}
 <hr size="1">
 <h4 class="subsubsection"> 4.2.1.1 Simple Header File </h4>
 
-<p><tt>It is good practice to always put definitions and declarations in header
+<p>It is good practice to always put definitions and declarations in header
 files as opposed to source files. In some cases it is even required. Here
 we will show the header file for a simple Crystal Space application.
 Although this is not strictly required, we use a class to encapsulate
 the application logic. Our <tt>&lsquo;simple.h&rsquo;</tt> header looks as follows:
-</tt> </p>
-<table><tr><td>&nbsp;</td><td><pre class="example"><tt>#ifndef __SIMPLE_H__
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">#ifndef __SIMPLE_H__
 #define __SIMPLE_H__
 
 #include &lt;crystalspace.h&gt;
@@ -101,27 +101,27 @@ public:
 };
 
 #endif // __SIMPLE1_H__
-</tt> </pre></td></tr></table>
-<p><tt>In the <samp>&lsquo;Simple&rsquo;</samp> class we keep a number of references to important
+</pre></td></tr></table>
+<p>In the <samp>&lsquo;Simple&rsquo;</samp> class we keep a number of references to important
 objects that we are going to need a lot. That way we don't have to get
 them every time when we need them. Other than that we have a constructor
 which will do the initialization of these variables, a destructor which
 will clean up the application, an initialization function which will
 be responsible for the full set up of Crystal Space and our application.
-</tt> </p>
-<p><tt>Note that we use smart pointers (<code>csRef&lt;&gt;</code>) for several of those
+</p>
+<p>Note that we use smart pointers (<code>csRef&lt;&gt;</code>) for several of those
 references. That makes it easier to manage reference counting. We let
 the smart pointer take care of this for us.
-</tt> </p>
-<p><tt>The event handler macro is used because our tutorial application also
+</p>
+<p>The event handler macro is used because our tutorial application also
 needs to be an event handler (it inherits from <code>csBaseEventHandler</code> for
 that). The macro indicates the name of this event handler and specifies that
 the application wants to handle the frame event in the first (or 'logic')
 phase.
-</tt> </p>
-<p><tt>In the source file <tt>&lsquo;simple.cpp&rsquo;</tt> we place the following:
-</tt> </p>
-<table><tr><td>&nbsp;</td><td><pre class="example"><tt>#include &quot;simple.h&quot;
+</p>
+<p>In the source file <tt>&lsquo;simple.cpp&rsquo;</tt> we place the following:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">#include &quot;simple.h&quot;
 
 CS_IMPLEMENT_APPLICATION
 
@@ -208,62 +208,62 @@ int main (int argc, char* argv[])
 {
   return csApplicationRunner&lt;Simple&gt;::Run (argc, argv);
 }
-</tt> </pre></td></tr></table>
-<p><tt>This is almost the simplest possible application and it is absolutely useless.
+</pre></td></tr></table>
+<p>This is almost the simplest possible application and it is absolutely useless.
 Also don't run it on an operating system where you can't kill a running
 application because there is no way to stop the application once it has
 started running.
-</tt> </p>
-<p><tt>Even though this application is useless it already has a lot of features
+</p>
+<p>Even though this application is useless it already has a lot of features
 that are going to be very useful later. Here is a short summary of all
 the things and features it already has:
-</tt> </p>
+</p>
 <ul>
 <li>
-<tt>It will open a window.
-</tt> 
+It will open a window.
+
 </li><li>
-<tt>You can control the size of the window and the video driver used
+You can control the size of the window and the video driver used
 for that window with command-line options (<samp>&lsquo;-video&rsquo;</samp> and <samp>&lsquo;-mode&rsquo;</samp>
 command-line options).
-</tt> 
+
 </li><li>
-<tt>It has the following plugins initialized and ready to use: engine, 3D
+It has the following plugins initialized and ready to use: engine, 3D
 renderer, canvas, reporter, reporter listener, font server, image loader,
 map loader, and <small>VFS</small>.
-</tt> </li></ul>
+</li></ul>
 
-<p><tt>Before we start making this application more useful lets have a look at what
+<p>Before we start making this application more useful lets have a look at what
 actually happens here.
-</tt> </p>
-<p><tt>Before doing anything at all, after including the necessary header files, we
+</p>
+<p>Before doing anything at all, after including the necessary header files, we
 first need to use a few macros.  The CS_IMPLEMENT_APPLICATION macro is
 essential for every application using Crystal Space.  It makes sure that the
 <code>main()</code> routine is correctly linked and called on every platform.
-</tt> </p>
-<p><tt><code>csInitializer::RequestPlugins()</code> will use the configuration file
+</p>
+<p><code>csInitializer::RequestPlugins()</code> will use the configuration file
 (which we are not using in this tutorial), the command-line and the
 requested plugins to find out which plugins to load. The command-line
 has highest priority, followed by the configuration file and lastly the
 requested plugins.
-</tt> </p>
-<p><tt>This concludes the initialization pass.
-</tt> </p>
-<p><tt>In <code>Simple::Application()</code> we open the window with a call
+</p>
+<p>This concludes the initialization pass.
+</p>
+<p>In <code>Simple::Application()</code> we open the window with a call
 to the function <code>csInitializer::OpenApplication()</code>. This sends
 the <samp>&lsquo;cscmdSystemOpen&rsquo;</samp> broadcast message to all components that are
 listening to the event queue.  One of the plugins that listens for this is
 the 3D renderer which will then open its window (or enable graphics
 on a non-windowing operating system).
-</tt> </p>
-<p><tt>After that, we call <code>Simple::SetupModules()</code> to locate all the
+</p>
+<p>After that, we call <code>Simple::SetupModules()</code> to locate all the
 common objects that we will need later, and store references to them
 in our main class. Because we use <code>csRef&lt;&gt;</code> or smart pointers,
 we don't have to worry about invoking <code>IncRef()</code> and <code>DecRef()</code>
 manually.
-</tt> </p>
-<p><tt>Finally we start the default main loop by calling <code>Run()</code>.
-</tt> </p>
+</p>
+<p>Finally we start the default main loop by calling <code>Run()</code>.
+</p>
 <hr size="1">
 <table cellpadding="1" cellspacing="1" border="0">
 <tr><td valign="middle" align="left">[<a href="Tutorial-Simple.html#0" title="Previous section in reading order"> &lt; </a>]</td>

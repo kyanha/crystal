@@ -61,12 +61,12 @@ ul.toc {list-style: none}
 <hr size="1">
 <h3 class="subsection"> 4.4.1 Names </h3>
 
-<p><tt>Events are identified with the help of an extensible hierarchically-structured
+<p>Events are identified with the help of an extensible hierarchically-structured
 event naming layer.  This system allows event names to be drilled down to
 arbitrary levels of specificity while simultaneously allowing event subscribers
 to express interest in general categories or precise event varieties.
-</tt> </p>
-<p><tt>For example: Each joystick is individually named, so event consumers can listen
+</p>
+<p>For example: Each joystick is individually named, so event consumers can listen
 only to particular devices, or to particular flavors of events.  For instance,
 the fourth joystick can produce the event
 <samp>&lsquo;crystalspace.input.joystick.3.button.down&rsquo;</samp>; an event handler may wish to
@@ -78,8 +78,8 @@ from that joystick, to <samp>&lsquo;crystalspace.input.joystick&rsquo;</samp> to
 from all joysticks, and so on. <em>Note</em>: A consequence of this behaviour is
 that subscribing to event names which themselves <em>are never used for
 actual events</em> is possible. Read on to see how to deal with this.
-</tt> </p>
-<p><tt>Event names are translated into an efficient internal representation, the
+</p>
+<p>Event names are translated into an efficient internal representation, the
 <samp>&lsquo;csEventID&rsquo;</samp>, using a singleton event name registry object
 (<samp>&lsquo;csEventNameRegistry&rsquo;</samp>, implementing the <samp>&lsquo;iEventNameRegistry&rsquo;</samp>
 interface) which can always be retrieved using the
@@ -97,10 +97,10 @@ cycles, performance-sensitive code should cache the results; see, for example,
 the <samp>&lsquo;CS_DECLARE_EVENT_SHORTCUTS&rsquo;</samp> and
 <samp>&lsquo;CS_INITIALIZE_EVENT_SHORTCUTS()&rsquo;</samp> macros in
 <tt>&lsquo;include/csutil/eventnames.h&rsquo;</tt>.
-</tt> </p>
-<p><tt>Demultiplexing in event handlers is handled like this:
-</tt> </p>
-<table><tr><td>&nbsp;</td><td><pre class="example"><tt>static bool DemoEventHandler (iEvent&amp; ev)
+</p>
+<p>Demultiplexing in event handlers is handled like this:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">static bool DemoEventHandler (iEvent&amp; ev)
 {
   if (ev.Name == csevMouseButton (object_reg, 0))
     ...
@@ -109,18 +109,18 @@ the <samp>&lsquo;CS_DECLARE_EVENT_SHORTCUTS&rsquo;</samp> and
   else
     ...
 }
-</tt> </pre></td></tr></table>
-<p><tt>This will handle mouse button and mouse move events for the first mouse.
-</tt> </p>
-<p><tt>You can also catch entire event hierarchies with a single test:
-</tt> </p>
-<table><tr><td>&nbsp;</td><td><pre class="example"><tt>if (name_reg-&gt;IsKindOf(ev.Name, csevKeyboardEvent (name_reg)))
+</pre></td></tr></table>
+<p>This will handle mouse button and mouse move events for the first mouse.
+</p>
+<p>You can also catch entire event hierarchies with a single test:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">if (name_reg-&gt;IsKindOf(ev.Name, csevKeyboardEvent (name_reg)))
 {
   HandleKeyboardEvent(ev)
 }
-</tt> </pre></td></tr></table>
-<p><tt>This will catch all keyboard events.
-</tt> </p>
+</pre></td></tr></table>
+<p>This will catch all keyboard events.
+</p>
 <hr size="1">
 <table cellpadding="1" cellspacing="1" border="0">
 <tr><td valign="middle" align="left">[<a href="Event-System.html#0" title="Previous section in reading order"> &lt; </a>]</td>

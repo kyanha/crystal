@@ -61,7 +61,7 @@ ul.toc {list-style: none}
 <hr size="1">
 <h4 class="subsubsection"> 4.3.1.7 Plugin Meta-Information </h4>
 
-<p><tt>It is possible and common to use <small>SCF</small> interfaces and objects directly via
+<p>It is possible and common to use <small>SCF</small> interfaces and objects directly via
 the C++ class names, via creation functions, or via facilities which return
 pointers to pure <small>SCF</small> interfaces.  However, when an external plugin modules
 publishes a class implementing an <small>SCF</small> interface, the client of that plugin
@@ -74,8 +74,8 @@ object in order to satisfy the request.  The <small>SCF</small> class name can b
 anything you like, though it is often useful to impose a hierarchical
 interpretation on the name.  For instance,
 <samp>&lsquo;crystalspace.graphics3d.opengl&rsquo;</samp>.
-</tt> </p>
-<p><tt>The data which describes a plugin module, such as the <small>SCF</small> class names
+</p>
+<p>The data which describes a plugin module, such as the <small>SCF</small> class names
 and C++ implementations which the plugin exports, is known as
 <em>meta-information</em>.  Each plugin has an associated meta-information
 resource which describes the plugin module.  This information can be accessed
@@ -84,8 +84,8 @@ meta-information is maintained in an <small>XML</small>-format text file which h
 the same name as the plugin module, but with extension <tt>&lsquo;.csplugin&rsquo;</tt>.  Here
 is a sample meta-information resource for a plugin named <tt>&lsquo;myplugin&rsquo;</tt>
 (<tt>&lsquo;myplugin.so&rsquo;</tt> on Unix, <tt>&lsquo;myplugin.dll&rsquo;</tt> on Windows):
-</tt> </p>
-<table><tr><td>&nbsp;</td><td><pre class="example"><tt>&lt;?xml version=&quot;1.0&quot;?&gt;
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">&lt;?xml version=&quot;1.0&quot;?&gt;
 &lt;!-- myplugin.csplugin --&gt;
 &lt;plugin&gt;
   &lt;scf&gt;
@@ -107,8 +107,8 @@ is a sample meta-information resource for a plugin named <tt>&lsquo;myplugin&rsq
     &lt;/classes&gt;
   &lt;/scf&gt;
 &lt;/plugin&gt;
-</tt> </pre></td></tr></table>
-<p><tt>The top-level node of a meta-information file is named <code>&lt;plugin&gt;</code>.  All
+</pre></td></tr></table>
+<p>The top-level node of a meta-information file is named <code>&lt;plugin&gt;</code>.  All
 <small>SCF</small>-related information is contained within an <code>&lt;scf&gt;</code> child node.
 Plugin modules can export multiple named <small>SCF</small> classes.  Each exported class
 is represented by a <code>&lt;class&gt;</code> node within the <code>&lt;classes&gt;</code> group.  The
@@ -119,16 +119,16 @@ argument to the <code>SCF_IMPLEMENT_FACTORY()</code> macro.  When an <small>SCF<
 depends upon other <small>SCF</small> classes, the dependencies are indicated via the
 optional <code>&lt;requires&gt;</code> group, which contains one <code>&lt;class&gt;</code> node per
 dependency.
-</tt> </p>
-<p><tt>The above example meta-information resource indicates that the plugin exports
+</p>
+<p>The above example meta-information resource indicates that the plugin exports
 two C++ classes, <samp>&lsquo;MyClass1&rsquo;</samp> and <samp>&lsquo;MyClass2&rsquo;</samp> under the <small>SCF</small> class
 names <samp>&lsquo;myproj.myplugin.foo1&rsquo;</samp> and <samp>&lsquo;myproj.myplugin.foo2&rsquo;</samp>,
 respectively.  Furthermore, the second exported class has a dependency upon two
 other <small>SCF</small> classes, <samp>&lsquo;myproj.myplugin.bar1&rsquo;</samp> and
 <samp>&lsquo;myproj.myplugin.bar2&rsquo;</samp>.  <small>SCF</small> will ensure that these other classes are
 loaded before it instantiates <samp>&lsquo;MyClass2&rsquo;</samp>.
-</tt> </p>
-<p><tt>Meta-information in the <tt>&lsquo;.csplugin&rsquo;</tt> file is extensible; it is not
+</p>
+<p>Meta-information in the <tt>&lsquo;.csplugin&rsquo;</tt> file is extensible; it is not
 restricted to <small>SCF</small>-only usage.  Plugin authors can choose to publish
 supplementary information about plugins in addition to the <small>SCF</small> information
 already published.  As a hypothetical example, image loading plugins might
@@ -138,8 +138,8 @@ image loading multiplexor to selectively request image loading plugins
 they are not needed.  Here is a possible meta-information table for a <small>PNG</small>
 image loader (with the <code>&lt;scf&gt;</code> node collapsed to <samp>&lsquo;<small class="dots">...</small>&rsquo;</samp> for the
 sake of illustration):
-</tt> </p>
-<table><tr><td>&nbsp;</td><td><pre class="example"><tt>&lt;?xml version=&quot;1.0&quot;?&gt;
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">&lt;?xml version=&quot;1.0&quot;?&gt;
 &lt;!-- cspngimg.csplugin --&gt;
 &lt;plugin&gt;
   &lt;scf&gt;...&lt;/scf&gt;
@@ -155,24 +155,24 @@ sake of illustration):
     &lt;/imagetype&gt;
   &lt;/imageloader&gt;
 &lt;/plugin&gt;
-</tt> </pre></td></tr></table>
-<p><tt>In this example, the <small>PNG</small> loader meta-information tells the multiplexor
+</pre></td></tr></table>
+<p>In this example, the <small>PNG</small> loader meta-information tells the multiplexor
 several different ways to identify a <small>PNG</small> image:
-</tt> </p>
+</p>
 <ul>
 <li>
-<tt>By checking <small>MIME</small> type, if available.
-</tt> </li><li>
-<tt>By checking file extension, if available.
-</tt> </li><li>
-<tt>By checking for the <em>magic</em> identification string <samp>&lsquo;\0x89PNG&rsquo;</samp> in the
+By checking <small>MIME</small> type, if available.
+</li><li>
+By checking file extension, if available.
+</li><li>
+By checking for the <em>magic</em> identification string <samp>&lsquo;\0x89PNG&rsquo;</samp> in the
 raw image data.
-</tt> </li></ul>
+</li></ul>
 
 
-<p><tt>If the multiplexor identifies the image as <small>PNG</small>, only then will it actually
+<p>If the multiplexor identifies the image as <small>PNG</small>, only then will it actually
 request the <small>PNG</small> loader plugin.
-</tt> </p>
+</p>
 <hr size="1">
 <table cellpadding="1" cellspacing="1" border="0">
 <tr><td valign="middle" align="left">[<a href="SCF-Client.html#0" title="Previous section in reading order"> &lt; </a>]</td>
