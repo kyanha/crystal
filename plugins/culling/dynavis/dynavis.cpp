@@ -2561,7 +2561,7 @@ void csDynaVis::Dump (iGraphics3D* g3d)
       	  reason_colors[i].g, reason_colors[i].b);
       }
       csReversibleTransform trans = debug_camera->GetTransform ();
-      trans = csTransform (csYRotMatrix3 (-PI/2.0), csVector3 (0)) * trans;
+      trans = csTransform (csYRotMatrix3 (-HALF_PI), csVector3 (0)) * trans;
       float fov = g3d->GetPerspectiveAspect ();
       int sx, sy;
       g3d->GetPerspectiveCenter (sx, sy);

@@ -219,7 +219,7 @@ void csPen::AddThickPoints(float fx1, float fy1, float fx2, float fy2)
 {
   float angle = atan2(fy2-fy1, fx2-fx1);
 
-  float a1 = angle - (PI/2.0);
+  float a1 = angle - HALF_PI;
   float ca1 = cos(a1)*pen_width, sa1 = sin(a1)*pen_width;
   bool first = line_points.GetSize ()<2;
 

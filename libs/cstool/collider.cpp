@@ -714,7 +714,7 @@ static float GetAngle (float x, float y)
 
   float angle = acos (x);
   if (y < 0)
-    angle = 2*PI - angle;
+    angle = TWO_PI - angle;
 
   return angle;
 }

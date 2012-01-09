@@ -634,8 +634,8 @@ class SndSysSourceSoftwareFilter_DirectFade :
 public:
   SndSysSourceSoftwareFilter_DirectFade() : SndSysSourceSoftwareFilter_Base()
   {
-    cos_far=cos(7*PI / 16);
-    cos_near=cos( PI / 4);
+    cos_far = cos (7 * PI / 16);
+    cos_near = cos (QUARTER_PI);
 
     range=cos_near-cos_far;
   }

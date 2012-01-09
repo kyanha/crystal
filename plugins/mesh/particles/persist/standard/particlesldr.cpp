@@ -282,8 +282,10 @@ CS_PLUGIN_NAMESPACE_BEGIN(ParticlesLoader)
     }
 
     //properties
-    float radius = 1.0f, coneAngle = PI/4;
-    csVector3 position (0.0f), extent (0.0f), initialVelocity (0.0f), initialAngVelocity (0.0f);
+    float radius = 1.0f;
+    float coneAngle = QUARTER_PI;
+    csVector3 position (0.0f), extent (0.0f), initialVelocity (0.0f),
+      initialAngVelocity (0.0f);
     bool enabled = true;
     float startTime = 0.0f, duration = FLT_MAX, emissionRate = 0.0f, 
       minTTL = FLT_MAX, maxTTL = FLT_MAX, minMass = 1.0f, maxMass = 1.0f;

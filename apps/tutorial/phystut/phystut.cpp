@@ -1200,7 +1200,7 @@ iRigidBody* Simple::SpawnMesh ()
   {
     // If dynamic collider meshes are not supported
     // we use a cylinder instead.
-    t.RotateThis (csVector3 (1, 0, 0), PI / 2.0f);
+    t.RotateThis (csVector3 (1, 0, 0), HALF_PI);
     rb->AttachColliderCylinder (0.2f, 1, t, 10, 1, 0.8f);
   }
 
@@ -1293,7 +1293,7 @@ iRigidBody* Simple::SpawnCylinder ()
   // We do a hardtransform here to make sure our cylinder has an artificial
   // offset. That way we can test if the physics engine supports that.
   csVector3 artificialOffset (3, 3, 3);
-  csReversibleTransform hardTransform (csYRotMatrix3 (PI/2.0), artificialOffset);
+  csReversibleTransform hardTransform (csYRotMatrix3 (HALF_PI), artificialOffset);
   cylinderFact->HardTransform (hardTransform);
 
   // Create the mesh.
@@ -1344,7 +1344,7 @@ iRigidBody* Simple::SpawnCapsule (float length, float radius)
     scfQueryInterface<iGeneralFactoryState> (capsuleFact->GetMeshObjectFactory ());
   gmstate->GenerateCapsule (length, radius, 10);
   capsuleFact->HardTransform (
-        csReversibleTransform (csYRotMatrix3 (PI/2), csVector3 (0)));
+        csReversibleTransform (csYRotMatrix3 (HALF_PI), csVector3 (0)));
 
   // Create the mesh.
   csRef<iMeshWrapper> mesh (engine->CreateMeshWrapper (
@@ -1392,7 +1392,7 @@ iRigidBody* Simple::SpawnConvexMesh ()
   const float length (rand() % 3 / 50. + .7);
   gmstate->GenerateCapsule (length, radius, 10);
   capsuleFact->HardTransform (
-        csReversibleTransform (csYRotMatrix3 (PI/2), csVector3 (0)));
+        csReversibleTransform (csYRotMatrix3 (HALF_PI), csVector3 (0)));
 
   // Create the mesh.
   csRef<iMeshWrapper> mesh (engine->CreateMeshWrapper (
@@ -1438,7 +1438,7 @@ iRigidBody* Simple::SpawnCompound ()
     scfQueryInterface<iGeneralFactoryState> (capsuleFact->GetMeshObjectFactory ());
   gmstate->GenerateCapsule (0.7f, 0.3f, 10);
   capsuleFact->HardTransform
-    (csReversibleTransform (csYRotMatrix3 (PI/2), csVector3 (-0.2f)));
+    (csReversibleTransform (csYRotMatrix3 (HALF_PI), csVector3 (-0.2f)));
 
   // Create the mesh.
   csRef<iMeshWrapper> capsuleMesh (engine->CreateMeshWrapper
@@ -1573,7 +1573,7 @@ void Simple::SpawnChain ()
   rb2->SetLinearVelocity (csVector3 (0.0f));
   rb2->SetAngularVelocity (csVector3 (0.0f));
   rb2->SetPosition (initPos - offset);
-  rb2->SetOrientation (csXRotMatrix3 (PI / 2.0f));
+  rb2->SetOrientation (csXRotMatrix3 (HALF_PI));
 
   iRigidBody* rb3 = SpawnBox ();
   rb3->SetLinearVelocity (csVector3 (0.0f));
@@ -1584,7 +1584,7 @@ void Simple::SpawnChain ()
   rb4->SetLinearVelocity (csVector3 (0.0f));
   rb4->SetAngularVelocity (csVector3 (0.0f));
   rb4->SetPosition (initPos - 3.0f * offset);
-  rb4->SetOrientation (csXRotMatrix3 (PI / 2.0f));
+  rb4->SetOrientation (csXRotMatrix3 (HALF_PI));
 
   iRigidBody* rb5 = SpawnBox ();
   rb5->SetLinearVelocity (csVector3 (0.0f));

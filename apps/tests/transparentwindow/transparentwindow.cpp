@@ -45,9 +45,9 @@ void TransparentWindow::Frame ()
   if (kbd->GetKeyState (CSKEY_LEFT))
     rotX += speed;
   if (kbd->GetKeyState (CSKEY_UP))
-    rotY = csMax (rotY - speed, -0.5f*PI + EPSILON);
+    rotY = csMax (rotY - speed, -HALF_PI + EPSILON);
   if (kbd->GetKeyState (CSKEY_DOWN))
-    rotY = csMin (rotY + speed, 0.5f*PI - EPSILON);
+    rotY = csMin (rotY + speed, HALF_PI - EPSILON);
 
   // Compute new camera pos. (Lifted from viewmesh.)
   csVector3 camTarget (0);

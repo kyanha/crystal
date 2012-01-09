@@ -570,8 +570,8 @@ CS_PLUGIN_NAMESPACE_BEGIN(Bodymesh)
 
   BodyBoneJoint::BodyBoneJoint ()
     : scfImplementationType (this), bounce (0.0f),
-    maxAngle (-PI, -PI/2.0f, -PI/2.0f), maxDistance (-1.0f),
-    minAngle (PI, PI/2.0f, PI/2.0f), minDistance (1.0f)
+    maxAngle (-PI, -HALF_PI, -HALF_PI), maxDistance (-1.0f),
+    minAngle (PI, HALF_PI, HALF_PI), minDistance (1.0f)
   {
     rotConstraints[0] = false;
     rotConstraints[1] = false;

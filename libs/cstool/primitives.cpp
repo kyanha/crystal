@@ -257,7 +257,7 @@ void Primitives::GenerateCylinder (float l, float r, uint sides,
 {
   const uint n = sides * 4;
   l *= 0.5;
-  float a = float(PI*2.0)/float(n);
+  float a = TWO_PI / float(n);
   float sa = (float) sin(a);
   float ca = (float) cos(a);
 
@@ -319,7 +319,7 @@ void Primitives::GenerateCapsule (float l, float r, uint sides,
 {
   const uint n = sides * 4;
   l *= 0.5;
-  float a = float(PI*2.0)/float(n);
+  float a = TWO_PI / float(n);
   float sa = (float) sin(a);
   float ca = (float) cos(a);
 

@@ -637,7 +637,7 @@ CS_LEAKGUARD_IMPLEMENT(MarschnerHelper);
 // Gaussian distribution - http://en.wikipedia.org/wiki/Normal_distribution
 float MarschnerHelper::GaussianDistribution(float sigma, float x_mu)
 {
-  return ((1.0f / (fabs(sigma) * sqrt(2.0f * PI))) *
+  return ((1.0f / (fabs(sigma) * sqrt(TWO_PI))) *
     exp(-(x_mu * x_mu) / (2.0f * sigma * sigma)));
 }
 
@@ -778,7 +778,7 @@ CubicSolution EquationsSolver::NormalizedCubicSolver(float A, float B, float C)
       float theta = acos(R / sqrt(-(Q * Q * Q)));
       float sqrtQ = sqrt(-Q);
       roots.X1 = (2 * sqrtQ * cos(theta / 3) - A / 3);
-      roots.X2 = (2 * sqrtQ * cos((theta + 2 * PI) / 3) - A / 3);
+      roots.X2 = (2 * sqrtQ * cos((theta + TWO_PI) / 3) - A / 3);
       roots.X3 = (2 * sqrtQ * cos((theta + 4 * PI) / 3) - A / 3);
       roots.count = 3;
     }

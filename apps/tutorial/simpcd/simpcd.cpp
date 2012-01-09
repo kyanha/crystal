@@ -398,13 +398,13 @@ void Simple::CreateRoom ()
   spstate = 
     scfQueryInterface<iSprite3DState> (parent_sprite->GetMeshObject ());
   spstate->SetAction ("default");
-  parent_sprite->GetMovable ()->Transform (csZRotMatrix3 (PI/2.));
+  parent_sprite->GetMovable ()->Transform (csZRotMatrix3 (HALF_PI));
   parent_sprite->GetMovable ()->UpdateMove ();
 
   // Now create the first child.
   sprite1 = engine->CreateMeshWrapper (imeshfact, "Rotater1");
   sprite1->GetMovable ()->SetPosition (csVector3 (0, -.5, -.5));
-  sprite1->GetMovable ()->Transform (csZRotMatrix3 (PI/2.));
+  sprite1->GetMovable ()->Transform (csZRotMatrix3 (HALF_PI));
   sprite1->GetMovable ()->UpdateMove ();
   spstate = scfQueryInterface<iSprite3DState> (sprite1->GetMeshObject ());
   spstate->SetAction ("default");
@@ -413,7 +413,7 @@ void Simple::CreateRoom ()
   // Now create the second child.
   sprite2 = engine->CreateMeshWrapper (imeshfact, "Rotater2");
   sprite2->GetMovable ()->SetPosition (csVector3 (0, .5, -.5));
-  sprite2->GetMovable ()->Transform (csZRotMatrix3 (PI/2.));
+  sprite2->GetMovable ()->Transform (csZRotMatrix3 (HALF_PI));
   sprite2->GetMovable ()->UpdateMove ();
   spstate = scfQueryInterface<iSprite3DState> (sprite2->GetMeshObject ());
   spstate->SetAction ("default");

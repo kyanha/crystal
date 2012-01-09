@@ -181,7 +181,7 @@ void ASndTest::CreateWorld ()
   sndsource3d->SetPosition( csVector3 (-10.0f, 5.0f, 30.0f) );
   csRef<iSndSysSource3DDirectionalSimple> sndsource3dds = scfQueryInterface<iSndSysSource3DDirectionalSimple> (sndsource);
   sndsource3dds->SetDirection( csVector3 (0.0f, 0.0f, 1.0f) );
-  sndsource3dds->SetDirectionalRadiation( PI/4.0f );
+  sndsource3dds->SetDirectionalRadiation (QUARTER_PI);
   light = engine->CreateLight (0, csVector3 (-10.0f, 5.0f, 39.0f), 5.0f, csColor (0.6f, 0.0f, 0.0f));
   ll->Add (light);
   sprite = engine->CreateMeshWrapper (imeshfact, "Sound4Sprite", world, csVector3 (-10.0f, 5.0f, 30.0f));
@@ -196,8 +196,8 @@ void ASndTest::CreateWorld ()
   sndsource3d->SetPosition( csVector3 (-30.0f, 5.0f, 30.0f) );
   csRef<iSndSysSource3DDirectional> sndsource3dd = scfQueryInterface<iSndSysSource3DDirectional> (sndsource);
   sndsource3dd->SetDirection( csVector3 (0.0f, 0.0f, 1.0f) );
-  sndsource3dd->SetDirectionalRadiationInnerCone( PI/4.0f );
-  sndsource3dd->SetDirectionalRadiationOuterCone( PI/2.0f );
+  sndsource3dd->SetDirectionalRadiationInnerCone (QUARTER_PI);
+  sndsource3dd->SetDirectionalRadiationOuterCone(HALF_PI);
   sndsource3dd->SetDirectionalRadiationOuterGain( 0.0f );
   light = engine->CreateLight (0, csVector3 (-30.0f, 5.0f, 39.0f), 5.0f, csColor (0.6f, 0.0f, 0.0f));
   ll->Add (light);

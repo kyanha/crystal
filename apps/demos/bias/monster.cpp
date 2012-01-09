@@ -30,7 +30,7 @@ static float GetAngle (float x, float y)
 
   float angle = acos (x);
   if (y < 0)
-    angle = 2*PI - angle;
+    angle = TWO_PI - angle;
 
   return angle;
 }
@@ -166,9 +166,11 @@ void Monster::Behaviour()
     {
       float len = sqrt (csSquaredDist::PointPoint (v1, v2));
       float angle = acos ((v2.x-v1.x) / len);
-      if ((v2.z-v1.z) > 0) angle = 2*PI - angle;
-      angle += PI / 2.0f;
-      if (angle > 2*PI) angle -= 2*PI;
+      if ((v2.z-v1.z) > 0)
+        angle = TWO_PI - angle;
+      angle += HALF_PI;
+      if (angle > TWO_PI)
+        angle -= TWO_PI;
 
       desiredAngle = angle;
       angleToReachFlag = true;
