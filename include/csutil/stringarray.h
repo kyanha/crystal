@@ -180,6 +180,20 @@ public:
   }
 
   /**
+   * Delete the given element from the array.
+   * \return True if the item has been found and deleted, false otherwise.
+   * \remarks Performs a linear search of the array to locate \c item, thus it
+   *   may be slow for large arrays.
+   */
+  bool Delete (const char* item)
+  {
+    size_t const n = Find (item);
+    if (n != csArrayItemNotFound)
+      return superclass::DeleteIndex (n);
+    return false;
+  }
+
+  /**
    * Find a string, case-insensitive.
    * \return csArrayItemNotFound if not found, else item index.
    * \remarks Works with sorted and unsorted arrays, but FindSortedKey() is
