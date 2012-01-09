@@ -479,7 +479,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(DebugDynamics)
       (cylinderFact->GetMeshObjectFactory ());
     gmstate->GenerateCylinder (length, radius, 10);
 
-    csReversibleTransform centerTransform (csYRotMatrix3 (PI/2), csVector3 (0));
+    csReversibleTransform centerTransform (csYRotMatrix3 (HALF_PI), csVector3 (0));
     cylinderFact->HardTransform (centerTransform * transform);
 
     // Create the mesh.
@@ -519,7 +519,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(DebugDynamics)
       (capsuleFact->GetMeshObjectFactory ());
     gmstate->GenerateCapsule (length, radius, 10);
 
-    csReversibleTransform centerTransform (csYRotMatrix3 (PI/2), csVector3 (0));
+    csReversibleTransform centerTransform (csYRotMatrix3 (HALF_PI), csVector3 (0));
     capsuleFact->HardTransform (centerTransform * transform);
 
     // Create the mesh.

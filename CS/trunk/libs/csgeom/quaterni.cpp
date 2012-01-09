@@ -48,8 +48,8 @@ void csQuaternion::SetEulerAngles (const csVector3& angles)
 csVector3 csQuaternion::GetEulerAngles () const
 {
   csVector3 angles;
-  const float case1 = PI / 2.0f;
-  const float case2 = -PI / 2.0f;
+  const float case1 = HALF_PI;
+  const float case2 = -HALF_PI;
 
   angles.z = atan2f (2.0f * (v.x*v.y + w*v.z), (w*w + v.x*v.x - v.y*v.y - v.z*v.z));
   float sine = -2.0f * (v.x*v.z - w*v.y);

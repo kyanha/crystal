@@ -513,7 +513,7 @@ csMeshGenerator::csMeshGenerator (csEngine* engine) :
 
   for (size_t i = 0 ; i < CS_GEOM_MAX_ROTATIONS ; i++)
   {
-    rotation_matrices[i] = csYRotMatrix3 (2.0f*PI * float (i)
+    rotation_matrices[i] = csYRotMatrix3 (TWO_PI * float (i)
       / float (CS_GEOM_MAX_ROTATIONS));
   }
 

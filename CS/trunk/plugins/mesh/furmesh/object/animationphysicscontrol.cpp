@@ -137,7 +137,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(FurMesh)
         if ( fabs( binormal * projection - 1 ) < EPSILON)
           sgn = 1;
         else
-          sgn = acos( binormal * projection ) > PI / 2 ? -1 : 1;
+          sgn = acos( binormal * projection ) > HALF_PI ? -1 : 1;
 
         if ( fabs( tangent * projection - 1 ) < EPSILON )
           sc[i].azimuth = 0;

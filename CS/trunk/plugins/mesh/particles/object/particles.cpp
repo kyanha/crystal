@@ -377,7 +377,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(Particles)
         csVector3 tmpV;
         float rot;
         particle.orientation.GetAxisAngle (tmpV, rot);
-        const float r = rot + PI/4;
+        const float r = rot + QUARTER_PI;
         const float s = sinf(r);
         const float c = cosf(r);
 

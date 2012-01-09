@@ -74,14 +74,14 @@ protected:
     if (m.m21 > 0.998f) // singularity at north pole
     { 
       vec.y = atan2(m.m13,m.m33);
-      vec.x = PI/2;
+      vec.x = HALF_PI;
       vec.z = 0;
       return vec;
     }
     if (m.m21 < -0.998f) // singularity at south pole
     { 
       vec.y = atan2(m.m13,m.m33);
-      vec.x = -PI/2;
+      vec.x = -HALF_PI;
       vec.z = 0;
       return vec;
     }

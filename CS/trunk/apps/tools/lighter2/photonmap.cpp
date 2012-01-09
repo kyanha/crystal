@@ -454,7 +454,7 @@ namespace lighter
     else
       node->theta = (unsigned char)theta;
 
-    int phi = int( atan2(dir[1],dir[0])*(256.0/(2.0*PI)) );
+    int phi = int( atan2(dir[1],dir[0])*(256.0 / (TWO_PI)) );
     if (phi>255)
       node->phi = 255;
     else if (phi<0)
