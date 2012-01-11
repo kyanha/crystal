@@ -33,6 +33,7 @@
 #include "csgeom/vector3.h"
 #include "csgeom/math3d.h"
 #include "csgfx/trianglestream.h"
+#include "csgfx/imagememory.h"
 #include "cstool/collider.h"
 #include "cstool/csview.h"
 #include "cstool/enginetools.h"
@@ -2773,12 +2774,21 @@ iMaterialWrapper* csBugPlug::FindColor (float r, float g, float b)
   name.Format ("mat%d,%d,%d\n", int (r*255), int (g*255), int (b*255));
   iMaterialWrapper* mw = Engine->FindMaterial (name);
   if (mw) return mw;
-  // Create a new material.
-  csRef<iMaterial> mat (Engine->CreateBaseMaterial (0));
 
-  // Attach a new SV to it
-  csShaderVariable* var = mat->GetVariableAdd (stringSetSvName->Request (CS_MATERIAL_VARNAME_FLATCOLOR));
-  var->SetValue (csColor (r,g,b));
+  iTextureManager* texman = G3D->GetTextureManager();
+  csRGBpixel singlePixel (int (r * 255), int (g * 255), int (b * 255), 255);
+  csRef<iImage> image;
+  int Format = texman ? texman->GetTextureFormat () : CS_IMGFMT_TRUECOLOR;
+  image.AttachNew (new csImageMemory (1, 1, (const void*)&singlePixel, Format));
+  iTextureWrapper* tex = Engine->GetTextureList ()->FindByName (name);
+  if (tex)
+    tex->SetImageFile (image);
+  else
+    tex = Engine->GetTextureList ()->NewTexture (image);
+  tex->QueryObject ()->SetName (name);
+
+  // Create a new material.
+  csRef<iMaterial> mat (Engine->CreateBaseMaterial (tex));
 
   mw = Engine->GetMaterialList ()->NewMaterial (mat, name);
   return mw;

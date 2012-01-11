@@ -32,8 +32,6 @@
 #include "ivideo/shader/shader.h"
 
 
-/// Name string for the material "flat color" shader var
-#define CS_MATERIAL_VARNAME_FLATCOLOR		"mat flatcolor"
 /// Name string for the material "diffuse" texture
 #define CS_MATERIAL_TEXTURE_DIFFUSE		"tex diffuse"
 
