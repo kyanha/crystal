@@ -526,7 +526,6 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
     }
 
     csRef<iTextureWrapper> texh = 0;
-    bool col_set = false;
     csColor col;
 
     bool shaders_mentioned = false;	// If true there were shaders.
@@ -567,16 +566,6 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
               RemoveLoadingMaterial(matname);
               return false;
             }
-          }
-        }
-        break;
-      case XMLTOKEN_COLOR:
-        {
-          col_set = true;
-          if (!SyntaxService->ParseColor (child, col))
-          {
-            RemoveLoadingMaterial(matname);
-            return false;
           }
         }
         break;
@@ -634,13 +623,6 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
     }
 
     csRef<iMaterial> material = Engine->CreateBaseMaterial (texh);
-
-    if (col_set)
-    {
-      csShaderVariable* flatSV = material->GetVariableAdd (
-        stringSetSvName->Request (CS_MATERIAL_VARNAME_FLATCOLOR));
-      flatSV->SetValue (col);
-    }
 
     csRef<iMaterialWrapper> mat;
 
