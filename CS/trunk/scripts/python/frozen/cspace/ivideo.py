@@ -985,7 +985,6 @@ iTextureManager_swigregister = _ivideo.iTextureManager_swigregister
 iTextureManager_swigregister(iTextureManager)
 iTextureManager_scfGetVersion = _ivideo.iTextureManager_scfGetVersion
 
-CS_MATERIAL_VARNAME_FLATCOLOR = _ivideo.CS_MATERIAL_VARNAME_FLATCOLOR
 CS_MATERIAL_TEXTURE_DIFFUSE = _ivideo.CS_MATERIAL_TEXTURE_DIFFUSE
 class iMaterial(iShaderVariableContext):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
