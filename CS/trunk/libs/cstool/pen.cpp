@@ -902,7 +902,7 @@ void csPen3D::DrawArc (const csVector3& c1, const csVector3& c2,
     case CS_AXIS_X: x1 = c1.y; y1 = c1.z; x2 = c2.y; y2 = c2.z; break;
     case CS_AXIS_Y: x1 = c1.x; y1 = c1.z; x2 = c2.x; y2 = c2.z; break;
     case CS_AXIS_Z: x1 = c1.x; y1 = c1.y; x2 = c2.x; y2 = c2.y; break;
-    default: CS_ASSERT (false);
+    default: CS_ASSERT (false); return;
   }
 
   // Check to make sure that the arc is not in a negative box.
@@ -967,7 +967,7 @@ static void Get4PointsOnArc (const csVector3& c1, const csVector3& c2,
     case CS_AXIS_X: x1 = c1.y; y1 = c1.z; x2 = c2.y; y2 = c2.z; break;
     case CS_AXIS_Y: x1 = c1.x; y1 = c1.z; x2 = c2.x; y2 = c2.z; break;
     case CS_AXIS_Z: x1 = c1.x; y1 = c1.y; x2 = c2.x; y2 = c2.y; break;
-    default: CS_ASSERT (false);
+    default: CS_ASSERT (false); return;
   }
 
   float width = x2-x1;
