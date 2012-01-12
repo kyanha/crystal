@@ -29,7 +29,11 @@
 #elif defined(CS_PLATFORM_WIN32)
 #  include "win32/csosdefs.h"
 # else
-#  error Unable to locate platform-specific "csosdefs.h" file.
+  #error Unable to locate the platform-specific "csosdefs.h" file for your \
+    system. Please report this issue to the Crystal Space 3D development \
+    team. Go to: \
+    "http://www.crystalspace3d.org/docs/online/manual/Feedback.html" \
+    for details on how to do this.
 #endif
 
 #endif // __CS_CSSYS_CSOSDEFS_H__

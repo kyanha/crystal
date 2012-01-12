@@ -292,9 +292,6 @@ int vswprintf ();
 #define CS_MAXPATHLEN 1024
 #endif
 #include <stdio.h>
-#ifdef CS_HAVE_SYS_PARAM_H
-#include <sys/param.h>
-#endif
 
 /**\def CS_ALLOC_STACK_ARRAY(type, var, size)
  * Dynamic stack memory allocation.
