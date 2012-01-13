@@ -366,7 +366,7 @@ int csProcFire::GetHalfBase()
 
 void csProcFire::SetPostSmoothing (int amount)
 {
-  postsmooth = MIN (amount, MIN (mat_w - 1, mat_h - 1));
+  postsmooth = csMin (amount, csMin (mat_w - 1, mat_h - 1));
 }
 
 int csProcFire::GetPostSmoothing ()

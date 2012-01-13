@@ -236,7 +236,7 @@ error2:
     uint8 *imagedata = (uint8*)Image->GetImageData();
     while (n > 0)
     {
-      max_color = MAX(max_color, *imagedata);
+      max_color = csMax (max_color, int (*imagedata));
       imagedata++;
       n--;
     }

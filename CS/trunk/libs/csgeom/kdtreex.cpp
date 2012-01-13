@@ -201,7 +201,7 @@ void KDTree::AddObject (KDTreeChild* obj)
 
   if (num_objects >= max_objects)
   {
-    max_objects += MIN (max_objects+2, 80);
+    max_objects += csMin (max_objects+2, 80);
     KDTreeChild** new_objects = new KDTreeChild* [max_objects];
     if (objects && num_objects > 0)
       memcpy (new_objects, objects, sizeof (KDTreeChild*) * num_objects);

@@ -1259,7 +1259,7 @@ void csGLGraphics3D::SetupShaderVariables()
       if (fogindex2 == (CS_FOGTABLE_SIZE - 1))
         fogalpha2 = 255;
       transientfogdata[(fogindex1+fogindex2*CS_FOGTABLE_SIZE)].alpha = 
-        MIN(fogalpha1, fogalpha2);
+        csMin (fogalpha1, fogalpha2);
     }
   }
 
@@ -4189,7 +4189,7 @@ void csGLGraphics3D::DumpZBuffer (const char* path)
 	zv *= zMul;
 	float cif = zv * (float)colorMax;
 	int ci = csQint (cif);
-	ci = MAX (0, MIN (ci, colorMax));
+	ci = csMax (0, csMin (ci, colorMax));
 	if (ci == colorMax)
 	{
 	  (imgPtr++)->Set (zBufColors[ci][0], zBufColors[ci][1],

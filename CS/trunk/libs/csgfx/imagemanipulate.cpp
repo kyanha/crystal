@@ -264,8 +264,8 @@ csRef<iImage> csImageManipulate::Mipmap2D (iImage* source, int steps,
 
   while (steps && !((cur_w == 1) && (cur_h == 1)) )
   {
-    const int newW = MAX (1, cur_w >> 1);
-    const int newH = MAX (1, cur_h >> 1);
+    const int newW = csMax (1, cur_w >> 1);
+    const int newH = csMax (1, cur_h >> 1);
     
     nimg.AttachNew (new csImageMemory (newW, newH, simg->GetFormat ()));
 
@@ -324,7 +324,7 @@ csRef<iImage> csImageManipulate::Mipmap3D (iImage* source, int step,
   const int nh = source->GetHeight () >> step;
   const int nd = source->GetDepth () >> step;
   // @@@ Will look ugly...
-  return Rescale (source, MAX (nw, 1), MAX (nh, 1), MAX (nd, 1));
+  return Rescale (source, csMax (nw, 1), csMax (nh, 1), csMax (nd, 1));
 }
 
 csRef<iImage> csImageManipulate::Mipmap (iImage* source, int steps, 

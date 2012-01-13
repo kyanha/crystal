@@ -288,7 +288,7 @@ csPtr<iImage> csDDSImageIO::Load (iDataBuffer* buf, int format)
       uint w = head.width; uint h = head.height; uint d = Depth;
       while (mipCount-- > 0)
       {
-	w = MAX (1, w >> 1); h = MAX (1, h >> 1); d = MAX (1, d >> 1);
+	w = csMax (1u, w >> 1); h = csMax (1u, h >> 1); d = csMax (1u, d >> 1);
 	dataSize = DataSize (dataType, bpp, w, h, d);
 	imgBuf.AttachNew (new csParasiticDataBuffer (buf, imgOffset, dataSize));
 	imgOffset += dataSize;

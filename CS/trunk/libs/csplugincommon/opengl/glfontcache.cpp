@@ -180,14 +180,14 @@ void csGLFontCache::Setup()
   }
 
   texSize = G2D->config->GetInt ("Video.OpenGL.FontCache.TextureSize", 256);
-  texSize = MAX (texSize, 64);
-  texSize = MIN (texSize, maxtex);
+  texSize = csMax (texSize, 64);
+  texSize = csMin (texSize, maxtex);
   maxTxts = G2D->config->GetInt ("Video.OpenGL.FontCache.MaxTextureNum", 16);
-  maxTxts = MAX (maxTxts, 1);
-  maxTxts = MIN (maxTxts, sizeof(size_t) * 8);
+  maxTxts = csMax (maxTxts, size_t (1));
+  maxTxts = csMin (maxTxts, sizeof(size_t) * 8);
   maxFloats = G2D->config->GetInt ("Video.OpenGL.FontCache.VertexCache", 128);
   maxFloats = ((maxFloats + 3) / 4) * 4;
-  maxFloats = MAX (maxFloats, 4);
+  maxFloats = csMax (maxFloats, size_t (4));
 
   glGenTextures (1, &texWhite);
   statecache->SetTexture (GL_TEXTURE_2D, texWhite);
@@ -233,8 +233,8 @@ csGLFontCache::GlyphCacheData* csGLFontCache::InternalCacheGlyph (
   int coordCorrect = 0;
   while ((allocWidth > texSize) || (allocHeight > texSize))
   {
-    allocWidth = MAX ((allocWidth+1) / 2, 1);
-    allocHeight = MAX ((allocHeight+1) / 2, 1);
+    allocWidth = csMax ((allocWidth+1) / 2, 1);
+    allocHeight = csMax ((allocHeight+1) / 2, 1);
     coordCorrect = 1;
   }
   // Width needs to be rounded up to a multiple of 4 for bug on Nvidia cards
@@ -329,7 +329,7 @@ csGLFontCache::GlyphCacheData* csGLFontCache::InternalCacheGlyph (
     // When using size-reduced glyphs, nudge the TCs slightly inward
     // to reduce leaking in of neighbouring glyphs.
     const float tccorrect = (float)((1 << coordCorrect) / 2) * (0.5f / tsf);
-    const int padX = MAX (texRect.Width() - bmetrics.width, 0);
+    const int padX = csMax (texRect.Width() - bmetrics.width, 0);
     cacheData->tx1 = (float)texRect.xmin / tsf + tccorrect;
     cacheData->ty1 = (float)texRect.ymin / tsf + tccorrect;
     cacheData->tx2 = (float)(texRect.xmax - padX) / tsf - tccorrect;
@@ -374,10 +374,10 @@ static void ShrinkGlyphData (uint8* glyph, int oldW, int oldH, int newW, int new
       int val = 0; 
       int cnt = 0;
       uint8* box = srcLine + x * boxX;
-      int by = MIN (boxY, oldH - y * boxY);
+      int by = csMin (boxY, oldH - y * boxY);
       while (by-- > 0)
       {
-	int bx = MIN (boxX, oldW - x * boxX);
+	int bx = csMin (boxX, oldW - x * boxX);
 	while (bx-- > 0)
 	{
 	  val += box[bx];
@@ -402,11 +402,11 @@ void csGLFontCache::CopyGlyphData (iFont* /*font*/, utf32_char /*glyph*/, size_t
 
     statecache->SetPixelUnpackAlignment (1);
 
-    uint8* intData = new uint8[MAX((texRect.Width () * texRect.Height ()),
+    uint8* intData = new uint8[csMax ((texRect.Width () * texRect.Height ()),
       (bmetrics.width * bmetrics.height))];
 
     const uint8 valXor = multiTexText ? 0 : 0xff;
-    const int padX = MAX (texRect.Width() - bmetrics.width, 0);
+    const int padX = csMax (texRect.Width() - bmetrics.width, 0);
     if (alphaDataBuf)
     {
       uint8* alphaData = alphaDataBuf->GetUint8 ();

@@ -667,13 +667,13 @@ void G2DTestSystemDriver::WriteCenteredWrapped (int mode, int dy, int &h,
       //p = space + 1;
       lw = 0;
       h += maxLH;
-      maxLH = MAX(fH, tH);
+      maxLH = csMax (fH, tH);
     }
     else
     {
       lw += tW + sW;
       drawLine << ' ' << p;
-      maxLH = MAX(maxLH, tH);
+      maxLH = csMax (maxLH, tH);
     }
     if (space != 0) p = space + 1; else p = 0;
   }

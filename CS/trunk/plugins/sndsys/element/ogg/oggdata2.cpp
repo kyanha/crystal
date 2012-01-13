@@ -20,6 +20,7 @@
 #include "cssysdef.h"
 #include "iutil/comp.h"
 #include "isndsys/ss_loader.h"
+#include "csgeom/math.h"
 #include "oggstream2.h"
 #include "oggdata2.h"
 
@@ -37,7 +38,7 @@ static size_t cs_ogg_read (void *ptr, size_t size, size_t nmemb, void *datasourc
   // size_t is unsigned, be careful with subtraction.  A 0 return indicates end of stream.
   if (ds->length <= (size_t)streamdata->position)
     return 0;
-  size_t br = MIN (size*nmemb, ds->length - streamdata->position);
+  size_t br = csMin (size*nmemb, ds->length - streamdata->position);
 
   memcpy (ptr, ds->data+streamdata->position, br);
 

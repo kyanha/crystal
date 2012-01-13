@@ -447,7 +447,7 @@ bool csShaderExpression::Parse (iDocumentNode* node)
   oper_arg tmp;
   tmp.type = TYPE_INVALID;
   tmp.vec4.Set (0.0f);
-  accstack.SetSize (MAX(acc_top, accstack_max) + 1, tmp);
+  accstack.SetSize (csMax (acc_top, accstack_max) + 1, tmp);
 
   destruct_cons (head);
 
@@ -1499,7 +1499,7 @@ bool csShaderExpression::eval_min (const oper_arg& arg1, const oper_arg& arg2,
   if (arg1.type == TYPE_NUMBER && arg2.type == TYPE_NUMBER)
   {
     output.type = TYPE_NUMBER;
-    output.num = MIN (arg1.num, arg2.num);
+    output.num = csMin (arg1.num, arg2.num);
   } 
   else 
   {
@@ -1518,7 +1518,7 @@ bool csShaderExpression::eval_max (const oper_arg& arg1, const oper_arg& arg2,
   if (arg1.type == TYPE_NUMBER && arg2.type == TYPE_NUMBER)
   {
     output.type = TYPE_NUMBER;
-    output.num = MAX (arg1.num, arg2.num);
+    output.num = csMax (arg1.num, arg2.num);
   } 
   else 
   {

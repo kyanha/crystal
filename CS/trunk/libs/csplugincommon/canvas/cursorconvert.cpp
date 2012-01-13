@@ -29,8 +29,8 @@
 
 static inline int rgb_dist (int tR, int tG, int tB, int sR, int sG, int sB)
 {
-  register int max = MAX (tR, tG);
-  max = MAX (max, tB);
+  register int max = csMax (tR, tG);
+  max = csMax (max, tB);
 
   sR -= tR; sG -= tG; sB -= tB;
 

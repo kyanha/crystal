@@ -523,8 +523,8 @@ void csFontPlexer::GetDimensions (const char *text, int &oW, int &oH, int &desc)
 	  int fW, fH, fDesc = font->GetDescent ();;
 	  font->GetMaxSize (fW, fH);
 
-	  oH = MAX (oH, fH);
-	  desc = MAX (desc, fDesc);
+	  oH = csMax (oH, fH);
+	  desc = csMax (desc, fDesc);
 	  break;
 	}
       }

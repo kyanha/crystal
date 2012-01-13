@@ -333,10 +333,10 @@ Color*		allocSource = 0;
 			cb2.SetCount(0);
 			AlphaCount = 0;
 			pSrcPix = pSrc;
-			const long maxYY = MIN(YSize-y, 4);
+			const long maxYY = csMin (YSize-y, 4l);
 			for(yy=0; yy<maxYY; yy++)
 			{
-				const long maxXX = MIN(XSize-x, 4);
+				const long maxXX = csMin (XSize-x, 4l);
 				for(xx=0; xx<maxXX; xx++)
 				{
 					C.Col = pSrcPix[xx].Col & Mask1565;
@@ -456,10 +456,10 @@ Color*		allocSource = 0;
 			// Compute a unique color list for the block
 			cb2.SetCount(0);
 			pSrcPix = pSrc;
-			const long maxYY = MIN(YSize-y, 4);
+			const long maxYY = csMin (YSize-y, 4l);
 			for(yy=0; yy<maxYY; yy++)
 			{
-				const long maxXX = MIN(XSize-x, 4);
+				const long maxXX = csMin (XSize-x, 4l);
 				for(xx=0; xx<maxXX; xx++)
 				{
 					C.Col = pSrcPix[xx].Col & Mask0565;
@@ -554,10 +554,10 @@ Color*		allocSource = 0;
 			cb2.SetCount(0);
 			cbA2.SetCount(0);
 			pSrcPix = pSrc;
-			const long maxYY = MIN(YSize-y, 4);
+			const long maxYY = csMin (YSize-y, 4l);
 			for(yy=0; yy<maxYY; yy++)
 			{
-				const long maxXX = MIN(XSize-x, 4);
+				const long maxXX = csMin (XSize-x, 4l);
 				for(xx=0; xx<maxXX; xx++)
 				{
 					C.Col = pSrcPix[xx].Col & Mask0565;

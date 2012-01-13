@@ -438,7 +438,7 @@ void Primitives::GenerateCone (float l, float r, uint sides,
    * centered on the origin. */
 
   // Make sure we have enough sides to actually make a cone.
-  sides = MAX(3, sides);
+  sides = csMax (uint (3), sides);
 
   // The top-point.
   mesh_vertices.Push (csVector3 (0, l, 0));

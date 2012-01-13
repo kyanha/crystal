@@ -325,7 +325,7 @@ void csTriangleMeshTools::CalculateOutline (
       }
       // Calculate minimum distance at which this edge changes status
       // (from in to out or vice versa).
-      float cl = MIN (ABS (cl1), ABS (cl2));
+      float cl = csMin (ABS (cl1), ABS (cl2));
       if (cl < valid_radius) valid_radius = cl;
     }
   }

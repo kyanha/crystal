@@ -62,7 +62,7 @@ public:
   {
     csBitArrayStorageType const* p0 = key1.GetStore();
     csBitArrayStorageType const* p1 = key2.GetStore();
-    size_t compareNum = MIN (key1.mLength, key2.mLength);
+    size_t compareNum = csMin (key1.mLength, key2.mLength);
     size_t i = 0;
     for (; i < compareNum; i++)
       if (p0[i] != p1[i])
@@ -159,7 +159,7 @@ protected:
     Storage()
     {
       memset (&inlineStore, 0, 
-        MAX(sizeof (heapStore), sizeof (inlineStore)));
+        csMax (sizeof (heapStore), sizeof (inlineStore)));
     }
   };
   Storage storage;
@@ -241,7 +241,7 @@ protected:
 	  if (newStore != oldStore)
 	  {
 	    memcpy (newStore, oldStore, 
-	      (MIN (mLength, newLength)) * sizeof (csBitArrayStorageType));
+	      (csMin (mLength, newLength)) * sizeof (csBitArrayStorageType));
 	    if (newLength > mLength)
 	      memset(newStore + mLength, 0,
 		     (newLength - mLength) * sizeof (csBitArrayStorageType));
@@ -560,7 +560,7 @@ public:
     {
       size_t index = GetIndex (pos);
       size_t offset = GetOffset (pos);
-      size_t checkCount = MIN(count, cellSize - offset);
+      size_t checkCount = csMin (count, cellSize - offset);
       csBitArrayStorageType mask = ((checkCount == cellSize) 
         ? ~(csBitArrayStorageType)0 
         : ((((csBitArrayStorageType)1) << checkCount) - 1)) << offset;

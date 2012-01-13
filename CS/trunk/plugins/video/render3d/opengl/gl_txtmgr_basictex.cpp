@@ -353,9 +353,9 @@ void csGLBasicTextureHandle::AdjustSizePo2 ()
 {
   if (texFlags.Check (CS_TEXTURE_NPOTS)) 
   {
-    actual_width = MIN(orig_width, G3D->maxNpotsTexSize);
-    actual_height = MIN(orig_height, G3D->maxNpotsTexSize);
-    actual_d = MIN(orig_d, G3D->maxNpotsTexSize);
+    actual_width = csMin (orig_width, G3D->maxNpotsTexSize);
+    actual_height = csMin (orig_height, G3D->maxNpotsTexSize);
+    actual_d = csMin (orig_d, G3D->maxNpotsTexSize);
     return;
   }
 

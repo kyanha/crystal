@@ -145,7 +145,7 @@ void csPolygon3DStatic::SetNumVertices (int count)
 
   if (old_data)
   {
-    int minsize = MIN (count, old_count);
+    int minsize = csMin (count, old_count);
     memcpy (polygon_data.vertices, old_data, sizeof (int) * minsize);
     switch (old_count)
     {

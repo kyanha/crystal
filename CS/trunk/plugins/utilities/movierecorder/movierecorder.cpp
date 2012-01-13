@@ -276,18 +276,18 @@ bool csMovieRecorder::HandleEndFrame (iEvent& /*event*/)
     writer->writeFrame(buffer, encodeTime, writeTime);
 
     totalFrameTime += thisFrameTime;
-    minFrameTime = MIN (minFrameTime, thisFrameTime);
-    maxFrameTime = MAX (maxFrameTime, thisFrameTime);
+    minFrameTime = csMin (minFrameTime, thisFrameTime);
+    maxFrameTime = csMax (maxFrameTime, thisFrameTime);
 
     csMicroTicks encodeTimeM = ((csMicroTicks) encodeTime) * 1000;
     totalFrameEncodeTime += encodeTimeM;
-    minFrameEncodeTime = MIN (minFrameEncodeTime, encodeTimeM);
-    maxFrameEncodeTime = MAX (maxFrameEncodeTime, encodeTimeM);
+    minFrameEncodeTime = csMin (minFrameEncodeTime, encodeTimeM);
+    maxFrameEncodeTime = csMax (maxFrameEncodeTime, encodeTimeM);
 
     csMicroTicks writeTimeM = ((csMicroTicks) writeTime) * 1000;
     totalWriteToDiskTime += writeTimeM;
-    minWriteToDiskTime = MIN (minWriteToDiskTime, writeTimeM);
-    maxWriteToDiskTime = MAX (maxWriteToDiskTime, writeTimeM);
+    minWriteToDiskTime = csMin (minWriteToDiskTime, writeTimeM);
+    maxWriteToDiskTime = csMax (maxWriteToDiskTime, writeTimeM);
   }
 
   return false;

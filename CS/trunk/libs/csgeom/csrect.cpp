@@ -20,6 +20,7 @@
 #include "cssysdef.h"
 #include "csqint.h"
 #include "csgeom/csrect.h"
+#include "csgeom/math.h"
 
 csRect::csRect ()
 {
@@ -170,23 +171,23 @@ void csRect::AddAdjacent (const csRect &rect)
 {
   csRect tmp;
   if (xmin == rect.xmax)
-    tmp.Set (rect.xmin, MAX (ymin, rect.ymin), xmax, MIN (ymax, rect.ymax));
+    tmp.Set (rect.xmin, csMax (ymin, rect.ymin), xmax, csMin (ymax, rect.ymax));
   else if (xmax == rect.xmin)
-    tmp.Set (xmin, MAX (ymin, rect.ymin), rect.xmax, MIN (ymax, rect.ymax));
+    tmp.Set (xmin, csMax (ymin, rect.ymin), rect.xmax, csMin (ymax, rect.ymax));
   else if (ymin == rect.ymax)
-    tmp.Set (MAX (xmin, rect.xmin), rect.ymin, MIN (xmax, rect.xmax), ymax);
+    tmp.Set (csMax (xmin, rect.xmin), rect.ymin, csMin (xmax, rect.xmax), ymax);
   else if (ymax == rect.ymin)
-    tmp.Set (MAX (xmin, rect.xmin), ymin, MIN (xmax, rect.xmax), rect.ymax);
+    tmp.Set (csMax (xmin, rect.xmin), ymin, csMin (xmax, rect.xmax), rect.ymax);
   if (tmp.Area () > Area ()) Set (tmp);
 }
 
 void csRect::Join (const csRect &rect)
 {
-  xmin = MIN (rect.xmin, xmin);
-  ymin = MIN (rect.ymin, ymin);
+  xmin = csMin (rect.xmin, xmin);
+  ymin = csMin (rect.ymin, ymin);
 
-  xmax = MAX (rect.xmax, xmax);
-  ymax = MAX (rect.ymax, ymax);
+  xmax = csMax (rect.xmax, xmax);
+  ymax = csMax (rect.ymax, ymax);
 }
 
 void csRect::Outset (int n)
