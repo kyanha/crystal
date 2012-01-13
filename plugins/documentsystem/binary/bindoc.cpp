@@ -1436,7 +1436,7 @@ void csBinaryDocNode::Store (csMemFile* nodesFile)
   uint32 scratchSize = 0;
   if (nodeData->flags & BD_NODE_HAS_ATTR) scratchSize = nodeData->atNum();
   if (nodeData->flags & BD_NODE_HAS_CHILDREN)
-    scratchSize = MAX(scratchSize, nodeData->ctNum());
+    scratchSize = csMax (scratchSize, nodeData->ctNum());
     
   CS_ALLOC_STACK_ARRAY(uint32, startsScratch, scratchSize);
   

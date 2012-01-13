@@ -633,18 +633,18 @@ void csColliderActor::InitializeColliders (
   csColliderActor::shift = shift;
   bottomSize = legs;
   topSize = body;
-  intervalSize.x = MIN(topSize.x, bottomSize.x);
-  intervalSize.y = MIN(topSize.y, bottomSize.y);
-  intervalSize.z = MIN(topSize.z, bottomSize.z);
+  intervalSize.x = csMin (topSize.x, bottomSize.x);
+  intervalSize.y = csMin (topSize.y, bottomSize.y);
+  intervalSize.z = csMin (topSize.z, bottomSize.z);
 
-  float maxX = MAX(body.x, legs.x)+shift.x;
-  float maxZ = MAX(body.z, legs.z)+shift.z;
-  float maxDim = MAX(maxX, maxZ);
+  float maxX = csMax (body.x, legs.x)+shift.x;
+  float maxZ = csMax (body.z, legs.z)+shift.z;
+  float maxDim = csMax (maxX, maxZ);
 
   csRef<iTriangleMesh> pm;
 
-  float bX2 = MAX(body.x, legs.x) / 2.0f;
-  float bZ2 = MAX(body.z, legs.z) / 2.0f;
+  float bX2 = csMax (body.x, legs.x) / 2.0f;
+  float bZ2 = csMax (body.z, legs.z) / 2.0f;
   float bYtop = legs.y + body.y;
 
   csBox3 top (csVector3 (-bX2, -legs.y/2.0f, -bZ2) + shift,  // Extend the bottom so we can check collision on stepping down
@@ -1078,7 +1078,7 @@ bool csColliderActor::AdjustForCollisions (
 	if(fabs(unit.y) >= 0.7f)
           onground = true;
         // This is a ground triangle so we can move on top of it
-        max_y = MIN(MAX(MAX(line[0].y, line[1].y),max_y), jumpY);
+        max_y = csMin (csMax (csMax (line[0].y, line[1].y),max_y), jumpY);
       }
       
 
@@ -1519,7 +1519,7 @@ static float ComputeLocalMaxInterval (
   const csVector3& intervalSize)
 {
   float local_max_interval =
-    MIN (MIN ((fabs (bodyVel.y) < SMALL_EPSILON)
+    csMin (csMin ((fabs (bodyVel.y) < SMALL_EPSILON)
     ? MAX_CD_INTERVAL
   : fabs (intervalSize.y/bodyVel.y), (fabs (bodyVel.x) < SMALL_EPSILON)
     ? MAX_CD_INTERVAL

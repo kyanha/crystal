@@ -141,7 +141,7 @@ class csPrintfFormatter
   public:
     void WriteTo (Twriter& writer, size_t offset = 0, size_t len = (size_t)~0)
     {
-      const size_t n = MIN (len, GetSize ());
+      const size_t n = csMin (len, GetSize ());
       for (size_t i = offset; i < n; i++) writer.Put (Get (i));
     }
   };
@@ -766,7 +766,7 @@ class csPrintfFormatter
       while (*ptr++ != 0) len++;
     }
     if (currentFormat.precision > -1)
-      len = MIN(len, (size_t)currentFormat.precision);
+      len = csMin (len, (size_t)currentFormat.precision);
 
     // How many utf32_chars were written
     size_t writtenLen;

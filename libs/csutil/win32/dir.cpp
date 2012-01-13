@@ -69,7 +69,7 @@ dirent *readdir (DIR *dirp)
   if (dirp->findHandle != INVALID_HANDLE_VALUE)
   {
     size_t nameLen = wcslen (dirp->findData.cFileName);
-    nameLen = MIN (nameLen, sizeof (dirp->currentEntry.d_name) - 1);
+    nameLen = csMin (nameLen, sizeof (dirp->currentEntry.d_name) - 1);
     csUnicodeTransform::WCtoUTF8 ((utf8_char*)dirp->currentEntry.d_name,
                                   sizeof (dirp->currentEntry.d_name),
                                   dirp->findData.cFileName, nameLen);

@@ -361,16 +361,16 @@ static int CompareStaticPolys (int const& i1, int const& i2)
 
   int maxdim1, mindim1, maxdim2, mindim2;
 
-  maxdim1 = MAX (
+  maxdim1 = csMax (
     csLightMap::CalcLightMapWidth (lm1->GetLitWidth ()),
     csLightMap::CalcLightMapHeight (lm1->GetLitHeight ()));
-  mindim1 = MIN (
+  mindim1 = csMin (
     csLightMap::CalcLightMapWidth (lm1->GetLitWidth ()),
     csLightMap::CalcLightMapHeight (lm1->GetLitHeight ()));
-  maxdim2 = MAX (
+  maxdim2 = csMax (
     csLightMap::CalcLightMapWidth (lm2->GetLitWidth ()),
     csLightMap::CalcLightMapHeight (lm2->GetLitHeight ()));
-  mindim2 = MIN (
+  mindim2 = csMin (
     csLightMap::CalcLightMapWidth (lm2->GetLitWidth ()),
     csLightMap::CalcLightMapHeight (lm2->GetLitHeight ()));
 
@@ -438,9 +438,9 @@ void csThingStatic::DistributePolyLMs (
     else
     {
       inputQueues[0].totalLumels += (lmw * lmh);
-      inputQueues[0].maxlmw = MAX (inputQueues[0].maxlmw, lmw);
-      inputQueues[0].maxlmh = MAX (inputQueues[0].maxlmh, lmh);
-      inputQueues[0].minLMArea = MIN(inputQueues[0].minLMArea, lmw * lmh);
+      inputQueues[0].maxlmw = csMax (inputQueues[0].maxlmw, lmw);
+      inputQueues[0].maxlmh = csMax (inputQueues[0].maxlmh, lmh);
+      inputQueues[0].minLMArea = csMin (inputQueues[0].minLMArea, lmw * lmh);
       inputQueues[0].polys.InsertSorted (polyIdx, CompareStaticPolys);
     }
   }
@@ -509,11 +509,11 @@ void csThingStatic::DistributePolyLMs (
             polyIdx, CompareStaticPolys);
           inputQueues[curQueue ^ 1].totalLumels += (lmw * lmh);
           inputQueues[curQueue ^ 1].maxlmw =
-            MAX (inputQueues[curQueue ^ 1].maxlmw, lmw);
+            csMax (inputQueues[curQueue ^ 1].maxlmw, lmw);
           inputQueues[curQueue ^ 1].maxlmh =
-            MAX (inputQueues[curQueue ^ 1].maxlmh, lmh);
+            csMax (inputQueues[curQueue ^ 1].maxlmh, lmh);
           inputQueues[curQueue ^ 1].minLMArea =
-            MIN(inputQueues[curQueue ^ 1].minLMArea, lmw * lmh);
+            csMin (inputQueues[curQueue ^ 1].minLMArea, lmw * lmh);
         }
       }
       superLMs.DeleteIndex (s);
@@ -2385,13 +2385,13 @@ bool csThingObjectType::Initialize (iObjectRegistry *object_reg)
   csConfigAccess cfg (object_reg, "/config/thing.cfg");
 
   int maxLightmapSize = cfg->GetInt ("Mesh.Thing.MaxSuperlightmapSize",
-    /*256*/MIN (maxTW, maxTH));
+    /*256*/csMin (maxTW, maxTH));
   maxLightmapW =
     cfg->GetInt ("Mesh.Thing.MaxSuperlightmapWidth", maxLightmapSize);
-  maxLightmapW = MIN (maxLightmapW, maxTW);
+  maxLightmapW = csMin (maxLightmapW, maxTW);
   maxLightmapH =
     cfg->GetInt ("Mesh.Thing.MaxSuperlightmapHeight", maxLightmapSize);
-  maxLightmapH = MIN (maxLightmapH, maxTH);
+  maxLightmapH = csMin (maxLightmapH, maxTH);
   maxSLMSpaceWaste =
     cfg->GetFloat ("Mesh.Thing.MaxSuperlightmapWaste", 0.6f);
   csThing::lightmap_quality = cfg->GetInt (

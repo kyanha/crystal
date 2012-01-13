@@ -612,7 +612,7 @@ void csStencilShadowStep::Perform (iRenderView* rview, iSector* sector,
 	const csReversibleTransform& tf = sp->GetMovable ()->GetTransform ();
 	csVector3 pos = tf.This2Other (sphere.GetCenter()); //transform it
 	csVector3 radWorld = tf.This2Other (csVector3 (sphere.GetRadius()));
-	maxRadius = MAX(radWorld.x, MAX(radWorld.y, radWorld.z));
+	maxRadius = csMax (radWorld.x, csMax (radWorld.y, radWorld.z));
 
 	if (!lightBehindCamera)
 	{

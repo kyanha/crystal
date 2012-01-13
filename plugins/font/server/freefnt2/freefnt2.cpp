@@ -443,7 +443,7 @@ csPtr<iDataBuffer> csFreeType2Font::GetGlyphBitmap (utf32_char c,
       memcpy (bitmap + stride*i, 
               face->face->glyph->bitmap.buffer + 
 	      n * face->face->glyph->bitmap.pitch,
-              MIN(stride, face->face->glyph->bitmap.pitch));
+              csMin (stride, face->face->glyph->bitmap.pitch));
     metrics.width = face->face->glyph->bitmap.width;
     metrics.left = face->face->glyph->bitmap_left;
   }
@@ -529,7 +529,7 @@ csPtr<iDataBuffer> csFreeType2Font::GetGlyphAlphaBitmap (utf32_char c,
       memcpy (bitmap + stride*i, 
               face->face->glyph->bitmap.buffer + 
 	      n * face->face->glyph->bitmap.pitch,
-              MIN(stride, face->face->glyph->bitmap.pitch));
+              csMin (stride, face->face->glyph->bitmap.pitch));
   }
   else
     bitmap = 0;

@@ -522,7 +522,7 @@ void csSprite2DMeshObject::StopUVAnimation (int idx)
   {
     if (idx != -1)
     {
-      uvani->frameindex = MIN(MAX(idx, 0), uvani->framecount-1);
+      uvani->frameindex = csMin (csMax (idx, 0), uvani->framecount-1);
       uvani->frame = uvani->ani->GetFrame (uvani->frameindex);
     }
     uvani->halted = true;
@@ -535,7 +535,7 @@ void csSprite2DMeshObject::PlayUVAnimation (int idx, int style, bool loop)
   {
     if (idx != -1)
     {
-      uvani->frameindex = MIN(MAX(idx, 0), uvani->framecount-1);
+      uvani->frameindex = csMin (csMax (idx, 0), uvani->framecount-1);
       uvani->frame = uvani->ani->GetFrame (uvani->frameindex);
     }
     uvani->halted = false;

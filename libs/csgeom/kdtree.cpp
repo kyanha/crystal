@@ -198,7 +198,7 @@ void csKDTree::AddObject (csKDTreeChild* obj)
 
   if (num_objects >= max_objects)
   {
-    max_objects += MIN (max_objects+2, 80);
+    max_objects += csMin (max_objects+2, 80);
     csKDTreeChild** new_objects = new csKDTreeChild* [max_objects];
     if (objects && num_objects > 0)
       memcpy (new_objects, objects, sizeof (csKDTreeChild*) * num_objects);

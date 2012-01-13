@@ -248,7 +248,7 @@ static inline char* FindConfigPath ()
 
     if (GetShellFolderPath (CSIDL_PROGRAM_FILES, programpath))
     {
-      size_t maxLen = MIN(sizeof(programpath), 1024-30);
+      size_t maxLen = csMin (sizeof(programpath), size_t (1024-30));
       char path[1024];
       memcpy (path, programpath, maxLen);
       path[maxLen] = 0;

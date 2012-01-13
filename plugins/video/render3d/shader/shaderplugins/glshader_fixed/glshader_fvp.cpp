@@ -406,7 +406,7 @@ void csGLShaderFVP::SetupState (const csRenderMesh* /*mesh*/,
           // fogplane, to avoid some ugly skipping. The "pow" is there
           // tweak the curve to get a bit smoother blend.
           float blend = 1.0f - pow (1.0f + fogplane.w*0.2f, 5);
-          blend = MIN (MAX (blend, 0), 1);
+          blend = csMin (csMax (blend, 0.f), 1.f);
 
           // Okay, here's the serious magic. Basically what we want to do
           // is to calculate the distance from the vertex to the viewplane
@@ -435,7 +435,7 @@ void csGLShaderFVP::SetupState (const csRenderMesh* /*mesh*/,
           // fact that during the blend we haven't actually reached
           // the fogplane yet. Nothing scientific, but does the job.
           const float dist =  fogplane.w*density;
-          coeff1[3] = (MIN (MAX (dist, -1.0f), 0) - 0.1f*density);
+          coeff1[3] = (csMin (csMax (dist, -1.0f), 0.f) - 0.1f*density);
 
           // This one is the fogplane distance, i.e. 
           // vertex<dot>fogplane/fogplane.z. We blend this to just a

@@ -103,7 +103,7 @@ bool csDDSSaver::FmtDXT::Save (csMemFile& out, iImage* image)
   dxtc.FromImage32 (img, method);
 
   uint16* dxtBlocks = (uint16*)dxtc.GetBlocks();
-  size_t wordCount = (MAX(imgW, 4)*MAX(imgH, 4)) / ((method == ImageLib::DC_DXT1) ? 4 : 2);
+  size_t wordCount = (csMax (imgW, 4)*csMax (imgH, 4)) / ((method == ImageLib::DC_DXT1) ? 4 : 2);
   while (wordCount-- > 0)
   {
     uint16 ui16 = csLittleEndian::Convert (*dxtBlocks++);

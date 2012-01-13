@@ -264,8 +264,8 @@ void csGLTextureHandle::PrepareInt ()
   {
     // Handle cube map faces
     csRef<csImageCubeMapMaker> newCube;
-    int faceCount = MIN (image->HasSubImages() + 1, 6);
-    for (int i = 0; i < faceCount; i++)
+    uint faceCount = csMin (image->HasSubImages() + 1, 6u);
+    for (uint i = 0; i < faceCount; i++)
     {
       int newFaceW, newFaceH, newFaceD;
       csRef<iImage> imgFace = image->GetSubImage (i);

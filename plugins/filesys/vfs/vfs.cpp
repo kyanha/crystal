@@ -735,7 +735,7 @@ size_t DiskFile::Read (char *Data, size_t DataSize)
     }
     else
     {
-      size_t rc = MIN (DataSize, Size - fpos);
+      size_t rc = csMin (DataSize, Size - fpos);
       memcpy (Data, (void*)(alldata->GetData() + fpos), rc);
       fpos += rc;
       return rc;

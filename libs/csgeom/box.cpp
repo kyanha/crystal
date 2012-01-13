@@ -112,28 +112,28 @@ bool csBox2::TestIntersect (const csBox2& box) const
 csBox2 operator+ (const csBox2 &box1, const csBox2 &box2)
 {
   return csBox2 (
-      MIN (box1.minbox.x, box2.minbox.x),
-      MIN (box1.minbox.y, box2.minbox.y),
-      MAX (box1.maxbox.x, box2.maxbox.x),
-      MAX (box1.maxbox.y, box2.maxbox.y));
+      csMin (box1.minbox.x, box2.minbox.x),
+      csMin (box1.minbox.y, box2.minbox.y),
+      csMax (box1.maxbox.x, box2.maxbox.x),
+      csMax (box1.maxbox.y, box2.maxbox.y));
 }
 
 csBox2 operator+ (const csBox2 &box, const csVector2 &point)
 {
   return csBox2 (
-      MIN (box.minbox.x, point.x),
-      MIN (box.minbox.y, point.y),
-      MAX (box.maxbox.x, point.x),
-      MAX (box.maxbox.y, point.y));
+      csMin (box.minbox.x, point.x),
+      csMin (box.minbox.y, point.y),
+      csMax (box.maxbox.x, point.x),
+      csMax (box.maxbox.y, point.y));
 }
 
 csBox2 operator * (const csBox2 &box1, const csBox2 &box2)
 {
   return csBox2 (
-      MAX (box1.minbox.x, box2.minbox.x),
-      MAX (box1.minbox.y, box2.minbox.y),
-      MIN (box1.maxbox.x, box2.maxbox.x),
-      MIN (box1.maxbox.y, box2.maxbox.y));
+      csMax (box1.minbox.x, box2.minbox.x),
+      csMax (box1.minbox.y, box2.minbox.y),
+      csMin (box1.maxbox.x, box2.maxbox.x),
+      csMin (box1.maxbox.y, box2.maxbox.y));
 }
 
 bool operator== (const csBox2 &box1, const csBox2 &box2)
@@ -263,13 +263,13 @@ float csBox2::SquaredOriginMaxDist () const
   else if (maxbox.x < 0)
     res = minbox.x * minbox.x;
   else
-    res = MAX (maxbox.x * maxbox.x, minbox.x * minbox.x);
+    res = csMax (maxbox.x * maxbox.x, minbox.x * minbox.x);
   if (minbox.y > 0)
     res += maxbox.y * maxbox.y;
   else if (maxbox.y < 0)
     res += minbox.y * minbox.y;
   else
-    res += MAX (maxbox.y * maxbox.y, minbox.y * minbox.y);
+    res += csMax (maxbox.y * maxbox.y, minbox.y * minbox.y);
   return res;
 }
 
@@ -311,7 +311,7 @@ float csBox2::SquaredPosMaxDist (const csVector2& pos) const
   else if (ma < 0)
     res = mi * mi;
   else
-    res = MAX (ma * ma, mi * mi);
+    res = csMax (ma * ma, mi * mi);
 
   mi = minbox.y - pos.y;
   ma = maxbox.y - pos.y;
@@ -320,7 +320,7 @@ float csBox2::SquaredPosMaxDist (const csVector2& pos) const
   else if (ma < 0)
     res += mi * mi;
   else
-    res += MAX (ma * ma, mi * mi);
+    res += csMax (ma * ma, mi * mi);
   return res;
 }
 
@@ -663,7 +663,7 @@ void csBox3::GetConvexOutline (
   int idx = CalculatePointSegment (pos);
 
   const Outline &ol = outlines[idx];
-  num_array = (bVisible ? ol.num : MIN (ol.num, 6));
+  num_array = (bVisible ? ol.num : csMin (ol.num, 6));
 
   int i;
   for (i = 0; i < num_array; i++)
@@ -760,19 +760,19 @@ float csBox3::SquaredOriginMaxDist () const
   else if (maxbox.x < 0)
     res = minbox.x * minbox.x;
   else
-    res = MAX (maxbox.x * maxbox.x, minbox.x * minbox.x);
+    res = csMax (maxbox.x * maxbox.x, minbox.x * minbox.x);
   if (minbox.y > 0)
     res += maxbox.y * maxbox.y;
   else if (maxbox.y < 0)
     res += minbox.y * minbox.y;
   else
-    res += MAX (maxbox.y * maxbox.y, minbox.y * minbox.y);
+    res += csMax (maxbox.y * maxbox.y, minbox.y * minbox.y);
   if (minbox.z > 0)
     res += maxbox.z * maxbox.z;
   else if (maxbox.z < 0)
     res += minbox.z * minbox.z;
   else
-    res += MAX (maxbox.z * maxbox.z, minbox.z * minbox.z);
+    res += csMax (maxbox.z * maxbox.z, minbox.z * minbox.z);
   return res;
 }
 
@@ -825,7 +825,7 @@ float csBox3::SquaredPosMaxDist (const csVector3& pos) const
   else if (ma < 0)
     res = mi * mi;
   else
-    res = MAX (ma * ma, mi * mi);
+    res = csMax (ma * ma, mi * mi);
 
   mi = minbox.y - pos.y;
   ma = maxbox.y - pos.y;
@@ -834,7 +834,7 @@ float csBox3::SquaredPosMaxDist (const csVector3& pos) const
   else if (ma < 0)
     res += mi * mi;
   else
-    res += MAX (ma * ma, mi * mi);
+    res += csMax (ma * ma, mi * mi);
 
   mi = minbox.z - pos.z;
   ma = maxbox.z - pos.z;
@@ -843,7 +843,7 @@ float csBox3::SquaredPosMaxDist (const csVector3& pos) const
   else if (ma < 0)
     res += mi * mi;
   else
-    res += MAX (ma * ma, mi * mi);
+    res += csMax (ma * ma, mi * mi);
   return res;
 }
 
@@ -872,7 +872,7 @@ bool csBox3::ProjectBox (const csTransform& trans, float fov,
   const csVector3& origin = trans.GetOrigin ();
   int idx = CalculatePointSegment (origin);
   const Outline &ol = outlines[idx];
-  int num_array = MIN (ol.num, 6);
+  int num_array = csMin (ol.num, 6);
 
   min_z = 100000000.0;
   max_z = 0;
@@ -940,7 +940,7 @@ bool csBox3::ProjectOutline (const csVector3& origin,
 {
   int idx = CalculatePointSegment (origin);
   const Outline &ol = outlines[idx];
-  int num_array = MIN (ol.num, 6);
+  int num_array = csMin (ol.num, 6);
 
   int i;
   for (i = 0 ; i < num_array ; i++)
@@ -966,7 +966,7 @@ bool csBox3::ProjectOutline (const csVector3& origin,
 {
   int idx = CalculatePointSegment (origin);
   const Outline &ol = outlines[idx];
-  int num_array = MIN (ol.num, 6);
+  int num_array = csMin (ol.num, 6);
   poly.SetVertexCount (num_array);
 
   int i;
@@ -992,7 +992,7 @@ bool csBox3::ProjectOutline (const csTransform& trans, float fov,
   const csVector3& origin = trans.GetOrigin ();
   int idx = CalculatePointSegment (origin);
   const Outline &ol = outlines[idx];
-  int num_array = MIN (ol.num, 6);
+  int num_array = csMin (ol.num, 6);
   poly.SetVertexCount (num_array);
 
   min_z = 100000000.0;
@@ -1024,7 +1024,7 @@ bool csBox3::ProjectBoxAndOutline (const csTransform& trans, float fov,
   const csVector3& origin = trans.GetOrigin ();
   int idx = CalculatePointSegment (origin);
   const Outline &ol = outlines[idx];
-  int num_array = MIN (ol.num, 6);
+  int num_array = csMin (ol.num, 6);
   poly.SetVertexCount (num_array);
 
   min_z = 100000000.0;
@@ -1077,7 +1077,7 @@ bool csBox3::ProjectBox (const csTransform& trans,
   const csVector3& origin = trans.GetOrigin ();
   int idx = CalculatePointSegment (origin);
   const Outline &ol = outlines[idx];
-  int num_array = MIN (ol.num, 6);
+  int num_array = csMin (ol.num, 6);
 
   min_z = 100000000.0;
   max_z = 0;
@@ -1189,34 +1189,34 @@ bool csBox3::TestIntersect (const csBox3& box) const
 csBox3 operator+ (const csBox3 &box1, const csBox3 &box2)
 {
   return csBox3 (
-      MIN (box1.minbox.x, box2.minbox.x),
-      MIN (box1.minbox.y, box2.minbox.y),
-      MIN (box1.minbox.z, box2.minbox.z),
-      MAX (box1.maxbox.x, box2.maxbox.x),
-      MAX (box1.maxbox.y, box2.maxbox.y),
-      MAX (box1.maxbox.z, box2.maxbox.z));
+      csMin (box1.minbox.x, box2.minbox.x),
+      csMin (box1.minbox.y, box2.minbox.y),
+      csMin (box1.minbox.z, box2.minbox.z),
+      csMax (box1.maxbox.x, box2.maxbox.x),
+      csMax (box1.maxbox.y, box2.maxbox.y),
+      csMax (box1.maxbox.z, box2.maxbox.z));
 }
 
 csBox3 operator+ (const csBox3 &box, const csVector3 &point)
 {
   return csBox3 (
-    MIN (box.minbox.x, point.x),
-    MIN (box.minbox.y, point.y),
-    MIN (box.minbox.z, point.z),
-    MAX (box.maxbox.x, point.x),
-    MAX (box.maxbox.y, point.y),
-    MAX (box.maxbox.z, point.z));
+    csMin (box.minbox.x, point.x),
+    csMin (box.minbox.y, point.y),
+    csMin (box.minbox.z, point.z),
+    csMax (box.maxbox.x, point.x),
+    csMax (box.maxbox.y, point.y),
+    csMax (box.maxbox.z, point.z));
 }
 
 csBox3 operator * (const csBox3 &box1, const csBox3 &box2)
 {
   return csBox3 (
-    MAX (box1.minbox.x, box2.minbox.x),
-    MAX (box1.minbox.y, box2.minbox.y),
-    MAX (box1.minbox.z, box2.minbox.z),
-    MIN (box1.maxbox.x, box2.maxbox.x),
-    MIN (box1.maxbox.y, box2.maxbox.y),
-    MIN (box1.maxbox.z, box2.maxbox.z));
+    csMax (box1.minbox.x, box2.minbox.x),
+    csMax (box1.minbox.y, box2.minbox.y),
+    csMax (box1.minbox.z, box2.minbox.z),
+    csMin (box1.maxbox.x, box2.maxbox.x),
+    csMin (box1.maxbox.y, box2.maxbox.y),
+    csMin (box1.maxbox.z, box2.maxbox.z));
 }
 
 bool operator== (const csBox3 &box1, const csBox3 &box2)

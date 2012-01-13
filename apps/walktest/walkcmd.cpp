@@ -1881,7 +1881,7 @@ bool CommandHandler (const char *cmd, const char *arg)
   else if (!csStrCaseCmp (cmd, "cubemapshots"))
   {
     csRef<iImageIO> iio = csQueryRegistry<iImageIO> (Sys->object_reg);
-    int dim = MIN (Sys->myG3D->GetWidth (), Sys->myG3D->GetHeight ());
+    int dim = csMin (Sys->myG3D->GetWidth (), Sys->myG3D->GetHeight ());
     dim = csFindNearestPowerOf2 (dim + 1) >> 1;
     int g2dh = Sys->myG3D->GetHeight ();
 

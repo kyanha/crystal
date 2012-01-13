@@ -62,7 +62,7 @@ void csPolygonRenderer::PrepareBuffers (uint& indexStart, uint& indexEnd)
 
       num_verts += pvc;
       num_indices += (pvc - 2) * 3;
-      max_vc = MAX (max_vc, pvc);
+      max_vc = csMax (max_vc, pvc);
     }
 
 #define INTERLEAVE 1

@@ -435,7 +435,7 @@ namespace lighter
 
               if (spRadius >= parallelDist)
               {
-                float tempDist = MAX(0,parallelDist + radius - spRadius);
+                float tempDist = csMax (0.f, parallelDist + radius - spRadius);
                 pseudoPos = pos + radVector*(1 - tempDist/(parallelDist*2.0f));
                 spRadius = radius - tempDist/2.0f;
               }
