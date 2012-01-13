@@ -242,9 +242,12 @@ void csBulletDynamicsSystem::CheckCollision (csBulletRigidBody& cs_obA,
       csBulletRigidBody *cs_obB;
       cs_obB = (csBulletRigidBody*) obB->getUserPointer();
       if (cs_obB)
+      {
+	::iRigidBody* otherBody = static_cast< ::iRigidBody*> (cs_obB);
 	// TODO: use the real position and normal of the contact
-        cs_obA.Collision(cs_obB, csVector3 (0.0f, 0.0f, 0.0f),
-			 csVector3 (0.0f, 1.0f, 0.0f), total);
+        cs_obA.Collision(otherBody, csVector3 (0.0f, 0.0f, 0.0f),
+	    csVector3 (0.0f, 1.0f, 0.0f), total);
+      }
     }
   }
   else if (cs_obA.contactObjects.Contains(obB) == csArrayItemNotFound)
