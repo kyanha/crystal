@@ -239,11 +239,10 @@ void csBulletDynamicsSystem::CheckCollision (csBulletRigidBody& cs_obA,
 
     if (total > COLLISION_THRESHOLD)
     {
-      csBulletRigidBody *cs_obB;
-      cs_obB = (csBulletRigidBody*) obB->getUserPointer();
+      iBody* cs_obB = static_cast<iBody*> (obB->getUserPointer ());
       if (cs_obB)
       {
-	::iRigidBody* otherBody = static_cast< ::iRigidBody*> (cs_obB);
+	csRef< ::iRigidBody> otherBody = scfQueryInterface< ::iRigidBody> (cs_obB);
 	// TODO: use the real position and normal of the contact
         cs_obA.Collision(otherBody, csVector3 (0.0f, 0.0f, 0.0f),
 	    csVector3 (0.0f, 1.0f, 0.0f), total);
