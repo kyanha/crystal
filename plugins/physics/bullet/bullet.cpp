@@ -362,7 +362,8 @@ void csBulletDynamicsSystem::RemoveBody (::iRigidBody* body)
       if (bulletBody->GetType () == CS::Physics::Bullet::RIGID_BODY)
       {
 	csBulletRigidBody* rigidBody = static_cast<csBulletRigidBody*> (bulletBody->QueryRigidBody ());
-	rigidBody->contactObjects.Delete (csBody->body);
+	btCollisionObject* colObj = static_cast<btCollisionObject*> (csBody->body);
+	rigidBody->contactObjects.Delete (colObj);
       }
 
       // wake up this body since the environment has changed
@@ -377,6 +378,28 @@ void csBulletDynamicsSystem::RemoveBody (::iRigidBody* body)
   csBody->insideWorld = false;
 
   dynamicBodies.Delete (body);
+
+  // It appears that contactObjects is not always symmetrical. Even after cleaning
+  // out this removed body from all bodies where this body contacted with it appears
+  // that there are still other bodies that could contain this body in their
+  // contactObjects list. Unfortunatelly checking for that is pretty slow but I
+  // see no other solution for now.
+  for (size_t i = 0 ; i < dynamicBodies.GetSize () ; i++)
+  {
+    csBulletRigidBody* bulBody = static_cast<csBulletRigidBody*> (dynamicBodies[i]);
+    size_t j = 0;
+    while (j < bulBody->contactObjects.GetSize ())
+    {
+      iBody* bulletBody = static_cast<iBody*> (bulBody->contactObjects[j]->getUserPointer ());
+      csBulletRigidBody* csBulletBody = static_cast<csBulletRigidBody*> (bulletBody);
+      if (csBulletBody == csBody)
+      {
+	bulBody->contactObjects.DeleteIndex (j);
+	j--;
+      }
+      j++;
+    }
+  }
 }
 
 ::iRigidBody* csBulletDynamicsSystem::FindBody (const char* name)
