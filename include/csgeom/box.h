@@ -262,6 +262,7 @@ public:
 
   /**
    * Calculate the squared distance between (0,0) and the box
+   * on the box which is nearest to (0,0).
    * This routine is extremely efficient.
    */
   float SquaredOriginDist () const;
@@ -274,14 +275,15 @@ public:
   float SquaredOriginMaxDist () const;
 
   /**
-   * Calculate the squared distance between pos and the box
+   * Calculate the squared distance between \a pos and the box
+   * on the box which is nearest to \a pos.
    * This routine is extremely efficient.
    */
   float SquaredPosDist (const csVector2& pos) const;
 
   /**
-   * Calculate the squared distance between pos and the point
-   * on the box which is furthest away from pos.
+   * Calculate the squared distance between \a pos and the point
+   * on the box which is furthest away from \a pos.
    * This routine is extremely efficient.
    */
   float SquaredPosMaxDist (const csVector2& pos) const;
