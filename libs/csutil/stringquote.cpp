@@ -19,6 +19,8 @@
 #include "cssysdef.h"
 #include "csutil/stringquote.h"
 
+#include "csutil/threading/tls.h"
+
 namespace CS
 {
   // Double quotes, UTF-8
@@ -36,14 +38,13 @@ namespace CS
   {
     struct QuoteStrings
     {
-      CS::Threading::Mutex mutex;
       int n;
       csStringFast<128> strings[numStrings];
       
       QuoteStrings() : n (0) {}
     };
 
-    CS_IMPLEMENT_STATIC_VAR(GetStrings, QuoteStrings, );
+    CS_IMPLEMENT_STATIC_VAR(GetStrings, CS::Threading::ThreadLocal<QuoteStrings>, );
   } // anonymous namespace
   
   void Quote::Single (csStringBase& out, const char* str)
@@ -56,7 +57,6 @@ namespace CS
   const char* Quote::Single (const char* str)
   {
     QuoteStrings& retStrings = *(GetStrings());
-    CS::Threading::ScopedLock<CS::Threading::Mutex> lock (retStrings.mutex);
     csStringBase& outStr = retStrings.strings[retStrings.n];
     retStrings.n = (retStrings.n + 1) % numStrings;
     Single (outStr, str);
@@ -73,7 +73,6 @@ namespace CS
   const char* Quote::Double (const char* str)
   {
     QuoteStrings& retStrings = *(GetStrings());
-    CS::Threading::ScopedLock<CS::Threading::Mutex> lock (retStrings.mutex);
     csStringBase& outStr = retStrings.strings[retStrings.n];
     retStrings.n = (retStrings.n + 1) % numStrings;
     Double (outStr, str);
