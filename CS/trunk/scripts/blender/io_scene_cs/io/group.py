@@ -48,7 +48,7 @@ def GroupAsCSFactory(self, func, depth=0):
   """
 
   func('<?xml version="1.0" encoding="UTF-8"?>')
-  func("<library xmlns=\"http://www.crystalspace3d.org/docs/online/manual\">")
+  func("<library xmlns=\"http://crystalspace3d.org/xml/library\">")
   
   # Get mapping buffers and submeshes for the objects composing the group
   meshData = []
