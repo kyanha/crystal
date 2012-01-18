@@ -69,7 +69,7 @@ class Hierarchy:
     """
 
     func('<?xml version="1.0" encoding="UTF-8"?>')
-    func("<library xmlns=\"http://www.crystalspace3d.org/docs/online/manual\">")
+    func("<library xmlns=\"http://crystalspace3d.org/xml/library\">")
 
     if animesh:
       func('  <plugins>')
