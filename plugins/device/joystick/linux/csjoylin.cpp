@@ -85,9 +85,8 @@ bool csLinuxJoystick::HandleEvent (iEvent& ev)
       int32 axisread[CS_MAX_LINUX_JOYSTICK_AXES];
       if ((js.type & ~JS_EVENT_INIT) == JS_EVENT_AXIS)
 	jd.axis[js.number] = js.value;
-      for (int iter=0 ; 
-	   iter<MIN(jd.nAxes,CS_MAX_LINUX_JOYSTICK_AXES) ; 
-	   iter++)
+      for (int iter = 0; iter < csMin (jd.nAxes,CS_MAX_LINUX_JOYSTICK_AXES);
+        iter++)
 	axisread[iter] = jd.axis[iter]; /* "int16" to "int" */
       switch (js.type & ~JS_EVENT_INIT) 
       {
