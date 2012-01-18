@@ -1,0 +1,49 @@
+__all__ = ["ui", "oi", "utilities", "B2CS"]
+
+bl_info = {
+    "name": "Export Crystal Space 3D format",
+    "description": "Export meshes, scenes and animations",
+    "author": "Crystal Space team",
+    "version": (1, 0),
+    "blender": (2, 5, 9),
+    "api": 36079,   # TODO
+    "location": "'File > Export > CrystalSpace 3D' activates the CS export panel"
+                " in the 'Properties > Render' window",
+    "warning": "",
+    "wiki_url": "http://www.crystalspace3d.org/docs/online/manual/Blender.html",  # TODO
+    "tracker_url": "http://projects.blender.org/tracker/index.php?" 
+                   "func=detail&aid=<number>",   # TODO
+    "category": "Import-Export"}
+
+import bpy
+
+class ExportCS(bpy.types.Operator):
+    bl_idname = "export.cs"
+    bl_label = 'Export CS'
+
+    def execute(self, context):
+        #TODO: let the user specify a file path
+        return {'FINISHED'}
+        
+def menu_func(self, context):
+    self.layout.operator(ExportCS.bl_idname, text="CrystalSpace 3D")
+
+def register():
+    bpy.utils.register_module(__name__)
+    #bpy.types.INFO_MT_file_export.append(menu_func)
+
+    if "io_scene_cs.settings" not in bpy.data.texts:
+        bpy.data.texts.new("io_scene_cs.settings")
+    if "io_scene_cs.utilities" not in bpy.data.texts:
+        bpy.data.texts.new("io_scene_cs.utilities")
+
+    from . import utilities
+    from . import ui
+    from . import io
+
+def unregister():
+    bpy.utils.unregister_module(__name__)
+    #bpy.types.INFO_MT_file_export.remove(menu_func)
+
+if __name__ == "__main__":
+    register()
