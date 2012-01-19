@@ -195,11 +195,11 @@ public:
 
   /// Test if each component of a vector is less than a small epsilon value.
   inline friend bool operator< (const csVector4T& v, float f)
-  { return ABS(v.x)<f && ABS(v.y)<f && ABS(v.z)<f && ABS(v.w)<f; }
+  { return ABS (v.x) < f && ABS (v.y) < f && ABS (v.z) < f && ABS (v.w) < f; }
 
-  /// Test if each component of a vector is less than a small epsilon value.
+  /// Test if each component of a vector is greater than a small epsilon value.
   inline friend bool operator> (float f, const csVector4T& v)
-  { return ABS(v.x)<f && ABS(v.y)<f && ABS(v.z)<f && ABS(v.w)<f; }
+  { return ABS (v.x) > f && ABS (v.y) > f && ABS (v.z) > f && ABS (v.w) > f; }
 
   /// Returns n-th component of the vector.
 #if defined( __STRICT_ANSI__) || defined(SWIG)
