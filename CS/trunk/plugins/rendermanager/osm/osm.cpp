@@ -222,7 +222,7 @@ struct WrapShadowParams<RMOSM::ShadowType>
     }
 
     // Output the final result to the backbuffer.
-//     DebugFrameRender (rview, renderTree);
+     DebugFrameRender (rview, renderTree);
 
     return true;
   }

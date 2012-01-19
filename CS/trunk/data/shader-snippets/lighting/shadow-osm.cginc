@@ -30,6 +30,7 @@ struct ShadowShadowMapDepth : ShadowShadowMap
   float4 shadowMapCoordsProj;
   int lightNum;
   float bias;
+  float EPS;
   
   void InitVP (int lightNum, float4 surfPositionWorld,
                float3 normWorld,
@@ -89,6 +90,10 @@ struct ShadowShadowMapDepth : ShadowShadowMap
   {   
     float sum = 0;
     float x, y;
+    
+    if (position.x < EPS || position.y < EPS || position.x > 1 - EPS ||
+      position.y > 1 - EPS)
+      return 0;
      
     sum += compareDepth > tex2D(tex, position + float2(-bias, -bias));
     sum += compareDepth > tex2D(tex, position + float2(-bias, 0));
@@ -128,6 +133,7 @@ struct ShadowShadowMapDepth : ShadowShadowMap
    
   half GetVisibility()
   { 
+    EPS = 0.0001;
     bias = 1.0 / lightPropsOM.size[lightNum];
     half inLight;
     int numSplits = lightPropsOM.opacityMapNumSplits[lightNum];
@@ -136,15 +142,14 @@ struct ShadowShadowMapDepth : ShadowShadowMap
     float2 position = shadowMapCoordsBiased.xy;
    
     int i;
-    float eps = 0.0001;
 
-    float compareDepth = (1 - shadowMapCoordsBiased.z) - eps;
+    float compareDepth = (1 - shadowMapCoordsBiased.z) - EPS;
     float depthStart = tex2D(lightPropsOM.shadowMapStart[lightNum], position).x;
     float depthEnd = tex2D(lightPropsOM.shadowMapEnd[lightNum], position).x;    
       
     i = min( tex2D( lightPropsOM.splitFunc[lightNum], 
       float2( min( (compareDepth - depthStart) / 
-      (1 - depthEnd - depthStart) , 0.9999 ) , 0 ) ).x * (numSplits - 1), 
+      abs(1 - depthEnd - depthStart) , 0.9999 ) , 0 ) ).x * (numSplits - 1), 
       numSplits - 1);      
 
     float previousMap = getMapValue(i, position) * 
@@ -154,6 +159,12 @@ struct ShadowShadowMapDepth : ShadowShadowMap
     inLight = previousMap; 
     inLight = exp(-1.0 * inLight);
 
+    /*
+    if (compareDepth > depthStart && depthStart > 0.01)
+      inLight = 0;
+    else
+      inLight = 1;
+    */
     return inLight;
   }
 };

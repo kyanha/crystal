@@ -108,16 +108,17 @@
           {
             fragmentOutput output;
             float4 surface = tex2D (TexDiffuse, IN.TexCoord);
+            float EPS = 0.0001;            
             
-            float value = surface.a;
-
+            // 1 if 0 - not defined
+            float value = surface.a + (surface.a < EPS);
+            
             // compute the projection for the depthStart map              
             float3 shadowMapCoordsBiased = (float3(0.5)*IN.shadowMapCoordsProj.xyz) 
               + float3(0.5);
             float2 position = shadowMapCoordsBiased.xy;
             
-            float eps = 0.0001;            
-            float compareDepth = (1 - shadowMapCoordsBiased.z) - eps;
+            float compareDepth = (1 - shadowMapCoordsBiased.z) - EPS;
             float depthStart = tex2D(DepthStartMap, position).x;
             float depthEnd = tex2D(DepthEndMap, position).x;
 

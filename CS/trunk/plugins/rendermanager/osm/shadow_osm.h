@@ -263,12 +263,19 @@ namespace CS
               csReversibleTransform meshTransform = 
                 mesh.meshWrapper->GetMovable()->GetTransform();
               csVector3 lightPosition = light->GetMovable()->GetPosition();
-
+              
               // Add / Remove opaque objects from the crop matrix
+              /*
               if (!showOpaqueObjects &&
                 mesh.meshWrapper->GetRenderPriority() != 
                 rview->GetEngine()->GetRenderPriority("alpha"))
                   continue;
+              */
+              // iFurMesh is already NOSHADOWCAST
+              if (mesh.meshWrapper->GetFlags().Check(CS_ENTITY_NOSHADOWCAST) == true && 
+                mesh.meshWrapper->GetRenderPriority() != 
+                rview->GetEngine()->GetRenderPriority("alpha"))
+                continue;
 
               // Add to mesh filter
 	            superFrust->meshFilter.AddFilterMesh (mesh.meshWrapper);
@@ -779,7 +786,7 @@ namespace CS
             dbgPersist.RegisterDebugFlag ("draw.osm.choose.split");
           dbgShowRenderTextures =
             dbgPersist.RegisterDebugFlag ("draw.osm.render.textures");
-          dbgPersist.EnableDebugFlag(dbgShowRenderTextures, true);
+          //dbgPersist.EnableDebugFlag(dbgShowRenderTextures, true);
           dbgShowOpaqueObjects =
             dbgPersist.RegisterDebugFlag ("draw.osm.opaque.objects");
           dbgPersist.EnableDebugFlag(dbgShowOpaqueObjects, true);
