@@ -241,11 +241,19 @@ bool SelfShadowDemo::CreateScene ()
   if (!loader->LoadMapFile (worlds[sceneNumber]))
     ReportError("Error couldn't load level!");
 
+  csRef<iMeshWrapper> meshWrapper =
+    engine->FindMeshObject ("Plane");
+  if (!meshWrapper)
+    ReportError ("Can't find Plane object!");
+  else
+    meshWrapper->SetFlagsRecursive(CS_ENTITY_NOSHADOWCAST);
+
   // Load krystal
   if (sceneNumber == 0)
   {
     LoadKrystal();
-    rm_dbg->DebugCommand("hide_opaque_objects");
+    // command might need to be removed
+    rm_dbg->DebugCommand("show_opaque_objects");
   }
   else
     rm_dbg->DebugCommand("show_opaque_objects");
