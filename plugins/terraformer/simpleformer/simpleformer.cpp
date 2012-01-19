@@ -94,8 +94,8 @@ static float BiCubicData (float* data, int width, int height, float x, float z)
   {
     int intX = (int) floor (x + 0.5);
     int intZ = (int) floor (z + 0.5);
-    intX = MAX (MIN (intX, width-1), 0);
-    intZ = MAX (MIN (intZ, height-1), 0);
+    intX = csMax (csMin (intX, width-1), 0);
+    intZ = csMax (csMin (intZ, height-1), 0);
     return data[(int)intX+(int)intZ*width];
   }
 #endif
