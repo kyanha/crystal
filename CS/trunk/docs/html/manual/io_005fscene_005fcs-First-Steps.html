@@ -1,0 +1,206 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html401/loose.dtd">
+<html>
+<!-- Created by texi2html 1.76 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Many creative people <dev@texi2html.cvshome.org>
+Send bugs and suggestions to <users@texi2html.cvshome.org>
+
+-->
+<head>
+<title>Crystal Space 2.1.0: 5.5.2 First Steps</title>
+
+<meta name="description" content="Crystal Space 2.1.0: 5.5.2 First Steps">
+<meta name="keywords" content="Crystal Space 2.1.0: 5.5.2 First Steps">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="texi2html 1.76">
+<meta http-equiv="Content-Type" content="text/html; charset=us-ascii">
+<style type="text/css">
+<!--
+a.summary-letter {text-decoration: none}
+pre.display {font-family: serif}
+pre.format {font-family: serif}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: serif; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: serif; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.sansserif {font-family:sans-serif; font-weight:normal;}
+ul.toc {list-style: none}
+-->
+</style>
+
+
+</head>
+
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
+
+<a name="io_005fscene_005fcs-First-Steps"></a>
+<a name="0"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="io_005fscene_005fcs-Installing.html#0" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="io_005fscene_005fcs-Export-Scenes.html#0" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="Working-with-Engine-Content.html#0" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="Blender.html#0" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="Internals.html#0" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="index.html#SEC_Top" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="cs_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="cs_Index.html#0" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="cs_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<hr size="1">
+<h3 class="subsection"> 5.5.2 First Steps </h3>
+
+<p>This section explains how to use io_scene_cs, the Blender export tool.
+</p>
+<a name="1"></a>
+<h2 class="heading"> Loading the interface </h2>
+
+<p>I'm assuming you have io_scene_cs add-on installed and enabled; otherwise, read the <a href="io_005fscene_005fcs-Installing.html#0">Installing <code>io_scene_cs</code></a> document first.
+</p>
+<p>If you don't see the interface in the <samp>&lsquo;Render&rsquo;</samp> context of <samp>&lsquo;Properties&rsquo;</samp> window:
+</p>
+<ul>
+<li> 
+Check that you have the exporter Add-On enabled as it is explained in the paragraph 'Enable Add-On' of the <a href="io_005fscene_005fcs-Installing.html#0">Installing <code>io_scene_cs</code></a> section.
+</li><li> 
+Check on console if the exporter is not failing due to wrong install or some unknown bug. 
+</li></ul>
+
+<p>At this point we have the interface in front of us and can export the world. 
+</p>
+<a name="2"></a>
+<h2 class="heading"> Overlay interface overview </h2>
+
+<p><img src="content/io_scene_cs/io_scene_cs_interface.png" alt="content/io_scene_cs/io_scene_cs_interface">
+</p>
+<p>The interface is composed of several buttons to configure and run the exporter:
+</p>
+<ul>
+<li> 
+<strong>Export path</strong>: directory browser to select the export folder
+</li></ul>
+
+<p>Two export buttons:
+</p>
+<ul>
+<li> 
+<strong>Export</strong>: export the world to the specified path
+</li><li> 
+<strong>Export and Run</strong>: export the world and then run it in CrystalSpace (uses <samp>&lsquo;walktest&rsquo;</samp>)
+</li></ul>
+
+<p>Three options:
+</p>
+<ul>
+<li> 
+<strong>console</strong>: option
+</li><li> 
+<strong>verbose</strong>: option
+</li><li> 
+<strong>silent</strong>: option
+</li></ul>
+
+<a name="3"></a>
+<h2 class="heading"> Export </h2>
+
+<p>To export succesfully, your world should contain at least one object.
+</p>
+<p>Click on the <strong>Export</strong> button of the io_scene_cs panel.
+</p>
+<p>Blender will work for a while and write informations about the export process on the console, until the final message: <strong>EXPORTING complete</strong>. The cs files are now saved in the specified export folder:
+</p>
+<ul>
+<li>
+the world file in the export directory
+</li><li>
+texture files (i.e. images) in the 'textures' directory
+</li><li>
+library files (i.e. genmesh, animesh and skeleton factories) in the 'factories' directory
+</li></ul>
+
+<p>If you want to see the exported objects, open the xml library files with viewmesh. Sockets, animations and morph targets are available via the application tabs.
+</p>
+<p>Note that, to be accessible to viewmesh, the 'textures' folder should be copied into the 'factories' folder. Furthermore, viewmesh only supports 'png' images. If texture files are in another format (e.g. 'tif'), you must convert them into 'png' images.
+</p>
+<a name="4"></a>
+<h2 class="heading"> Export and Run </h2>
+
+<p>To export and run succesfully, check that your world has:
+</p>
+<ul>
+<li> 
+at least a camera,
+</li><li> 
+at least one light,
+</li><li> 
+some objects, at least some big object below the camera so it won't fall into the void as soon as you start the map.
+</li></ul>
+
+<p>Once this is ready, go to the export tab and click on the <strong>Export and Run</strong> button.
+</p>
+<p>This will make Blender think for some moments and you should see the status message: <strong>EXPORTING complete</strong>. This means all is going well and briefly the CrystalSpace walktest window should appear (otherwise, check the Blender console for output).
+</p>
+<p>You will be able to move around your recently created geometry. Using the &quot;8&quot; key you can deactivate gravity and fly around. Note walktest has lots of keys and options, so you can look at this elsewhere. ??????????????
+</p>
+<a name="5"></a>
+<h4 class="subsubheading"> If the walktest window fails to open </h4>
+
+<ul>
+<li> 
+Check CrystalSpace is correctly installed and the 'CRYSTAL' variable is set.
+</li><li> 
+Check there are no errors in the Blender output. 
+</li></ul>
+
+<a name="6"></a>
+<h4 class="subsubheading"> If all you see is black </h4>
+
+<ul>
+<li> 
+Check the normals from objects are pointing the correct way. If you made a cube surrounding the player this usually means you need to reverse its normals (in Blender Edit mode, press hotkey 'W' then select 'Flip Normals').
+</li><li> 
+Check there is a light, and it is close enough to your geometry.
+</li><li> 
+Also check the console to ensure that your entire scene is being exported. Sometimes only the camera will be exported hence you will only see black. If you have this problem select all the objects in your scene (Hotkey 'A') and then press 'Export and Run'.
+</li><li> 
+It's also possible that since the gravity is activated by default in walktest, the camera pans away from the set view too fast. Ensure that you press the '8' key to deactivate gravity. 
+</li></ul>
+
+
+<hr size="1">
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="io_005fscene_005fcs-Installing.html#0" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="io_005fscene_005fcs-Export-Scenes.html#0" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="Working-with-Engine-Content.html#0" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="Blender.html#0" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="Internals.html#0" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="index.html#SEC_Top" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="cs_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="cs_Index.html#0" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="cs_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<p>
+ <font size="-1">
+  This document was generated using <a href="http://texi2html.cvshome.org/"><em>texi2html 1.76</em></a>.
+ </font>
+ <br>
+
+</p>
+</body>
+</html>

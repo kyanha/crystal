@@ -1,0 +1,157 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html401/loose.dtd">
+<html>
+<!-- Created by texi2html 1.76 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Many creative people <dev@texi2html.cvshome.org>
+Send bugs and suggestions to <users@texi2html.cvshome.org>
+
+-->
+<head>
+<title>Crystal Space 2.1.0: 5.5.3 Exporting Scenes</title>
+
+<meta name="description" content="Crystal Space 2.1.0: 5.5.3 Exporting Scenes">
+<meta name="keywords" content="Crystal Space 2.1.0: 5.5.3 Exporting Scenes">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="texi2html 1.76">
+<meta http-equiv="Content-Type" content="text/html; charset=us-ascii">
+<style type="text/css">
+<!--
+a.summary-letter {text-decoration: none}
+pre.display {font-family: serif}
+pre.format {font-family: serif}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: serif; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: serif; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.sansserif {font-family:sans-serif; font-weight:normal;}
+ul.toc {list-style: none}
+-->
+</style>
+
+
+</head>
+
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
+
+<a name="io_005fscene_005fcs-Export-Scenes"></a>
+<a name="0"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="io_005fscene_005fcs-First-Steps.html#0" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="io_005fscene_005fcs-Export-Genmesh.html#0" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="Working-with-Engine-Content.html#0" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="Blender.html#0" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="Internals.html#0" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="index.html#SEC_Top" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="cs_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="cs_Index.html#0" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="cs_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<hr size="1">
+<h3 class="subsection"> 5.5.3 Exporting Scenes </h3>
+
+<p>The following paragraphs describe the generics you need to know to be able to export Blender scenes using io_scene_cs. 
+</p>
+<ul>
+<li> <strong>Interface</strong>
+
+<p>io_scene_cs uses mainly an overlay interface that can be loaded over the Blender 3D windows.
+</p>
+<p>See section <a href="io_005fscene_005fcs-First-Steps.html#0">Overlay Interface Overview</a> of this manual if you want more details about io_scene_cs interface.
+</p>
+</li><li> <strong>Object Types</strong>
+
+<p>Each of the object types in Blender corresponds to some CrystalSpace type. For example a Blender lamp will result in a CrystalSpace light.
+</p>
+<p>Specific information about mesh types is available at sections <a href="io_005fscene_005fcs-Export-Genmesh.html#0">Exporting Static Objects</a> and <a href="io_005fscene_005fcs-Export-Animesh.html#0">Exporting Animated Objects</a> of this manual.
+</p>
+</li><li> <strong>Exporting Libraries</strong>
+
+<p>io_scene_cs generates two kinds of xml files: world files and library files. Scenes that are exported to run directly are described in world files that use the &lt;world&gt; tag. Library files will use the &lt;library&gt; tag instead and so you can't run them directly with walktest any more.
+</p>
+<p>One world file will be generated for each Blender scene and one library file for each cs factory.
+</p>
+</li><li> <strong>Factories and Objects</strong>
+
+<p>In CrystalSpace as in Blender there is a clear distinction between an object and the mesh data it references (the factory). Thus, several objects can share a factory and save space and processing time.
+</p>
+<p>The correspondency between Blender &quot;Mesh Data Objects&quot; and CrystalSpace &quot;Factories&quot; is not straightforward, as different functionalities are present in each system, and also in CrystalSpace there are different mesh types not present in Blender.
+</p>
+<p>The main concern here is to clearly distinguish in Blender between ME (mesh data) and OB (reference object). The object is the individual we are considering, and the mesh data is the data possibly shared between objects.
+</p>
+<p>Data sharing is easiest achieved in Blender by using the combination ALT-D to duplicate and link the object. Then when modifying one object the other will also be modified in Blender. Objects defined as factory instances will share data in CrystalSpace.
+</p>
+<p>Currently factories are generated for Blender mesh and armature types. They are described in xml library files saved into the 'factories' folder.
+</p>
+</li><li> <strong>Mesh References and Mesh Objects</strong>
+
+<p>Objects composing a Blender scene are described in the world file as 'meshref' or 'meshobj' types. Both of them are defined as instances of a CrystalSpace factory.
+</p>
+<p>A 'meshref' is an object that references a mesh factory defined elsewhere (i.e. another world file, library, or something created in code by the game). With meshref the actual geometry of the object as defined in Blender will be ignored.
+</p>
+<p>A 'meshobj' references a group of general meshes. See section <a href="io_005fscene_005fcs-Export-Genmesh.html#0">Exporting Static Objects</a> if you want more information about groups.
+</p>
+</li><li> <strong>Materials and Textures</strong>
+
+<p>Materials are handled in a very different way in Blender than in CrystalSpace, as the scope of each infrastructure is very different. Because of this, CrystalSpace related material properties might be missing.
+</p>
+<p>In CrystalSpace, materials are defined in world files (describing scenes) and in library files (decribing mesh factories). Textures used by materials are referenced in the same files. They are exported as images in the 'textures' directory.
+</p>
+</li><li> <strong>Camera</strong>
+
+<p>A camera in Blender will be exported as a start location in CrystalSpace map, so it is not a real object in cs.
+</p>
+</li><li> <strong>Lights</strong>
+
+<p>A lamp in Blender will be exported as a light in CrystalSpace. All Blender lamp types will be exported as normal point light sources.
+</p>
+<p>The parameters that get exported for a lamp entity are the distance (radius), the colour (r, g, b components) and the brightness. Attenuation type and other such properties are ignored.
+</p>
+</li><li> <strong>Parenting</strong>
+
+<p>You can parent objects in Blender and they will be exported as similar object hierachies in CrystalSpace. 
+</p>
+</li><li> <strong>Sectors</strong>
+
+<p>CrystalSpace maps are usually divided into multiple sectors. This is emulated by Blender's scenes. Each scene becomes a sector of the same name, and they can be connected using special objects called portals.
+</p>
+</li></ul>
+
+
+<hr size="1">
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="io_005fscene_005fcs-First-Steps.html#0" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="io_005fscene_005fcs-Export-Genmesh.html#0" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="Working-with-Engine-Content.html#0" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="Blender.html#0" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="Internals.html#0" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="index.html#SEC_Top" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="cs_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="cs_Index.html#0" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="cs_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<p>
+ <font size="-1">
+  This document was generated using <a href="http://texi2html.cvshome.org/"><em>texi2html 1.76</em></a>.
+ </font>
+ <br>
+
+</p>
+</body>
+</html>
