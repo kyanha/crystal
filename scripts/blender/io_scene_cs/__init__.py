@@ -7,12 +7,10 @@ bl_info = {
     "version": (1, 0),
     "blender": (2, 5, 9),
     "api": 36079,   # TODO
-    "location": "'File > Export > CrystalSpace 3D' activates the CS export panel"
-                " in the 'Properties > Render' window",
+    "location": "The main panel is in 'Properties > Render'",
     "warning": "",
     "wiki_url": "http://www.crystalspace3d.org/docs/online/manual/Blender.html",  # TODO
-    "tracker_url": "http://projects.blender.org/tracker/index.php?" 
-                   "func=detail&aid=<number>",   # TODO
+    "tracker_url": "http://crystalspace3d.org/trac/CS/report"
     "category": "Import-Export"}
 
 import bpy
