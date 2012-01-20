@@ -894,6 +894,25 @@ bool HairTest::Application ()
 
   engine->SetSaveableFlag(true);
 
+  /* NOTE: Config settings for render managers are stored in 'engine.cfg' 
+   * and are needed when loading a render manager. Normally these settings 
+   * are added by the engine when it loads a render manager. However, since
+   * we are loading the shadow_pssm render manager manually we must also manually
+   * add the proper config file. */
+  csRef<iConfigManager> cfg = 
+    csQueryRegistry<iConfigManager> (GetObjectRegistry());
+  cfg->AddDomain 
+    ("/config/engine.cfg", vfs, iConfigManager::ConfigPriorityPlugin);
+
+  csRef<iRenderManager> rm = csLoadPlugin<iRenderManager> 
+    (GetObjectRegistry(), "crystalspace.rendermanager.osm");
+  if (!rm)
+    return ReportError("Failed to load OSM Render Manager!");
+
+  cfg->RemoveDomain ("/config/engine.cfg");
+
+  engine->SetRenderManager(rm);
+
   // Find references to the plugins of the animation nodes
   lookAtManager = 
     csQueryRegistry<CS::Animation::iSkeletonLookAtNodeManager> (GetObjectRegistry ());
