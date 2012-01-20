@@ -365,14 +365,6 @@ void SelfShadowDemo::LoadKrystal()
 
   furMesh->SetFurMeshProperties (hairMeshProperties);
 
-  // Shader variables
-  csRef<iShaderVarStringSet> svStrings = 
-    csQueryRegistryTagInterface<iShaderVarStringSet> (
-    object_reg, "crystalspace.shader.variablenameset");
-
-  if (!svStrings) 
-   ReportError ("No SV names string set!\n");
-
   furMesh->SetAnimatedMesh (animesh);
   furMesh->SetMeshFactory (animeshFactory);
   furMesh->SetMeshFactorySubMesh 

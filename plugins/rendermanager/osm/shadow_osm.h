@@ -241,8 +241,7 @@ namespace CS
         void ProcessGeometry(SuperFrustum* superFrust, 
           typename RenderTree::ContextNode& context, iLight* light, 
           CS::RenderManager::RenderView* rview, float& _near, float& _far, 
-          csBox3& castingObjects, csBox3& receivingObjects, 
-          bool showOpaqueObjects)
+          csBox3& castingObjects, csBox3& receivingObjects)
         {
           typename RenderTree::ContextNode::TreeType::MeshNodeTreeIteratorType 
             it = context.meshNodes.GetIterator ();
@@ -264,17 +263,8 @@ namespace CS
                 mesh.meshWrapper->GetMovable()->GetTransform();
               csVector3 lightPosition = light->GetMovable()->GetPosition();
               
-              // Add / Remove opaque objects from the crop matrix
-              /*
-              if (!showOpaqueObjects &&
-                mesh.meshWrapper->GetRenderPriority() != 
-                rview->GetEngine()->GetRenderPriority("alpha"))
-                  continue;
-              */
-              // iFurMesh is already NOSHADOWCAST
-              if (mesh.meshWrapper->GetFlags().Check(CS_ENTITY_NOSHADOWCAST) == true && 
-                mesh.meshWrapper->GetRenderPriority() != 
-                rview->GetEngine()->GetRenderPriority("alpha"))
+              // Only meshes that cast shadows
+              if (mesh.meshWrapper->GetFlags().Check(CS_ENTITY_NOSHADOWCAST) == true)
                 continue;
 
               // Add to mesh filter
@@ -386,9 +376,7 @@ namespace CS
   
           // Find object limits
           ProcessGeometry(lightFrustums.frustums[0], context, light, rview, 
-            _near, _far, castingObjects, receivingObjects, 
-            persist.dbgPersist->
-              IsDebugFlagEnabled(persist.dbgShowOpaqueObjects));
+            _near, _far, castingObjects, receivingObjects);
 
           // Then compute crop matrix
           CS::Math::Matrix4 proj = FindOrthCropMatrix(rview, light, 
@@ -763,7 +751,6 @@ namespace CS
 
         uint dbgChooseSplit;
         uint dbgShowRenderTextures;
-        uint dbgShowOpaqueObjects;
         RenderTreeBase::DebugPersistent *dbgPersist;
 
         /// Set the prefix for configuration settings
@@ -787,9 +774,6 @@ namespace CS
           dbgShowRenderTextures =
             dbgPersist.RegisterDebugFlag ("draw.osm.render.textures");
           //dbgPersist.EnableDebugFlag(dbgShowRenderTextures, true);
-          dbgShowOpaqueObjects =
-            dbgPersist.RegisterDebugFlag ("draw.osm.opaque.objects");
-          dbgPersist.EnableDebugFlag(dbgShowOpaqueObjects, true);
 
           this->shaderManager = shaderManager;
           mrt = 0;
