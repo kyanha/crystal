@@ -97,3 +97,11 @@ def DecomposeMatrix (matrix):
   # transform quaternion to a 4x4 rotation matrix
   rot = quat.to_matrix().to_4x4()
   return loc, rot, scale
+
+# Export a default camera
+def ExportDefaultCamera (func, depth, sceneName):
+  func(' '*depth +'<start name="Camera">')
+  func(' '*depth +'  <sector>%s</sector>'%sceneName)
+  func(' '*depth +'  <position x="0.0" z="0.0" y="0.0" />')
+  func(' '*depth +'  <up y="1" x="0" z="0" />')
+  func(' '*depth +'</start>')
