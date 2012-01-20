@@ -417,8 +417,7 @@ def GetScale(self):
   """ Get object scale
   """
   if self.parent and self.parent.type == 'ARMATURE' and self.parent_type != 'BONE':
-    pScale = self.relative_matrix.to_scale()
-    scale = mathutils.Vector(((1/pScale.x)*self.scale.x,(1/pScale.y)*self.scale.y,(1/pScale.z)*self.scale.z))
+    scale = self.parent.scale
   else:
     scale = self.scale
 
