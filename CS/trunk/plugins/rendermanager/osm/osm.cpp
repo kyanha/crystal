@@ -305,22 +305,6 @@ struct WrapShadowParams<RMOSM::ShadowType>
         treePersistent.debugPersist.EnableDebugFlag(flag,true);
       return true;
     }
-    // Add opaque object to the render textures 
-    else if (strcmp (cmd, "show_opaque_objects") == 0)
-    {
-      uint flag = 
-        treePersistent.debugPersist.QueryDebugFlag("draw.osm.opaque.objects");
-      treePersistent.debugPersist.EnableDebugFlag(flag,true);
-      return true;
-    }
-    // Remove opaque object from the render textures  
-    else if (strcmp (cmd, "hide_opaque_objects") == 0)
-    {
-      uint flag = 
-        treePersistent.debugPersist.QueryDebugFlag("draw.osm.opaque.objects");
-      treePersistent.debugPersist.EnableDebugFlag(flag,false);
-      return true;
-    }
 
     return false;
   }

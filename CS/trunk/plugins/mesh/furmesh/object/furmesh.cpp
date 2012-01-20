@@ -404,7 +404,6 @@ CS_PLUGIN_NAMESPACE_BEGIN(FurMesh)
     if (hairMeshProperties && hairMeshProperties->GetMaterial())
       materialWrapper->SetMaterial(hairMeshProperties->GetMaterial());
 
-    GetMeshWrapper()->SetFlagsRecursive(CS_ENTITY_NOSHADOWS, CS_ENTITY_NOSHADOWS);
     SetMaterialWrapper(materialWrapper);
 
     // Get the buffer holder
