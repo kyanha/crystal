@@ -1,0 +1,157 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html401/loose.dtd">
+<html>
+<!-- Created by texi2html 1.76 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Many creative people <dev@texi2html.cvshome.org>
+Send bugs and suggestions to <users@texi2html.cvshome.org>
+
+-->
+<head>
+<title>Crystal Space 2.1.0: 5.5.5 Exporting Animated Objects</title>
+
+<meta name="description" content="Crystal Space 2.1.0: 5.5.5 Exporting Animated Objects">
+<meta name="keywords" content="Crystal Space 2.1.0: 5.5.5 Exporting Animated Objects">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="texi2html 1.76">
+<meta http-equiv="Content-Type" content="text/html; charset=us-ascii">
+<style type="text/css">
+<!--
+a.summary-letter {text-decoration: none}
+pre.display {font-family: serif}
+pre.format {font-family: serif}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: serif; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: serif; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.sansserif {font-family:sans-serif; font-weight:normal;}
+ul.toc {list-style: none}
+-->
+</style>
+
+
+</head>
+
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
+
+<a name="io_005fscene_005fcs-Export-Animesh"></a>
+<a name="0"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="io_005fscene_005fcs-Export-Genmesh.html#0" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="io_005fscene_005fcs-ToDo.html#0" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="Working-with-Engine-Content.html#0" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="Blender.html#0" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="Internals.html#0" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="index.html#SEC_Top" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="cs_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="cs_Index.html#0" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="cs_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<hr size="1">
+<h3 class="subsection"> 5.5.5 Exporting Animated Objects </h3>
+
+<p>Apart from static objects, Blender allows the definition of animated objects. 
+</p>
+<p>Animation is making an object move or change shape over time. Objects can be animated in many ways: moving as a whole object, deforming them or animating character via armature. In this section, we will cover the last two of them.
+</p>
+<a name="1"></a>
+<h4 class="subsubheading"> Animesh </h4>
+
+<p>An animesh is the CrystalSpace type for a mesh animated by morphing (i.e. morph target animation) and/or by rigging (i.e. skeletal animation).
+</p>
+<p>An animated mesh object in Blender will be exported as a cs animesh factory. Just as genmeshes, the definition of this factory will be saved in a library file named '&lt;mesh name&gt;' and placed in the 'factories' folder. The object itself will be exported in the 'world' file as a 'meshref' or a 'meshobj', containing a reference to the animesh factory.
+</p>
+<p>Again, as is true of genmesh factories, an animesh factory defines a default material, vertex colors, vertex normals, uv mapping coordinates and a submesh per used material.
+</p>
+<a name="2"></a>
+<h4 class="subsubheading"> Morph Targets </h4>
+
+<p>A morph target animation deformes a mesh by moving a series of vertex. In Blender, a morph target or a (blend) shape stores modified vertex positions. In each key frame of an animation, the vertices are then interpolated between these stored positions.
+</p>
+<p>io_scene_cs converts these mesh deformations into offsets: one offset is defined for each vertex of the mesh. A cs morph target is stored in the animesh factory, specifying its name along with an offset buffer.
+</p>
+<a name="3"></a>
+<h4 class="subsubheading"> Armatures </h4>
+
+<p>A skeletal animation uses a hierarchical set of interconnected bones, called the skeleton, to animate a character's mesh.
+</p>
+<p>A Blender armature will be exported as a CrystalSpace skeleton with corresponding animations and animesh rigging information. The skeleton factory is stored in a xml library file named 'skel&lt;mesh name&gt;_rig' and placed in the 'factories' folder. It is described as a hierarchy of bones, each bone being represented by a name and a transformation matrix. To complete the character's data, a reference to the skeleton factory is written into the animesh library file.
+</p>
+<a name="4"></a>
+<h4 class="subsubheading"> Bone Influences </h4>
+
+<p>Portions of the character's mesh can be associated with multiple bones (maximum 4 in CrystalSpace), each one having a scaling factor called vertex weight or blend weight. The process of creating this association is called &ldquo;skinning&rdquo;. 
+</p>
+<p>A weight defines the influence that a bone exerts on a vertex. Blender defines a weight for each vertex group a vertex is member of. These vertex weights are exported by io_scene_cs as cs bone influences in the animesh factory: four normalized influences are associated to each vertex. If Blender defined less then four weights for a vertex, null influences are inserted to complete them. At the contrary, if Blender defines more then four weights, only the four largest ones are normalized and assigned to this vertex; the other ones are lost.
+</p>
+<a name="5"></a>
+<h4 class="subsubheading"> Animations </h4>
+
+<p>Blender defines animations in term of poses and keyframes.
+</p>
+<p>Animating armatures in Blender implies to define key positions/rotations/scales, and use Ipo curves to interpolate between them. Armature animation is also known as &ldquo;posing&rdquo;, as one main technique is to define some key poses, and then blend between them.
+</p>
+<p>A Blender action (i.e. animation) defined in terms of poses and keyframes is exported as a cs animation, specifying its name and a list of keyframes for each bone animated by this action. A cs keyframe defines a time, a position and a rotation for a bone.
+</p>
+<p>CrystalSpace animations are described in the same library file (called 'skel&lt;mesh name&gt;_rig') as the skeleton factory they are animating, along with the associated animation tree.
+</p>
+<a name="6"></a>
+<h4 class="subsubheading"> Sockets </h4>
+
+<p>With mesh sockets you can mount meshes. Child mesh will follow parent's animation. You can use it for example for keeping weapon or ride a horse. At this moment you can use socket only with animesh+skeletal animation. 
+</p>
+<p>To make a socket you need dummy mesh (for example small sphere or box - size doesn't matter, only center of the mesh matters) then set position for it. Now parent it to bone. To do it you need set armature to pose mode, select dummy socket mesh, keep SHIFT, select bone, CTRL+P, 'Make parent to: Bone'.
+</p>
+<p>Sockets are exported in the same library file as the animesh factory. Each socket defines a name, a bone and the transformation to apply to an object we want to attach to that bone.
+</p>
+<p><img src="content/io_scene_cs/icon_exclamation.png" alt="content/io_scene_cs/icon_exclamation"> <strong>Constraints</strong>
+</p>
+<ul>
+<li>
+io_scene_cs will not take modifiers into account. Hence modifiers should be applied before export.
+</li><li>
+No user defined shape (morph target) should be named 'Basis' in Blender. This particular shape represents the rest pose (with null offsets) and will not be exported.
+</li><li>
+Animations should not use inverse kinematics in Blender because io_scene_cs will not export them correctly (this will result in missing key frames for bones animated by IK).
+</li><li>
+If a Blender animation defines scaling modifications on an armature, io_scene_cs will not export them since only translation and rotation parts of armature animations are supported.
+</li></ul>
+
+
+<hr size="1">
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="io_005fscene_005fcs-Export-Genmesh.html#0" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="io_005fscene_005fcs-ToDo.html#0" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="Working-with-Engine-Content.html#0" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="Blender.html#0" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="Internals.html#0" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="index.html#SEC_Top" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="cs_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="cs_Index.html#0" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="cs_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<p>
+ <font size="-1">
+  This document was generated using <a href="http://texi2html.cvshome.org/"><em>texi2html 1.76</em></a>.
+ </font>
+ <br>
+
+</p>
+</body>
+</html>

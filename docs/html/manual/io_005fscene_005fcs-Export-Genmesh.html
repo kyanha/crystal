@@ -1,0 +1,126 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html401/loose.dtd">
+<html>
+<!-- Created by texi2html 1.76 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Many creative people <dev@texi2html.cvshome.org>
+Send bugs and suggestions to <users@texi2html.cvshome.org>
+
+-->
+<head>
+<title>Crystal Space 2.1.0: 5.5.4 Exporting Static Objects</title>
+
+<meta name="description" content="Crystal Space 2.1.0: 5.5.4 Exporting Static Objects">
+<meta name="keywords" content="Crystal Space 2.1.0: 5.5.4 Exporting Static Objects">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="texi2html 1.76">
+<meta http-equiv="Content-Type" content="text/html; charset=us-ascii">
+<style type="text/css">
+<!--
+a.summary-letter {text-decoration: none}
+pre.display {font-family: serif}
+pre.format {font-family: serif}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: serif; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: serif; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.sansserif {font-family:sans-serif; font-weight:normal;}
+ul.toc {list-style: none}
+-->
+</style>
+
+
+</head>
+
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
+
+<a name="io_005fscene_005fcs-Export-Genmesh"></a>
+<a name="0"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="io_005fscene_005fcs-Export-Scenes.html#0" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="io_005fscene_005fcs-Export-Animesh.html#0" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="Working-with-Engine-Content.html#0" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="Blender.html#0" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="Internals.html#0" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="index.html#SEC_Top" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="cs_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="cs_Index.html#0" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="cs_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<hr size="1">
+<h3 class="subsection"> 5.5.4 Exporting Static Objects </h3>
+
+<p>All mesh types export some factory, meshobj and meshref to the map.
+</p>
+<a name="1"></a>
+<h4 class="subsubheading"> Genmesh </h4>
+
+<p>Genmesh is the default type in io_scene_cs. This is the general mesh type in CrystalSpace (see section <a href="MeshObject-Genmesh.html#0">Genmesh Mesh Object</a> for more details).
+</p>
+<p>A static mesh object in Blender will be exported as a cs genmesh factory. The definition of this factory will be saved in a library file named '&lt;mesh name&gt;' and placed in the 'factories' folder. The object itself will be exported in the 'world' file as a 'meshref' or a 'meshobj', containing a reference to the genmesh factory.
+</p>
+<p>A default material is defined for each genmesh factory. It can use vertex colours ???????????? and will always export correct uv mapping. Vertex normals will correctly be exported if the associated vertex is not on a surface edge. Since edge vertices are not duplicated during the export, a single normal will be defined for two non coplanar surfaces. Thus, the bigger the angle between surfaces, the more erroneous will be the normal. ????????????
+</p>
+<a name="2"></a>
+<h4 class="subsubheading"> Submesh </h4>
+
+<p>Using submeshes you can define subsets of the mesh factory that use different materials. When you don't use 'submesh' the entire mesh will use the same material. As soon as you use submeshes, every triangle is contained in some submesh. Basically a submesh specifies triangle indices and a material.
+</p>
+<p>During the export, each mesh object will automatically be subdivided into submeshes along with its used materials.
+</p>
+<a name="3"></a>
+<h4 class="subsubheading"> Instance </h4>
+
+<p>This is an instancing type for general meshes in CrystalSpace. In principle it is faster, but the different instances of the factory will be more difficult to manipulate in CrystalSpace.
+</p>
+<p>You want to use this when you have many different static objects that share a factory. Instance can't be entities or have physics assigned in io_scene_cs.
+</p>
+<a name="4"></a>
+<h4 class="subsubheading"> Empty </h4>
+
+<p>Although it is non renderable, a Blender Empty object has a location, rotation, and scale. An Empty object is often used as a placeholder or a proxy object. In most cases it is used as a parent to other objects, i.e. to define a group of objects. Objects composing the group are exported as instances or submeshes of a cs general mesh, depending on their Blender properties.
+</p>
+<p><img src="content/io_scene_cs/icon_exclamation.png" alt="content/io_scene_cs/icon_exclamation"> <strong>Constraints</strong>
+</p>
+<ul>
+<li>io_scene_cs will not take modifiers into account. Hence modifiers should be applied before export.
+</li></ul>
+
+
+<hr size="1">
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="io_005fscene_005fcs-Export-Scenes.html#0" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="io_005fscene_005fcs-Export-Animesh.html#0" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="Working-with-Engine-Content.html#0" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="Blender.html#0" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="Internals.html#0" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="index.html#SEC_Top" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="cs_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="cs_Index.html#0" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="cs_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<p>
+ <font size="-1">
+  This document was generated using <a href="http://texi2html.cvshome.org/"><em>texi2html 1.76</em></a>.
+ </font>
+ <br>
+
+</p>
+</body>
+</html>
