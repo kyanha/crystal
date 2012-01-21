@@ -253,32 +253,15 @@ bool csShaderGLCGCommon::GetProgramNode (iDocumentNode* passProgNode)
       {
 	case XMLTOKEN_PROGRAM:
 	  {
-	    const char* filename = child->GetAttributeValue ("file");
-	    if (filename != 0)
-	    {
-	      programFileName = filename;
-    
-	      csRef<iVFS> vfs = csQueryRegistry<iVFS> (objectReg);
-	      csRef<iFile> file = vfs->Open (filename, VFS_FILE_READ);
-	      if (!file.IsValid())
-	      {
-		synsrv->Report ("crystalspace.graphics3d.shader.cg",
-		  CS_REPORTER_SEVERITY_WARNING, child,
-		  "Could not open %s", CS::Quote::Single (filename));
-		return false;
-	      }
-    
-	      programFile = file;
-	    }
-	    else
-	      programNode = child;
+        if (ParseProgramNode (child, programSource))
+          return false;
 	  }
 	  break;
       }
     }
   }
 
-  return programNode.IsValid();
+  return programSource.programNode.IsValid();
 }
 
 }

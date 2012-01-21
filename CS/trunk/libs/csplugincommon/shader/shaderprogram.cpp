@@ -361,29 +361,8 @@ bool csShaderProgram::ParseCommon (iDocumentNode* child)
     break;
   case XMLTOKEN_PROGRAM:
     {
-      const char* filename = child->GetAttributeValue ("file");
-      if (filename != 0)
-      {
-        programFileName = filename;
-
-        csRef<iVFS> vfs = csQueryRegistry<iVFS> (objectReg);
-        csRef<iFile> file = vfs->Open (filename, VFS_FILE_READ);
-        if (!file.IsValid())
-        {
-          synsrv->Report ("crystalspace.graphics3d.shader.common",
-            CS_REPORTER_SEVERITY_WARNING, child,
-            "Could not open %s", CS::Quote::Single (filename));
-          return false;
-        }
-
-        programFile = file;
-        programNode.Invalidate ();
-      }
-      else
-      {
-        programNode = child;
-        programFile.Invalidate ();
-      }
+      if (!ParseProgramNode (child, programSource))
+        return false;
     }
     break;
 
@@ -397,13 +376,41 @@ bool csShaderProgram::ParseCommon (iDocumentNode* child)
   return true;
 }
 
-#include "csutil/custom_new_disable.h"
-iDocumentNode* csShaderProgram::GetProgramNode ()
+bool csShaderProgram::ParseProgramNode (iDocumentNode* child, ProgramSource& parsedSource)
 {
-  if (programNode.IsValid ())
-    return programNode;
+  const char* filename = child->GetAttributeValue ("file");
+  if (filename != 0)
+  {
+    parsedSource.programFileName = filename;
 
-  if (programFile.IsValid ())
+    csRef<iVFS> vfs = csQueryRegistry<iVFS> (objectReg);
+    csRef<iFile> file = vfs->Open (filename, VFS_FILE_READ);
+    if (!file.IsValid())
+    {
+      synsrv->Report ("crystalspace.graphics3d.shader.common",
+        CS_REPORTER_SEVERITY_WARNING, child,
+        "Could not open %s", CS::Quote::Single (filename));
+      return false;
+    }
+
+    parsedSource.programFile = file;
+    parsedSource.programNode.Invalidate ();
+  }
+  else
+  {
+    parsedSource.programNode = child;
+    parsedSource.programFile.Invalidate ();
+  }
+  return true;
+}
+
+#include "csutil/custom_new_disable.h"
+iDocumentNode* csShaderProgram::GetProgramNode (ProgramSource& programSource)
+{
+  if (programSource.programNode.IsValid ())
+    return programSource.programNode;
+
+  if (programSource.programFile.IsValid ())
   {
     csRef<iDocumentSystem> docsys =  
       csQueryRegistry<iDocumentSystem> (objectReg);
@@ -411,33 +418,33 @@ iDocumentNode* csShaderProgram::GetProgramNode ()
       docsys.AttachNew (new csTinyDocumentSystem ());
     csRef<iDocument> doc (docsys->CreateDocument ());
 
-    const char* err = doc->Parse (programFile, true);
+    const char* err = doc->Parse (programSource.programFile, true);
     if (err != 0)
     {
       csReport (objectReg,
 	CS_REPORTER_SEVERITY_WARNING, 
 	"crystalspace.graphics3d.shader.common",
-	"Error parsing %s: %s", programFileName.GetData(), err);
+	"Error parsing %s: %s", programSource.programFileName.GetData(), err);
       return 0;
     }
-    programNode = doc->GetRoot ();
-    programFile = 0;
-    return programNode;
+    programSource.programNode = doc->GetRoot ();
+    programSource.programFile.Invalidate();
+    return programSource.programNode;
   }
 
-  return 0;
+  return nullptr;
 }
 
-csPtr<iDataBuffer> csShaderProgram::GetProgramData ()
+csPtr<iDataBuffer> csShaderProgram::GetProgramData (ProgramSource& programSource)
 {
-  if (programFile.IsValid())
+  if (programSource.programFile.IsValid())
   {
-    return programFile->GetAllData ();
+    return programSource.programFile->GetAllData ();
   }
 
-  if (programNode.IsValid())
+  if (programSource.programNode.IsValid())
   {
-    char* data = CS::StrDup (programNode->GetContentsValue ());
+    char* data = CS::StrDup (programSource.programNode->GetContentsValue ());
 
     csRef<iDataBuffer> newbuff;
     newbuff.AttachNew (new CS::DataBuffer<> (data, data ? strlen (data) : 0));
@@ -452,7 +459,7 @@ void csShaderProgram::DumpProgramInfo (csString& output)
 {
   output << "Program description: " << 
     (description.Length () ? description.GetData () : "<none>") << "\n";
-  output << "Program file name: " << programFileName << "\n";
+  output << "Program file name: " << programSource.programFileName << "\n";
 }
 
 void csShaderProgram::DumpVariableMappings (csString& output)
