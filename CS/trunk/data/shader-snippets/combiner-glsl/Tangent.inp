@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8" ?> 
 <!--
   Copyright (C) 2007 by Frank Richter
 	    (C) 2007 by Jorrit Tyberghein
@@ -16,30 +17,26 @@
   License along with this library; if not, write to the Free
   Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 -->
-<!-- Direction from vertex to eye, in camera space -->
-<snippet>
-  <technique priority="100">
-    <combiner name="cg" plugin="crystalspace.graphics3d.shader.combiner.glcg" />
-    <combiner name="glsl" plugin="crystalspace.graphics3d.shader.combiner.glsl" />
+<input name="Tangent" type="normal" default="complex" >
+  <block location="inputs">
+    <varying type="normal" name="in_Tangent" />
+  </block>
   
-    <input name="position" type="position4_camera" />
-    
-    <block location="cg:vertexMain">
-      eyeDirectionCamera = -position;
-    </block>
+  <block location=":pass">
+    <buffer source="tangent" destination="in_Tangent" />
+  </block>
   
-    <block location="glsl:vertexMain">
-      eyeDirectionCamera = -position;
-    </block>
+  <block location="vertexToFragment">
+    <varying type="normal" name="Tangent" />
+  </block>
   
-    <block location="cg:fragmentMain">
-      eyeDirectionCamera = -position;
-    </block>
+  <block location="vertexMain">
+    Tangent = in_Tangent;
+  </block>
   
-    <block location="glsl:fragmentMain">
-      eyeDirectionCamera = -position;
-    </block>
+  <block location="fragmentMain">
+    // Renormalize, as interpolation will have denormalized it
+    Tangent = normalize (Tangent);
+  </block>
   
-    <output name="eyeDirectionCamera" type="direction_camera" />
-  </technique>
-</snippet>
+</input>

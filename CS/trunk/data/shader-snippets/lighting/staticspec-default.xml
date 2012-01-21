@@ -22,6 +22,7 @@
     <snippet id="forward_normal">
       <technique priority="100">
 	<combiner name="cg" plugin="crystalspace.graphics3d.shader.combiner.glcg" />
+        <combiner name="glsl" plugin="crystalspace.graphics3d.shader.combiner.glsl" />
 	
 	<!-- Surface normal -->
 	<input name="i_normal" type="normal_tangent" default="value" defval="0,0,1"/>
@@ -33,6 +34,12 @@
 	<block location="cg:fragmentMain">
 	  o_normal = i_normal;
 	</block>
+        <block location="glsl:vertexMain">
+          o_normal = i_normal;
+        </block>
+        <block location="glsl:fragmentMain">
+          o_normal = i_normal;
+        </block>
       </technique>
     </snippet>
     
@@ -98,18 +105,31 @@
 	    <buffer source="texture coordinate lightmap" 
 		    destination="vertexIn.texcoordLM" />
 	  </block>
+          <block location="glsl:pass">
+            <buffer source="texture coordinate lightmap" 
+                    destination="in_texcoordLM" />
+          </block>
 	  
 	  <block location="cg:vertexToFragment">
 	    <varying type="texcoord2" name="texCoordLM" />
 	  </block>
+          <block location="glsl:vertexToFragment">
+            <varying type="texcoord2" name="texCoordLM" />
+          </block>
 	  
 	  <block location="cg:vertexIn">
 	    <varying type="texcoord2" name="texcoordLM" />
 	  </block>
+          <block location="glsl:inputs">
+            <varying type="texcoord2" name="in_texcoordLM" />
+          </block>
 	  
 	  <block location="cg:vertexMain">
 	    texCoordLM = vertexIn.texcoordLM;
 	  </block>
+          <block location="glsl:vertexMain">
+            texCoordLM = in_texcoordLM;
+          </block>
 	</input>
 	
 	<input name="eyeToSurf" type="normal_tangent" default="value" defval="0,0,1" />
@@ -260,11 +280,16 @@
     
       <technique priority="100">
 	<combiner name="cg" plugin="crystalspace.graphics3d.shader.combiner.glcg" />
+        <combiner name="glsl" plugin="crystalspace.graphics3d.shader.combiner.glsl" />
 	
 	<block location="cg:fragmentMain">
 	  specular = float3(0);
 	  specular_attr_perfragment = false;
 	</block>
+        <block location="glsl:fragmentMain">
+          specular = vec3(0);
+          specular_attr_perfragment = false;
+        </block>
 	
 	<output name="specular" type="rgb">
 	  <attribute name="perfragment" type="bool" />

@@ -18,6 +18,22 @@
   Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 -->
 <shader compiler="shaderweaver" name="lighting_imposter"> 
+  <technique priority="250">
+    <pass>
+      <combiner plugin="crystalspace.graphics3d.shader.combiner.glsl" />
+
+      <snippet id="position" file="/shader-snippets/position.xml" />
+      <snippet id="surface" file="/shader-snippets/surface/surface-classic.xml" />
+      <snippet id="apply_mixmode_alpha" file="/shader-snippets/mixmode-alpha.xml" />
+      <snippet id="sectorfog" file="/shader-snippets/fog/fog-sector.xml" />
+      <snippet id="hdrscale" file="/shader-snippets/hdr-postscale.xml" />
+
+      <connection from="position" to="surface" />
+      <connection from="surface" to="apply_mixmode_alpha" />
+      <connection from="apply_mixmode_alpha" to="sectorfog" />
+      <connection from="sectorfog" to="hdrscale" />
+    </pass>
+  </technique>
   <technique priority="200">
     <pass>
       <combiner plugin="crystalspace.graphics3d.shader.combiner.glcg" />

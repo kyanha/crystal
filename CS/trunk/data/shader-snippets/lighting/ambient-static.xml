@@ -257,20 +257,31 @@
     
       <technique priority="100">
 	<combiner name="cg" plugin="crystalspace.graphics3d.shader.combiner.glcg" />
+        <combiner name="glsl" plugin="crystalspace.graphics3d.shader.combiner.glsl" />
 	
 	<input name="combinedAmbient" type="rgb" default="complex" private="yes">
 	  <block location="cg:variablemap">
 	    <variablemap variable="light ambient"
 			destination="fragmentIn.combinedAmbient" />
 	  </block>
+          <block location="glsl:variablemap">
+            <variablemap variable="light ambient"
+                        destination="in_combinedAmbient" />
+          </block>
 	  
 	  <block location="cg:fragmentIn">
 	    <uniform type="rgb" name="combinedAmbient" />
 	  </block>
+          <block location="glsl:inputs">
+            <uniform type="rgb" name="in_combinedAmbient" />
+          </block>
 	  
 	  <block location="cg:fragmentMain">
 	    combinedAmbient = fragmentIn.combinedAmbient;
 	  </block>
+          <block location="glsl:fragmentMain">
+            combinedAmbient = in_combinedAmbient;
+          </block>
 	</input>
 	
 	<input name="dynamicAmbientScaled" type="rgb" default="complex" private="yes">
@@ -282,14 +293,25 @@
 	      <sexp>(* "dynamic ambient" 0.5)</sexp>
 	    </variablemap>
 	  </block>
+          <block location="glsl:variablemap">
+            <variablemap destination="in_dynamicAmbientScaled" type="expr">
+              <sexp>(* "dynamic ambient" 0.5)</sexp>
+            </variablemap>
+          </block>
 	  
 	  <block location="cg:fragmentIn">
 	    <uniform type="rgb" name="dynamicAmbientScaled" />
 	  </block>
+          <block location="glsl:inputs">
+            <uniform type="rgb" name="in_dynamicAmbientScaled" />
+          </block>
 	  
 	  <block location="cg:fragmentMain">
 	    dynamicAmbientScaled = fragmentIn.dynamicAmbientScaled;
 	  </block>
+          <block location="glsl:fragmentMain">
+            dynamicAmbientScaled = in_dynamicAmbientScaled;
+          </block>
 	  
 	  <block location="cg:vertexIn">
 	    <uniform type="rgb" name="dynamicAmbientScaled" />
@@ -298,28 +320,44 @@
 	  <block location="cg:vertexMain">
 	    dynamicAmbientScaled = vertexIn.dynamicAmbientScaled;
 	  </block>
+          <block location="glsl:vertexMain">
+            dynamicAmbientScaled = in_dynamicAmbientScaled;
+          </block>
 	</input>
 	<input name="occlusionFactor" type="float" default="value" defval="1">
 	  <attribute name="perfragment" type="bool" defval="false" />
 	</input>
 	
 	<input name="texCoordLM" type="texcoord2" default="complex">
-	  <block location="pass">
+	  <block location="cg:pass">
 	    <buffer source="texture coordinate lightmap" 
 		    destination="vertexIn.texcoordLM" />
 	  </block>
+          <block location="glsl:pass">
+            <buffer source="texture coordinate lightmap" 
+                    destination="in_texcoordLM" />
+          </block>
 	  
 	  <block location="cg:vertexToFragment">
 	    <varying type="texcoord2" name="texCoordLM" />
 	  </block>
+          <block location="glsl:vertexToFragment">
+            <varying type="texcoord2" name="texCoordLM" />
+          </block>
 	  
 	  <block location="cg:vertexIn">
 	    <varying type="texcoord2" name="texcoordLM" />
 	  </block>
+          <block location="glsl:inputs">
+            <varying type="texcoord2" name="in_texcoordLM" />
+          </block>
 	  
 	  <block location="cg:vertexMain">
 	    texCoordLM = vertexIn.texcoordLM;
 	  </block>
+          <block location="glsl:vertexMain">
+            texCoordLM = in_texcoordLM;
+          </block>
 	</input>
 	
 	<!-- Surface normal -->
@@ -328,40 +366,64 @@
 	</input>
 	
 	<input name="litColor" type="rgb" default="complex" private="yes">
-	  <block location="pass">
+	  <block location="cg:pass">
 	    <buffer source="static color" destination="vertexIn.litColor" />
 	  </block>
+          <block location="glsl:pass">
+            <buffer source="static color" destination="in_litColor" />
+          </block>
 	  
 	  <block location="cg:vertexIn">
 	    <varying type="rgb" name="litColor" />
 	  </block>
+          <block location="glsl:inputs">
+            <varying type="rgb" name="in_litColor" />
+          </block>
 	  
 	  <block location="cg:vertexToFragment">
 	    <varying type="rgb" name="litColor" />
 	  </block>
+          <block location="glsl:vertexToFragment">
+            <varying type="rgb" name="litColor" />
+          </block>
 	  
 	  <block location="cg:vertexMain">
 	    litColor = vertexIn.litColor;
 	  </block>
+          <block location="glsl:vertexMain">
+            litColor = in_litColor;
+          </block>
 	</input>
 	<input name="lightmap" type="tex2d" default="complex" private="yes">
-	  <block location="pass">
+	  <block location="cg:pass">
 	    <texture name="tex lightmap" destination="fragmentIn.lightmap" />
 	  </block>
+          <block location="glsl:pass">
+            <texture name="tex lightmap" destination="in_lightmap" />
+          </block>
 	  
 	  <block location="cg:fragmentIn">
 	    <uniform type="tex2d" name="lightmap" />
 	  </block>
+          <block location="glsl:inputs">
+            <uniform type="tex2d" name="in_lightmap" />
+          </block>
 	  
 	  <block location="cg:fragmentMain">
 	    lightmap = fragmentIn.lightmap;
 	  </block>
+          <block location="glsl:fragmentMain">
+            #sampler_assign lightmap fragmentIn.lightmap
+          </block>
 	</input>
 	<input file="/shader-snippets/lightScale.inp" private="yes" />
 		
 	<block location="cg:vertexToFragment">
 	  <varying type="rgb" name="ambientPerVertex" />
 	</block>
+        <block location="glsl:vertexToFragment">
+          <varying type="rgb" name="ambientPerVertex" />
+        </block>
 	  
 	<block location="cg:vertexMain">
 	    <?if vars."tex lightmap".texture ?>
@@ -381,6 +443,24 @@
 	      ambient_attr_perfragment = occlusionFactor_attr_perfragment;
 	    <?endif?>
 	</block>
+        <block location="glsl:vertexMain">
+            <?if vars."tex lightmap".texture ?>
+              ambient_attr_perfragment = true;
+            <?elsif vars."static color".buffer?>
+              if (!occlusionFactor_attr_perfragment)
+              {
+                vec3 ambient_dynamic = dynamicAmbientScaled * occlusionFactor;
+                vec3 ambient_static;
+                ambient_static = (2.0*lightScale.x) * litColor;
+                ambientPerVertex = (ambient_dynamic*(2.0*lightScale.x) + ambient_static);
+                ambient_attr_perfragment = false;
+              }
+              else
+                ambient_attr_perfragment = true;
+            <?else?>
+              ambient_attr_perfragment = occlusionFactor_attr_perfragment;
+            <?endif?>
+        </block>
 	
 	<block location="cg:fragmentMain">
 	  <?if (vars."pass number".int == 0) && (vars."pass do_ambient") ?>
@@ -412,6 +492,36 @@
 	  ambient_attr_perfragment = false;
 	  <?endif?>
 	</block>
+        <block location="glsl:fragmentMain">
+          <?if (vars."pass number".int == 0) && (vars."pass do_ambient") ?>
+            vec3 ambient_dynamic = dynamicAmbientScaled * occlusionFactor;
+            vec3 ambient_static;
+            <?if vars."tex lightmap".texture ?>
+              ambient_static = (2.0*lightScale.x) * texture2D (lightmap, texCoordLM).rgb;
+              ambient_attr_perfragment = true;
+            <?elsif vars."static color".buffer?>
+              if (occlusionFactor_attr_perfragment)
+              {
+                ambient_static = (2.0*lightScale.x) * litColor;
+                ambient_attr_perfragment = occlusionFactor_attr_perfragment;
+              }
+              else
+              {
+                ambient_dynamic = vec3 (0);
+                ambient_static = ambientPerVertex;
+                ambient_attr_perfragment = false;
+              }
+            <?else?>
+              ambient_dynamic = vec3 (0);
+              ambient_static = combinedAmbient * occlusionFactor;
+              ambient_attr_perfragment = occlusionFactor_attr_perfragment;
+            <?endif?>
+            ambient = (ambient_dynamic*(2.0*lightScale.x) + ambient_static);
+          <?else?>
+          ambient = vec3(0);
+          ambient_attr_perfragment = false;
+          <?endif?>
+        </block>
 	
 	<output name="ambient" type="rgb">
 	  <attribute name="perfragment" type="bool" />

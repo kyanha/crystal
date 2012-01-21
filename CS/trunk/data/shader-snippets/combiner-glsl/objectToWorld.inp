@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8" ?> 
 <!--
   Copyright (C) 2007 by Frank Richter
 	    (C) 2007 by Jorrit Tyberghein
@@ -16,30 +17,23 @@
   License along with this library; if not, write to the Free
   Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 -->
-<!-- Direction from vertex to eye, in camera space -->
-<snippet>
-  <technique priority="100">
-    <combiner name="cg" plugin="crystalspace.graphics3d.shader.combiner.glcg" />
-    <combiner name="glsl" plugin="crystalspace.graphics3d.shader.combiner.glsl" />
+<!-- Slightly dirty: float4x4 is no weaver type, so gets written out 
+     verbatim -->
+<input name="objectToWorld" type="float4x4" default="complex">
+  <block location="inputs">
+    <uniform type="float4x4" name="in_objectToWorld" />
+  </block>
   
-    <input name="position" type="position4_camera" />
-    
-    <block location="cg:vertexMain">
-      eyeDirectionCamera = -position;
-    </block>
-  
-    <block location="glsl:vertexMain">
-      eyeDirectionCamera = -position;
-    </block>
-  
-    <block location="cg:fragmentMain">
-      eyeDirectionCamera = -position;
-    </block>
-  
-    <block location="glsl:fragmentMain">
-      eyeDirectionCamera = -position;
-    </block>
-  
-    <output name="eyeDirectionCamera" type="direction_camera" />
-  </technique>
-</snippet>
+  <block location="vertexMain">
+    objectToWorld = in_objectToWorld;
+  </block>
+
+  <block location="fragmentMain">
+    objectToWorld = in_objectToWorld;
+  </block>
+
+  <block location="variablemap">
+    <variablemap variable="object2world transform" 
+      destination="in_objectToWorld" />
+  </block>
+</input>

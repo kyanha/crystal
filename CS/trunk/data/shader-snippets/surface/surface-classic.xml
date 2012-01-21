@@ -19,20 +19,41 @@
 <snippet>
   <technique priority="100">
     <combiner name="cg" plugin="crystalspace.graphics3d.shader.combiner.glcg" />
+    <combiner name="glsl" plugin="crystalspace.graphics3d.shader.combiner.glsl" />
     
     <input file="/shader-snippets/texCoord.inp"	/>
     
     <input name="texDiffuse" type="tex2d" default="complex">
-      <block location="pass">
+      <block location="cg:pass">
 	<texture name="tex diffuse" destination="fragmentIn.texDiffuse" />
+      </block>
+      <block location="glsl:pass">
+        <texture name="tex diffuse" destination="in_texDiffuse" />
       </block>
       
       <block location="cg:fragmentIn">
 	<uniform type="tex2d" name="texDiffuse" />
       </block>
+
+      <block location="glsl:inputs">
+        <uniform type="tex2d" name="in_texDiffuse" />
+      </block>
+
       
       <block location="cg:fragmentMain">
 	texDiffuse = fragmentIn.texDiffuse;
+      </block>
+
+      <block location="glsl:fragmentMain">
+        /* #sampler_assign is not a real directive from the GLSL preprocessor
+           but handled by the GLSL combiner. It's used since GLSL doesn't
+           allow assignment of sampler variables; so work around this
+           limitation in the combiner. */
+        #sampler_assign texDiffuse in_texDiffuse
+      </block>
+
+      <block location="glsl:vertexMain">
+        #sampler_assign texDiffuse in_texDiffuse
       </block>
     </input>
     
@@ -41,8 +62,18 @@
       surfaceColor_attr_perfragment = true;
     </block>
     
+    <block location="glsl:vertexMain">
+      surfaceColor = vec4(0);
+      surfaceColor_attr_perfragment = true;
+    </block>
+    
     <block location="cg:fragmentMain">
       surfaceColor = tex2D (texDiffuse, texCoord);
+      surfaceColor_attr_perfragment = true;
+    </block>
+    
+    <block location="glsl:fragmentMain">
+      surfaceColor = texture2D (texDiffuse, texCoord);
       surfaceColor_attr_perfragment = true;
     </block>
     

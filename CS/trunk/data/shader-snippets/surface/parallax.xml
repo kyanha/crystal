@@ -23,6 +23,7 @@
     <snippet id="parallax">
       <technique priority="100">
 	<combiner name="cg" plugin="crystalspace.graphics3d.shader.combiner.glcg" />
+        <combiner name="glsl" plugin="crystalspace.graphics3d.shader.combiner.glcg" />
 	
 	<input file="/shader-snippets/texCoord.inp" />
 	
@@ -30,17 +31,28 @@
 	<input name="eyeVec" type="direction_tangent" />
 	
 	<input name="texHeight" type="tex2d" default="complex">
-	  <block location="pass">
+	  <block location="cg:pass">
 	    <texture name="tex height" destination="fragmentIn.texHeight" />
 	  </block>
+          <block location="glsl:pass">
+            <texture name="tex height" destination="in_texHeight" />
+          </block>
 	  
 	  <block location="cg:fragmentIn">
 	    <uniform type="tex2d" name="texHeight" />
 	  </block>
 	  
+          <block location="glsl:input">
+            <uniform type="tex2d" name="in_texHeight" />
+          </block>
+          
 	  <block location="cg:fragmentMain">
 	    texHeight = fragmentIn.texHeight;
 	  </block>
+          
+          <block location="glsl:fragmentMain">
+            #sampler_assign texHeight in_texHeight
+          </block>
 	</input>
        
 	<block location="cg:definitions">
@@ -96,6 +108,7 @@
     <snippet id="parallax">
       <technique priority="100">
 	<combiner name="cg" plugin="crystalspace.graphics3d.shader.combiner.glcg" />
+        <combiner name="glsl" plugin="crystalspace.graphics3d.shader.combiner.glsl" />
 	
 	<input file="/shader-snippets/texCoord.inp" />
 	
@@ -104,10 +117,19 @@
 	  texCoordOffset = texCoord;
 	</block>
 	
+        <block location="glsl:vertexMain">
+          // In case the coords are used on the VP side...
+          texCoordOffset = texCoord;
+        </block>
+        
 	<block location="cg:fragmentMain">
 	  texCoordOffset = texCoord;
 	</block>
 	
+        <block location="glsl:fragmentMain">
+          texCoordOffset = texCoord;
+        </block>
+        
 	<output name="texCoordOffset" type="texcoord2" />
       </technique>
     </snippet>
