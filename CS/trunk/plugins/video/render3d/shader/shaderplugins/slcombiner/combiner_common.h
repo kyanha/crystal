@@ -27,7 +27,7 @@
 
 #include "iutil/comp.h"
 
-#include "beautify_cg.h"
+#include "beautify.h"
 
 CS_PLUGIN_NAMESPACE_BEGIN(SLCombiner)
 {
@@ -170,7 +170,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(SLCombiner)
     {
       csRef<iDocumentNode> node;
       csString stringAppend;
-      CgBeautifier beautifier;
+      Beautifier beautifier;
 
       void FlushAppendString ();
     public:
