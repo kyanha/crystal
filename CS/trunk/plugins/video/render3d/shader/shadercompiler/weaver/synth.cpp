@@ -252,7 +252,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(ShaderWeaver)
       
         csSet<csString> techConditions;
 	TagNodesHelper techTags;
-	bool aPassSucceeded = false;
+	bool allPassesSucceeded = false;
 	csRef<iDocumentNode> firstTechNode;
 	for (size_t p = 0; p < synthTechs[t].GetSize(); p++)
 	{
@@ -301,11 +301,13 @@ CS_PLUGIN_NAMESPACE_BEGIN(ShaderWeaver)
               messageNode->SetValue (csString().Format ("pass #%zu: %s", p,
                                                         synthTech->GetStatus().message.GetData()));
             }
+            allPassesSucceeded = false;
           }
 	  else
 	  {
 	    synthTech->WriteToPass (passNode);
-	    aPassSucceeded = true;
+            if (p == 0)
+              allPassesSucceeded = true;
 	    
 	    const char* techCond = synthTech->GetTechniqueConditions();
 	    if (techCond && *techCond)
@@ -313,7 +315,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(ShaderWeaver)
 	    techTags.Merge (synthTech->GetTags());
 	  }
 	}
-	if (!aPassSucceeded)
+	if (!allPassesSucceeded)
 	  shaderNode->RemoveNode (techniqueNode);
 	else
 	{
