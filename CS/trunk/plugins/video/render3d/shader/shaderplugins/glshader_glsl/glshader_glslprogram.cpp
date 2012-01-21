@@ -32,6 +32,22 @@ CS_PLUGIN_NAMESPACE_BEGIN(GLShaderGLSL)
 {
   CS_LEAKGUARD_IMPLEMENT (csShaderGLSLProgram);
 
+  csShaderGLSLProgram::csShaderGLSLProgram (csGLShader_GLSL* shaderPlug) :
+    scfImplementationType (this, shaderPlug->object_reg),
+    shaderPlug (shaderPlug),
+    program_id (0),
+    validProgram (false),
+    useTessellation (false)
+  {
+    InitTokenTable (xmltokens);
+  }
+
+  csShaderGLSLProgram::~csShaderGLSLProgram ()
+  {
+    if (program_id != 0)
+      shaderPlug->ext->glDeleteObjectARB (program_id);
+  }
+
   void csShaderGLSLProgram::Activate ()
   {
     shaderPlug->ext->glUseProgramObjectARB (program_id);
@@ -156,15 +172,9 @@ CS_PLUGIN_NAMESPACE_BEGIN(GLShaderGLSL)
 
   csRef<iDataBuffer> csShaderGLSLProgram::LoadSource (iDocumentNode* node)
   {
-    csRef<iDocumentNodeIterator> it = node->GetNodes ();
-    while (it->HasNext ())
-    {
-      csRef<iDocumentNode> child = it->Next ();
-      if (child->GetType () != CS_NODE_ELEMENT) continue;
-      if (!ParseCommon (child))
-        return 0;
-    }
-    return GetProgramData ();
+    ProgramSource program;
+    if (!ParseProgramNode (node, program)) return (iDataBuffer*)nullptr;
+    return GetProgramData (program);
   }
 
   bool csShaderGLSLProgram::Load (iShaderDestinationResolver*,
@@ -173,46 +183,50 @@ CS_PLUGIN_NAMESPACE_BEGIN(GLShaderGLSL)
     if (!node)
       return false;
 
-    csRef<iDocumentNode> program;
-
-    program = node->GetNode ("vp");
-    if (program)
+    csRef<iDocumentNodeIterator> it = node->GetNodes ();
+    while(it->HasNext())
     {
-      vpSource = LoadSource (program);
-      if (!vpSource)
-        return false;
-    }
+      csRef<iDocumentNode> child = it->Next();
+      if(child->GetType() != CS_NODE_ELEMENT) continue;
+      const char* value = child->GetValue ();
+      csStringID id = xmltokens.Request (value);
+      switch(id)
+      {
+        case XMLTOKEN_VP:
+          vpSource = LoadSource (child);
+          if (!vpSource)
+            return false;
+          break;
+        case XMLTOKEN_FP:
+          fpSource = LoadSource (child);
+          if (!fpSource)
+            return false;
+          break;
+        case XMLTOKEN_GP:
+          gpSource = LoadSource (child);
+          if (!gpSource)
+            return false;
+          break;
+        case XMLTOKEN_EP:
+          epSource = LoadSource (child);
+          if (!epSource)
+            return false;
+          break;
+        case XMLTOKEN_CP:
+          cpSource = LoadSource (child);
+          if (!cpSource)
+            return false;
+          break;
 
-    program = node->GetNode ("fp");
-    if (program)
-    {
-      fpSource = LoadSource (program);
-      if (!fpSource)
-        return false;
-    }
-
-    program = node->GetNode ("gp");
-    if (program)
-    {
-      gpSource = LoadSource (program);
-      if (!gpSource)
-        return false;
-    }
-
-    program = node->GetNode ("ep");
-    if (program)
-    {
-      epSource = LoadSource (program);
-      if (!epSource)
-        return false;
-    }
-
-    program = node->GetNode ("cp");
-    if (program)
-    {
-      cpSource = LoadSource (program);
-      if (!cpSource)
-        return false;
+        case XMLTOKEN_VARIABLEMAP:
+        case XMLTOKEN_DESCRIPTION:
+          if (!ParseCommon (child))
+            return false;
+          break;
+        default:
+          synsrv->ReportBadToken (child);
+          return false;
+      }
     }
 
     return true;
