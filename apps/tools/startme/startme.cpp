@@ -38,7 +38,6 @@ StartMe::~StartMe ()
 
 void SizeWindow (CEGUI::Window* w)
 {//Size window to contents.
-  const CEGUI::RenderedString& rs(w->getRenderedString());
   float height(20.0f);
   height += CEGUI::PropertyHelper::stringToFloat (w->getProperty ("VertExtent"));
   w->setHeight(cegui_absdim(height));
