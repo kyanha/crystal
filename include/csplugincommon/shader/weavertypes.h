@@ -35,7 +35,7 @@ namespace CS
     {
       struct TypeInfo
       {
-        /// Base type (sampler or vector)
+        /// Base type (sampler, vector or matrix)
         enum 
         {
           /// Type is a (float) vector type
@@ -44,16 +44,26 @@ namespace CS
           VectorB, 
           /// Type is a (integer) vector type
           VectorI, 
+          /// Type is a (float) matrix type
+          Matrix,
+          /// Type is a (bool) matrix type
+          MatrixB,
+          /// Type is a (integer) matrix type
+          MatrixI,
           /// Type is a texture sampler type
           Sampler
         } baseType;
         /// For samplers: whether sampler is a cube map sampler
         bool samplerIsCube;
         /**
-         * Dimensions: number of components for a vector or number of texture
-         * dimensions for a sampler.
+         * Dimensions: number of components for a vector, number of texture
+         * dimensions for a sampler or number of rows for a matrix.
          */
         int dimensions;
+        /**
+         * Second dimensions: number of columns for a matrix, unused otherwise.
+         */
+        int dimensions2;
         /// Semantics of value
         enum
         {
