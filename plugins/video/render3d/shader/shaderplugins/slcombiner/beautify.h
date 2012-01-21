@@ -16,14 +16,14 @@
   Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 
-#ifndef __BEAUTIFY_CG_H__
-#define __BEAUTIFY_CG_H__
+#ifndef __BEAUTIFY_H__
+#define __BEAUTIFY_H__
 
 #include "csutil/csstring.h"
 
 CS_PLUGIN_NAMESPACE_BEGIN(SLCombiner)
 {
-  class CgBeautifier
+  class Beautifier
   {
     csString& dest;
 
@@ -81,11 +81,11 @@ CS_PLUGIN_NAMESPACE_BEGIN(SLCombiner)
     // Apply indentation according to current indent level, plus minus delta.
     void ApplyIndentation (int delta = 0);
   public:
-    CgBeautifier (csString& dest);
+    Beautifier (csString& dest);
   
     void Append (const char* str);
   };
 }
 CS_PLUGIN_NAMESPACE_END(SLCombiner)
 
-#endif // __BEAUTIFY_CG_H__
+#endif // __BEAUTIFY_H__

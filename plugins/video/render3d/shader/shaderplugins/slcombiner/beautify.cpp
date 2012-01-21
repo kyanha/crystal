@@ -18,17 +18,17 @@
 
 #include "cssysdef.h"
 
-#include "beautify_cg.h"
+#include "beautify.h"
 
 CS_PLUGIN_NAMESPACE_BEGIN(SLCombiner)
 {
 
-  CgBeautifier::CgBeautifier (csString& dest) : dest (dest), indent (0),
+  Beautifier::Beautifier (csString& dest) : dest (dest), indent (0),
     lineStatement (-1), currentStatement (0), state (stateNeedNewline)
   {
   }
 
-  int CgBeautifier::HandleCommentChar (const char*& str, int commentType, 
+  int Beautifier::HandleCommentChar (const char*& str, int commentType, 
                                        char ch)
   {
     int newState = state;
@@ -70,7 +70,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(SLCombiner)
   }
   
     
-  int CgBeautifier::HandleStatementChar (const char*& str, char ch)
+  int Beautifier::HandleStatementChar (const char*& str, char ch)
   {
     int newState = state;
     switch (ch)
@@ -115,7 +115,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(SLCombiner)
     return newState;
   }
   
-  int CgBeautifier::HandleBetweenChar (const char*& str, char ch)
+  int Beautifier::HandleBetweenChar (const char*& str, char ch)
   {
     int newState = state;
     switch (ch)
@@ -181,7 +181,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(SLCombiner)
     return newState;
   }
 
-  int CgBeautifier::HandlePreprocessorChar (const char*& str, char ch)
+  int Beautifier::HandlePreprocessorChar (const char*& str, char ch)
   {
     int newState = state;
     switch (ch)
@@ -200,7 +200,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(SLCombiner)
     return newState;
   }
 
-  void CgBeautifier::Append (const char* str)
+  void Beautifier::Append (const char* str)
   {
     char ch;
     while ((ch = *str) != 0)
@@ -228,7 +228,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(SLCombiner)
 
   }
 
-  void CgBeautifier::BeginComment (char ch, char next, const char*& str, 
+  void Beautifier::BeginComment (char ch, char next, const char*& str, 
                                    int& newState)
   {
     if (next == '/')
@@ -247,7 +247,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(SLCombiner)
     }
   }
 
-  void CgBeautifier::ApplyIndentation (int delta)
+  void Beautifier::ApplyIndentation (int delta)
   {
     for (int i = 0; i < indent+delta; i++)
       dest += "  ";
