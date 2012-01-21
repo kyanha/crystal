@@ -105,9 +105,22 @@ CS_PLUGIN_NAMESPACE_BEGIN(ShaderWeaver)
     class SynthesizeTechnique :
       public scfImplementation1<SynthesizeTechnique, iJob>
     {
+    public:
+      /// Result for the synthesis of one technique
+      struct Result
+      {
+        /// Flag whether synthesis was successful
+        bool status;
+        /// Messages to be emitted to a comment in the generated technique
+        csString message;
+        
+        Result (bool status) : status (status) {}
+        Result (const Result& other) : status (other.status), message (other.message) {}
+      };
+    private:
       friend class SynthesizeNodeTree;
     
-      bool status;
+      Result status;
       csString techniqueConditions;
     
       const WeaverCompiler* compiler;
@@ -171,7 +184,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(ShaderWeaver)
       csPtr<iDocumentNode> EncloseInCondition (iDocumentNode* node,
         const char* condition) const;
 	
-      bool operator() (ShaderVarNodesHelper& shaderVarNodes, 
+      Result operator() (ShaderVarNodesHelper& shaderVarNodes, 
         iDocumentNode* errorNode, const Snippet* snippet,
         const TechniqueGraph& graph);
     public:
@@ -186,7 +199,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(ShaderWeaver)
          snippet (snippet), graph (graph), combiners (combiners)
       {}
     
-      bool GetStatus() const { return status; }
+      const Result& GetStatus() const { return status; }
       void Run()
       { 
         status =  (*this) (shaderVarNodes, errorNode, snippet, graph);
