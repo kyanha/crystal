@@ -60,6 +60,8 @@ CS_PLUGIN_NAMESPACE_BEGIN(SLCombiner)
     /** @} */
   protected:
     const char* GetMessageID() const;
+    const char* CoercionInputName () { return "value"; }
+    const char* CoercionResultName () { return "result"; }
   };
   
   class ShaderCombinerGLSL :

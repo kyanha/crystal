@@ -101,6 +101,8 @@ CS_PLUGIN_NAMESPACE_BEGIN(SLCombiner)
 
     bool LoadCoercionLibrary (const char* path);
     bool ParseCoercion (iDocumentNode* node);
+    virtual const char* CoercionInputName () = 0;
+    virtual const char* CoercionResultName () = 0;
     typedef csHash<csRef<iDocumentNode>, csString> CoercionTemplates;
     bool ParseCoercionTemplates (iDocumentNode* node,
       CoercionTemplates& templates);
