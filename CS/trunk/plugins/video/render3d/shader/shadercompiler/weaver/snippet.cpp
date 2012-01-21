@@ -184,8 +184,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(ShaderWeaver)
   {
     FileAliases aliases;
     Snippet::AtomTechnique* technique = 
-      ParseAtomTechnique (node, true, aliases, combiner.name);
-    technique->combiner = combiner;
+      ParseAtomTechnique (node, true, aliases, combiner.classId);
     if (markAsCoercion)
     {
       CS::Utility::ScopedDelete<BasicIterator<Snippet::Technique::Output> > 
@@ -321,21 +320,13 @@ CS_PLUGIN_NAMESPACE_BEGIN(ShaderWeaver)
       {
 	csRef<iDocumentNode> child = nodes->Next ();
 	if (child->GetType() != CS_NODE_ELEMENT) continue;
-	
-	if (hasCombiner)
-	{
-	  compiler->Report (CS_REPORTER_SEVERITY_WARNING, child,
-	    "Multiple %s nodes", CS::Quote::Single ("combiner"));
-	}
-	
+
+    csString combinerName;
 	Technique::CombinerPlugin newCombiner;
-        if (!ParseCombiner (child, newCombiner)) return 0;
+        if (!ParseCombiner (child, combinerName, newCombiner)) return 0;
 	
-	if (!hasCombiner)
-	{
-	  newTech.SetCombiner (newCombiner);
-	  hasCombiner = true;
-	}
+    newTech.AddCombiner (combinerName, newCombiner);
+	hasCombiner = true;
       }
       if (!canOmitCombiner && !hasCombiner)
       {
@@ -380,11 +371,12 @@ CS_PLUGIN_NAMESPACE_BEGIN(ShaderWeaver)
     return new AtomTechnique (newTech);
   }
 
-  bool Snippet::ParseCombiner (iDocumentNode* child, 
+  bool Snippet::ParseCombiner (iDocumentNode* child,
+                               csString& name,
                                Technique::CombinerPlugin& newCombiner) const
   {
-    newCombiner.name = child->GetAttributeValue ("name");
-    if (newCombiner.name.IsEmpty())
+    name = child->GetAttributeValue ("name");
+    if (name.IsEmpty())
     {
       compiler->Report (CS_REPORTER_SEVERITY_WARNING, child,
         "%s node without %s attribute",
@@ -479,23 +471,30 @@ CS_PLUGIN_NAMESPACE_BEGIN(ShaderWeaver)
 	    CS::Quote::Single ("defsv"));
           return false;
         }
-        
-	csRef<WeaverCommon::iCombinerLoader> combinerLoader = 
-	  csLoadPluginCheck<WeaverCommon::iCombinerLoader> (compiler->objectreg,
-	    newTech.combiner.classId, false);
-	if (!combinerLoader.IsValid())
-	{
-	  // Don't complain, will happen later anyway
-	  return false;
-	}
-	
-	csRef<iDocumentNode> svBlocksNode = 
-	  compiler->CreateAutoNode (CS_NODE_ELEMENT);
-	combinerLoader->GenerateSVInputBlocks (svBlocksNode, "c", 
-	  svName, newInput.type, newInput.name, newInput.name);
-        if (!ReadBlocks (compiler, svBlocksNode, newInput.complexBlocks, 
-            aliases, defaultCombinerName))
-	  return false;
+
+        csRef<iDocumentNode> svBlocksNode =
+          compiler->CreateAutoNode (CS_NODE_ELEMENT);
+        AtomTechnique::CombinerHash::GlobalIterator combiners (newTech.combiners.GetIterator());
+        while (combiners.HasNext())
+        {
+          csString combinerName;
+          AtomTechnique::CombinerPlugin combiner;
+          combiner = combiners.Next (combinerName);
+          csRef<WeaverCommon::iCombinerLoader> combinerLoader =
+            csLoadPluginCheck<WeaverCommon::iCombinerLoader> (compiler->objectreg,
+              combiner.classId, false);
+          if (!combinerLoader.IsValid())
+          {
+            // Don't complain, will happen later anyway
+            continue;
+          }
+
+          combinerLoader->GenerateSVInputBlocks (svBlocksNode, "c",
+            svName, newInput.type, newInput.name, newInput.name);
+          if (!ReadBlocks (compiler, svBlocksNode, newInput.complexBlocks,
+              aliases, combinerName))
+            return false;
+        }
         newInput.defaultType = Technique::Input::Complex;
       }
       else

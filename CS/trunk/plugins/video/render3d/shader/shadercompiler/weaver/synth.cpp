@@ -383,7 +383,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(ShaderWeaver)
       CS_ASSERT(snippetTechIter->HasNext());
       const Snippet::Technique* snipTech = snippetTechIter->Next();
       CS_ASSERT(!snippetTechIter->HasNext());
-      comb = &snipTech->GetCombiner();
+      comb = &(static_cast<const Snippet::CompoundTechnique*> (snipTech)->GetCombiner());
       
       csRef<WeaverCommon::iCombinerLoader> loader = 
 	csLoadPluginCheck<WeaverCommon::iCombinerLoader> (compiler->objectreg,
@@ -522,8 +522,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(ShaderWeaver)
           csString tag;
           if (!inp.noMerge)
           {
-            tag = GetInputTag (combiner, *comb, node.tech->GetCombiner(), 
-              inp);
+            tag = GetInputTag (combiner, *comb, inp, node.tech);
             if (!tag.IsEmpty())
             {
               TaggedInputHash::Iterator iter (
@@ -574,7 +573,6 @@ CS_PLUGIN_NAMESPACE_BEGIN(ShaderWeaver)
 	        combiner->QueryCoerceChain (output->type, inp.type);
 	      // Ugly?
 	      Snippet::Technique::CombinerPlugin tempComb (*comb);
-	      tempComb.name = "combiner";
               // Subtle: may add nodes to the node tree
               synthTree.AugmentCoerceChain (compiler, tempComb, 
                 combiner, coerceChain, graph, node, inp.name,
@@ -700,8 +698,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(ShaderWeaver)
 	  const Snippet::Technique::Block& block = 
 	    inp.complexBlocks[b];
 	  csRef<WeaverCommon::iCombiner> theCombiner (GetCombiner (
-	    combiner, *comb, emitted.node->tech->GetCombiner(),
-	    block.combinerName));
+	    combiner, *comb, block.combinerName, emitted.node->tech));
           if (theCombiner.IsValid())
           {
             csRef<iDocumentNode> node;
@@ -840,8 +837,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(ShaderWeaver)
 	  {
 	    const Snippet::Technique::Block& block = blockIt->Next();
 	    csRef<WeaverCommon::iCombiner> theCombiner (
-	      GetCombiner (combiner, *comb, node.tech->GetCombiner(),
-	      block.combinerName));
+	      GetCombiner (combiner, *comb, block.combinerName, node.tech));
 	    if (theCombiner.IsValid())
 	    {
 	      csRef<iDocumentNode> node;
@@ -1160,23 +1156,35 @@ CS_PLUGIN_NAMESPACE_BEGIN(ShaderWeaver)
   WeaverCommon::iCombiner* Synthesizer::SynthesizeTechnique::GetCombiner (
       WeaverCommon::iCombiner* used, 
       const Snippet::Technique::CombinerPlugin& comb,
-      const Snippet::Technique::CombinerPlugin& requested,
-      const char* requestedName)
+      const char* requestedName,
+      const Snippet::Technique* tech)
   {
     if ((requestedName == 0) || (strlen (requestedName) == 0))
       return defaultCombiner;
-      
-    if (comb.classId != requested.classId) return 0;
-    if (requested.name != requestedName) return 0;
-    if (!used->CompatibleParams (requested.params)) return 0;
+
+    csString combinerClassId;
+    csRef<iDocumentNode> combiner_params;
+    if (tech->IsCompound())
+    {
+      const Snippet::Technique::CombinerPlugin& requested (
+        static_cast<const Snippet::CompoundTechnique*> (tech)->GetCombiner ());
+      combinerClassId = requested.classId;
+      combiner_params = requested.params;
+    }
+    else
+    {
+      combinerClassId = static_cast<const Snippet::AtomTechnique*> (tech)->GetCombinerId (requestedName);
+    }
+    if (comb.classId != combinerClassId) return 0;
+    if (combiner_params && !used->CompatibleParams (combiner_params)) return 0;
     return used;
   }
 
   csString Synthesizer::SynthesizeTechnique::GetInputTag (
     WeaverCommon::iCombiner* combiner,
     const Snippet::Technique::CombinerPlugin& comb, 
-    const Snippet::Technique::CombinerPlugin& combTech,
-    const Snippet::Technique::Input& input)
+    const Snippet::Technique::Input& input,
+    const Snippet::Technique* tech)
   {
     csString tag;
     if (input.defaultType == Snippet::Technique::Input::Complex)
@@ -1185,7 +1193,6 @@ CS_PLUGIN_NAMESPACE_BEGIN(ShaderWeaver)
       for (size_t b = 0; b < input.complexBlocks.GetSize(); b++)
       {
         const Snippet::Technique::Block& block = input.complexBlocks[b];
-        if (!block.combinerName.IsEmpty()) continue;
         csRef<iString> newTag = defaultCombiner->QueryInputTag (block.location,
           block.node);
         if (!newTag.IsValid() || newTag->IsEmpty()) continue;
@@ -1201,8 +1208,9 @@ CS_PLUGIN_NAMESPACE_BEGIN(ShaderWeaver)
         {
           const Snippet::Technique::Block& block = input.complexBlocks[b];
           if (block.combinerName.IsEmpty()) continue;
-          csRef<WeaverCommon::iCombiner> theCmbiner (GetCombiner (
-            combiner, comb, combTech, block.combinerName));
+          csRef<WeaverCommon::iCombiner> theCombiner (GetCombiner (
+            combiner, comb, block.combinerName, tech));
+          if (!theCombiner) continue;
           csRef<iString> newTag = combiner->QueryInputTag (block.location,
             block.node);
           if (!newTag.IsValid() || newTag->IsEmpty()) continue;

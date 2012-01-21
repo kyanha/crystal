@@ -160,13 +160,13 @@ CS_PLUGIN_NAMESPACE_BEGIN(ShaderWeaver)
       CS::PluginCommon::ShaderWeaver::iCombiner* GetCombiner (
 	CS::PluginCommon::ShaderWeaver::iCombiner* used, 
 	const Snippet::Technique::CombinerPlugin& comb,
-	const Snippet::Technique::CombinerPlugin& requested,
-	const char* requestedName);
+	const char* requestedName,
+        const Snippet::Technique* tech);
       
       csString GetInputTag (CS::PluginCommon::ShaderWeaver::iCombiner* combiner,
 	const Snippet::Technique::CombinerPlugin& comb,
-	const Snippet::Technique::CombinerPlugin& combTech,
-	const Snippet::Technique::Input& input);
+	const Snippet::Technique::Input& input,
+    const Snippet::Technique* tech);
 	
       csPtr<iDocumentNode> EncloseInCondition (iDocumentNode* node,
         const char* condition) const;

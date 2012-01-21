@@ -48,7 +48,6 @@ CS_PLUGIN_NAMESPACE_BEGIN(ShaderWeaver)
       csString outerCondition;
       struct CombinerPlugin
       {
-        csString name;
         csString classId;
         csRef<iDocumentNode> params;
       };
@@ -107,7 +106,6 @@ CS_PLUGIN_NAMESPACE_BEGIN(ShaderWeaver)
       
       virtual bool IsCompound() const = 0;
       
-      virtual const CombinerPlugin& GetCombiner() const = 0;
       virtual BasicIterator<const Input>* GetInputs() const = 0;
       virtual BasicIterator<const Output>* GetOutputs() const = 0;
       
@@ -118,7 +116,8 @@ CS_PLUGIN_NAMESPACE_BEGIN(ShaderWeaver)
     {
       friend class Snippet;
       CS::Utility::Checksum::MD5::Digest id;
-      CombinerPlugin combiner;
+      typedef csHash<CombinerPlugin, csString> CombinerHash;
+      CombinerHash combiners;
       csArray<Block> blocks;
       csArray<Input> inputs;
       csArray<Output> outputs;
@@ -129,12 +128,16 @@ CS_PLUGIN_NAMESPACE_BEGIN(ShaderWeaver)
       virtual bool IsCompound() const { return false; }
       const CS::Utility::Checksum::MD5::Digest& GetID() const { return id; }
       
-      void SetCombiner (const CombinerPlugin& comb) { combiner = comb; }
+      void AddCombiner (const char* name, const CombinerPlugin& comb) { combiners.Put (name, comb); }
       void AddBlock (const Block& block) { blocks.Push (block); }
       void AddInput (const Input& input) { inputs.Push (input); }
       void AddOutput (const Output& output) { outputs.Push (output); }
     
-      virtual const CombinerPlugin& GetCombiner() const { return combiner; }
+      const char* GetCombinerId (const char* name) const
+      {
+        const CombinerPlugin* comb (combiners.GetElementPointer (name));
+        return comb ? comb->classId.GetData() : name;
+      }
       virtual BasicIterator<const Block>* GetBlocks() const
       { return new BasicIteratorImpl<const Block, csArray<Block> > (blocks); }
       virtual BasicIterator<const Input>* GetInputs() const
@@ -192,7 +195,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(ShaderWeaver)
       const ExplicitConnectionsHash* GetExplicitConnections (Snippet* to) const
       { return explicitConnections.GetElementPointer (to); }
       
-      virtual const CombinerPlugin& GetCombiner() const { return combiner; }
+      const CombinerPlugin& GetCombiner () const { return combiner; }
       virtual BasicIterator<const Block>* GetBlocks() const { return 0; }
       virtual BasicIterator<const Input>* GetInputs() const;
       virtual BasicIterator<const Output>* GetOutputs() const;
@@ -244,7 +247,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(ShaderWeaver)
     AtomTechnique* ParseAtomTechnique (/*WeaverCompiler* compiler,*/
       iDocumentNode* node, bool canOmitCombiner,
       const FileAliases& aliases, const char* defaultCombinerName = 0) const;
-    bool ParseCombiner (iDocumentNode* child, 
+    bool ParseCombiner (iDocumentNode* child, csString& name,
       Technique::CombinerPlugin& newCombiner) const;
     bool ParseInput (iDocumentNode* child, AtomTechnique& newTech,
       const FileAliases& aliases, const char* defaultCombinerName) const;
