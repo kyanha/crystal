@@ -25,6 +25,13 @@ CS_PLUGIN_NAMESPACE_BEGIN(GLShaderGLSL)
 {
   class csGLShader_GLSL;
   class csShaderGLSLShader;
+  
+  struct ProgramUniform
+  {
+    GLint size;
+    GLenum type;
+    GLint location;
+  };
 
   class csShaderGLSLProgram :
     public scfImplementationExt0<csShaderGLSLProgram, csShaderProgram>
@@ -68,6 +75,12 @@ CS_PLUGIN_NAMESPACE_BEGIN(GLShaderGLSL)
 
     void SetupVmap ();
 
+    void SetUniformValue (const ProgramUniform& uniform,
+                          csShaderVariable* var);
+    template<typename ElementType, typename Setter>
+    void SetUniformValue (const ProgramUniform& uniform,
+                          csShaderVariable* var,
+                          Setter setter);
   public:
     CS_LEAKGUARD_DECLARE (csShaderGLSLProgram);
 

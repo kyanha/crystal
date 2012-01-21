@@ -23,6 +23,8 @@
 #include "csutil/scfstringarray.h"
 #include "iutil/comp.h"
 
+#include "glshader_glslprogram.h"
+
 CS_PLUGIN_NAMESPACE_BEGIN(GLShaderGLSL)
 {
   class csGLShader_GLSL : public scfImplementation2<csGLShader_GLSL, 
@@ -37,6 +39,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(GLShaderGLSL)
     csGLExtensionManager* ext;
     iObjectRegistry* object_reg;
     csRef<iGraphics3D> graph;
+    csBlockAllocator<ProgramUniform> uniformAlloc;
 
     CS_LEAKGUARD_DECLARE (csGLShader_GLSL);
 
