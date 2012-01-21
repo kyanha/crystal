@@ -20,12 +20,16 @@
 <snippet>
   <technique priority="100">
     <combiner name="cg" plugin="crystalspace.graphics3d.shader.combiner.glcg" />
+    <combiner name="glsl" plugin="crystalspace.graphics3d.shader.combiner.glsl" />
   
     <input name="position" type="position4_world" />
     
     <input name="eyePosWorld" type="float4" default="complex" private="yes">
       <block location="cg:vertexIn">
 	<uniform type="float4" name="eyePosWorld" />
+      </block>
+      <block location="glsl:inputs">
+        <uniform type="float4" name="in_eyePosWorld" />
       </block>
       
       <block location="cg:fragmentIn">
@@ -35,9 +39,15 @@
       <block location="cg:vertexMain">
 	eyePosWorld = vertexIn.eyePosWorld;
       </block>
+      <block location="glsl:vertexMain">
+        eyePosWorld = in_eyePosWorld;
+      </block>
       
       <block location="cg:fragmentMain">
 	eyePosWorld = fragmentIn.eyePosWorld;
+      </block>
+      <block location="glsl:fragmentMain">
+        eyePosWorld = in_eyePosWorld;
       </block>
       
       <block location="cg:variablemap">
@@ -48,13 +58,24 @@
 	  <sexp>(matrix-column (matrix2gl "world2camera transform inverse") 3)</sexp>
 	</variablemap>
       </block>
+      <block location="glsl:variablemap">
+        <variablemap destination="in_eyePosWorld" type="expr">
+          <sexp>(matrix-column (matrix2gl "world2camera transform inverse") 3)</sexp>
+        </variablemap>
+      </block>
     </input>
     
     <block location="cg:vertexMain">
       eyeDirectionWorld = (position - eyePosWorld).xyz;
     </block>
+    <block location="glsl:vertexMain">
+      eyeDirectionWorld = (position - eyePosWorld).xyz;
+    </block>
   
     <block location="cg:fragmentMain">
+      eyeDirectionWorld = (position - eyePosWorld).xyz;
+    </block>
+    <block location="glsl:fragmentMain">
       eyeDirectionWorld = (position - eyePosWorld).xyz;
     </block>
   

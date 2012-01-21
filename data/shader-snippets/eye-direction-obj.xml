@@ -20,6 +20,7 @@
 <snippet>
   <technique priority="100">
     <combiner name="cg" plugin="crystalspace.graphics3d.shader.combiner.glcg" />
+    <combiner name="glsl" plugin="crystalspace.graphics3d.shader.combiner.glsl" />
   
     <input name="position" type="position4_object" />
     
@@ -34,14 +35,26 @@
       <block location="cg:vertexMain">
 	ModelViewIT = vertexIn.ModelViewIT;
       </block>
+
+      <block location="glsl:vertexMain">
+        ModelViewIT = gl_ModelViewMatrixInverseTranspose;
+      </block>
     </input>
     
     <block location="cg:vertexToFragment">
       <varying type="direction_object" name="eyeDirectionObj" />
     </block>
     
+    <block location="glsl:vertexToFragment">
+      <varying type="direction_object" name="eyeDirectionObj" />
+    </block>
+    
     <block location="cg:vertexMain">
       eyeDirectionObj = float3 (position - ModelViewIT[3]);
+    </block>
+    
+    <block location="glsl:vertexMain">
+      eyeDirectionObj = vec3 (position - ModelViewIT[3]);
     </block>
     
     <output name="eyeDirectionObj" type="direction_object" />

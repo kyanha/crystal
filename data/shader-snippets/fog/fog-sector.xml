@@ -19,6 +19,7 @@
 <snippet>
   <technique priority="100">
     <combiner name="cg" plugin="crystalspace.graphics3d.shader.combiner.glcg" />
+    <combiner name="glsl" plugin="crystalspace.graphics3d.shader.combiner.glsl" />
 
     <input name="litColor" type="rgba" />
     <input name="eyePos" type="position4_camera" />
@@ -36,13 +37,32 @@
       <uniform type="float" name="fogLimit" />
     </block>
     
+    <block location="glsl:inputs">
+      <uniform type="float4" name="in_fogPlaneS" />
+      <uniform type="float4" name="in_fogPlaneT" />
+      <uniform type="tex2d" name="in_fogTex" />
+      <uniform type="rgba" name="in_fogColor" />
+      <uniform type="float" name="in_fogFadeEnd" />
+      <uniform type="float" name="in_fogFadeStart" />
+      <uniform type="float" name="in_fogLimit" />
+    </block>
+    
     <block location="cg:vertexToFragment">
+      <varying type="texcoord2" name="fogTC" />
+    </block>
+    
+    <block location="glsl:vertexToFragment">
       <varying type="texcoord2" name="fogTC" />
     </block>
     
     <block location="cg:vertexMain">
       fogTC.x = dot (eyePos, vertexIn.fogPlaneS);
       fogTC.y = dot (eyePos, vertexIn.fogPlaneT);
+    </block>
+    
+    <block location="glsl:vertexMain">
+      fogTC.x = dot (eyePos, in_fogPlaneS);
+      fogTC.y = dot (eyePos, in_fogPlaneT);
     </block>
     
     <block location="cg:variablemap">
@@ -83,9 +103,52 @@
       <?endif?>
     </block>
     
-    <block location="pass">
+    <block location="glsl:variablemap">
+      <?if vars."fog density".float &gt; 0 ?>
+        <variablemap variable="fog color" destination="in_fogColor" />
+        <variablemap variable="fog fade start" destination="in_fogFadeStart" />
+        <variablemap variable="fog fade end" destination="in_fogFadeEnd" />
+        <variablemap variable="fog limit" destination="in_fogLimit" />
+        <!-- See the glshader_fixed plugin source for a detailed explanation 
+              of the formular below. -->
+        <variablemap destination="in_fogPlaneS" type="expr">
+          <sexp>
+          (if (&gt; (elt3 fogplane) 0)
+            (make-vector 
+              0 
+              0 
+              "fog density" 
+              (- (min (max (* (elt4 fogplane) "fog density") -1) 0) (* 0.1 "fog density"))
+            )
+            (make-vector 0 0 "fog density" (* -0.1 "fog density"))
+          )
+          </sexp>
+        </variablemap>
+        <variablemap destination="in_fogPlaneT" type="expr">
+          <sexp>
+          (if (&gt; (elt3 fogplane) 0)
+            (make-vector
+              (/ (* (elt1 fogplane) "fog density") (elt3 fogplane))
+              (/ (* (elt2 fogplane) "fog density") (elt3 fogplane))
+              "fog density"
+              (+ (min (max (pow (+ 1 (* (elt4 fogplane) 0.2)) 5) 0) 1)
+                  (* "fog density" (- (/ (elt4 fogplane) (elt3 fogplane)) 0.1)))
+            )
+            (make-vector 0 0 0 1)
+          )
+          </sexp>
+        </variablemap>
+      <?endif?>
+    </block>
+    
+    <block location="cg:pass">
       <!-- We need the fog lookup texture -->
       <texture name="standardtex fog" destination="fragmentIn.fogTex" />
+    </block>
+    
+    <block location="glsl:pass">
+      <!-- We need the fog lookup texture -->
+      <texture name="standardtex fog" destination="in_fogTex" />
     </block>
     
     <block location="cg:fragmentMain">
@@ -103,6 +166,25 @@
                                 (fragmentIn.fogFadeEnd - fragmentIn.fogFadeStart));
         <?elsif vars."fog mode".int == consts.CS_FOG_MODE_CRYSTALSPACE ?>
           foggedColor = lerp (litColor, fragmentIn.fogColor, intensity);
+        <?endif?>
+      <?endif?>
+    </block>
+    
+    <block location="glsl:fragmentMain">
+      foggedColor = litColor;
+      <?if vars."fog density".float &gt; 0 ?>
+        float intensity = texture2D (in_fogTex, fogTC).a;
+        float distance = length(eyePos);
+        /* CS_FOG_MODE_LINEAR */
+        <?if vars."fog mode".int == consts.CS_FOG_MODE_LINEAR ?>
+          if(distance >= in_fogFadeEnd && (in_fogLimit > distance || in_fogFadeEnd >= in_fogLimit))
+            foggedColor = mix (litColor, in_fogColor, intensity);
+          else if(distance >= in_fogFadeStart && in_fogFadeEnd > distance)
+            foggedColor = mix (litColor, in_fogColor, intensity *
+                               (in_fogFadeEnd - distance) /
+                               (in_fogFadeEnd - in_fogFadeStart));
+        <?elsif vars."fog mode".int == consts.CS_FOG_MODE_CRYSTALSPACE ?>
+          foggedColor = mix (litColor, in_fogColor, intensity);
         <?endif?>
       <?endif?>
     </block>

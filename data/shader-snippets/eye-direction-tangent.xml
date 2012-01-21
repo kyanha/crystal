@@ -23,6 +23,7 @@
     <snippet id="toTangent">
       <technique priority="100">
 	<combiner name="cg" plugin="crystalspace.graphics3d.shader.combiner.glcg" />
+        <combiner name="glsl" plugin="crystalspace.graphics3d.shader.combiner.glsl" />
       
 	<input name="eyeVecT" type="direction_tangent" />
 	
@@ -30,10 +31,18 @@
 	  <varying type="direction_tangent" name="eyeDirectionTangent" />
 	</block>
 	
+        <block location="glsl:vertexToFragment">
+          <varying type="direction_tangent" name="eyeDirectionTangent" />
+        </block>
+        
 	<block location="cg:vertexMain">
 	  eyeDirectionTangent = eyeVecT;
 	</block>
 	
+        <block location="glsl:vertexMain">
+          eyeDirectionTangent = eyeVecT;
+        </block>
+        
 	<output name="eyeDirectionTangent" type="direction_tangent" />
       </technique>
     </snippet>

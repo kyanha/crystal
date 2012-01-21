@@ -19,6 +19,7 @@
 <snippet>
   <technique priority="100">
     <combiner name="cg" plugin="crystalspace.graphics3d.shader.combiner.glcg" />
+    <combiner name="glsl" plugin="crystalspace.graphics3d.shader.combiner.glsl" />
     
     <input name="surfaceColor" type="rgba" >
       <attribute name="perfragment" type="bool" defval="true" />
@@ -29,8 +30,18 @@
       outputColor.rgb *= surfaceColor.a;
       outputColor_attr_perfragment = surfaceColor_attr_perfragment;
     </block>
+    <block location="glsl:fragmentMain">
+      outputColor = surfaceColor;
+      outputColor.rgb *= surfaceColor.a;
+      outputColor_attr_perfragment = surfaceColor_attr_perfragment;
+    </block>
 
     <block location="cg:vertexMain">
+      outputColor = surfaceColor;
+      outputColor.rgb *= surfaceColor.a;
+      outputColor_attr_perfragment = surfaceColor_attr_perfragment;
+    </block>
+    <block location="glsl:vertexMain">
       outputColor = surfaceColor;
       outputColor.rgb *= surfaceColor.a;
       outputColor_attr_perfragment = surfaceColor_attr_perfragment;

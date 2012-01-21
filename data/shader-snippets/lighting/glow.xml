@@ -19,73 +19,70 @@
 <snippet>
   <technique priority="100">
     <combiner name="cg" plugin="crystalspace.graphics3d.shader.combiner.glcg" />
+    <combiner name="glsl" plugin="crystalspace.graphics3d.shader.combiner.glsl" />
     
     <input file="/shader-snippets/texCoord.inp"	
       condition='vars."tex glow".texture' />
     
     <input name="texGlow" type="tex2d" default="complex"
 	condition='vars."tex glow".texture'>
-      <block location="pass">
+      <block location="cg:pass">
 	<texture name="tex glow" destination="fragmentIn.texGlow" />
+      </block>
+      
+      <block location="glsl:pass">
+        <texture name="tex glow" destination="in_texGlow" />
       </block>
       
       <block location="cg:fragmentIn">
 	<uniform type="tex2d" name="texGlow" />
       </block>
       
-      <block location="cg:fragmentMain">
-	texGlow = fragmentIn.texGlow;
-      </block>
-    </input>
-    
-    <input name="surfaceColor" type="rgba" />
-   
-    <block location="cg:fragmentMain">
-      surfaceWithGlow = surfaceColor;
-      <?if vars."tex glow".texture ?>
-	surfaceWithGlow.rgb += tex2D (texGlow, texCoord).rgb;
-      <?endif?>
-    </block>
-    
-    <output name="surfaceWithGlow" type="rgba" />
-  </technique>
-  
-  <technique priority="50">
-    <combiner name="cg" plugin="crystalspace.graphics3d.shader.combiner.glcg" />
-    
-    <input file="/shader-snippets/texCoord.inp"	
-      condition='vars."tex glow".texture' />
-    
-    <input name="texGlow" type="tex2d" default="complex"
-	condition='vars."tex glow".texture'>
-      <block location="pass">
-	<texture name="tex glow" destination="fragmentIn.texGlow" />
-      </block>
-      
-      <block location="cg:fragmentIn">
-	<uniform type="tex2d" name="texGlow" />
+      <block location="glsl:inputs">
+        <uniform type="tex2d" name="in_texGlow" />
       </block>
       
       <block location="cg:fragmentMain">
 	texGlow = fragmentIn.texGlow;
+      </block>
+
+      <block location="glsl:fragmentMain">
+        #sampler_assign texGlow in_texGlow
       </block>
     </input>
     
     <input name="surfaceColor" type="rgba" />
    
     <!-- In PS1.x you can't use the same texcoords for multiple TUs,
-	 so the glow coordinates have to be copied in tbe VP. -->
+         so the glow coordinates have to be copied in tbe VP. -->
     <block location="cg:vertexToFragment">
-      <varying type="texcoord2" name="texcoordGlow" />
+      <varying type="texcoord2" name="texCoordGlow" />
     </block>
     
+    <block location="cg:vertexMain">
+      surfaceWithGlow = surfaceColor;
+      texCoordGlow = texCoord;
+    </block>
+    <block location="glsl:vertexMain">
+      surfaceWithGlow = surfaceColor;
+    </block>
+
     <block location="cg:fragmentMain">
+    #if FRAGMENT_PROGRAM_LEVEL >= 0x200
+      texCoordGlow = texCoord;
+    #endif
       surfaceWithGlow = surfaceColor;
       <?if vars."tex glow".texture ?>
-	surfaceWithGlow.rgb += tex2D (texGlow, texcoordGlow).rgb;
+	surfaceWithGlow.rgb += tex2D (texGlow, texCoordGlow).rgb;
+      <?endif?>
+    </block>
+    <block location="glsl:fragmentMain">
+      surfaceWithGlow = surfaceColor;
+      <?if vars."tex glow".texture ?>
+        surfaceWithGlow.rgb += texture2D (texGlow, texCoord).rgb;
       <?endif?>
     </block>
     
     <output name="surfaceWithGlow" type="rgba" />
   </technique>
-</snippet>
+  </snippet>

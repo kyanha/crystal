@@ -22,6 +22,7 @@
     <snippet id="forward_normal">
       <technique priority="100">
 	<combiner name="cg" plugin="crystalspace.graphics3d.shader.combiner.glcg" />
+        <combiner name="glsl" plugin="crystalspace.graphics3d.shader.combiner.glsl" />
 	
 	<!-- Surface normal -->
 	<input name="i_normal" type="normal_tangent" default="value" defval="0,0,1"/>
@@ -30,15 +31,22 @@
 	<block location="cg:vertexMain">
 	  o_normal = i_normal;
 	</block>
+        <block location="glsl:vertexMain">
+          o_normal = i_normal;
+        </block>
 	<block location="cg:fragmentMain">
 	  o_normal = i_normal;
 	</block>
+        <block location="glsl:fragmentMain">
+          o_normal = i_normal;
+        </block>
       </technique>
     </snippet>
     
     <snippet id="lighting">
       <technique priority="100">
 	<combiner name="cg" plugin="crystalspace.graphics3d.shader.combiner.glcg" />
+        <combiner name="glsl" plugin="crystalspace.graphics3d.shader.combiner.glsl" />
       
 	<!-- Vector from eye to position -->
 	<input name="eyeToSurf" type="direction_world" />
@@ -63,11 +71,17 @@
 	<block location="cg:variablemap">
 	  <?Lighting_Variablemaps?>
 	</block>
+        <block location="glsl:variablemap">
+          <?Lighting_Variablemaps?>
+        </block>
 	
 	<block location="cg:definitions">
 	  <?Include /shader-snippets/lighting/lightfuncs.cginc ?>
 	  
 	</block>
+        <block location="glsl:definitions">
+          <?Include /shader-snippets/lighting/lightfuncs.glsli?>
+        </block>
 	
 	<block location="cg:vertexMain">
 	  diffuseColor = float3(0);
@@ -76,6 +90,13 @@
 	  diffuseColor_attr_perfragment = true;
 	  specularColor_attr_perfragment = true;
 	</block>
+        <block location="glsl:vertexMain">
+          diffuseColor = vec3(0);
+          specularColor = vec3(0);
+          
+          diffuseColor_attr_perfragment = true;
+          specularColor_attr_perfragment = true;
+        </block>
 	
 	<block location="cg:fragmentMain">
 	  diffuseColor = float3(0);
@@ -104,6 +125,32 @@
 	  diffuseColor_attr_perfragment = true;
 	  specularColor_attr_perfragment = true;
 	</block>
+        <block location="glsl:fragmentMain">
+          diffuseColor = vec3(0);
+          specularColor = vec3(0);
+          vec3 myEyeToSurf = eyeToSurf;
+          myEyeToSurf = normalize (eyeToSurf);
+          <![CDATA[
+          for (int l = 0; l < maxLights; l++)
+          {
+            int i = lightOffset + l;
+            if ((i >= minLights) && (i >= lightProps.count)) break;
+          ]]>
+            LightSpace lightSpace = MakeLightSpaceWorld (i, positionW);
+            
+            Light light = GetCurrentLight (lightSpace, i);
+            vec4 lightAttenuationVec = lightProps.attenuationVec[i];
+            vec3 d, s;
+            ComputeLight (lightSpace, light, myEyeToSurf, normal, shininess,
+              lightProps.colorDiffuse[i], lightProps.colorSpecular[i],
+              lightAttenuationVec, 1, d, s);
+            
+            diffuseColor += d;
+            specularColor += s;
+          }
+          diffuseColor_attr_perfragment = true;
+          specularColor_attr_perfragment = true;
+        </block>
 	
 	<output name="diffuseColor" type="rgb">
 	  <attribute name="perfragment" type="bool" />

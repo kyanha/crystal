@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?> 
 <!--
-  Copyright (C) 2007 by Frank Richter
+  Copyright (C) 2007-2011 by Frank Richter
 	    (C) 2007 by Jorrit Tyberghein
 
   This library is free software; you can redistribute it and/or
@@ -17,28 +17,28 @@
   License along with this library; if not, write to the Free
   Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 -->
-<input name="ModelView" type="float4x4" default="complex">
+<input name="ModelViewProj" type="float4x4" default="complex">
   <block location="cg:vertexIn">
-    <uniform type="float4x4" name="ModelView" binding="state.matrix.modelview" />
+    <uniform type="float4x4" name="ModelViewProj" binding="state.matrix.mvp" />
   </block>
   
   <block location="cg:fragmentIn">
-    <uniform type="float4x4" name="ModelView" binding="state.matrix.modelview" />
+    <uniform type="float4x4" name="ModelViewProj" binding="state.matrix.mvp" />
   </block>
   
   <block location="cg:vertexMain">
-    ModelView = vertexIn.ModelView;
+    ModelViewProj = vertexIn.ModelViewProj;
   </block>
   
   <block location="cg:fragmentMain">
-    ModelView = fragmentIn.ModelView;
+    ModelViewProj = fragmentIn.ModelViewProj;
   </block>
 
   <block location="glsl:vertexMain">
-    ModelView = gl_ModelViewMatrix;
+    ModelViewProj = gl_ModelViewProjectionMatrix;
   </block>
   
   <block location="glsl:fragmentMain">
-    ModelView = gl_ModelViewMatrix;
+    ModelViewProj = gl_ModelViewProjectionMatrix;
   </block>
 </input>
