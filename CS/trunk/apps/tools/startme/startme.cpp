@@ -40,12 +40,7 @@ void SizeWindow (CEGUI::Window* w)
 {//Size window to contents.
   const CEGUI::RenderedString& rs(w->getRenderedString());
   float height(20.0f);
-  for (size_t i = 0; i < rs.getLineCount(); ++i)
-  {
-    const CEGUI::Size line_sz(rs.getPixelSize(i));
-    height += line_sz.d_height;
-  }
-  height += rs.getLineCount()*10.0f;
+  height += CEGUI::PropertyHelper::stringToFloat (w->getProperty ("VertExtent"));
   w->setHeight(cegui_absdim(height));
   w->setYPosition(CEGUI::UDim(0.5f, -height/2));
 }
@@ -505,10 +500,15 @@ void StartMe::LoadConfig ()
         demo.image = iterator->GetStr ();
       else
       {
-	// CEGUI will throw away all empty lines, therefore we add a single space instead
-	if (strcmp (iterator->GetStr (), "") != 0)
-	  demo.description += iterator->GetStr ();
-	demo.description += " \n";
+	csString line (iterator->GetStr ());
+        demo.description += line;
+        // Only emit a 'paragraph break' when encountering a single empty line
+	if (line.IsEmpty())
+          /* CEGUI will throw away all empty lines, therefore we use a single 
+           * space to force an empty line */
+          demo.description += "\n \n";
+        else
+          demo.description += " ";
       }
     }
     demos.Push (demo);
