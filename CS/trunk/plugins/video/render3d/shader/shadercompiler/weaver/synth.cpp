@@ -298,7 +298,8 @@ CS_PLUGIN_NAMESPACE_BEGIN(ShaderWeaver)
             {
               csRef<iDocumentNode> messageNode (
                 shaderNode->CreateNodeBefore (CS_NODE_COMMENT));
-              messageNode->SetValue (synthTech->GetStatus().message);
+              messageNode->SetValue (csString().Format ("pass #%zu: %s", p,
+                                                        synthTech->GetStatus().message.GetData()));
             }
           }
 	  else
@@ -500,6 +501,17 @@ CS_PLUGIN_NAMESPACE_BEGIN(ShaderWeaver)
       {
         SynthesizeNodeTree::Node& node = nodeIt->Next();
         csString& nodeAnnotation = node.annotation;
+        
+        if (!node.tech->IsCompound())
+        {
+          if (!static_cast<const Snippet::AtomTechnique*> (node.tech)->HasCombiner (comb->classId))
+          {
+            synthResult.message.AppendFmt ("skipping b/c tech: %s<%d>  not having combiner: %s\n",
+                                           node.tech->snippetName, node.tech->priority,
+                                           comb->classId.GetData());
+            synthResult.status = false;
+          }
+        }
 
         /* For new connections introduced by input merging.
          * Connections are added delayed to avoid interference with
