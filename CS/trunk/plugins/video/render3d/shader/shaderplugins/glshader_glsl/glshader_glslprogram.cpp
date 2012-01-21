@@ -46,6 +46,12 @@ CS_PLUGIN_NAMESPACE_BEGIN(GLShaderGLSL)
   {
     if (program_id != 0)
       shaderPlug->ext->glDeleteObjectARB (program_id);
+
+    for (size_t i = 0; i < variablemap.GetSize (); ++i)
+    {
+      VariableMapEntry& mapping = variablemap[i];
+      shaderPlug->uniformAlloc.Free (reinterpret_cast<ProgramUniform*> (mapping.userVal));
+    }
   }
 
   void csShaderGLSLProgram::Activate ()
@@ -66,7 +72,6 @@ CS_PLUGIN_NAMESPACE_BEGIN(GLShaderGLSL)
     const csShaderVariableStack& stack)
   {
     size_t i;
-    const csGLExtensionManager* ext = shaderPlug->ext;
     csRef<csShaderVariable> var;
 
     if (useTessellation)
@@ -84,83 +89,195 @@ CS_PLUGIN_NAMESPACE_BEGIN(GLShaderGLSL)
       // If var is null now we have no const nor any passed value, ignore it
       if (!var.IsValid ())
         continue;
+      
+      const ProgramUniform* uniform (reinterpret_cast<const ProgramUniform*> (mapping.userVal));
+      SetUniformValue (*uniform, var);
+    }
+  }
+  
+  template<typename Base, unsigned N>
+  struct Vec
+  {
+    Base data[N];
+    
+    bool CopyFrom (csShaderVariable* var)
+    {
+      csVector4 v;
+      if (!var->GetValue (v)) return false;
+      for (uint i = 0; i < N; i++)
+        data[i] = v[i];
+      return true;
+    }
+  };
+  
+  template<>
+  struct Vec<GLint, 1>
+  {
+    GLint data[1];
 
-      switch (var->GetType ())
+    bool CopyFrom (csShaderVariable* var)
+    {
+      int i;
+      if (!var->GetValue (i)) return false;
+      data[0] = i;
+      return true;
+    }
+  };
+  
+  template<>
+  struct Vec<GLfloat, 1>
+  {
+    GLfloat data[1];
+
+    bool CopyFrom (csShaderVariable* var)
+    {
+      float f;
+      if (!var->GetValue (f)) return false;
+      data[0] = f;
+      return true;
+    }
+  };
+  
+  template<typename Base, unsigned Cols, unsigned Rows>
+  struct Mat
+  {
+    Base data[Cols*Rows];
+    
+    bool CopyFrom (csShaderVariable* var)
+    {
+      float matrix[16];
+      switch (var->GetType())
       {
-      case csShaderVariable::INT:
+      case csShaderVariable::TRANSFORM:
         {
-          int v;
-          if (var->GetValue (v))
-            ext->glUniform1iARB (mapping.userVal, v);
+          csReversibleTransform t;
+          if (!var->GetValue (t)) return false;
+          makeGLMatrix (t, matrix);
         }
-        break;    
-      case csShaderVariable::FLOAT:
-        {
-          float v;
-          if (var->GetValue (v))
-            ext->glUniform1fARB (mapping.userVal, v);
-        }
-        break;    
-      case csShaderVariable::VECTOR2:
-        {
-          csVector2 v;
-          if (var->GetValue (v))
-            ext->glUniform2fARB (mapping.userVal, v[0], v[1]);
-        }
-        break;    
-      case csShaderVariable::VECTOR3:
-        {
-          csVector3 v;
-          if (var->GetValue (v))
-            ext->glUniform3fARB (mapping.userVal, v[0], v[1], v[2]);
-        }
-        break;    
-      case csShaderVariable::VECTOR4:
-        {
-          csVector4 v;
-          if (var->GetValue (v))
-            ext->glUniform4fARB (mapping.userVal, v[0], v[1], v[2], v[3]);
-        }
-        break;    
+        break;
       case csShaderVariable::MATRIX3X3:
         {
           csMatrix3 m;
-          if (var->GetValue (m))
-          {
-            // NOTE: sending a 4x4 matrix isn't actually required
-            float matrix[16];
-            makeGLMatrix (m, matrix);
-            ext->glUniformMatrix4fvARB (mapping.userVal, 1, GL_FALSE, matrix);
-          }
+          if (!var->GetValue (m)) return false;
+          makeGLMatrix (m, matrix);
         }
         break;
       case csShaderVariable::MATRIX4X4:
         {
           CS::Math::Matrix4 m;
-          if (var->GetValue (m))
-          {
-            float matrix[16];
-            CS::PluginCommon::MakeGLMatrix4x4 (m, matrix);
-            ext->glUniformMatrix4fvARB (mapping.userVal, 1, GL_FALSE, matrix);
-          }
+          if (!var->GetValue (m)) return false;
+          CS::PluginCommon::MakeGLMatrix4x4 (m, matrix);
         }
         break;
-      case csShaderVariable::TRANSFORM:
+      default:
+        return false;
+      }
+      
+      for (uint c = 0; c < Cols; c++)
+      {
+        for (uint r = 0; r < Rows; r++)
         {
-          csReversibleTransform t;
-          if (var->GetValue (t))
-          {
-            float matrix[16];
-            makeGLMatrix (t, matrix);
-            ext->glUniformMatrix4fvARB (mapping.userVal, 1, GL_FALSE, matrix);
-          }
+          data[r + c * Rows] = matrix[r + c*4];
         }
+      }
+      return true;
+    }
+  };
+  
+  template<typename WrappedFunction>
+  struct glUniformMatrixWrapperType
+  {
+    WrappedFunction func;
+    
+    glUniformMatrixWrapperType (WrappedFunction func) : func (func) {}
+    
+    void operator() (GLint location, GLsizei count, GLfloat* value)
+    {
+      func (location, count, GL_FALSE /* column major order */, value);
+    }
+  };
+  
+  template<typename WrappedFunction>
+  glUniformMatrixWrapperType<WrappedFunction> glUniformMatrixWrapper (WrappedFunction func)
+  {
+    return glUniformMatrixWrapperType<WrappedFunction> (func);
+  }
+
+  void csShaderGLSLProgram::SetUniformValue (const ProgramUniform& uniform,
+                                             csShaderVariable* var)
+  {
+      const csGLExtensionManager* ext = shaderPlug->ext;
+      switch (uniform.type)
+      {
+      case GL_FLOAT:
+      case GL_BOOL_ARB:
+        SetUniformValue<Vec<GLfloat, 1> > (uniform, var, ext->glUniform1fvARB);
+        break;    
+      case GL_FLOAT_VEC2_ARB:
+      case GL_BOOL_VEC2_ARB:
+        SetUniformValue<Vec<GLfloat, 2> > (uniform, var, ext->glUniform2fvARB);
+        break;    
+      case GL_FLOAT_VEC3_ARB:
+      case GL_BOOL_VEC3_ARB:
+        SetUniformValue<Vec<GLfloat, 3> > (uniform, var, ext->glUniform3fvARB);
+        break;    
+      case GL_FLOAT_VEC4_ARB:
+      case GL_BOOL_VEC4_ARB:
+        SetUniformValue<Vec<GLfloat, 4> > (uniform, var, ext->glUniform4fvARB);
+        break;    
+      case GL_INT:
+        SetUniformValue<Vec<GLint, 1> > (uniform, var, ext->glUniform1ivARB);
+        break;    
+      case GL_INT_VEC2_ARB:
+        SetUniformValue<Vec<GLint, 2> > (uniform, var, ext->glUniform2ivARB);
+        break;    
+      case GL_INT_VEC3_ARB:
+        SetUniformValue<Vec<GLint, 3> > (uniform, var, ext->glUniform3ivARB);
+        break;    
+      case GL_INT_VEC4_ARB:
+        SetUniformValue<Vec<GLint, 4> > (uniform, var, ext->glUniform4ivARB);
         break;
-      case csShaderVariable::ARRAY:
+      case GL_FLOAT_MAT2_ARB:
+        SetUniformValue<Mat<GLfloat, 2, 2> > (uniform, var,
+                                              glUniformMatrixWrapper (ext->glUniformMatrix2fvARB));
+        break;
+      case GL_FLOAT_MAT3_ARB:
+        SetUniformValue<Mat<GLfloat, 3, 3> > (uniform, var,
+                                              glUniformMatrixWrapper (ext->glUniformMatrix3fvARB));
+        break;
+      case GL_FLOAT_MAT4_ARB:
+        SetUniformValue<Mat<GLfloat, 4, 4> > (uniform, var,
+                                              glUniformMatrixWrapper (ext->glUniformMatrix4fvARB));
         break;
       default:
         break;
       }
+  }
+
+  template<typename ElementType, typename Setter>
+  void csShaderGLSLProgram::SetUniformValue (const ProgramUniform& uniform,
+                                             csShaderVariable* var,
+                                             Setter setter)
+  {
+    if (var->GetType() == csShaderVariable::ARRAY)
+    {
+      // Array: collect all values into a single flat array...
+      size_t numElements (uniform.size);
+      numElements = csMin (numElements, var->GetArraySize());
+      if (numElements == 0) return;
+      CS_ALLOC_STACK_ARRAY(ElementType, values, numElements);
+      memset (values, 0, sizeof (ElementType) * numElements);
+      for (size_t i = 0; i < numElements; i++)
+        values[i].CopyFrom (var->GetArrayElement (i));
+      // ... and set.
+      setter (uniform.location, numElements, values[0].data);
+    }
+    else
+    {
+      // “Simple” value: set directly
+      ElementType val;
+      if (val.CopyFrom (var))
+        setter (uniform.location, 1, val.data);
     }
   }
 
@@ -239,23 +356,46 @@ CS_PLUGIN_NAMESPACE_BEGIN(GLShaderGLSL)
     return false;
   }
 
-
   void csShaderGLSLProgram::SetupVmap ()
   {
     const csGLExtensionManager* ext = shaderPlug->ext;
     csRef<csShaderVariable> var;
+    
+    csHash<ProgramUniform, csString> uniforms;
+    GLint activeUniforms (0);
+    ext->glGetObjectParameterivARB (program_id, GL_OBJECT_ACTIVE_UNIFORMS_ARB,
+                                    &activeUniforms);
+    GLint maxUniformNameLen (0);
+    ext->glGetObjectParameterivARB (program_id, GL_OBJECT_ACTIVE_UNIFORM_MAX_LENGTH_ARB,
+                                    &maxUniformNameLen);
+    CS_ALLOC_STACK_ARRAY(char, uniformName, maxUniformNameLen+1);
+    for (GLint i = 0; i < activeUniforms; i++)
+    {
+      ProgramUniform uniform;
+      ext->glGetActiveUniformARB (program_id, GLuint (i),
+                                  maxUniformNameLen, nullptr, &uniform.size,
+                                  &uniform.type, reinterpret_cast<GLcharARB*> (uniformName));
+      uniform.location = ext->glGetUniformLocationARB (program_id,
+        uniformName);
+      uniforms.Put (uniformName, uniform);
+      
+      // Distribute TUs to active samplers right away
+    }
 
     for (size_t i = 0; i < variablemap.GetSize (); ++i)
     {
       VariableMapEntry& mapping = variablemap[i];
-
-      mapping.userVal = ext->glGetUniformLocationARB (program_id,
-        mapping.destination.GetData ());
-      if (mapping.userVal == -1)
+      
+      ProgramUniform* uniform (uniforms.GetElementPointer (mapping.destination));
+      if (!uniform) 
       {
         // the uniform variable doesnt exist!
         variablemap.DeleteIndex (i--);
+        continue;
       }
+      
+      ProgramUniform* allocatedUniform (shaderPlug->uniformAlloc.Alloc (*uniform));
+      mapping.userVal = reinterpret_cast<uintptr_t> (allocatedUniform);
     }
   }
 
