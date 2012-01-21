@@ -242,15 +242,15 @@ CS_PLUGIN_NAMESPACE_BEGIN(SLCombiner)
     csRef<iDocumentNode> inputNode =
       node->CreateNodeBefore (CS_NODE_ELEMENT);
     inputNode->SetValue ("input");
-    inputNode->SetAttribute ("name", "input");
+    inputNode->SetAttribute ("name", CoercionInputName());
     inputNode->SetAttribute ("type", from);
 
     csRef<iDocumentNode> outputNode =
       node->CreateNodeBefore (CS_NODE_ELEMENT);
     outputNode->SetValue ("output");
-    outputNode->SetAttribute ("name", "output");
+    outputNode->SetAttribute ("name", CoercionResultName ());
     outputNode->SetAttribute ("type", to);
-    outputNode->SetAttribute ("inheritattr", "input");
+    outputNode->SetAttribute ("inheritattr", CoercionInputName());
 
     CoerceItem item;
     item.fromType = StoredTypeName (from);
