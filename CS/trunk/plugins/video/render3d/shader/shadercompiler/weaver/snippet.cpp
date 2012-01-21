@@ -1109,7 +1109,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(ShaderWeaver)
       csVector4 v;
       param.var->GetValue (v);
       combinerLoader->GenerateConstantInputBlocks (techNode, "c", v, 
-        numComps, "output");
+        numComps, "value");
     }
     else
     {
@@ -1122,7 +1122,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(ShaderWeaver)
         return;
       }
       combinerLoader->GenerateSVInputBlocks (techNode, "c", 
-        compiler->svstrings->Request (param.name), weaverType, "output", id);
+        compiler->svstrings->Request (param.name), weaverType, "value", id);
     }
 
     {
@@ -1130,7 +1130,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(ShaderWeaver)
         techNode->CreateNodeBefore (CS_NODE_ELEMENT);
       outputNode->SetValue ("output");
       outputNode->SetAttribute ("type", weaverType);
-      outputNode->SetAttribute ("name", "output");
+      outputNode->SetAttribute ("name", "value");
     }
     
     HandleSnippetNode (tech, snippetNode, aliases);
