@@ -164,7 +164,7 @@ void StartMe::Frame ()
     if (selected && rotationStatus != OVER_EXIT)
     {
       CEGUI::Window* description = cegui->GetWindowManagerPtr()->getWindow("Description");
-      description->setText(demos[i].description);
+      description->setText((const utf8_char*)demos[i].description.c_str());
       SizeWindow(description);
       csString alphas;
       alphas += alpha2;
