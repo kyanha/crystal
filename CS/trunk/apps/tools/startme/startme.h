@@ -109,9 +109,6 @@ private:
    */
   void Frame ();
 
-  /// Here we will create our little, simple world.
-  void CreateRoom ();
-
   /// Load configuration from file.
   void LoadConfig ();
 
