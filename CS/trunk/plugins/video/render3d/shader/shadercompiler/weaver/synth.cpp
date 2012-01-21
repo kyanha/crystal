@@ -655,7 +655,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(ShaderWeaver)
 		    }
                     
                     csString inpOutputName;
-	            inpOutputName.Format ("in_%s", inp.name.GetData());
+	            inpOutputName.Format ("_in_%s_", inp.name.GetData());
                     node.inputLinks.Put (inp.name, inpOutputName);
                     
                   }
@@ -720,7 +720,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(ShaderWeaver)
         }
 		  
         csString inpOutputName;
-	inpOutputName.Format ("in_%s", inp.name.GetData());
+	inpOutputName.Format ("_in_%s_", inp.name.GetData());
 	combiner->AddGlobal (inpOutputName, inp.type,
           GetAnnotation ("Unique name for default input %s tag %s",
 	    CS::Quote::Double (inp.name.GetData()), 
