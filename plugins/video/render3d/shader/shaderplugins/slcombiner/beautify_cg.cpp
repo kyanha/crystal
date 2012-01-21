@@ -24,7 +24,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(SLCombiner)
 {
 
   CgBeautifier::CgBeautifier (csString& dest) : dest (dest), indent (0),
-    lineStatement (-1), currentStatement (0), state (0)
+    lineStatement (-1), currentStatement (0), state (stateNeedNewline)
   {
   }
 
@@ -174,8 +174,8 @@ CS_PLUGIN_NAMESPACE_BEGIN(SLCombiner)
         }
         break;
       default:
-        newState = stateStatement;
         InsertNewlineIfNeeded ();
+        newState = stateStatement;
         break;
     }
     return newState;

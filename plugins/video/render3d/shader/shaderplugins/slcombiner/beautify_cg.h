@@ -72,7 +72,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(SLCombiner)
     {
       if (state & stateNeedNewline)
       {
-        dest += "\n";
+        if (!dest.IsEmpty()) dest += "\n";
         ApplyIndentation ((lineStatement != currentStatement) ? 0 : 1);
         if (!keepStatementCounter) lineStatement = currentStatement;
         state &= ~stateNeedNewline;
