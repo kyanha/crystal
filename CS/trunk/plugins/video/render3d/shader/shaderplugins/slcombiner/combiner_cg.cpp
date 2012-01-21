@@ -1389,6 +1389,16 @@ CS_PLUGIN_NAMESPACE_BEGIN(SLCombiner)
 	  else
 	    return csString().Format ("%s%d", baseTypeStr, typeInfo->dimensions);
 	}
+      case ShaderWeaver::TypeInfo::Matrix:
+      case ShaderWeaver::TypeInfo::MatrixB:
+      case ShaderWeaver::TypeInfo::MatrixI:
+        {
+          static const char* const baseTypeStrs[] =
+          { "float", "bool", "int" };
+          const char* baseTypeStr = baseTypeStrs[typeInfo->baseType -
+            ShaderWeaver::TypeInfo::Matrix];
+          return csString().Format ("%s%dx%d", baseTypeStr, typeInfo->dimensions, typeInfo->dimensions2);
+        }
       case ShaderWeaver::TypeInfo::Sampler:
 	if (typeInfo->samplerIsCube)
 	  return "samplerCUBE";
