@@ -87,7 +87,7 @@ namespace CS
          */
 	virtual void Link (const char* fromName, const char* toName) = 0;
         /// Add contents of a &lt;block&gt; node.
-        virtual void WriteBlock (const char* location, 
+        virtual bool WriteBlock (const char* location, 
           iDocumentNode* blockNodes) = 0;
         /// Finish snippet.
         virtual bool EndSnippet () = 0;

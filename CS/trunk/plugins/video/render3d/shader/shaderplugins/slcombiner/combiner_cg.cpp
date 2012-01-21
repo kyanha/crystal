@@ -1062,7 +1062,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(SLCombiner)
       toName, fromName);
   }
       
-  void ShaderCombinerCg::WriteBlock (const char* location, 
+  bool ShaderCombinerCg::WriteBlock (const char* location, 
                                      iDocumentNode* blockNode)
   {
     csRefArray<iDocumentNode>* destNodes = 0;
@@ -1116,7 +1116,10 @@ CS_PLUGIN_NAMESPACE_BEGIN(SLCombiner)
         csRef<iDocumentNode> next = nodes->Next();
         destNodes->Push (next);
       }
+      return true;
     }
+    else
+      return false;
   }
   
   bool ShaderCombinerCg::EndSnippet ()
