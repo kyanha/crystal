@@ -53,7 +53,6 @@ CS_PLUGIN_NAMESPACE_BEGIN(SLCombiner)
   ShaderCombinerLoaderCg::ShaderCombinerLoaderCg (iBase* parent) : 
     scfImplementationType (this, parent)
   {
-    InitTokenTable (xmltokens);
   }
   
   csPtr<ShaderWeaver::iCombiner> 
@@ -105,43 +104,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(SLCombiner)
     if (usedComponents > 1) code << ')';
     code << ';';
 
-    csRef<iDocumentNode> blockNode;
-    csRef<iDocumentNode> contents;
-
-    blockNode = node->CreateNodeBefore (CS_NODE_ELEMENT);
-    blockNode->SetValue ("block");
-    blockNode->SetAttribute ("location", 
-      csString().Format ("%s:fragmentMain", locationPrefix));
-    contents = blockNode->CreateNodeBefore (CS_NODE_TEXT);
-    contents->SetValue (code);
-
-    blockNode = node->CreateNodeBefore (CS_NODE_ELEMENT);
-    blockNode->SetValue ("block");
-    blockNode->SetAttribute ("location", 
-      csString().Format ("%s:vertexMain", locationPrefix));
-    contents = blockNode->CreateNodeBefore (CS_NODE_TEXT);
-    contents->SetValue (code);
-  }
-
-  static inline bool IsAlpha (char c)
-  { return ((c >= 'A') && (c <= 'Z')) || ((c >= 'a') || (c <= 'z')); }
-
-  static inline bool IsAlNum (char c)
-  { return ((c >= '0') && (c <= '9')) || IsAlpha (c); }
-
-  static csString MakeIdentifier (const char* s)
-  {
-    csString res;
-    if (!IsAlpha (*s)) res << '_';
-    while (*s != 0)
-    {
-      char ch = *s++;
-      if (IsAlNum (ch))
-        res << ch;
-      else
-        res.AppendFmt ("_%02x", ch);
-    }
-    return res;
+    ShaderCombinerLoaderCommon::GenerateConstantInputBlocks (node, locationPrefix, code);
   }
 
   void ShaderCombinerLoaderCg::GenerateSVInputBlocks (iDocumentNode* node, 
@@ -316,7 +279,8 @@ CS_PLUGIN_NAMESPACE_BEGIN(SLCombiner)
 
   bool ShaderCombinerLoaderCg::Initialize (iObjectRegistry* reg)
   {
-    object_reg = reg;
+    if (!ShaderCombinerLoaderCommon::Initialize (reg))
+      return false;
     
     csConfigAccess config (object_reg);
     
@@ -331,437 +295,12 @@ CS_PLUGIN_NAMESPACE_BEGIN(SLCombiner)
     if (!LoadCoercionLibrary (libraryPath))
       return false;
     
-    annotateCombined = config->GetBool ("Video.ShaderWeaver.AnnotateOutput");
-
     return true;
   }
   
-  namespace
+  const char* ShaderCombinerLoaderCg::GetMessageID() const
   {
-    static const char messageID[] =
-      "crystalspace.graphics3d.shader.combiner.glcg";
-  }
-  
-  void ShaderCombinerLoaderCg::Report (int severity, const char* msg, ...)
-  {
-    va_list args;
-    va_start (args, msg);
-    csReportV (object_reg, severity, messageID, msg, args);
-    va_end (args);
-  }
-  
-  void ShaderCombinerLoaderCg::Report (int severity, iDocumentNode* node, 
-                                       const char* msg, ...)
-  {
-    va_list args;
-    va_start (args, msg);
-    
-    csRef<iSyntaxService> synsrv = csQueryRegistry<iSyntaxService> (
-      object_reg);
-    if (synsrv.IsValid())
-    {
-      csString msgStr;
-      msgStr.FormatV (msg, args);
-      synsrv->Report (messageID, severity, node, "%s", msgStr.GetData());
-    }
-    else
-    {
-      csReportV (object_reg, severity, messageID, msg, args);
-    }
-    va_end (args);
-  }
-    
-  csPtr<WeaverCommon::iCoerceChainIterator> 
-  ShaderCombinerLoaderCg::QueryCoerceChain (const char* fromType, 
-                                            const char* toType)
-  {
-    csRef<CoerceChainIterator> iterator;
-    iterator.AttachNew (new CoerceChainIterator);
-    
-    FindCoerceChain (fromType, toType, iterator->nodes);
-    
-    return csPtr<WeaverCommon::iCoerceChainIterator> (iterator);
-  }
-  
-  uint ShaderCombinerLoaderCg::CoerceCost (const char* fromType, 
-                                           const char* toType)
-  {
-    csArray<const CoerceItem*> chain;
-    
-    FindCoerceChain (fromType, toType, chain);
-    if (chain.GetSize() == 0)
-      return ShaderWeaver::NoCoercion;
-      
-    uint cost = 0;
-    for (size_t i = 0; i < chain.GetSize(); i++)
-      cost += chain[i]->cost;
-    return cost;
-  }
-  
-  bool ShaderCombinerLoaderCg::LoadCoercionLibrary (const char* path)
-  {
-    csRef<iVFS> vfs (csQueryRegistry<iVFS> (object_reg));
-    if (!vfs.IsValid()) return false;
-    
-    csRef<iFile> libfile = vfs->Open (path, VFS_FILE_READ);
-    if (!libfile.IsValid())
-    {
-      Report (CS_REPORTER_SEVERITY_ERROR, "Can't open %s", path);
-      return false;
-    }
-    
-    csRef<iDocumentSystem> docsys;
-    docsys.AttachNew (new csTinyDocumentSystem);
-    csRef<iDocument> doc = docsys->CreateDocument();
-    {
-      const char* err = doc->Parse (libfile);
-      if (err)
-      {
-        Report (CS_REPORTER_SEVERITY_ERROR, "Error parsing %s: %s",
-          path, err);
-	return false;
-      }
-    }
-    csRef<iDocumentNode> startNode = 
-      doc->GetRoot ()->GetNode ("combinerlibrary");
-    if (!startNode.IsValid())
-    {
-      Report (CS_REPORTER_SEVERITY_ERROR,
-	"Expected %s node in file %s",
-	CS::Quote::Single ("combinerlibrary"),
-	CS::Quote::Single (path));
-      return false;
-    }
-    
-    CoercionTemplates templates;
-    csRef<iDocumentNodeIterator> nodes = startNode->GetNodes();
-    while (nodes->HasNext())
-    {
-      csRef<iDocumentNode> child = nodes->Next();
-      if (child->GetType() != CS_NODE_ELEMENT) continue;
-      
-      csStringID id = xmltokens.Request (child->GetValue());
-      switch (id)
-      {
-        case XMLTOKEN_COERCION:
-          if (!ParseCoercion (child))
-            return false;
-          break;
-        case XMLTOKEN_COERCIONTEMPLATE:
-          if (!ParseCoercionTemplates (child, templates))
-            return false;
-          break;
-	default:
-	  {
-	    csRef<iSyntaxService> synsrv = csQueryRegistry<iSyntaxService> (
-	      object_reg);
-	    if (synsrv.IsValid())
-	      synsrv->ReportBadToken (child);
-	    return false;
-	  }
-      }
-    }
-
-    /* Compute a checksum over the coercion library, to be able to detect
-       changes (and allow weaver to invalidate cached shaders) */
-    uint32 libCheckSum;
-    {
-      csRef<iDataBuffer> libData = libfile->GetAllData();
-      libCheckSum = CS::Utility::Checksum::Adler32 (libData);
-      CS::PluginCommon::ShaderCacheHelper::ShaderDocHasher hasher (object_reg,
-	startNode);
-      csRef<iDataBuffer> hashStream = hasher.GetHashStream();
-      libCheckSum = CS::Utility::Checksum::Adler32 (libCheckSum, hashStream);
-    }
-    uint32 checkSumLE = csLittleEndian::UInt32 (libCheckSum);
-    codeString = CS::Utility::EncodeBase64 (&checkSumLE, sizeof (checkSumLE));
-
-    return SynthesizeDefaultCoercions (templates);
-  }
-  
-  bool ShaderCombinerLoaderCg::ParseCoercion (iDocumentNode* node)
-  {
-    const char* from = node->GetAttributeValue ("from");
-    if (!from || !*from)
-    {
-      Report (CS_REPORTER_SEVERITY_ERROR, node, 
-        "Non-empty %s attribute expected",
-	CS::Quote::Single ("from"));
-      return false;
-    }
-    const char* to = node->GetAttributeValue ("to");
-    if (!to || !*to)
-    {
-      Report (CS_REPORTER_SEVERITY_ERROR, node, 
-        "Non-empty %s attribute expected",
-	CS::Quote::Single ("to"));
-      return false;
-    }
-    int cost;
-    csRef<iDocumentAttribute> costAttr = node->GetAttribute ("cost");
-    if (!costAttr.IsValid())
-    {
-      Report (CS_REPORTER_SEVERITY_WARNING, node,
-        "No %s attribute, assuming cost 0",
-	CS::Quote::Single ("cost"));
-      cost = 0;
-    }
-    else
-    {
-      cost = costAttr->GetValueAsInt ();
-    }
-
-    csRef<iDocumentNode> inputNode = 
-      node->CreateNodeBefore (CS_NODE_ELEMENT);
-    inputNode->SetValue ("input");
-    inputNode->SetAttribute ("name", "input");
-    inputNode->SetAttribute ("type", from);
-    
-    csRef<iDocumentNode> outputNode = 
-      node->CreateNodeBefore (CS_NODE_ELEMENT);
-    outputNode->SetValue ("output");
-    outputNode->SetAttribute ("name", "output");
-    outputNode->SetAttribute ("type", to);
-    outputNode->SetAttribute ("inheritattr", "input");
-    
-    CoerceItem item;
-    item.fromType = StoredTypeName (from);
-    item.toType = StoredTypeName (to);
-    item.cost = cost;
-    item.node = node;
-    CoerceItems* items = coercions.GetElementPointer (from);
-    if (items == 0)
-    {
-      coercions.Put (StoredTypeName (from), CoerceItems());
-      items = coercions.GetElementPointer (from);
-    }
-    items->InsertSorted (item, &CoerceItemCompare);
-    
-    return true;
-  }
-
-  bool ShaderCombinerLoaderCg::ParseCoercionTemplates (iDocumentNode* node, 
-    CoercionTemplates& templates)
-  {
-    const char* name = node->GetAttributeValue ("name");
-    if (!name || !*name)
-    {
-      Report (CS_REPORTER_SEVERITY_ERROR, node, 
-        "Non-empty %s attribute expected",
-	CS::Quote::Single ("name"));
-      return false;
-    }
-    templates.PutUnique (name, node);
-    return true;
-  }
-
-  bool ShaderCombinerLoaderCg::SynthesizeDefaultCoercions (
-    const CoercionTemplates& templates)
-  {
-    iDocumentNode* templNormalize = templates.Get ("normalize", 
-      (iDocumentNode*)0);
-    if (!templNormalize)
-    {
-      Report (CS_REPORTER_SEVERITY_ERROR, 
-        "No %s coercion template",
-	CS::Quote::Single ("normalize"));
-      return false;
-    }
-    iDocumentNode* templPassthrough = templates.Get ("passthrough", 
-      (iDocumentNode*)0);
-    if (!templPassthrough)
-    {
-      Report (CS_REPORTER_SEVERITY_ERROR, 
-        "No %s coercion template",
-	CS::Quote::Single ("passthrough"));
-      return false;
-    }
-
-    csRef<iDocumentSystem> docsys;
-    docsys.AttachNew (new csTinyDocumentSystem);
-
-    ShaderWeaver::TypeInfoIterator typeIt;
-    while (typeIt.HasNext())
-    {
-      csString type;
-      const ShaderWeaver::TypeInfo& typeInfo = *typeIt.Next (type);
-      iDocumentNode* templ = 0;
-      ShaderWeaver::TypeInfo newTypeInfo (typeInfo);
-      if (typeInfo.semantics == ShaderWeaver::TypeInfo::Direction)
-      {
-        if (typeInfo.unit)
-        {
-          templ = templPassthrough;
-          newTypeInfo.unit = false;
-        }
-        else
-        {
-          templ = templNormalize;
-          newTypeInfo.unit = true;
-        }
-      }
-      else if (typeInfo.space != ShaderWeaver::TypeInfo::NoSpace)
-      {
-        templ = templPassthrough;
-        newTypeInfo.space = ShaderWeaver::TypeInfo::NoSpace;
-      }
-      const char* newTypeName = ShaderWeaver::QueryType (newTypeInfo);
-      if( (templ != 0) && (newTypeName != 0))
-      {
-        csRef<iDocument> doc = docsys->CreateDocument();
-        csRef<iDocumentNode> root = doc->CreateRoot ();
-        csRef<iDocumentNode> main = root->CreateNodeBefore (CS_NODE_ELEMENT);
-        CS::DocSystem::CloneNode (templ, main);
-        main->SetAttribute ("from", type);
-        main->SetAttribute ("to", newTypeName);
-        ParseCoercion (main);
-      }
-    }
-    return true;
-  }
-
-  int ShaderCombinerLoaderCg::CoerceItemCompare (CoerceItem const& i1, 
-						 CoerceItem const& i2)
-  {
-    if (i1.cost < i2.cost)
-      return -1;
-    else if (i1.cost < i2.cost)
-      return 1;
-      
-    // If two types have same cost, put the more specialized one first.
-    const ShaderWeaver::TypeInfo* t1 = ShaderWeaver::QueryTypeInfo (i1.toType);
-    const ShaderWeaver::TypeInfo* t2 = ShaderWeaver::QueryTypeInfo (i2.toType);
-    if ((t1 == 0) || (t2 == 0)) return 0;
-    
-    if ((t1->semantics != ShaderWeaver::TypeInfo::NoSemantics)
-      && (t2->semantics == ShaderWeaver::TypeInfo::NoSemantics))
-      return -1;
-    if ((t1->semantics == ShaderWeaver::TypeInfo::NoSemantics)
-      && (t2->semantics != ShaderWeaver::TypeInfo::NoSemantics))
-      return 1;
-    
-    if ((t1->space != ShaderWeaver::TypeInfo::NoSpace)
-      && (t2->space == ShaderWeaver::TypeInfo::NoSpace))
-      return -1;
-    if ((t1->space == ShaderWeaver::TypeInfo::NoSpace)
-      && (t2->space != ShaderWeaver::TypeInfo::NoSpace))
-      return 1;
-    
-    /*
-    if (t1->unit && !t2->unit)
-      return -1;
-    if (!t1->unit && t2->unit)
-      return 1;
-    */
-    
-    return 0;
-  }
-  
-  /* Bit of a kludge... helpers uses by FindCoerceChain, however, can't be made
-   * local b/c used as template parameters...
-   */
-  namespace
-  {
-    template<typename T>
-    struct Hierarchy
-    {
-      const T* item;
-      size_t parent;
-      
-      Hierarchy (const T* item, size_t parent) : item (item),
-        parent (parent) {}
-    };
-    template<typename T>
-    struct TestSource
-    {
-      csString type;
-      const T* item;
-      size_t depth;
-      size_t hierarchy;
-      
-      TestSource (const T& item, size_t depth, size_t hierarchy) :
-        type (item.toType), item (&item), depth (depth), hierarchy (hierarchy) {}
-    };
-  }
-  
-  void ShaderCombinerLoaderCg::FindCoerceChain (const char* from, 
-                                                const char* to,
-                                                csArray<const CoerceItem*>& chain)
-  {
-    csArray<Hierarchy<CoerceItem> > hierarchy;
-    csFIFO<TestSource<CoerceItem> > sourcesToTest;
-    
-    const CoerceItems* items = coercions.GetElementPointer (from);
-    if (items != 0)
-    {
-      // Search for direct match
-      for (size_t i = 0; i < items->GetSize(); i++)
-      {
-	if (strcmp (items->Get (i).toType, to) == 0)
-	{
-	  chain.Push (&items->Get (i));
-	  return;
-	}
-	else
-	{
-	  // Otherwise, search if no match is found.
-          const CoerceItem& item = items->Get (i);
-	  sourcesToTest.Push (TestSource<CoerceItem> (item, 
-	    0, 
-	    hierarchy.Push (Hierarchy<CoerceItem> (&item, 
-	      csArrayItemNotFound))));
-	}
-      }
-    }
-
-    // To avoid unnecessary complicated each type can only appear once.
-    csSet<csString> seenTypes;
-    seenTypes.Add (from);
-    // Keep track of used coercions to prevent loops.
-    csSet<csConstPtrKey<CoerceItem> > checkedItems;
-    while (sourcesToTest.GetSize() > 0)
-    {
-      TestSource<CoerceItem> testFrom = sourcesToTest.PopTop ();
-      if (checkedItems.Contains (testFrom.item)) continue;
-      const CoerceItems* items = coercions.GetElementPointer (testFrom.type);
-      if (items != 0)
-      {
-        // Search for direct match
-	for (size_t i = 0; i < items->GetSize(); i++)
-	{
-          const CoerceItem& item = items->Get (i);
-	  if (strcmp (item.toType, to) == 0)
-	  {
-	    // Generate chain
-	    size_t d = testFrom.depth+1;
-	    chain.SetSize (d+1);
-            chain[d] = &item;
-            chain[--d] = testFrom.item;
-	    size_t h = testFrom.hierarchy;
-	    while (d-- > 0)
-	    {
-	      h = hierarchy[h].parent;
-              const CoerceItem* hItem = hierarchy[h].item;
-	      chain[d] = hItem;
-	    }
-            return;
-	  }
-	  else
-	  {
-	    // Otherwise, search if no match is found.
-            if (!seenTypes.Contains (item.toType))
-            {
-	      sourcesToTest.Push (TestSource<CoerceItem> (item,
-	        testFrom.depth+1, 
-	        hierarchy.Push (Hierarchy<CoerceItem> (&item, 
-	          testFrom.hierarchy))));
-            }
-	  }
-	}
-      }
-      checkedItems.AddNoTest (testFrom.item);
-      seenTypes.Add (testFrom.type);
-    }
+    return "crystalspace.graphics3d.shader.combiner.glcg";
   }
   
   //---------------------------------------------------------------------
@@ -785,8 +324,8 @@ CS_PLUGIN_NAMESPACE_BEGIN(SLCombiner)
 	  iDocumentNode* node = snippet.vert2frag[i];
 	  if (node->GetType() == CS_NODE_ELEMENT)
 	  {
-	    csStringID id = loader->xmltokens.Request (node->GetValue());
-	    if (id == ShaderCombinerLoaderCg::XMLTOKEN_VARYING)
+	    csStringID id = loader->xmltokens_common.Request (node->GetValue());
+	    if (id == ShaderCombinerLoaderCommon::XMLTOKEN_VARYING)
 	    {
 	      csString name = node->GetAttributeValue ("name");
 	      if (name.IsEmpty()) continue;
@@ -857,11 +396,11 @@ CS_PLUGIN_NAMESPACE_BEGIN(SLCombiner)
       cycleAutoSem.Append ("#endif\n");
     }
   
-    void WriteDeclarationsPreamble (DocNodeCgAppender& appender) const
+    void WriteDeclarationsPreamble (DocNodeAppender& appender) const
     {
       appender.Append (declsPreamble);
     }
-    void WriteDeclarationsPostamble (DocNodeCgAppender& appender) const
+    void WriteDeclarationsPostamble (DocNodeAppender& appender) const
     {
       appender.Append (declsPostamble);
     }
@@ -1231,7 +770,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(SLCombiner)
       csRef<iDocumentNode> programNode = cgvpNode->CreateNodeBefore (CS_NODE_ELEMENT);
       programNode->SetValue ("program");
       
-      DocNodeCgAppender appender (programNode);
+      DocNodeAppender appender (programNode);
 
       if (definitions.GetSize() > 0)
       {
@@ -1333,7 +872,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(SLCombiner)
       csRef<iDocumentNode> programNode = cgfpNode->CreateNodeBefore (CS_NODE_ELEMENT);
       programNode->SetValue ("program");
       
-      DocNodeCgAppender appender (programNode);
+      DocNodeAppender appender (programNode);
       
       for (size_t s = 0; s < snippets.GetSize(); s++)
       {
@@ -1432,9 +971,9 @@ CS_PLUGIN_NAMESPACE_BEGIN(SLCombiner)
         csRef<iDocumentNode> node = nodes->Next();
         if (node->GetType() != CS_NODE_ELEMENT) continue;
 
-        csStringID id = loader->xmltokens.Request (node->GetValue());
-        if ((id == ShaderCombinerLoaderCg::XMLTOKEN_UNIFORM)
-          || (id == ShaderCombinerLoaderCg::XMLTOKEN_VARYING))
+        csStringID id = loader->xmltokens_common.Request (node->GetValue());
+        if ((id == ShaderCombinerLoaderCommon::XMLTOKEN_UNIFORM)
+          || (id == ShaderCombinerLoaderCommon::XMLTOKEN_VARYING))
         {
           const char* binding = node->GetAttributeValue ("binding");
           if (!binding || !*binding) continue;
@@ -1453,8 +992,8 @@ CS_PLUGIN_NAMESPACE_BEGIN(SLCombiner)
         csRef<iDocumentNode> node = nodes->Next();
         if (node->GetType() != CS_NODE_ELEMENT) continue;
 
-        csStringID id = loader->xmltokens.Request (node->GetValue());
-        if (id == ShaderCombinerLoaderCg::XMLTOKEN_VARIABLEMAP)
+        csStringID id = loader->xmltokens_common.Request (node->GetValue());
+        if (id == ShaderCombinerLoaderCommon::XMLTOKEN_VARIABLEMAP)
         {
           const char* variable = node->GetAttributeValue ("variable");
           const char* type = node->GetAttributeValue ("type");
@@ -1489,7 +1028,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(SLCombiner)
 
   void ShaderCombinerCg::AppendProgramInput (
     const csRefArray<iDocumentNode>& nodes,
-    DocNodeCgAppender& appender)
+    DocNodeAppender& appender)
   {
     // FIXME: error handling here
     for (size_t n = 0; n < nodes.GetSize(); n++)
@@ -1500,7 +1039,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(SLCombiner)
   }
   
   void ShaderCombinerCg::AppendProgramInput_V2FHead (
-    const Snippet& snippet, DocNodeCgAppender& appender)
+    const Snippet& snippet, DocNodeAppender& appender)
   {
     // FIXME: error handling here
     for (size_t n = 0; n < snippet.vert2frag.GetSize(); n++)
@@ -1508,8 +1047,8 @@ CS_PLUGIN_NAMESPACE_BEGIN(SLCombiner)
       iDocumentNode* node = snippet.vert2frag[n];
       if (node->GetType() == CS_NODE_ELEMENT)
       {
-        csStringID id = loader->xmltokens.Request (node->GetValue());
-        if (id == ShaderCombinerLoaderCg::XMLTOKEN_VARYING)
+        csStringID id = loader->xmltokens_common.Request (node->GetValue());
+        if (id == ShaderCombinerLoaderCommon::XMLTOKEN_VARYING)
         {
           csString name = node->GetAttributeValue ("name");
           if (name.IsEmpty()) continue;
@@ -1541,7 +1080,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(SLCombiner)
   
   void ShaderCombinerCg::AppendProgramInput_V2FDecl (
     const Snippet& snippet, const V2FAutoSematicsHelper& semanticsHelper,
-    DocNodeCgAppender& appender)
+    DocNodeAppender& appender)
   {
     // FIXME: error handling here
     for (size_t n = 0; n < snippet.vert2frag.GetSize(); n++)
@@ -1549,8 +1088,8 @@ CS_PLUGIN_NAMESPACE_BEGIN(SLCombiner)
       iDocumentNode* node = snippet.vert2frag[n];
       if (node->GetType() == CS_NODE_ELEMENT)
       {
-        csStringID id = loader->xmltokens.Request (node->GetValue());
-        if (id == ShaderCombinerLoaderCg::XMLTOKEN_VARYING)
+        csStringID id = loader->xmltokens_common.Request (node->GetValue());
+        if (id == ShaderCombinerLoaderCommon::XMLTOKEN_VARYING)
         {
           csString name = node->GetAttributeValue ("name");
           if (name.IsEmpty()) continue;
@@ -1619,7 +1158,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(SLCombiner)
   }
   
   void ShaderCombinerCg::AppendProgramInput_V2FLocals (
-    const Snippet& snippet, DocNodeCgAppender& appender)
+    const Snippet& snippet, DocNodeAppender& appender)
   {
     // FIXME: error handling here
     for (size_t n = 0; n < snippet.vert2frag.GetSize(); n++)
@@ -1627,8 +1166,8 @@ CS_PLUGIN_NAMESPACE_BEGIN(SLCombiner)
       iDocumentNode* node = snippet.vert2frag[n];
       if (node->GetType() == CS_NODE_ELEMENT)
       {
-        csStringID id = loader->xmltokens.Request (node->GetValue());
-        if (id == ShaderCombinerLoaderCg::XMLTOKEN_VARYING)
+        csStringID id = loader->xmltokens_common.Request (node->GetValue());
+        if (id == ShaderCombinerLoaderCommon::XMLTOKEN_VARYING)
         {
           csString name = node->GetAttributeValue ("name");
 	  const char* type = node->GetAttributeValue ("type");
@@ -1665,7 +1204,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(SLCombiner)
   }
   
   void ShaderCombinerCg::AppendProgramInput_V2FVP (
-    const Snippet& snippet, DocNodeCgAppender& appender)
+    const Snippet& snippet, DocNodeAppender& appender)
   {
     // FIXME: error handling here
     for (size_t n = 0; n < snippet.vert2frag.GetSize(); n++)
@@ -1673,8 +1212,8 @@ CS_PLUGIN_NAMESPACE_BEGIN(SLCombiner)
       iDocumentNode* node = snippet.vert2frag[n];
       if (node->GetType() == CS_NODE_ELEMENT)
       {
-        csStringID id = loader->xmltokens.Request (node->GetValue());
-        if (id == ShaderCombinerLoaderCg::XMLTOKEN_VARYING)
+        csStringID id = loader->xmltokens_common.Request (node->GetValue());
+        if (id == ShaderCombinerLoaderCommon::XMLTOKEN_VARYING)
         {
           csString name = node->GetAttributeValue ("name");
           int count;
@@ -1714,7 +1253,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(SLCombiner)
   }
   
   void ShaderCombinerCg::AppendProgramInput_V2FFP (
-    const Snippet& snippet, DocNodeCgAppender& appender)
+    const Snippet& snippet, DocNodeAppender& appender)
   {
     // FIXME: error handling here
     for (size_t n = 0; n < snippet.vert2frag.GetSize(); n++)
@@ -1722,8 +1261,8 @@ CS_PLUGIN_NAMESPACE_BEGIN(SLCombiner)
       iDocumentNode* node = snippet.vert2frag[n];
       if (node->GetType() == CS_NODE_ELEMENT)
       {
-        csStringID id = loader->xmltokens.Request (node->GetValue());
-        if (id == ShaderCombinerLoaderCg::XMLTOKEN_VARYING)
+        csStringID id = loader->xmltokens_common.Request (node->GetValue());
+        if (id == ShaderCombinerLoaderCommon::XMLTOKEN_VARYING)
         {
           csString name = node->GetAttributeValue ("name");
           int count;
@@ -1775,15 +1314,15 @@ CS_PLUGIN_NAMESPACE_BEGIN(SLCombiner)
   }
   
   void ShaderCombinerCg::AppendProgramInput (iDocumentNode* node,
-    DocNodeCgAppender& appender)
+    DocNodeAppender& appender)
   {
     if (node->GetType() == CS_NODE_ELEMENT)
     {
-      csStringID id = loader->xmltokens.Request (node->GetValue());
+      csStringID id = loader->xmltokens_common.Request (node->GetValue());
       switch (id)
       {
-	case ShaderCombinerLoaderCg::XMLTOKEN_UNIFORM:
-	case ShaderCombinerLoaderCg::XMLTOKEN_VARYING:
+	case ShaderCombinerLoaderCommon::XMLTOKEN_UNIFORM:
+	case ShaderCombinerLoaderCommon::XMLTOKEN_VARYING:
           {
 	    const char* name = node->GetAttributeValue ("name");
 	    const char* type = node->GetAttributeValue ("type");
@@ -1796,7 +1335,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(SLCombiner)
 	      if (binding) bindingStr.Format (" : %s", binding);
 	      csString str;
               str.Format ("%s %s %s%s;\n", 
-	        (id == ShaderCombinerLoaderCg::XMLTOKEN_UNIFORM) ? "uniform" :
+	        (id == ShaderCombinerLoaderCommon::XMLTOKEN_UNIFORM) ? "uniform" :
 	        "varying",
 	        typeInfo ? CgType (typeInfo).GetData() : type,
 		name, bindingStr.GetDataSafe());
@@ -1892,8 +1431,32 @@ CS_PLUGIN_NAMESPACE_BEGIN(SLCombiner)
     return annotateStr;
   }
 
+  void ShaderCombinerCg::AppendComment (csString& s, const char* contents)
+  {
+    const char* linebreak;
+    linebreak = strpbrk (contents, "\r\n");
+    if (linebreak == 0)
+    {
+      s.AppendFmt ("// %s\n", contents);
+    }
+    else
+    {
+      s.Append ("/* ");
+      const char* lineStart = contents;
+      while (linebreak != 0)
+      {
+        s.Append (lineStart, linebreak - lineStart);
+        s.Append ("\n   ");
+        lineStart = linebreak+1;
+        linebreak = strpbrk (lineStart, "\r\n");
+      }
+      s.Append (lineStart);
+        s.Append ("\n */\n");
+    }
+  }
+
   void ShaderCombinerCg::AppendSnippetMap (const csHash<csString, csString>& map, 
-                                           DocNodeCgAppender& appender)
+                                           DocNodeAppender& appender)
   {
     csHash<csString, csString>::ConstGlobalIterator it = map.GetIterator ();
     while (it.HasNext())
@@ -1905,77 +1468,5 @@ CS_PLUGIN_NAMESPACE_BEGIN(SLCombiner)
     }
   }
   
-  void ShaderCombinerCg::SplitOffArrayCount (csString& name, int& count)
-  {
-    size_t bracketPos = name.FindFirst ('[');
-    if (bracketPos == (size_t)-1)
-    {
-      count = -1;
-    }
-    else
-    {
-      // @@@ Not very strict
-      sscanf (name.GetData() + bracketPos + 1, "%d", &count);
-      name.Truncate (bracketPos);
-    }
-  }
-    
-  //-------------------------------------------------------------------------
-  
-  void ShaderCombinerCg::DocNodeCgAppender::FlushAppendString ()
-  {
-    if (!stringAppend.IsEmpty ())
-    {
-      csRef<iDocumentNode> newNode = node->CreateNodeBefore (CS_NODE_TEXT);
-      newNode->SetValue (stringAppend);
-      stringAppend.Empty();
-    }
-  }
-  
-  ShaderCombinerCg::DocNodeCgAppender::DocNodeCgAppender (iDocumentNode* node) :
-    node (node), beautifier (stringAppend)
-  {
-    stringAppend.SetGrowsBy (0);
-  }
-  
-  ShaderCombinerCg::DocNodeCgAppender::~DocNodeCgAppender ()
-  {
-    FlushAppendString();
-  }
-
-  void ShaderCombinerCg::DocNodeCgAppender::Append (const char* str)
-  {
-    if (str == 0) return;
-    beautifier.Append (str);
-  }
-  
-  void ShaderCombinerCg::DocNodeCgAppender::Append (iDocumentNode* appendNode)
-  {
-    csDocumentNodeType nodeType = appendNode->GetType();
-    if (nodeType == CS_NODE_TEXT)
-    {
-      Append (appendNode->GetValue());
-    }
-    else if (nodeType == CS_NODE_COMMENT)
-    {
-      // Skip
-    }
-    else
-    {
-      FlushAppendString();
-      csRef<iDocumentNode> newNode = 
-        node->CreateNodeBefore (nodeType);
-      CS::DocSystem::CloneNode (appendNode, newNode);
-    }
-  }
-
-  void ShaderCombinerCg::DocNodeCgAppender::Append (
-    const csRefArray<iDocumentNode>& nodes)
-  {
-    for (size_t n = 0; n < nodes.GetSize(); n++)
-    {
-      Append (nodes[n]);
-    }
-  }
 }
 CS_PLUGIN_NAMESPACE_END(SLCombiner)
