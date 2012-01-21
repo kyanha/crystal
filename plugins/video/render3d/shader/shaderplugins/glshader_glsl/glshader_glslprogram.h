@@ -30,6 +30,12 @@ CS_PLUGIN_NAMESPACE_BEGIN(GLShaderGLSL)
     public scfImplementationExt0<csShaderGLSLProgram, csShaderProgram>
   {
   private:
+    csStringHash xmltokens;
+  #define CS_TOKEN_ITEM_FILE \
+    "plugins/video/render3d/shader/shaderplugins/glshader_glsl/glshader_glsl.tok"
+  #include "cstool/tokenlist.h"
+  #undef CS_TOKEN_ITEM_FILE
+
     csRef<csGLShader_GLSL> shaderPlug;
 
     // GL identifier
@@ -65,19 +71,8 @@ CS_PLUGIN_NAMESPACE_BEGIN(GLShaderGLSL)
   public:
     CS_LEAKGUARD_DECLARE (csShaderGLSLProgram);
 
-    csShaderGLSLProgram(csGLShader_GLSL* shaderPlug) : 
-    scfImplementationType (this, shaderPlug->object_reg)
-    {
-      program_id = 0;
-      validProgram = true;
-      useTessellation = false;
-      this->shaderPlug = shaderPlug;
-    }
-    virtual ~csShaderGLSLProgram ()
-    {
-      if (program_id != 0)
-        shaderPlug->ext->glDeleteObjectARB (program_id);
-    }
+    csShaderGLSLProgram(csGLShader_GLSL* shaderPlug);
+    virtual ~csShaderGLSLProgram ();
 
     void SetValid (bool val) { validProgram = val; }
 
