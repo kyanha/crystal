@@ -58,7 +58,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(ShaderWeaver)
     void AddInputAttribute (const char* inputName,
       const char* name, const char* type, const char* defVal) {};
     void Link (const char* fromName, const char* toName) {}
-    void WriteBlock (const char* location, iDocumentNode* blockNodes);
+    bool WriteBlock (const char* location, iDocumentNode* blockNodes);
     bool EndSnippet ();
     void AddGlobal (const char* name, const char* type, 
       const char* annotation) {}

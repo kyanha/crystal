@@ -738,7 +738,15 @@ CS_PLUGIN_NAMESPACE_BEGIN(ShaderWeaver)
             }
             else
               node = block.node;
-            theCombiner->WriteBlock (block.location, node);
+            if (!theCombiner->WriteBlock (block.location, node)
+                && (theCombiner != defaultCombiner))
+            {
+              /* HACK: Fall back to default combiner; done to be able to
+               * use locations of the default combiner, but filtered by
+               * the actual combiner being used (e.g. "cg:pass" or
+               * "glsl:pass"). */
+              defaultCombiner->WriteBlock (block.location, node);
+            }
           }
         }
 		  
@@ -868,7 +876,15 @@ CS_PLUGIN_NAMESPACE_BEGIN(ShaderWeaver)
 	        node = EncloseInCondition (block.node, nodeCondition);
 	      else
 		node = block.node;
-	      theCombiner->WriteBlock (block.location, node);
+              if (!theCombiner->WriteBlock (block.location, node)
+                  && (theCombiner != defaultCombiner))
+              {
+                /* HACK: Fall back to default combiner; done to be able to
+                 * use locations of the default combiner, but filtered by
+                 * the actual combiner being used (e.g. "cg:pass" or
+                 * "glsl:pass"). */
+                defaultCombiner->WriteBlock (block.location, node);
+              }
 	    }
 	  }
 	}

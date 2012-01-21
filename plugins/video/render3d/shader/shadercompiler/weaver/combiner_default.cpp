@@ -53,7 +53,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(ShaderWeaver)
   {
   }
   
-  void CombinerDefault::WriteBlock (const char* location, 
+  bool CombinerDefault::WriteBlock (const char* location, 
                                     iDocumentNode* blockNode)
   {
     if (strcmp (location, "pass") == 0)
@@ -63,6 +63,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(ShaderWeaver)
       {
         passNodes.Push (nodes->Next());
       }
+      return true;
     }
     else if (strcmp (location, "shadervars") == 0)
     {
@@ -72,6 +73,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(ShaderWeaver)
         csRef<iDocumentNode> child = nodes->Next();
         shaderVarNodes.AddNode (child);
       }
+      return true;
     }
     else if (strcmp (location, "tags") == 0)
     {
@@ -81,7 +83,9 @@ CS_PLUGIN_NAMESPACE_BEGIN(ShaderWeaver)
         csRef<iDocumentNode> child = nodes->Next();
         tagNodes.AddNode (child);
       }
+      return true;
     }
+    return false;
   }
   
   bool CombinerDefault::EndSnippet ()
