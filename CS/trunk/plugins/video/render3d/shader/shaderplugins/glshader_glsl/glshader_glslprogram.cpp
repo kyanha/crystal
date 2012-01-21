@@ -380,6 +380,19 @@ CS_PLUGIN_NAMESPACE_BEGIN(GLShaderGLSL)
       uniforms.Put (uniformName, uniform);
       
       // Distribute TUs to active samplers right away
+      if ((uniform.type == GL_SAMPLER_1D_ARB)
+        || (uniform.type == GL_SAMPLER_2D_ARB)
+        || (uniform.type == GL_SAMPLER_3D_ARB)
+        || (uniform.type == GL_SAMPLER_CUBE_ARB)
+        || (uniform.type == GL_SAMPLER_1D_SHADOW_ARB)
+        || (uniform.type == GL_SAMPLER_2D_SHADOW_ARB)
+        || (uniform.type == GL_SAMPLER_2D_RECT_ARB)
+        || (uniform.type == GL_SAMPLER_2D_RECT_SHADOW_ARB))
+      {
+        int tu = int (tuBindings.GetSize());
+        tuBindings.Put (uniformName, tu);
+        ext->glUniform1iARB (uniform.location, tu);
+      }
     }
 
     for (size_t i = 0; i < variablemap.GetSize (); ++i)
@@ -579,21 +592,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(GLShaderGLSL)
 
   int csShaderGLSLProgram::ResolveTU (const char* binding)
   {
-    for (unsigned int i = 0; i < tuBindings.GetSize (); i++)
-    {
-      if (strcasecmp (binding, tuBindings[i].GetData ()) == 0)
-        return i;
-    }
-
-    // Binding was not found, add it
-    int tu;
-    const csGLExtensionManager* ext = shaderPlug->ext;
-
-    tuBindings.Push (csString (binding));
-    tu = tuBindings.GetSize () - 1;
-    ext->glUniform1iARB (ext->glGetUniformLocationARB (program_id, binding), tu);
-
-    return tu;
+    return tuBindings.Get (binding, -1);
   }
 }
 CS_PLUGIN_NAMESPACE_END(GLShaderGLSL)
