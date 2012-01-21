@@ -133,6 +133,17 @@ CS_PLUGIN_NAMESPACE_BEGIN(ShaderWeaver)
       void AddInput (const Input& input) { inputs.Push (input); }
       void AddOutput (const Output& output) { outputs.Push (output); }
     
+      bool HasCombiner (const char* combinerId) const
+      {
+        if (combiners.GetSize() == 0) return true; // always allow “combiner-neutral” snippets
+        CombinerHash::ConstGlobalIterator combinersIt (combiners.GetIterator());
+        while (combinersIt.HasNext())
+        {
+          const CombinerPlugin& combiner (combinersIt.Next());
+          if (combiner.classId.Compare (combinerId)) return true;
+        }
+        return false;
+      }
       const char* GetCombinerId (const char* name) const
       {
         const CombinerPlugin* comb (combiners.GetElementPointer (name));
