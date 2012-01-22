@@ -430,24 +430,30 @@ CS_PLUGIN_NAMESPACE_BEGIN(GLShaderGLSL)
   csPtr<csShaderGLSLShader> csShaderGLSLProgram::CreateFP () const
   {
     return csPtr<csShaderGLSLShader> (
-      new csShaderGLSLShader (shaderPlug, "fragment", GL_FRAGMENT_SHADER_ARB));
+      new csShaderGLSLShader (shaderPlug,
+                              csString().Format ("%s FP", description.GetData()),
+                              GL_FRAGMENT_SHADER_ARB));
   }
   csPtr<csShaderGLSLShader> csShaderGLSLProgram::CreateGP () const
   {
     return csPtr<csShaderGLSLShader> (
-      new csShaderGLSLShader (shaderPlug, "geometry", GL_GEOMETRY_SHADER_EXT));
+      new csShaderGLSLShader (shaderPlug,
+                              csString().Format ("%s GP", description.GetData()),
+                              GL_GEOMETRY_SHADER_EXT));
   }
   csPtr<csShaderGLSLShader> csShaderGLSLProgram::CreateEP () const
   {
     return csPtr<csShaderGLSLShader> (
-      new csShaderGLSLShader (shaderPlug, "tessellation evaluation",
-      GL_TESS_EVALUATION_SHADER_ARB));
+      new csShaderGLSLShader (shaderPlug,
+                              csString().Format ("%s TEP", description.GetData()),
+                              GL_TESS_EVALUATION_SHADER_ARB));
   }
   csPtr<csShaderGLSLShader> csShaderGLSLProgram::CreateCP () const
   {
     return csPtr<csShaderGLSLShader> (
-      new csShaderGLSLShader (shaderPlug, "tessellation control",
-      GL_TESS_CONTROL_SHADER_ARB));
+      new csShaderGLSLShader (shaderPlug,
+                              csString().Format ("%s TCP", description.GetData()),
+                              GL_TESS_CONTROL_SHADER_ARB));
   }
 
   bool csShaderGLSLProgram::Compile (iHierarchicalCache*, csRef<iString>* tag)
@@ -468,7 +474,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(GLShaderGLSL)
         return false;
 
       vp = CreateVP ();
-      if (!vp->Compile (vpSource->GetData ()))
+      if (!vp->Compile (vpSource->GetData (), doVerbose))
         return false;
 
       ext->glAttachObjectARB (program_id, vp->GetID ());
@@ -479,7 +485,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(GLShaderGLSL)
         return false;
 
       fp = CreateFP ();
-      if (!fp->Compile (fpSource->GetData ()))
+      if (!fp->Compile (fpSource->GetData (), doVerbose))
         return false;
 
       ext->glAttachObjectARB (program_id, fp->GetID ());
@@ -490,7 +496,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(GLShaderGLSL)
         return false;
 
       gp = CreateGP ();
-      if (!gp->Compile (gpSource->GetData ()))
+      if (!gp->Compile (gpSource->GetData (), doVerbose))
         return false;
 
       ext->glAttachObjectARB (program_id, gp->GetID ());
@@ -501,7 +507,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(GLShaderGLSL)
         return false;
 
       ep = CreateEP ();
-      if (!ep->Compile (epSource->GetData ()))
+      if (!ep->Compile (epSource->GetData (), doVerbose))
         return false;
 
       ext->glAttachObjectARB (program_id, ep->GetID ());
@@ -513,7 +519,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(GLShaderGLSL)
         return false;
 
       cp = CreateCP ();
-      if (!cp->Compile (cpSource->GetData ()))
+      if (!cp->Compile (cpSource->GetData (), doVerbose))
         return false;
 
       ext->glAttachObjectARB (program_id, cp->GetID ());
@@ -523,22 +529,29 @@ CS_PLUGIN_NAMESPACE_BEGIN(GLShaderGLSL)
     ext->glLinkProgramARB (program_id);
     ext->glGetObjectParameterivARB (program_id, GL_OBJECT_LINK_STATUS_ARB,
       &status);
-    if (!status)
+
+    if (doVerbose)
     {
-      GLint size;
+      if (!status)
+      {
+        shaderPlug->Report (CS_REPORTER_SEVERITY_WARNING,
+          "Couldn't link %s", CS::Quote::Single (description.GetData ()));
+      }
+      GLint logSize;
 
       ext->glGetObjectParameterivARB (program_id, GL_OBJECT_INFO_LOG_LENGTH_ARB,
-        &size);
-      csString logs((size_t)(size + 1));
-      // cast hax
-      ext->glGetInfoLogARB (program_id, size, NULL, (GLcharARB*)logs.GetData ());
+        &logSize);
+      CS_ALLOC_STACK_ARRAY(char, infoLog, logSize+1);
+      ext->glGetInfoLogARB (program_id, logSize, NULL, (GLcharARB*)infoLog);
 
-      shaderPlug->Report (CS_REPORTER_SEVERITY_WARNING,
-        "Couldn't link %s", description.GetData ());
-      shaderPlug->Report (CS_REPORTER_SEVERITY_WARNING, "Error string: %s", 
-        CS::Quote::Single (logs.GetData ()));
-      return false;
+      int severity = !status ? CS_REPORTER_SEVERITY_WARNING
+                             : CS_REPORTER_SEVERITY_NOTIFY;
+      shaderPlug->Report (severity, "Info log for %s: %s", 
+        CS::Quote::Single (description.GetData ()),
+        infoLog);
     }
+    if (!status)
+      return false;
 
     // glValidateProgram() ?
 

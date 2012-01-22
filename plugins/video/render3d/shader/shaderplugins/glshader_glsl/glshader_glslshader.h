@@ -59,7 +59,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(GLShaderGLSL)
       return shader_id;
     }
 
-    bool Compile (const char *source);
+    bool Compile (const char *source, bool doVerbose);
   };
 }
 CS_PLUGIN_NAMESPACE_END(GLShaderGLSL)
