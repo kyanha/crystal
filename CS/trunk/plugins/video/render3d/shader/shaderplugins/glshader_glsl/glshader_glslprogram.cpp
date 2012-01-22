@@ -270,7 +270,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(GLShaderGLSL)
       for (size_t i = 0; i < numElements; i++)
         values[i].CopyFrom (var->GetArrayElement (i));
       // ... and set.
-      setter (uniform.location, numElements, values[0].data);
+      setter (uniform.location, GLsizei (numElements), values[0].data);
     }
     else
     {
