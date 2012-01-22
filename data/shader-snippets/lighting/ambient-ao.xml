@@ -19,20 +19,30 @@
 <snippet>
   <technique priority="100">
     <combiner name="cg" plugin="crystalspace.graphics3d.shader.combiner.glcg" />
+    <combiner name="glsl" plugin="crystalspace.graphics3d.shader.combiner.glsl" />
     
     <input file="/shader-snippets/texCoord.inp" />
     
     <input name="texAO" type="tex2d" default="complex">
-      <block location="pass">
+      <block location="cg:pass">
 	<texture name="tex ambient occlusion" destination="fragmentIn.texAO" />
+      </block>
+      <block location="glsl:pass">
+	<texture name="tex ambient occlusion" destination="in_texAO" />
       </block>
       
       <block location="cg:fragmentIn">
 	<uniform type="tex2d" name="texAO" />
       </block>
+      <block location="glsl:fragmentIn">
+	<uniform type="tex2d" name="in_texAO" />
+      </block>
       
       <block location="cg:fragmentMain">
 	texAO = fragmentIn.texAO;
+      </block>
+      <block location="glsl:fragmentMain">
+	#sampler_assign texAO in_texAO
       </block>
     </input>
     
@@ -45,9 +55,26 @@
 	occlusionFactor_attr_perfragment = false;
       <?endif?>
     </block>
+    <block location="glsl:fragmentMain">
+      <?if vars."tex ambient occlusion".texture ?>
+	occlusionFactor = texture2D (texAO, texCoord).x;
+	occlusionFactor_attr_perfragment = true;
+      <?else?>
+	occlusionFactor = 1.0;
+	occlusionFactor_attr_perfragment = false;
+      <?endif?>
+    </block>
     
     <block location="cg:vertexMain">
       occlusionFactor = 1;
+      <?if vars."tex ambient occlusion".texture?>
+        occlusionFactor_attr_perfragment = true;
+      <?else?>
+        occlusionFactor_attr_perfragment = false;
+      <?endif?>
+    </block>
+    <block location="glsl:vertexMain">
+      occlusionFactor = 1.0;
       <?if vars."tex ambient occlusion".texture?>
         occlusionFactor_attr_perfragment = true;
       <?else?>
