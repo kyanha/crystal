@@ -24,8 +24,6 @@
   
     <input name="position" type="position4_object" />
     
-    <!-- Slightly dirty: float4x4 is no weaver type, so gets written out 
-	 verbatim -->
     <input name="ModelViewIT" type="float4x4" default="complex">
       <block location="cg:vertexIn">
 	<uniform type="float4x4" name="ModelViewIT" 
@@ -35,9 +33,10 @@
       <block location="cg:vertexMain">
 	ModelViewIT = vertexIn.ModelViewIT;
       </block>
-
+    </input>
+    <input name="ModelViewI" type="float4x4" default="complex">
       <block location="glsl:vertexMain">
-        ModelViewIT = gl_ModelViewMatrixInverseTranspose;
+        ModelViewI = gl_ModelViewMatrixInverse;
       </block>
     </input>
     
@@ -54,7 +53,7 @@
     </block>
     
     <block location="glsl:vertexMain">
-      eyeDirectionObj = vec3 (position - ModelViewIT[3]);
+      eyeDirectionObj = (position - ModelViewI[3]).xyz;
     </block>
     
     <output name="eyeDirectionObj" type="direction_object" />
