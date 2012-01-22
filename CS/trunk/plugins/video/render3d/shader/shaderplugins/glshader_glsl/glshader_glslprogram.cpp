@@ -210,42 +210,42 @@ CS_PLUGIN_NAMESPACE_BEGIN(GLShaderGLSL)
       switch (uniform.type)
       {
       case GL_FLOAT:
-      case GL_BOOL_ARB:
+      case GL_BOOL:
         SetUniformValue<Vec<GLfloat, 1> > (uniform, var, ext->glUniform1fvARB);
         break;    
-      case GL_FLOAT_VEC2_ARB:
-      case GL_BOOL_VEC2_ARB:
+      case GL_FLOAT_VEC2:
+      case GL_BOOL_VEC2:
         SetUniformValue<Vec<GLfloat, 2> > (uniform, var, ext->glUniform2fvARB);
         break;    
-      case GL_FLOAT_VEC3_ARB:
-      case GL_BOOL_VEC3_ARB:
+      case GL_FLOAT_VEC3:
+      case GL_BOOL_VEC3:
         SetUniformValue<Vec<GLfloat, 3> > (uniform, var, ext->glUniform3fvARB);
         break;    
-      case GL_FLOAT_VEC4_ARB:
-      case GL_BOOL_VEC4_ARB:
+      case GL_FLOAT_VEC4:
+      case GL_BOOL_VEC4:
         SetUniformValue<Vec<GLfloat, 4> > (uniform, var, ext->glUniform4fvARB);
         break;    
       case GL_INT:
         SetUniformValue<Vec<GLint, 1> > (uniform, var, ext->glUniform1ivARB);
         break;    
-      case GL_INT_VEC2_ARB:
+      case GL_INT_VEC2:
         SetUniformValue<Vec<GLint, 2> > (uniform, var, ext->glUniform2ivARB);
         break;    
-      case GL_INT_VEC3_ARB:
+      case GL_INT_VEC3:
         SetUniformValue<Vec<GLint, 3> > (uniform, var, ext->glUniform3ivARB);
         break;    
-      case GL_INT_VEC4_ARB:
+      case GL_INT_VEC4:
         SetUniformValue<Vec<GLint, 4> > (uniform, var, ext->glUniform4ivARB);
         break;
-      case GL_FLOAT_MAT2_ARB:
+      case GL_FLOAT_MAT2:
         SetUniformValue<Mat<GLfloat, 2, 2> > (uniform, var,
                                               glUniformMatrixWrapper (ext->glUniformMatrix2fvARB));
         break;
-      case GL_FLOAT_MAT3_ARB:
+      case GL_FLOAT_MAT3:
         SetUniformValue<Mat<GLfloat, 3, 3> > (uniform, var,
                                               glUniformMatrixWrapper (ext->glUniformMatrix3fvARB));
         break;
-      case GL_FLOAT_MAT4_ARB:
+      case GL_FLOAT_MAT4:
         SetUniformValue<Mat<GLfloat, 4, 4> > (uniform, var,
                                               glUniformMatrixWrapper (ext->glUniformMatrix4fvARB));
         break;
@@ -366,7 +366,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(GLShaderGLSL)
     ext->glGetObjectParameterivARB (program_id, GL_OBJECT_ACTIVE_UNIFORMS_ARB,
                                     &activeUniforms);
     GLint maxUniformNameLen (0);
-    ext->glGetObjectParameterivARB (program_id, GL_OBJECT_ACTIVE_UNIFORM_MAX_LENGTH_ARB,
+    ext->glGetObjectParameterivARB (program_id, GL_OBJECT_ACTIVE_UNIFORM_MAX_LENGTH,
                                     &maxUniformNameLen);
     CS_ALLOC_STACK_ARRAY(char, uniformName, maxUniformNameLen+1);
     for (GLint i = 0; i < activeUniforms; i++)
@@ -380,14 +380,14 @@ CS_PLUGIN_NAMESPACE_BEGIN(GLShaderGLSL)
       uniforms.Put (uniformName, uniform);
       
       // Distribute TUs to active samplers right away
-      if ((uniform.type == GL_SAMPLER_1D_ARB)
-        || (uniform.type == GL_SAMPLER_2D_ARB)
-        || (uniform.type == GL_SAMPLER_3D_ARB)
-        || (uniform.type == GL_SAMPLER_CUBE_ARB)
-        || (uniform.type == GL_SAMPLER_1D_SHADOW_ARB)
-        || (uniform.type == GL_SAMPLER_2D_SHADOW_ARB)
-        || (uniform.type == GL_SAMPLER_2D_RECT_ARB)
-        || (uniform.type == GL_SAMPLER_2D_RECT_SHADOW_ARB))
+      if ((uniform.type == GL_SAMPLER_1D)
+        || (uniform.type == GL_SAMPLER_2D)
+        || (uniform.type == GL_SAMPLER_3D)
+        || (uniform.type == GL_SAMPLER_CUBE)
+        || (uniform.type == GL_SAMPLER_1D_SHADOW)
+        || (uniform.type == GL_SAMPLER_2D_SHADOW)
+        || (uniform.type == GL_SAMPLER_2D_RECT)
+        || (uniform.type == GL_SAMPLER_2D_RECT_SHADOW))
       {
         int tu = int (tuBindings.GetSize());
         tuBindings.Put (uniformName, tu);
