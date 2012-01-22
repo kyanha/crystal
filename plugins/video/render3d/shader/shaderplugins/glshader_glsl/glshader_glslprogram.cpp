@@ -374,9 +374,15 @@ CS_PLUGIN_NAMESPACE_BEGIN(GLShaderGLSL)
     for (GLint i = 0; i < activeUniforms; i++)
     {
       ProgramUniform uniform;
+      GLsizei nameLen (0);
       ext->glGetActiveUniformARB (program_id, GLuint (i),
-                                  maxUniformNameLen, nullptr, &uniform.size,
+                                  maxUniformNameLen, &nameLen, &uniform.size,
                                   &uniform.type, reinterpret_cast<GLcharARB*> (uniformName));
+      // NVIDIA driver reports array uniforms with a "[0]" suffix, remove that
+      if ((nameLen > 3) && (strcmp (uniformName + nameLen - 3, "[0]") == 0))
+      {
+        uniformName[nameLen - 3] = 0;
+      }
       uniform.location = ext->glGetUniformLocationARB (program_id,
         uniformName);
       uniforms.Put (uniformName, uniform);
