@@ -27,7 +27,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(GLShaderGLSL)
 {
   CS_LEAKGUARD_IMPLEMENT (csShaderGLSLShader);
 
-  bool csShaderGLSLShader::Compile (const char *source)
+  bool csShaderGLSLShader::Compile (const char *source, bool doVerbose)
   {
     GLint status;                   // compile status
     const csGLExtensionManager* ext = shaderPlug->ext;
@@ -38,24 +38,28 @@ CS_PLUGIN_NAMESPACE_BEGIN(GLShaderGLSL)
 
     ext->glGetObjectParameterivARB (shader_id, GL_OBJECT_COMPILE_STATUS_ARB,
       &status);
-    if (status != GL_TRUE)
+    if (doVerbose)
     {
-      GLint size;
+      if (!status)
+      {
+        shaderPlug->Report (CS_REPORTER_SEVERITY_WARNING,
+          "Couldn't compile %s", CS::Quote::Single (typeName));
+      }
+      GLint logSize;
 
       ext->glGetObjectParameterivARB (shader_id, GL_OBJECT_INFO_LOG_LENGTH_ARB,
-        &size);
-      csString logs((size_t)(size + 1));
-      // cast hax
-      ext->glGetInfoLogARB (shader_id, size, NULL, (GLcharARB*)logs.GetData ());
+        &logSize);
+      CS_ALLOC_STACK_ARRAY(char, infoLog, logSize+1);
+      ext->glGetInfoLogARB (shader_id, logSize, NULL, (GLcharARB*)infoLog);
 
-      shaderPlug->Report (CS_REPORTER_SEVERITY_WARNING,
-        "Couldn't compile GLSL %s shader", typeName.GetData ());
-      shaderPlug->Report (CS_REPORTER_SEVERITY_WARNING, "Error string: %s", 
-        CS::Quote::Single (logs.GetData ()));
-      return false;
+      int severity = !status ? CS_REPORTER_SEVERITY_WARNING
+                             : CS_REPORTER_SEVERITY_NOTIFY;
+      shaderPlug->Report (severity, "Info log for %s: %s", 
+        CS::Quote::Single (typeName),
+        infoLog);
     }
 
-    return true;
+    return status;
   }
 }
 CS_PLUGIN_NAMESPACE_END(GLShaderGLSL)
