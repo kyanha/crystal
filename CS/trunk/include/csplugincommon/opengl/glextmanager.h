@@ -1282,8 +1282,8 @@ typedef GLvoid (csAPIENTRY* csGLGETQUERYOBJECTUIV) (GLuint id, GLenum pname, GLu
 #define GL_OBJECT_ACTIVE_UNIFORMS                                    0x8B86
 #endif
 
-#ifndef GL_OBJECT_ACTIVE_UNIFORMS_MAX_LENGTH
-#define GL_OBJECT_ACTIVE_UNIFORMS_MAX_LENGTH                         0x8B87
+#ifndef GL_OBJECT_ACTIVE_UNIFORM_MAX_LENGTH
+#define GL_OBJECT_ACTIVE_UNIFORM_MAX_LENGTH                          0x8B87
 #endif
 
 #ifndef GL_OBJECT_SHADER_SOURCE_LENGTH
@@ -1344,6 +1344,38 @@ typedef GLvoid (csAPIENTRY* csGLGETQUERYOBJECTUIV) (GLuint id, GLenum pname, GLu
 
 #ifndef GL_FLOAT_MAT4
 #define GL_FLOAT_MAT4                                                0x8B5C
+#endif
+
+#ifndef GL_SAMPLER_1D
+#define GL_SAMPLER_1D                                                0x8B5D
+#endif
+
+#ifndef GL_SAMPLER_2D
+#define GL_SAMPLER_2D                                                0x8B5E
+#endif
+
+#ifndef GL_SAMPLER_3D
+#define GL_SAMPLER_3D                                                0x8B5F
+#endif
+
+#ifndef GL_SAMPLER_CUBE
+#define GL_SAMPLER_CUBE                                              0x8B60
+#endif
+
+#ifndef GL_SAMPLER_1D_SHADOW
+#define GL_SAMPLER_1D_SHADOW                                         0x8B61
+#endif
+
+#ifndef GL_SAMPLER_2D_SHADOW
+#define GL_SAMPLER_2D_SHADOW                                         0x8B62
+#endif
+
+#ifndef GL_SAMPLER_2D_RECT
+#define GL_SAMPLER_2D_RECT                                           0x8B63
+#endif
+
+#ifndef GL_SAMPLER_2D_RECT_SHADOW
+#define GL_SAMPLER_2D_RECT_SHADOW                                    0x8B64
 #endif
 
 #ifndef GL_FRAGMENT_SHADER
