@@ -42,7 +42,7 @@ private:
 
   csWeakRef<iGraphics3D> g3d;
   csGLExtensionManager* ext;
-  csGLShader_FIXED* shaderPlug;
+  csRef<csGLShader_FIXED> shaderPlug;
 
   csGLStateCache* statecache;
 
