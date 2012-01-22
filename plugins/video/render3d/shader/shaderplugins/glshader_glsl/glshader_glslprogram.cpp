@@ -360,6 +360,8 @@ CS_PLUGIN_NAMESPACE_BEGIN(GLShaderGLSL)
   {
     const csGLExtensionManager* ext = shaderPlug->ext;
     csRef<csShaderVariable> var;
+
+    ext->glUseProgramObjectARB (program_id);
     
     csHash<ProgramUniform, csString> uniforms;
     GLint activeUniforms (0);
@@ -394,6 +396,8 @@ CS_PLUGIN_NAMESPACE_BEGIN(GLShaderGLSL)
         ext->glUniform1iARB (uniform.location, tu);
       }
     }
+
+    ext->glUseProgramObjectARB (0);
 
     for (size_t i = 0; i < variablemap.GetSize (); ++i)
     {
