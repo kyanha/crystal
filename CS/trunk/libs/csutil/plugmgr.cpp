@@ -256,7 +256,10 @@ csPtr<iComponent> csPluginManager::LoadPluginInstance (const char *classID,
 	csPlugin* pl = FindPluginByClassID (classID);
 	csRef<iComponent> comp;
 	pl->Plugin.Get (comp);
-        return csPtr<iComponent> (comp);
+        if (comp)
+          return csPtr<iComponent> (comp);
+        /* comp == null may actually happen if the plugin was unloaded
+           during searching it in the loaded plugin list! */
       }
     }
   }
