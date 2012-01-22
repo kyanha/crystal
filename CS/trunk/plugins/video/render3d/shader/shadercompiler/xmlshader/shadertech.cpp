@@ -194,7 +194,11 @@ bool csXMLShaderTech::LoadPass (iDocumentNode *node, ShaderPass* pass,
 
   CachedPlugins cachedPlugins;
 
-  GetProgramPlugins (node, cachedPlugins, variant);
+  if (!GetProgramPlugins (node, cachedPlugins, variant))
+  {
+    SetFailReason ("Couldn't load shader plugin(s).");
+    return false;
+  }
 
   csRef<iShaderProgram> program;
 
@@ -559,7 +563,8 @@ bool csXMLShaderTech::PrecachePass (iDocumentNode *node, ShaderPass* pass,
 
   CachedPlugins cachedPlugins;
 
-  GetProgramPlugins (node, cachedPlugins, variant);
+  if (!GetProgramPlugins (node, cachedPlugins, variant))
+    return false;
 
   if (!ParseModes (pass, node, hlp)) return false;
 
@@ -1159,7 +1164,8 @@ iShaderProgram::CacheLoadResult csXMLShaderTech::LoadPassFromCache (
   if (!cacheFile) return iShaderProgram::loadFail;
 
   CachedPlugins plugins;
-  GetProgramPlugins (node, plugins, variant);
+  if (!GetProgramPlugins (node, plugins, variant))
+    return iShaderProgram::loadFail;
   
   if (!ReadPass (pass, cacheFile, plugins)) return iShaderProgram::loadFail;
   
@@ -1547,7 +1553,7 @@ bool csXMLShaderTech::PrecacheProgram (iBase* previous, iDocumentNode* node,
     cacheInfo.programNode, cacheTo, &object);
 }
 
-void csXMLShaderTech::GetProgramPlugins (iDocumentNode *node,
+bool csXMLShaderTech::GetProgramPlugins (iDocumentNode *node,
                                          CachedPlugins& cacheInfo,
                                          size_t variant)
 {
@@ -1557,7 +1563,8 @@ void csXMLShaderTech::GetProgramPlugins (iDocumentNode *node,
       csXMLShaderCompiler::XMLTOKEN_SHADER));
       
     if (programNodeShader)
-      GetProgramPlugin (programNodeShader, cacheInfo.unified, variant);
+      if (!GetProgramPlugin (programNodeShader, cacheInfo.unified, variant))
+        return false;
   }
   
   {
@@ -1566,7 +1573,8 @@ void csXMLShaderTech::GetProgramPlugins (iDocumentNode *node,
       csXMLShaderCompiler::XMLTOKEN_FP));
       
     if (programNodeFP)
-      GetProgramPlugin (programNodeFP, cacheInfo.fp, variant);
+      if (!GetProgramPlugin (programNodeFP, cacheInfo.fp, variant))
+        return false;
   }
   
   {
@@ -1575,7 +1583,8 @@ void csXMLShaderTech::GetProgramPlugins (iDocumentNode *node,
       csXMLShaderCompiler::XMLTOKEN_VP));
       
     if (programNodeVP)
-      GetProgramPlugin (programNodeVP, cacheInfo.vp, variant);
+      if (!GetProgramPlugin (programNodeVP, cacheInfo.vp, variant))
+        return false;
   }
 
   {
@@ -1584,12 +1593,14 @@ void csXMLShaderTech::GetProgramPlugins (iDocumentNode *node,
       csXMLShaderCompiler::XMLTOKEN_VPROC));
       
     if (programNodeVPr)
-      GetProgramPlugin (programNodeVPr, cacheInfo.vproc, variant);
+      if (!GetProgramPlugin (programNodeVPr, cacheInfo.vproc, variant))
+        return false;
   }
-  
+
+  return true;
 }
 
-void csXMLShaderTech::GetProgramPlugin (iDocumentNode *node,
+bool csXMLShaderTech::GetProgramPlugin (iDocumentNode *node,
                                         CachedPlugin& cacheInfo,
                                         size_t variant)
 {
@@ -1598,7 +1609,7 @@ void csXMLShaderTech::GetProgramPlugin (iDocumentNode *node,
     parent->compiler->Report (CS_REPORTER_SEVERITY_ERROR,
       "No shader program plugin specified for <%s> in shader %s",
       node->GetValue (), CS::Quote::Single (parent->GetName ()));
-    return;
+    return false;
   }
 
   csStringFast<256> plugin ("crystalspace.graphics3d.shader.");
@@ -1617,7 +1628,7 @@ void csXMLShaderTech::GetProgramPlugin (iDocumentNode *node,
 	  CS::Quote::Single (plugin.GetData()),
 	  node->GetValue (),
 	  CS::Quote::Single (parent->GetName ()));
-    return;
+    return false;
   }
 
   const char* programType = node->GetAttributeValue("type");
@@ -1638,6 +1649,7 @@ void csXMLShaderTech::GetProgramPlugin (iDocumentNode *node,
   cacheInfo.progType = programType;
   cacheInfo.programPlugin = plg;
   cacheInfo.programNode = programNode;
+  return true;
 }
 
 bool csXMLShaderTech::LoadBoilerplate (iLoaderContext* ldr_context, 

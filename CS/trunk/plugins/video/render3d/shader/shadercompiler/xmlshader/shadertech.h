@@ -213,9 +213,9 @@ CS_PLUGIN_NAMESPACE_BEGIN(XMLShader)
   	iDocumentNode *node, size_t variant,
         iHierarchicalCache* cacheTo, CachedPlugin& cacheInfo,
         csRef<iBase>& progObj, const char* tag);
-  void GetProgramPlugins (iDocumentNode *node, CachedPlugins& cacheInfo,
+  bool GetProgramPlugins (iDocumentNode *node, CachedPlugins& cacheInfo,
     size_t variant);
-  void GetProgramPlugin (iDocumentNode *node, CachedPlugin& cacheInfo,
+  bool GetProgramPlugin (iDocumentNode *node, CachedPlugin& cacheInfo,
     size_t variant);
   
   iShaderProgram::CacheLoadResult LoadProgramFromCache (iBase* previous,
