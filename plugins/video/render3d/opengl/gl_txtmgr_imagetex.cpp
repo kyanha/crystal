@@ -293,7 +293,7 @@ void csGLTextureHandle::PrepareInt ()
     }
     if (newCube.IsValid())
     {
-      for (int i = 0; i < faceCount; i++)
+      for (uint i = 0; i < faceCount; i++)
       {
 	if (!newCube->SubImageSet (i))
 	  newCube->SetSubImage (i, image->GetSubImage (i));
