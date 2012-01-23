@@ -279,11 +279,10 @@
   #define CS_INITIALIZE_PLATFORM_APPLICATION CS_WIN32_MSVC_DEBUG_GOOP
 #endif
 
-// The 2D graphics driver used by renderers on this platform
+// The default 2D graphics driver used by renderers on this platform.
 #define CS_OPENGL_2D_DRIVER "crystalspace.graphics2d.glwin32"
 
-// The sound driver
-#define CS_SOUND_DRIVER "crystalspace.sound.driver.waveout"
+// The default sound driver used on this platform.
 #define CS_SNDSYS_DRIVER "crystalspace.sndsys.software.driver.directsound"
 
 // SCF symbol export facility.

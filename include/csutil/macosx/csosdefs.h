@@ -71,12 +71,11 @@
 #define CS_PATH_DELIMITER ':'
 #define CS_PATH_SEPARATOR '/'
 
+// The default 2D graphics driver used by renderers on this platform.
 #undef  CS_OPENGL_2D_DRIVER
 #define CS_OPENGL_2D_DRIVER "crystalspace.graphics2d.glosx"
 
-#undef  CS_SOUND_DRIVER
-#define CS_SOUND_DRIVER "crystalspace.sound.driver.coreaudio"
-
+// The default sound driver used on this platform.
 #undef  CS_SNDSYS_DRIVER
 #define CS_SNDSYS_DRIVER "crystalspace.sndsys.software.driver.coreaudio"
 

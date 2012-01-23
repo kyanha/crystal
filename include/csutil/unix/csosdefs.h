@@ -48,9 +48,11 @@
 #define CS_PATH_DELIMITER ':'
 #define CS_PATH_SEPARATOR '/'
 
-#define CS_OPENGL_2D_DRIVER   "crystalspace.graphics2d.glx"
-#define CS_SOUND_DRIVER       "crystalspace.sound.driver.oss"
-#define CS_SNDSYS_DRIVER      "crystalspace.sndsys.software.driver.alsa"
+// The default 2D graphics driver used by renderers on this platform.
+#define CS_OPENGL_2D_DRIVER "crystalspace.graphics2d.glx"
+
+// The default sound driver used on this platform.
+#define CS_SNDSYS_DRIVER "crystalspace.sndsys.software.driver.alsa"
 
 #if !defined(CS_STATIC_LINKED) && defined(CS_UNIX_PLUGIN_REQUIRES_MAIN)
 // Dummy main function required for plugin modules on some Unix platforms.

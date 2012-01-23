@@ -395,12 +395,13 @@ struct iSCF : public virtual iBase
 
   /**
    * Retrieve a list of class names whose prefix matches a pattern string.  For
-   * example, QueryClassList("crystalspace.sound.loader.") will return a list
-   * of class names which begin with the string "crystalspace.sound.loader.".
-   * If pattern is zero length or the null pointer, then all registered class
-   * names are returned.  If any class names match the pattern, then the return
-   * value is a list of strings.  If no class names match the pattern string,
-   * then the returned list is empty.
+   * example, QueryClassList("crystalspace.graphics3d.shadercompiler.") will
+   * return a list of class names which begin with the string
+   * "crystalspace.graphics3d.shadercompiler.". If pattern is zero length or  
+   * the null pointer, then all registered class names are returned.  If any 
+   * class names match the pattern, then the return value is a list of 
+   * strings.  If no class names match the pattern string, then the returned 
+   * list is empty.
    */
   virtual csRef<iStringArray> QueryClassList (char const* pattern) = 0;
 
