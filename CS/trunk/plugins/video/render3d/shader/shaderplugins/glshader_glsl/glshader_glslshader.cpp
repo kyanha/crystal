@@ -62,7 +62,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(GLShaderGLSL)
       }
     }
 
-    return status;
+    return status != GL_FALSE;
   }
 }
 CS_PLUGIN_NAMESPACE_END(GLShaderGLSL)
