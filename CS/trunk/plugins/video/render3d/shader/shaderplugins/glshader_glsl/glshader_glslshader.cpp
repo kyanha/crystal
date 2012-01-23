@@ -45,18 +45,21 @@ CS_PLUGIN_NAMESPACE_BEGIN(GLShaderGLSL)
         shaderPlug->Report (CS_REPORTER_SEVERITY_WARNING,
           "Couldn't compile %s", CS::Quote::Single (typeName));
       }
-      GLint logSize;
+      GLint logSize (0);
 
       ext->glGetObjectParameterivARB (shader_id, GL_OBJECT_INFO_LOG_LENGTH_ARB,
         &logSize);
       CS_ALLOC_STACK_ARRAY(char, infoLog, logSize+1);
       ext->glGetInfoLogARB (shader_id, logSize, NULL, (GLcharARB*)infoLog);
 
-      int severity = !status ? CS_REPORTER_SEVERITY_WARNING
-                             : CS_REPORTER_SEVERITY_NOTIFY;
-      shaderPlug->Report (severity, "Info log for %s: %s", 
-        CS::Quote::Single (typeName),
-        infoLog);
+      if ((logSize > 0) && (strlen (infoLog) > 0))
+      {
+        int severity = !status ? CS_REPORTER_SEVERITY_WARNING
+                               : CS_REPORTER_SEVERITY_NOTIFY;
+        shaderPlug->Report (severity, "Info log for %s: %s", 
+          CS::Quote::Single (typeName),
+          infoLog);
+      }
     }
 
     return status;
