@@ -98,7 +98,7 @@ def DecomposeMatrix (matrix):
   rot = quat.to_matrix().to_4x4()
   return loc, rot, scale
 
-# Export a default camera
+# Export a camera as a cs start location
 def ExportCamera (func, depth, sceneName, cameraName="Camera", cameraLocation=[0.0,0.0,0.0]):
   func(' '*depth +'<start name="%s">'%(cameraName))
   # Flip Y and Z axis.
