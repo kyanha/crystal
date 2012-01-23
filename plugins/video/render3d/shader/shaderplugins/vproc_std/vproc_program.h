@@ -71,7 +71,7 @@ public:
 
   virtual void GetUsedShaderVars (csBitArray& bits) const;
 private:
-  csVProc_Std *shaderPlugin;
+  csRef<csVProc_Std> shaderPlugin;
 
   csStringHash tokens;
 #define CS_TOKEN_ITEM_FILE \
