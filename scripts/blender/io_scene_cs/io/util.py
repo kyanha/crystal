@@ -99,9 +99,10 @@ def DecomposeMatrix (matrix):
   return loc, rot, scale
 
 # Export a default camera
-def ExportDefaultCamera (func, depth, sceneName):
-  func(' '*depth +'<start name="Camera">')
-  func(' '*depth +'  <sector>%s</sector>'%sceneName)
-  func(' '*depth +'  <position x="0.0" z="0.0" y="0.0" />')
+def ExportCamera (func, depth, sceneName, cameraName="Camera", cameraLocation=[0.0,0.0,0.0]):
+  func(' '*depth +'<start name="%s">'%(cameraName))
+  # Flip Y and Z axis.
+  func(' '*depth +'  <sector>%s</sector>'%(sceneName))
+  func(' '*depth +'  <position x="%f" z="%f" y="%f" />'%tuple(cameraLocation))
   func(' '*depth +'  <up y="1" x="0" z="0" />')
   func(' '*depth +'</start>')

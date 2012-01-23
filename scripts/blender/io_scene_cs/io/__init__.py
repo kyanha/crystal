@@ -102,7 +102,7 @@ def Export(path):
       ob.AsCS(Write(f), 2)
   if not foundCamera:
     # Set a default camera if none was found in the current scene
-    util.ExportDefaultCamera(Write(f), 2, bpy.context.scene.uname)
+    util.ExportCamera(Write(f), 2, bpy.context.scene.uname)
 
   Write(f)('</world>')
   f.close()

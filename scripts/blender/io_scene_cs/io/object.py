@@ -339,13 +339,7 @@ def ObjectAsCS(self, func, depth=0, **kwargs):
     func(' '*depth +'  <attenuation>linear</attenuation>')
     func(' '*depth +'</light>')
   elif self.type == 'CAMERA':
-    func(' '*depth +'<start name="%s">'%(name))
-    # Flip Y and Z axis.
-    func(' '*depth +'  <sector>%s</sector>'%(bpy.context.scene.uname))
-    func(' '*depth +'  <position x="%f" z="%f" y="%f" />'% tuple(self.location))
-    func(' '*depth +'  <up y="1" x="0" z="0" />')
-    #func(' '*depth +'  <forward y="3.57855" x="27.5196" z="16.9281" />'%())
-    func(' '*depth +'</start>')
+    ExportCamera(func, 2, bpy.context.scene.uname, name, tuple(self.location))
   elif self.type == 'EMPTY':
     if self.dupli_type=='GROUP' and self.dupli_group:
       if self.dupli_group.doMerge:
