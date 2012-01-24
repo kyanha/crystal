@@ -10,7 +10,7 @@ bl_info = {
     "location": "The main panel is in 'Properties > Render'",
     "warning": "",
     "wiki_url": "http://www.crystalspace3d.org/docs/online/manual/Blender.html",  # TODO
-    "tracker_url": "http://crystalspace3d.org/trac/CS/report"
+    "tracker_url": "http://crystalspace3d.org/trac/CS/report",
     "category": "Import-Export"}
 
 import bpy
