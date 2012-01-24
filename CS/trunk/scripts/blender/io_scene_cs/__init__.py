@@ -1,9 +1,9 @@
-__all__ = ["ui", "oi", "utilities", "B2CS"]
+__all__ = ["ui", "oi", "utilities"]
 
 bl_info = {
     "name": "Export Crystal Space 3D format",
     "description": "Export meshes, scenes and animations",
-    "author": "Crystal Space team",
+    "author": "The Crystal Space team",
     "version": (1, 0),
     "blender": (2, 5, 9),
     "api": 36079,   # TODO
