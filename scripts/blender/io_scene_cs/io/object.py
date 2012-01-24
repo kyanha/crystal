@@ -175,7 +175,7 @@ class Hierarchy:
 
     # Reference skeleton as a CS library
     if self.object.type == 'ARMATURE':
-      func('  <library>skel%s_rig</library>'%(self.object.name))
+      func('  <library>factories/skel%s_rig</library>'%(self.object.name))
 
     # Export meshes as imbricated CS general mesh factories
     import copy
