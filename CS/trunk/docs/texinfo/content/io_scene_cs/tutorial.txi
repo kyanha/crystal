@@ -2,114 +2,120 @@
 @node io_scene_cs First Steps, io_scene_cs Export Scenes, io_scene_cs Installing, Blender
 @subsection First Steps
 
-This section explains how to use io_scene_cs, the Blender export tool.
+This section presents the main panel of the user interface of the @code{io_scene_cs}
+add-on script.
 
-@heading Loading the interface
+@heading Main export panel
 
-I'm assuming you have io_scene_cs add-on installed and enabled; otherwise, read the @ref{io_scene_cs Installing, Installing @code{io_scene_cs}} document first.
-
-If you don't see the interface in the @samp{Render} context of @samp{Properties} window:
-
-@itemize @bullet
-@item 
-Check that you have the exporter Add-On enabled as it is explained in the paragraph 'Enable Add-On' of the @ref{io_scene_cs Installing, Installing @code{io_scene_cs}} section.
-@item 
-Check on console if the exporter is not failing due to wrong install or some unknown bug. 
-@end itemize
-
-At this point we have the interface in front of us and can export the world. 
-
-@heading Overlay interface overview
+The main @samp{Crystal Space Export} panel is placed in the @samp{Render} context of the
+@samp{Properties} (or @samp{Buttons}) window.
 
 @picturess{content,io_scene_cs,io_scene_cs_interface}
 
-The interface is composed of several buttons to configure and run the exporter:
+The panel is composed of several buttons and controls to configure and run the exporter:
 
 @itemize @bullet
 @item 
-@strong{Export path}: directory browser to select the export folder
+@strong{Export path}: path to the folder where the generated files will be put.
+@item 
+@strong{Export}: export the scene to the specified path.
+@item 
+@strong{Export and Run}: export the scene then run it in Crystal Space's @samp{walktest}.
+@item 
+@strong{Console}: enable the @code{-console} flag of @samp{walktest}
+@item 
+@strong{Verbose}: enable the @code{-verbose=-scf} flag of @samp{walktest}
+@item 
+@strong{Silent}: enable the @code{-silent} flag of @samp{walktest}
 @end itemize
 
-Two export buttons:
+If the @samp{CRYSTAL} environment variable is not defined or pointing to a directory
+containing the @samp{walktest} application, then most of these controls are not present and
+are replaced instead by the comment @samp{'walktest' isn't available!}. See the
+@ref{HOWTO Setting the CRYSTAL environment variable, dedicated section} in order to solve this.
 
-@itemize @bullet
-@item 
-@strong{Export}: export the world to the specified path
-@item 
-@strong{Export and Run}: export the world and then run it in CrystalSpace (uses @samp{walktest})
-@end itemize
+@heading The 'Export' button
 
-Three options:
+When you click on the @strong{Export} button, Blender will start working and writing
+informations about the export process on the
+@url{http://wiki.blender.org/index.php/Doc:2.6/Manual/Interface/Window_system/Console_window, Blender console},
+until the final message: @samp{EXPORTING complete}. The files generated should have been
+placed in the given export folder.
 
-@itemize @bullet
-@item 
-@strong{console}: option
-@item 
-@strong{verbose}: option
-@item 
-@strong{silent}: option
-@end itemize
-
-@heading Export
-
-To export succesfully, your world should contain at least one object.
-
-Click on the @strong{Export} button of the io_scene_cs panel.
-
-Blender will work for a while and write informations about the export process on the console, until the final message: @strong{EXPORTING complete}. The cs files are now saved in the specified export folder:
+The structure of the files is the following:
 
 @itemize @bullet
 @item
-the world file in the export directory
+the @samp{world} file containing your scene, in the export directory
 @item
-texture files (i.e. images) in the 'textures' directory
+all texture files are put in the @samp{textures} directory
 @item
-library files (i.e. genmesh, animesh and skeleton factories) in the 'factories' directory
+all library files (i.e. the mesh factories) are put in the @samp{factories} directory
 @end itemize
 
-If you want to see the exported objects, open the xml library files with viewmesh. Sockets, animations and morph targets are available via the application tabs.
+If you want to visualize the exported objects, then you can open the library files with
+@samp{viewmesh}. Take care for that that the path where are your files should be mounted
+correctly in the @ref{VFS, Virtual File System} of Crystal Space (@sc{vfs}).
 
-Note that, to be accessible to viewmesh, the 'textures' folder should be copied into the 'factories' folder. Furthermore, viewmesh only supports 'png' images. If texture files are in another format (e.g. 'tif'), you must convert them into 'png' images.
+In order to mount the VFS path, use the following command:
 
-@heading Export and Run
+@itemize @bullet
+@item
+@code{viewmesh -R=<export_path> factories/<library_file>}
+@end itemize
 
-To export and run succesfully, check that your world has:
+@heading The 'Export and Run' button
+
+This button allows the user to either launch the export process and view the result in
+the @ref{Walktest, @samp{walktest}} application.
+
+In order to work correctly, your scene needs:
 
 @itemize @bullet
 @item 
-at least a camera,
+at least one camera,
 @item 
-at least one light,
+at least one light lighting your objects,
 @item 
-some objects, at least some big object below the camera so it won't fall into the void as soon as you start the map.
+some objects below the camera, to be used as a roof and in order for the @samp{walktest}'s
+camera to not fall into the void as soon as you start the map.
 @end itemize
 
-Once this is ready, go to the export tab and click on the @strong{Export and Run} button.
+Once clicked on the @strong{Export and Run} button, the export process will start until
+the status message: @strong{EXPORTING complete} appears on the Blender console. Shortly
+after that, the @samp{walktest} window should appear (otherwise, check the Blender console
+for some output message).
 
-This will make Blender think for some moments and you should see the status message: @strong{EXPORTING complete}. This means all is going well and briefly the CrystalSpace walktest window should appear (otherwise, check the Blender console for output).
+Using the arrow keys, you will be able to move around your scene. Using the @samp{8} key
+you can deactivate the gravity and fly around. Note that @samp{walktest} has a lot of
+different keys and options, so you may want to have a look at the
+@ref{Walktest, dedicated manual page} for that.
 
-You will be able to move around your recently created geometry. Using the "8" key you can deactivate gravity and fly around. Note walktest has lots of keys and options, so you can look at this elsewhere. ??????????????
-
-@subsubheading If the walktest window fails to open
+@subsubheading If the 'walktest' window fails to open
 
 @itemize @bullet
 @item 
-Check CrystalSpace is correctly installed and the 'CRYSTAL' variable is set.
-@item 
-Check there are no errors in the Blender output. 
+Check that there are no errors in the
+@url{http://wiki.blender.org/index.php/Doc:2.6/Manual/Interface/Window_system/Console_window, Blender console window}.
 @end itemize
 
-@subsubheading If all you see is black
+@subsubheading If the 'walktest' screen is kept black
 
 @itemize @bullet
 @item 
-Check the normals from objects are pointing the correct way. If you made a cube surrounding the player this usually means you need to reverse its normals (in Blender Edit mode, press hotkey 'W' then select 'Flip Normals').
+Check if there is a light, and if it is close enough to your geometry.
 @item 
-Check there is a light, and it is close enough to your geometry.
+It is also possible that since the gravity is activated by default in walktest, the
+camera pans away from the set view too fast. Ensure that you press the @samp{8} key to
+deactivate gravity, or that you added a floor below you camera.
 @item 
-Also check the console to ensure that your entire scene is being exported. Sometimes only the camera will be exported hence you will only see black. If you have this problem select all the objects in your scene (Hotkey 'A') and then press 'Export and Run'.
+Check the console to ensure that your entire scene is being exported. Sometimes only the
+camera will be exported hence you will only see black. If you have this problem select all
+the objects in your scene (Hotkey @samp{A}) and then press @samp{Export and Run}.
 @item 
-It's also possible that since the gravity is activated by default in walktest, the camera pans away from the set view too fast. Ensure that you press the '8' key to deactivate gravity. 
+Check that the normals from objects are pointing in the correct direction. If you made a cube
+surrounding the player this usually means you need to reverse its normals (in Blender and in
+Edit mode, press the hotkey @samp{W} then select @samp{Flip Normals}).
 @end itemize
 
 
@@ -129,7 +135,7 @@ See section @ref{io_scene_cs First Steps, Overlay Interface Overview} of this ma
 
 Each of the object types in Blender corresponds to some CrystalSpace type. For example a Blender lamp will result in a CrystalSpace light.
 
-Specific information about mesh types is available at sections @ref{io_scene_cs Export Genmesh, Exporting Static Objects} and @ref{io_scene_cs Export Animesh, Exporting Animated Objects} of this manual.
+Specific information about mesh types is available at sections @ref{io_scene_cs Export Genmesh, Exporting Static Meshes} and @ref{io_scene_cs Export Animesh, Exporting Animated Meshes} of this manual.
 
 @item @strong{Exporting Libraries}
 
@@ -155,7 +161,7 @@ Objects composing a Blender scene are described in the world file as 'meshref' o
 
 A 'meshref' is an object that references a mesh factory defined elsewhere (i.e. another world file, library, or something created in code by the game). With meshref the actual geometry of the object as defined in Blender will be ignored.
 
-A 'meshobj' references a group of general meshes. See section @ref{io_scene_cs Export Genmesh, Exporting Static Objects} if you want more information about groups.
+A 'meshobj' references a group of general meshes. See section @ref{io_scene_cs Export Genmesh, Exporting Static Meshes} if you want more information about groups.
 
 @item @strong{Materials and Textures}
 
@@ -185,7 +191,7 @@ CrystalSpace maps are usually divided into multiple sectors. This is emulated by
 
 
 @node io_scene_cs Export Genmesh, io_scene_cs Export Animesh, io_scene_cs Export Scenes, Blender
-@subsection Exporting Static Objects
+@subsection Exporting Static Meshes
 
 All mesh types export some factory, meshobj and meshref to the map.
 
@@ -221,7 +227,7 @@ io_scene_cs will not take modifiers into account. Hence modifiers should be appl
 
 
 @node io_scene_cs Export Animesh, io_scene_cs ToDo, io_scene_cs Export Genmesh, Blender
-@subsection Exporting Animated Objects
+@subsection Exporting Animated Meshes
 
 Apart from static objects, Blender allows the definition of animated objects. 
 
