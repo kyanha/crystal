@@ -83,8 +83,7 @@ class B2CS_OT_export_run(bpy.types.Operator):
 
 @rnaType
 class RENDER_PT_csSettingsPanel(csSettingsPanel, bpy.types.Panel):
-  bl_label = "Crystal Space scene"
-  bl_options = {'HIDE_HEADER'}
+  bl_label = "Crystal Space Export"
   
   def draw(self, context):
     layout = self.layout
