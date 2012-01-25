@@ -52,6 +52,9 @@ class csBulletJoint : public scfImplementation1<
   friend class csBulletSystem;
   friend class csBulletSector;
 private:
+  csBulletSystem* sys;
+  csBulletSector* sector;
+
   csOrthoTransform transform;
   csVector3 linearStiff;
   csVector3 angularStiff;
@@ -61,6 +64,8 @@ private:
   csVector3 angularEquilPoint;
 
   csVector3 position;
+  btVector3 minDist;
+  btVector3 maxDist;
   csVector3 minAngle;
   csVector3 maxAngle;
 
@@ -68,16 +73,14 @@ private:
   csVector3 desiredVelocity;
   btVector3 maxforce;
   btTransform frA, frB;
-  btVector3 minDist;
-  btVector3 maxDist;
   csJointType type;
-  csBulletSystem* sys;
-  csBulletSector* sector;
   btTypedConstraint* rigidJoint;
   btSoftBody::Joint* softJoint;
   iPhysicalBody* bodies[2];
   float threshold;
   int axis;
+
+  char jointFlag;
 
   bool transConstraintX;
   bool transConstraintY;
@@ -86,8 +89,6 @@ private:
   bool rotConstraintX;
   bool rotConstraintY;
   bool rotConstraintZ;
-
-  char jointFlag;
 
 public:
   csBulletJoint (csBulletSystem* system);

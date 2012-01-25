@@ -27,13 +27,16 @@
 
 CS_PLUGIN_NAMESPACE_BEGIN (Bullet2)
 {
-csBulletJoint::csBulletJoint (csBulletSystem* system): scfImplementationType (this), sys (system), 
-  rigidJoint (NULL), threshold (FLT_MAX), transConstraintX (false), transConstraintY (false), 
-  transConstraintZ (false), minDist (1.0f, 1.0f, 1.0f), maxDist (1.0f, 1.0f, 1.0f), rotConstraintX (false), 
-  rotConstraintY (false), rotConstraintZ (false), minAngle (PI / 2.0f), maxAngle (PI / 2.0f), bounce (0.0f), 
-  desiredVelocity (0.0f), softJoint (NULL), linearStiff (0.f, 0.f, 0.f), angularStiff (0.f, 0.f, 0.f),
-  linearDamp (1.f, 1.f, 1.f), angularDamp (1.f, 1.f, 1.f), linearEquilPoint (0.f, 0.f, 0.f), 
-  angularEquilPoint (0.f, 0.f, 0.f), type (RIGID_6DOF_JOINT), jointFlag (0)
+csBulletJoint::csBulletJoint (csBulletSystem* system)
+  : scfImplementationType (this), sys (system), linearStiff (0.f, 0.f, 0.f),
+  angularStiff (0.f, 0.f, 0.f), linearDamp (1.f, 1.f, 1.f),
+  angularDamp (1.f, 1.f, 1.f), linearEquilPoint (0.f, 0.f, 0.f),
+  angularEquilPoint (0.f, 0.f, 0.f), minDist (1.0f, 1.0f, 1.0f),
+  maxDist (1.0f, 1.0f, 1.0f), minAngle (PI / 2.0f), maxAngle (PI / 2.0f),
+  bounce (0.0f), desiredVelocity (0.0f), type (RIGID_6DOF_JOINT),
+  rigidJoint (NULL), softJoint (NULL), threshold (FLT_MAX), jointFlag (0),
+  transConstraintX (false), transConstraintY (false), transConstraintZ (false),
+  rotConstraintX (false), rotConstraintY (false), rotConstraintZ (false)
 {
   float squaredScale = sys->getInternalScale () * sys->getInternalScale ();
   maxforce = btVector3 (0.1f * squaredScale,
@@ -50,7 +53,7 @@ void csBulletJoint::Attach (CS::Physics2::iPhysicalBody* body1, CS::Physics2::iP
 {
   CS_ASSERT (body1);
 
-  csBulletCollisionObject *collBody1 = dynamic_cast<csBulletCollisionObject*> (body1);
+  //csBulletCollisionObject *collBody1 = dynamic_cast<csBulletCollisionObject*> (body1);
   csBulletCollisionObject* collBody2 = NULL;
 
   if (body2)

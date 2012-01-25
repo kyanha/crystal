@@ -42,19 +42,19 @@ class csBulletRigidBody : public scfImplementationExt1<
   friend class csBulletSector;
 private:
   // TODO: remove as much as possible of these fields and store them in the btRigidBody instead
-  CS::Physics2::RigidBodyState physicalState;
-  csVector3 linearVelocity;
-  csVector3 angularVelocity;
-  csRef<CS::Physics2::iKinematicCallback> kinematicCb;
   btRigidBody* btBody;
+  CS::Physics2::RigidBodyState physicalState;
   float density;
   float totalMass;
-  float linearDampening;
-  float angularDampening;
   float friction;
   float softness;
   float elasticity;
+  float linearDampening;
+  float angularDampening;
+  csVector3 linearVelocity;
+  csVector3 angularVelocity;
   short anchorCount;
+  csRef<CS::Physics2::iKinematicCallback> kinematicCb;
 
 public:
   csBulletRigidBody (csBulletSystem* phySys);

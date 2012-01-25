@@ -47,12 +47,12 @@ private:
     btVector3 position;
   };
 
-  csArray<AnimatedAnchor> animatedAnchors;
+  btSoftBody* btBody;
   float friction;
   float density;
   float totalMass;
-  btSoftBody* btBody;  
   short anchorCount;
+  csArray<AnimatedAnchor> animatedAnchors;
 
 public:
   csBulletSoftBody (csBulletSystem* phySys, btSoftBody* body);

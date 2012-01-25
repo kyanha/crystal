@@ -37,8 +37,8 @@
 CS_PLUGIN_NAMESPACE_BEGIN (Bullet2)
 {
 csBulletSoftBody::csBulletSoftBody (csBulletSystem* phySys, btSoftBody* body)
-  :scfImplementationType (this, phySys), btBody (body), anchorCount (0),
-  friction (5.0f), density (0.1f)
+  :scfImplementationType (this, phySys), btBody (body), friction (5.0f),
+  density (0.1f), anchorCount (0)
 {
   btObject = body;
   btBody->setUserPointer (dynamic_cast<iPhysicalBody*> (this));
