@@ -61,120 +61,125 @@ ul.toc {list-style: none}
 <hr size="1">
 <h3 class="subsection"> 5.5.2 First Steps </h3>
 
-<p>This section explains how to use io_scene_cs, the Blender export tool.
+<p>This section presents the main panel of the user interface of the <code>io_scene_cs</code>
+add-on script.
 </p>
 <a name="1"></a>
-<h2 class="heading"> Loading the interface </h2>
+<h2 class="heading"> Main export panel </h2>
 
-<p>I'm assuming you have io_scene_cs add-on installed and enabled; otherwise, read the <a href="io_005fscene_005fcs-Installing.html#0">Installing <code>io_scene_cs</code></a> document first.
+<p>The main <samp>&lsquo;Crystal Space Export&rsquo;</samp> panel is placed in the <samp>&lsquo;Render&rsquo;</samp> context of the
+<samp>&lsquo;Properties&rsquo;</samp> (or <samp>&lsquo;Buttons&rsquo;</samp>) window.
 </p>
-<p>If you don't see the interface in the <samp>&lsquo;Render&rsquo;</samp> context of <samp>&lsquo;Properties&rsquo;</samp> window:
-</p>
-<ul>
-<li> 
-Check that you have the exporter Add-On enabled as it is explained in the paragraph 'Enable Add-On' of the <a href="io_005fscene_005fcs-Installing.html#0">Installing <code>io_scene_cs</code></a> section.
-</li><li> 
-Check on console if the exporter is not failing due to wrong install or some unknown bug. 
-</li></ul>
-
-<p>At this point we have the interface in front of us and can export the world. 
-</p>
-<a name="2"></a>
-<h2 class="heading"> Overlay interface overview </h2>
-
 <p><img src="content/io_scene_cs/io_scene_cs_interface.png" alt="content/io_scene_cs/io_scene_cs_interface">
 </p>
-<p>The interface is composed of several buttons to configure and run the exporter:
+<p>The panel is composed of several buttons and controls to configure and run the exporter:
 </p>
 <ul>
 <li> 
-<strong>Export path</strong>: directory browser to select the export folder
+<strong>Export path</strong>: path to the folder where the generated files will be put.
+</li><li> 
+<strong>Export</strong>: export the scene to the specified path.
+</li><li> 
+<strong>Export and Run</strong>: export the scene then run it in Crystal Space's <samp>&lsquo;walktest&rsquo;</samp>.
+</li><li> 
+<strong>Console</strong>: enable the <code>-console</code> flag of <samp>&lsquo;walktest&rsquo;</samp>
+</li><li> 
+<strong>Verbose</strong>: enable the <code>-verbose=-scf</code> flag of <samp>&lsquo;walktest&rsquo;</samp>
+</li><li> 
+<strong>Silent</strong>: enable the <code>-silent</code> flag of <samp>&lsquo;walktest&rsquo;</samp>
 </li></ul>
 
-<p>Two export buttons:
+<p>If the <samp>&lsquo;CRYSTAL&rsquo;</samp> environment variable is not defined or pointing to a directory
+containing the <samp>&lsquo;walktest&rsquo;</samp> application, then most of these controls are not present and
+are replaced instead by the comment <samp>&lsquo;'walktest' isn't available!&rsquo;</samp>. See the
+<a href="HOWTO-Setting-the-CRYSTAL-environment-variable.html#0">dedicated section</a> in order to solve this.
 </p>
-<ul>
-<li> 
-<strong>Export</strong>: export the world to the specified path
-</li><li> 
-<strong>Export and Run</strong>: export the world and then run it in CrystalSpace (uses <samp>&lsquo;walktest&rsquo;</samp>)
-</li></ul>
+<a name="2"></a>
+<h2 class="heading"> The 'Export' button </h2>
 
-<p>Three options:
+<p>When you click on the <strong>Export</strong> button, Blender will start working and writing
+informations about the export process on the
+<a href="http://wiki.blender.org/index.php/Doc:2.6/Manual/Interface/Window_system/Console_window">Blender console</a>,
+until the final message: <samp>&lsquo;EXPORTING complete&rsquo;</samp>. The files generated should have been
+placed in the given export folder.
 </p>
-<ul>
-<li> 
-<strong>console</strong>: option
-</li><li> 
-<strong>verbose</strong>: option
-</li><li> 
-<strong>silent</strong>: option
-</li></ul>
-
-<a name="3"></a>
-<h2 class="heading"> Export </h2>
-
-<p>To export succesfully, your world should contain at least one object.
-</p>
-<p>Click on the <strong>Export</strong> button of the io_scene_cs panel.
-</p>
-<p>Blender will work for a while and write informations about the export process on the console, until the final message: <strong>EXPORTING complete</strong>. The cs files are now saved in the specified export folder:
+<p>The structure of the files is the following:
 </p>
 <ul>
 <li>
-the world file in the export directory
+the <samp>&lsquo;world&rsquo;</samp> file containing your scene, in the export directory
 </li><li>
-texture files (i.e. images) in the 'textures' directory
+all texture files are put in the <samp>&lsquo;textures&rsquo;</samp> directory
 </li><li>
-library files (i.e. genmesh, animesh and skeleton factories) in the 'factories' directory
+all library files (i.e. the mesh factories) are put in the <samp>&lsquo;factories&rsquo;</samp> directory
 </li></ul>
 
-<p>If you want to see the exported objects, open the xml library files with viewmesh. Sockets, animations and morph targets are available via the application tabs.
+<p>If you want to visualize the exported objects, then you can open the library files with
+<samp>&lsquo;viewmesh&rsquo;</samp>. Take care for that that the path where are your files should be mounted
+correctly in the <a href="VFS.html#0">Virtual File System</a> of Crystal Space (<small>VFS</small>).
 </p>
-<p>Note that, to be accessible to viewmesh, the 'textures' folder should be copied into the 'factories' folder. Furthermore, viewmesh only supports 'png' images. If texture files are in another format (e.g. 'tif'), you must convert them into 'png' images.
+<p>In order to mount the VFS path, use the following command:
+</p>
+<ul>
+<li>
+<code>viewmesh -R=&lt;export_path&gt; factories/&lt;library_file&gt;</code>
+</li></ul>
+
+<a name="3"></a>
+<h2 class="heading"> The 'Export and Run' button </h2>
+
+<p>This button allows the user to either launch the export process and view the result in
+the <a href="Walktest.html#0"><samp>&lsquo;walktest&rsquo;</samp></a> application.
+</p>
+<p>In order to work correctly, your scene needs:
+</p>
+<ul>
+<li> 
+at least one camera,
+</li><li> 
+at least one light lighting your objects,
+</li><li> 
+some objects below the camera, to be used as a roof and in order for the <samp>&lsquo;walktest&rsquo;</samp>'s
+camera to not fall into the void as soon as you start the map.
+</li></ul>
+
+<p>Once clicked on the <strong>Export and Run</strong> button, the export process will start until
+the status message: <strong>EXPORTING complete</strong> appears on the Blender console. Shortly
+after that, the <samp>&lsquo;walktest&rsquo;</samp> window should appear (otherwise, check the Blender console
+for some output message).
+</p>
+<p>Using the arrow keys, you will be able to move around your scene. Using the <samp>&lsquo;8&rsquo;</samp> key
+you can deactivate the gravity and fly around. Note that <samp>&lsquo;walktest&rsquo;</samp> has a lot of
+different keys and options, so you may want to have a look at the
+<a href="Walktest.html#0">dedicated manual page</a> for that.
 </p>
 <a name="4"></a>
-<h2 class="heading"> Export and Run </h2>
+<h4 class="subsubheading"> If the 'walktest' window fails to open </h4>
 
-<p>To export and run succesfully, check that your world has:
-</p>
 <ul>
 <li> 
-at least a camera,
-</li><li> 
-at least one light,
-</li><li> 
-some objects, at least some big object below the camera so it won't fall into the void as soon as you start the map.
+Check that there are no errors in the
+<a href="http://wiki.blender.org/index.php/Doc:2.6/Manual/Interface/Window_system/Console_window">Blender console window</a>.
 </li></ul>
 
-<p>Once this is ready, go to the export tab and click on the <strong>Export and Run</strong> button.
-</p>
-<p>This will make Blender think for some moments and you should see the status message: <strong>EXPORTING complete</strong>. This means all is going well and briefly the CrystalSpace walktest window should appear (otherwise, check the Blender console for output).
-</p>
-<p>You will be able to move around your recently created geometry. Using the &quot;8&quot; key you can deactivate gravity and fly around. Note walktest has lots of keys and options, so you can look at this elsewhere. ??????????????
-</p>
 <a name="5"></a>
-<h4 class="subsubheading"> If the walktest window fails to open </h4>
+<h4 class="subsubheading"> If the 'walktest' screen is kept black </h4>
 
 <ul>
 <li> 
-Check CrystalSpace is correctly installed and the 'CRYSTAL' variable is set.
+Check if there is a light, and if it is close enough to your geometry.
 </li><li> 
-Check there are no errors in the Blender output. 
-</li></ul>
-
-<a name="6"></a>
-<h4 class="subsubheading"> If all you see is black </h4>
-
-<ul>
-<li> 
-Check the normals from objects are pointing the correct way. If you made a cube surrounding the player this usually means you need to reverse its normals (in Blender Edit mode, press hotkey 'W' then select 'Flip Normals').
+It is also possible that since the gravity is activated by default in walktest, the
+camera pans away from the set view too fast. Ensure that you press the <samp>&lsquo;8&rsquo;</samp> key to
+deactivate gravity, or that you added a floor below you camera.
 </li><li> 
-Check there is a light, and it is close enough to your geometry.
+Check the console to ensure that your entire scene is being exported. Sometimes only the
+camera will be exported hence you will only see black. If you have this problem select all
+the objects in your scene (Hotkey <samp>&lsquo;A&rsquo;</samp>) and then press <samp>&lsquo;Export and Run&rsquo;</samp>.
 </li><li> 
-Also check the console to ensure that your entire scene is being exported. Sometimes only the camera will be exported hence you will only see black. If you have this problem select all the objects in your scene (Hotkey 'A') and then press 'Export and Run'.
-</li><li> 
-It's also possible that since the gravity is activated by default in walktest, the camera pans away from the set view too fast. Ensure that you press the '8' key to deactivate gravity. 
+Check that the normals from objects are pointing in the correct direction. If you made a cube
+surrounding the player this usually means you need to reverse its normals (in Blender and in
+Edit mode, press the hotkey <samp>&lsquo;W&rsquo;</samp> then select <samp>&lsquo;Flip Normals&rsquo;</samp>).
 </li></ul>
 
 
