@@ -47,6 +47,7 @@ private:
   csVector3 angularVelocity;
   csRef<CS::Physics2::iKinematicCallback> kinematicCb;
   btRigidBody* btBody;
+  float density;
   float totalMass;
   float linearDampening;
   float angularDampening;
