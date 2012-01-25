@@ -35,6 +35,7 @@
 #include "csplugincommon/opengl/glcommon2d.h"
 #include "csplugincommon/opengl/glfontcache.h"
 
+
 /* While GL_NEAREST causes jaggies when oversized fonts are used, it is far
  * less problematic in the common case of sanely sized fonts, where 
  * GL_LINEAR can cause microscopic leaks... which are problematic nonetheless
@@ -181,7 +182,7 @@ void csGLFontCache::Setup()
 
   texSize = G2D->config->GetInt ("Video.OpenGL.FontCache.TextureSize", 256);
   texSize = csMax (texSize, 64);
-  texSize = csMin (texSize, maxtex);
+  texSize = csMin (texSize, (int)maxtex);
   maxTxts = G2D->config->GetInt ("Video.OpenGL.FontCache.MaxTextureNum", 16);
   maxTxts = csMax (maxTxts, size_t (1));
   maxTxts = csMin (maxTxts, sizeof(size_t) * 8);
