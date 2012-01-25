@@ -514,8 +514,8 @@ void csBulletColliderTerrain::LoadCellToCollider (iTerrainCell *cell)
 
       if (needExtremum)
       {
-        minHeight = MIN (minHeight, height);
-        maxHeight = MAX (maxHeight, height);
+        minHeight = csMin (minHeight, height);
+        maxHeight = csMax (maxHeight, height);
       }
     }
 
