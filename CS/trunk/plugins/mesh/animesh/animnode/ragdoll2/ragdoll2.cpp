@@ -205,7 +205,7 @@ void RagdollNode::CreateBoneData (CS::Animation::iBodyChainNode* chainNode,
     bones.Put (boneData.boneID, boneData);
 
     // update the max bone ID
-    maxBoneID = MAX (maxBoneID, boneData.boneID);
+    maxBoneID = csMax (maxBoneID, boneData.boneID);
   }
 
   // update state of children nodes
