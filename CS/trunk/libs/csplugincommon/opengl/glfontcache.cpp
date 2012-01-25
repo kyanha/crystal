@@ -35,7 +35,6 @@
 #include "csplugincommon/opengl/glcommon2d.h"
 #include "csplugincommon/opengl/glfontcache.h"
 
-
 /* While GL_NEAREST causes jaggies when oversized fonts are used, it is far
  * less problematic in the common case of sanely sized fonts, where 
  * GL_LINEAR can cause microscopic leaks... which are problematic nonetheless
