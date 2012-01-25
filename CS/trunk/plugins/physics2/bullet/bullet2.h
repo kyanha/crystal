@@ -67,11 +67,7 @@ struct CollisionPortal
   btGhostObject* ghostPortal;
 
   CollisionPortal (iPortal* portal) : portal (portal), desSector (NULL), ghostPortal (NULL) {}
-  ~CollisionPortal () {
-    if (ghostPortal) 
-      delete ghostPortal->getCollisionShape ();
-      delete ghostPortal;
-    }
+  ~CollisionPortal ();
   void AddObject (csRef<csBulletCollisionObject> object) {objects.Push (object);}
 };
 
@@ -107,19 +103,11 @@ class csBulletSector : public scfImplementationExt3<
     }
   };
 
-  CollisionGroupVector collGroups;
-  csRefArray<csBulletJoint> joints;
-  csArray<CollisionPortal*> portals;
-  csRefArrayObject<csBulletCollisionObject> collisionObjects;
-  csRefArrayObject<csBulletRigidBody> rigidBodies;
-  csRefArrayObject<csBulletSoftBody> softBodies;
-  csWeakRefArray<csBulletSoftBody> anchoredSoftBodies;
-  csRef<csBulletCollisionActor> collisionActor;
-  csRef<iSector> sector;
+  csBulletSystem* sys;
 
+  bool isSoftWorld;
   csVector3 gravity;
   btGhostObject* hitPortal;
-  csBulletSystem* sys;
   csBulletDebugDraw* debugDraw;
   btDynamicsWorld* bulletWorld;
   btCollisionDispatcher* dispatcher;
@@ -128,7 +116,7 @@ class csBulletSector : public scfImplementationExt3<
   btBroadphaseInterface* broadphase;
   btSoftBodyWorldInfo* softWorldInfo;
 
-  int systemFilterCount;
+  size_t systemFilterCount;
 
   float linearDampening;
   float angularDampening;
@@ -139,7 +127,15 @@ class csBulletSector : public scfImplementationExt3<
   float worldTimeStep;
   size_t worldMaxSteps;
 
-  bool isSoftWorld;
+  CollisionGroupVector collGroups;
+  csRefArray<csBulletJoint> joints;
+  csArray<CollisionPortal*> portals;
+  csRefArrayObject<csBulletCollisionObject> collisionObjects;
+  csRefArrayObject<csBulletRigidBody> rigidBodies;
+  csRefArrayObject<csBulletSoftBody> softBodies;
+  csWeakRefArray<csBulletSoftBody> anchoredSoftBodies;
+  csRef<csBulletCollisionActor> collisionActor;
+  csRef<iSector> sector;
 
   void CheckCollisions();
   void UpdateCollisionPortals ();

@@ -25,10 +25,11 @@
 CS_PLUGIN_NAMESPACE_BEGIN (Bullet2)
 {
 csBulletRigidBody::csBulletRigidBody (csBulletSystem* phySys)
-: scfImplementationType (this, phySys), btBody (NULL), density (0.2f), totalMass (0.0f),
-physicalState (CS::Physics2::STATE_DYNAMIC), softness (0.01f), anchorCount (0),
-friction (5.0f), elasticity (0.2f), linearVelocity (0.0f, 0.0f, 0.0f),
-angularVelocity (0.0f, 0.0f, 0.0f), linearDampening (0.0f), angularDampening (0.0f)
+: scfImplementationType (this, phySys), btBody (NULL), 
+  physicalState (CS::Physics2::STATE_DYNAMIC), density (0.2f), totalMass (0.0f),
+  friction (5.0f), softness (0.01f), elasticity (0.2f), linearDampening (0.0f),
+  angularDampening (0.0f), linearVelocity (0.0f, 0.0f, 0.0f),
+  angularVelocity (0.0f, 0.0f, 0.0f), anchorCount (0)
 {
   type = CS::Collision2::COLLISION_OBJECT_PHYSICAL;
 }

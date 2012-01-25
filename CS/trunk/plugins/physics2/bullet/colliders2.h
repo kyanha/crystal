@@ -59,9 +59,9 @@ class csBulletCollider: public virtual CS::Collision2::iCollider
 protected:
   csVector3 scale;
   btCollisionShape* shape;
-  csBulletSystem* collSystem;
   float margin;
   float volume;
+  csBulletSystem* collSystem;
 
 public:
   csBulletCollider ();
@@ -109,8 +109,8 @@ class csBulletColliderCylinder:
   public scfImplementation2<csBulletColliderCylinder,
   csBulletCollider, CS::Collision2::iColliderCylinder>
 {
-  float radius;
   float length;
+  float radius;
 
 public:
   csBulletColliderCylinder (float length, float radius, csBulletSystem* sys);
@@ -125,8 +125,8 @@ class csBulletColliderCapsule:
   public scfImplementation2<csBulletColliderCapsule,
   csBulletCollider, CS::Collision2::iColliderCapsule>
 {
-  float radius;
   float length;
+  float radius;
 
 public:
   csBulletColliderCapsule (float length, float radius, csBulletSystem* sys);
@@ -141,8 +141,8 @@ class csBulletColliderCone:
   public scfImplementation2<csBulletColliderCone,
   csBulletCollider, CS::Collision2::iColliderCone>
 {
-  float radius;
   float length;
+  float radius;
 
 public:
   csBulletColliderCone (float length, float radius, csBulletSystem* sys);

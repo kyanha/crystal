@@ -82,7 +82,7 @@ btTriangleMesh* GenerateTriMeshData (iMeshWrapper* mesh, csStringID baseID,
   btTriangleMesh* btMesh = new btTriangleMesh ();
   
   size_t triangleCount = triMesh->GetTriangleCount ();
-  size_t vertexCount = triMesh->GetVertexCount ();
+  //size_t vertexCount = triMesh->GetVertexCount ();
 
   size_t i;
   csTriangle *c_triangle = triMesh->GetTriangles ();
@@ -109,7 +109,7 @@ btTriangleMesh* GenerateTriMeshData (iMeshWrapper* mesh, csStringID baseID,
 #include "csutil/custom_new_enable.h"
 
 csBulletCollider::csBulletCollider ()
-  : collSystem (NULL), scale (1,1,1), shape (NULL), volume (0.0), margin (0.0)
+  : scale (1,1,1), shape (NULL), margin (0.0), volume (0.0), collSystem (NULL)
 {
 }
 
@@ -310,7 +310,7 @@ csBulletColliderConvexMesh::csBulletColliderConvexMesh (iMeshWrapper* mesh, csBu
     delete hull;
   }
   else
-    for (int i = 0; i < vertexCount; i++)
+    for (size_t i = 0; i < vertexCount; i++)
     {
       convexShape->addPoint (CSToBullet (c_vertex[i], collSystem->getInternalScale ()));
     }
@@ -421,8 +421,8 @@ void HeightMapCollider::UpdateMaxHeight (float maxHeight)
 
 csBulletColliderTerrain::csBulletColliderTerrain (iTerrainSystem* terrain, float minimumHeight,
                                                   float maximumHeight, csBulletSystem* sys)
-  : scfImplementationType (this), minimumHeight (minimumHeight), 
-  maximumHeight (maximumHeight), terrainSystem (terrain)
+  : scfImplementationType (this), terrainSystem (terrain), minimumHeight (minimumHeight), 
+  maximumHeight (maximumHeight)
 {
   collSystem = sys;
   unload = true;

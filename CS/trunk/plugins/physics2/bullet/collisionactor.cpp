@@ -96,9 +96,9 @@ CS_PLUGIN_NAMESPACE_BEGIN (Bullet2)
 {
 
 csBulletCollisionActor::csBulletCollisionActor (csBulletSystem* sys)
-: scfImplementationType (this, sys), wasOnGround (true),
-wasJumping (false), verticalVelocity (0), maxJumpHeight (0),
-touchingContact (false), speed (0), useGhostSweep (true), recoveringFactor (0.2f)
+: scfImplementationType (this, sys), verticalVelocity (0), speed (0),
+  maxJumpHeight (0), recoveringFactor (0.2f), touchingContact (false),
+  wasOnGround (true), wasJumping (false), useGhostSweep (true)
 {
   type = CS::Collision2::COLLISION_OBJECT_ACTOR;
   SetMaxSlope (btRadians (45.0f));

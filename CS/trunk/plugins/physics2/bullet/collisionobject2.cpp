@@ -11,10 +11,11 @@ CS_PLUGIN_NAMESPACE_BEGIN (Bullet2)
 {
 
 csBulletCollisionObject::csBulletCollisionObject (csBulletSystem* sys)
-: scfImplementationType (this), system (sys), collCb (NULL), btObject (NULL),
-sector (NULL), compoundShape (NULL), movable (NULL), camera (NULL), insideWorld (false), transform (btTransform::getIdentity ()),
-objectCopy (NULL), objectOrigin (NULL), shapeChanged (false), isTerrain (false), 
-type (CS::Collision2::COLLISION_OBJECT_BASE), haveStaticColliders(0), portalWarp (btQuaternion::getIdentity ())
+: scfImplementationType (this), movable (NULL), camera (NULL), collCb (NULL),
+  type (CS::Collision2::COLLISION_OBJECT_BASE), transform (btTransform::getIdentity ()),
+  portalWarp (btQuaternion::getIdentity ()), sector (NULL), system (sys),
+  btObject (NULL), compoundShape (NULL), objectOrigin (NULL), objectCopy (NULL),
+  haveStaticColliders(0), insideWorld (false), shapeChanged (false), isTerrain (false)
 {
   btTransform identity;
   identity.setIdentity ();

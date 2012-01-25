@@ -59,6 +59,15 @@ const float COLLISION_THRESHOLD = 0.01f;
 CS_PLUGIN_NAMESPACE_BEGIN(Bullet2)
 {
 
+CollisionPortal::~CollisionPortal ()
+{
+  if (ghostPortal) 
+  {
+    delete ghostPortal->getCollisionShape ();
+    delete ghostPortal;
+  }
+}
+
 struct PointContactResult : public btCollisionWorld::ContactResultCallback
 {
   csArray<CS::Collision2::CollisionData>& colls;
@@ -81,10 +90,11 @@ struct PointContactResult : public btCollisionWorld::ContactResultCallback
 };
 
 csBulletSector::csBulletSector (csBulletSystem* sys)
- :scfImplementationType (this), sys (sys), isSoftWorld (false), hitPortal (NULL),
- sector (NULL), softWorldInfo (NULL), worldTimeStep (1.0f / 60.0f),
- worldMaxSteps (1), linearDampening (0.0f), angularDampening (0.0f), linearDisableThreshold (0.8f),
- angularDisableThreshold (1.0f), timeDisableThreshold (0.0f), debugDraw (NULL)
+  :scfImplementationType (this), sys (sys), isSoftWorld (false),
+  hitPortal (NULL), debugDraw (NULL), softWorldInfo (NULL),
+  linearDampening (0.0f), angularDampening (0.0f),
+  linearDisableThreshold (0.8f), angularDisableThreshold (1.0f),
+  timeDisableThreshold (0.0f), worldTimeStep (1.0f / 60.0f), worldMaxSteps (1)
 {
   configuration = new btDefaultCollisionConfiguration ();
   dispatcher = new btCollisionDispatcher (configuration);
@@ -251,7 +261,7 @@ void csBulletSector::AddPortal (iPortal* portal, const csOrthoTransform& meshTra
   csVector3 offset = portal->GetObjectPlane ().GetNormal () * maxEdge *0.1f;
 
   btConvexHullShape* conv = new btConvexHullShape ();
-  for (size_t i = 0; i < portal->GetVertexIndicesCount (); i++)
+  for (int i = 0; i < portal->GetVertexIndicesCount (); i++)
   {  
     conv->addPoint (CSToBullet (vert [portal->GetVertexIndices()[i]], sys->getInternalScale ()));
     conv->addPoint (CSToBullet((vert [portal->GetVertexIndices()[i]] + offset), sys->getInternalScale ()));
@@ -464,8 +474,8 @@ void csBulletSector::SetGroupCollision (const char* name1,
                                         const char* name2,
                                         bool collide)
 {
-  int index1 = collGroups.FindKey (CollisionGroupVector::KeyCmp (name1));
-  int index2 = collGroups.FindKey (CollisionGroupVector::KeyCmp (name2));
+  size_t index1 = collGroups.FindKey (CollisionGroupVector::KeyCmp (name1));
+  size_t index2 = collGroups.FindKey (CollisionGroupVector::KeyCmp (name2));
   if (index1 == csArrayItemNotFound || index2 == csArrayItemNotFound)
     return;
   if (!collide)
@@ -487,8 +497,8 @@ void csBulletSector::SetGroupCollision (const char* name1,
 bool csBulletSector::GetGroupCollision (const char* name1,
                                         const char* name2)
 {
-  int index1 = collGroups.FindKey (CollisionGroupVector::KeyCmp (name1));
-  int index2 = collGroups.FindKey (CollisionGroupVector::KeyCmp (name2));
+  size_t index1 = collGroups.FindKey (CollisionGroupVector::KeyCmp (name1));
+  size_t index2 = collGroups.FindKey (CollisionGroupVector::KeyCmp (name2));
   if (index1 == csArrayItemNotFound || index2 == csArrayItemNotFound)
     return false;
   if ((collGroups[index1].mask & (1 << index2)) != 0 
@@ -1360,7 +1370,7 @@ void csBulletSector::UpdateCollisionPortals ()
             csBulletRigidBody* newBody = dynamic_cast<csBulletRigidBody*> ((CS::Physics2::iRigidBody*)nb);
             csBulletRigidBody* rb = dynamic_cast<csBulletRigidBody*> (pb->QueryRigidBody ());
             
-            for (int k = 0; k < rb->GetColliderCount (); k++)
+            for (size_t k = 0; k < rb->GetColliderCount (); k++)
               newBody->AddCollider (rb->GetCollider (k), rb->relaTransforms[k]);
 
             newBody->SetFriction (rb->friction);
@@ -1392,7 +1402,7 @@ void csBulletSector::UpdateCollisionPortals ()
           newObject = dynamic_cast<csBulletCollisionObject*> ((CS::Collision2::iCollisionObject*)co);
           newObject->SetObjectType (CS::Collision2::COLLISION_OBJECT_GHOST, false);
 
-          for (int k = 0; k < csBulletObj->GetColliderCount (); k++)
+          for (size_t k = 0; k < csBulletObj->GetColliderCount (); k++)
             newObject->AddCollider (csBulletObj->GetCollider (k), csBulletObj->relaTransforms[k]);
 
           newObject->RebuildObject ();
@@ -1666,6 +1676,8 @@ void csBulletSystem::DecomposeConcaveMesh (CS::Collision2::iCollisionObject* obj
 
   class MyConvexDecomposition : public ConvexDecomposition::ConvexDecompInterface
   {
+    int mHullCount;
+    int mBaseCount;
     float scale;
     btVector3 centroid;
     bool simp;
@@ -1675,10 +1687,7 @@ void csBulletSystem::DecomposeConcaveMesh (CS::Collision2::iCollisionObject* obj
     btAlignedObjectArray<float> m_convexVolume;
 
     MyConvexDecomposition (float scale, bool simplify)
-      :scale (scale),
-      mBaseCount (0),
-      mHullCount (0),
-      simp (simplify)
+      : mHullCount (0), mBaseCount (0), scale (scale), simp (simplify)
     {
     }
 
@@ -1747,9 +1756,6 @@ void csBulletSystem::DecomposeConcaveMesh (CS::Collision2::iCollisionObject* obj
       m_convexVolume.push_back(result.mHullVolume);
       mBaseCount+=result.mHullVcount; // advance the 'base index' counter.
     }
-
-    int   mBaseCount;
-    int		mHullCount;
   };
 
   csRef<iTriangleMesh> triMesh = FindColdetTriangleMesh (mesh, baseID, colldetID);

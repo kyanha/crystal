@@ -8,7 +8,7 @@
 CS_PLUGIN_NAMESPACE_BEGIN(Bullet2)
 {
 
-struct CS::Physics2::iPhysicalBody;
+//struct CS::Physics2::iPhysicalBody;
 
 class csBulletCollisionObject: public scfImplementationExt1<
   csBulletCollisionObject, csObject, CS::Collision2::iCollisionObject>
