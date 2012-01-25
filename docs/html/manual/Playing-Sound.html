@@ -77,36 +77,41 @@ correct number of shooting sounds.
 
 ...
 
-if (!csInitializer::RequestPlugins(object_reg,
+if (!csInitializer::RequestPlugins (object_reg,
 ...
-  CS_REQUEST_PLUGIN(&quot;crystalspace.sndsys.renderer.software&quot;,
-    iSndSysRenderer),
+  CS_REQUEST_PLUGIN (&quot;crystalspace.sndsys.renderer.software&quot;, iSndSysRenderer),
   CS_REQUEST_LEVELLOADER),
   CS_REQUEST_END))
 ...
 
-  csRef&lt;iLoader&gt; loader = csQueryRegistry&lt;iLoader&gt; (GetObjectRegistry());
-  if (!loader) ReportError(&quot;Failed to locate Loader!&quot;);
+  csRef&lt;iLoader&gt; loader = csQueryRegistry&lt;iLoader&gt; (GetObjectRegistry ());
+  if (!loader)
+    ReportError (&quot;Failed to locate Loader!&quot;);
 
-  csRef&lt;iSndSysRenderer&gt; sndrenderer = csQueryRegistry&lt;iSndSysRenderer&gt; (GetObjectRegistry());
-  if (!sndrenderer) ReportError(&quot;Failed to locate Sound renderer!&quot;); 
+  csRef&lt;iSndSysRenderer&gt; sndrenderer = csQueryRegistry&lt;iSndSysRenderer&gt; (GetObjectRegistry ());
+  if (!sndrenderer)
+    ReportError (&quot;Failed to locate Sound renderer!&quot;); 
   
-  csRef&lt;iSndSysWrapper&gt; w_boom = loader-&gt;LoadSoundWrapper(&quot;buzz&quot;,&quot;/lib/std/loopbzzt.wav&quot;);
-  if(!w_boom) ReportError(&quot;No Wrapper&quot;);
+  csRef&lt;iSndSysWrapper&gt; w_boom = loader-&gt;LoadSoundWrapper (&quot;buzz&quot;,&quot;/lib/std/loopbzzt.wav&quot;);
+  if (!w_boom)
+    ReportError (&quot;No Wrapper&quot;);
 
-  csRef&lt;iSndSysData&gt; snddata = w_boom-&gt;GetData();
-  if(!snddata) ReportError(&quot;No Sound Data&quot;);
+  csRef&lt;iSndSysData&gt; snddata = w_boom-&gt;GetData ();
+  if (!snddata)
+    ReportError (&quot;No Sound Data&quot;);
 
   csRef&lt;iSndSysStream&gt; sndstream = sndrenderer-&gt;CreateStream (snddata, CS_SND3D_ABSOLUTE);
-  if(!sndstream) ReportError(&quot;No Stream&quot;);
+  if (!sndstream)
+    ReportError (&quot;No Stream&quot;);
   
   sndstream-&gt;SetLoopState (CS_SNDSYS_STREAM_DONTLOOP);
   sndstream-&gt;Unpause ();
   
   csRef&lt;iSndSysSource&gt; sndsrc = sndrenderer-&gt;CreateSource (sndstream);
-  if(!sndsrc)ReportError(&quot;No Source&quot;);
+  if (!sndsrc)
+    ReportError (&quot;No Source&quot;);
 
-  sndsrc-&gt;SetVolume( 1.0 );
+  sndsrc-&gt;SetVolume (1.0);
 
 </pre></td></tr></table>
 <a name="2"></a>
@@ -114,7 +119,7 @@ if (!csInitializer::RequestPlugins(object_reg,
 
 <p>Here is how you can specify a looping sound:
 </p>
-<table><tr><td>&nbsp;</td><td><pre class="example">  sndstream-&gt;SetLoopState (CS_SNDSYS_STREAM_DONTLOOP);
+<table><tr><td>&nbsp;</td><td><pre class="example">  sndstream-&gt;SetLoopState (CS_SNDSYS_STREAM_LOOP);
   sndstream-&gt;Unpause ();
 </pre></td></tr></table>
 
