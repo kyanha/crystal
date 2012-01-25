@@ -1150,7 +1150,6 @@ void Simple::GripContactBodies ()
     {
       if (pb->GetBodyType () == CS::Physics2::BODY_RIGID)
       {
-	printf ("touch\n");
         CS::Physics2::iRigidBody* rb = pb->QueryRigidBody ();
         csVector3 velo = pb->GetLinearVelocity ();
         velo = - velo;
