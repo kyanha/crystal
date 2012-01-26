@@ -123,7 +123,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(DebugNode)
     g3d->DrawLine (vXYz, vXYZ, fov, color);
   }
 
-  // --------------------------  IKDebugNode  --------------------------
+  // --------------------------  DebugNode  --------------------------
 
   CS_LEAKGUARD_IMPLEMENT(DebugNode);
 

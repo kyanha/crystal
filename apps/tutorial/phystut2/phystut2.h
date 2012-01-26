@@ -2,9 +2,9 @@
 #define __PHYSTUT2_H__
 
 #include "cstool/demoapplication.h"
-#include "ivaria/physical2.h"
+#include "ivaria/physics.h"
 #include "ivaria/bullet2.h"
-#include "ivaria/collision2.h"
+#include "ivaria/collisions.h"
 #include "imesh/animesh.h"
 #include "imesh/animnode/ragdoll2.h"
 

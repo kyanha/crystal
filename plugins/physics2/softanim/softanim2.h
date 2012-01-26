@@ -23,7 +23,7 @@
 #include "csutil/dirtyaccessarray.h"
 #include "iutil/comp.h"
 #include "csutil/weakref.h"
-#include "ivaria/physical2.h"
+#include "ivaria/physics.h"
 #include "iengine/movable.h"
 #include "imesh/animesh.h"
 

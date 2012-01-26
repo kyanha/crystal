@@ -20,7 +20,7 @@ Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 #define __SIMPCD2_H__
 
 #include <crystalspace.h>
-#include "ivaria/collision2.h"
+#include "ivaria/collisions.h"
 
 /**
 * This is the main class of this Tutorial. It contains the

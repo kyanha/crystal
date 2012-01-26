@@ -31,7 +31,7 @@
 #include "imesh/genmesh.h"
 #include "csgeom/tri.h"
 #include "cstool/primitives.h"
-#include "ivaria/collision2.h"
+#include "ivaria/collisions.h"
 
 namespace CS 
 {

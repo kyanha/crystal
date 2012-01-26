@@ -20,7 +20,7 @@
 #define __CS_OPCODE_COLLIDER_H__
 
 #include "imesh/terrain2.h"
-#include "ivaria/collision2.h"
+#include "ivaria/collisions.h"
 #include "Opcode.h"
 #include "csOpcode2.h"
 

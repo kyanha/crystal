@@ -19,7 +19,7 @@
 #include "cssysdef.h"
 #include "csutil/scf.h"
 #include "ivaria/reporter.h"
-#include "ivaria/physical2.h"
+#include "ivaria/physics.h"
 #include "ivaria/bullet2.h"
 #include "imesh/object.h"
 #include "imesh/objmodel.h"

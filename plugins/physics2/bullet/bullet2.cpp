@@ -28,7 +28,7 @@
 #include "csutil/sysfunc.h"
 #include "iutil/objreg.h"
 #include "ivaria/view.h"
-#include "ivaria/collision2.h"
+#include "ivaria/collisions.h"
 #include "igeom/trimesh.h"
 #include "iengine/portal.h"
 #include "iengine/portalcontainer.h"
