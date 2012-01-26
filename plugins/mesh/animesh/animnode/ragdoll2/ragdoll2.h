@@ -89,20 +89,20 @@ public:
   ~RagdollNode ();
 
   //-- CS::Animation::iSkeletonRagdollNode
-  virtual void SetPhysicalSystem (CS::Physics2::iPhysicalSystem* system);
-  virtual CS::Physics2::iPhysicalSystem* GetPhysicalSystem () const;
-  virtual void SetPhysicalSector (CS::Physics2::iPhysicalSector* sector);
-  virtual CS::Physics2::iPhysicalSector* GetPhysicalSector () const;
+  virtual void SetPhysicalSystem (CS::Physics::iPhysicalSystem* system);
+  virtual CS::Physics::iPhysicalSystem* GetPhysicalSystem () const;
+  virtual void SetPhysicalSector (CS::Physics::iPhysicalSector* sector);
+  virtual CS::Physics::iPhysicalSector* GetPhysicalSector () const;
   virtual void SetBodyChainState (CS::Animation::iBodyChain* chain, CS::Animation::RagdollState state);
   virtual CS::Animation::RagdollState GetBodyChainState (CS::Animation::iBodyChain* chain) const;
 
-  virtual CS::Physics2::iRigidBody* GetBoneRigidBody (CS::Animation::BoneID bone);
-  virtual CS::Physics2::iJoint* GetBoneJoint (const CS::Animation::BoneID bone);
+  virtual CS::Physics::iRigidBody* GetBoneRigidBody (CS::Animation::BoneID bone);
+  virtual CS::Physics::iJoint* GetBoneJoint (const CS::Animation::BoneID bone);
 
   virtual uint GetBoneCount (CS::Animation::RagdollState state) const;
   virtual CS::Animation::BoneID GetBone (CS::Animation::RagdollState state, uint index) const;
 
-  virtual CS::Animation::BoneID GetRigidBodyBone (CS::Physics2::iRigidBody* body) const;
+  virtual CS::Animation::BoneID GetRigidBodyBone (CS::Physics::iRigidBody* body) const;
 
   virtual void ResetChainTransform (CS::Animation::iBodyChain* chain);
 
@@ -117,8 +117,8 @@ private:
   {
     CS::Animation::BoneID boneID;
     CS::Animation::RagdollState state;
-    csRef<CS::Physics2::iRigidBody> rigidBody;
-    csRef<CS::Physics2::iJoint> joint;
+    csRef<CS::Physics::iRigidBody> rigidBody;
+    csRef<CS::Physics::iJoint> joint;
   };
 
   struct ResetChainData
@@ -136,9 +136,9 @@ private:
 
 private:
   csWeakRef<iSceneNode> sceneNode;
-  csWeakRef<CS::Collision2::iCollisionSystem> collisionSystem;
-  csWeakRef<CS::Physics2::iPhysicalSystem> physicalSystem;
-  csWeakRef<CS::Physics2::iPhysicalSector> physicalSector;
+  csWeakRef<CS::Collisions::iCollisionSystem> collisionSystem;
+  csWeakRef<CS::Physics::iPhysicalSystem> physicalSystem;
+  csWeakRef<CS::Physics::iPhysicalSector> physicalSector;
   csArray<ChainData> chains;
   csHash<BoneData, CS::Animation::BoneID> bones;
   csArray<ResetChainData> resetChains;
@@ -149,13 +149,13 @@ private:
 };
 
 class BoneKinematicCallback : public scfImplementation1
-  <BoneKinematicCallback, CS::Physics2::iKinematicCallback>
+  <BoneKinematicCallback, CS::Physics::iKinematicCallback>
 {
 public:
   BoneKinematicCallback (RagdollNode* ragdollNode, CS::Animation::BoneID boneID);
   ~BoneKinematicCallback ();
 
-  virtual void GetBodyTransform (CS::Physics2::iRigidBody* body, csOrthoTransform& transform) const;
+  virtual void GetBodyTransform (CS::Physics::iRigidBody* body, csOrthoTransform& transform) const;
 
 private:
   RagdollNode* ragdollNode;

@@ -47,7 +47,7 @@ enum csJointType
 };
 
 class csBulletJoint : public scfImplementation1<
-  csBulletJoint, CS::Physics2::iJoint>
+  csBulletJoint, CS::Physics::iJoint>
 {
   friend class csBulletSystem;
   friend class csBulletSector;
@@ -96,10 +96,10 @@ public:
 
   void SetType (csJointType type) {this->type = type;}
 
-  virtual void Attach (CS::Physics2::iPhysicalBody* body1, CS::Physics2::iPhysicalBody* body2,
+  virtual void Attach (CS::Physics::iPhysicalBody* body1, CS::Physics::iPhysicalBody* body2,
     bool forceUpdate = true);
 
-  virtual CS::Physics2::iPhysicalBody* GetAttachedBody (int index)
+  virtual CS::Physics::iPhysicalBody* GetAttachedBody (int index)
   {
     CS_ASSERT (index >= 0 && index <= 1);
     return bodies[index];

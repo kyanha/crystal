@@ -11,19 +11,19 @@
 class Simple : public CS::Utility::DemoApplication
 {
 private:
-  csRef<CS::Collision2::iCollisionSystem> collisionSystem;
-  csRef<CS::Physics2::iPhysicalSystem> physicalSystem;
-  csRef<CS::Collision2::iCollisionSector> collisionSector;
-  csRef<CS::Physics2::iPhysicalSector> physicalSector;
-  csRef<CS::Physics2::Bullet2::iPhysicalSector> bulletSector;
-  csRef<CS::Physics2::iSoftBodyAnimationControlFactory> softBodyAnimationFactory;
-  csRefArray<CS::Physics2::iRigidBody> dynamicBodies;
+  csRef<CS::Collisions::iCollisionSystem> collisionSystem;
+  csRef<CS::Physics::iPhysicalSystem> physicalSystem;
+  csRef<CS::Collisions::iCollisionSector> collisionSector;
+  csRef<CS::Physics::iPhysicalSector> physicalSector;
+  csRef<CS::Physics::Bullet2::iPhysicalSector> bulletSector;
+  csRef<CS::Physics::iSoftBodyAnimationControlFactory> softBodyAnimationFactory;
+  csRefArray<CS::Physics::iRigidBody> dynamicBodies;
   bool isSoftBodyWorld;
 
   // Meshes
   csRef<iMeshFactoryWrapper> boxFact;
   csRef<iMeshFactoryWrapper> meshFact;
-  csRef<CS::Collision2::iColliderConcaveMesh> mainCollider;
+  csRef<CS::Collisions::iColliderConcaveMesh> mainCollider;
 
 
   // Environments
@@ -45,10 +45,10 @@ private:
   float dynamicSpeed;
 
   // Camera related
-  CS::Physics2::Bullet2::DebugMode debugMode;
+  CS::Physics::Bullet2::DebugMode debugMode;
   int physicalCameraMode;
-  csRef<CS::Physics2::iRigidBody> cameraBody;
-  csRef<CS::Collision2::iCollisionActor> cameraActor;
+  csRef<CS::Physics::iRigidBody> cameraBody;
+  csRef<CS::Collisions::iCollisionActor> cameraActor;
 
   // Ragdoll related
   csRef<CS::Animation::iSkeletonRagdollNodeManager2> ragdollManager;
@@ -56,22 +56,22 @@ private:
   // Dragging related
   bool dragging;
   bool softDragging;
-  csRef<CS::Physics2::iJoint> dragJoint;
-  csRef<CS::Physics2::iSoftBody> draggedBody;
+  csRef<CS::Physics::iJoint> dragJoint;
+  csRef<CS::Physics::iSoftBody> draggedBody;
   
   size_t draggedVertex;
   float dragDistance;
   float linearDampening, angularDampening;
 
   // Cut & Paste related
-  csRef<CS::Physics2::iPhysicalBody> clipboardBody;
+  csRef<CS::Physics::iPhysicalBody> clipboardBody;
   csRef<iMovable> clipboardMovable;
 
   // Collider
   csOrthoTransform localTrans;
 
   // Ghost
-  csRef<CS::Collision2::iCollisionObject> ghostObject;
+  csRef<CS::Collisions::iCollisionObject> ghostObject;
 
 private:
   void Frame ();
@@ -85,25 +85,25 @@ private:
 
   // Spawning objects
   bool SpawnStarCollider ();
-  CS::Physics2::iRigidBody* SpawnBox (bool setVelocity = true);
-  CS::Physics2::iRigidBody* SpawnSphere (bool setVelocity = true);
-  CS::Physics2::iRigidBody* SpawnCone (bool setVelocity = true);
-  CS::Physics2::iRigidBody* SpawnCylinder (bool setVelocity = true);
-  CS::Physics2::iRigidBody* SpawnCapsule (float length = rand() % 3 / 50.f + .7f,
+  CS::Physics::iRigidBody* SpawnBox (bool setVelocity = true);
+  CS::Physics::iRigidBody* SpawnSphere (bool setVelocity = true);
+  CS::Physics::iRigidBody* SpawnCone (bool setVelocity = true);
+  CS::Physics::iRigidBody* SpawnCylinder (bool setVelocity = true);
+  CS::Physics::iRigidBody* SpawnCapsule (float length = rand() % 3 / 50.f + .7f,
     float radius = rand() % 10 / 50.f + .2f, bool setVelocity = true);
-  CS::Collision2::iCollisionObject* SpawnConcaveMesh ();
-  CS::Physics2::iRigidBody* SpawnConvexMesh (bool setVelocity = true);
-  CS::Physics2::iRigidBody* SpawnCompound (bool setVelocity = true);
-  CS::Physics2::iJoint* SpawnJointed ();
-  CS::Physics2::iRigidBody* SpawnFilterBody (bool setVelocity = true);
+  CS::Collisions::iCollisionObject* SpawnConcaveMesh ();
+  CS::Physics::iRigidBody* SpawnConvexMesh (bool setVelocity = true);
+  CS::Physics::iRigidBody* SpawnCompound (bool setVelocity = true);
+  CS::Physics::iJoint* SpawnJointed ();
+  CS::Physics::iRigidBody* SpawnFilterBody (bool setVelocity = true);
   void SpawnChain ();
   void LoadFrankieRagdoll ();
   void LoadKrystalRagdoll ();
   void SpawnFrankieRagdoll ();
   void SpawnKrystalRagdoll ();
   void SpawnRope ();
-  CS::Physics2::iSoftBody* SpawnCloth ();
-  CS::Physics2::iSoftBody* SpawnSoftBody (bool setVelocity = true);
+  CS::Physics::iSoftBody* SpawnCloth ();
+  CS::Physics::iSoftBody* SpawnSoftBody (bool setVelocity = true);
 
   void CreateBoxRoom ();
   void CreatePortalRoom ();
@@ -121,11 +121,11 @@ public:
   bool Application ();
 
   friend class MouseAnchorAnimationControl;
-  csRef<CS::Physics2::iAnchorAnimationControl> grabAnimationControl;
+  csRef<CS::Physics::iAnchorAnimationControl> grabAnimationControl;
 };
 
 class MouseAnchorAnimationControl : public scfImplementation1
-  <MouseAnchorAnimationControl, CS::Physics2::iAnchorAnimationControl>
+  <MouseAnchorAnimationControl, CS::Physics::iAnchorAnimationControl>
 {
 public:
   MouseAnchorAnimationControl (Simple* simple)

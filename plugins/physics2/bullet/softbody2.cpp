@@ -42,7 +42,7 @@ csBulletSoftBody::csBulletSoftBody (csBulletSystem* phySys, btSoftBody* body)
 {
   btObject = body;
   btBody->setUserPointer (dynamic_cast<iPhysicalBody*> (this));
-  this->type = CS::Collision2::COLLISION_OBJECT_PHYSICAL;
+  this->type = CS::Collisions::COLLISION_OBJECT_PHYSICAL;
 }
 
 csBulletSoftBody::~csBulletSoftBody ()
@@ -69,9 +69,9 @@ void csBulletSoftBody::RebuildObject ()
   btBody->setCollisionFlags(0);
 }
 
-CS::Collision2::HitBeamResult csBulletSoftBody::HitBeam (const csVector3& start, const csVector3& end)
+CS::Collisions::HitBeamResult csBulletSoftBody::HitBeam (const csVector3& start, const csVector3& end)
 {
-  CS::Collision2::HitBeamResult result;
+  CS::Collisions::HitBeamResult result;
   btVector3 rayFrom = CSToBullet (start, system->getInternalScale ());
   btVector3 rayTo = CSToBullet (end, system->getInternalScale ());
   btSoftBody::sRayCast ray;
@@ -130,7 +130,7 @@ bool csBulletSoftBody::RemoveBulletObject ()
     for (int i = 0; i < btBody->m_anchors.size (); i++)
     {
       btRigidBody* btRB = btBody->m_anchors[i].m_body;
-      CS::Collision2::iCollisionObject* collObject = static_cast<CS::Collision2::iCollisionObject*> (
+      CS::Collisions::iCollisionObject* collObject = static_cast<CS::Collisions::iCollisionObject*> (
         btRB->getUserPointer ());
       csBulletRigidBody* rb = dynamic_cast<csBulletRigidBody*> (collObject);
       rb->anchorCount -- ;
@@ -149,7 +149,7 @@ bool csBulletSoftBody::AddBulletObject ()
       static_cast<btSoftRigidDynamicsWorld*> (sector->bulletWorld);
 
     softWorld->addSoftBody (btBody, collGroup.value, collGroup.mask);
-    btBody->setUserPointer (static_cast<CS::Collision2::iCollisionObject*> (
+    btBody->setUserPointer (static_cast<CS::Collisions::iCollisionObject*> (
       dynamic_cast<iPhysicalBody*>(this)));
     insideWorld = true;
   }
@@ -272,7 +272,7 @@ void csBulletSoftBody::AnchorVertex (size_t vertexIndex, iRigidBody* body)
 }
 
 void csBulletSoftBody::AnchorVertex (size_t vertexIndex,
-                                     CS::Physics2::iAnchorAnimationControl* controller)
+                                     CS::Physics::iAnchorAnimationControl* controller)
 {
   AnimatedAnchor anchor (vertexIndex, controller);
   animatedAnchors.Push (anchor);

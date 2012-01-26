@@ -8,10 +8,10 @@
 CS_PLUGIN_NAMESPACE_BEGIN(Bullet2)
 {
 
-//struct CS::Physics2::iPhysicalBody;
+//struct CS::Physics::iPhysicalBody;
 
 class csBulletCollisionObject: public scfImplementationExt1<
-  csBulletCollisionObject, csObject, CS::Collision2::iCollisionObject>
+  csBulletCollisionObject, csObject, CS::Collisions::iCollisionObject>
 {
   friend class csBulletSector;
   friend class csBulletSystem;
@@ -25,12 +25,12 @@ protected:
   csRefArray<csBulletCollider> colliders;
   csRefArray<csBulletCollisionObject> contactObjects;
   csArray<csOrthoTransform> relaTransforms;
-  csArray<CS::Physics2::iJoint*> joints;
-  CS::Collision2::CollisionGroup collGroup;
+  csArray<CS::Physics::iJoint*> joints;
+  CS::Collisions::CollisionGroup collGroup;
   csWeakRef<iMovable> movable;
   csWeakRef<iCamera> camera;
-  csRef<CS::Collision2::iCollisionCallback> collCb;
-  CS::Collision2::CollisionObjectType type;
+  csRef<CS::Collisions::iCollisionCallback> collCb;
+  CS::Collisions::CollisionObjectType type;
 
   btTransform transform;
   btTransform invPricipalAxis;
@@ -54,12 +54,12 @@ public:
   virtual ~csBulletCollisionObject ();
 
   virtual iObject* QueryObject (void) { return (iObject*) this; }
-  virtual CS::Collision2::iCollisionObject* QueryCollisionObject () {
-    return dynamic_cast<CS::Collision2::iCollisionObject*> (this);}
-  virtual CS::Physics2::iPhysicalBody* QueryPhysicalBody () {return NULL;}
+  virtual CS::Collisions::iCollisionObject* QueryCollisionObject () {
+    return dynamic_cast<CS::Collisions::iCollisionObject*> (this);}
+  virtual CS::Physics::iPhysicalBody* QueryPhysicalBody () {return NULL;}
 
-  virtual void SetObjectType (CS::Collision2::CollisionObjectType type, bool forceRebuild = true);
-  virtual CS::Collision2::CollisionObjectType GetObjectType () {return type;}
+  virtual void SetObjectType (CS::Collisions::CollisionObjectType type, bool forceRebuild = true);
+  virtual CS::Collisions::CollisionObjectType GetObjectType () {return type;}
 
   virtual void SetAttachedMovable (iMovable* movable){this->movable = movable;}
   virtual iMovable* GetAttachedMovable (){return movable;}
@@ -70,12 +70,12 @@ public:
   virtual void SetTransform (const csOrthoTransform& trans);
   virtual csOrthoTransform GetTransform ();
 
-  virtual void AddCollider (CS::Collision2::iCollider* collider, const csOrthoTransform& relaTrans
+  virtual void AddCollider (CS::Collisions::iCollider* collider, const csOrthoTransform& relaTrans
     = csOrthoTransform (csMatrix3 (), csVector3 (0)));
-  virtual void RemoveCollider (CS::Collision2::iCollider* collider);
+  virtual void RemoveCollider (CS::Collisions::iCollider* collider);
   virtual void RemoveCollider (size_t index);
 
-  virtual CS::Collision2::iCollider* GetCollider (size_t index) ;
+  virtual CS::Collisions::iCollider* GetCollider (size_t index) ;
   virtual size_t GetColliderCount () {return colliders.GetSize ();}
 
   virtual void RebuildObject ();
@@ -83,14 +83,14 @@ public:
   virtual void SetCollisionGroup (const char* name);
   virtual const char* GetCollisionGroup () const {return collGroup.name.GetData ();}
 
-  virtual void SetCollisionCallback (CS::Collision2::iCollisionCallback* cb) {collCb = cb;}
-  virtual CS::Collision2::iCollisionCallback* GetCollisionCallback () {return collCb;}
+  virtual void SetCollisionCallback (CS::Collisions::iCollisionCallback* cb) {collCb = cb;}
+  virtual CS::Collisions::iCollisionCallback* GetCollisionCallback () {return collCb;}
 
-  virtual bool Collide (CS::Collision2::iCollisionObject* otherObject);
-  virtual CS::Collision2::HitBeamResult HitBeam (const csVector3& start, const csVector3& end);
+  virtual bool Collide (CS::Collisions::iCollisionObject* otherObject);
+  virtual CS::Collisions::HitBeamResult HitBeam (const csVector3& start, const csVector3& end);
 
   virtual size_t GetContactObjectsCount ();
-  virtual CS::Collision2::iCollisionObject* GetContactObject (size_t index);
+  virtual CS::Collisions::iCollisionObject* GetContactObject (size_t index);
 
   btCollisionObject* GetBulletCollisionPointer () {return btObject;}
   virtual bool RemoveBulletObject ();

@@ -73,9 +73,9 @@ struct CollisionPortal
 
 //Will also implement iPhysicalSector...
 class csBulletSector : public scfImplementationExt3<
-  csBulletSector, csObject, CS::Collision2::iCollisionSector, 
-  CS::Physics2::Bullet2::iPhysicalSector,
-  CS::Physics2::iPhysicalSector>
+  csBulletSector, csObject, CS::Collisions::iCollisionSector, 
+  CS::Physics::Bullet2::iPhysicalSector,
+  CS::Physics::iPhysicalSector>
 {
   friend class csBulletCollisionObject;
   friend class csBulletCollisionActor;
@@ -87,19 +87,19 @@ class csBulletSector : public scfImplementationExt3<
   friend class csBulletMotionState;
   friend class csBulletSystem;
 
-  class CollisionGroupVector : public csArray<CS::Collision2::CollisionGroup>
+  class CollisionGroupVector : public csArray<CS::Collisions::CollisionGroup>
   {
   public:
-    CollisionGroupVector () : csArray<CS::Collision2::CollisionGroup> () {}
-    static int CompareKey (CS::Collision2::CollisionGroup const& item,
+    CollisionGroupVector () : csArray<CS::Collisions::CollisionGroup> () {}
+    static int CompareKey (CS::Collisions::CollisionGroup const& item,
       char const* const& key)
     {
       return strcmp (item.name.GetData (), key);
     }
-    static csArrayCmp<CS::Collision2::CollisionGroup, char const*>
+    static csArrayCmp<CS::Collisions::CollisionGroup, char const*>
       KeyCmp(char const* k)
     {
-      return csArrayCmp<CS::Collision2::CollisionGroup, char const*> (k,CompareKey);
+      return csArrayCmp<CS::Collisions::CollisionGroup, char const*> (k,CompareKey);
     }
   };
 
@@ -152,12 +152,12 @@ public:
   virtual void SetGravity (const csVector3& v);
   virtual csVector3 GetGravity () const {return gravity;}
 
-  virtual void AddCollisionObject(CS::Collision2::iCollisionObject* object);
-  virtual void RemoveCollisionObject(CS::Collision2::iCollisionObject* object);
+  virtual void AddCollisionObject(CS::Collisions::iCollisionObject* object);
+  virtual void RemoveCollisionObject(CS::Collisions::iCollisionObject* object);
 
   virtual size_t GetCollisionObjectCount () {return collisionObjects.GetSize ();}
-  virtual CS::Collision2::iCollisionObject* GetCollisionObject (size_t index);
-  virtual CS::Collision2::iCollisionObject* FindCollisionObject (const char* name);
+  virtual CS::Collisions::iCollisionObject* GetCollisionObject (size_t index);
+  virtual CS::Collisions::iCollisionObject* FindCollisionObject (const char* name);
 
   virtual void AddPortal(iPortal* portal, const csOrthoTransform& meshTrans);
   virtual void RemovePortal(iPortal* portal);
@@ -165,26 +165,26 @@ public:
   virtual void SetSector(iSector* sector);
   virtual iSector* GetSector(){return sector;}
 
-  virtual CS::Collision2::HitBeamResult HitBeam(const csVector3& start, 
+  virtual CS::Collisions::HitBeamResult HitBeam(const csVector3& start, 
     const csVector3& end);
 
-  virtual CS::Collision2::HitBeamResult HitBeamPortal(const csVector3& start, 
+  virtual CS::Collisions::HitBeamResult HitBeamPortal(const csVector3& start, 
     const csVector3& end);
 
-  virtual CS::Collision2::CollisionGroup& CreateCollisionGroup (const char* name);
-  virtual CS::Collision2::CollisionGroup& FindCollisionGroup (const char* name);
+  virtual CS::Collisions::CollisionGroup& CreateCollisionGroup (const char* name);
+  virtual CS::Collisions::CollisionGroup& FindCollisionGroup (const char* name);
 
   virtual void SetGroupCollision (const char* name1,
     const char* name2, bool collide);
   virtual bool GetGroupCollision (const char* name1,
     const char* name2);
 
-  virtual bool CollisionTest(CS::Collision2::iCollisionObject* object, 
-    csArray<CS::Collision2::CollisionData>& collisions);
+  virtual bool CollisionTest(CS::Collisions::iCollisionObject* object, 
+    csArray<CS::Collisions::CollisionData>& collisions);
 
-  virtual void AddCollisionActor (CS::Collision2::iCollisionActor* actor);
+  virtual void AddCollisionActor (CS::Collisions::iCollisionActor* actor);
   virtual void RemoveCollisionActor ();
-  virtual CS::Collision2::iCollisionActor* GetCollisionActor ();
+  virtual CS::Collisions::iCollisionActor* GetCollisionActor ();
 
   /*virtual MoveResult MoveTest (iCollisionObject* object,
     const csOrthoTransform& fromWorld, const csOrthoTransform& toWorld);*/
@@ -204,22 +204,22 @@ public:
   virtual void SetAutoDisableParams (float linear,
     float angular, float time);
 
-  virtual void AddRigidBody (CS::Physics2::iRigidBody* body);
-  virtual void RemoveRigidBody (CS::Physics2::iRigidBody* body);
+  virtual void AddRigidBody (CS::Physics::iRigidBody* body);
+  virtual void RemoveRigidBody (CS::Physics::iRigidBody* body);
 
   virtual size_t GetRigidBodyCount () {return rigidBodies.GetSize ();}
-  virtual CS::Physics2::iRigidBody* GetRigidBody (size_t index);
-  virtual CS::Physics2::iRigidBody* FindRigidBody (const char* name);
+  virtual CS::Physics::iRigidBody* GetRigidBody (size_t index);
+  virtual CS::Physics::iRigidBody* FindRigidBody (const char* name);
 
-  virtual void AddSoftBody (CS::Physics2::iSoftBody* body);
-  virtual void RemoveSoftBody (CS::Physics2::iSoftBody* body);
+  virtual void AddSoftBody (CS::Physics::iSoftBody* body);
+  virtual void RemoveSoftBody (CS::Physics::iSoftBody* body);
 
   virtual size_t GetSoftBodyCount () {return softBodies.GetSize ();}
-  virtual CS::Physics2::iSoftBody* GetSoftBody (size_t index);
-  virtual CS::Physics2::iSoftBody* FindSoftBody (const char* name);
+  virtual CS::Physics::iSoftBody* GetSoftBody (size_t index);
+  virtual CS::Physics::iSoftBody* FindSoftBody (const char* name);
 
-  virtual void AddJoint (CS::Physics2::iJoint* joint);
-  virtual void RemoveJoint (CS::Physics2::iJoint* joint);
+  virtual void AddJoint (CS::Physics::iJoint* joint);
+  virtual void RemoveJoint (CS::Physics::iJoint* joint);
 
   virtual void SetSoftBodyEnabled (bool enabled);
   virtual bool GetSoftBodyEnabled () {return isSoftWorld;}
@@ -232,8 +232,8 @@ public:
   virtual bool SaveWorld (const char* filename);
 
   virtual void DebugDraw (iView* rview);
-  virtual void SetDebugMode (CS::Physics2::Bullet2::DebugMode mode);
-  virtual CS::Physics2::Bullet2::DebugMode GetDebugMode ();
+  virtual void SetDebugMode (CS::Physics::Bullet2::DebugMode mode);
+  virtual CS::Physics::Bullet2::DebugMode GetDebugMode ();
 
   virtual void StartProfile ();
 
@@ -243,29 +243,29 @@ public:
 
   bool BulletCollide (btCollisionObject* objectA,
     btCollisionObject* objectB,
-    csArray<CS::Collision2::CollisionData>& data);
+    csArray<CS::Collisions::CollisionData>& data);
 
-  CS::Collision2::HitBeamResult RigidHitBeam(btCollisionObject* object, 
+  CS::Collisions::HitBeamResult RigidHitBeam(btCollisionObject* object, 
 			     const csVector3& start,
 			     const csVector3& end);
 
   void UpdateSoftBodies (float timeStep);
 
-  void AddMovableToSector (CS::Collision2::iCollisionObject* obj);
+  void AddMovableToSector (CS::Collisions::iCollisionObject* obj);
 
-  void RemoveMovableFromSector (CS::Collision2::iCollisionObject* obj);
+  void RemoveMovableFromSector (CS::Collisions::iCollisionObject* obj);
 };
 
 class csBulletSystem : public scfImplementation3<
-  csBulletSystem, CS::Collision2::iCollisionSystem, 
-  CS::Physics2::iPhysicalSystem, iComponent>
+  csBulletSystem, CS::Collisions::iCollisionSystem, 
+  CS::Physics::iPhysicalSystem, iComponent>
 {
   friend class csBulletColliderConvexMesh;
   friend class csBulletColliderConcaveMesh;
   friend class csBulletSector;
 private:
   iObjectRegistry* object_reg;
-  /*csRefArrayObject<CS::Collision2::iCollider> colliders;
+  /*csRefArrayObject<CS::Collisions::iCollider> colliders;
   csRefArrayObject<csBulletCollisionObject> objects;
   csRefArrayObject<csBulletRigidBody> rigidBodies;
   csRefArrayObject<csBulletSoftBody> softBodies;
@@ -287,55 +287,55 @@ public:
 
   // iCollisionSystem
   virtual void SetInternalScale (float scale);
-  virtual csRef<CS::Collision2::iColliderConvexMesh> CreateColliderConvexMesh (
+  virtual csRef<CS::Collisions::iColliderConvexMesh> CreateColliderConvexMesh (
     iMeshWrapper* mesh, bool simplify = false);
-  virtual csRef<CS::Collision2::iColliderConcaveMesh> CreateColliderConcaveMesh (iMeshWrapper* mesh);
-  virtual csRef<CS::Collision2::iColliderConcaveMeshScaled> CreateColliderConcaveMeshScaled
-      (CS::Collision2::iColliderConcaveMesh* collider, csVector3 scale);
-  virtual csRef<CS::Collision2::iColliderCylinder> CreateColliderCylinder (float length, float radius);
-  virtual csRef<CS::Collision2::iColliderBox> CreateColliderBox (const csVector3& size);
-  virtual csRef<CS::Collision2::iColliderSphere> CreateColliderSphere (float radius);
-  virtual csRef<CS::Collision2::iColliderCapsule> CreateColliderCapsule (float length, float radius);
-  virtual csRef<CS::Collision2::iColliderCone> CreateColliderCone (float length, float radius);
-  virtual csRef<CS::Collision2::iColliderPlane> CreateColliderPlane (const csPlane3& plane);
-  virtual csRef<CS::Collision2::iColliderTerrain> CreateColliderTerrain (iTerrainSystem* terrain,
+  virtual csRef<CS::Collisions::iColliderConcaveMesh> CreateColliderConcaveMesh (iMeshWrapper* mesh);
+  virtual csRef<CS::Collisions::iColliderConcaveMeshScaled> CreateColliderConcaveMeshScaled
+      (CS::Collisions::iColliderConcaveMesh* collider, csVector3 scale);
+  virtual csRef<CS::Collisions::iColliderCylinder> CreateColliderCylinder (float length, float radius);
+  virtual csRef<CS::Collisions::iColliderBox> CreateColliderBox (const csVector3& size);
+  virtual csRef<CS::Collisions::iColliderSphere> CreateColliderSphere (float radius);
+  virtual csRef<CS::Collisions::iColliderCapsule> CreateColliderCapsule (float length, float radius);
+  virtual csRef<CS::Collisions::iColliderCone> CreateColliderCone (float length, float radius);
+  virtual csRef<CS::Collisions::iColliderPlane> CreateColliderPlane (const csPlane3& plane);
+  virtual csRef<CS::Collisions::iColliderTerrain> CreateColliderTerrain (iTerrainSystem* terrain,
       float minHeight = 0, float maxHeight = 0);
 
-  virtual csRef<CS::Collision2::iCollisionObject> CreateCollisionObject ();
-  virtual csRef<CS::Collision2::iCollisionActor> CreateCollisionActor ();
-  virtual csRef<CS::Collision2::iCollisionSector> CreateCollisionSector ();
-  virtual CS::Collision2::iCollisionSector* FindCollisionSector (const char* name);
+  virtual csRef<CS::Collisions::iCollisionObject> CreateCollisionObject ();
+  virtual csRef<CS::Collisions::iCollisionActor> CreateCollisionActor ();
+  virtual csRef<CS::Collisions::iCollisionSector> CreateCollisionSector ();
+  virtual CS::Collisions::iCollisionSector* FindCollisionSector (const char* name);
 
-  virtual void DecomposeConcaveMesh (CS::Collision2::iCollisionObject* object,
+  virtual void DecomposeConcaveMesh (CS::Collisions::iCollisionObject* object,
     iMeshWrapper* mesh, bool simplify = false); 
 
   //iPhysicalSystem
-  virtual csRef<CS::Physics2::iRigidBody> CreateRigidBody ();
+  virtual csRef<CS::Physics::iRigidBody> CreateRigidBody ();
 
-  virtual csRef<CS::Physics2::iJoint> CreateJoint ();
-  virtual csRef<CS::Physics2::iJoint> CreateRigidP2PJoint (const csVector3 position);
-  virtual csRef<CS::Physics2::iJoint> CreateRigidSlideJoint (const csOrthoTransform trans,
+  virtual csRef<CS::Physics::iJoint> CreateJoint ();
+  virtual csRef<CS::Physics::iJoint> CreateRigidP2PJoint (const csVector3 position);
+  virtual csRef<CS::Physics::iJoint> CreateRigidSlideJoint (const csOrthoTransform trans,
     float minDist, float maxDist, float minAngle, float maxAngle, int axis);
-  virtual csRef<CS::Physics2::iJoint> CreateRigidHingeJoint (const csVector3 position,
+  virtual csRef<CS::Physics::iJoint> CreateRigidHingeJoint (const csVector3 position,
     float minAngle, float maxAngle, int axis);
-  virtual csRef<CS::Physics2::iJoint> CreateRigidConeTwistJoint (const csOrthoTransform trans,
+  virtual csRef<CS::Physics::iJoint> CreateRigidConeTwistJoint (const csOrthoTransform trans,
     float swingSpan1,float swingSpan2,float twistSpan);
-  virtual csRef<CS::Physics2::iJoint> CreateSoftLinearJoint (const csVector3 position);
-  virtual csRef<CS::Physics2::iJoint> CreateSoftAngularJoint (int axis);
-  virtual csRef<CS::Physics2::iJoint> CreateRigidPivotJoint (CS::Physics2::iRigidBody* body, const csVector3 position);
+  virtual csRef<CS::Physics::iJoint> CreateSoftLinearJoint (const csVector3 position);
+  virtual csRef<CS::Physics::iJoint> CreateSoftAngularJoint (int axis);
+  virtual csRef<CS::Physics::iJoint> CreateRigidPivotJoint (CS::Physics::iRigidBody* body, const csVector3 position);
  
-  virtual csRef<CS::Physics2::iSoftBody> CreateRope (csVector3 start,
+  virtual csRef<CS::Physics::iSoftBody> CreateRope (csVector3 start,
       csVector3 end, size_t segmentCount);
-  virtual csRef<CS::Physics2::iSoftBody> CreateRope (csVector3* vertices, size_t vertexCount);
-  virtual csRef<CS::Physics2::iSoftBody> CreateCloth (csVector3 corner1, csVector3 corner2,
+  virtual csRef<CS::Physics::iSoftBody> CreateRope (csVector3* vertices, size_t vertexCount);
+  virtual csRef<CS::Physics::iSoftBody> CreateCloth (csVector3 corner1, csVector3 corner2,
       csVector3 corner3, csVector3 corner4,
       size_t segmentCount1, size_t segmentCount2,
       bool withDiagonals = false);
 
-  virtual csRef<CS::Physics2::iSoftBody> CreateSoftBody (iGeneralFactoryState* genmeshFactory, 
+  virtual csRef<CS::Physics::iSoftBody> CreateSoftBody (iGeneralFactoryState* genmeshFactory, 
     const csOrthoTransform& bodyTransform);
 
-  virtual csRef<CS::Physics2::iSoftBody> CreateSoftBody (csVector3* vertices,
+  virtual csRef<CS::Physics::iSoftBody> CreateSoftBody (csVector3* vertices,
       size_t vertexCount, csTriangle* triangles, size_t triangleCount,
       const csOrthoTransform& bodyTransform);
   float getInverseInternalScale() {return inverseInternalScale;}

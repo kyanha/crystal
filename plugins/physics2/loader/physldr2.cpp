@@ -155,14 +155,14 @@ csPtr<iBase> csPhysicsLoader2::Parse (iDocumentNode *node,
 {
   engine = csQueryRegistry<iEngine> (object_reg);
   CS_ASSERT (engine);
-  collisionSystem = csQueryRegistry<CS::Collision2::iCollisionSystem> (object_reg);
+  collisionSystem = csQueryRegistry<CS::Collisions::iCollisionSystem> (object_reg);
   if (collisionSystem == NULL)
   {
     synldr->ReportError ("crystalspace.dynamics.loader",
       node, "No physics in object registry!");
     return 0;
   }
-  physicalSystem = scfQueryInterface<CS::Physics2::iPhysicalSystem> (collisionSystem);
+  physicalSystem = scfQueryInterface<CS::Physics::iPhysicalSystem> (collisionSystem);
   csRef<iDocumentNodeIterator> it = node->GetNodes ();
   while (it->HasNext ())
   {
@@ -173,7 +173,7 @@ csPtr<iBase> csPhysicsLoader2::Parse (iDocumentNode *node,
     if (id == XMLTOKEN_COLLISIONSECTOR)
     {
       csRef<iDocumentAttribute> attr = child->GetAttribute ("name");
-      csRef<CS::Collision2::iCollisionSector> collisionSector;
+      csRef<CS::Collisions::iCollisionSector> collisionSector;
       if (attr)
         collisionSector = collisionSystem->FindCollisionSector (attr->GetValue ());
       if (! collisionSector)
@@ -197,11 +197,11 @@ csPtr<iBase> csPhysicsLoader2::Parse (iDocumentNode *node,
 }
 
 bool csPhysicsLoader2::ParseCollisionSector (iDocumentNode *node, 
-                                             CS::Collision2::iCollisionSector* collSector,
+                                             CS::Collisions::iCollisionSector* collSector,
                                              iLoaderContext* ldr_context)
 {
-  csRef<CS::Physics2::iPhysicalSector> physSector = 
-    scfQueryInterface<CS::Physics2::iPhysicalSector> (collSector);
+  csRef<CS::Physics::iPhysicalSector> physSector = 
+    scfQueryInterface<CS::Physics::iPhysicalSector> (collSector);
   csRef<iDocumentNodeIterator> it = node->GetNodes ();
   while (it->HasNext ())
   {
@@ -267,14 +267,14 @@ bool csPhysicsLoader2::ParseCollisionSector (iDocumentNode *node,
       }
     case XMLTOKEN_COLLISIONOBJECT:
       {
-        csRef<CS::Collision2::iCollisionObject> obj= collisionSystem->CreateCollisionObject ();
+        csRef<CS::Collisions::iCollisionObject> obj= collisionSystem->CreateCollisionObject ();
         if (!ParseCollisionObject (child, obj, collSector, ldr_context))
           return false;
         break;
       }
     case XMLTOKEN_RIGIDBODY:
       {
-        csRef<CS::Physics2::iRigidBody> rb = physicalSystem->CreateRigidBody ();
+        csRef<CS::Physics::iRigidBody> rb = physicalSystem->CreateRigidBody ();
         if (!ParseRigidBody (child, rb, collSector, ldr_context))
           return false;
         break;
@@ -287,7 +287,7 @@ bool csPhysicsLoader2::ParseCollisionSector (iDocumentNode *node,
       }
     case XMLTOKEN_JOINT:
       {
-        csRef<CS::Physics2::iJoint> joint = physicalSystem->CreateJoint ();
+        csRef<CS::Physics::iJoint> joint = physicalSystem->CreateJoint ();
         if (!ParseJoint (child, joint, physSector))
           return false;
         break;
@@ -301,15 +301,15 @@ bool csPhysicsLoader2::ParseCollisionSector (iDocumentNode *node,
 }
 
 bool csPhysicsLoader2::ParseCollisionObject (iDocumentNode *node, 
-                                             CS::Collision2::iCollisionObject* object, 
-                                             CS::Collision2::iCollisionSector* collSector, 
+                                             CS::Collisions::iCollisionObject* object, 
+                                             CS::Collisions::iCollisionSector* collSector, 
                                              iLoaderContext* ldr_context)
 {
   const char *name = node->GetAttributeValue ("name");
   object->QueryObject()->SetName (name);
 
   if (node->GetAttribute ("ghost"))
-    object->SetObjectType (CS::Collision2::COLLISION_OBJECT_GHOST);
+    object->SetObjectType (CS::Collisions::COLLISION_OBJECT_GHOST);
 
   csRef<iDocumentNodeIterator> it = node->GetNodes ();
   while (it->HasNext ())
@@ -403,8 +403,8 @@ bool csPhysicsLoader2::ParseCollisionObject (iDocumentNode *node,
 }
 
 bool csPhysicsLoader2::ParseRigidBody (iDocumentNode *node, 
-                                       CS::Physics2::iRigidBody* body,
-                                       CS::Collision2::iCollisionSector* collSector,
+                                       CS::Physics::iRigidBody* body,
+                                       CS::Collisions::iCollisionSector* collSector,
                                        iLoaderContext* ldr_context)
 {
   if (node->GetAttributeValue ("mass"))
@@ -440,13 +440,13 @@ bool csPhysicsLoader2::ParseRigidBody (iDocumentNode *node,
       switch (stateID)
       {
       case XMLTOKEN_DYNAMIC:
-        body->SetState (CS::Physics2::STATE_DYNAMIC);
+        body->SetState (CS::Physics::STATE_DYNAMIC);
         break;
       case XMLTOKEN_STATIC:
-        body->SetState (CS::Physics2::STATE_STATIC);
+        body->SetState (CS::Physics::STATE_STATIC);
         break;
       case XMLTOKEN_KINEMATIC:
-        body->SetState (CS::Physics2::STATE_KINEMATIC);
+        body->SetState (CS::Physics::STATE_KINEMATIC);
         break;
       default:
         synldr->ReportBadToken (child);
@@ -459,13 +459,13 @@ bool csPhysicsLoader2::ParseRigidBody (iDocumentNode *node,
 }
 
 bool csPhysicsLoader2::ParseSoftBody (iDocumentNode *node, 
-                                      CS::Physics2::iPhysicalSector* physSector,
+                                      CS::Physics::iPhysicalSector* physSector,
                                       iLoaderContext* ldr_context)
 {
   csOrthoTransform trans;
   ParseTransform (node, trans);
 
-  csRef<CS::Physics2::iSoftBody> body;
+  csRef<CS::Physics::iSoftBody> body;
   csRef<iDocumentNodeIterator> it = node->GetNodes ();
   while (it->HasNext ())
   {
@@ -523,7 +523,7 @@ bool csPhysicsLoader2::ParseSoftBody (iDocumentNode *node,
         const char* rname = child->GetAttributeValue ("rigidbody");
         if (rname)
         {
-          CS::Physics2::iRigidBody* rb = physSector->FindRigidBody (rname);
+          CS::Physics::iRigidBody* rb = physSector->FindRigidBody (rname);
           if (!rb)
           {
             synldr->ReportError ("crystalspace.dynamics.loader",
@@ -558,7 +558,7 @@ static float GetFloat (iDocumentNode* node, const char* name, float def)
   return attr->GetValueAsFloat ();
 }
 
-bool csPhysicsLoader2::ParseColliderBox (iDocumentNode *node, CS::Collision2::iCollisionObject* object)
+bool csPhysicsLoader2::ParseColliderBox (iDocumentNode *node, CS::Collisions::iCollisionObject* object)
 {
   csVector3 v;
   if (!synldr->ParseVector (node, v))
@@ -572,15 +572,15 @@ bool csPhysicsLoader2::ParseColliderBox (iDocumentNode *node, CS::Collision2::iC
   trans.Identity ();
   ParseTransform (node, trans);
 
-  csRef<CS::Collision2::iColliderBox> box = collisionSystem->CreateColliderBox (v);
+  csRef<CS::Collisions::iColliderBox> box = collisionSystem->CreateColliderBox (v);
   object->AddCollider (box, trans);
   return true;
 }
 
-bool csPhysicsLoader2::ParseColliderSphere (iDocumentNode *node, CS::Collision2::iCollisionObject* object)
+bool csPhysicsLoader2::ParseColliderSphere (iDocumentNode *node, CS::Collisions::iCollisionObject* object)
 {
   float r = node->GetAttributeValueAsFloat ("radius");
-  csRef<CS::Collision2::iColliderSphere> sp = collisionSystem->CreateColliderSphere (r);
+  csRef<CS::Collisions::iColliderSphere> sp = collisionSystem->CreateColliderSphere (r);
 
   csOrthoTransform trans;
   trans.Identity ();
@@ -590,11 +590,11 @@ bool csPhysicsLoader2::ParseColliderSphere (iDocumentNode *node, CS::Collision2:
   return true;
 }
 
-bool csPhysicsLoader2::ParseColliderCylinder (iDocumentNode *node, CS::Collision2::iCollisionObject* object)
+bool csPhysicsLoader2::ParseColliderCylinder (iDocumentNode *node, CS::Collisions::iCollisionObject* object)
 {
   float l = node->GetAttributeValueAsFloat ("length");
   float r = node->GetAttributeValueAsFloat ("radius");
-  csRef<CS::Collision2::iColliderCylinder> cy = collisionSystem->CreateColliderCylinder (l, r);
+  csRef<CS::Collisions::iColliderCylinder> cy = collisionSystem->CreateColliderCylinder (l, r);
 
   csOrthoTransform trans;
   trans.Identity ();
@@ -604,11 +604,11 @@ bool csPhysicsLoader2::ParseColliderCylinder (iDocumentNode *node, CS::Collision
   return true;
 }
 
-bool csPhysicsLoader2::ParseColliderCapsule (iDocumentNode *node, CS::Collision2::iCollisionObject* object)
+bool csPhysicsLoader2::ParseColliderCapsule (iDocumentNode *node, CS::Collisions::iCollisionObject* object)
 {
   float l = node->GetAttributeValueAsFloat ("length");
   float r = node->GetAttributeValueAsFloat ("radius");
-  csRef<CS::Collision2::iColliderCapsule> ca = collisionSystem->CreateColliderCapsule (l, r);
+  csRef<CS::Collisions::iColliderCapsule> ca = collisionSystem->CreateColliderCapsule (l, r);
 
   csOrthoTransform trans;
   trans.Identity ();
@@ -618,11 +618,11 @@ bool csPhysicsLoader2::ParseColliderCapsule (iDocumentNode *node, CS::Collision2
   return true;
 }
 
-bool csPhysicsLoader2::ParseColliderCone (iDocumentNode *node, CS::Collision2::iCollisionObject* object)
+bool csPhysicsLoader2::ParseColliderCone (iDocumentNode *node, CS::Collisions::iCollisionObject* object)
 {
   float l = node->GetAttributeValueAsFloat ("length");
   float r = node->GetAttributeValueAsFloat ("radius");
-  csRef<CS::Collision2::iColliderCone> co = collisionSystem->CreateColliderCone (l, r);
+  csRef<CS::Collisions::iColliderCone> co = collisionSystem->CreateColliderCone (l, r);
 
   csOrthoTransform trans;
   trans.Identity ();
@@ -632,7 +632,7 @@ bool csPhysicsLoader2::ParseColliderCone (iDocumentNode *node, CS::Collision2::i
   return true;
 }
 
-bool csPhysicsLoader2::ParseColliderPlane (iDocumentNode *node, CS::Collision2::iCollisionObject* object)
+bool csPhysicsLoader2::ParseColliderPlane (iDocumentNode *node, CS::Collisions::iCollisionObject* object)
 {
   csPlane3 plane;
   if (synldr->ParsePlane (node, plane))
@@ -641,7 +641,7 @@ bool csPhysicsLoader2::ParseColliderPlane (iDocumentNode *node, CS::Collision2::
       node, "Error processing plane parameters");
     return false;
   }
-  csRef<CS::Collision2::iColliderPlane> pl = collisionSystem->CreateColliderPlane (plane);
+  csRef<CS::Collisions::iColliderPlane> pl = collisionSystem->CreateColliderPlane (plane);
 
   csOrthoTransform trans;
   trans.Identity ();
@@ -651,7 +651,7 @@ bool csPhysicsLoader2::ParseColliderPlane (iDocumentNode *node, CS::Collision2::
   return true;
 }
 
-bool csPhysicsLoader2::ParseColliderConvexMesh (iDocumentNode *node, CS::Collision2::iCollisionObject* object, iLoaderContext* ldr_context)
+bool csPhysicsLoader2::ParseColliderConvexMesh (iDocumentNode *node, CS::Collisions::iCollisionObject* object, iLoaderContext* ldr_context)
 {
   if (!node->GetContentsValue ()) { return false; }
 
@@ -661,7 +661,7 @@ bool csPhysicsLoader2::ParseColliderConvexMesh (iDocumentNode *node, CS::Collisi
   
   if (m)
   {
-    csRef<CS::Collision2::iColliderConvexMesh> conv = collisionSystem->CreateColliderConvexMesh (m);
+    csRef<CS::Collisions::iColliderConvexMesh> conv = collisionSystem->CreateColliderConvexMesh (m);
 
     csOrthoTransform trans;
     trans.Identity ();
@@ -678,7 +678,7 @@ bool csPhysicsLoader2::ParseColliderConvexMesh (iDocumentNode *node, CS::Collisi
   }
 }
 
-bool csPhysicsLoader2::ParseColliderConcaveMesh (iDocumentNode *node, CS::Collision2::iCollisionObject* object, iLoaderContext* ldr_context)
+bool csPhysicsLoader2::ParseColliderConcaveMesh (iDocumentNode *node, CS::Collisions::iCollisionObject* object, iLoaderContext* ldr_context)
 {
   if (!node->GetContentsValue ()) { return false; }
 
@@ -688,7 +688,7 @@ bool csPhysicsLoader2::ParseColliderConcaveMesh (iDocumentNode *node, CS::Collis
 
   if (m)
   {
-    csRef<CS::Collision2::iColliderConcaveMesh> conc = collisionSystem->CreateColliderConcaveMesh (m);
+    csRef<CS::Collisions::iColliderConcaveMesh> conc = collisionSystem->CreateColliderConcaveMesh (m);
 
     csOrthoTransform trans;
     trans.Identity ();
@@ -705,7 +705,7 @@ bool csPhysicsLoader2::ParseColliderConcaveMesh (iDocumentNode *node, CS::Collis
   }
 }
 
-bool csPhysicsLoader2::ParseColliderTerrain (iDocumentNode *node, CS::Collision2::iCollisionObject* object, iLoaderContext* ldr_context)
+bool csPhysicsLoader2::ParseColliderTerrain (iDocumentNode *node, CS::Collisions::iCollisionObject* object, iLoaderContext* ldr_context)
 {
   if (!node->GetContentsValue ()) { return false; }
 
@@ -722,7 +722,7 @@ bool csPhysicsLoader2::ParseColliderTerrain (iDocumentNode *node, CS::Collision2
         node, "Unable to find terrain system in engine");
       return false;
     }
-    csRef<CS::Collision2::iColliderTerrain> terr = collisionSystem->CreateColliderTerrain (terrain);
+    csRef<CS::Collisions::iColliderTerrain> terr = collisionSystem->CreateColliderTerrain (terrain);
 
     csOrthoTransform trans;
     trans.Identity ();
@@ -769,14 +769,14 @@ bool csPhysicsLoader2::ParseTransform (iDocumentNode* node, csOrthoTransform &t)
   return true;
 }
 
-bool csPhysicsLoader2::ParseJoint (iDocumentNode *node, CS::Physics2::iJoint* joint, CS::Physics2::iPhysicalSector* sector)
+bool csPhysicsLoader2::ParseJoint (iDocumentNode *node, CS::Physics::iJoint* joint, CS::Physics::iPhysicalSector* sector)
 {
   joint->SetTransConstraints (false, false, false);
   joint->SetRotConstraints (false, false, false);
   csRef<iDocumentNodeIterator> it = node->GetNodes ();
   csOrthoTransform t;
-  csRef<CS::Physics2::iPhysicalBody> body1 = 0;
-  csRef<CS::Physics2::iPhysicalBody> body2 = 0;
+  csRef<CS::Physics::iPhysicalBody> body1 = 0;
+  csRef<CS::Physics::iPhysicalBody> body2 = 0;
   while (it->HasNext ())
   {
     csRef<iDocumentNode> child = it->Next ();

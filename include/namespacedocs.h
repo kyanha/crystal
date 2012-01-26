@@ -41,6 +41,12 @@ namespace CS
   {}
 
   /**
+   * Collision detection and utilities
+   */
+  namespace Collisions
+  {}
+
+  /**
    * Container classes
    */
   namespace Container

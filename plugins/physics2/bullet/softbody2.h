@@ -29,8 +29,8 @@ CS_PLUGIN_NAMESPACE_BEGIN (Bullet2)
 {
 
 class csBulletSoftBody : public scfImplementationExt2<csBulletSoftBody, 
-  csBulletCollisionObject, CS::Physics2::iSoftBody,
-  CS::Physics2::Bullet2::iSoftBody>
+  csBulletCollisionObject, CS::Physics::iSoftBody,
+  CS::Physics::Bullet2::iSoftBody>
 {
   friend class csBulletRigidBody;
   friend class csBulletJoint;
@@ -39,11 +39,11 @@ private:
 
   struct AnimatedAnchor
   {
-    AnimatedAnchor (size_t vertexIndex, CS::Physics2::iAnchorAnimationControl* controller)
+    AnimatedAnchor (size_t vertexIndex, CS::Physics::iAnchorAnimationControl* controller)
       : vertexIndex (vertexIndex), controller (controller) {}
 
     size_t vertexIndex;
-    csRef<CS::Physics2::iAnchorAnimationControl> controller;
+    csRef<CS::Physics::iAnchorAnimationControl> controller;
     btVector3 position;
   };
 
@@ -60,12 +60,12 @@ public:
 
   virtual iObject* QueryObject (void) { return (iObject*) this; }
   //iCollisionObject
-  virtual CS::Collision2::iCollisionObject* QueryCollisionObject () {return dynamic_cast<csBulletCollisionObject*> (this);}  
-  virtual CS::Physics2::iPhysicalBody* QueryPhysicalBody () {return this;}
+  virtual CS::Collisions::iCollisionObject* QueryCollisionObject () {return dynamic_cast<csBulletCollisionObject*> (this);}  
+  virtual CS::Physics::iPhysicalBody* QueryPhysicalBody () {return this;}
 
-  virtual void SetObjectType (CS::Collision2::CollisionObjectType type, bool forceRebuild = true) {}
-  virtual CS::Collision2::CollisionObjectType GetObjectType ()
-  {return CS::Collision2::COLLISION_OBJECT_PHYSICAL;}
+  virtual void SetObjectType (CS::Collisions::CollisionObjectType type, bool forceRebuild = true) {}
+  virtual CS::Collisions::CollisionObjectType GetObjectType ()
+  {return CS::Collisions::COLLISION_OBJECT_PHYSICAL;}
 
   virtual void SetAttachedMovable (iMovable* movable) {csBulletCollisionObject::SetAttachedMovable (movable);}
   virtual iMovable* GetAttachedMovable () {return csBulletCollisionObject::GetAttachedMovable ();}
@@ -79,25 +79,25 @@ public:
   virtual void RebuildObject ();
 
   // btSoftBody don't use collision shape.
-  virtual void AddCollider (CS::Collision2::iCollider* collider, const csOrthoTransform& relaTrans
+  virtual void AddCollider (CS::Collisions::iCollider* collider, const csOrthoTransform& relaTrans
     = csOrthoTransform (csMatrix3 (), csVector3 (0))) {}
-  virtual void RemoveCollider (CS::Collision2::iCollider* collider) {}
+  virtual void RemoveCollider (CS::Collisions::iCollider* collider) {}
   virtual void RemoveCollider (size_t index) {}
 
-  virtual CS::Collision2::iCollider* GetCollider (size_t index) {return NULL;}
+  virtual CS::Collisions::iCollider* GetCollider (size_t index) {return NULL;}
   virtual size_t GetColliderCount () {return 0;}
 
   virtual void SetCollisionGroup (const char* name) {csBulletCollisionObject::SetCollisionGroup (name);}
   virtual const char* GetCollisionGroup () const {return csBulletCollisionObject::GetCollisionGroup ();}
 
-  virtual void SetCollisionCallback (CS::Collision2::iCollisionCallback* cb) {collCb = cb;}
-  virtual CS::Collision2::iCollisionCallback* GetCollisionCallback () {return collCb;}
+  virtual void SetCollisionCallback (CS::Collisions::iCollisionCallback* cb) {collCb = cb;}
+  virtual CS::Collisions::iCollisionCallback* GetCollisionCallback () {return collCb;}
 
   virtual bool Collide (iCollisionObject* otherObject) {return csBulletCollisionObject::Collide (otherObject);}
-  virtual CS::Collision2::HitBeamResult HitBeam (const csVector3& start, const csVector3& end);
+  virtual CS::Collisions::HitBeamResult HitBeam (const csVector3& start, const csVector3& end);
 
   virtual size_t GetContactObjectsCount () {return contactObjects.GetSize ();}
-  virtual CS::Collision2::iCollisionObject* GetContactObject (size_t index) {
+  virtual CS::Collisions::iCollisionObject* GetContactObject (size_t index) {
     return csBulletCollisionObject::GetContactObject (index);}
 
   btSoftBody* GetBulletSoftPointer () {return btBody;}
@@ -106,9 +106,9 @@ public:
 
   //iPhysicalBody
 
-  virtual CS::Physics2::PhysicalBodyType GetBodyType () const {return CS::Physics2::BODY_SOFT;}
-  virtual CS::Physics2::iRigidBody* QueryRigidBody () {return NULL;}
-  virtual CS::Physics2::iSoftBody* QuerySoftBody () {return dynamic_cast<CS::Physics2::iSoftBody*>(this);}
+  virtual CS::Physics::PhysicalBodyType GetBodyType () const {return CS::Physics::BODY_SOFT;}
+  virtual CS::Physics::iRigidBody* QueryRigidBody () {return NULL;}
+  virtual CS::Physics::iSoftBody* QuerySoftBody () {return dynamic_cast<CS::Physics::iSoftBody*>(this);}
 
   virtual bool Disable ();
   virtual bool Enable ();
@@ -138,9 +138,9 @@ public:
 
   virtual void AnchorVertex (size_t vertexIndex);
   virtual void AnchorVertex (size_t vertexIndex,
-    CS::Physics2::iRigidBody* body);
+    CS::Physics::iRigidBody* body);
   virtual void AnchorVertex (size_t vertexIndex,
-    CS::Physics2::iAnchorAnimationControl* controller);
+    CS::Physics::iAnchorAnimationControl* controller);
 
   virtual void UpdateAnchor (size_t vertexIndex,
     csVector3& position);

@@ -105,7 +105,7 @@ void Simple::Frame ()
     // If there is a collision we undo our transforms of the sprite and
     // reverse rotation direction for it.
     //---------
-     csArray<CS::Collision2::CollisionData> data;
+     csArray<CS::Collisions::CollisionData> data;
      collisionSector->CollisionTest (terrainObject, data);
      for (size_t i = 0; i < data.GetSize (); i++)
      {
@@ -230,7 +230,7 @@ bool Simple::OnInitialize(int /*argc*/, char* /*argv*/ [])
     CS_REQUEST_REPORTER,
     CS_REQUEST_REPORTERLISTENER,
     CS_REQUEST_PLUGIN("crystalspace.collision.opcode2",
-    CS::Collision2::iCollisionSystem),
+    CS::Collisions::iCollisionSystem),
     CS_REQUEST_END))
     return ReportError("Failed to initialize plugins!");
 
@@ -303,7 +303,7 @@ bool Simple::SetupModules ()
   loader = csQueryRegistry<iLoader> (GetObjectRegistry());
   if (!loader) return ReportError("Failed to locate Loader!");
 
-  collisionSystem = csQueryRegistry<CS::Collision2::iCollisionSystem> (GetObjectRegistry());
+  collisionSystem = csQueryRegistry<CS::Collisions::iCollisionSystem> (GetObjectRegistry());
   if (!collisionSystem) return ReportError("Failed to locate collision system!");
 
   // We need a View to the virtual world.
@@ -557,7 +557,7 @@ void Simple::CreateTerrain ()
   collisionSector->SetSector (room);
 
   // Create a terrain collider.
-  csRef<CS::Collision2::iColliderTerrain> terrainCollider = collisionSystem->CreateColliderTerrain (terrain);
+  csRef<CS::Collisions::iColliderTerrain> terrainCollider = collisionSystem->CreateColliderTerrain (terrain);
 
   // Create a collision object. Set the collider.
   terrainObject = collisionSystem->CreateCollisionObject ();
@@ -671,7 +671,7 @@ bool Simple::OnMouseDown (iEvent& event)
     csVector3 startBeam = camera->GetTransform ().GetOrigin ();
     csVector3 endBeam = camera->GetTransform ().This2Other (v3d);
 
-    CS::Collision2::HitBeamResult hitResult = 
+    CS::Collisions::HitBeamResult hitResult = 
       collisionSector->HitBeam (startBeam, endBeam);
 
     if (!hitResult.hasHit)

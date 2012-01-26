@@ -63,13 +63,13 @@ private:
   csRef<iRenderManager> rm;
 
   /// The collision plugin, creates colliders
-  csRef<CS::Collision2::iCollisionSystem> collisionSystem;
+  csRef<CS::Collisions::iCollisionSystem> collisionSystem;
 
   /// A pointer to the sector the camera will be in.
   csRef<iSector> room;
 
   /// A pointer to the collision sector.
-  csRef<CS::Collision2::iCollisionSector> collisionSector;
+  csRef<CS::Collisions::iCollisionSector> collisionSector;
 
   /// The anchor sprite
   csRef<iMeshWrapper> parent_sprite;
@@ -81,10 +81,10 @@ private:
   csRef<iMeshWrapper> sprite1;
   
   /// sprites' shared collider
-  csRef<CS::Collision2::iColliderConcaveMesh> sprite_col;
+  csRef<CS::Collisions::iColliderConcaveMesh> sprite_col;
 
   /// sprite1's object
-  csRef<CS::Collision2::iCollisionObject> sprite1_obj;
+  csRef<CS::Collisions::iCollisionObject> sprite1_obj;
 
   /// Determines in which direction sprite2 will rotate
   float rot2_direction;
@@ -93,7 +93,7 @@ private:
   csRef<iMeshWrapper> sprite2;
 
   /// sprite2's object
-  csRef<CS::Collision2::iCollisionObject> sprite2_obj;
+  csRef<CS::Collisions::iCollisionObject> sprite2_obj;
 
   /// Current orientation of the camera.
   float rotX, rotY;
@@ -109,7 +109,7 @@ private:
   int environment;
 
   // The collider of terrain.
-  csRef<CS::Collision2::iCollisionObject> terrainObject;
+  csRef<CS::Collisions::iCollisionObject> terrainObject;
 
 public:
   bool SetupModules ();

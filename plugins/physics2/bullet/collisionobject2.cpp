@@ -12,7 +12,7 @@ CS_PLUGIN_NAMESPACE_BEGIN (Bullet2)
 
 csBulletCollisionObject::csBulletCollisionObject (csBulletSystem* sys)
 : scfImplementationType (this), movable (NULL), camera (NULL), collCb (NULL),
-  type (CS::Collision2::COLLISION_OBJECT_BASE), transform (btTransform::getIdentity ()),
+  type (CS::Collisions::COLLISION_OBJECT_BASE), transform (btTransform::getIdentity ()),
   portalWarp (btQuaternion::getIdentity ()), sector (NULL), system (sys),
   btObject (NULL), compoundShape (NULL), objectOrigin (NULL), objectCopy (NULL),
   haveStaticColliders(0), insideWorld (false), shapeChanged (false), isTerrain (false)
@@ -34,16 +34,16 @@ csBulletCollisionObject::~csBulletCollisionObject ()
     delete motionState;
 }
 
-void csBulletCollisionObject::SetObjectType (CS::Collision2::CollisionObjectType type,
+void csBulletCollisionObject::SetObjectType (CS::Collisions::CollisionObjectType type,
                                              bool forceRebuild /* = true */)
 {
   //many many constraints.
-  if (type == CS::Collision2::COLLISION_OBJECT_ACTOR || type == CS::Collision2::COLLISION_OBJECT_PHYSICAL)
+  if (type == CS::Collisions::COLLISION_OBJECT_ACTOR || type == CS::Collisions::COLLISION_OBJECT_PHYSICAL)
   {
     csFPrintf  (stderr, "csBulletCollisionObject: Can't change from BASE/GHOST to ACTOR/PHYSICAL\n");
     return;
   }
-  else if (isTerrain && type != CS::Collision2::COLLISION_OBJECT_BASE)
+  else if (isTerrain && type != CS::Collisions::COLLISION_OBJECT_BASE)
   {
     csFPrintf  (stderr, "csBulletCollisionObject: Can't change terrain object from BASE to other type\n");
     return;
@@ -67,7 +67,7 @@ void csBulletCollisionObject::SetTransform (const csOrthoTransform& trans)
 
   transform = CSToBullet (trans, system->getInternalScale ());
 
-  if (type == CS::Collision2::COLLISION_OBJECT_BASE || type == CS::Collision2::COLLISION_OBJECT_PHYSICAL)
+  if (type == CS::Collisions::COLLISION_OBJECT_BASE || type == CS::Collisions::COLLISION_OBJECT_PHYSICAL)
   {
     if (!isTerrain)
     {
@@ -109,7 +109,7 @@ csOrthoTransform csBulletCollisionObject::GetTransform ()
 {
   float inverseScale = system->getInverseInternalScale ();
 
-  if (type == CS::Collision2::COLLISION_OBJECT_BASE || type == CS::Collision2::COLLISION_OBJECT_PHYSICAL)
+  if (type == CS::Collisions::COLLISION_OBJECT_BASE || type == CS::Collisions::COLLISION_OBJECT_PHYSICAL)
   {
     if (!isTerrain)
     {
@@ -136,18 +136,18 @@ csOrthoTransform csBulletCollisionObject::GetTransform ()
       return BulletToCS (transform, system->getInverseInternalScale ());
 }
 
-void csBulletCollisionObject::AddCollider (CS::Collision2::iCollider* collider,
+void csBulletCollisionObject::AddCollider (CS::Collisions::iCollider* collider,
                                            const csOrthoTransform& relaTrans)
 {
   csRef<csBulletCollider> coll (dynamic_cast<csBulletCollider*>(collider));
 
-  CS::Collision2::ColliderType type = collider->GetGeometryType ();
-  if (type == CS::Collision2::COLLIDER_CONCAVE_MESH
-    ||type == CS::Collision2::COLLIDER_CONCAVE_MESH_SCALED
-    ||type == CS::Collision2::COLLIDER_PLANE)
+  CS::Collisions::ColliderType type = collider->GetGeometryType ();
+  if (type == CS::Collisions::COLLIDER_CONCAVE_MESH
+    ||type == CS::Collisions::COLLIDER_CONCAVE_MESH_SCALED
+    ||type == CS::Collisions::COLLIDER_PLANE)
     haveStaticColliders ++;
   
-  if(type == CS::Collision2::COLLIDER_TERRAIN)
+  if(type == CS::Collisions::COLLIDER_TERRAIN)
   {
     colliders.Empty ();
     relaTransforms.Empty ();
@@ -165,7 +165,7 @@ void csBulletCollisionObject::AddCollider (CS::Collision2::iCollider* collider,
   //User must call RebuildObject() after this.
 }
 
-void csBulletCollisionObject::RemoveCollider (CS::Collision2::iCollider* collider)
+void csBulletCollisionObject::RemoveCollider (CS::Collisions::iCollider* collider)
 {
   for (size_t i =0; i < colliders.GetSize(); i++)
   {
@@ -185,10 +185,10 @@ void csBulletCollisionObject::RemoveCollider (size_t index)
     if (isTerrain && index == 0)
       isTerrain = false;
 
-    CS::Collision2::ColliderType type = colliders[index]->GetGeometryType ();
-    if (type == CS::Collision2::COLLIDER_CONCAVE_MESH
-      ||type == CS::Collision2::COLLIDER_CONCAVE_MESH_SCALED
-      ||type == CS::Collision2::COLLIDER_PLANE)
+    CS::Collisions::ColliderType type = colliders[index]->GetGeometryType ();
+    if (type == CS::Collisions::COLLIDER_CONCAVE_MESH
+      ||type == CS::Collisions::COLLIDER_CONCAVE_MESH_SCALED
+      ||type == CS::Collisions::COLLIDER_PLANE)
       haveStaticColliders --;
 
     colliders.DeleteIndex (index);
@@ -197,7 +197,7 @@ void csBulletCollisionObject::RemoveCollider (size_t index)
   //User must call RebuildObject() after this.
 }
 
-CS::Collision2::iCollider* csBulletCollisionObject::GetCollider (size_t index)
+CS::Collisions::iCollider* csBulletCollisionObject::GetCollider (size_t index)
 {
   if (index < colliders.GetSize ())
     return colliders[index];
@@ -256,7 +256,7 @@ void csBulletCollisionObject::SetCollisionGroup (const char* name)
   if (!sector)
     return;
 
-  CS::Collision2::CollisionGroup& group = sector->FindCollisionGroup (name);
+  CS::Collisions::CollisionGroup& group = sector->FindCollisionGroup (name);
   this->collGroup = group;
 
   if (btObject && insideWorld)
@@ -266,9 +266,9 @@ void csBulletCollisionObject::SetCollisionGroup (const char* name)
   }
 }
 
-bool csBulletCollisionObject::Collide (CS::Collision2::iCollisionObject* otherObject)
+bool csBulletCollisionObject::Collide (CS::Collisions::iCollisionObject* otherObject)
 {
-  csArray<CS::Collision2::CollisionData> data;
+  csArray<CS::Collisions::CollisionData> data;
   csBulletCollisionObject* otherObj = dynamic_cast<csBulletCollisionObject*> (otherObject);
   if (isTerrain)
   {
@@ -309,7 +309,7 @@ bool csBulletCollisionObject::Collide (CS::Collision2::iCollisionObject* otherOb
   return false;
 }
 
-CS::Collision2::HitBeamResult csBulletCollisionObject::HitBeam (const csVector3& start,
+CS::Collisions::HitBeamResult csBulletCollisionObject::HitBeam (const csVector3& start,
                                                 const csVector3& end)
 {
   //Terrain part
@@ -319,11 +319,11 @@ CS::Collision2::HitBeamResult csBulletCollisionObject::HitBeam (const csVector3&
     for (size_t i = 0; i < terrainColl->bodies.GetSize (); i++)
     {
       btRigidBody* body = terrainColl->GetBulletObject (i);
-      CS::Collision2::HitBeamResult result = sector->RigidHitBeam (body, start, end);
+      CS::Collisions::HitBeamResult result = sector->RigidHitBeam (body, start, end);
       if (result.hasHit)
         return result;
     }
-    return CS::Collision2::HitBeamResult();
+    return CS::Collisions::HitBeamResult();
   }
   //Others part
   else
@@ -333,8 +333,8 @@ CS::Collision2::HitBeamResult csBulletCollisionObject::HitBeam (const csVector3&
 size_t csBulletCollisionObject::GetContactObjectsCount ()
 {
   size_t result = 0;
-  if (type == CS::Collision2::COLLISION_OBJECT_BASE 
-    || type == CS::Collision2::COLLISION_OBJECT_PHYSICAL)
+  if (type == CS::Collisions::COLLISION_OBJECT_BASE 
+    || type == CS::Collisions::COLLISION_OBJECT_PHYSICAL)
     result = contactObjects.GetSize ();
   else
   {
@@ -351,10 +351,10 @@ size_t csBulletCollisionObject::GetContactObjectsCount ()
   return result;
 }
 
-CS::Collision2::iCollisionObject* csBulletCollisionObject::GetContactObject (size_t index)
+CS::Collisions::iCollisionObject* csBulletCollisionObject::GetContactObject (size_t index)
 {
-  if (type == CS::Collision2::COLLISION_OBJECT_BASE 
-    || type == CS::Collision2::COLLISION_OBJECT_PHYSICAL)
+  if (type == CS::Collisions::COLLISION_OBJECT_BASE 
+    || type == CS::Collisions::COLLISION_OBJECT_PHYSICAL)
   {
     if (index < contactObjects.GetSize () && index >= 0)
       return contactObjects[index];
@@ -378,7 +378,7 @@ CS::Collision2::iCollisionObject* csBulletCollisionObject::GetContactObject (siz
       {
         btCollisionObject* obj = ghost->getOverlappingObject (index);
         if (obj)
-          return static_cast<CS::Collision2::iCollisionObject*> (obj->getUserPointer ());
+          return static_cast<CS::Collisions::iCollisionObject*> (obj->getUserPointer ());
         else 
           return NULL;
       }
@@ -402,7 +402,7 @@ bool csBulletCollisionObject::RemoveBulletObject ()
 {
   if (insideWorld)
   {
-    if (type == CS::Collision2::COLLISION_OBJECT_BASE)
+    if (type == CS::Collisions::COLLISION_OBJECT_BASE)
     {
       if (isTerrain)
       {
@@ -456,7 +456,7 @@ bool csBulletCollisionObject::AddBulletObject ()
 
   invPricipalAxis = pricipalAxis.inverse ();
 
-  if (type == CS::Collision2::COLLISION_OBJECT_BASE)
+  if (type == CS::Collisions::COLLISION_OBJECT_BASE)
   {
     if (!isTerrain)
     {
@@ -477,8 +477,8 @@ bool csBulletCollisionObject::AddBulletObject ()
     else
       dynamic_cast<csBulletColliderTerrain*> (colliders[0])->AddRigidBodies (sector, this);
   }
-  else if (type == CS::Collision2::COLLISION_OBJECT_GHOST 
-    || type == CS::Collision2::COLLISION_OBJECT_ACTOR)
+  else if (type == CS::Collisions::COLLISION_OBJECT_GHOST 
+    || type == CS::Collisions::COLLISION_OBJECT_ACTOR)
   {
 
     btObject = new btPairCachingGhostObject ();
@@ -487,7 +487,7 @@ bool csBulletCollisionObject::AddBulletObject ()
       movable->SetFullTransform (BulletToCS(transform * invPricipalAxis, system->getInverseInternalScale ()));
     if (camera)
       camera->SetTransform (BulletToCS(transform * invPricipalAxis, system->getInverseInternalScale ()));
-    btObject->setUserPointer (dynamic_cast<CS::Collision2::iCollisionObject*> (this));
+    btObject->setUserPointer (dynamic_cast<CS::Collisions::iCollisionObject*> (this));
     btObject->setCollisionShape (shape);
     sector->broadphase->getOverlappingPairCache()->setInternalGhostPairCallback(new btGhostPairCallback());
     sector->bulletWorld->addCollisionObject (btObject, collGroup.value, collGroup.mask);
