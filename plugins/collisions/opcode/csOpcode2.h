@@ -67,7 +67,7 @@ class csOpcodeCollisionSector : public scfImplementationExt1<
 
   CollisionGroupVector collGroups;
   CS::Collisions::CollisionGroupMask allFilter; 
-  int systemFilterCount;
+  size_t systemFilterCount;
 
   csRef<iSector> sector;
   csOpcodeCollisionSystem* sys;

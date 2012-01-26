@@ -32,15 +32,15 @@ class csOpcodeCollider : public scfImplementation1<
   friend class csOpcodeCollisionObject;
   friend class csOpcodeCollisionSector;
 private:
+  csOpcodeCollisionSystem* system;
+  iMeshWrapper* mesh;
   float volume;
   Opcode::Model* model;
-  iMeshWrapper* mesh;
   Opcode::MeshInterface opcMeshInt;
   unsigned int* indexholder;
   Point *vertholder;
   csVector3 scale;
   csBox3 aabbox;
-  csOpcodeCollisionSystem* system;
 
   static void MeshCallback (udword triangle_index, 
     Opcode::VertexPointers& triangle, void* user_data);

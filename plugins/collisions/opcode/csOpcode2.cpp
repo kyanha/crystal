@@ -57,7 +57,7 @@ bool Opcode_Err (const char* msg, ...)
 }
 
 csOpcodeCollisionSector::csOpcodeCollisionSector (csOpcodeCollisionSystem* sys)
-: scfImplementationType (this), sys (sys), allFilter (-1)
+: scfImplementationType (this), allFilter (-1), sys (sys)
 {
   CS::Collisions::CollisionGroup defaultGroup ("Default");
   defaultGroup.value = 1;
@@ -178,8 +178,8 @@ CS::Collisions::CollisionGroup& csOpcodeCollisionSector::FindCollisionGroup (con
 
 void csOpcodeCollisionSector::SetGroupCollision (const char* name1, const char* name2, bool collide)
 {
-  int index1 = collGroups.FindKey (CollisionGroupVector::KeyCmp (name1));
-  int index2 = collGroups.FindKey (CollisionGroupVector::KeyCmp (name2));
+  size_t index1 = collGroups.FindKey (CollisionGroupVector::KeyCmp (name1));
+  size_t index2 = collGroups.FindKey (CollisionGroupVector::KeyCmp (name2));
   if (index1 == csArrayItemNotFound || index2 == csArrayItemNotFound)
     return;
   if (!collide)
@@ -200,8 +200,8 @@ void csOpcodeCollisionSector::SetGroupCollision (const char* name1, const char* 
 
 bool csOpcodeCollisionSector::GetGroupCollision (const char* name1, const char* name2)
 {
-  int index1 = collGroups.FindKey (CollisionGroupVector::KeyCmp (name1));
-  int index2 = collGroups.FindKey (CollisionGroupVector::KeyCmp (name2));
+  size_t index1 = collGroups.FindKey (CollisionGroupVector::KeyCmp (name1));
+  size_t index2 = collGroups.FindKey (CollisionGroupVector::KeyCmp (name2));
   if (index1 == csArrayItemNotFound || index2 == csArrayItemNotFound)
     return false;
   if ((collGroups[index1].value & (1 << index2)) != 0 

@@ -374,7 +374,7 @@ CS::Collisions::iCollisionObject* csBulletCollisionObject::GetContactObject (siz
     btGhostObject* ghost = btGhostObject::upcast (btObject);
     if (ghost)
     {
-      if (index < ghost->getNumOverlappingObjects () && index >= 0)
+      if (index < (size_t) ghost->getNumOverlappingObjects () && index >= 0)
       {
         btCollisionObject* obj = ghost->getOverlappingObject (index);
         if (obj)
