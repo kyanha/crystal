@@ -42,7 +42,7 @@ struct iAnimatedMesh;
 } // namespace CS
 
 namespace CS{
-namespace Physics2{
+namespace Physics{
 
 struct iPhysicalSystem;
 struct iRigidBody;
@@ -153,24 +153,24 @@ struct iSkeletonRagdollNode2 : public virtual iSkeletonAnimNode
   /**
    * Set the dynamic system.
    */
-  virtual void SetPhysicalSystem (CS::Physics2::iPhysicalSystem* system) = 0;
+  virtual void SetPhysicalSystem (CS::Physics::iPhysicalSystem* system) = 0;
 
   /**
    * Get the dynamic system.
    */
-  virtual CS::Physics2::iPhysicalSystem* GetPhysicalSystem () const = 0;
+  virtual CS::Physics::iPhysicalSystem* GetPhysicalSystem () const = 0;
 
    /**
    * Set the physical sector where the rigid bodies are evolving. It is valid to provide a
    * null system, in this case the bodies already created will be removed from any dynamic
    * system.
    */
-  virtual void SetPhysicalSector (CS::Physics2::iPhysicalSector* sector) = 0;
+  virtual void SetPhysicalSector (CS::Physics::iPhysicalSector* sector) = 0;
 
   /**
    * Get the physical sector where the rigid bodies are evolving
    */
-  virtual CS::Physics2::iPhysicalSector* GetPhysicalSector () const = 0;
+  virtual CS::Physics::iPhysicalSector* GetPhysicalSector () const = 0;
 
   /**
    * Set the body chain in the given physical state.
@@ -185,12 +185,12 @@ struct iSkeletonRagdollNode2 : public virtual iSkeletonAnimNode
   /**
    * Get the rigid body of the given bone.
    */
-  virtual CS::Physics2::iRigidBody* GetBoneRigidBody (BoneID bone) = 0;
+  virtual CS::Physics::iRigidBody* GetBoneRigidBody (BoneID bone) = 0;
 
   /**
    * Get the joint of the given bone.
    */
-  virtual CS::Physics2::iJoint* GetBoneJoint (const BoneID bone) = 0;
+  virtual CS::Physics::iJoint* GetBoneJoint (const BoneID bone) = 0;
 
   /**
    * Get the count of bones in the given physical state.
@@ -219,7 +219,7 @@ struct iSkeletonRagdollNode2 : public virtual iSkeletonAnimNode
    * CS::Animation::InvalidBoneID if the given rigid body is not part of this
    * physical body.
    */
-  virtual BoneID GetRigidBodyBone (CS::Physics2::iRigidBody* body) const = 0;
+  virtual BoneID GetRigidBodyBone (CS::Physics::iRigidBody* body) const = 0;
 };
 
 } // namespace Animation
