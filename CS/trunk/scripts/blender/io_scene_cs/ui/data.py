@@ -40,7 +40,7 @@ class MESH_OT_csFactory_RemoveProperty(bpy.types.Operator):
 
 @rnaType
 class MESH_PT_csFactory(csFactoryPanel, bpy.types.Panel):
-  bl_label = "Crystal Space mesh factory"
+  bl_label = "Crystal Space Mesh Factory"
 
   def LayoutAddProperty(self, row, ob, name):
     split = row.split(percentage=0.5)

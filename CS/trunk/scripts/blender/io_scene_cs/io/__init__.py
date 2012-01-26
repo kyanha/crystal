@@ -68,8 +68,8 @@ def Export(path):
           if fact.object.type == 'ARMATURE':
             if fact.object.data.bones:
               ob = fact.object
-              print('Exporting skeleton and animations:', util.Join(path, 'factories/', 'skel%s_rig'%(ob.name)))
-              fb = open(util.Join(path, 'factories/', 'skel%s_rig'%(ob.name)), 'w')
+              print('Exporting skeleton and animations:', util.Join(path, 'factories/', '%s_rig'%(ob.name)))
+              fb = open(util.Join(path, 'factories/', '%s_rig'%(ob.name)), 'w')
               ob.data.AsCSSkelAnim(Write(fb), 2, ob)
               fb.close()
     elif typ == 'F':

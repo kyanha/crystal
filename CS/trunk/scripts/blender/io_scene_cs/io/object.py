@@ -35,7 +35,7 @@ class Hierarchy:
 
   def AsCSRef(self, func, depth=0, dirName='factories/'):
     if self.object.type == 'ARMATURE' and self.object.data.bones:
-      func(' '*depth +'<library>%sskel%s_rig</library>'%(dirName,self.object.name))
+      func(' '*depth +'<library>%s%s_rig</library>'%(dirName,self.object.name))
     func(' '*depth +'<library>%s%s</library>'%(dirName,self.object.name))
 
   def GetDependencies(self):
@@ -175,7 +175,7 @@ class Hierarchy:
 
     # Reference skeleton as a CS library
     if self.object.type == 'ARMATURE':
-      func('  <library>factories/skel%s_rig</library>'%(self.object.name))
+      func('  <library>factories/%s_rig</library>'%(self.object.name))
 
     # Export meshes as imbricated CS general mesh factories
     import copy
@@ -276,7 +276,7 @@ class Hierarchy:
 
     # Specify skeleton name
     if self.object.type == 'ARMATURE':
-      func(' '*depth + '    <skeleton>skel%s_rig</skeleton>'%(self.object.name))
+      func(' '*depth + '    <skeleton>%s_rig</skeleton>'%(self.object.name))
 
     # Export morph targets
     for mt in GetMorphTargets(totalVertices, **kwargs):

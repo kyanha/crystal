@@ -329,7 +329,7 @@ def AsCSSkeletonAnimations (self, func, depth, armatureObject):
       func('      </state>')
     func('    </node>')
     func('  </animationpacket>')
-    print('INFO: %s animation(s) exported for skeleton "skel%s_rig"'%(len(exportedActions),armatureName))
+    print('INFO: %s animation(s) exported for skeleton "%s_rig"'%(len(exportedActions),armatureName))
 
   # Unlink the armature copy and delete baking scene
   armatureObjectCpy.data.pose_position = initialPose
@@ -338,14 +338,14 @@ def AsCSSkeletonAnimations (self, func, depth, armatureObject):
   bpy.data.scenes.remove(bakingScene)
 
   # EXPORT SKELETON
-  func('  <skeleton name="skel%s_rig">'%(armatureName))
+  func('  <skeleton name="%s_rig">'%(armatureName))
   for bone in self.bones:
     if not bone.parent:
       bone.AsCS(func, depth+2, armatureObject.matrix_world)
   if len(exportedActions):
     func('    <animationpacket>%s_packet</animationpacket>'%(armatureName))
   func('  </skeleton>')
-  print('INFO: %s bone(s) exported for skeleton "skel%s_rig"'%(len(boneNames),armatureName))
+  print('INFO: %s bone(s) exported for skeleton "%s_rig"'%(len(boneNames),armatureName))
 
   func('  </addon>')
   func('</library>')
