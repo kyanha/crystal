@@ -28,6 +28,7 @@
 #include "imesh/animnode/lookat.h"
 #include "imesh/animnode/noise.h"
 #include "imesh/animnode/ragdoll.h"
+#include "imesh/animnode/ragdoll2.h"
 #include "imesh/animnode/retarget.h"
 #include "imesh/animnode/skeleton2anim.h"
 #include "imesh/animnode/speed.h"
