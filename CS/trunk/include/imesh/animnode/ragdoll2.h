@@ -27,7 +27,7 @@
 
 #include "csutil/scf_interface.h"
 
-#include "ivaria/physical2.h"
+#include "ivaria/physics.h"
 #include "imesh/bodymesh.h"
 
 /**\addtogroup meshplugins
