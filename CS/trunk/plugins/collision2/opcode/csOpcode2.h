@@ -23,7 +23,7 @@
 #include "csutil/scf.h"
 #include "csutil/nobjvec.h"
 #include "csutil/scf_implementation.h"
-#include "ivaria/collision2.h"
+#include "ivaria/collisions.h"
 #include "iengine/sector.h"
 #include "iengine/movable.h"
 #include "csutil/csobject.h"

@@ -22,7 +22,7 @@
 #include "BulletCollision/CollisionShapes/btHeightfieldTerrainShape.h"
 #include "csgeom/plane3.h"
 #include "imesh/terrain2.h"
-#include "ivaria/collision2.h"
+#include "ivaria/collisions.h"
 #include "common2.h"
 
 class btBoxShape;

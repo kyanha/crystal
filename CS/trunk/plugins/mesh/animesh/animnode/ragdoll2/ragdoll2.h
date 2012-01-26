@@ -26,7 +26,7 @@
 #include "csutil/csstring.h"
 #include "imesh/animnode/ragdoll2.h"
 #include "iutil/comp.h"
-#include "ivaria/physical2.h"
+#include "ivaria/physics.h"
 
 CS_PLUGIN_NAMESPACE_BEGIN(Ragdoll2)
 {

@@ -31,9 +31,9 @@
 #include "iutil/object.h"
 #include "iutil/objreg.h"
 #include "ivaria/reporter.h"
-#include "ivaria/collision2.h"
+#include "ivaria/collisions.h"
 #include "ivaria/bullet2.h"
-#include "ivaria/physical2.h"
+#include "ivaria/physics.h"
 #include "imesh/terrain2.h"
 #include "physldr2.h"
 
