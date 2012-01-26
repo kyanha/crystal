@@ -43,7 +43,7 @@ struct iAnimatedMesh;
 
 namespace CS
 {
-namespace Collision2
+namespace Collisions
 {
 struct iCollisionCallback;
 struct iCollisionObject;
@@ -54,7 +54,7 @@ struct iCollisionObject;
 
 namespace CS
 {
-namespace Physics2
+namespace Physics
 {
 
 struct iJoint;
@@ -87,22 +87,22 @@ enum RigidBodyState
  * A base interface of physical bodies. 
  * iRigidBody and iSoftBody will be derived from this one.
  */
-struct iPhysicalBody : public virtual CS::Collision2::iCollisionObject
+struct iPhysicalBody : public virtual CS::Collisions::iCollisionObject
 {
-  SCF_INTERFACE (CS::Physics2::iPhysicalBody, 1, 0, 0);
+  SCF_INTERFACE (CS::Physics::iPhysicalBody, 1, 0, 0);
 
   /// Get the body type of this physical body.
   virtual PhysicalBodyType GetBodyType () const = 0;
 
   /**
    * Query the iRigidBody interface of this body. It returns NULL if the
-   * interface is not valid, ie GetType() is not CS::Physics2::BODY_RIGID.
+   * interface is not valid, ie GetType() is not CS::Physics::BODY_RIGID.
    */
   virtual iRigidBody* QueryRigidBody () = 0;
 
   /**
    * Query the iSoftBody interface of this body. It returns NULL if the
-   * interface is not valid, ie GetType() is not CS::Physics2::BODY_SOFT.
+   * interface is not valid, ie GetType() is not CS::Physics::BODY_SOFT.
    */
   virtual iSoftBody* QuerySoftBody () = 0;
 
@@ -170,11 +170,11 @@ struct iPhysicalBody : public virtual CS::Collision2::iCollisionObject
  * Main users of this interface:
  * - iPhysicalSector
  *
- * \sa CS::Physics2::iSoftBody CS::Physics2::Bullet2::iSoftBody
+ * \sa CS::Physics::iSoftBody CS::Physics::Bullet2::iSoftBody
  */
 struct iRigidBody : public virtual iPhysicalBody
 {
-  SCF_INTERFACE (CS::Physics2::iRigidBody, 1, 0, 0);
+  SCF_INTERFACE (CS::Physics::iRigidBody, 1, 0, 0);
 
   /// Get the current state of the body.
   virtual RigidBodyState GetState () = 0;
@@ -280,16 +280,16 @@ struct iRigidBody : public virtual iPhysicalBody
 
 /**
  * This class can be implemented in order to update the position of an anchor of a
- * CS::Physics2::iSoftBody. This can be used to try to control manually the
+ * CS::Physics::iSoftBody. This can be used to try to control manually the
  * position of a vertex of a soft body.
  *
  * \warning This feature uses a hack around the physical simulation of soft bodies
  * and may not always be stable. Use it at your own risk.
- * \sa CS::Physics2::iSoftBody::AnchorVertex(size_t,iAnchorAnimationControl)
+ * \sa CS::Physics::iSoftBody::AnchorVertex(size_t,iAnchorAnimationControl)
  */
 struct iAnchorAnimationControl : public virtual iBase
 {
-  SCF_INTERFACE(CS::Physics2::iAnchorAnimationControl, 1, 0, 0);
+  SCF_INTERFACE(CS::Physics::iAnchorAnimationControl, 1, 0, 0);
 
   /**
    * Return the new position of the anchor, in world coordinates.
@@ -317,11 +317,11 @@ struct iAnchorAnimationControl : public virtual iBase
  * Main users of this interface:
  * - iPhysicalSector
  *
- * \sa CS::Physics2::iRigidBody CS::Physics2::Bullet2::iSoftBody
+ * \sa CS::Physics::iRigidBody CS::Physics::Bullet2::iSoftBody
  */
 struct iSoftBody : public virtual iPhysicalBody
 {
-  SCF_INTERFACE (CS::Physics2::iSoftBody, 1, 0, 0);
+  SCF_INTERFACE (CS::Physics::iSoftBody, 1, 0, 0);
 
   /// Set the mass of a node by index.
   virtual void SetVertexMass (float mass, size_t index) = 0;
@@ -411,7 +411,7 @@ virtual const csVector3 GetWindVelocity () const = 0;
 };
 
 /**
- * General helper class for CS::Physics2::Bullet::iSoftBody.
+ * General helper class for CS::Physics::Bullet::iSoftBody.
  */
 struct SoftBodyHelper
 {
@@ -488,7 +488,7 @@ struct SoftBodyHelper
  */
 struct iJoint : public virtual iBase
 {
-  SCF_INTERFACE (CS::Physics2::iJoint, 1, 0, 0);
+  SCF_INTERFACE (CS::Physics::iJoint, 1, 0, 0);
 
   /**
    * Set the rigid bodies that will be affected by this joint. Set force_update to true if 
@@ -681,11 +681,11 @@ struct iJoint : public virtual iBase
  * callback are provided then the dynamic system will use a default one which
  * will update the transform of the body from the position of the attached
  * movable (see iCollisionObject::SetAttachedMovable()).
- * \sa CS::Physics2::iRigidBody::SetKinematicCallback()
+ * \sa CS::Physics::iRigidBody::SetKinematicCallback()
  */
 struct iKinematicCallback : public virtual iBase
 {
-  SCF_INTERFACE (CS::Physics2::iKinematicCallback, 1, 0, 0);
+  SCF_INTERFACE (CS::Physics::iKinematicCallback, 1, 0, 0);
 
   /**
    * Update the new transform of the rigid body.
@@ -707,11 +707,11 @@ struct iKinematicCallback : public virtual iBase
  * Main users of this interface:
  * - Dynamics loader plugin (crystalspace.dynamics.loader)
  *
- * \sa CS::Collision2::iCollisionSystem
+ * \sa CS::Collisions::iCollisionSystem
  */
 struct iPhysicalSystem : public virtual iBase
 {
-  SCF_INTERFACE (CS::Physics2::iPhysicalSystem, 1, 0, 0);
+  SCF_INTERFACE (CS::Physics::iPhysicalSystem, 1, 0, 0);
 
   /**
    * Create a rigid body, if there's an iCollisionObject pointer, 
@@ -842,13 +842,13 @@ struct iPhysicalSystem : public virtual iBase
  * It manage all physical bodies.
  * 
  * Main ways to get pointers to this interface:
- * - scfQueryInterface<CS::Physics2::iPhysicalSector>() from a CS::Collision2::iCollisionSector
+ * - scfQueryInterface<CS::Physics::iPhysicalSector>() from a CS::Collisions::iCollisionSector
  *
- * \sa CS::Collision2::iCollisionSector CS::Physics2::Bullet2::iPhysicalSector
+ * \sa CS::Collisions::iCollisionSector CS::Physics::Bullet2::iPhysicalSector
  */
 struct iPhysicalSector : public virtual iBase
 {
-  SCF_INTERFACE (CS::Physics2::iPhysicalSector, 1, 0, 0);
+  SCF_INTERFACE (CS::Physics::iPhysicalSector, 1, 0, 0);
 
   /**
    * Set the simulation speed. A value of 0 means that the simulation is not made
@@ -884,7 +884,7 @@ struct iPhysicalSector : public virtual iBase
    * in one second. 0 means that the movement will not be reduced, while
    * 1 means that the object will not move.
    * The default value is 0.
-   * \sa CS::Physics2::iRigidBody::SetLinearDampener()
+   * \sa CS::Physics::iRigidBody::SetLinearDampener()
    */
   virtual void SetLinearDampener (float d) = 0;
 
@@ -900,7 +900,7 @@ struct iPhysicalSector : public virtual iBase
    * in one second. 0 means that the movement will not be reduced, while
    * 1 means that the object will not move.
    * The default value is 0.
-   * \sa CS::Physics2::iRigidBody::SetRollingDampener()
+   * \sa CS::Physics::iRigidBody::SetRollingDampener()
    */
   virtual void SetRollingDampener (float d) = 0;
 
@@ -978,7 +978,7 @@ struct iPhysicalSector : public virtual iBase
 };
 
 /**
- * Animation control type for a genmesh animated by a CS::Physics2::iSoftBody.
+ * Animation control type for a genmesh animated by a CS::Physics::iSoftBody.
  *
  * Main ways to get pointers to this interface:
  * - csQueryPluginClass()
@@ -989,14 +989,14 @@ struct iPhysicalSector : public virtual iBase
  */
 struct iSoftBodyAnimationControlType : public iGenMeshAnimationControlType
 {
-  SCF_INTERFACE (CS::Physics2::iSoftBodyAnimationControlType, 1, 0, 0);
+  SCF_INTERFACE (CS::Physics::iSoftBodyAnimationControlType, 1, 0, 0);
 };
 
 /**
- * Animation control factory for a genmesh animated by a CS::Physics2::iSoftBody.
+ * Animation control factory for a genmesh animated by a CS::Physics::iSoftBody.
  *
  * Main creators of instances implementing this interface:
- * - CS::Physics2::iSoftBodyAnimationControlType::CreateAnimationControlFactory()
+ * - CS::Physics::iSoftBodyAnimationControlType::CreateAnimationControlFactory()
  *
  * Main ways to get pointers to this interface:
  * - iGeneralFactoryState::GetAnimationControlFactory()
@@ -1006,11 +1006,11 @@ struct iSoftBodyAnimationControlType : public iGenMeshAnimationControlType
  */
 struct iSoftBodyAnimationControlFactory : public iGenMeshAnimationControlFactory
 {
-  SCF_INTERFACE (CS::Physics2::iSoftBodyAnimationControlFactory, 1, 0, 0);
+  SCF_INTERFACE (CS::Physics::iSoftBodyAnimationControlFactory, 1, 0, 0);
 };
 
 /**
- * Animation control for a genmesh animated by a CS::Physics2::iSoftBody. This class will
+ * Animation control for a genmesh animated by a CS::Physics::iSoftBody. This class will
  * animate the vertices of the genmesh depending on the physical simulation of the
  * soft body. It will also update automatically the position of the genmesh.
  *
@@ -1019,7 +1019,7 @@ struct iSoftBodyAnimationControlFactory : public iGenMeshAnimationControlFactory
  * of the animesh, even when it is deformed by the skinning and morphing processes.
  *
  * Main creators of instances implementing this interface:
- * - CS::Physics2::iSoftBodyAnimationControlFactory::CreateAnimationControl()
+ * - CS::Physics::iSoftBodyAnimationControlFactory::CreateAnimationControl()
  *
  * Main ways to get pointers to this interface:
  * - iGeneralMeshState::GetAnimationControl()
@@ -1029,7 +1029,7 @@ struct iSoftBodyAnimationControlFactory : public iGenMeshAnimationControlFactory
  */
 struct iSoftBodyAnimationControl : public iGenMeshAnimationControl
 {
-  SCF_INTERFACE (CS::Physics2::iSoftBodyAnimationControl, 1, 0, 0);
+  SCF_INTERFACE (CS::Physics::iSoftBodyAnimationControl, 1, 0, 0);
 
   /**
    * Set the soft body to be used to animate the genmesh. You can switch this soft body
@@ -1054,7 +1054,7 @@ struct iSoftBodyAnimationControl : public iGenMeshAnimationControl
    *
    * This anchor is only effective if the vertex of the animesh is influenced by more
    * than one bone or by some morph targets. If it is not the case then it is more
-   * efficient to simply use CS::Physics2::iSoftBody::AnchorVertex(size_t,iRigidBody*).
+   * efficient to simply use CS::Physics::iSoftBody::AnchorVertex(size_t,iRigidBody*).
    *
    * You have to provide a rigid body attached to the animesh as a main physical anchor
    * point. The main way to do that is to use a CS::Animation::iSkeletonRagdollNode
