@@ -18,11 +18,12 @@
 #define ENVIRONMENT_TERRAIN 3
 
 Simple::Simple()
-: DemoApplication ("CrystalSpace.PhysTut2"),
-isSoftBodyWorld (true), solver (0),
-do_bullet_debug (false), do_soft_debug (true), allStatic (false), 
-pauseDynamic (false), dynamicSpeed (1.0f), physicalCameraMode (CAMERA_DYNAMIC), 
-dragging (false), softDragging (false), remainingStepDuration (0.0f), debugMode (CS::Physics::Bullet2::DEBUG_COLLIDERS)
+  : DemoApplication ("CrystalSpace.PhysTut2"),
+    isSoftBodyWorld (true), solver (0), do_bullet_debug (false),
+    do_soft_debug (true), remainingStepDuration (0.0f), allStatic (false), 
+    pauseDynamic (false), dynamicSpeed (1.0f),
+    debugMode (CS::Physics::Bullet2::DEBUG_COLLIDERS),
+    physicalCameraMode (CAMERA_DYNAMIC), dragging (false), softDragging (false)
 {
   localTrans.Identity ();
 }
@@ -187,15 +188,15 @@ void Simple::Frame ()
 
   hudManager->GetStateDescriptions ()->Push (csString ("Physics engine: ") + phys_engine_name);
 
-  txt.Format ("Collision objects count: %d", collisionSector->GetCollisionObjectCount ());
+  txt.Format ("Collision objects count: %zu", collisionSector->GetCollisionObjectCount ());
   hudManager->GetStateDescriptions ()->Push (txt);
 
-  txt.Format ("Rigid bodies count: %d", physicalSector->GetRigidBodyCount ());
+  txt.Format ("Rigid bodies count: %zu", physicalSector->GetRigidBodyCount ());
   hudManager->GetStateDescriptions ()->Push (txt);
 
   if (isSoftBodyWorld)
   {
-    txt.Format ("Soft bodies count: %d", (int) physicalSector->GetSoftBodyCount ());
+    txt.Format ("Soft bodies count: %zu", physicalSector->GetSoftBodyCount ());
     hudManager->GetStateDescriptions ()->Push (txt);
   }
 
@@ -502,7 +503,7 @@ bool Simple::OnKeyboard (iEvent &event)
           CS::Physics::iRigidBody* rigidBody = clipboardBody->QueryRigidBody ();
           if (rigidBody->GetState () == CS::Physics::STATE_DYNAMIC)
           {
-            int count = physicalSector->GetRigidBodyCount ();
+            size_t count = physicalSector->GetRigidBodyCount ();
             physicalSector->RemoveRigidBody (clipboardBody->QueryRigidBody ());
             //room->GetMeshes ()->Remove (clipboardMovable->GetSceneNode ()->QueryMesh ());
             if (physicalSector->GetRigidBodyCount () == count)

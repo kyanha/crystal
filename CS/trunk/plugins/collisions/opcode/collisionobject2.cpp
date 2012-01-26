@@ -23,8 +23,9 @@
 CS_PLUGIN_NAMESPACE_BEGIN (Opcode2)
 {
 csOpcodeCollisionObject::csOpcodeCollisionObject (csOpcodeCollisionSystem* sys)
-  :scfImplementationType (this), system (sys), collCb (NULL), sector (NULL),
-  type (CS::Collisions::COLLISION_OBJECT_BASE), collider (NULL), isTerrain (false)
+  : scfImplementationType (this), system (sys), sector (NULL),
+  collider (NULL), type (CS::Collisions::COLLISION_OBJECT_BASE),
+  collCb (NULL), isTerrain (false)
 {
   transform.Identity ();
 }
@@ -120,12 +121,13 @@ bool csOpcodeCollisionObject::Collide (CS::Collisions::iCollisionObject* otherOb
   else if (obj->isTerrain || isTerrain)
   {
     bool contact = sector->CollideTerrain (this, obj, collisions);
-    if (contact)
-      if (collCb)
-        if (obj->isTerrain)
-          collCb->OnCollision (this,obj,collisions);
-        else
-          collCb->OnCollision (obj,this,collisions);
+    if (contact && collCb)
+    {
+      if (obj->isTerrain)
+	collCb->OnCollision (this,obj,collisions);
+      else
+	collCb->OnCollision (obj,this,collisions);
+    }
     return contact;
   }
   else
@@ -140,7 +142,7 @@ bool csOpcodeCollisionObject::Collide (CS::Collisions::iCollisionObject* otherOb
 
 CS::Collisions::HitBeamResult csOpcodeCollisionObject::HitBeam (const csVector3& start, const csVector3& end)
 {
-  CS::Collisions::iCollider* col = collider;
+  //CS::Collisions::iCollider* col = collider;
   float dep;
   CS::Collisions::HitBeamResult result;
   if (isTerrain)

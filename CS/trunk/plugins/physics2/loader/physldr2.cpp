@@ -247,6 +247,7 @@ bool csPhysicsLoader2::ParseCollisionSector (iDocumentNode *node,
       }
     case XMLTOKEN_DAMPENER:
       {
+	// TODO: use default values
         float angular = child->GetAttributeValueAsFloat ("angular");
         float linear = child->GetAttributeValueAsFloat ("linear");
         physSector->SetRollingDampener (angular);
@@ -261,9 +262,10 @@ bool csPhysicsLoader2::ParseCollisionSector (iDocumentNode *node,
       }
     case XMLTOKEN_STEPPARAS:
       {
-        float timeStep = child->GetAttributeValueAsFloat ("timestep");
-        float maxStep = child->GetAttributeValueAsFloat ("maxstep");
-        float iteration = child->GetAttributeValueAsFloat ("iteration");
+        float timeStep = child->GetAttributeValueAsFloat ("timestep", 0.0166f);
+        int maxStep = child->GetAttributeValueAsInt ("maxstep", 1);
+        int iteration = child->GetAttributeValueAsInt ("iteration", 10);
+	physSector->SetStepParameters (timeStep, maxStep, iteration);
       }
     case XMLTOKEN_COLLISIONOBJECT:
       {
@@ -549,13 +551,6 @@ bool csPhysicsLoader2::ParseSoftBody (iDocumentNode *node,
     }
   }
   return true;
-}
-
-static float GetFloat (iDocumentNode* node, const char* name, float def)
-{
-  csRef<iDocumentAttribute> attr = node->GetAttribute (name);
-  if (!attr) return def;
-  return attr->GetValueAsFloat ();
 }
 
 bool csPhysicsLoader2::ParseColliderBox (iDocumentNode *node, CS::Collisions::iCollisionObject* object)
