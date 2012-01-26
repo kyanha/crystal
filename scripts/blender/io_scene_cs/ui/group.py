@@ -8,7 +8,7 @@ class OBJECT_PT_B2CS_groups(bpy.types.Panel):
   bl_region_type = 'WINDOW'
   bl_context = "object"
   b2cs_context = "object"
-  bl_label = "Crystal Space mesh groups"
+  bl_label = "Crystal Space Mesh Groups"
   
   @classmethod
   def poll(cls, context):

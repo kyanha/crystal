@@ -11,7 +11,7 @@ class csShaderVarContextPanel():
     bl_space_type = "PROPERTIES"
     bl_region_type = "WINDOW"
     bl_context = "object"
-    bl_label = "Crystal Space shader"
+    bl_label = "Crystal Space Shader"
     bl_label = ""
 
     @classmethod
@@ -34,7 +34,7 @@ class OBJECT_PT_csShaderVarContext_RemoveProperty(bpy.types.Operator):
 
 @rnaType
 class OBJECT_PT_csShaderVarContext(csShaderVarContextPanel, bpy.types.Panel):
-    bl_label = "Crystal Space shader"
+    bl_label = "Crystal Space Shader"
 
     def draw(self, context):
         layout = self.layout

@@ -42,7 +42,7 @@ class OBJECT_OT_csObject_RemoveProperty(bpy.types.Operator):
 
 @rnaType
 class OBJECT_PT_csObject(csObjectPanel, bpy.types.Panel):
-  bl_label = "Crystal Space mesh object"
+  bl_label = "Crystal Space Mesh Object"
   bl_options = {'HIDE_HEADER'}
 
   def LayoutAddProperty(self, row, ob, name):

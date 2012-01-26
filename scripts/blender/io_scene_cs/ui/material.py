@@ -25,9 +25,7 @@ class csMaterialPanel():
 
 @rnaType
 class MATERIAL_PT_B2CS__context_material(csMaterialPanel, bpy.types.Panel):
-    bl_label = ""
-    bl_options = {'HIDE_HEADER'}
-
+    bl_label = "Crystal Space Material"
 
     def draw(self, context):
         layout = self.layout
