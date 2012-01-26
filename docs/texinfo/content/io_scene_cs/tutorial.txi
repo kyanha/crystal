@@ -8,24 +8,25 @@ add-on script.
 @heading Main export panel
 
 The main @samp{Crystal Space Export} panel is placed in the @samp{Render} context of the
-@samp{Properties} (or @samp{Buttons}) window.
+@samp{Properties} (or @samp{Buttons}) window. Some other panels are also added in some
+other contexts of the @samp{Properties} window, they will be presented later.
 
 @picturess{content,io_scene_cs,io_scene_cs_interface}
 
 The panel is composed of several buttons and controls to configure and run the exporter:
 
 @itemize @bullet
-@item 
+@item
 @strong{Export path}: path to the folder where the generated files will be put.
-@item 
+@item
 @strong{Export}: export the scene to the specified path.
-@item 
+@item
 @strong{Export and Run}: export the scene then run it in Crystal Space's @samp{walktest}.
-@item 
+@item
 @strong{Console}: enable the @code{-console} flag of @samp{walktest}
-@item 
+@item
 @strong{Verbose}: enable the @code{-verbose=-scf} flag of @samp{walktest}
-@item 
+@item
 @strong{Silent}: enable the @code{-silent} flag of @samp{walktest}
 @end itemize
 
@@ -46,11 +47,13 @@ The structure of the files is the following:
 
 @itemize @bullet
 @item
-the @samp{world} file containing your scene, in the export directory
+a @file{world} file containing your scene is created at the root of the export directory
 @item
-all texture files are put in the @samp{textures} directory
+a @file{textures} directory is created in the export directory, and all texture files are
+put in it
 @item
-all library files (i.e. the mesh factories) are put in the @samp{factories} directory
+a @file{factories} directory is created in the export directory, and all library files (i.e.
+the mesh factories) are put in it
 @end itemize
 
 If you want to visualize the exported objects, then you can open the library files with
@@ -72,11 +75,11 @@ the @ref{Walktest, @samp{walktest}} application.
 In order to work correctly, your scene needs:
 
 @itemize @bullet
-@item 
+@item
 at least one camera,
-@item 
+@item
 at least one light lighting your objects,
-@item 
+@item
 some objects below the camera, to be used as a roof and in order for the @samp{walktest}'s
 camera to not fall into the void as soon as you start the map.
 @end itemize
@@ -94,7 +97,7 @@ different keys and options, so you may want to have a look at the
 @subsubheading If the 'walktest' window fails to open
 
 @itemize @bullet
-@item 
+@item
 Check that there are no errors in the
 @url{http://wiki.blender.org/index.php/Doc:2.6/Manual/Interface/Window_system/Console_window, Blender console window}.
 @end itemize
@@ -102,90 +105,73 @@ Check that there are no errors in the
 @subsubheading If the 'walktest' screen is kept black
 
 @itemize @bullet
-@item 
+@item
 Check if there is a light, and if it is close enough to your geometry.
-@item 
+@item
 It is also possible that since the gravity is activated by default in walktest, the
 camera pans away from the set view too fast. Ensure that you press the @samp{8} key to
 deactivate gravity, or that you added a floor below you camera.
-@item 
+@item
 Check the console to ensure that your entire scene is being exported. Sometimes only the
 camera will be exported hence you will only see black. If you have this problem select all
 the objects in your scene (Hotkey @samp{A}) and then press @samp{Export and Run}.
-@item 
-Check that the normals from objects are pointing in the correct direction. If you made a cube
-surrounding the player this usually means you need to reverse its normals (in Blender and in
-Edit mode, press the hotkey @samp{W} then select @samp{Flip Normals}).
+@item
+Check that the normals from the objects are pointing in the correct direction. If you made a
+cube surrounding the player this usually means you need to reverse its normals (in Blender
+and in Edit mode, press the hotkey @samp{W} then select @samp{Flip Normals}).
 @end itemize
 
 
 @node io_scene_cs Export Scenes, io_scene_cs Export Genmesh, io_scene_cs First Steps, Blender
 @subsection Exporting Scenes
 
-The following paragraphs describe the generics you need to know to be able to export Blender scenes using io_scene_cs. 
+This section presents the main objects and files that are created when a Blender scene is
+exported.
 
 @itemize @bullet
-@item @strong{Interface}
+@item @strong{Sectors}
 
-io_scene_cs uses mainly an overlay interface that can be loaded over the Blender 3D windows.
+Crystal Space maps can be split in several sectors linked by portals. This should be defined
+through @url{http://wiki.blender.org/index.php/Doc:2.6/Manual/Interface/Scenes, Blender's scenes},
+with one scene per sector. This feature is however still in developement and the
+@code{io_scene_cs} add-on can currently support only one scene.
 
-See section @ref{io_scene_cs First Steps, Overlay Interface Overview} of this manual if you want more details about io_scene_cs interface.
+@item @strong{Cameras}
 
-@item @strong{Object Types}
-
-Each of the object types in Blender corresponds to some CrystalSpace type. For example a Blender lamp will result in a CrystalSpace light.
-
-Specific information about mesh types is available at sections @ref{io_scene_cs Export Genmesh, Exporting Static Meshes} and @ref{io_scene_cs Export Animesh, Exporting Animated Meshes} of this manual.
-
-@item @strong{Exporting Libraries}
-
-io_scene_cs generates two kinds of xml files: world files and library files. Scenes that are exported to run directly are described in world files that use the <world> tag. Library files will use the <library> tag instead and so you can't run them directly with walktest any more.
-
-One world file will be generated for each Blender scene and one library file for each cs factory.
-
-@item @strong{Factories and Objects}
-
-In CrystalSpace as in Blender there is a clear distinction between an object and the mesh data it references (the factory). Thus, several objects can share a factory and save space and processing time.
-
-The correspondency between Blender "Mesh Data Objects" and CrystalSpace "Factories" is not straightforward, as different functionalities are present in each system, and also in CrystalSpace there are different mesh types not present in Blender.
-
-The main concern here is to clearly distinguish in Blender between ME (mesh data) and OB (reference object). The object is the individual we are considering, and the mesh data is the data possibly shared between objects.
-
-Data sharing is easiest achieved in Blender by using the combination ALT-D to duplicate and link the object. Then when modifying one object the other will also be modified in Blender. Objects defined as factory instances will share data in CrystalSpace.
-
-Currently factories are generated for Blender mesh and armature types. They are described in xml library files saved into the 'factories' folder.
-
-@item @strong{Mesh References and Mesh Objects}
-
-Objects composing a Blender scene are described in the world file as 'meshref' or 'meshobj' types. Both of them are defined as instances of a CrystalSpace factory.
-
-A 'meshref' is an object that references a mesh factory defined elsewhere (i.e. another world file, library, or something created in code by the game). With meshref the actual geometry of the object as defined in Blender will be ignored.
-
-A 'meshobj' references a group of general meshes. See section @ref{io_scene_cs Export Genmesh, Exporting Static Meshes} if you want more information about groups.
-
-@item @strong{Materials and Textures}
-
-Materials are handled in a very different way in Blender than in CrystalSpace, as the scope of each infrastructure is very different. Because of this, CrystalSpace related material properties might be missing.
-
-In CrystalSpace, materials are defined in world files (describing scenes) and in library files (decribing mesh factories). Textures used by materials are referenced in the same files. They are exported as images in the 'textures' directory.
-
-@item @strong{Camera}
-
-A camera in Blender will be exported as a start location in CrystalSpace map, so it is not a real object in cs.
+All cameras in Blender will be exported as camera positions (i.e. iCameraPosition objects)
+in the Crystal Space @file{world} file. Currently, the positions will appear in the inverse
+order than they are created, although being ordered alphabetically would be better.
 
 @item @strong{Lights}
 
-A lamp in Blender will be exported as a light in CrystalSpace. All Blender lamp types will be exported as normal point light sources.
+All lamps in Blender will be exported as lights in Crystal Space. Whatever the lamp type used
+in Blender, the lamp will be exported as a point light.
 
-The parameters that get exported for a lamp entity are the distance (radius), the colour (r, g, b components) and the brightness. Attenuation type and other such properties are ignored.
+The parameters that get exported from a lamp are the distance (radius), the colour (RGB
+components) and the energy (brightness). The attenuation type and the other lamp properties
+are ignored.
 
-@item @strong{Parenting}
+@item @strong{Meshes and Mesh factories}
 
-You can parent objects in Blender and they will be exported as similar object hierachies in CrystalSpace. 
+All the mesh objects that are present in the Blender scene will be exported, either as a
+@ref{io_scene_cs Export Genmesh, static mesh} or an @ref{io_scene_cs Export Animesh, animated mesh}.
+For each different mesh, a file containing the definition of the mesh factory will be generated
+in the @file{factories} directory. Each instance of the mesh will get an entry in the
+@file{world} file.
 
-@item @strong{Sectors}
+You can parent objects in Blender and they will be exported as similar object hierachies
+in Crystal Space. 
 
-CrystalSpace maps are usually divided into multiple sectors. This is emulated by Blender's scenes. Each scene becomes a sector of the same name, and they can be connected using special objects called portals.
+@item @strong{Materials and Textures}
+
+Blender has a complex system for materials and textures, e.g. with the
+@url{http://wiki.blender.org/index.php/Doc:2.6/Manual/Composite_Nodes, node composition system}
+allowing to modify dynamically images and material properties. This system is very powerful
+in an offline rendering, but is not always suited for real-time rendering such as what is
+made in Crystal Space.
+
+The current status of the material exporting functionalities of the @code{io_scene_cs}
+add-on are also simply quite poor, and most Blender parameters are not yet exported.
 
 @end itemize
 
@@ -193,81 +179,101 @@ CrystalSpace maps are usually divided into multiple sectors. This is emulated by
 @node io_scene_cs Export Genmesh, io_scene_cs Export Animesh, io_scene_cs Export Scenes, Blender
 @subsection Exporting Static Meshes
 
-All mesh types export some factory, meshobj and meshref to the map.
+If a Blender mesh object has neither an armature nor any shape keys, then it will be
+exported as a @ref{MeshObject Genmesh, Genmesh Mesh Object}. In the other case, then it
+will be @ref{io_scene_cs Export Animesh, exported as an animated mesh}.
 
-@subsubheading Genmesh
+@subsubheading Exported Genmesh Data
 
-Genmesh is the default type in io_scene_cs. This is the general mesh type in CrystalSpace (see section @ref{MeshObject Genmesh, Genmesh Mesh Object} for more details).
-
-A static mesh object in Blender will be exported as a cs genmesh factory. The definition of this factory will be saved in a library file named '<mesh name>' and placed in the 'factories' folder. The object itself will be exported in the 'world' file as a 'meshref' or a 'meshobj', containing a reference to the genmesh factory.
-
-A default material is defined for each genmesh factory. It can use vertex colours ???????????? and will always export correct uv mapping. Vertex normals will correctly be exported if the associated vertex is not on a surface edge. Since edge vertices are not duplicated during the export, a single normal will be defined for two non coplanar surfaces. Thus, the bigger the angle between surfaces, the more erroneous will be the normal. ????????????
-
-@subsubheading Submesh
-
-Using submeshes you can define subsets of the mesh factory that use different materials. When you don't use 'submesh' the entire mesh will use the same material. As soon as you use submeshes, every triangle is contained in some submesh. Basically a submesh specifies triangle indices and a material.
-
-During the export, each mesh object will automatically be subdivided into submeshes along with its used materials.
-
-@subsubheading Instance
-
-This is an instancing type for general meshes in CrystalSpace. In principle it is faster, but the different instances of the factory will be more difficult to manipulate in CrystalSpace.
-
-You want to use this when you have many different static objects that share a factory. Instance can't be entities or have physics assigned in io_scene_cs.
-
-@subsubheading Empty
-
-Although it is non renderable, a Blender Empty object has a location, rotation, and scale. An Empty object is often used as a placeholder or a proxy object. In most cases it is used as a parent to other objects, i.e. to define a group of objects. Objects composing the group are exported as instances or submeshes of a cs general mesh, depending on their Blender properties.
-
-@picturess{content,io_scene_cs,icon_exclamation} @strong{Constraints}
+The data of the mesh that are exported are
 
 @itemize @bullet
-io_scene_cs will not take modifiers into account. Hence modifiers should be applied before export.
+@item
+the vertices of the mesh. Note that because of the triangulation process made, the count
+of vertices once exported in Crystal Space will generally be greater than the one in the
+Blender mesh.
+@item
+the faces of the mesh. Blender can use faces with any number of vertices while Crystal
+Space only uses triangles, therefore the faces are triangulated during the export process.
+@item
+the submeshes of the mesh. Every different Blender material that is actually used by some
+face of the mesh will correspond to a different submesh in the Genmesh. Every face that is
+exported will be placed in the corresponding submesh. 
+@item
+the UV coordinates
+@item
+the normals
+@item
+the vertex colors
 @end itemize
+
+All this data is put in the corresponding library file in the @file{factories} directory.
+
+@subsubheading Instanced Meshes
+
+Instanced meshes can be defined using the @samp{Crystal Mesh Group} panel in the @samp{Object}
+context of the @samp{Properties} window.
+
+@subsubheading Warning on the Blender Object Modifiers
+
+The Blender object modifiers that can be defined in the @samp{Object Modifier}
+context of the @samp{Properties} window are not supported by the @code{io_scene_cs} add-on.
+Please make sure that all modifiers are either applied or removed before exporting your mesh.
 
 
 @node io_scene_cs Export Animesh, io_scene_cs ToDo, io_scene_cs Export Genmesh, Blender
 @subsection Exporting Animated Meshes
 
-Apart from static objects, Blender allows the definition of animated objects. 
+If a Blender mesh object contains either an armature or any shape keys, then it will be
+exported as an animated mesh. In the other case, then it
+will be @ref{io_scene_cs Export Genmesh, exported as a static mesh}.
 
-Animation is making an object move or change shape over time. Objects can be animated in many ways: moving as a whole object, deforming them or animating character via armature. In this section, we will cover the last two of them.
+The data that is exported is the same as the one exported with static meshes, plus the data
+relevant for the animation (that will be presented in this section).
 
-@subsubheading Animesh
+All this data will be split in two different files in the @file{factories} directory:
 
-An animesh is the CrystalSpace type for a mesh animated by morphing (i.e. morph target animation) and/or by rigging (i.e. skeletal animation).
+@begin itemize
+@item
+the animated mesh factory, in a file of the same name than the Blender mesh.
+@item
+the skeleton factory and the animations, in a file of the same name than the Blender mesh
+plus the @samp{_rig} postfix.
+@end itemize
 
-An animated mesh object in Blender will be exported as a cs animesh factory. Just as genmeshes, the definition of this factory will be saved in a library file named '<mesh name>' and placed in the 'factories' folder. The object itself will be exported in the 'world' file as a 'meshref' or a 'meshobj', containing a reference to the animesh factory.
+@subsubheading Submeshes
 
-Again, as is true of genmesh factories, an animesh factory defines a default material, vertex colors, vertex normals, uv mapping coordinates and a submesh per used material.
+Faces that uses a different material are put in a separate submesh, similarly to the
+@ref{io_scene_cs Export Genmesh, static meshes}.
 
 @subsubheading Morph Targets
 
-A morph target animation deformes a mesh by moving a series of vertex. In Blender, a morph target or a (blend) shape stores modified vertex positions. In each key frame of an animation, the vertices are then interpolated between these stored positions.
+The Blender shape keys (i.e. variations of the positions of the vertices of the mesh)
+are exported as Crystal Space's morph targets.
 
-io_scene_cs converts these mesh deformations into offsets: one offset is defined for each vertex of the mesh. A cs morph target is stored in the animesh factory, specifying its name along with an offset buffer.
+The shape key with the name @samp{Basis} is selected as the default position of the
+vertices (i.e. the main @samp{vertex} render buffer of the animated mesh). All other shape
+keys are exported as a different morph target.
 
-@subsubheading Armatures
+@subsubheading Skeleton and Bone Influences
 
-A skeletal animation uses a hierarchical set of interconnected bones, called the skeleton, to animate a character's mesh.
-
-A Blender armature will be exported as a CrystalSpace skeleton with corresponding animations and animesh rigging information. The skeleton factory is stored in a xml library file named 'skel<mesh name>_rig' and placed in the 'factories' folder. It is described as a hierarchy of bones, each bone being represented by a name and a transformation matrix. To complete the character's data, a reference to the skeleton factory is written into the animesh library file.
-
-@subsubheading Bone Influences
-
-Portions of the character's mesh can be associated with multiple bones (maximum 4 in CrystalSpace), each one having a scaling factor called vertex weight or blend weight. The process of creating this association is called ``skinning''. 
-
-A weight defines the influence that a bone exerts on a vertex. Blender defines a weight for each vertex group a vertex is member of. These vertex weights are exported by io_scene_cs as cs bone influences in the animesh factory: four normalized influences are associated to each vertex. If Blender defined less then four weights for a vertex, null influences are inserted to complete them. At the contrary, if Blender defines more then four weights, only the four largest ones are normalized and assigned to this vertex; the other ones are lost.
+The Blender armature of the mesh, if any, is exported as the Crystal Space's skeleton
+of the animated mesh. Along with the skeleton, the Blender weight map of the mesh
+(defining in which proportion each vertex is influenced by the motion of the bones)
+is exported as the bone influences of the animated mesh.
 
 @subsubheading Animations
 
-Blender defines animations in term of poses and keyframes.
+All the keyframe animations of the mesh are exported too.
 
-Animating armatures in Blender implies to define key positions/rotations/scales, and use Ipo curves to interpolate between them. Armature animation is also known as ``posing'', as one main technique is to define some key poses, and then blend between them.
+@emph{Warning}: Only the positional and rotational components of the key frames are
+exported. The Crystal Space's animated mesh doesn't (yet) support morphing and scaling
+components.
 
-A Blender action (i.e. animation) defined in terms of poses and keyframes is exported as a cs animation, specifying its name and a list of keyframes for each bone animated by this action. A cs keyframe defines a time, a position and a rotation for a bone.
-
-CrystalSpace animations are described in the same library file (called 'skel<mesh name>_rig') as the skeleton factory they are animating, along with the associated animation tree.
+@emph{Warning}: The Blender object constraints defined on the skeleton will not be
+exported correctly. So make sure to disable any constraint first (in the
+@samp{Object Constraints} context of the @samp{Properties} window, when the skeleton
+is selected).
 
 @subsubheading Sockets
 
@@ -277,49 +283,36 @@ To make a socket you need dummy mesh (for example small sphere or box - size doe
 
 Sockets are exported in the same library file as the animesh factory. Each socket defines a name, a bone and the transformation to apply to an object we want to attach to that bone.
 
-@picturess{content,io_scene_cs,icon_exclamation} @strong{Constraints}
-
-@itemize @bullet
-@item
-io_scene_cs will not take modifiers into account. Hence modifiers should be applied before export.
-@item
-No user defined shape (morph target) should be named 'Basis' in Blender. This particular shape represents the rest pose (with null offsets) and will not be exported.
-@item
-Animations should not use inverse kinematics in Blender because io_scene_cs will not export them correctly (this will result in missing key frames for bones animated by IK).
-@item
-If a Blender animation defines scaling modifications on an armature, io_scene_cs will not export them since only translation and rotation parts of armature animations are supported.
-@end itemize
-
 
 @node io_scene_cs ToDo, , io_scene_cs Export Animesh, Blender
 @subsection ToDo
 
 @itemize @bullet
-@item 
+@item
 definitions of materials and exports of texture files are frequently incomplete
-@item 
+@item
 the consistency of 'world' file is not guaranteed
-@item 
+@item
 lamps are exported as simple point light sources
 @item
 erroneous normals: non duplicated Blender vertices on surface edges lead to inconsistent cs normals
-@item 
+@item
 no support for trees of armatures: only the root armature is exported, not the children ones
-@item 
+@item
 no support for double sided faces: they are exported as single sided faces
-@item 
+@item
 no support for inverse kinematics: keyframes will be missing for bones animated by IK
-@item 
+@item
 no support for groups of animated meshes
-@item 
+@item
 no support for portals and sectors
-@item 
+@item
 no terrain support
-@item 
+@item
 no colliders support
-@item 
+@item
 no support for scaling modifications during animations (only translations and rotations are exported)
-@item 
+@item
 lack of a configurable b2.5cs export panel (e.g. selection of objects and properties to export, export of normals with or without vertex duplication)
 @end itemize
 
