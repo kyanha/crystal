@@ -27,7 +27,7 @@
 CS_PLUGIN_NAMESPACE_BEGIN (Opcode2)
 {
 class csOpcodeCollider : public scfImplementation1<
-  csOpcodeCollider, CS::Collision2::iColliderConcaveMesh>
+  csOpcodeCollider, CS::Collisions::iColliderConcaveMesh>
 {
   friend class csOpcodeCollisionObject;
   friend class csOpcodeCollisionSector;
@@ -47,7 +47,7 @@ private:
 public:
   csOpcodeCollider (iMeshWrapper* mesh, csOpcodeCollisionSystem* sys);
   virtual ~csOpcodeCollider();
-  virtual CS::Collision2::ColliderType GetGeometryType () const {return CS::Collision2::COLLIDER_CONCAVE_MESH;}
+  virtual CS::Collisions::ColliderType GetGeometryType () const {return CS::Collisions::COLLIDER_CONCAVE_MESH;}
   virtual iMeshWrapper* GetMesh () {return mesh;}
   virtual void SetLocalScale (const csVector3& scale) {}
   virtual const csVector3& GetLocalScale () const {return scale;}
@@ -77,7 +77,7 @@ public:
 
 class csOpcodeColliderTerrain:
   public scfImplementation2<csOpcodeColliderTerrain,
-  CS::Collision2::iColliderTerrain, iTerrainCellLoadCallback>
+  CS::Collisions::iColliderTerrain, iTerrainCellLoadCallback>
 {
   friend class csOpcodeCollisionObject;
   friend class csOpcodeCollisionSector;
@@ -93,7 +93,7 @@ class csOpcodeColliderTerrain:
 public:
   csOpcodeColliderTerrain(iTerrainSystem* terrain, csOpcodeCollisionSystem* sys);
   virtual ~csOpcodeColliderTerrain();
-  virtual CS::Collision2::ColliderType GetGeometryType() const {return CS::Collision2::COLLIDER_TERRAIN;}
+  virtual CS::Collisions::ColliderType GetGeometryType() const {return CS::Collisions::COLLIDER_TERRAIN;}
   virtual iTerrainSystem* GetTerrain() const {return terrainSystem;}
   virtual void SetLocalScale (const csVector3& scale) {}
   virtual const csVector3& GetLocalScale () const {return scale;}

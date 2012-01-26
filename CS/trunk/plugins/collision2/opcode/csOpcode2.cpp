@@ -59,12 +59,12 @@ bool Opcode_Err (const char* msg, ...)
 csOpcodeCollisionSector::csOpcodeCollisionSector (csOpcodeCollisionSystem* sys)
 : scfImplementationType (this), sys (sys), allFilter (-1)
 {
-  CS::Collision2::CollisionGroup defaultGroup ("Default");
+  CS::Collisions::CollisionGroup defaultGroup ("Default");
   defaultGroup.value = 1;
   defaultGroup.mask = allFilter;
   collGroups.Push (defaultGroup);
 
-  CS::Collision2::CollisionGroup staticGroup ("Static");
+  CS::Collisions::CollisionGroup staticGroup ("Static");
   staticGroup.value = 2;
   staticGroup.mask = allFilter ^ 2;
   collGroups.Push (staticGroup);
@@ -81,7 +81,7 @@ void csOpcodeCollisionSector::SetGravity (const csVector3& v)
 //Set gravity for what?
 }
 
-void csOpcodeCollisionSector::AddCollisionObject (CS::Collision2::iCollisionObject* object)
+void csOpcodeCollisionSector::AddCollisionObject (CS::Collisions::iCollisionObject* object)
 {
   csRef<csOpcodeCollisionObject> obj (dynamic_cast<csOpcodeCollisionObject*>(object));
   collisionObjects.Push (obj);
@@ -91,7 +91,7 @@ void csOpcodeCollisionSector::AddCollisionObject (CS::Collision2::iCollisionObje
   AddMovableToSector (object);
 }
 
-void csOpcodeCollisionSector::RemoveCollisionObject (CS::Collision2::iCollisionObject* object)
+void csOpcodeCollisionSector::RemoveCollisionObject (CS::Collisions::iCollisionObject* object)
 {
   csOpcodeCollisionObject* collObject = dynamic_cast<csOpcodeCollisionObject*> (object);
   CS_ASSERT (collObject);
@@ -99,7 +99,7 @@ void csOpcodeCollisionSector::RemoveCollisionObject (CS::Collision2::iCollisionO
   RemoveMovableFromSector (object);
 }
 
-CS::Collision2::iCollisionObject* csOpcodeCollisionSector::GetCollisionObject (size_t index)
+CS::Collisions::iCollisionObject* csOpcodeCollisionSector::GetCollisionObject (size_t index)
 {
   if (index >= 0 && index < collisionObjects.GetSize ())
     return collisionObjects[index]->QueryCollisionObject ();
@@ -107,7 +107,7 @@ CS::Collision2::iCollisionObject* csOpcodeCollisionSector::GetCollisionObject (s
     return NULL;
 }
 
-CS::Collision2::iCollisionObject* csOpcodeCollisionSector::FindCollisionObject (const char* name)
+CS::Collisions::iCollisionObject* csOpcodeCollisionSector::FindCollisionObject (const char* name)
 {
   return collisionObjects.FindByName (name);
 }
@@ -122,15 +122,15 @@ void csOpcodeCollisionSector::RemovePortal (iPortal* portal)
 //TODO
 }
 
-CS::Collision2::HitBeamResult csOpcodeCollisionSector::HitBeam(const csVector3& start, 
+CS::Collisions::HitBeamResult csOpcodeCollisionSector::HitBeam(const csVector3& start, 
                                                                 const csVector3& end)
 {
-  CS::Collision2::HitBeamResult result;
+  CS::Collisions::HitBeamResult result;
   //Maybe at first do an AABB-ray collide. (Does Opcode support AABB-ray collide?)
   float depth = FLT_MAX;
   for (size_t i = 0; i < collisionObjects.GetSize (); i++)
   {
-    CS::Collision2::HitBeamResult res;
+    CS::Collisions::HitBeamResult res;
     float dep;
     if (collisionObjects[i]->isTerrain)
       res = HitBeamTerrain (collisionObjects[i], start, end, dep);
@@ -145,29 +145,29 @@ CS::Collision2::HitBeamResult csOpcodeCollisionSector::HitBeam(const csVector3& 
   return result;
 }
 
-CS::Collision2::HitBeamResult csOpcodeCollisionSector::HitBeamPortal(const csVector3& start, 
+CS::Collisions::HitBeamResult csOpcodeCollisionSector::HitBeamPortal(const csVector3& start, 
                                                                       const csVector3& end)
 {
-  CS::Collision2::HitBeamResult result = HitBeam (start, end);
+  CS::Collisions::HitBeamResult result = HitBeam (start, end);
 
   //TODO
   return result;
 }
 
-CS::Collision2::CollisionGroup& csOpcodeCollisionSector::CreateCollisionGroup (const char* name)
+CS::Collisions::CollisionGroup& csOpcodeCollisionSector::CreateCollisionGroup (const char* name)
 {
   size_t groupCount = collGroups.GetSize ();
-  if (groupCount >= sizeof (CS::Collision2::CollisionGroupMask) * 8)
+  if (groupCount >= sizeof (CS::Collisions::CollisionGroupMask) * 8)
     return collGroups[0];
 
-  CS::Collision2::CollisionGroup newGroup(name);
+  CS::Collisions::CollisionGroup newGroup(name);
   newGroup.value = 1 << groupCount;
   newGroup.mask = allFilter ^ newGroup.value;
   collGroups.Push (newGroup);
   return collGroups[groupCount];
 }
 
-CS::Collision2::CollisionGroup& csOpcodeCollisionSector::FindCollisionGroup (const char* name)
+CS::Collisions::CollisionGroup& csOpcodeCollisionSector::FindCollisionGroup (const char* name)
 {
   size_t index = collGroups.FindKey (CollisionGroupVector::KeyCmp (name));
   if (index == csArrayItemNotFound)
@@ -211,7 +211,7 @@ bool csOpcodeCollisionSector::GetGroupCollision (const char* name1, const char* 
     return false;
 }
 
-bool csOpcodeCollisionSector::CollisionTest (CS::Collision2::iCollisionObject* object, csArray<CS::Collision2::CollisionData>& collisions)
+bool csOpcodeCollisionSector::CollisionTest (CS::Collisions::iCollisionObject* object, csArray<CS::Collisions::CollisionData>& collisions)
 {
   size_t length = collisions.GetSize ();
   csOpcodeCollisionObject* obj = dynamic_cast<csOpcodeCollisionObject*> (object);
@@ -246,7 +246,7 @@ bool csOpcodeCollisionSector::CollisionTest (CS::Collision2::iCollisionObject* o
     return false;
 }
 
-void csOpcodeCollisionSector::AddCollisionActor (CS::Collision2::iCollisionActor* actor)
+void csOpcodeCollisionSector::AddCollisionActor (CS::Collisions::iCollisionActor* actor)
 {
 //TODO
 }
@@ -256,12 +256,12 @@ void csOpcodeCollisionSector::RemoveCollisionActor ()
 //TODO
 }
 
-CS::Collision2::iCollisionActor* csOpcodeCollisionSector::GetCollisionActor ()
+CS::Collisions::iCollisionActor* csOpcodeCollisionSector::GetCollisionActor ()
 {
   return NULL;
 }
 
-void csOpcodeCollisionSector::AddMovableToSector (CS::Collision2::iCollisionObject* obj)
+void csOpcodeCollisionSector::AddMovableToSector (CS::Collisions::iCollisionObject* obj)
 {
   iMovable* movable = obj->GetAttachedMovable ();
   if (movable && sector)
@@ -275,7 +275,7 @@ void csOpcodeCollisionSector::AddMovableToSector (CS::Collision2::iCollisionObje
   }
 }
 
-void csOpcodeCollisionSector::RemoveMovableFromSector (CS::Collision2::iCollisionObject* obj)
+void csOpcodeCollisionSector::RemoveMovableFromSector (CS::Collisions::iCollisionObject* obj)
 {
   iMovable* movable = obj->GetAttachedMovable ();
   if (movable && sector)
@@ -289,14 +289,14 @@ void csOpcodeCollisionSector::RemoveMovableFromSector (CS::Collision2::iCollisio
   }
 }
 
-CS::Collision2::HitBeamResult csOpcodeCollisionSector::HitBeamObject (csOpcodeCollisionObject* object,
+CS::Collisions::HitBeamResult csOpcodeCollisionSector::HitBeamObject (csOpcodeCollisionObject* object,
                                                                       const csVector3& start,
                                                                       const csVector3& end,
                                                                       float& depth)
 {
-  CS::Collision2::iCollider* col = object->collider;
+  CS::Collisions::iCollider* col = object->collider;
   csOpcodeCollider* collider = dynamic_cast<csOpcodeCollider*> (col);
-  CS::Collision2::HitBeamResult res = HitBeamCollider (collider->model, collider->vertholder, 
+  CS::Collisions::HitBeamResult res = HitBeamCollider (collider->model, collider->vertholder, 
     collider->indexholder, object->transform, start, end, depth);
   if (res.hasHit)
     res.object = object;
@@ -304,13 +304,13 @@ CS::Collision2::HitBeamResult csOpcodeCollisionSector::HitBeamObject (csOpcodeCo
   return res;
 }
 
-CS::Collision2::HitBeamResult csOpcodeCollisionSector::HitBeamTerrain (csOpcodeCollisionObject* terrainObj, 
+CS::Collisions::HitBeamResult csOpcodeCollisionSector::HitBeamTerrain (csOpcodeCollisionObject* terrainObj, 
                                                                        const csVector3& start, 
                                                                        const csVector3& end,
                                                                        float& depth)
 {
-  CS::Collision2::HitBeamResult result;
-  CS::Collision2::iCollider* col = terrainObj->collider;
+  CS::Collisions::HitBeamResult result;
+  CS::Collisions::iCollider* col = terrainObj->collider;
   csOpcodeColliderTerrain* terrainColl = dynamic_cast<csOpcodeColliderTerrain*> (col);
   for (size_t i = 0; i < terrainColl->colliders.GetSize (); i++)
   {
@@ -331,7 +331,7 @@ static void ray_cb (const CollisionFace& hit, void* user_data)
   collision_faces->Push (hit.mFaceID);
 }
 
-CS::Collision2::HitBeamResult csOpcodeCollisionSector::HitBeamCollider (Opcode::Model* model, 
+CS::Collisions::HitBeamResult csOpcodeCollisionSector::HitBeamCollider (Opcode::Model* model, 
                                                                         Point* vertholder,
                                                                         udword* indexholder, 
                                                                         const csOrthoTransform& trans, 
@@ -378,7 +378,7 @@ CS::Collision2::HitBeamResult csOpcodeCollisionSector::HitBeamCollider (Opcode::
   RayCol.SetUserData ((void*)&collision_faces);
   collision_faces.SetSize (0);
 
-  CS::Collision2::HitBeamResult result;
+  CS::Collisions::HitBeamResult result;
   bool isOk = RayCol.Collide (ray, *ColCache.Model0, &transform);
   if (isOk)
   {
@@ -439,9 +439,9 @@ CS::Collision2::HitBeamResult csOpcodeCollisionSector::HitBeamCollider (Opcode::
 
 bool csOpcodeCollisionSector::CollideObject (csOpcodeCollisionObject* objA,
                                              csOpcodeCollisionObject* objB, 
-                                             csArray<CS::Collision2::CollisionData>& collisions)
+                                             csArray<CS::Collisions::CollisionData>& collisions)
 {
-  CS::Collision2::iCollider* col = objA->collider;
+  CS::Collisions::iCollider* col = objA->collider;
   csOpcodeCollider* colliderA = dynamic_cast<csOpcodeCollider*> (col);
   col = objB->collider;
   csOpcodeCollider* colliderB = dynamic_cast<csOpcodeCollider*> (col);
@@ -464,10 +464,10 @@ bool csOpcodeCollisionSector::CollideObject (csOpcodeCollisionObject* objA,
 
 bool csOpcodeCollisionSector::CollideTerrain (csOpcodeCollisionObject* objA, 
                                               csOpcodeCollisionObject* objB,
-                                              csArray<CS::Collision2::CollisionData>& collisions)
+                                              csArray<CS::Collisions::CollisionData>& collisions)
 {
-  CS::Collision2::iCollider* colA = objA->collider;
-  CS::Collision2::iCollider* colB = objB->collider;
+  CS::Collisions::iCollider* colA = objA->collider;
+  CS::Collisions::iCollider* colB = objB->collider;
   csOpcodeColliderTerrain* terrainColl;
   csOpcodeCollider* objColl;
   bool terrainIsA = objA->isTerrain;
@@ -723,12 +723,12 @@ void csOpcodeCollisionSystem::SetInternalScale (float scale)
   //use internal scale?
 }
 
-csRef<CS::Collision2::iColliderConvexMesh> csOpcodeCollisionSystem::CreateColliderConvexMesh (iMeshWrapper* mesh, bool simplify /* = false */)
+csRef<CS::Collisions::iColliderConvexMesh> csOpcodeCollisionSystem::CreateColliderConvexMesh (iMeshWrapper* mesh, bool simplify /* = false */)
 {
   return NULL;
 }
 
-csRef<CS::Collision2::iColliderConcaveMesh> csOpcodeCollisionSystem::CreateColliderConcaveMesh (iMeshWrapper* mesh)
+csRef<CS::Collisions::iColliderConcaveMesh> csOpcodeCollisionSystem::CreateColliderConcaveMesh (iMeshWrapper* mesh)
 {
   csRef<csOpcodeCollider> collider;
   collider.AttachNew (new csOpcodeCollider (mesh,this));
@@ -736,43 +736,43 @@ csRef<CS::Collision2::iColliderConcaveMesh> csOpcodeCollisionSystem::CreateColli
   return collider;
 }
 
-csRef<CS::Collision2::iColliderConcaveMeshScaled> csOpcodeCollisionSystem::CreateColliderConcaveMeshScaled
-(CS::Collision2::iColliderConcaveMesh* collider, csVector3 scale)
+csRef<CS::Collisions::iColliderConcaveMeshScaled> csOpcodeCollisionSystem::CreateColliderConcaveMeshScaled
+(CS::Collisions::iColliderConcaveMesh* collider, csVector3 scale)
 {
   return NULL;
 }
 
-csRef<CS::Collision2::iColliderCylinder> csOpcodeCollisionSystem::CreateColliderCylinder (float length, float radius)
+csRef<CS::Collisions::iColliderCylinder> csOpcodeCollisionSystem::CreateColliderCylinder (float length, float radius)
 {
   return NULL;
 }
 
-csRef<CS::Collision2::iColliderBox> csOpcodeCollisionSystem::CreateColliderBox (const csVector3& size)
+csRef<CS::Collisions::iColliderBox> csOpcodeCollisionSystem::CreateColliderBox (const csVector3& size)
 {
   return NULL;
 }
 
-csRef<CS::Collision2::iColliderSphere> csOpcodeCollisionSystem::CreateColliderSphere (float radius)
+csRef<CS::Collisions::iColliderSphere> csOpcodeCollisionSystem::CreateColliderSphere (float radius)
 {
   return NULL;
 }
 
-csRef<CS::Collision2::iColliderCapsule> csOpcodeCollisionSystem::CreateColliderCapsule (float length, float radius)
+csRef<CS::Collisions::iColliderCapsule> csOpcodeCollisionSystem::CreateColliderCapsule (float length, float radius)
 {
   return NULL;
 }
 
-csRef<CS::Collision2::iColliderCone> csOpcodeCollisionSystem::CreateColliderCone (float length, float radius)
+csRef<CS::Collisions::iColliderCone> csOpcodeCollisionSystem::CreateColliderCone (float length, float radius)
 {
   return NULL;
 }
 
-csRef<CS::Collision2::iColliderPlane> csOpcodeCollisionSystem::CreateColliderPlane (const csPlane3& plane)
+csRef<CS::Collisions::iColliderPlane> csOpcodeCollisionSystem::CreateColliderPlane (const csPlane3& plane)
 {
   return NULL;
 }
 
-csRef<CS::Collision2::iColliderTerrain> csOpcodeCollisionSystem::CreateColliderTerrain (iTerrainSystem* terrain,
+csRef<CS::Collisions::iColliderTerrain> csOpcodeCollisionSystem::CreateColliderTerrain (iTerrainSystem* terrain,
                                                                float minHeight, float maxHeight)
 {
   csRef<csOpcodeColliderTerrain> collider;
@@ -781,7 +781,7 @@ csRef<CS::Collision2::iColliderTerrain> csOpcodeCollisionSystem::CreateColliderT
   return collider;
 }
 
-csRef<CS::Collision2::iCollisionObject> csOpcodeCollisionSystem::CreateCollisionObject ()
+csRef<CS::Collisions::iCollisionObject> csOpcodeCollisionSystem::CreateCollisionObject ()
 {
   csRef<csOpcodeCollisionObject> collObject;
   collObject.AttachNew (new csOpcodeCollisionObject (this));
@@ -789,13 +789,13 @@ csRef<CS::Collision2::iCollisionObject> csOpcodeCollisionSystem::CreateCollision
   return collObject;
 }
 
-csRef<CS::Collision2::iCollisionActor> csOpcodeCollisionSystem::CreateCollisionActor ()
+csRef<CS::Collisions::iCollisionActor> csOpcodeCollisionSystem::CreateCollisionActor ()
 {
   //TODO
   return NULL;
 }
 
-csRef<CS::Collision2::iCollisionSector> csOpcodeCollisionSystem::CreateCollisionSector ()
+csRef<CS::Collisions::iCollisionSector> csOpcodeCollisionSystem::CreateCollisionSector ()
 {
   csRef<csOpcodeCollisionSector> collSector;
   collSector.AttachNew (new csOpcodeCollisionSector (this));
@@ -804,12 +804,12 @@ csRef<CS::Collision2::iCollisionSector> csOpcodeCollisionSystem::CreateCollision
   return collSector;
 }
 
-CS::Collision2::iCollisionSector* csOpcodeCollisionSystem::FindCollisionSector (const char* name)
+CS::Collisions::iCollisionSector* csOpcodeCollisionSystem::FindCollisionSector (const char* name)
 {
   return this->collSectors.FindByName (name);
 }
 
-void csOpcodeCollisionSystem::DecomposeConcaveMesh (CS::Collision2::iCollisionObject* object,
+void csOpcodeCollisionSystem::DecomposeConcaveMesh (CS::Collisions::iCollisionObject* object,
                                    iMeshWrapper* mesh, bool simplify)
 {
 }

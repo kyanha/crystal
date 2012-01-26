@@ -26,12 +26,12 @@ CS_PLUGIN_NAMESPACE_BEGIN (Bullet2)
 {
 csBulletRigidBody::csBulletRigidBody (csBulletSystem* phySys)
 : scfImplementationType (this, phySys), btBody (NULL), 
-  physicalState (CS::Physics2::STATE_DYNAMIC), density (0.2f), totalMass (0.0f),
+  physicalState (CS::Physics::STATE_DYNAMIC), density (0.2f), totalMass (0.0f),
   friction (5.0f), softness (0.01f), elasticity (0.2f), linearDampening (0.0f),
   angularDampening (0.0f), linearVelocity (0.0f, 0.0f, 0.0f),
   angularVelocity (0.0f, 0.0f, 0.0f), anchorCount (0)
 {
-  type = CS::Collision2::COLLISION_OBJECT_PHYSICAL;
+  type = CS::Collisions::COLLISION_OBJECT_PHYSICAL;
 }
 
 csBulletRigidBody::~csBulletRigidBody ()
@@ -39,18 +39,18 @@ csBulletRigidBody::~csBulletRigidBody ()
   RemoveBulletObject ();
 }
 
-void csBulletRigidBody::AddCollider (CS::Collision2::iCollider* collider, 
+void csBulletRigidBody::AddCollider (CS::Collisions::iCollider* collider, 
                                      const csOrthoTransform& relaTrans)
 {
   csRef<csBulletCollider> coll (dynamic_cast<csBulletCollider*>(collider));
 
-  CS::Collision2::ColliderType type = collider->GetGeometryType ();
-  if (type == CS::Collision2::COLLIDER_CONCAVE_MESH
-    ||type == CS::Collision2::COLLIDER_CONCAVE_MESH_SCALED
-    ||type == CS::Collision2::COLLIDER_PLANE)
+  CS::Collisions::ColliderType type = collider->GetGeometryType ();
+  if (type == CS::Collisions::COLLIDER_CONCAVE_MESH
+    ||type == CS::Collisions::COLLIDER_CONCAVE_MESH_SCALED
+    ||type == CS::Collisions::COLLIDER_PLANE)
     haveStaticColliders ++;
 
-  else if (type == CS::Collision2::COLLIDER_TERRAIN)
+  else if (type == CS::Collisions::COLLIDER_TERRAIN)
   {
     csFPrintf (stderr, "csBulletRigidBody: Can not add terrain collider to physical body.\n");
     return;
@@ -61,7 +61,7 @@ void csBulletRigidBody::AddCollider (CS::Collision2::iCollider* collider,
   shapeChanged = true;
 }
 
-void csBulletRigidBody::RemoveCollider (CS::Collision2::iCollider* collider)
+void csBulletRigidBody::RemoveCollider (CS::Collisions::iCollider* collider)
 {
   for (size_t i =0; i < colliders.GetSize(); i++)
   {
@@ -77,10 +77,10 @@ void csBulletRigidBody::RemoveCollider (size_t index)
 {
   if (index >= colliders.GetSize ())
     return;
-  CS::Collision2::ColliderType type = colliders[index]->GetGeometryType ();
-  if (type == CS::Collision2::COLLIDER_CONCAVE_MESH
-    ||type == CS::Collision2::COLLIDER_CONCAVE_MESH_SCALED
-    ||type == CS::Collision2::COLLIDER_PLANE)
+  CS::Collisions::ColliderType type = colliders[index]->GetGeometryType ();
+  if (type == CS::Collisions::COLLIDER_CONCAVE_MESH
+    ||type == CS::Collisions::COLLIDER_CONCAVE_MESH_SCALED
+    ||type == CS::Collisions::COLLIDER_PLANE)
     haveStaticColliders --;
   colliders.DeleteIndex (index);
   relaTransforms.DeleteIndex (index);
@@ -192,12 +192,12 @@ bool csBulletRigidBody::AddBulletObject ()
   btObject = btBody;
 
   if (haveStaticColliders > 0)
-    physicalState = CS::Physics2::STATE_STATIC;
+    physicalState = CS::Physics::STATE_STATIC;
 
   SetState (physicalState);
 
   sector->bulletWorld->addRigidBody (btBody, collGroup.value, collGroup.mask);
-  btBody->setUserPointer (dynamic_cast<CS::Collision2::iCollisionObject*> (
+  btBody->setUserPointer (dynamic_cast<CS::Collisions::iCollisionObject*> (
     dynamic_cast<csBulletCollisionObject*>(this)));
  
   insideWorld = true;
@@ -245,7 +245,7 @@ float csBulletRigidBody::GetMass ()
 {
   // TODO: kinematic too?
   // TODO: more efficient
-  if (physicalState != CS::Physics2::STATE_DYNAMIC)
+  if (physicalState != CS::Physics::STATE_DYNAMIC)
     return 0.0f;
 
   if (totalMass > SMALL_EPSILON)
@@ -285,17 +285,17 @@ void csBulletRigidBody::SetElasticity (float elasticity)
   this->elasticity = elasticity;
 }
 
-bool csBulletRigidBody::SetState (CS::Physics2::RigidBodyState state)
+bool csBulletRigidBody::SetState (CS::Physics::RigidBodyState state)
 {
   if (physicalState != state || !insideWorld)
   {
-    CS::Physics2::RigidBodyState previousState = physicalState;
+    CS::Physics::RigidBodyState previousState = physicalState;
     physicalState = state;
 
     if (!btBody)
       return false;
 
-    if (haveStaticColliders > 0 && state != CS::Physics2::STATE_STATIC)
+    if (haveStaticColliders > 0 && state != CS::Physics::STATE_STATIC)
       return false;
 
     if (insideWorld)
@@ -304,7 +304,7 @@ bool csBulletRigidBody::SetState (CS::Physics2::RigidBodyState state)
     btVector3 linearVelo = CSToBullet (linearVelocity, system->getInternalScale ());
     btVector3 angularVelo = btVector3 (angularVelocity.x, angularVelocity.y, angularVelocity.z);
 
-    if (previousState == CS::Physics2::STATE_KINEMATIC && insideWorld)
+    if (previousState == CS::Physics::STATE_KINEMATIC && insideWorld)
     {
       btBody->setCollisionFlags (btBody->getCollisionFlags()
         & ~btCollisionObject::CF_KINEMATIC_OBJECT);
@@ -323,7 +323,7 @@ bool csBulletRigidBody::SetState (CS::Physics2::RigidBodyState state)
       btBody->setMotionState (motionState);
     }
 
-    if (state == CS::Physics2::STATE_DYNAMIC)
+    if (state == CS::Physics::STATE_DYNAMIC)
     {
       btBody->setCollisionFlags (btBody->getCollisionFlags()
         & ~btCollisionObject::CF_STATIC_OBJECT);
@@ -344,7 +344,7 @@ bool csBulletRigidBody::SetState (CS::Physics2::RigidBodyState state)
       btBody->setAngularVelocity (angularVelo);
       btBody->updateInertiaTensor ();
     }
-    else if (state == CS::Physics2::STATE_KINEMATIC)
+    else if (state == CS::Physics::STATE_KINEMATIC)
     {
       if (!kinematicCb)
         kinematicCb.AttachNew (new csBulletDefaultKinematicCallback ());
@@ -371,7 +371,7 @@ bool csBulletRigidBody::SetState (CS::Physics2::RigidBodyState state)
       btBody->setInterpolationLinearVelocity (btVector3(0.0f, 0.0f, 0.0f));
       btBody->setInterpolationAngularVelocity (btVector3(0.0f, 0.0f, 0.0f));
     }
-    else if (state == CS::Physics2::STATE_STATIC)
+    else if (state == CS::Physics::STATE_STATIC)
     {
       btBody->setCollisionFlags (btBody->getCollisionFlags()
         | btCollisionObject::CF_STATIC_OBJECT
@@ -394,7 +394,7 @@ void csBulletRigidBody::SetLinearVelocity (const csVector3& vel)
   linearVelocity = vel;
   if (!btBody)
     return;
-  if (physicalState == CS::Physics2::STATE_DYNAMIC)
+  if (physicalState == CS::Physics::STATE_DYNAMIC)
   {
     btBody->setLinearVelocity (CSToBullet (vel, system->getInternalScale ()));
     btBody->activate ();
@@ -415,7 +415,7 @@ void csBulletRigidBody::SetAngularVelocity (const csVector3& vel)
   angularVelocity = vel;
   if (!btBody)
     return; 
-  if (physicalState == CS::Physics2::STATE_DYNAMIC)
+  if (physicalState == CS::Physics::STATE_DYNAMIC)
   {
     btBody->setAngularVelocity (btVector3 (vel.x, vel.y, vel.z));
     btBody->activate ();

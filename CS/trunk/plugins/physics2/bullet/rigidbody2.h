@@ -28,13 +28,13 @@ CS_PLUGIN_NAMESPACE_BEGIN (Bullet2)
 class csBulletPhysicalSystem;
 class csBulletDefaultKinematicCallback;
 
-using CS::Physics2::iPhysicalBody;
-using CS::Physics2::iRigidBody;
-using CS::Physics2::iSoftBody;
+using CS::Physics::iPhysicalBody;
+using CS::Physics::iRigidBody;
+using CS::Physics::iSoftBody;
 
 class csBulletRigidBody : public scfImplementationExt1<
   csBulletRigidBody, csBulletCollisionObject, 
-  CS::Physics2::iRigidBody>
+  CS::Physics::iRigidBody>
 {
   friend class csBulletKinematicMotionState;
   friend class csBulletSoftBody;
@@ -43,7 +43,7 @@ class csBulletRigidBody : public scfImplementationExt1<
 private:
   // TODO: remove as much as possible of these fields and store them in the btRigidBody instead
   btRigidBody* btBody;
-  CS::Physics2::RigidBodyState physicalState;
+  CS::Physics::RigidBodyState physicalState;
   float density;
   float totalMass;
   float friction;
@@ -54,7 +54,7 @@ private:
   csVector3 linearVelocity;
   csVector3 angularVelocity;
   short anchorCount;
-  csRef<CS::Physics2::iKinematicCallback> kinematicCb;
+  csRef<CS::Physics::iKinematicCallback> kinematicCb;
 
 public:
   csBulletRigidBody (csBulletSystem* phySys);
@@ -65,8 +65,8 @@ public:
   virtual iCollisionObject* QueryCollisionObject () {return dynamic_cast<csBulletCollisionObject*> (this);}
   virtual iPhysicalBody* QueryPhysicalBody () {return this;}
 
-  virtual void SetObjectType (CS::Collision2::CollisionObjectType type, bool forceRebuild = true) {}
-  virtual CS::Collision2::CollisionObjectType GetObjectType () {return CS::Collision2::COLLISION_OBJECT_PHYSICAL;}
+  virtual void SetObjectType (CS::Collisions::CollisionObjectType type, bool forceRebuild = true) {}
+  virtual CS::Collisions::CollisionObjectType GetObjectType () {return CS::Collisions::COLLISION_OBJECT_PHYSICAL;}
 
   virtual void SetAttachedMovable (iMovable* movable) {csBulletCollisionObject::SetAttachedMovable (movable);}
   virtual iMovable* GetAttachedMovable () {return csBulletCollisionObject::GetAttachedMovable ();}
@@ -79,26 +79,26 @@ public:
 
   virtual void RebuildObject () {csBulletCollisionObject::RebuildObject ();}
 
-  virtual void AddCollider (CS::Collision2::iCollider* collider, const csOrthoTransform& relaTrans
+  virtual void AddCollider (CS::Collisions::iCollider* collider, const csOrthoTransform& relaTrans
     = csOrthoTransform (csMatrix3 (), csVector3 (0)));
-  virtual void RemoveCollider (CS::Collision2::iCollider* collider);
+  virtual void RemoveCollider (CS::Collisions::iCollider* collider);
   virtual void RemoveCollider (size_t index);
 
-  virtual CS::Collision2::iCollider* GetCollider (size_t index) {return csBulletCollisionObject::GetCollider (index);}
+  virtual CS::Collisions::iCollider* GetCollider (size_t index) {return csBulletCollisionObject::GetCollider (index);}
   virtual size_t GetColliderCount () {return colliders.GetSize ();}
 
   virtual void SetCollisionGroup (const char* name) {csBulletCollisionObject::SetCollisionGroup (name);}
   virtual const char* GetCollisionGroup () const {return csBulletCollisionObject::GetCollisionGroup ();}
 
-  virtual void SetCollisionCallback (CS::Collision2::iCollisionCallback* cb) {collCb = cb;}
-  virtual CS::Collision2::iCollisionCallback* GetCollisionCallback () {return collCb;}
+  virtual void SetCollisionCallback (CS::Collisions::iCollisionCallback* cb) {collCb = cb;}
+  virtual CS::Collisions::iCollisionCallback* GetCollisionCallback () {return collCb;}
 
   virtual bool Collide (iCollisionObject* otherObject) {return csBulletCollisionObject::Collide (otherObject);}
-  virtual CS::Collision2::HitBeamResult HitBeam (const csVector3& start, const csVector3& end)
+  virtual CS::Collisions::HitBeamResult HitBeam (const csVector3& start, const csVector3& end)
   { return csBulletCollisionObject::HitBeam (start, end);}
 
   virtual size_t GetContactObjectsCount () {return contactObjects.GetSize ();}
-  virtual CS::Collision2::iCollisionObject* GetContactObject (size_t index) {
+  virtual CS::Collisions::iCollisionObject* GetContactObject (size_t index) {
     return csBulletCollisionObject::GetContactObject (index);}
 
   btRigidBody* GetBulletRigidPointer () {return btBody;}
@@ -107,7 +107,7 @@ public:
 
   //iPhysicalBody
 
-  virtual CS::Physics2::PhysicalBodyType GetBodyType () const {return CS::Physics2::BODY_RIGID;}
+  virtual CS::Physics::PhysicalBodyType GetBodyType () const {return CS::Physics::BODY_RIGID;}
   virtual iRigidBody* QueryRigidBody () {return dynamic_cast<iRigidBody*>(this);}
   virtual iSoftBody* QuerySoftBody () {return NULL;}
 
@@ -131,8 +131,8 @@ public:
   virtual float GetFriction () {return friction;}
 
   //iRigidBody
-  virtual CS::Physics2::RigidBodyState GetState () {return physicalState;}
-  virtual bool SetState (CS::Physics2::RigidBodyState state);
+  virtual CS::Physics::RigidBodyState GetState () {return physicalState;}
+  virtual bool SetState (CS::Physics::RigidBodyState state);
 
   virtual void SetElasticity (float elasticity);
   virtual float GetElasticity () {return elasticity;}
@@ -160,8 +160,8 @@ public:
   virtual csVector3 GetForce () const;
   virtual csVector3 GetTorque () const;
 
-  virtual void SetKinematicCallback (CS::Physics2::iKinematicCallback* cb) {kinematicCb = cb;}
-  virtual CS::Physics2::iKinematicCallback* GetKinematicCallback () {return kinematicCb;}
+  virtual void SetKinematicCallback (CS::Physics::iKinematicCallback* cb) {kinematicCb = cb;}
+  virtual CS::Physics::iKinematicCallback* GetKinematicCallback () {return kinematicCb;}
 
   virtual void SetLinearDampener (float d);
   virtual float GetLinearDampener () {return linearDampening;}
@@ -171,12 +171,12 @@ public:
 };
 
 class csBulletDefaultKinematicCallback : public scfImplementation1<
-  csBulletDefaultKinematicCallback, CS::Physics2::iKinematicCallback>
+  csBulletDefaultKinematicCallback, CS::Physics::iKinematicCallback>
 {
 public:
   csBulletDefaultKinematicCallback ();
   virtual ~csBulletDefaultKinematicCallback();
-  virtual void GetBodyTransform (CS::Physics2::iRigidBody* body, csOrthoTransform& transform) const;
+  virtual void GetBodyTransform (CS::Physics::iRigidBody* body, csOrthoTransform& transform) const;
 };
 }
 CS_PLUGIN_NAMESPACE_END (Bullet2)

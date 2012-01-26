@@ -40,7 +40,7 @@ struct iView;
 
 namespace CS
 {
-namespace Physics2
+namespace Physics
 {
 struct iPhysicalBody;
 }
@@ -48,7 +48,7 @@ struct iPhysicalBody;
 
 namespace CS
 {
-namespace Collision2
+namespace Collisions
 {
 
 struct csConvexResult;
@@ -170,7 +170,7 @@ struct CollisionData
  */
 struct iCollisionCallback: public virtual iBase
 {
-  SCF_INTERFACE (CS::Collision2::iCollisionCallback, 1, 0, 0);
+  SCF_INTERFACE (CS::Collisions::iCollisionCallback, 1, 0, 0);
 
   /**
    * A collision occurred.
@@ -188,7 +188,7 @@ struct iCollisionCallback: public virtual iBase
  */
 struct iCollider : public virtual iBase
 {
-  SCF_INTERFACE (CS::Collision2::iCollider, 1, 0, 0);
+  SCF_INTERFACE (CS::Collisions::iCollider, 1, 0, 0);
 
   /// Get the geometry type of this collider. 
   virtual ColliderType GetGeometryType () const = 0;
@@ -220,7 +220,7 @@ struct iCollider : public virtual iBase
  */
 struct iColliderBox : public virtual iCollider
 {
-  SCF_INTERFACE (CS::Collision2::iColliderBox, 1, 0, 0);
+  SCF_INTERFACE (CS::Collisions::iColliderBox, 1, 0, 0);
 
   /// Get the box geometry of this collider.
   virtual csVector3 GetBoxGeometry ()  = 0;
@@ -240,7 +240,7 @@ struct iColliderBox : public virtual iCollider
  */
 struct iColliderSphere : public virtual iCollider
 {
-  SCF_INTERFACE (CS::Collision2::iColliderSphere, 1, 0, 0);
+  SCF_INTERFACE (CS::Collisions::iColliderSphere, 1, 0, 0);
 
   /// Get the sphere geometry of this collider.
   virtual float GetSphereGeometry () = 0;
@@ -260,7 +260,7 @@ struct iColliderSphere : public virtual iCollider
  */
 struct iColliderCylinder : public virtual iCollider
 {
-  SCF_INTERFACE (CS::Collision2::iColliderCylinder, 1, 0, 0);
+  SCF_INTERFACE (CS::Collisions::iColliderCylinder, 1, 0, 0);
 
   /// Get the cylinder geometry of this collider.
   virtual void GetCylinderGeometry (float& length, float& radius) = 0;
@@ -280,7 +280,7 @@ struct iColliderCylinder : public virtual iCollider
  */
 struct iColliderCapsule : public virtual iCollider
 {
-  SCF_INTERFACE (CS::Collision2::iColliderCapsule, 1, 0, 0);
+  SCF_INTERFACE (CS::Collisions::iColliderCapsule, 1, 0, 0);
 
   /// Get the capsule geometry of this collider.
   virtual void GetCapsuleGeometry (float& length, float& radius) = 0;
@@ -300,7 +300,7 @@ struct iColliderCapsule : public virtual iCollider
  */
 struct iColliderCone : public virtual iCollider
 {
-  SCF_INTERFACE (CS::Collision2::iColliderCone, 1, 0, 0);
+  SCF_INTERFACE (CS::Collisions::iColliderCone, 1, 0, 0);
 
   /// Get the cone geometry of this collider.
   virtual void GetConeGeometry (float& length, float& radius) = 0;
@@ -320,7 +320,7 @@ struct iColliderCone : public virtual iCollider
  */
 struct iColliderPlane : public virtual iCollider
 {
-  SCF_INTERFACE (CS::Collision2::iColliderPlane, 1, 0, 0);
+  SCF_INTERFACE (CS::Collisions::iColliderPlane, 1, 0, 0);
 
   /// Get the plane geometry of this collider.
   virtual csPlane3 GetPlaneGeometry () = 0;
@@ -340,7 +340,7 @@ struct iColliderPlane : public virtual iCollider
  */
 struct iColliderConvexMesh : public virtual iCollider
 {
-  SCF_INTERFACE (CS::Collision2::iColliderConvexMesh, 1, 0, 0);
+  SCF_INTERFACE (CS::Collisions::iColliderConvexMesh, 1, 0, 0);
 
   /// Get the mesh factory of this collider.
   virtual iMeshWrapper* GetMesh () = 0;
@@ -360,7 +360,7 @@ struct iColliderConvexMesh : public virtual iCollider
  */
 struct iColliderConcaveMesh : public virtual iCollider
 {
-  SCF_INTERFACE (CS::Collision2::iColliderConcaveMesh, 1, 0, 0);
+  SCF_INTERFACE (CS::Collisions::iColliderConcaveMesh, 1, 0, 0);
 
   /// Get the mesh factory of this collider.
   virtual iMeshWrapper* GetMesh () = 0;
@@ -380,7 +380,7 @@ struct iColliderConcaveMesh : public virtual iCollider
  */
 struct iColliderConcaveMeshScaled : public virtual iCollider
 {
-  SCF_INTERFACE (CS::Collision2::iColliderConcaveMeshScaled, 1, 0, 0);
+  SCF_INTERFACE (CS::Collisions::iColliderConcaveMeshScaled, 1, 0, 0);
 
   /// Get the concave collider scaled by this collider.
   virtual iColliderConcaveMesh* GetCollider () = 0;
@@ -400,7 +400,7 @@ struct iColliderConcaveMeshScaled : public virtual iCollider
  */
 struct iColliderTerrain : public virtual iCollider
 {
-  SCF_INTERFACE (CS::Collision2::iColliderTerrain, 1, 0, 0);
+  SCF_INTERFACE (CS::Collisions::iColliderTerrain, 1, 0, 0);
 
   /// Get the terrain system.
   virtual iTerrainSystem* GetTerrain () const = 0;
@@ -421,7 +421,7 @@ struct iColliderTerrain : public virtual iCollider
  */
 struct iCollisionObject : public virtual iBase
 {
-  SCF_INTERFACE (CS::Collision2::iCollisionObject, 1, 0, 0);
+  SCF_INTERFACE (CS::Collisions::iCollisionObject, 1, 0, 0);
 
   /// Return the underlying object
   virtual iObject *QueryObject (void) = 0;
@@ -430,7 +430,7 @@ struct iCollisionObject : public virtual iBase
   virtual iCollisionObject* QueryCollisionObject () = 0;
 
   /// Return the physical body pointer if it's a physical body, or NULL.
-  virtual CS::Physics2::iPhysicalBody* QueryPhysicalBody () = 0;
+  virtual CS::Physics::iPhysicalBody* QueryPhysicalBody () = 0;
 
   /// Set the type of the collision object.
   virtual void SetObjectType (CollisionObjectType type, bool forceRebuild = true) = 0;
@@ -527,7 +527,7 @@ struct iCollisionObject : public virtual iBase
 // kickvb: most of this would have to be redesigned, let's do it later
 struct iCollisionActor : public virtual iCollisionObject
 {
-  SCF_INTERFACE (CS::Collision2::iCollisionActor, 1, 0, 0);
+  SCF_INTERFACE (CS::Collisions::iCollisionActor, 1, 0, 0);
 
   /// Check if we are on the ground.
   virtual bool IsOnGround () = 0;
@@ -601,11 +601,11 @@ struct iCollisionActor : public virtual iCollisionObject
  * Main ways to get pointers to this interface:
  * - iCollisionSystem::FindCollisionSector()
  *
- * \sa CS::Physics2::iPhysicalSector CS::Physics2::Bullet2::iPhysicalSector
+ * \sa CS::Physics::iPhysicalSector CS::Physics::Bullet2::iPhysicalSector
  */
 struct iCollisionSector : public virtual iBase
 {
-  SCF_INTERFACE (CS::Collision2::iCollisionSector, 1, 0, 0);
+  SCF_INTERFACE (CS::Collisions::iCollisionSector, 1, 0, 0);
 
   /// Return the underlying object
   virtual iObject *QueryObject (void) = 0;
@@ -704,11 +704,11 @@ struct iCollisionSector : public virtual iBase
  * Main ways to get pointers to this interface:
  * - csQueryRegistry()
  * 
- * \sa CS::Physics2::iPhysicalSystem
+ * \sa CS::Physics::iPhysicalSystem
  */
 struct iCollisionSystem : public virtual iBase
 {
-  SCF_INTERFACE (CS::Collision2::iCollisionSystem, 1, 0, 0);
+  SCF_INTERFACE (CS::Collisions::iCollisionSystem, 1, 0, 0);
 
   /**
    * Set the internal scale to be applied to the whole dynamic world. Use this

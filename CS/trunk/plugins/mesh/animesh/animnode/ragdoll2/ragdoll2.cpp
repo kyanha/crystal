@@ -139,18 +139,18 @@ RagdollNode::~RagdollNode ()
   Stop ();
 }
 
-void RagdollNode::SetPhysicalSystem (CS::Physics2::iPhysicalSystem* system)
+void RagdollNode::SetPhysicalSystem (CS::Physics::iPhysicalSystem* system)
 {
   physicalSystem = system;
-  collisionSystem = scfQueryInterface<CS::Collision2::iCollisionSystem> (system);
+  collisionSystem = scfQueryInterface<CS::Collisions::iCollisionSystem> (system);
 }
 
-CS::Physics2::iPhysicalSystem* RagdollNode::GetPhysicalSystem () const
+CS::Physics::iPhysicalSystem* RagdollNode::GetPhysicalSystem () const
 {
   return physicalSystem;
 }
 
-void RagdollNode::SetPhysicalSector (CS::Physics2::iPhysicalSector* sector)
+void RagdollNode::SetPhysicalSector (CS::Physics::iPhysicalSector* sector)
 {
   if (!physicalSector)
   {
@@ -181,7 +181,7 @@ void RagdollNode::SetPhysicalSector (CS::Physics2::iPhysicalSector* sector)
   }
 }
 
-CS::Physics2::iPhysicalSector* RagdollNode::GetPhysicalSector () const
+CS::Physics::iPhysicalSector* RagdollNode::GetPhysicalSector () const
 {
   return physicalSector;
 }
@@ -262,7 +262,7 @@ CS::Animation::RagdollState RagdollNode::GetBodyChainState
   return chains[index].state;
 }
 
-CS::Physics2::iRigidBody* RagdollNode::GetBoneRigidBody (CS::Animation::BoneID bone)
+CS::Physics::iRigidBody* RagdollNode::GetBoneRigidBody (CS::Animation::BoneID bone)
 {
   if (!bones.Contains (bone))
     return nullptr;
@@ -270,7 +270,7 @@ CS::Physics2::iRigidBody* RagdollNode::GetBoneRigidBody (CS::Animation::BoneID b
   return bones[bone]->rigidBody;
 }
 
-CS::Physics2::iJoint* RagdollNode::GetBoneJoint (const CS::Animation::BoneID bone)
+CS::Physics::iJoint* RagdollNode::GetBoneJoint (const CS::Animation::BoneID bone)
 {
   if (!bones.Contains (bone))
     return nullptr;
@@ -313,7 +313,7 @@ CS::Animation::BoneID RagdollNode::GetBone (CS::Animation::RagdollState state, u
   return CS::Animation::InvalidBoneID;
 }
 
-CS::Animation::BoneID RagdollNode::GetRigidBodyBone (CS::Physics2::iRigidBody* body) const
+CS::Animation::BoneID RagdollNode::GetRigidBodyBone (CS::Physics::iRigidBody* body) const
 {
   for (csHash<BoneData, CS::Animation::BoneID>::ConstGlobalIterator it = bones.GetIterator ();
  it.HasNext (); )
@@ -568,7 +568,7 @@ void RagdollNode::UpdateBoneState (BoneData* boneData)
         {
           csVector3 boxSize;
           collider->GetBoxGeometry (boxSize);
-          csRef<CS::Collision2::iColliderBox> box = collisionSystem->CreateColliderBox (boxSize);
+          csRef<CS::Collisions::iColliderBox> box = collisionSystem->CreateColliderBox (boxSize);
           boneData->rigidBody->AddCollider (box, collider->GetTransform ());
           break;
         }
@@ -576,7 +576,7 @@ void RagdollNode::UpdateBoneState (BoneData* boneData)
         {
           float length, radius;
           collider->GetCylinderGeometry (length, radius);
-          csRef<CS::Collision2::iColliderCylinder> cy = collisionSystem->CreateColliderCylinder (length,radius);
+          csRef<CS::Collisions::iColliderCylinder> cy = collisionSystem->CreateColliderCylinder (length,radius);
           boneData->rigidBody->AddCollider (cy, collider->GetTransform ());
           break;
         }
@@ -584,7 +584,7 @@ void RagdollNode::UpdateBoneState (BoneData* boneData)
         {
           float length, radius;
           collider->GetCapsuleGeometry (length, radius);
-          csRef<CS::Collision2::iColliderCapsule> ca = collisionSystem->CreateColliderCapsule (length, radius);
+          csRef<CS::Collisions::iColliderCapsule> ca = collisionSystem->CreateColliderCapsule (length, radius);
           boneData->rigidBody->AddCollider (ca, collider->GetTransform ());
           break;
         }
@@ -592,7 +592,7 @@ void RagdollNode::UpdateBoneState (BoneData* boneData)
         {
           iMeshWrapper* mesh;
           collider->GetConvexMeshGeometry (mesh);
-          csRef<CS::Collision2::iColliderConvexMesh> conv = collisionSystem->CreateColliderConvexMesh (mesh);
+          csRef<CS::Collisions::iColliderConvexMesh> conv = collisionSystem->CreateColliderConvexMesh (mesh);
           boneData->rigidBody->AddCollider (conv, collider->GetTransform ());
           break;
         }
@@ -601,7 +601,7 @@ void RagdollNode::UpdateBoneState (BoneData* boneData)
         {
           iMeshWrapper* mesh;
           collider->GetMeshGeometry (mesh);
-          csRef<CS::Collision2::iColliderConcaveMesh> conc = collisionSystem->CreateColliderConcaveMesh (mesh);
+          csRef<CS::Collisions::iColliderConcaveMesh> conc = collisionSystem->CreateColliderConcaveMesh (mesh);
           boneData->rigidBody->AddCollider (conc, collider->GetTransform ());
           break;
         }
@@ -611,7 +611,7 @@ void RagdollNode::UpdateBoneState (BoneData* boneData)
           csPlane3 plane;
           collider->GetPlaneGeometry (plane);
           // TODO: add transform
-          csRef<CS::Collision2::iColliderPlane> pl = collisionSystem->CreateColliderPlane (plane);
+          csRef<CS::Collisions::iColliderPlane> pl = collisionSystem->CreateColliderPlane (plane);
           boneData->rigidBody->AddCollider (pl, collider->GetTransform ());
           break;
         }
@@ -620,7 +620,7 @@ void RagdollNode::UpdateBoneState (BoneData* boneData)
         {
           csSphere sphere;
           collider->GetSphereGeometry (sphere);
-          csRef<CS::Collision2::iColliderSphere> sp = collisionSystem->CreateColliderSphere (sphere.GetRadius ());
+          csRef<CS::Collisions::iColliderSphere> sp = collisionSystem->CreateColliderSphere (sphere.GetRadius ());
           csOrthoTransform trans = collider->GetTransform ();
           trans.SetOrigin (sphere.GetCenter ());
           boneData->rigidBody->AddCollider (sp, trans);
@@ -646,7 +646,7 @@ void RagdollNode::UpdateBoneState (BoneData* boneData)
   if (boneData->state == CS::Animation::STATE_DYNAMIC)
   {
     // set the rigid body in dynamic state
-    boneData->rigidBody->SetState (CS::Physics2::STATE_DYNAMIC);
+    boneData->rigidBody->SetState (CS::Physics::STATE_DYNAMIC);
 
     // if there was already a rigid body then update its position
     if (previousBody)
@@ -737,7 +737,7 @@ void RagdollNode::UpdateBoneState (BoneData* boneData)
     boneData->rigidBody->SetKinematicCallback (ref);
 
     // set the rigid body in kinematic state
-    boneData->rigidBody->SetState (CS::Physics2::STATE_KINEMATIC  );
+    boneData->rigidBody->SetState (CS::Physics::STATE_KINEMATIC  );
 
     // remove the joint
     if (boneData->joint)
@@ -810,7 +810,7 @@ BoneKinematicCallback::~BoneKinematicCallback ()
 {
 }
 
-void BoneKinematicCallback::GetBodyTransform (CS::Physics2::iRigidBody* body, 
+void BoneKinematicCallback::GetBodyTransform (CS::Physics::iRigidBody* body, 
                                               csOrthoTransform& transform) const
 {
   // read the position of the kinematic body from the skeleton state

@@ -33,7 +33,7 @@
 
 namespace CS
 {
-namespace Physics2
+namespace Physics
 {
 namespace Bullet2
 {
@@ -52,11 +52,11 @@ enum DebugMode
 /**
  * The Bullet implementation of iSoftBody also implements this
  * interface.
- * \sa CS::Physics2::iRigidBody CS::Physics2::iSoftBody
+ * \sa CS::Physics::iRigidBody CS::Physics::iSoftBody
  */
 struct iSoftBody : public virtual iBase
 {
-  SCF_INTERFACE (CS::Physics2::Bullet2::iSoftBody, 1, 0, 0);
+  SCF_INTERFACE (CS::Physics::Bullet2::iSoftBody, 1, 0, 0);
 
   /**
    * Draw the debug informations of this soft body. This has to be called
@@ -164,11 +164,11 @@ struct iSoftBody : public virtual iBase
 /**
  * The Bullet implementation of iPhysicalSector also implements this
  * interface.
- * \sa CS::Physics2::iPhysicalSector
+ * \sa CS::Physics::iPhysicalSector
  */
 struct iPhysicalSector : public virtual iBase
 {
-  SCF_INTERFACE (CS::Physics2::Bullet2::iPhysicalSector, 1, 0, 0);
+  SCF_INTERFACE (CS::Physics::Bullet2::iPhysicalSector, 1, 0, 0);
 
   /**
    * Save the current state of the dynamic world in a file.
@@ -185,7 +185,7 @@ struct iPhysicalSector : public virtual iBase
 
   /**
    * Set the mode to be used when displaying debug informations. The default value
-   * is 'CS::Physics2::Bullet2::DEBUG_COLLIDERS | CS::Physics2::Bullet2::DEBUG_JOINTS'.
+   * is 'CS::Physics::Bullet2::DEBUG_COLLIDERS | CS::Physics::Bullet2::DEBUG_JOINTS'.
    * \remark Don't forget to call DebugDraw() at each frame to effectively display
    * the debug informations.
    */

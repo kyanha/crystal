@@ -100,7 +100,7 @@ csBulletCollisionActor::csBulletCollisionActor (csBulletSystem* sys)
   maxJumpHeight (0), recoveringFactor (0.2f), touchingContact (false),
   wasOnGround (true), wasJumping (false), useGhostSweep (true)
 {
-  type = CS::Collision2::COLLISION_OBJECT_ACTOR;
+  type = CS::Collisions::COLLISION_OBJECT_ACTOR;
   SetMaxSlope (btRadians (45.0f));
   fallSpeed = 55.0f * system->getInternalScale ();
   jumpSpeed = 9.8f * system->getInternalScale ();
@@ -112,7 +112,7 @@ csBulletCollisionActor::~csBulletCollisionActor ()
   RemoveBulletObject ();
 }
 
-void csBulletCollisionActor::AddCollider (CS::Collision2::iCollider* collider, const csOrthoTransform& relaTrans)
+void csBulletCollisionActor::AddCollider (CS::Collisions::iCollider* collider, const csOrthoTransform& relaTrans)
 {
   csBulletCollider* coll = dynamic_cast<csBulletCollider*> (collider);
 
@@ -132,7 +132,7 @@ void csBulletCollisionActor::AddCollider (CS::Collision2::iCollider* collider, c
   }
 }
 
-void csBulletCollisionActor::RemoveCollider (CS::Collision2::iCollider* collider)
+void csBulletCollisionActor::RemoveCollider (CS::Collisions::iCollider* collider)
 {
   if (collider == colliders[0])
     colliders.Empty ();
@@ -239,7 +239,7 @@ bool csBulletCollisionActor::RecoverFromPenetration ()
   csOrthoTransform curTrans = GetTransform ();
   csVector3 curPosi = curTrans.GetOrigin ();
 
-  csArray<CS::Collision2::CollisionData> data;
+  csArray<CS::Collisions::CollisionData> data;
   sector->CollisionTest (this->QueryCollisionObject (), data);
 
   for (size_t i = 0; i < data.GetSize (); i++)

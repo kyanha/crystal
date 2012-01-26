@@ -30,7 +30,7 @@
 CS_PLUGIN_NAMESPACE_BEGIN(SoftAnim2)
 {
 class SoftBodyControlType : public scfImplementation2<SoftBodyControlType,
-  CS::Physics2::iSoftBodyAnimationControlType, iComponent>
+  CS::Physics::iSoftBodyAnimationControlType, iComponent>
 {
   friend class SoftBodyControlFactory;
   friend class SoftBodyControl;
@@ -54,11 +54,11 @@ private:
 
 class SoftBodyControlFactory : public scfImplementation2<SoftBodyControlFactory, 
   scfFakeInterface<iGenMeshAnimationControlFactory>,
-  CS::Physics2::iSoftBodyAnimationControlFactory>
+  CS::Physics::iSoftBodyAnimationControlFactory>
 {
   friend class SoftBodyControl;
 public:
-  CS_LEAKGUARD_DECLARE(CS::Physics2::iSoftBodyAnimationControlFactory);
+  CS_LEAKGUARD_DECLARE(CS::Physics::iSoftBodyAnimationControlFactory);
 
   SoftBodyControlFactory (SoftBodyControlType* type);
 
@@ -73,19 +73,19 @@ private:
 };
 
 class SoftBodyControl : public scfImplementation2<SoftBodyControl, 
-  scfFakeInterface<iGenMeshAnimationControl>, CS::Physics2::iSoftBodyAnimationControl>
+  scfFakeInterface<iGenMeshAnimationControl>, CS::Physics::iSoftBodyAnimationControl>
 {
 public:
-  CS_LEAKGUARD_DECLARE(CS::Physics2::iSoftBodyAnimationControl);
+  CS_LEAKGUARD_DECLARE(CS::Physics::iSoftBodyAnimationControl);
 
   SoftBodyControl (SoftBodyControlFactory* factory, iMeshObject* mesh);
 
   //-- CS::Animation::iSoftBodyAnimationControl
-  virtual void SetSoftBody (CS::Physics2::iSoftBody* body, bool doubleSided = false);
-  virtual CS::Physics2::iSoftBody* GetSoftBody ();
+  virtual void SetSoftBody (CS::Physics::iSoftBody* body, bool doubleSided = false);
+  virtual CS::Physics::iSoftBody* GetSoftBody ();
 
   virtual void CreateAnimatedMeshAnchor (CS::Mesh::iAnimatedMesh* animesh,
-    CS::Physics2::iRigidBody* body,
+    CS::Physics::iRigidBody* body,
     size_t bodyVertexIndex,
     size_t animeshVertexIndex = (size_t) ~0);
   virtual size_t GetAnimatedMeshAnchorVertex (size_t bodyVertexIndex);
@@ -115,7 +115,7 @@ public:
 private:
   SoftBodyControlFactory* factory;
   csWeakRef<iMeshObject> mesh;
-  csRef<CS::Physics2::iSoftBody> softBody;
+  csRef<CS::Physics::iSoftBody> softBody;
   bool doubleSided;
   csDirtyAccessArray<csVector3> vertices;
   csDirtyAccessArray<csVector3> normals;
@@ -127,7 +127,7 @@ private:
   struct Anchor
   {
     csWeakRef<CS::Mesh::iAnimatedMesh> animesh;
-    csWeakRef<CS::Physics2::iRigidBody> body;
+    csWeakRef<CS::Physics::iRigidBody> body;
     size_t bodyVertexIndex;
     size_t animeshVertexIndex;
   };

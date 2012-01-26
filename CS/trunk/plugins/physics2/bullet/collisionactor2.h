@@ -28,7 +28,7 @@ CS_PLUGIN_NAMESPACE_BEGIN (Bullet2)
 
 class csBulletCollisionActor : public scfImplementationExt1<
   csBulletCollisionActor, csBulletCollisionObject, 
-  CS::Collision2::iCollisionActor>
+  CS::Collisions::iCollisionActor>
 {
 private:
   btVector3 currentPosition;
@@ -67,11 +67,11 @@ public:
 
   virtual iObject* QueryObject (void) { return (iObject*) this; }
   //iCollisionObject
-  virtual CS::Collision2::iCollisionObject* QueryCollisionObject () {return dynamic_cast<csBulletCollisionObject*> (this);}
-  virtual CS::Physics2::iPhysicalBody* QueryPhysicalBody () {return NULL;}
+  virtual CS::Collisions::iCollisionObject* QueryCollisionObject () {return dynamic_cast<csBulletCollisionObject*> (this);}
+  virtual CS::Physics::iPhysicalBody* QueryPhysicalBody () {return NULL;}
 
-  virtual void SetObjectType (CS::Collision2::CollisionObjectType type, bool forceRebuild = true) {}
-  virtual CS::Collision2::CollisionObjectType GetObjectType () {return CS::Collision2::COLLISION_OBJECT_ACTOR;}
+  virtual void SetObjectType (CS::Collisions::CollisionObjectType type, bool forceRebuild = true) {}
+  virtual CS::Collisions::CollisionObjectType GetObjectType () {return CS::Collisions::COLLISION_OBJECT_ACTOR;}
 
   virtual void SetAttachedMovable (iMovable* movable) {csBulletCollisionObject::SetAttachedMovable (movable);}
   virtual iMovable* GetAttachedMovable () {return csBulletCollisionObject::GetAttachedMovable ();}
@@ -87,26 +87,26 @@ public:
 
   virtual void RebuildObject () {csBulletCollisionObject::RebuildObject ();}
 
-  virtual void AddCollider (CS::Collision2::iCollider* collider, const csOrthoTransform& relaTrans
+  virtual void AddCollider (CS::Collisions::iCollider* collider, const csOrthoTransform& relaTrans
     = csOrthoTransform (csMatrix3 (), csVector3 (0)));
-  virtual void RemoveCollider (CS::Collision2::iCollider* collider);
+  virtual void RemoveCollider (CS::Collisions::iCollider* collider);
   virtual void RemoveCollider (size_t index);
 
-  virtual CS::Collision2::iCollider* GetCollider (size_t index) {return csBulletCollisionObject::GetCollider (index);}
+  virtual CS::Collisions::iCollider* GetCollider (size_t index) {return csBulletCollisionObject::GetCollider (index);}
   virtual size_t GetColliderCount () {return colliders.GetSize ();}
 
   virtual void SetCollisionGroup (const char* name) {csBulletCollisionObject::SetCollisionGroup (name);}
   virtual const char* GetCollisionGroup () const {return csBulletCollisionObject::GetCollisionGroup ();}
 
-  virtual void SetCollisionCallback (CS::Collision2::iCollisionCallback* cb) {collCb = cb;}
-  virtual CS::Collision2::iCollisionCallback* GetCollisionCallback () {return collCb;}
+  virtual void SetCollisionCallback (CS::Collisions::iCollisionCallback* cb) {collCb = cb;}
+  virtual CS::Collisions::iCollisionCallback* GetCollisionCallback () {return collCb;}
 
   virtual bool Collide (iCollisionObject* otherObject) {return csBulletCollisionObject::Collide (otherObject);}
-  virtual CS::Collision2::HitBeamResult HitBeam (const csVector3& start, const csVector3& end)
+  virtual CS::Collisions::HitBeamResult HitBeam (const csVector3& start, const csVector3& end)
   { return csBulletCollisionObject::HitBeam (start, end);}
 
   virtual size_t GetContactObjectsCount () {return contactObjects.GetSize ();}
-  virtual CS::Collision2::iCollisionObject* GetContactObject (size_t index) {
+  virtual CS::Collisions::iCollisionObject* GetContactObject (size_t index) {
     return csBulletCollisionObject::GetContactObject (index);}
 
   virtual bool RemoveBulletObject () {return csBulletCollisionObject::RemoveBulletObject ();}

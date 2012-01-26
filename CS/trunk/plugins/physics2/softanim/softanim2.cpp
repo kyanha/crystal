@@ -119,7 +119,7 @@ SoftBodyControl::SoftBodyControl (SoftBodyControlFactory* factory, iMeshObject* 
     bboxes[i] = bbox;
 }
 
-void SoftBodyControl::SetSoftBody (CS::Physics2::iSoftBody* body, bool doubleSided /* = false */)
+void SoftBodyControl::SetSoftBody (CS::Physics::iSoftBody* body, bool doubleSided /* = false */)
 {
   CS_ASSERT (body);
 
@@ -140,13 +140,13 @@ void SoftBodyControl::SetSoftBody (CS::Physics2::iSoftBody* body, bool doubleSid
   Update (0, 0, 0);
 }
 
-CS::Physics2::iSoftBody* SoftBodyControl::GetSoftBody ()
+CS::Physics::iSoftBody* SoftBodyControl::GetSoftBody ()
 {
   return softBody;
 }
 
 void SoftBodyControl::CreateAnimatedMeshAnchor (CS::Mesh::iAnimatedMesh* animesh, 
-                                                CS::Physics2::iRigidBody* body, 
+                                                CS::Physics::iRigidBody* body, 
                                                 size_t bodyVertexIndex, 
                                                 size_t animeshVertexIndex)
 {

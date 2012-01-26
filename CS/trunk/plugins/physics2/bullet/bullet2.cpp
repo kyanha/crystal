@@ -70,16 +70,16 @@ CollisionPortal::~CollisionPortal ()
 
 struct PointContactResult : public btCollisionWorld::ContactResultCallback
 {
-  csArray<CS::Collision2::CollisionData>& colls;
+  csArray<CS::Collisions::CollisionData>& colls;
   csBulletSystem* sys;
-  PointContactResult(csBulletSystem* sys, csArray<CS::Collision2::CollisionData>& collisions) : colls(collisions), sys(sys) 
+  PointContactResult(csBulletSystem* sys, csArray<CS::Collisions::CollisionData>& collisions) : colls(collisions), sys(sys) 
   {
   }
   virtual	btScalar	addSingleResult (btManifoldPoint& cp,	const btCollisionObject* colObj0, int partId0,int index0,const btCollisionObject* colObj1,int partId1,int index1)
   {
-    CS::Collision2::CollisionData data;
-    data.objectA = static_cast<CS::Collision2::iCollisionObject*>(colObj0->getUserPointer ());
-    data.objectB = static_cast<CS::Collision2::iCollisionObject*>(colObj1->getUserPointer ());
+    CS::Collisions::CollisionData data;
+    data.objectA = static_cast<CS::Collisions::iCollisionObject*>(colObj0->getUserPointer ());
+    data.objectB = static_cast<CS::Collisions::iCollisionObject*>(colObj1->getUserPointer ());
     data.penetration = cp.m_distance1 * sys->getInverseInternalScale ();
     data.positionWorldOnA = BulletToCS (cp.m_positionWorldOnA, sys->getInverseInternalScale ());
     data.positionWorldOnB = BulletToCS (cp.m_positionWorldOnB, sys->getInverseInternalScale ());
@@ -113,34 +113,34 @@ csBulletSector::csBulletSector (csBulletSystem* sys)
 
   SetGravity (csVector3 (0.0f, -9.81f, 0.0f));
 
-  CS::Collision2::CollisionGroupMask allFilter = -1;
+  CS::Collisions::CollisionGroupMask allFilter = -1;
 
-  CS::Collision2::CollisionGroup defaultGroup ("Default");
+  CS::Collisions::CollisionGroup defaultGroup ("Default");
   defaultGroup.value = 1;
   defaultGroup.mask = allFilter;
   collGroups.Push (defaultGroup);
 
-  CS::Collision2::CollisionGroup staticGroup ("Static");
+  CS::Collisions::CollisionGroup staticGroup ("Static");
   staticGroup.value = 2;
   staticGroup.mask = allFilter ^ 2;
   collGroups.Push (staticGroup);
 
-  CS::Collision2::CollisionGroup kinematicGroup ("Kinematic");
+  CS::Collisions::CollisionGroup kinematicGroup ("Kinematic");
   kinematicGroup.value = 4;
   kinematicGroup.mask = allFilter ^ 4;
   collGroups.Push (kinematicGroup);
 
-  CS::Collision2::CollisionGroup portalGroup ("Portal");
+  CS::Collisions::CollisionGroup portalGroup ("Portal");
   portalGroup.value = 8;
   portalGroup.mask = allFilter ^ 8;
   collGroups.Push (portalGroup);
 
-  CS::Collision2::CollisionGroup copyGroup ("PortalCopy");
+  CS::Collisions::CollisionGroup copyGroup ("PortalCopy");
   copyGroup.value = 16;
   copyGroup.mask = allFilter ^ 16;
   collGroups.Push (copyGroup);
 
-  CS::Collision2::CollisionGroup characterGroup ("Character");
+  CS::Collisions::CollisionGroup characterGroup ("Character");
   characterGroup.value = 32;
   characterGroup.mask = allFilter ^ 32;
   collGroups.Push (characterGroup);
@@ -185,14 +185,14 @@ void csBulletSector::SetGravity (const csVector3& v)
     softWorldInfo->m_gravity = gravity;
 }
 
-void csBulletSector::AddCollisionObject (CS::Collision2::iCollisionObject* object)
+void csBulletSector::AddCollisionObject (CS::Collisions::iCollisionObject* object)
 {
   csBulletCollisionObject* obj (dynamic_cast<csBulletCollisionObject*>(object));
 
-  if (obj->GetObjectType () == CS::Collision2::COLLISION_OBJECT_PHYSICAL)
+  if (obj->GetObjectType () == CS::Collisions::COLLISION_OBJECT_PHYSICAL)
   {
     iPhysicalBody* phyBody = obj->QueryPhysicalBody ();
-    if (phyBody->GetBodyType () == CS::Physics2::BODY_RIGID)
+    if (phyBody->GetBodyType () == CS::Physics::BODY_RIGID)
       AddRigidBody (phyBody->QueryRigidBody ());
     else
       AddSoftBody (phyBody->QuerySoftBody ());
@@ -208,16 +208,16 @@ void csBulletSector::AddCollisionObject (CS::Collision2::iCollisionObject* objec
   }
 }
 
-void csBulletSector::RemoveCollisionObject (CS::Collision2::iCollisionObject* object)
+void csBulletSector::RemoveCollisionObject (CS::Collisions::iCollisionObject* object)
 {
   csBulletCollisionObject* collObject = dynamic_cast<csBulletCollisionObject*> (object);
   if (!collObject)
     return;
 
-  if (collObject->GetObjectType () == CS::Collision2::COLLISION_OBJECT_PHYSICAL)
+  if (collObject->GetObjectType () == CS::Collisions::COLLISION_OBJECT_PHYSICAL)
   {
     iPhysicalBody* phyBody = dynamic_cast<iPhysicalBody*> (object);
-    if (phyBody->GetBodyType () == CS::Physics2::BODY_RIGID)
+    if (phyBody->GetBodyType () == CS::Physics::BODY_RIGID)
       RemoveRigidBody (phyBody->QueryRigidBody ());
     else
       RemoveSoftBody (phyBody->QuerySoftBody ());
@@ -234,7 +234,7 @@ void csBulletSector::RemoveCollisionObject (CS::Collision2::iCollisionObject* ob
   }
 }
 
-CS::Collision2::iCollisionObject* csBulletSector::GetCollisionObject (size_t index)
+CS::Collisions::iCollisionObject* csBulletSector::GetCollisionObject (size_t index)
 {
   if (index >= 0 && index < collisionObjects.GetSize ())
     return collisionObjects[index]->QueryCollisionObject ();
@@ -242,7 +242,7 @@ CS::Collision2::iCollisionObject* csBulletSector::GetCollisionObject (size_t ind
     return NULL;
 }
 
-CS::Collision2::iCollisionObject* csBulletSector::FindCollisionObject (const char* name)
+CS::Collisions::iCollisionObject* csBulletSector::FindCollisionObject (const char* name)
 {
   return collisionObjects.FindByName (name);
 }
@@ -323,7 +323,7 @@ void csBulletSector::SetSector (iSector* sector)
    }
 }
 
-CS::Collision2::HitBeamResult csBulletSector::HitBeam (const csVector3& start, const csVector3& end)
+CS::Collisions::HitBeamResult csBulletSector::HitBeam (const csVector3& start, const csVector3& end)
 {
   btVector3 rayFrom = CSToBullet (start, sys->getInternalScale ());
   btVector3 rayTo = CSToBullet (end, sys->getInternalScale ());
@@ -333,11 +333,11 @@ CS::Collision2::HitBeamResult csBulletSector::HitBeam (const csVector3& start, c
   rayCallback.m_collisionFilterGroup = 1;
   bulletWorld->rayTest (rayFrom, rayTo, rayCallback);
 
-  CS::Collision2::HitBeamResult result;
+  CS::Collisions::HitBeamResult result;
 
   if(rayCallback.hasHit ())
   {
-    CS::Collision2::iCollisionObject* collObject = static_cast<CS::Collision2::iCollisionObject*> (
+    CS::Collisions::iCollisionObject* collObject = static_cast<CS::Collisions::iCollisionObject*> (
       rayCallback.m_collisionObject->getUserPointer ());
 
     result.hasHit = true;
@@ -407,11 +407,11 @@ CS::Collision2::HitBeamResult csBulletSector::HitBeam (const csVector3& start, c
   return result;
 }
 
-CS::Collision2::HitBeamResult csBulletSector::HitBeamPortal (const csVector3& start, const csVector3& end)
+CS::Collisions::HitBeamResult csBulletSector::HitBeamPortal (const csVector3& start, const csVector3& end)
 {
   hitPortal = NULL;
 
-  CS::Collision2::HitBeamResult result = HitBeam (start, end);
+  CS::Collisions::HitBeamResult result = HitBeam (start, end);
 
   if (result.object == NULL && hitPortal)
   {
@@ -448,20 +448,20 @@ CS::Collision2::HitBeamResult csBulletSector::HitBeamPortal (const csVector3& st
 
 }
 
-CS::Collision2::CollisionGroup& csBulletSector::CreateCollisionGroup (const char* name)
+CS::Collisions::CollisionGroup& csBulletSector::CreateCollisionGroup (const char* name)
 {
   size_t groupCount = collGroups.GetSize ();
-  if (groupCount >= sizeof (CS::Collision2::CollisionGroupMask) * 8)
+  if (groupCount >= sizeof (CS::Collisions::CollisionGroupMask) * 8)
     return collGroups[0];
 
-  CS::Collision2::CollisionGroup newGroup(name);
+  CS::Collisions::CollisionGroup newGroup(name);
   newGroup.value = 1 << groupCount;
   newGroup.mask = ~newGroup.value;
   collGroups.Push (newGroup);
   return collGroups[groupCount];
 }
 
-CS::Collision2::CollisionGroup& csBulletSector::FindCollisionGroup (const char* name)
+CS::Collisions::CollisionGroup& csBulletSector::FindCollisionGroup (const char* name)
 {
   size_t index = collGroups.FindKey (CollisionGroupVector::KeyCmp (name));
   if (index == csArrayItemNotFound)
@@ -508,8 +508,8 @@ bool csBulletSector::GetGroupCollision (const char* name1,
     return false;
 }
 
-bool csBulletSector::CollisionTest (CS::Collision2::iCollisionObject* object, 
-                                    csArray<CS::Collision2::CollisionData>& collisions)
+bool csBulletSector::CollisionTest (CS::Collisions::iCollisionObject* object, 
+                                    csArray<CS::Collisions::CollisionData>& collisions)
 {
 
   if (!object)
@@ -519,8 +519,8 @@ bool csBulletSector::CollisionTest (CS::Collision2::iCollisionObject* object,
   PointContactResult result(sys, collisions);
 
   csBulletCollisionObject* collObject = dynamic_cast<csBulletCollisionObject*> (object);
-  if (collObject->GetObjectType () == CS::Collision2::COLLISION_OBJECT_BASE
-    || collObject->GetObjectType () == CS::Collision2::COLLISION_OBJECT_PHYSICAL)
+  if (collObject->GetObjectType () == CS::Collisions::COLLISION_OBJECT_BASE
+    || collObject->GetObjectType () == CS::Collisions::COLLISION_OBJECT_PHYSICAL)
   {
     if (collObject->isTerrain)
     {
@@ -556,11 +556,11 @@ bool csBulletSector::CollisionTest (CS::Collision2::iCollisionObject* object,
         btPersistentManifold* manifold = manifoldArray[j];
         btCollisionObject* objA = static_cast<btCollisionObject*> (manifold->getBody0 ());
         btCollisionObject* objB = static_cast<btCollisionObject*> (manifold->getBody1 ());
-        CS::Collision2::iCollisionObject* csCOA = static_cast<CS::Collision2::iCollisionObject*>(objA->getUserPointer ());
-        CS::Collision2::iCollisionObject* csCOB = static_cast<CS::Collision2::iCollisionObject*>(objB->getUserPointer ());
+        CS::Collisions::iCollisionObject* csCOA = static_cast<CS::Collisions::iCollisionObject*>(objA->getUserPointer ());
+        CS::Collisions::iCollisionObject* csCOB = static_cast<CS::Collisions::iCollisionObject*>(objB->getUserPointer ());
         for (int p=0;p<manifold->getNumContacts();p++)
         {
-          CS::Collision2::CollisionData data;
+          CS::Collisions::CollisionData data;
           data.objectA = csCOA;
           data.objectB = csCOB;
 
@@ -577,11 +577,11 @@ bool csBulletSector::CollisionTest (CS::Collision2::iCollisionObject* object,
 
   if (collObject->objectCopy)
   {
-    csArray<CS::Collision2::CollisionData> copyData;
+    csArray<CS::Collisions::CollisionData> copyData;
     collObject->objectCopy->sector->CollisionTest (collObject->objectCopy, copyData);
     for (size_t i = 0; i < copyData.GetSize (); i++)
     {
-      CS::Collision2::CollisionData data;
+      CS::Collisions::CollisionData data;
       if (copyData[i].objectA == collObject->objectCopy->QueryCollisionObject ())
       {
         data.objectA = object;
@@ -615,7 +615,7 @@ bool csBulletSector::CollisionTest (CS::Collision2::iCollisionObject* object,
     return false;
 }
 
-void csBulletSector::AddCollisionActor (CS::Collision2::iCollisionActor* actor)
+void csBulletSector::AddCollisionActor (CS::Collisions::iCollisionActor* actor)
 {
   csRef<csBulletCollisionActor> obj (dynamic_cast<csBulletCollisionActor*>(actor));
   collisionActor = obj;
@@ -631,14 +631,14 @@ void csBulletSector::RemoveCollisionActor ()
   collisionActor = NULL;
 }
 
-CS::Collision2::iCollisionActor* csBulletSector::GetCollisionActor ()
+CS::Collisions::iCollisionActor* csBulletSector::GetCollisionActor ()
 {
   return collisionActor;
 }
 
 bool csBulletSector::BulletCollide (btCollisionObject* objectA,
                                     btCollisionObject* objectB,
-                                    csArray<CS::Collision2::CollisionData>& data)
+                                    csArray<CS::Collisions::CollisionData>& data)
 {
   //contactPairTest
   PointContactResult result(sys, data);
@@ -649,14 +649,14 @@ bool csBulletSector::BulletCollide (btCollisionObject* objectA,
     return true;
 }
 
-CS::Collision2::HitBeamResult csBulletSector::RigidHitBeam (btCollisionObject* object, 
+CS::Collisions::HitBeamResult csBulletSector::RigidHitBeam (btCollisionObject* object, 
                                             const csVector3& start,
                                             const csVector3& end)
 {
   btVector3 rayFrom = CSToBullet (start, sys->getInternalScale ());
   btVector3 rayTo = CSToBullet (end, sys->getInternalScale ());
 
-  CS::Collision2::HitBeamResult result;
+  CS::Collisions::HitBeamResult result;
 
   if (object->getInternalType () == btCollisionObject::CO_SOFT_BODY)
   {
@@ -794,7 +794,7 @@ void csBulletSector::SetAutoDisableParams (float linear, float angular,
   timeDisableThreshold = time;
 }
 
-void csBulletSector::AddRigidBody (CS::Physics2::iRigidBody* body)
+void csBulletSector::AddRigidBody (CS::Physics::iRigidBody* body)
 {
   csRef<csBulletRigidBody> btBody (dynamic_cast<csBulletRigidBody*>(body));
   rigidBodies.Push (btBody);
@@ -810,7 +810,7 @@ void csBulletSector::AddRigidBody (CS::Physics2::iRigidBody* body)
   AddMovableToSector (body);
 }
 
-void csBulletSector::RemoveRigidBody (CS::Physics2::iRigidBody* body)
+void csBulletSector::RemoveRigidBody (CS::Physics::iRigidBody* body)
 {
   csBulletRigidBody* btBody = dynamic_cast<csBulletRigidBody*> (body);
   CS_ASSERT (btBody);
@@ -823,17 +823,17 @@ void csBulletSector::RemoveRigidBody (CS::Physics2::iRigidBody* body)
   }
 }
 
-CS::Physics2::iRigidBody* csBulletSector::GetRigidBody (size_t index)
+CS::Physics::iRigidBody* csBulletSector::GetRigidBody (size_t index)
 {
   return rigidBodies[index]->QueryRigidBody ();
 }
 
-CS::Physics2::iRigidBody* csBulletSector::FindRigidBody (const char* name)
+CS::Physics::iRigidBody* csBulletSector::FindRigidBody (const char* name)
 {
   return rigidBodies.FindByName (name);
 }
 
-void csBulletSector::AddSoftBody (CS::Physics2::iSoftBody* body)
+void csBulletSector::AddSoftBody (CS::Physics::iSoftBody* body)
 {
   csRef<csBulletSoftBody> btBody (dynamic_cast<csBulletSoftBody*>(body));
   softBodies.Push (btBody);
@@ -849,8 +849,8 @@ void csBulletSector::AddSoftBody (CS::Physics2::iSoftBody* body)
       return;
     csRef<iGeneralMeshState> meshState =
       scfQueryInterface<iGeneralMeshState> (mesh->GetMeshObject ());
-    csRef<CS::Physics2::iSoftBodyAnimationControl> animationControl =
-      scfQueryInterface<CS::Physics2::iSoftBodyAnimationControl> (meshState->GetAnimationControl ());
+    csRef<CS::Physics::iSoftBodyAnimationControl> animationControl =
+      scfQueryInterface<CS::Physics::iSoftBodyAnimationControl> (meshState->GetAnimationControl ());
     if (!animationControl->GetSoftBody ())
       animationControl->SetSoftBody (body);
 
@@ -858,7 +858,7 @@ void csBulletSector::AddSoftBody (CS::Physics2::iSoftBody* body)
   }
 }
 
-void csBulletSector::RemoveSoftBody (CS::Physics2::iSoftBody* body)
+void csBulletSector::RemoveSoftBody (CS::Physics::iSoftBody* body)
 {
   csBulletSoftBody* btBody = dynamic_cast<csBulletSoftBody*> (body);
   CS_ASSERT (btBody);
@@ -871,17 +871,17 @@ void csBulletSector::RemoveSoftBody (CS::Physics2::iSoftBody* body)
   }
 }
 
-CS::Physics2::iSoftBody* csBulletSector::GetSoftBody (size_t index)
+CS::Physics::iSoftBody* csBulletSector::GetSoftBody (size_t index)
 {
   return softBodies[index]->QuerySoftBody ();
 }
 
-CS::Physics2::iSoftBody* csBulletSector::FindSoftBody (const char* name)
+CS::Physics::iSoftBody* csBulletSector::FindSoftBody (const char* name)
 {
   return softBodies.FindByName (name);
 }
 
-void csBulletSector::AddJoint (CS::Physics2::iJoint* joint)
+void csBulletSector::AddJoint (CS::Physics::iJoint* joint)
 {
   csBulletJoint* btJoint = dynamic_cast<csBulletJoint*> (joint);
   CS_ASSERT(btJoint);
@@ -890,7 +890,7 @@ void csBulletSector::AddJoint (CS::Physics2::iJoint* joint)
   joints.Push (btJoint);
 }
 
-void csBulletSector::RemoveJoint (CS::Physics2::iJoint* joint)
+void csBulletSector::RemoveJoint (CS::Physics::iJoint* joint)
 {
   csBulletJoint* btJoint = dynamic_cast<csBulletJoint*> (joint);
   CS_ASSERT(btJoint);
@@ -993,7 +993,7 @@ void csBulletSector::DebugDraw (iView* rview)
   debugDraw->DebugDraw (rview);
 }
 
-void csBulletSector::SetDebugMode (CS::Physics2::Bullet2::DebugMode mode)
+void csBulletSector::SetDebugMode (CS::Physics::Bullet2::DebugMode mode)
 {
   if (!debugDraw)
   {
@@ -1004,10 +1004,10 @@ void csBulletSector::SetDebugMode (CS::Physics2::Bullet2::DebugMode mode)
   debugDraw->SetDebugMode (mode);
 }
 
-CS::Physics2::Bullet2::DebugMode csBulletSector::GetDebugMode ()
+CS::Physics::Bullet2::DebugMode csBulletSector::GetDebugMode ()
 {
   if (!debugDraw)
-    return CS::Physics2::Bullet2::DEBUG_NOTHING;
+    return CS::Physics::Bullet2::DEBUG_NOTHING;
 
   return debugDraw->GetDebugMode ();
 }
@@ -1053,7 +1053,7 @@ void csBulletSector::UpdateSoftBodies (float timeStep)
   }
 }
 
-void csBulletSector::AddMovableToSector (CS::Collision2::iCollisionObject* obj)
+void csBulletSector::AddMovableToSector (CS::Collisions::iCollisionObject* obj)
 {
   iMovable* movable = obj->GetAttachedMovable ();
   if (movable && sector)
@@ -1067,7 +1067,7 @@ void csBulletSector::AddMovableToSector (CS::Collision2::iCollisionObject* obj)
   }
 }
 
-void csBulletSector::RemoveMovableFromSector (CS::Collision2::iCollisionObject* obj)
+void csBulletSector::RemoveMovableFromSector (CS::Collisions::iCollisionObject* obj)
 {
   iMovable* movable = obj->GetAttachedMovable ();
   if (movable && sector)
@@ -1104,10 +1104,10 @@ void csBulletSector::CheckCollisions ()
       btCollisionObject* obB =
         static_cast<btCollisionObject*> (contactManifold->getBody1 ());
 
-      CS::Collision2::iCollisionObject* cs_obA = 
-        static_cast<CS::Collision2::iCollisionObject*> (obA->getUserPointer ());
-      CS::Collision2::iCollisionObject* cs_obB = 
-        static_cast<CS::Collision2::iCollisionObject*> (obB->getUserPointer ());
+      CS::Collisions::iCollisionObject* cs_obA = 
+        static_cast<CS::Collisions::iCollisionObject*> (obA->getUserPointer ());
+      CS::Collisions::iCollisionObject* cs_obB = 
+        static_cast<CS::Collisions::iCollisionObject*> (obB->getUserPointer ());
 
       if (!cs_obA || !cs_obB)
         continue;
@@ -1115,13 +1115,13 @@ void csBulletSector::CheckCollisions ()
       csBulletCollisionObject* csCOA = dynamic_cast<csBulletCollisionObject*> (cs_obA);
       csBulletCollisionObject* csCOB = dynamic_cast<csBulletCollisionObject*> (cs_obB);
 
-      if (csCOA->GetObjectType () == CS::Collision2::COLLISION_OBJECT_BASE
-        || csCOA->GetObjectType () == CS::Collision2::COLLISION_OBJECT_PHYSICAL)
+      if (csCOA->GetObjectType () == CS::Collisions::COLLISION_OBJECT_BASE
+        || csCOA->GetObjectType () == CS::Collisions::COLLISION_OBJECT_PHYSICAL)
         if (csCOA->contactObjects.Contains (csCOB) == csArrayItemNotFound)
           csCOA->contactObjects.Push (csCOB);
 
-      if (csCOB->GetObjectType () == CS::Collision2::COLLISION_OBJECT_BASE
-        || csCOB->GetObjectType () == CS::Collision2::COLLISION_OBJECT_PHYSICAL)
+      if (csCOB->GetObjectType () == CS::Collisions::COLLISION_OBJECT_BASE
+        || csCOB->GetObjectType () == CS::Collisions::COLLISION_OBJECT_PHYSICAL)
         if (csCOB->contactObjects.Contains (csCOA) == csArrayItemNotFound)
           csCOB->contactObjects.Push (csCOA);
     }
@@ -1145,19 +1145,19 @@ void csBulletSector::UpdateCollisionPortals ()
     {
       btTransform tran = portals[i]->ghostPortal->getWorldTransform ();
       btCollisionObject* obj = portals[i]->ghostPortal->getOverlappingObject (j);
-      CS::Collision2::iCollisionObject* csObj = 
-        static_cast<CS::Collision2::iCollisionObject*> (obj->getUserPointer ());
+      CS::Collisions::iCollisionObject* csObj = 
+        static_cast<CS::Collisions::iCollisionObject*> (obj->getUserPointer ());
       csBulletCollisionObject* csBulletObj = dynamic_cast<csBulletCollisionObject*> (csObj);
       csBulletCollisionObject* newObject;
 
       // Collide with static object?
-      if (csBulletObj->GetObjectType () == CS::Collision2::COLLISION_OBJECT_BASE)
+      if (csBulletObj->GetObjectType () == CS::Collisions::COLLISION_OBJECT_BASE)
         continue;
 
-      if (csBulletObj->GetObjectType () == CS::Collision2::COLLISION_OBJECT_PHYSICAL)
+      if (csBulletObj->GetObjectType () == CS::Collisions::COLLISION_OBJECT_PHYSICAL)
       {
-        CS::Physics2::iPhysicalBody* pb = csObj->QueryPhysicalBody ();
-        if (pb->GetBodyType () == CS::Physics2::BODY_SOFT)
+        CS::Physics::iPhysicalBody* pb = csObj->QueryPhysicalBody ();
+        if (pb->GetBodyType () == CS::Physics::BODY_SOFT)
         {
           //use AABB
           btVector3 aabbMin, aabbMax;
@@ -1202,7 +1202,7 @@ void csBulletSector::UpdateCollisionPortals ()
             firstBody->btBody->getAabb (aabbMin, aabbMax);
             if (!TestAabbAgainstAabb2 (aabbMin, aabbMax, aabbMin2, aabbMax2))
               continue;
-            csArray<CS::Physics2::iPhysicalBody*> rbs;
+            csArray<CS::Physics::iPhysicalBody*> rbs;
             csArray<csBulletJoint*> jnts;
             bool doTrans = true;
             size_t head, end;
@@ -1219,7 +1219,7 @@ void csBulletSector::UpdateCollisionPortals ()
                 doTrans = false;
                 break;
               }
-              else if (rbs[head]->GetBodyType () == CS::Physics2::BODY_SOFT)
+              else if (rbs[head]->GetBodyType () == CS::Physics::BODY_SOFT)
               {
                 // Soft joint should not be transmitted.
                 doTrans = false;
@@ -1227,7 +1227,7 @@ void csBulletSector::UpdateCollisionPortals ()
                 firstBody->SetAngularVelocity (csVector3 (0.0f));
                 break;
               }
-              else if (rbs[head]->QueryRigidBody ()->GetState () == CS::Physics2::STATE_STATIC)
+              else if (rbs[head]->QueryRigidBody ()->GetState () == CS::Physics::STATE_STATIC)
               {
                 // If there's a static body in the chain, the chain should not be transmited.
                 // Just ignore the motion.
@@ -1247,7 +1247,7 @@ void csBulletSector::UpdateCollisionPortals ()
                   continue;
 
                 jnts.Push (jnt);
-                CS::Physics2::iPhysicalBody* otherBody;
+                CS::Physics::iPhysicalBody* otherBody;
                 if (jnt->bodies[0] != rb->QueryPhysicalBody ())
                   otherBody = jnt->bodies[0];
                 else
@@ -1330,13 +1330,13 @@ void csBulletSector::UpdateCollisionPortals ()
             RemoveCollisionObject (csObj);
             portals[i]->desSector->AddCollisionObject (csObj);
           }
-          if (csObj->GetObjectType () == CS::Collision2::COLLISION_OBJECT_PHYSICAL)
+          if (csObj->GetObjectType () == CS::Collisions::COLLISION_OBJECT_PHYSICAL)
           {
-            CS::Physics2::iPhysicalBody* pb = csObj->QueryPhysicalBody ();
-            if (pb->GetBodyType () == CS::Physics2::BODY_RIGID)
+            CS::Physics::iPhysicalBody* pb = csObj->QueryPhysicalBody ();
+            if (pb->GetBodyType () == CS::Physics::BODY_RIGID)
             {
               csBulletRigidBody* rb = dynamic_cast<csBulletRigidBody*> (pb->QueryRigidBody ());
-              if (rb->GetState () == CS::Physics2::STATE_DYNAMIC)
+              if (rb->GetState () == CS::Physics::STATE_DYNAMIC)
               {
                 rb->SetLinearVelocity (portals[i]->warpTrans.GetT2O () * rb->GetLinearVelocity ());
                 rb->SetAngularVelocity (portals[i]->warpTrans.GetT2O () * rb->GetAngularVelocity ()); 
@@ -1360,14 +1360,14 @@ void csBulletSector::UpdateCollisionPortals ()
       else
       {
         portals[i]->AddObject (csBulletObj);
-        if (csObj->GetObjectType () == CS::Collision2::COLLISION_OBJECT_PHYSICAL)
+        if (csObj->GetObjectType () == CS::Collisions::COLLISION_OBJECT_PHYSICAL)
         {
           btVector3 localInertia (0.0f, 0.0f, 0.0f);
-          CS::Physics2::iPhysicalBody* pb = csObj->QueryPhysicalBody ();
-          if (pb->GetBodyType () == CS::Physics2::BODY_RIGID)
+          CS::Physics::iPhysicalBody* pb = csObj->QueryPhysicalBody ();
+          if (pb->GetBodyType () == CS::Physics::BODY_RIGID)
           {
-            csRef<CS::Physics2::iRigidBody> nb = sys->CreateRigidBody ();
-            csBulletRigidBody* newBody = dynamic_cast<csBulletRigidBody*> ((CS::Physics2::iRigidBody*)nb);
+            csRef<CS::Physics::iRigidBody> nb = sys->CreateRigidBody ();
+            csBulletRigidBody* newBody = dynamic_cast<csBulletRigidBody*> ((CS::Physics::iRigidBody*)nb);
             csBulletRigidBody* rb = dynamic_cast<csBulletRigidBody*> (pb->QueryRigidBody ());
             
             for (size_t k = 0; k < rb->GetColliderCount (); k++)
@@ -1395,12 +1395,12 @@ void csBulletSector::UpdateCollisionPortals ()
             
           }
         }
-        else if (csObj->GetObjectType () == CS::Collision2::COLLISION_OBJECT_GHOST
-          || csObj->GetObjectType () == CS::Collision2::COLLISION_OBJECT_ACTOR)
+        else if (csObj->GetObjectType () == CS::Collisions::COLLISION_OBJECT_GHOST
+          || csObj->GetObjectType () == CS::Collisions::COLLISION_OBJECT_ACTOR)
         {
-          csRef<CS::Collision2::iCollisionObject> co = sys->CreateCollisionObject ();
-          newObject = dynamic_cast<csBulletCollisionObject*> ((CS::Collision2::iCollisionObject*)co);
-          newObject->SetObjectType (CS::Collision2::COLLISION_OBJECT_GHOST, false);
+          csRef<CS::Collisions::iCollisionObject> co = sys->CreateCollisionObject ();
+          newObject = dynamic_cast<csBulletCollisionObject*> ((CS::Collisions::iCollisionObject*)co);
+          newObject->SetObjectType (CS::Collisions::COLLISION_OBJECT_GHOST, false);
 
           for (size_t k = 0; k < csBulletObj->GetColliderCount (); k++)
             newObject->AddCollider (csBulletObj->GetCollider (k), csBulletObj->relaTransforms[k]);
@@ -1444,15 +1444,15 @@ void csBulletSector::SetInformationToCopy (csBulletCollisionObject* obj,
 
   btTransform btTrans = CSToBullet (trans, sys->getInternalScale ());
 
-  if (obj->type == CS::Collision2::COLLISION_OBJECT_PHYSICAL)
+  if (obj->type == CS::Collisions::COLLISION_OBJECT_PHYSICAL)
   {
-    CS::Physics2::iPhysicalBody* pb = obj->QueryPhysicalBody ();
-    if (pb->GetBodyType () == CS::Physics2::BODY_RIGID)
+    CS::Physics::iPhysicalBody* pb = obj->QueryPhysicalBody ();
+    if (pb->GetBodyType () == CS::Physics::BODY_RIGID)
     {
       csBulletRigidBody* btCopy = dynamic_cast<csBulletRigidBody*> (cpy->QueryPhysicalBody ()->QueryRigidBody ());
       csBulletRigidBody* rb = dynamic_cast<csBulletRigidBody*> (pb->QueryRigidBody ());
 
-      if (rb->GetState () == CS::Physics2::STATE_DYNAMIC)
+      if (rb->GetState () == CS::Physics::STATE_DYNAMIC)
       {
         btQuaternion rotate;
         CSToBullet (warpTrans.GetT2O()).getRotation (rotate);
@@ -1467,8 +1467,8 @@ void csBulletSector::SetInformationToCopy (csBulletCollisionObject* obj,
       //TODO Soft Body
     }
   }
-  else if (obj->type == CS::Collision2::COLLISION_OBJECT_GHOST
-    || obj->type == CS::Collision2::COLLISION_OBJECT_ACTOR)
+  else if (obj->type == CS::Collisions::COLLISION_OBJECT_GHOST
+    || obj->type == CS::Collisions::COLLISION_OBJECT_ACTOR)
   {
     cpy->SetTransform (trans);
   }
@@ -1478,14 +1478,14 @@ void csBulletSector::GetInformationFromCopy (csBulletCollisionObject* obj,
                                              csBulletCollisionObject* cpy)
 {
   // TODO Warp the velocity.
-  if (obj->type == CS::Collision2::COLLISION_OBJECT_PHYSICAL)
+  if (obj->type == CS::Collisions::COLLISION_OBJECT_PHYSICAL)
   {
-    CS::Physics2::iPhysicalBody* pb = obj->QueryPhysicalBody ();
-    if (pb->GetBodyType () == CS::Physics2::BODY_RIGID)
+    CS::Physics::iPhysicalBody* pb = obj->QueryPhysicalBody ();
+    if (pb->GetBodyType () == CS::Physics::BODY_RIGID)
     {
       csBulletRigidBody* btCopy = dynamic_cast<csBulletRigidBody*> (cpy->QueryPhysicalBody ()->QueryRigidBody ());
       csBulletRigidBody* rb = dynamic_cast<csBulletRigidBody*> (pb->QueryRigidBody ());
-      if (rb->GetState () == CS::Physics2::STATE_DYNAMIC)
+      if (rb->GetState () == CS::Physics::STATE_DYNAMIC)
       {
         btQuaternion qua = cpy->portalWarp;
 
@@ -1495,7 +1495,7 @@ void csBulletSector::GetInformationFromCopy (csBulletCollisionObject* obj,
         rb->btBody->internalGetTurnVelocity ()= quatRotate (qua, btCopy->btBody->internalGetTurnVelocity ());
         rb->btBody->internalWritebackVelocity ();
       }
-      else if (rb->GetState () == CS::Physics2::STATE_KINEMATIC)
+      else if (rb->GetState () == CS::Physics::STATE_KINEMATIC)
       {
         //Nothing to do?
       }
@@ -1505,8 +1505,8 @@ void csBulletSector::GetInformationFromCopy (csBulletCollisionObject* obj,
       //TODO Soft Body
     }
   }
-  else if (obj->type == CS::Collision2::COLLISION_OBJECT_GHOST
-    || obj->type == CS::Collision2::COLLISION_OBJECT_ACTOR)
+  else if (obj->type == CS::Collisions::COLLISION_OBJECT_GHOST
+    || obj->type == CS::Collisions::COLLISION_OBJECT_ACTOR)
   {
     //btPairCachingGhostObject* ghostCopy = btPairCachingGhostObject::upcast (cpy);
     //btPairCachingGhostObject* ghostObject = btPairCachingGhostObject::upcast (obj->btObject);
@@ -1547,16 +1547,16 @@ bool csBulletSystem::Initialize (iObjectRegistry* object_reg)
   return true;
 }
 
-csRef<CS::Collision2::iColliderConvexMesh> csBulletSystem::CreateColliderConvexMesh (iMeshWrapper* mesh, bool simplify)
+csRef<CS::Collisions::iColliderConvexMesh> csBulletSystem::CreateColliderConvexMesh (iMeshWrapper* mesh, bool simplify)
 {
   csRef<csBulletColliderConvexMesh> collider;
   collider.AttachNew (new csBulletColliderConvexMesh (mesh, this, simplify));
 
   //colliders.Push (collider);
-  return (CS::Collision2::iColliderConvexMesh*)collider;
+  return (CS::Collisions::iColliderConvexMesh*)collider;
 }
 
-csRef<CS::Collision2::iColliderConcaveMesh> csBulletSystem::CreateColliderConcaveMesh (iMeshWrapper* mesh)
+csRef<CS::Collisions::iColliderConcaveMesh> csBulletSystem::CreateColliderConcaveMesh (iMeshWrapper* mesh)
 {
   csRef<csBulletColliderConcaveMesh> collider;
   collider.AttachNew (new csBulletColliderConcaveMesh (mesh,this));
@@ -1565,8 +1565,8 @@ csRef<CS::Collision2::iColliderConcaveMesh> csBulletSystem::CreateColliderConcav
   return collider;
 }
 
-csRef<CS::Collision2::iColliderConcaveMeshScaled> csBulletSystem::CreateColliderConcaveMeshScaled (
-  CS::Collision2::iColliderConcaveMesh* collider, csVector3 scale)
+csRef<CS::Collisions::iColliderConcaveMeshScaled> csBulletSystem::CreateColliderConcaveMeshScaled (
+  CS::Collisions::iColliderConcaveMesh* collider, csVector3 scale)
 {
   csRef<csBulletColliderConcaveMeshScaled> coll;
   coll.AttachNew (new csBulletColliderConcaveMeshScaled (collider, scale,this));
@@ -1575,7 +1575,7 @@ csRef<CS::Collision2::iColliderConcaveMeshScaled> csBulletSystem::CreateCollider
   return coll;
 }
 
-csRef<CS::Collision2::iColliderCylinder> csBulletSystem::CreateColliderCylinder (float length, float radius)
+csRef<CS::Collisions::iColliderCylinder> csBulletSystem::CreateColliderCylinder (float length, float radius)
 {
   csRef<csBulletColliderCylinder> collider;
   collider.AttachNew (new csBulletColliderCylinder (length, radius, this));
@@ -1584,7 +1584,7 @@ csRef<CS::Collision2::iColliderCylinder> csBulletSystem::CreateColliderCylinder 
   return collider;
 }
 
-csRef<CS::Collision2::iColliderBox> csBulletSystem::CreateColliderBox (const csVector3& size)
+csRef<CS::Collisions::iColliderBox> csBulletSystem::CreateColliderBox (const csVector3& size)
 {
   csRef<csBulletColliderBox> collider;
   collider.AttachNew (new csBulletColliderBox (size, this));
@@ -1593,7 +1593,7 @@ csRef<CS::Collision2::iColliderBox> csBulletSystem::CreateColliderBox (const csV
   return collider;
 } 
 
-csRef<CS::Collision2::iColliderSphere> csBulletSystem::CreateColliderSphere (float radius)
+csRef<CS::Collisions::iColliderSphere> csBulletSystem::CreateColliderSphere (float radius)
 {
   csRef<csBulletColliderSphere> collider;
   collider.AttachNew (new csBulletColliderSphere (radius, this));
@@ -1602,7 +1602,7 @@ csRef<CS::Collision2::iColliderSphere> csBulletSystem::CreateColliderSphere (flo
   return collider;
 }
 
-csRef<CS::Collision2::iColliderCapsule> csBulletSystem::CreateColliderCapsule (float length, float radius)
+csRef<CS::Collisions::iColliderCapsule> csBulletSystem::CreateColliderCapsule (float length, float radius)
 {
   csRef<csBulletColliderCapsule> collider;
   collider.AttachNew (new csBulletColliderCapsule (length, radius, this));
@@ -1611,7 +1611,7 @@ csRef<CS::Collision2::iColliderCapsule> csBulletSystem::CreateColliderCapsule (f
   return collider;
 }
 
-csRef<CS::Collision2::iColliderCone> csBulletSystem::CreateColliderCone (float length, float radius)
+csRef<CS::Collisions::iColliderCone> csBulletSystem::CreateColliderCone (float length, float radius)
 {
   csRef<csBulletColliderCone> collider;
   collider.AttachNew (new csBulletColliderCone (length, radius, this));
@@ -1620,7 +1620,7 @@ csRef<CS::Collision2::iColliderCone> csBulletSystem::CreateColliderCone (float l
   return collider;
 }
 
-csRef<CS::Collision2::iColliderPlane> csBulletSystem::CreateColliderPlane (const csPlane3& plane)
+csRef<CS::Collisions::iColliderPlane> csBulletSystem::CreateColliderPlane (const csPlane3& plane)
 {
   csRef<csBulletColliderPlane> collider;
   collider.AttachNew (new csBulletColliderPlane (plane, this));
@@ -1629,7 +1629,7 @@ csRef<CS::Collision2::iColliderPlane> csBulletSystem::CreateColliderPlane (const
   return collider;
 }
 
-csRef<CS::Collision2::iColliderTerrain> csBulletSystem::CreateColliderTerrain (iTerrainSystem* terrain, 
+csRef<CS::Collisions::iColliderTerrain> csBulletSystem::CreateColliderTerrain (iTerrainSystem* terrain, 
                                                                float minHeight /* = 0 */, 
                                                                float maxHeight /* = 0 */)
 {
@@ -1640,7 +1640,7 @@ csRef<CS::Collision2::iColliderTerrain> csBulletSystem::CreateColliderTerrain (i
   return collider;
 }
 
-csRef<CS::Collision2::iCollisionObject> csBulletSystem::CreateCollisionObject ()
+csRef<CS::Collisions::iCollisionObject> csBulletSystem::CreateCollisionObject ()
 {
   csRef<csBulletCollisionObject> collObject;
   collObject.AttachNew (new csBulletCollisionObject (this));
@@ -1649,14 +1649,14 @@ csRef<CS::Collision2::iCollisionObject> csBulletSystem::CreateCollisionObject ()
   return collObject;
 }
 
-csRef<CS::Collision2::iCollisionActor> csBulletSystem::CreateCollisionActor ()
+csRef<CS::Collisions::iCollisionActor> csBulletSystem::CreateCollisionActor ()
 {
-  csRef<CS::Collision2::iCollisionActor> collActor;
+  csRef<CS::Collisions::iCollisionActor> collActor;
   collActor.AttachNew (new csBulletCollisionActor (this));
 
   return collActor;
 }
-csRef<CS::Collision2::iCollisionSector> csBulletSystem::CreateCollisionSector ()
+csRef<CS::Collisions::iCollisionSector> csBulletSystem::CreateCollisionSector ()
 {
   csRef<csBulletSector> collSector;
   collSector.AttachNew (new csBulletSector (this));
@@ -1665,12 +1665,12 @@ csRef<CS::Collision2::iCollisionSector> csBulletSystem::CreateCollisionSector ()
   return collSector;
 }
 
-CS::Collision2::iCollisionSector* csBulletSystem::FindCollisionSector (const char* name)
+CS::Collisions::iCollisionSector* csBulletSystem::FindCollisionSector (const char* name)
 {
   return this->collSectors.FindByName (name);
 }
 
-void csBulletSystem::DecomposeConcaveMesh (CS::Collision2::iCollisionObject* object, iMeshWrapper* mesh, bool simplify)
+void csBulletSystem::DecomposeConcaveMesh (CS::Collisions::iCollisionObject* object, iMeshWrapper* mesh, bool simplify)
 {
   csBulletCollisionObject* btCollObject = dynamic_cast<csBulletCollisionObject*> (object);
 
@@ -1807,7 +1807,7 @@ void csBulletSystem::DecomposeConcaveMesh (CS::Collision2::iCollisionObject* obj
   //RebuildObject? or let user do it?
 }
 
-csRef<CS::Physics2::iRigidBody> csBulletSystem::CreateRigidBody ()
+csRef<CS::Physics::iRigidBody> csBulletSystem::CreateRigidBody ()
 {
   csRef<csBulletRigidBody> body;
   body.AttachNew (new csBulletRigidBody (this));
@@ -1816,7 +1816,7 @@ csRef<CS::Physics2::iRigidBody> csBulletSystem::CreateRigidBody ()
   return body;
 }
 
-csRef<CS::Physics2::iJoint> csBulletSystem::CreateJoint ()
+csRef<CS::Physics::iJoint> csBulletSystem::CreateJoint ()
 {
   csRef<csBulletJoint> joint;
   joint.AttachNew (new csBulletJoint (this));
@@ -1824,7 +1824,7 @@ csRef<CS::Physics2::iJoint> csBulletSystem::CreateJoint ()
   return joint;  
 }
 
-csRef<CS::Physics2::iJoint> csBulletSystem::CreateRigidP2PJoint (const csVector3 position)
+csRef<CS::Physics::iJoint> csBulletSystem::CreateRigidP2PJoint (const csVector3 position)
 {
   csRef<csBulletJoint> joint;
   joint.AttachNew (new csBulletJoint (this));
@@ -1838,7 +1838,7 @@ csRef<CS::Physics2::iJoint> csBulletSystem::CreateRigidP2PJoint (const csVector3
   return joint;
 }
 
-csRef<CS::Physics2::iJoint> csBulletSystem::CreateRigidSlideJoint (const csOrthoTransform trans,
+csRef<CS::Physics::iJoint> csBulletSystem::CreateRigidSlideJoint (const csOrthoTransform trans,
                                                     float minDist, float maxDist, 
                                                     float minAngle, float maxAngle, int axis)
 {
@@ -1865,7 +1865,7 @@ csRef<CS::Physics2::iJoint> csBulletSystem::CreateRigidSlideJoint (const csOrtho
   return joint;
 }
 
-csRef<CS::Physics2::iJoint> csBulletSystem::CreateRigidHingeJoint (const csVector3 position, 
+csRef<CS::Physics::iJoint> csBulletSystem::CreateRigidHingeJoint (const csVector3 position, 
                                                      float minAngle, float maxAngle, int axis)
 {
   csRef<csBulletJoint> joint;
@@ -1885,7 +1885,7 @@ csRef<CS::Physics2::iJoint> csBulletSystem::CreateRigidHingeJoint (const csVecto
   return joint;
 }
 
-csRef<CS::Physics2::iJoint> csBulletSystem::CreateRigidConeTwistJoint (const csOrthoTransform trans, 
+csRef<CS::Physics::iJoint> csBulletSystem::CreateRigidConeTwistJoint (const csOrthoTransform trans, 
                                                                        float swingSpan1,float swingSpan2,
                                                                        float twistSpan) 
 {
@@ -1907,7 +1907,7 @@ csRef<CS::Physics2::iJoint> csBulletSystem::CreateRigidConeTwistJoint (const csO
   return joint;
 }
 
-csRef<CS::Physics2::iJoint> csBulletSystem::CreateSoftLinearJoint (const csVector3 position)
+csRef<CS::Physics::iJoint> csBulletSystem::CreateSoftLinearJoint (const csVector3 position)
 {
   csRef<csBulletJoint> joint;
   joint.AttachNew (new csBulletJoint (this));
@@ -1917,7 +1917,7 @@ csRef<CS::Physics2::iJoint> csBulletSystem::CreateSoftLinearJoint (const csVecto
   return joint;
 }
 
-csRef<CS::Physics2::iJoint> csBulletSystem::CreateSoftAngularJoint (int axis)
+csRef<CS::Physics::iJoint> csBulletSystem::CreateSoftAngularJoint (int axis)
 {
   csRef<csBulletJoint> joint;
   if (axis < 0 || axis > 2)
@@ -1935,7 +1935,7 @@ csRef<CS::Physics2::iJoint> csBulletSystem::CreateSoftAngularJoint (int axis)
   return joint;
 }
 
-csRef<CS::Physics2::iJoint> csBulletSystem::CreateRigidPivotJoint (iRigidBody* body, const csVector3 position)
+csRef<CS::Physics::iJoint> csBulletSystem::CreateRigidPivotJoint (iRigidBody* body, const csVector3 position)
 {
   csRef<csBulletJoint> joint;
   joint.AttachNew (new csBulletJoint (this));
@@ -1950,7 +1950,7 @@ csRef<CS::Physics2::iJoint> csBulletSystem::CreateRigidPivotJoint (iRigidBody* b
   return joint;
 }
 
-csRef<CS::Physics2::iSoftBody> csBulletSystem::CreateRope (csVector3 start,
+csRef<CS::Physics::iSoftBody> csBulletSystem::CreateRope (csVector3 start,
                                              csVector3 end,
                                              size_t segmentCount)
 {
@@ -1971,7 +1971,7 @@ csRef<CS::Physics2::iSoftBody> csBulletSystem::CreateRope (csVector3 start,
   return csRef<iSoftBody>(csBody->QuerySoftBody());
 }
 
-csRef<CS::Physics2::iSoftBody> csBulletSystem::CreateRope (csVector3* vertices, size_t vertexCount)
+csRef<CS::Physics::iSoftBody> csBulletSystem::CreateRope (csVector3* vertices, size_t vertexCount)
 {
   // Create the nodes
   CS_ALLOC_STACK_ARRAY(btVector3, nodes, vertexCount);
@@ -2001,7 +2001,7 @@ csRef<CS::Physics2::iSoftBody> csBulletSystem::CreateRope (csVector3* vertices, 
   return csBody; 
 }
 
-csRef<CS::Physics2::iSoftBody> csBulletSystem::CreateCloth (csVector3 corner1, csVector3 corner2,
+csRef<CS::Physics::iSoftBody> csBulletSystem::CreateCloth (csVector3 corner1, csVector3 corner2,
                                               csVector3 corner3, csVector3 corner4,
                                               size_t segmentCount1, size_t segmentCount2,
                                               bool withDiagonals /* = false */)
@@ -2020,7 +2020,7 @@ csRef<CS::Physics2::iSoftBody> csBulletSystem::CreateCloth (csVector3 corner1, c
   return csBody;
 }
 
-csRef<CS::Physics2::iSoftBody> csBulletSystem::CreateSoftBody (iGeneralFactoryState* genmeshFactory,
+csRef<CS::Physics::iSoftBody> csBulletSystem::CreateSoftBody (iGeneralFactoryState* genmeshFactory,
                                                  const csOrthoTransform& bodyTransform)
 {
   btScalar* vertices = new btScalar[genmeshFactory->GetVertexCount () * 3];
@@ -2058,7 +2058,7 @@ csRef<CS::Physics2::iSoftBody> csBulletSystem::CreateSoftBody (iGeneralFactorySt
   return csBody;
 }
 
-csRef<CS::Physics2::iSoftBody> csBulletSystem::CreateSoftBody (csVector3* vertices, size_t vertexCount,
+csRef<CS::Physics::iSoftBody> csBulletSystem::CreateSoftBody (csVector3* vertices, size_t vertexCount,
                                                  csTriangle* triangles, size_t triangleCount,
                                                  const csOrthoTransform& bodyTransform)
 {

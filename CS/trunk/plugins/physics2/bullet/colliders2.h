@@ -51,7 +51,7 @@ class csBulletSystem;
 csRef<iTriangleMesh> FindColdetTriangleMesh (iMeshWrapper* mesh, 
                                              csStringID baseID, csStringID colldetID);
 
-class csBulletCollider: public virtual CS::Collision2::iCollider
+class csBulletCollider: public virtual CS::Collisions::iCollider
 {
   friend class csBulletCollisionObject;
   friend class csBulletCollisionActor;
@@ -66,7 +66,7 @@ protected:
 public:
   csBulletCollider ();
   virtual ~csBulletCollider() {}
-  virtual CS::Collision2::ColliderType GetGeometryType () const = 0;
+  virtual CS::Collisions::ColliderType GetGeometryType () const = 0;
   virtual void SetLocalScale (const csVector3& scale);
   virtual const csVector3& GetLocalScale () const {return scale;}
   virtual void SetMargin (float margin);
@@ -76,30 +76,30 @@ public:
 
 class csBulletColliderBox: 
   public scfImplementation2<csBulletColliderBox,
-  csBulletCollider, CS::Collision2::iColliderBox>
+  csBulletCollider, CS::Collisions::iColliderBox>
 {
   csVector3 boxSize;
 
 public:
   csBulletColliderBox (const csVector3& boxSize, csBulletSystem* sys);
   virtual ~csBulletColliderBox ();
-  virtual CS::Collision2::ColliderType GetGeometryType () const
-  {return CS::Collision2::COLLIDER_BOX;}
+  virtual CS::Collisions::ColliderType GetGeometryType () const
+  {return CS::Collisions::COLLIDER_BOX;}
 
   virtual csVector3 GetBoxGeometry () {return boxSize;}
 };
 
 class csBulletColliderSphere:
   public scfImplementation2<csBulletColliderSphere,
-  csBulletCollider, CS::Collision2::iColliderSphere>
+  csBulletCollider, CS::Collisions::iColliderSphere>
 {
   float radius;
 
 public:
   csBulletColliderSphere (float radius, csBulletSystem* sys);
   virtual ~csBulletColliderSphere ();
-  virtual CS::Collision2::ColliderType GetGeometryType () const
-  {return CS::Collision2::COLLIDER_SPHERE;}
+  virtual CS::Collisions::ColliderType GetGeometryType () const
+  {return CS::Collisions::COLLIDER_SPHERE;}
   virtual void SetMargin (float margin);
 
   virtual float GetSphereGeometry () {return radius;}
@@ -107,7 +107,7 @@ public:
 
 class csBulletColliderCylinder:
   public scfImplementation2<csBulletColliderCylinder,
-  csBulletCollider, CS::Collision2::iColliderCylinder>
+  csBulletCollider, CS::Collisions::iColliderCylinder>
 {
   float length;
   float radius;
@@ -115,15 +115,15 @@ class csBulletColliderCylinder:
 public:
   csBulletColliderCylinder (float length, float radius, csBulletSystem* sys);
   virtual ~csBulletColliderCylinder ();
-  virtual CS::Collision2::ColliderType GetGeometryType () const
-  {return CS::Collision2::COLLIDER_CYLINDER;}
+  virtual CS::Collisions::ColliderType GetGeometryType () const
+  {return CS::Collisions::COLLIDER_CYLINDER;}
 
   virtual void GetCylinderGeometry (float& length, float& radius);
 };
 
 class csBulletColliderCapsule: 
   public scfImplementation2<csBulletColliderCapsule,
-  csBulletCollider, CS::Collision2::iColliderCapsule>
+  csBulletCollider, CS::Collisions::iColliderCapsule>
 {
   float length;
   float radius;
@@ -131,15 +131,15 @@ class csBulletColliderCapsule:
 public:
   csBulletColliderCapsule (float length, float radius, csBulletSystem* sys);
   virtual ~csBulletColliderCapsule ();
-  virtual CS::Collision2::ColliderType GetGeometryType () const
-  {return CS::Collision2::COLLIDER_CAPSULE;}
+  virtual CS::Collisions::ColliderType GetGeometryType () const
+  {return CS::Collisions::COLLIDER_CAPSULE;}
 
   virtual void GetCapsuleGeometry (float& length, float& radius);
 };
 
 class csBulletColliderCone:
   public scfImplementation2<csBulletColliderCone,
-  csBulletCollider, CS::Collision2::iColliderCone>
+  csBulletCollider, CS::Collisions::iColliderCone>
 {
   float length;
   float radius;
@@ -147,23 +147,23 @@ class csBulletColliderCone:
 public:
   csBulletColliderCone (float length, float radius, csBulletSystem* sys);
   virtual ~csBulletColliderCone ();
-  virtual CS::Collision2::ColliderType GetGeometryType () const
-  {return CS::Collision2::COLLIDER_CONE;}
+  virtual CS::Collisions::ColliderType GetGeometryType () const
+  {return CS::Collisions::COLLIDER_CONE;}
 
   virtual void GetConeGeometry (float& length, float& radius);
 };
 
 class csBulletColliderPlane:
   public scfImplementation2<csBulletColliderPlane,
-  csBulletCollider, CS::Collision2::iColliderPlane>
+  csBulletCollider, CS::Collisions::iColliderPlane>
 {
   csPlane3 plane;
 
 public:
   csBulletColliderPlane (const csPlane3& plane, csBulletSystem* sys);
   virtual ~csBulletColliderPlane ();
-  virtual CS::Collision2::ColliderType GetGeometryType () const
-  {return CS::Collision2::COLLIDER_PLANE;}
+  virtual CS::Collisions::ColliderType GetGeometryType () const
+  {return CS::Collisions::COLLIDER_PLANE;}
   virtual void SetLocalScale (const csVector3& scale) {}
 
   virtual csPlane3 GetPlaneGeometry () {return plane;}
@@ -171,7 +171,7 @@ public:
 
 class csBulletColliderConvexMesh:
   public scfImplementation2<csBulletColliderConvexMesh,
-  csBulletCollider, CS::Collision2::iColliderConvexMesh>
+  csBulletCollider, CS::Collisions::iColliderConvexMesh>
 {
   iMeshWrapper* mesh;
   
@@ -185,15 +185,15 @@ public:
     this->volume = volume;
   }
   virtual ~csBulletColliderConvexMesh ();
-  virtual CS::Collision2::ColliderType GetGeometryType () const
- {return CS::Collision2::COLLIDER_CONVEX_MESH;}
+  virtual CS::Collisions::ColliderType GetGeometryType () const
+ {return CS::Collisions::COLLIDER_CONVEX_MESH;}
 
   virtual iMeshWrapper* GetMesh () {return mesh;}
 };
 
 class csBulletColliderConcaveMesh:
   public scfImplementation2<csBulletColliderConcaveMesh, 
-  csBulletCollider, CS::Collision2::iColliderConcaveMesh>
+  csBulletCollider, CS::Collisions::iColliderConcaveMesh>
 {
   friend class csBulletColliderConcaveMeshScaled;
   btTriangleMesh* triMesh;
@@ -202,26 +202,26 @@ class csBulletColliderConcaveMesh:
 public:
   csBulletColliderConcaveMesh (iMeshWrapper* mesh, csBulletSystem* sys);
   virtual ~csBulletColliderConcaveMesh ();
-  virtual CS::Collision2::ColliderType GetGeometryType () const
- {return CS::Collision2::COLLIDER_CONCAVE_MESH;}
+  virtual CS::Collisions::ColliderType GetGeometryType () const
+ {return CS::Collisions::COLLIDER_CONCAVE_MESH;}
 
   virtual iMeshWrapper* GetMesh () {return mesh;}
 };
 
 class csBulletColliderConcaveMeshScaled:
   public scfImplementation2<csBulletColliderConcaveMeshScaled,
-  csBulletCollider, CS::Collision2::iColliderConcaveMeshScaled>
+  csBulletCollider, CS::Collisions::iColliderConcaveMeshScaled>
 {
   csBulletColliderConcaveMesh* originalCollider;
 
 public:
-  csBulletColliderConcaveMeshScaled (CS::Collision2::iColliderConcaveMesh* collider, csVector3 scale, csBulletSystem* sys);
+  csBulletColliderConcaveMeshScaled (CS::Collisions::iColliderConcaveMesh* collider, csVector3 scale, csBulletSystem* sys);
   virtual ~csBulletColliderConcaveMeshScaled();
-  virtual CS::Collision2::ColliderType GetGeometryType () const
-  {return CS::Collision2::COLLIDER_CONCAVE_MESH_SCALED;}
+  virtual CS::Collisions::ColliderType GetGeometryType () const
+  {return CS::Collisions::COLLIDER_CONCAVE_MESH_SCALED;}
 
-  virtual CS::Collision2::iColliderConcaveMesh* GetCollider () 
-  {return dynamic_cast<CS::Collision2::iColliderConcaveMesh*>(originalCollider);}
+  virtual CS::Collisions::iColliderConcaveMesh* GetCollider () 
+  {return dynamic_cast<CS::Collisions::iColliderConcaveMesh*>(originalCollider);}
 };
 
 class HeightMapCollider : public btHeightfieldTerrainShape
@@ -244,7 +244,7 @@ public:
 
 class csBulletColliderTerrain:
   public scfImplementation3<csBulletColliderTerrain, 
-  csBulletCollider, CS::Collision2::iColliderTerrain, iTerrainCellLoadCallback>
+  csBulletCollider, CS::Collisions::iColliderTerrain, iTerrainCellLoadCallback>
 {
   friend class csBulletSector;
   friend class csBulletCollisionObject;
@@ -266,7 +266,7 @@ public:
     float minimumHeight, float maximumHeight,
     csBulletSystem* sys);
   virtual ~csBulletColliderTerrain ();
-  virtual CS::Collision2::ColliderType GetGeometryType () const {return CS::Collision2::COLLIDER_TERRAIN;}
+  virtual CS::Collisions::ColliderType GetGeometryType () const {return CS::Collisions::COLLIDER_TERRAIN;}
   virtual void SetLocalScale (const csVector3& scale);
   virtual void SetMargin (float margin);
 
