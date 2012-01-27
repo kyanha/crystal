@@ -338,8 +338,6 @@ def ObjectAsCS(self, func, depth=0, **kwargs):
     func(' '*depth +'  <radius brightness="%f">%f</radius>'%(self.data.energy, self.data.distance))
     func(' '*depth +'  <attenuation>linear</attenuation>')
     func(' '*depth +'</light>')
-  elif self.type == 'CAMERA':
-    ExportCamera(func, 2, bpy.context.scene.uname, name, tuple(self.location))
   elif self.type == 'EMPTY':
     if self.dupli_type=='GROUP' and self.dupli_group:
       if self.dupli_group.doMerge:
@@ -352,7 +350,7 @@ def ObjectAsCS(self, func, depth=0, **kwargs):
     #Handle children: translate to top level.
     for obj in self.children:
       obj.AsCS(func, depth, transform=self.relative_matrix, name=self.uname)
-  else:
+  elif self.type != 'CAMERA':
     print('\nWARNING: Object "%s" of type "%s" is not supported!'%(self.name, self.type))
 
 bpy.types.Object.AsCS = ObjectAsCS

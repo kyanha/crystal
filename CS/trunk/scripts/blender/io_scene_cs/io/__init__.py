@@ -3,15 +3,11 @@ import bpy
 import os
 
 from . import util
-
 from . import transform
-
 from . import image
 from . import material
-
 from . import renderbuffer
 from . import submesh
-
 from . import data
 from . import object
 from . import group
@@ -93,16 +89,6 @@ def Export(path):
 
   # Export the scene description in the 'world' file
   scn.AsCS(Write(f), 2)
-
-  # Export the cameras
-  foundCamera = False
-  for ob in scn.objects:
-    if ob.type == 'CAMERA':
-      foundCamera = True
-      ob.AsCS(Write(f), 2)
-  if not foundCamera:
-    # Set a default camera if none was found in the current scene
-    util.ExportCamera(Write(f), 2, bpy.context.scene.uname)
 
   Write(f)('</world>')
   f.close()
