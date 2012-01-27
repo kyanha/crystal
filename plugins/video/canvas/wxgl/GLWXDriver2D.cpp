@@ -189,9 +189,6 @@ bool csGraphics2DWX::SetMouseCursor (csMouseCursorID shape)
 void csGraphics2DWX::SetParent(wxWindow* wx)
 {
   myParent = wx;
-  topLevelParent = myParent;
-  while (topLevelParent->GetParent ())
-    topLevelParent = topLevelParent->GetParent ();
 }
 
 wxWindow* csGraphics2DWX::GetWindow()
