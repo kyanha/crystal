@@ -61,52 +61,62 @@ ul.toc {list-style: none}
 <hr size="1">
 <h3 class="subsection"> 5.5.5 Exporting Animated Meshes </h3>
 
-<p>Apart from static objects, Blender allows the definition of animated objects. 
+<p>If a Blender mesh object contains either an armature or any shape keys, then it will be
+exported as an animated mesh. In the other case, then it
+will be <a href="io_005fscene_005fcs-Export-Genmesh.html#0">exported as a static mesh</a>.
 </p>
-<p>Animation is making an object move or change shape over time. Objects can be animated in many ways: moving as a whole object, deforming them or animating character via armature. In this section, we will cover the last two of them.
+<p>The data that is exported is the same as the one exported with static meshes, plus the data
+relevant for the animation (that will be presented in this section).
 </p>
-<a name="1"></a>
-<h4 class="subsubheading"> Animesh </h4>
+<p>All this data will be split in two different files in the <tt>&lsquo;factories&rsquo;</tt> directory:
+</p>
+<ul class="toc">
+<li>
+the animated mesh factory, in a file of the same name than the Blender mesh.
+</li><li>
+the skeleton factory and the animations, in a file of the same name than the Blender mesh
+plus the <samp>&lsquo;_rig&rsquo;</samp> postfix.
+</li></ul>
 
-<p>An animesh is the CrystalSpace type for a mesh animated by morphing (i.e. morph target animation) and/or by rigging (i.e. skeletal animation).
-</p>
-<p>An animated mesh object in Blender will be exported as a cs animesh factory. Just as genmeshes, the definition of this factory will be saved in a library file named '&lt;mesh name&gt;' and placed in the 'factories' folder. The object itself will be exported in the 'world' file as a 'meshref' or a 'meshobj', containing a reference to the animesh factory.
-</p>
-<p>Again, as is true of genmesh factories, an animesh factory defines a default material, vertex colors, vertex normals, uv mapping coordinates and a submesh per used material.
+<a name="1"></a>
+<h4 class="subsubheading"> Submeshes </h4>
+
+<p>Faces that uses a different material are put in a separate submesh, similarly to the
+<a href="io_005fscene_005fcs-Export-Genmesh.html#0">static meshes</a>.
 </p>
 <a name="2"></a>
 <h4 class="subsubheading"> Morph Targets </h4>
 
-<p>A morph target animation deformes a mesh by moving a series of vertex. In Blender, a morph target or a (blend) shape stores modified vertex positions. In each key frame of an animation, the vertices are then interpolated between these stored positions.
+<p>The Blender shape keys (i.e. variations of the positions of the vertices of the mesh)
+are exported as Crystal Space's morph targets.
 </p>
-<p>io_scene_cs converts these mesh deformations into offsets: one offset is defined for each vertex of the mesh. A cs morph target is stored in the animesh factory, specifying its name along with an offset buffer.
+<p>The shape key with the name <samp>&lsquo;Basis&rsquo;</samp> is selected as the default position of the
+vertices (i.e. the main <samp>&lsquo;vertex&rsquo;</samp> render buffer of the animated mesh). All other shape
+keys are exported as a different morph target.
 </p>
 <a name="3"></a>
-<h4 class="subsubheading"> Armatures </h4>
+<h4 class="subsubheading"> Skeleton and Bone Influences </h4>
 
-<p>A skeletal animation uses a hierarchical set of interconnected bones, called the skeleton, to animate a character's mesh.
-</p>
-<p>A Blender armature will be exported as a CrystalSpace skeleton with corresponding animations and animesh rigging information. The skeleton factory is stored in a xml library file named 'skel&lt;mesh name&gt;_rig' and placed in the 'factories' folder. It is described as a hierarchy of bones, each bone being represented by a name and a transformation matrix. To complete the character's data, a reference to the skeleton factory is written into the animesh library file.
+<p>The Blender armature of the mesh, if any, is exported as the Crystal Space's skeleton
+of the animated mesh. Along with the skeleton, the Blender weight map of the mesh
+(defining in which proportion each vertex is influenced by the motion of the bones)
+is exported as the bone influences of the animated mesh.
 </p>
 <a name="4"></a>
-<h4 class="subsubheading"> Bone Influences </h4>
-
-<p>Portions of the character's mesh can be associated with multiple bones (maximum 4 in CrystalSpace), each one having a scaling factor called vertex weight or blend weight. The process of creating this association is called &ldquo;skinning&rdquo;. 
-</p>
-<p>A weight defines the influence that a bone exerts on a vertex. Blender defines a weight for each vertex group a vertex is member of. These vertex weights are exported by io_scene_cs as cs bone influences in the animesh factory: four normalized influences are associated to each vertex. If Blender defined less then four weights for a vertex, null influences are inserted to complete them. At the contrary, if Blender defines more then four weights, only the four largest ones are normalized and assigned to this vertex; the other ones are lost.
-</p>
-<a name="5"></a>
 <h4 class="subsubheading"> Animations </h4>
 
-<p>Blender defines animations in term of poses and keyframes.
+<p>All the keyframe animations of the mesh are exported too.
 </p>
-<p>Animating armatures in Blender implies to define key positions/rotations/scales, and use Ipo curves to interpolate between them. Armature animation is also known as &ldquo;posing&rdquo;, as one main technique is to define some key poses, and then blend between them.
+<p><em>Warning</em>: Only the positional and rotational components of the key frames are
+exported. The Crystal Space's animated mesh doesn't (yet) support morphing and scaling
+components.
 </p>
-<p>A Blender action (i.e. animation) defined in terms of poses and keyframes is exported as a cs animation, specifying its name and a list of keyframes for each bone animated by this action. A cs keyframe defines a time, a position and a rotation for a bone.
+<p><em>Warning</em>: The Blender object constraints defined on the skeleton will not be
+exported correctly. So make sure to disable any constraint first (in the
+<samp>&lsquo;Object Constraints&rsquo;</samp> context of the <samp>&lsquo;Properties&rsquo;</samp> window, when the skeleton
+is selected).
 </p>
-<p>CrystalSpace animations are described in the same library file (called 'skel&lt;mesh name&gt;_rig') as the skeleton factory they are animating, along with the associated animation tree.
-</p>
-<a name="6"></a>
+<a name="5"></a>
 <h4 class="subsubheading"> Sockets </h4>
 
 <p>With mesh sockets you can mount meshes. Child mesh will follow parent's animation. You can use it for example for keeping weapon or ride a horse. At this moment you can use socket only with animesh+skeletal animation. 
@@ -115,19 +125,6 @@ ul.toc {list-style: none}
 </p>
 <p>Sockets are exported in the same library file as the animesh factory. Each socket defines a name, a bone and the transformation to apply to an object we want to attach to that bone.
 </p>
-<p><img src="content/io_scene_cs/icon_exclamation.png" alt="content/io_scene_cs/icon_exclamation"> <strong>Constraints</strong>
-</p>
-<ul>
-<li>
-io_scene_cs will not take modifiers into account. Hence modifiers should be applied before export.
-</li><li>
-No user defined shape (morph target) should be named 'Basis' in Blender. This particular shape represents the rest pose (with null offsets) and will not be exported.
-</li><li>
-Animations should not use inverse kinematics in Blender because io_scene_cs will not export them correctly (this will result in missing key frames for bones animated by IK).
-</li><li>
-If a Blender animation defines scaling modifications on an armature, io_scene_cs will not export them since only translation and rotation parts of armature animations are supported.
-</li></ul>
-
 
 <hr size="1">
 <table cellpadding="1" cellspacing="1" border="0">
