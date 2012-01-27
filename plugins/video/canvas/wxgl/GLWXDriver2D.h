@@ -47,6 +47,10 @@ class csGraphics2DWX : public scfImplementationExt2<csGraphics2DWX,
   int FindPixelFormat (csGLPixelFormatPicker& picker, PIXELFORMATDESCRIPTOR& pfd);
   int FindPixelFormatGDI (HDC hDC, csGLPixelFormatPicker& picker);
   csGraphics2DGLCommon::csGLPixelFormatPicker* picker;
+  // Because the Win32 API ShowCursor() maintains a counter we have to keep track
+  // of the hidden status of the cursor so that we don't accidently increase or
+  // decrease the counter too much.
+  bool cursorIsHidden;
 #endif
 
 public:
@@ -93,8 +97,7 @@ public:
 
   /// Set mouse cursor shape
   // should be the window manager
-  virtual bool SetMouseCursor (csMouseCursorID iShape)
-  { return false;}
+  virtual bool SetMouseCursor (csMouseCursorID shape);
 
   /**\name iWxWindow implementation
    * @{ */

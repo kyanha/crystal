@@ -75,6 +75,9 @@ SCF_IMPLEMENT_FACTORY (csGraphics2DWX)
 csGraphics2DWX::csGraphics2DWX (iBase *iParent) :
     scfImplementationType (this, iParent), myParent (0), theCanvas (0)
 {
+#if WIN32
+  cursorIsHidden = false;
+#endif
 }
 
 void csGraphics2DWX::AlertV (int type, const char* title,
@@ -133,6 +136,52 @@ bool csGraphics2DWX::Initialize (iObjectRegistry *object_reg)
 bool csGraphics2DWX::SetMousePosition (int x, int y)
 {
   myParent->WarpPointer (x, y);
+  return true;
+}
+
+bool csGraphics2DWX::SetMouseCursor (csMouseCursorID shape)
+{
+  int cursorId;
+  switch (shape)
+  {
+    case csmcNone:
+      cursorId = wxCURSOR_BLANK;
+#if WIN32
+      // Workaround for windows where setting a blank cursor doesn't appear to work otherwise.
+      {
+        wxCursor cursor (cursorId);
+        myParent->SetCursor (cursor);
+	if (!cursorIsHidden)
+	{
+	  ShowCursor (0);
+	  cursorIsHidden = true;
+	}
+	return true;
+      }
+#endif
+      break;
+    case csmcArrow: cursorId = wxCURSOR_ARROW; break;
+    case csmcLens: cursorId = wxCURSOR_MAGNIFIER; break;
+    case csmcCross: cursorId = wxCURSOR_CROSS; break;
+    case csmcPen: cursorId = wxCURSOR_PENCIL; break;
+    case csmcMove: cursorId = wxCURSOR_LEFT_BUTTON; break;
+    case csmcSizeNWSE: cursorId = wxCURSOR_SIZENWSE; break;
+    case csmcSizeNESW: cursorId = wxCURSOR_SIZENESW; break;
+    case csmcSizeNS: cursorId = wxCURSOR_SIZENS; break;
+    case csmcSizeEW: cursorId = wxCURSOR_SIZEWE; break;
+    case csmcStop: cursorId = wxCURSOR_NO_ENTRY; break;
+    case csmcWait: cursorId = wxCURSOR_WAIT; break;
+    default: cursorId = wxCURSOR_ARROW; break;
+  }
+#if WIN32
+  if (cursorIsHidden)
+  {
+    ShowCursor (1);
+    cursorIsHidden = false;
+  }
+#endif
+  wxCursor cursor (cursorId);
+  myParent->SetCursor (cursor);
   return true;
 }
 
