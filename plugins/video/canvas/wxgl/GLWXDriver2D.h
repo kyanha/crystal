@@ -41,6 +41,7 @@ class csGraphics2DWX : public scfImplementationExt2<csGraphics2DWX,
 #endif
 {
   wxWindow* myParent;
+  wxWindow* topLevelParent;
   csGLCanvas* theCanvas;
 
 #ifdef WIN32
