@@ -22,7 +22,7 @@ static char const metainfo_opcode2[] =
 "  <scf>"
 "    <classes>"
 "      <class>"
-"        <name>crystalspace.collision.opcode2</name>"
+"        <name>crystalspace.collisions.opcode2</name>"
 "        <implementation>csOpcodeCollisionSystem</implementation>"
 "        <description>OPCODE collision system</description>"
 "      </class>"
