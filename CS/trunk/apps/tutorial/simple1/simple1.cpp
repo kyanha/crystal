@@ -227,28 +227,6 @@ bool Simple::SetupModules ()
   // to the screen.
   printer.AttachNew (new FramePrinter (GetObjectRegistry ()));
 
-csReversibleTransform trans;
-trans.SetO2T (csMatrix3 (-0.858729,-0.135831,0.494099,   -0.262279,0.94486,-0.196085,    -0.44022,-0.297976,-0.847005));
-trans.SetO2TTranslation (csVector3 (-8.97528,9.81017,13.5718));
-csVector3 up, right, front;
-up = trans.GetUp ();
-right = trans.GetRight ();
-front = trans.GetFront ();
-printf ("up=%g,%g,%g    front=%g,%g,%g    right=%g,%g,%g\n", up.x, up.y, up.z, front.x, front.y, front.z, right.x, right.y, right.z);
-
-csVector3 lookat_point (-9.11167,9.73425,13.32);
-
-csPlane3 plane (trans.GetOrigin (), trans.GetOrigin () + front, trans.GetOrigin () + up);
-printf ("distance from plane %g\n", plane.Classify (lookat_point));
-
-trans.LookAt (lookat_point - trans.GetOrigin (), up);
-
-up = trans.GetUp ();
-right = trans.GetRight ();
-front = trans.GetFront ();
-printf ("up=%g,%g,%g    front=%g,%g,%g    right=%g,%g,%g\n", up.x, up.y, up.z, front.x, front.y, front.z, right.x, right.y, right.z);
-fflush (stdout);
-
   return true;
 }
 
