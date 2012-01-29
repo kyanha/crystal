@@ -203,7 +203,7 @@ void csPen::DrawMesh (csRenderMeshType mesh_type)
     g3d->DrawSimpleMesh (mesh, csSimpleMeshScreenspace);
 }
 
-void csPen::SetMixMode(uint mode)
+void csPen::SetMixMode (uint mode)
 {
   mesh.mixmode = mode;
 }
@@ -243,13 +243,13 @@ void csPen::AddThickPoints(float fx1, float fy1, float fx2, float fy2)
   last[1].x=fx2-ca1; last[1].y=fy2-sa1;
 }
 
-void csPen::SetFlag(uint flag)
+void csPen::SetFlag (uint flag)
 {
   flags |= flag;
 }
 
 
-void csPen::ClearFlag(uint flag)
+void csPen::ClearFlag (uint flag)
 {
   flags &= (~flag);
 }
@@ -322,7 +322,7 @@ void csPen::SetTransform (const csReversibleTransform& trans)
   mesh.object2world = trans;
 }
 
-void csPen::Translate(const csVector3 &t)
+void csPen::Translate (const csVector3 &t)
 {
   csTransform tr;
 
@@ -332,14 +332,14 @@ void csPen::Translate(const csVector3 &t)
   tt+=t;
 }
 
-void csPen::Rotate(const float &a)
+void csPen::Rotate (const float &a)
 {
   csZRotMatrix3 rm(a);
   csTransform tr(rm, csVector3(0));
   mesh.object2world*=tr;
 }
 
-void csPen::DrawThickLine(uint x1, uint y1, uint x2, uint y2)
+void csPen::DrawThickLine (int x1, int y1, int x2, int y2)
 {
   Start();
 
@@ -360,9 +360,56 @@ void csPen::DrawThickLines (const csArray<csPenCoordinatePair>& pairs)
   DrawMesh(CS_MESHTYPE_QUADS);
 }
 
-/** Draws a single line. */
-void csPen::DrawLine (uint x1, uint y1, uint x2, uint y2)
+bool csPen::ClipLine (int& x1, int& y1, int& x2, int& y2)
 {
+  if (x1 < 0 && x2 < 0) return false;
+  if (y1 < 0 && y2 < 0) return false;
+  int sw = g2d->GetWidth ();
+  if (x1 >= sw && x2 >= sw) return false;
+  int sh = g2d->GetHeight ();
+  if (y1 >= sh && y2 >= sh) return false;
+
+  float dist;
+
+  if (x1 < 0 || x2 < 0)
+  {
+    dist = - float (x1) / float (x2 - x1);
+    int ix = 0;
+    int iy = y1 + dist * (y2 - y1);
+    if (x1 < 0) { x1 = ix; y1 = iy; }
+    else { x2 = ix; y2 = iy; }
+  }
+  if (x1 >= sw || x2 >= sw)
+  {
+    dist = float (- x1 + sw - 1) / float (x2 - x1);
+    int ix = sw-1;
+    int iy = y1 + dist * (y2 - y1);
+    if (x1 >= sw) { x1 = ix; y1 = iy; }
+    else { x2 = ix; y2 = iy; }
+  }
+  if (y1 < 0 || y2 < 0)
+  {
+    dist = float (y1) / float (y1 - y2);
+    int ix = x1 + dist * (x2 - x1);
+    int iy = 0;
+    if (y1 < 0) { x1 = ix; y1 = iy; }
+    else { x2 = ix; y2 = iy; }
+  }
+  if (y1 >= sh || y2 >= sh)
+  {
+    dist = float (y1 - sh + 1) / float (y1 - y2);
+    int ix = x1 + dist * (x2 - x1);
+    int iy = sh-1;
+    if (y1 >= sh) { x1 = ix; y1 = iy; }
+    else { x2 = ix; y2 = iy; }
+  }
+
+  return true;
+}
+
+void csPen::DrawLine (int x1, int y1, int x2, int y2)
+{
+  if (!ClipLine (x1, y1, x2, y2)) return;
   if (pen_width>1) { DrawThickLine(x1,y1,x2,y2); return; }
 
   Start ();
@@ -396,10 +443,8 @@ void csPen::DrawLines (const csArray<csPenCoordinatePair>& pairs)
   DrawMesh (CS_MESHTYPE_LINES);
 }
 
-/** Draws a single point. */
-void csPen::DrawPoint (uint x1, uint y1)
+void csPen::DrawPoint (int x1, int y1)
 {
-
   Start ();
   AddVertex (x1,y1);
 
@@ -408,7 +453,7 @@ void csPen::DrawPoint (uint x1, uint y1)
 }
 
 /** Draws a rectangle. */
-void csPen::DrawRect (uint x1, uint y1, uint x2, uint y2)
+void csPen::DrawRect (int x1, int y1, int x2, int y2)
 {
   Start ();
   SetAutoTexture(x2-x1, y2-y1);
@@ -431,7 +476,7 @@ void csPen::DrawRect (uint x1, uint y1, uint x2, uint y2)
 
 /** Draws a mitered rectangle. The miter value should be between 0.0 and 1.0, and determines how
 * much of the corner is mitered off and beveled. */
-void csPen::DrawMiteredRect (uint x1, uint y1, uint x2, uint y2,
+void csPen::DrawMiteredRect (int x1, int y1, int x2, int y2,
                              uint miter)
 {
   if (miter == 0)
@@ -483,7 +528,7 @@ void csPen::DrawMiteredRect (uint x1, uint y1, uint x2, uint y2,
 
 /** Draws a rounded rectangle. The roundness value should be between 0.0 and 1.0, and determines how
   * much of the corner is rounded off. */
-void csPen::DrawRoundedRect (uint x1, uint y1, uint x2, uint y2,
+void csPen::DrawRoundedRect (int x1, int y1, int x2, int y2,
                              uint roundness)
 {
   if (roundness == 0)
@@ -557,7 +602,7 @@ void csPen::DrawRoundedRect (uint x1, uint y1, uint x2, uint y2,
  * want a full circle or ellipse, specify 0 as the start angle and 2*PI
  * as the end angle.
  */
-void csPen::DrawArc(uint x1, uint y1, uint x2, uint y2,
+void csPen::DrawArc (int x1, int y1, int x2, int y2,
     float start_angle, float end_angle)
 {
   // Check to make sure that the arc is not in a negative box.
@@ -596,7 +641,7 @@ void csPen::DrawArc(uint x1, uint y1, uint x2, uint y2,
   DrawMesh (MESH_TYPE(CS_MESHTYPE_TRIANGLEFAN));
 }
 
-void csPen::DrawTriangle(uint x1, uint y1, uint x2, uint y2, uint x3, uint y3)
+void csPen::DrawTriangle (int x1, int y1, int x2, int y2, int x3, int y3)
 {
   Start();
 
@@ -610,7 +655,7 @@ void csPen::DrawTriangle(uint x1, uint y1, uint x2, uint y2, uint x3, uint y3)
   DrawMesh (MESH_TYPE(CS_MESHTYPE_TRIANGLES));
 }
 
-void csPen::Write(iFont *font, uint x1, uint y1, const char *text)
+void csPen::Write(iFont *font, int x1, int y1, const char *text)
 {
   if (font==0) return;
 
@@ -626,7 +671,7 @@ void csPen::Write(iFont *font, uint x1, uint y1, const char *text)
   g2d->Write(font, (int)pos.x, (int)pos.y, the_color, -1, text);
 }
 
-void csPen::WriteLines(iFont *font, uint x1, uint y1, const csStringArray& lines)
+void csPen::WriteLines (iFont *font, int x1, int y1, const csStringArray& lines)
 {
   if (font==0) return;
 
@@ -648,7 +693,7 @@ void csPen::WriteLines(iFont *font, uint x1, uint y1, const csStringArray& lines
   }
 }
 
-void csPen::WriteBoxed(iFont *font, uint x1, uint y1, uint x2, uint y2,
+void csPen::WriteBoxed (iFont *font, int x1, int y1, int x2, int y2,
     uint h_align, uint v_align, const char *text)
 {
   if (font==0) return;
@@ -696,7 +741,7 @@ void csPen::WriteBoxed(iFont *font, uint x1, uint y1, uint x2, uint y2,
   Write(font, x, y, text);
 }
 
-void csPen::WriteLinesBoxed(iFont *font, uint x1, uint y1, uint x2, uint y2,
+void csPen::WriteLinesBoxed(iFont *font, int x1, int y1, int x2, int y2,
     uint h_align, uint v_align, const csStringArray& lines)
 {
   if (font==0) return;
