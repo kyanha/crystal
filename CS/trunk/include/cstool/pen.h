@@ -62,8 +62,8 @@ enum CS_PEN_FLAGS
  */
 struct csPenCoordinate
 {
-  uint x, y;
-  csPenCoordinate (uint x, uint y) : x (x), y (y) { }
+  int x, y;
+  csPenCoordinate (int x, int y) : x (x), y (y) { }
 };
 
 /**
@@ -72,7 +72,7 @@ struct csPenCoordinate
 struct csPenCoordinatePair
 {
   csPenCoordinate c1, c2;
-  csPenCoordinatePair (uint x1, uint y1, uint x2, uint y2) :
+  csPenCoordinatePair (int x1, int y1, int x2, int y2) :
     c1 (x1, y1), c2 (x2, y2) { }
 };
 
@@ -283,18 +283,18 @@ public:
    * Sets the given flag.
    * @param flag The flag to set.
    */
-  void SetFlag(uint flag);
+  void SetFlag (uint flag);
   /**
    * Clears the given flag.
    * @param flag The flag to clear.
    */
-  void ClearFlag(uint flag);
+  void ClearFlag (uint flag);
 
   /**
    * Sets the given mix (blending) mode.
    * @param mode The mixmode to set.
    */
-  void SetMixMode(uint mode);
+  void SetMixMode (uint mode);
 
   /**
    * Sets the current color.
@@ -359,14 +359,20 @@ public:
   void SetTransform (const csReversibleTransform& trans);
 
   /**
+   * Clip a line to the given canvas size.
+   * Returns true the line is not empty.
+   */
+  bool ClipLine (int& x1, int& y1, int& x2, int& y2);
+
+  /**
    * Draws a single line.
    */
-  void DrawLine (uint x1, uint y1, uint x2, uint y2);
+  void DrawLine (int x1, int y1, int x2, int y2);
   void DrawLine (const csPenCoordinatePair& coords)
   {
     DrawLine (coords.c1.x, coords.c1.y, coords.c2.x, coords.c2.y);
   }
-  void DrawThickLine(uint x1, uint y1, uint x2, uint y2);
+  void DrawThickLine (int x1, int y1, int x2, int y2);
 
   /**
    * Draws a series of lines.
@@ -377,13 +383,13 @@ public:
   /**
    * Draws a single point.
    */
-  void DrawPoint (uint x1, uint y2);
+  void DrawPoint (int x1, int y2);
   void DrawPoint (const csPenCoordinate& c) { DrawPoint (c.x, c.y); }
 
   /**
    * Draws a rectangle.
    */
-  void DrawRect (uint x1, uint y1, uint x2, uint y2);
+  void DrawRect (int x1, int y1, int x2, int y2);
   void DrawRect (const csPenCoordinatePair& coords)
   {
     DrawRect (coords.c1.x, coords.c1.y, coords.c2.x, coords.c2.y);
@@ -393,7 +399,7 @@ public:
    * Draws a mitered rectangle. The miter value should be between 0.0 and 1.0,
    * and determines how much of the corner is mitered off and beveled.
    */
-  void DrawMiteredRect (uint x1, uint y1, uint x2, uint y2,
+  void DrawMiteredRect (int x1, int y1, int x2, int y2,
     uint miter);
   void DrawMiteredRect (const csPenCoordinatePair& coords,
     uint miter)
@@ -406,7 +412,7 @@ public:
    * Draws a rounded rectangle. The roundness value should be between
    * 0.0 and 1.0, and determines how much of the corner is rounded off.
    */
-  void DrawRoundedRect (uint x1, uint y1, uint x2, uint y2,
+  void DrawRoundedRect (int x1, int y1, int x2, int y2,
     uint roundness);
   void DrawRoundedRect (const csPenCoordinatePair& coords,
     uint roundness)
@@ -422,7 +428,7 @@ public:
    * a full circle or ellipse, specify 0 as the start angle and 2*PI as the
    * end angle.
    */
-  void DrawArc (uint x1, uint y1, uint x2, uint y2,
+  void DrawArc (int x1, int y1, int x2, int y2,
   	float start_angle = 0, float end_angle = 6.2831853);
   void DrawArc (const csPenCoordinatePair& coords,
   	float start_angle = 0, float end_angle = 6.2831853)
@@ -434,8 +440,8 @@ public:
   /**
    * Draws a triangle around the given vertices.
    */
-  void DrawTriangle(uint x1, uint y1, uint x2, uint y2, uint x3, uint y3);
-  void DrawTriangle(const csPenCoordinate& c1,
+  void DrawTriangle (int x1, int y1, int x2, int y2, int x3, int y3);
+  void DrawTriangle (const csPenCoordinate& c1,
       const csPenCoordinate& c2, const csPenCoordinate& c3)
   {
     DrawTriangle (c1.x, c1.y, c2.x, c2.y, c3.x, c3.y);
@@ -444,16 +450,16 @@ public:
   /**
    * Writes text in the given font at the given location.
    */
-  void Write(iFont *font, uint x1, uint y1, const char *text);
-  void Write(iFont *font, const csPenCoordinate& c, const char *text)
+  void Write (iFont *font, int x1, int y1, const char *text);
+  void Write (iFont *font, const csPenCoordinate& c, const char *text)
   {
     Write (font, c.x, c.y, text);
   }
   /**
    * Writes multiple lines of text in the given font at the given location.
    */
-  void WriteLines(iFont *font, uint x1, uint y1, const csStringArray& lines);
-  void WriteLines(iFont *font, const csPenCoordinate& c,
+  void WriteLines (iFont *font, int x1, int y1, const csStringArray& lines);
+  void WriteLines (iFont *font, const csPenCoordinate& c,
       const csStringArray& lines)
   {
     WriteLines (font, c.x, c.y, lines);
@@ -463,9 +469,9 @@ public:
    * Writes text in the given font, in the given box.  The alignment
    * specified in h_align and v_align determine how it should be aligned.
    */
-  void WriteBoxed(iFont *font, uint x1, uint y1, uint x2, uint y2,
+  void WriteBoxed (iFont *font, int x1, int y1, int x2, int y2,
     uint h_align, uint v_align, const char *text);
-  void WriteBoxed(iFont *font, const csPenCoordinatePair& coords,
+  void WriteBoxed (iFont *font, const csPenCoordinatePair& coords,
     uint h_align, uint v_align, const char *text)
   {
     WriteBoxed (font, coords.c1.x, coords.c1.y, coords.c2.x, coords.c2.y,
@@ -477,9 +483,9 @@ public:
    * The alignment specified in h_align and v_align determine how it should
    * be aligned.
    */
-  void WriteLinesBoxed(iFont *font, uint x1, uint y1, uint x2, uint y2,
+  void WriteLinesBoxed (iFont *font, int x1, int y1, int x2, int y2,
     uint h_align, uint v_align, const csStringArray& lines);
-  void WriteLinesBoxed(iFont *font, const csPenCoordinatePair& coords,
+  void WriteLinesBoxed (iFont *font, const csPenCoordinatePair& coords,
     uint h_align, uint v_align, const csStringArray& lines)
   {
     WriteLinesBoxed (font, coords.c1.x, coords.c1.y, coords.c2.x, coords.c2.y,
