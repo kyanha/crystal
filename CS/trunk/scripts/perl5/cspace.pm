@@ -22510,6 +22510,7 @@ sub DESTROY {
 *SetOrigin = *cspacec::csPen_SetOrigin;
 *Translate = *cspacec::csPen_Translate;
 *SetTransform = *cspacec::csPen_SetTransform;
+*ClipLine = *cspacec::csPen_ClipLine;
 *DrawLine = *cspacec::csPen_DrawLine;
 *DrawThickLine = *cspacec::csPen_DrawThickLine;
 *DrawLines = *cspacec::csPen_DrawLines;

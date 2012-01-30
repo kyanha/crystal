@@ -604,6 +604,7 @@ class csPen(object):
     def SetOrigin(*args): return _cstool.csPen_SetOrigin(*args)
     def Translate(*args): return _cstool.csPen_Translate(*args)
     def SetTransform(*args): return _cstool.csPen_SetTransform(*args)
+    def ClipLine(*args): return _cstool.csPen_ClipLine(*args)
     def DrawLine(*args): return _cstool.csPen_DrawLine(*args)
     def DrawThickLine(*args): return _cstool.csPen_DrawThickLine(*args)
     def DrawLines(*args): return _cstool.csPen_DrawLines(*args)
