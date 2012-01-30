@@ -275,6 +275,42 @@ Light GetCurrentLight (LightSpace lightSpace, int lightNum)
 }
 
 <![CDATA[
+void ComputeLightKajiyaKay (LightSpace lightSpace, Light light, 
+                   half3 eyeToSurf, half3 surfNormal,
+                   half surfShininess, 
+                   float3 lightDiffuse, float3 lightSpecular,
+                   float4 lightAttenuationVec,
+                   half shadowFactor,
+                   out float3 d, out float3 s)
+{
+  half3 L = light.GetIncidence();
+  half3 H = normalize (lightSpace.GetSurfaceToLight() - eyeToSurf);
+  half spot = light.GetAttenuation();
+
+  float4 lightCoeff = lit (dot (surfNormal, L), dot (surfNormal, H),
+    surfShininess);
+  
+  float lightDist = lightSpace.GetLightDistance();
+  half attn;
+  float invAttnRadius = lightAttenuationVec.w;
+  if (invAttnRadius > 0)
+    attn = Attenuation_Linear (lightDist, invAttnRadius);
+  else
+    attn = Attenuation_CLQ (lightDist, lightAttenuationVec.xyz);
+  
+  attn *= shadowFactor;
+
+  d = lightDiffuse * lightCoeff.y * spot * attn;
+  
+  float tangentEye = dot(surfNormal, eyeToSurf);
+  float tangentLight = dot(surfNormal, -lightSpace.GetSurfaceToLight());
+  
+  float3 specularColor = pow( tangentLight * tangentEye + sin( acos( tangentLight ) ) * sin( acos( tangentEye ) ) , 60.0);
+  specularColor *= lightSpecular * spot * attn;
+  specularColor = max (0.0, specularColor);
+  s = specularColor;
+}
+
 void ComputeLight (LightSpace lightSpace, Light light, 
                    half3 eyeToSurf, half3 surfNormal,
                    half surfShininess, 

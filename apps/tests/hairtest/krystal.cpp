@@ -350,19 +350,13 @@ bool KrystalScene::CreateAvatar ()
   if (!materialWrapper)
     hairTest->ReportError ("Can't find marschner material!");
 
-  // Default Material
-  csRef<iMaterialWrapper> hairMaterial =
-    hairTest->engine->FindMaterial("hair_trans");
-  if(!hairMaterial)
-    hairTest->ReportError ("Hair material not found!");
-  
   avatarMesh->SetFlagsRecursive(CS_ENTITY_NOSHADOWCAST);
 
   // Create the fur properties for the hairs
   csRef<CS::Mesh::iFurMeshMaterialProperties> hairMeshProperties = 
     furMeshType->CreateHairMeshMarschnerProperties ("krystal_marschner");
-  hairMeshProperties->SetMaterial(hairMaterial->GetMaterial ());
-  animesh->GetSubMesh (1)->SetMaterial (hairMaterial);
+  hairMeshProperties->SetMaterial(materialWrapper->GetMaterial ());
+  animesh->GetSubMesh (1)->SetMaterial (materialWrapper);
 
   // Create the two possible animation control's. We'll switch between than at the user request.
   hairPhysicsControl = scfQueryInterface<CS::Animation::iFurPhysicsControl>
