@@ -17377,10 +17377,10 @@ SWIGINTERN PyObject *GeneralMeshBuilder_swigregister(PyObject *SWIGUNUSEDPARM(se
 SWIGINTERN PyObject *_wrap_csPenCoordinate_x_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   csPenCoordinate *arg1 = (csPenCoordinate *) 0 ;
-  uint arg2 ;
+  int arg2 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  unsigned long val2 ;
+  int val2 ;
   int ecode2 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
@@ -17391,11 +17391,11 @@ SWIGINTERN PyObject *_wrap_csPenCoordinate_x_set(PyObject *SWIGUNUSEDPARM(self),
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "csPenCoordinate_x_set" "', argument " "1"" of type '" "csPenCoordinate *""'"); 
   }
   arg1 = reinterpret_cast< csPenCoordinate * >(argp1);
-  ecode2 = SWIG_AsVal_unsigned_SS_long(obj1, &val2);
+  ecode2 = SWIG_AsVal_int(obj1, &val2);
   if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "csPenCoordinate_x_set" "', argument " "2"" of type '" "uint""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "csPenCoordinate_x_set" "', argument " "2"" of type '" "int""'");
   } 
-  arg2 = static_cast< uint >(val2);
+  arg2 = static_cast< int >(val2);
   if (arg1) (arg1)->x = arg2;
   resultobj = SWIG_Py_Void();
   return resultobj;
@@ -17410,7 +17410,7 @@ SWIGINTERN PyObject *_wrap_csPenCoordinate_x_get(PyObject *SWIGUNUSEDPARM(self),
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
-  uint result;
+  int result;
   
   if(!PyArg_UnpackTuple(args,(char *)"csPenCoordinate_x_get",1,1,&obj0)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_csPenCoordinate, 0 |  0 );
@@ -17418,8 +17418,8 @@ SWIGINTERN PyObject *_wrap_csPenCoordinate_x_get(PyObject *SWIGUNUSEDPARM(self),
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "csPenCoordinate_x_get" "', argument " "1"" of type '" "csPenCoordinate *""'"); 
   }
   arg1 = reinterpret_cast< csPenCoordinate * >(argp1);
-  result = (uint) ((arg1)->x);
-  resultobj = SWIG_From_unsigned_SS_long(static_cast< unsigned long >(result));
+  result = (int) ((arg1)->x);
+  resultobj = SWIG_From_int(static_cast< int >(result));
   return resultobj;
 fail:
   return NULL;
@@ -17429,10 +17429,10 @@ fail:
 SWIGINTERN PyObject *_wrap_csPenCoordinate_y_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   csPenCoordinate *arg1 = (csPenCoordinate *) 0 ;
-  uint arg2 ;
+  int arg2 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  unsigned long val2 ;
+  int val2 ;
   int ecode2 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
@@ -17443,11 +17443,11 @@ SWIGINTERN PyObject *_wrap_csPenCoordinate_y_set(PyObject *SWIGUNUSEDPARM(self),
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "csPenCoordinate_y_set" "', argument " "1"" of type '" "csPenCoordinate *""'"); 
   }
   arg1 = reinterpret_cast< csPenCoordinate * >(argp1);
-  ecode2 = SWIG_AsVal_unsigned_SS_long(obj1, &val2);
+  ecode2 = SWIG_AsVal_int(obj1, &val2);
   if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "csPenCoordinate_y_set" "', argument " "2"" of type '" "uint""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "csPenCoordinate_y_set" "', argument " "2"" of type '" "int""'");
   } 
-  arg2 = static_cast< uint >(val2);
+  arg2 = static_cast< int >(val2);
   if (arg1) (arg1)->y = arg2;
   resultobj = SWIG_Py_Void();
   return resultobj;
@@ -17462,7 +17462,7 @@ SWIGINTERN PyObject *_wrap_csPenCoordinate_y_get(PyObject *SWIGUNUSEDPARM(self),
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
-  uint result;
+  int result;
   
   if(!PyArg_UnpackTuple(args,(char *)"csPenCoordinate_y_get",1,1,&obj0)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_csPenCoordinate, 0 |  0 );
@@ -17470,8 +17470,8 @@ SWIGINTERN PyObject *_wrap_csPenCoordinate_y_get(PyObject *SWIGUNUSEDPARM(self),
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "csPenCoordinate_y_get" "', argument " "1"" of type '" "csPenCoordinate *""'"); 
   }
   arg1 = reinterpret_cast< csPenCoordinate * >(argp1);
-  result = (uint) ((arg1)->y);
-  resultobj = SWIG_From_unsigned_SS_long(static_cast< unsigned long >(result));
+  result = (int) ((arg1)->y);
+  resultobj = SWIG_From_int(static_cast< int >(result));
   return resultobj;
 fail:
   return NULL;
@@ -17480,27 +17480,27 @@ fail:
 
 SWIGINTERN PyObject *_wrap_new_csPenCoordinate(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  uint arg1 ;
-  uint arg2 ;
-  unsigned long val1 ;
+  int arg1 ;
+  int arg2 ;
+  int val1 ;
   int ecode1 = 0 ;
-  unsigned long val2 ;
+  int val2 ;
   int ecode2 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   csPenCoordinate *result = 0 ;
   
   if(!PyArg_UnpackTuple(args,(char *)"new_csPenCoordinate",2,2,&obj0,&obj1)) SWIG_fail;
-  ecode1 = SWIG_AsVal_unsigned_SS_long(obj0, &val1);
+  ecode1 = SWIG_AsVal_int(obj0, &val1);
   if (!SWIG_IsOK(ecode1)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "new_csPenCoordinate" "', argument " "1"" of type '" "uint""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "new_csPenCoordinate" "', argument " "1"" of type '" "int""'");
   } 
-  arg1 = static_cast< uint >(val1);
-  ecode2 = SWIG_AsVal_unsigned_SS_long(obj1, &val2);
+  arg1 = static_cast< int >(val1);
+  ecode2 = SWIG_AsVal_int(obj1, &val2);
   if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "new_csPenCoordinate" "', argument " "2"" of type '" "uint""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "new_csPenCoordinate" "', argument " "2"" of type '" "int""'");
   } 
-  arg2 = static_cast< uint >(val2);
+  arg2 = static_cast< int >(val2);
   result = (csPenCoordinate *)new csPenCoordinate(arg1,arg2);
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_csPenCoordinate, SWIG_POINTER_NEW |  0 );
   return resultobj;
@@ -17643,17 +17643,17 @@ fail:
 
 SWIGINTERN PyObject *_wrap_new_csPenCoordinatePair(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  uint arg1 ;
-  uint arg2 ;
-  uint arg3 ;
-  uint arg4 ;
-  unsigned long val1 ;
+  int arg1 ;
+  int arg2 ;
+  int arg3 ;
+  int arg4 ;
+  int val1 ;
   int ecode1 = 0 ;
-  unsigned long val2 ;
+  int val2 ;
   int ecode2 = 0 ;
-  unsigned long val3 ;
+  int val3 ;
   int ecode3 = 0 ;
-  unsigned long val4 ;
+  int val4 ;
   int ecode4 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
@@ -17662,26 +17662,26 @@ SWIGINTERN PyObject *_wrap_new_csPenCoordinatePair(PyObject *SWIGUNUSEDPARM(self
   csPenCoordinatePair *result = 0 ;
   
   if(!PyArg_UnpackTuple(args,(char *)"new_csPenCoordinatePair",4,4,&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
-  ecode1 = SWIG_AsVal_unsigned_SS_long(obj0, &val1);
+  ecode1 = SWIG_AsVal_int(obj0, &val1);
   if (!SWIG_IsOK(ecode1)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "new_csPenCoordinatePair" "', argument " "1"" of type '" "uint""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "new_csPenCoordinatePair" "', argument " "1"" of type '" "int""'");
   } 
-  arg1 = static_cast< uint >(val1);
-  ecode2 = SWIG_AsVal_unsigned_SS_long(obj1, &val2);
+  arg1 = static_cast< int >(val1);
+  ecode2 = SWIG_AsVal_int(obj1, &val2);
   if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "new_csPenCoordinatePair" "', argument " "2"" of type '" "uint""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "new_csPenCoordinatePair" "', argument " "2"" of type '" "int""'");
   } 
-  arg2 = static_cast< uint >(val2);
-  ecode3 = SWIG_AsVal_unsigned_SS_long(obj2, &val3);
+  arg2 = static_cast< int >(val2);
+  ecode3 = SWIG_AsVal_int(obj2, &val3);
   if (!SWIG_IsOK(ecode3)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "new_csPenCoordinatePair" "', argument " "3"" of type '" "uint""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "new_csPenCoordinatePair" "', argument " "3"" of type '" "int""'");
   } 
-  arg3 = static_cast< uint >(val3);
-  ecode4 = SWIG_AsVal_unsigned_SS_long(obj3, &val4);
+  arg3 = static_cast< int >(val3);
+  ecode4 = SWIG_AsVal_int(obj3, &val4);
   if (!SWIG_IsOK(ecode4)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "new_csPenCoordinatePair" "', argument " "4"" of type '" "uint""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "new_csPenCoordinatePair" "', argument " "4"" of type '" "int""'");
   } 
-  arg4 = static_cast< uint >(val4);
+  arg4 = static_cast< int >(val4);
   result = (csPenCoordinatePair *)new csPenCoordinatePair(arg1,arg2,arg3,arg4);
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_csPenCoordinatePair, SWIG_POINTER_NEW |  0 );
   return resultobj;
@@ -18453,22 +18453,92 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_csPen_ClipLine(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  csPen *arg1 = (csPen *) 0 ;
+  int *arg2 = 0 ;
+  int *arg3 = 0 ;
+  int *arg4 = 0 ;
+  int *arg5 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  void *argp3 = 0 ;
+  int res3 = 0 ;
+  void *argp4 = 0 ;
+  int res4 = 0 ;
+  void *argp5 = 0 ;
+  int res5 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  PyObject * obj3 = 0 ;
+  PyObject * obj4 = 0 ;
+  bool result;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"csPen_ClipLine",5,5,&obj0,&obj1,&obj2,&obj3,&obj4)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_csPen, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "csPen_ClipLine" "', argument " "1"" of type '" "csPen *""'"); 
+  }
+  arg1 = reinterpret_cast< csPen * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_int,  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "csPen_ClipLine" "', argument " "2"" of type '" "int &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "csPen_ClipLine" "', argument " "2"" of type '" "int &""'"); 
+  }
+  arg2 = reinterpret_cast< int * >(argp2);
+  res3 = SWIG_ConvertPtr(obj2, &argp3, SWIGTYPE_p_int,  0 );
+  if (!SWIG_IsOK(res3)) {
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "csPen_ClipLine" "', argument " "3"" of type '" "int &""'"); 
+  }
+  if (!argp3) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "csPen_ClipLine" "', argument " "3"" of type '" "int &""'"); 
+  }
+  arg3 = reinterpret_cast< int * >(argp3);
+  res4 = SWIG_ConvertPtr(obj3, &argp4, SWIGTYPE_p_int,  0 );
+  if (!SWIG_IsOK(res4)) {
+    SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "csPen_ClipLine" "', argument " "4"" of type '" "int &""'"); 
+  }
+  if (!argp4) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "csPen_ClipLine" "', argument " "4"" of type '" "int &""'"); 
+  }
+  arg4 = reinterpret_cast< int * >(argp4);
+  res5 = SWIG_ConvertPtr(obj4, &argp5, SWIGTYPE_p_int,  0 );
+  if (!SWIG_IsOK(res5)) {
+    SWIG_exception_fail(SWIG_ArgError(res5), "in method '" "csPen_ClipLine" "', argument " "5"" of type '" "int &""'"); 
+  }
+  if (!argp5) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "csPen_ClipLine" "', argument " "5"" of type '" "int &""'"); 
+  }
+  arg5 = reinterpret_cast< int * >(argp5);
+  result = (bool)(arg1)->ClipLine(*arg2,*arg3,*arg4,*arg5);
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_csPen_DrawLine__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   csPen *arg1 = (csPen *) 0 ;
-  uint arg2 ;
-  uint arg3 ;
-  uint arg4 ;
-  uint arg5 ;
+  int arg2 ;
+  int arg3 ;
+  int arg4 ;
+  int arg5 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  unsigned long val2 ;
+  int val2 ;
   int ecode2 = 0 ;
-  unsigned long val3 ;
+  int val3 ;
   int ecode3 = 0 ;
-  unsigned long val4 ;
+  int val4 ;
   int ecode4 = 0 ;
-  unsigned long val5 ;
+  int val5 ;
   int ecode5 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
@@ -18482,26 +18552,26 @@ SWIGINTERN PyObject *_wrap_csPen_DrawLine__SWIG_0(PyObject *SWIGUNUSEDPARM(self)
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "csPen_DrawLine" "', argument " "1"" of type '" "csPen *""'"); 
   }
   arg1 = reinterpret_cast< csPen * >(argp1);
-  ecode2 = SWIG_AsVal_unsigned_SS_long(obj1, &val2);
+  ecode2 = SWIG_AsVal_int(obj1, &val2);
   if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "csPen_DrawLine" "', argument " "2"" of type '" "uint""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "csPen_DrawLine" "', argument " "2"" of type '" "int""'");
   } 
-  arg2 = static_cast< uint >(val2);
-  ecode3 = SWIG_AsVal_unsigned_SS_long(obj2, &val3);
+  arg2 = static_cast< int >(val2);
+  ecode3 = SWIG_AsVal_int(obj2, &val3);
   if (!SWIG_IsOK(ecode3)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "csPen_DrawLine" "', argument " "3"" of type '" "uint""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "csPen_DrawLine" "', argument " "3"" of type '" "int""'");
   } 
-  arg3 = static_cast< uint >(val3);
-  ecode4 = SWIG_AsVal_unsigned_SS_long(obj3, &val4);
+  arg3 = static_cast< int >(val3);
+  ecode4 = SWIG_AsVal_int(obj3, &val4);
   if (!SWIG_IsOK(ecode4)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "csPen_DrawLine" "', argument " "4"" of type '" "uint""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "csPen_DrawLine" "', argument " "4"" of type '" "int""'");
   } 
-  arg4 = static_cast< uint >(val4);
-  ecode5 = SWIG_AsVal_unsigned_SS_long(obj4, &val5);
+  arg4 = static_cast< int >(val4);
+  ecode5 = SWIG_AsVal_int(obj4, &val5);
   if (!SWIG_IsOK(ecode5)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode5), "in method '" "csPen_DrawLine" "', argument " "5"" of type '" "uint""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode5), "in method '" "csPen_DrawLine" "', argument " "5"" of type '" "int""'");
   } 
-  arg5 = static_cast< uint >(val5);
+  arg5 = static_cast< int >(val5);
   (arg1)->DrawLine(arg2,arg3,arg4,arg5);
   resultobj = SWIG_Py_Void();
   return resultobj;
@@ -18573,22 +18643,22 @@ SWIGINTERN PyObject *_wrap_csPen_DrawLine(PyObject *self, PyObject *args) {
     _v = SWIG_CheckState(res);
     if (_v) {
       {
-        int res = SWIG_AsVal_unsigned_SS_long(argv[1], NULL);
+        int res = SWIG_AsVal_int(argv[1], NULL);
         _v = SWIG_CheckState(res);
       }
       if (_v) {
         {
-          int res = SWIG_AsVal_unsigned_SS_long(argv[2], NULL);
+          int res = SWIG_AsVal_int(argv[2], NULL);
           _v = SWIG_CheckState(res);
         }
         if (_v) {
           {
-            int res = SWIG_AsVal_unsigned_SS_long(argv[3], NULL);
+            int res = SWIG_AsVal_int(argv[3], NULL);
             _v = SWIG_CheckState(res);
           }
           if (_v) {
             {
-              int res = SWIG_AsVal_unsigned_SS_long(argv[4], NULL);
+              int res = SWIG_AsVal_int(argv[4], NULL);
               _v = SWIG_CheckState(res);
             }
             if (_v) {
@@ -18603,7 +18673,7 @@ SWIGINTERN PyObject *_wrap_csPen_DrawLine(PyObject *self, PyObject *args) {
 fail:
   SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number of arguments for overloaded function 'csPen_DrawLine'.\n"
     "  Possible C/C++ prototypes are:\n"
-    "    DrawLine(csPen *,uint,uint,uint,uint)\n"
+    "    DrawLine(csPen *,int,int,int,int)\n"
     "    DrawLine(csPen *,csPenCoordinatePair const &)\n");
   return NULL;
 }
@@ -18612,19 +18682,19 @@ fail:
 SWIGINTERN PyObject *_wrap_csPen_DrawThickLine(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   csPen *arg1 = (csPen *) 0 ;
-  uint arg2 ;
-  uint arg3 ;
-  uint arg4 ;
-  uint arg5 ;
+  int arg2 ;
+  int arg3 ;
+  int arg4 ;
+  int arg5 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  unsigned long val2 ;
+  int val2 ;
   int ecode2 = 0 ;
-  unsigned long val3 ;
+  int val3 ;
   int ecode3 = 0 ;
-  unsigned long val4 ;
+  int val4 ;
   int ecode4 = 0 ;
-  unsigned long val5 ;
+  int val5 ;
   int ecode5 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
@@ -18638,26 +18708,26 @@ SWIGINTERN PyObject *_wrap_csPen_DrawThickLine(PyObject *SWIGUNUSEDPARM(self), P
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "csPen_DrawThickLine" "', argument " "1"" of type '" "csPen *""'"); 
   }
   arg1 = reinterpret_cast< csPen * >(argp1);
-  ecode2 = SWIG_AsVal_unsigned_SS_long(obj1, &val2);
+  ecode2 = SWIG_AsVal_int(obj1, &val2);
   if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "csPen_DrawThickLine" "', argument " "2"" of type '" "uint""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "csPen_DrawThickLine" "', argument " "2"" of type '" "int""'");
   } 
-  arg2 = static_cast< uint >(val2);
-  ecode3 = SWIG_AsVal_unsigned_SS_long(obj2, &val3);
+  arg2 = static_cast< int >(val2);
+  ecode3 = SWIG_AsVal_int(obj2, &val3);
   if (!SWIG_IsOK(ecode3)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "csPen_DrawThickLine" "', argument " "3"" of type '" "uint""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "csPen_DrawThickLine" "', argument " "3"" of type '" "int""'");
   } 
-  arg3 = static_cast< uint >(val3);
-  ecode4 = SWIG_AsVal_unsigned_SS_long(obj3, &val4);
+  arg3 = static_cast< int >(val3);
+  ecode4 = SWIG_AsVal_int(obj3, &val4);
   if (!SWIG_IsOK(ecode4)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "csPen_DrawThickLine" "', argument " "4"" of type '" "uint""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "csPen_DrawThickLine" "', argument " "4"" of type '" "int""'");
   } 
-  arg4 = static_cast< uint >(val4);
-  ecode5 = SWIG_AsVal_unsigned_SS_long(obj4, &val5);
+  arg4 = static_cast< int >(val4);
+  ecode5 = SWIG_AsVal_int(obj4, &val5);
   if (!SWIG_IsOK(ecode5)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode5), "in method '" "csPen_DrawThickLine" "', argument " "5"" of type '" "uint""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode5), "in method '" "csPen_DrawThickLine" "', argument " "5"" of type '" "int""'");
   } 
-  arg5 = static_cast< uint >(val5);
+  arg5 = static_cast< int >(val5);
   (arg1)->DrawThickLine(arg2,arg3,arg4,arg5);
   resultobj = SWIG_Py_Void();
   return resultobj;
@@ -18735,13 +18805,13 @@ fail:
 SWIGINTERN PyObject *_wrap_csPen_DrawPoint__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   csPen *arg1 = (csPen *) 0 ;
-  uint arg2 ;
-  uint arg3 ;
+  int arg2 ;
+  int arg3 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  unsigned long val2 ;
+  int val2 ;
   int ecode2 = 0 ;
-  unsigned long val3 ;
+  int val3 ;
   int ecode3 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
@@ -18753,16 +18823,16 @@ SWIGINTERN PyObject *_wrap_csPen_DrawPoint__SWIG_0(PyObject *SWIGUNUSEDPARM(self
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "csPen_DrawPoint" "', argument " "1"" of type '" "csPen *""'"); 
   }
   arg1 = reinterpret_cast< csPen * >(argp1);
-  ecode2 = SWIG_AsVal_unsigned_SS_long(obj1, &val2);
+  ecode2 = SWIG_AsVal_int(obj1, &val2);
   if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "csPen_DrawPoint" "', argument " "2"" of type '" "uint""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "csPen_DrawPoint" "', argument " "2"" of type '" "int""'");
   } 
-  arg2 = static_cast< uint >(val2);
-  ecode3 = SWIG_AsVal_unsigned_SS_long(obj2, &val3);
+  arg2 = static_cast< int >(val2);
+  ecode3 = SWIG_AsVal_int(obj2, &val3);
   if (!SWIG_IsOK(ecode3)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "csPen_DrawPoint" "', argument " "3"" of type '" "uint""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "csPen_DrawPoint" "', argument " "3"" of type '" "int""'");
   } 
-  arg3 = static_cast< uint >(val3);
+  arg3 = static_cast< int >(val3);
   (arg1)->DrawPoint(arg2,arg3);
   resultobj = SWIG_Py_Void();
   return resultobj;
@@ -18834,12 +18904,12 @@ SWIGINTERN PyObject *_wrap_csPen_DrawPoint(PyObject *self, PyObject *args) {
     _v = SWIG_CheckState(res);
     if (_v) {
       {
-        int res = SWIG_AsVal_unsigned_SS_long(argv[1], NULL);
+        int res = SWIG_AsVal_int(argv[1], NULL);
         _v = SWIG_CheckState(res);
       }
       if (_v) {
         {
-          int res = SWIG_AsVal_unsigned_SS_long(argv[2], NULL);
+          int res = SWIG_AsVal_int(argv[2], NULL);
           _v = SWIG_CheckState(res);
         }
         if (_v) {
@@ -18852,7 +18922,7 @@ SWIGINTERN PyObject *_wrap_csPen_DrawPoint(PyObject *self, PyObject *args) {
 fail:
   SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number of arguments for overloaded function 'csPen_DrawPoint'.\n"
     "  Possible C/C++ prototypes are:\n"
-    "    DrawPoint(csPen *,uint,uint)\n"
+    "    DrawPoint(csPen *,int,int)\n"
     "    DrawPoint(csPen *,csPenCoordinate const &)\n");
   return NULL;
 }
@@ -18861,19 +18931,19 @@ fail:
 SWIGINTERN PyObject *_wrap_csPen_DrawRect__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   csPen *arg1 = (csPen *) 0 ;
-  uint arg2 ;
-  uint arg3 ;
-  uint arg4 ;
-  uint arg5 ;
+  int arg2 ;
+  int arg3 ;
+  int arg4 ;
+  int arg5 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  unsigned long val2 ;
+  int val2 ;
   int ecode2 = 0 ;
-  unsigned long val3 ;
+  int val3 ;
   int ecode3 = 0 ;
-  unsigned long val4 ;
+  int val4 ;
   int ecode4 = 0 ;
-  unsigned long val5 ;
+  int val5 ;
   int ecode5 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
@@ -18887,26 +18957,26 @@ SWIGINTERN PyObject *_wrap_csPen_DrawRect__SWIG_0(PyObject *SWIGUNUSEDPARM(self)
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "csPen_DrawRect" "', argument " "1"" of type '" "csPen *""'"); 
   }
   arg1 = reinterpret_cast< csPen * >(argp1);
-  ecode2 = SWIG_AsVal_unsigned_SS_long(obj1, &val2);
+  ecode2 = SWIG_AsVal_int(obj1, &val2);
   if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "csPen_DrawRect" "', argument " "2"" of type '" "uint""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "csPen_DrawRect" "', argument " "2"" of type '" "int""'");
   } 
-  arg2 = static_cast< uint >(val2);
-  ecode3 = SWIG_AsVal_unsigned_SS_long(obj2, &val3);
+  arg2 = static_cast< int >(val2);
+  ecode3 = SWIG_AsVal_int(obj2, &val3);
   if (!SWIG_IsOK(ecode3)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "csPen_DrawRect" "', argument " "3"" of type '" "uint""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "csPen_DrawRect" "', argument " "3"" of type '" "int""'");
   } 
-  arg3 = static_cast< uint >(val3);
-  ecode4 = SWIG_AsVal_unsigned_SS_long(obj3, &val4);
+  arg3 = static_cast< int >(val3);
+  ecode4 = SWIG_AsVal_int(obj3, &val4);
   if (!SWIG_IsOK(ecode4)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "csPen_DrawRect" "', argument " "4"" of type '" "uint""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "csPen_DrawRect" "', argument " "4"" of type '" "int""'");
   } 
-  arg4 = static_cast< uint >(val4);
-  ecode5 = SWIG_AsVal_unsigned_SS_long(obj4, &val5);
+  arg4 = static_cast< int >(val4);
+  ecode5 = SWIG_AsVal_int(obj4, &val5);
   if (!SWIG_IsOK(ecode5)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode5), "in method '" "csPen_DrawRect" "', argument " "5"" of type '" "uint""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode5), "in method '" "csPen_DrawRect" "', argument " "5"" of type '" "int""'");
   } 
-  arg5 = static_cast< uint >(val5);
+  arg5 = static_cast< int >(val5);
   (arg1)->DrawRect(arg2,arg3,arg4,arg5);
   resultobj = SWIG_Py_Void();
   return resultobj;
@@ -18978,22 +19048,22 @@ SWIGINTERN PyObject *_wrap_csPen_DrawRect(PyObject *self, PyObject *args) {
     _v = SWIG_CheckState(res);
     if (_v) {
       {
-        int res = SWIG_AsVal_unsigned_SS_long(argv[1], NULL);
+        int res = SWIG_AsVal_int(argv[1], NULL);
         _v = SWIG_CheckState(res);
       }
       if (_v) {
         {
-          int res = SWIG_AsVal_unsigned_SS_long(argv[2], NULL);
+          int res = SWIG_AsVal_int(argv[2], NULL);
           _v = SWIG_CheckState(res);
         }
         if (_v) {
           {
-            int res = SWIG_AsVal_unsigned_SS_long(argv[3], NULL);
+            int res = SWIG_AsVal_int(argv[3], NULL);
             _v = SWIG_CheckState(res);
           }
           if (_v) {
             {
-              int res = SWIG_AsVal_unsigned_SS_long(argv[4], NULL);
+              int res = SWIG_AsVal_int(argv[4], NULL);
               _v = SWIG_CheckState(res);
             }
             if (_v) {
@@ -19008,7 +19078,7 @@ SWIGINTERN PyObject *_wrap_csPen_DrawRect(PyObject *self, PyObject *args) {
 fail:
   SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number of arguments for overloaded function 'csPen_DrawRect'.\n"
     "  Possible C/C++ prototypes are:\n"
-    "    DrawRect(csPen *,uint,uint,uint,uint)\n"
+    "    DrawRect(csPen *,int,int,int,int)\n"
     "    DrawRect(csPen *,csPenCoordinatePair const &)\n");
   return NULL;
 }
@@ -19017,20 +19087,20 @@ fail:
 SWIGINTERN PyObject *_wrap_csPen_DrawMiteredRect__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   csPen *arg1 = (csPen *) 0 ;
-  uint arg2 ;
-  uint arg3 ;
-  uint arg4 ;
-  uint arg5 ;
+  int arg2 ;
+  int arg3 ;
+  int arg4 ;
+  int arg5 ;
   uint arg6 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  unsigned long val2 ;
+  int val2 ;
   int ecode2 = 0 ;
-  unsigned long val3 ;
+  int val3 ;
   int ecode3 = 0 ;
-  unsigned long val4 ;
+  int val4 ;
   int ecode4 = 0 ;
-  unsigned long val5 ;
+  int val5 ;
   int ecode5 = 0 ;
   unsigned long val6 ;
   int ecode6 = 0 ;
@@ -19047,26 +19117,26 @@ SWIGINTERN PyObject *_wrap_csPen_DrawMiteredRect__SWIG_0(PyObject *SWIGUNUSEDPAR
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "csPen_DrawMiteredRect" "', argument " "1"" of type '" "csPen *""'"); 
   }
   arg1 = reinterpret_cast< csPen * >(argp1);
-  ecode2 = SWIG_AsVal_unsigned_SS_long(obj1, &val2);
+  ecode2 = SWIG_AsVal_int(obj1, &val2);
   if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "csPen_DrawMiteredRect" "', argument " "2"" of type '" "uint""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "csPen_DrawMiteredRect" "', argument " "2"" of type '" "int""'");
   } 
-  arg2 = static_cast< uint >(val2);
-  ecode3 = SWIG_AsVal_unsigned_SS_long(obj2, &val3);
+  arg2 = static_cast< int >(val2);
+  ecode3 = SWIG_AsVal_int(obj2, &val3);
   if (!SWIG_IsOK(ecode3)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "csPen_DrawMiteredRect" "', argument " "3"" of type '" "uint""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "csPen_DrawMiteredRect" "', argument " "3"" of type '" "int""'");
   } 
-  arg3 = static_cast< uint >(val3);
-  ecode4 = SWIG_AsVal_unsigned_SS_long(obj3, &val4);
+  arg3 = static_cast< int >(val3);
+  ecode4 = SWIG_AsVal_int(obj3, &val4);
   if (!SWIG_IsOK(ecode4)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "csPen_DrawMiteredRect" "', argument " "4"" of type '" "uint""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "csPen_DrawMiteredRect" "', argument " "4"" of type '" "int""'");
   } 
-  arg4 = static_cast< uint >(val4);
-  ecode5 = SWIG_AsVal_unsigned_SS_long(obj4, &val5);
+  arg4 = static_cast< int >(val4);
+  ecode5 = SWIG_AsVal_int(obj4, &val5);
   if (!SWIG_IsOK(ecode5)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode5), "in method '" "csPen_DrawMiteredRect" "', argument " "5"" of type '" "uint""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode5), "in method '" "csPen_DrawMiteredRect" "', argument " "5"" of type '" "int""'");
   } 
-  arg5 = static_cast< uint >(val5);
+  arg5 = static_cast< int >(val5);
   ecode6 = SWIG_AsVal_unsigned_SS_long(obj5, &val6);
   if (!SWIG_IsOK(ecode6)) {
     SWIG_exception_fail(SWIG_ArgError(ecode6), "in method '" "csPen_DrawMiteredRect" "', argument " "6"" of type '" "uint""'");
@@ -19158,22 +19228,22 @@ SWIGINTERN PyObject *_wrap_csPen_DrawMiteredRect(PyObject *self, PyObject *args)
     _v = SWIG_CheckState(res);
     if (_v) {
       {
-        int res = SWIG_AsVal_unsigned_SS_long(argv[1], NULL);
+        int res = SWIG_AsVal_int(argv[1], NULL);
         _v = SWIG_CheckState(res);
       }
       if (_v) {
         {
-          int res = SWIG_AsVal_unsigned_SS_long(argv[2], NULL);
+          int res = SWIG_AsVal_int(argv[2], NULL);
           _v = SWIG_CheckState(res);
         }
         if (_v) {
           {
-            int res = SWIG_AsVal_unsigned_SS_long(argv[3], NULL);
+            int res = SWIG_AsVal_int(argv[3], NULL);
             _v = SWIG_CheckState(res);
           }
           if (_v) {
             {
-              int res = SWIG_AsVal_unsigned_SS_long(argv[4], NULL);
+              int res = SWIG_AsVal_int(argv[4], NULL);
               _v = SWIG_CheckState(res);
             }
             if (_v) {
@@ -19194,7 +19264,7 @@ SWIGINTERN PyObject *_wrap_csPen_DrawMiteredRect(PyObject *self, PyObject *args)
 fail:
   SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number of arguments for overloaded function 'csPen_DrawMiteredRect'.\n"
     "  Possible C/C++ prototypes are:\n"
-    "    DrawMiteredRect(csPen *,uint,uint,uint,uint,uint)\n"
+    "    DrawMiteredRect(csPen *,int,int,int,int,uint)\n"
     "    DrawMiteredRect(csPen *,csPenCoordinatePair const &,uint)\n");
   return NULL;
 }
@@ -19203,20 +19273,20 @@ fail:
 SWIGINTERN PyObject *_wrap_csPen_DrawRoundedRect__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   csPen *arg1 = (csPen *) 0 ;
-  uint arg2 ;
-  uint arg3 ;
-  uint arg4 ;
-  uint arg5 ;
+  int arg2 ;
+  int arg3 ;
+  int arg4 ;
+  int arg5 ;
   uint arg6 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  unsigned long val2 ;
+  int val2 ;
   int ecode2 = 0 ;
-  unsigned long val3 ;
+  int val3 ;
   int ecode3 = 0 ;
-  unsigned long val4 ;
+  int val4 ;
   int ecode4 = 0 ;
-  unsigned long val5 ;
+  int val5 ;
   int ecode5 = 0 ;
   unsigned long val6 ;
   int ecode6 = 0 ;
@@ -19233,26 +19303,26 @@ SWIGINTERN PyObject *_wrap_csPen_DrawRoundedRect__SWIG_0(PyObject *SWIGUNUSEDPAR
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "csPen_DrawRoundedRect" "', argument " "1"" of type '" "csPen *""'"); 
   }
   arg1 = reinterpret_cast< csPen * >(argp1);
-  ecode2 = SWIG_AsVal_unsigned_SS_long(obj1, &val2);
+  ecode2 = SWIG_AsVal_int(obj1, &val2);
   if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "csPen_DrawRoundedRect" "', argument " "2"" of type '" "uint""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "csPen_DrawRoundedRect" "', argument " "2"" of type '" "int""'");
   } 
-  arg2 = static_cast< uint >(val2);
-  ecode3 = SWIG_AsVal_unsigned_SS_long(obj2, &val3);
+  arg2 = static_cast< int >(val2);
+  ecode3 = SWIG_AsVal_int(obj2, &val3);
   if (!SWIG_IsOK(ecode3)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "csPen_DrawRoundedRect" "', argument " "3"" of type '" "uint""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "csPen_DrawRoundedRect" "', argument " "3"" of type '" "int""'");
   } 
-  arg3 = static_cast< uint >(val3);
-  ecode4 = SWIG_AsVal_unsigned_SS_long(obj3, &val4);
+  arg3 = static_cast< int >(val3);
+  ecode4 = SWIG_AsVal_int(obj3, &val4);
   if (!SWIG_IsOK(ecode4)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "csPen_DrawRoundedRect" "', argument " "4"" of type '" "uint""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "csPen_DrawRoundedRect" "', argument " "4"" of type '" "int""'");
   } 
-  arg4 = static_cast< uint >(val4);
-  ecode5 = SWIG_AsVal_unsigned_SS_long(obj4, &val5);
+  arg4 = static_cast< int >(val4);
+  ecode5 = SWIG_AsVal_int(obj4, &val5);
   if (!SWIG_IsOK(ecode5)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode5), "in method '" "csPen_DrawRoundedRect" "', argument " "5"" of type '" "uint""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode5), "in method '" "csPen_DrawRoundedRect" "', argument " "5"" of type '" "int""'");
   } 
-  arg5 = static_cast< uint >(val5);
+  arg5 = static_cast< int >(val5);
   ecode6 = SWIG_AsVal_unsigned_SS_long(obj5, &val6);
   if (!SWIG_IsOK(ecode6)) {
     SWIG_exception_fail(SWIG_ArgError(ecode6), "in method '" "csPen_DrawRoundedRect" "', argument " "6"" of type '" "uint""'");
@@ -19344,22 +19414,22 @@ SWIGINTERN PyObject *_wrap_csPen_DrawRoundedRect(PyObject *self, PyObject *args)
     _v = SWIG_CheckState(res);
     if (_v) {
       {
-        int res = SWIG_AsVal_unsigned_SS_long(argv[1], NULL);
+        int res = SWIG_AsVal_int(argv[1], NULL);
         _v = SWIG_CheckState(res);
       }
       if (_v) {
         {
-          int res = SWIG_AsVal_unsigned_SS_long(argv[2], NULL);
+          int res = SWIG_AsVal_int(argv[2], NULL);
           _v = SWIG_CheckState(res);
         }
         if (_v) {
           {
-            int res = SWIG_AsVal_unsigned_SS_long(argv[3], NULL);
+            int res = SWIG_AsVal_int(argv[3], NULL);
             _v = SWIG_CheckState(res);
           }
           if (_v) {
             {
-              int res = SWIG_AsVal_unsigned_SS_long(argv[4], NULL);
+              int res = SWIG_AsVal_int(argv[4], NULL);
               _v = SWIG_CheckState(res);
             }
             if (_v) {
@@ -19380,7 +19450,7 @@ SWIGINTERN PyObject *_wrap_csPen_DrawRoundedRect(PyObject *self, PyObject *args)
 fail:
   SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number of arguments for overloaded function 'csPen_DrawRoundedRect'.\n"
     "  Possible C/C++ prototypes are:\n"
-    "    DrawRoundedRect(csPen *,uint,uint,uint,uint,uint)\n"
+    "    DrawRoundedRect(csPen *,int,int,int,int,uint)\n"
     "    DrawRoundedRect(csPen *,csPenCoordinatePair const &,uint)\n");
   return NULL;
 }
@@ -19389,21 +19459,21 @@ fail:
 SWIGINTERN PyObject *_wrap_csPen_DrawArc__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   csPen *arg1 = (csPen *) 0 ;
-  uint arg2 ;
-  uint arg3 ;
-  uint arg4 ;
-  uint arg5 ;
+  int arg2 ;
+  int arg3 ;
+  int arg4 ;
+  int arg5 ;
   float arg6 ;
   float arg7 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  unsigned long val2 ;
+  int val2 ;
   int ecode2 = 0 ;
-  unsigned long val3 ;
+  int val3 ;
   int ecode3 = 0 ;
-  unsigned long val4 ;
+  int val4 ;
   int ecode4 = 0 ;
-  unsigned long val5 ;
+  int val5 ;
   int ecode5 = 0 ;
   float val6 ;
   int ecode6 = 0 ;
@@ -19423,26 +19493,26 @@ SWIGINTERN PyObject *_wrap_csPen_DrawArc__SWIG_0(PyObject *SWIGUNUSEDPARM(self),
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "csPen_DrawArc" "', argument " "1"" of type '" "csPen *""'"); 
   }
   arg1 = reinterpret_cast< csPen * >(argp1);
-  ecode2 = SWIG_AsVal_unsigned_SS_long(obj1, &val2);
+  ecode2 = SWIG_AsVal_int(obj1, &val2);
   if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "csPen_DrawArc" "', argument " "2"" of type '" "uint""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "csPen_DrawArc" "', argument " "2"" of type '" "int""'");
   } 
-  arg2 = static_cast< uint >(val2);
-  ecode3 = SWIG_AsVal_unsigned_SS_long(obj2, &val3);
+  arg2 = static_cast< int >(val2);
+  ecode3 = SWIG_AsVal_int(obj2, &val3);
   if (!SWIG_IsOK(ecode3)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "csPen_DrawArc" "', argument " "3"" of type '" "uint""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "csPen_DrawArc" "', argument " "3"" of type '" "int""'");
   } 
-  arg3 = static_cast< uint >(val3);
-  ecode4 = SWIG_AsVal_unsigned_SS_long(obj3, &val4);
+  arg3 = static_cast< int >(val3);
+  ecode4 = SWIG_AsVal_int(obj3, &val4);
   if (!SWIG_IsOK(ecode4)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "csPen_DrawArc" "', argument " "4"" of type '" "uint""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "csPen_DrawArc" "', argument " "4"" of type '" "int""'");
   } 
-  arg4 = static_cast< uint >(val4);
-  ecode5 = SWIG_AsVal_unsigned_SS_long(obj4, &val5);
+  arg4 = static_cast< int >(val4);
+  ecode5 = SWIG_AsVal_int(obj4, &val5);
   if (!SWIG_IsOK(ecode5)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode5), "in method '" "csPen_DrawArc" "', argument " "5"" of type '" "uint""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode5), "in method '" "csPen_DrawArc" "', argument " "5"" of type '" "int""'");
   } 
-  arg5 = static_cast< uint >(val5);
+  arg5 = static_cast< int >(val5);
   ecode6 = SWIG_AsVal_float(obj5, &val6);
   if (!SWIG_IsOK(ecode6)) {
     SWIG_exception_fail(SWIG_ArgError(ecode6), "in method '" "csPen_DrawArc" "', argument " "6"" of type '" "float""'");
@@ -19464,20 +19534,20 @@ fail:
 SWIGINTERN PyObject *_wrap_csPen_DrawArc__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   csPen *arg1 = (csPen *) 0 ;
-  uint arg2 ;
-  uint arg3 ;
-  uint arg4 ;
-  uint arg5 ;
+  int arg2 ;
+  int arg3 ;
+  int arg4 ;
+  int arg5 ;
   float arg6 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  unsigned long val2 ;
+  int val2 ;
   int ecode2 = 0 ;
-  unsigned long val3 ;
+  int val3 ;
   int ecode3 = 0 ;
-  unsigned long val4 ;
+  int val4 ;
   int ecode4 = 0 ;
-  unsigned long val5 ;
+  int val5 ;
   int ecode5 = 0 ;
   float val6 ;
   int ecode6 = 0 ;
@@ -19494,26 +19564,26 @@ SWIGINTERN PyObject *_wrap_csPen_DrawArc__SWIG_1(PyObject *SWIGUNUSEDPARM(self),
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "csPen_DrawArc" "', argument " "1"" of type '" "csPen *""'"); 
   }
   arg1 = reinterpret_cast< csPen * >(argp1);
-  ecode2 = SWIG_AsVal_unsigned_SS_long(obj1, &val2);
+  ecode2 = SWIG_AsVal_int(obj1, &val2);
   if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "csPen_DrawArc" "', argument " "2"" of type '" "uint""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "csPen_DrawArc" "', argument " "2"" of type '" "int""'");
   } 
-  arg2 = static_cast< uint >(val2);
-  ecode3 = SWIG_AsVal_unsigned_SS_long(obj2, &val3);
+  arg2 = static_cast< int >(val2);
+  ecode3 = SWIG_AsVal_int(obj2, &val3);
   if (!SWIG_IsOK(ecode3)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "csPen_DrawArc" "', argument " "3"" of type '" "uint""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "csPen_DrawArc" "', argument " "3"" of type '" "int""'");
   } 
-  arg3 = static_cast< uint >(val3);
-  ecode4 = SWIG_AsVal_unsigned_SS_long(obj3, &val4);
+  arg3 = static_cast< int >(val3);
+  ecode4 = SWIG_AsVal_int(obj3, &val4);
   if (!SWIG_IsOK(ecode4)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "csPen_DrawArc" "', argument " "4"" of type '" "uint""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "csPen_DrawArc" "', argument " "4"" of type '" "int""'");
   } 
-  arg4 = static_cast< uint >(val4);
-  ecode5 = SWIG_AsVal_unsigned_SS_long(obj4, &val5);
+  arg4 = static_cast< int >(val4);
+  ecode5 = SWIG_AsVal_int(obj4, &val5);
   if (!SWIG_IsOK(ecode5)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode5), "in method '" "csPen_DrawArc" "', argument " "5"" of type '" "uint""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode5), "in method '" "csPen_DrawArc" "', argument " "5"" of type '" "int""'");
   } 
-  arg5 = static_cast< uint >(val5);
+  arg5 = static_cast< int >(val5);
   ecode6 = SWIG_AsVal_float(obj5, &val6);
   if (!SWIG_IsOK(ecode6)) {
     SWIG_exception_fail(SWIG_ArgError(ecode6), "in method '" "csPen_DrawArc" "', argument " "6"" of type '" "float""'");
@@ -19530,19 +19600,19 @@ fail:
 SWIGINTERN PyObject *_wrap_csPen_DrawArc__SWIG_2(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   csPen *arg1 = (csPen *) 0 ;
-  uint arg2 ;
-  uint arg3 ;
-  uint arg4 ;
-  uint arg5 ;
+  int arg2 ;
+  int arg3 ;
+  int arg4 ;
+  int arg5 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  unsigned long val2 ;
+  int val2 ;
   int ecode2 = 0 ;
-  unsigned long val3 ;
+  int val3 ;
   int ecode3 = 0 ;
-  unsigned long val4 ;
+  int val4 ;
   int ecode4 = 0 ;
-  unsigned long val5 ;
+  int val5 ;
   int ecode5 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
@@ -19556,26 +19626,26 @@ SWIGINTERN PyObject *_wrap_csPen_DrawArc__SWIG_2(PyObject *SWIGUNUSEDPARM(self),
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "csPen_DrawArc" "', argument " "1"" of type '" "csPen *""'"); 
   }
   arg1 = reinterpret_cast< csPen * >(argp1);
-  ecode2 = SWIG_AsVal_unsigned_SS_long(obj1, &val2);
+  ecode2 = SWIG_AsVal_int(obj1, &val2);
   if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "csPen_DrawArc" "', argument " "2"" of type '" "uint""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "csPen_DrawArc" "', argument " "2"" of type '" "int""'");
   } 
-  arg2 = static_cast< uint >(val2);
-  ecode3 = SWIG_AsVal_unsigned_SS_long(obj2, &val3);
+  arg2 = static_cast< int >(val2);
+  ecode3 = SWIG_AsVal_int(obj2, &val3);
   if (!SWIG_IsOK(ecode3)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "csPen_DrawArc" "', argument " "3"" of type '" "uint""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "csPen_DrawArc" "', argument " "3"" of type '" "int""'");
   } 
-  arg3 = static_cast< uint >(val3);
-  ecode4 = SWIG_AsVal_unsigned_SS_long(obj3, &val4);
+  arg3 = static_cast< int >(val3);
+  ecode4 = SWIG_AsVal_int(obj3, &val4);
   if (!SWIG_IsOK(ecode4)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "csPen_DrawArc" "', argument " "4"" of type '" "uint""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "csPen_DrawArc" "', argument " "4"" of type '" "int""'");
   } 
-  arg4 = static_cast< uint >(val4);
-  ecode5 = SWIG_AsVal_unsigned_SS_long(obj4, &val5);
+  arg4 = static_cast< int >(val4);
+  ecode5 = SWIG_AsVal_int(obj4, &val5);
   if (!SWIG_IsOK(ecode5)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode5), "in method '" "csPen_DrawArc" "', argument " "5"" of type '" "uint""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode5), "in method '" "csPen_DrawArc" "', argument " "5"" of type '" "int""'");
   } 
-  arg5 = static_cast< uint >(val5);
+  arg5 = static_cast< int >(val5);
   (arg1)->DrawArc(arg2,arg3,arg4,arg5);
   resultobj = SWIG_Py_Void();
   return resultobj;
@@ -19784,22 +19854,22 @@ SWIGINTERN PyObject *_wrap_csPen_DrawArc(PyObject *self, PyObject *args) {
     _v = SWIG_CheckState(res);
     if (_v) {
       {
-        int res = SWIG_AsVal_unsigned_SS_long(argv[1], NULL);
+        int res = SWIG_AsVal_int(argv[1], NULL);
         _v = SWIG_CheckState(res);
       }
       if (_v) {
         {
-          int res = SWIG_AsVal_unsigned_SS_long(argv[2], NULL);
+          int res = SWIG_AsVal_int(argv[2], NULL);
           _v = SWIG_CheckState(res);
         }
         if (_v) {
           {
-            int res = SWIG_AsVal_unsigned_SS_long(argv[3], NULL);
+            int res = SWIG_AsVal_int(argv[3], NULL);
             _v = SWIG_CheckState(res);
           }
           if (_v) {
             {
-              int res = SWIG_AsVal_unsigned_SS_long(argv[4], NULL);
+              int res = SWIG_AsVal_int(argv[4], NULL);
               _v = SWIG_CheckState(res);
             }
             if (_v) {
@@ -19817,22 +19887,22 @@ SWIGINTERN PyObject *_wrap_csPen_DrawArc(PyObject *self, PyObject *args) {
     _v = SWIG_CheckState(res);
     if (_v) {
       {
-        int res = SWIG_AsVal_unsigned_SS_long(argv[1], NULL);
+        int res = SWIG_AsVal_int(argv[1], NULL);
         _v = SWIG_CheckState(res);
       }
       if (_v) {
         {
-          int res = SWIG_AsVal_unsigned_SS_long(argv[2], NULL);
+          int res = SWIG_AsVal_int(argv[2], NULL);
           _v = SWIG_CheckState(res);
         }
         if (_v) {
           {
-            int res = SWIG_AsVal_unsigned_SS_long(argv[3], NULL);
+            int res = SWIG_AsVal_int(argv[3], NULL);
             _v = SWIG_CheckState(res);
           }
           if (_v) {
             {
-              int res = SWIG_AsVal_unsigned_SS_long(argv[4], NULL);
+              int res = SWIG_AsVal_int(argv[4], NULL);
               _v = SWIG_CheckState(res);
             }
             if (_v) {
@@ -19856,22 +19926,22 @@ SWIGINTERN PyObject *_wrap_csPen_DrawArc(PyObject *self, PyObject *args) {
     _v = SWIG_CheckState(res);
     if (_v) {
       {
-        int res = SWIG_AsVal_unsigned_SS_long(argv[1], NULL);
+        int res = SWIG_AsVal_int(argv[1], NULL);
         _v = SWIG_CheckState(res);
       }
       if (_v) {
         {
-          int res = SWIG_AsVal_unsigned_SS_long(argv[2], NULL);
+          int res = SWIG_AsVal_int(argv[2], NULL);
           _v = SWIG_CheckState(res);
         }
         if (_v) {
           {
-            int res = SWIG_AsVal_unsigned_SS_long(argv[3], NULL);
+            int res = SWIG_AsVal_int(argv[3], NULL);
             _v = SWIG_CheckState(res);
           }
           if (_v) {
             {
-              int res = SWIG_AsVal_unsigned_SS_long(argv[4], NULL);
+              int res = SWIG_AsVal_int(argv[4], NULL);
               _v = SWIG_CheckState(res);
             }
             if (_v) {
@@ -19898,9 +19968,9 @@ SWIGINTERN PyObject *_wrap_csPen_DrawArc(PyObject *self, PyObject *args) {
 fail:
   SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number of arguments for overloaded function 'csPen_DrawArc'.\n"
     "  Possible C/C++ prototypes are:\n"
-    "    DrawArc(csPen *,uint,uint,uint,uint,float,float)\n"
-    "    DrawArc(csPen *,uint,uint,uint,uint,float)\n"
-    "    DrawArc(csPen *,uint,uint,uint,uint)\n"
+    "    DrawArc(csPen *,int,int,int,int,float,float)\n"
+    "    DrawArc(csPen *,int,int,int,int,float)\n"
+    "    DrawArc(csPen *,int,int,int,int)\n"
     "    DrawArc(csPen *,csPenCoordinatePair const &,float,float)\n"
     "    DrawArc(csPen *,csPenCoordinatePair const &,float)\n"
     "    DrawArc(csPen *,csPenCoordinatePair const &)\n");
@@ -19911,25 +19981,25 @@ fail:
 SWIGINTERN PyObject *_wrap_csPen_DrawTriangle__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   csPen *arg1 = (csPen *) 0 ;
-  uint arg2 ;
-  uint arg3 ;
-  uint arg4 ;
-  uint arg5 ;
-  uint arg6 ;
-  uint arg7 ;
+  int arg2 ;
+  int arg3 ;
+  int arg4 ;
+  int arg5 ;
+  int arg6 ;
+  int arg7 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  unsigned long val2 ;
+  int val2 ;
   int ecode2 = 0 ;
-  unsigned long val3 ;
+  int val3 ;
   int ecode3 = 0 ;
-  unsigned long val4 ;
+  int val4 ;
   int ecode4 = 0 ;
-  unsigned long val5 ;
+  int val5 ;
   int ecode5 = 0 ;
-  unsigned long val6 ;
+  int val6 ;
   int ecode6 = 0 ;
-  unsigned long val7 ;
+  int val7 ;
   int ecode7 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
@@ -19945,36 +20015,36 @@ SWIGINTERN PyObject *_wrap_csPen_DrawTriangle__SWIG_0(PyObject *SWIGUNUSEDPARM(s
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "csPen_DrawTriangle" "', argument " "1"" of type '" "csPen *""'"); 
   }
   arg1 = reinterpret_cast< csPen * >(argp1);
-  ecode2 = SWIG_AsVal_unsigned_SS_long(obj1, &val2);
+  ecode2 = SWIG_AsVal_int(obj1, &val2);
   if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "csPen_DrawTriangle" "', argument " "2"" of type '" "uint""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "csPen_DrawTriangle" "', argument " "2"" of type '" "int""'");
   } 
-  arg2 = static_cast< uint >(val2);
-  ecode3 = SWIG_AsVal_unsigned_SS_long(obj2, &val3);
+  arg2 = static_cast< int >(val2);
+  ecode3 = SWIG_AsVal_int(obj2, &val3);
   if (!SWIG_IsOK(ecode3)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "csPen_DrawTriangle" "', argument " "3"" of type '" "uint""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "csPen_DrawTriangle" "', argument " "3"" of type '" "int""'");
   } 
-  arg3 = static_cast< uint >(val3);
-  ecode4 = SWIG_AsVal_unsigned_SS_long(obj3, &val4);
+  arg3 = static_cast< int >(val3);
+  ecode4 = SWIG_AsVal_int(obj3, &val4);
   if (!SWIG_IsOK(ecode4)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "csPen_DrawTriangle" "', argument " "4"" of type '" "uint""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "csPen_DrawTriangle" "', argument " "4"" of type '" "int""'");
   } 
-  arg4 = static_cast< uint >(val4);
-  ecode5 = SWIG_AsVal_unsigned_SS_long(obj4, &val5);
+  arg4 = static_cast< int >(val4);
+  ecode5 = SWIG_AsVal_int(obj4, &val5);
   if (!SWIG_IsOK(ecode5)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode5), "in method '" "csPen_DrawTriangle" "', argument " "5"" of type '" "uint""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode5), "in method '" "csPen_DrawTriangle" "', argument " "5"" of type '" "int""'");
   } 
-  arg5 = static_cast< uint >(val5);
-  ecode6 = SWIG_AsVal_unsigned_SS_long(obj5, &val6);
+  arg5 = static_cast< int >(val5);
+  ecode6 = SWIG_AsVal_int(obj5, &val6);
   if (!SWIG_IsOK(ecode6)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode6), "in method '" "csPen_DrawTriangle" "', argument " "6"" of type '" "uint""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode6), "in method '" "csPen_DrawTriangle" "', argument " "6"" of type '" "int""'");
   } 
-  arg6 = static_cast< uint >(val6);
-  ecode7 = SWIG_AsVal_unsigned_SS_long(obj6, &val7);
+  arg6 = static_cast< int >(val6);
+  ecode7 = SWIG_AsVal_int(obj6, &val7);
   if (!SWIG_IsOK(ecode7)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode7), "in method '" "csPen_DrawTriangle" "', argument " "7"" of type '" "uint""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode7), "in method '" "csPen_DrawTriangle" "', argument " "7"" of type '" "int""'");
   } 
-  arg7 = static_cast< uint >(val7);
+  arg7 = static_cast< int >(val7);
   (arg1)->DrawTriangle(arg2,arg3,arg4,arg5,arg6,arg7);
   resultobj = SWIG_Py_Void();
   return resultobj;
@@ -20078,32 +20148,32 @@ SWIGINTERN PyObject *_wrap_csPen_DrawTriangle(PyObject *self, PyObject *args) {
     _v = SWIG_CheckState(res);
     if (_v) {
       {
-        int res = SWIG_AsVal_unsigned_SS_long(argv[1], NULL);
+        int res = SWIG_AsVal_int(argv[1], NULL);
         _v = SWIG_CheckState(res);
       }
       if (_v) {
         {
-          int res = SWIG_AsVal_unsigned_SS_long(argv[2], NULL);
+          int res = SWIG_AsVal_int(argv[2], NULL);
           _v = SWIG_CheckState(res);
         }
         if (_v) {
           {
-            int res = SWIG_AsVal_unsigned_SS_long(argv[3], NULL);
+            int res = SWIG_AsVal_int(argv[3], NULL);
             _v = SWIG_CheckState(res);
           }
           if (_v) {
             {
-              int res = SWIG_AsVal_unsigned_SS_long(argv[4], NULL);
+              int res = SWIG_AsVal_int(argv[4], NULL);
               _v = SWIG_CheckState(res);
             }
             if (_v) {
               {
-                int res = SWIG_AsVal_unsigned_SS_long(argv[5], NULL);
+                int res = SWIG_AsVal_int(argv[5], NULL);
                 _v = SWIG_CheckState(res);
               }
               if (_v) {
                 {
-                  int res = SWIG_AsVal_unsigned_SS_long(argv[6], NULL);
+                  int res = SWIG_AsVal_int(argv[6], NULL);
                   _v = SWIG_CheckState(res);
                 }
                 if (_v) {
@@ -20120,7 +20190,7 @@ SWIGINTERN PyObject *_wrap_csPen_DrawTriangle(PyObject *self, PyObject *args) {
 fail:
   SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number of arguments for overloaded function 'csPen_DrawTriangle'.\n"
     "  Possible C/C++ prototypes are:\n"
-    "    DrawTriangle(csPen *,uint,uint,uint,uint,uint,uint)\n"
+    "    DrawTriangle(csPen *,int,int,int,int,int,int)\n"
     "    DrawTriangle(csPen *,csPenCoordinate const &,csPenCoordinate const &,csPenCoordinate const &)\n");
   return NULL;
 }
@@ -20130,16 +20200,16 @@ SWIGINTERN PyObject *_wrap_csPen_Write__SWIG_0(PyObject *SWIGUNUSEDPARM(self), P
   PyObject *resultobj = 0;
   csPen *arg1 = (csPen *) 0 ;
   iFont *arg2 = (iFont *) 0 ;
-  uint arg3 ;
-  uint arg4 ;
+  int arg3 ;
+  int arg4 ;
   char *arg5 = (char *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   void *argp2 = 0 ;
   int res2 = 0 ;
-  unsigned long val3 ;
+  int val3 ;
   int ecode3 = 0 ;
-  unsigned long val4 ;
+  int val4 ;
   int ecode4 = 0 ;
   int res5 ;
   char *buf5 = 0 ;
@@ -20161,16 +20231,16 @@ SWIGINTERN PyObject *_wrap_csPen_Write__SWIG_0(PyObject *SWIGUNUSEDPARM(self), P
     SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "csPen_Write" "', argument " "2"" of type '" "iFont *""'"); 
   }
   arg2 = reinterpret_cast< iFont * >(argp2);
-  ecode3 = SWIG_AsVal_unsigned_SS_long(obj2, &val3);
+  ecode3 = SWIG_AsVal_int(obj2, &val3);
   if (!SWIG_IsOK(ecode3)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "csPen_Write" "', argument " "3"" of type '" "uint""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "csPen_Write" "', argument " "3"" of type '" "int""'");
   } 
-  arg3 = static_cast< uint >(val3);
-  ecode4 = SWIG_AsVal_unsigned_SS_long(obj3, &val4);
+  arg3 = static_cast< int >(val3);
+  ecode4 = SWIG_AsVal_int(obj3, &val4);
   if (!SWIG_IsOK(ecode4)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "csPen_Write" "', argument " "4"" of type '" "uint""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "csPen_Write" "', argument " "4"" of type '" "int""'");
   } 
-  arg4 = static_cast< uint >(val4);
+  arg4 = static_cast< int >(val4);
   res5 = SWIG_AsCharPtrAndSize(obj4, &buf5, NULL, &alloc5);
   if (!SWIG_IsOK(res5)) {
     SWIG_exception_fail(SWIG_ArgError(res5), "in method '" "csPen_Write" "', argument " "5"" of type '" "char const *""'");
@@ -20283,12 +20353,12 @@ SWIGINTERN PyObject *_wrap_csPen_Write(PyObject *self, PyObject *args) {
       _v = SWIG_CheckState(res);
       if (_v) {
         {
-          int res = SWIG_AsVal_unsigned_SS_long(argv[2], NULL);
+          int res = SWIG_AsVal_int(argv[2], NULL);
           _v = SWIG_CheckState(res);
         }
         if (_v) {
           {
-            int res = SWIG_AsVal_unsigned_SS_long(argv[3], NULL);
+            int res = SWIG_AsVal_int(argv[3], NULL);
             _v = SWIG_CheckState(res);
           }
           if (_v) {
@@ -20306,7 +20376,7 @@ SWIGINTERN PyObject *_wrap_csPen_Write(PyObject *self, PyObject *args) {
 fail:
   SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number of arguments for overloaded function 'csPen_Write'.\n"
     "  Possible C/C++ prototypes are:\n"
-    "    Write(csPen *,iFont *,uint,uint,char const *)\n"
+    "    Write(csPen *,iFont *,int,int,char const *)\n"
     "    Write(csPen *,iFont *,csPenCoordinate const &,char const *)\n");
   return NULL;
 }
@@ -20316,16 +20386,16 @@ SWIGINTERN PyObject *_wrap_csPen_WriteLines__SWIG_0(PyObject *SWIGUNUSEDPARM(sel
   PyObject *resultobj = 0;
   csPen *arg1 = (csPen *) 0 ;
   iFont *arg2 = (iFont *) 0 ;
-  uint arg3 ;
-  uint arg4 ;
+  int arg3 ;
+  int arg4 ;
   csStringArray *arg5 = 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   void *argp2 = 0 ;
   int res2 = 0 ;
-  unsigned long val3 ;
+  int val3 ;
   int ecode3 = 0 ;
-  unsigned long val4 ;
+  int val4 ;
   int ecode4 = 0 ;
   void *argp5 = 0 ;
   int res5 = 0 ;
@@ -20346,16 +20416,16 @@ SWIGINTERN PyObject *_wrap_csPen_WriteLines__SWIG_0(PyObject *SWIGUNUSEDPARM(sel
     SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "csPen_WriteLines" "', argument " "2"" of type '" "iFont *""'"); 
   }
   arg2 = reinterpret_cast< iFont * >(argp2);
-  ecode3 = SWIG_AsVal_unsigned_SS_long(obj2, &val3);
+  ecode3 = SWIG_AsVal_int(obj2, &val3);
   if (!SWIG_IsOK(ecode3)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "csPen_WriteLines" "', argument " "3"" of type '" "uint""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "csPen_WriteLines" "', argument " "3"" of type '" "int""'");
   } 
-  arg3 = static_cast< uint >(val3);
-  ecode4 = SWIG_AsVal_unsigned_SS_long(obj3, &val4);
+  arg3 = static_cast< int >(val3);
+  ecode4 = SWIG_AsVal_int(obj3, &val4);
   if (!SWIG_IsOK(ecode4)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "csPen_WriteLines" "', argument " "4"" of type '" "uint""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "csPen_WriteLines" "', argument " "4"" of type '" "int""'");
   } 
-  arg4 = static_cast< uint >(val4);
+  arg4 = static_cast< int >(val4);
   res5 = SWIG_ConvertPtr(obj4, &argp5, SWIGTYPE_p_csStringArray,  0  | 0);
   if (!SWIG_IsOK(res5)) {
     SWIG_exception_fail(SWIG_ArgError(res5), "in method '" "csPen_WriteLines" "', argument " "5"" of type '" "csStringArray const &""'"); 
@@ -20469,12 +20539,12 @@ SWIGINTERN PyObject *_wrap_csPen_WriteLines(PyObject *self, PyObject *args) {
       _v = SWIG_CheckState(res);
       if (_v) {
         {
-          int res = SWIG_AsVal_unsigned_SS_long(argv[2], NULL);
+          int res = SWIG_AsVal_int(argv[2], NULL);
           _v = SWIG_CheckState(res);
         }
         if (_v) {
           {
-            int res = SWIG_AsVal_unsigned_SS_long(argv[3], NULL);
+            int res = SWIG_AsVal_int(argv[3], NULL);
             _v = SWIG_CheckState(res);
           }
           if (_v) {
@@ -20492,7 +20562,7 @@ SWIGINTERN PyObject *_wrap_csPen_WriteLines(PyObject *self, PyObject *args) {
 fail:
   SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number of arguments for overloaded function 'csPen_WriteLines'.\n"
     "  Possible C/C++ prototypes are:\n"
-    "    WriteLines(csPen *,iFont *,uint,uint,csStringArray const &)\n"
+    "    WriteLines(csPen *,iFont *,int,int,csStringArray const &)\n"
     "    WriteLines(csPen *,iFont *,csPenCoordinate const &,csStringArray const &)\n");
   return NULL;
 }
@@ -20502,10 +20572,10 @@ SWIGINTERN PyObject *_wrap_csPen_WriteBoxed__SWIG_0(PyObject *SWIGUNUSEDPARM(sel
   PyObject *resultobj = 0;
   csPen *arg1 = (csPen *) 0 ;
   iFont *arg2 = (iFont *) 0 ;
-  uint arg3 ;
-  uint arg4 ;
-  uint arg5 ;
-  uint arg6 ;
+  int arg3 ;
+  int arg4 ;
+  int arg5 ;
+  int arg6 ;
   uint arg7 ;
   uint arg8 ;
   char *arg9 = (char *) 0 ;
@@ -20513,13 +20583,13 @@ SWIGINTERN PyObject *_wrap_csPen_WriteBoxed__SWIG_0(PyObject *SWIGUNUSEDPARM(sel
   int res1 = 0 ;
   void *argp2 = 0 ;
   int res2 = 0 ;
-  unsigned long val3 ;
+  int val3 ;
   int ecode3 = 0 ;
-  unsigned long val4 ;
+  int val4 ;
   int ecode4 = 0 ;
-  unsigned long val5 ;
+  int val5 ;
   int ecode5 = 0 ;
-  unsigned long val6 ;
+  int val6 ;
   int ecode6 = 0 ;
   unsigned long val7 ;
   int ecode7 = 0 ;
@@ -20549,26 +20619,26 @@ SWIGINTERN PyObject *_wrap_csPen_WriteBoxed__SWIG_0(PyObject *SWIGUNUSEDPARM(sel
     SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "csPen_WriteBoxed" "', argument " "2"" of type '" "iFont *""'"); 
   }
   arg2 = reinterpret_cast< iFont * >(argp2);
-  ecode3 = SWIG_AsVal_unsigned_SS_long(obj2, &val3);
+  ecode3 = SWIG_AsVal_int(obj2, &val3);
   if (!SWIG_IsOK(ecode3)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "csPen_WriteBoxed" "', argument " "3"" of type '" "uint""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "csPen_WriteBoxed" "', argument " "3"" of type '" "int""'");
   } 
-  arg3 = static_cast< uint >(val3);
-  ecode4 = SWIG_AsVal_unsigned_SS_long(obj3, &val4);
+  arg3 = static_cast< int >(val3);
+  ecode4 = SWIG_AsVal_int(obj3, &val4);
   if (!SWIG_IsOK(ecode4)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "csPen_WriteBoxed" "', argument " "4"" of type '" "uint""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "csPen_WriteBoxed" "', argument " "4"" of type '" "int""'");
   } 
-  arg4 = static_cast< uint >(val4);
-  ecode5 = SWIG_AsVal_unsigned_SS_long(obj4, &val5);
+  arg4 = static_cast< int >(val4);
+  ecode5 = SWIG_AsVal_int(obj4, &val5);
   if (!SWIG_IsOK(ecode5)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode5), "in method '" "csPen_WriteBoxed" "', argument " "5"" of type '" "uint""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode5), "in method '" "csPen_WriteBoxed" "', argument " "5"" of type '" "int""'");
   } 
-  arg5 = static_cast< uint >(val5);
-  ecode6 = SWIG_AsVal_unsigned_SS_long(obj5, &val6);
+  arg5 = static_cast< int >(val5);
+  ecode6 = SWIG_AsVal_int(obj5, &val6);
   if (!SWIG_IsOK(ecode6)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode6), "in method '" "csPen_WriteBoxed" "', argument " "6"" of type '" "uint""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode6), "in method '" "csPen_WriteBoxed" "', argument " "6"" of type '" "int""'");
   } 
-  arg6 = static_cast< uint >(val6);
+  arg6 = static_cast< int >(val6);
   ecode7 = SWIG_AsVal_unsigned_SS_long(obj6, &val7);
   if (!SWIG_IsOK(ecode7)) {
     SWIG_exception_fail(SWIG_ArgError(ecode7), "in method '" "csPen_WriteBoxed" "', argument " "7"" of type '" "uint""'");
@@ -20721,22 +20791,22 @@ SWIGINTERN PyObject *_wrap_csPen_WriteBoxed(PyObject *self, PyObject *args) {
       _v = SWIG_CheckState(res);
       if (_v) {
         {
-          int res = SWIG_AsVal_unsigned_SS_long(argv[2], NULL);
+          int res = SWIG_AsVal_int(argv[2], NULL);
           _v = SWIG_CheckState(res);
         }
         if (_v) {
           {
-            int res = SWIG_AsVal_unsigned_SS_long(argv[3], NULL);
+            int res = SWIG_AsVal_int(argv[3], NULL);
             _v = SWIG_CheckState(res);
           }
           if (_v) {
             {
-              int res = SWIG_AsVal_unsigned_SS_long(argv[4], NULL);
+              int res = SWIG_AsVal_int(argv[4], NULL);
               _v = SWIG_CheckState(res);
             }
             if (_v) {
               {
-                int res = SWIG_AsVal_unsigned_SS_long(argv[5], NULL);
+                int res = SWIG_AsVal_int(argv[5], NULL);
                 _v = SWIG_CheckState(res);
               }
               if (_v) {
@@ -20768,7 +20838,7 @@ SWIGINTERN PyObject *_wrap_csPen_WriteBoxed(PyObject *self, PyObject *args) {
 fail:
   SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number of arguments for overloaded function 'csPen_WriteBoxed'.\n"
     "  Possible C/C++ prototypes are:\n"
-    "    WriteBoxed(csPen *,iFont *,uint,uint,uint,uint,uint,uint,char const *)\n"
+    "    WriteBoxed(csPen *,iFont *,int,int,int,int,uint,uint,char const *)\n"
     "    WriteBoxed(csPen *,iFont *,csPenCoordinatePair const &,uint,uint,char const *)\n");
   return NULL;
 }
@@ -20778,10 +20848,10 @@ SWIGINTERN PyObject *_wrap_csPen_WriteLinesBoxed__SWIG_0(PyObject *SWIGUNUSEDPAR
   PyObject *resultobj = 0;
   csPen *arg1 = (csPen *) 0 ;
   iFont *arg2 = (iFont *) 0 ;
-  uint arg3 ;
-  uint arg4 ;
-  uint arg5 ;
-  uint arg6 ;
+  int arg3 ;
+  int arg4 ;
+  int arg5 ;
+  int arg6 ;
   uint arg7 ;
   uint arg8 ;
   csStringArray *arg9 = 0 ;
@@ -20789,13 +20859,13 @@ SWIGINTERN PyObject *_wrap_csPen_WriteLinesBoxed__SWIG_0(PyObject *SWIGUNUSEDPAR
   int res1 = 0 ;
   void *argp2 = 0 ;
   int res2 = 0 ;
-  unsigned long val3 ;
+  int val3 ;
   int ecode3 = 0 ;
-  unsigned long val4 ;
+  int val4 ;
   int ecode4 = 0 ;
-  unsigned long val5 ;
+  int val5 ;
   int ecode5 = 0 ;
-  unsigned long val6 ;
+  int val6 ;
   int ecode6 = 0 ;
   unsigned long val7 ;
   int ecode7 = 0 ;
@@ -20824,26 +20894,26 @@ SWIGINTERN PyObject *_wrap_csPen_WriteLinesBoxed__SWIG_0(PyObject *SWIGUNUSEDPAR
     SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "csPen_WriteLinesBoxed" "', argument " "2"" of type '" "iFont *""'"); 
   }
   arg2 = reinterpret_cast< iFont * >(argp2);
-  ecode3 = SWIG_AsVal_unsigned_SS_long(obj2, &val3);
+  ecode3 = SWIG_AsVal_int(obj2, &val3);
   if (!SWIG_IsOK(ecode3)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "csPen_WriteLinesBoxed" "', argument " "3"" of type '" "uint""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "csPen_WriteLinesBoxed" "', argument " "3"" of type '" "int""'");
   } 
-  arg3 = static_cast< uint >(val3);
-  ecode4 = SWIG_AsVal_unsigned_SS_long(obj3, &val4);
+  arg3 = static_cast< int >(val3);
+  ecode4 = SWIG_AsVal_int(obj3, &val4);
   if (!SWIG_IsOK(ecode4)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "csPen_WriteLinesBoxed" "', argument " "4"" of type '" "uint""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "csPen_WriteLinesBoxed" "', argument " "4"" of type '" "int""'");
   } 
-  arg4 = static_cast< uint >(val4);
-  ecode5 = SWIG_AsVal_unsigned_SS_long(obj4, &val5);
+  arg4 = static_cast< int >(val4);
+  ecode5 = SWIG_AsVal_int(obj4, &val5);
   if (!SWIG_IsOK(ecode5)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode5), "in method '" "csPen_WriteLinesBoxed" "', argument " "5"" of type '" "uint""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode5), "in method '" "csPen_WriteLinesBoxed" "', argument " "5"" of type '" "int""'");
   } 
-  arg5 = static_cast< uint >(val5);
-  ecode6 = SWIG_AsVal_unsigned_SS_long(obj5, &val6);
+  arg5 = static_cast< int >(val5);
+  ecode6 = SWIG_AsVal_int(obj5, &val6);
   if (!SWIG_IsOK(ecode6)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode6), "in method '" "csPen_WriteLinesBoxed" "', argument " "6"" of type '" "uint""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode6), "in method '" "csPen_WriteLinesBoxed" "', argument " "6"" of type '" "int""'");
   } 
-  arg6 = static_cast< uint >(val6);
+  arg6 = static_cast< int >(val6);
   ecode7 = SWIG_AsVal_unsigned_SS_long(obj6, &val7);
   if (!SWIG_IsOK(ecode7)) {
     SWIG_exception_fail(SWIG_ArgError(ecode7), "in method '" "csPen_WriteLinesBoxed" "', argument " "7"" of type '" "uint""'");
@@ -20997,22 +21067,22 @@ SWIGINTERN PyObject *_wrap_csPen_WriteLinesBoxed(PyObject *self, PyObject *args)
       _v = SWIG_CheckState(res);
       if (_v) {
         {
-          int res = SWIG_AsVal_unsigned_SS_long(argv[2], NULL);
+          int res = SWIG_AsVal_int(argv[2], NULL);
           _v = SWIG_CheckState(res);
         }
         if (_v) {
           {
-            int res = SWIG_AsVal_unsigned_SS_long(argv[3], NULL);
+            int res = SWIG_AsVal_int(argv[3], NULL);
             _v = SWIG_CheckState(res);
           }
           if (_v) {
             {
-              int res = SWIG_AsVal_unsigned_SS_long(argv[4], NULL);
+              int res = SWIG_AsVal_int(argv[4], NULL);
               _v = SWIG_CheckState(res);
             }
             if (_v) {
               {
-                int res = SWIG_AsVal_unsigned_SS_long(argv[5], NULL);
+                int res = SWIG_AsVal_int(argv[5], NULL);
                 _v = SWIG_CheckState(res);
               }
               if (_v) {
@@ -21044,7 +21114,7 @@ SWIGINTERN PyObject *_wrap_csPen_WriteLinesBoxed(PyObject *self, PyObject *args)
 fail:
   SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number of arguments for overloaded function 'csPen_WriteLinesBoxed'.\n"
     "  Possible C/C++ prototypes are:\n"
-    "    WriteLinesBoxed(csPen *,iFont *,uint,uint,uint,uint,uint,uint,csStringArray const &)\n"
+    "    WriteLinesBoxed(csPen *,iFont *,int,int,int,int,uint,uint,csStringArray const &)\n"
     "    WriteLinesBoxed(csPen *,iFont *,csPenCoordinatePair const &,uint,uint,csStringArray const &)\n");
   return NULL;
 }
@@ -24760,6 +24830,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"csPen_SetOrigin", _wrap_csPen_SetOrigin, METH_VARARGS, NULL},
 	 { (char *)"csPen_Translate", _wrap_csPen_Translate, METH_VARARGS, NULL},
 	 { (char *)"csPen_SetTransform", _wrap_csPen_SetTransform, METH_VARARGS, NULL},
+	 { (char *)"csPen_ClipLine", _wrap_csPen_ClipLine, METH_VARARGS, NULL},
 	 { (char *)"csPen_DrawLine", _wrap_csPen_DrawLine, METH_VARARGS, NULL},
 	 { (char *)"csPen_DrawThickLine", _wrap_csPen_DrawThickLine, METH_VARARGS, NULL},
 	 { (char *)"csPen_DrawLines", _wrap_csPen_DrawLines, METH_VARARGS, NULL},
