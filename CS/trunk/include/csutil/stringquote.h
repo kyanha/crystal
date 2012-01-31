@@ -30,7 +30,7 @@ namespace CS
 {
   /**
    * Helper functions to decorate strings with nice-looking quote characters.
-   * \remarks This functions works upon UTF-8 strings. Non-UTF-8 input will
+   * \remarks These functions work upon UTF-8 strings. Non-UTF-8 input will
    *   likely be mangled.
    */
   struct CS_CRYSTALSPACE_EXPORT Quote
@@ -53,6 +53,40 @@ namespace CS
     static const char* Single (const char* str);
     
     /**
+     * Add a single left quote (<tt>&lsquo;</tt>) before a string.
+     * \param out String to receive quoted input.
+     * \param str String to quote.
+     */
+    static void SingleLeft (csStringBase& out, const char* str = "");
+    /**
+     * Add a single left quote (<tt>&lsquo;</tt>) before a string.
+     * \param str String to quote.
+     * \return Pointer to quoted input. The returned string will be discarded
+     *   overwritten after a small, but indeterminate time. It is safe to
+     *   assume it survives to be used as an argument to a function call, but
+     *	 for anything longer than that the string should be stowed away
+     *   manually somewhere.
+     */
+    static const char* SingleLeft (const char* str = "");
+    
+    /**
+     * Add a single right quote (<tt>&lsquo;</tt>) before a string.
+     * \param out String to receive quoted input.
+     * \param str String to quote.
+     */
+    static void SingleRight (csStringBase& out, const char* str = "");
+    /**
+     * Add a single right quote (<tt>&lsquo;</tt>) before a string.
+     * \param str String to quote.
+     * \return Pointer to quoted input. The returned string will be discarded
+     *   overwritten after a small, but indeterminate time. It is safe to
+     *   assume it survives to be used as an argument to a function call, but
+     *	 for anything longer than that the string should be stowed away
+     *   manually somewhere.
+     */
+    static const char* SingleRight (const char* str = "");
+    
+    /**
      * Add double quotes (<tt>&ldquo;</tt>, <tt>&rdquo;</tt>) around a string.
      * \param out String to receive quoted input.
      * \param str String to quote.
@@ -68,6 +102,40 @@ namespace CS
      *   manually somewhere.
      */
     static const char* Double (const char* str);
+
+    /**
+     * Add a double left quote (<tt>&rdquo;</tt>) after a string.
+     * \param out String to receive quoted input.
+     * \param str String to quote.
+     */
+    static void DoubleLeft (csStringBase& out, const char* str = "");
+    /**
+     * Add a double left quote (<tt>&rdquo;</tt>) after a string.
+     * \param str String to quote.
+     * \return Pointer to quoted input. The returned string will be discarded
+     *   overwritten after a small, but indeterminate time. It is safe to
+     *   assume it survives to be used as an argument to a function call, but
+     *	 for anything longer than that the string should be stowed away
+     *   manually somewhere.
+     */
+    static const char* DoubleLeft (const char* str = "");
+
+    /**
+     * Add a double right quote (<tt>&rdquo;</tt>) after a string.
+     * \param out String to receive quoted input.
+     * \param str String to quote.
+     */
+    static void DoubleRight (csStringBase& out, const char* str = "");
+    /**
+     * Add a double right quote (<tt>&rdquo;</tt>) after a string.
+     * \param str String to quote.
+     * \return Pointer to quoted input. The returned string will be discarded
+     *   overwritten after a small, but indeterminate time. It is safe to
+     *   assume it survives to be used as an argument to a function call, but
+     *	 for anything longer than that the string should be stowed away
+     *   manually somewhere.
+     */
+    static const char* DoubleRight (const char* str = "");
   };
 } // namespace CS
 
