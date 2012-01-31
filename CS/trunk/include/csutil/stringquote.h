@@ -36,13 +36,13 @@ namespace CS
   struct CS_CRYSTALSPACE_EXPORT Quote
   {
     /**
-     * Add single quotes (<tt>&lsquo;</tt>, <tt>&rsquo;</tt>) around a string.
+     * Put single quotes (<tt>&lsquo;</tt>, <tt>&rsquo;</tt>) around a string.
      * \param out String to receive quoted input.
      * \param str String to quote.
      */
     static void Single (csStringBase& out, const char* str);
     /**
-     * Add single quotes (<tt>&lsquo;</tt>, <tt>&rsquo;</tt>) around a string.
+     * Put single quotes (<tt>&lsquo;</tt>, <tt>&rsquo;</tt>) around a string.
      * \param str String to quote.
      * \return Pointer to quoted input. The returned string will be discarded
      *   overwritten after a small, but indeterminate time. It is safe to
@@ -53,13 +53,13 @@ namespace CS
     static const char* Single (const char* str);
     
     /**
-     * Add a single left quote (<tt>&lsquo;</tt>) before a string.
+     * Put a single left quote (<tt>&lsquo;</tt>) before a string.
      * \param out String to receive quoted input.
      * \param str String to quote.
      */
     static void SingleLeft (csStringBase& out, const char* str = "");
     /**
-     * Add a single left quote (<tt>&lsquo;</tt>) before a string.
+     * Put a single left quote (<tt>&lsquo;</tt>) before a string.
      * \param str String to quote.
      * \return Pointer to quoted input. The returned string will be discarded
      *   overwritten after a small, but indeterminate time. It is safe to
@@ -70,13 +70,13 @@ namespace CS
     static const char* SingleLeft (const char* str = "");
     
     /**
-     * Add a single right quote (<tt>&lsquo;</tt>) before a string.
+     * Put a single right quote (<tt>&lsquo;</tt>) before a string.
      * \param out String to receive quoted input.
      * \param str String to quote.
      */
     static void SingleRight (csStringBase& out, const char* str = "");
     /**
-     * Add a single right quote (<tt>&lsquo;</tt>) before a string.
+     * Put a single right quote (<tt>&lsquo;</tt>) before a string.
      * \param str String to quote.
      * \return Pointer to quoted input. The returned string will be discarded
      *   overwritten after a small, but indeterminate time. It is safe to
@@ -87,13 +87,13 @@ namespace CS
     static const char* SingleRight (const char* str = "");
     
     /**
-     * Add double quotes (<tt>&ldquo;</tt>, <tt>&rdquo;</tt>) around a string.
+     * Put double quotes (<tt>&ldquo;</tt>, <tt>&rdquo;</tt>) around a string.
      * \param out String to receive quoted input.
      * \param str String to quote.
      */
     static void Double (csStringBase& out, const char* str);
     /**
-     * Add double quotes (<tt>&ldquo;</tt>, <tt>&rdquo;</tt>) around a string.
+     * Put double quotes (<tt>&ldquo;</tt>, <tt>&rdquo;</tt>) around a string.
      * \param str String to quote.
      * \return Pointer to quoted input. The returned string will be discarded
      *   overwritten after a small, but indeterminate time. It is safe to
@@ -104,13 +104,13 @@ namespace CS
     static const char* Double (const char* str);
 
     /**
-     * Add a double left quote (<tt>&rdquo;</tt>) after a string.
+     * Put a double left quote (<tt>&rdquo;</tt>) after a string.
      * \param out String to receive quoted input.
      * \param str String to quote.
      */
     static void DoubleLeft (csStringBase& out, const char* str = "");
     /**
-     * Add a double left quote (<tt>&rdquo;</tt>) after a string.
+     * Put a double left quote (<tt>&rdquo;</tt>) after a string.
      * \param str String to quote.
      * \return Pointer to quoted input. The returned string will be discarded
      *   overwritten after a small, but indeterminate time. It is safe to
@@ -121,13 +121,13 @@ namespace CS
     static const char* DoubleLeft (const char* str = "");
 
     /**
-     * Add a double right quote (<tt>&rdquo;</tt>) after a string.
+     * Put a double right quote (<tt>&rdquo;</tt>) after a string.
      * \param out String to receive quoted input.
      * \param str String to quote.
      */
     static void DoubleRight (csStringBase& out, const char* str = "");
     /**
-     * Add a double right quote (<tt>&rdquo;</tt>) after a string.
+     * Put a double right quote (<tt>&rdquo;</tt>) after a string.
      * \param str String to quote.
      * \return Pointer to quoted input. The returned string will be discarded
      *   overwritten after a small, but indeterminate time. It is safe to
