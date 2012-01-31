@@ -66,8 +66,7 @@ private:
   bool OnMouseDown(iEvent&);
   bool OnMouseMove(iEvent&);
 
-
-  void CreateRoom(); 
+  bool CreateRoom();
 
 public:
   Demo();
