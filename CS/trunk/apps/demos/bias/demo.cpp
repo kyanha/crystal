@@ -55,6 +55,22 @@ void Demo::Frame()
 
 bool Demo::OnInitialize(int /*argc*/, char* /*argv*/ [])
 {
+  // Check for commandline help.
+  if (csCommandLineHelper::CheckHelp (GetObjectRegistry ()))
+  {
+    csCommandLineHelper commandLineHelper;
+
+    commandLineHelper.AddCommandLineOption
+      ("level", csString ().Format ("Name of the level. Currently, the only possible value is %s", CS::Quote::Single ("test")),
+       csVariant (""));
+
+    commandLineHelper.PrintApplicationHelp (GetObjectRegistry (), "csbias", "csbias [OPTIONS]",
+					    "Peragro Tempus: Project Bias\n\n"
+					    "Crystal Space demonstration of a medieval First Person Shooter.");
+
+    return false;
+  }
+
   if (!csInitializer::RequestPlugins(GetObjectRegistry(),
     CS_REQUEST_VFS,
     CS_REQUEST_OPENGL3D,
@@ -110,7 +126,6 @@ bool Demo::Application()
   iNativeWindow* nw = g3d->GetDriver2D()->GetNativeWindow ();
   if (nw) nw->SetTitle ("Peragro Tempus: Project Bias");
 
-
   // Initialize CEGUI wrapper
   cegui->Initialize ();
   
@@ -156,12 +171,13 @@ bool Demo::Application()
   if (!collide_system) return ReportError ("No Collision Detection plugin found!");
   object_reg->Register (collide_system, "iCollideSystem");
 
-  CreateRoom();
+  if (!CreateRoom ())
+    return false;
 
-  player.AttachNew(new Player(object_reg));
-  object_reg->Register(player, "Player");
+  player.AttachNew (new Player (object_reg));
+  object_reg->Register (player, "Player");
 
-  Run();
+  Run ();
 
   return true;
 }
@@ -280,16 +296,13 @@ bool Demo::OnMouseMove(iEvent& ev)
   return true;
 }
 
-void Demo::CreateRoom ()
+bool Demo::CreateRoom ()
 {
   // Read from command line which level to load
   csRef<iCommandLineParser> clp =
     csQueryRegistry<iCommandLineParser> (GetObjectRegistry ());
 
-  if (clp->GetBoolOption ("help", false))
-  {
-
-  }
+  csPrintf ("\nLoading level...\n");
 
   csString levelName = clp->GetOption ("level");
 
@@ -305,19 +318,13 @@ void Demo::CreateRoom ()
   {
     bool suc = vfs->Mount("/bias/", "$@data$/bias$/world.zip");
     if (!suc)
-    {
-      ReportError ("Error: could not mount VFS path %s",
-		   CS::Quote::Single ("$@data$/bias$/world.zip"));
-      return;
-    }
+      return ReportError ("Error: could not mount VFS path %s",
+			  CS::Quote::Single ("$@data$/bias$/world.zip"));
 
     vfs->ChDir("/bias/");
     suc = loader->LoadMapFile("/bias/world", false);
     if (!suc)
-    {
-      ReportError ("Error: could not load map file\n");
-      return;
-    }
+      return ReportError ("Error: could not load map file\n");
 
     if (engine->GetCameraPositions ()->GetCount () > 0)
     {
@@ -479,8 +486,12 @@ void Demo::CreateRoom ()
     engineMeshes->Remove(monsterIndices.Pop());
   }
 
+  csPrintf ("Initializing collision system...\n");
+
   // Initialize the collision system with the current state of the scene
   csColliderHelper::InitializeCollisionWrappers (collide_system, engine);
+
+  csPrintf ("Populating level with monsters...\n");
 
   // Create all monsters
   for (size_t i = 0; i < monsterList.GetSize(); i++)
@@ -500,6 +511,10 @@ void Demo::CreateRoom ()
   int FRAME_HEIGHT = g3d->GetDriver2D()->GetHeight();
   int FRAME_WIDTH = g3d->GetDriver2D()->GetWidth();
   g3d->GetDriver2D()->SetMousePosition (FRAME_WIDTH / 2, FRAME_HEIGHT / 2);
+
+  csPrintf ("Starting game...\n");
+
+  return true;
 }
 
 
