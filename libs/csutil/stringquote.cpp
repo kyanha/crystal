@@ -63,6 +63,36 @@ namespace CS
     return outStr;
   }
   
+  void Quote::SingleLeft (csStringBase& out, const char* str)
+  {
+    out.Replace (LSQUO);
+    out.Append (str);
+  }
+  
+  const char* Quote::SingleLeft (const char* str)
+  {
+    QuoteStrings& retStrings = *(GetStrings());
+    csStringBase& outStr = retStrings.strings[retStrings.n];
+    retStrings.n = (retStrings.n + 1) % numStrings;
+    SingleLeft (outStr, str);
+    return outStr;
+  }
+  
+  void Quote::SingleRight (csStringBase& out, const char* str)
+  {
+    out.Replace (str);
+    out.Append (RSQUO);
+  }
+  
+  const char* Quote::SingleRight (const char* str)
+  {
+    QuoteStrings& retStrings = *(GetStrings());
+    csStringBase& outStr = retStrings.strings[retStrings.n];
+    retStrings.n = (retStrings.n + 1) % numStrings;
+    SingleRight (outStr, str);
+    return outStr;
+  }
+  
   void Quote::Double (csStringBase& out, const char* str)
   {
     out.Replace (LDQUO);
@@ -76,6 +106,36 @@ namespace CS
     csStringBase& outStr = retStrings.strings[retStrings.n];
     retStrings.n = (retStrings.n + 1) % numStrings;
     Double (outStr, str);
+    return outStr;
+  }
+  
+  void Quote::DoubleLeft (csStringBase& out, const char* str)
+  {
+    out.Replace (LDQUO);
+    out.Append (str);
+  }
+  
+  const char* Quote::DoubleLeft (const char* str)
+  {
+    QuoteStrings& retStrings = *(GetStrings());
+    csStringBase& outStr = retStrings.strings[retStrings.n];
+    retStrings.n = (retStrings.n + 1) % numStrings;
+    DoubleLeft (outStr, str);
+    return outStr;
+  }
+  
+  void Quote::DoubleRight (csStringBase& out, const char* str)
+  {
+    out.Replace (str);
+    out.Append (RDQUO);
+  }
+  
+  const char* Quote::DoubleRight (const char* str)
+  {
+    QuoteStrings& retStrings = *(GetStrings());
+    csStringBase& outStr = retStrings.strings[retStrings.n];
+    retStrings.n = (retStrings.n + 1) % numStrings;
+    DoubleRight (outStr, str);
     return outStr;
   }
   
