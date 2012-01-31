@@ -19,7 +19,14 @@
 #include "startme.h"
 #include "csutil/floatrand.h"
 
+// Wheel default rotation speed
 #define DEFAULT_ROTATION_SPEED 0.0005f
+
+// Font definitions
+#define FONT_NORMAL "DejaVuSerif-10"
+#define FONT_NORMAL_ITALIC "DejaVuSerif-Italic-10"
+#define FONT_TITLE "DejaVuSerif-Bold-15"
+#define FONT_TITLE_ITALIC "DejaVuSerif-BoldItalic-15"
 
 CS_IMPLEMENT_APPLICATION
 
@@ -307,21 +314,25 @@ bool StartMe::Application()
 
   cegui->GetSystemPtr ()->setDefaultMouseCursor("ice", "MouseArrow");
 
-  cegui->GetFontManagerPtr ()->createFreeTypeFont("DejaVuSerif-10", 10, true, "/fonts/ttf/DejaVuSerif.ttf");
-  cegui->GetFontManagerPtr ()->createFreeTypeFont("DejaVuSerif-Italic-10", 10, true, "/fonts/ttf/DejaVuSerif-Italic.ttf");
-  cegui->GetFontManagerPtr ()->createFreeTypeFont("DejaVuSerif-Bold-20", 15, true, "/fonts/ttf/DejaVuSerif-Bold.ttf");
+  // Setup the fonts
+  cegui->GetFontManagerPtr ()->createFreeTypeFont
+    (FONT_NORMAL, 10, true, "/fonts/ttf/DejaVuSerif.ttf");
+  cegui->GetFontManagerPtr ()->createFreeTypeFont
+    (FONT_NORMAL_ITALIC, 10, true, "/fonts/ttf/DejaVuSerif-Italic.ttf");
+  cegui->GetFontManagerPtr ()->createFreeTypeFont
+    (FONT_TITLE, 15, true, "/fonts/ttf/DejaVuSerif-Bold.ttf");
+  cegui->GetFontManagerPtr ()->createFreeTypeFont
+    (FONT_TITLE_ITALIC, 15, true, "/fonts/ttf/DejaVuSerif-BoldItalic.ttf");
 
   CEGUI::WindowManager* winMgr = cegui->GetWindowManagerPtr ();
 
-  // Load the CEGUI layout and set as root
+  // Load the CEGUI layout and set it as the root layout
   vfs->ChDir ("/data/startme/");
-  cegui->GetSchemeManagerPtr ()->create("crystal.scheme");
-  cegui->GetSystemPtr ()->setGUISheet(winMgr->loadWindowLayout("startme.layout"));
+  cegui->GetSchemeManagerPtr ()->create ("crystal.scheme");
+  cegui->GetSystemPtr ()->setGUISheet(winMgr->loadWindowLayout ("startme.layout"));
 
   // We need a View to the virtual world.
-  view.AttachNew(new csView (engine, g3d));
-  // We use the full window to draw the world.
-  view->SetRectangle (0, 0, g2d->GetWidth (), g2d->GetHeight ());
+  view.AttachNew (new csView (engine, g3d));
 
   LoadConfig ();
 
@@ -464,6 +475,41 @@ bool StartMe::OnMouseMove (iEvent& ev)
 
   return false;
 }
+
+const char* StartMe::ParseDescriptionLine (const char* text, bool title)
+{
+  descriptionLine = text;
+  csString leftQuote;
+  csString rightQuote;
+
+  // Replace the '<emp>' tags by italic fonts with quotes
+  if (title)
+  {
+    leftQuote.Format ("%s[font=\'%s\']", CS::Quote::SingleLeft (), FONT_TITLE_ITALIC);
+    rightQuote.Format ("[font='%s']%s", FONT_TITLE, CS::Quote::SingleRight ());
+  }
+  else
+  {
+    leftQuote.Format ("%s[font=\'%s\']", CS::Quote::SingleLeft (), FONT_NORMAL_ITALIC);
+    rightQuote.Format ("[font='%s']%s", FONT_NORMAL, CS::Quote::SingleRight ());
+  }
+
+  descriptionLine.ReplaceAll ("<emp>", leftQuote);
+  descriptionLine.ReplaceAll ("</emp>", rightQuote);
+
+  // Emphasize the title
+  if (title)
+  {
+    descriptionLine.Insert (0, "[font='']");
+    descriptionLine.Insert (7, FONT_TITLE);
+    descriptionLine.Append ("[font='");
+    descriptionLine.Append (FONT_NORMAL);
+    descriptionLine.Append ("']");
+  }
+
+  return descriptionLine;
+}
+
 void StartMe::LoadConfig ()
 {  
   // Retrieve demo programs informations.
@@ -481,33 +527,34 @@ void StartMe::LoadConfig ()
       key.SubString (leaf,
           key.FindLast ('.', key.Length ()) + 1,
           key.Length ());
-      if (!strcmp(leaf.GetData (), "name"))
+      if (!strcmp (leaf.GetData (), "name"))
       {
         demo.name = iterator->GetStr ();
 
 	// Add this name as the title of the description
-	demo.description = "[horiz-alignment='centre'][font='DejaVuSerif-Bold-20']";
-	demo.description += iterator->GetStr ();
-	demo.description += "[font='DejaVuSerif-10']";
+	demo.description = ParseDescriptionLine (iterator->GetStr (), true);
         demo.description += "\n \n";
       }
-      else if (!strcmp(leaf.GetData (), "exec"))
+      else if (!strcmp (leaf.GetData (), "exec"))
         demo.exec = iterator->GetStr ();
-      else if (!strcmp(leaf.GetData (), "args"))
+      else if (!strcmp (leaf.GetData (), "args"))
         demo.args = iterator->GetStr ();
-      else if (!strcmp(leaf.GetData (), "image"))
+      else if (!strcmp (leaf.GetData (), "image"))
         demo.image = iterator->GetStr ();
       else
       {
 	csString line (iterator->GetStr ());
-        demo.description += line;
-        // Only emit a 'paragraph break' when encountering a single empty line
-	if (line.IsEmpty())
+
+	// Only emit a 'paragraph break' when encountering a single empty line
+	if (line.IsEmpty ())
           /* CEGUI will throw away all empty lines, therefore we use a single 
            * space to force an empty line */
           demo.description += "\n \n";
         else
+	{
+	  demo.description += ParseDescriptionLine (line, false);
           demo.description += " ";
+	}
       }
     }
     demos.Push (demo);

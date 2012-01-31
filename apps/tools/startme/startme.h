@@ -86,9 +86,10 @@ private:
   /// A pointer to the sector the camera will be in.
   iSector* room;
 
-  // For the demos.
+  /// The array of demo descriptions.
   csArray<DemoData> demos;
 
+  /// The frame printer responsible of the display of each frame.
   csRef<FramePrinter> printer;
 
   virtual bool OnKeyboard (iEvent&);
@@ -102,6 +103,9 @@ private:
   } rotationStatus;
   float rotationSpeed;
 
+  /// Temp string for parsing config description lines
+  csString descriptionLine;
+
   /**
    * Setup everything that needs to be rendered on screen. This routine
    * is called from the event handler in response to a cscmdProcess
@@ -110,6 +114,7 @@ private:
   void Frame ();
 
   /// Load configuration from file.
+  const char* ParseDescriptionLine (const char* text, bool title);
   void LoadConfig ();
 
   bool OnClick (const CEGUI::EventArgs& e);
