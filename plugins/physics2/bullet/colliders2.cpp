@@ -283,7 +283,7 @@ csBulletColliderConvexMesh::csBulletColliderConvexMesh (iMeshWrapper* mesh, csBu
     csVector3 c = c_vertex[c_triangle[i].c] - origin;
     csVector3 d;
     d.Cross (b, c);
-    volume += fabsl (a * d);
+    volume += fabs (a * d);
   }
 
   volume /= 6.0f;
