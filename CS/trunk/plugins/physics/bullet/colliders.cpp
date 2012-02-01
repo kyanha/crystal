@@ -617,10 +617,10 @@ float csBulletCollider::GetVolume ()
 	for (int i = 1; i < faceCount; i++)
 	{
 	  int index = i * 3;
-	  volume += fabsl (btDot
-			   (vertices[indices[index]] - origin,
-			    btCross (vertices[indices[index + 1]] - origin,
-				     vertices[indices[index + 2]] - origin)));
+	  volume += btFabs (btDot
+			    (vertices[indices[index]] - origin,
+			     btCross (vertices[indices[index + 1]] - origin,
+				      vertices[indices[index + 2]] - origin)));
 	}
 
 	return volume / 6.0f;
