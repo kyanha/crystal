@@ -151,8 +151,8 @@ class RenderBuffers:
         def findFace(csVertices, csIndex):
           ''' Find the face containing this vertex '''
           for mapV in csVertices:
-            if mapV.csVertex == csIndex:
-              return mapV.face, mapV.vertex
+            if mapV['csVertex'] == csIndex:
+              return mapV['face'], mapV['vertex']
           return -1, -1
 
         face, vi = findFace(self.mappingBuffers[i][indexBlender],indexCS)

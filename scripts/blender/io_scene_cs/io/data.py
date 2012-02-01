@@ -41,8 +41,8 @@ def GetSubMeshesRaw(self, name, indexV, indexGroups, mappingBuffer = []):
         indexV += 1
       else:
         for mapV in mappingBuffer[face.vertices[i]]:
-          if mapV.face == index and mapV.vertex == i:
-            indexGroups[triplet].append(mapV.csVertex + firstIndex)
+          if mapV['face'] == index and mapV['vertex'] == i:
+            indexGroups[triplet].append(mapV['csVertex'] + firstIndex)
             indexV += 1
             break
 
@@ -118,22 +118,17 @@ def AsCSGenmeshLib(self, func, depth=0, **kwargs):
 bpy.types.Mesh.AsCSGenmeshLib = AsCSGenmeshLib
 
 
-#======= Mapping buffer ===========================================
-
-class CSMappingVertex:
-  def __init__(self, indexFace, indexVertex, indexCSVertex):
-    self.face = indexFace
-    self.vertex = indexVertex
-    self.csVertex = indexCSVertex
+#======= Mapping buffers ===========================================
 
 
 def GetCSMappingBuffer (self):
   """ Generate mapping buffers between Blender and CS vertices.
       Return mapVert, list defining the Blender vertex corresponding
-      to each CS vertex, and mapBuf, list defining a list of CSMappingVertex
-      for each Blender vertex (i.e. the face, the index of this vertex in the face
-      and the corresponding CS vertex)
+      to each CS vertex, and mapBuf, list defining a list of mappingVertex
+      for each Blender vertex (i.e. the face, the index of this vertex in 
+      the face and the corresponding CS vertex)
   """
+
   # Determine the UV texture: we only use the active UV texture or the first one
   if self.uv_textures.active:
     tface = self.uv_textures.active.data
@@ -145,21 +140,6 @@ def GetCSMappingBuffer (self):
 
   # TODO: double sided faces
 
-  # Mesh without texture coordinates
-  if tface == None:
-    mapBuf = []
-    mapVert = []
-    for indexV, vertex in enumerate(self.vertices):
-      indexBuf = []
-      for indexF, face in enumerate(self.faces):
-        tt = [2,1,0] if len(face.vertices)==3 else [3, 2, 1, 0]
-        for i in tt:
-          indexBuf.append(CSMappingVertex(indexF,i,indexV))
-      mapVert.append(indexV)
-      mapBuf.append(indexBuf)
-    return mapVert, mapBuf
-
-  # Mesh with texture coordinates
   epsilon = 1e-9
   mapBuf = []
   mapVert = []
@@ -173,26 +153,41 @@ def GetCSMappingBuffer (self):
       if len(mapBuf[face.vertices[i]]) == 0:
         # Blender vertex is not defined in CS
         # => create a new CS vertex
-        mapBuf[face.vertices[i]].append(CSMappingVertex(indexF,i,csIndex))
+        mappingVertex = {'face': indexF, 'vertex': i, 'csVertex': csIndex}
+        mapBuf[face.vertices[i]].append(mappingVertex)
         mapVert.append(face.vertices[i])
         csIndex += 1
       else:
-        vertexFound = False
-        uv = tface[indexF].uv[i]
-        for mappedI, mappedV in enumerate(mapBuf[face.vertices[i]]):
-          if (abs(uv[0] - tface[mappedV.face].uv[mappedV.vertex][0]) < epsilon) and \
-             (abs(uv[1] - tface[mappedV.face].uv[mappedV.vertex][1]) < epsilon):
-            # Blender vertex is defined in CS with the same (u,v) coordinates
-            # => add a reference to the corresponding CS vertex
-            vertexFound = True
-            mapBuf[face.vertices[i]].append(CSMappingVertex(indexF,i,mappedV.csVertex))
-            break
-        if not vertexFound:
-          # Blender vertex is defined in CS but with different (u,v) coordinates
-          # => create a new CS vertex
-          mapBuf[face.vertices[i]].append(CSMappingVertex(indexF,i,csIndex))
-          mapVert.append(face.vertices[i])
-          csIndex += 1
+        if tface == None:
+          # Mesh without texture coordinates
+          for mappedI, mappedV in enumerate(mapVert):
+            if mappedV == face.vertices[i]:
+              # Blender vertex is already defined in CS 
+              # (no (u,v) coordinates to differentiate in this case)
+              # => add a reference to the corresponding CS vertex
+              mappingVertex = {'face': indexF, 'vertex': i, 'csVertex': mappedI}
+              mapBuf[face.vertices[i]].append(mappingVertex)
+              break
+        else:
+          # Mesh with texture coordinates
+          vertexFound = False
+          uv = tface[indexF].uv[i]
+          for mappedI, mappedV in enumerate(mapBuf[face.vertices[i]]):
+            if (abs(uv[0] - tface[mappedV['face']].uv[mappedV['vertex']][0]) < epsilon) and \
+               (abs(uv[1] - tface[mappedV['face']].uv[mappedV['vertex']][1]) < epsilon):
+              # Blender vertex is defined in CS with the same (u,v) coordinates
+              # => add a reference to the corresponding CS vertex
+              vertexFound = True
+              mappingVertex = {'face': indexF, 'vertex': i, 'csVertex': mappedV['csVertex']}
+              mapBuf[face.vertices[i]].append(mappingVertex)
+              break
+          if not vertexFound:
+            # Blender vertex is defined in CS but with different (u,v) coordinates
+            # => create a new CS vertex
+            mappingVertex = {'face': indexF, 'vertex': i, 'csVertex': csIndex}
+            mapBuf[face.vertices[i]].append(mappingVertex)
+            mapVert.append(face.vertices[i])
+            csIndex += 1
 
   return mapVert, mapBuf
 
