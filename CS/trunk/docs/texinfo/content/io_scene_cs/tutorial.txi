@@ -138,9 +138,10 @@ with one scene per sector. This feature is however still in developement and the
 
 @item @strong{Cameras}
 
-All cameras in Blender will be exported as camera positions (i.e. iCameraPosition objects)
-in the Crystal Space @file{world} file. Currently, the positions will appear in the inverse
-order than they are created, although being ordered alphabetically would be better.
+All cameras in Blender will be exported as camera positions (i.e. @code{iCameraPosition} objects)
+in the Crystal Space @file{world} file. The name of the cameras is important since they
+are exported in the alphabetical order of their name, with the first camera serving usually
+as the starting position in the Crystal Space scene.
 
 @item @strong{Lights}
 
@@ -164,14 +165,16 @@ in Crystal Space.
 
 @item @strong{Materials and Textures}
 
-Blender has a complex system for materials and textures, e.g. with the
-@url{http://wiki.blender.org/index.php/Doc:2.6/Manual/Composite_Nodes, node composition system}
-allowing to modify dynamically images and material properties. This system is very powerful
-in an offline rendering, but is not always suited for real-time rendering such as what is
-made in Crystal Space.
+All the textures that are used by any of the exported meshes will be exported in the
+@file{textures} directory.
 
-The current status of the material exporting functionalities of the @code{io_scene_cs}
-add-on are also simply quite poor, and most Blender parameters are not yet exported.
+Only the main material properties will be exported, such as the diffuse map, the
+specular map and specular color, the normal map, and the displacement (parallax) map.
+
+Most other Blender material properties are not exported, such as the mirror properties,
+the subsurface scattering, the shadows, etc. Also, materials using the
+@url{http://wiki.blender.org/index.php/Doc:2.6/Manual/Composite_Nodes, node composition system}
+of Blender are not supported at all.
 
 @end itemize
 
@@ -233,7 +236,7 @@ relevant for the animation (that will be presented in this section).
 
 All this data will be split in two different files in the @file{factories} directory:
 
-@itemize
+@itemize @bullet
 @item
 the animated mesh factory, in a file of the same name than the Blender mesh.
 @item
@@ -270,49 +273,56 @@ All the keyframe animations of the mesh are exported too.
 exported. The Crystal Space's animated mesh doesn't (yet) support morphing and scaling
 components.
 
-@emph{Warning}: The Blender object constraints defined on the skeleton will not be
-exported correctly. So make sure to disable any constraint first (in the
-@samp{Object Constraints} context of the @samp{Properties} window, when the skeleton
-is selected).
+@emph{Warning}: The Blender object constraints defined on the skeleton (such as
+@samp{Inverse Kinematics}, @samp{Copy Rotation}) will not be exported correctly. So make
+sure to disable any constraint first (in the @samp{Object Constraints} context of the
+ @samp{Properties} window, when the skeleton is selected).
 
 @subsubheading Sockets
 
-With mesh sockets you can mount meshes. Child mesh will follow parent's animation. You can use it for example for keeping weapon or ride a horse. At this moment you can use socket only with animesh+skeletal animation. 
+You can attach external meshes to the bone of an animated mesh, in order fo them to follow the motion of the bone, whatever its animation. This is made through Crystal Space socket objects (@code{CS::Mesh::iAnimatedMeshSocket}).
 
-To make a socket you need dummy mesh (for example small sphere or box - size doesn't matter, only center of the mesh matters) then set position for it. Now parent it to bone. To do it you need set armature to pose mode, select dummy socket mesh, keep SHIFT, select bone, CTRL+P, 'Make parent to: Bone'.
+To define a socket in Blender, you must:
 
-Sockets are exported in the same library file as the animesh factory. Each socket defines a name, a bone and the transformation to apply to an object we want to attach to that bone.
+@itemize @bullet
+@item
+Create an additional dummy external object that will be used to define the socket. The size or shape doesn't matter, only its position and name.
+@item
+Place the dummy mesh at the position you want for of your socket (with the skeleton in its default pose).
+@item
+Parent the dummy mesh to a bone of the armature. For this, do @cite{*precisely*} the following:
+@itemize @bullet
+@item
+select your armature, put it in @samp{Pose} mode and select the bone on the armature
+@item
+in the @url{http://wiki.blender.org/index.php/Doc:2.6/Manual/Data_System/The_Outliner, Blender outliner},
+left-click to select your dummy mesh
+@item
+still in the Blender outliner, hold down @samp{SHIFT} and left-click on your animated mesh
+@item
+in the @url{http://wiki.blender.org/index.php/Doc:2.6/Manual/3D_interaction/Navigating, Blender 3D view},
+press @samp{CTRL-P} then select @samp{Bone} in the @samp{Parent To} menu
+@end itemize
+@item
+@end itemize
 
+There are no restrictions on the number of sockets.
 
 @node io_scene_cs ToDo, , io_scene_cs Export Animesh, Blender
 @subsection ToDo
 
 @itemize @bullet
 @item
-definitions of materials and exports of texture files are frequently incomplete
-@item
-the consistency of 'world' file is not guaranteed
-@item
 lamps are exported as simple point light sources
-@item
-erroneous normals: non duplicated Blender vertices on surface edges lead to inconsistent cs normals
 @item
 no support for trees of armatures: only the root armature is exported, not the children ones
 @item
 no support for double sided faces: they are exported as single sided faces
 @item
-no support for inverse kinematics: keyframes will be missing for bones animated by IK
-@item
-no support for groups of animated meshes
-@item
 no support for portals and sectors
 @item
 no terrain support
 @item
-no colliders support
-@item
-no support for scaling modifications during animations (only translations and rotations are exported)
-@item
-lack of a configurable b2.5cs export panel (e.g. selection of objects and properties to export, export of normals with or without vertex duplication)
+no support for colliders and physical properties
 @end itemize
 
