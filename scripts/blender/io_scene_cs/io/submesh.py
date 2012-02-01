@@ -67,6 +67,3 @@ class SubMesh:
     if self.image:
       dependencies['T'][self.image.uname] = self.image
     return dependencies
-
-
-

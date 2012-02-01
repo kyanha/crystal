@@ -141,10 +141,10 @@ class Hierarchy:
     for subs in subMeshess:
       for sub in subs:
         for name, tex in sub.GetDependencies()['T'].items():
-          textures[name] = tex
+          textures[name] = (tex, sub.material)
     for name, tex in textures.items():
-      tex.AsCS(func, depth+2, path=texturePath)
-      tex.save_export(B2CS.properties.exportPath)
+      tex[0].AsCS(func, depth+2, path=texturePath, material=tex[1])
+      tex[0].save_export(B2CS.properties.exportPath)
     func(' '*depth +"</textures>")
 
     # Export materials
