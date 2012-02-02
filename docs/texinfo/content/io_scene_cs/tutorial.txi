@@ -128,22 +128,21 @@ and in Edit mode, press the hotkey @samp{W} then select @samp{Flip Normals}).
 This section presents the main objects and files that are created when a Blender scene is
 exported.
 
-@itemize @bullet
-@item @strong{Sectors}
+@subsubheading Sectors
 
 Crystal Space maps can be split in several sectors linked by portals. This should be defined
 through @url{http://wiki.blender.org/index.php/Doc:2.6/Manual/Interface/Scenes, Blender's scenes},
 with one scene per sector. This feature is however still in developement and the
 @code{io_scene_cs} add-on can currently support only one scene.
 
-@item @strong{Cameras}
+@subsubheading Cameras
 
 All cameras in Blender will be exported as camera positions (i.e. @code{iCameraPosition} objects)
 in the Crystal Space @file{world} file. The name of the cameras is important since they
 are exported in the alphabetical order of their name, with the first camera serving usually
 as the starting position in the Crystal Space scene.
 
-@item @strong{Lights}
+@subsubheading Lights
 
 All lamps in Blender will be exported as lights in Crystal Space. Whatever the lamp type used
 in Blender, the lamp will be exported as a point light.
@@ -152,7 +151,7 @@ The parameters that get exported from a lamp are the distance (radius), the colo
 components) and the energy (brightness). The attenuation type and the other lamp properties
 are ignored.
 
-@item @strong{Meshes and Mesh factories}
+@subsubheading Meshes and Mesh factories
 
 All the mesh objects that are present in the Blender scene will be exported, either as a
 @ref{io_scene_cs Export Genmesh, static mesh} or an @ref{io_scene_cs Export Animesh, animated mesh}.
@@ -163,7 +162,7 @@ in the @file{factories} directory. Each instance of the mesh will get an entry i
 You can parent objects in Blender and they will be exported as similar object hierachies
 in Crystal Space. 
 
-@item @strong{Materials and Textures}
+@subsubheading Materials and Textures
 
 All the textures that are used by any of the exported meshes will be exported in the
 @file{textures} directory.
@@ -175,8 +174,6 @@ Most other Blender material properties are not exported, such as the mirror prop
 the subsurface scattering, the shadows, etc. Also, materials using the
 @url{http://wiki.blender.org/index.php/Doc:2.6/Manual/Composite_Nodes, node composition system}
 of Blender are not supported at all.
-
-@end itemize
 
 
 @node io_scene_cs Export Genmesh, io_scene_cs Export Animesh, io_scene_cs Export Scenes, Blender
@@ -228,7 +225,7 @@ Please make sure that all modifiers are either applied or removed before exporti
 @subsection Exporting Animated Meshes
 
 If a Blender mesh object contains either an armature or any shape keys, then it will be
-exported as an animated mesh. In the other case, then it
+exported as an @ref{MeshObject Animesh}. In the other case, then it
 will be @ref{io_scene_cs Export Genmesh, exported as a static mesh}.
 
 The data that is exported is the same as the one exported with static meshes, plus the data
@@ -280,17 +277,22 @@ sure to disable any constraint first (in the @samp{Object Constraints} context o
 
 @subsubheading Sockets
 
-You can attach external meshes to the bone of an animated mesh, in order fo them to follow the motion of the bone, whatever its animation. This is made through Crystal Space socket objects (@code{CS::Mesh::iAnimatedMeshSocket}).
+You can attach external meshes to the bone of an animated mesh, in order fo them to
+follow the motion of the bone, whatever its animation. This is made through Crystal
+Space socket objects (@code{CS::Mesh::iAnimatedMeshSocket}).
 
 To define a socket in Blender, you must:
 
 @itemize @bullet
 @item
-Create an additional dummy external object that will be used to define the socket. The size or shape doesn't matter, only its position and name.
+Create an additional dummy external object that will be used to define the socket. The
+size or shape doesn't matter, only its position and name.
 @item
-Place the dummy mesh at the position you want for of your socket (with the skeleton in its default pose).
+Place the dummy mesh at the position you want for of your socket (with the skeleton in
+its default pose).
 @item
-Parent the dummy mesh to a bone of the armature. For this, do @cite{*precisely*} the following:
+Parent the dummy mesh to a bone of the armature. For this, do @cite{*precisely*} the
+following:
 @itemize @bullet
 @item
 select your armature, put it in @samp{Pose} mode and select the bone on the armature
@@ -303,7 +305,6 @@ still in the Blender outliner, hold down @samp{SHIFT} and left-click on your ani
 in the @url{http://wiki.blender.org/index.php/Doc:2.6/Manual/3D_interaction/Navigating, Blender 3D view},
 press @samp{CTRL-P} then select @samp{Bone} in the @samp{Parent To} menu
 @end itemize
-@item
 @end itemize
 
 There are no restrictions on the number of sockets.
