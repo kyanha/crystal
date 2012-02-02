@@ -70,7 +70,7 @@ relevant for the animation (that will be presented in this section).
 </p>
 <p>All this data will be split in two different files in the <tt>&lsquo;factories&rsquo;</tt> directory:
 </p>
-<ul class="toc">
+<ul>
 <li>
 the animated mesh factory, in a file of the same name than the Blender mesh.
 </li><li>
@@ -111,21 +111,41 @@ is exported as the bone influences of the animated mesh.
 exported. The Crystal Space's animated mesh doesn't (yet) support morphing and scaling
 components.
 </p>
-<p><em>Warning</em>: The Blender object constraints defined on the skeleton will not be
-exported correctly. So make sure to disable any constraint first (in the
-<samp>&lsquo;Object Constraints&rsquo;</samp> context of the <samp>&lsquo;Properties&rsquo;</samp> window, when the skeleton
-is selected).
+<p><em>Warning</em>: The Blender object constraints defined on the skeleton (such as
+<samp>&lsquo;Inverse Kinematics&rsquo;</samp>, <samp>&lsquo;Copy Rotation&rsquo;</samp>) will not be exported correctly. So make
+sure to disable any constraint first (in the <samp>&lsquo;Object Constraints&rsquo;</samp> context of the
+ <samp>&lsquo;Properties&rsquo;</samp> window, when the skeleton is selected).
 </p>
 <a name="5"></a>
 <h4 class="subsubheading"> Sockets </h4>
 
-<p>With mesh sockets you can mount meshes. Child mesh will follow parent's animation. You can use it for example for keeping weapon or ride a horse. At this moment you can use socket only with animesh+skeletal animation. 
+<p>You can attach external meshes to the bone of an animated mesh, in order fo them to follow the motion of the bone, whatever its animation. This is made through Crystal Space socket objects (<code>CS::Mesh::iAnimatedMeshSocket</code>).
 </p>
-<p>To make a socket you need dummy mesh (for example small sphere or box - size doesn't matter, only center of the mesh matters) then set position for it. Now parent it to bone. To do it you need set armature to pose mode, select dummy socket mesh, keep SHIFT, select bone, CTRL+P, 'Make parent to: Bone'.
+<p>To define a socket in Blender, you must:
 </p>
-<p>Sockets are exported in the same library file as the animesh factory. Each socket defines a name, a bone and the transformation to apply to an object we want to attach to that bone.
-</p>
+<ul>
+<li>
+Create an additional dummy external object that will be used to define the socket. The size or shape doesn't matter, only its position and name.
+</li><li>
+Place the dummy mesh at the position you want for of your socket (with the skeleton in its default pose).
+</li><li>
+Parent the dummy mesh to a bone of the armature. For this, do <cite>*precisely*</cite> the following:
+<ul>
+<li>
+select your armature, put it in <samp>&lsquo;Pose&rsquo;</samp> mode and select the bone on the armature
+</li><li>
+in the <a href="http://wiki.blender.org/index.php/Doc:2.6/Manual/Data_System/The_Outliner">Blender outliner</a>,
+left-click to select your dummy mesh
+</li><li>
+still in the Blender outliner, hold down <samp>&lsquo;SHIFT&rsquo;</samp> and left-click on your animated mesh
+</li><li>
+in the <a href="http://wiki.blender.org/index.php/Doc:2.6/Manual/3D_interaction/Navigating">Blender 3D view</a>,
+press <samp>&lsquo;CTRL-P&rsquo;</samp> then select <samp>&lsquo;Bone&rsquo;</samp> in the <samp>&lsquo;Parent To&rsquo;</samp> menu
+</li></ul>
+</li></ul>
 
+<p>There are no restrictions on the number of sockets.
+</p>
 <hr size="1">
 <table cellpadding="1" cellspacing="1" border="0">
 <tr><td valign="middle" align="left">[<a href="io_005fscene_005fcs-Export-Genmesh.html#0" title="Previous section in reading order"> &lt; </a>]</td>
