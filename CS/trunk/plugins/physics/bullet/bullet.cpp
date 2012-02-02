@@ -394,6 +394,8 @@ void csBulletDynamicsSystem::RemoveBody (::iRigidBody* body)
       csBulletRigidBody* csBulletBody = static_cast<csBulletRigidBody*> (bulletBody);
       if (csBulletBody == csBody)
       {
+	printf ("WARNING!!!\n");
+	fflush (stdout);
 	bulBody->contactObjects.DeleteIndex (j);
 	j--;
       }

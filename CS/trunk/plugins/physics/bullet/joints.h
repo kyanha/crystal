@@ -149,8 +149,19 @@ class csBulletPivotJoint : public scfImplementation1<csBulletPivotJoint,
   virtual iRigidBody* GetAttachedBody () const;
   virtual void SetPosition (const csVector3& position);
   virtual csVector3 GetPosition () const;
+  virtual void SetParameters (float impulseClamp, float tau, float damping)
+  {
+    csBulletPivotJoint::impulseClamp = impulseClamp;
+    csBulletPivotJoint::tau = tau;
+    csBulletPivotJoint::damping = damping;
+  }
+  virtual float GetImpulseClamp () const { return impulseClamp; }
+  virtual float GetTau () const { return tau; }
+  virtual float GetDamping () const { return damping; }
 
  private:
+  float impulseClamp, tau, damping;
+
   csBulletDynamicsSystem* dynSys;
   csRef<csBulletRigidBody> body;
   btPoint2PointConstraint* constraint;
