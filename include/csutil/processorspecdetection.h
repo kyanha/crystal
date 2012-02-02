@@ -43,6 +43,8 @@ namespace CS
 #include "csutil/processor/processorspecdetection_win.h"
 #elif defined(CS_PROCESSOR_POWERPC)
 #include "csutil/processor/processorspecdetection_gcc_ppc.h"
+#elif defined(CS_PROCESSOR_ARM)
+#include "csutil/processor/processorspecdetection_nonwin_gcc_arm.h"
 #else
 #include "csutil/processor/processorspecdetection_nonwin_gcc_x86.h"
 #endif
@@ -135,6 +137,8 @@ namespace CS
             ProcessorSpecDetectionBase<DetectInstructionsWin> procDetect;
 #elif defined(CS_PROCESSOR_POWERPC)
             ProcessorSpecDetectionBase<DetectInstructionsGCCPPC> procDetect;
+#elif defined(CS_PROCESSOR_ARM)
+            ProcessorSpecDetectionBase<DetectInstructionsNonWinGCCARM> procDetect;
 #else
             ProcessorSpecDetectionBase<DetectInstructionsNonWinGCCx86> procDetect;
 #endif
