@@ -717,7 +717,7 @@ struct iKinematicCallback : public virtual iBase
  */
 struct iPivotJoint : public virtual iBase
 {
-  SCF_INTERFACE (CS::Physics::Bullet::iPivotJoint, 1, 0, 0);
+  SCF_INTERFACE (CS::Physics::Bullet::iPivotJoint, 1, 0, 1);
 
   /**
    * Attach a rigid body to the joint.
@@ -740,6 +740,18 @@ struct iPivotJoint : public virtual iBase
    * Get the current position of the joint, in world coordinates.
    */
   virtual csVector3 GetPosition () const = 0;
+
+  /**
+   * Set pivot joint parameters.
+   */
+  virtual void SetParameters (float impulseClamp, float tau, float damping) = 0;
+
+  /// Get impulse clamp.
+  virtual float GetImpulseClamp () const = 0;
+  /// Get tau.
+  virtual float GetTau () const = 0;
+  /// Get damping.
+  virtual float GetDamping () const = 0;
 };
 
 /**

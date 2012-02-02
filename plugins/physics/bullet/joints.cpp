@@ -363,6 +363,9 @@ csVector3 csBulletJoint::GetAngularConstraintAxis (int body)
 csBulletPivotJoint::csBulletPivotJoint (csBulletDynamicsSystem* dynSys)
   : scfImplementationType (this), dynSys (dynSys)
 {
+  tau = 0.3f;
+  damping = 1.0f;
+  impulseClamp = 0.0f;
 }
 
 csBulletPivotJoint::~csBulletPivotJoint ()
@@ -386,9 +389,10 @@ void csBulletPivotJoint::Attach (::iRigidBody* body,
 
   constraint = new btPoint2PointConstraint
     (*this->body->body, localPivot);
+  constraint->m_setting.m_impulseClamp = impulseClamp;
+  constraint->m_setting.m_tau = tau;
+  constraint->m_setting.m_damping = damping;
   dynSys->bulletWorld->addConstraint (constraint);
-
-  constraint->m_setting.m_tau = 0.1f;
 }
 
 iRigidBody* csBulletPivotJoint::GetAttachedBody () const
