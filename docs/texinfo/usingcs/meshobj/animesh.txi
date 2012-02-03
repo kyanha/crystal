@@ -64,8 +64,8 @@ This section presents the general concepts that are used to define an Animesh.
 
 An animesh is at first made of an envelope defining its shape, i.e. a set of vertices
 and triangles defining the shape of the mesh. Similarly to a @ref{MeshObject Genmesh, Genmesh},
-it will hold render buffers for the vertices, the triangles, the normals, the colors,
-the tangents and the binormals.
+it will hold render buffers for the vertices, the triangles, the normals, the UV mapping,
+the colors, the tangents and the binormals.
 
 @subsubheading The skeleton
 
@@ -155,9 +155,12 @@ Every time that the pose of the skeleton or the weight of a morph target is chan
 deformation of the envelope must be re-computed through a step called the skinning process.
 During that process, the position of the vertices, as well as the normals, tangents and
 binormals if they are used, are re-computed depending of the bones and morph targets
-affecting them. This process is computed by default on the CPU but can be delegated on the
-GPU by using a dedicated skinning vertex shader (although this is not yet natively supported
-by Crystal Space).
+affecting them. Crystal Space uses a higher quality dual quaternion skinning in order to
+preserve the volume of the envelope.
+
+The skinning process is computed by default on the CPU but can be delegated on the
+GPU using a dedicated skinning vertex shader, this is however not yet supported natively
+by Crystal Space.
 
 @subsubheading Bone bounding boxes
 
