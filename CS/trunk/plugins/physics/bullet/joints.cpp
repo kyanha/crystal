@@ -114,8 +114,8 @@ bool csBulletJoint::RebuildJoint ()
 	frB = bodies[1]->body->getCenterOfMassTransform().inverse() * jointTransform;
 
 	// create joint
-	btGeneric6DofConstraint* dof6 =
-	  new btGeneric6DofConstraint (*bodies[0]->body, *bodies[1]->body,
+	btGeneric6DofSpringConstraint* dof6 =
+	  new btGeneric6DofSpringConstraint (*bodies[0]->body, *bodies[1]->body,
 				       frA, frB, true);
 
 	// compute min/max values
