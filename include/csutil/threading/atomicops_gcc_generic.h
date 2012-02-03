@@ -30,34 +30,34 @@ namespace Threading
     public:
     inline static int32 Set (int32* target, int32 value)
     {
-      return __sync_lock_test_and_set(target, value);
+      return __sync_lock_test_and_set (target, value);
     }
 
     inline static void* Set (void** target, void* value)
     {
-      return __sync_lock_test_and_set(target, value);
+      return __sync_lock_test_and_set (target, value);
     }
 
     inline static int32 CompareAndSet (int32* target, int32 value,
       int32 comparand)
     {
-      return __sync_val_compare_and_swap(target, comparand, value);
+      return __sync_val_compare_and_swap (target, comparand, value);
     }
 
     inline static void* CompareAndSet (void** target, void* value,
       void* comparand)
     {
-      return __sync_val_compare_and_swap(target, comparand, value);
+      return __sync_val_compare_and_swap (target, comparand, value);
     }
 
     inline static int32 Increment (int32* target, register int32 incr = 1)
     {
-      return __sync_fetch_and_add(target, incr);
+      return __sync_fetch_and_add (target, incr);
     }
 
     inline static int32 Decrement (int32* target)
     {
-      return __sync_fetch_and_sub(target, 1);
+      return __sync_fetch_and_sub (target, 1);
     }
   };
 }
