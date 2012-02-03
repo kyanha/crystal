@@ -69,6 +69,13 @@ int csBulletJoint::ComputeBestBulletJointType ()
       return BULLET_JOINT_6DOF;
     }
 
+    if ((int (rot_constraint_x) + int (rot_constraint_y) + int (rot_constraint_z)) == 2)
+    {
+      // One rotation is unconstrainted. A hinge is best.
+      //return BULLET_JOINT_HINGE;
+      return BULLET_JOINT_6DOF;
+    }
+
     // It seems that the 6DOF joint type is always a better choice, because
     // it is more stable and more powerful.
     else return BULLET_JOINT_6DOF;//BULLET_JOINT_CONETWIST;
@@ -100,6 +107,77 @@ bool csBulletJoint::RebuildJoint ()
   jointType = ComputeBestBulletJointType ();
   switch (jointType)
   {
+    case BULLET_JOINT_HINGE:
+      {
+	btVector3 anchor = CSToBullet (transform.GetOrigin (), dynSys->internalScale);
+	btVector3 axis1, axis2;
+	btScalar minAngular, maxAngular;
+
+	if (!rot_constraint_x)
+	{
+	  axis1 = CSToBullet (transform.GetFront (), dynSys->internalScale);
+	  axis2 = CSToBullet (transform.GetUp (), dynSys->internalScale);
+	  minAngular = min_angle[0];
+	  maxAngular = max_angle[0];
+	}
+	else if (!rot_constraint_y)
+	{
+	  axis1 = CSToBullet (transform.GetFront (), dynSys->internalScale);
+	  axis2 = CSToBullet (transform.GetRight (), dynSys->internalScale);
+	  minAngular = min_angle[1];
+	  maxAngular = max_angle[1];
+	}
+	else if (!rot_constraint_z)
+	{
+	  axis1 = CSToBullet (transform.GetUp (), dynSys->internalScale);
+	  axis2 = CSToBullet (transform.GetRight (), dynSys->internalScale);
+	  minAngular = min_angle[2];
+	  maxAngular = max_angle[2];
+	}
+
+	// create joint
+	btHinge2Constraint* hinge =
+	  new btHinge2Constraint (*bodies[0]->body, *bodies[1]->body, anchor, axis1, axis2);
+
+	// apply min/max values
+	hinge->setLowerLimit (minAngular);
+	hinge->setUpperLimit (maxAngular);
+
+	// apply the parameters for the motor
+	if (fabs (desired_velocity[0]) > EPSILON)
+	{
+	  btRotationalLimitMotor* motor = hinge->getRotationalLimitMotor (0);
+	  motor->m_enableMotor = true;
+	  motor->m_targetVelocity = desired_velocity[0];
+	  motor->m_maxMotorForce = maxforce[0];
+	}
+	hinge->getRotationalLimitMotor (0)->m_bounce = bounce[0];
+
+	if (fabs (desired_velocity[1]) > EPSILON)
+	{
+	  printf ("Setting motor\n");
+	  btRotationalLimitMotor* motor = hinge->getRotationalLimitMotor (1);
+	  motor->m_enableMotor = true;
+	  motor->m_targetVelocity = desired_velocity[1];
+	  motor->m_maxMotorForce = maxforce[1];
+	  motor->m_damping = 0.1f;
+	}
+	hinge->getRotationalLimitMotor (1)->m_bounce = bounce[1];
+
+	if (fabs (desired_velocity[2]) > EPSILON)
+	{
+	  btRotationalLimitMotor* motor = hinge->getRotationalLimitMotor (2);
+	  motor->m_enableMotor = true;
+	  motor->m_targetVelocity = desired_velocity[2];
+	  motor->m_maxMotorForce = maxforce[2];
+	  motor->m_damping = 0.1f;
+	}
+	hinge->getRotationalLimitMotor (2)->m_bounce = bounce[2];
+
+	constraint = hinge;
+      }
+      break;
+
     case BULLET_JOINT_6DOF:
       {
 	// compute local transforms of the joint
