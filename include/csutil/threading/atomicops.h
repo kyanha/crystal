@@ -163,6 +163,14 @@ namespace Threading
   namespace CS { namespace Threading {
     typedef AtomicOperationsBase<AtomicOperationsArmGCC> AtomicOperations;
   } }
+
+#elif defined(CS_COMPILER_GCC)
+  #include "csutil/threading/atomicops_gcc_generic.h"
+
+  namespace CS { namespace Threading {
+    typedef AtomicOperationsBase<AtomicOperationsGenericGCC> AtomicOperations;
+  } }
+
 #else
 #error "No atomic operations defined for your platform!"
 #endif
