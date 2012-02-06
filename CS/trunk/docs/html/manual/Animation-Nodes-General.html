@@ -86,6 +86,10 @@ that would simply play the wheel animation. Before that, you need to configure t
 <code>CS::Animation::iSkeletonAnimationNodeFactory</code> in order to play cyclically,
 otherwise the animation will be stopped after it has been played once.
 </p>
+<p>The blending tree has a single node and looks like this:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">   CS::Animation::iSkeletonAnimationNode
+</pre></td></tr></table>
 <p>Now, say that there is more wind, and that you want to change the speed of the
 rotation of the wheel. For that, you would access the <code>CS::Animation::iSkeletonAnimationNode</code>
 in the blending tree (using e.g. <code>CS::Animation::iSkeletonAnimNode::FindNode()</code>),
@@ -105,11 +109,51 @@ blending tree, i.e. the root, with the the <code>CS::Animation::iSkeletonAnimati
 as a child node. Now, when the animation is played, both nodes are activated,
 and you can either animate your windmill and visualize the skeleton.
 </p>
+<p>The structure of the blending tree now looks like this:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">     CS::Animation::iSkeletonDebugNode
+                      |
+                      |
+   CS::Animation::iSkeletonAnimationNode
+</pre></td></tr></table>
 <a name="3"></a>
+<h4 class="subsubheading"> Third example: dynamic behavior </h4>
+
+<p>Now, say that you have several different animations of your wheel turning at
+various speed, e.g. with the wheel starting to roll out when the speed is high.
+You may use a <code>CS::Animation::iSkeletonSpeedNode</code> that will take all these
+animations as input child nodes, and combine them in order to generate a new
+animation, whatever the rotation speed asked by the user.
+</p>
+<p>Say also, that you want to attach some pieces of tissue to the wheel, and that
+you want those pieces to ba animated through soft body physical simulation. For
+that, you would use a <code>CS::Animation::iSkeletonRagdollNode</code> in order to
+create the physical rigid bodies that will represent the wheel (you would need
+to provide the collision model of your animesh for that). Then you would create
+a Genmesh animated by the soft body controller, and attach it to the rigid bodies
+of your wheel.
+</p>
+<p>Now, the structure of the blending tree looks like this:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">                                    CS::Animation::iSkeletonDebugNode
+                                                     |
+                                                     |
+                                   CS::Animation::iSkeletonRagdollNode
+                                                     |
+                                                     |
+                                    CS::Animation::iSkeletonSpeedNode
+                                                     |
+                          ----------------------------------------------------------
+                          |                                                        |
+       CS::Animation::iSkeletonAnimationNode                    CS::Animation::iSkeletonAnimationNode
+             ('normal speed' animation)                                 ('high speed' animation)
+</pre></td></tr></table>
+<a name="4"></a>
 <h4 class="subsubheading"> Other examples </h4>
 
 <p>Other examples of setup of animations trees and general Animesh usage can be
-found in the <code>avatartest</code> application.
+found in the <code>avatartest</code> application. The <code>csbias</code> demo is also another
+interesting example.
 </p>
 
 <hr size="1">
