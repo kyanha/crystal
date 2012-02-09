@@ -79,7 +79,7 @@ class B2CS_OT_export_run(bpy.types.Operator):
 
 @rnaType
 class RENDER_PT_csSettingsPanel(csSettingsPanel, bpy.types.Panel):
-  bl_label = "CrystalSpace Export"
+  bl_label = "Crystal Space Export"
   
   def draw(self, context):
     layout = self.layout
@@ -130,5 +130,5 @@ B2CS.BoolProperty( attr="silent",
         description="Enable the '-silent' flag of 'walktest'", default=True)
 
 B2CS.BoolProperty( attr="library",
-        name="Export scene as CS library",
-        description="Export the current scene as a unique CS library file", default=False)
+        name="Export objects as a CS library",
+        description="Export all objects composing the world as a unique CS library file", default=False)
