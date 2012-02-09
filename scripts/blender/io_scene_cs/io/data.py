@@ -1,4 +1,5 @@
 import bpy
+
 from sys import float_info
 from mathutils import *
 
@@ -6,8 +7,11 @@ from .util import *
 from .transform import *
 from .renderbuffer import *
 from .submesh import *
+from io_scene_cs.utilities import StringProperty
 
-from io_scene_cs.utilities import B2CS
+
+# Property defining an UV texture's name for a mesh ('None' if not defined)
+StringProperty(['Mesh'], attr="uv_texture", name="UV texture", default='None')
 
 
 def GetMaterial(self, index):
@@ -21,13 +25,20 @@ bpy.types.Mesh.GetMaterial = GetMaterial
 def GetSubMeshesRaw(self, name, indexV, indexGroups, mappingBuffer = []):
   """ Compute the CS submeshes of this Blender mesh by remapping
       Blender vertices to CS vertices and triangulating the faces
+      param name: name of the mesh
+      param indexV: starting index of the CS vertices
+      param indexGroups: buffer defining for each submesh (identified by the 
+            mesh name, the material and the texture) its CS faces, composed
+            by three vertices
+      param mappingBuffer: mapping buffer defining a CS vertex for each
+            face vertex of the Blender mesh
   """
   firstIndex = indexV
   tface = self.uv_textures.active.data if self.uv_textures.active else None
   # For each face composing this mesh
   for index, face in enumerate(self.faces):
     im = tface[index].image if tface else None
-    # Identify the submesh
+    # Identify the submesh by the mesh name, material and texture
     triplet = (name, self.GetMaterial(face.material_index), im)
     if triplet not in indexGroups:
       indexGroups[triplet] = []
@@ -53,6 +64,10 @@ bpy.types.Mesh.GetSubMeshesRaw = GetSubMeshesRaw
 
 def GetSubMeshes(self, name = '', mappingBuffer = [], numVertices = 0):
   """ Create the CS submeshes of this Blender mesh
+      param name: name of the mesh
+      param mappingBuffer: mapping buffer defining a CS vertex for each
+            face vertex of the Blender mesh
+      param numVertices: number of CS vertices previously defined      
   """
   indexV = numVertices
   indexGroups = {}
@@ -62,64 +77,13 @@ def GetSubMeshes(self, name = '', mappingBuffer = [], numVertices = 0):
 bpy.types.Mesh.GetSubMeshes = GetSubMeshes
 
 
-def SubmeshesLackMaterial(subMeshes):
-  for sub in subMeshes:
-    if not sub.material:
-      return True
-  return False
-
-
 def MeshAsCSRef(self, func, depth=0, dirName='factories/'):
   func(' '*depth +'<library>%s%s</library>'%(dirName,self.uname))
 
 bpy.types.Mesh.AsCSRef = MeshAsCSRef
 
 
-#======== Genmesh ==============================================================
-
-def AsCSGenmeshLib(self, func, depth=0, **kwargs):
-  """ Write an xml description of this mesh as a CS general mesh factory
-  """
-
-  func(' '*depth + '<meshfact name=\"%s\">'%(self.uname))
-  if self.use_imposter:
-    func(' '*depth + '  <imposter range="100.0" tolerance="0.4" camera_tolerance="0.4" shader="lighting_imposter"/>')
-  func(' '*depth + '  <plugin>crystalspace.mesh.loader.factory.genmesh</plugin>')
-  func(' '*depth + '  <params>')
-
-  # Recover submeshes from kwargs
-  if 'subMeshes' in kwargs:
-    subMeshes = kwargs['subMeshes']
-
-  if SubmeshesLackMaterial(subMeshes):
-    #This mesh has a submesh without a material
-    if self.GetMaterial(0):
-      mat = self.GetMaterial(0).uname
-    else:
-      mat = None
-      print('WARNING: Factory "%s" has no material'%(self.name))
-    func(' '*depth + '    <material>%s</material>'%(str(mat)))
-
-  # Export mesh's render buffers
-  for buf in GetRenderBuffers(**kwargs):
-    buf.AsCS(func, depth+4, False)
-
-  # Export mesh's submeshes
-  for sub in subMeshes:
-    sub.AsCS(func, depth+4, False)
-
-  func(' '*depth + '  </params>')
-
-  # Don't close 'meshfact' flag if another mesh object is defined as 
-  # an imbricated genmesh factory of this factory
-  if not ('dontClose' in kwargs and kwargs['dontClose']):
-    func(' '*depth + '</meshfact>')
-
-bpy.types.Mesh.AsCSGenmeshLib = AsCSGenmeshLib
-
-
 #======= Mapping buffers ===========================================
-
 
 def GetCSMappingBuffer (self):
   """ Generate mapping buffers between Blender and CS vertices.
@@ -163,7 +127,7 @@ def GetCSMappingBuffer (self):
           for mappedI, mappedV in enumerate(mapVert):
             if mappedV == face.vertices[i]:
               # Blender vertex is already defined in CS 
-              # (no (u,v) coordinates to differentiate in this case)
+              # (no (u,v) coordinates to differentiate the vertices in this case)
               # => add a reference to the corresponding CS vertex
               mappingVertex = {'face': indexF, 'vertex': i, 'csVertex': mappedI}
               mapBuf[face.vertices[i]].append(mappingVertex)
@@ -182,7 +146,7 @@ def GetCSMappingBuffer (self):
               mapBuf[face.vertices[i]].append(mappingVertex)
               break
           if not vertexFound:
-            # Blender vertex is defined in CS but with different (u,v) coordinates
+            # Blender vertex is defined in CS with different (u,v) coordinates
             # => create a new CS vertex
             mappingVertex = {'face': indexF, 'vertex': i, 'csVertex': csIndex}
             mapBuf[face.vertices[i]].append(mappingVertex)
@@ -196,7 +160,7 @@ bpy.types.Mesh.GetCSMappingBuffer = GetCSMappingBuffer
 
 #======= Armature ===========================================
 
-def GetBoneNames (bones, boneNames={}, index=-1):
+def GetBoneNames (bones):
   ''' Return a list of bone names with their corresponding order index
       param bones: list of bones      
   '''
@@ -207,6 +171,8 @@ def GetBoneNames (bones, boneNames={}, index=-1):
       boneNames, index = GetChildBoneNames(child.children, boneNames, index)
     return boneNames, index
     
+  boneNames = {}
+  index = -1
   for bone in bones:
     if not bone.parent:
       index += 1
@@ -215,11 +181,13 @@ def GetBoneNames (bones, boneNames={}, index=-1):
   return boneNames
   
 
-def AsCSSkeletonAnimations (self, func, depth, armatureObject):
+def AsCSSkeletonAnimations (self, func, depth, armatureObject, dontClose=False):
   """ Export Blender skeleton and associated animations
   """
-  func('<library>')
-  func('  <addon plugin="crystalspace.skeletalanimation.loader">')
+  if not dontClose:
+    func('<?xml version="1.0" encoding="UTF-8"?>')
+    func('<library xmlns=\"http://crystalspace3d.org/xml/library\">')
+  func(' '*depth + '<addon plugin="crystalspace.skeletalanimation.loader">')
 
   # EXPORT ANIMATIONS
   boneNames = GetBoneNames(self.bones)
@@ -252,7 +220,7 @@ def AsCSSkeletonAnimations (self, func, depth, armatureObject):
         print("Error: Curve is not valid", curve.data_path, curve.array_index)
         continue
         
-      dp = curve.data_path        # (p.e. "pose.bones['BoneName'].location")
+      dp = curve.data_path        # (e.g. "pose.bones['BoneName'].location")
       if dp[:10] == "pose.bones":
         dpSplit = dp[10:].split('[')[1].split(']')
         boneName = dpSplit[0][1:-1:]
@@ -265,6 +233,7 @@ def AsCSSkeletonAnimations (self, func, depth, armatureObject):
 
         if op != 'location' and op != 'rotation_quaternion':
           continue
+
         # TODO: export 'scale' operations
 
         # Keyframes
@@ -294,14 +263,14 @@ def AsCSSkeletonAnimations (self, func, depth, armatureObject):
     # Write animation packet
     exportedActions.append(action)
     if len(exportedActions) == 1:
-      func('  <animationpacket name="%s_packet">'%(armatureName))
-    func('    <animation name="%s">'%(action.name))
+      func(' '*depth + '<animationpacket name="%s_packet">'%(armatureName))
+    func(' '*depth + '  <animation name="%s">'%(action.name))
 
     fps = 24.0
     for boneName in boneKeyframes.keys():
       # Write bone index
       boneIndex = boneNames[boneName]
-      func('      <channel bone="%s">'%(boneIndex))
+      func(' '*depth + '    <channel bone="%s">'%(boneIndex))
       frames = boneKeyframes[boneName]
       for time in sorted(frames):
         # Write time and bone position/rotation for each frame
@@ -310,20 +279,20 @@ def AsCSSkeletonAnimations (self, func, depth, armatureObject):
         pos, quat = bone.GetBoneCurrentMatrix(armatureObjectCpy)
         scale = armatureObjectCpy.scale
         csTime = time/fps
-        func(' '*8 + '<key time="%g" x="%s" y="%s" z="%s" qx="%s" qy="%s" qz="%s" qw="%s" />' % \
+        func(' '*(depth+6) + '<key time="%g" x="%s" y="%s" z="%s" qx="%s" qy="%s" qz="%s" qw="%s" />' % \
              (csTime, scale[0]*pos[0], scale[2]*pos[2], scale[1]*pos[1], quat.x, quat.z, quat.y, -quat.w))
-      func('      </channel>')
-    func('    </animation>')
+      func(' '*depth + '    </channel>')
+    func(' '*depth + '  </animation>')
 
   if len(exportedActions) != 0:
     # Write animations tree
-    func('    <node type="fsm" name="root">')
+    func(' '*depth + '  <node type="fsm" name="root">')
     for action in exportedActions:
-      func('      <state name="%s">'%(action.name))
-      func('        <node type="animation" animation="%s"/>'%(action.name))
-      func('      </state>')
-    func('    </node>')
-    func('  </animationpacket>')
+      func(' '*depth + '    <state name="%s">'%(action.name))
+      func(' '*depth + '      <node type="animation" animation="%s"/>'%(action.name))
+      func(' '*depth + '    </state>')
+    func(' '*depth + '  </node>')
+    func(' '*depth + '</animationpacket>')
     print('INFO: %s animation(s) exported for skeleton "%s_rig"'%(len(exportedActions),armatureName))
 
   # Unlink the armature copy and delete baking scene
@@ -333,30 +302,32 @@ def AsCSSkeletonAnimations (self, func, depth, armatureObject):
   bpy.data.scenes.remove(bakingScene)
 
   # EXPORT SKELETON
-  func('  <skeleton name="%s_rig">'%(armatureName))
+  func(' '*depth + '<skeleton name="%s_rig">'%(armatureName))
   for bone in self.bones:
     if not bone.parent:
       bone.AsCS(func, depth+2, armatureObject.matrix_world)
   if len(exportedActions):
-    func('    <animationpacket>%s_packet</animationpacket>'%(armatureName))
-  func('  </skeleton>')
+    func(' '*depth + '  <animationpacket>%s_packet</animationpacket>'%(armatureName))
+  func(' '*depth + '</skeleton>')
   print('INFO: %s bone(s) exported for skeleton "%s_rig"'%(len(boneNames),armatureName))
 
-  func('  </addon>')
-  func('</library>')
+  func(' '*depth + '</addon>')
+  if not dontClose:
+    func('</library>')
 
 bpy.types.Armature.AsCSSkelAnim = AsCSSkeletonAnimations
 
 
-def GetBoneInfluences (self, objects, **kwargs):
+def GetBoneInfluences (self, **kwargs):
   """ Generate a list of bone influences (4 per vertex) for each vertex of
       the mesh animated by this armature.
-      param objects: list of the objects composing the scene
       param kwargs: mapping buffers of this armature
   """
   # Recover mapping buffers from kwargs
+  meshData = []
   if 'meshData' in kwargs:
     meshData = kwargs['meshData']
+  mappingBuffers = []
   if 'mappingVertices' in kwargs:
     mappingVertices = kwargs['mappingVertices']
 
@@ -390,7 +361,7 @@ def GetBoneInfluences (self, objects, **kwargs):
 
           # TODO: treat all armatures, not only the root one
 
-      # Sort the bone influences of the vertex (descending order)
+      # Sort bone influences of the vertex by descending order
       weights.sort(key=lambda el: el[1],reverse=True)
 
       # Add the 4 largest influences of the vertex
@@ -431,8 +402,8 @@ bpy.types.Armature.GetBoneInfluences = GetBoneInfluences
 #======= Bone ===========================================
 
 def GetBoneMatrix (self, worldTransform):
-  ''' Return translation and rotation (quaternion) parts of the local bone transformation
-      corresponding to the rest pose
+  ''' Return translation and rotation (quaternion) parts of the local bone 
+      transformation corresponding to the rest pose
   '''
   if not self.parent:
     loc, rot, scale = DecomposeMatrix(worldTransform)
@@ -447,8 +418,8 @@ bpy.types.Bone.GetBoneMatrix = GetBoneMatrix
 
 
 def GetBoneCurrentMatrix (self, armatureObject):
-  ''' Return translation and rotation (quaternion) parts of the local bone transformation
-      corresponding to the current pose of the armature
+  ''' Return translation and rotation (quaternion) parts of the local bone 
+      transformation corresponding to the current pose of the armature
   '''
   poseBones = armatureObject.pose.bones
   poseBone = poseBones[self.name]

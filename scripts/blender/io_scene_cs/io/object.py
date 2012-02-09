@@ -1,14 +1,12 @@
 import bpy
-import mathutils
-
-from .util import *
 from mathutils import *
 
+from .util import *
 from .transform import *
 from .renderbuffer import *
 from .morphtarget import *
+from .material import *
 
-from io_scene_cs.utilities import B2CS
 
 class Hierarchy:
   OBJECTS = {}
@@ -60,14 +58,10 @@ class Hierarchy:
 
 #======== Genmesh and Animesh ===========================================================
 
-  def AsCSLib(self, func, depth=0, path='', animesh=False, **kwargs):
-    """ Export a Blender object and its children of type 'MESH' as Crystal Space factories:
-        - animesh=False: mesh and children without armature neither morph targets 
-          are exported as imbricated Crystal Space general mesh factories
-        - animesh=True: mesh and children with armature and/or morph targets 
-          are exported as a Crystal Space animated mesh factory
+  def WriteCSLibHeader(self, func, animesh=False):
+    """ Write an xml header for a CS library
+        param animesh: indicates if the library decribes an animesh
     """
-
     func('<?xml version="1.0" encoding="UTF-8"?>')
     func("<library xmlns=\"http://crystalspace3d.org/xml/library\">")
 
@@ -78,9 +72,63 @@ class Hierarchy:
       func('    <plugin name="skeletonfact">crystalspace.mesh.loader.factory.skeleton</plugin>')
       func('  </plugins>')      
 
+
+  def WriteCSAnimeshHeader(self, func, depth, skelRef=True):
+    """ Write an xml header for a CS animesh factory
+        param skelRef: indicates if a skeleton library should be
+              specified for this mesh
+    """
+    # Reference skeleton as a CS library
+    if skelRef and self.object.type == 'ARMATURE':
+      func(" "*depth + "<library>factories/%s_rig</library>"%(self.object.name))
+
+    func(" "*depth + "<meshfact name=\"%s\">"%(self.object.name))
+    func(" "*depth + "  <plugin>crystalspace.mesh.loader.factory.animesh</plugin>")
+
+
+  def AsCSLib(self, path='', animesh=False, **kwargs):
+    """ Export this Blender mesh as a CS library file entitled '<mesh name>' in the 
+        '<path>/factories' folder; it is exported as a general mesh or an animated 
+        mesh depending of the 'animesh' parameter; if an armature is defined for an 
+        animesh, it is exported as a library file entitled '<mesh name>_rig' in the
+        'factories' folder
+    """
+
+    def Write(fi):
+      def write(data):
+        fi.write(data+'\n')
+      return write
+
+    # Export mesh
+    fa = open(Join(path, 'factories/', self.object.name), 'w')
+    self.WriteCSLibHeader(Write(fa), animesh)
+    objectDeps = self.object.GetDependencies()
+    use_imposter = not animesh and self.object.data.use_imposter
+    ExportMaterials(Write(fa), 2, path, objectDeps, use_imposter)
+    if animesh:
+      self.WriteCSAnimeshHeader(Write(fa), 2)
+    self.WriteCSMeshBuffers(Write(fa), 2, path, animesh, dontClose=False)
+    fa.close()
+
+    # Export skeleton and animations
+    if self.object.type == 'ARMATURE' and self.object.data.bones:
+      skel = self.object
+      print('Exporting skeleton and animations:', Join(path, 'factories/', '%s_rig'%(skel.name)))
+      fb = open(Join(path, 'factories/', '%s_rig'%(skel.name)), 'w')
+      skel.data.AsCSSkelAnim(Write(fb), 2, skel, dontClose=False)
+      fb.close()
+
+
+  def WriteCSMeshBuffers(self, func, depth=0, path='', animesh=False, dontClose=False, **kwargs):
+    """ Write an xml decription of a Blender object and its children of type 'MESH':
+        - animesh=False: mesh and children without armature neither morph targets 
+          are exported as imbricated CrystalSpace general mesh factories
+        - animesh=True: mesh and children with armature and/or morph targets 
+          are exported as a CrystalSpace animated mesh factory
+    """
+
     # Build CS mapping buffers and submeshes for this object
     print("Building CS mapping buffers...")
-    use_imposter = not animesh and self.object.data.use_imposter
     meshData = []
     subMeshess = []
     mappingBuffers = []
@@ -96,8 +144,6 @@ class Hierarchy:
           # Socket objects must be exported as general meshes
           if animesh and ob.parent_type=='BONE':
             continue
-          if not animesh and ob.data.use_imposter:
-            use_imposter = ob.data.use_imposter
           indexObject = find(lambda obCpy: obCpy.data == ob.data, meshData)
           if indexObject == None:
             # Get object's scale
@@ -107,8 +153,8 @@ class Hierarchy:
             if ((animesh and ob.parent and ob.parent.type == 'ARMATURE') or \
                 (not animesh and ob.parent and ob.parent.type == 'MESH'))   \
                and ob.parent_type != 'BONE':
-              # If the mesh is child of a parent object, i.e. an armature in case of 
-              # animesh export and a mesh in case of genmesh export, transform the 
+              # If the mesh is child of another object (i.e. an armature in case of 
+              # animesh export and a mesh in case of genmesh export), transform the 
               # copied object to its world position
               obCpy = ob.GetTransformedCopy(ob.relative_matrix)
             else:
@@ -130,53 +176,6 @@ class Hierarchy:
     totalVertices = Gets([objects], 0)
     print('--> Total number of CS vertices = %s'%(totalVertices))
 
-    # Recover texture path from kwargs
-    texturePath = 'textures/'
-    if 'texturePath' in kwargs:
-      texturePath = kwargs['texturePath']
-
-    # Export textures 
-    func(' '*depth +"<textures>")
-    textures = {}
-    for subs in subMeshess:
-      for sub in subs:
-        for name, tex in sub.GetDependencies()['T'].items():
-          textures[name] = (tex, sub.material)
-    for name, tex in textures.items():
-      tex[0].AsCS(func, depth+2, path=texturePath, material=tex[1])
-      tex[0].save_export(B2CS.properties.exportPath)
-    func(' '*depth +"</textures>")
-
-    # Export materials
-    shaders = {}
-    materials = {}
-    func(' '*depth +"<materials>")
-    for subs in subMeshess:
-      for sub in subs:
-        if sub.material and sub.material.name not in materials:
-          materials[sub.material.name] = sub.material
-          args = {}
-          if animesh and sub.image:
-            args['image'] = sub.image
-          sub.material.AsCS(func, depth+2, **args)
-          shaders.update(sub.material.GetShaders())
-    func(' '*depth +"</materials>")
-
-    # Export shaders
-    if use_imposter:
-      func(' '*depth +"<shaders>")
-      func(' '*depth +"  <shader><file>/shader/lighting/lighting_imposter.xml</file></shader>")
-      func(' '*depth +"</shaders>")
-    else:
-      func(' '*depth +"<shaders>")
-      for shader in shaders:
-        func(' '*depth +"  <shader><file>"+shader+"</file></shader>")
-      func(' '*depth +"</shaders>")
-
-    # Reference skeleton as a CS library
-    if self.object.type == 'ARMATURE':
-      func('  <library>factories/%s_rig</library>'%(self.object.name))
-
     # Export meshes as imbricated CS general mesh factories
     import copy
     if not animesh:
@@ -192,7 +191,7 @@ class Hierarchy:
           args['mappingVertices'] = [mappingVertices[indexObject]]
           args['scales'] = [scales[indexObject]]
           args['dontClose'] = True
-          ob.data.AsCSGenmeshLib(func, d, **args)
+          ob.AsCSGenmeshLib(func, d, **args)
           Export(children, d+2)
           func(" "*d + "</meshfact>")
 
@@ -206,9 +205,10 @@ class Hierarchy:
       args['mappingBuffers'] = mappingBuffers
       args['mappingVertices'] = mappingVertices
       args['scales'] = scales
-      self.AsCSAnimeshLib(func, depth, totalVertices, **args)
+      self.AsCSAnimeshLib(func, depth, totalVertices, dontClose, **args)
 
-    func("</library>")
+    if not dontClose:
+      func("</library>")
 
     # Delete working copies of the exported objects
     for obCpy in meshData:
@@ -217,10 +217,10 @@ class Hierarchy:
 
 #======== Animesh ==============================================================
 
-  def AsCSAnimeshLib(self, func, depth=0, totalVertices=0, **kwargs):
+  def AsCSAnimeshLib(self, func, depth=0, totalVertices=0, dontClose=False, **kwargs):
     """ Write an xml description of this mesh, including children meshes,
-        as a CS animated mesh factory (i.e. render buffers, submeshes, bone influences,
-        morph targets, sockets) 
+        as a CS animated mesh factory (i.e. material, render buffers, submeshes, 
+        bone influences, morph targets, sockets)
     """
 
     # Recover submeshes from kwargs
@@ -228,9 +228,7 @@ class Hierarchy:
     if 'subMeshess' in kwargs:
       subMeshess = kwargs['subMeshess']
 
-    # Export the animesh factory in main XML file 'factory_name'
-    func(" "*depth + "<meshfact name=\"%s\">"%(self.object.name))
-    func(" "*depth + "  <plugin>crystalspace.mesh.loader.factory.animesh</plugin>")
+    # Export the animesh factory
     func(" "*depth + "  <params>")
 
     # Take the first found material as default object material
@@ -262,10 +260,12 @@ class Hierarchy:
       buf.AsCS(func, depth+4, True)
 
     # Export bone influences
-    objects = bpy.context.scene.objects
     if self.object.type == 'ARMATURE':
+      # Specify skeleton name
+      func(' '*depth + '    <skeleton>%s_rig</skeleton>'%(self.object.name))
+
       func(' '*depth + '    <boneinfluences>')
-      for influences in self.object.data.GetBoneInfluences(objects, **kwargs):
+      for influences in self.object.data.GetBoneInfluences(**kwargs):
         func(' '*depth + '      <bi bone="%s" weight="%.4f"/>'%(influences[0],influences[1]))
       func(' '*depth + '    </boneinfluences>')
 
@@ -273,10 +273,6 @@ class Hierarchy:
     for submeshes in subMeshess:
       for sub in submeshes:
         sub.AsCS(func, depth+4, True)
-
-    # Specify skeleton name
-    if self.object.type == 'ARMATURE':
-      func(' '*depth + '    <skeleton>%s_rig</skeleton>'%(self.object.name))
 
     # Export morph targets
     for mt in GetMorphTargets(totalVertices, **kwargs):
@@ -300,36 +296,91 @@ class Hierarchy:
 
     func(' '*depth + '    <tangents automatic="true"/>')
     func(" "*depth + "  </params>")
-    func(" "*depth + "</meshfact>")
+
+    if not dontClose:
+      func(" "*depth + "</meshfact>")
+
+
+#======== Genmesh ==============================================================
+
+def AsCSGenmeshLib(self, func, depth=0, **kwargs):
+  """ Write an xml description of this mesh as a CS general mesh factory
+      (i.e. header, material, render buffers and submeshes)
+  """
+
+  # Write genmesh header
+  func(' '*depth + '<meshfact name=\"%s\">'%(self.name))
+  if self.data.use_imposter:
+    func(' '*depth + '  <imposter range="100.0" tolerance="0.4" camera_tolerance="0.4" shader="lighting_imposter"/>')
+  func(' '*depth + '  <plugin>crystalspace.mesh.loader.factory.genmesh</plugin>')
+  func(' '*depth + '  <params>')
+
+  # Recover submeshes from kwargs
+  if 'subMeshes' in kwargs:
+    subMeshes = kwargs['subMeshes']
+
+  # Write mesh's material
+  def SubmeshesLackMaterial(subMeshes):
+    for sub in subMeshes:
+      if not sub.material:
+        return True
+    return False
+
+  if SubmeshesLackMaterial(subMeshes):
+    #This mesh has a submesh without a material
+    if self.data.GetMaterial(0):
+      mat = self.data.GetMaterial(0).uname
+    else:
+      mat = None
+    print('WARNING: Factory "%s" has no material'%(self.name))
+    func(' '*depth + '    <material>%s</material>'%(str(mat)))
+
+  # Export mesh's render buffers
+  for buf in GetRenderBuffers(**kwargs):
+    buf.AsCS(func, depth+4, False)
+
+  # Export mesh's submeshes
+  for sub in subMeshes:
+    sub.AsCS(func, depth+4, False)
+
+  func(' '*depth + '  </params>')
+
+  # Don't close 'meshfact' flag if another mesh object is defined as 
+  # an imbricated genmesh factory of this factory
+  if not ('dontClose' in kwargs and kwargs['dontClose']):
+    func(' '*depth + '</meshfact>')
+
+bpy.types.Object.AsCSGenmeshLib = AsCSGenmeshLib
 
 
 #======== Object ====================================================================
 
 def ObjectAsCS(self, func, depth=0, **kwargs):
+  """ Write a reference to this object (as part of a sector in the 'world' file); 
+      only mesh, armature, group and lamp objects are described
+  """
   name = self.uname
   if 'name' in kwargs:
     name = kwargs['name']+':'+name
 
   if self.type == 'MESH':
-    func(' '*depth +'<meshref name="%s">'%(name))
-    func(' '*depth +'  <factory>%s</factory>'%(self.data.uname))
-
+    func(' '*depth +'<meshref name="%s_object">'%(self.name))
+    func(' '*depth +'  <factory>%s</factory>'%(self.name))
     matrix = self.relative_matrix
     if 'transform' in kwargs:
       matrix =  matrix * kwargs['transform']
     MatrixAsCS(matrix, func, depth+2)
-
     func(' '*depth +'</meshref>')
+
   elif self.type == 'ARMATURE':
     func(' '*depth +'<meshref name="%s_object">'%(name))
     func(' '*depth +'  <factory>%s</factory>'%(name))
-
     matrix = self.relative_matrix
     if 'transform' in kwargs:
       matrix =  matrix * kwargs['transform']
     MatrixAsCS(matrix, func, depth+2)
+    func(' '*depth +'</meshref>')
 
-    func(' '*depth +'</meshref>')    
   elif self.type == 'LAMP':
     func(' '*depth +'<light name="%s">'%(name))
     # Flip Y and Z axis.
@@ -338,6 +389,7 @@ def ObjectAsCS(self, func, depth=0, **kwargs):
     func(' '*depth +'  <radius brightness="%f">%f</radius>'%(self.data.energy, self.data.distance))
     func(' '*depth +'  <attenuation>linear</attenuation>')
     func(' '*depth +'</light>')
+
   elif self.type == 'EMPTY':
     if self.dupli_type=='GROUP' and self.dupli_group:
       if self.dupli_group.doMerge:
@@ -350,6 +402,7 @@ def ObjectAsCS(self, func, depth=0, **kwargs):
     #Handle children: translate to top level.
     for obj in self.children:
       obj.AsCS(func, depth, transform=self.relative_matrix, name=self.uname)
+
   elif self.type != 'CAMERA':
     print('\nWARNING: Object "%s" of type "%s" is not supported!'%(self.name, self.type))
 
@@ -357,40 +410,52 @@ bpy.types.Object.AsCS = ObjectAsCS
 
 
 def ObjectDependencies(self, empty=None):
+  """ Get the dependencies of this object and its children, i.e. textures, 
+      materials, armatures, meshes and groups associated with it
+  """
   dependencies = EmptyDependencies()  
+
   if self.type == 'ARMATURE':
     # Object with skeleton ==> 'A' type (animesh)
     if self.children:
       hier = Hierarchy(self, empty)
       print('ObjectDependencies: ', hier.uname, '-', self.name)
       dependencies['A'][hier.uname] = hier
-  elif self.type == 'MESH':
-    if self.data.shape_keys:
-      # Mesh with morph targets ==> 'A' type (animesh)
-      hier = Hierarchy(self, empty)
-      print('ObjectDependencies: ', hier.uname, '-', self.name)
-      dependencies['A'][hier.uname] = hier      
-    else:
-      # Mesh without skeleton neither morph target 
-      # or child of a bone (attached by socket) ==> 'F' type (genmesh)
-      def IsAnimeshSubmesh(ob):
-        ''' Test if ob is child of an armature
-            (and not linked by a socket to a bone)
-        '''
-        if ob.parent_type=='BONE' and ob.parent_bone:
-          return False
-        if ob.parent:
-          return IsAnimeshSubmesh(ob.parent)
-        return ob.type=='ARMATURE'
+      for child in self.children:
+        if child.parent_type != 'BONE':
+          MergeDependencies(dependencies, child.GetDependencies())
 
-      if not IsAnimeshSubmesh(self):
+  elif self.type == 'MESH':
+    def IsAnimeshSubmesh(ob):
+      ''' Test if ob is child of an armature
+          (and not linked by a socket to a bone)
+      '''
+      if ob.parent_type=='BONE' and ob.parent_bone:
+        return False
+      if ob.parent:
+        return IsAnimeshSubmesh(ob.parent)
+      return ob.type=='ARMATURE'
+
+    # Mesh without any vertex or face and submesh of animesh
+    # will not be exported as individual mesh factory
+    if not IsAnimeshSubmesh(self) \
+          and len(self.data.vertices)!=0 and len(self.data.faces)!=0:
+      if self.data.shape_keys:
+        # Mesh with morph targets ==> 'A' type (animesh)
+        hier = Hierarchy(self, empty)
+        print('ObjectDependencies: ', hier.uname, '-', self.name)
+        dependencies['A'][hier.uname] = hier      
+      else:
+        # Mesh without skeleton neither morph target 
+        # or child of a bone (attached by socket) ==> 'F' type (genmesh)
         hier = Hierarchy(self, empty)
         print('ObjectDependencies: ', hier.uname, '-', self.name)
         dependencies['F'][hier.uname] = hier
-    for mat in self.materials:
-      # Material of the mesh ==> 'M' type
-      dependencies['M'][mat.uname] = mat
-      MergeDependencies(dependencies, mat.GetDependencies())
+
+    # Material of the mesh ==> 'M' type
+    # Associated textures  ==> 'T' type
+    MergeDependencies(dependencies, self.GetMaterialDependencies())
+
   elif self.type == 'EMPTY':
     if self.dupli_type=='GROUP' and self.dupli_group:
       # Group of objects ==> 'G' type
@@ -398,11 +463,66 @@ def ObjectDependencies(self, empty=None):
         dependencies['G'][self.dupli_group.uname] = self.dupli_group
         MergeDependencies(dependencies, self.dupli_group.GetDependencies())
       else:
-        for ob in [ob for ob in self.dupli_group.objects if not ob.parent]:  #TODO materials?
+        for ob in [ob for ob in self.dupli_group.objects if not ob.parent]:
           MergeDependencies(dependencies, ob.GetDependencies(self))
+
   return dependencies
 
 bpy.types.Object.GetDependencies = ObjectDependencies
+
+
+def GetMaterialDeps(self):
+  """ Get materials and textures associated with this object
+  """
+  dependencies = EmptyDependencies()
+  foundDiffuseTexture = False
+  for mat in self.materials:
+    # Material of the mesh ==> 'M' type
+    # and associated textures ==> 'T' type
+    dependencies['M'][mat.uname] = mat
+    MergeDependencies(dependencies, mat.GetDependencies())
+    foundDiffuseTexture = foundDiffuseTexture or mat.HasDiffuseTexture() 
+  # Search for a diffuse texture if none is defined among the materials
+  if not foundDiffuseTexture:
+    if self.data and self.data.uv_textures and self.data.uv_textures.active:
+      # UV texture of the mesh ==> 'T' type
+      for index, facedata in enumerate(self.data.uv_textures.active.data):
+        if facedata.image and facedata.image.uname not in dependencies['T'].keys():
+          dependencies['T'][facedata.image.uname] = facedata.image
+          self.data.uv_texture = facedata.image.uname
+          material = self.data.GetMaterial(self.data.faces[index].material_index)
+          if material:
+            material.uv_texture = facedata.image.uname
+  return dependencies
+
+bpy.types.Object.GetMaterialDeps = GetMaterialDeps
+
+
+def GetMaterialDependencies(self):
+  """ Get materials and textures associated with this object
+      and its children
+  """
+  dependencies = self.GetMaterialDeps()
+  for child in self.children:
+    MergeDependencies(dependencies, child.GetMaterialDeps())
+  return dependencies
+
+bpy.types.Object.GetMaterialDependencies = GetMaterialDependencies
+
+
+def HasImposter(self):
+  """ Indicates if this object uses an imposter
+  """
+  if self.type == 'MESH':
+    if self.data and self.data.use_imposter:
+      return True
+  elif self.type == 'EMPTY':
+    if self.dupli_type=='GROUP' and self.dupli_group:
+      if self.dupli_group.HasImposter():
+        return True
+  return False
+
+bpy.types.Object.HasImposter = HasImposter
 
 
 def GetScale(self):

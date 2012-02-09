@@ -35,8 +35,7 @@ def GetUniqueFileName(obj):
 
 #Absolute path is unique.
 bpy.types.Image.uname = property(GetUniqueName)
-bpy.types.Image.ufilename = property(GetUniqueFileName)  
-
+bpy.types.Image.ufilename = property(GetUniqueFileName)
 bpy.types.Material.uname = property(GetUniqueName)
 bpy.types.Mesh.uname = property(GetUniqueName)
 bpy.types.Object.uname = property(GetUniqueName)  

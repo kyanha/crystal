@@ -1,6 +1,6 @@
 from .util import *
-
 from .renderbuffer import *
+
 
 class SubMesh:
   def __init__(self, name, material, image, indices):

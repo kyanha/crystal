@@ -12,31 +12,6 @@ def ObjectHasMergingGroup(self):
 bpy.types.Object.hasMergingGroup = ObjectHasMergingGroup
 
 
-def SceneAsCS(self, func, depth=0):
-  func(' '*depth +'<sector name="%s">'%(self.uname))
-    
-  objects = []   
-  for ob in [o for o in self.objects if o.type != 'CAMERA' and not o.parent]:
-    if ob not in objects:
-      group = ob.hasMergingGroup()
-      if group:
-        group.AsCS(func, depth+2)
-        objects.extend([object for object in group.objects])
-      else:
-        ob.AsCS(func, depth+2)
-    
-  func(' '*depth +'</sector>')
-
-  # Export cameras
-  cameras = []
-  for ob in self.objects:
-    if ob.type == 'CAMERA':
-      cameras.append(ob)
-  self.CamerasAsCS(func, depth, cameras)
-
-bpy.types.Scene.AsCS = SceneAsCS
-
-
 def SceneDependencies(self):
   dependencies = EmptyDependencies()
 
@@ -55,9 +30,46 @@ def SceneDependencies(self):
 bpy.types.Scene.GetDependencies = SceneDependencies
 
 
-# Export cameras of current scene as cs start locations
-def CamerasAsCS (self, func, depth, cameras):
-  if not cameras:
+def SceneAsCS(self, func, depth=0):
+  """ Write an xml decription of this scene: it is exported as a CS sector
+      with a reference to all objects of types mesh, armature, group and lamp
+      contained in this scene
+  """
+  func(' '*depth +'<sector name="%s">'%(self.uname))
+    
+  objects = []   
+  for ob in [o for o in self.objects if o.type != 'CAMERA']:
+    if not ob.parent or (ob.parent and ob.parent_type == 'BONE'):
+      if ob not in objects:
+        group = ob.hasMergingGroup()
+        if group:
+          group.AsCS(func, depth+2)
+          objects.extend([object for object in group.objects])
+        else:
+          ob.AsCS(func, depth+2)
+    
+  func(' '*depth +'</sector>')
+
+bpy.types.Scene.AsCS = SceneAsCS
+
+
+def GetCameras(self):
+  """ Get a list of all cameras of this scene
+  """
+  cameras = {}
+  for ob in self.objects:
+    if ob.type == 'CAMERA':
+      cameras[ob.uname] = {'scene': self, 'camera': ob}
+  return cameras
+
+bpy.types.Scene.GetCameras = GetCameras
+
+
+def CameraAsCS (self, func, depth, camera=None):
+  """ Export camera as a CS start location of current scene;
+      if no camera is defined, set a default start position
+  """
+  if camera == None:
     # Set a default camera if none was found in current scene
     func(' '*depth +'<start name="Camera">')
     func(' '*depth +'  <sector>%s</sector>'%(self.uname))
@@ -65,14 +77,24 @@ def CamerasAsCS (self, func, depth, cameras):
     func(' '*depth +'  <up y="1" x="0" z="0" />')
     func(' '*depth +'</start>')
   else:
-    # Export cameras sorted by names
-    cameras.sort(key=lambda cam: cam.uname)
-    for camera in cameras:
-      func(' '*depth +'<start name="%s">'%(camera.uname))
-      # Flip Y and Z axis.
-      func(' '*depth +'  <sector>%s</sector>'%(self.uname))
-      func(' '*depth +'  <position x="%f" z="%f" y="%f" />'%tuple(camera.location))
-      func(' '*depth +'  <up y="1" x="0" z="0" />')
-      func(' '*depth +'</start>')
+    func(' '*depth +'<start name="%s">'%(camera.uname))
+    func(' '*depth +'  <sector>%s</sector>'%(self.uname))
+    # Flip Y and Z axis.
+    func(' '*depth +'  <position x="%f" z="%f" y="%f" />'%tuple(camera.location))
+    func(' '*depth +'  <up y="1" x="0" z="0" />')
+    func(' '*depth +'</start>')
 
-bpy.types.Scene.CamerasAsCS = CamerasAsCS
+bpy.types.Scene.CameraAsCS = CameraAsCS
+
+
+#===== static method ExportCameras ==============================
+
+def ExportCameras (func, depth, cameras):
+  """ Export cameras sorted by names; each camera is described 
+      as a CS start location for the scene it belongs to
+      param cameras: list of cameras and their associated scene
+  """
+  keylist = cameras.keys()
+  for camName in sorted(keylist):
+    cam = cameras[camName]
+    cam['scene'].CameraAsCS(func, depth, cam['camera'])
