@@ -26,7 +26,7 @@ def Export(path):
   exportAsLibrary = B2CS.properties.library
   if exportAsLibrary:
     print("\nEXPORTING: "+Join(path, 'library')+" ====================================")
-    print("  All objects of the current scene are exported as factories in 'library' file.\n")
+    print("  All objects of the world are exported as factories in 'library' file.\n")
     ExportLibrary(path)
 
   else:
@@ -108,33 +108,34 @@ def ExportWorld(path):
 
 
 def ExportLibrary(path):
-  """ Export all objects composing the current scene as factories in
-      a single 'library' file, placed in the directory specified by 'path'.
+  """ Export all objects composing the world as factories in a single 'library' file,
+      placed in the directory specified by 'path'.
   """
 
   # Create the export directory for textures
   if not os.path.exists(Join(path, 'textures/')):
     os.makedirs(Join(path, 'textures/'))
 
-  # Get data about all objects composing the current scene
-  scene = bpy.context.scene
-  deps = scene.GetDependencies()
+  # Get data about all objects composing the world
+  deps = util.EmptyDependencies()
+  for scene in bpy.data.scenes:
+    MergeDependencies(deps, scene.GetDependencies())
 
   # Create a 'library' file containing the xml description of the objects
-  # composing the scene
   f = open(Join(path, 'library'), 'w')
   Write(f)('<?xml version="1.0" encoding="UTF-8"?>')
   Write(f)('<library xmlns=\"http://crystalspace3d.org/xml/library\">')
 
-  # Export the textures/materials/shaders of all objects contained in current scene  
+  # Export the textures/materials/shaders of the objects
   use_imposter = False
-  for ob in scene.objects:
-    if ob.HasImposter():
-      use_imposter = True
-      break
+  for scene in bpy.data.scenes:
+    for ob in scene.objects:
+      if ob.HasImposter():
+        use_imposter = True
+        break
   ExportMaterials(Write(f), 2, path, deps, use_imposter)
 
-  # Export the objects composing the current scene
+  # Export the objects composing the Blender world
   for typ in deps:
     if typ == 'A':
       # Animated meshes
