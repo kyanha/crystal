@@ -122,9 +122,9 @@ class Hierarchy:
   def WriteCSMeshBuffers(self, func, depth=0, path='', animesh=False, dontClose=False, **kwargs):
     """ Write an xml decription of a Blender object and its children of type 'MESH':
         - animesh=False: mesh and children without armature neither morph targets 
-          are exported as imbricated CrystalSpace general mesh factories
+          are exported as imbricated Crystal Space general mesh factories
         - animesh=True: mesh and children with armature and/or morph targets 
-          are exported as a CrystalSpace animated mesh factory
+          are exported as a Crystal Space animated mesh factory
     """
 
     # Build CS mapping buffers and submeshes for this object
