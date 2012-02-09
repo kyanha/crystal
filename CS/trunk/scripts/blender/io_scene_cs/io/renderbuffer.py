@@ -157,7 +157,7 @@ class RenderBuffers:
 
         face, vi = findFace(self.mappingBuffers[i][indexBlender],indexCS)
         
-        # Add the vertex uv coordinates to the CS texture coordinates buffer
+        # Add uv coordinates of this vertex to the CS texture coordinates buffer
         if tface and face != -1:
           uv = tface[face].uv[vi]
           self.texCoordBuffer.AddElement((uv[0],1.0-uv[1]))

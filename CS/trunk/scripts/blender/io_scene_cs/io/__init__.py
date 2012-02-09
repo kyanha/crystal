@@ -2,94 +2,174 @@ import bpy
 
 import os
 
-from . import util
-from . import transform
-from . import image
-from . import material
-from . import renderbuffer
-from . import submesh
-from . import data
-from . import object
-from . import group
-from . import scene
+from .util import *
+from .transform import *
+from .image import *
+from .renderbuffer import *
+from .submesh import *
+from .data import *
+from .object import *
+from .group import *
+from .scene import *
+from .material import ExportMaterials
+from io_scene_cs.utilities import B2CS
+
+
+def Write(fi):
+  def write(data):
+    fi.write(data+'\n')
+  return write
 
 
 def Export(path):
-  print("\nEXPORTING: "+util.Join(path, 'world')+" ====================================")
 
-  scn = bpy.context.scene
-  deps = scn.GetDependencies()
+  exportAsLibrary = B2CS.properties.library
+  if exportAsLibrary:
+    print("\nEXPORTING: "+Join(path, 'library')+" ====================================")
+    print("  All objects of the current scene are exported as factories in 'library' file.\n")
+    ExportLibrary(path)
 
-  # Create the export directories
-  if not os.path.exists(util.Join(path, 'factories/')):
-    os.makedirs(util.Join(path, 'factories/'))
-  if not os.path.exists(util.Join(path, 'textures/')):
-    os.makedirs(util.Join(path, 'textures/'))
+  else:
+    print("\nEXPORTING: "+Join(path, 'world')+" ====================================")
+    print("  All scenes composing this world are exported as sectors in the 'world' file ;\n",
+           " all objects of these scenes are exported as separated libraries.\n")
+    ExportWorld(path)
 
-  # Create a 'world' file containing the xml description of the scene
-  f = open(util.Join(path, 'world'), 'w')
-  def Write(fi):
-    def write(data):
-      fi.write(data+'\n')
-    return write
 
-  Write(f)('<world>')
+def ExportWorld(path):
+  """ Export scenes composing the world as sectors in the 'world' file,
+      saved in the directory specified by 'path'. All objects of these scenes
+      are exported as separated libraries in the 'factories' subfolder.
+  """
 
-  # Export the objects composing the scene
+  # Create the export directory for textures
+  if not os.path.exists(Join(path, 'textures/')):
+    os.makedirs(Join(path, 'textures/'))
+
+  # Create the export directory for factories
+  if not os.path.exists(Join(path, 'factories/')):
+    os.makedirs(Join(path, 'factories/'))
+
+  # Get data about all objects composing this world
+  deps = util.EmptyDependencies()
+  cameras = {}
+  for scene in bpy.data.scenes:
+    MergeDependencies(deps, scene.GetDependencies())
+    cameras.update(scene.GetCameras())
+
+  # Create a 'world' file containing the xml description of the scenes
+  f = open(Join(path, 'world'), 'w')
+  Write(f)('<?xml version="1.0" encoding="UTF-8"?>')
+  Write(f)('<world xmlns=\"http://crystalspace3d.org/xml/library\">')
+
+  # Export the objects composing the world
   for typ in deps:
-    if typ == 'T':
-      # Textures
-      Write(f)('  <textures>')
-      for name, tex in deps[typ].items():
-        tex.AsCS(Write(f), 4)
-      Write(f)('  </textures>')
-    elif typ == 'M':
-      # Materials
-      Write(f)('  <materials>')
-      for name, mat in deps[typ].items():
-        mat.AsCS(Write(f), 4)
-      Write(f)('  </materials>')
-    elif typ == 'A':
+    if typ == 'A':
       # Animated meshes
       for name, fact in deps[typ].items():
         if not fact.object.parent:
           print('\nEXPORT OBJECT "%s" AS A CS ANIMATED MESH\n'%(fact.object.name))
-          print('Writing fact',fact.uname,':', util.Join(path, 'factories/', fact.object.name))
+          print('Writing fact',fact.uname,':', Join(path, 'factories/', fact.object.name))
           fact.AsCSRef(Write(f), 2, 'factories/')
-          # Export mesh factory
-          fa = open(util.Join(path, 'factories/', fact.object.name), 'w')
-          fact.AsCSLib(Write(fa), 2, path, True)
-          fa.close()          
-          # Export skeleton and animations
-          if fact.object.type == 'ARMATURE':
-            if fact.object.data.bones:
-              ob = fact.object
-              print('Exporting skeleton and animations:', util.Join(path, 'factories/', '%s_rig'%(ob.name)))
-              fb = open(util.Join(path, 'factories/', '%s_rig'%(ob.name)), 'w')
-              ob.data.AsCSSkelAnim(Write(fb), 2, ob)
-              fb.close()
+          # Export animesh factory
+          fact.AsCSLib(path, animesh=True)
     elif typ == 'F':
       # General meshes
       for name, fact in deps[typ].items():
         print('\nEXPORT OBJECT "%s" AS A CS GENERAL MESH\n'%(fact.object.name))
-        print('Writing fact',fact.uname,':', util.Join(path, 'factories/', fact.object.name))
+        print('Writing fact',fact.uname,':', Join(path, 'factories/', fact.object.name))
         fact.AsCSRef(Write(f), 2, 'factories/')
-        fa = open(util.Join(path, 'factories/', fact.object.name), 'w')
-        fact.AsCSLib(Write(fa), 2, path, False)
-        fa.close()
+        # Export genmesh factory
+        fact.AsCSLib(path, animesh=False)
     elif typ == 'G':
       # Groups of objects
       for name, group in deps[typ].items():
         print('\nEXPORT GROUP "%s" AS A CS GENERAL MESH\n'%(group.uname))
-        print('Writing group', util.Join(path, 'factories/', group.uname))
+        print('Writing group', Join(path, 'factories/', group.uname))
         group.AsCSRef(Write(f), 2, 'factories/')
-        fa = open(util.Join(path, 'factories/', group.uname), 'w')
-        group.AsCSFactory(Write(fa), 2)
-        fa.close()
+        # Export group of genmeshes
+        group.AsCSLib(path)
 
-  # Export the scene description in the 'world' file
-  scn.AsCS(Write(f), 2)
+  # Export cameras
+  if cameras:
+    ExportCameras(Write(f), 2, cameras)
+  else:
+    # Set a default camera if none is defined
+    bpy.context.scene.CameraAsCS(Write(f), 2)
+
+  # Export scenes as CS sectors in the 'world' file
+  for scene in bpy.data.scenes:
+    scene.AsCS(Write(f), 2)
 
   Write(f)('</world>')
   f.close()
+
+  print("\nEXPORTING complete ==================================================")
+
+
+def ExportLibrary(path):
+  """ Export all objects composing the current scene as factories in
+      a single 'library' file, placed in the directory specified by 'path'.
+  """
+
+  # Create the export directory for textures
+  if not os.path.exists(Join(path, 'textures/')):
+    os.makedirs(Join(path, 'textures/'))
+
+  # Get data about all objects composing the current scene
+  scene = bpy.context.scene
+  deps = scene.GetDependencies()
+
+  # Create a 'library' file containing the xml description of the objects
+  # composing the scene
+  f = open(Join(path, 'library'), 'w')
+  Write(f)('<?xml version="1.0" encoding="UTF-8"?>')
+  Write(f)('<library xmlns=\"http://crystalspace3d.org/xml/library\">')
+
+  # Export the textures/materials/shaders of all objects contained in current scene  
+  use_imposter = False
+  for ob in scene.objects:
+    if ob.HasImposter():
+      use_imposter = True
+      break
+  ExportMaterials(Write(f), 2, path, deps, use_imposter)
+
+  # Export the objects composing the current scene
+  for typ in deps:
+    if typ == 'A':
+      # Animated meshes
+      for name, fact in deps[typ].items():
+        ob = fact.object
+        if not ob.parent:
+          print('\nEXPORT OBJECT "%s" AS A CS ANIMATED MESH\n'%(ob.name))
+          print('Writing fact',fact.uname,'in', Join(path, 'library'))
+          # Export animesh factory
+          fact.WriteCSAnimeshHeader(Write(f), 2, skelRef=False)
+          # Export skeleton and animations
+          if ob.type == 'ARMATURE' and ob.data.bones:
+            print('Exporting skeleton and animations: %s_rig'%(ob.name))
+            ob.data.AsCSSkelAnim(Write(f), 4, ob, dontClose=True)
+          # Export mesh buffers
+          fact.WriteCSMeshBuffers(Write(f), 2, path, animesh=True, dontClose=True)
+          Write(f)('  </meshfact>')
+    elif typ == 'F':
+      # General meshes
+      for name, fact in deps[typ].items():
+        ob = fact.object
+        print('\nEXPORT OBJECT "%s" AS A CS GENERAL MESH\n'%(ob.name))
+        print('Writing fact',fact.uname,'in', Join(path, 'library'))
+        # Export genmesh factory
+        fact.WriteCSMeshBuffers(Write(f), 2, path, animesh=False, dontClose=True)
+    elif typ == 'G':
+      # Groups of objects
+      for name, group in deps[typ].items():
+        print('\nEXPORT GROUP "%s" AS A CS GENERAL MESH\n'%(group.uname))
+        print('Writing group', group.uname,'in', Join(path, 'library'))
+        # Export group of meshes
+        use_imposter = group.HasImposter()
+        group.WriteCSGroup(Write(f), 2, use_imposter, dontClose=True)
+
+  Write(f)('</library>')
+  f.close()
+
   print("\nEXPORTING complete ==================================================")

@@ -4,12 +4,31 @@ import mathutils
 from .util import *
 from .transform import *
 from .submesh import *
-
+from .material import *
 from io_scene_cs.utilities import B2CS
 
 
+def GroupallObjects(self, matrix=None):
+  objects = []
+  for ob in self.objects:
+    if ob.type == 'EMPTY':
+      if ob.dupli_type=='GROUP' and ob.dupli_group:
+        objects.extend(ob.dupli_group.allObjects(ob.relative_matrix))
+    else:
+      objects.append((matrix, ob))
+  return objects
+  
+bpy.types.Group.allObjects = GroupallObjects
+
+
+def GroupAsCSRef(self, func, depth=0, dirName='factories/'):
+  func(' '*depth +'<library>%s%s</library>'%(dirName,self.uname))
+
+bpy.types.Group.AsCSRef = GroupAsCSRef
+
+
 def GroupAsCS(self, func, depth=0, **kwargs):
-  func(' '*depth +'<meshobj name="%s">'%(self.name))
+  func(' '*depth +'<meshobj name="%s_group">'%(self.uname))
   func(' '*depth +'  <plugin>crystalspace.mesh.loader.genmesh</plugin>')
   func(' '*depth +'  <params>')
   func(' '*depth +'    <factory>%s</factory>'%(self.uname))
@@ -29,27 +48,41 @@ def GroupAsCS(self, func, depth=0, **kwargs):
 bpy.types.Group.AsCS = GroupAsCS
 
 
-def GroupallObjects(self, matrix=None):
-  objects = []
-  for ob in self.objects:
-    if ob.type == 'EMPTY':
-      if ob.dupli_type=='GROUP' and ob.dupli_group:
-        objects.extend(ob.dupli_group.allObjects(ob.relative_matrix))
-    else:
-      objects.append((matrix, ob))
-  return objects
-  
-bpy.types.Group.allObjects = GroupallObjects
-
-
-def GroupAsCSFactory(self, func, depth=0):
-  """ Export a group of Blender objects as a Crystal Space general mesh:
-      objects are exported as instances or submeshes of the general mesh
-  """
-
+def WriteCSLibHeader(self, func):
   func('<?xml version="1.0" encoding="UTF-8"?>')
   func("<library xmlns=\"http://crystalspace3d.org/xml/library\">")
-  
+
+bpy.types.Group.WriteCSLibHeader = WriteCSLibHeader
+
+
+def GroupAsCSLib(self, path=''):
+  """ Export a group of Blender objects as a CS library entitled
+      '<group name>' in the '<path>/factories' folder;
+      objects are exported as instances or submeshes of a general mesh
+  """
+
+  def Write(fi):
+    def write(data):
+      fi.write(data+'\n')
+    return write
+
+  # Export group
+  fa = open(Join(path, 'factories/', self.uname), 'w')
+  self.WriteCSLibHeader(Write(fa))
+  groupDeps = self.GetDependencies()
+  use_imposter = self.HasImposter()
+  ExportMaterials(Write(fa), 2, path, groupDeps, use_imposter)
+  self.WriteCSGroup(Write(fa), 2, use_imposter, dontClose=False)
+  fa.close()
+
+bpy.types.Group.AsCSLib = GroupAsCSLib
+
+
+def WriteCSGroup(self, func, depth=0, use_imposter=False, dontClose=False):
+  """ Write an xml description of the meshes composing this group:
+      objects are exported as instances or submeshes of a general mesh
+  """
+
   # Get mapping buffers and submeshes for the objects composing the group
   meshData = []
   subMeshess = []
@@ -81,58 +114,22 @@ def GroupAsCSFactory(self, func, depth=0):
       subMeshess.append(ob.data.GetSubMeshes(ob.name,mapBuf,indexV))
       mappingBuffers.append(mapBuf)
       mappingVertices.append(mapVert)
-      print('number of CS vertices for mesh "%s" = %s'%(ob.data.name,numCSVertices))
+      print('number of CS vertices for mesh "%s" = %s'%(ob.name,numCSVertices))
       indexV += numCSVertices
 
-  # Export textures
-  func("  <textures>")
-  textures = {}
-  for submeshes in subMeshess:
-    for sub in submeshes:
-      for name, tex in sub.GetDependencies()['T'].items():
-        textures[name] = tex      
-  for name, tex in textures.items():
-    tex.AsCS(func, depth+2, path='textures/')
-    tex.save_export(B2CS.properties.exportPath)
-  func("  </textures>")
-  
-  # Export shaders
-  func("  <shaders>")
-  #func("    <shader><file>/shader/lighting/lighting_imposter.xml</file></shader>")
-  func("    <shader><file>/shader/lighting/lighting_default_instance.xml</file></shader>")
-  func("    <shader><file>/shader/lighting/lighting_default_instance_binalpha.xml</file></shader>")
-  func("    <shader><file>/shader/foliage/tree_leaves.xml</file></shader>")
-  func("  </shaders>")
-  
-  shaders = {}
-  if self.groupedInstances:
-    shaders = {'depthwrite':'*null', 'base':'lighting_default_instance', 'diffuse':'lighting_default_instance'}
-  
-  # Export materials
-  mat = True
-  materials = {}
-  func("  <materials>")
-  for submeshes in subMeshess:
-    for sub in submeshes:
-      if sub.material and sub.material.name not in materials:
-        materials[sub.material.name] = sub.material
-        sub.material.AsCS(func, depth+2, shaders=shaders)
-      else:
-        mat = None
-  func("  </materials>")
-    
   # Export the group of objects as a general mesh factory
-  func("  <meshfact name=\"%s\">"%(self.uname))
+  func(' '*depth + '<meshfact name=\"%s\">'%(self.uname))
   if self.groupedInstances:
     # EXPORT OBJECTS AS INSTANCES OF THE GENERAL MESH
     print("The objects composing group '%s' are exported as instances of a general mesh"%(self.uname))
-    func('    <instances>')
-    func('      <meshfact name=\"%s-instance\">'%(self.uname))
-    #func('     <imposter range="10.0" tolerance="45.0" camera_tolerance="45.0" shader="lighting_imposter"/>')
-    func('        <plugin>crystalspace.mesh.loader.factory.genmesh</plugin>')
-    func('        <params>')
+    func(' '*depth + '  <instances>')
+    func(' '*depth + '    <meshfact name=\"%s-instance\">'%(self.uname))
+    #if use_imposter:
+    #  func(' '*depth + '      <imposter range="10.0" tolerance="45.0" camera_tolerance="45.0" shader="lighting_imposter"/>')
+    func(' '*depth + '      <plugin>crystalspace.mesh.loader.factory.genmesh</plugin>')
+    func(' '*depth + '      <params>')
 
-    # Export first object of the group as basic general mesh
+    # Export first object of the group as a basic general mesh
     m, ob in self.allObjects()[0]
 
     # Export render buffers
@@ -148,20 +145,22 @@ def GroupAsCSFactory(self, func, depth=0):
     for sub in ob.data.GetSubMeshes(ob.name,mappingBuffers[indexObject]):
       sub.AsCS(func, depth+8)
 
-    func("        </params>")    
-    func("      </meshfact>")
+    func(' '*depth + '      </params>')
+    func(' '*depth + '    </meshfact>')
 
     # Export objects of the group as instances of the basic general mesh
     min_corner = mathutils.Vector((0.0, 0.0, 0.0))
     max_corner = mathutils.Vector((0.0, 0.0, 0.0))
     for m, ob in self.allObjects():
-      func("      <instance>")
+      # Define an instance of the general mesh
+      func(' '*depth + '    <instance>')
       matrix = ob.matrix_world
       if m: 
         matrix = matrix * m
       MatrixAsCS(matrix, func, depth+4, True)
-      func("      </instance>")
+      func(' '*depth + '    </instance>')
       
+      # Determine object's bounding box
       for corner in ob.bound_box:
         corner =  matrix * mathutils.Vector(corner)
         for i in range(3):
@@ -170,31 +169,40 @@ def GroupAsCSFactory(self, func, depth=0):
           elif corner[i] > max_corner[i]:
             max_corner[i] = corner[i]      
       
-    func("    </instances>")
+    func(' '*depth + '  </instances>')
 
     # Export group's bounding box
-    func('    <bbox>')
-    func('      <v x="%s" y="%s" z="%s" />'%(min_corner[0], min_corner[2], min_corner[1]))
-    func('      <v x="%s" y="%s" z="%s" />'%(max_corner[0], max_corner[2], max_corner[1]))
-    func('    </bbox>')
+    func(' '*depth + '  <bbox>')
+    func(' '*depth + '    <v x="%s" y="%s" z="%s" />'%(min_corner[0], min_corner[2], min_corner[1]))
+    func(' '*depth + '    <v x="%s" y="%s" z="%s" />'%(max_corner[0], max_corner[2], max_corner[1]))
+    func(' '*depth + '  </bbox>')
 
-    func("  </meshfact>")
+    func(' '*depth + '</meshfact>')
 
   else:
     # EXPORT OBJECTS AS SUBMESHES OF THE GENERAL MESH
     print("The objects composing group '%s' are exported as submeshes of a general mesh"%(self.uname))
-    func("    <plugin>crystalspace.mesh.loader.factory.genmesh</plugin>")
-    func("    <params>")
+    #if use_imposter:
+    #  func(' '*depth + '  <imposter range="10.0" tolerance="45.0" camera_tolerance="45.0" shader="lighting_imposter"/>')
+    func(' '*depth + '  <plugin>crystalspace.mesh.loader.factory.genmesh</plugin>')
+    func(' '*depth + '  <params>')
     
+    def SubmeshesLackMaterial(subMeshess):
+      for submeshes in subMeshess:
+        for sub in submeshes:
+          if not sub.material:
+            return True
+      return False
+
     # There is a submesh without a material
-    if not mat:
+    if SubmeshesLackMaterial(subMeshess):
       for m, ob in self.allObjects():
         if ob.data.GetMaterial(0):
           mat = ob.data.GetMaterial(0).uname
           break        
       if not mat:
         print('WARNING: Factory "%s" has no material!'%(self.name))
-      func("      <material>%s</material>"%(str(mat)))   
+      func(' '*depth + '    <material>%s</material>'%(str(mat)))   
   
     # Export the render buffers of all objects composing the group
     args = {}
@@ -209,32 +217,38 @@ def GroupAsCSFactory(self, func, depth=0):
       for sub in submeshes:
         sub.AsCS(func, 6)
   
-    func("    </params>")    
-    func("  </meshfact>")
+    func(' '*depth + '  </params>')
+    func(' '*depth + '</meshfact>')
     
-  func("</library>")
+  if not dontClose:
+    func("</library>")
   
   # Delete working copies of objects
   for obCpy in meshData:
     bpy.data.objects.remove(obCpy)
 
-bpy.types.Group.AsCSFactory = GroupAsCSFactory
+bpy.types.Group.WriteCSGroup = WriteCSGroup
 
 
-def GroupAsCSRef(self, func, depth=0, dirName='factories/'):
-  func(' '*depth +'<library>%s%s</library>'%(dirName,self.uname))
+def HasImposter(self):
+  """ Indicates if one of the objects belonging to this group
+      uses an imposter
+  """
+  for m, ob in self.allObjects():
+    if ob.data.use_imposter:
+      return True
+  return False
 
-bpy.types.Group.AsCSRef = GroupAsCSRef
+bpy.types.Group.HasImposter = HasImposter
 
 
 def GroupDependencies(self):
+  """ Get the materials and the textures associated with
+      the objects composing the group
+  """
   dependencies = EmptyDependencies()
-  """
-  for ob in self.objects:
-    for mat in ob.materials:
-      dependencies['M'][mat.uname] = mat
-      MergeDependencies(dependencies, mat.GetDependencies())
-  """
+  for m, ob in self.allObjects():
+    MergeDependencies(dependencies, ob.GetMaterialDependencies())
   return dependencies
-  
+
 bpy.types.Group.GetDependencies = GroupDependencies
