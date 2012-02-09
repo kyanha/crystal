@@ -11,10 +11,10 @@ Send bugs and suggestions to <users@texi2html.cvshome.org>
 
 -->
 <head>
-<title>Crystal Space 2.1.0: 2.4.2.3 Building</title>
+<title>Crystal Space 2.1.0: 2.4.2.3 Building Crystal Space</title>
 
-<meta name="description" content="Crystal Space 2.1.0: 2.4.2.3 Building">
-<meta name="keywords" content="Crystal Space 2.1.0: 2.4.2.3 Building">
+<meta name="description" content="Crystal Space 2.1.0: 2.4.2.3 Building Crystal Space">
+<meta name="keywords" content="Crystal Space 2.1.0: 2.4.2.3 Building Crystal Space">
 <meta name="resource-type" content="document">
 <meta name="distribution" content="global">
 <meta name="Generator" content="texi2html 1.76">
@@ -59,64 +59,56 @@ ul.toc {list-style: none}
 <td valign="middle" align="left">[<a href="cs_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
 </tr></table>
 <hr size="1">
-<h4 class="subsubsection"> 2.4.2.3 Building </h4>
+<h4 class="subsubsection"> 2.4.2.3 Building Crystal Space </h4>
 
+<p>Now that all dependencies are setup, you can go ahead with the compilation
+of Crystal Space.
+</p>
 <a name="1"></a>
-<h4 class="subsubheading"> Download the latest Crystal Space source </h4>
+<h4 class="subsubheading"> Configure and build the project </h4>
 
-<p>You can either download the <em>latest stable version</em> of Crystal Space or the <em>current development version</em>.
+<p>Download and unpack a source package of Crystal Space, either
+<a href="http://www.crystalspace3d.org/main/Download">an official release from the website</a>
+or <a href="http://www.crystalspace3d.org/main/Download_trunk">a development version from Subversion</a>.
 </p>
-<ul>
-<li>
-<strong>Stable version</strong>
-
-<p>The sources of the stable version are available at:
+<p>Then open a new terminal, go to the directory where you unpacked Crystal Space,
+run the configuration script and build the entire project:
 </p>
-<p><a href="http://www.crystalspace3d.org/main/Download">http://www.crystalspace3d.org/main/Download</a>
-</p>
-<p>If you want to download a <em>source package</em>, simply locate the installation folder and decompress the archive there. <br><br>
-If you prefer to download the source files from the <em>Subversion repository</em>, check out the latest 2.0 release of Crystal Space:
-</p>
-<table><tr><td>&nbsp;</td><td><pre class="example">svn co https://crystal.svn.sourceforge.net/svnroot/crystal/CS/branches/release/V2.0 CS_stable
+<table><tr><td>&nbsp;</td><td><pre class="example">./configure
+jam
 </pre></td></tr></table>
-</li><li>
-<strong>Development version</strong>
-
-<p>This unstable version, called the <em>trunk</em>, is actively being developed. You can found it here:
+<p>This is the end of the compilation process of Crystal Space. You can now try
+to run a test application such as <samp>&lsquo;walktest&rsquo;</samp> or <samp>&lsquo;startme&rsquo;</samp>.
 </p>
-<p><a href="http://www.crystalspace3d.org/main/Download_trunk">http://www.crystalspace3d.org/main/Download_trunk</a>
+<p>You can also see more information on the available building options at the
+<a href="Unix.html#0">dedicated page</a>.
 </p>
-<p>To download the current development version of Crystal Space, check out its Subversion repository:
-</p>
-<table><tr><td>&nbsp;</td><td><pre class="example">svn co https://crystal.svn.sourceforge.net/svnroot/crystal/CS/trunk CS_latest
-</pre></td></tr></table>
-</li></ul>
-
 <a name="2"></a>
 <h4 class="subsubheading"> Update your environment variables </h4>
 
-<p>This is not advised to do a <samp>&lsquo;make install&rsquo;</samp> for Crystal Space, since it can interfere with other installations you may have made previously. The dedicated way to deal with that problem is to define the &ldquo;<a href="HOWTO-Setting-the-CRYSTAL-environment-variable.html#0">CRYSTAL</a>&rdquo; environment variable.
+<p>This is not advised to do a <code>make install</code> for Crystal Space, since it
+can interfere with other installations you may have made previously. The
+dedicated way to deal with that problem is to define the
+<a href="HOWTO-Setting-the-CRYSTAL-environment-variable.html#0">CRYSTAL environment variable</a>.
 </p>
-<p>In order to do so, you can open your <samp>&lsquo;~/.bashrc&rsquo;</samp> file and add the following new line at the end of it:
+<p>In order to do so, you can open your <tt>&lsquo;~/.bashrc&rsquo;</tt> file and add the following
+new line at the end of it:
 </p>
 <table><tr><td>&nbsp;</td><td><pre class="example">export CRYSTAL=path_to_your_CS_directory
 </pre></td></tr></table>
-<p>Also, since you haven't installed Crystal Space, your system will most probably have troubles finding its shared library files. To deal with that, you would need to add an entry in your &ldquo;LD_LIBRARY_PATH&rdquo; environment variable, so add also the following line to your <samp>&lsquo;~/.bashrc&rsquo;</samp> file:
+<p>Also, since you haven't installed Crystal Space, your system will most probably
+have troubles finding its shared library files. To deal with that, you would need
+to add an entry in your <code>LD_LIBRARY_PATH</code> environment variable, so add also
+the following line to your <tt>&lsquo;~/.bashrc&rsquo;</tt> file:
 </p>
 <table><tr><td>&nbsp;</td><td><pre class="example">export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:path_to_your_CS_directory
 </pre></td></tr></table>
-<p>The changes you made to your <samp>&lsquo;~/.bashrc&rsquo;</samp> file will only get available for the next terminals you would open. You may therefore prefer to close the terminals you have already opened in order to avoid getting problems with the environment variables not defined.
+<p>The changes you made to your <tt>&lsquo;~/.bashrc&rsquo;</tt> file will only get available for
+the next terminals you would open. You may therefore prefer to close the terminals
+you have already opened in order to avoid getting problems with the environment
+variables not defined.
 </p>
-<a name="3"></a>
-<h4 class="subsubheading"> Configure and build the project </h4>
 
-<p>Now everything is finally setup. We can open a new terminal, run the configuration script in the CS branch folder and build the entire project:
-</p>
-<table><tr><td>&nbsp;</td><td><pre class="example">configure
-nice jam
-</pre></td></tr></table>
-<p>This is the end of the compilation process of Crystal Space. You can now try running the <samp>&lsquo;walktest&rsquo;</samp> and <samp>&lsquo;avatartest&rsquo;</samp> demonstrations.
-</p>
 <hr size="1">
 <table cellpadding="1" cellspacing="1" border="0">
 <tr><td valign="middle" align="left">[<a href="Debian-Libraries.html#0" title="Previous section in reading order"> &lt; </a>]</td>
