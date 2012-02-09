@@ -17,6 +17,9 @@ The panel is composed of several buttons and controls to configure and run the e
 
 @itemize @bullet
 @item
+@strong{Export as a CS library}: whether the scene should be exported as a @samp{library}
+or a @samp{world} file.
+@item
 @strong{Export path}: path to the folder where the generated files will be put.
 @item
 @strong{Export}: export the scene to the specified path.
@@ -43,17 +46,32 @@ informations about the export process on the
 until the final message: @samp{EXPORTING complete}. The files generated should have been
 placed in the given export folder.
 
-The structure of the files is the following:
+The structure of the files will depend whether you have checked or not the
+@samp{Export as a CS library} option. If its is @cite{not} checked, then it will be the
+following:
 
 @itemize @bullet
 @item
-a @file{world} file containing your scene is created at the root of the export directory
+a @file{world} file containing your scene (i.e. all sectors) is created at the root
+of the export directory
 @item
 a @file{textures} directory is created in the export directory, and all texture files are
 put in it
 @item
 a @file{factories} directory is created in the export directory, and all library files (i.e.
 the mesh factories) are put in it
+@end itemize
+
+If the @samp{Export as a CS library} option @cite{is} checked, then there will be only one
+file generated:
+
+@itemize @bullet
+@item
+a @file{library} file containing all mesh factories is created at the root of the export
+directory
+@item
+a @file{textures} directory is also created in the export directory, and all texture files
+are put in it
 @end itemize
 
 If you want to visualize the exported objects, then you can open the library files with
@@ -128,12 +146,25 @@ and in Edit mode, press the hotkey @samp{W} then select @samp{Flip Normals}).
 This section presents the main objects and files that are created when a Blender scene is
 exported.
 
-@subsubheading Sectors
+The sectors, portals, lights and cameras are all exported in the @file{world} file. This
+also means that they will be exported only if the @samp{Export as a CS library} option
+is not checked. See the section on the @ref{XML File Format, format of the Crystal Space map files}
+for more information on the @file{world} file.
 
-Crystal Space maps can be split in several sectors linked by portals. This should be defined
-through @url{http://wiki.blender.org/index.php/Doc:2.6/Manual/Interface/Scenes, Blender's scenes},
-with one scene per sector. This feature is however still in developement and the
-@code{io_scene_cs} add-on can currently support only one scene.
+The materials and mesh factories are exported in a Crystal Space @samp{library} file,
+either in the @file{factories} directory or in the main @file{library} file.
+
+@subsubheading Sectors and Portals
+
+The maps in Crystal Space can be split in @ref{VIS sectors and portals, several sectors linked by portals}.
+The concept of sectors corresponds to the one of the
+@url{http://wiki.blender.org/index.php/Doc:2.6/Manual/Interface/Scenes, Blender scenes},
+but Blender has no matching concept for the portals.
+
+Each scene in Blender will therefore be exported as a different sector in the Crystal
+Space @file{world} file.
+
+The portals are not yet exported, this is a feature still in development.
 
 @subsubheading Cameras
 
