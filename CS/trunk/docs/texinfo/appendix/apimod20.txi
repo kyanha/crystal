@@ -6,17 +6,213 @@
 This section documents the major changes between versions 1.4 and 2.0 of
 Crystal Space.
 
-@menu
-* Api2_0 Static Build Plugin Scanning:: Plugin scanning in static builds changes
-@end menu
+Version 2.0 is a major release. As such, not all changes are documented.  Below
+details the major changes since the last release. This wil continue to be updated as time progrsses.
 
-@node Api2_0 Static Build Plugin Scanning, , Release Notes 2_0, Release Notes 2_0
-@subsection Plugin scanning in static builds changes
+This list will not be as complete as wished, but due to timescale between
+this and the last release, it makes it difficult to document all changes.
 
+@strong{API changes:}
+
+@itemize @bullet
+
+@item
+Added @code{csBitArray::IsBitSetTolerant ()} (does not assert for out
+of bound indices).
+
+@item
+Removed @code{CS_CONST_METHOD} and @code{CS_PURE_METHOD}. Pure and
+const specifiers have very strong semantics that almost never is warranted,
+and to avoid problems and bugs caused by them remove them totally.
+
+@item
+Addition new @code{SimpleStaticLighter} class. This is a conveniance class
+that calculates simple static vertex lighting (similar to what lighter2 would
+do) for individual meshes. This is useful for statically lighting dynamically
+created geometry or for updating vertex lighting on an object that has moved.
+
+@item
+Added @code{PeekNext ()} methods to @code{csRedBlackTreeMap} iterators.
+
+@item
+Renamed @code{csFinite ()} to @code{CS::IsFinite ()}.
+
+@item
+Renamed @code{csNaN ()} to @code{CS::IsNaN ()}.
+
+@item
+Deprecated @code{csNormal ()}.
+
+@item
+Added @code{iCameraListener} and deprecated @code{iCameraSectorListener}.
+@end itemize
+
+@strong{New features/enhancements:}
+
+@itemize @bullet
+
+@item
+New apps added. @file{csbias}, @file{deferreddemo}, @file{island},
+@file{waterdemo2}, @file{shadertut}. Please look for others in the
+@file{apps} directory.
+
+@item
+New level and data added. Please look within the @samp{data} directory.
+
+@item
+Threading has been extended and improved.
+
+@item
+Transition to preferred @file{bullet} for physics plugin underway.
+
+@item
+Extended support and usage of unit testing with @sc{cs}.
+
+@item
+Made memory blocks dump more useful in @code{ptmalloc}.
+
+@item
+Addition of leak guarding to @code{animesh}.
+
+@item
+Added copy constructors to @code{csRefCount}/@code{FastRefCount}
+that properly set the refcount to 1.
+
+@item
+Made generic render step provide inverse object to world TF as a SV.
+
+@item
+Extended @code{csFIFO} with a @code{Top ()} method that peeks into the fifo without removing anything. Agumented the @sc{fsm} node with possibility to
+specify transition animations between two states as well as the possibility to
+do smooth cross blends between two states or state and transition animation.
+
+@item
+Added state transitions animations to the @file{skeleton2} loader.
+
+@item
+Added [no]compact option to @file{optimisedata}, to put all data into
+one file (or split into many).
+
+@item
+Added new blender 2.6 export scripts. These are under development and
+all feedback will be appreciated.
+@end itemize
+
+@strong{Removals:}
+
+@itemize @bullet
+
+@item
+Completed removal of software renderer.
+
+@item
+Completed removal of old event system.
+
+@item
+Completed removal of thing plugin.
+
+@item
+Completed removal of old sound system.
+
+@item
+Completed removal of deprecated world attributes from tree.
+
+@item
+@file{simpvs} and @file{csdemo} have been removed.
+
+@item
+Large cleanup of lighting code which has resulted in removal of both
+interfaces and other methods. A result was a complete rework of lighting
+code.
+
+@item
+Removal of @file{instmesh} and @file{bezier} meshes as they are reall
+not that useful and instmesh isn't working that well either.
+
+@item
+Removed @code{iImageIO::SetDithering ()}.
+
+@item
+Removed deprecated @code{csProcessorCapability}.
+@end itemize
+
+@strong{Fixes that apply to tickets in Trac:}
+
+@itemize @bullet
+
+@item
+Changed @code{XMLshader} to expand all templates before retaining nodes
+for later parsing. Should help with #486.
+@end itemize
+
+@strong{Other changes:}
+
+@itemize @bullet
+
+@item
+There has been many additions, fixes and other work performed on the
+render manager, renderers and shaders. These are too numerous to mention.
+
+@item
+There has been many additions, fixes and other work performed on the configure
+system. Too numerous to mention.
+
+@item
+There have been many fixes and updates for platform support. Too numerous
+to mention.
+
+@item
+@file{perl} and @file{java} plugins are now disabled by default.
+
+@item
+There has been many updates and fixes to the documentation. Too numerous
+to mention.
+
+@item
 When building an application with ``statically linked plugins'' (usually by
 utilizing the @samp{LinkStaticPlugins} Jam rule) @sc{scf}'s automatic scanning
-for plugins was ``magically'' inhibited. This behaviour has been abandoned; now,
-by default plugin scanning is always performed independently of whether
+for plugins was ``magically'' inhibited. This behaviour has been abandoned;
+now, by default plugin scanning is always performed independently of whether
 statically linked plugins are used or not. Plugin scanning can be inhibited by
 calling @code{scfInitialize} manually (see the API documentation for details
 how).
+
+@item
+parallaxAtt moved to @samp{shader-old}.
+
+@item
+Added a check to the legacy renderbuffer so that it removes the
+@code{CS_BUFFER_COLOR} user renderbuffer if colors are not set.
+
+@item
+Changed to unshadowed render manager as default.
+
+@item
+Disabled high @sc{dpi} scaling on Windows Vista.
+
+@item
+Un-inline most @code{csPathsList} methods to avoid cross-module memory
+allocs/frees.
+
+@item
+Add a 'used @sc{sv}' traverser that gives the set of used @sc{sv}s (instead
+of individual @sc{sv} names).
+
+@item
+Extensive removal of dead and old code.
+
+@item
+Optimisation @file{lighter2} by not doing transparency-computation of shadowrays if path is fully unoccluded or fully occluded.
+
+@item
+Support for (properly hardware-accelerated) clip planes.
+
+@item
+Packaging scripts have been moved from the scripts directory into a sub packaging directory.
+
+@item
+Use @code{glXChooseFBConfig} instead of @code{glXChooseVisual}.
+
+@item
+Avoid crashes when encountering a corrupt @sc{png} images.
+@end itemize
