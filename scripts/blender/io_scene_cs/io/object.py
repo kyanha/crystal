@@ -313,9 +313,9 @@ def AsCSGenmeshLib(self, func, depth=0, **kwargs):
   func(' '*depth + '  <plugin>crystalspace.mesh.loader.factory.genmesh</plugin>')
   if self.data.use_imposter:
     func(' '*depth + '  <imposter range="100.0" tolerance="0.4" camera_tolerance="0.4" shader="lighting_imposter"/>')
-  if self.data.priority != 'None':
+  if self.data.priority != 'object':
     func(' '*depth + '  <priority>%s</priority>'%(self.data.priority))
-  if self.data.zbuf_mode != 'None':
+  if self.data.zbuf_mode != 'zuse':
     func(' '*depth + '  <%s/>'%(self.data.zbuf_mode))
   func(' '*depth + '  <params>')
 
