@@ -90,25 +90,24 @@ class MESH_PT_csFactory(csFactoryPanel, bpy.types.Panel):
 BoolProperty(['Mesh'], 
      attr="use_imposter", 
      name="imposter", 
-     description="Set wether this mesh should employ an imposter", 
+     description="Whether or not this mesh should use an imposter", 
      default=False)
 
 EnumProperty(['Mesh'], 
      attr="priority", 
      name="Render priority",
-     description="The priority level in which the object will be renderered in CS", 
-     items=[('None','None',''),('init','init',''),('sky','sky',''),('sky2','sky2',''),
+     description="Priority level in which the object will be renderered", 
+     items=[('init','init',''),('sky','sky',''),('sky2','sky2',''),
             ('portal','portal',''),('wall','wall',''),('wall2','wall2',''),('object','object',''),
             ('object2','object2',''),('transp','transp',''),('alpha','alpha',''),('final','final','')],
-     default='None')
+     default='object')
 
 EnumProperty(['Mesh'],
      attr="zbuf_mode",
      name="Z-buffer mode",
-     description="Indicates how the object will be rendered with regards to the Z-buffer",
-     items=[('None','None',""),
-            ('znone','Z-None',"Descr: Don't test or write."),
-            ('zfill','Z-Fill',"Write unconditionally."),
-            ('ztest','Z-Test',"Test only."),
-            ('zuse','Z-Use',"Test, write if successful.")],
-     default='None')
+     description="Behavior of the rendering of the object regarding the Z-Buffer",
+     items=[('znone','Z-None',"Don't test or write"),
+            ('zfill','Z-Fill',"Write unconditionally"),
+            ('ztest','Z-Test',"Test only"),
+            ('zuse','Z-Use',"Test, write if successful")],
+     default='zuse')
