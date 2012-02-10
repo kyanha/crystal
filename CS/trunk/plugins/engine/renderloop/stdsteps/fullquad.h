@@ -49,7 +49,7 @@ private:
   iObjectRegistry* object_reg;
 
 public:
-  csFullScreenQuadRenderStepFactory (iObjectRegistry* object_reg);
+  csFullScreenQuadRenderStepFactory (iBase* scfParent, iObjectRegistry* object_reg);
   virtual ~csFullScreenQuadRenderStepFactory ();
 
   virtual csPtr<iRenderStep> Create ();
@@ -82,7 +82,7 @@ private:
   //csFullscreenQuad* fullquad;
 
 public:
-  csFullScreenQuadRenderStep (iObjectRegistry* object_reg);
+  csFullScreenQuadRenderStep (iBase* scfParent, iObjectRegistry* object_reg);
   virtual ~csFullScreenQuadRenderStep ();
 
   virtual void Perform (iRenderView* rview, iSector* sector,

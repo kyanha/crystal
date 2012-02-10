@@ -59,7 +59,7 @@ csGenericRSType::csGenericRSType (iBase* p) :
 csPtr<iRenderStepFactory> csGenericRSType::NewFactory()
 {
   return csPtr<iRenderStepFactory> 
-    (new csGenericRenderStepFactory (object_reg));
+    (new csGenericRenderStepFactory (this, object_reg));
 }
 
 //---------------------------------------------------------------------------
@@ -76,7 +76,7 @@ csPtr<iBase> csGenericRSLoader::Parse (iDocumentNode* node,
 				       iBase* /*context*/)
 {
   csRef<iGenericRenderStep> step;
-  step.AttachNew (new csGenericRenderStep (object_reg));
+  step.AttachNew (new csGenericRenderStep (this, object_reg));
 
   csRef<iDocumentNodeIterator> it = node->GetNodes ();
   while (it->HasNext ())
@@ -135,8 +135,8 @@ csPtr<iBase> csGenericRSLoader::Parse (iDocumentNode* node,
 //---------------------------------------------------------------------------
 
 csGenericRenderStepFactory::csGenericRenderStepFactory (
-  iObjectRegistry* object_reg) :
-  scfImplementationType (this)
+  iBase* scfParent, iObjectRegistry* object_reg) :
+  scfImplementationType (this, scfParent)
 {
   csGenericRenderStepFactory::object_reg = object_reg;
 }
@@ -148,7 +148,7 @@ csGenericRenderStepFactory::~csGenericRenderStepFactory ()
 csPtr<iRenderStep> csGenericRenderStepFactory::Create ()
 {
   return csPtr<iRenderStep> 
-    (new csGenericRenderStep (object_reg));
+    (new csGenericRenderStep (this, object_reg));
 }
 
 //---------------------------------------------------------------------------
@@ -159,8 +159,8 @@ CS::ShaderVarStringID csGenericRenderStep::string_object2worldInv;
 CS::ShaderVarStringID csGenericRenderStep::light_ambient;
 
 csGenericRenderStep::csGenericRenderStep (
-  iObjectRegistry* object_reg) :
-  scfImplementationType (this)
+  iBase* scfParent, iObjectRegistry* object_reg) :
+  scfImplementationType (this, scfParent)
 {
   objreg = object_reg;
 

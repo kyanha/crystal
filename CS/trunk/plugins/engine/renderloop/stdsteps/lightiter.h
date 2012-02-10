@@ -80,7 +80,7 @@ private:
 public:
   CS_LEAKGUARD_DECLARE (csLightIterRenderStepFactory);
 
-  csLightIterRenderStepFactory (iObjectRegistry* object_reg);
+  csLightIterRenderStepFactory (iBase* scfParent, iObjectRegistry* object_reg);
   virtual ~csLightIterRenderStepFactory ();
 
   virtual csPtr<iRenderStep> Create ();
@@ -106,7 +106,7 @@ private:
 public:
   csWeakRef<iGraphics3D> g3d;
 
-  csLightIterRenderStep (iObjectRegistry* object_reg);
+  csLightIterRenderStep (iBase* scfParent, iObjectRegistry* object_reg);
   virtual ~csLightIterRenderStep ();
 
   void Init ();

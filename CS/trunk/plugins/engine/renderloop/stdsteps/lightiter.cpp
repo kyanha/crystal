@@ -55,7 +55,7 @@ csLightIterRSType::csLightIterRSType (iBase* p) :
 csPtr<iRenderStepFactory> csLightIterRSType::NewFactory()
 {
   return csPtr<iRenderStepFactory> 
-    (new csLightIterRenderStepFactory (object_reg));
+    (new csLightIterRenderStepFactory (this, object_reg));
 }
 
 //---------------------------------------------------------------------------
@@ -84,7 +84,7 @@ csPtr<iBase> csLightIterRSLoader::Parse (iDocumentNode* node,
 				       iBase* /*context*/)
 {
   csRef<iLightIterRenderStep> step;
-  step.AttachNew (new csLightIterRenderStep (object_reg));
+  step.AttachNew (new csLightIterRenderStep (this, object_reg));
   csRef<iRenderStepContainer> steps =
     scfQueryInterface<iRenderStepContainer> (step);
 
@@ -114,8 +114,8 @@ csPtr<iBase> csLightIterRSLoader::Parse (iDocumentNode* node,
 //---------------------------------------------------------------------------
 
 csLightIterRenderStepFactory::csLightIterRenderStepFactory (
-  iObjectRegistry* object_reg) :
-  scfImplementationType (this)
+  iBase* scfParent, iObjectRegistry* object_reg) :
+  scfImplementationType (this, scfParent)
 {
   csLightIterRenderStepFactory::object_reg = object_reg;
 }
@@ -127,14 +127,14 @@ csLightIterRenderStepFactory::~csLightIterRenderStepFactory ()
 csPtr<iRenderStep> csLightIterRenderStepFactory::Create ()
 {
   return csPtr<iRenderStep> 
-    (new csLightIterRenderStep (object_reg));
+    (new csLightIterRenderStep (this, object_reg));
 }
 
 //---------------------------------------------------------------------------
 
 csLightIterRenderStep::csLightIterRenderStep (
-  iObjectRegistry* object_reg) :
-  scfImplementationType (this), lastLSVHelperFrame ((uint)~0)
+  iBase* scfParent, iObjectRegistry* object_reg) :
+  scfImplementationType (this, scfParent), lastLSVHelperFrame ((uint)~0)
 {
   csLightIterRenderStep::object_reg = object_reg;
   initialized = false;

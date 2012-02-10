@@ -57,7 +57,7 @@ private:
   iObjectRegistry* object_reg;
 
 public:
-  csShadowmapRenderStepFactory (iObjectRegistry* object_reg);
+  csShadowmapRenderStepFactory (iBase* scfParent, iObjectRegistry* object_reg);
   virtual ~csShadowmapRenderStepFactory ();
 
   virtual csPtr<iRenderStep> Create ();
@@ -100,7 +100,7 @@ private:
   csRenderMeshList *mesh_list;
 
 public:
-  csShadowmapRenderStep (iObjectRegistry* object_reg);
+  csShadowmapRenderStep (iBase* scfParent, iObjectRegistry* object_reg);
   virtual ~csShadowmapRenderStep ();
 
   virtual void Perform (iRenderView* rview, iSector* sector,

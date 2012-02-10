@@ -70,7 +70,7 @@ private:
   iObjectRegistry* object_reg;
 
 public:
-  csTargetRenderStepFactory (iObjectRegistry* object_reg);
+  csTargetRenderStepFactory (iBase* scfParent, iObjectRegistry* object_reg);
   virtual ~csTargetRenderStepFactory ();
 
   virtual csPtr<iRenderStep> Create ();
@@ -89,7 +89,7 @@ private:
   bool persistent;
 
 public:
-  csTargetRenderStep (iObjectRegistry* object_reg);
+  csTargetRenderStep (iBase* scfParent, iObjectRegistry* object_reg);
   virtual ~csTargetRenderStep ();
 
   virtual void Perform (iRenderView* rview, iSector* sector,
