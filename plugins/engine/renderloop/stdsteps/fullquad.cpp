@@ -54,7 +54,7 @@ csFullScreenQuadRSType::csFullScreenQuadRSType (iBase* p) :
 csPtr<iRenderStepFactory> csFullScreenQuadRSType::NewFactory()
 {
   return csPtr<iRenderStepFactory> 
-    (new csFullScreenQuadRenderStepFactory (object_reg));
+    (new csFullScreenQuadRenderStepFactory (this, object_reg));
 }
 
 //---------------------------------------------------------------------------
@@ -70,7 +70,7 @@ csPtr<iBase> csFullScreenQuadRSLoader::Parse (iDocumentNode* node,
 				       iBase* /*context*/)
 {
   csFullScreenQuadRenderStep* newstep = 
-    new csFullScreenQuadRenderStep (object_reg);
+    new csFullScreenQuadRenderStep (this, object_reg);
   csRef<iRenderStep> step;
   step.AttachNew (newstep);    
 
@@ -201,8 +201,8 @@ bool csFullScreenQuadRSLoader::ParseStep (iLoaderContext* ldr_context,
 //---------------------------------------------------------------------------
 
 csFullScreenQuadRenderStepFactory::csFullScreenQuadRenderStepFactory (
-  iObjectRegistry* object_reg) :
-  scfImplementationType (this)
+  iBase* scfParent, iObjectRegistry* object_reg) :
+  scfImplementationType (this, scfParent)
 {
   csFullScreenQuadRenderStepFactory::object_reg = object_reg;
 }
@@ -214,14 +214,14 @@ csFullScreenQuadRenderStepFactory::~csFullScreenQuadRenderStepFactory ()
 csPtr<iRenderStep> csFullScreenQuadRenderStepFactory::Create ()
 {
   return csPtr<iRenderStep> 
-    (new csFullScreenQuadRenderStep (object_reg));
+    (new csFullScreenQuadRenderStep (this, object_reg));
 }
 
 //---------------------------------------------------------------------------
 
 csFullScreenQuadRenderStep::csFullScreenQuadRenderStep (
-  iObjectRegistry* object_reg) :
-  scfImplementationType (this)
+  iBase* scfParent, iObjectRegistry* object_reg) :
+  scfImplementationType (this, scfParent)
 {
   csRef<iGraphics3D> g3d = 
     csQueryRegistry<iGraphics3D> (object_reg);

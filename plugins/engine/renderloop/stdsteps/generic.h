@@ -73,7 +73,7 @@ private:
   iObjectRegistry* object_reg;
 
 public:
-  csGenericRenderStepFactory (iObjectRegistry* object_reg);
+  csGenericRenderStepFactory (iBase* scfParent, iObjectRegistry* object_reg);
   virtual ~csGenericRenderStepFactory ();
 
   virtual csPtr<iRenderStep> Create ();
@@ -134,7 +134,7 @@ private:
   static CS::ShaderVarStringID light_ambient;
 
 public:
-  csGenericRenderStep (iObjectRegistry* object_reg);
+  csGenericRenderStep (iBase* scfParent, iObjectRegistry* object_reg);
   virtual ~csGenericRenderStep ();
 
   virtual void Perform (iRenderView* rview, iSector* sector,
