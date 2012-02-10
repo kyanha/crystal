@@ -82,9 +82,24 @@ class Hierarchy:
     if skelRef and self.object.type == 'ARMATURE':
       func(" "*depth + "<library>factories/%s_rig</library>"%(self.object.name))
 
+    # Animesh factory header
     func(" "*depth + "<meshfact name=\"%s\">"%(self.object.name))
     func(" "*depth + "  <plugin>crystalspace.mesh.loader.factory.animesh</plugin>")
 
+    # Render priority and Z-mode properties
+    if self.object.type == 'ARMATURE':
+      for child in self.object.children:
+        if child.parent_type!='BONE':
+          if child.data.priority != 'object':
+            func(' '*depth + '  <priority>%s</priority>'%(child.data.priority))
+          if child.data.zbuf_mode != 'zuse':
+            func(' '*depth + '  <%s/>'%(child.data.zbuf_mode))
+    else:      
+      if self.object.data.priority != 'object':
+        func(' '*depth + '  <priority>%s</priority>'%(self.object.data.priority))
+      if self.object.data.zbuf_mode != 'zuse':
+        func(' '*depth + '  <%s/>'%(self.object.data.zbuf_mode))
+      
 
   def AsCSLib(self, path='', animesh=False, **kwargs):
     """ Export this Blender mesh as a CS library file entitled '<mesh name>' in the 

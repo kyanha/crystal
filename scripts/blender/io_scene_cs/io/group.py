@@ -119,18 +119,24 @@ def WriteCSGroup(self, func, depth=0, use_imposter=False, dontClose=False):
 
   # Export the group of objects as a general mesh factory
   func(' '*depth + '<meshfact name=\"%s\">'%(self.uname))
+
   if self.groupedInstances:
     # EXPORT OBJECTS AS INSTANCES OF THE GENERAL MESH
     print("The objects composing group '%s' are exported as instances of a general mesh"%(self.uname))
     func(' '*depth + '  <instances>')
-    func(' '*depth + '    <meshfact name=\"%s-instance\">'%(self.uname))
-    #if use_imposter:
-    #  func(' '*depth + '      <imposter range="10.0" tolerance="45.0" camera_tolerance="45.0" shader="lighting_imposter"/>')
-    func(' '*depth + '      <plugin>crystalspace.mesh.loader.factory.genmesh</plugin>')
-    func(' '*depth + '      <params>')
 
     # Export first object of the group as a basic general mesh
     m, ob in self.allObjects()[0]
+
+    func(' '*depth + '    <meshfact name=\"%s-instance\">'%(self.uname))
+    func(' '*depth + '      <plugin>crystalspace.mesh.loader.factory.genmesh</plugin>')
+    #if use_imposter:
+    #  func(' '*depth + '      <imposter range="10.0" tolerance="45.0" camera_tolerance="45.0" shader="lighting_imposter"/>')
+    if ob.data.priority != 'object':
+      func(' '*depth + '      <priority>%s</priority>'%(ob.data.priority))
+    if ob.data.zbuf_mode != 'zuse':
+      func(' '*depth + '      <%s/>'%(ob.data.zbuf_mode))
+    func(' '*depth + '      <params>')
 
     # Export render buffers
     indexObject = find(lambda obCpy: obCpy.name[:-4] == ob.name[:len(obCpy.name[:-4])], meshData)
@@ -182,9 +188,15 @@ def WriteCSGroup(self, func, depth=0, use_imposter=False, dontClose=False):
   else:
     # EXPORT OBJECTS AS SUBMESHES OF THE GENERAL MESH
     print("The objects composing group '%s' are exported as submeshes of a general mesh"%(self.uname))
+    func(' '*depth + '  <plugin>crystalspace.mesh.loader.factory.genmesh</plugin>')
     #if use_imposter:
     #  func(' '*depth + '  <imposter range="10.0" tolerance="45.0" camera_tolerance="45.0" shader="lighting_imposter"/>')
-    func(' '*depth + '  <plugin>crystalspace.mesh.loader.factory.genmesh</plugin>')
+    for m, ob in self.allObjects():
+      if ob.data.priority != 'object':
+        func(' '*depth + '  <priority>%s</priority>'%(ob.data.priority))
+      if ob.data.zbuf_mode != 'zuse':
+        func(' '*depth + '  <%s/>'%(ob.data.zbuf_mode))
+
     func(' '*depth + '  <params>')
     
     def SubmeshesLackMaterial(subMeshess):
