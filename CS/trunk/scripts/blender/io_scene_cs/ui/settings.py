@@ -130,5 +130,5 @@ B2CS.BoolProperty( attr="silent",
         description="Enable the '-silent' flag of 'walktest'", default=True)
 
 B2CS.BoolProperty( attr="library",
-        name="Export as a CS library",
-        description="Export all mesh factories in a unique CS library file", default=False)
+        name="Export objects as a CS library",
+        description="Export all objects composing the world as a unique CS library file", default=False)
