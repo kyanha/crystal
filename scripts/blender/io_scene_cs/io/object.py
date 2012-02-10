@@ -310,9 +310,13 @@ def AsCSGenmeshLib(self, func, depth=0, **kwargs):
 
   # Write genmesh header
   func(' '*depth + '<meshfact name=\"%s\">'%(self.name))
+  func(' '*depth + '  <plugin>crystalspace.mesh.loader.factory.genmesh</plugin>')
   if self.data.use_imposter:
     func(' '*depth + '  <imposter range="100.0" tolerance="0.4" camera_tolerance="0.4" shader="lighting_imposter"/>')
-  func(' '*depth + '  <plugin>crystalspace.mesh.loader.factory.genmesh</plugin>')
+  if self.data.priority != 'None':
+    func(' '*depth + '  <priority>%s</priority>'%(self.data.priority))
+  if self.data.zbuf_mode != 'None':
+    func(' '*depth + '  <%s/>'%(self.data.zbuf_mode))
   func(' '*depth + '  <params>')
 
   # Recover submeshes from kwargs
