@@ -11,10 +11,10 @@ Send bugs and suggestions to <users@texi2html.cvshome.org>
 
 -->
 <head>
-<title>Crystal Space 2.1.0: 4.15.5 GenMesh Animation</title>
+<title>Crystal Space 2.1.0: 4.15.4 GenMesh Animation</title>
 
-<meta name="description" content="Crystal Space 2.1.0: 4.15.5 GenMesh Animation">
-<meta name="keywords" content="Crystal Space 2.1.0: 4.15.5 GenMesh Animation">
+<meta name="description" content="Crystal Space 2.1.0: 4.15.4 GenMesh Animation">
+<meta name="keywords" content="Crystal Space 2.1.0: 4.15.4 GenMesh Animation">
 <meta name="resource-type" content="document">
 <meta name="distribution" content="global">
 <meta name="Generator" content="texi2html 1.76">
@@ -43,8 +43,8 @@ ul.toc {list-style: none}
 <a name="GenMesh-Animation"></a>
 <a name="0"></a>
 <table cellpadding="1" cellspacing="1" border="0">
-<tr><td valign="middle" align="left">[<a href="Socket-Animation.html#0" title="Previous section in reading order"> &lt; </a>]</td>
-<td valign="middle" align="left">[<a href="Sequence-Manager.html#0" title="Next section in reading order"> &gt; </a>]</td>
+<tr><td valign="middle" align="left">[<a href="SpriteCal3D-Animation.html#0" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="Socket-Animation.html#0" title="Next section in reading order"> &gt; </a>]</td>
 <td valign="middle" align="left"> &nbsp; </td>
 <td valign="middle" align="left">[<a href="Using-Crystal-Space.html#0" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
 <td valign="middle" align="left">[<a href="Animation.html#0" title="Up section"> Up </a>]</td>
@@ -59,10 +59,62 @@ ul.toc {list-style: none}
 <td valign="middle" align="left">[<a href="cs_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
 </tr></table>
 <hr size="1">
-<h3 class="subsection"> 4.15.5 GenMesh Animation </h3>
+<h3 class="subsection"> 4.15.4 GenMesh Animation </h3>
 
-<p><small>TODO</small>!
+<p>The shape of a <a href="MeshObject-Genmesh.html#0">Genmesh</a> can be animated using an
+animation controller (classes <code>iGenMeshAnimationControl</code> and
+<code>iGenMeshAnimationControlFactory</code>).
 </p>
+<p>An animation controller is given the ability to modify the state and shape of
+the mesh, i.e. mainly the main render buffers of the mesh such as the vertices,
+the triangles, the normals, the bitangents, along with other parameters such as
+the bounding box.
+</p>
+<p>An animation controller is associated to a Genmesh using the methods
+<code>iGeneralFactoryState::SetAnimationControlFactory()</code> or
+<code>iGeneralMeshState::SetAnimationControl()</code>. If a Genmesh has an animation
+controller, then this controller will have its various methods
+<code>iGenMeshAnimationControl::UpdateXXX()</code> called every frame, whenever the
+mesh is visible, and allowing the controller to modify the Genmesh.
+</p>
+<p>There are several different animation controllers already available in Crystal
+Space. These are:
+</p>
+<ul>
+<li>
+Scripted transformations
+
+<p>Plugin: <code>crystalspace.mesh.anim.genmesh</code>
+</p>
+<p>This plugin allows to define sets of geometric transformations to be applied on the
+whole mesh, such as rotation, trnaslation, scaling. The transformations to be applied
+are defined in XML scripts.
+</p>
+</li><li>
+Soft body simulation
+
+<p>Plugin: <code>crystalspace.dynamics.softanim</code>
+</p>
+<p>This plugin allows to animate automatically a Genmesh depending on the motion and
+deformation made by a soft body that is physically simulated.
+</p>
+</li><li>
+Skeletal animation
+
+<p>Plugin: <code>crystalspace.mesh.anim.skeleton2</code>
+</p>
+<p>This plugin allows to animate the Genmesh based on the motion of a skeleton. This
+plugin has however became obsolete by the <a href="MeshObject-Animesh.html#0">Animesh</a>.
+</p>
+</li><li>
+PD lights
+
+<p>Plugin: <code>crystalspace.mesh.anim.pdlight</code>
+</p>
+<p><cite>todo</cite>!
+</p>
+</li></ul>
+
 <hr size="1">
 <p>
  <font size="-1">

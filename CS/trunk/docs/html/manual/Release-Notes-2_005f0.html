@@ -44,7 +44,7 @@ ul.toc {list-style: none}
 <a name="0"></a>
 <table cellpadding="1" cellspacing="1" border="0">
 <tr><td valign="middle" align="left">[<a href="Release-Notes.html#0" title="Previous section in reading order"> &lt; </a>]</td>
-<td valign="middle" align="left">[<a href="Api2_005f0-Static-Build-Plugin-Scanning.html#0" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left">[<a href="Release-Notes-1_005f4_005f1.html#0" title="Next section in reading order"> &gt; </a>]</td>
 <td valign="middle" align="left"> &nbsp; </td>
 <td valign="middle" align="left">[<a href="Release-Notes.html#0" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
 <td valign="middle" align="left">[<a href="Release-Notes.html#0" title="Up section"> Up </a>]</td>
@@ -64,11 +64,229 @@ ul.toc {list-style: none}
 <p>This section documents the major changes between versions 1.4 and 2.0 of
 Crystal Space.
 </p>
-<table class="menu" border="0" cellspacing="0">
-<tr><td align="left" valign="top"><a href="Api2_005f0-Static-Build-Plugin-Scanning.html#0">C.1.1 Plugin scanning in static builds changes</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"></td></tr>
-</table>
+<p>Version 2.0 is a major release. As such, not all changes are documented.  Below
+details the major changes since the last release. This wil continue to be updated as time progrsses.
+</p>
+<p>This list will not be as complete as wished, but due to timescale between
+this and the last release, it makes it difficult to document all changes.
+</p>
+<p><strong>API changes:</strong>
+</p>
+<ul>
+<li>
+Added <code>csBitArray::IsBitSetTolerant ()</code> (does not assert for out
+of bound indices).
+
+</li><li>
+Removed <code>CS_CONST_METHOD</code> and <code>CS_PURE_METHOD</code>. Pure and
+const specifiers have very strong semantics that almost never is warranted,
+and to avoid problems and bugs caused by them remove them totally.
+
+</li><li>
+Addition new <code>SimpleStaticLighter</code> class. This is a conveniance class
+that calculates simple static vertex lighting (similar to what lighter2 would
+do) for individual meshes. This is useful for statically lighting dynamically
+created geometry or for updating vertex lighting on an object that has moved.
+
+</li><li>
+Added <code>PeekNext ()</code> methods to <code>csRedBlackTreeMap</code> iterators.
+
+</li><li>
+Renamed <code>csFinite ()</code> to <code>CS::IsFinite ()</code>.
+
+</li><li>
+Renamed <code>csNaN ()</code> to <code>CS::IsNaN ()</code>.
+
+</li><li>
+Deprecated <code>csNormal ()</code>.
+
+</li><li>
+Added <code>iCameraListener</code> and deprecated <code>iCameraSectorListener</code>.
+</li></ul>
+
+<p><strong>New features/enhancements:</strong>
+</p>
+<ul>
+<li>
+New apps added. <tt>&lsquo;csbias&rsquo;</tt>, <tt>&lsquo;deferreddemo&rsquo;</tt>, <tt>&lsquo;island&rsquo;</tt>,
+<tt>&lsquo;waterdemo2&rsquo;</tt>, <tt>&lsquo;shadertut&rsquo;</tt>. Please look for others in the
+<tt>&lsquo;apps&rsquo;</tt> directory.
+
+</li><li>
+New level and data added. Please look within the <samp>&lsquo;data&rsquo;</samp> directory.
+
+</li><li>
+Threading has been extended and improved.
+
+</li><li>
+Transition to preferred <tt>&lsquo;bullet&rsquo;</tt> for physics plugin underway.
+
+</li><li>
+Extended support and usage of unit testing with <small>CS</small>.
+
+</li><li>
+Made memory blocks dump more useful in <code>ptmalloc</code>.
+
+</li><li>
+Addition of leak guarding to <code>animesh</code>.
+
+</li><li>
+Added copy constructors to <code>csRefCount</code>/<code>FastRefCount</code>
+that properly set the refcount to 1.
+
+</li><li>
+Made generic render step provide inverse object to world TF as a SV.
+
+</li><li>
+Extended <code>csFIFO</code> with a <code>Top ()</code> method that peeks into the fifo without removing anything. Agumented the <small>FSM</small> node with possibility to
+specify transition animations between two states as well as the possibility to
+do smooth cross blends between two states or state and transition animation.
+
+</li><li>
+Added state transitions animations to the <tt>&lsquo;skeleton2&rsquo;</tt> loader.
+
+</li><li>
+Added [no]compact option to <tt>&lsquo;optimisedata&rsquo;</tt>, to put all data into
+one file (or split into many).
+
+</li><li>
+Added new blender 2.6 export scripts. These are under development and
+all feedback will be appreciated.
+</li></ul>
+
+<p><strong>Removals:</strong>
+</p>
+<ul>
+<li>
+Completed removal of software renderer.
+
+</li><li>
+Completed removal of old event system.
+
+</li><li>
+Completed removal of thing plugin.
+
+</li><li>
+Completed removal of old sound system.
+
+</li><li>
+Completed removal of deprecated world attributes from tree.
+
+</li><li>
+<tt>&lsquo;simpvs&rsquo;</tt> and <tt>&lsquo;csdemo&rsquo;</tt> have been removed.
+
+</li><li>
+Large cleanup of lighting code which has resulted in removal of both
+interfaces and other methods. A result was a complete rework of lighting
+code.
+
+</li><li>
+Removal of <tt>&lsquo;instmesh&rsquo;</tt> and <tt>&lsquo;bezier&rsquo;</tt> meshes as they are reall
+not that useful and instmesh isn't working that well either.
+
+</li><li>
+Removed <code>iImageIO::SetDithering ()</code>.
+
+</li><li>
+Removed deprecated <code>csProcessorCapability</code>.
+</li></ul>
+
+<p><strong>Fixes that apply to tickets in Trac:</strong>
+</p>
+<ul>
+<li>
+Changed <code>XMLshader</code> to expand all templates before retaining nodes
+for later parsing. Should help with #486.
+</li></ul>
+
+<p><strong>Other changes:</strong>
+</p>
+<ul>
+<li>
+There has been many additions, fixes and other work performed on the
+render manager, renderers and shaders. These are too numerous to mention.
+
+</li><li>
+There has been many additions, fixes and other work performed on the configure
+system. Too numerous to mention.
+
+</li><li>
+There have been many fixes and updates for platform support. Too numerous
+to mention.
+
+</li><li>
+<tt>&lsquo;perl&rsquo;</tt> and <tt>&lsquo;java&rsquo;</tt> plugins are now disabled by default.
+
+</li><li>
+There has been many updates and fixes to the documentation. Too numerous
+to mention.
+
+</li><li>
+When building an application with &ldquo;statically linked plugins&rdquo; (usually by
+utilizing the <samp>&lsquo;LinkStaticPlugins&rsquo;</samp> Jam rule) <small>SCF</small>'s automatic scanning
+for plugins was &ldquo;magically&rdquo; inhibited. This behaviour has been abandoned;
+now, by default plugin scanning is always performed independently of whether
+statically linked plugins are used or not. Plugin scanning can be inhibited by
+calling <code>scfInitialize</code> manually (see the API documentation for details
+how).
+
+</li><li>
+parallaxAtt moved to <samp>&lsquo;shader-old&rsquo;</samp>.
+
+</li><li>
+Added a check to the legacy renderbuffer so that it removes the
+<code>CS_BUFFER_COLOR</code> user renderbuffer if colors are not set.
+
+</li><li>
+Changed to unshadowed render manager as default.
+
+</li><li>
+Disabled high <small>DPI</small> scaling on Windows Vista.
+
+</li><li>
+Un-inline most <code>csPathsList</code> methods to avoid cross-module memory
+allocs/frees.
+
+</li><li>
+Add a 'used <small>SV</small>' traverser that gives the set of used <small>SV</small>s (instead
+of individual <small>SV</small> names).
+
+</li><li>
+Extensive removal of dead and old code.
+
+</li><li>
+Optimisation <tt>&lsquo;lighter2&rsquo;</tt> by not doing transparency-computation of shadowrays if path is fully unoccluded or fully occluded.
+
+</li><li>
+Support for (properly hardware-accelerated) clip planes.
+
+</li><li>
+Packaging scripts have been moved from the scripts directory into a sub packaging directory.
+
+</li><li>
+Use <code>glXChooseFBConfig</code> instead of <code>glXChooseVisual</code>.
+
+</li><li>
+Avoid crashes when encountering a corrupt <small>PNG</small> images.
+</li></ul>
 
 <hr size="1">
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="Release-Notes.html#0" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="Release-Notes-1_005f4_005f1.html#0" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="Release-Notes.html#0" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="Release-Notes.html#0" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="Licenses.html#0" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="index.html#SEC_Top" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="cs_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="cs_Index.html#0" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="cs_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
 <p>
  <font size="-1">
   This document was generated using <a href="http://texi2html.cvshome.org/"><em>texi2html 1.76</em></a>.
