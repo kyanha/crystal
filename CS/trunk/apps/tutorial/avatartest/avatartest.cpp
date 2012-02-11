@@ -57,9 +57,8 @@ void AvatarTest::PrintHelp ()
 
   // Printing help
   commandLineHelper.PrintApplicationHelp
-    (GetObjectRegistry (), "avatartest",
-     "avatartest <OPTIONS>",
-     "Tests on the animation of objects iAnimatedMesh.");
+    (GetObjectRegistry (), "avatartest", "avatartest <OPTIONS>",
+     "Tutorial on the animation of objects iAnimatedMesh.");
 }
 
 void AvatarTest::Frame ()
