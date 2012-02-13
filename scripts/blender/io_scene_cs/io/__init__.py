@@ -23,6 +23,16 @@ def Write(fi):
 
 def Export(path):
 
+  # Set interaction mode to 'OBJECT' mode
+  editMode = False
+  for ob in bpy.data.objects:
+    if ob.mode == 'EDIT':
+      if bpy.ops.object.mode_set.poll():
+        bpy.ops.object.mode_set(mode='OBJECT')
+        editMode = True
+        break
+
+  # Export Blender data to Crystal Space format
   exportAsLibrary = B2CS.properties.library
   if exportAsLibrary:
     print("\nEXPORTING: "+Join(path, 'library')+" ====================================")
@@ -34,6 +44,11 @@ def Export(path):
     print("  All scenes composing this world are exported as sectors in the 'world' file ;\n",
            " all objects of these scenes are exported as separated libraries.\n")
     ExportWorld(path)
+
+  # Restore interaction mode
+  if editMode:
+    if bpy.ops.object.mode_set.poll():
+      bpy.ops.object.mode_set(mode='EDIT')
 
 
 def ExportWorld(path):
