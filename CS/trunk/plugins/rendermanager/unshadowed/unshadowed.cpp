@@ -230,6 +230,7 @@ bool RMUnshadowed::RenderView (iView* view, bool recursePortals)
   csRef<CS::RenderManager::RenderView> rview;
   rview = treePersistent.renderViews.GetRenderView (view);
   iCamera* c = view->GetCamera ();
+  rview->SetOriginalCamera (c);
   iGraphics3D* G3D = rview->GetGraphics3D ();
   int frameWidth = G3D->GetWidth ();
   int frameHeight = G3D->GetHeight ();

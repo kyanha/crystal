@@ -113,7 +113,7 @@ namespace RenderManager
     /// Set the camera.
     void SetCamera (iCamera* camera);
     /// Set the original camera.
-    void SetOriginalCamera (iCamera* camera);
+    virtual void SetOriginalCamera (iCamera* camera);
     /// Get the original camera.
     virtual iCamera* GetOriginalCamera () const { return original_camera; }
 
