@@ -179,7 +179,7 @@ const char* csExpressionTokenizer::Tokenize (const char* string, size_t len,
 	}
 	break;
       case tNumber:
-	if (isalnum (*string) || (*string == '.') || (*string == 'e') || 
+	if (isdigit (*string) || (*string == '.') || (*string == 'e') || 
 	  (*string == 'E'))
 	{
 	  currentToken.tokenLen++;
