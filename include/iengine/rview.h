@@ -177,7 +177,7 @@ public:
  */
 struct iRenderView : public virtual iBase
 {
-  SCF_INTERFACE(iRenderView, 2,2,0);
+  SCF_INTERFACE(iRenderView, 2,3,0);
   /// Get the current render context.
   virtual csRenderContext* GetRenderContext () = 0;
 
@@ -218,6 +218,12 @@ struct iRenderView : public virtual iBase
    * Get the portal we last traversed through.
    */
   virtual iPortal* GetLastPortal () = 0;
+
+  /**
+   * Set the original camera for this render view. This is
+   * the camera before any space warping portals.
+   */
+  virtual void SetOriginalCamera (iCamera* camera) = 0;
 
   /**
    * Get the original camera for this render view. This is
