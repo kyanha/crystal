@@ -25,11 +25,13 @@ namespace CS
 {
   namespace Debug
   {
-    
+    static CS::Threading::RecursiveMutex assertMutex;
+    static int assertCnt = 0;
+
     void AssertMessage (const char* expr, const char* filename, int line,
 			 const char* msg)
     {
-      static int assertCnt = 0;
+      CS::Threading::ScopedLock<CS::Threading::RecursiveMutex> assertLock (assertMutex);
       
       if (assertCnt == 1)
       {
