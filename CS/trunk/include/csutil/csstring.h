@@ -597,7 +597,7 @@ public:
    * \remarks Internally uses the various flavours of Append().
    */
   template<typename T>
-  csStringBase& Replace (T const& val) { Truncate (0); return Append (val); }
+  inline csStringBase& Replace (T const& val);
 
   /**
    * Check if another string is equal to this one.
@@ -1236,5 +1236,14 @@ public:
 #endif
   /** @} */
 };
+
+template<typename T>
+csStringBase& csStringBase::Replace (T const& val)
+{
+  // Use a temp string so replacing a string with itself works correctly
+  csString temp;
+  temp.Append (val);
+  return Replace (static_cast<const csStringBase&> (temp));
+}
 
 #endif // __CS_CSSTRING_H__
