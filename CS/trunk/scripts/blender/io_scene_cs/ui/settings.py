@@ -37,7 +37,12 @@ def WalkTestPath():
     walktest = "walktest.exe"
   else:
     walktest = "walktest"
-  return os.path.join(os.environ.get("CRYSTAL"), walktest).replace('\\', '/')
+
+  # Look either in the 'CRYSTAL' and 'CRYSTAL/bin' paths
+  path = os.path.join(os.environ.get("CRYSTAL"), walktest).replace('\\', '/')
+  if os.path.exists(path):
+    return path
+  return os.path.join(os.environ.get("CRYSTAL"), "bin", walktest).replace('\\', '/')
             
 def HasCrystalSpace():    
   return os.path.exists(WalkTestPath())
