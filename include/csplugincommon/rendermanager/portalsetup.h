@@ -473,6 +473,7 @@ namespace RenderManager
       iCamera* inewcam = newCam->GetCamera();
       newRenderView = renderTree.GetPersistentData().renderViews.GetRenderView (rview, portal, inewcam);
       newRenderView->SetEngine (rview->GetEngine ());
+      newRenderView->SetOriginalCamera (rview->GetOriginalCamera ());
 	
       if (portalFlags.Check (CS_PORTAL_WARP))
       {

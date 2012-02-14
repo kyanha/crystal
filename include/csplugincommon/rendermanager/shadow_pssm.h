@@ -569,8 +569,9 @@ namespace RenderManager
 	    bool noCasters = (castersBox.Empty());
 	    
 	    CS::RenderManager::RenderView* rview = context.renderView;
-      csRef<CS::RenderManager::RenderView> newRenderView;
-      newRenderView = renderTree.GetPersistentData().renderViews.CreateRenderView ();
+            csRef<CS::RenderManager::RenderView> newRenderView;
+            newRenderView = renderTree.GetPersistentData().renderViews.CreateRenderView ();
+	    newRenderView->SetOriginalCamera (rview->GetOriginalCamera ());
 	    newRenderView->SetEngine (rview->GetEngine ());
 	    newRenderView->SetThisSector (rview->GetThisSector ());
 	    

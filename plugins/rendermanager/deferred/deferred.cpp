@@ -347,6 +347,7 @@ bool RMDeferred::RenderView(iView *view, bool recursePortals)
   // Setup renderview
   csRef<CS::RenderManager::RenderView> rview;
   rview = treePersistent.renderViews.GetRenderView (view);
+  rview->SetOriginalCamera (view->GetCamera ());
 
   // Computes the left, right, top, and bottom of the view frustum.
   iPerspectiveCamera *camera = view->GetPerspectiveCamera ();

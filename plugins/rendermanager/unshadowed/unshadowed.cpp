@@ -347,6 +347,8 @@ bool RMUnshadowed::HandleTarget (RenderTreeType& renderTree,
   // Prepare
   csRef<CS::RenderManager::RenderView> rview;
   rview = treePersistent.renderViews.GetRenderView (settings.view);
+  iCamera* c = settings.view->GetCamera ();
+  rview->SetOriginalCamera (c);
 
   iSector* startSector = rview->GetThisSector ();
 

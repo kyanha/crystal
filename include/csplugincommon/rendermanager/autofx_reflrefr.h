@@ -478,8 +478,9 @@ namespace CS
 	      csRef<CS::RenderManager::RenderView> reflView;
 	      csRef<iCamera> newCam (cam->Clone());
 	      iCamera* inewcam = newCam;
-        reflView = renderTree.GetPersistentData().renderViews.CreateRenderView (rview);
+              reflView = renderTree.GetPersistentData().renderViews.CreateRenderView (rview);
 	      reflView->SetCamera (inewcam);
+	      reflView->SetOriginalCamera (rview->GetOriginalCamera ());
 	      CS::Utility::MeshFilter meshFilter;
 	      meshFilter.AddFilterMesh (mesh.meshWrapper);
 	      reflView->SetMeshFilter(meshFilter);
