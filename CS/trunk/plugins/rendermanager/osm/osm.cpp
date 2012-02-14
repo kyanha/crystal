@@ -173,6 +173,7 @@ struct WrapShadowParams<RMOSM::ShadowType>
 
     csRef<CS::RenderManager::RenderView> rview;
     rview = treePersistent.renderViews.GetRenderView (view);
+    rview->SetOriginalCamera (view->GetCamera ());
     iGraphics3D* G3D = rview->GetGraphics3D ();
     int frameWidth = G3D->GetWidth ();
     int frameHeight = G3D->GetHeight ();

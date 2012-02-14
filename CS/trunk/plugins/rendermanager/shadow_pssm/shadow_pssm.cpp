@@ -356,6 +356,7 @@ bool RMShadowedPSSM::RenderView (iView* view, bool recursePortals)
   view->UpdateClipper ();
   csRef<CS::RenderManager::RenderView> rview;
   rview = treePersistent.renderViews.GetRenderView (view);
+  rview->SetOriginalCamera (view->GetCamera ());
   iPerspectiveCamera* c = view->GetPerspectiveCamera ();
   iGraphics3D* G3D = rview->GetGraphics3D ();
   int frameWidth = G3D->GetWidth ();
@@ -459,6 +460,7 @@ bool RMShadowedPSSM::HandleTarget (RenderTreeType& renderTree,
   // Prepare
   csRef<CS::RenderManager::RenderView> rview;
   rview = treePersistent.renderViews.GetRenderView (settings.view);
+  rview->SetOriginalCamera (settings.view->GetCamera ());
 
   iSector* startSector = rview->GetThisSector ();
 

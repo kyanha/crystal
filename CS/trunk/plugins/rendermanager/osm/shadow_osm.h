@@ -428,6 +428,7 @@ namespace CS
               renderTree.GetPersistentData().renderViews.CreateRenderView ();
             newRenderView->SetEngine (rview->GetEngine ());
             newRenderView->SetThisSector (rview->GetThisSector ());
+	    newRenderView->SetOriginalCamera (rview->GetOriginalCamera ());
 
             // We only need one shadow map project SV per light
             for (int i = 0; i < 4; i++)
