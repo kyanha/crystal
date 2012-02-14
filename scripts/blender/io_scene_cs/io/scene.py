@@ -40,8 +40,6 @@ def SceneAsCS(self, func, depth=0):
   objects = []   
   for ob in [o for o in self.objects if o.type != 'CAMERA']:
     if not ob.parent or (ob.parent and ob.parent_type == 'BONE'):
-      if ob.type=='MESH' and (len(ob.data.vertices)==0 or len(ob.data.faces)==0):
-        continue
       if ob not in objects:
         group = ob.hasMergingGroup()
         if group:
