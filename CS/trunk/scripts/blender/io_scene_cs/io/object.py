@@ -383,16 +383,17 @@ def ObjectAsCS(self, func, depth=0, **kwargs):
     name = kwargs['name']+':'+name
 
   if self.type == 'MESH':
-    func(' '*depth +'<meshref name="%s_object">'%(self.name))
-    func(' '*depth +'  <factory>%s</factory>'%(self.name))
-    if self.parent and self.parent_type == 'BONE':
-      matrix = self.matrix_world
-    else:
-      matrix = self.relative_matrix
-      if 'transform' in kwargs:
-        matrix =  matrix * kwargs['transform']
-    MatrixAsCS(matrix, func, depth+2)
-    func(' '*depth +'</meshref>')
+    if len(self.data.vertices)!=0 and len(self.data.faces)!=0:
+      func(' '*depth +'<meshref name="%s_object">'%(self.name))
+      func(' '*depth +'  <factory>%s</factory>'%(self.name))
+      if self.parent and self.parent_type == 'BONE':
+        matrix = self.matrix_world
+      else:
+        matrix = self.relative_matrix
+        if 'transform' in kwargs:
+          matrix =  matrix * kwargs['transform']
+      MatrixAsCS(matrix, func, depth+2)
+      func(' '*depth +'</meshref>')
 
   elif self.type == 'ARMATURE':
     func(' '*depth +'<meshref name="%s_object">'%(name))
