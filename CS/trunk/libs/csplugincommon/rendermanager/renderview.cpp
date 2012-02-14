@@ -154,7 +154,7 @@ RenderView::RenderView (const RenderView& other, bool keepCamera) :
   engine = other.engine;
   g3d = other.g3d;
   g2d = other.g2d;
-  original_camera = 0;	// @@@ Right?
+  //original_camera = 0;	// @@@ Right?
   leftx = other.leftx;
   rightx = other.rightx;
   topy = other.topy;
