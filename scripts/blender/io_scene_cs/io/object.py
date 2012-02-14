@@ -385,9 +385,12 @@ def ObjectAsCS(self, func, depth=0, **kwargs):
   if self.type == 'MESH':
     func(' '*depth +'<meshref name="%s_object">'%(self.name))
     func(' '*depth +'  <factory>%s</factory>'%(self.name))
-    matrix = self.relative_matrix
-    if 'transform' in kwargs:
-      matrix =  matrix * kwargs['transform']
+    if self.parent and self.parent_type == 'BONE':
+      matrix = self.matrix_world
+    else:
+      matrix = self.relative_matrix
+      if 'transform' in kwargs:
+        matrix =  matrix * kwargs['transform']
     MatrixAsCS(matrix, func, depth+2)
     func(' '*depth +'</meshref>')
 
