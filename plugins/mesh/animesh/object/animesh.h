@@ -74,9 +74,10 @@ CS_PLUGIN_NAMESPACE_BEGIN(Animesh)
 
 
   class AnimeshObjectFactory :
-    public scfImplementation2<AnimeshObjectFactory,
-                              CS::Mesh::iAnimatedMeshFactory,
-                              iMeshObjectFactory>
+    public scfImplementationExt2<AnimeshObjectFactory,
+                                 csObjectModel,
+                                 CS::Mesh::iAnimatedMeshFactory,
+                                 iMeshObjectFactory>
   {
   public:
     AnimeshObjectFactory (AnimeshObjectType* objType);
@@ -162,6 +163,11 @@ CS_PLUGIN_NAMESPACE_BEGIN(Animesh)
     virtual void SetMixMode (uint mode);
     virtual uint GetMixMode () const;
 
+    //-- iObjectModel
+    virtual const csBox3& GetObjectBoundingBox ();
+    virtual void SetObjectBoundingBox (const csBox3& bbox);
+    virtual void GetRadius (float& radius, csVector3& center);
+
     //-- Private
     inline uint GetVertexCountP () const
     {
@@ -171,18 +177,17 @@ CS_PLUGIN_NAMESPACE_BEGIN(Animesh)
     void ComputeTangents ();
 
   private: 
-    void ComputeObjectBoundingBox ();
+    void UpdateBoundingBoxes ();
 
-    void ComputeSubsets ();
+    void UpdateSubsets ();
     void RebuildMorphTargets ();
 
-    // required but stupid stuff..
+    // Main mesh factory properties
     csRef<AnimeshObjectType> objectType;
     iMeshFactoryWrapper* logParent;
     csRef<iMaterialWrapper> material;
     csFlags factoryFlags;
     uint mixMode;
-    csBox3 factoryBB;
 
     // Main data storage...
     uint vertexCount;
@@ -208,18 +213,13 @@ CS_PLUGIN_NAMESPACE_BEGIN(Animesh)
     // Sockets
     csRefArray<FactorySocket> sockets;
 
-    // Bounding boxes
-    struct Bone
-    {
-      csBox3 bbox;    // the bb associated with a bone
-      bool userBbox;  // the bb is defined by user
+    // Whether or not the user has manually set any of the bone bounding boxes
+    bool userBoneBBoxes;
 
-      Bone () 
-        : userBbox (false)
-      {}
-    };
-
-    csArray<Bone> bones;  // list of bounding boxes linked to the mesh bones
+    // Global bounding box of the whole mesh, and list of the bounding boxes
+    // linked to each bones
+    csBox3 globalBBox;
+    csHash<csBox3, CS::Animation::BoneID> boneBBoxes;
 
     // Subsets
     csArray<Subset> subsets; 
@@ -390,6 +390,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(Animesh)
     virtual void HardTransform (const csReversibleTransform& t);
     virtual bool SupportsHardTransform () const;
 
+    virtual bool HitBeamBBoxes (const csVector3& start, const csVector3& end);
     virtual bool HitBeamOutline (const csVector3& start,
       const csVector3& end, csVector3& isect, float* pr);
     virtual bool HitBeamObject (const csVector3& start, const csVector3& end,
@@ -452,7 +453,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(Animesh)
 
     void PreskinLF ();
 
-    void ComputeObjectBoundingBox ();
+    void UpdateBoundingBoxes ();
 
     class RenderBufferAccessor :
       public scfImplementation1<RenderBufferAccessor, 
@@ -567,14 +568,13 @@ CS_PLUGIN_NAMESPACE_BEGIN(Animesh)
     csRefArray<Submesh> submeshes;
     csRefArray<Socket> sockets;
 
-    // Array of user defined bounding boxes, indexed by a BoneID
-    // (memory is allocated only if a bounding box is associated with BoneID)
-    csHash<csBox3, CS::Animation::BoneID> boundingBoxes;
+    // Whether or not the user has manually set the global bounding box of the mesh
+    bool userGlobalBBox;
 
-    // The object bounding box
-    csBox3 boundingBox;
-    // The object bounding box is defined by user
-    bool userObjectBB;
+    // Global bounding box of the whole mesh, and list of the bounding boxes
+    // linked to each bones
+    csBox3 globalBBox;
+    csHash<csBox3, CS::Animation::BoneID> boneBBoxes;
 
     // Holder for skinned vertex buffers
     csRef<RenderBufferAccessor> bufferAccessor;

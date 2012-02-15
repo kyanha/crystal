@@ -62,6 +62,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(Animesh)
   static CS::ShaderVarStringID svNameBoneTransformsReal = CS::InvalidShaderVarStringID;
   static CS::ShaderVarStringID svNameBoneTransformsDual = CS::InvalidShaderVarStringID;
 
+  static csBox3 emptyBox;
 
   SCF_IMPLEMENT_FACTORY(AnimeshObjectType);
 
@@ -106,7 +107,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(Animesh)
 
   AnimeshObjectFactory::AnimeshObjectFactory (AnimeshObjectType* objType)
     : scfImplementationType (this), objectType (objType), logParent (0), material (0),
-    vertexCount (0), userSubsets (false)
+    vertexCount (0), userBoneBBoxes (false), userSubsets (false)
   {}
 
   CS::Mesh::iAnimatedMeshSubMeshFactory* AnimeshObjectFactory::CreateSubMesh (iRenderBuffer* indices,
@@ -357,20 +358,20 @@ CS_PLUGIN_NAMESPACE_BEGIN(Animesh)
 	  sumWeight += boneInfluences[i*4+j].influenceWeight;
 	}
 
-	for (size_t j = 0; j < 4; ++j)
-	{
-	  boneInfluences[i*4+j].influenceWeight /= sumWeight;
-	}
+	if (sumWeight > SMALL_EPSILON)
+	  for (size_t j = 0; j < 4; ++j)
+	  {
+	    boneInfluences[i*4+j].influenceWeight /= sumWeight;
+	  }
       }
     }
 
-    // Fix the bounding box linked to each bone 
-    // and the entire object bounding box
-    ComputeObjectBoundingBox ();
+    // Update the bounding boxes
+    UpdateBoundingBoxes ();
 
     // Compute the subsets from the current factory and morph targets
     if (!userSubsets && morphTargets.GetSize ())
-      ComputeSubsets ();
+      UpdateSubsets ();
   }
 
   void AnimeshObjectFactory::SetSkeletonFactory (CS::Animation::iSkeletonFactory* skeletonFactory)
@@ -514,7 +515,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(Animesh)
 
   iObjectModel* AnimeshObjectFactory::GetObjectModel ()
   {
-    return 0;
+    return this;
   }
 
   bool AnimeshObjectFactory::SetMaterialWrapper (iMaterialWrapper* material)
@@ -536,6 +537,22 @@ CS_PLUGIN_NAMESPACE_BEGIN(Animesh)
   uint AnimeshObjectFactory::GetMixMode () const
   {
     return mixMode;
+  }
+
+  const csBox3& AnimeshObjectFactory::GetObjectBoundingBox ()
+  {
+    return globalBBox;
+  }
+  
+  void AnimeshObjectFactory::SetObjectBoundingBox (const csBox3& bbox)
+  {
+    globalBBox = bbox;
+  }
+
+  void AnimeshObjectFactory::GetRadius (float& radius, csVector3& center)
+  {
+    center = globalBBox.GetCenter ();
+    radius = globalBBox.GetSize ().Norm () * 0.5f;
   }
 
   void AnimeshObjectFactory::ComputeTangents ()
@@ -610,118 +627,127 @@ CS_PLUGIN_NAMESPACE_BEGIN(Animesh)
     }
   }
 
-  void AnimeshObjectFactory::ComputeObjectBoundingBox ()
+  void AnimeshObjectFactory::UpdateBoundingBoxes ()
   {
-    // Initialize the bounding box of the animated mesh object factory
-    factoryBB.StartBoundingBox ();
-
-    if (skeletonFactory && !bones.GetSize ())
-      bones.SetSize (skeletonFactory->GetTopBoneID () + 1);
-
-    // If there are no bone, skeleton, or bone influence, then compute
-    // only the bounding box for the whole mesh
-    if (!bones.GetSize () || !boneInfluences.GetSize ())
-    {
-      csVertexListWalker<float, csVector3> vbuf (vertexBuffer);
-      for (size_t i = 0; i < vertexCount; ++i)
-      {
-	factoryBB.AddBoundingVertex (*vbuf);
-	++vbuf;
-      }
-
-      return;
-    }
-
-    csQuaternion rot;
+    csQuaternion rotation;
     csVector3 offset;
-    bool generateBboxes = false;
 
-    // Initialize the bounding box of each bone
-    for (CS::Animation::BoneID i = 0; i < bones.GetSize (); i++)
-      if (!bones[i].userBbox)
+    globalBBox.StartBoundingBox ();
+
+    // First step: compute the BBox of each bone if they have not been provided
+    // by the user
+    if (!userBoneBBoxes)
+    {
+      boneBBoxes.DeleteAll ();
+
+      csVertexListWalker<float, csVector3> vertices (vertexBuffer);
+
+      // If there are no skeleton, no bones, or no bone influences defined,
+      // then add all vertices to the main BBox
+      if (!skeletonFactory
+	  || !skeletonFactory->GetBoneOrderList ().GetSize ()
+	  || !boneInfluences.GetSize ())
       {
-	generateBboxes = true;
-	bones[i].bbox.StartBoundingBox ();
+	for (size_t j = 0; j < vertexCount; j++)
+	{
+	  globalBBox.AddBoundingVertex (*vertices);
+	  ++vertices;
+	}
+
+	boneBBoxes.PutUnique (CS::Animation::InvalidBoneID, globalBBox);
+	return;
       }
 
-    // Compute the bone bounding boxes
-    if (generateBboxes)
-    {
-      csVertexListWalker<float, csVector3> vbuf (vertexBuffer);
+      // Iterate on all vertices and add them to the BBoxes of the bones
+      // influencing them
+      csBox3 rootBBox;
+
       for (size_t j = 0; j < vertexCount; j++)
       {
+	float weightSum = 0.0f;
+
+	// Iterate on all bone influences
 	for (size_t k = 0; k < 4; k++)
 	{
-	  CS::Animation::BoneID vertexBone = boneInfluences[4*j+k].bone;
-	  float boneInfluence = boneInfluences[4*j+k].influenceWeight;
+	  size_t index = 4 * j + k;
 
-	  // If there is no bounding box defined by user and the bone weight is non zero
-	  if ((!bones[vertexBone].userBbox) && (boneInfluence > SMALL_EPSILON))
+	  if (boneInfluences[index].influenceWeight > SMALL_EPSILON)
 	  {
+	    weightSum += boneInfluences[index].influenceWeight;
+
+	    CS::Animation::BoneID boneID = boneInfluences[index].bone;
+	    csBox3& bbox = boneBBoxes.GetOrCreate (boneID);
+
 	    // Transform the vertex from object space to bone space
-	    skeletonFactory->GetTransformAbsSpace (vertexBone, rot, offset);
-	    csVector3 boneSpaceVertex = rot.GetConjugate ().Rotate (*vbuf - offset);
+	    skeletonFactory->GetTransformAbsSpace (boneID, rotation, offset);
+	    csVector3 boneSpaceVertex = rotation.GetConjugate ().Rotate (*vertices - offset);
 
 	    // Add the transformed vertex to the bone bounding box
-	    Bone& bone = bones[vertexBone];
-	    bone.bbox.AddBoundingVertex (boneSpaceVertex);
+	    bbox.AddBoundingVertex (boneSpaceVertex);
 	  }
 	}
 
-	++vbuf;
-      }
+	// If the total influence is equal to 0.0, then add the vertex
+	// to the root BBox too
+	if (weightSum < SMALL_EPSILON)
+	  rootBBox.AddBoundingVertex (*vertices);
+
+	++vertices;
+      }      
+
+      // Add a root BBox if needed
+      if (!rootBBox.Empty ())
+	boneBBoxes.PutUnique (CS::Animation::InvalidBoneID, rootBBox);    
     }
 
-    // Compute the bounding box of the whole mesh
-    for (CS::Animation::BoneID i = 0; i < bones.GetSize (); i++)
+    // Second step: compute the global bounding box of the whole mesh
+    // by merging all bone bounding boxes
+    for (csHash<csBox3, CS::Animation::BoneID>::GlobalIterator it =
+	   boneBBoxes.GetIterator (); it.HasNext (); )
     {
-      if (skeletonFactory->HasBone (i))
+      csTuple2<csBox3, CS::Animation::BoneID> tuple = it.NextTuple ();
+
+      if (tuple.first.Empty ())
+	continue;
+
+      // Add all bone BBoxes to the global one
+      if (!skeletonFactory
+	  || tuple.second == CS::Animation::InvalidBoneID)
+	for (int i = 0; i < 8; i++)
+	  globalBBox.AddBoundingVertex (tuple.first.GetCorner (i));
+
+      else
       {
-	skeletonFactory->GetTransformAbsSpace (i, rot, offset); 
-	csReversibleTransform object2bone (csMatrix3 (rot.GetConjugate ()), offset); 
+	// Transform the BBox from bone space to object space
+	skeletonFactory->GetTransformAbsSpace (tuple.second, rotation, offset); 
+	csReversibleTransform object2bone (csMatrix3 (rotation.GetConjugate ()), offset); 
 	csReversibleTransform bone2object = object2bone.GetInverse ();
 
-	// Add the bounding box of the bone to the object bounding box
-	csBox3 bbox = GetBoneBoundingBox (i);
-	if (!bbox.Empty ())
-	{
-	  csVector3 cornerBB;
-	  cornerBB = bone2object * bbox.GetCorner (CS_BOX_CORNER_xyz);
-	  factoryBB.AddBoundingVertex (cornerBB);
-	  cornerBB = bone2object * bbox.GetCorner (CS_BOX_CORNER_Xyz);
-	  factoryBB.AddBoundingVertex (cornerBB);
-	  cornerBB = bone2object * bbox.GetCorner (CS_BOX_CORNER_xYz);
-	  factoryBB.AddBoundingVertex (cornerBB);
-	  cornerBB = bone2object * bbox.GetCorner (CS_BOX_CORNER_xyZ);
-	  factoryBB.AddBoundingVertex (cornerBB);
-	  cornerBB = bone2object * bbox.GetCorner (CS_BOX_CORNER_XYz);
-	  factoryBB.AddBoundingVertex (cornerBB);
-	  cornerBB = bone2object * bbox.GetCorner (CS_BOX_CORNER_XyZ);
-	  factoryBB.AddBoundingVertex (cornerBB);
-	  cornerBB = bone2object * bbox.GetCorner (CS_BOX_CORNER_xYZ);
-	  factoryBB.AddBoundingVertex (cornerBB);
-	  cornerBB = bone2object * bbox.GetCorner (CS_BOX_CORNER_XYZ);
-	  factoryBB.AddBoundingVertex (cornerBB);
-	}
+	for (int i = 0; i < 8; i++)
+	  globalBBox.AddBoundingVertex (bone2object * tuple.first.GetCorner (i));
       }
     }
   }
 
   void AnimeshObjectFactory::SetBoneBoundingBox (CS::Animation::BoneID bone, const csBox3& box)
   {
-    if (skeletonFactory && (bones.GetSize () == 0))
-      bones.SetSize (skeletonFactory->GetTopBoneID () + 1);
+    CS_ASSERT (bone == CS::Animation::InvalidBoneID
+	       || !skeletonFactory
+	       || (skeletonFactory && skeletonFactory->HasBone (bone)));
 
-    CS_ASSERT (bone < bones.GetSize ());
-
-    bones[bone].bbox = box;
-    bones[bone].userBbox = true;
+    userBoneBBoxes = true;
+    boneBBoxes.PutUnique (bone, box);
   } 
 
   const csBox3& AnimeshObjectFactory::GetBoneBoundingBox (CS::Animation::BoneID bone) const
   {
-    CS_ASSERT (bone < bones.GetSize ());
-    return bones[bone].bbox;
+    CS_ASSERT (bone == CS::Animation::InvalidBoneID
+	       || !skeletonFactory
+	       || (skeletonFactory && skeletonFactory->HasBone (bone)));
+
+    const csBox3* box = boneBBoxes.GetElementPointer (bone);
+    if (!box) return emptyBox;
+    return *box;
   }
 
 
@@ -769,7 +795,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(Animesh)
     userSubsets = false;
   }
 
-  void AnimeshObjectFactory::ComputeSubsets ()
+  void AnimeshObjectFactory::UpdateSubsets ()
   {
     ClearSubsets ();
 
@@ -995,7 +1021,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(Animesh)
   AnimeshObject::AnimeshObject (AnimeshObjectFactory* factory)
     : scfImplementationType (this), factory (factory), logParent (0),
     material (0), mixMode (0), skeleton (0), animationInitialized (false),
-    boundingBox (factory->factoryBB), userObjectBB (false), morphVersion (0), morphStateChanged (false),
+    userGlobalBBox (false), globalBBox (factory->globalBBox), morphVersion (0), morphStateChanged (false),
     skinVertexVersion (~0), skinNormalVersion (~0), skinTangentBinormalVersion (~0),
     morphVertexVersion (0), skinVertexLF (false), skinNormalLF (false), skinTangentBinormalLF (false)
   {
@@ -1101,24 +1127,29 @@ CS_PLUGIN_NAMESPACE_BEGIN(Animesh)
 
   void AnimeshObject::SetBoneBoundingBox (CS::Animation::BoneID bone, const csBox3& box)
   {
-    boundingBoxes.PutUnique (bone, box);
+    CS_ASSERT (bone == CS::Animation::InvalidBoneID
+	       || !skeleton
+	       || (skeleton && skeleton->GetFactory ()->HasBone (bone)));
+
+    boneBBoxes.PutUnique (bone, box);
   } 
 
   const csBox3& AnimeshObject::GetBoneBoundingBox (CS::Animation::BoneID bone) const
   {
+    CS_ASSERT (bone == CS::Animation::InvalidBoneID
+	       || !skeleton
+	       || (skeleton && skeleton->GetFactory ()->HasBone (bone)));
+
     // If the user has defined a bounding box then return this one, 
     // else return the one from the factory
-    if (boundingBoxes.Contains (bone))
-    {
-      csHash<csBox3, CS::Animation::BoneID>::ConstIterator it =
-	boundingBoxes.GetIterator (bone);
-      return it.Next ();
-    }
+    const csBox3* box = boneBBoxes.GetElementPointer (bone);
+    if (box) return *box;
 
-    CS_ASSERT (factory && (bone < factory->bones.GetSize ()));
-    return factory->bones[bone].bbox;
+    box = factory->boneBBoxes.GetElementPointer (bone);
+    if (box) return *box;
+
+    return emptyBox;
   }
-
 
   iMeshObjectFactory* AnimeshObject::GetFactory () const
   {
@@ -1199,7 +1230,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(Animesh)
         meshPtr->z_buf_mode = fsm->zbufMode;
 
         meshPtr->object2world = o2wt;
-        meshPtr->bbox = GetObjectBoundingBox();
+        meshPtr->bbox = globalBBox;
         meshPtr->geometryInstance = factory;
         meshPtr->variablecontext = sm->svContexts[j];
 
@@ -1259,13 +1290,15 @@ CS_PLUGIN_NAMESPACE_BEGIN(Animesh)
     lastUpdate = current_time;
     accumulatedFrames = 0;
 
+    // TODO: don't update everything if the pose hasn't changed
+
     // Copy the skeletal state into our buffers
     UpdateLocalBoneTransforms ();
     UpdateSocketTransforms ();
 
-    // Update the bounding box of the mesh object
-    if (!userObjectBB && factory->bones.GetSize ())
-      ComputeObjectBoundingBox ();
+    // Update the global bounding box of the mesh
+    if (!userGlobalBBox)
+      UpdateBoundingBoxes ();
   }
 
   void AnimeshObject::HardTransform (const csReversibleTransform& t)
@@ -1277,58 +1310,87 @@ CS_PLUGIN_NAMESPACE_BEGIN(Animesh)
     return false;
   }
 
+  bool AnimeshObject::HitBeamBBoxes (const csVector3& start, const csVector3& end)
+  {
+    csSegment3 segment (start, end);
+    csHitBeamResult rc;
+    csQuaternion rotation;
+    csVector3 position;
+
+    // Iterate on all user defined bone bounding boxes
+    for (csHash<csBox3, CS::Animation::BoneID>::GlobalIterator it =
+	   boneBBoxes.GetIterator (); it.HasNext (); )
+    {
+      csTuple2<csBox3, CS::Animation::BoneID> tuple = it.NextTuple ();
+
+      if (tuple.first.Empty ())
+	continue;
+
+      // Test against the specific bone BBox
+      if (!skeleton || tuple.second == CS::Animation::InvalidBoneID)
+	rc.facehit = csIntersect3::BoxSegment (tuple.first, segment, rc.isect, &rc.r);
+
+      else
+      {
+	skeleton->GetTransformAbsSpace (tuple.second, rotation, position); 
+	csReversibleTransform object2bone (csMatrix3 (rotation.GetConjugate ()), position); 
+	csSegment3 segment (object2bone * start, object2bone * end);
+	rc.facehit = csIntersect3::BoxSegment (tuple.first, segment, rc.isect, &rc.r);
+      }
+
+      // Stop whenever we find a hit
+      if (rc.facehit != -1)
+	return true;
+    }
+
+    // Iterate on all factory bone bounding boxes
+    for (csHash<csBox3, CS::Animation::BoneID>::GlobalIterator it =
+	   factory->boneBBoxes.GetIterator (); it.HasNext (); )
+    {
+      csTuple2<csBox3, CS::Animation::BoneID> tuple = it.NextTuple ();
+
+      // Don't test against the BBoxes already defined by the user
+      if (tuple.first.Empty () || boneBBoxes.Contains (tuple.second))
+	continue;
+
+      // Test against the specific bone BBox
+      if (!skeleton || tuple.second == CS::Animation::InvalidBoneID)
+	rc.facehit = csIntersect3::BoxSegment (tuple.first, segment, rc.isect, &rc.r);
+
+      else
+      {
+	skeleton->GetTransformAbsSpace (tuple.second, rotation, position); 
+	csReversibleTransform object2bone (csMatrix3 (rotation.GetConjugate ()), position); 
+	csSegment3 segment (object2bone * start, object2bone * end);
+	rc.facehit = csIntersect3::BoxSegment (tuple.first, segment, rc.isect, &rc.r);
+      }
+
+      // Stop whenever we find a hit
+      if (rc.facehit != -1)
+	return true;
+    }
+
+    return false;
+  }
+
   bool AnimeshObject::HitBeamOutline (const csVector3& start,
     const csVector3& end, csVector3& isect, float* pr)
   {
-    // Pre-test on each bone bounding box
-    csQuaternion rotation;
-    csVector3 position;
-    csHitBeamResult rc;
+    // Do a first pre-test against all bone bounding boxes
+    if (!HitBeamBBoxes (start, end))
+      return false;
 
-    // Iterate all bones bounding boxes
-    if (skeleton)
-    {
-      csRef<CS::Animation::iSkeletonFactory> skeletonFactory = skeleton->GetFactory ();
-      CS::Animation::BoneID numBones = skeletonFactory->GetTopBoneID () + 1;
-      bool hit = false;
-
-      for (CS::Animation::BoneID i = 0; i < numBones; i++)
-      {
-	if (skeletonFactory->HasBone (i))
-	{
-	  csBox3 bbox = GetBoneBoundingBox (i);
-	  if (!bbox.Empty ())
-	  {
-	    // Test if the beam hits bounding box i
-	    skeleton->GetTransformAbsSpace (i, rotation, position); 
-	    csReversibleTransform object2bone (csMatrix3 (rotation.GetConjugate ()), position); 
-	    csSegment3 transformedSeg (object2bone * start, object2bone * end);
-	    rc.facehit = csIntersect3::BoxSegment (bbox, transformedSeg, rc.isect, &rc.r);
-
-	    if (rc.facehit != -1)
-	    {
-	      hit = true;
-	      break;
-	    }
-	  }
-	}
-      }
-
-      // Return false if no bone bounding box has been hit by the beam
-      if (!hit) 
-	return false;
-    }
-
-    // Test each mesh triangle
-    csSegment3 seg (start, end);
+    // Now test on each triangle of the mesh
+    csSegment3 segment (start, end);
     csRenderBufferLock<csVector3> vrt (skeleton ? skinnedVertices : postMorphVertices);
 
-    // Iterate all submeshes...
+    // Iterate on all rendered submeshes
     for (size_t i = 0; i < submeshes.GetSize (); ++i)
     {
       if (!submeshes[i]->isRendering)
         continue;
 
+      // Search for the first triangle hit by the beam
       FactorySubmesh* fsm = factory->submeshes[i];
       for (size_t j = 0; j < fsm->indexBuffers.GetSize (); ++j)
       {
@@ -1338,7 +1400,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(Animesh)
 	while (triangles.HasNext())
 	{
 	  CS::TriangleT<uint> t (triangles.Next());
-	  if (csIntersect3::SegmentTriangle (seg, 
+	  if (csIntersect3::SegmentTriangle (segment, 
 					     vrt[t.a], vrt[t.b], vrt[t.c], 
 					     isect))
 	  {
@@ -1357,47 +1419,12 @@ CS_PLUGIN_NAMESPACE_BEGIN(Animesh)
     csVector3& isect, float* pr, int* polygon_idx,
     iMaterialWrapper** material)
   {
-    // Pre-test on each bone bounding box
-    csQuaternion rotation;
-    csVector3 position;
-    csHitBeamResult rc;
+    // Do a first pre-test against all bone bounding boxes
+    if (!HitBeamBBoxes (start, end))
+      return false;
 
-    // Iterate all bones bounding boxes
-    if (skeleton)
-    {
-      csRef<CS::Animation::iSkeletonFactory> skeletonFactory = skeleton->GetFactory ();
-      CS::Animation::BoneID numBones = skeletonFactory->GetTopBoneID () + 1;
-      bool hit = false;
-
-      for (CS::Animation::BoneID i = 0; i < numBones; i++)
-      {
-	if (skeletonFactory->HasBone (i))
-	{
-	  csBox3 bbox = GetBoneBoundingBox (i);
-	  if (!bbox.Empty ())
-	  {
-	    // Test if the beam hits bounding box i
-	    skeleton->GetTransformAbsSpace (i, rotation, position); 
-	    csReversibleTransform object2bone (csMatrix3 (rotation.GetConjugate ()), position); 
-	    csSegment3 transformedSeg (object2bone * start, object2bone * end);
-	    rc.facehit = csIntersect3::BoxSegment (bbox, transformedSeg, rc.isect, &rc.r);
-
-	    if (rc.facehit != -1)
-	    {
-	      hit = true;
-	      break;
-	    }
-	  }
-	}
-      }
-
-      // Return false if no bone bounding box has been hit by the beam
-      if (!hit) 
-	return false;
-    }
-
-    // Test each mesh triangle
-    csSegment3 seg (start, end);
+    // Now test on each triangle of the mesh
+    csSegment3 segment (start, end);
     float tot_dist = csSquaredDist::PointPoint (start, end);
     float dist, temp;
     float itot_dist = 1 / tot_dist;
@@ -1406,12 +1433,13 @@ CS_PLUGIN_NAMESPACE_BEGIN(Animesh)
     iMaterialWrapper* mat = 0;
     csRenderBufferLock<csVector3> vrt (skeleton ? skinnedVertices : postMorphVertices);
 
-    // Iterate all submeshes...
+    // Iterate on all rendered submeshes
     for (size_t i = 0; i < submeshes.GetSize (); ++i)
     {
       if (!submeshes[i]->isRendering)
         continue;
 
+      // Search for the closest triangle hit by the beam
       FactorySubmesh* fsm = factory->submeshes[i];
       for (size_t j = 0; j < fsm->indexBuffers.GetSize (); ++j)
       {
@@ -1421,7 +1449,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(Animesh)
 	while (triangles.HasNext())
 	{
 	  CS::TriangleT<uint> t (triangles.Next());
-	  if (csIntersect3::SegmentTriangle (seg, 
+	  if (csIntersect3::SegmentTriangle (segment, 
 					     vrt[t.a], vrt[t.b], vrt[t.c], 
 					     tmp))
 	  {
@@ -1547,25 +1575,25 @@ CS_PLUGIN_NAMESPACE_BEGIN(Animesh)
 
   const csBox3& AnimeshObject::GetObjectBoundingBox ()
   {
-    return boundingBox;
+    return globalBBox;
   }
   
   void AnimeshObject::SetObjectBoundingBox (const csBox3& bbox)
   {
-    userObjectBB = true; 
-    boundingBox = bbox;
+    userGlobalBBox = true; 
+    globalBBox = bbox;
   }
 
   void AnimeshObject::UnsetObjectBoundingBox ()
   {
-    userObjectBB = false; 
-    ComputeObjectBoundingBox ();
+    userGlobalBBox = false; 
+    UpdateBoundingBoxes ();
   }
 
   void AnimeshObject::GetRadius (float& radius, csVector3& center)
   {
-    center = boundingBox.GetCenter ();
-    radius = boundingBox.GetSize ().Norm () * 0.5f;
+    center = globalBBox.GetCenter ();
+    radius = globalBBox.GetSize ().Norm () * 0.5f;
   }
 
   void AnimeshObject::SetupSubmeshes ()
@@ -1777,47 +1805,69 @@ CS_PLUGIN_NAMESPACE_BEGIN(Animesh)
     }
   }
 
-  void AnimeshObject::ComputeObjectBoundingBox ()
+  void AnimeshObject::UpdateBoundingBoxes ()
   {
-    CS_ASSERT (skeleton);
-    csRef<CS::Animation::iSkeletonFactory> skeletonFactory = skeleton->GetFactory ();
-
-    csQuaternion rot;
-    csVector3 offset;
-    boundingBox.StartBoundingBox ();
-
-    // For each bone of the skeleton
-    CS::Animation::BoneID numBones = skeletonFactory->GetTopBoneID () + 1;
-    for (CS::Animation::BoneID i = 0; i < numBones ; i++)
+    // If there is no skeleton then apply the BBox of the factory
+    if (!skeleton)
     {
-      if (skeletonFactory->HasBone (i))
-      {
-	// Add the bounding box of the bone to the object bounding box
-	csBox3 bbox = GetBoneBoundingBox (i);
-        if (!bbox.Empty ())
-	{
-	  skeleton->GetTransformAbsSpace (i, rot, offset); 
-	  csReversibleTransform object2bone (csMatrix3 (rot.GetConjugate ()), offset); 
-	  csReversibleTransform bone2object = object2bone.GetInverse ();
+      globalBBox = factory->globalBBox;
+      return;
+    }
 
-	  csVector3 cornerBB;
-	  cornerBB = bone2object * bbox.GetCorner (CS_BOX_CORNER_xyz);
-	  boundingBox.AddBoundingVertex (cornerBB);
-	  cornerBB = bone2object * bbox.GetCorner (CS_BOX_CORNER_Xyz);
-	  boundingBox.AddBoundingVertex (cornerBB);
-	  cornerBB = bone2object * bbox.GetCorner (CS_BOX_CORNER_xYz);
-	  boundingBox.AddBoundingVertex (cornerBB);
-	  cornerBB = bone2object * bbox.GetCorner (CS_BOX_CORNER_xyZ);
-	  boundingBox.AddBoundingVertex (cornerBB);
-	  cornerBB = bone2object * bbox.GetCorner (CS_BOX_CORNER_XYz);
-	  boundingBox.AddBoundingVertex (cornerBB);
-	  cornerBB = bone2object * bbox.GetCorner (CS_BOX_CORNER_XyZ);
-	  boundingBox.AddBoundingVertex (cornerBB);
-	  cornerBB = bone2object * bbox.GetCorner (CS_BOX_CORNER_xYZ);
-	  boundingBox.AddBoundingVertex (cornerBB);
-	  cornerBB = bone2object * bbox.GetCorner (CS_BOX_CORNER_XYZ);
-	  boundingBox.AddBoundingVertex (cornerBB);
-	}
+    csQuaternion rotation;
+    csVector3 offset;
+    globalBBox.StartBoundingBox ();
+
+    // Merge all user defined bone BBoxes into the global one
+    for (csHash<csBox3, CS::Animation::BoneID>::GlobalIterator it =
+	   boneBBoxes.GetIterator (); it.HasNext (); )
+    {
+      csTuple2<csBox3, CS::Animation::BoneID> tuple = it.NextTuple ();
+
+      if (tuple.first.Empty ())
+	continue;
+
+      // Add all bone BBoxes to the global one
+      if (tuple.second == CS::Animation::InvalidBoneID)
+	for (int i = 0; i < 8; i++)
+	  globalBBox.AddBoundingVertex (tuple.first.GetCorner (i));
+
+      else
+      {
+	// Transform the BBox from bone space to object space
+	skeleton->GetTransformAbsSpace (tuple.second, rotation, offset); 
+	csReversibleTransform object2bone (csMatrix3 (rotation.GetConjugate ()), offset); 
+	csReversibleTransform bone2object = object2bone.GetInverse ();
+
+	for (int i = 0; i < 8; i++)
+	  globalBBox.AddBoundingVertex (bone2object * tuple.first.GetCorner (i));
+      }
+    }
+
+    // Merge all factory bone BBoxes into the global one
+    for (csHash<csBox3, CS::Animation::BoneID>::GlobalIterator it =
+	   factory->boneBBoxes.GetIterator (); it.HasNext (); )
+    {
+      csTuple2<csBox3, CS::Animation::BoneID> tuple = it.NextTuple ();
+
+      // Don't add the BBoxes already defined by the user
+      if (tuple.first.Empty () || boneBBoxes.Contains (tuple.second))
+	continue;
+
+      // Add all bone BBoxes to the global one
+      if (tuple.second == CS::Animation::InvalidBoneID)
+	for (int i = 0; i < 8; i++)
+	  globalBBox.AddBoundingVertex (tuple.first.GetCorner (i));
+
+      else
+      {
+	// Transform the BBox from bone space to object space
+	skeleton->GetTransformAbsSpace (tuple.second, rotation, offset); 
+	csReversibleTransform object2bone (csMatrix3 (rotation.GetConjugate ()), offset); 
+	csReversibleTransform bone2object = object2bone.GetInverse ();
+
+	for (int i = 0; i < 8; i++)
+	  globalBBox.AddBoundingVertex (bone2object * tuple.first.GetCorner (i));
       }
     }
   }

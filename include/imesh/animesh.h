@@ -457,19 +457,36 @@ struct iAnimatedMeshFactory : public virtual iBase
   * @{ */
 
   /**
-   * Set the bounding box of the given bone, in bone space. Bone bounding boxes 
-   * are used to update the global bounding box of the animated mesh factory and 
-   * to speed up hitbeam tests. If you don't specify a bounding box for a bone,
-   * a bounding box is automatically generated: it includes all the mesh vertices 
-   * which have a non zero weight for this bone.
-   * You must call Invalidate() after modifying it.
-   * \param bone The ID of the bone.
-   * \param box The bounding box of the given bone, in bone space.
+   * Set the bounding box of the given bone. Bone bounding boxes are used to update
+   * the global bounding box of the animated mesh, and to speed up hitbeam tests. Each
+   * bounding box should enclose all the vertices that are influenced by the given bone,
+   * even when the morph targets are active.
+   *
+   * If you don't specify any bounding boxes, then they will be generated automatically
+   * by taking all the vertices that have a bone influence bigger than zero.
+   *
+   * If you specify at least one bounding box, then no other boxes will be used at all.
+   * You should therefore either declare no boxes at all, or all the boxes that might be
+   * needed, not partial definition.
+   *
+   * \warning You must call Invalidate() after modifying it in order to recompute the
+   * global bounding box of the factory..
+   *
+   * \param bone The ID of the bone. It is valid to use CS::Animation::InvalidBoneID
+   * as a parameter, in this case it will refer to the bounding box of the vertices that
+   * aren't influenced by any bone.
+   * \param box The bounding box of the given bone. The corners of the box are expressed
+   * in bone space.
    */
   virtual void SetBoneBoundingBox (CS::Animation::BoneID bone, const csBox3& box) = 0; 
 
   /**
-   * Get the bounding box of the bone with the given ID, in bone space.
+   * Get the bounding box of the bone with the given ID. The corners of the box
+   * are expressed in bone space.
+   *
+   * It is valid to use CS::Animation::InvalidBoneID as a parameter, in this case
+   * it will return the bounding box of the vertices that aren't influenced by any
+   * bone.
    */
   virtual const csBox3& GetBoneBoundingBox (CS::Animation::BoneID bone) const = 0; 
 
@@ -660,29 +677,41 @@ struct iAnimatedMesh : public virtual iBase
   virtual iRenderBufferAccessor* GetRenderBufferAccessor () const = 0;
 
   /**
-   * Set the bounding box of the given bone, in bone space. Bone bounding boxes 
-   * are used to update the global bounding box of the animated mesh and 
-   * to speed up HitBeam tests. They should cover all vertices belonging to
-   * the bone, even when the morph targets are active.
+   * Set the bounding box of the given bone. Bone bounding boxes are used to update
+   * the global bounding box of the animated mesh, and to speed up hitbeam tests. Each
+   * bounding box should enclose all the vertices that are influenced by the given bone,
+   * even when the morph targets are active.
    *
-   * If you don't specify a bounding box for a bone, then it will be generated
-   * automatically but may not be optimized nor correct when the morph targets
-   * are active.
+   * If you don't specify a bounding box, then the one from the factory will be used
+   * instead.
    *
-   * \param bone The ID of the bone.
-   * \param box The bounding box of the given bone, in bone space.
+   * \param bone The ID of the bone. It is valid to use CS::Animation::InvalidBoneID
+   * as a parameter, in this case it will refer to the bounding box of the vertices that
+   * aren't influenced by any bone.
+   * \param box The bounding box of the given bone. The corners of the box are expressed
+   * in bone space.
    */
   virtual void SetBoneBoundingBox (CS::Animation::BoneID bone, const csBox3& box) = 0; 
 
   /**
-   * Get the bounding box of the bone with the given ID, in bone space.
+   * Get the bounding box of the bone with the given ID. The corners of the box
+   * are expressed in bone space.
+   *
+   * If no bounding box has been defined for this bone on the animated mesh, then the
+   * one from the factory will be returned instead. If the factory has no box neither,
+   * then a default, empty one will be returned.
+   *
+   * It is valid to use CS::Animation::InvalidBoneID as a parameter, in this case
+   * it will return the bounding box of the vertices that aren't influenced by any
+   * bone.
    */
   virtual const csBox3& GetBoneBoundingBox (CS::Animation::BoneID bone) const = 0; 
 
   /**
    * Unset the custom bounding box of this animated mesh. It will now be again
-   * computed and updated automatically.
-   * \sa iObjectModel::SetObjectBoundingBox()
+   * computed and updated automatically. At the inverse, using
+   * iObjectModel::SetObjectBoundingBox() on this mesh will force a given box to
+   * be used.
    */
   virtual void UnsetObjectBoundingBox () = 0;
 
