@@ -462,7 +462,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(Animeshldr)
         case XMLTOKEN_BBOX:
 	{
 	  currBone = child2->GetAttributeValueAsInt("bone");
-	  if (currBone >= numBones)
+	  if (currBone != CS::Animation::InvalidBoneID && currBone >= numBones)
 	  {
 	    synldr->ReportError (msgidFactory, child2, 
 				 "Invalid bounding box index %d, expected maximum %d bones",
@@ -776,30 +776,34 @@ CS_PLUGIN_NAMESPACE_BEGIN(Animeshldr)
 	}
       }
 
-      // Write bounding boxes
+      // Write the bounding boxes
       {
 	CS::Animation::iSkeletonFactory* skeletonFact = factory->GetSkeletonFactory ();
 	if (skeletonFact)
 	{
-	  CS::Animation::BoneID numBones = skeletonFact->GetTopBoneID () + 1;
-
-	  if (numBones > 0)
+	  csRef<iDocumentNode> bboxNode;
+	  csArray<CS::Animation::BoneID> boneList = skeletonFact->GetBoneOrderList ();
+	  boneList.Push (CS::Animation::InvalidBoneID);
+	  for (csArray<CS::Animation::BoneID>::Iterator it =
+		 boneList.GetIterator (); it.HasNext (); )
 	  {
-	    csRef<iDocumentNode> bboxNode = 
-	      paramsNode->CreateNodeBefore (CS_NODE_ELEMENT, 0);
-	    bboxNode->SetValue ("bboxes");
-	
-	    for (CS::Animation::BoneID i = 0; i < numBones ; i++)
+	    CS::Animation::BoneID boneID = it.Next ();
+	    csBox3 bbox = factory->GetBoneBoundingBox (boneID);
+
+	    // Write only the bboxes that are not empty
+	    if (!bbox.Empty ())
 	    {
-	      if (skeletonFact->HasBone (i))
+	      if (!bboxNode)
 	      {
-		csRef<iDocumentNode> node = 
-		  bboxNode->CreateNodeBefore (CS_NODE_ELEMENT, 0);
-		node->SetValue ("bbox");
-		node->SetAttributeAsInt ("bone", i);
-		csBox3 bbox = factory->GetBoneBoundingBox (i);
-		synldr->WriteBox (node, bbox);
+		bboxNode = paramsNode->CreateNodeBefore (CS_NODE_ELEMENT, 0);
+		bboxNode->SetValue ("bboxes");
 	      }
+
+	      csRef<iDocumentNode> node = 
+		bboxNode->CreateNodeBefore (CS_NODE_ELEMENT, 0);
+	      node->SetValue ("bbox");
+	      node->SetAttributeAsInt ("bone", boneID);
+	      synldr->WriteBox (node, bbox);
 	    }
 	  }
 	}
