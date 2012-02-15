@@ -130,6 +130,8 @@ class RenderBuffers:
     """
     # For each mesh composing the object
     for i, ob in enumerate(self.meshData):
+      doubleSided = ob.data.show_double_sided
+
       # Get the active UV texture and vertex colors
       tface = ob.data.uv_textures.active.data if ob.data.uv_textures.active else None
       cface = ob.data.vertex_colors.active.data if ob.data.vertex_colors.active else None
@@ -143,10 +145,17 @@ class RenderBuffers:
         else:
           scale = ob.scale
         self.positionBuffer.AddElement(tuple(map(lambda j: scale[j]*pos[j], range(3))))
+        if doubleSided:
+          # Duplicate the vertex coordinates in case of a double sided mesh
+          self.positionBuffer.AddElement(tuple(map(lambda j: scale[j]*pos[j], range(3))))
 
         # Add the vertex normal to the CS normal buffer
         # Flip Y and Z axis.
         self.normalBuffer.AddElement(tuple(ob.data.vertices[indexBlender].normal))
+        if doubleSided:
+          # Duplicate and inverse the vertex normal in case of a double sided mesh
+          nor = ob.data.vertices[indexBlender].normal
+          self.normalBuffer.AddElement((-nor[0],-nor[1],-nor[2]))
         
         def findFace(csVertices, csIndex):
           ''' Find the face containing this vertex '''
@@ -160,16 +169,24 @@ class RenderBuffers:
         # Add uv coordinates of this vertex to the CS texture coordinates buffer
         if tface and face != -1:
           uv = tface[face].uv[vi]
-          self.texCoordBuffer.AddElement((uv[0],1.0-uv[1]))
+          uvco = (uv[0],1.0-uv[1])
         else:
-          self.texCoordBuffer.AddElement((0.0,0.0))
+          uvco = (0.0,0.0)
+        self.texCoordBuffer.AddElement(uvco)
+        if doubleSided:
+          # Duplicate the uv coordinates in case of a double sided mesh
+          self.texCoordBuffer.AddElement(uvco)
 
         # Add the vertex color to the CS color buffer
         if cface and face != -1:
           colors = [cface[face].color1, cface[face].color2, cface[face].color3, cface[face].color4]
-          self.colorBuffer.AddElement(tuple(colors[vi]))
+          col = tuple(colors[vi])
         else:
-          self.colorBuffer.AddElement((1.0,1.0,1.0))
+          col = (1.0,1.0,1.0)
+        self.colorBuffer.AddElement(col)
+        if doubleSided:
+          # Duplicate the color in case of a double sided mesh
+          self.colorBuffer.AddElement(col)
 
  
 #===== static method GetRenderBuffers ==============================

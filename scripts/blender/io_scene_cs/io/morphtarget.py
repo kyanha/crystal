@@ -106,6 +106,9 @@ def GetMorphTargets(numVertices, **kwargs):
               if abs(offset[j])>epsilon:
                 nonNullOffset = True
             offsets.append(offset)
+            # Duplicate vertex offset if the mesh is double sided
+            if ob.data.show_double_sided:
+              offsets.append(offset)              
           # Add the morph target to the list if it contains non null offsets
           if nonNullOffset:
             mt = MorphTarget(block.name, offsets, numVertices, startIndex)

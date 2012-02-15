@@ -24,7 +24,8 @@ bpy.types.Mesh.GetMaterial = GetMaterial
 
 def GetSubMeshesRaw(self, name, indexV, indexGroups, mappingBuffer = []):
   """ Compute the CS submeshes of this Blender mesh by remapping
-      Blender vertices to CS vertices and triangulating the faces
+      Blender vertices to CS vertices, triangulating the faces and
+      duplicating the double sided faces
       param name: name of the mesh
       param indexV: starting index of the CS vertices
       param indexGroups: buffer defining for each submesh (identified by the 
@@ -33,7 +34,10 @@ def GetSubMeshesRaw(self, name, indexV, indexGroups, mappingBuffer = []):
       param mappingBuffer: mapping buffer defining a CS vertex for each
             face vertex of the Blender mesh
   """
+  
+  # Starting index of the cs vertices composing this submesh
   firstIndex = indexV
+  # Active UV texture
   tface = self.uv_textures.active.data if self.uv_textures.active else None
   # For each face composing this mesh
   for index, face in enumerate(self.faces):
@@ -42,20 +46,49 @@ def GetSubMeshesRaw(self, name, indexV, indexGroups, mappingBuffer = []):
     triplet = (name, self.GetMaterial(face.material_index), im)
     if triplet not in indexGroups:
       indexGroups[triplet] = []
-    # Triangulate
+    # Triangulate the mesh face
     indices = [v for v in face.vertices]
     tt = [2,1,0] if len(indices)==3 else [2, 1, 0, 3, 2, 0]
-    for i in tt:
-      # Add vertices composing the triangle to submesh
-      if len(mappingBuffer) == 0:
+    if len(mappingBuffer) == 0:
+      # No mapping buffer => directly copy the index of Blender vertices
+      for i in tt:
         indexGroups[triplet].append(face.vertices[i])
         indexV += 1
+    else:
+      # Mapping buffer => use the corresponding cs index of these vertices
+      if not self.show_double_sided:
+        # Single sided mesh
+        for i in tt:
+          # Add vertices composing the triangle to submesh
+          for mapV in mappingBuffer[face.vertices[i]]:
+            if mapV['face'] == index and mapV['vertex'] == i:
+              # cs index = firstIndex + j  
+              # (where j is the index of this vertex in the submesh)
+              indexGroups[triplet].append(firstIndex + mapV['csVertex'])
+              indexV += 1
+              break
       else:
-        for mapV in mappingBuffer[face.vertices[i]]:
-          if mapV['face'] == index and mapV['vertex'] == i:
-            indexGroups[triplet].append(mapV['csVertex'] + firstIndex)
-            indexV += 1
-            break
+        # Double sided mesh
+        for i in tt:
+          # Add vertices composing the triangle of the first side of the mesh
+          for mapV in mappingBuffer[face.vertices[i]]:
+            if mapV['face'] == index and mapV['vertex'] == i:
+              # cs index = firstIndex + 2*j  
+              # (where j is the cs index of the vertex for a single sided face)
+              indexGroups[triplet].append(firstIndex + 2 * mapV['csVertex'])
+              indexV += 1
+              break
+
+        # Add vertices composing the triangle of the second side of the mesh
+        tt = [0,1,2] if len(indices)==3 else [0, 1, 2, 3, 0, 2]
+        for i in tt:
+          for mapV in mappingBuffer[face.vertices[i]]:
+            if mapV['face'] == index and mapV['vertex'] == i:
+              # cs index = firstIndex + 2*j + 1 
+              # (where j is the cs index of the vertex for a single sided face)
+              indexGroups[triplet].append(firstIndex + 2 * mapV['csVertex'] + 1)
+              indexV += 1
+              break
 
   return indexV, indexGroups
 
@@ -101,8 +134,6 @@ def GetCSMappingBuffer (self):
   else:
     print("WARNING: mesh",self.name,"has no UV texture")
     tface = None
-
-  # TODO: double sided faces
 
   epsilon = 1e-9
   mapBuf = []
@@ -251,6 +282,7 @@ def AsCSSkeletonAnimations (self, func, depth, armatureObject, dontClose=False):
       print("WARNING: Action '%s' not exported: no keyframe defined"%(action.name))
       continue
 
+    """
     # Verify if the action defines armature movement
     displacementFound = False
     for bone in boneKeyframes.keys():
@@ -259,6 +291,7 @@ def AsCSSkeletonAnimations (self, func, depth, armatureObject, dontClose=False):
         break
     if not displacementFound:
       print("INFO: Action '%s' defines a pose (no armature movement)"%(action.name))
+    """
 
     # Write animation packet
     exportedActions.append(action)
@@ -376,16 +409,25 @@ def GetBoneInfluences (self, **kwargs):
           break
 
       # Normalize the bone influences to 1
+      vertexInfluence = []
       for i in range(countBones):
         if sumWeights > epsilon:
           weights[i][1] = weights[i][1] / sumWeights
-        influences.append(weights[i])
+        vertexInfluence.append(weights[i])
 
       # Fill vertex influences with null values if less then 4 non null
       # influences have been found for this vertex
       if countBones < 4:
         for i in range(4-countBones):
-          influences.append([0, 0.0])
+          vertexInfluence.append([0, 0.0])
+
+      # Add bone influences to the list
+      for i in range(4):
+        influences.append(vertexInfluence[i])
+      if ob.data.show_double_sided:
+        # Duplicate the influences in case of a double sided mesh
+        for i in range(4):
+          influences.append(vertexInfluence[i])
 
   if undefinedGroups:
     print("ERROR: undefined vertex group index; corresponding bone influences have been lost!")
@@ -478,6 +520,7 @@ def GetSocketMatrix (self, socketObject, armatureObject):
 
   # Decompose socket matrix
   loc, rot, scale = DecomposeMatrix(socketMatrix)
+  rot = rot.to_euler()
   return (loc, rot)
 
 bpy.types.Bone.GetSocketMatrix = GetSocketMatrix
@@ -492,7 +535,6 @@ def AsCSSocket(self, func, depth, socketObject, armature):
 
   # Get local transformation of the socket
   pos, rot = self.GetSocketMatrix(socketObject, armature)
-  rot = rot.to_euler()
 
   # Get armature's scale
   scale = armature.scale
