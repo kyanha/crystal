@@ -1588,19 +1588,19 @@ static inline void DrawBox3D (iGraphics3D* G3D,
   csVector3 vXyZ = tr * box.GetCorner (CS_BOX_CORNER_XyZ);
   csVector3 vxYZ = tr * box.GetCorner (CS_BOX_CORNER_xYZ);
   csVector3 vXYZ = tr * box.GetCorner (CS_BOX_CORNER_XYZ);
-  float fov = G3D->GetDriver2D ()->GetHeight ();
-  G3D->DrawLine (vxyz, vXyz, fov, color);
-  G3D->DrawLine (vXyz, vXYz, fov, color);
-  G3D->DrawLine (vXYz, vxYz, fov, color);
-  G3D->DrawLine (vxYz, vxyz, fov, color);
-  G3D->DrawLine (vxyZ, vXyZ, fov, color);
-  G3D->DrawLine (vXyZ, vXYZ, fov, color);
-  G3D->DrawLine (vXYZ, vxYZ, fov, color);
-  G3D->DrawLine (vxYZ, vxyZ, fov, color);
-  G3D->DrawLine (vxyz, vxyZ, fov, color);
-  G3D->DrawLine (vxYz, vxYZ, fov, color);
-  G3D->DrawLine (vXyz, vXyZ, fov, color);
-  G3D->DrawLine (vXYz, vXYZ, fov, color);
+  const CS::Math::Matrix4& projection (G3D->GetProjectionMatrix());
+  G3D->DrawLine (vxyz, vXyz, projection, color);
+  G3D->DrawLine (vXyz, vXYz, projection, color);
+  G3D->DrawLine (vXYz, vxYz, projection, color);
+  G3D->DrawLine (vxYz, vxyz, projection, color);
+  G3D->DrawLine (vxyZ, vXyZ, projection, color);
+  G3D->DrawLine (vXyZ, vXYZ, projection, color);
+  G3D->DrawLine (vXYZ, vxYZ, projection, color);
+  G3D->DrawLine (vxYZ, vxyZ, projection, color);
+  G3D->DrawLine (vxyz, vxyZ, projection, color);
+  G3D->DrawLine (vxYz, vxYZ, projection, color);
+  G3D->DrawLine (vXyz, vXyZ, projection, color);
+  G3D->DrawLine (vXYz, vXYZ, projection, color);
 }
 
 bool csBugPlug::HandleFrame (iEvent& /*event*/)
