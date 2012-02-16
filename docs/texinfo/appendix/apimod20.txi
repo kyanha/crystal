@@ -6,11 +6,240 @@
 This section documents the major changes between versions 1.4 and 2.0 of
 Crystal Space.
 
-Version 2.0 is a major release. As such, not all changes are documented.  Below
-details the major changes since the last release. This wil continue to be updated as time progrsses.
+Version 2.0 is a major release. As such, not all changes are documented. Below
+details the major changes since the last release. This will continue to be
+updated as time progresses.
 
 This list will not be as complete as wished, but due to timescale between
 this and the last release, it makes it difficult to document all changes.
+
+@strong{New features/enhancements:}
+
+@itemize @bullet
+
+@item
+Added new demonstration applications: @file{csbias}, @file{csisland}.
+
+@item
+Added new tutorial applications: @file{avatartest}, @file{shadertut}.
+
+@item
+Added new tool applications: @file{hairtest}, @file{shagnetron}, @file{cslodgen},
+@file{cslodview}, @file{csmocapviewer}, @file{csterrainedtest}.
+
+@item
+Added new test applications: @file{imptest}, @file{transparentwindow},
+@file{csceguiconftest}, @file{threadtest}, @file{jobtest}, @file{smoketest},
+@file{deferreddemo}, @file{waterdemo2}.
+
+@item
+The @file{startme} application has been almost completely re-written for a nicer
+an a more usable User Interface.
+
+@item
+Many improvements have been added to the following applications and plugins:
+@file{viewmesh}, @file{walktest}, @file{genmeshify}, @file{bugplug}.
+
+@item
+Added several generic tool classes that can be used in application development:
+@code{CS::Utility::iCameraManager}, @code{CS::Utility::iHUDManager},
+@code{CS::Utility::DemoApplication}, @code{CS::Debug::iVisualDebugger},
+@code{CS::Material::MaterialBuilder}.
+
+@item
+New level and data added. Please look within the @file{data} directory.
+
+@item
+Threading support has been extended and improved.
+
+@item
+Added a threaded loader for the parallel loading of the data.
+
+@item
+Added support for custom camera projection matrices.
+
+@item
+A new @code{iRenderManager} interface has been added, abstracting the rendering
+method used to display the scenes.
+
+@item
+A new post-effects system has been added, see @code{iRenderManagerPostEffects}
+and related classes.
+
+@item
+The lighting and shader systems have received many fixes and improvements.
+
+@item
+The shaders have been split in the directories @file{data/shader} for the global
+@cite{weaved} shaders, @file{data/shader-snippet} for the snippets to be weaved in
+the shader weaver, and @file{data/shader-old} for the previous shaders.
+
+@item
+Many new shaders have been added. See in @file{data/shader}.
+
+@item
+A new @samp{deferred} render manager has been added, implementing deferred shading.
+
+@item
+The @file{lighter2} application has been extended with a radiosity system, allowing
+far more realistic pre-lighting.
+
+@item
+A new culler has been added, @samp{occluvis}, doing hardware occlusion visibility
+culling.
+
+@item
+A new imposter system has been added. See the @file{imptest} application.
+
+@item
+A new @ref{Progressive Level of Detail, progressive Level of Detail} system has
+been added.
+
+@item
+Added support for Pixel Buffer Objects.
+
+@item
+Added support for static mesh instancing.
+
+@item
+Many fixes and improvements have been made to the mesh generator.
+
+@item
+Many fixes and improvements have been made to @samp{terrain2} and its multi-splatting
+functionalities.
+
+@item
+Added support for modifiable terrains, along with the start of a terrain editor (see
+@file{csterrainedtest}).
+
+@item
+Implemented most of the missing functionalities in the @file{Bullet} physics
+plugin. Augmented this plugin with many new functionalities such as soft bodies,
+terrains, and collision tests.
+
+@item
+Added some tools for the creation and animation of soft bodies (see
+@code{CS::Animation::iSoftBodyAnimationControl} and
+@code{CS::Physics::Bullet::SoftBodyHelper}).
+
+@item
+Added a plugin for the visual debugging of a physical simulation (see
+@code{CS::Debug::iDynamicSystemDebugger}).
+
+@item
+Switched by default to the @file{Bullet} library instead of @sc{ode} for the
+physical simulation. The @sc{ode} plugin will not get further support anymore,
+and will be removed in some future.
+
+@item
+Many additions and fixes to the @ref{MeshObject Animesh, Animesh mesh}. Many
+additions are about optimizations of the morphing and display processes.
+
+@item
+Added support for animated decals on Animesh meshes.
+
+@item
+Added a structure to hold the physical description of an Animesh (see
+@code{iBodySkeleton} and other classes).
+
+@item
+Added many new animation blending nodes: @samp{Ragdoll}, @samp{LookAt},
+@samp{IKPhysical}, @samp{IKCCD}, @samp{Speed}, @samp{Debug}, @samp{Retarget}.
+
+@item
+Fixes and improvements of the @samp{FSM} and @samp{Animation} animation
+blending nodes.
+
+@item
+The logic of the animation blending nodes has been changed, and the nodes work
+now in bind space instead of bone space.
+
+@item
+Added some default template classes for the creation of new animation nodes (see
+the header file @file{cstool/animnodetmpl.h}).
+
+@item
+Added a @sc{BVH} motion capture parser for the Animesh, along with a motion capture
+viewer and a Point Light Display System (see @file{csmocapviewer}).
+
+@item
+Added some tools for the creation and merging of Animesh meshes
+(see @code{CS::Mesh::AnimatedMeshTools}).
+
+@item
+Added the parsing of animation blending nodes to the @file{skeleton2} loader.
+
+@item
+Added a new @samp{Fur} mesh, for the animation and display of hairs and fur.
+
+@item
+Added a new @samp{Water} mesh, for the display of oceans and seas.
+
+@item
+Added a plugin for the Assimp library, allowing to load genmeshes and animeshes into
+Crystal Space from a wide range of different file format.
+
+@item
+Added a new @ref{Blender, Blender 2.6x export script}.
+
+@item
+Improved the @ref{3DSMax, 3DSMax export script}.
+
+@item
+Added a new 3DSMax exporter plugin, see in the @file{/CSExporters/CrystalMax}
+Subversion repository.
+
+@item
+Added a new terrain exporter plugin for the @url{http://www.pnp-terraincreator.com/, PnP TerrainCreator}
+editor, see in the @file{/CSExporters/CrystalPnP} Subversion repository.
+
+@item
+The @sc{cegui} plugin has received many improvements and additions.
+
+@item
+A new generic application configuration tool has been added. See the classes
+@samp{iConfigListener} and @samp{iConfigNotifier}, and the @file{csceguiconftest}
+application.
+
+@item
+The @samp{wxWidgets} canvas and @file{wxtest} application have been improved.
+
+@item
+The @url{http://libnoise.sourceforge.net/, libnoise} library has been integrated.
+See the @code{CS::Math::Noise} namespace.
+
+@item
+Added a Secure Hash Algorithm implementation (SHA-256). See the @code{SHA256} class.
+
+@item
+Added a HTTP implementation (see the @code{iHTTPConnection} class and related).
+
+@item
+Added many namespaces in the Crystal Space SDK. Future new classes should always
+be put in some @sc{cs} namespace.
+
+@item
+Extended support and usage of unit testing with @sc{cs}.
+
+@item
+Made memory blocks dump more useful in @code{ptmalloc}.
+
+@item
+Added copy constructors to @code{csRefCount}/@code{FastRefCount}
+that properly set the refcount to 1.
+
+@item
+Made generic render step provide inverse object to world TF as a SV.
+
+@item
+Extended @code{csFIFO} with a @code{Top ()} method that peeks into the fifo
+without removing anything.
+
+@item
+Added [no]compact option to @file{optimisedata}, to put all data into
+one file (or split into many).
+
+@end itemize
 
 @strong{API changes:}
 
@@ -26,7 +255,7 @@ const specifiers have very strong semantics that almost never is warranted,
 and to avoid problems and bugs caused by them remove them totally.
 
 @item
-Addition new @code{SimpleStaticLighter} class. This is a conveniance class
+Addition new @code{SimpleStaticLighter} class. This is a convenience class
 that calculates simple static vertex lighting (similar to what lighter2 would
 do) for individual meshes. This is useful for statically lighting dynamically
 created geometry or for updating vertex lighting on an object that has moved.
@@ -47,57 +276,6 @@ Deprecated @code{csNormal ()}.
 Added @code{iCameraListener} and deprecated @code{iCameraSectorListener}.
 @end itemize
 
-@strong{New features/enhancements:}
-
-@itemize @bullet
-
-@item
-New apps added. @file{csbias}, @file{deferreddemo}, @file{island},
-@file{waterdemo2}, @file{shadertut}. Please look for others in the
-@file{apps} directory.
-
-@item
-New level and data added. Please look within the @samp{data} directory.
-
-@item
-Threading has been extended and improved.
-
-@item
-Transition to preferred @file{bullet} for physics plugin underway.
-
-@item
-Extended support and usage of unit testing with @sc{cs}.
-
-@item
-Made memory blocks dump more useful in @code{ptmalloc}.
-
-@item
-Addition of leak guarding to @code{animesh}.
-
-@item
-Added copy constructors to @code{csRefCount}/@code{FastRefCount}
-that properly set the refcount to 1.
-
-@item
-Made generic render step provide inverse object to world TF as a SV.
-
-@item
-Extended @code{csFIFO} with a @code{Top ()} method that peeks into the fifo without removing anything. Agumented the @sc{fsm} node with possibility to
-specify transition animations between two states as well as the possibility to
-do smooth cross blends between two states or state and transition animation.
-
-@item
-Added state transitions animations to the @file{skeleton2} loader.
-
-@item
-Added [no]compact option to @file{optimisedata}, to put all data into
-one file (or split into many).
-
-@item
-Added new blender 2.6 export scripts. These are under development and
-all feedback will be appreciated.
-@end itemize
-
 @strong{Removals:}
 
 @itemize @bullet
@@ -109,7 +287,8 @@ Completed removal of software renderer.
 Completed removal of old event system.
 
 @item
-Completed removal of thing plugin.
+Completed removal of @samp{thing} plugin. However, you can now convert your
+previous @samp{thing} meshes using @file{genmeshify}.
 
 @item
 Completed removal of old sound system.
@@ -118,15 +297,12 @@ Completed removal of old sound system.
 Completed removal of deprecated world attributes from tree.
 
 @item
-@file{simpvs} and @file{csdemo} have been removed.
-
-@item
 Large cleanup of lighting code which has resulted in removal of both
 interfaces and other methods. A result was a complete rework of lighting
 code.
 
 @item
-Removal of @file{instmesh} and @file{bezier} meshes as they are reall
+Removal of @file{instmesh} and @file{bezier} meshes as they are
 not that useful and instmesh isn't working that well either.
 
 @item
@@ -134,6 +310,10 @@ Removed @code{iImageIO::SetDithering ()}.
 
 @item
 Removed deprecated @code{csProcessorCapability}.
+
+@item
+Removed the @file{simpvs} application.
+
 @end itemize
 
 @strong{Fixes that apply to tickets in Trac:}
@@ -202,13 +382,15 @@ of individual @sc{sv} names).
 Extensive removal of dead and old code.
 
 @item
-Optimisation @file{lighter2} by not doing transparency-computation of shadowrays if path is fully unoccluded or fully occluded.
+Optimisation @file{lighter2} by not doing transparency-computation of shadowrays
+if path is fully unoccluded or fully occluded.
 
 @item
 Support for (properly hardware-accelerated) clip planes.
 
 @item
-Packaging scripts have been moved from the scripts directory into a sub packaging directory.
+Packaging scripts have been moved from the scripts directory into a sub packaging
+directory.
 
 @item
 Use @code{glXChooseFBConfig} instead of @code{glXChooseVisual}.
