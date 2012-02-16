@@ -725,6 +725,13 @@ public:
   /// Draw a line
   virtual void DrawLine(const csVector3 & v1,
     const csVector3 & v2, float fov, int color);
+  void DrawLine (const csVector3& v1, const csVector3& v2,
+    const CS::Math::Matrix4& projection, int color);
+  /**
+   * Clip line to be drawn by DrawLine to SMALL_Z.
+   * Returns \c false if the line should not be drawn.
+   */
+  bool DrawLineNearClip (csVector3 & v1, csVector3 & v2);
 
   /**
    * Set optional clipper to use. If clipper == null

@@ -121,6 +121,8 @@ public:
     int sw, int sh, int tx, int ty, int tw, int th, uint8 Alpha = 0);
   void DrawLine (const csVector3& /*v1*/, const csVector3& /*v2*/,
     float /*fov*/, int /*color*/) { }
+  void DrawLine (const csVector3& /*v1*/, const csVector3& /*v2*/,
+    const CS::Math::Matrix4& /*projection*/, int /*color*/) { }
   void SetClipper (iClipper2D* clipper, int cliptype);
   iClipper2D* GetClipper ();
   int GetClipType () const;
