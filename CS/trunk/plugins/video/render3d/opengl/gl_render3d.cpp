@@ -1701,45 +1701,71 @@ void csGLGraphics3D::Print (csRect const* area)
   txtmgr->NextFrame (frameNum);
 }
 
-void csGLGraphics3D::DrawLine (const csVector3 & v1, const csVector3 & v2,
+void csGLGraphics3D::DrawLine (const csVector3 & _v1, const csVector3 & _v2,
 	float fov, int color)
 {
   SwapIfNeeded();
 
-  if (v1.z < SMALL_Z && v2.z < SMALL_Z)
-    return;
+  csVector3 v1 (_v1), v2 (_v2);
+  if (!DrawLineNearClip (v1, v2)) return;
 
-  float x1 = v1.x, y1 = v1.y, z1 = v1.z;
-  float x2 = v2.x, y2 = v2.y, z2 = v2.z;
-
-  if (z1 < SMALL_Z)
-  {
-    // x = t*(x2-x1)+x1;
-    // y = t*(y2-y1)+y1;
-    // z = t*(z2-z1)+z1;
-    float t = (SMALL_Z - z1) / (z2 - z1);
-    x1 = t * (x2 - x1) + x1;
-    y1 = t * (y2 - y1) + y1;
-    z1 = SMALL_Z;
-  }
-  else if (z2 < SMALL_Z)
-  {
-    // x = t*(x2-x1)+x1;
-    // y = t*(y2-y1)+y1;
-    // z = t*(z2-z1)+z1;
-    float t = (SMALL_Z - z1) / (z2 - z1);
-    x2 = t * (x2 - x1) + x1;
-    y2 = t * (y2 - y1) + y1;
-    z2 = SMALL_Z;
-  }
-  float iz1 = fov / z1;
-  int px1 = csQint (x1 * iz1 + (viewwidth / 2));
-  int py1 = viewheight - 1 - csQint (y1 * iz1 + (viewheight / 2));
-  float iz2 = fov / z2;
-  int px2 = csQint (x2 * iz2 + (viewwidth / 2));
-  int py2 = viewheight - 1 - csQint (y2 * iz2 + (viewheight / 2));
+  float iz1 = fov / v1.z;
+  int px1 = csQint (v1.x * iz1 + (viewwidth / 2));
+  int py1 = viewheight - 1 - csQint (v1.y * iz1 + (viewheight / 2));
+  float iz2 = fov / v2.z;
+  int px2 = csQint (v2.x * iz2 + (viewwidth / 2));
+  int py2 = viewheight - 1 - csQint (v2.y * iz2 + (viewheight / 2));
 
   G2D->DrawLine (px1, py1, px2, py2, color);
+}
+
+void csGLGraphics3D::DrawLine (const csVector3& _v1, const csVector3& _v2,
+                               const CS::Math::Matrix4& projection, int color)
+{
+  SwapIfNeeded();
+
+  csVector3 v1 (_v1), v2 (_v2);
+  if (!DrawLineNearClip (v1, v2)) return;
+
+  csVector4 v1p (projection * csVector4 (v1));
+  v1p /= v1p.w;
+  csVector4 v2p (projection * csVector4 (v2));
+  v2p /= v2p.w;
+
+  int px1 = csQint ((v1p.x + 1) * (viewwidth / 2));
+  int py1 = viewheight - 1 - csQint ((v1p.y + 1) * (viewheight / 2));
+  int px2 = csQint ((v2p.x + 1) * (viewwidth / 2));
+  int py2 = viewheight - 1 - csQint ((v2p.y + 1) * (viewheight / 2));
+
+  G2D->DrawLine (px1, py1, px2, py2, color);
+}
+
+bool csGLGraphics3D::DrawLineNearClip (csVector3 & v1, csVector3 & v2)
+{
+  if (v1.z < SMALL_Z && v2.z < SMALL_Z)
+    return false;
+
+  if (v1.z < SMALL_Z)
+  {
+    // x = t*(x2-x1)+x1;
+    // y = t*(y2-y1)+y1;
+    // z = t*(z2-z1)+z1;
+    float t = (SMALL_Z - v1.z) / (v2.z - v1.z);
+    v1.x = t * (v2.x - v1.x) + v1.x;
+    v1.y = t * (v2.y - v1.y) + v1.y;
+    v1.z = SMALL_Z;
+  }
+  else if (v2.z < SMALL_Z)
+  {
+    // x = t*(x2-x1)+x1;
+    // y = t*(y2-y1)+y1;
+    // z = t*(z2-z1)+z1;
+    float t = (SMALL_Z - v1.z) / (v2.z - v1.z);
+    v2.x = t * (v2.x - v1.x) + v1.x;
+    v2.y = t * (v2.y - v1.y) + v1.y;
+    v2.z = SMALL_Z;
+  }
+  return true;
 }
 
 
