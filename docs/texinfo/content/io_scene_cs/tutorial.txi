@@ -245,12 +245,17 @@ All this data is put in the corresponding library file in the @file{factories} d
 Instanced meshes can be defined using the @samp{Crystal Mesh Group} panel in the @samp{Object}
 context of the @samp{Properties} window.
 
-@subsubheading Warning on the Blender 'Double Sided' mesh option
+@subsubheading Warning on the @samp{Double Sided} mesh option
 
-By default, Blender activates the 'Double Sided' option on meshes. All faces, hence
-all vertices, of a double sided mesh will be duplicated by the exporter, implying a 
-doubled memory cost. Knowing that, since this behaviour is only meaningful for some 
-objects, try to deactivate it as often as you can.
+By default, Blender activates the @samp{Double Sided} option on all meshes. In this case,
+the @code{io_scene_cs} add-on will duplicate all faces, vertices, normals, etc of the mesh,
+implying much more memory and display costs. Therefore, be sure to deactivate this option
+whenever you don't need it.
+
+The @samp{Double Sided} option is found in the @samp{Object Data} context of the
+@samp{Properties} window.
+
+@picturess{content,io_scene_cs,blender_double_sided}
 
 @subsubheading Warning on the Blender Object Modifiers
 
@@ -315,7 +320,7 @@ sure to disable any constraint first (in the @samp{Object Constraints} context o
 
 @subsubheading Sockets
 
-You can attach external meshes to the bone of an animated mesh, in order fo them to
+You can attach external meshes to the bone of an animated mesh, in order for them to
 follow the motion of the bone, whatever its animation. This is made through Crystal
 Space socket objects (@code{CS::Mesh::iAnimatedMeshSocket}).
 
@@ -347,26 +352,32 @@ press @samp{CTRL-P} then select @samp{Bone} in the @samp{Parent To} menu
 
 There are no restrictions on the number of sockets.
 
-@subsubheading Warning on the Blender 'Double Sided' mesh option
+@subsubheading Warning on the @samp{Double Sided} mesh option
 
-By default, Blender activates the 'Double Sided' option on meshes. All faces, hence
-all vertices, of a double sided mesh will be duplicated by the exporter, implying a 
-doubled memory cost. Knowing that, since this behaviour is only meaningful for some 
-objects, try to deactivate it as often as you can.
+Similarly to the @ref{io_scene_cs Export Genmesh, static meshes}, if the
+@samp{Double Sided} option is checked for the Animesh, then it will be exported with
+a doubled amount of vertices and other render buffers. Uncheck this option whenever
+you can.
 
 @node io_scene_cs ToDo, , io_scene_cs Export Animesh, Blender
 @subsection ToDo
 
+This section lists the main features of the exporter that are still lacking. Please
+contact the Crystal Space mailing list if you wish to help and add support for them.
+
 @itemize @bullet
 @item
-lamps are exported as simple point light sources
+All lamps are exported as simple point light sources
 @item
-no support for trees of armatures: only the root armature is exported, not the children ones
+No support for portals
 @item
-no support for portals
+No support for terrains
 @item
-no terrain support
+No support for particles
 @item
-no support for colliders and physical properties
+No support for colliders and physical properties
+@item
+No support for trees of armatures: only the root armature is exported, not the children
+ones
 @end itemize
 
