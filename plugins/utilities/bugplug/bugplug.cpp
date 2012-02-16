@@ -1588,7 +1588,7 @@ static inline void DrawBox3D (iGraphics3D* G3D,
   csVector3 vXyZ = tr * box.GetCorner (CS_BOX_CORNER_XyZ);
   csVector3 vxYZ = tr * box.GetCorner (CS_BOX_CORNER_xYZ);
   csVector3 vXYZ = tr * box.GetCorner (CS_BOX_CORNER_XYZ);
-  float fov = G3D->GetPerspectiveAspect ();
+  float fov = G3D->GetDriver2D ()->GetHeight ();
   G3D->DrawLine (vxyz, vXyz, fov, color);
   G3D->DrawLine (vXyz, vXYz, fov, color);
   G3D->DrawLine (vXYz, vxYz, fov, color);
@@ -1684,7 +1684,7 @@ bool csBugPlug::HandleFrame (iEvent& /*event*/)
     iRenderView* rview = shadow->GetView();
     iCamera* cam = rview->GetOriginalCamera();
     csTransform tr_w2c = cam->GetTransform ();
-    float fov = G3D->GetPerspectiveAspect ();
+    float fov = G3D->GetDriver2D ()->GetHeight ();
     bool do_bbox, do_rad, do_norm, do_skel;
     shadow->GetShowOptions (do_bbox, do_rad, do_norm, do_skel);
     G3D->BeginDraw (CSDRAW_2DGRAPHICS);
@@ -1722,13 +1722,12 @@ bool csBugPlug::HandleFrame (iEvent& /*event*/)
         csVector3 r, center;
         selected_meshes[k]->GetMeshObject ()->GetObjectModel ()
 		->GetRadius (radius,center);
-        csVector3 trans_o = tr_o2c * center;
         r.Set (radius, 0, 0);
-        G3D->DrawLine (trans_o-r, trans_o+r, fov, rad_color);
+        G3D->DrawLine (tr_o2c * (center-r), tr_o2c * (center+r), fov, rad_color);
         r.Set (0, radius, 0);
-        G3D->DrawLine (trans_o-r, trans_o+r, fov, rad_color);
+        G3D->DrawLine (tr_o2c * (center-r), tr_o2c * (center+r), fov, rad_color);
         r.Set (0, 0, radius);
-        G3D->DrawLine (trans_o-r, trans_o+r, fov, rad_color);
+        G3D->DrawLine (tr_o2c * (center-r), tr_o2c * (center+r), fov, rad_color);
       }
       if (do_norm)
       {
