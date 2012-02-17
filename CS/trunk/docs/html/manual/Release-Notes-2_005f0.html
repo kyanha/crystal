@@ -64,12 +64,240 @@ ul.toc {list-style: none}
 <p>This section documents the major changes between versions 1.4 and 2.0 of
 Crystal Space.
 </p>
-<p>Version 2.0 is a major release. As such, not all changes are documented.  Below
-details the major changes since the last release. This wil continue to be updated as time progrsses.
+<p>Version 2.0 is a major release. As such, not all changes are documented. Below
+details the major changes since the last release. This will continue to be
+updated as time progresses.
 </p>
 <p>This list will not be as complete as wished, but due to timescale between
 this and the last release, it makes it difficult to document all changes.
 </p>
+<p><strong>New features/enhancements:</strong>
+</p>
+<ul>
+<li>
+Added new demonstration applications: <tt>&lsquo;csbias&rsquo;</tt>, <tt>&lsquo;csisland&rsquo;</tt>.
+
+</li><li>
+Added new tutorial applications: <tt>&lsquo;avatartest&rsquo;</tt>, <tt>&lsquo;shadertut&rsquo;</tt>.
+
+</li><li>
+Added new tool applications: <tt>&lsquo;hairtest&rsquo;</tt>, <tt>&lsquo;shagnetron&rsquo;</tt>, <tt>&lsquo;cslodgen&rsquo;</tt>,
+<tt>&lsquo;cslodview&rsquo;</tt>, <tt>&lsquo;csmocapviewer&rsquo;</tt>, <tt>&lsquo;csterrainedtest&rsquo;</tt>.
+
+</li><li>
+Added new test applications: <tt>&lsquo;imptest&rsquo;</tt>, <tt>&lsquo;transparentwindow&rsquo;</tt>,
+<tt>&lsquo;csceguiconftest&rsquo;</tt>, <tt>&lsquo;threadtest&rsquo;</tt>, <tt>&lsquo;jobtest&rsquo;</tt>, <tt>&lsquo;smoketest&rsquo;</tt>,
+<tt>&lsquo;deferreddemo&rsquo;</tt>, <tt>&lsquo;waterdemo2&rsquo;</tt>.
+
+</li><li>
+The <tt>&lsquo;startme&rsquo;</tt> application has been almost completely re-written for a nicer
+an a more usable User Interface.
+
+</li><li>
+Many improvements have been added to the following applications and plugins:
+<tt>&lsquo;viewmesh&rsquo;</tt>, <tt>&lsquo;walktest&rsquo;</tt>, <tt>&lsquo;genmeshify&rsquo;</tt>, <tt>&lsquo;bugplug&rsquo;</tt>.
+
+</li><li>
+Added several generic tool classes that can be used in application development:
+<code>CS::Utility::iCameraManager</code>, <code>CS::Utility::iHUDManager</code>,
+<code>CS::Utility::DemoApplication</code>, <code>CS::Debug::iVisualDebugger</code>,
+<code>CS::Material::MaterialBuilder</code>.
+
+</li><li>
+New level and data added. Please look within the <tt>&lsquo;data&rsquo;</tt> directory.
+
+</li><li>
+Threading support has been extended and improved.
+
+</li><li>
+Added a threaded loader for the parallel loading of the data.
+
+</li><li>
+Added support for custom camera projection matrices.
+
+</li><li>
+A new <code>iRenderManager</code> interface has been added, abstracting the rendering
+method used to display the scenes.
+
+</li><li>
+A new post-effects system has been added, see <code>iRenderManagerPostEffects</code>
+and related classes.
+
+</li><li>
+The lighting and shader systems have received many fixes and improvements.
+
+</li><li>
+The shaders have been split in the directories <tt>&lsquo;data/shader&rsquo;</tt> for the global
+<cite>weaved</cite> shaders, <tt>&lsquo;data/shader-snippet&rsquo;</tt> for the snippets to be weaved in
+the shader weaver, and <tt>&lsquo;data/shader-old&rsquo;</tt> for the previous shaders.
+
+</li><li>
+Many new shaders have been added. See in <tt>&lsquo;data/shader&rsquo;</tt>.
+
+</li><li>
+A new <samp>&lsquo;deferred&rsquo;</samp> render manager has been added, implementing deferred shading.
+
+</li><li>
+The <tt>&lsquo;lighter2&rsquo;</tt> application has been extended with a radiosity system, allowing
+far more realistic pre-lighting.
+
+</li><li>
+A new culler has been added, <samp>&lsquo;occluvis&rsquo;</samp>, doing hardware occlusion visibility
+culling.
+
+</li><li>
+A new imposter system has been added. See the <tt>&lsquo;imptest&rsquo;</tt> application.
+
+</li><li>
+A new <a href="Progressive-Level-of-Detail.html#0">progressive Level of Detail</a> system has
+been added.
+
+</li><li>
+Added support for Pixel Buffer Objects.
+
+</li><li>
+Added support for static mesh instancing.
+
+</li><li>
+Many fixes and improvements have been made to the mesh generator.
+
+</li><li>
+Many fixes and improvements have been made to <samp>&lsquo;terrain2&rsquo;</samp> and its multi-splatting
+functionalities.
+
+</li><li>
+Added support for modifiable terrains, along with the start of a terrain editor (see
+<tt>&lsquo;csterrainedtest&rsquo;</tt>).
+
+</li><li>
+Implemented most of the missing functionalities in the <tt>&lsquo;Bullet&rsquo;</tt> physics
+plugin. Augmented this plugin with many new functionalities such as soft bodies,
+terrains, and collision tests.
+
+</li><li>
+Added some tools for the creation and animation of soft bodies (see
+<code>CS::Animation::iSoftBodyAnimationControl</code> and
+<code>CS::Physics::Bullet::SoftBodyHelper</code>).
+
+</li><li>
+Added a plugin for the visual debugging of a physical simulation (see
+<code>CS::Debug::iDynamicSystemDebugger</code>).
+
+</li><li>
+Switched by default to the <tt>&lsquo;Bullet&rsquo;</tt> library instead of <small>ODE</small> for the
+physical simulation. The <small>ODE</small> plugin will not get further support anymore,
+and will be removed in some future.
+
+</li><li>
+Many additions and fixes to the <a href="MeshObject-Animesh.html#0">Animesh mesh</a>. Many
+additions are about optimizations of the morphing and display processes.
+
+</li><li>
+Added support for animated decals on Animesh meshes.
+
+</li><li>
+Added a structure to hold the physical description of an Animesh (see
+<code>iBodySkeleton</code> and other classes).
+
+</li><li>
+Added many new animation blending nodes: <samp>&lsquo;Ragdoll&rsquo;</samp>, <samp>&lsquo;LookAt&rsquo;</samp>,
+<samp>&lsquo;IKPhysical&rsquo;</samp>, <samp>&lsquo;IKCCD&rsquo;</samp>, <samp>&lsquo;Speed&rsquo;</samp>, <samp>&lsquo;Debug&rsquo;</samp>, <samp>&lsquo;Retarget&rsquo;</samp>.
+
+</li><li>
+Fixes and improvements of the <samp>&lsquo;FSM&rsquo;</samp> and <samp>&lsquo;Animation&rsquo;</samp> animation
+blending nodes.
+
+</li><li>
+The logic of the animation blending nodes has been changed, and the nodes work
+now in bind space instead of bone space.
+
+</li><li>
+Added some default template classes for the creation of new animation nodes (see
+the header file <tt>&lsquo;cstool/animnodetmpl.h&rsquo;</tt>).
+
+</li><li>
+Added a <small>BVH</small> motion capture parser for the Animesh, along with a motion capture
+viewer and a Point Light Display System (see <tt>&lsquo;csmocapviewer&rsquo;</tt>).
+
+</li><li>
+Added some tools for the creation and merging of Animesh meshes
+(see <code>CS::Mesh::AnimatedMeshTools</code>).
+
+</li><li>
+Added the parsing of animation blending nodes to the <tt>&lsquo;skeleton2&rsquo;</tt> loader.
+
+</li><li>
+Added a new <samp>&lsquo;Fur&rsquo;</samp> mesh, for the animation and display of hairs and fur.
+
+</li><li>
+Added a new <samp>&lsquo;Water&rsquo;</samp> mesh, for the display of oceans and seas.
+
+</li><li>
+Added a plugin for the Assimp library, allowing to load genmeshes and animeshes into
+Crystal Space from a wide range of different file format.
+
+</li><li>
+Added a new <a href="Blender.html#0">Blender 2.6x export script</a>.
+
+</li><li>
+Improved the <a href="3DSMax.html#0">3DSMax export script</a>.
+
+</li><li>
+Added a new 3DSMax exporter plugin, see in the <tt>&lsquo;/CSExporters/CrystalMax&rsquo;</tt>
+Subversion repository.
+
+</li><li>
+Added a new terrain exporter plugin for the <a href="http://www.pnp-terraincreator.com/">PnP TerrainCreator</a>
+editor, see in the <tt>&lsquo;/CSExporters/CrystalPnP&rsquo;</tt> Subversion repository.
+
+</li><li>
+The <small>CEGUI</small> plugin has received many improvements and additions.
+
+</li><li>
+A new generic application configuration tool has been added. See the classes
+<samp>&lsquo;iConfigListener&rsquo;</samp> and <samp>&lsquo;iConfigNotifier&rsquo;</samp>, and the <tt>&lsquo;csceguiconftest&rsquo;</tt>
+application.
+
+</li><li>
+The <samp>&lsquo;wxWidgets&rsquo;</samp> canvas and <tt>&lsquo;wxtest&rsquo;</tt> application have been improved.
+
+</li><li>
+The <a href="http://libnoise.sourceforge.net/">libnoise</a> library has been integrated.
+See the <code>CS::Math::Noise</code> namespace.
+
+</li><li>
+Added a Secure Hash Algorithm implementation (SHA-256). See the <code>SHA256</code> class.
+
+</li><li>
+Added a HTTP implementation (see the <code>iHTTPConnection</code> class and related).
+
+</li><li>
+Added many namespaces in the Crystal Space SDK. Future new classes should always
+be put in some <small>CS</small> namespace.
+
+</li><li>
+Extended support and usage of unit testing with <small>CS</small>.
+
+</li><li>
+Made memory blocks dump more useful in <code>ptmalloc</code>.
+
+</li><li>
+Added copy constructors to <code>csRefCount</code>/<code>FastRefCount</code>
+that properly set the refcount to 1.
+
+</li><li>
+Made generic render step provide inverse object to world TF as a SV.
+
+</li><li>
+Extended <code>csFIFO</code> with a <code>Top ()</code> method that peeks into the fifo
+without removing anything.
+
+</li><li>
+Added [no]compact option to <tt>&lsquo;optimisedata&rsquo;</tt>, to put all data into
+one file (or split into many).
+
+</li></ul>
+
 <p><strong>API changes:</strong>
 </p>
 <ul>
@@ -83,7 +311,7 @@ const specifiers have very strong semantics that almost never is warranted,
 and to avoid problems and bugs caused by them remove them totally.
 
 </li><li>
-Addition new <code>SimpleStaticLighter</code> class. This is a conveniance class
+Addition new <code>SimpleStaticLighter</code> class. This is a convenience class
 that calculates simple static vertex lighting (similar to what lighter2 would
 do) for individual meshes. This is useful for statically lighting dynamically
 created geometry or for updating vertex lighting on an object that has moved.
@@ -104,56 +332,6 @@ Deprecated <code>csNormal ()</code>.
 Added <code>iCameraListener</code> and deprecated <code>iCameraSectorListener</code>.
 </li></ul>
 
-<p><strong>New features/enhancements:</strong>
-</p>
-<ul>
-<li>
-New apps added. <tt>&lsquo;csbias&rsquo;</tt>, <tt>&lsquo;deferreddemo&rsquo;</tt>, <tt>&lsquo;island&rsquo;</tt>,
-<tt>&lsquo;waterdemo2&rsquo;</tt>, <tt>&lsquo;shadertut&rsquo;</tt>. Please look for others in the
-<tt>&lsquo;apps&rsquo;</tt> directory.
-
-</li><li>
-New level and data added. Please look within the <samp>&lsquo;data&rsquo;</samp> directory.
-
-</li><li>
-Threading has been extended and improved.
-
-</li><li>
-Transition to preferred <tt>&lsquo;bullet&rsquo;</tt> for physics plugin underway.
-
-</li><li>
-Extended support and usage of unit testing with <small>CS</small>.
-
-</li><li>
-Made memory blocks dump more useful in <code>ptmalloc</code>.
-
-</li><li>
-Addition of leak guarding to <code>animesh</code>.
-
-</li><li>
-Added copy constructors to <code>csRefCount</code>/<code>FastRefCount</code>
-that properly set the refcount to 1.
-
-</li><li>
-Made generic render step provide inverse object to world TF as a SV.
-
-</li><li>
-Extended <code>csFIFO</code> with a <code>Top ()</code> method that peeks into the fifo without removing anything. Agumented the <small>FSM</small> node with possibility to
-specify transition animations between two states as well as the possibility to
-do smooth cross blends between two states or state and transition animation.
-
-</li><li>
-Added state transitions animations to the <tt>&lsquo;skeleton2&rsquo;</tt> loader.
-
-</li><li>
-Added [no]compact option to <tt>&lsquo;optimisedata&rsquo;</tt>, to put all data into
-one file (or split into many).
-
-</li><li>
-Added new blender 2.6 export scripts. These are under development and
-all feedback will be appreciated.
-</li></ul>
-
 <p><strong>Removals:</strong>
 </p>
 <ul>
@@ -164,7 +342,8 @@ Completed removal of software renderer.
 Completed removal of old event system.
 
 </li><li>
-Completed removal of thing plugin.
+Completed removal of <samp>&lsquo;thing&rsquo;</samp> plugin. However, you can now convert your
+previous <samp>&lsquo;thing&rsquo;</samp> meshes using <tt>&lsquo;genmeshify&rsquo;</tt>.
 
 </li><li>
 Completed removal of old sound system.
@@ -173,15 +352,12 @@ Completed removal of old sound system.
 Completed removal of deprecated world attributes from tree.
 
 </li><li>
-<tt>&lsquo;simpvs&rsquo;</tt> and <tt>&lsquo;csdemo&rsquo;</tt> have been removed.
-
-</li><li>
 Large cleanup of lighting code which has resulted in removal of both
 interfaces and other methods. A result was a complete rework of lighting
 code.
 
 </li><li>
-Removal of <tt>&lsquo;instmesh&rsquo;</tt> and <tt>&lsquo;bezier&rsquo;</tt> meshes as they are reall
+Removal of <tt>&lsquo;instmesh&rsquo;</tt> and <tt>&lsquo;bezier&rsquo;</tt> meshes as they are
 not that useful and instmesh isn't working that well either.
 
 </li><li>
@@ -189,6 +365,10 @@ Removed <code>iImageIO::SetDithering ()</code>.
 
 </li><li>
 Removed deprecated <code>csProcessorCapability</code>.
+
+</li><li>
+Removed the <tt>&lsquo;simpvs&rsquo;</tt> application.
+
 </li></ul>
 
 <p><strong>Fixes that apply to tickets in Trac:</strong>
@@ -255,13 +435,15 @@ of individual <small>SV</small> names).
 Extensive removal of dead and old code.
 
 </li><li>
-Optimisation <tt>&lsquo;lighter2&rsquo;</tt> by not doing transparency-computation of shadowrays if path is fully unoccluded or fully occluded.
+Optimisation <tt>&lsquo;lighter2&rsquo;</tt> by not doing transparency-computation of shadowrays
+if path is fully unoccluded or fully occluded.
 
 </li><li>
 Support for (properly hardware-accelerated) clip planes.
 
 </li><li>
-Packaging scripts have been moved from the scripts directory into a sub packaging directory.
+Packaging scripts have been moved from the scripts directory into a sub packaging
+directory.
 
 </li><li>
 Use <code>glXChooseFBConfig</code> instead of <code>glXChooseVisual</code>.
