@@ -10145,7 +10145,6 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *DrawMesh = *cspacec::iGraphics3D_DrawMesh;
 *DrawSimpleMesh = *cspacec::iGraphics3D_DrawSimpleMesh;
 *DrawPixmap = *cspacec::iGraphics3D_DrawPixmap;
-*DrawLine = *cspacec::iGraphics3D_DrawLine;
 *ActivateBuffers = *cspacec::iGraphics3D_ActivateBuffers;
 *DeactivateBuffers = *cspacec::iGraphics3D_DeactivateBuffers;
 *SetTextureState = *cspacec::iGraphics3D_SetTextureState;
@@ -10190,6 +10189,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *GetEdgeDrawing = *cspacec::iGraphics3D_GetEdgeDrawing;
 *SetTessellation = *cspacec::iGraphics3D_SetTessellation;
 *GetTessellation = *cspacec::iGraphics3D_GetTessellation;
+*DrawLine = *cspacec::iGraphics3D_DrawLine;
 *scfGetVersion = *cspacec::iGraphics3D_scfGetVersion;
 sub DESTROY {
     return unless $_[0]->isa('HASH');

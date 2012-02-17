@@ -9803,7 +9803,7 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_iGraphics3D_DrawLine(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_iGraphics3D_DrawLine__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   iGraphics3D *arg1 = (iGraphics3D *) 0 ;
   csVector3 *arg2 = 0 ;
@@ -11859,6 +11859,148 @@ SWIGINTERN PyObject *_wrap_iGraphics3D_GetTessellation(PyObject *SWIGUNUSEDPARM(
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_iGraphics3D_DrawLine__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  iGraphics3D *arg1 = (iGraphics3D *) 0 ;
+  csVector3 *arg2 = 0 ;
+  csVector3 *arg3 = 0 ;
+  CS::Math::Matrix4 *arg4 = 0 ;
+  int arg5 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  void *argp3 = 0 ;
+  int res3 = 0 ;
+  void *argp4 = 0 ;
+  int res4 = 0 ;
+  int val5 ;
+  int ecode5 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  PyObject * obj3 = 0 ;
+  PyObject * obj4 = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"iGraphics3D_DrawLine",5,5,&obj0,&obj1,&obj2,&obj3,&obj4)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_iGraphics3D, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "iGraphics3D_DrawLine" "', argument " "1"" of type '" "iGraphics3D *""'"); 
+  }
+  arg1 = reinterpret_cast< iGraphics3D * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_csVector3,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "iGraphics3D_DrawLine" "', argument " "2"" of type '" "csVector3 const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "iGraphics3D_DrawLine" "', argument " "2"" of type '" "csVector3 const &""'"); 
+  }
+  arg2 = reinterpret_cast< csVector3 * >(argp2);
+  res3 = SWIG_ConvertPtr(obj2, &argp3, SWIGTYPE_p_csVector3,  0  | 0);
+  if (!SWIG_IsOK(res3)) {
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "iGraphics3D_DrawLine" "', argument " "3"" of type '" "csVector3 const &""'"); 
+  }
+  if (!argp3) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "iGraphics3D_DrawLine" "', argument " "3"" of type '" "csVector3 const &""'"); 
+  }
+  arg3 = reinterpret_cast< csVector3 * >(argp3);
+  res4 = SWIG_ConvertPtr(obj3, &argp4, SWIGTYPE_p_CS__Math__Matrix4,  0  | 0);
+  if (!SWIG_IsOK(res4)) {
+    SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "iGraphics3D_DrawLine" "', argument " "4"" of type '" "CS::Math::Matrix4 const &""'"); 
+  }
+  if (!argp4) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "iGraphics3D_DrawLine" "', argument " "4"" of type '" "CS::Math::Matrix4 const &""'"); 
+  }
+  arg4 = reinterpret_cast< CS::Math::Matrix4 * >(argp4);
+  ecode5 = SWIG_AsVal_int(obj4, &val5);
+  if (!SWIG_IsOK(ecode5)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode5), "in method '" "iGraphics3D_DrawLine" "', argument " "5"" of type '" "int""'");
+  } 
+  arg5 = static_cast< int >(val5);
+  (arg1)->DrawLine((csVector3 const &)*arg2,(csVector3 const &)*arg3,(CS::Math::Matrix4 const &)*arg4,arg5);
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_iGraphics3D_DrawLine(PyObject *self, PyObject *args) {
+  int argc;
+  PyObject *argv[6];
+  int ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = (int)PyObject_Length(args);
+  for (ii = 0; (ii < argc) && (ii < 5); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 5) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_iGraphics3D, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      int res = SWIG_ConvertPtr(argv[1], 0, SWIGTYPE_p_csVector3, 0);
+      _v = SWIG_CheckState(res);
+      if (_v) {
+        int res = SWIG_ConvertPtr(argv[2], 0, SWIGTYPE_p_csVector3, 0);
+        _v = SWIG_CheckState(res);
+        if (_v) {
+          int res = SWIG_ConvertPtr(argv[3], 0, SWIGTYPE_p_CS__Math__Matrix4, 0);
+          _v = SWIG_CheckState(res);
+          if (_v) {
+            {
+              int res = SWIG_AsVal_int(argv[4], NULL);
+              _v = SWIG_CheckState(res);
+            }
+            if (_v) {
+              return _wrap_iGraphics3D_DrawLine__SWIG_1(self, args);
+            }
+          }
+        }
+      }
+    }
+  }
+  if (argc == 5) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_iGraphics3D, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      int res = SWIG_ConvertPtr(argv[1], 0, SWIGTYPE_p_csVector3, 0);
+      _v = SWIG_CheckState(res);
+      if (_v) {
+        int res = SWIG_ConvertPtr(argv[2], 0, SWIGTYPE_p_csVector3, 0);
+        _v = SWIG_CheckState(res);
+        if (_v) {
+          {
+            int res = SWIG_AsVal_float(argv[3], NULL);
+            _v = SWIG_CheckState(res);
+          }
+          if (_v) {
+            {
+              int res = SWIG_AsVal_int(argv[4], NULL);
+              _v = SWIG_CheckState(res);
+            }
+            if (_v) {
+              return _wrap_iGraphics3D_DrawLine__SWIG_0(self, args);
+            }
+          }
+        }
+      }
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number of arguments for overloaded function 'iGraphics3D_DrawLine'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    DrawLine(iGraphics3D *,csVector3 const &,csVector3 const &,float,int)\n"
+    "    DrawLine(iGraphics3D *,csVector3 const &,csVector3 const &,CS::Math::Matrix4 const &,int)\n");
   return NULL;
 }
 
@@ -25166,7 +25308,6 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"iGraphics3D_DrawMesh", _wrap_iGraphics3D_DrawMesh, METH_VARARGS, NULL},
 	 { (char *)"iGraphics3D_DrawSimpleMesh", _wrap_iGraphics3D_DrawSimpleMesh, METH_VARARGS, NULL},
 	 { (char *)"iGraphics3D_DrawPixmap", _wrap_iGraphics3D_DrawPixmap, METH_VARARGS, NULL},
-	 { (char *)"iGraphics3D_DrawLine", _wrap_iGraphics3D_DrawLine, METH_VARARGS, NULL},
 	 { (char *)"iGraphics3D_ActivateBuffers", _wrap_iGraphics3D_ActivateBuffers, METH_VARARGS, NULL},
 	 { (char *)"iGraphics3D_DeactivateBuffers", _wrap_iGraphics3D_DeactivateBuffers, METH_VARARGS, NULL},
 	 { (char *)"iGraphics3D_SetTextureState", _wrap_iGraphics3D_SetTextureState, METH_VARARGS, NULL},
@@ -25211,6 +25352,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"iGraphics3D_GetEdgeDrawing", _wrap_iGraphics3D_GetEdgeDrawing, METH_VARARGS, NULL},
 	 { (char *)"iGraphics3D_SetTessellation", _wrap_iGraphics3D_SetTessellation, METH_VARARGS, NULL},
 	 { (char *)"iGraphics3D_GetTessellation", _wrap_iGraphics3D_GetTessellation, METH_VARARGS, NULL},
+	 { (char *)"iGraphics3D_DrawLine", _wrap_iGraphics3D_DrawLine, METH_VARARGS, NULL},
 	 { (char *)"iGraphics3D_scfGetVersion", _wrap_iGraphics3D_scfGetVersion, METH_VARARGS, NULL},
 	 { (char *)"delete_iGraphics3D", _wrap_delete_iGraphics3D, METH_VARARGS, NULL},
 	 { (char *)"iGraphics3D_swigregister", iGraphics3D_swigregister, METH_VARARGS, NULL},
