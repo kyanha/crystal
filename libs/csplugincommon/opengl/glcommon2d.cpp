@@ -19,6 +19,7 @@
 #include "cssysdef.h"
 #include "csqint.h"
 
+#include "csgeom/vector3.h"
 #include "igraphic/image.h"
 #include "igraphic/imageio.h"
 #include "iutil/document.h"
@@ -29,6 +30,7 @@
 
 #include "csgeom/csrect.h"
 #include "csgeom/math.h"
+#include "csgeom/projections.h"
 #include "csplugincommon/opengl/assumedstate.h"
 #include "csplugincommon/opengl/glcommon2d.h"
 #include "csplugincommon/opengl/glstates.h"
@@ -556,6 +558,69 @@ void csGraphics2DGLCommon::DrawLine (
   glEnd ();
 
   if (gl_alphaTest) statecache->Enable_GL_ALPHA_TEST ();
+}
+
+void csGraphics2DGLCommon::Draw3DLine (const csVector3& _v1, const csVector3& _v2,
+				       float fov, int color)
+{
+  csVector3 v1 (_v1), v2 (_v2);
+  if (!DrawLineNearClip (v1, v2)) return;
+
+  float iz1 = fov / v1.z;
+  int px1 = csQint (v1.x * iz1 + (vpWidth / 2));
+  int py1 = vpHeight - 1 - csQint (v1.y * iz1 + (vpHeight / 2));
+  float iz2 = fov / v2.z;
+  int px2 = csQint (v2.x * iz2 + (vpWidth / 2));
+  int py2 = vpHeight - 1 - csQint (v2.y * iz2 + (vpHeight / 2));
+
+  DrawLine (px1, py1, px2, py2, color);
+}
+
+void csGraphics2DGLCommon::Draw3DLine (const csVector3& _v1, const csVector3& _v2,
+				       const CS::Math::Matrix4& projection, int color)
+{
+  csVector3 v1 (_v1), v2 (_v2);
+  if (!DrawLineNearClip (v1, v2)) return;
+
+  csVector4 v1p (projection * csVector4 (v1));
+  v1p /= v1p.w;
+  csVector4 v2p (projection * csVector4 (v2));
+  v2p /= v2p.w;
+
+  int px1 = csQint ((v1p.x + 1) * (vpWidth / 2));
+  int py1 = vpHeight - 1 - csQint ((v1p.y + 1) * (vpHeight / 2));
+  int px2 = csQint ((v2p.x + 1) * (vpWidth / 2));
+  int py2 = vpHeight - 1 - csQint ((v2p.y + 1) * (vpHeight / 2));
+
+  DrawLine (px1, py1, px2, py2, color);
+}
+
+bool csGraphics2DGLCommon::DrawLineNearClip (csVector3 & v1, csVector3 & v2)
+{
+  if (v1.z < SMALL_Z && v2.z < SMALL_Z)
+    return false;
+
+  if (v1.z < SMALL_Z)
+  {
+    // x = t*(x2-x1)+x1;
+    // y = t*(y2-y1)+y1;
+    // z = t*(z2-z1)+z1;
+    float t = (SMALL_Z - v1.z) / (v2.z - v1.z);
+    v1.x = t * (v2.x - v1.x) + v1.x;
+    v1.y = t * (v2.y - v1.y) + v1.y;
+    v1.z = SMALL_Z;
+  }
+  else if (v2.z < SMALL_Z)
+  {
+    // x = t*(x2-x1)+x1;
+    // y = t*(y2-y1)+y1;
+    // z = t*(z2-z1)+z1;
+    float t = (SMALL_Z - v1.z) / (v2.z - v1.z);
+    v2.x = t * (v2.x - v1.x) + v1.x;
+    v2.y = t * (v2.y - v1.y) + v1.y;
+    v2.z = SMALL_Z;
+  }
+  return true;
 }
 
 void csGraphics2DGLCommon::DrawBox (int x, int y, int w, int h, int color)
