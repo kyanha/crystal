@@ -30,7 +30,7 @@ int main(int argc, char** argv)
   iObjectRegistry* object_reg = csInitializer::CreateEnvironment (argc, argv);
   if(!object_reg)
   {
-    printf("Object Reg failed to Init!\n");
+    csPrintf("Object Reg failed to Init!\n");
     return 1;
   }
 
@@ -38,7 +38,7 @@ int main(int argc, char** argv)
     "crystalspace.utilities.colladaconvertor");
   if(!collada)
   {
-    printf("Collada plugin failed to load!\n");
+    csPrintf("Collada plugin failed to load!\n");
     return 1;
   }
 
@@ -55,16 +55,16 @@ int main(int argc, char** argv)
     args.Push(argv[i]);
   }
 
-  printf("Collada %s to Crystal Space Convertor\n\n", COLLADA_VERSION);
+  csPrintf("Collada %s to Crystal Space Convertor\n\n", COLLADA_VERSION);
 
   if(argc == 1 || args[0].Compare("--help") || args[0].Compare("-help"))
   {
-    printf("Options:\n");
-    printf("-library Export the following files as library files.\n");
-    printf("-map Export the following files as world files.\n");
-    printf("-out Output file path.\n");
-    printf("-[no]sectorscene Set if each scene is an entire sector. Else the top level objects in each scene are considered a sector.\n\n");
-    printf("Usage: collada2cs(.exe) -map -sectorscene file1.dae -nosectorscene file2.dae -library file3.dae -out out.xml file4.dae\n");
+    csPrintf("Options:\n");
+    csPrintf("-library Export the following files as library files.\n");
+    csPrintf("-map Export the following files as world files.\n");
+    csPrintf("-out Output file path.\n");
+    csPrintf("-[no]sectorscene Set if each scene is an entire sector. Else the top level objects in each scene are considered a sector.\n\n");
+    csPrintf("Usage: collada2cs(.exe) -map -sectorscene file1.dae -nosectorscene file2.dae -library file3.dae -out out.xml file4.dae\n");
   }
   else
   {
@@ -93,7 +93,7 @@ int main(int argc, char** argv)
       }
       else
       {
-        printf("File %zu of %zu:\n", i + 1, args.GetSize());
+        csPrintf("File %zu of %zu:\n", i + 1, args.GetSize());
         csString fileIn = "/this/";
         fileIn.Append(args[i]);
 
@@ -109,13 +109,13 @@ int main(int argc, char** argv)
           fileOut.Append(".xml");
         }
 
-        printf("- Loading file: %s\n", args[i].GetData());
+	csPrintf("- Loading file: %s\n", args[i].GetData());
         collada->Load(fileIn);
 
-        printf("- Converting\n");
+        csPrintf("- Converting\n");
         collada->Convert();
 
-        printf("- Writing file: %s\n\n", fileOut.GetData());
+        csPrintf("- Writing file: %s\n\n", fileOut.GetData());
         collada->Write(csString().Format("/this/%s", fileOut.GetData()));
       }
     }
