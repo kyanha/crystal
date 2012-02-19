@@ -104,11 +104,11 @@ bool CS3DPanel::Initialize (iObjectRegistry* obj_reg)
   g2d->AllowResize (true);
 
   csRef<iWxWindow> wxwin = scfQueryInterface<iWxWindow> (g2d);
-  if( !wxwin )
+  if(!wxwin)
   {
     csReport (object_reg, CS_REPORTER_SEVERITY_ERROR,
               "crystalspace.application.editor",
-              "Canvas is no iWxWindow plugin!");
+              "The drawing canvas is not a iWxWindow plugin!");
     return false;
   }
   window = new CS3DPanel::Panel (this, editor->GetWindow (), -1, wxPoint(0,0), wxSize(200,150));
@@ -420,6 +420,7 @@ void CS3DPanel::ProcessFrame ()
   // Tell 3D driver we're going to display 3D things.
   if (!g3d->BeginDraw (CSDRAW_CLEARSCREEN | CSDRAW_3DGRAPHICS))
     return;
+  csRef<iGraphics2D> g2d = g3d->GetDriver2D ();
 
   // Tell the camera to render into the frame buffer.
   view->Draw ();
@@ -482,7 +483,7 @@ void CS3DPanel::ProcessFrame ()
     return;
   
   csTransform tr_w2c = view->GetCamera ()->GetTransform ();
-  int fov = g3d->GetDriver2D ()->GetHeight ();
+  const CS::Math::Matrix4& projection (g3d->GetProjectionMatrix ());
 
   csRef<iEditorObjectIterator> it = selection->GetIterator ();
   while (it->HasNext ())
@@ -499,7 +500,7 @@ void CS3DPanel::ProcessFrame ()
     iMovable* mov = mesh->GetMovable ();
     csReversibleTransform tr_o2c = tr_w2c / mov->GetFullTransform ();
     
-    int bbox_color = g3d->GetDriver2D ()->FindRGB (128, 255, 128);
+    int bbox_color = g2d->FindRGB (128, 255, 128);
     const csBox3& bbox = mesh->GetMeshObject ()
         ->GetObjectModel ()->GetObjectBoundingBox ();
     csVector3 vxyz = tr_o2c * bbox.GetCorner (CS_BOX_CORNER_xyz);
@@ -510,18 +511,18 @@ void CS3DPanel::ProcessFrame ()
     csVector3 vXyZ = tr_o2c * bbox.GetCorner (CS_BOX_CORNER_XyZ);
     csVector3 vxYZ = tr_o2c * bbox.GetCorner (CS_BOX_CORNER_xYZ);
     csVector3 vXYZ = tr_o2c * bbox.GetCorner (CS_BOX_CORNER_XYZ);
-    g3d->DrawLine (vxyz, vXyz, fov, bbox_color);
-    g3d->DrawLine (vXyz, vXYz, fov, bbox_color);
-    g3d->DrawLine (vXYz, vxYz, fov, bbox_color);
-    g3d->DrawLine (vxYz, vxyz, fov, bbox_color);
-    g3d->DrawLine (vxyZ, vXyZ, fov, bbox_color);
-    g3d->DrawLine (vXyZ, vXYZ, fov, bbox_color);
-    g3d->DrawLine (vXYZ, vxYZ, fov, bbox_color);
-    g3d->DrawLine (vxYZ, vxyZ, fov, bbox_color);
-    g3d->DrawLine (vxyz, vxyZ, fov, bbox_color);
-    g3d->DrawLine (vxYz, vxYZ, fov, bbox_color);
-    g3d->DrawLine (vXyz, vXyZ, fov, bbox_color);
-    g3d->DrawLine (vXYz, vXYZ, fov, bbox_color);
+    g2d->Draw3DLine (vxyz, vXyz, projection, bbox_color);
+    g2d->Draw3DLine (vXyz, vXYz, projection, bbox_color);
+    g2d->Draw3DLine (vXYz, vxYz, projection, bbox_color);
+    g2d->Draw3DLine (vxYz, vxyz, projection, bbox_color);
+    g2d->Draw3DLine (vxyZ, vXyZ, projection, bbox_color);
+    g2d->Draw3DLine (vXyZ, vXYZ, projection, bbox_color);
+    g2d->Draw3DLine (vXYZ, vxYZ, projection, bbox_color);
+    g2d->Draw3DLine (vxYZ, vxyZ, projection, bbox_color);
+    g2d->Draw3DLine (vxyz, vxyZ, projection, bbox_color);
+    g2d->Draw3DLine (vxYz, vxYZ, projection, bbox_color);
+    g2d->Draw3DLine (vXyz, vXyZ, projection, bbox_color);
+    g2d->Draw3DLine (vXYz, vXYZ, projection, bbox_color);
   }
 }
 
