@@ -108,19 +108,20 @@ CS_PLUGIN_NAMESPACE_BEGIN(DebugNode)
     csVector3 vXyZ = tr * box.GetCorner (CS_BOX_CORNER_XyZ);
     csVector3 vxYZ = tr * box.GetCorner (CS_BOX_CORNER_xYZ);
     csVector3 vXYZ = tr * box.GetCorner (CS_BOX_CORNER_XYZ);
-    float fov = g3d->GetDriver2D ()->GetHeight ();
-    g3d->DrawLine (vxyz, vXyz, fov, color);
-    g3d->DrawLine (vXyz, vXYz, fov, color);
-    g3d->DrawLine (vXYz, vxYz, fov, color);
-    g3d->DrawLine (vxYz, vxyz, fov, color);
-    g3d->DrawLine (vxyZ, vXyZ, fov, color);
-    g3d->DrawLine (vXyZ, vXYZ, fov, color);
-    g3d->DrawLine (vXYZ, vxYZ, fov, color);
-    g3d->DrawLine (vxYZ, vxyZ, fov, color);
-    g3d->DrawLine (vxyz, vxyZ, fov, color);
-    g3d->DrawLine (vxYz, vxYZ, fov, color);
-    g3d->DrawLine (vXyz, vXyZ, fov, color);
-    g3d->DrawLine (vXYz, vXYZ, fov, color);
+    const CS::Math::Matrix4& projection (g3d->GetProjectionMatrix ());
+    iGraphics2D* g2d = g3d->GetDriver2D ();
+    g2d->Draw3DLine (vxyz, vXyz, projection, color);
+    g2d->Draw3DLine (vXyz, vXYz, projection, color);
+    g2d->Draw3DLine (vXYz, vxYz, projection, color);
+    g2d->Draw3DLine (vxYz, vxyz, projection, color);
+    g2d->Draw3DLine (vxyZ, vXyZ, projection, color);
+    g2d->Draw3DLine (vXyZ, vXYZ, projection, color);
+    g2d->Draw3DLine (vXYZ, vxYZ, projection, color);
+    g2d->Draw3DLine (vxYZ, vxyZ, projection, color);
+    g2d->Draw3DLine (vxyz, vxyZ, projection, color);
+    g2d->Draw3DLine (vxYz, vxYZ, projection, color);
+    g2d->Draw3DLine (vXyz, vXyZ, projection, color);
+    g2d->Draw3DLine (vXYz, vXYZ, projection, color);
   }
 
   // --------------------------  DebugNode  --------------------------
@@ -147,7 +148,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(DebugNode)
       return;
 
     CS::Animation::iSkeletonFactory* fact = skeleton->GetFactory ();
-    float fov = g2d->GetHeight ();
+    const CS::Math::Matrix4& projection (camera->GetProjectionMatrix ());
     csReversibleTransform object2camera =
       camera->GetTransform () / skeleton->GetSceneNode ()->GetMovable ()->GetFullTransform ();
 
@@ -209,16 +210,19 @@ CS_PLUGIN_NAMESPACE_BEGIN(DebugNode)
       if (factory->modes & CS::Animation::DEBUG_IMAGES
 	  && factory->image)
       {
-	float x1 = bonePosition.x, y1 = bonePosition.y, z1 = bonePosition.z;
-	float iz1 = fov / z1;
-	int px1 = csQint (x1 * iz1 + (g2d->GetWidth ()  / 2));
-	int py1 = g2d->GetHeight () - 1 - csQint (y1 * iz1 + (g2d->GetHeight () / 2));
+	if (bonePosition < SMALL_Z)
+	  continue;
+
+	csVector4 v1p (projection * csVector4 (bonePosition));
+	v1p /= v1p.w;
+
+	int px1 = csQint ((v1p.x + 1) * (g2d->GetWidth() / 2));
+	int py1 = g2d->GetHeight () - 1 - csQint ((v1p.y + 1) * (g2d->GetHeight () / 2));
  
 	// TODO: images are not drawn correctly
 
-	if (iz1 > 0.0f)
-	  factory->image->Draw (g3d, px1 - factory->image->Width () / 2,
-				py1 - factory->image->Height () / 2);
+	factory->image->Draw (g3d, px1 - factory->image->Width () / 2,
+			      py1 - factory->image->Height () / 2);
       }
 
       if (factory->modes & CS::Animation::DEBUG_2DLINES)
@@ -239,25 +243,24 @@ CS_PLUGIN_NAMESPACE_BEGIN(DebugNode)
 	csVector3 endGlobal = position + rotation.Rotate (endLocal);
 	csVector3 boneEnd = object2camera * endGlobal;
 
-	g3d->DrawLine (bonePosition, boneEnd, fov, colorI);
+	g2d->Draw3DLine (bonePosition, boneEnd, projection, colorI);
       }
 
       if (factory->modes & CS::Animation::DEBUG_SQUARES)
       {
-	float x1 = bonePosition.x, y1 = bonePosition.y, z1 = bonePosition.z;
-	float iz1 = fov / z1;
-	int px1 = csQint (x1 * iz1 + (g2d->GetWidth ()  / 2));
-	int py1 = g2d->GetHeight () - 1 - csQint (y1 * iz1 + (g2d->GetHeight () / 2));
+	if (bonePosition < SMALL_Z)
+	  continue;
+
+	csVector4 v1p (projection * csVector4 (bonePosition));
+	v1p /= v1p.w;
+
+	int px1 = csQint ((v1p.x + 1) * (g2d->GetWidth() / 2));
+	int py1 = g2d->GetHeight () - 1 - csQint ((v1p.y + 1) * (g2d->GetHeight () / 2));
  
-	if (iz1 > 0.0f)
-	{
-	  size_t size = 5;
-	  for (size_t i = 0; i < size; i++)
-	    for (size_t j = 0; j < size; j++)
-	      g3d->GetDriver2D ()->DrawPixel (px1 - size / 2 + i,
-					      py1 - size / 2 + j,
-					      colorI);
-	}
+	size_t size = 5;
+	for (size_t i = 0; i < size; i++)
+	  for (size_t j = 0; j < size; j++)
+	    g2d->DrawPixel (px1 - size / 2 + i, py1 - size / 2 + j, colorI);
       }
 
       // Draw the bounding boxes
