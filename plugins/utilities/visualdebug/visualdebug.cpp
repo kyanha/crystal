@@ -85,7 +85,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(VisualDebug)
     iGraphics3D* g3d = view->GetContext ();
     iGraphics2D* g2d = g3d->GetDriver2D ();
     csTransform tr_w2c = view->GetCamera ()->GetTransform ();
-    int fov = g2d->GetHeight ();
+    const CS::Math::Matrix4& projection (g3d->GetProjectionMatrix ());
 
     if (!g3d->BeginDraw (CSDRAW_2DGRAPHICS))
       return;
@@ -100,15 +100,15 @@ CS_PLUGIN_NAMESPACE_BEGIN(VisualDebug)
       csVector3 origin = transform.transform.GetOrigin ();
       csVector3 end = transform.transform.This2Other (csVector3 (transform.size, 0.0f, 0.0f));
       int color = g2d->FindRGB (255, 0, 0);
-      g3d->DrawLine (tr_w2c * origin, tr_w2c * end, fov, color);
+      g2d->Draw3DLine (tr_w2c * origin, tr_w2c * end, projection, color);
 
       end = transform.transform.This2Other (csVector3 (0.0f, transform.size, 0.0f));
       color = g2d->FindRGB (0, 255, 0);
-      g3d->DrawLine (tr_w2c * origin, tr_w2c * end, fov, color);
+      g2d->Draw3DLine (tr_w2c * origin, tr_w2c * end, projection, color);
 
       end = transform.transform.This2Other (csVector3 (0.0f, 0.0f, transform.size));
       color = g2d->FindRGB (0, 0, 255);
-      g3d->DrawLine (tr_w2c * origin, tr_w2c * end, fov, color);
+      g2d->Draw3DLine (tr_w2c * origin, tr_w2c * end, projection, color);
 
       if (!transform.persist)
 	transforms.DeleteIndex (index);
@@ -127,17 +127,20 @@ CS_PLUGIN_NAMESPACE_BEGIN(VisualDebug)
 				255.0f * positionData.color[2]);
       csVector3 position = tr_w2c * positionData.position;
 
-      float x1 = position.x, y1 = position.y, z1 = position.z;
-      float iz1 = fov / z1;
-      int px1 = csQint (x1 * iz1 + (g2d->GetWidth ()  / 2));
-      int py1 = g2d->GetHeight () - 1 - csQint (y1 * iz1 + (g2d->GetHeight () / 2));
- 
-      if (iz1 > 0.0f)
-	for (size_t i = 0; i < positionData.size; i++)
-	  for (size_t j = 0; j < positionData.size; j++)
-	    g3d->GetDriver2D ()->DrawPixel (px1 - positionData.size / 2 + i,
-					    py1 - positionData.size / 2 + j,
-					    color);
+      if (position < SMALL_Z)
+	continue;
+
+      csVector4 v1p (projection * csVector4 (position));
+      v1p /= v1p.w;
+
+      int px1 = csQint ((v1p.x + 1) * (g2d->GetWidth() / 2));
+      int py1 = g2d->GetHeight () - 1 - csQint ((v1p.y + 1) * (g2d->GetHeight () / 2));
+
+      for (size_t i = 0; i < positionData.size; i++)
+	for (size_t j = 0; j < positionData.size; j++)
+	  g3d->GetDriver2D ()->DrawPixel (px1 - positionData.size / 2 + i,
+					  py1 - positionData.size / 2 + j,
+					  color);
 
       if (!positionData.persist)
 	positions.DeleteIndex (index);
@@ -156,7 +159,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(VisualDebug)
 				255.0f * vectorData.color[2]);
       csVector3 origin = vectorData.transform.GetOrigin ();
       csVector3 end = origin + vectorData.transform.This2OtherRelative (vectorData.vector);
-      g3d->DrawLine (tr_w2c * origin, tr_w2c * end, fov, color);
+      g2d->Draw3DLine (tr_w2c * origin, tr_w2c * end, projection, color);
 
       if (!vectorData.persist)
 	vectors.DeleteIndex (index);

@@ -192,7 +192,7 @@ public:
     iGraphics3D* g3d = view->GetContext ();
     iGraphics2D* g2d = g3d->GetDriver2D ();
     csTransform tr_w2c = view->GetCamera ()->GetTransform ();
-    int fov = g2d->GetHeight ();
+    const CS::Math::Matrix4& projection (view->GetCamera ()->GetProjectionMatrix ());
 
     if (!g3d->BeginDraw (CSDRAW_2DGRAPHICS))
       return;
@@ -203,7 +203,7 @@ public:
       int color = g2d->FindRGB (int (l.color.red * 255),
 				int (l.color.green * 255),
 				int (l.color.blue * 255));
-      g3d->DrawLine (tr_w2c * l.p1, tr_w2c * l.p2, fov, color);
+      g2d->Draw3DLine (tr_w2c * l.p1, tr_w2c * l.p2, projection, color);
     }
 
     lines.Empty ();
