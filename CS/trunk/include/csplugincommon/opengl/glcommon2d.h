@@ -166,6 +166,12 @@ protected:
   /// Open default driver database.
   void OpenDriverDB (const char* phase = 0);
 
+  /**
+   * Clip line to be drawn by DrawLine to SMALL_Z.
+   * Returns \c false if the line should not be drawn.
+   */
+  bool DrawLineNearClip (csVector3 & v1, csVector3 & v2);
+
   void Report (int severity, const char* msg, ...);
 public:
   virtual const char* GetRendererString (const char* str);
@@ -231,6 +237,12 @@ public:
 
   /// Draw a line
   virtual void DrawLine (float x1, float y1, float x2, float y2, int color);
+  /// Draw a line in camera space
+  virtual void Draw3DLine (const csVector3& v1, const csVector3& v2,
+    float fov, int color);
+  /// Draw a line in camera space
+  virtual void Draw3DLine (const csVector3& v1, const csVector3& v2,
+    const CS::Math::Matrix4& projection, int color);
   /// Draw a box
   virtual void DrawBox (int x, int y, int w, int h, int color);
   /// Draw a pixel

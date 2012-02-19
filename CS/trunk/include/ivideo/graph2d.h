@@ -40,6 +40,13 @@ struct iNativeWindow;
 struct iGraphics2D;
 
 class csRect;
+class csVector3;
+
+namespace CS {
+namespace Math {
+class Matrix4;
+} // namespace Math
+} // namespace CS
 
 /// iGraphics2D::Write() flags.
 enum
@@ -86,7 +93,7 @@ struct csPixelCoord
  */
 struct iGraphics2D : public virtual iBase
 {
-  SCF_INTERFACE (iGraphics2D, 4, 0, 1);
+  SCF_INTERFACE (iGraphics2D, 4, 0, 2);
   
   /// Open the device.
   virtual bool Open () = 0;
@@ -318,6 +325,28 @@ struct iGraphics2D : public virtual iBase
   virtual const char* GetHWGLVersion () = 0;
   /// Get a string containing the vendor info.
   virtual const char* GetHWVendor () = 0;
+
+  /**
+   * Draw a line in camera space.
+   * \param v1 Start point.
+   * \param v2 End point.
+   * \param fov Field of View to use for the projection. Typically, you would want to use the one returned
+   * by iPerspectiveCamera::GetFOV().
+   * \param color Color of the line.
+   */
+  virtual void Draw3DLine (const csVector3& v1, const csVector3& v2,
+    float fov, int color) = 0;
+
+  /**
+   * Draw a line in camera space.
+   * \param v1 Start point.
+   * \param v2 End point.
+   * \param projection Projection matrix to use. Typically, you would want to use the one returned
+   * by iCamera::GetProjectionMatrix().
+   * \param color Color of the line.
+   */
+  virtual void Draw3DLine (const csVector3& v1, const csVector3& v2,
+    const CS::Math::Matrix4& projection, int color) = 0;
 };
 
 /** @} */

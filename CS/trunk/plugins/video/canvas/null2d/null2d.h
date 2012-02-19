@@ -63,6 +63,14 @@ public:
   /// Draw a line
   virtual void DrawLine (float , float , float , float , int )
   { }
+  /// Draw a line in camera space
+  virtual void Draw3DLine (const csVector3& v1, const csVector3& v2,
+    float fov, int color)
+  { }
+  /// Draw a line in camera space
+  virtual void Draw3DLine (const csVector3& v1, const csVector3& v2,
+    const CS::Math::Matrix4& projection, int color)
+  { }
   /// Draw a box of given width and height
   virtual void DrawBox (int , int , int , int , int )
   { }
