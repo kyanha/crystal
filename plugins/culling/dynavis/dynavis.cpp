@@ -2593,40 +2593,40 @@ void csDynaVis::Dump (iGraphics3D* g3d)
         csVisibilityObjectWrapper* visobj_wrap = visobj_vector[i];
         int col = reason_cols[visobj_wrap->history->reason];
         const csBox3& b = visobj_wrap->child->GetBBox ();
-        g3d->DrawLine (
+        g2d->Draw3DLine (
       	  trans.Other2This (b.GetCorner (CS_BOX_CORNER_xyz)),
       	  trans.Other2This (b.GetCorner (CS_BOX_CORNER_Xyz)), fov, col);
-        g3d->DrawLine (
+        g2d->Draw3DLine (
       	  trans.Other2This (b.GetCorner (CS_BOX_CORNER_xyz)),
       	  trans.Other2This (b.GetCorner (CS_BOX_CORNER_xYz)), fov, col);
-        g3d->DrawLine (
+        g2d->Draw3DLine (
       	  trans.Other2This (b.GetCorner (CS_BOX_CORNER_xyz)),
       	  trans.Other2This (b.GetCorner (CS_BOX_CORNER_xyZ)), fov, col);
-        g3d->DrawLine (
+        g2d->Draw3DLine (
       	  trans.Other2This (b.GetCorner (CS_BOX_CORNER_XYZ)),
       	  trans.Other2This (b.GetCorner (CS_BOX_CORNER_xYZ)), fov, col);
-        g3d->DrawLine (
+        g2d->Draw3DLine (
       	  trans.Other2This (b.GetCorner (CS_BOX_CORNER_XYZ)),
       	  trans.Other2This (b.GetCorner (CS_BOX_CORNER_XyZ)), fov, col);
-        g3d->DrawLine (
+        g2d->Draw3DLine (
       	  trans.Other2This (b.GetCorner (CS_BOX_CORNER_XYZ)),
       	  trans.Other2This (b.GetCorner (CS_BOX_CORNER_XYz)), fov, col);
-        g3d->DrawLine (
+        g2d->Draw3DLine (
       	  trans.Other2This (b.GetCorner (CS_BOX_CORNER_Xyz)),
       	  trans.Other2This (b.GetCorner (CS_BOX_CORNER_XYz)), fov, col);
-        g3d->DrawLine (
+        g2d->Draw3DLine (
       	  trans.Other2This (b.GetCorner (CS_BOX_CORNER_Xyz)),
       	  trans.Other2This (b.GetCorner (CS_BOX_CORNER_XyZ)), fov, col);
-        g3d->DrawLine (
+        g2d->Draw3DLine (
       	  trans.Other2This (b.GetCorner (CS_BOX_CORNER_xYz)),
       	  trans.Other2This (b.GetCorner (CS_BOX_CORNER_xYZ)), fov, col);
-        g3d->DrawLine (
+        g2d->Draw3DLine (
       	  trans.Other2This (b.GetCorner (CS_BOX_CORNER_xYz)),
       	  trans.Other2This (b.GetCorner (CS_BOX_CORNER_XYz)), fov, col);
-        g3d->DrawLine (
+        g2d->Draw3DLine (
       	  trans.Other2This (b.GetCorner (CS_BOX_CORNER_xyZ)),
       	  trans.Other2This (b.GetCorner (CS_BOX_CORNER_XyZ)), fov, col);
-        g3d->DrawLine (
+        g2d->Draw3DLine (
       	  trans.Other2This (b.GetCorner (CS_BOX_CORNER_xyZ)),
       	  trans.Other2This (b.GetCorner (CS_BOX_CORNER_xYZ)), fov, col);
       }
