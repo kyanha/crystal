@@ -22,32 +22,53 @@
 #include "csextern.h"
 
 /**\file
- * String scanning (sscanf() flavor).
+ * String scanning (\c sscanf() flavor).
  */
 
 /**
- * Own version of sscanf that is a bit more relaxed towards spaces
+ * Own version of \c sscanf that is a bit more relaxed towards spaces
  * and also accepts quoted strings (the quotes will not be included into
  * the result string).
- * <p>
- * It supports the following format commands:
- * <p>
- * - %%d -- integer number
- * - %%f -- floating point
- * - %%b -- boolean (0, 1, true, false, yes, no, on, off)
- * - %%s -- string (with or without single quotes)
- * - %%S -- string (delimited with double quotes)<br>
- *              \\n will be converted to a newline<br>
- *              \\t will be converted to a tab<br>
- *              \\\\ produces a \\<br>
- *              \\" produces a "<br>
- *              all other conbinations of \\ are copied.
- * - %%D -- list of integers, first argument should be a
+ * 
+ * \par Safe string arguments
+ * The string formats \c %%s and \c %%S expect a pointer to a character array
+ * as the destination value; the scanned string is then copied to that array.
+ * As there is no way for \c csScanStr to know the size of the destination
+ * buffer it might be overflowed, causing memory corruption.<br>
+ * However, \c csScanStr supports the safe formats \c %%as and \c %%aS; they
+ * behave like \c %%s and \c %%S, but expect a pointer <em>to a pointer</em>
+ * as the destination. \c csScanStr will allocate a buffer (using cs_malloc)
+ * of a sufficient size to hold the scanned string and store that pointer in
+ * the destination.
+ * 
+ * Example:
+ * \code
+ * char* scanned_str (nullptr);
+ * csScanStr (input, "%as", &scanned_str);
+ * if (scanned_str)
+ * {
+ *   // Do stuff
+ * }
+ * cs_free (scanned_str);
+ * \endcode
+ * 
+ * \par Supported format commands
+ * - \c %%d -- integer number
+ * - \c %%f -- floating point
+ * - \c %%b -- boolean (0, 1, true, false, yes, no, on, off)
+ * - \c %%s -- string (with or without single quotes)
+ * - \c %%S -- string (delimited with double quotes)<br>
+ *              \c \\n will be converted to a newline<br>
+ *              \c \\t will be converted to a tab<br>
+ *              \c \\\\ produces a \c \\ <br>
+ *              \c \\" produces a \c " <br>
+ *              all other combinations of \c \\ are copied.
+ * - \c %%D -- list of integers, first argument should be a
  *		pointer to an array of integers, second argument
  *		a pointer to an integer which will contain the
  *		number of elements inserted in the list.
- * - %%F -- similarly, a list of floats.
- * - %%n -- this returns the amount of the input string
+ * - \c %%F -- similarly, a list of floats.
+ * - \c %%n -- this returns the amount of the input string
  *              thats been consumed, in characters. Does NOT
  *              increment the return count and does not read
  *              from the input string.
