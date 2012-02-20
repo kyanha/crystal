@@ -634,6 +634,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(SLCombiner)
           AppendSnippetMap (snippets[s].inputMaps, snippets[s].inputMapsTypes, appender);
           AppendSnippetMap (snippets[s].attrInputMaps, snippets[s].attrInputMapsTypes, appender);
           AppendProgramBody (snippets[s].vertexBody, snippets[s], appender);
+          appender.Append ("\n");
           AppendProgramInput_V2FVP (snippets[s], appender);
           AppendSnippetMap (snippets[s].outputMaps, snippets[s].outputMapsTypes, appender);
           AppendSnippetMap (snippets[s].attrOutputMaps, snippets[s].attrOutputMapsTypes, appender);
@@ -697,6 +698,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(SLCombiner)
           AppendSnippetMap (snippets[s].attrInputMaps, snippets[s].attrInputMapsTypes, appender);
           AppendProgramInput_V2FFP (snippets[s], appender);
           AppendProgramBody (snippets[s].fragmentBody, snippets[s], appender);
+          appender.Append ("\n");
           AppendSnippetMap (snippets[s].outputMaps, snippets[s].outputMapsTypes, appender);
           AppendSnippetMap (snippets[s].attrOutputMaps, snippets[s].attrOutputMapsTypes, appender);
           AppendSnippetMapCleanup (snippets[s].inputMaps, snippets[s].inputMapsTypes, appender);
