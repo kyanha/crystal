@@ -52,8 +52,9 @@
  *              increment the return count and does not read
  *              from the input string.
  *
- * Returns the number of successfully scanned arguments or -1 if there
- * was a mismatch.
+ * Returns the number of successfully scanned arguments.
+ * Hence if there is a mismatch effectively the number of the last
+ * successfully scanned argument is returned.
  */
 CS_CRYSTALSPACE_EXPORT int csScanStr (const char* in, const char* format, ...);
 
