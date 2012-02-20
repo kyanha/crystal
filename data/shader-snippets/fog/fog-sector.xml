@@ -1,6 +1,5 @@
 <!--
-  Copyright (C) 2007 by Frank Richter
-	    (C) 2007 by Jorrit Tyberghein
+  Copyright (C) 2012 by Frank Richter
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Library General Public
@@ -16,234 +15,42 @@
   License along with this library; if not, write to the Free
   Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 -->
-<snippet>
+<snippet type="compound">
   <technique priority="100">
-    <combiner name="cg" plugin="crystalspace.graphics3d.shader.combiner.glcg" />
-    <combiner name="glsl" plugin="crystalspace.graphics3d.shader.combiner.glsl" />
+    <snippet id="fogcolor" file="/shader-snippets/fog/fogonly-sector.xml" />
+    <snippet id="basecolor">
+      <technique priority="100">
+        <combiner name="cg" plugin="crystalspace.graphics3d.shader.combiner.glcg" />
+        <combiner name="glsl" plugin="crystalspace.graphics3d.shader.combiner.glsl" />
 
-    <input name="litColor" type="rgba" />
-    <input name="eyePos" type="position4_camera" />
-    
-    <block location="cg:vertexIn">
-      <uniform type="float4" name="fogPlaneS" />
-      <uniform type="float4" name="fogPlaneT" />
-    </block>
+        <input name="litColor" type="rgba" />
+        
+        <block location="cg:vertexMain">
+          result = litColor;
+        </block>
+        
+        <block location="glsl:vertexMain">
+          result = litColor;
+        </block>
+        
+        <block location="cg:fragmentMain">
+          result = litColor;
+        </block>
+        
+        <block location="glsl:fragmentMain">
+          result = litColor;
+        </block>
+        
+        <output name="result" type="rgba" />
+      </technique>
+    </snippet>
 
-    <block location="cg:fragmentIn">
-      <uniform type="tex2d" name="fogTex" />
-      <uniform type="rgba" name="fogColor" />
-    </block>
-    
-    <block location="cg:definitions">
-      <![CDATA[
-      struct FogInput
-      {
-        float fogDensity;
-        float fogFadeEnd;
-        float fogFadeStart;
-        float fogLimit;
-        bool fogLimitFlag;
-        float2 fogSelect;
-      };
-      uniform FogInput fogInput;
-      
-      float ComputeFogDensity (float4 eyePos)
-      {
-        float distance = length(eyePos);
-      ]]>
-      <?if (vars."fog mode".int == consts.CS_FOG_MODE_CRYSTALSPACE) || (vars."fog mode".int == consts.CS_FOG_MODE_LINEAR) ?>
-      <![CDATA[
-        float linear_intensity = 1 - saturate ((fogInput.fogFadeEnd - distance) / (fogInput.fogFadeEnd - fogInput.fogFadeStart));
-        if (fogInput.fogLimitFlag && (distance >= fogInput.fogLimit))
-          linear_intensity = 0;
-        float2 intensity_factors = float2 (linear_intensity, 1);
-      ]]>
-      <?else?>
-      <![CDATA[
-        float fog_exp = exp(-(distance * fogInput.fogDensity));
-        float2 intensity_factors = float2 (1-fog_exp, 1-(fog_exp*fog_exp));
-      ]]>
-      <?endif?>
-      <![CDATA[
-        float intensity_factor = dot (intensity_factors, fogInput.fogSelect);
-        return intensity_factor;
-      }
-      ]]>
-    </block>
-    
-    <block location="glsl:inputs">
-      <uniform type="float4" name="in_fogPlaneS" />
-      <uniform type="float4" name="in_fogPlaneT" />
-      <uniform type="tex2d" name="in_fogTex" />
-      <uniform type="rgba" name="in_fogColor" />
-      <uniform type="float" name="in_fogDensity" />
-      <uniform type="float" name="in_fogFadeEnd" />
-      <uniform type="float" name="in_fogFadeStart" />
-      <uniform type="float" name="in_fogLimit" />
-      <uniform type="bool" name="in_fogLimitFlag" />
-      <uniform type="float2" name="in_fogSelect" />
-    </block>
-    
-    <block location="cg:vertexToFragment">
-      <varying type="texcoord2" name="fogTC" />
-      <varying type="float" name="fogIntensity" />
-    </block>
-    
-    <block location="glsl:vertexToFragment">
-      <varying type="texcoord2" name="fogTC" />
-    </block>
-    
-    <block location="cg:vertexMain">
-      fogTC.x = dot (eyePos, vertexIn.fogPlaneS);
-      fogTC.y = dot (eyePos, vertexIn.fogPlaneT);
-    #if FRAGMENT_PROGRAM_LEVEL &lt; 0x200
-      // Need to compute fog per-vertex
-      fogIntensity = ComputeFogDensity (eyePos);
-    #endif
-    </block>
-    
-    <block location="glsl:vertexMain">
-      fogTC.x = dot (eyePos, in_fogPlaneS);
-      fogTC.y = dot (eyePos, in_fogPlaneT);
-    </block>
-    
-    <block location="cg:variablemap">
-      <variablemap variable="fog color" destination="fragmentIn.fogColor" />
-      <variablemap variable="fog density" destination="fogInput.fogDensity" />
-      <variablemap variable="fog fade start" destination="fogInput.fogFadeStart" />
-      <variablemap variable="fog fade end" destination="fogInput.fogFadeEnd" />
-      <variablemap variable="fog limit" destination="fogInput.fogLimit" />
-      <variablemap destination="fogInput.fogLimitFlag" type="expr">
-        <sexp>(&lt; "fog fade end" "fog limit")</sexp>
-      </variablemap>
-      <variablemap destination="fogInput.fogSelect" type="expr">
-        <sexp>(make-vector (|| (= "fog mode" 1) (= "fog mode" 3)) (|| (= "fog mode" 2) (= "fog mode" 4)))</sexp>
-      </variablemap>
-      <?if (vars."fog mode".int != consts.CS_FOG_MODE_NONE) ?>
-      <!-- See the glshader_fixed plugin source for a detailed explanation 
-            of the formular below. -->
-      <variablemap destination="vertexIn.fogPlaneS" type="expr">
-        <sexp>
-        (if (&gt; (elt3 fogplane) 0)
-          (make-vector 
-            0 
-            0 
-            "fog density" 
-            (- (min (max (* (elt4 fogplane) "fog density") -1) 0) (* 0.1 "fog density"))
-          )
-          (make-vector 0 0 "fog density" (* -0.1 "fog density"))
-        )
-        </sexp>
-      </variablemap>
-      <variablemap destination="vertexIn.fogPlaneT" type="expr">
-        <sexp>
-        (if (&gt; (elt3 fogplane) 0)
-          (make-vector
-            (/ (* (elt1 fogplane) "fog density") (elt3 fogplane))
-            (/ (* (elt2 fogplane) "fog density") (elt3 fogplane))
-            "fog density"
-            (+ (min (max (pow (+ 1 (* (elt4 fogplane) 0.2)) 5) 0) 1)
-                (* "fog density" (- (/ (elt4 fogplane) (elt3 fogplane)) 0.1)))
-          )
-          (make-vector 0 0 0 1)
-        )
-        </sexp>
-      </variablemap>
-      <?endif?>
-    </block>
-    
-    <block location="glsl:variablemap">
-      <variablemap variable="fog color" destination="in_fogColor" />
-      <variablemap variable="fog density" destination="in_fogDensity" />
-      <variablemap variable="fog fade start" destination="in_fogFadeStart" />
-      <variablemap variable="fog fade end" destination="in_fogFadeEnd" />
-      <variablemap variable="fog limit" destination="in_fogLimit" />
-      <variablemap destination="in_fogLimitFlag" type="expr">
-        <sexp>(&lt; "fog fade end" "fog limit")</sexp>
-      </variablemap>
-      <variablemap destination="in_fogSelect" type="expr">
-        <sexp>(make-vector (|| (= "fog mode" 1) (= "fog mode" 3)) (|| (= "fog mode" 2) (= "fog mode" 4)))</sexp>
-      </variablemap>
-      <?if (vars."fog mode".int != consts.CS_FOG_MODE_NONE) ?>
-      <!-- See the glshader_fixed plugin source for a detailed explanation 
-            of the formular below. -->
-      <variablemap destination="in_fogPlaneS" type="expr">
-        <sexp>
-        (if (&gt; (elt3 fogplane) 0)
-          (make-vector 
-            0 
-            0 
-            "fog density" 
-            (- (min (max (* (elt4 fogplane) "fog density") -1) 0) (* 0.1 "fog density"))
-          )
-          (make-vector 0 0 "fog density" (* -0.1 "fog density"))
-        )
-        </sexp>
-      </variablemap>
-      <variablemap destination="in_fogPlaneT" type="expr">
-        <sexp>
-        (if (&gt; (elt3 fogplane) 0)
-          (make-vector
-            (/ (* (elt1 fogplane) "fog density") (elt3 fogplane))
-            (/ (* (elt2 fogplane) "fog density") (elt3 fogplane))
-            "fog density"
-            (+ (min (max (pow (+ 1 (* (elt4 fogplane) 0.2)) 5) 0) 1)
-                (* "fog density" (- (/ (elt4 fogplane) (elt3 fogplane)) 0.1)))
-          )
-          (make-vector 0 0 0 1)
-        )
-        </sexp>
-      </variablemap>
-      <?endif?>
-    </block>
-    
-    <block location="cg:pass">
-      <!-- We need the fog lookup texture -->
-      <texture name="standardtex fog" destination="fragmentIn.fogTex" />
-    </block>
-    
-    <block location="glsl:pass">
-      <!-- We need the fog lookup texture -->
-      <texture name="standardtex fog" destination="in_fogTex" />
-    </block>
-    
-    <block location="cg:fragmentMain">
-      foggedColor = litColor;
-      <?if (vars."fog mode".int != consts.CS_FOG_MODE_NONE) ?>
-        float intensity = 1;
-        <?if (vars."fog mode".int == consts.CS_FOG_MODE_CRYSTALSPACE) || (vars."fog mode".int == consts.CS_FOG_MODE_LINEAR) ?>
-        intensity = tex2D (fragmentIn.fogTex, fogTC).a;
-        <?endif?>
-        float intensity_factor;
-      #if FRAGMENT_PROGRAM_LEVEL &lt; 0x200
-        intensity_factor = fogIntensity;
-      #else
-        intensity_factor = ComputeFogDensity (eyePos);
-      #endif
-        foggedColor = lerp (litColor, fragmentIn.fogColor, intensity * intensity_factor);
-      <?endif?>
-    </block>
-    
-    <block location="glsl:fragmentMain">
-      foggedColor = litColor;
-      <?if (vars."fog mode".int != consts.CS_FOG_MODE_NONE) ?>
-        float distance = length(eyePos);
-        float intensity = 1.0;
-        <?if (vars."fog mode".int == consts.CS_FOG_MODE_CRYSTALSPACE) || (vars."fog mode".int == consts.CS_FOG_MODE_LINEAR) ?>
-        intensity = texture2D (in_fogTex, fogTC).a;
-        float linear_intensity = 1.0 - clamp ((in_fogFadeEnd - distance) / (in_fogFadeEnd - in_fogFadeStart), 0.0, 1.0);
-        if (in_fogLimitFlag &amp;&amp; (distance &gt;= in_fogLimit))
-          linear_intensity = 0.0;
-        vec2 intensity_factors = vec2 (linear_intensity, 1);
-        <?else?>
-        float fog_exp = exp(-(distance * in_fogDensity));
-        vec2 intensity_factors = vec2 (1.0-fog_exp, 1.0-fog_exp*fog_exp);
-        <?endif?>
-        float intensity_factor = dot (intensity_factors, in_fogSelect);
-        foggedColor = mix (litColor, in_fogColor, intensity * intensity_factor);
-      <?endif?>
-    </block>
-    
-    <output name="foggedColor" type="rgba" />
+    <snippet id="compose" file="/shader-snippets/porter-duff/atop.xml" />
+    <connection from="fogcolor" to="compose">
+      <explicit from="foggedColor" to="a" />
+    </connection>
+    <connection from="basecolor" to="compose">
+      <explicit from="result" to="b" />
+    </connection>
   </technique>
 </snippet>
