@@ -39,7 +39,6 @@ private:
   GLuint program_num;
 
   bool validProgram;
-  csRef<iDataBuffer> programBuffer;
 
   void Report (int severity, const char* msg, ...);
 public:
