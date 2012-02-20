@@ -350,7 +350,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(GLShaderGLSL)
   }
 
   bool csShaderGLSLProgram::Load (iShaderDestinationResolver*, const char* program, 
-    csArray<csShaderVarMapping> &mappings)
+    const csArray<csShaderVarMapping> &mappings)
   {
     // makes no sense for an "unified" shader to be loaded from one single source
     return false;

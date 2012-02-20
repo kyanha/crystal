@@ -60,7 +60,7 @@ void csXMLShaderWrapper::GetUsedShaderVars (csBitArray& bits) const
 
 bool csXMLShaderWrapper::Load (iShaderDestinationResolver *resolve,
                                const char *program,
-                               csArray<csShaderVarMapping> &mappings)
+                               const csArray<csShaderVarMapping> &mappings)
 {
   // you're not supposed to load a shader wrapper
   return false;

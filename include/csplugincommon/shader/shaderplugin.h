@@ -88,7 +88,7 @@ struct iShaderProgram : public virtual iBase
 
   /// Loads from raw text
   virtual bool Load (iShaderDestinationResolver* resolve, const char* program, 
-    csArray<csShaderVarMapping>& mappings) = 0;
+    const csArray<csShaderVarMapping>& mappings) = 0;
 
   /**
    * Compile a program.
