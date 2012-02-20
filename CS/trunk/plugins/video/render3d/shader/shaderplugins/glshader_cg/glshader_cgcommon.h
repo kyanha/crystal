@@ -237,7 +237,7 @@ public:
 
   /// Loads from raw text
   virtual bool Load (iShaderDestinationResolver*, const char*, 
-    csArray<csShaderVarMapping>&)
+    const csArray<csShaderVarMapping>&)
   { return false; }
 
   const csSet<csString>& GetUnusedParameters ()

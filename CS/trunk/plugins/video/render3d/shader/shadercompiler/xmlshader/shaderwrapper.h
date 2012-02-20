@@ -63,7 +63,7 @@ public:
 
   virtual bool Load (iShaderDestinationResolver *resolve,
                      const char *program,
-                     csArray<csShaderVarMapping> &mappings);
+                     const csArray<csShaderVarMapping> &mappings);
   virtual bool Load (iShaderDestinationResolver *resolve,
                      iDocumentNode *node);
 

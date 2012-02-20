@@ -68,7 +68,7 @@ bool csShaderGLPS1_Common::Load (iShaderDestinationResolver*,
 
 bool csShaderGLPS1_Common::Load (iShaderDestinationResolver*, 
 				 const char* program, 
-				 csArray<csShaderVarMapping> &mappings)
+				 const csArray<csShaderVarMapping> &mappings)
 {
   programBuffer.AttachNew (new csDataBuffer (csStrNew (program),
     strlen (program)));

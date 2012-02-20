@@ -325,7 +325,7 @@ bool csShaderGLAVP::Load (iShaderDestinationResolver*, iDocumentNode* program)
 }
 
 bool csShaderGLAVP::Load (iShaderDestinationResolver*, const char* program, 
-			  csArray<csShaderVarMapping> &mappings)
+			  const csArray<csShaderVarMapping> &mappings)
 {
   programBuffer.AttachNew (new csDataBuffer (csStrNew (program),
     strlen (program)));

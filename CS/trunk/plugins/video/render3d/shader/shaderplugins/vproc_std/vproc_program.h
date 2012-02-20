@@ -63,7 +63,7 @@ public:
 
   /// Loads from raw text
   virtual bool Load (iShaderDestinationResolver* resolve, 
-    const char* program, csArray<csShaderVarMapping>& mappings);
+    const char* program, const csArray<csShaderVarMapping>& mappings);
 
 
   /// Compile a program
