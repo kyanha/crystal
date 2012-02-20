@@ -213,7 +213,7 @@ public:
       int color = g2d->FindRGB (int (l.color.red * 255),
         int (l.color.green * 255),
         int (l.color.blue * 255));
-      g2d->Draw3DLine (tr_w2c * l.p1, tr_w2c * l.p2, projection, color);
+      g2d->DrawLineProjected (tr_w2c * l.p1, tr_w2c * l.p2, projection, color);
     }
 
     lines.Empty ();

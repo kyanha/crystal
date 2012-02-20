@@ -511,18 +511,18 @@ void CS3DPanel::ProcessFrame ()
     csVector3 vXyZ = tr_o2c * bbox.GetCorner (CS_BOX_CORNER_XyZ);
     csVector3 vxYZ = tr_o2c * bbox.GetCorner (CS_BOX_CORNER_xYZ);
     csVector3 vXYZ = tr_o2c * bbox.GetCorner (CS_BOX_CORNER_XYZ);
-    g2d->Draw3DLine (vxyz, vXyz, projection, bbox_color);
-    g2d->Draw3DLine (vXyz, vXYz, projection, bbox_color);
-    g2d->Draw3DLine (vXYz, vxYz, projection, bbox_color);
-    g2d->Draw3DLine (vxYz, vxyz, projection, bbox_color);
-    g2d->Draw3DLine (vxyZ, vXyZ, projection, bbox_color);
-    g2d->Draw3DLine (vXyZ, vXYZ, projection, bbox_color);
-    g2d->Draw3DLine (vXYZ, vxYZ, projection, bbox_color);
-    g2d->Draw3DLine (vxYZ, vxyZ, projection, bbox_color);
-    g2d->Draw3DLine (vxyz, vxyZ, projection, bbox_color);
-    g2d->Draw3DLine (vxYz, vxYZ, projection, bbox_color);
-    g2d->Draw3DLine (vXyz, vXyZ, projection, bbox_color);
-    g2d->Draw3DLine (vXYz, vXYZ, projection, bbox_color);
+    g2d->DrawLineProjected (vxyz, vXyz, projection, bbox_color);
+    g2d->DrawLineProjected (vXyz, vXYz, projection, bbox_color);
+    g2d->DrawLineProjected (vXYz, vxYz, projection, bbox_color);
+    g2d->DrawLineProjected (vxYz, vxyz, projection, bbox_color);
+    g2d->DrawLineProjected (vxyZ, vXyZ, projection, bbox_color);
+    g2d->DrawLineProjected (vXyZ, vXYZ, projection, bbox_color);
+    g2d->DrawLineProjected (vXYZ, vxYZ, projection, bbox_color);
+    g2d->DrawLineProjected (vxYZ, vxyZ, projection, bbox_color);
+    g2d->DrawLineProjected (vxyz, vxyZ, projection, bbox_color);
+    g2d->DrawLineProjected (vxYz, vxYZ, projection, bbox_color);
+    g2d->DrawLineProjected (vXyz, vXyZ, projection, bbox_color);
+    g2d->DrawLineProjected (vXYz, vXYZ, projection, bbox_color);
   }
 }
 
