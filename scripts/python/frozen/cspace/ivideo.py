@@ -128,6 +128,7 @@ class iGraphics2D(core.iBase):
     def GetHWRenderer(*args): return _ivideo.iGraphics2D_GetHWRenderer(*args)
     def GetHWGLVersion(*args): return _ivideo.iGraphics2D_GetHWGLVersion(*args)
     def GetHWVendor(*args): return _ivideo.iGraphics2D_GetHWVendor(*args)
+    def Draw3DLine(*args): return _ivideo.iGraphics2D_Draw3DLine(*args)
     scfGetVersion = staticmethod(_ivideo.iGraphics2D_scfGetVersion)
     __swig_destroy__ = _ivideo.delete_iGraphics2D
     __del__ = lambda self : None;
@@ -379,6 +380,7 @@ class iGraphics3D(core.iBase):
     def DrawMesh(*args): return _ivideo.iGraphics3D_DrawMesh(*args)
     def DrawSimpleMesh(*args): return _ivideo.iGraphics3D_DrawSimpleMesh(*args)
     def DrawPixmap(*args): return _ivideo.iGraphics3D_DrawPixmap(*args)
+    def DrawLine(*args): return _ivideo.iGraphics3D_DrawLine(*args)
     def ActivateBuffers(*args): return _ivideo.iGraphics3D_ActivateBuffers(*args)
     def DeactivateBuffers(*args): return _ivideo.iGraphics3D_DeactivateBuffers(*args)
     def SetTextureState(*args): return _ivideo.iGraphics3D_SetTextureState(*args)
@@ -423,7 +425,6 @@ class iGraphics3D(core.iBase):
     def GetEdgeDrawing(*args): return _ivideo.iGraphics3D_GetEdgeDrawing(*args)
     def SetTessellation(*args): return _ivideo.iGraphics3D_SetTessellation(*args)
     def GetTessellation(*args): return _ivideo.iGraphics3D_GetTessellation(*args)
-    def DrawLine(*args): return _ivideo.iGraphics3D_DrawLine(*args)
     scfGetVersion = staticmethod(_ivideo.iGraphics3D_scfGetVersion)
     __swig_destroy__ = _ivideo.delete_iGraphics3D
     __del__ = lambda self : None;
