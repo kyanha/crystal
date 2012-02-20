@@ -393,13 +393,13 @@ bool csShaderProgram::ParseProgramNode (iDocumentNode* child, ProgramSource& par
       return false;
     }
 
-    parsedSource.programFile = file;
+    parsedSource.programData = file->GetAllData();
     parsedSource.programNode.Invalidate ();
   }
   else
   {
     parsedSource.programNode = child;
-    parsedSource.programFile.Invalidate ();
+    parsedSource.programData.Invalidate ();
   }
   return true;
 }
@@ -410,7 +410,7 @@ iDocumentNode* csShaderProgram::GetProgramNode (ProgramSource& programSource)
   if (programSource.programNode.IsValid ())
     return programSource.programNode;
 
-  if (programSource.programFile.IsValid ())
+  if (programSource.programData.IsValid ())
   {
     csRef<iDocumentSystem> docsys =  
       csQueryRegistry<iDocumentSystem> (objectReg);
@@ -418,7 +418,7 @@ iDocumentNode* csShaderProgram::GetProgramNode (ProgramSource& programSource)
       docsys.AttachNew (new csTinyDocumentSystem ());
     csRef<iDocument> doc (docsys->CreateDocument ());
 
-    const char* err = doc->Parse (programSource.programFile, true);
+    const char* err = doc->Parse (programSource.programData, true);
     if (err != 0)
     {
       csReport (objectReg,
@@ -428,7 +428,7 @@ iDocumentNode* csShaderProgram::GetProgramNode (ProgramSource& programSource)
       return 0;
     }
     programSource.programNode = doc->GetRoot ();
-    programSource.programFile.Invalidate();
+    programSource.programData.Invalidate();
     return programSource.programNode;
   }
 
@@ -437,9 +437,9 @@ iDocumentNode* csShaderProgram::GetProgramNode (ProgramSource& programSource)
 
 csPtr<iDataBuffer> csShaderProgram::GetProgramData (ProgramSource& programSource)
 {
-  if (programSource.programFile.IsValid())
+  if (programSource.programData.IsValid())
   {
-    return programSource.programFile->GetAllData ();
+    return csPtr<iDataBuffer> (programSource.programData);
   }
 
   if (programSource.programNode.IsValid())

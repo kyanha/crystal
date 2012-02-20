@@ -209,8 +209,8 @@ protected:
   {
     /// iDocumentNode the program is loaded from
     csRef<iDocumentNode> programNode;
-    /// File the program is loaded from (if any)
-    csRef<iFile> programFile;
+    /// Data buffer with program data, if loaded from external source
+    csRef<iDataBuffer> programData;
 
     /// Filename of program
     csString programFileName;
