@@ -43,6 +43,12 @@ CS_PLUGIN_NAMESPACE_BEGIN(GLShaderCg)
     uint NumTexInstructionSlots;
     uint extensions;
     
+    /// Extensions that influence profile behaviour - bit mask
+    enum
+    {
+      extARB_color_buffer_float = 1
+    };
+
     ProfileLimits (
       CS::PluginCommon::ShaderProgramPluginGL::HardwareVendor vendor,
       CGprofile profile);
