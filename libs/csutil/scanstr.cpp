@@ -233,7 +233,7 @@ int csScanStr (const char* in, const char* format, ...)
       in += strspn (in, CS_WHITE);
     }
     else if (*in == *format) { format++; in++; }
-    else { num = -1; break; }
+    else { break; }
   }
 
   va_end (arg);
