@@ -1,5 +1,5 @@
 <!--
-  Copyright (C) 2008 by Frank Richter
+  Copyright (C) 2012 by Frank Richter
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Library General Public
@@ -18,16 +18,23 @@
 <snippet>
   <technique priority="100">
     <combiner name="cg" plugin="crystalspace.graphics3d.shader.combiner.glcg" />
+    <combiner name="glsl" plugin="crystalspace.graphics3d.shader.combiner.glsl" />
     
     <input name="a" type="rgba" />
     <input name="b" type="rgba" />
       
     <block location="cg:fragmentMain">
-      result = a*(1-b.a) + b;
+      result = a*b.a + b*(1-a.a);
     </block>
-
     <block location="cg:vertexMain">
-      result = a*(1-b.a) + b;
+      result = a*b.a + b*(1-a.a);
+    </block>
+    
+    <block location="glsl:fragmentMain">
+      result = a*b.a + b*(1.0-a.a);
+    </block>
+    <block location="glsl:vertexMain">
+      result = a*b.a + b*(1.0-a.a);
     </block>
     
     <output name="result" type="rgba" />
