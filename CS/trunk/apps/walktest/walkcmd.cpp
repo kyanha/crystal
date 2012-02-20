@@ -736,6 +736,8 @@ float safe_atof (const char* arg)
 #define RECORD_ARGS(CMD, ARG) Sys->recorder->RecordArgs (CMD, ARG);
 #define RECORD_CMD(CMD) Sys->recorder->RecordCommand (CMD);
 
+static bool HandleFog (const char* arg);
+
 bool CommandHandler (const char *cmd, const char *arg)
 {
   if (!csStrCaseCmp (cmd, "help"))
@@ -1117,30 +1119,7 @@ bool CommandHandler (const char *cmd, const char *arg)
   }
   else if (!csStrCaseCmp (cmd, "s_fog"))
   {
-    if (!arg)
-    {
-      const csFog& f = Sys->views->GetCamera ()->GetSector ()->GetFog ();
-      Sys->Report (CS_REPORTER_SEVERITY_NOTIFY,
-      	"Fog in current sector (%f,%f,%f) density=%f",
-      	f.color.red, f.color.green, f.color.blue, f.density);
-    }
-    else
-    {
-      float r, g, b, dens;
-      if (csScanStr (arg, "%f,%f,%f,%f", &r, &g, &b, &dens) != 4)
-      {
-        Sys->Report (CS_REPORTER_SEVERITY_NOTIFY,
-		"Expected r,g,b,density. Got something else!");
-        return false;
-      }
-      csFog f;
-      f.density = dens;
-      f.color.red = r;
-      f.color.green = g;
-      f.color.blue = b;
-      f.mode = CS_FOG_MODE_CRYSTALSPACE;
-      Sys->views->GetCamera ()->GetSector ()->SetFog (f);
-    }
+    return HandleFog (arg);
   }
   else if (!csStrCaseCmp (cmd, "loadmap"))
   {
@@ -2026,6 +2005,99 @@ bool CommandHandler (const char *cmd, const char *arg)
   else
     return false;
 
+  return true;
+}
+
+static bool HandleFog (const char* arg)
+{
+  if (!arg)
+  {
+    const csFog& f = Sys->views->GetCamera ()->GetSector ()->GetFog ();
+    const char* fogMode ("???");
+    switch (f.mode)
+    {
+    case CS_FOG_MODE_NONE:
+      fogMode = "none";
+      break;
+    case CS_FOG_MODE_CRYSTALSPACE:
+      fogMode = "CrystalSpace";
+      break;
+    case CS_FOG_MODE_LINEAR_CRYSTALSPACE:
+      fogMode = "linear_crystalspace";
+      break;
+    case CS_FOG_MODE_EXP:
+      fogMode = "exp";
+      break;
+    case CS_FOG_MODE_EXP2:
+      fogMode = "exp2";
+      break;
+    }
+    Sys->Report (CS_REPORTER_SEVERITY_NOTIFY,
+      "Fog in current sector: (%f,%f,%f) density=%f mode=%s start=%f end=%f limit=%f",
+      f.color.red, f.color.green, f.color.blue, f.density,
+      fogMode, f.start, f.end, f.limit);
+  }
+  else
+  {
+    float r, g, b, dens, start, end, limit;
+    char* mode_string (nullptr);
+    int nArgs = csScanStr (arg, "%f,%f,%f,%f,%as,%f,%f,%f",
+                           &r, &g, &b, &dens, &mode_string, &start, &end, &limit);
+    if ((nArgs < 4) || (nArgs > 8))
+    {
+      Sys->Report (CS_REPORTER_SEVERITY_NOTIFY,
+              "Expected r,g,b,density[,mode[,start[,end[,limit]]]]. Got something else!");
+      return false;
+    }
+    csFog f;// (Sys->views->GetCamera ()->GetSector ()->GetFog ());
+    f.density = dens;
+    f.color.red = r;
+    f.color.green = g;
+    f.color.blue = b;
+    f.mode = dens > 0 ? CS_FOG_MODE_CRYSTALSPACE : CS_FOG_MODE_NONE;
+    if (nArgs >= 5)
+    {
+      if (strcasecmp (mode_string, "none") == 0)
+      {
+        f.mode = CS_FOG_MODE_NONE;
+      }
+      else if (strcasecmp (mode_string, "crystalspace") == 0)
+      {
+        f.mode = CS_FOG_MODE_CRYSTALSPACE;
+      }
+      else if (strcasecmp (mode_string, "linear_crystalspace") == 0)
+      {
+        f.mode = CS_FOG_MODE_LINEAR_CRYSTALSPACE;
+      }
+      else if (strcasecmp (mode_string, "linear") == 0)
+      {
+        f.mode = CS_FOG_MODE_LINEAR;
+      }
+      else if (strcasecmp (mode_string, "exp") == 0)
+      {
+        f.mode = CS_FOG_MODE_EXP;
+      }
+      else if (strcasecmp (mode_string, "exp2") == 0)
+      {
+        f.mode = CS_FOG_MODE_EXP2;
+      }
+      else
+      {
+        Sys->Report (CS_REPORTER_SEVERITY_NOTIFY,
+                     "Invalid fog mode %s", CS::Quote::Double (mode_string));
+      }
+    }
+    if (nArgs >= 6)
+      f.start = start;
+    if (nArgs >= 7)
+      f.end = end;
+    if (nArgs >= 8)
+      f.limit = limit;
+    Sys->views->GetCamera ()->GetSector ()->SetFog (f);
+    Sys->Report (CS_REPORTER_SEVERITY_NOTIFY, "Changed fog for sector %s",
+      Sys->views->GetCamera ()->GetSector ()->QueryObject()->GetName());
+    cs_free (mode_string);
+  }
   return true;
 }
 
