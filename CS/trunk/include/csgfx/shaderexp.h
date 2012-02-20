@@ -192,6 +192,15 @@ private:
   template<typename Comparator>
   bool eval_compare (const Comparator& cmp, const oper_arg& arg1,
     const oper_arg& arg2, oper_arg& output) const;
+    
+  /// Evaluate logical AND
+  bool eval_and (const oper_arg& arg1, const oper_arg& arg2,
+        oper_arg& output) const;
+  /// Evaluate logical OR
+  bool eval_or (const oper_arg& arg1, const oper_arg& arg2,
+        oper_arg& output) const;
+  /// Evaluate logical NOT
+  bool eval_not (const oper_arg& arg, oper_arg& output) const;
   	
   bool eval_matrix_column (const oper_arg& arg1, const oper_arg& arg2,
   	oper_arg& output) const;
