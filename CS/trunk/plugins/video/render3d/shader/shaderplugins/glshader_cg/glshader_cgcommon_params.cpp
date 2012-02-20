@@ -42,6 +42,13 @@ void csShaderGLCGCommon::SetParameterValue (const Setter& setter,
   
   switch (paramType)
   {
+    case CG_BOOL:
+      {
+        int i;
+        if (var->GetValue (i))
+          setter.Parameter1i (slot, param, (i != 0) ? 1 : 0);
+      }
+      break;
     case CG_INT:
       {
 	int i;
