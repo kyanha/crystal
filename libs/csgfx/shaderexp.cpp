@@ -102,6 +102,11 @@ enum
   OP_EQ,
   OP_NE,
   
+  // Logical operations
+  OP_AND,
+  OP_OR,
+  OP_NOT,
+  
   // Pseudo-ops, special case weird stuff
   OP_PS_MAKE_VECTOR,
   OP_PS_IF,
@@ -159,6 +164,9 @@ static const char* const opNames[OP_LAST] = {
   "GE",
   "EQ",
   "NE",
+  "AND",
+  "OR",
+  "NOT",
   "!MAKEVECTOR",
   "!IF",
   "!LIMIT",
@@ -280,6 +288,10 @@ static const op_args_info optimize_arg_table[] =
   { 2, 2, false }, // OP_EQ
   { 2, 2, false }, // OP_NE
   
+  { 2, -1, true }, // OP_AND
+  { 2, -1, true }, // OP_OR
+  { 1, 1, false },  //OP_NOT
+
   { 2, 4, false }, // OP_PS_MAKE_VECTOR
   { 3, 3, false }, // OP_PS_IF
 
@@ -973,6 +985,8 @@ bool csShaderExpression::eval_oper (int oper, oper_arg arg1, oper_arg arg2,
   case OP_GT: return eval_compare (GT(), arg1, arg2, output);
   case OP_EQ: return eval_compare (EQ(), arg1, arg2, output);
   case OP_NE: return eval_compare (NE(), arg1, arg2, output);
+  case OP_AND: return eval_and (arg1, arg2, output);
+  case OP_OR: return eval_or (arg1, arg2, output);
   case OP_INT_SELT12: return eval_selt12 (arg1, arg2, output);
   case OP_INT_SELT34: return eval_selt34 (arg1, arg2, output);
   case OP_INT_SELECT: return eval_select (arg1, arg2, output);
@@ -1023,6 +1037,7 @@ bool csShaderExpression::eval_oper (int oper, oper_arg arg1, oper_arg& output)
   case OP_FUNC_MATRIX2GL: return eval_matrix2gl (arg1, output);
   case OP_FUNC_MATRIX_INV: return eval_matrix_inv (arg1, output);
   case OP_FUNC_MATRIX_TRANSP: return eval_matrix_transp (arg1, output);
+  case OP_NOT: return eval_not (arg1, output);
   case OP_INT_LOAD: return eval_load (arg1, output);
 
   default:
@@ -1567,6 +1582,65 @@ bool csShaderExpression::eval_compare (const Comparator& cmp,
   return true;
 }
       
+bool csShaderExpression::eval_and (const oper_arg& arg1,
+  const oper_arg& arg2, oper_arg& output) const 
+{
+  if (arg1.type == TYPE_NUMBER && arg2.type == TYPE_NUMBER)
+  {
+    output.type = TYPE_NUMBER;
+    output.num = (arg1.num != 0) && (arg2.num != 0) ? 1 : 0;
+  } 
+  else 
+  {
+    EvalError ("Invalid types for %s operator, (%s, %s).", 
+      CS::Quote::Single ("and"),
+      GetTypeName (arg1.type), GetTypeName (arg2.type));
+
+    return false;
+  }
+
+  return true;
+}
+
+bool csShaderExpression::eval_or (const oper_arg& arg1,
+  const oper_arg& arg2, oper_arg& output) const 
+{
+  if (arg1.type == TYPE_NUMBER && arg2.type == TYPE_NUMBER)
+  {
+    output.type = TYPE_NUMBER;
+    output.num = (arg1.num != 0) || (arg2.num != 0) ? 1 : 0;
+  } 
+  else 
+  {
+    EvalError ("Invalid types for %s operator, (%s, %s).", 
+      CS::Quote::Single ("or"),
+      GetTypeName (arg1.type), GetTypeName (arg2.type));
+
+    return false;
+  }
+
+  return true;
+}
+
+bool csShaderExpression::eval_not (const oper_arg& arg, oper_arg& output) const
+{
+  if (arg.type == TYPE_NUMBER)
+  {
+    output.type = TYPE_NUMBER;
+    output.num = (arg.num != 0) ? 0 : 1;
+  } 
+  else 
+  {
+    EvalError ("Invalid types for %s operator, (%s).", 
+      CS::Quote::Single ("not"),
+      GetTypeName (arg.type));
+
+    return false;
+  }
+
+  return true;
+}
+
 bool csShaderExpression::eval_matrix_column (const oper_arg& arg1, 
   const oper_arg& arg2, oper_arg& output) const
 {
@@ -2713,6 +2787,7 @@ csStringID csShaderExpression::GetCommonTokenOp (const char* token)
 
 static const TokenTabEntry xmlTokens[] = {
   {"add", 3, OP_ADD},
+  {"and", 3, OP_AND},
   {"atom", 4, OP_XML_ATOM},
   {"div", 3, OP_DIV},
   {"eq", 2, OP_EQ},
@@ -2722,6 +2797,8 @@ static const TokenTabEntry xmlTokens[] = {
   {"lt", 2, OP_LT},
   {"mul", 3, OP_MUL},
   {"ne", 2, OP_NE},
+  {"not", 3, OP_NOT},
+  {"or", 2, OP_NOT},
   {"sexp", 4, OP_XML_SEXP},
   {"sub", 4, OP_SUB}
 };
@@ -2735,6 +2812,8 @@ csStringID csShaderExpression::GetXmlTokenOp (const char* token)
 }
 
 static const TokenTabEntry sexpTokens[] = {
+  {"!", 1, OP_NOT},
+  {"&&", 2, OP_AND},
   {"*", 1, OP_MUL},
   {"+", 1, OP_ADD},
   {"-", 1, OP_SUB},
@@ -2744,7 +2823,8 @@ static const TokenTabEntry sexpTokens[] = {
   {"<=", 2, OP_LE},
   {"=", 1, OP_EQ},
   {">", 1, OP_GT},
-  {">=", 2, OP_GE}
+  {">=", 2, OP_GE},
+  {"||", 2, OP_OR}
 };
 const size_t sexpTokenNum = sizeof (sexpTokens) / sizeof (TokenTabEntry);
 
