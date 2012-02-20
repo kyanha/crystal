@@ -502,7 +502,9 @@ bool csShaderExpression::Evaluate (csShaderVariable* var,
         break;
       }
     } 
-    else if (op.arg2.type == TYPE_INVALID)
+    else if ((op.arg2.type == TYPE_INVALID)
+        && (op.opcode != OP_INT_SELT34)) /* SELT34 is a special case: it accepts
+                                            a 2nd argument of type INVALID */
     {
       if (!eval_oper (op.opcode, op.arg1, accstack.Get (op.acc)))
       {
@@ -2612,6 +2614,10 @@ void csShaderExpression::print_ops (const oper_array& ops) const
         csPrintf (" ACC%d", op.arg1.acc);
         break;
 
+      case TYPE_INVALID:
+        csPrintf (" <invalid>");
+        break;
+
       default:
         csPrintf (" #<unknown type %" PRIu8 ">", op.arg1.type);
       }
@@ -2646,6 +2652,10 @@ void csShaderExpression::print_ops (const oper_array& ops) const
 
       case TYPE_ACCUM:
         csPrintf (",ACC%d", op.arg2.acc);
+        break;
+        
+      case TYPE_INVALID:
+        csPrintf (",<invalid>");
         break;
 
       default:
