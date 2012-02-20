@@ -60,14 +60,55 @@ class csRenderMeshList;
 class csReversibleTransform;
 class csVector3;
 
-
+/// Modes for per-sector fog
 enum csFogMode
 {
+  /// Fog is disabled.
   CS_FOG_MODE_NONE = 0,
-  CS_FOG_MODE_LINEAR,
+  /**
+   * Combination of linear fog and &ldquo;CrystalSpace&rdquo; fog.
+   * This computes a linear fog for the sector: there is no fog until the
+   * distance csFog::start, and it will linearly increase until it's fully
+   * opaque at the distance csFog::end. (For a distance \em d, the fog function
+   * is <em>1 - ((e - d)/(e - s))</em>.
+   * 
+   * There's also the specialty that the
+   * fog is cut off (fully transparent) at the distance csFog::limit if that
+   * distance is greated than the end distance:
+   * 
+   * \em And this computed linear fog is modulated with the sector fog value
+   * from CS_FOG_MODE_CRYSTALSPACE.
+   */
+  CS_FOG_MODE_LINEAR_CRYSTALSPACE,
+  /**
+   * &ldquo;CrystalSpace&rdquo; fog.
+   * This fog has the special property to be correct across portals, even if
+   * the sectors have different fog densities (or colors).
+   * 
+   * The basis for this fog mode is an exponential fog, the fog function for a
+   * distance \em d is <em>1 - exp(-(d-0.1)*density*7)</em>.
+   * The distance is either the distance from the viewer, or, if portals are
+   * involved, the distance from the portal.
+   */
   CS_FOG_MODE_CRYSTALSPACE,
-  CS_FOG_MODE_EXP, // Not implemented
-  CS_FOG_MODE_EXP2 // Not implemented
+  /**
+   * Exponential fog.
+   * The fog function for a distance \em d is <em>1 - exp(-d*density)</em>.
+   * The distance is the distance from the viewer.
+   * 
+   * Note this fog will look wrong if viewed through a portal.
+   */
+  CS_FOG_MODE_EXP,
+  /**
+   * Exponential fog.
+   * The fog function for a distance \em d is <em>1 - exp(-(d*density)^2)</em>.
+   * The distance is the distance from the viewer.
+   * 
+   * Note this fog will look wrong if viewed through a portal.
+   */
+  CS_FOG_MODE_EXP2,
+  /// Alternative name for CS_FOG_MODE_LINEAR_CRYSTALSPACE
+  CS_FOG_MODE_LINEAR = CS_FOG_MODE_LINEAR_CRYSTALSPACE
 };
 
 /**
@@ -75,15 +116,18 @@ enum csFogMode
  */
 struct csFog
 {
-  /// Density (for CS_FOG_MODE_LINEAR, CS_FOG_MODE_EXP, CS_FOG_MODE_EXP2, CS_FOG_MODE_CRYSTALSPACE)
+  /**
+   * Density (for #CS_FOG_MODE_LINEAR_CRYSTALSPACE, #CS_FOG_MODE_EXP,
+   * #CS_FOG_MODE_EXP2, #CS_FOG_MODE_CRYSTALSPACE)
+   */
   float density;
   /// Color
   csColor4 color;
-  /// Fog fade start distance (for CS_FOG_MODE_LINEAR).
+  /// Fog fade start distance (for #CS_FOG_MODE_LINEAR).
   float start;
-  /// Fog fade end distance (for CS_FOG_MODE_LINEAR).
+  /// Fog fade end distance (for #CS_FOG_MODE_LINEAR).
   float end;
-  /// The limit after which the fog is no longer shown (for rings of fog) (for CS_FOG_MODE_LINEAR).
+  /// The limit after which the fog is no longer shown (for rings of fog) (for #CS_FOG_MODE_LINEAR).
   float limit;
   /// Fog mode.
   csFogMode mode;
