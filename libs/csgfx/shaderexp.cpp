@@ -46,7 +46,12 @@ Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 #define DEBUG_PRINTF while (0) csPrintf
 #endif
 
-//#define SHADEREXP_DEBUG
+// Print debugging output for parsing
+#define SHADEREXP_DEBUG_PARSE   1
+// Print debugging output for evaluation
+#define SHADEREXP_DEBUG_EVAL    2
+// Set this to an OR-combination of _PARSE and _EVAL to enable debug output
+#define SHADEREXP_DEBUG         0
 
 enum 
 {
@@ -410,7 +415,7 @@ bool csShaderExpression::Parse (iDocumentNode* node)
 
   if (!parse_xml (head, node)) 
   {
-#ifdef SHADEREXP_DEBUG
+#if SHADEREXP_DEBUG & SHADEREXP_DEBUG_PARSE
     if (head)
       print_cons (head);
 #endif
@@ -421,7 +426,7 @@ bool csShaderExpression::Parse (iDocumentNode* node)
     return false;
   }
 
-#ifdef SHADEREXP_DEBUG
+#if SHADEREXP_DEBUG & SHADEREXP_DEBUG_PARSE
   print_cons (head);
   csPrintf ("\n***************\n");
 #endif
@@ -435,7 +440,7 @@ bool csShaderExpression::Parse (iDocumentNode* node)
     return false;
   }
 
-#ifdef SHADEREXP_DEBUG
+#if SHADEREXP_DEBUG & SHADEREXP_DEBUG_PARSE
   print_cons (head);
   csPrintf( "\n***************\n");
 #endif
@@ -450,7 +455,7 @@ bool csShaderExpression::Parse (iDocumentNode* node)
     return false;
   }
 
-#ifdef SHADEREXP_DEBUG
+#if SHADEREXP_DEBUG & SHADEREXP_DEBUG_PARSE
   print_ops (opcodes);
 #endif
 
@@ -470,7 +475,7 @@ bool csShaderExpression::Parse (iDocumentNode* node)
 bool csShaderExpression::Evaluate (csShaderVariable* var, 
   csShaderVariableStack& stacks)
 {
-#ifdef SHADEREXP_DEBUG
+#if SHADEREXP_DEBUG & SHADEREXP_DEBUG_EVAL
   int debug_counter = 0;
 #endif
 
@@ -490,7 +495,7 @@ bool csShaderExpression::Evaluate (csShaderVariable* var,
   {
     const oper & op = iter.Next ();
 
-#ifdef SHADEREXP_DEBUG
+#if SHADEREXP_DEBUG & SHADEREXP_DEBUG_EVAL
     debug_counter++;
 #endif
 
@@ -521,7 +526,7 @@ bool csShaderExpression::Evaluate (csShaderVariable* var,
       }
     }
 
-#ifdef SHADEREXP_DEBUG
+#if SHADEREXP_DEBUG & SHADEREXP_DEBUG_EVAL
     csPrintf ("Eval result (op %3i): <ACC%i> <- ", debug_counter, op.acc);
     print_result (accstack.Get(op.acc));
     csPrintf("\n");
