@@ -258,8 +258,8 @@ static const op_args_info optimize_arg_table[] =
   { 1, 1, false }, //  OP_FUNC_COS
   { 1, 1, false }, //  OP_FUNC_TAN
 
-  { 1, 1, false }, // OP_FUNC_DOT
-  { 1, 1, false }, // OP_FUNC_CROSS
+  { 2, 2, false }, // OP_FUNC_DOT
+  { 2, 2, false }, // OP_FUNC_CROSS
   { 1, 1, false }, // OP_FUNC_VEC_LEN
   { 1, 1, false }, // OP_FUNC_NORMAL
   { 1, 1, false }, // OP_FUNC_FLOOR
