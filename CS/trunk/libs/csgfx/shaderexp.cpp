@@ -1057,7 +1057,7 @@ bool csShaderExpression::eval_oper (int oper, oper_arg& output)
   case OP_FUNC_FRAME: return eval_frame (output);
 
   default:
-    EvalError ("Unknown single-arg operator %s (%d).", GetOperName (oper), oper);
+    EvalError ("Unknown no-arg operator %s (%d).", GetOperName (oper), oper);
   }
 
   return false;
