@@ -110,18 +110,18 @@ CS_PLUGIN_NAMESPACE_BEGIN(DebugNode)
     csVector3 vXYZ = tr * box.GetCorner (CS_BOX_CORNER_XYZ);
     const CS::Math::Matrix4& projection (g3d->GetProjectionMatrix ());
     iGraphics2D* g2d = g3d->GetDriver2D ();
-    g2d->Draw3DLine (vxyz, vXyz, projection, color);
-    g2d->Draw3DLine (vXyz, vXYz, projection, color);
-    g2d->Draw3DLine (vXYz, vxYz, projection, color);
-    g2d->Draw3DLine (vxYz, vxyz, projection, color);
-    g2d->Draw3DLine (vxyZ, vXyZ, projection, color);
-    g2d->Draw3DLine (vXyZ, vXYZ, projection, color);
-    g2d->Draw3DLine (vXYZ, vxYZ, projection, color);
-    g2d->Draw3DLine (vxYZ, vxyZ, projection, color);
-    g2d->Draw3DLine (vxyz, vxyZ, projection, color);
-    g2d->Draw3DLine (vxYz, vxYZ, projection, color);
-    g2d->Draw3DLine (vXyz, vXyZ, projection, color);
-    g2d->Draw3DLine (vXYz, vXYZ, projection, color);
+    g2d->DrawLineProjected (vxyz, vXyz, projection, color);
+    g2d->DrawLineProjected (vXyz, vXYz, projection, color);
+    g2d->DrawLineProjected (vXYz, vxYz, projection, color);
+    g2d->DrawLineProjected (vxYz, vxyz, projection, color);
+    g2d->DrawLineProjected (vxyZ, vXyZ, projection, color);
+    g2d->DrawLineProjected (vXyZ, vXYZ, projection, color);
+    g2d->DrawLineProjected (vXYZ, vxYZ, projection, color);
+    g2d->DrawLineProjected (vxYZ, vxyZ, projection, color);
+    g2d->DrawLineProjected (vxyz, vxyZ, projection, color);
+    g2d->DrawLineProjected (vxYz, vxYZ, projection, color);
+    g2d->DrawLineProjected (vXyz, vXyZ, projection, color);
+    g2d->DrawLineProjected (vXYz, vXYZ, projection, color);
   }
 
   // --------------------------  DebugNode  --------------------------
@@ -243,7 +243,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(DebugNode)
 	csVector3 endGlobal = position + rotation.Rotate (endLocal);
 	csVector3 boneEnd = object2camera * endGlobal;
 
-	g2d->Draw3DLine (bonePosition, boneEnd, projection, colorI);
+	g2d->DrawLineProjected (bonePosition, boneEnd, projection, colorI);
       }
 
       if (factory->modes & CS::Animation::DEBUG_SQUARES)

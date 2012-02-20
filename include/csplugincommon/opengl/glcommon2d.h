@@ -238,10 +238,10 @@ public:
   /// Draw a line
   virtual void DrawLine (float x1, float y1, float x2, float y2, int color);
   /// Draw a line in camera space
-  virtual void Draw3DLine (const csVector3& v1, const csVector3& v2,
+  virtual void DrawLineProjected (const csVector3& v1, const csVector3& v2,
     float fov, int color);
   /// Draw a line in camera space
-  virtual void Draw3DLine (const csVector3& v1, const csVector3& v2,
+  virtual void DrawLineProjected (const csVector3& v1, const csVector3& v2,
     const CS::Math::Matrix4& projection, int color);
   /// Draw a box
   virtual void DrawBox (int x, int y, int w, int h, int color);

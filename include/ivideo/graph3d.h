@@ -1002,9 +1002,9 @@ struct iGraphics3D : public virtual iBase
   /**
    * Draw a line in camera space. Warning! This is a 2D operation
    * and must be called while in BeginDraw(CSDRAW_2DGRAPHICS)!
-   * \deprecated Deprecated in 2.0. Use iGraphics2D::Draw3DLine() instead
+   * \deprecated Deprecated in 2.0. Use iGraphics2D::DrawLineProjected() instead
    */
-  CS_DEPRECATED_METHOD_MSG("Use iGraphics2D::Draw3DLine() instead")
+  CS_DEPRECATED_METHOD_MSG("Use iGraphics2D::DrawLineProjected() instead")
   virtual void DrawLine (const csVector3& v1, const csVector3& v2,
     float fov, int color) = 0;
 
