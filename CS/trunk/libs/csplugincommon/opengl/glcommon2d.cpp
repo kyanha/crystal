@@ -560,8 +560,8 @@ void csGraphics2DGLCommon::DrawLine (
   if (gl_alphaTest) statecache->Enable_GL_ALPHA_TEST ();
 }
 
-void csGraphics2DGLCommon::Draw3DLine (const csVector3& _v1, const csVector3& _v2,
-				       float fov, int color)
+void csGraphics2DGLCommon::DrawLineProjected
+  (const csVector3& _v1, const csVector3& _v2, float fov, int color)
 {
   csVector3 v1 (_v1), v2 (_v2);
   if (!DrawLineNearClip (v1, v2)) return;
@@ -576,8 +576,9 @@ void csGraphics2DGLCommon::Draw3DLine (const csVector3& _v1, const csVector3& _v
   DrawLine (px1, py1, px2, py2, color);
 }
 
-void csGraphics2DGLCommon::Draw3DLine (const csVector3& _v1, const csVector3& _v2,
-				       const CS::Math::Matrix4& projection, int color)
+void csGraphics2DGLCommon::DrawLineProjected
+  (const csVector3& _v1, const csVector3& _v2,
+   const CS::Math::Matrix4& projection, int color)
 {
   csVector3 v1 (_v1), v2 (_v2);
   if (!DrawLineNearClip (v1, v2)) return;

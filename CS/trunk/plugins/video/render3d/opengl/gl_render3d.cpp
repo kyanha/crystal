@@ -1705,7 +1705,7 @@ void csGLGraphics3D::DrawLine (const csVector3 & v1, const csVector3 & v2,
 	float fov, int color)
 {
   SwapIfNeeded();
-  G2D->Draw3DLine (v1, v2, fov, color);
+  G2D->DrawLineProjected (v1, v2, fov, color);
 }
 
 bool csGLGraphics3D::ActivateBuffers (csRenderBufferHolder *holder, 

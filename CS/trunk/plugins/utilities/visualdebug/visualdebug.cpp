@@ -100,15 +100,15 @@ CS_PLUGIN_NAMESPACE_BEGIN(VisualDebug)
       csVector3 origin = transform.transform.GetOrigin ();
       csVector3 end = transform.transform.This2Other (csVector3 (transform.size, 0.0f, 0.0f));
       int color = g2d->FindRGB (255, 0, 0);
-      g2d->Draw3DLine (tr_w2c * origin, tr_w2c * end, projection, color);
+      g2d->DrawLineProjected (tr_w2c * origin, tr_w2c * end, projection, color);
 
       end = transform.transform.This2Other (csVector3 (0.0f, transform.size, 0.0f));
       color = g2d->FindRGB (0, 255, 0);
-      g2d->Draw3DLine (tr_w2c * origin, tr_w2c * end, projection, color);
+      g2d->DrawLineProjected (tr_w2c * origin, tr_w2c * end, projection, color);
 
       end = transform.transform.This2Other (csVector3 (0.0f, 0.0f, transform.size));
       color = g2d->FindRGB (0, 0, 255);
-      g2d->Draw3DLine (tr_w2c * origin, tr_w2c * end, projection, color);
+      g2d->DrawLineProjected (tr_w2c * origin, tr_w2c * end, projection, color);
 
       if (!transform.persist)
 	transforms.DeleteIndex (index);
@@ -159,7 +159,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(VisualDebug)
 				255.0f * vectorData.color[2]);
       csVector3 origin = vectorData.transform.GetOrigin ();
       csVector3 end = origin + vectorData.transform.This2OtherRelative (vectorData.vector);
-      g2d->Draw3DLine (tr_w2c * origin, tr_w2c * end, projection, color);
+      g2d->DrawLineProjected (tr_w2c * origin, tr_w2c * end, projection, color);
 
       if (!vectorData.persist)
 	vectors.DeleteIndex (index);
