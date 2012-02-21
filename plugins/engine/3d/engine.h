@@ -866,18 +866,20 @@ public:
    */
   int lightAmbientBlue;
 
-  /// Default shader to attach to all materials
-  // \todo move back to private and make accessible
-  csRef<iShader> defaultShader;
-
   /// Shader variable names for light SVs
   csLightShaderVarCache lightSvNames;
   
   /// Get the shader attenuation texture SV
   csShaderVariable* GetLightAttenuationTextureSV();
+
+  /// Get the default shader (passed to the render loop upon creation)
+  iShader* GetDefaultMaterialShader ();
 private:
 
   // -- PRIVATE MEMBERS
+
+  /// Default shader to pass to the render loop
+  csRef<iShader> defaultShader;
 
   /// Pool from which to allocate render views.
   CS::RenderManager::RenderView::Pool rviewPool;

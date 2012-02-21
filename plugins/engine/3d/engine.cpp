@@ -743,6 +743,28 @@ csShaderVariable* csEngine::GetLightAttenuationTextureSV()
   return lightAttenuationTexture;
 }
 
+iShader* csEngine::GetDefaultMaterialShader ()
+{
+  if (!defaultShader)
+  {
+    csConfigAccess cfg (objectRegistry, "/config/engine.cfg");
+
+    // Load default shaders
+    csRef<iDocumentSystem> docsys (
+      csQueryRegistry<iDocumentSystem> (objectRegistry));
+    if (!docsys.IsValid())
+      docsys.AttachNew (new csTinyDocumentSystem ());
+
+    const char* shaderPath;
+    shaderPath = cfg->GetStr ("Engine.Shader.Default",
+      "/shader/std_lighting.xml");
+    defaultShader = LoadShader (docsys, shaderPath);
+    if (!defaultShader.IsValid())
+      Warn ("Default shader %s not available", CS::Quote::Double (shaderPath));
+  }
+  return defaultShader;
+}
+
 void csEngine::DeleteAllForce ()
 {
   // First notify all sector removal callbacks.
@@ -808,13 +830,9 @@ THREADED_CALLABLE_IMPL(csEngine, DeleteAll)
     if (!docsys.IsValid())
       docsys.AttachNew (new csTinyDocumentSystem ());
 
-    const char* shaderPath;
-    shaderPath = cfg->GetStr ("Engine.Shader.Default", 
-      "/shader/std_lighting.xml");
-    defaultShader = LoadShader (docsys, shaderPath);
-    if (!defaultShader.IsValid())
-      Warn ("Default shader %s not available", shaderPath);
+    defaultShader.Invalidate();
 
+    const char* shaderPath;
     shaderPath = cfg->GetStr ("Engine.Shader.Portal", 
       "/shader/std_lighting_portal.xml");
     csRef<iShader> portal_shader = LoadShader (docsys, shaderPath);
@@ -1254,7 +1272,7 @@ csPtr<iRenderLoop> csEngine::CreateDefaultRenderLoop ()
     genStep = scfQueryInterface<iGenericRenderStep> (step);
   
     genStep->SetShaderType ("standard");
-    genStep->SetDefaultShader (defaultShader);
+    genStep->SetDefaultShader (GetDefaultMaterialShader ());
     genStep->SetZBufMode (CS_ZBUF_MESH);
     genStep->SetZOffset (false);
     genStep->SetPortalTraversal (true);
