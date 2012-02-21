@@ -67,7 +67,8 @@ A new post-effects system has been added, see @code{iRenderManagerPostEffects}
 and related classes.
 
 @item
-The lighting and shader systems have received many fixes and improvements.
+The render managers, the lighting and shader systems have all received many fixes
+and improvements.
 
 @item
 The shaders have been split in the directories @file{data/shader} for the global
@@ -75,7 +76,10 @@ The shaders have been split in the directories @file{data/shader} for the global
 the shader weaver, and @file{data/shader-old} for the previous shaders.
 
 @item
-Many new shaders have been added. See in @file{data/shader}.
+Many new shaders have been added, such as the @samp{sky} shader implementing the
+Perez luminance model, the @samp{clouds} shader implementing a Perlin noise, and
+the @samp{fake_sss} implementing a fake sub-surface scattering. See in
+@file{data/shader} for the other additions.
 
 @item
 A new @samp{deferred} render manager has been added, implementing deferred shading.
@@ -127,11 +131,6 @@ Added a plugin for the visual debugging of a physical simulation (see
 @code{CS::Debug::iDynamicSystemDebugger}).
 
 @item
-Switched by default to the @file{Bullet} library instead of @sc{ode} for the
-physical simulation. The @sc{ode} plugin will not get further support anymore,
-and will be removed in some future.
-
-@item
 Many additions and fixes to the @ref{MeshObject Animesh, Animesh mesh}. Many
 additions are about optimizations of the morphing and display processes.
 
@@ -149,10 +148,6 @@ Added many new animation blending nodes: @samp{Ragdoll}, @samp{LookAt},
 @item
 Fixes and improvements of the @samp{FSM} and @samp{Animation} animation
 blending nodes.
-
-@item
-The logic of the animation blending nodes has been changed, and the nodes work
-now in bind space instead of bone space.
 
 @item
 Added some default template classes for the creation of new animation nodes (see
@@ -219,7 +214,18 @@ Added many namespaces in the Crystal Space SDK. Future new classes should always
 be put in some @sc{cs} namespace.
 
 @item
+There has been many additions, fixes and other work performed on the configure
+system.
+
+@item
 Extended support and usage of unit testing with @sc{cs}.
+
+@item
+There have been many fixes and updates for platform support, especially for the
+ARM platform.
+
+@item
+There has been many updates and fixes to the documentation.
 
 @item
 Made memory blocks dump more useful in @code{ptmalloc}.
@@ -287,7 +293,7 @@ Completed removal of software renderer.
 Completed removal of old event system.
 
 @item
-Completed removal of @samp{thing} plugin. However, you can now convert your
+Completed removal of @samp{thing} mesh plugin. However, you can now convert your
 previous @samp{thing} meshes using @file{genmeshify}.
 
 @item
@@ -300,6 +306,10 @@ Completed removal of deprecated world attributes from tree.
 Large cleanup of lighting code which has resulted in removal of both
 interfaces and other methods. A result was a complete rework of lighting
 code.
+
+@item
+Removed the following canvas: @samp{sdl}, @samp{caca}, @samp{xextshm},
+@samp{ddraw}, @samp{softx}, @samp{memory}.
 
 @item
 Removal of @file{instmesh} and @file{bezier} meshes as they are
@@ -330,23 +340,16 @@ for later parsing. Should help with #486.
 @itemize @bullet
 
 @item
-There has been many additions, fixes and other work performed on the
-render manager, renderers and shaders. These are too numerous to mention.
+Switched by default to the @file{Bullet} library instead of @sc{ode} for the
+physical simulation. The @sc{ode} plugin will not get further support anymore,
+and will be removed in some future.
 
 @item
-There has been many additions, fixes and other work performed on the configure
-system. Too numerous to mention.
-
-@item
-There have been many fixes and updates for platform support. Too numerous
-to mention.
+The logic of the Animesh's animation blending nodes has been changed, and the
+nodes work now in bind space instead of bone space.
 
 @item
 @file{perl} and @file{java} plugins are now disabled by default.
-
-@item
-There has been many updates and fixes to the documentation. Too numerous
-to mention.
 
 @item
 When building an application with ``statically linked plugins'' (usually by
@@ -379,9 +382,6 @@ Add a 'used @sc{sv}' traverser that gives the set of used @sc{sv}s (instead
 of individual @sc{sv} names).
 
 @item
-Extensive removal of dead and old code.
-
-@item
 Optimisation @file{lighter2} by not doing transparency-computation of shadowrays
 if path is fully unoccluded or fully occluded.
 
@@ -397,4 +397,8 @@ Use @code{glXChooseFBConfig} instead of @code{glXChooseVisual}.
 
 @item
 Avoid crashes when encountering a corrupt @sc{png} images.
+
+@item
+Extensive removal of dead and old code.
+
 @end itemize
