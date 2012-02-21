@@ -41072,10 +41072,11 @@ SWIGEXPORT void SWIG_init(void) {
   SWIG_Python_SetConstant(d, "CS_LIGHT_DIRECTIONAL",SWIG_From_int(static_cast< int >(CS_LIGHT_DIRECTIONAL)));
   SWIG_Python_SetConstant(d, "CS_LIGHT_SPOTLIGHT",SWIG_From_int(static_cast< int >(CS_LIGHT_SPOTLIGHT)));
   SWIG_Python_SetConstant(d, "CS_FOG_MODE_NONE",SWIG_From_int(static_cast< int >(CS_FOG_MODE_NONE)));
-  SWIG_Python_SetConstant(d, "CS_FOG_MODE_LINEAR",SWIG_From_int(static_cast< int >(CS_FOG_MODE_LINEAR)));
+  SWIG_Python_SetConstant(d, "CS_FOG_MODE_LINEAR_CRYSTALSPACE",SWIG_From_int(static_cast< int >(CS_FOG_MODE_LINEAR_CRYSTALSPACE)));
   SWIG_Python_SetConstant(d, "CS_FOG_MODE_CRYSTALSPACE",SWIG_From_int(static_cast< int >(CS_FOG_MODE_CRYSTALSPACE)));
   SWIG_Python_SetConstant(d, "CS_FOG_MODE_EXP",SWIG_From_int(static_cast< int >(CS_FOG_MODE_EXP)));
   SWIG_Python_SetConstant(d, "CS_FOG_MODE_EXP2",SWIG_From_int(static_cast< int >(CS_FOG_MODE_EXP2)));
+  SWIG_Python_SetConstant(d, "CS_FOG_MODE_LINEAR",SWIG_From_int(static_cast< int >(CS_FOG_MODE_LINEAR)));
   SWIG_Python_SetConstant(d, "CS_RENDPRI_SORT_NONE",SWIG_From_int(static_cast< int >(CS_RENDPRI_SORT_NONE)));
   SWIG_Python_SetConstant(d, "CS_RENDPRI_SORT_BACK2FRONT",SWIG_From_int(static_cast< int >(CS_RENDPRI_SORT_BACK2FRONT)));
   SWIG_Python_SetConstant(d, "CS_RENDPRI_SORT_FRONT2BACK",SWIG_From_int(static_cast< int >(CS_RENDPRI_SORT_FRONT2BACK)));

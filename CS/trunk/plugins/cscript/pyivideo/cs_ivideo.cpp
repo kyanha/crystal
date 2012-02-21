@@ -6477,7 +6477,7 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_iGraphics2D_Draw3DLine__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_iGraphics2D_DrawLineProjected__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   iGraphics2D *arg1 = (iGraphics2D *) 0 ;
   csVector3 *arg2 = 0 ;
@@ -6500,39 +6500,39 @@ SWIGINTERN PyObject *_wrap_iGraphics2D_Draw3DLine__SWIG_0(PyObject *SWIGUNUSEDPA
   PyObject * obj3 = 0 ;
   PyObject * obj4 = 0 ;
   
-  if(!PyArg_UnpackTuple(args,(char *)"iGraphics2D_Draw3DLine",5,5,&obj0,&obj1,&obj2,&obj3,&obj4)) SWIG_fail;
+  if(!PyArg_UnpackTuple(args,(char *)"iGraphics2D_DrawLineProjected",5,5,&obj0,&obj1,&obj2,&obj3,&obj4)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_iGraphics2D, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "iGraphics2D_Draw3DLine" "', argument " "1"" of type '" "iGraphics2D *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "iGraphics2D_DrawLineProjected" "', argument " "1"" of type '" "iGraphics2D *""'"); 
   }
   arg1 = reinterpret_cast< iGraphics2D * >(argp1);
   res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_csVector3,  0  | 0);
   if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "iGraphics2D_Draw3DLine" "', argument " "2"" of type '" "csVector3 const &""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "iGraphics2D_DrawLineProjected" "', argument " "2"" of type '" "csVector3 const &""'"); 
   }
   if (!argp2) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "iGraphics2D_Draw3DLine" "', argument " "2"" of type '" "csVector3 const &""'"); 
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "iGraphics2D_DrawLineProjected" "', argument " "2"" of type '" "csVector3 const &""'"); 
   }
   arg2 = reinterpret_cast< csVector3 * >(argp2);
   res3 = SWIG_ConvertPtr(obj2, &argp3, SWIGTYPE_p_csVector3,  0  | 0);
   if (!SWIG_IsOK(res3)) {
-    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "iGraphics2D_Draw3DLine" "', argument " "3"" of type '" "csVector3 const &""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "iGraphics2D_DrawLineProjected" "', argument " "3"" of type '" "csVector3 const &""'"); 
   }
   if (!argp3) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "iGraphics2D_Draw3DLine" "', argument " "3"" of type '" "csVector3 const &""'"); 
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "iGraphics2D_DrawLineProjected" "', argument " "3"" of type '" "csVector3 const &""'"); 
   }
   arg3 = reinterpret_cast< csVector3 * >(argp3);
   ecode4 = SWIG_AsVal_float(obj3, &val4);
   if (!SWIG_IsOK(ecode4)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "iGraphics2D_Draw3DLine" "', argument " "4"" of type '" "float""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "iGraphics2D_DrawLineProjected" "', argument " "4"" of type '" "float""'");
   } 
   arg4 = static_cast< float >(val4);
   ecode5 = SWIG_AsVal_int(obj4, &val5);
   if (!SWIG_IsOK(ecode5)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode5), "in method '" "iGraphics2D_Draw3DLine" "', argument " "5"" of type '" "int""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode5), "in method '" "iGraphics2D_DrawLineProjected" "', argument " "5"" of type '" "int""'");
   } 
   arg5 = static_cast< int >(val5);
-  (arg1)->Draw3DLine((csVector3 const &)*arg2,(csVector3 const &)*arg3,arg4,arg5);
+  (arg1)->DrawLineProjected((csVector3 const &)*arg2,(csVector3 const &)*arg3,arg4,arg5);
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
@@ -6540,7 +6540,7 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_iGraphics2D_Draw3DLine__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_iGraphics2D_DrawLineProjected__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   iGraphics2D *arg1 = (iGraphics2D *) 0 ;
   csVector3 *arg2 = 0 ;
@@ -6563,42 +6563,42 @@ SWIGINTERN PyObject *_wrap_iGraphics2D_Draw3DLine__SWIG_1(PyObject *SWIGUNUSEDPA
   PyObject * obj3 = 0 ;
   PyObject * obj4 = 0 ;
   
-  if(!PyArg_UnpackTuple(args,(char *)"iGraphics2D_Draw3DLine",5,5,&obj0,&obj1,&obj2,&obj3,&obj4)) SWIG_fail;
+  if(!PyArg_UnpackTuple(args,(char *)"iGraphics2D_DrawLineProjected",5,5,&obj0,&obj1,&obj2,&obj3,&obj4)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_iGraphics2D, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "iGraphics2D_Draw3DLine" "', argument " "1"" of type '" "iGraphics2D *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "iGraphics2D_DrawLineProjected" "', argument " "1"" of type '" "iGraphics2D *""'"); 
   }
   arg1 = reinterpret_cast< iGraphics2D * >(argp1);
   res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_csVector3,  0  | 0);
   if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "iGraphics2D_Draw3DLine" "', argument " "2"" of type '" "csVector3 const &""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "iGraphics2D_DrawLineProjected" "', argument " "2"" of type '" "csVector3 const &""'"); 
   }
   if (!argp2) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "iGraphics2D_Draw3DLine" "', argument " "2"" of type '" "csVector3 const &""'"); 
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "iGraphics2D_DrawLineProjected" "', argument " "2"" of type '" "csVector3 const &""'"); 
   }
   arg2 = reinterpret_cast< csVector3 * >(argp2);
   res3 = SWIG_ConvertPtr(obj2, &argp3, SWIGTYPE_p_csVector3,  0  | 0);
   if (!SWIG_IsOK(res3)) {
-    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "iGraphics2D_Draw3DLine" "', argument " "3"" of type '" "csVector3 const &""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "iGraphics2D_DrawLineProjected" "', argument " "3"" of type '" "csVector3 const &""'"); 
   }
   if (!argp3) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "iGraphics2D_Draw3DLine" "', argument " "3"" of type '" "csVector3 const &""'"); 
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "iGraphics2D_DrawLineProjected" "', argument " "3"" of type '" "csVector3 const &""'"); 
   }
   arg3 = reinterpret_cast< csVector3 * >(argp3);
   res4 = SWIG_ConvertPtr(obj3, &argp4, SWIGTYPE_p_CS__Math__Matrix4,  0  | 0);
   if (!SWIG_IsOK(res4)) {
-    SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "iGraphics2D_Draw3DLine" "', argument " "4"" of type '" "CS::Math::Matrix4 const &""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "iGraphics2D_DrawLineProjected" "', argument " "4"" of type '" "CS::Math::Matrix4 const &""'"); 
   }
   if (!argp4) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "iGraphics2D_Draw3DLine" "', argument " "4"" of type '" "CS::Math::Matrix4 const &""'"); 
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "iGraphics2D_DrawLineProjected" "', argument " "4"" of type '" "CS::Math::Matrix4 const &""'"); 
   }
   arg4 = reinterpret_cast< CS::Math::Matrix4 * >(argp4);
   ecode5 = SWIG_AsVal_int(obj4, &val5);
   if (!SWIG_IsOK(ecode5)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode5), "in method '" "iGraphics2D_Draw3DLine" "', argument " "5"" of type '" "int""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode5), "in method '" "iGraphics2D_DrawLineProjected" "', argument " "5"" of type '" "int""'");
   } 
   arg5 = static_cast< int >(val5);
-  (arg1)->Draw3DLine((csVector3 const &)*arg2,(csVector3 const &)*arg3,(CS::Math::Matrix4 const &)*arg4,arg5);
+  (arg1)->DrawLineProjected((csVector3 const &)*arg2,(csVector3 const &)*arg3,(CS::Math::Matrix4 const &)*arg4,arg5);
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
@@ -6606,7 +6606,7 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_iGraphics2D_Draw3DLine(PyObject *self, PyObject *args) {
+SWIGINTERN PyObject *_wrap_iGraphics2D_DrawLineProjected(PyObject *self, PyObject *args) {
   int argc;
   PyObject *argv[6];
   int ii;
@@ -6636,7 +6636,7 @@ SWIGINTERN PyObject *_wrap_iGraphics2D_Draw3DLine(PyObject *self, PyObject *args
               _v = SWIG_CheckState(res);
             }
             if (_v) {
-              return _wrap_iGraphics2D_Draw3DLine__SWIG_1(self, args);
+              return _wrap_iGraphics2D_DrawLineProjected__SWIG_1(self, args);
             }
           }
         }
@@ -6665,7 +6665,7 @@ SWIGINTERN PyObject *_wrap_iGraphics2D_Draw3DLine(PyObject *self, PyObject *args
               _v = SWIG_CheckState(res);
             }
             if (_v) {
-              return _wrap_iGraphics2D_Draw3DLine__SWIG_0(self, args);
+              return _wrap_iGraphics2D_DrawLineProjected__SWIG_0(self, args);
             }
           }
         }
@@ -6674,10 +6674,10 @@ SWIGINTERN PyObject *_wrap_iGraphics2D_Draw3DLine(PyObject *self, PyObject *args
   }
   
 fail:
-  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number of arguments for overloaded function 'iGraphics2D_Draw3DLine'.\n"
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number of arguments for overloaded function 'iGraphics2D_DrawLineProjected'.\n"
     "  Possible C/C++ prototypes are:\n"
-    "    Draw3DLine(iGraphics2D *,csVector3 const &,csVector3 const &,float,int)\n"
-    "    Draw3DLine(iGraphics2D *,csVector3 const &,csVector3 const &,CS::Math::Matrix4 const &,int)\n");
+    "    DrawLineProjected(iGraphics2D *,csVector3 const &,csVector3 const &,float,int)\n"
+    "    DrawLineProjected(iGraphics2D *,csVector3 const &,csVector3 const &,CS::Math::Matrix4 const &,int)\n");
   return NULL;
 }
 
@@ -25275,7 +25275,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"iGraphics2D_GetHWRenderer", _wrap_iGraphics2D_GetHWRenderer, METH_VARARGS, NULL},
 	 { (char *)"iGraphics2D_GetHWGLVersion", _wrap_iGraphics2D_GetHWGLVersion, METH_VARARGS, NULL},
 	 { (char *)"iGraphics2D_GetHWVendor", _wrap_iGraphics2D_GetHWVendor, METH_VARARGS, NULL},
-	 { (char *)"iGraphics2D_Draw3DLine", _wrap_iGraphics2D_Draw3DLine, METH_VARARGS, NULL},
+	 { (char *)"iGraphics2D_DrawLineProjected", _wrap_iGraphics2D_DrawLineProjected, METH_VARARGS, NULL},
 	 { (char *)"iGraphics2D_scfGetVersion", _wrap_iGraphics2D_scfGetVersion, METH_VARARGS, NULL},
 	 { (char *)"delete_iGraphics2D", _wrap_delete_iGraphics2D, METH_VARARGS, NULL},
 	 { (char *)"iGraphics2D__PerformExtension", _wrap_iGraphics2D__PerformExtension, METH_VARARGS, NULL},
