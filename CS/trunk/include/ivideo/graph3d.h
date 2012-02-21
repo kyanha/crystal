@@ -808,7 +808,7 @@ namespace CS
  */
 struct iGraphics3D : public virtual iBase
 {
-  SCF_INTERFACE(iGraphics3D, 4, 0, 4);
+  SCF_INTERFACE(iGraphics3D, 4, 0, 3);
   
   /// Open the 3D graphics display.
   virtual bool Open () = 0;
