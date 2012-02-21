@@ -194,10 +194,11 @@ iLightIterator_swigregister(iLightIterator)
 iLightIterator_scfGetVersion = _iengine.iLightIterator_scfGetVersion
 
 CS_FOG_MODE_NONE = _iengine.CS_FOG_MODE_NONE
-CS_FOG_MODE_LINEAR = _iengine.CS_FOG_MODE_LINEAR
+CS_FOG_MODE_LINEAR_CRYSTALSPACE = _iengine.CS_FOG_MODE_LINEAR_CRYSTALSPACE
 CS_FOG_MODE_CRYSTALSPACE = _iengine.CS_FOG_MODE_CRYSTALSPACE
 CS_FOG_MODE_EXP = _iengine.CS_FOG_MODE_EXP
 CS_FOG_MODE_EXP2 = _iengine.CS_FOG_MODE_EXP2
+CS_FOG_MODE_LINEAR = _iengine.CS_FOG_MODE_LINEAR
 class csFog(object):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
     __repr__ = _swig_repr

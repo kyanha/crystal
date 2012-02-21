@@ -9879,7 +9879,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *GetHWRenderer = *cspacec::iGraphics2D_GetHWRenderer;
 *GetHWGLVersion = *cspacec::iGraphics2D_GetHWGLVersion;
 *GetHWVendor = *cspacec::iGraphics2D_GetHWVendor;
-*Draw3DLine = *cspacec::iGraphics2D_Draw3DLine;
+*DrawLineProjected = *cspacec::iGraphics2D_DrawLineProjected;
 *scfGetVersion = *cspacec::iGraphics2D_scfGetVersion;
 sub DESTROY {
     return unless $_[0]->isa('HASH');
@@ -23450,10 +23450,11 @@ sub CS_LIGHT_POINTLIGHT () { $cspacec::CS_LIGHT_POINTLIGHT }
 sub CS_LIGHT_DIRECTIONAL () { $cspacec::CS_LIGHT_DIRECTIONAL }
 sub CS_LIGHT_SPOTLIGHT () { $cspacec::CS_LIGHT_SPOTLIGHT }
 sub CS_FOG_MODE_NONE () { $cspacec::CS_FOG_MODE_NONE }
-sub CS_FOG_MODE_LINEAR () { $cspacec::CS_FOG_MODE_LINEAR }
+sub CS_FOG_MODE_LINEAR_CRYSTALSPACE () { $cspacec::CS_FOG_MODE_LINEAR_CRYSTALSPACE }
 sub CS_FOG_MODE_CRYSTALSPACE () { $cspacec::CS_FOG_MODE_CRYSTALSPACE }
 sub CS_FOG_MODE_EXP () { $cspacec::CS_FOG_MODE_EXP }
 sub CS_FOG_MODE_EXP2 () { $cspacec::CS_FOG_MODE_EXP2 }
+sub CS_FOG_MODE_LINEAR () { $cspacec::CS_FOG_MODE_LINEAR }
 sub CS_RENDPRI_SORT_NONE () { $cspacec::CS_RENDPRI_SORT_NONE }
 sub CS_RENDPRI_SORT_BACK2FRONT () { $cspacec::CS_RENDPRI_SORT_BACK2FRONT }
 sub CS_RENDPRI_SORT_FRONT2BACK () { $cspacec::CS_RENDPRI_SORT_FRONT2BACK }
