@@ -69,6 +69,31 @@ struct iBodyManager : public virtual iBase
   virtual void ClearBodySkeletons () = 0;
 };
 
+
+/**
+ * This iterator is returned by iBodySkeleton->GetBodyBones().
+ */
+struct iBoneIDIterator : public virtual iBase
+{
+  SCF_INTERFACE(iBoneIDIterator,0,0,1);
+
+  virtual bool HasNext () const = 0;
+  virtual BoneID Next () = 0;
+};
+
+
+/**
+ * This iterator is returned by iBodySkeleton->GetBodyChains().
+ */
+struct iBodyChainIterator : public virtual iBase
+{
+  SCF_INTERFACE(iBodyChainIterator,0,0,1);
+
+  virtual bool HasNext () const = 0;
+  virtual iBodyChain* Next () = 0;
+};
+
+
 /**
  * This class holds the physical description of the skeleton of an animated mesh.
  * For each relevant bone of the skeleton, one has to define an CS::Animation::iBodyBone that 
@@ -106,6 +131,21 @@ struct iBodySkeleton : public virtual iBase
   virtual iBodyBone* FindBodyBone (const char *name) const = 0;
 
   /**
+   * Find a body bone from the ID of the associated animesh bone.
+   */
+  virtual iBodyBone* FindBodyBone (BoneID bone) const = 0;
+
+  /**
+   * Get an iterator over all bones in this body.
+   */
+  virtual csPtr<iBoneIDIterator> GetBodyBones () const = 0;
+
+  /**
+   * Remove a body bone.
+   */
+  virtual void RemoveBodyBone (BoneID bone) = 0;
+
+  /**
    * Delete all body bones.
    */
   virtual void ClearBodyBones () = 0;
@@ -124,14 +164,19 @@ struct iBodySkeleton : public virtual iBase
   virtual iBodyChain* FindBodyChain (const char *name) const = 0;
 
   /**
+   * Get an iterator over all body chains in this body.
+   */
+  virtual csPtr<iBodyChainIterator> GetBodyChains () const = 0;
+
+  /**
+   * Remove a body chain.
+   */
+  virtual void RemoveBodyChain (const char* name) = 0;
+
+  /**
    * Delete all body chains.
    */
   virtual void ClearBodyChains () = 0;
-
-  /**
-   * Find a body bone from the ID of the associated animesh bone.
-   */
-  virtual iBodyBone* FindBodyBone (BoneID bone) const = 0;
 };
 
 /**

@@ -157,6 +157,35 @@ CS_PLUGIN_NAMESPACE_BEGIN(Bodymesh)
     return boneHash.Get (bone, 0);
   }
 
+  class BoneIDIterator : public scfImplementation1<BoneIDIterator, CS::Animation::iBoneIDIterator>
+  {
+  private:
+    csHash<csRef<BodyBone>, CS::Animation::BoneID>::ConstGlobalIterator it;
+
+  public:
+    BoneIDIterator (const csHash<csRef<BodyBone>, CS::Animation::BoneID>::ConstGlobalIterator& it) :
+      scfImplementationType (this), it (it) { }
+    virtual ~BoneIDIterator () { }
+    virtual bool HasNext () const { return it.HasNext (); }
+    virtual CS::Animation::BoneID Next ()
+    {
+      CS::Animation::BoneID boneID;
+      csRef<BodyBone> bone = it.Next (boneID);
+      return boneID;
+    }
+  };
+
+  csPtr<CS::Animation::iBoneIDIterator> BodySkeleton::GetBodyBones () const
+  {
+    BoneIDIterator* iterator = new BoneIDIterator (boneHash.GetIterator ());
+    return iterator;
+  }
+
+  void BodySkeleton::RemoveBodyBone (CS::Animation::BoneID bone)
+  {
+    boneHash.DeleteAll (bone);
+  }
+
   void BodySkeleton::ClearBodyBones ()
   {
     boneHash.DeleteAll ();
@@ -192,6 +221,35 @@ CS_PLUGIN_NAMESPACE_BEGIN(Bodymesh)
   CS::Animation::iBodyChain* BodySkeleton::FindBodyChain (const char *name) const
   {
     return chainHash.Get (name, 0);
+  }
+
+  class BodyChainIterator : public scfImplementation1<BodyChainIterator, CS::Animation::iBodyChainIterator>
+  {
+  private:
+    csHash<csRef<CS::Animation::iBodyChain>, csString>::ConstGlobalIterator it;
+
+  public:
+    BodyChainIterator (const csHash<csRef<CS::Animation::iBodyChain>, csString>::ConstGlobalIterator& it) :
+      scfImplementationType (this), it (it) { }
+    virtual ~BodyChainIterator () { }
+    virtual bool HasNext () const { return it.HasNext (); }
+    virtual CS::Animation::iBodyChain* Next ()
+    {
+      csString name;
+      csRef<CS::Animation::iBodyChain> chain = it.Next (name);
+      return chain;
+    }
+  };
+
+  csPtr<CS::Animation::iBodyChainIterator> BodySkeleton::GetBodyChains () const
+  {
+    BodyChainIterator* iterator = new BodyChainIterator (chainHash.GetIterator ());
+    return iterator;
+  }
+
+  void BodySkeleton::RemoveBodyChain (const char* name)
+  {
+    chainHash.DeleteAll (name);
   }
 
   void BodySkeleton::ClearBodyChains ()
