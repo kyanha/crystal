@@ -202,11 +202,15 @@ CS_PLUGIN_NAMESPACE_BEGIN(Bodymesh)
     virtual CS::Animation::iBodyBone* CreateBodyBone (CS::Animation::BoneID boneID);
     virtual CS::Animation::iBodyBone* FindBodyBone (const char *name) const;
     virtual CS::Animation::iBodyBone* FindBodyBone (CS::Animation::BoneID bone) const;
+    virtual csPtr<CS::Animation::iBoneIDIterator> GetBodyBones () const;
+    virtual void RemoveBodyBone (CS::Animation::BoneID bone);
     virtual void ClearBodyBones ();
 
     virtual CS::Animation::iBodyChain* CreateBodyChain (const char *name,
 							CS::Animation::BoneID rootBone);
     virtual CS::Animation::iBodyChain* FindBodyChain (const char *name) const;
+    virtual csPtr<CS::Animation::iBodyChainIterator> GetBodyChains () const;
+    virtual void RemoveBodyChain (const char* name);
     virtual void ClearBodyChains ();
 
   private:
