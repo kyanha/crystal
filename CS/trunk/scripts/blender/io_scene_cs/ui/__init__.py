@@ -8,3 +8,4 @@ from . import object
 from . import settings
 from . import image
 from . import material
+from . import portal
