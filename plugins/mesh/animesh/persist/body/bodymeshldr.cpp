@@ -21,13 +21,13 @@
 #include "cssysdef.h"
 
 #include "csutil/ref.h"
+#include "csgeom/plane3.h"
+#include "iengine/mesh.h"
+#include "imap/ldrctxt.h"
 #include "imap/services.h"
+#include "imesh/bodymesh.h"
 #include "iutil/document.h"
 #include "iutil/plugin.h"
-#include "imap/ldrctxt.h"
-#include "iengine/mesh.h"
-#include "imesh/bodymesh.h"
-#include "csgeom/sphere.h"
 
 #include "bodymeshldr.h"
 
@@ -340,15 +340,9 @@ CS_PLUGIN_NAMESPACE_BEGIN(BodyMeshLdr)
 	case XMLTOKEN_COLLIDERSPHERE:
 	  {
 	    float r = child->GetAttributeValueAsFloat ("radius");
-	    csVector3 v;
-	    if (!synldr->ParseVector (child, v))
-	    {
-	      synldr->ReportError (msgid, child, "Error processing box parameters");
-	      return false;
-	    }
 
 	    CS::Animation::iBodyBoneCollider* collider = bone->CreateBoneCollider ();
-	    collider->SetSphereGeometry (csSphere (v, r));
+	    collider->SetSphereGeometry (r);
 	    ParseColliderParams (child, collider);
 
 	    break;
