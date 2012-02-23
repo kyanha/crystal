@@ -19,15 +19,14 @@
 #include "cssysdef.h"
 #include "csutil/scf.h"
 
-#include <ivaria/reporter.h>
-#include <csgeom/transfrm.h>
-#include <csgeom/plane3.h>
-#include <csgeom/sphere.h>
-#include <iengine/scenenode.h>
-#include <iengine/movable.h>
-#include <iengine/mesh.h>
-#include <imesh/object.h>
-#include <imesh/animesh.h>
+#include "ivaria/reporter.h"
+#include "csgeom/transfrm.h"
+#include "csgeom/plane3.h"
+#include "iengine/scenenode.h"
+#include "iengine/movable.h"
+#include "iengine/mesh.h"
+#include "imesh/object.h"
+#include "imesh/animesh.h"
 #include "ragdoll2.h"
 
 CS_PLUGIN_NAMESPACE_BEGIN(Ragdoll2)
@@ -618,12 +617,10 @@ void RagdollNode::UpdateBoneState (BoneData* boneData)
 
       case SPHERE_COLLIDER_GEOMETRY:
         {
-          csSphere sphere;
-          collider->GetSphereGeometry (sphere);
-          csRef<CS::Collisions::iColliderSphere> sp = collisionSystem->CreateColliderSphere (sphere.GetRadius ());
-          csOrthoTransform trans = collider->GetTransform ();
-          trans.SetOrigin (sphere.GetCenter ());
-          boneData->rigidBody->AddCollider (sp, trans);
+	  float radius;
+	  collider->GetSphereGeometry (radius);
+          csRef<CS::Collisions::iColliderSphere> sp = collisionSystem->CreateColliderSphere (radius);
+          boneData->rigidBody->AddCollider (sp, collider->GetTransform ());
           break;
         }
 
