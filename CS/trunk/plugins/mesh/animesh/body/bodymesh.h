@@ -33,7 +33,6 @@
 #include "ivaria/dynamics.h"
 #include <csgeom/matrix3.h>
 #include <csgeom/plane3.h>
-#include <csgeom/sphere.h>
 
 CS_PLUGIN_NAMESPACE_BEGIN(Bodymesh)
 {
@@ -118,7 +117,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(Bodymesh)
     virtual bool SetCylinderGeometry (float length, float radius);
     virtual bool SetMeshGeometry (iMeshWrapper *mesh);
     virtual bool SetPlaneGeometry (const csPlane3 &plane);
-    virtual bool SetSphereGeometry (const csSphere &sphere);
+    virtual bool SetSphereGeometry (float radius);
  
     virtual csColliderGeometryType GetGeometryType () const;
 
@@ -128,7 +127,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(Bodymesh)
     virtual bool GetCylinderGeometry (float &length, float &radius) const;
     virtual bool GetMeshGeometry (iMeshWrapper *&mesh) const;
     virtual bool GetPlaneGeometry (csPlane3 &plane) const;
-    virtual bool GetSphereGeometry (csSphere &sphere) const;
+    virtual bool GetSphereGeometry (float &radius) const;
 
     virtual void SetTransform (const csOrthoTransform &transform);
     virtual csOrthoTransform GetTransform () const;
@@ -157,7 +156,6 @@ CS_PLUGIN_NAMESPACE_BEGIN(Bodymesh)
     float radius;
     csRef<iMeshWrapper> mesh;
     csPlane3 plane;
-    csSphere sphere;
   };
 
   class BodyManager : public scfImplementation2<BodyManager, 

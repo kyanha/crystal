@@ -479,7 +479,7 @@ struct iBodyBoneJoint : public virtual iBase
  */
 struct iBodyBoneCollider : public virtual iBase
 {
-  SCF_INTERFACE(CS::Animation::iBodyBoneCollider, 2, 0, 0);
+  SCF_INTERFACE(CS::Animation::iBodyBoneCollider, 2, 0, 1);
 
   /**
    * Set the collider as a box (defined by the given size).
@@ -514,7 +514,7 @@ struct iBodyBoneCollider : public virtual iBase
   /**
    * Set the collider as a sphere. 
    */
-  virtual bool SetSphereGeometry (const csSphere &sphere) = 0;
+  virtual bool SetSphereGeometry (float radius) = 0;
  
   /**
    * Get the type of the collider geometry.
@@ -561,7 +561,7 @@ struct iBodyBoneCollider : public virtual iBase
    * If this collider has a sphere geometry then the method will return true and
    * the sphere, otherwise it will return false.
    */
-  virtual bool GetSphereGeometry (csSphere &sphere) const = 0;
+  virtual bool GetSphereGeometry (float &radius) const = 0;
  
   /**
    * Set the local transform of this collider.

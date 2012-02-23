@@ -23,15 +23,14 @@
 #include "csutil/scf.h"
 
 #include "ragdoll.h"
-#include <ivaria/reporter.h>
-#include <csgeom/transfrm.h>
-#include <csgeom/plane3.h>
-#include <csgeom/sphere.h>
-#include <iengine/scenenode.h>
-#include <iengine/movable.h>
-#include <iengine/mesh.h>
-#include <imesh/object.h>
-#include <imesh/animesh.h>
+#include "ivaria/reporter.h"
+#include "csgeom/transfrm.h"
+#include "csgeom/plane3.h"
+#include "iengine/scenenode.h"
+#include "iengine/movable.h"
+#include "iengine/mesh.h"
+#include "imesh/object.h"
+#include "imesh/animesh.h"
 
 CS_PLUGIN_NAMESPACE_BEGIN(Ragdoll)
 {
@@ -644,11 +643,10 @@ CS_PLUGIN_NAMESPACE_BEGIN(Ragdoll)
 
 	case SPHERE_COLLIDER_GEOMETRY:
 	  {
-	    csSphere sphere;
-	    collider->GetSphereGeometry (sphere);
+	    float radius;
+	    collider->GetSphereGeometry (radius);
 	    boneData->rigidBody->AttachColliderSphere
-	      (sphere.GetRadius (),
-	       sphere.GetCenter () + collider->GetTransform ().GetOrigin (),
+	      (radius, collider->GetTransform ().GetOrigin (),
 	       collider->GetFriction (), collider->GetDensity (),
 	       collider->GetElasticity (), collider->GetSoftness ());
 	    break;

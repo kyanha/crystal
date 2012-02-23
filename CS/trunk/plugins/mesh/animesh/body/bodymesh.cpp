@@ -800,10 +800,10 @@ CS_PLUGIN_NAMESPACE_BEGIN(Bodymesh)
     return true;
   }
 
-  bool BodyBoneCollider::SetSphereGeometry (const csSphere &sphere)
+  bool BodyBoneCollider::SetSphereGeometry (float radius)
   {
     geometryType = SPHERE_COLLIDER_GEOMETRY;
-    this->sphere = sphere;
+    this->radius = radius;
     return true;
   }
  
@@ -868,12 +868,12 @@ CS_PLUGIN_NAMESPACE_BEGIN(Bodymesh)
     return true;
   }
 
-  bool BodyBoneCollider::GetSphereGeometry (csSphere &sphere) const
+  bool BodyBoneCollider::GetSphereGeometry (float &radius) const
   {
     if (geometryType != SPHERE_COLLIDER_GEOMETRY)
       return false;
 
-    sphere = this->sphere;
+    radius = this->radius;
     return true;
   }
 
