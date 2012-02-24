@@ -465,7 +465,7 @@ def ObjectDependencies(self, empty=None):
 
     # Mesh without any vertex or face and submesh of animesh
     # will not be exported as individual mesh factory
-    if not IsAnimeshSubmesh(self) \
+    if not IsAnimeshSubmesh(self) and not self.data.portal \
           and len(self.data.vertices)!=0 and len(self.data.faces)!=0:
       if self.data.shape_keys:
         # Mesh with morph targets ==> 'A' type (animesh)
