@@ -236,7 +236,7 @@ def AsCSSkeletonAnimations (self, func, depth, armatureObject, dontClose=False):
   # Actions
   exportedActions = []
   actions = []
-  if bpy.data.actions:
+  if armatureObjectCpy.animation_data and bpy.data.actions:
     actions = bpy.data.actions
 
   for action in actions:
