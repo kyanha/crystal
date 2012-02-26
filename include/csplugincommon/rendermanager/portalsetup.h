@@ -361,7 +361,7 @@ namespace RenderManager
 	    if (IsSimplePortal (portalFlags))
 	    {
 	      SetupSimplePortal (context, setupData, portal, sector,
-		  portalVerts2d, count, screenW, screenH, holder);
+		  portalVerts2d, portalVerts3d, count, screenW, screenH, holder);
 	    }
 	    else
 	    {
@@ -415,7 +415,7 @@ namespace RenderManager
     void SetupSimplePortal (
       typename RenderTreeType::ContextNode& context,
       ContextSetupData& setupData, iPortal* portal, iSector* sector,
-      csVector2* portalVerts2d, size_t count,
+      const csVector2* portalVerts2d, const csVector3* portalVerts3d, size_t count,
       int screenW, int screenH,
       typename RenderTreeType::ContextNode::PortalHolder& holder)
     {
@@ -451,6 +451,27 @@ namespace RenderManager
       contextFunction (*portalCtx, setupData);
 
       rview->RestoreRenderContext ();
+      
+      /* Create render mesh for the simple portal. Required to so simple
+       * portals in fogged sectors look right. */
+      if (rview->GetThisSector()->HasFog())
+      {
+        // Synthesize a render mesh for the portal plane
+        bool meshCreated;
+        csRenderMesh* rm = renderTree.GetPersistentData().rmHolder.GetUnusedMesh (
+                    meshCreated, rview->GetCurrentFrameNumber());
+        SetupPortalRM (rm, portal, sector, count, rview);
+        rm->buffers = GetPortalBuffers (count, portalVerts2d, portalVerts3d,
+                                        false);
+        rm->variablecontext.Invalidate();
+          
+        typename RenderTreeType::MeshNode::SingleMesh sm;
+        sm.meshObjSVs = 0;
+
+        CS::Graphics::RenderPriority renderPrio =
+            holder.meshWrapper->GetRenderPriority ();
+        context.AddRenderMesh (rm, renderPrio, sm);
+      }
     }
 
     void SetupHeavyPortal (
