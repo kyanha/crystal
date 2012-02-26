@@ -834,7 +834,7 @@ THREADED_CALLABLE_IMPL(csEngine, DeleteAll)
 
     const char* shaderPath;
     shaderPath = cfg->GetStr ("Engine.Shader.Portal", 
-      "/shader/std_lighting_portal.xml");
+      "/shader/portal/default.xml");
     csRef<iShader> portal_shader = LoadShader (docsys, shaderPath);
     if (!portal_shader.IsValid())
       Warn ("Default shader %s not available", shaderPath);
