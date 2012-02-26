@@ -512,7 +512,7 @@ private:
    * polygon will be extended horizontally.
    * Returns false if polygon is outside screen.
    */
-  bool DrawPolygon (csVector2* verts, size_t num_verts, csBox2Int& bbox);
+  bool DrawPolygon (const csVector2* verts, size_t num_verts, csBox2Int& bbox);
 
   //@{
   /**
@@ -586,7 +586,7 @@ public:
   /**
    * Insert an inverted polygon in the coverage buffer.
    */
-  void InsertPolygonInverted (csVector2* verts, size_t num_verts,
+  void InsertPolygonInverted (const csVector2* verts, size_t num_verts,
   	float max_depth);
 
   /**
@@ -595,7 +595,7 @@ public:
    * This function ignores depth in the depth buffer and should only
    * be used if you don't plan to use depth information nor depend on it.
    */
-  void InsertPolygonInvertedNoDepth (csVector2* verts, size_t num_verts);
+  void InsertPolygonInvertedNoDepth (const csVector2* verts, size_t num_verts);
 
   /**
    * Insert a polygon in the coverage buffer.
@@ -607,7 +607,7 @@ public:
    * <p>
    * If this function returns the number of tiles that were modified.
    */
-  int InsertPolygon (csVector2* verts, size_t num_verts, float max_depth,
+  int InsertPolygon (const csVector2* verts, size_t num_verts, float max_depth,
   	csBox2Int& modified_bbox);
 
   /**
@@ -621,7 +621,7 @@ public:
    * This function ignores depth in the depth buffer and should only
    * be used if you don't plan to use depth information nor depend on it.
    */
-  int InsertPolygonNoDepth (csVector2* verts, size_t num_verts);
+  int InsertPolygonNoDepth (const csVector2* verts, size_t num_verts);
 
   //@{
   /**

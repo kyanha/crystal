@@ -37,7 +37,7 @@ namespace CS
     StatusOutput statOut;
 
     // The currently clipped polygon
-    csVector2 *InP;
+    const csVector2 *InP;
     // Number of input vertices
     size_t InV;
     // The current output polygon
@@ -46,7 +46,7 @@ namespace CS
     size_t& OutV;
   public:
     EdgeClipper (const ClipLogic& clip, const StatusOutput& statOut,
-      csVector2 *InP, size_t InV, csVector2 *OutP, size_t& OutV) : 
+      const csVector2 *InP, size_t InV, csVector2 *OutP, size_t& OutV) : 
       clip (clip), statOut (statOut), InP (InP), InV (InV), OutP (OutP), 
       OutV (OutV)
     {

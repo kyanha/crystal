@@ -36,7 +36,7 @@
 static void BoundingBoxForView (iView *view, csBox2 *box)
 {
   size_t vertexCount = view->GetClipper()->GetVertexCount();
-  csVector2 *clip = view->GetClipper()->GetClipPoly();
+  const csVector2 *clip = view->GetClipper()->GetClipPoly();
   for (size_t i = 0; i < vertexCount; i++)
     box->AddBoundingVertex (clip[i]);
 }

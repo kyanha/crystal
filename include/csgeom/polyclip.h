@@ -100,15 +100,15 @@ public:
   { InitClipBox (); }
 
   /// Simple clipping
-  virtual uint8 Clip (csVector2 *InPolygon, size_t InCount,
+  virtual uint8 Clip (const csVector2 *InPolygon, size_t InCount,
     csVector2 *OutPolygon, size_t &OutCount);
 
   /// Clip and compute the bounding box
-  virtual uint8 Clip (csVector2 *InPolygon, size_t InCount,
+  virtual uint8 Clip (const csVector2 *InPolygon, size_t InCount,
     csVector2 *OutPolygon, size_t &OutCount, csBox2 &BoundingBox);
 
   /// Clip and return additional information about each vertex
-  virtual uint8 Clip (csVector2 *InPolygon, size_t InCount,
+  virtual uint8 Clip (const csVector2 *InPolygon, size_t InCount,
     csVector2 *OutPolygon, size_t &OutCount, csVertexStatus *OutStatus);
 
   /// Classify some bounding box against this clipper.
@@ -123,7 +123,7 @@ public:
   { return 4; }
 
   /// Return a pointer to the array of csVector2's
-  virtual csVector2 *GetClipPoly ()
+  virtual const csVector2 *GetClipPoly ()
   { return ClipBox; }
 
   virtual ClipperType GetClipperType() const { return clipperBox; }
@@ -144,7 +144,7 @@ class CS_CRYSTALSPACE_EXPORT csPolygonClipper : public csClipper
   /// Equation for all edges of clipping polygon
   csVector2 *ClipData;
   /// Clipper polygon itself
-  csVector2 *ClipPoly;
+  const csVector2 *ClipPoly;
   /// A pointer to the pooled polygon (so that we can free it later).
   csPoly2D *ClipPoly2D;
   /// Number of vertices in clipper polygon
@@ -160,21 +160,21 @@ public:
   csPolygonClipper (csPoly2D *Clipper, bool mirror = false,
     bool copy = false);
   /// Create a polygon clipper object from a set of 2D vectors.
-  csPolygonClipper (csVector2 *Clipper, size_t Count, bool mirror = false,
+  csPolygonClipper (const csVector2 *Clipper, size_t Count, bool mirror = false,
     bool copy = false);
   /// Destroy the polygon clipper object.
   virtual ~csPolygonClipper ();
 
   /// Simple clipping
-  virtual uint8 Clip (csVector2 *InPolygon, size_t InCount,
+  virtual uint8 Clip (const csVector2 *InPolygon, size_t InCount,
     csVector2 *OutPolygon, size_t &OutCount);
 
   /// Clip and compute the bounding box
-  virtual uint8 Clip (csVector2 *InPolygon, size_t InCount,
+  virtual uint8 Clip (const csVector2 *InPolygon, size_t InCount,
     csVector2 *OutPolygon, size_t &OutCount, csBox2 &BoundingBox);
 
   /// Clip and return additional information about each vertex
-  virtual uint8 Clip (csVector2 *InPolygon, size_t InCount,
+  virtual uint8 Clip (const csVector2 *InPolygon, size_t InCount,
     csVector2 *OutPolygon, size_t &OutCount, csVertexStatus *OutStatus);
 
   /// Classify some bounding box against this clipper.
@@ -187,7 +187,7 @@ public:
   virtual size_t GetVertexCount () { return ClipPolyVertices; }
 
   /// Return a pointer to the array of csVector2's
-  virtual csVector2 *GetClipPoly ()
+  virtual const csVector2 *GetClipPoly ()
   { return ClipPoly; }
 
   virtual ClipperType GetClipperType() const { return clipperPoly; }

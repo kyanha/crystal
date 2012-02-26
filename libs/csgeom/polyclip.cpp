@@ -203,7 +203,7 @@ int csBoxClipper::ClassifyBox (const csBox2 &box)
 }
 
 uint8 csBoxClipper::Clip (
-  csVector2 *InPolygon,
+  const csVector2 *InPolygon,
   size_t InCount,
   csVector2 *OutPolygon,
   size_t &OutCount)
@@ -219,7 +219,7 @@ uint8 csBoxClipper::Clip (
 }
 
 uint8 csBoxClipper::Clip (
-  csVector2 *InPolygon,
+  const csVector2 *InPolygon,
   size_t InCount,
   csVector2 *OutPolygon,
   size_t &OutCount,
@@ -238,7 +238,7 @@ uint8 csBoxClipper::Clip (
 }
 
 uint8 csBoxClipper::Clip (
-  csVector2 *InPolygon,
+  const csVector2 *InPolygon,
   size_t InCount,
   csVector2 *OutPolygon,
   size_t &OutCount,
@@ -277,16 +277,17 @@ csPolygonClipper::csPolygonClipper (
   {
     ClipPoly2D = polypool->Alloc ();
     ClipPoly2D->MakeRoom (Count * 2);
-    ClipPoly = ClipPoly2D->GetVertices ();
-    ClipData = ClipPoly + Count;
+    csVector2* ClipPoly_new = ClipPoly2D->GetVertices ();
+    ClipData = ClipPoly_new + Count;
 
     size_t vert;
     if (mirror)
       for (vert = 0; vert < Count; vert++)
-        ClipPoly[Count - 1 - vert] = (*Clipper)[vert];
+        ClipPoly_new[Count - 1 - vert] = (*Clipper)[vert];
     else
       for (vert = 0; vert < Count; vert++)
-        ClipPoly[vert] = (*Clipper)[vert];
+        ClipPoly_new[vert] = (*Clipper)[vert];
+    ClipPoly = ClipPoly_new;
   }
   else
   {
@@ -299,7 +300,7 @@ csPolygonClipper::csPolygonClipper (
 }
 
 csPolygonClipper::csPolygonClipper (
-  csVector2 *Clipper,
+  const csVector2 *Clipper,
   size_t Count,
   bool mirror,
   bool copy) :
@@ -311,15 +312,16 @@ csPolygonClipper::csPolygonClipper (
   {
     ClipPoly2D = polypool->Alloc ();
     ClipPoly2D->MakeRoom (Count * 2);
-    ClipPoly = ClipPoly2D->GetVertices ();
-    ClipData = ClipPoly + Count;
+    csVector2* ClipPoly_new = ClipPoly2D->GetVertices ();
+    ClipData = ClipPoly_new + Count;
 
     size_t vert;
     if (mirror)
       for (vert = 0; vert < Count; vert++)
-        ClipPoly[Count - 1 - vert] = Clipper[vert];
+        ClipPoly_new[Count - 1 - vert] = Clipper[vert];
     else
-      for (vert = 0; vert < Count; vert++) ClipPoly[vert] = Clipper[vert];
+      for (vert = 0; vert < Count; vert++) ClipPoly_new[vert] = Clipper[vert];
+    ClipPoly = ClipPoly_new;
   }
   else
   {
@@ -380,7 +382,7 @@ bool csPolygonClipper::IsInside (const csVector2 &v)
 }
 
 uint8 csPolygonClipper::Clip (
-  csVector2 *InPolygon,
+  const csVector2 *InPolygon,
   size_t InCount,
   csVector2 *OutPolygon,
   size_t &OutCount)
@@ -395,7 +397,7 @@ uint8 csPolygonClipper::Clip (
 }
 
 uint8 csPolygonClipper::Clip (
-  csVector2 *InPolygon,
+  const csVector2 *InPolygon,
   size_t InCount,
   csVector2 *OutPolygon,
   size_t &OutCount,
@@ -417,7 +419,7 @@ uint8 csPolygonClipper::Clip (
 }
 
 uint8 csPolygonClipper::Clip (
-  csVector2 *InPolygon,
+  const csVector2 *InPolygon,
   size_t InCount,
   csVector2 *OutPolygon,
   size_t &OutCount,

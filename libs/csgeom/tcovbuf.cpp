@@ -1830,7 +1830,7 @@ void csTiledCoverageBuffer::DrawLine (int x1, int y1, int x2, int y2,
   }
 }
 
-bool csTiledCoverageBuffer::DrawPolygon (csVector2* verts, size_t num_verts,
+bool csTiledCoverageBuffer::DrawPolygon (const csVector2* verts, size_t num_verts,
 	csBox2Int& bbox)
 {
   size_t i, j;
@@ -2332,7 +2332,7 @@ bool csTiledCoverageBuffer::TestPolygon (csVector2* verts, size_t num_verts,
   return rc;
 }
 
-void csTiledCoverageBuffer::InsertPolygonInverted (csVector2* verts,
+void csTiledCoverageBuffer::InsertPolygonInverted (const csVector2* verts,
 	size_t num_verts, float max_depth)
 {
   csBox2Int bbox;
@@ -2353,7 +2353,7 @@ void csTiledCoverageBuffer::InsertPolygonInverted (csVector2* verts,
   }
 }
 
-void csTiledCoverageBuffer::InsertPolygonInvertedNoDepth (csVector2* verts,
+void csTiledCoverageBuffer::InsertPolygonInvertedNoDepth (const csVector2* verts,
 	size_t num_verts)
 {
   csBox2Int bbox;
@@ -2374,7 +2374,7 @@ void csTiledCoverageBuffer::InsertPolygonInvertedNoDepth (csVector2* verts,
   }
 }
 
-int csTiledCoverageBuffer::InsertPolygon (csVector2* verts, size_t num_verts,
+int csTiledCoverageBuffer::InsertPolygon (const csVector2* verts, size_t num_verts,
 	float max_depth, csBox2Int& modified_bbox)
 {
   csBox2Int bbox;
@@ -2413,7 +2413,7 @@ int csTiledCoverageBuffer::InsertPolygon (csVector2* verts, size_t num_verts,
   return modified;
 }
 
-int csTiledCoverageBuffer::InsertPolygonNoDepth (csVector2* verts,
+int csTiledCoverageBuffer::InsertPolygonNoDepth (const csVector2* verts,
 	size_t num_verts)
 {
   csBox2Int bbox;

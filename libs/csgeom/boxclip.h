@@ -41,7 +41,7 @@ namespace CS
     const csBox2& region;
     
     // The currently clipped polygon
-    csVector2 *InP;
+    const csVector2 *InP;
     // Number of input vertices
     size_t InV;
     // The current output polygon
@@ -136,7 +136,7 @@ namespace CS
   public:
     BoxClipper (const BoxTest& boxTest, const StatusOutput& statOut,
       const csBox2& region,
-      csVector2 *InP, size_t InV, csVector2 *OutP) : 
+      const csVector2 *InP, size_t InV, csVector2 *OutP) : 
       boxTest (boxTest), statOut (statOut), region (region),
       InP (InP), InV (InV), OutP (OutP), OutV (-1)
     {
@@ -146,7 +146,7 @@ namespace CS
       // Temporary storage for intermediate polygons
       csVector2 TempPoly [MAX_OUTPUT_VERTICES];
       // The currently clipped polygon
-      csVector2 *InP = this->InP;
+      const csVector2 *InP = this->InP;
       // Number of input vertices
       size_t InV = this->InV;
       // The current output polygon
