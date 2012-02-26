@@ -99,7 +99,7 @@ struct iClipper2D : public virtual iBase
    * to contain space at least for #MAX_OUTPUT_VERTICES elements.
    * \return One of \link #CS_CLIP_OUTSIDE CS_CLIP_*\endlink.
    */
-  virtual uint8 Clip (csVector2 *InPolygon, size_t InCount,
+  virtual uint8 Clip (const csVector2 *InPolygon, size_t InCount,
     csVector2 *OutPolygon, size_t &OutCount) = 0;
 
   /**
@@ -110,7 +110,7 @@ struct iClipper2D : public virtual iBase
    * minimal rectangle that contains the output polygon.
    * \return One of \link #CS_CLIP_OUTSIDE CS_CLIP_*\endlink.
    */
-  virtual uint8 Clip (csVector2 *InPolygon, size_t InCount,
+  virtual uint8 Clip (const csVector2 *InPolygon, size_t InCount,
     csVector2 *OutPolygon, size_t &OutCount, csBox2 &BoundingBox) = 0;
 
   /**
@@ -122,7 +122,7 @@ struct iClipper2D : public virtual iBase
    * #MAX_OUTPUT_VERTICES elements.
    * \return One of \link #CS_CLIP_OUTSIDE CS_CLIP_*\endlink.
    */
-  virtual uint8 Clip (csVector2 *InPolygon, size_t InCount,
+  virtual uint8 Clip (const csVector2 *InPolygon, size_t InCount,
     csVector2 *OutPolygon, size_t &OutCount, csVertexStatus *OutStatus) = 0;
 
   /**
@@ -148,7 +148,7 @@ struct iClipper2D : public virtual iBase
   virtual size_t GetVertexCount () = 0;
 
   /// Return a pointer to the array of csVector2's
-  virtual csVector2 *GetClipPoly () = 0;
+  virtual const csVector2 *GetClipPoly () = 0;
 
   /// The type of a clipper
   enum ClipperType

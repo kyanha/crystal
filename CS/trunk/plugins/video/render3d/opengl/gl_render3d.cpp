@@ -408,7 +408,7 @@ void csGLGraphics3D::CalculateFrustum ()
     size_t nv = clipper->GetVertexCount ();
     csVector3 v3;
     v3.z = 1;
-    csVector2* v = clipper->GetClipPoly ();
+    const csVector2* v = clipper->GetClipPoly ();
     size_t i;
     for (i = 0 ; i < nv ; i++)
     {
@@ -457,7 +457,7 @@ void csGLGraphics3D::SetupStencil ()
       stencilclipnum = 1;
     }
     size_t nv = clipper->GetVertexCount ();
-    csVector2* v = clipper->GetClipPoly ();
+    const csVector2* v = clipper->GetClipPoly ();
 
     statecache->SetShadeModel (GL_FLAT);
 
@@ -3203,7 +3203,7 @@ void csGLGraphics3D::SetClipper (iClipper2D* clipper, int cliptype)
 	old2dClip.xmax, old2dClip.ymax);
     hasOld2dClip = true;
 
-    csVector2* clippoly = clipper->GetClipPoly ();
+    const csVector2* clippoly = clipper->GetClipPoly ();
     csBox2 scissorbox;
     scissorbox.AddBoundingVertex (clippoly[0]);
     for (i=1; i<clipper->GetVertexCount (); i++)

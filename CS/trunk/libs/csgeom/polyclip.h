@@ -47,24 +47,24 @@ namespace CS
     StatusOutput statOut;
 
     // The currently clipped polygon
-    csVector2 *InP;
+    const csVector2 *InP;
     // Number of input vertices
     size_t InV;
     // The current output polygon
     csVector2 *OutP;
     // Number of output vertices
     size_t OutV;
-    csVector2* ClipPoly;
-    csVector2* ClipData;
+    const csVector2* ClipPoly;
+    const csVector2* ClipData;
     size_t ClipPolyVertices;
     
     struct ClipPolyEdge
     {
-      csVector2* ClipPoly;
-      csVector2* ClipData;
+      const csVector2* ClipPoly;
+      const csVector2* ClipData;
       size_t edge;
       
-      ClipPolyEdge (csVector2* ClipPoly, csVector2* ClipData, size_t edge) :
+      ClipPolyEdge (const csVector2* ClipPoly, const csVector2* ClipData, size_t edge) :
 	ClipPoly (ClipPoly), ClipData (ClipData), edge (edge)
       {
       }
@@ -99,8 +99,8 @@ namespace CS
     };
   public:
     PolyClipper (const StatusOutput& statOut,
-      csVector2 *InP, size_t InV, csVector2 *OutP,
-      size_t ClipPolyVertices, csVector2* ClipPoly, csVector2* ClipData) : 
+      const csVector2 *InP, size_t InV, csVector2 *OutP,
+      size_t ClipPolyVertices, const csVector2* ClipPoly, const csVector2* ClipData) : 
       statOut (statOut), InP (InP), InV (InV), OutP (OutP), OutV (0),
       ClipPoly (ClipPoly), ClipData (ClipData), 
       ClipPolyVertices (ClipPolyVertices)
@@ -111,7 +111,7 @@ namespace CS
       // Temporary storage for intermediate polygons
       csVector2 TempPoly [MAX_OUTPUT_VERTICES];
       // The currently clipped polygon
-      csVector2 *InP = this->InP;
+      const csVector2 *InP = this->InP;
       // Number of input vertices
       size_t InV = this->InV;
       // The current output polygon
