@@ -233,6 +233,8 @@ private:
   void print_cons (const cons*) const;
   /// Dump the opcode list
   void print_ops (const oper_array&) const;
+  /// String representation of a single argument
+  const char* oper_arg_str (const oper_arg&) const;
   /// Dump the result of an operation
   void print_result (const oper_arg&) const;
 
@@ -253,6 +255,8 @@ private:
   mutable csString errorMsg;
   void ParseError (const char* message, ...) const;
   void EvalError (const char* message, ...) const;
+
+  mutable csString* tmpOperArgStr;
 public:
   csShaderExpression (iObjectRegistry*);
   ~csShaderExpression ();
