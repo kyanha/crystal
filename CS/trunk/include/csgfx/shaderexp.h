@@ -76,7 +76,7 @@ public:
   struct oper 
   {
     uint8 opcode, acc;
-    oper_arg arg1, arg2;
+    oper_arg arg1, arg2, arg3;
   };
 
   typedef csArray<oper> oper_array;
@@ -128,6 +128,10 @@ private:
   /// Evaluate away constant values 
   bool eval_const (cons*&);
 
+  /// Helper function: resolve an argument if it's a variable
+  bool resolve_arg (oper_arg& arg);
+  /// Evaluate an operator and 3 arguments
+  bool eval_oper (int oper, oper_arg arg1, oper_arg arg2, oper_arg arg3, oper_arg& output);
   /// Evaluate an operator and 2 arguments
   bool eval_oper (int oper, oper_arg arg1, oper_arg arg2, oper_arg& output);
   /// Evaluate an operator with a single argument
@@ -213,14 +217,17 @@ private:
   /// Internal set vector element 1 and 2
   bool eval_selt12 (const oper_arg& arg1, const oper_arg& arg2,
   	oper_arg & output) const;
+  /// Internal set vector element 3
+  bool eval_selt3 (const oper_arg & arg1, const oper_arg & arg2,
+    oper_arg& output) const;
   /// Internal set vector element 3 and 4
   bool eval_selt34 (const oper_arg & arg1, const oper_arg & arg2,
-  	oper_arg& output) const;
+  	const oper_arg & arg3, oper_arg& output) const;
   /// Internal load operator
   bool eval_load (const oper_arg& arg1, oper_arg& output) const;
   /// Internal select operator
   bool eval_select (const oper_arg& arg1, const oper_arg& arg2,
-    oper_arg& output) const;
+    const oper_arg& arg3, oper_arg& output) const;
 
   /// Evaluate a variable into an oper_arg
   bool eval_variable (csShaderVariable*, oper_arg& out);
