@@ -192,6 +192,35 @@ public:
 
 namespace CS
 {
+  /**
+   * Convenience wrapper for csHashComputer<T>::ComputeHash().
+   */
+  template<typename T>
+  static inline uint HashCompute (const T& val)
+  {
+      return csHashComputer<T>::ComputeHash (val);
+  }
+
+  /**
+   * Combine two hash values into one.
+   * Convenient when e.g. hashing an array, or when explicitly hashing over the
+   * fields of a struct.
+   *
+   * Example:
+   * \code
+   * uint hash (0);
+   * for (size_i i = 0; i < myArray.GetSize(); i++)
+   * {
+   *   CS::HashCombine (hash, CS::HashCompute (myArray[i]));
+   * }
+   * \endcode
+   */
+  static inline void HashCombine (uint& hash, uint nextHash)
+  {
+    // Taken from boost::hash_combine
+    hash ^= nextHash + 0x9e3779b9 + (hash<<6) + (hash>>2);
+  }
+
   namespace Utility
   {
 
