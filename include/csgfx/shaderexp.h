@@ -71,12 +71,16 @@ public:
     
     csVector4 vec4;
     CS::Math::Matrix4 matrix;
+
+    uint GetHash() const;
   };
 
   struct oper 
   {
     uint8 opcode, acc;
     oper_arg arg1, arg2, arg3;
+
+    uint GetHash() const;
   };
 
   typedef csArray<oper> oper_array;
@@ -125,8 +129,16 @@ private:
   /// Compile an IF pseudo-op
   bool compile_if (const cons*, int& acc_top, int acc);
 
-  /// Evaluate away constant values 
+  /**\name Optimization functions
+   * @{ */
+  /// Evaluate away constant values, build operations array
   bool eval_const (cons*&);
+  /**
+   * Eliminate common subexpressions
+   * \returns Whether an optimization was applied
+   */
+  bool optimize_cse (oper_array&);
+  /** @} */
 
   /// Helper function: resolve an argument if it's a variable
   bool resolve_arg (oper_arg& arg);

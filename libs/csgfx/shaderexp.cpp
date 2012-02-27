@@ -25,6 +25,7 @@ Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 #include <math.h>
 #include <ctype.h>
 
+#include "csutil/hashr.h"
 #include "csutil/scanstr.h"
 #include "csutil/scfarray.h"
 #include "csutil/stringconv.h"
@@ -231,6 +232,67 @@ struct cons : public CS::Memory::CustomAllocated
   cons () : cdr (0), cdr_rev (0) {}
 };
 
+template<>
+class csComparator<csShaderExpression::oper_arg>
+{
+public:
+  static int Compare (csShaderExpression::oper_arg const& r1, csShaderExpression::oper_arg const& r2)
+  {
+    if (r1.type != r2.type) return r2.type - r1.type;
+
+    switch (r1.type)
+    {
+    case TYPE_NUMBER:
+      return csComparator<float>::Compare (r1.num, r2.num);
+    case TYPE_VECTOR2:
+    case TYPE_VECTOR3:
+    case TYPE_VECTOR4:
+      return csComparatorStruct<csVector4>::Compare (r1.vec4, r2.vec4);
+    case TYPE_VARIABLE:
+      {
+        if (r1.var.id != r2.var.id) return r2.var.id - r1.var.id;
+        if (r1.var.indices || r2.var.indices)
+        {
+          if (!r1.var.indices) return -1;
+          if (!r2.var.indices) return 1;
+          size_t n1 (*r1.var.indices);
+          size_t n2 (*r2.var.indices);
+          if (n1 != n2) return n2 - n1;
+          return memcmp (r1.var.indices+1, r2.var.indices+1, n1*sizeof(size_t));
+        }
+        return 0;
+      }
+    case TYPE_MATRIX:
+      return csComparatorStruct<CS::Math::Matrix4>::Compare (r1.matrix, r2.matrix);
+    case TYPE_ACCUM:
+      return r2.acc - r1.acc;
+    case TYPE_OPER:
+      return r2.oper - r1.oper;
+    case TYPE_CONS:
+      return r2.cell - r1.cell;
+    }
+
+    return 0;
+  }
+};
+
+template<>
+class csComparator<csShaderExpression::oper>
+{
+public:
+  static int Compare (csShaderExpression::oper const& r1, csShaderExpression::oper const& r2)
+  {
+    if (r1.opcode != r2.opcode) return r2.opcode - r1.opcode;
+    if (r1.acc != r2.acc) return r2.acc - r1.acc;
+    int cmp;
+    cmp = csComparator<csShaderExpression::oper_arg>::Compare (r1.arg1, r2.arg1);
+    if (cmp != 0) return cmp;
+    cmp = csComparator<csShaderExpression::oper_arg>::Compare (r1.arg2, r2.arg2);
+    if (cmp != 0) return cmp;
+    return 0;
+  }
+};
+
 struct op_args_info 
 {
   int min_args; /* -1 means no limit */
@@ -431,7 +493,7 @@ bool csShaderExpression::Parse (iDocumentNode* node)
 
 #if SHADEREXP_DEBUG & SHADEREXP_DEBUG_PARSE
   print_cons (head);
-  csPrintf ("\n***************\n");
+  csPrintf ("\n******* ^^ parsed cons ^^ ********\n");
 #endif
 
   if (!eval_const (head))
@@ -445,7 +507,7 @@ bool csShaderExpression::Parse (iDocumentNode* node)
 
 #if SHADEREXP_DEBUG & SHADEREXP_DEBUG_PARSE
   print_cons (head);
-  csPrintf( "\n***************\n");
+  csPrintf( "\n******* ^^ after eval_const ^^ ********\n");
 #endif
 
   int acc_top = 0;
@@ -461,6 +523,15 @@ bool csShaderExpression::Parse (iDocumentNode* node)
 #if SHADEREXP_DEBUG & SHADEREXP_DEBUG_PARSE
   print_ops (opcodes);
 #endif
+
+  if (optimize_cse (opcodes))
+  {
+  #if SHADEREXP_DEBUG & SHADEREXP_DEBUG_PARSE
+    csPrintf( "******* ^^ after compile_cons ^^ ********\n");
+    print_ops (opcodes);
+    csPrintf( "******* ^^ after optimize_cse ^^ ********\n");
+  #endif
+  }
 
   opcodes.ShrinkBestFit ();
 
@@ -838,6 +909,125 @@ bool csShaderExpression::eval_const (cons*& head)
   }
 
   return true;
+}
+
+namespace
+{
+  class RegisterRenameHelper
+  {
+    csBitArray usedRegs;
+    csHashReversible<int, int> mappedRegs;
+
+    int NextAvailableReg()
+    {
+      size_t bit (usedRegs.GetFirstBitUnset ());
+      if (bit == csArrayItemNotFound)
+      {
+        bit = usedRegs.GetSize();
+        usedRegs.SetSize (bit+1);
+      }
+      usedRegs.SetBit (bit);
+      return int (bit);
+    }
+  public:
+    int MapOutputReg (int reg)
+    {
+      int* mappedReg (mappedRegs.GetElementPointer (reg));
+      if (mappedReg) return *mappedReg;
+
+      int newReg (NextAvailableReg());
+      mappedRegs.Put (reg, newReg);
+      return newReg;
+    }
+    int MapInputReg (int reg)
+    {
+      int* mappedReg (mappedRegs.GetElementPointer (reg));
+      if (mappedReg) return *mappedReg;
+
+      int newReg (NextAvailableReg());
+      mappedRegs.Put (reg, newReg);
+      return newReg;
+    }
+    void MarkRegisterAvailable (int reg)
+    {
+      const int* k;
+      while ((k = mappedRegs.GetKeyPointer (reg)))
+        mappedRegs.DeleteAll (*k);
+      usedRegs.ClearBit (reg);
+    }
+
+    size_t NumUsedRegs ()
+    {
+      return usedRegs.GetSize();
+    }
+  };
+}
+
+bool csShaderExpression::optimize_cse (oper_array& ops)
+{
+  bool did_optimize (false);
+  oper_array new_ops;
+  /* How this works:
+   * We have a hash keyed by operations, value is output accum.
+   * For each op, we look if it is in the hash. If it is, it means
+   * we have already computed it, some time ago; remove the current op
+   * and add an entry to the accumulator substitution table so any instance
+   * of the 'old' output value is replaced with the new.
+   */
+  csHashReversible<int, oper> previousOps;
+  csHashReversible<int, int> accumSubstitutions;
+  int nextAcc (0);
+  size_t i (0);
+  while (i < ops.GetSize())
+  {
+    oper testOp (ops[i]);
+    int outAcc (testOp.acc);
+    testOp.acc = -1;
+    if (testOp.arg1.type == TYPE_ACCUM)
+      testOp.arg1.acc = accumSubstitutions.Get (testOp.arg1.acc, testOp.arg1.acc);
+    if (testOp.arg2.type == TYPE_ACCUM)
+      testOp.arg2.acc = accumSubstitutions.Get (testOp.arg2.acc, testOp.arg2.acc);
+    if (testOp.arg3.type == TYPE_ACCUM)
+      testOp.arg3.acc = accumSubstitutions.Get (testOp.arg3.acc, testOp.arg3.acc);
+
+    int* prevAccum = previousOps.GetElementPointer (testOp);
+    if (prevAccum)
+    {
+      accumSubstitutions.PutUnique (outAcc, *prevAccum);
+      did_optimize = true;
+    }
+    else
+    {
+      previousOps.PutUnique (testOp, nextAcc);
+      accumSubstitutions.PutUnique (outAcc, nextAcc);
+      testOp.acc = nextAcc;
+      new_ops.Push (testOp);
+      nextAcc++;
+    }
+    i++;
+  }
+  if (did_optimize)
+  {
+    /* We effectively assigned an individual output reg to each op in the
+     * previous step, so we need to do register renaming here. */
+    RegisterRenameHelper renameHelper;
+    for (size_t o = new_ops.GetSize(); o-- > 0; )
+    {
+      oper& op (new_ops[o]);
+      op.acc = renameHelper.MapOutputReg (op.acc);
+      renameHelper.MarkRegisterAvailable (op.acc);
+      if (op.arg1.type == TYPE_ACCUM)
+        op.arg1.acc = renameHelper.MapInputReg (op.arg1.acc);
+      if (op.arg2.type == TYPE_ACCUM)
+        op.arg2.acc = renameHelper.MapInputReg (op.arg2.acc);
+      if (op.arg3.type == TYPE_ACCUM)
+        op.arg3.acc = renameHelper.MapInputReg (op.arg3.acc);
+    }
+
+    ops = new_ops;
+    accstack.SetSize (renameHelper.NumUsedRegs());
+  }
+  return did_optimize;
 }
 
 bool csShaderExpression::eval_variable (csShaderVariable* var, oper_arg& out)
@@ -2888,4 +3078,49 @@ const size_t xmlTypeTokenNum = sizeof (xmlTypeTokens) / sizeof (TokenTabEntry);
 csStringID csShaderExpression::GetXmlType (const char* token)
 {
   return GetTokenID (xmlTypeTokens, xmlTypeTokenNum, token);
+}
+
+//---------------------------------------------------------------------------
+
+uint csShaderExpression::oper_arg::GetHash() const
+{
+  switch (type)
+  {
+  case TYPE_NUMBER:
+    return CS::HashCompute (num);
+  case TYPE_VECTOR2:
+  case TYPE_VECTOR3:
+  case TYPE_VECTOR4:
+    return csHashCompute (reinterpret_cast<const char*> (&vec4), sizeof (vec4));
+  case TYPE_VARIABLE:
+    {
+      uint hash (CS::HashCompute (var.id));
+      if (var.indices)
+      {
+        size_t n = var.indices[0];
+        size_t* index = var.indices + 1;
+        for (size_t i = 0; i < n; i++)
+        {
+          CS::HashCombine (hash, CS::HashCompute (index[i]));
+        }
+      }
+      return hash;
+    }
+  case TYPE_MATRIX:
+    return csHashCompute (reinterpret_cast<const char*> (&matrix), sizeof (matrix));
+  case TYPE_ACCUM:
+    return acc;
+  }
+
+  return ~0u;
+}
+
+uint csShaderExpression::oper::GetHash() const
+{
+  uint hash (CS::HashCompute (opcode));
+  CS::HashCombine (hash, CS::HashCompute (acc));
+  CS::HashCombine (hash, CS::HashCompute (arg1));
+  CS::HashCombine (hash, CS::HashCompute (arg2));
+  CS::HashCombine (hash, CS::HashCompute (arg3));
+  return hash;
 }
