@@ -343,13 +343,14 @@ using namespace CMPNS;
 CS_LEAKGUARD_IMPLEMENT (csShaderExpression);
 
 csShaderExpression::csShaderExpression (iObjectRegistry* objr) :
-  stack (0), svIndicesScratch (32), accstack_max (0)
+  stack (0), svIndicesScratch (32), accstack_max (0), tmpOperArgStr (nullptr)
 {
   obj_reg = objr;
 }
 
 csShaderExpression::~csShaderExpression ()
 {
+  delete tmpOperArgStr;
 }
 
 void csShaderExpression::ParseError (const char* message, ...) const
@@ -2591,85 +2592,58 @@ void csShaderExpression::print_ops (const oper_array& ops) const
 
     if (op.arg1.type != TYPE_INVALID)
     {
-      switch (op.arg1.type)
-      {
-      case TYPE_NUMBER:
-        csPrintf (" %f", op.arg1.num);
-        break;
-
-      case TYPE_VECTOR2:
-        csPrintf (" #(%f %f)", op.arg1.vec4.x, op.arg1.vec4.y);
-        break;
-
-      case TYPE_VECTOR3:
-        csPrintf (" #(%f %f %f)", op.arg1.vec4.x, op.arg1.vec4.y,
-                 op.arg1.vec4.z);
-        break;
-
-      case TYPE_VECTOR4:
-        csPrintf (" #(%f %f %f %f)", op.arg1.vec4.x, op.arg1.vec4.y,
-                 op.arg1.vec4.z, op.arg1.vec4.w);
-        break;
-
-      case TYPE_VARIABLE:
-        csPrintf (" %s", strset->Request(op.arg1.var.id));
-        break;
-
-      case TYPE_ACCUM:
-        csPrintf (" ACC%d", op.arg1.acc);
-        break;
-
-      case TYPE_INVALID:
-        csPrintf (" <invalid>");
-        break;
-
-      default:
-        csPrintf (" #<unknown type %" PRIu8 ">", op.arg1.type);
-      }
-
+      csPrintf (" %s", oper_arg_str (op.arg1));
     }
 
     if (op.arg2.type != TYPE_INVALID)
     {
-      switch (op.arg2.type)
-      {
-      case TYPE_NUMBER:
-        csPrintf (",%f", op.arg2.num);
-        break;
-
-      case TYPE_VECTOR2:
-        csPrintf (",#(%f %f)", op.arg2.vec4.x, op.arg2.vec4.y);
-        break;
-
-      case TYPE_VECTOR3:
-        csPrintf (",#(%f %f %f)", op.arg2.vec4.x, op.arg2.vec4.y,
-                 op.arg2.vec4.z);
-        break;
-
-      case TYPE_VECTOR4:
-        csPrintf (",#(%f %f %f %f)", op.arg2.vec4.x, op.arg2.vec4.y,
-                 op.arg2.vec4.z, op.arg2.vec4.w);
-        break;
-
-      case TYPE_VARIABLE:
-        csPrintf (",%s", strset->Request(op.arg2.var.id));
-        break;
-
-      case TYPE_ACCUM:
-        csPrintf (",ACC%d", op.arg2.acc);
-        break;
-        
-      case TYPE_INVALID:
-        csPrintf (",<invalid>");
-        break;
-
-      default:
-        csPrintf (",#<unknown type %" PRIu8 ">", op.arg2.type);
-      }
+      csPrintf (",%s", oper_arg_str (op.arg2));
     }
 
     csPrintf (" -> ACC%d\n", op.acc);
   }
+}
+
+const char* csShaderExpression::oper_arg_str (const oper_arg& arg) const
+{
+  if (!tmpOperArgStr) tmpOperArgStr = new csString;
+
+    switch (arg.type)
+    {
+    case TYPE_NUMBER:
+      tmpOperArgStr->Format ("%f", arg.num);
+      break;
+
+    case TYPE_VECTOR2:
+      tmpOperArgStr->Format ("#(%f %f)", arg.vec4.x, arg.vec4.y);
+      break;
+
+    case TYPE_VECTOR3:
+      tmpOperArgStr->Format ("#(%f %f %f)", arg.vec4.x, arg.vec4.y,
+                             arg.vec4.z);
+      break;
+
+    case TYPE_VECTOR4:
+      tmpOperArgStr->Format ("#(%f %f %f %f)", arg.vec4.x, arg.vec4.y,
+                             arg.vec4.z, arg.vec4.w);
+      break;
+
+    case TYPE_VARIABLE:
+      tmpOperArgStr->Format ("%s", strset->Request(arg.var.id));
+      break;
+
+    case TYPE_ACCUM:
+      tmpOperArgStr->Format ("ACC%d", arg.acc);
+      break;
+
+    case TYPE_INVALID:
+      tmpOperArgStr->Replace ("<invalid>");
+      break;
+
+    default:
+      tmpOperArgStr->Format ("#<unknown type %" PRIu8 ">", arg.type);
+    }
+    return *tmpOperArgStr;
 }
 
 void csShaderExpression::print_result (const oper_arg& arg) const
