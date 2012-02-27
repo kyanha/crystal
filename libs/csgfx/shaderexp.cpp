@@ -125,6 +125,7 @@ enum
 
   // Internal ops
   OP_INT_SELT12,
+  OP_INT_SELT3,
   OP_INT_SELT34,
   OP_INT_LOAD,
   OP_INT_SELECT,
@@ -178,6 +179,7 @@ static const char* const opNames[OP_LAST] = {
   "!ATOM",
   "!SEXP",
   "SELT12",
+  "SELT3",
   "SELT34",
   "LOAD",
   "SELECT"
@@ -508,9 +510,7 @@ bool csShaderExpression::Evaluate (csShaderVariable* var,
         break;
       }
     } 
-    else if ((op.arg2.type == TYPE_INVALID)
-        && (op.opcode != OP_INT_SELT34)) /* SELT34 is a special case: it accepts
-                                            a 2nd argument of type INVALID */
+    else if (op.arg2.type == TYPE_INVALID)
     {
       if (!eval_oper (op.opcode, op.arg1, accstack.Get (op.acc)))
       {
@@ -518,9 +518,17 @@ bool csShaderExpression::Evaluate (csShaderVariable* var,
         break;
       }
     } 
-    else 
+    else if (op.arg3.type == TYPE_INVALID)
     {
       if (!eval_oper (op.opcode, op.arg1, op.arg2, accstack.Get (op.acc)))
+      {
+        eval = false;
+        break;
+      }
+    }
+    else
+    {
+      if (!eval_oper (op.opcode, op.arg1, op.arg2, op.arg3, accstack.Get (op.acc)))
       {
         eval = false;
         break;
@@ -933,46 +941,54 @@ bool csShaderExpression::eval_argument (const oper_arg& arg,
   return true;
 }
 
+
+bool csShaderExpression::resolve_arg (oper_arg& arg)
+{
+  if (arg.type == TYPE_VARIABLE)
+  {
+    csShaderVariable* var = ResolveVar (arg.var);
+    if (!var)
+    {
+      EvalError ("Cannot resolve variable name %s in symbol table.",
+        CS::Quote::Single (strset->Request (arg.var.id)));
+
+      return false;
+    }
+
+    if (!eval_variable (var, arg))
+      return false;
+  }
+  else if (arg.type == TYPE_ACCUM)
+  {
+    arg = accstack.Get (arg.acc);
+  }
+  return true;
+}
+
+bool csShaderExpression::eval_oper (int oper, oper_arg arg1, oper_arg arg2,
+  oper_arg arg3, oper_arg& output)
+{
+  resolve_arg (arg1);
+  resolve_arg (arg2);
+  resolve_arg (arg3);
+
+  switch (oper)
+  {
+  case OP_INT_SELT34: return eval_selt34 (arg1, arg2, arg3, output);
+  case OP_INT_SELECT: return eval_select (arg1, arg2, arg3, output);
+
+  default:
+    EvalError ("Unknown multi-arg operator %s (%d).", GetOperName (oper), oper);
+  }
+
+  return false;
+}
+
 bool csShaderExpression::eval_oper (int oper, oper_arg arg1, oper_arg arg2,
   oper_arg& output)
 {
-  if (arg1.type == TYPE_VARIABLE)
-  {
-    csShaderVariable* var = ResolveVar (arg1.var);
-    if (!var)
-    {
-      EvalError ("Cannot resolve variable name %s in symbol table.", 
-        CS::Quote::Single (strset->Request (arg1.var.id)));
-
-      return false;
-    }
-
-    if (!eval_variable (var, arg1))
-      return false;
-  } 
-  else if (arg1.type == TYPE_ACCUM)
-  {
-    arg1 = accstack.Get (arg1.acc);
-  }
-
-  if (arg2.type == TYPE_VARIABLE)
-  {
-    csShaderVariable* var = ResolveVar (arg2.var);
-    if (!var)
-    {
-      EvalError ("Cannot resolve variable name %s in symbol table.", 
-        CS::Quote::Single (strset->Request (arg2.var.id)));
-
-      return false;
-    }
-
-    if (!eval_variable (var, arg2))
-      return false;
-  } 
-  else if (arg2.type == TYPE_ACCUM)
-  {
-    arg2 = accstack.Get (arg2.acc);
-  }
+  resolve_arg (arg1);
+  resolve_arg (arg2);
 
   switch (oper)
   {
@@ -996,8 +1012,7 @@ bool csShaderExpression::eval_oper (int oper, oper_arg arg1, oper_arg arg2,
   case OP_AND: return eval_and (arg1, arg2, output);
   case OP_OR: return eval_or (arg1, arg2, output);
   case OP_INT_SELT12: return eval_selt12 (arg1, arg2, output);
-  case OP_INT_SELT34: return eval_selt34 (arg1, arg2, output);
-  case OP_INT_SELECT: return eval_select (arg1, arg2, output);
+  case OP_INT_SELT3: return eval_selt3 (arg1, arg2, output);
 
   default:
     EvalError ("Unknown multi-arg operator %s (%d).", GetOperName (oper), oper);
@@ -1008,24 +1023,7 @@ bool csShaderExpression::eval_oper (int oper, oper_arg arg1, oper_arg arg2,
 
 bool csShaderExpression::eval_oper (int oper, oper_arg arg1, oper_arg& output)
 {
-  if (arg1.type == TYPE_VARIABLE)
-  {
-    csShaderVariable* var = ResolveVar (arg1.var);
-    if (!var)
-    {
-      EvalError ("Cannot resolve variable name %s in symbol table.", 
-        CS::Quote::Single (strset->Request (arg1.var.id)));
-
-      return false;
-    }
-
-    if (!eval_variable (var, arg1))
-      return false;
-  } 
-  else if (arg1.type == TYPE_ACCUM)
-  {
-    arg1 = accstack.Get (arg1.acc);
-  }
+  resolve_arg (arg1);
 
   switch (oper)
   {
@@ -1789,31 +1787,64 @@ bool csShaderExpression::eval_selt12 (const oper_arg& arg1,
   return true;
 }
 
-bool csShaderExpression::eval_selt34 (const oper_arg& arg1,
-  const oper_arg& arg2, oper_arg& output) const 
+bool csShaderExpression::eval_selt3 (const oper_arg& arg1,
+  const oper_arg& arg2, oper_arg& output) const
 {
-  if (arg1.type != TYPE_NUMBER)
+  if ((arg1.type != TYPE_VECTOR2)
+      && (arg1.type != TYPE_VECTOR3)
+      && (arg1.type != TYPE_VECTOR4))
   {
-    EvalError ("Arguments to selt34 aren't numbers.");
+    EvalError ("1st arguments to selt3 is not a vector.");
 
     return false;
   }
 
-  output.type = TYPE_VECTOR3;
-  output.vec4.z = arg1.num;
+  if (arg2.type != TYPE_NUMBER)
+  {
+    EvalError ("Value argument to selt3 is not a number.");
 
-  if (arg2.type == TYPE_INVALID) 
-    return true;
+    return false;
+  }
+
+  output.vec4 = arg1.vec4;
+  output.vec4.z = arg2.num;
+  output.type = arg1.type;
+  if (output.type == TYPE_VECTOR2)
+    output.type = TYPE_VECTOR3;
+
+  return true;
+}
+
+bool csShaderExpression::eval_selt34 (const oper_arg& arg1,
+  const oper_arg& arg2, const oper_arg& arg3, oper_arg& output) const
+{
+  if ((arg1.type != TYPE_VECTOR2)
+      && (arg1.type != TYPE_VECTOR3)
+      && (arg1.type != TYPE_VECTOR4))
+  {
+    EvalError ("1st arguments to selt34 is not a vector.");
+
+    return false;
+  }
 
   if (arg2.type != TYPE_NUMBER)
   {
-    EvalError ("Arguments to selt34 aren't numbers.");
+    EvalError ("1st value argument to selt34 is not a number.");
+
+    return false;
+  }
+
+  output.vec4.z = arg2.num;
+
+  if (arg3.type != TYPE_NUMBER)
+  {
+    EvalError ("2nd value argument to selt34 is not a number.");
 
     return false;
   }
 
   output.type = TYPE_VECTOR4;
-  output.vec4.w = arg2.num;
+  output.vec4.w = arg3.num;
 
   return true;
 }
@@ -1829,16 +1860,16 @@ bool csShaderExpression::eval_load (const oper_arg& arg1,
 }
 
 bool csShaderExpression::eval_select (const oper_arg& arg1,
-  const oper_arg& arg2, oper_arg& output) const 
+  const oper_arg& arg2, const oper_arg& arg3, oper_arg& output) const
 {
-  if (output.type != TYPE_NUMBER)
+  if (arg1.type != TYPE_NUMBER)
   {
     EvalError ("Selector is not a number.");
 
     return false;
   }
 
-  output = (output.num != 0) ? arg1 : arg2;
+  output = (arg1.num != 0) ? arg2 : arg3;
 
   return true;
 }
@@ -2252,6 +2283,7 @@ bool csShaderExpression::compile_cons (const cons* cell, int& acc_top)
 
     tmp.arg1 = cell->car;
     tmp.arg2.type = TYPE_INVALID;
+    tmp.arg3.type = TYPE_INVALID;
 
     opcodes.Push (tmp);
 
@@ -2287,6 +2319,7 @@ bool csShaderExpression::compile_cons (const cons* cell, int& acc_top)
 
     tmp.arg1.type = TYPE_INVALID;
     tmp.arg2.type = TYPE_INVALID;
+    tmp.arg3.type = TYPE_INVALID;
 
     opcodes.Push (tmp);
 
@@ -2314,6 +2347,7 @@ bool csShaderExpression::compile_cons (const cons* cell, int& acc_top)
         tmp.arg1.acc = this_acc;
         tmp.arg2.type = TYPE_ACCUM;
         tmp.arg2.acc = this_acc + 1;
+        tmp.arg3.type = TYPE_INVALID;
 
         acc_top--;
       }
@@ -2325,6 +2359,7 @@ bool csShaderExpression::compile_cons (const cons* cell, int& acc_top)
         tmp.arg1.acc = acc_top - 1;
 
         tmp.arg2.type = TYPE_INVALID;
+        tmp.arg3.type = TYPE_INVALID;
       }
       else
       {
@@ -2341,6 +2376,7 @@ bool csShaderExpression::compile_cons (const cons* cell, int& acc_top)
       tmp.arg1.type = TYPE_ACCUM;
       tmp.arg1.acc = this_acc;
       tmp.arg2 = cptr->car;
+      tmp.arg3.type = TYPE_INVALID;
     }
     else
     {
@@ -2350,6 +2386,7 @@ bool csShaderExpression::compile_cons (const cons* cell, int& acc_top)
         {
           tmp.arg1 = cptr->car;
           tmp.arg2 = cptr->cdr->car;
+          tmp.arg3.type = TYPE_INVALID;
 
           cptr = cptr->cdr;
         }
@@ -2358,12 +2395,14 @@ bool csShaderExpression::compile_cons (const cons* cell, int& acc_top)
           tmp.opcode = OP_INT_LOAD;
           tmp.arg1 = cptr->car;
           tmp.arg2.type = TYPE_INVALID;
+          tmp.arg3.type = TYPE_INVALID;
         }
       }
       else
       {
         tmp.arg1 = cptr->car;
         tmp.arg2.type = TYPE_INVALID;
+        tmp.arg3.type = TYPE_INVALID;
       }
 
       acc_top++;
@@ -2412,6 +2451,8 @@ bool csShaderExpression::compile_make_vector (const cons* cptr,
     tmp.arg2 = cptr->car;
   }
 
+  tmp.arg3.type = TYPE_INVALID;
+
   opcodes.Push (tmp);
 
   acc_top = this_acc + 1;
@@ -2422,32 +2463,10 @@ bool csShaderExpression::compile_make_vector (const cons* cptr,
     return true;
   }
 
-  tmp.opcode = OP_INT_SELT34;
+  tmp.opcode = OP_INT_SELT3;
   tmp.acc = this_acc;
-
-  if (cptr->car.type == TYPE_CONS)
-  {
-    tmp.arg1.type = TYPE_ACCUM;
-    tmp.arg1.acc = acc_top;
-
-    if (!compile_cons (cptr->car.cell, acc_top))
-      return false;
-  }
-  else
-  {
-    tmp.arg1 = cptr->car;
-  }
-
-  cptr = cptr->cdr;
-  if (!cptr)
-  {
-    acc_top = this_acc + 1;
-
-    tmp.arg2.type = TYPE_INVALID;
-    opcodes.Push (tmp);
-
-    return true;
-  }
+  tmp.arg1.type = TYPE_ACCUM;
+  tmp.arg1.acc = this_acc;
 
   if (cptr->car.type == TYPE_CONS)
   {
@@ -2460,6 +2479,31 @@ bool csShaderExpression::compile_make_vector (const cons* cptr,
   else
   {
     tmp.arg2 = cptr->car;
+  }
+
+  cptr = cptr->cdr;
+  if (!cptr)
+  {
+    acc_top = this_acc + 1;
+
+    tmp.arg3.type = TYPE_INVALID;
+    opcodes.Push (tmp);
+
+    return true;
+  }
+
+  tmp.opcode = OP_INT_SELT34;
+  if (cptr->car.type == TYPE_CONS)
+  {
+    tmp.arg3.type = TYPE_ACCUM;
+    tmp.arg3.acc = acc_top;
+
+    if (!compile_cons (cptr->car.cell, acc_top))
+      return false;
+  }
+  else
+  {
+    tmp.arg3 = cptr->car;
   }
 
   acc_top = this_acc + 1;
@@ -2478,21 +2522,8 @@ bool csShaderExpression::compile_if (const cons* cptr,
 
   tmp.opcode = OP_INT_SELECT;
   tmp.acc = this_acc;
-
-  cptr = cptr->cdr;
-
-  if (cptr->car.type == TYPE_CONS)
-  {
-    tmp.arg1.type = TYPE_ACCUM;
-    tmp.arg1.acc = acc_top;
-
-    if (!compile_cons (cptr->car.cell, acc_top))
-      return false;
-  }
-  else
-  {
-    tmp.arg1 = cptr->car;
-  }
+  tmp.arg1.type = TYPE_ACCUM;
+  tmp.arg1.acc = this_acc;
 
   cptr = cptr->cdr;
 
@@ -2507,6 +2538,21 @@ bool csShaderExpression::compile_if (const cons* cptr,
   else
   {
     tmp.arg2 = cptr->car;
+  }
+
+  cptr = cptr->cdr;
+
+  if (cptr->car.type == TYPE_CONS)
+  {
+    tmp.arg3.type = TYPE_ACCUM;
+    tmp.arg3.acc = acc_top;
+
+    if (!compile_cons (cptr->car.cell, acc_top))
+      return false;
+  }
+  else
+  {
+    tmp.arg3 = cptr->car;
   }
 
   opcodes.Push (tmp);
@@ -2598,6 +2644,11 @@ void csShaderExpression::print_ops (const oper_array& ops) const
     if (op.arg2.type != TYPE_INVALID)
     {
       csPrintf (",%s", oper_arg_str (op.arg2));
+    }
+
+    if (op.arg3.type != TYPE_INVALID)
+    {
+      csPrintf (",%s", oper_arg_str (op.arg3));
     }
 
     csPrintf (" -> ACC%d\n", op.acc);
