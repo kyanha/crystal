@@ -109,7 +109,9 @@ def WriteCSGroup(self, func, depth=0, use_imposter=False, dontClose=False):
       meshData.append(obCpy)
       # Generate mapping buffers
       mapVert, mapBuf = ob.data.GetCSMappingBuffer()
-      numCSVertices = 2*len(mapVert) if ob.data.show_double_sided else len(mapVert)
+      numCSVertices = len(mapVert)
+      if B2CS.properties.enableDoublesided and ob.data.show_double_sided:
+        numCSVertices = 2*len(mapVert)
       # Generate submeshes
       subMeshess.append(ob.data.GetSubMeshes(ob.name,mapBuf,indexV))
       mappingBuffers.append(mapBuf)
@@ -117,7 +119,7 @@ def WriteCSGroup(self, func, depth=0, use_imposter=False, dontClose=False):
       indexV += numCSVertices
 
       warning = "(WARNING: double sided mesh implies duplication of its vertices)" \
-          if ob.data.show_double_sided else ""
+          if B2CS.properties.enableDoublesided and ob.data.show_double_sided else ""
       print('number of CS vertices for mesh "%s" = %s  %s'%(ob.name,numCSVertices,warning))
 
   # Export the group of objects as a general mesh factory
