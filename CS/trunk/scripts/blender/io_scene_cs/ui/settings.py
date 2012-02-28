@@ -90,6 +90,8 @@ class RENDER_PT_csSettingsPanel(csSettingsPanel, bpy.types.Panel):
     layout = self.layout
     
     row = layout.row()
+    row.prop(B2CS.properties, "enableDoublesided")
+    row = layout.row()
     row.prop(B2CS.properties, "library")
     row = layout.row()
     row.prop(B2CS.properties, "exportPath")
@@ -120,20 +122,30 @@ elif not default_path.endswith(os.sep):
             
 B2CS.StringProperty( attr="exportPath",
         name="Export path",
-        description="Export path", default=default_path, subtype='DIR_PATH')
+        description="Export path", 
+        default=default_path, subtype='DIR_PATH')
         
 B2CS.BoolProperty( attr="console",
         name="Console",
-        description="Enable the '-console' flag of 'walktest'", default=True)
+        description="Enable the '-console' flag of 'walktest'", 
+        default=True)
         
 B2CS.BoolProperty( attr="verbose",
         name="Verbose",
-        description="Enable the '-verbose=-scf' flag of 'walktest'", default=True)
+        description="Enable the '-verbose=-scf' flag of 'walktest'", 
+        default=True)
 
 B2CS.BoolProperty( attr="silent",
         name="Silent",
-        description="Enable the '-silent' flag of 'walktest'", default=True)
+        description="Enable the '-silent' flag of 'walktest'", 
+        default=True)
 
 B2CS.BoolProperty( attr="library",
         name="Export as a CS library",
-        description="Export all mesh factories in a unique CS library file", default=False)
+        description="Export all mesh factories in a unique CS library file", 
+        default=False)
+
+B2CS.BoolProperty( attr="enableDoublesided",
+        name="Enable double sided meshes",
+        description="If unchecked, all meshes are exported as single sided",
+        default=False)
