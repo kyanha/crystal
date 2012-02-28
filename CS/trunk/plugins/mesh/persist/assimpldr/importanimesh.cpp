@@ -421,9 +421,6 @@ CS_PLUGIN_NAMESPACE_BEGIN(AssimpLoader)
 					    CS::Animation::BoneID parent,
 					    aiMatrix4x4 transform)
   {
-    // Accumulate the transform from the parent bone
-    transform = transform * node->mTransformation;
-
     // Create a bone if needed
     BoneData* boneData = animeshData->boneNodes[node->mName.data];
     if (boneData && boneData->isBone)
@@ -432,11 +429,14 @@ CS_PLUGIN_NAMESPACE_BEGIN(AssimpLoader)
       CS::Animation::iSkeletonFactory* skeletonFactory =
 	animeshData->factory->GetSkeletonFactory ();
       boneData->boneID = skeletonFactory->CreateBone (parent);
-      parent = boneData->boneID;
       skeletonFactory->SetBoneName (boneData->boneID, node->mName.data);
 
+      // Store the transform if the bone is a root bone
+      if (parent == CS::Animation::InvalidBoneID)
+	rootTransforms.Put (boneData->boneID, transform);
+      parent = boneData->boneID;
+
       // Compute the bone transform
-      // TODO: missing inverse mesh transform
       aiMatrix4x4 boneTransform = boneData->transform.Inverse ();
 
       // Convert it to a CS transform
@@ -462,6 +462,9 @@ CS_PLUGIN_NAMESPACE_BEGIN(AssimpLoader)
     }
 
     // TODO: else skip branch
+
+    // Accumulate the transform from the parent bone
+    transform = transform * node->mTransformation;
 
     // Import all subnodes
     for (unsigned int i = 0; i < node->mNumChildren; i++)
@@ -599,6 +602,17 @@ CS_PLUGIN_NAMESPACE_BEGIN(AssimpLoader)
 	}
       }
 
+      // If the bone is one of the root of the skeleton, then read its transform
+      aiVector3D rootScaling; 
+      aiQuaternion rootRotation;
+      aiVector3D rootPosition;
+      bool isRootBone = false;
+      if (skeletonFactory->GetBoneParent (animeshNode->boneID) == CS::Animation::InvalidBoneID)
+      {
+	isRootBone = true;
+	rootTransforms[animeshNode->boneID]->Decompose (rootScaling, rootRotation, rootPosition); 
+      }
+
       // Create the animation channel
       CS::Animation::ChannelID channelID = skeletonAnimation->AddChannel (animeshNode->boneID);
 
@@ -611,8 +625,14 @@ CS_PLUGIN_NAMESPACE_BEGIN(AssimpLoader)
 	float time = animation->mTicksPerSecond > SMALL_EPSILON ?
 	  key.mTime / animation->mTicksPerSecond : key.mTime;
 
-	// Add the keyframe
-	skeletonAnimation->AddOrSetKeyFrame (channelID, time, Assimp2CS (key.mValue));
+	// Add the keyframe (transform it at first if the bone is a root of the skeleton)
+	if (isRootBone)
+	{
+	  aiQuaternion q = key.mValue * rootRotation;
+	  skeletonAnimation->AddOrSetKeyFrame (channelID, time, Assimp2CS (q));
+	}
+
+	else skeletonAnimation->AddOrSetKeyFrame (channelID, time, Assimp2CS (key.mValue));
 	// TODO: the frames without position component are invalid
       }
 
@@ -625,9 +645,16 @@ CS_PLUGIN_NAMESPACE_BEGIN(AssimpLoader)
 	float time = animation->mTicksPerSecond > SMALL_EPSILON ?
 	  key.mTime / animation->mTicksPerSecond : key.mTime;
 
-	// Add the keyframe
+	// Add the keyframe (transform it at first if the bone is a root of the skeleton)
+	if (isRootBone)
+	{
+	  aiVector3D v = key.mValue + rootPosition;
+	  skeletonAnimation->AddOrSetKeyFrame (channelID, time, Assimp2CS (v));
+	}
+
 	// TODO: really need to scale the offset?
-	skeletonAnimation->AddOrSetKeyFrame (channelID, time, Assimp2CS (key.mValue));
+	else skeletonAnimation->AddOrSetKeyFrame (channelID, time, Assimp2CS (key.mValue));
+	// TODO: the frames without rotation component are invalid
       }
     }
   }
