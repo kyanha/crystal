@@ -257,6 +257,21 @@ def HasImposter(self):
 bpy.types.Group.HasImposter = HasImposter
 
 
+def CheckVisibility(self):
+  """ Return True if all objects composing the group are visible;
+      False otherwise
+  """
+  for ob in self.objects:
+    if ob.hide:
+      # There is only one visibility factor for all objects 
+      # composing a group => if one of them is hidden,
+      # they are all hidden
+      return False
+  return True
+
+bpy.types.Group.CheckVisibility = CheckVisibility
+
+
 def GroupDependencies(self):
   """ Get the materials and the textures associated with
       the objects composing the group
