@@ -82,12 +82,11 @@ def ExportWorld(path):
     if typ == 'A':
       # Animated meshes
       for name, fact in deps[typ].items():
-        if not fact.object.parent:
-          print('\nEXPORT OBJECT "%s" AS A CS ANIMATED MESH\n'%(fact.object.name))
-          print('Writing fact',fact.uname,':', Join(path, 'factories/', fact.object.name))
-          fact.AsCSRef(Write(f), 2, 'factories/')
-          # Export animesh factory
-          fact.AsCSLib(path, animesh=True)
+        print('\nEXPORT OBJECT "%s" AS A CS ANIMATED MESH\n'%(fact.object.name))
+        print('Writing fact',fact.uname,':', Join(path, 'factories/', fact.object.name))
+        fact.AsCSRef(Write(f), 2, 'factories/')
+        # Export animesh factory
+        fact.AsCSLib(path, animesh=True)
     elif typ == 'F':
       # General meshes
       for name, fact in deps[typ].items():
@@ -156,18 +155,17 @@ def ExportLibrary(path):
       # Animated meshes
       for name, fact in deps[typ].items():
         ob = fact.object
-        if not ob.parent:
-          print('\nEXPORT OBJECT "%s" AS A CS ANIMATED MESH\n'%(ob.name))
-          print('Writing fact',fact.uname,'in', Join(path, 'library'))
-          # Export animesh factory
-          fact.WriteCSAnimeshHeader(Write(f), 2, skelRef=False)
-          # Export skeleton and animations
-          if ob.type == 'ARMATURE' and ob.data.bones:
-            print('Exporting skeleton and animations: %s_rig'%(ob.name))
-            ob.data.AsCSSkelAnim(Write(f), 4, ob, dontClose=True)
-          # Export mesh buffers
-          fact.WriteCSMeshBuffers(Write(f), 2, path, animesh=True, dontClose=True)
-          Write(f)('  </meshfact>')
+        print('\nEXPORT OBJECT "%s" AS A CS ANIMATED MESH\n'%(ob.name))
+        print('Writing fact',fact.uname,'in', Join(path, 'library'))
+        # Export animesh factory
+        fact.WriteCSAnimeshHeader(Write(f), 2, skelRef=False)
+        # Export skeleton and animations
+        if ob.type == 'ARMATURE' and ob.data.bones:
+          print('Exporting skeleton and animations: %s_rig'%(ob.name))
+          ob.data.AsCSSkelAnim(Write(f), 4, ob, dontClose=True)
+        # Export mesh buffers
+        fact.WriteCSMeshBuffers(Write(f), 2, path, animesh=True, dontClose=True)
+        Write(f)('  </meshfact>')
     elif typ == 'F':
       # General meshes
       for name, fact in deps[typ].items():

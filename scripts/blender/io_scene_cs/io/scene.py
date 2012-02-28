@@ -17,6 +17,8 @@ def SceneDependencies(self):
   dependencies = EmptyDependencies()
 
   for ob in self.objects:
+    if not ob.IsExportable():
+      continue
     merge = False
     for group in ob.users_group:
       if group.doMerge:
@@ -42,8 +44,8 @@ def SceneAsCS(self, func, depth=0):
   objects = self.PortalsAsCS(func, depth)
 
   # Export lamps and objects (as instancies of factories)
-  for ob in [o for o in self.objects if o.type != 'CAMERA']:    
-    if not ob.parent or (ob.parent and ob.parent_type == 'BONE'):
+  for ob in [o for o in self.objects if o.type != 'CAMERA']:
+    if ob.IsExportable():
       if ob not in objects:
         group = ob.hasMergingGroup()
         if group:
@@ -147,11 +149,11 @@ bpy.types.Scene.PortalsAsCS = PortalsAsCS
 
 
 def GetCameras(self):
-  """ Get a list of all cameras of this scene
+  """ Get a list of all visible cameras of this scene
   """
   cameras = {}
   for ob in self.objects:
-    if ob.type == 'CAMERA':
+    if ob.type == 'CAMERA' and not ob.hide:
       cameras[ob.uname] = {'scene': self, 'camera': ob}
   return cameras
 
