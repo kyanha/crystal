@@ -42,12 +42,12 @@ CS_PLUGIN_NAMESPACE_BEGIN(AssimpLoader)
   /**
    * Type conversion
    */
-  inline csVector3 Assimp2CS (aiVector3D& v)
+  inline csVector3 Assimp2CS (const aiVector3D& v)
   {
     return csVector3 (v.x, v.y, v.z);
   }
 
-  inline csColor4 Assimp2CS (aiColor4D& c)
+  inline csColor4 Assimp2CS (const aiColor4D& c)
   {
     return csColor4 (c.r, c.g, c.b, c.a);
   }
@@ -57,7 +57,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(AssimpLoader)
     return csTriangle (t[0], t[1], t[2]);
   }
 
-  inline csQuaternion Assimp2CS (aiQuaternion& q)
+  inline csQuaternion Assimp2CS (const aiQuaternion& q)
   {
     return csQuaternion (q.x, q.y, q.z, q.w);
   }

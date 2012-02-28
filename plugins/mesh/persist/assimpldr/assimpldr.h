@@ -252,6 +252,9 @@ private:
     CS::Animation::BoneID boneID;
   };
   csHash<AnimeshNode, csString> animeshNodes;
+
+  // Array of transformations of the root bones of the animesh skeletons
+  csHash<aiMatrix4x4, CS::Animation::BoneID> rootTransforms;
 };
 
 }
