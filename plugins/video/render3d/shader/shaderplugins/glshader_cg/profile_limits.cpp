@@ -72,6 +72,12 @@ CS_PLUGIN_NAMESPACE_BEGIN(GLShaderCg)
     LIMIT(NumTemps, MAX_PROGRAM_TEMPORARIES_ARB, 32, UNLIMITED) \
   PROFILE_END(FP40)
 
+  // Extensions that influence profile behaviour - bit mask
+  enum
+  {
+    extARB_color_buffer_float = 1
+  };
+
   ProfileLimits::ProfileLimits (
     CS::PluginCommon::ShaderProgramPluginGL::HardwareVendor vendor,
     CGprofile profile)
