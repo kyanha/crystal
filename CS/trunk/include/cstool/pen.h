@@ -510,32 +510,35 @@ struct csPen3DCoordinatePair
 class CS_CRYSTALSPACE_EXPORT csPen3D
 {
 private:
-  /** The 3d context for drawing. */
+  /** The 3d context for drawing */
   csRef<iGraphics3D> g3d;
 
-  /** The 2d context for drawing. */
+  /** The 2d context for drawing */
   csRef<iGraphics2D> g2d;
 
-  /** The mesh that we reuse in developing the shapes we're making. */
+  /** The mesh that we reuse in developing the shapes we're making */
   csSimpleRenderMesh mesh;
 
-  /** The color we use. */
+  /** The color we use */
   csVector4 color;
 
-  /** The polygon index that we're generating. */
+  /** The polygon index that we're generating */
   csPolyIndexed poly_idx;
 
-  /** The polygon that we're generating. */
+  /** The polygon that we're generating */
   csPoly3D poly;
 
-  /** The color array generated for verts as we render. */
+  /** The color array generated for verts as we render */
   csDirtyAccessArray<csVector4> colors;
 
-  /** The texture coordinates are generated as we render too. */
+  /** The texture coordinates are generated as we render too */
   csDirtyAccessArray<csVector2> texcoords;
 
   /** A cache that can be used to store intermediate results */
   csPenCache* penCache;
+
+  /** Local to object transform */
+  csReversibleTransform local2object;
 
 protected:
   /**
@@ -592,9 +595,25 @@ public:
   void SetColor (const csColor4 &color);
 
   /**
-   * Set a transform.
+   * Set object to world transform. This is used only
+   * when actually drawing.
    */
   void SetTransform (const csReversibleTransform& trans);
+
+  /**
+   * Set the local to object transform. This is used at the
+   * time the primitives are rendered.
+   */
+  void SetLocal2ObjectTransform (const csReversibleTransform& trans)
+  {
+    local2object = trans;
+  }
+
+  /// Get the local to object transform.
+  const csReversibleTransform& GetLocal2ObjectTransform () const
+  {
+    return local2object;
+  }
 
   /**
    * Draws a single line.
