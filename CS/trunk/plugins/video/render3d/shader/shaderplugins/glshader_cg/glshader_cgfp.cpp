@@ -209,31 +209,18 @@ bool csShaderGLCGFP::TryCompile (uint loadFlags,
     testForUnused.Push ("PARAM__clip_out_packed_distances2_UNUSED");
   }
   unusedParams.DeleteAll();
-  /* When the ARB_color_buffer_float ext is present & used, the bindings may
-   * change when unused V2F values are removed; so the program needs to be
-   * built a 2nd time to get the “real” behavior.
-   * Without that ext, the bindings would stay the same, and one pass is enough. */
-  bool needTwoPasses (
-    (limits.fp.extensions & ProfileLimits::extARB_color_buffer_float) != 0);
-  if (needTwoPasses)
-  {
-    if (!DefaultLoadProgram (0, programStr, progFP, 
-        limits, (loadFlags & (~loadApplyVmap)) | loadFlagUnusedV2FForInit))
-      return false;
-    CollectUnusedParameters (unusedParams, testForUnused);
-    bool ret = DefaultLoadProgram (this, programStr, progFP, 
-      limits, loadFlags | loadFlagUnusedV2FForInit);
+  if (!DefaultLoadProgram (0, programStr, progFP, 
+      limits, (loadFlags & (~loadApplyVmap)) | loadFlagUnusedV2FForInit))
+    return false;
+  /* Compile twice to be able to filter out unused vertex2fragment stuff on 
+    * pass 2.
+    * @@@ FIXME: two passes are not always needed.
+    */
+  CollectUnusedParameters (unusedParams, testForUnused);
+  bool ret = DefaultLoadProgram (this, programStr, progFP, 
+    limits, loadFlags | loadFlagUnusedV2FForInit);
     
-    return ret;
-  }
-  else
-  {
-    if (!DefaultLoadProgram (0, programStr, progFP, 
-        limits, loadFlags | loadFlagUnusedV2FForInit))
-      return false;
-    CollectUnusedParameters (unusedParams, testForUnused);
-    return true;
-  }
+  return ret;
 }
 
 int csShaderGLCGFP::ResolveTU (const char* binding)
