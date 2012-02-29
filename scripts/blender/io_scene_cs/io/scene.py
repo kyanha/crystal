@@ -36,7 +36,7 @@ bpy.types.Scene.GetDependencies = SceneDependencies
 def SceneAsCS(self, func, depth=0):
   """ Write an xml decription of this scene: it is exported as a CS sector
       with a reference to all mesh, armature, group, lamp and portal objects
-      contained in this scene
+      contained in this scene (no reference to cameras and socket objects)
   """
   func(' '*depth +'<sector name="%s">'%(self.uname))
 
@@ -44,7 +44,8 @@ def SceneAsCS(self, func, depth=0):
   objects = self.PortalsAsCS(func, depth)
 
   # Export lamps and objects (as instancies of factories)
-  for ob in [o for o in self.objects if o.type != 'CAMERA']:
+  for ob in [o for o in self.objects \
+               if o.type!='CAMERA' and o.parent_type!='BONE']:
     if ob.IsExportable():
       if ob not in objects:
         group = ob.hasMergingGroup()

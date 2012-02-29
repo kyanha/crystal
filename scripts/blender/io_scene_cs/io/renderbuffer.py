@@ -139,14 +139,16 @@ class RenderBuffers:
       tface = ob.data.uv_textures.active.data if ob.data.uv_textures.active else None
       cface = ob.data.vertex_colors.active.data if ob.data.vertex_colors.active else None
 
+      # Get object's scale
+      if self.scales:
+        scale = self.scales[i]
+      else:
+        scale = ob.scale
+
       # For each vertex of this mesh
       for indexCS, indexBlender in enumerate(self.mappingVertices[i]):
         # Add the vertex coordinates to the CS position buffer
         pos = ob.data.vertices[indexBlender].co
-        if self.scales:
-          scale = self.scales[i]
-        else:
-          scale = ob.scale
         self.positionBuffer.AddElement(tuple(map(lambda j: scale[j]*pos[j], range(3))))
         if doubleSided:
           # Duplicate the vertex coordinates in case of a double sided mesh

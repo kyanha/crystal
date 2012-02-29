@@ -33,9 +33,8 @@ class Hierarchy:
     return "hier" + str(self.id)
 
   def AsCSRef(self, func, depth=0, dirName='factories/'):
-    if self.object.type == 'ARMATURE' and self.object.data.bones:
-      func(' '*depth +'<library>%s%s_rig</library>'%(dirName,self.object.name))
-    func(' '*depth +'<library>%s%s</library>'%(dirName,self.object.name))
+    if self.object.parent_type != 'BONE':
+      func(' '*depth +'<library>%s%s</library>'%(dirName,self.object.name))
 
   def GetDependencies(self):
     dependencies = EmptyDependencies()
