@@ -616,7 +616,11 @@ bpy.types.Object.HasImposter = HasImposter
 def GetScale(self):
   """ Get object scale
   """
-  if self.parent and self.parent.type == 'ARMATURE':
+  if self.parent and self.parent_type == 'BONE':
+    pscale = self.parent.scale    
+    oscale = self.scale
+    scale = Vector((pscale[0]*oscale[0], pscale[1]*oscale[1], pscale[2]*oscale[2]))
+  elif self.parent and self.parent.type == 'ARMATURE':
     scale = self.parent.scale
   else:
     scale = self.scale
