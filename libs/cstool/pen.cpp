@@ -850,7 +850,7 @@ void csPen3D::Start ()
 
 void csPen3D::AddVertex (const csVector3& v)
 {
-  poly_idx.AddVertex((int)poly.AddVertex(v));
+  poly_idx.AddVertex((int)poly.AddVertex(local2object * v));
   colors.Push(color);
 }
 
