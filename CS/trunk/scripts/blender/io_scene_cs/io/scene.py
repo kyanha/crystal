@@ -86,6 +86,10 @@ def PortalsAsCS(self, func, depth=0):
   portals = []
   for ob in [o for o in self.objects if o.type=='MESH' and o.data.portal]:
     portals.append(ob)
+    # Check if the portal is visible
+    if ob.hide:
+      continue
+
     # Check if the portal defines vertices
     if len(ob.data.vertices) == 0:
       print("\nWARNING: portal '%s' not exported: this mesh has no vertex"%(ob.name))
