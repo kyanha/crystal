@@ -17,6 +17,8 @@
 */
 
 #include "isotest.h"
+#include "imesh/gmeshskel2.h"
+#include "imesh/skeleton.h"
 
 CS_IMPLEMENT_APPLICATION
 
