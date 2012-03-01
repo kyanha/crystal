@@ -4903,6 +4903,27 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_iSkeleton_RecreateAnimationTree(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  CS::Animation::iSkeleton *arg1 = (CS::Animation::iSkeleton *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"iSkeleton_RecreateAnimationTree",1,1,&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_CS__Animation__iSkeleton, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "iSkeleton_RecreateAnimationTree" "', argument " "1"" of type '" "CS::Animation::iSkeleton *""'"); 
+  }
+  arg1 = reinterpret_cast< CS::Animation::iSkeleton * >(argp1);
+  (arg1)->RecreateAnimationTree();
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_iSkeleton_UpdateSkeleton(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   CS::Animation::iSkeleton *arg1 = (CS::Animation::iSkeleton *) 0 ;
@@ -17978,6 +17999,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"iSkeleton_GetAnimationPacket", _wrap_iSkeleton_GetAnimationPacket, METH_VARARGS, NULL},
 	 { (char *)"iSkeleton_SetAnimationPacket", _wrap_iSkeleton_SetAnimationPacket, METH_VARARGS, NULL},
 	 { (char *)"iSkeleton_RecreateSkeleton", _wrap_iSkeleton_RecreateSkeleton, METH_VARARGS, NULL},
+	 { (char *)"iSkeleton_RecreateAnimationTree", _wrap_iSkeleton_RecreateAnimationTree, METH_VARARGS, NULL},
 	 { (char *)"iSkeleton_UpdateSkeleton", _wrap_iSkeleton_UpdateSkeleton, METH_VARARGS, NULL},
 	 { (char *)"iSkeleton_GetSkeletonStateVersion", _wrap_iSkeleton_GetSkeletonStateVersion, METH_VARARGS, NULL},
 	 { (char *)"iSkeleton_SetAnimatedMesh", _wrap_iSkeleton_SetAnimatedMesh, METH_VARARGS, NULL},

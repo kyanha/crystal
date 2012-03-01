@@ -653,6 +653,8 @@ class csPen3D(object):
     def SetMixMode(*args): return _cstool.csPen3D_SetMixMode(*args)
     def SetColor(*args): return _cstool.csPen3D_SetColor(*args)
     def SetTransform(*args): return _cstool.csPen3D_SetTransform(*args)
+    def SetLocal2ObjectTransform(*args): return _cstool.csPen3D_SetLocal2ObjectTransform(*args)
+    def GetLocal2ObjectTransform(*args): return _cstool.csPen3D_GetLocal2ObjectTransform(*args)
     def DrawLine(*args): return _cstool.csPen3D_DrawLine(*args)
     def DrawLines(*args): return _cstool.csPen3D_DrawLines(*args)
     def DrawBox(*args): return _cstool.csPen3D_DrawBox(*args)

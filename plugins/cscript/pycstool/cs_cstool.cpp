@@ -21627,6 +21627,64 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_csPen3D_SetLocal2ObjectTransform(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  csPen3D *arg1 = (csPen3D *) 0 ;
+  csReversibleTransform *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"csPen3D_SetLocal2ObjectTransform",2,2,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_csPen3D, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "csPen3D_SetLocal2ObjectTransform" "', argument " "1"" of type '" "csPen3D *""'"); 
+  }
+  arg1 = reinterpret_cast< csPen3D * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_csReversibleTransform,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "csPen3D_SetLocal2ObjectTransform" "', argument " "2"" of type '" "csReversibleTransform const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "csPen3D_SetLocal2ObjectTransform" "', argument " "2"" of type '" "csReversibleTransform const &""'"); 
+  }
+  arg2 = reinterpret_cast< csReversibleTransform * >(argp2);
+  (arg1)->SetLocal2ObjectTransform((csReversibleTransform const &)*arg2);
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_csPen3D_GetLocal2ObjectTransform(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  csPen3D *arg1 = (csPen3D *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  csReversibleTransform *result = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"csPen3D_GetLocal2ObjectTransform",1,1,&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_csPen3D, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "csPen3D_GetLocal2ObjectTransform" "', argument " "1"" of type '" "csPen3D const *""'"); 
+  }
+  arg1 = reinterpret_cast< csPen3D * >(argp1);
+  {
+    csReversibleTransform const &_result_ref = ((csPen3D const *)arg1)->GetLocal2ObjectTransform();
+    result = (csReversibleTransform *) &_result_ref;
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_csReversibleTransform, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_csPen3D_DrawLine__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   csPen3D *arg1 = (csPen3D *) 0 ;
@@ -24860,6 +24918,8 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"csPen3D_SetMixMode", _wrap_csPen3D_SetMixMode, METH_VARARGS, NULL},
 	 { (char *)"csPen3D_SetColor", _wrap_csPen3D_SetColor, METH_VARARGS, NULL},
 	 { (char *)"csPen3D_SetTransform", _wrap_csPen3D_SetTransform, METH_VARARGS, NULL},
+	 { (char *)"csPen3D_SetLocal2ObjectTransform", _wrap_csPen3D_SetLocal2ObjectTransform, METH_VARARGS, NULL},
+	 { (char *)"csPen3D_GetLocal2ObjectTransform", _wrap_csPen3D_GetLocal2ObjectTransform, METH_VARARGS, NULL},
 	 { (char *)"csPen3D_DrawLine", _wrap_csPen3D_DrawLine, METH_VARARGS, NULL},
 	 { (char *)"csPen3D_DrawLines", _wrap_csPen3D_DrawLines, METH_VARARGS, NULL},
 	 { (char *)"csPen3D_DrawBox", _wrap_csPen3D_DrawBox, METH_VARARGS, NULL},
