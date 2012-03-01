@@ -22608,6 +22608,8 @@ sub DESTROY {
 *SetMixMode = *cspacec::csPen3D_SetMixMode;
 *SetColor = *cspacec::csPen3D_SetColor;
 *SetTransform = *cspacec::csPen3D_SetTransform;
+*SetLocal2ObjectTransform = *cspacec::csPen3D_SetLocal2ObjectTransform;
+*GetLocal2ObjectTransform = *cspacec::csPen3D_GetLocal2ObjectTransform;
 *DrawLine = *cspacec::csPen3D_DrawLine;
 *DrawLines = *cspacec::csPen3D_DrawLines;
 *DrawBox = *cspacec::csPen3D_DrawBox;

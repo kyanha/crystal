@@ -134,6 +134,7 @@ class iSkeleton(core.iBase):
     def GetAnimationPacket(*args): return _animation.iSkeleton_GetAnimationPacket(*args)
     def SetAnimationPacket(*args): return _animation.iSkeleton_SetAnimationPacket(*args)
     def RecreateSkeleton(*args): return _animation.iSkeleton_RecreateSkeleton(*args)
+    def RecreateAnimationTree(*args): return _animation.iSkeleton_RecreateAnimationTree(*args)
     def UpdateSkeleton(*args): return _animation.iSkeleton_UpdateSkeleton(*args)
     def GetSkeletonStateVersion(*args): return _animation.iSkeleton_GetSkeletonStateVersion(*args)
     def SetAnimatedMesh(*args): return _animation.iSkeleton_SetAnimatedMesh(*args)
