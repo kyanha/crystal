@@ -1,0 +1,92 @@
+@c -*-texinfo-*-
+@node io_scene_cs Portals, io_scene_cs Export Scenes, io_scene_cs Export Scenes, io_scene_cs Export Scenes
+@subsubsection Portal tool
+
+The @samp{Crystal Space Portal Tool} panel is found in the @samp{Object Data} context 
+of the @samp{Properties} window.
+
+@picturess{content,io_scene_cs,io_scene_cs_portal}
+
+@subsubheading Creating portals
+
+To define a portal, you must follow the correct procedure. Let's make a portal @code{P1} from 
+scene @code{S1} leading to a place @code{DEST1} in scene @code{S2}.
+@itemize @bullet
+@item
+Create the source mesh:
+@itemize @bullet
+@item
+Create and position a plane in scene @code{S1}: that mesh will correspond to your portal @code{P1}.
+@item
+Adjust orientation of portal @code{P1} so that its normal indicates the direction it should lead to,
+i.e. the direction to pass through the portal.
+@end itemize
+@item
+Create the destination mesh:
+@itemize @bullet
+@item
+Create a second mesh in scene @code{S2} corresponding to the destination of the portal. 
+@item
+Position the mesh and adjust its orientation so that the normal indicates 
+the viewing direction of the portal.
+@item
+Since only the coordinate system of the target mesh will be considered, 
+turn off the visibility of that object to prevent its export.
+@end itemize
+
+@picturess{content,io_scene_cs,io_scene_cs_portal_ex1}
+
+@item
+Select face @code{P1} and tag it as portal in the @samp{Crystal Space Portal Tool}.
+@item
+Type in the name of the Blender mesh this portal should link to, @code{DEST1} in this case.
+@item
+Ensure that the visibility of portal @code{P1} is active. 
+@item
+Your scene is now ready to be exported!
+@end itemize
+
+The portal we just created is a one-way portal. To obtain a bidirectional portal,
+the above procedure should be repeated with a portal @code{P2} defined in scene @code{S2} and 
+leading to destination @code{DEST2} in scene @code{S1}. Notice that if @code{P2} and @code{DEST2} 
+can be obtained by duplicating @code{DEST1} and @code{P1} respectively and updating their portal 
+properties, their orientations must then be modified to obtain inverted normals.
+
+@subsubheading Troubleshooting
+
+If some of the portals don't look ok while exporting Blender worlds, check that:
+
+@itemize @bullet
+@item
+the name of the destination mesh has been accepted, i.e. the error message
+@samp{ERROR: unknown mesh name} does not appear in the portal tool panel;
+@item
+there is no error message on the console;
+@item
+there is no duplicate portals;
+@item
+the normals are looking at the correct side;
+@item
+the portal visibility is correctly configured, i.e. source meshes should be visible and 
+destination meshes hidden.
+@end itemize
+
+If you still have a defective portal after you checked those points, it is
+highly probable that the orientation of the destination mesh is causing the problem. 
+A good hint is to define the target mesh with the same XYZ rotations as the source mesh. 
+Starting from that configuration, try to find the simplest way to rightly orient the 
+destination mesh (i.e. requiring a minimum number of rotations).
+
+@subsubheading Try the example file
+
+The file 
+@url{http://trac.crystalspace3d.org/trac/CS/browser/CSAssets/trunk/blender/portaltut.blend,
+portaltut.blend} defines three rooms, each of them situated 
+in a different scene. Two portals are defined to pass from the first room to the third
+one and two others to make the way back.
+
+Select your export path and run the world by pressing the @samp{Export and Run} button. 
+You should see something similar to this image:
+
+@picturess{content,io_scene_cs,portaltut_run}
+
