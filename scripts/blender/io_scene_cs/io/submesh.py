@@ -56,7 +56,8 @@ class SubMesh:
     if self.material:
       func(' '*depth +'  <material>'+self.material.uname+'</material>')
     if not animesh and self.image:
-      func(' '*depth +'  <shadervar type="texture" name="tex diffuse">%s</shadervar>'%(self.image.uname))
+      if not self.material or (self.material and not self.material.HasDiffuseTexture()):
+        func(' '*depth +'  <shadervar type="texture" name="tex diffuse">%s</shadervar>'%(self.image.uname))
     SubMesh.IndexBuffer(self.indices).AsCS(func, depth+2, animesh)
     func(' '*depth +'</submesh>')
 
