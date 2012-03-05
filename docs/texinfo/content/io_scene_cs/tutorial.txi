@@ -101,7 +101,7 @@ at least one camera,
 @item
 at least one light lighting your objects,
 @item
-some objects below the camera, to be used as a roof and in order for the @samp{walktest}'s
+some visible objects below the camera, to be used as a roof and in order for the @samp{walktest}'s
 camera to not fall into the void as soon as you start the map.
 @end itemize
 
@@ -110,9 +110,8 @@ the status message: @strong{EXPORTING complete} appears on the Blender console. 
 after that, the @samp{walktest} window should appear (otherwise, check the Blender console
 for some output message).
 
-Using the arrow keys, you will be able to move around your scene. Using the @samp{8} key
-you can deactivate the gravity and fly around. Note that @samp{walktest} has a lot of
-different keys and options, so you may want to have a look at the
+Using the arrow keys, you will be able to move around your scene. Note that @samp{walktest} 
+has a lot of different keys and options, so you may want to have a look at the
 @ref{Walktest, dedicated manual page} for that.
 
 @subsubheading If the 'walktest' window fails to open
@@ -130,16 +129,18 @@ Check that there are no errors in the
 Check if there is a light, and if it is close enough to your geometry.
 @item
 It is also possible that since the gravity is activated by default in walktest, the
-camera pans away from the set view too fast. Ensure that you press the @samp{8} key to
-deactivate gravity, or that you added a floor below you camera.
+camera pans away from the set view too fast. Ensure that you added a floor below 
+your camera.
 @item
 Check the console to ensure that your entire scene is being exported. Sometimes only the
-camera will be exported hence you will only see black. If you have this problem select all
-the objects in your scene (Hotkey @samp{A}) and then press @samp{Export and Run}.
+camera will be exported hence you will only see black. If you have this problem, ensure that
+the visibility of some objects is activated in the viewport. If so, you can also select 
+all the objects in your scene (Hotkey @samp{A}) and then press @samp{Export and Run}.
 @item
-Check that the normals from the objects are pointing in the correct direction. If you made a
-cube surrounding the player this usually means you need to reverse its normals (in Blender
-and in Edit mode, press the hotkey @samp{W} then select @samp{Flip Normals}).
+Check that the normals from the visible objects are pointing in the correct direction. 
+If you made a cube surrounding the player this usually means you need to reverse its 
+normals (in Blender and in Edit mode, press the hotkey @samp{W} then select 
+@samp{Flip Normals}).
 @end itemize
 
 
@@ -148,6 +149,8 @@ and in Edit mode, press the hotkey @samp{W} then select @samp{Flip Normals}).
 
 This section presents the main objects and files that are created when a Blender scene is
 exported.
+
+Beware! Only @strong{visible objects} will be exported by @code{io_scene_cs}.
 
 The sectors, portals, lights and cameras are all exported in the @file{world} file. This
 also means that they will be exported only if the @samp{Export as a CS library} option
@@ -167,19 +170,22 @@ but Blender has no matching concept for the portals.
 Each scene in Blender will therefore be exported as a different sector in the Crystal
 Space @file{world} file.
 
-The portals are not yet exported, this is a feature still in development.
+Check the portal tool page to learn more about the procedure to assign portals: 
+@menu
+* io_scene_cs Portals:: Portal tool
+@end menu
 
 @subsubheading Cameras
 
-All cameras in Blender will be exported as camera positions (i.e. @code{iCameraPosition} objects)
-in the Crystal Space @file{world} file. The name of the cameras is important since they
+All visible cameras in Blender will be exported as camera positions (i.e. @code{iCameraPosition} 
+objects) in the Crystal Space @file{world} file. The name of the cameras is important since they
 are exported in the alphabetical order of their name, with the first camera serving usually
 as the starting position in the Crystal Space scene.
 
 @subsubheading Lights
 
-All lamps in Blender will be exported as lights in Crystal Space. Whatever the lamp type used
-in Blender, the lamp will be exported as a point light.
+All visible lamps in Blender will be exported as lights in Crystal Space. Whatever the lamp 
+type used in Blender, the lamp will be exported as a point light.
 
 The parameters that get exported from a lamp are the distance (radius), the colour (RGB
 components) and the energy (brightness). The attenuation type and the other lamp properties
@@ -187,14 +193,14 @@ are ignored.
 
 @subsubheading Meshes and Mesh factories
 
-All the mesh objects that are present in the Blender scene will be exported, either as a
+All the mesh objects that are visible in the Blender scene will be exported, either as a
 @ref{io_scene_cs Export Genmesh, static mesh} or an @ref{io_scene_cs Export Animesh, animated mesh}.
 For each different mesh, a file containing the definition of the mesh factory will be generated
 in the @file{factories} directory. Each instance of the mesh will get an entry in the
 @file{world} file.
 
 You can parent objects in Blender and they will be exported as similar object hierachies
-in Crystal Space. 
+in Crystal Space.
 
 @subsubheading Materials and Textures
 
@@ -209,6 +215,7 @@ the subsurface scattering, the shadows, etc. Also, materials using the
 @url{http://wiki.blender.org/index.php/Doc:2.6/Manual/Composite_Nodes, node composition system}
 of Blender are not supported at all.
 
+@importss{content,io_scene_cs,portals.txi}
 
 @node io_scene_cs Export Genmesh, io_scene_cs Export Animesh, io_scene_cs Export Scenes, Blender
 @subsection Exporting Static Meshes
@@ -360,7 +367,7 @@ There are no restrictions on the number of sockets.
 
 @subsubheading Warning on socket objects attached to scaled armatures
 
-If you're planning to change the default scale of the armature used to attach socket objects, 
+If you're planning to change the default scale of the armature used to attach some objects, 
 you must first define the socket on the armature with its default scale of 1. Afterwards, 
 you can change the armature's scale: in the same way as Blender, the exported socket object 
 will be scaled proportionally to the armature.
@@ -389,8 +396,6 @@ Limited support of the camera properties
 @item
 Limited support of the material properties
 @item
-No support for portals
-@item
 No support for terrains
 @item
 No support for particles
@@ -400,4 +405,3 @@ No support for colliders, physical properties, and iBodySkeleton
 No support for trees of armatures: only the root armature is exported, not the children
 ones
 @end itemize
-
