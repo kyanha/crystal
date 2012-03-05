@@ -57,22 +57,20 @@ bpy.types.Object.materials = property(GetMaterials)
 def SaveImage(self, path):
   dst = Join(path, 'textures/', self.ufilename)
   print("INFO: saving image", self.name, "to", dst, "...")
-  if self.has_data:
+  try:
     if self.packed_file:
       self.save_render(dst)
     else:
-      try:
-        library = os.path.split(bpy.path.abspath(self.library.filepath))[0] if self.library else None
-        if library != None and self.filepath.startswith('//'):
-          src = os.path.join(library, self.filepath[2:])
-        else:
-          src = bpy.path.abspath(self.filepath) 
-        shutil.copyfile(src, dst)
-      except IOError:
-        print("WARNING: couldn't copy image %s!"%(src))
+      library = os.path.split(bpy.path.abspath(self.library.filepath))[0] if self.library else None
+      if library != None and self.filepath.startswith('//'):
+        src = os.path.join(library, self.filepath[2:])
+      else:
+        src = bpy.path.abspath(self.filepath) 
+      shutil.copyfile(src, dst)
     print("INFO: Done.")
     return True
-  print("WARNING: No image data!")
+  except IOError:
+    print("WARNING: couldn't copy image %s!"%(src))
   return False
 
 bpy.types.Image.save_export = SaveImage
