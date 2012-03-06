@@ -628,8 +628,8 @@ CS_PLUGIN_NAMESPACE_BEGIN(Bodymesh)
 
   BodyBoneJoint::BodyBoneJoint ()
     : scfImplementationType (this), bounce (0.0f),
-    maxAngle (-PI, -HALF_PI, -HALF_PI), maxDistance (-1.0f),
-    minAngle (PI, HALF_PI, HALF_PI), minDistance (1.0f)
+    maxAngle (-PI, -HALF_PI, -PI), maxDistance (-1.0f),
+    minAngle (PI, HALF_PI, PI), minDistance (1.0f)
   {
     rotConstraints[0] = false;
     rotConstraints[1] = false;
@@ -750,8 +750,8 @@ CS_PLUGIN_NAMESPACE_BEGIN(Bodymesh)
   CS_LEAKGUARD_IMPLEMENT(BodyBoneCollider);
 
   BodyBoneCollider::BodyBoneCollider ()
-    : scfImplementationType (this), friction (0.0f), softness (0.0f),
-    elasticity (0.0f), density (0.0f), geometryType (NO_GEOMETRY),
+    : scfImplementationType (this), friction (0.5f), softness (0.0f),
+    elasticity (0.2f), density (0.1f), geometryType (NO_GEOMETRY),
     box_size (0.0f), length (0.0f), radius (0.0f)
   {
   }
