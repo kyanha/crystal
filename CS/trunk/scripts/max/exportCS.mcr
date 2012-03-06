@@ -26,28 +26,28 @@ ButtonText:"Export Level to CS"
 tooltip:"Export Level to CS" Icon:#("Maxscript",1)
 (
 
-rollout Test1 "Export Level to CS" width:226 height:432
+rollout Test1 "Export Level to CS" width:226 height:481
 (
 	edittext edt3 "" pos:[17,32] width:192 height:21
 	label lbl1 "Export Level To:" pos:[21,7] width:142 height:20
-	button btn2 "Export!" pos:[37,110] width:152 height:24
-	label lbl6 "Scale:" pos:[58,72] width:40 height:20
-	edittext edtScale "" pos:[101,67] width:63 height:27
-	checkbox chkLights "Generate Fake lights for walktest" pos:[7,352] width:215 height:20 enabled:true
-	label lbl3 "Duration (msecs):" pos:[17,380] width:108 height:20
-	edittext edtDuration "" pos:[129,379] width:76 height:22
-	checkbox chk2 "Copy textures to dest dir" pos:[7,325] width:210 height:22
-	GroupBox grp2 "Sanity Check" pos:[10,222] width:201 height:94
-	checkbox chkSanity "Check Only, no Deletion" pos:[22,246] width:159 height:23 enabled:true checked:true
-	button sanity "SanityCheck!" pos:[32,276] width:145 height:31
+	button btn2 "Export!" pos:[37,104] width:152 height:24
+	label lbl6 "Scale:" pos:[58,69] width:40 height:20
+	edittext edtScale "" pos:[101,64] width:63 height:27
+	checkbox chkLights "Generate Fake lights for walktest" pos:[7,409] width:215 height:20 enabled:true
+	label lbl3 "Duration (msecs):" pos:[17,437] width:108 height:20
+	edittext edtDuration "" pos:[129,436] width:76 height:22
+	checkbox chk2 "Copy textures to dest dir" pos:[7,379] width:210 height:22
+	GroupBox grp2 "Sanity Check" pos:[10,276] width:201 height:94
+	checkbox chkSanity "Check Only, no Deletion" pos:[22,300] width:159 height:23 enabled:true checked:true
+	button sanity "SanityCheck!" pos:[32,330] width:145 height:31
 	label lblVersion "V." pos:[180,5] width:40 height:21
-
-	GroupBox grp3 "Terrain" pos:[11,146] width:189 height:62
-	checkbox chkTerrain "Export as Terrain Level" pos:[20,170] width:168 height:26
-
+	GroupBox grp3 "Terrain" pos:[11,139] width:189 height:62
+	checkbox chkTerrain "Export as Terrain Level" pos:[20,163] width:168 height:26
+	GroupBox grp4 "Server map" pos:[12,207] width:189 height:62
+	checkbox chkServer "Export as Server Map" pos:[21,231] width:168 height:26
 	on Test1 open do
 	(
-	   version = 54 as String
+	   version = 56 as String
 	   lblVersion.text = "V."+version
 	   
 	
@@ -76,7 +76,12 @@ rollout Test1 "Export Level to CS" width:226 height:432
 	    -- ////////////////////////
 	    -- Variables used in the program
 	    -- ////////////////////////
-	
+
+		-- disable undo
+		undo off
+		-- disable scene redraw
+		disableSceneRedraw()
+
 	    -- get filename
 	    filename = edt3.text
 	    -- set debug output
@@ -405,7 +410,7 @@ rollout Test1 "Export Level to CS" width:226 height:432
 	
 	            -- Normal Map Texture:
 	            normalMapImage = getMatNormalMapFilename m
-	            if (findItem materialsWrittenToWorld normalMapImage==0 and normalMapImage!="materialnotdefined") then
+	            if (findItem materialsWrittenToWorld normalMapImage==0 and normalMapImage!="materialnotdefined" and m.mapEnables[9]) then
 	            (
 	                format "m: % \n" m
 	                format "    <texture name=\"%\">\n" normalMapImage to:outFile
@@ -433,7 +438,7 @@ rollout Test1 "Export Level to CS" width:226 height:432
 	              )
 	              -- Normal Map Texture:
 	              normalMapImage = getMatNormalMapFilename m
-	              if (findItem materialsWrittenToWorld normalMapImage==0 and normalMapImage!="materialnotdefined") then
+	              if (findItem materialsWrittenToWorld normalMapImage==0 and normalMapImage!="materialnotdefined" and m.mapEnables[9]) then
 	              (
 	                format "m: % \n" m
 	                format "    <texture name=\"%\">\n" normalMapImage to:outFile
@@ -459,9 +464,9 @@ rollout Test1 "Export Level to CS" width:226 height:432
 	
 	        -- handle Multi/materials
 	        if ((classOf m)==Multimaterial) then
+	        (
+	              for subm in m do
 	              (
-	            for subm in m do
-	                    (
 	              -- For each material, if not written then add it.                
 	              -- Diffuse Texture:
 	              diffuseImage = getMatDiffuseMapFilename subm                
@@ -536,7 +541,7 @@ rollout Test1 "Export Level to CS" width:226 height:432
 	
 	                -- Normal Map Texture:
 	                normalMapImage = getMatNormalMapFilename subm
-	                if (findItem materialsWrittenToWorld normalMapImage==0 and normalMapImage!="materialnotdefined") then
+	                if (findItem materialsWrittenToWorld normalMapImage==0 and normalMapImage!="materialnotdefined" and subm.mapEnables[9]) then
 	                (
 	                    format "m: % \n" subm
 	                    format "    <texture name=\"%\">\n" normalMapImage to:outFile
@@ -563,7 +568,7 @@ rollout Test1 "Export Level to CS" width:226 height:432
 	                  )
 	                  -- Normal Map Texture:
 	                  normalMapImage = getMatNormalMapFilename subm
-	                  if (findItem materialsWrittenToWorld normalMapImage==0 and normalMapImage!="materialnotdefined") then
+	                  if (findItem materialsWrittenToWorld normalMapImage==0 and normalMapImage!="materialnotdefined" and subm.mapEnables[9]) then
 	                  (
 	                    format "m: % \n" subm
 	                    format "    <texture name=\"%\">\n" normalMapImage to:outFile
@@ -689,7 +694,7 @@ rollout Test1 "Export Level to CS" width:226 height:432
 	
 	                -- handles reflection materials
 	                normalMapImage = getMatNormalMapFilename m
-
+	
 	                if (m.mapEnables[10]) then
 	                (
 	                    format "      <shader type=\"base\">reflect_water_plane</shader>\n" to:outFile
@@ -730,9 +735,9 @@ rollout Test1 "Export Level to CS" width:226 height:432
 	                (
 	                    -- handles diffuse maps
 	                    format "      <shadervar type=\"texture\" name=\"tex diffuse\">%</shadervar>\n" diffuseMapImage to:outFile
-	
-	                    -- handles normal maps
-	                    if(normalMapImage!="materialnotdefined") then
+
+
+	                    if(m.mapEnables[9] and normalMapImage!="materialnotdefined") then
 	                    (
 	                        format "      <shadervar type=\"texture\" name=\"tex normal compressed\">%</shadervar>\n" normalMapImage to:outFile
 	                    )
@@ -913,7 +918,7 @@ rollout Test1 "Export Level to CS" width:226 height:432
 	
 	                    -- handles reflection materials
 	                    normalMapImage = getMatNormalMapFilename subm
-
+	
 	                    if (subm.mapEnables[10]) then
 	                    (
 	                        format "      <shader type=\"standard\">reflect_water_plane</shader>\n" to:outFile
@@ -942,9 +947,9 @@ rollout Test1 "Export Level to CS" width:226 height:432
 	                    (
 	                        -- handles diffuse maps
 	                        format "      <shadervar type=\"texture\" name=\"tex diffuse\">%</shadervar>\n" diffuseMapImage to:outFile
-
+	
 	                        -- handles normal maps
-	                        if(normalMapImage!="materialnotdefined") then
+	                        if(subm.mapEnables[9] and normalMapImage!="materialnotdefined") then
 	                        (
 	                           format "      <shadervar type=\"texture\" name=\"tex normal compressed\">%</shadervar>\n" normalMapImage to:outFile
 	                        )
@@ -1023,18 +1028,10 @@ rollout Test1 "Export Level to CS" width:226 height:432
 	
 	      -- add shaders needed for terrain
 	      if (chkTerrain.checked) then (
-	       filestr = openFile "ps_terrain.shaders.txt"
-	       if (filestr==undefined) then (
-	            message = "ERROR: ps_terrain.shaders.txt not found!"
-	            messageBox message
-	            return 1
+	        format "    <shader><file>/shader/terrain/terrain.xml</file></shader>\n" line to:outFile
+	        format "    <shader><file>/shader/terrain/splat.xml</file></shader>\n" line to:outFile
+	        format "    <shader><file>/shader/terrain/multisplat.xml</file></shader>\n" line to:outFile
 	       )
-	       while (not eof filestr) do
-	       (
-	           line = readLine filestr
-	        format "%\n" line to:outFile
-	       )
-	      )
 	
 	      format "</shaders>\n" to:outFile
 	    )
@@ -1073,7 +1070,12 @@ rollout Test1 "Export Level to CS" width:226 height:432
 	            xpart = (obj.pos.x * xscale) + xrelocate
 	            ypart = (obj.pos.y * yscale) + yrelocate
 	            zpart = (obj.pos.z * zscale) + zrelocate
-	
+
+                rotvalues = quattoeuler obj.rotation order:2
+				rotx = (rotvalues.x * pi)/180
+	            roty = -((rotvalues.y * pi)/180)
+	            rotz = (rotvalues.z * pi)/180
+
 	            renderorientation = getUserProp obj "RENDERORIENTATION"
 	            rotationmode = getUserProp obj "ROTATION"
 	            sortmode = getUserProp obj "SORT"
@@ -1095,6 +1097,7 @@ rollout Test1 "Export Level to CS" width:226 height:432
 	            placement = getUserProp obj "PLACEMENT"
 	            effectorforce = getUserProp obj "EFFECTORFORCE"
 	            effectorrandacc = getUserProp obj "EFFECTORRANDACC"
+				effectoracceleration = getUserProp obj "EFFECTORACCELERATION"
 	
 	            uniformvel = getUserProp obj "UNIFORMVEL"
 	            if (uniformvel==undefined) then (
@@ -1182,7 +1185,14 @@ rollout Test1 "Export Level to CS" width:226 height:432
 	                    format "    <force x='%' y='%' z='%'/> \n" effectorforce[1] effectorforce[2] effectorforce[3] to:outFile
 	                    format "  </effector> \n" to:outFile
 	                )
-	                
+
+	                if (effectoracceleration!=undefined) then (
+	                    effectoracceleration = tokenize effectoracceleration ","
+	                    format "  <effector type='force'> \n" to:outFile
+	                    format "    <acceleration x='%' y='%' z='%'/> \n" effectoracceleration[1] effectoracceleration[2] effectoracceleration[3] to:outFile
+	                    format "  </effector> \n" to:outFile
+	                )
+
 	                velocity = getUserProp obj "VELOCITYFIELD"
 	                if (velocity!=undefined) then (
 	                    velocity = tokenize velocity ","
@@ -1236,7 +1246,11 @@ rollout Test1 "Export Level to CS" width:226 height:432
 	                format "  </params>\n" to:outFile
 	                format "  <trimesh><id>shadows</id></trimesh>\n" to:outFile
 	                format "  <ztest/><noshadows/>\n" to:outFile
-	                format "  <move><v x='%' y='%' z='%'/></move>\n" xpart zpart ypart to:outFile
+	                format "  <move><v x='%' y='%' z='%'/>\n" xpart zpart ypart to:outFile
+				    if (rotx!=0 or roty!=0 or rotz!=0) then (
+					   format "  <matrix><rotx>%</rotx><roty>%</roty><rotz>%</rotz></matrix>\n" rotx roty rotz to:outFile
+					)
+					format "  </move>\n" to:outFile
 	                format " </meshobj>\n" to:outFile
 	            )
 	
@@ -2681,23 +2695,16 @@ rollout Test1 "Export Level to CS" width:226 height:432
 	    -- write shaders
 	    WriteShaders outFile
 	
-	    -- write materials        
-	    WriteMaterials terrainobject outFile
-	    --return 1
+	    -- write materials only if not in server maps mode
+		if (not chkServer.checked) then (
+	       WriteMaterials terrainobject outFile
+		)
 	
 	    -- write plugins
 	    format "  <plugins>\n" to:outFile
 	    format "    <plugin name=\"meshFact\">crystalspace.mesh.loader.factory.genmesh</plugin>\n" to:outFile
 	    format "    <plugin name=\"mesh\">crystalspace.mesh.loader.genmesh</plugin>\n" to:outFile
 	
-	    -- Obsolete
-	    --format "    <plugin name=\"thing\">crystalspace.mesh.loader.thing</plugin>\n" to:outFile
-	    --format "    <plugin name=\"thingFact\">crystalspace.mesh.loader.factory.thing</plugin>\n" to:outFile
-	
-	      --if (fireNeeded) then (
-	    --    format "    <plugin name=\"fireFact\">crystalspace.mesh.loader.factory.fire</plugin>\n" to:outFile  
-	    --    format "    <plugin name=\"fire\">crystalspace.mesh.loader.fire</plugin>\n" to:outFile  
-	      --)
 	
 	      if (fireNeeded or emitNeeded) then (
 	        format "    <plugin name=\"emitFact\">crystalspace.mesh.loader.factory.emit</plugin>\n" to:outFile 
@@ -2717,18 +2724,7 @@ rollout Test1 "Export Level to CS" width:226 height:432
 	
 	    format "  </plugins>\n\n" to:outFile
 	
-	    -- write renderpriorities and renderloop for terrain
-	      --if (chkTerrain.checked) then (
-	        --format "<addon>" to:outFile
-	        --format "<plugin>crystalspace.renderloop.loop.loader</plugin>" to:outFile
-	        --format "<paramsfile>/shader/std_rloop_terrainfixed.xml</paramsfile>" to:outFile
-	        --format "</addon>" to:outFile
-	      --)
-	
-	    -- write particles declarations
-	      --if (fireNeeded) then (
-	    --    format "    <meshfact name=\"fireFact\"><plugin>fireFact</plugin><params /></meshfact>\n\n" to:outFile
-	    --)
+
 	      if (fireNeeded or emitNeeded) then (
 	        format "    <meshfact name=\"emitFact\"><plugin>emitFact</plugin><params /></meshfact>\n\n" to:outFile  
 	      )
@@ -2756,7 +2752,7 @@ rollout Test1 "Export Level to CS" width:226 height:432
 	    format "\n" to:outFile
 	
 	
-	    -- search and write meshfacts and thingfacts and terrain
+	    -- search and write meshfacts and terrain
 	    factoryMeshes = #()
 	    factoryThingMeshes = #()
 	    for obj in allObjects do
@@ -2789,8 +2785,11 @@ rollout Test1 "Export Level to CS" width:226 height:432
 	            return 1
 	        )
 	
-	        -- export particles meshfacts
-	        if ( (classOf obj)==Point ) then (
+	        -- export particles meshfacts only if not server map mode
+	        if ( (classOf obj)==Point) then (
+	            if (chkServer.checked) then (
+	                continue
+	            )
 	            OutputParticle obj allObjects true outFile
 	            continue;
 	        )
@@ -2800,6 +2799,9 @@ rollout Test1 "Export Level to CS" width:226 height:432
 	        -- ****************************************
 	        objName = obj.name
 	        if (findString objName "_g_" !=undefined) then (
+	            if (chkServer.checked) then (
+	                continue
+	            )
 	            -- factory must have name like : _g_name_0
 	            toks = tokenize objName "_"
 	            if (toks.count == 4 and objName[objName.count-1] == "_" and objName[objName.count] == "0") then
@@ -2810,8 +2812,9 @@ rollout Test1 "Export Level to CS" width:226 height:432
 	            continue;
 	        ) -- end if genmesh
 	
-	
+          	-- ****************************************
 	        -- check for terrain
+			-- ****************************************
 	        if (findString objName "_terr_" !=undefined) then (
 	             format "Checking _terr_: %\n" roomName
 	        
@@ -2830,7 +2833,7 @@ rollout Test1 "Export Level to CS" width:226 height:432
 	
 	          if (obj.parent==undefined) then (
 	                sectorname = roomName
-	          format "Checking _terr_1.1: % % \n" sectorname roomName
+	                format "Checking _terr_1.1: % % \n" sectorname roomName
 	          ) else (
 	              sectorname = obj.parent.name
 	              toks = tokenize sectorname "_"
@@ -2854,88 +2857,78 @@ rollout Test1 "Export Level to CS" width:226 height:432
 	            messageBox message
 	          ) else (
 	              c = 0
-	                for subm in m do (
-	                    image = getMatDiffuseMapFilename subm
+	              for subm in m do (
+	                 image = getMatDiffuseMapFilename subm
 	
-	
-	                  if (image=="materialnotdefined") then
-	                      continue
+	                 if (image=="materialnotdefined") then
+	                     continue
 	                    
-	                  imagetemp = image + "sshhaaddeerr"
+	                 imagetemp = image + "sshhaaddeerr"
 	
-	                    if (c!=0) then
+	                 if (c!=0) then
 	                      append mymaterials imagetemp 
-	                  c = c + 1
+	                 c = c + 1
 	              )
 	          )
 	
 	          format "      <materialmapsize height=\"128\" width=\"128\" />\n" to:outFile
 	          format "      <size x=\"%\" y=\"%\" z=\"%\" />\n" (terrx*2) terry (terrz*2) to:outFile
-	          format "      <basematerial>%</basematerial>\n" terrain_material to:outFile
+	          if (chkServer.checked) then (
+			      format "      <basematerial>dummy</basematerial>\n" to:outFile
+	          ) else (
+	              format "      <basematerial>%</basematerial>\n" terrain_material to:outFile
+	          )
 	          --format "      <renderproperties><param name=\"block resolution\">16</param><param name=\"lod splitcoeff\">8</param></renderproperties>\n" to:outFile
 	          format "      <feederproperties><param name=\"heightmap source\">%</param> \n" terrimage  to:outFile
 	          format "      <param name=\"smooth heightmap\">yes</param></feederproperties>\n" to:outFile
 	          format "  </celldefault><cell><feederproperties>\n" to:outFile
 	
-	          --if (materialmap!="alpha") then (
-	            --    format "   <materialmap image=\"%\" />\n" materialmap to:outFile
-	          --) else (
-	          --   materialmapa = getUserProp obj "MATERIALMAPA"
-	          --  toks = tokenize materialmapa "|"
-	        --    c=1
-	        --    for a in toks do (
-	        --        format "   <alphamap material=\"%\">%</alphamap> \n" mymaterials[c] a to:outFile
-	        --        c = c + 1
-	        --    )
-	        --  )
-	
+
 	          format "  </feederproperties><position x=\"-%\" y=\"-%\" /></cell></cells>\n" terrx terrz to:outFile
 	
-	          --format "   <terraformer>%</terraformer><sampleregion>\n" roomName to:outFile
-	          --format "   <min x=\"-%\" y=\"-%\" /> <max x=\"%\" y=\"%\" /></sampleregion>\n" terrx terrz terrx terrz to:outFile
 	          format " </params></meshfact>\n" to:outFile
 	          continue;
-	          )
-	
+	        ) -- end terrain
+
 	        -- ****************************************
 	        -- For any other object we create a genmesh factory automatically
 	        -- ****************************************
-	
-	        OutputGenMeshFactory obj outFile debug 1
-	      
-	                istrasparent=false
-	                -- check if object is a range alpha trasparent
-	                rangetrasp = getUserProp obj "RANGETRASP"
-	                if (rangetrasp=="yes") then (
-	                  istrasparent=true
-	                )
-	
-	                -- check if object is a binary alpha trasparent
-	                trasp = getUserProp obj "TRASPARENT"
-	                if (trasp=="yes") then (
-	                  istrasparent=true
-	                )
-	                
-	                -- no shadow not supported on meshfact
-	                -- no more used??
-	                --noshadows = getUserProp obj "NOSHADOWS"
-	                --if (noshadows=="yes") then
-	                --    format "      <noshadows />\n" to:outFile
-	
-	                -- check for no lighting setting
-	                lighting = getUserProp obj "LIGHTING"
-	
-	                -- check for colldet based on groups
-	                --colldet = doesCollide obj collvisInfo
-	                --check simple colldet setting
-	                colldet = getUserProp obj "COLLDET"
-	
-	                -- check for viscull setting
-	                viscull = getUserProp obj "VISCULL"
-	
-	                -- check for culleronly setting
-	                culleronly = getUserProp obj "CULLERONLY"
-	        
+	        if (not chkServer.checked) then (
+	           OutputGenMeshFactory obj outFile debug 1
+	        )
+                istrasparent=false
+                -- check if object is a range alpha trasparent
+                rangetrasp = getUserProp obj "RANGETRASP"
+                if (rangetrasp=="yes") then (
+                  istrasparent=true
+                )
+
+                -- check if object is a binary alpha trasparent
+                trasp = getUserProp obj "TRASPARENT"
+                if (trasp=="yes") then (
+                  istrasparent=true
+                )
+                
+                -- no shadow not supported on meshfact
+                -- no more used??
+                --noshadows = getUserProp obj "NOSHADOWS"
+                --if (noshadows=="yes") then
+                --    format "      <noshadows />\n" to:outFile
+
+                -- check for no lighting setting
+                lighting = getUserProp obj "LIGHTING"
+
+                -- check for colldet based on groups
+                --colldet = doesCollide obj collvisInfo
+                --check simple colldet setting
+                colldet = getUserProp obj "COLLDET"
+
+                -- check for viscull setting
+                viscull = getUserProp obj "VISCULL"
+
+                -- check for culleronly setting
+                culleronly = getUserProp obj "CULLERONLY"
+        
 	    ) -- end for obj in allObjects
 	
 	
@@ -2944,23 +2937,9 @@ rollout Test1 "Export Level to CS" width:226 height:432
 	    format "<clearzbuf>yes</clearzbuf>" to:outFile
 	    format "<clearscreen>yes</clearscreen>" to:outFile
 	
-	    -- Setting for lightmaps cell size (obsolete used for thingmeshes only)
-	    --customPropNumber = fileProperties.findProperty #custom "lightmapsize"
-	    --if (customPropNumber!=0) then
-	    --    lightmapsize = fileProperties.getPropertyValue #custom customPropNumber
-	    --if (lightmapsize!=undefined) then
-	    --    format "<lightmapcellsize>%</lightmapcellsize>" lightmapsize to:outFile
-	    --else
-	    --    format "<lightmapcellsize>32</lightmapcellsize>" to:outFile
-	
-	    -- terrain renderloop
-	    --if (chkTerrain.checked) then (
-	    --    format "<renderloop>std_rloop_terrainfixed</renderloop>" to:outFile
-	    --)
 	    format "</settings>\n\n" to:outFile
 	
-	
-	
+
 	    -- check groups for viscull/colldect
 	    groups = #();
 	    for obj in allObjects do 
@@ -3122,6 +3101,9 @@ rollout Test1 "Export Level to CS" width:226 height:432
 	        
 	            -- convert particles
 	            if ( (classOf obj)==Point) then (
+				    if (chkServer.checked) then (
+					    continue
+					)
 	                format "Found particle Object: %\n" obj.name
 	                OutputParticle obj allObjects false outFile
 	                continue
@@ -3170,32 +3152,8 @@ rollout Test1 "Export Level to CS" width:226 height:432
 	                messageBox message
 	              ) else (
 	                  c = 0
-	                    --for subm in m do (
-	                  --      image = getMatDiffuseMapFilename subm
-	
-	
-	                --      if (image=="materialnotdefined") then
-	                --          continue
-	                        
-	                --      imagetemp = image + "sshhaaddeerr"
-	
-	                --        if (c==0) then
-	                --          format "      <materialpalette>\n" imagetemp to:outFile
-	                --      else
-	                --          format "      <material>%</material>\n" imagetemp to:outFile
-	                --      c = c + 1
-	                --  )
-	                --  format "    </materialpalette>\n"  to:outFile
-	
 	              )
-	              --format "          <lodvalue name=\"splatting distance\">%</lodvalue><lodvalue name=\"error tolerance\">4</lodvalue>\n" loddistance to:outFile
-	              --format "          <!--For bruteblock-->" to:outFile
-	                --format "          <lodvalue name=\"block resolution\">64</lodvalue>\n" to:outFile
-	                --format "          <lodvalue name=\"block split distance\">64</lodvalue>\n" to:outFile
-	                --format "          <lodvalue name=\"minimum block size\">32</lodvalue>\n" to:outFile
-	                --format "          <lodvalue name=\"cd resolution\">256</lodvalue>\n" to:outFile
-	                --format "          <lodvalue name=\"lightmap resolution\">513</lodvalue></params>\n" to:outFile
-	              -- format "      <move><v x=\"%\" y=\"%\" z=\"%\" /></move></meshobj>\n" terrx terrz terry to:outFile
+
 	              format "      </params><move><v x=\"%\" y=\"%\" z=\"%\" /></move><priority>wall</priority></meshobj>\n" terrx terrz terry to:outFile
 	              continue;
 	            ) -- end manage terrain
@@ -3217,9 +3175,19 @@ rollout Test1 "Export Level to CS" width:226 height:432
 	            if (findString obj.name "_occ_" !=undefined) then (
 	                occluder = true
 	            )
-	
+
+	            -- do not output occluders in case we are in server maps mode
+	            if (chkServer.checked and occluder) then (
+	                continue
+				)
+
 	            -- player barriers
 	            playerbarrier = getUserProp obj "PLAYERBARRIER"
+
+				-- force occluder type on all objects if we are in server maps mode
+				if (chkServer.checked) then (
+					playerbarrier = "yes"
+				)
 	
 	            if (occluder) then (
 	                format "\nFound Object Name: % type occluder" obj.name
@@ -3229,7 +3197,7 @@ rollout Test1 "Export Level to CS" width:226 height:432
 	            if (occluder or culleronly=="yes" or playerbarrier=="yes") then (
 	                format "    <trimesh name=\"%\">\n" obj.name to:outFile
 	            )
-	
+
 	        
 	            -- check for no lighting setting
 	            lighting = getUserProp obj "LIGHTING"
@@ -3248,22 +3216,26 @@ rollout Test1 "Export Level to CS" width:226 height:432
 	                format "      <min x=\"%\" y=\"%\" z=\"%\" />\n"  obj.min.x obj.min.z obj.min.y to:outFile
 	                format "      <max x=\"%\" y=\"%\" z=\"%\" />\n"  obj.max.x obj.max.z obj.max.y to:outFile
 	            )
-	
+
 	            -- handles non-box occluders
 	            if (occluder and (classOf obj)!=Box) then
 	            (
 	                format "      <mesh>\n" to:outFile
 	                OutputCullerOnly obj outFile verboseMode debug 
-	            )
-	
+
 	            -- export faces of the mesh
-	            if (culleronly=="yes" or playerbarrier=="yes") then (
+	            ) else if (culleronly=="yes" or playerbarrier=="yes") then (
 	                format "      <mesh>\n" to:outFile
 	                OutputCullerOnly obj outFile verboseMode debug 
 	            )
 	
-	             -- close params
-	            if (playerbarrier=="yes") then (
+	            -- close params
+	            if (chkServer.checked) then (
+	                 format "      </mesh>\n" to:outFile
+	                 format "      <id>base</id>\n" to:outFile
+	                 format "    </trimesh>\n" to:outFile
+	                 continue
+	            ) else if (playerbarrier=="yes") then (
 	                 format "      </mesh>\n" to:outFile
 	                 format "      <id>colldet</id>\n" to:outFile
 	                 format "    </trimesh>\n" to:outFile
@@ -3279,11 +3251,6 @@ rollout Test1 "Export Level to CS" width:226 height:432
 	                 format "    </trimesh>\n" to:outFile
 	                 continue
 	            )
-	            -- else (
-	            --     format "      </params>\n" to:outFile
-	                 -- close mesh object
-	            --     format "    </meshobj>\n" to:outFile
-	            --)
 	    
 	             format "\n" to:outFile
 	
@@ -3337,46 +3304,24 @@ rollout Test1 "Export Level to CS" width:226 height:432
 	
 	                istrasparent=false
 	
-	                -- NO MORE USED, DONE IN THE FACTORY
-	                -- handles transparent objects
-	                --if (findString obj.name "_t_" !=undefined) then (
-	                --  format "      <priority>alpha</priority>\n" to:outFile
-	                --  format "      <ztest />\n" to:outFile
-	                --  istrasparent=true
-	                --)
-	                
 	                -- handles sky objects
 	                if (findString obj.name "_sky_" !=undefined) then (
 	                  format "      <priority>object2</priority>\n" to:outFile
 	                  format "      <zuse />\n" to:outFile
 	                  format "      <key name=\"lighter2\" editoronly=\"yes\" vertexlight=\"yes\" />\n" to:outFile
 	                )
-	                -- handles zfill objects
-	                --else if (findString obj.name "_s_" !=undefined) then (
-	                --  format "      <priority>object</priority>\n" to:outFile
-	                --  format "      <zuse />\n" to:outFile
-	                --)
 	                else if (culleronly=="yes" or playerbarrier=="yes" or (occluder and (classOf obj)!=Box)) then (
 	                    format "      <mesh>\n" to:outFile
 	                ) else if (occluder and (classOf obj)==Box) then (
 	                    format "      <box>\n" to:outFile
 	                )
 	
-	                -- NO MORE USED, DEFINED ON GENMESH FACTORY
-	                -- else (
-	                --  format "      <priority>object</priority>\n" to:outFile
-	                --  format "      <zuse />\n" to:outFile
-	                --)
 	
 	                -- check for no shadow setting
 	                noshadows = getUserProp obj "NOSHADOWS"
 	                if (noshadows=="yes") then
 	                    format "      <noshadows />\n" to:outFile
 	        
-	                -- manage skydome as genmesh
-	                --if (findString objName "_skydome" != undefined or findString objName "_skybox" != undefined) then (
-	                --    format "      <priority>sky</priority>\n" to:outFile
-	                --)
 	
 	                -- for meshref <factory> must go outisde <params>
 	                if (lodlow!=undefined and isExplicitGenMesh) then
@@ -3550,133 +3495,7 @@ rollout Test1 "Export Level to CS" width:226 height:432
 	                )
 	
 	                continue;
-	    
-	            --)
-	
-	            -- SHOULD NOT BE USED ANYMORE
-	            -- manage thingmeshes
-	            isThingMesh = false
-	
-	            objName = obj.name
-	            if (findString objName "_f_" != undefined) then (
-	                isThingMesh = true
-	                -- skip factories
-	                toks = tokenize objName "_"
-	                if (toks.count == 4 and objName[objName.count-1] == "_" and objName[objName.count] == "0") then
-	                    continue;
-	    
-	                format "    <meshobj name=\"%\">\n" obj.name to:outFile
-	                -- check for no shadow setting
-	                noshadows = getUserProp obj "NOSHADOWS"
-	                if (noshadows=="yes") then
-	                    format "      <noshadows />\n" to:outFile
-	    
-	                format "      <plugin>thing</plugin>\n" obj.name to:outFile
-	
-	                -- search factory
-	                genFactObj=null
-	                for genFact in factoryThingMeshes do
-	                (
-	                    genFactName = "_f_"+toks[3]+"_0"
-	                    if (genFact.name==genFactName) then genFactObj=genFact 
-	                )
-	                if (genFactObj==null) then (
-	                    message = "Export aborted: NO OBJECT FOUND AS THINGMESH FACTORY OF " + obj.name
-	                    messageBox message
-	
-	                    close outFile
-	                    return 1
-	                )
-	    
-	                format "      <params><factory>%</factory>\n" toks[3] to:outFile
-	    
-	    
-	                -- check that instance and factory have same number of faces
-	                if (genFactObj.numfaces!=obj.numfaces) then (
-	                    message = "Export aborted. thingmesh "+obj.name+ " and thingfactory "+genFactObj.name + " have a different number of faces";
-	                    messageBox message
-	                    close outFile
-	                    return 1
-	                )
-	                -- change material if necessary
-	                -- cycle on all faces of object
-	                matReplaced = #()
-	                for i =1 to obj.numFaces do
-	                (
-	                    matIDOld = getFaceMatID genFactObj i
-	                    matIDNew = getFaceMatID obj i
-	                    if ((classOf obj.mat)==Standardmaterial) then
-	                        currentNewMat = obj.mat
-	                    else
-	                        currentNewMat = obj.mat[matIDOld]
-	                    if ((classOf genFactObj.mat)==Standardmaterial) then
-	                        currentOldMat = genFactObj.mat
-	                    else
-	                        currentOldMat = genFactObj.mat[matIDNew]
-	    
-	                    if (currentOldMat.name!=currentNewMat.name) then
-	                    (
-	
-	                        -- check it has not been already replaced
-	                        oldMatName = getMatDiffuseMapFilename currentOldMat
-	                        newMatName = getMatDiffuseMapFilename currentNewMat
-	                        if (findItem matReplaced oldMatName==0) then (
-	                            format "<replacematerial old=\"%\" new=\"%\" />\n" oldMatName newMatName to:outFile
-	                            append matReplaced oldMatName
-	                            format "%\n" matReplaced
-	    
-	                        )
-	                    )
-	                )
-	                -- format "      <material>%</material></params>\n" (getMatDiffuseMapFilename obj.mat) to:outFile NO MATERIAL CHANGE FOR NOW
-	                format "      </params>\n" to:outFile
-	    
-	                -- checks if model has left-oriented system or not
-	                face = getface obj 1
-	                v1= getvert obj face[1]
-	                v2 = getvert obj face[2]
-	                v3 = getvert obj face[3]
-	                
-	                vect1 = v1-v2
-	                vect2 = v3-v2
-	                normal1 = cross vect1 vect2
-	                facenorm = normal1/(length normal1)
-	                maxnorm = getfacenormal obj 1
-	                flipModel = false
-	    
-	                dotProd = dot facenorm maxnorm
-	                if (dotProd>0) then (
-	                    flipModel = true
-	                )
-	    
-	               if (flipModel) then (
-	                format "\n ThingMesh Instance Object needs flipping: %\n" obj.name
-	               )
-	    
-	                xMove = (obj.pos.x * xscale) + xrelocate
-	                yMove = (obj.pos.y * yscale) + yrelocate
-	                zMove = (obj.pos.z * zscale) + zrelocate
-	    
-	                format "      <move><v x=\"%\" y=\"%\" z=\"%\" />\n" xMove zMove yMove to:outFile
-	                rotvalues = quattoeuler obj.rotation order:2
-	    
-	                if (flipModel) then (
-	                    rotx = ((rotvalues.x) * pi)/180
-	                    roty = -((rotvalues.y) * pi)/180
-	                    rotz = ((rotvalues.z) * pi)/180
-	                ) else (
-	                    rotx = (rotvalues.x * pi)/180
-	                    roty = -((rotvalues.y * pi)/180)
-	                    rotz = (rotvalues.z * pi)/180
-	                )
-	    
-	                format "      <matrix><rotx>%</rotx><roty>%</roty><rotz>%</rotz></matrix>\n" rotx roty rotz to:outFile
-	                format "      </move>\n"  to:outFile
-	                format "    </meshobj>\n" to:outFile
-	                continue;
-	    
-	            )
-	
+
 	    
 	              --print (getUserPropBuffer obj) to:outFile -- output buffer as a string literal 
 	              gc()
@@ -3697,10 +3516,9 @@ rollout Test1 "Export Level to CS" width:226 height:432
 	        
 	        lightColors = #()
 	        lightInfo = #()
-	        -- it was performing this only if fakelight was checked
-	        -- now we do it always
-	        --if (chkLights.checked) then
-	        if (true) then
+
+	        -- Collect light info, only if we are not in server map mode
+	        if (not chkServer.checked) then
 	        (
 	            format "Dynamic Lights flag set\n"
 	            -- cycle on all frames of the animation
@@ -3760,9 +3578,12 @@ rollout Test1 "Export Level to CS" width:226 height:432
 	        -- reset slider time (used mainly to avoid problem in getting last frame data)
 	        slidertime=0
 	    
-	        -- outputs lights
+	        -- outputs lights only if we are not in server map mode
 	        lcount = 1
 	        sectorambient=undefined;
+			if (chkServer.checked) then (
+				lightsFound = #()
+			)
 	        for ll in lightsFound do
 	        (
 	
@@ -3843,11 +3664,15 @@ rollout Test1 "Export Level to CS" width:226 height:432
 	
 	    format "   <sequences>\n" to:outFile
 	
-	    -- output lightning sequence
+	    -- output lightning sequence unless we are in server map mode
+		if (chkServer.checked) then (
+		  lightsThresholdValues = #()
+		)
+
 	    customPropNumber = fileProperties.findProperty #custom "lightning"
 	    if (customPropNumber!=0) then (
 	        lightning = fileProperties.getPropertyValue #custom customPropNumber 
-	        if (lightning=="yes") then
+	        if (lightning=="yes" and (not chkServer.checked)) then
 	        (
 	            format "     <sequence name=\"% lightning\"> \n" roomName to:outFile
 	            format "      <setambient sector=\"%\" red=\"1.0\" green=\"1.0\" blue=\"1.5\" /> \n" roomName to:outFile
@@ -3901,7 +3726,7 @@ rollout Test1 "Export Level to CS" width:226 height:432
 	
 	        lcount = lcount + 1
 	    )
-	
+
 	
 	    -- output Fake Sequence for testing dynamic lights
 	    if (chkLights.checked) then
@@ -4014,7 +3839,11 @@ rollout Test1 "Export Level to CS" width:226 height:432
 	    )
 	
 	    messageBox message
-	
+
+		-- enable undo
+		undo on
+		-- enable scene redraw
+		enableSceneRedraw()
 	)
 	on sanity pressed do
 	(
@@ -4022,7 +3851,6 @@ rollout Test1 "Export Level to CS" width:226 height:432
 	    include "sanityCheck.ms"
 	)
 )
-
 gw = newRolloutFloater "Export Level to CS" 300 400 
 addRollout Test1 gw 
 
