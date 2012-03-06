@@ -202,7 +202,8 @@ class Hierarchy:
     if not animesh:
       def Export(objs, d):
         for ob, children in objs:
-          if not ob.hide:
+          export = (ob.type == 'MESH' and not ob.hide)
+          if export:
             indexObject = find(lambda obCpy: obCpy.name[:-4] == ob.name[:len(obCpy.name[:-4])], meshData)
             lib = "from library '%s'"%(bpy.path.abspath(ob.library.filepath)) if ob.library else ''
             print('EXPORT mesh "%s" %s'%(ob.name, lib))
@@ -215,7 +216,7 @@ class Hierarchy:
             args['dontClose'] = True
             ob.AsCSGenmeshLib(func, d, **args)
           Export(children, d+2)
-          if not ob.hide:
+          if export:
             func(" "*d + "</meshfact>")
           
       Export([objects], depth)
