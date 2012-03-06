@@ -1,5 +1,5 @@
 /*
-  Copyright (C) 2009-10 Christian Van Brussel, Institute of Information
+  Copyright (C) 2009-12 Christian Van Brussel, Institute of Information
       and Communication Technologies, Electronics and Applied Mathematics
       at Universite catholique de Louvain, Belgium
       http://www.uclouvain.be/en-icteam.html
@@ -66,6 +66,9 @@ CS_PLUGIN_NAMESPACE_BEGIN(Ragdoll)
     inline virtual iSkeletonAnimNodeFactory* GetChildNode () const
     { return CS::Animation::SkeletonAnimNodeFactorySingle::GetChildNode (); }
 
+    virtual void SetDynamicSystem (iDynamicSystem* system);
+    virtual iDynamicSystem* GetDynamicSystem () const;
+
     //-- CS::Animation::iSkeletonAnimNodeFactory
     csPtr<CS::Animation::SkeletonAnimNodeSingleBase> ActualCreateInstance (
       CS::Animation::iSkeletonAnimPacket* packet, CS::Animation::iSkeleton* skeleton);
@@ -74,6 +77,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(Ragdoll)
     csRef<CS::Animation::iBodySkeleton> bodySkeleton;
     csArray<ChainData> chains;
     CS::Animation::BoneID ragdollRoot;
+    csWeakRef<iDynamicSystem> dynamicSystem;
 
     friend class RagdollNode;
   };
@@ -87,7 +91,8 @@ CS_PLUGIN_NAMESPACE_BEGIN(Ragdoll)
   public:
     CS_LEAKGUARD_DECLARE(RagdollNode);
 
-    RagdollNode (RagdollNodeFactory* factory, CS::Animation::iSkeleton* skeleton);
+    RagdollNode (RagdollNodeFactory* factory, CS::Animation::iSkeleton* skeleton,
+		 iDynamicSystem* system);
     ~RagdollNode ();
 
     //-- CS::Animation::iSkeletonRagdollNode
@@ -131,6 +136,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(Ragdoll)
 			 CS::Animation::RagdollState state);
     void SetChainNodeState (CS::Animation::iBodyChainNode* chainNode,
 			    CS::Animation::RagdollState state);
+    void InitBoneStates ();
     void UpdateBoneState (BoneData* boneData);
     void ResetChainNodeTransform (CS::Animation::iBodyChainNode* chainNode);
 

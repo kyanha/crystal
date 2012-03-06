@@ -1,5 +1,5 @@
 /*
-  Copyright (C) 2009-10 Christian Van Brussel, Institute of Information
+  Copyright (C) 2009-12 Christian Van Brussel, Institute of Information
       and Communication Technologies, Electronics and Applied Mathematics
       at Universite catholique de Louvain, Belgium
       http://www.uclouvain.be/en-icteam.html
@@ -108,11 +108,22 @@ CS_PLUGIN_NAMESPACE_BEGIN(Ragdoll)
       chains.DeleteIndexFast (index);
   }
 
+  void RagdollNodeFactory::SetDynamicSystem (iDynamicSystem* system)
+  {
+    dynamicSystem = system;
+  }
+
+  iDynamicSystem* RagdollNodeFactory::GetDynamicSystem () const
+  {
+    return dynamicSystem;
+  }
+
   csPtr<CS::Animation::SkeletonAnimNodeSingleBase> RagdollNodeFactory::ActualCreateInstance (
     CS::Animation::iSkeletonAnimPacket* packet,
     CS::Animation::iSkeleton* skeleton)
   {
-    return csPtr<CS::Animation::SkeletonAnimNodeSingleBase> (new RagdollNode (this, skeleton));
+    return csPtr<CS::Animation::SkeletonAnimNodeSingleBase>
+      (new RagdollNode (this, skeleton, dynamicSystem));
   }
 
   // --------------------------  RagdollNode  --------------------------
@@ -120,10 +131,11 @@ CS_PLUGIN_NAMESPACE_BEGIN(Ragdoll)
   CS_LEAKGUARD_IMPLEMENT(RagdollNode);
 
   RagdollNode::RagdollNode (RagdollNodeFactory* factory, 
-			    CS::Animation::iSkeleton* skeleton)
+			    CS::Animation::iSkeleton* skeleton,
+			    iDynamicSystem* system)
     : scfImplementationType (this),
     CS::Animation::SkeletonAnimNodeSingle<RagdollNodeFactory> (factory, skeleton),
-    sceneNode (nullptr), maxBoneID (0)
+    sceneNode (nullptr), dynamicSystem (system), maxBoneID (0)
   {
     // copy body chains
     for (csArray<ChainData>::Iterator it = factory->chains.GetIterator (); it.HasNext (); )
@@ -146,6 +158,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(Ragdoll)
     if (!dynamicSystem)
     {
       dynamicSystem = system;
+      InitBoneStates ();
       return;
     }
 
@@ -356,32 +369,15 @@ CS_PLUGIN_NAMESPACE_BEGIN(Ragdoll)
   {
     if (isPlaying)
       return;
+    isPlaying = true;
 
     // Find the scene node
     if (!sceneNode)
       sceneNode = skeleton->GetSceneNode ();
 
-    // Check for the dynamic system
-    if (!dynamicSystem)
-    {
-      factory->manager->Report (CS_REPORTER_SEVERITY_ERROR,
-        "No dynamic system defined while starting the ragdoll animation node.\n");
-      return;
-    }
-
-    isPlaying = true;
-
-    // Update the state of all bones (iterate in increasing order of the bone ID's
-    // so that the parent bones are always updated before their children)
-    for (size_t i = 0; i <= maxBoneID; i++)
-    {
-      if (!bones.Contains ((CS::Animation::BoneID)i))
-        continue;
-
-      BoneData nullBone;
-      BoneData& boneData = bones.Get ((CS::Animation::BoneID)i, nullBone);
-      UpdateBoneState (&boneData);
-    }
+    // Init the bone states
+    if (dynamicSystem)
+      InitBoneStates ();
 
     // Start the child node
     if (childNode)
@@ -408,12 +404,13 @@ CS_PLUGIN_NAMESPACE_BEGIN(Ragdoll)
       childNode->Stop ();
   }
 
+  // TODO: update the mesh position in TickAnimation()
   void RagdollNode::BlendState (CS::Animation::AnimatedMeshState* state, float baseWeight)
   {
     // TODO: use baseWeight
 
     // check that this node is active
-    if (!isPlaying)
+    if (!isPlaying || !dynamicSystem)
       return;
 
     // make the child node blend the state
@@ -452,6 +449,8 @@ CS_PLUGIN_NAMESPACE_BEGIN(Ragdoll)
 						      skeletonOffset);
 
       csOrthoTransform bodyTransform = boneData.rigidBody->GetTransform ();
+      if (CS::IsNaN (bodyTransform.GetOrigin ()[0]))
+	continue;
 
       CS::Animation::BoneID parentBoneID = skeleton->GetFactory ()->GetBoneParent (boneData.boneID);
 
@@ -679,7 +678,6 @@ CS_PLUGIN_NAMESPACE_BEGIN(Ragdoll)
 	csOrthoTransform animeshTransform = sceneNode->GetMovable ()->GetFullTransform ();
 	csOrthoTransform bodyTransform = boneTransform * animeshTransform;
 	boneData->rigidBody->SetTransform (bodyTransform);
-
       }
 
       // prepare for adding a joint
@@ -696,56 +694,50 @@ CS_PLUGIN_NAMESPACE_BEGIN(Ragdoll)
       if (!bones.Contains (parentBoneID))
 	return;
 
-      // check availability of joint data
-      if (!bodyBone->GetBoneJoint ())
+      // setup the joint
+      if (bodyBone->GetBoneJoint ())
       {
-	factory->manager->Report
-	  (CS_REPORTER_SEVERITY_ERROR,
-	   "No joint defined for bone %i while creating rigid body.\n",
-	   bodyBone->GetAnimeshBone ());
-	return;
-      }
+	BoneData nullBone;
+	BoneData& parentBoneData = bones.Get (parentBoneID, nullBone);
 
-      BoneData nullBone;
-      BoneData& parentBoneData = bones.Get (parentBoneID, nullBone);
-
-      // create the dynamic joint
-      boneData->joint = dynamicSystem->CreateJoint ();
-      boneData->joint->SetBounce (bodyBone->GetBoneJoint ()->GetBounce (), false);
-      boneData->joint->SetRotConstraints (bodyBone->GetBoneJoint ()->IsXRotConstrained (),
-					  bodyBone->GetBoneJoint ()->IsYRotConstrained (),
-					  bodyBone->GetBoneJoint ()->IsZRotConstrained (),
-					  false);
-      boneData->joint->SetTransConstraints (bodyBone->GetBoneJoint ()->IsXTransConstrained (),
-					    bodyBone->GetBoneJoint ()->IsYTransConstrained (),
-					    bodyBone->GetBoneJoint ()->IsZTransConstrained (),
+	// create the dynamic joint
+	boneData->joint = dynamicSystem->CreateJoint ();
+	boneData->joint->SetBounce (bodyBone->GetBoneJoint ()->GetBounce (), false);
+	boneData->joint->SetRotConstraints (bodyBone->GetBoneJoint ()->IsXRotConstrained (),
+					    bodyBone->GetBoneJoint ()->IsYRotConstrained (),
+					    bodyBone->GetBoneJoint ()->IsZRotConstrained (),
 					    false);
+	boneData->joint->SetTransConstraints (bodyBone->GetBoneJoint ()->IsXTransConstrained (),
+					      bodyBone->GetBoneJoint ()->IsYTransConstrained (),
+					      bodyBone->GetBoneJoint ()->IsZTransConstrained (),
+					      false);
 
-      boneData->joint->SetMaximumAngle (bodyBone->GetBoneJoint ()->GetMaximumAngle (), false);
-      boneData->joint->SetMaximumDistance (bodyBone->GetBoneJoint ()->GetMaximumDistance (),
-					   false);
-      boneData->joint->SetMinimumAngle (bodyBone->GetBoneJoint ()->GetMinimumAngle (), false);
-      boneData->joint->SetMinimumDistance (bodyBone->GetBoneJoint ()->GetMinimumDistance (),
-					   false);
+	boneData->joint->SetMaximumAngle (bodyBone->GetBoneJoint ()->GetMaximumAngle (), false);
+	boneData->joint->SetMaximumDistance (bodyBone->GetBoneJoint ()->GetMaximumDistance (),
+					     false);
+	boneData->joint->SetMinimumAngle (bodyBone->GetBoneJoint ()->GetMinimumAngle (), false);
+	boneData->joint->SetMinimumDistance (bodyBone->GetBoneJoint ()->GetMinimumDistance (),
+					     false);
 
-      // setup the transform of the joint 
-      csQuaternion rotation; 
-      csVector3 offset; 
+	// setup the transform of the joint 
+	csQuaternion rotation; 
+	csVector3 offset; 
 
-      // TODO: GetTransformBindSpace seems to return a wrong data 
-      //skeleton->GetTransformBindSpace (boneData->boneID, rotation, offset); 
-      //csOrthoTransform jointTransform (csMatrix3 (rotation.GetConjugate ()), offset); 
+	// TODO: GetTransformBindSpace seems to return a wrong data 
+	//skeleton->GetTransformBindSpace (boneData->boneID, rotation, offset); 
+	//csOrthoTransform jointTransform (csMatrix3 (rotation.GetConjugate ()), offset); 
 
-      skeleton->GetTransformBoneSpace (boneData->boneID, rotation, offset); 
-      csOrthoTransform boneTransform (csMatrix3 (rotation.GetConjugate ()), offset); 
-      skeleton->GetFactory ()->GetTransformBoneSpace (boneData->boneID, rotation, offset); 
-      csOrthoTransform boneSTransform (csMatrix3 (rotation.GetConjugate ()), offset); 
-      boneData->joint->SetTransform (bodyBone->GetBoneJoint ()->GetTransform () * 
-				     boneSTransform * boneTransform.GetInverse()); 
+	skeleton->GetTransformBoneSpace (boneData->boneID, rotation, offset); 
+	csOrthoTransform boneTransform (csMatrix3 (rotation.GetConjugate ()), offset); 
+	skeleton->GetFactory ()->GetTransformBoneSpace (boneData->boneID, rotation, offset); 
+	csOrthoTransform boneSTransform (csMatrix3 (rotation.GetConjugate ()), offset); 
+	boneData->joint->SetTransform (bodyBone->GetBoneJoint ()->GetTransform () * 
+				       boneSTransform * boneTransform.GetInverse()); 
 
-      // attach the rigid bodies to the joint
-      boneData->joint->Attach (parentBoneData.rigidBody, boneData->rigidBody, false);
-      boneData->joint->RebuildJoint ();
+	// attach the rigid bodies to the joint
+	boneData->joint->Attach (parentBoneData.rigidBody, boneData->rigidBody, false);
+	boneData->joint->RebuildJoint ();
+      }
 
       return;
     }
@@ -780,6 +772,21 @@ CS_PLUGIN_NAMESPACE_BEGIN(Ragdoll)
 	dynamicSystem->RemoveJoint (boneData->joint);
 	boneData->joint = 0;
       }
+    }
+  }
+
+  void RagdollNode::InitBoneStates ()
+  {
+    // Update the state of all bones (iterate in increasing order of the bone ID's
+    // so that the parent bones are always updated before their children)
+    for (size_t i = 0; i <= maxBoneID; i++)
+    {
+      if (!bones.Contains ((CS::Animation::BoneID)i))
+        continue;
+
+      BoneData nullBone;
+      BoneData& boneData = bones.Get ((CS::Animation::BoneID)i, nullBone);
+      UpdateBoneState (&boneData);
     }
   }
 
