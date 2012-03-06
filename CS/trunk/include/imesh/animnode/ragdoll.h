@@ -73,7 +73,7 @@ enum RagdollState
  */
 struct iSkeletonRagdollNodeFactory : public virtual iSkeletonAnimNodeFactory
 {
-  SCF_INTERFACE(CS::Animation::iSkeletonRagdollNodeFactory, 2, 0, 0);
+  SCF_INTERFACE(CS::Animation::iSkeletonRagdollNodeFactory, 2, 0, 1);
 
   /**
    * Set the physical description of the skeleton.
@@ -115,6 +115,18 @@ struct iSkeletonRagdollNodeFactory : public virtual iSkeletonAnimNodeFactory
    * Return the child animation node of this node.
    */
   virtual iSkeletonAnimNodeFactory* GetChildNode () const = 0;
+
+  /**
+   * Set the default dynamic system where the rigid bodies created by the
+   * child animation nodes will be evolving.
+   */
+  virtual void SetDynamicSystem (iDynamicSystem* system) = 0;
+
+  /**
+   * Get the default dynamic system where the rigid bodies created by the
+   * child animation nodes will be evolving.
+   */
+  virtual iDynamicSystem* GetDynamicSystem () const = 0;
 };
 
 /**
