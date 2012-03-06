@@ -740,6 +740,19 @@ CS_PLUGIN_NAMESPACE_BEGIN(Skeleton2)
     cachedTransformsDirty = false;
   }
 
+  void Skeleton::RecreateAnimationTree ()
+  {
+    RecreateAnimationTreeP ();
+
+    // Restart the animation tree if we are in 'autostart' mode
+    if (factory->autostart && animationPacket)
+    {
+      CS::Animation::iSkeletonAnimNode* node = animationPacket->GetAnimationRoot ();
+      if (node)
+	node->Play ();
+    }
+  }
+
   void Skeleton::RecreateAnimationTreeP ()
   {
     if (!factory->animationPacket)

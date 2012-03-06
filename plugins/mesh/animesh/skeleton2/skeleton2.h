@@ -186,7 +186,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(Skeleton2)
     virtual void SetAnimationPacket (CS::Animation::iSkeletonAnimPacket* packet);
 
     virtual void RecreateSkeleton ();
-    virtual void RecreateAnimationTree () { RecreateAnimationTreeP (); }
+    virtual void RecreateAnimationTree ();
     virtual void ResetSkeletonState ();
     virtual void UpdateSkeleton (float dt);
 
