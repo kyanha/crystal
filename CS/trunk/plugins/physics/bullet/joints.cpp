@@ -38,7 +38,7 @@ csBulletJoint::csBulletJoint (csBulletDynamicsSystem* dynsys)
   constraint (0), trans_constraint_x (false), trans_constraint_y (false),
   trans_constraint_z (false), min_dist (1.0f, 1.0f, 1.0f), max_dist (-1.0f, -1.0f, -1.0f),
   rot_constraint_x (false), rot_constraint_y (false), rot_constraint_z (false),
-  min_angle (HALF_PI), max_angle (-HALF_PI), bounce (0.0f),
+  min_angle (PI, HALF_PI, PI), max_angle (-PI, -HALF_PI, -PI), bounce (0.0f),
   desired_velocity (0.0f)
 {
   angular_constraints_axis[0].Set (0.0f, 1.0f, 0.0f);
@@ -175,7 +175,6 @@ bool csBulletJoint::RebuildJoint ()
 
 	if (fabs (desired_velocity[1]) > EPSILON)
 	{
-	  printf ("Setting motor\n");
 	  btRotationalLimitMotor* motor = dof6->getRotationalLimitMotor (1);
 	  motor->m_enableMotor = true;
 	  motor->m_targetVelocity = desired_velocity[1];
