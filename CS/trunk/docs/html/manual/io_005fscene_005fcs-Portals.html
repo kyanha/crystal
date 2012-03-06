@@ -1,0 +1,184 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html401/loose.dtd">
+<html>
+<!-- Created by texi2html 1.76 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Many creative people <dev@texi2html.cvshome.org>
+Send bugs and suggestions to <users@texi2html.cvshome.org>
+
+-->
+<head>
+<title>Crystal Space 2.1.0: 5.5.3.1 Portal tool</title>
+
+<meta name="description" content="Crystal Space 2.1.0: 5.5.3.1 Portal tool">
+<meta name="keywords" content="Crystal Space 2.1.0: 5.5.3.1 Portal tool">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="texi2html 1.76">
+<meta http-equiv="Content-Type" content="text/html; charset=us-ascii">
+<style type="text/css">
+<!--
+a.summary-letter {text-decoration: none}
+pre.display {font-family: serif}
+pre.format {font-family: serif}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: serif; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: serif; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.sansserif {font-family:sans-serif; font-weight:normal;}
+ul.toc {list-style: none}
+-->
+</style>
+
+
+</head>
+
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
+
+<a name="io_005fscene_005fcs-Portals"></a>
+<a name="0"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="io_005fscene_005fcs-Export-Scenes.html#0" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="io_005fscene_005fcs-Export-Genmesh.html#0" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="Working-with-Engine-Content.html#0" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="io_005fscene_005fcs-Export-Scenes.html#0" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="Internals.html#0" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="index.html#SEC_Top" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="cs_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="cs_Index.html#0" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="cs_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<hr size="1">
+<h4 class="subsubsection"> 5.5.3.1 Portal tool </h4>
+
+<p>The <samp>&lsquo;Crystal Space Portal Tool&rsquo;</samp> panel is found in the <samp>&lsquo;Object Data&rsquo;</samp> context 
+of the <samp>&lsquo;Properties&rsquo;</samp> window.
+</p>
+<p><img src="content/io_scene_cs/io_scene_cs_portal.png" alt="content/io_scene_cs/io_scene_cs_portal">
+</p>
+<a name="1"></a>
+<h4 class="subsubheading"> Creating portals </h4>
+
+<p>To define a portal, you must follow the correct procedure. Let's make a portal <code>P1</code> from 
+scene <code>S1</code> leading to a place <code>DEST1</code> in scene <code>S2</code>.
+</p><ul>
+<li>
+Create the source mesh:
+<ul>
+<li>
+Create and position a plane in scene <code>S1</code>: that mesh will correspond to your portal <code>P1</code>.
+</li><li>
+Adjust orientation of portal <code>P1</code> so that its normal indicates the direction it should lead to,
+i.e. the direction to pass through the portal.
+</li></ul>
+
+<p><img src="content/io_scene_cs/io_scene_cs_portal_ex1.png" alt="content/io_scene_cs/io_scene_cs_portal_ex1">
+</p>
+</li><li>
+Create the destination mesh:
+<ul>
+<li>
+Create a second mesh in scene <code>S2</code> corresponding to the destination of the portal. 
+</li><li>
+Position the mesh and adjust its orientation so that the normal indicates 
+the viewing direction of the portal.
+</li><li>
+Since only the coordinate system of the target mesh will be considered, 
+turn off the visibility of that object to prevent its export.
+</li></ul>
+
+<p><img src="content/io_scene_cs/io_scene_cs_portal_ex2.png" alt="content/io_scene_cs/io_scene_cs_portal_ex2">
+</p>
+</li><li>
+Select face <code>P1</code> and tag it as portal in the <samp>&lsquo;Crystal Space Portal Tool&rsquo;</samp>.
+</li><li>
+Type in the name of the Blender mesh this portal should link to, <code>DEST1</code> in this case.
+</li><li>
+Ensure that the visibility of portal <code>P1</code> is active. 
+</li><li>
+Your scene is now ready to be exported!
+</li></ul>
+
+<p>The portal we just created is a one-way portal. To obtain a bidirectional portal,
+the above procedure should be repeated with a portal <code>P2</code> defined in scene <code>S2</code> and 
+leading to destination <code>DEST2</code> in scene <code>S1</code>. Notice that if <code>P2</code> and <code>DEST2</code> 
+can be obtained by duplicating <code>DEST1</code> and <code>P1</code> respectively and updating their portal 
+properties, their orientations must then be modified to obtain inverted normals.
+</p>
+<a name="2"></a>
+<h4 class="subsubheading"> Troubleshooting </h4>
+
+<p>If some of the portals don't look ok while exporting Blender worlds, check that:
+</p>
+<ul>
+<li>
+the name of the destination mesh has been accepted, i.e. the error message
+<samp>&lsquo;ERROR: unknown mesh name&rsquo;</samp> does not appear in the portal tool panel;
+</li><li>
+there is no error message on the console;
+</li><li>
+there is no duplicate portals;
+</li><li>
+the normals are looking at the correct side;
+</li><li>
+the portal visibility is correctly configured, i.e. source meshes should be visible and 
+destination meshes hidden.
+</li></ul>
+
+<p>If you still have a defective portal after you checked those points, it is
+highly probable that the orientation of the destination mesh is causing the problem. 
+A good hint is to define the target mesh with the same XYZ rotations as the source mesh. 
+Starting from that configuration, try to find the simplest way to rightly orient the 
+destination mesh (i.e. requiring a minimum number of rotations).
+</p>
+<a name="3"></a>
+<h4 class="subsubheading"> Try the example file </h4>
+
+<p>The file 
+<a href="http://trac.crystalspace3d.org/trac/CS/browser/CSAssets/trunk/blender/portaltut.blend">portaltut.blend</a> defines three rooms, each of them situated 
+in a different scene. Two portals are defined to pass from the first room to the third
+one and two others to make the way back.
+</p>
+<p>Select your export path and run the world by pressing the <samp>&lsquo;Export and Run&rsquo;</samp> button. 
+You should see something similar to this image:
+</p>
+<p><img src="content/io_scene_cs/portaltut_run.png" alt="content/io_scene_cs/portaltut_run">
+</p>
+
+
+<hr size="1">
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="io_005fscene_005fcs-Export-Scenes.html#0" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="io_005fscene_005fcs-Export-Genmesh.html#0" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="Working-with-Engine-Content.html#0" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="io_005fscene_005fcs-Export-Scenes.html#0" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="Internals.html#0" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="index.html#SEC_Top" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="cs_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="cs_Index.html#0" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="cs_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<p>
+ <font size="-1">
+  This document was generated using <a href="http://texi2html.cvshome.org/"><em>texi2html 1.76</em></a>.
+ </font>
+ <br>
+
+</p>
+</body>
+</html>
