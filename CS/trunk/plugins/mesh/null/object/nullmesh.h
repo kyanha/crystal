@@ -163,7 +163,7 @@ public:
 
 
 private:
-  iMeshObjectFactory* factory;
+  csRef<iMeshObjectFactory> factory;
   iMeshObjectType* nullmesh_type;
   iMeshWrapper* logparent;
   iMeshObject* hitbeam_mesh;
