@@ -263,6 +263,8 @@ namespace Implementation
 
   void ThreadBase::UnregisterTlsInstance (ThreadLocalBase* tls)
   {
+    if (!GetTlsInstances_v)
+      return;	// TLS instances list has already been destroyed
     TlsInstances& tlsInstances = *GetTlsInstances();
     ScopedLock<Mutex> lockInstances (tlsInstances.mutex);
 
