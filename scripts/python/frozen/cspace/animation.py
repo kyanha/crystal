@@ -935,6 +935,8 @@ class iSkeletonRagdollNodeFactory(iSkeletonAnimNodeFactory):
     def RemoveBodyChain(*args): return _animation.iSkeletonRagdollNodeFactory_RemoveBodyChain(*args)
     def SetChildNode(*args): return _animation.iSkeletonRagdollNodeFactory_SetChildNode(*args)
     def GetChildNode(*args): return _animation.iSkeletonRagdollNodeFactory_GetChildNode(*args)
+    def SetDynamicSystem(*args): return _animation.iSkeletonRagdollNodeFactory_SetDynamicSystem(*args)
+    def GetDynamicSystem(*args): return _animation.iSkeletonRagdollNodeFactory_GetDynamicSystem(*args)
     scfGetVersion = staticmethod(_animation.iSkeletonRagdollNodeFactory_scfGetVersion)
     __swig_destroy__ = _animation.delete_iSkeletonRagdollNodeFactory
     __del__ = lambda self : None;

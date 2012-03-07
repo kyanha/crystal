@@ -16437,6 +16437,58 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_iSkeletonRagdollNodeFactory_SetDynamicSystem(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  CS::Animation::iSkeletonRagdollNodeFactory *arg1 = (CS::Animation::iSkeletonRagdollNodeFactory *) 0 ;
+  iDynamicSystem *arg2 = (iDynamicSystem *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"iSkeletonRagdollNodeFactory_SetDynamicSystem",2,2,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_CS__Animation__iSkeletonRagdollNodeFactory, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "iSkeletonRagdollNodeFactory_SetDynamicSystem" "', argument " "1"" of type '" "CS::Animation::iSkeletonRagdollNodeFactory *""'"); 
+  }
+  arg1 = reinterpret_cast< CS::Animation::iSkeletonRagdollNodeFactory * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_iDynamicSystem, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "iSkeletonRagdollNodeFactory_SetDynamicSystem" "', argument " "2"" of type '" "iDynamicSystem *""'"); 
+  }
+  arg2 = reinterpret_cast< iDynamicSystem * >(argp2);
+  (arg1)->SetDynamicSystem(arg2);
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_iSkeletonRagdollNodeFactory_GetDynamicSystem(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  CS::Animation::iSkeletonRagdollNodeFactory *arg1 = (CS::Animation::iSkeletonRagdollNodeFactory *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  iDynamicSystem *result = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"iSkeletonRagdollNodeFactory_GetDynamicSystem",1,1,&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_CS__Animation__iSkeletonRagdollNodeFactory, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "iSkeletonRagdollNodeFactory_GetDynamicSystem" "', argument " "1"" of type '" "CS::Animation::iSkeletonRagdollNodeFactory const *""'"); 
+  }
+  arg1 = reinterpret_cast< CS::Animation::iSkeletonRagdollNodeFactory * >(argp1);
+  result = (iDynamicSystem *)((CS::Animation::iSkeletonRagdollNodeFactory const *)arg1)->GetDynamicSystem();
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_iDynamicSystem, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_iSkeletonRagdollNodeFactory_scfGetVersion(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   int result;
@@ -18417,6 +18469,8 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"iSkeletonRagdollNodeFactory_RemoveBodyChain", _wrap_iSkeletonRagdollNodeFactory_RemoveBodyChain, METH_VARARGS, NULL},
 	 { (char *)"iSkeletonRagdollNodeFactory_SetChildNode", _wrap_iSkeletonRagdollNodeFactory_SetChildNode, METH_VARARGS, NULL},
 	 { (char *)"iSkeletonRagdollNodeFactory_GetChildNode", _wrap_iSkeletonRagdollNodeFactory_GetChildNode, METH_VARARGS, NULL},
+	 { (char *)"iSkeletonRagdollNodeFactory_SetDynamicSystem", _wrap_iSkeletonRagdollNodeFactory_SetDynamicSystem, METH_VARARGS, NULL},
+	 { (char *)"iSkeletonRagdollNodeFactory_GetDynamicSystem", _wrap_iSkeletonRagdollNodeFactory_GetDynamicSystem, METH_VARARGS, NULL},
 	 { (char *)"iSkeletonRagdollNodeFactory_scfGetVersion", _wrap_iSkeletonRagdollNodeFactory_scfGetVersion, METH_VARARGS, NULL},
 	 { (char *)"delete_iSkeletonRagdollNodeFactory", _wrap_delete_iSkeletonRagdollNodeFactory, METH_VARARGS, NULL},
 	 { (char *)"iSkeletonRagdollNodeFactory_swigregister", iSkeletonRagdollNodeFactory_swigregister, METH_VARARGS, NULL},
