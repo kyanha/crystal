@@ -142,10 +142,10 @@ B2CS.BoolProperty( attr="silent",
 
 B2CS.BoolProperty( attr="library",
         name="Export as a CS library",
-        description="Export all mesh factories in a unique CS library file", 
+        description="Export all mesh factories in an unique CS library file", 
         default=False)
 
 B2CS.BoolProperty( attr="enableDoublesided",
         name="Enable double sided meshes",
-        description="If unchecked, all meshes are exported as single sided",
+        description="Global enabling of the 'Double Sided' option for all meshes",
         default=False)
