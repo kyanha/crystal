@@ -33,7 +33,8 @@ CS_PLUGIN_NAMESPACE_BEGIN(SoftAnim2)
 
 //-------------------------- SoftBodyControlType --------------------------
 
-SCF_IMPLEMENT_FACTORY(SoftBodyControlType);
+typedef SoftBodyControlType SoftBodyControlType2;
+SCF_IMPLEMENT_FACTORY(SoftBodyControlType2);
 
 CS_LEAKGUARD_IMPLEMENT(SoftBodyControlType);
 
