@@ -148,6 +148,7 @@ class Hierarchy:
     subMeshess = []
     mappingBuffers = []
     mappingVertices = []
+    mappingNormals = []
     scales = []
     objects = self.Get()
 
@@ -170,13 +171,13 @@ class Hierarchy:
                and ob.parent_type != 'BONE':
               # If the mesh is child of another object (i.e. an armature in case of 
               # animesh export and a mesh in case of genmesh export), transform the 
-              # copied object to its world position
+              # copied object relatively to its parent
               obCpy = ob.GetTransformedCopy(ob.relative_matrix)
             else:
               obCpy = ob.GetTransformedCopy()
             meshData.append(obCpy)
             # Generate mapping buffers
-            mapVert, mapBuf = ob.data.GetCSMappingBuffer()
+            mapVert, mapBuf, norBuf = ob.data.GetCSMappingBuffers()
             numCSVertices = len(mapVert)
             if B2CS.properties.enableDoublesided and ob.data.show_double_sided:
               numCSVertices = 2*len(mapVert)
@@ -184,6 +185,7 @@ class Hierarchy:
             subMeshess.append(ob.data.GetSubMeshes(ob.name,mapBuf,indexV))
             mappingBuffers.append(mapBuf)
             mappingVertices.append(mapVert)
+            mappingNormals.append(norBuf)
             if animesh:
               indexV += numCSVertices
 
@@ -212,6 +214,7 @@ class Hierarchy:
             args['subMeshes'] = subMeshess[indexObject]
             args['mappingBuffers'] = [mappingBuffers[indexObject]]
             args['mappingVertices'] = [mappingVertices[indexObject]]
+            args['mappingNormals'] = [mappingNormals[indexObject]]
             args['scales'] = [scales[indexObject]]
             args['dontClose'] = True
             ob.AsCSGenmeshLib(func, d, **args)
@@ -228,6 +231,7 @@ class Hierarchy:
       args['subMeshess'] = subMeshess
       args['mappingBuffers'] = mappingBuffers
       args['mappingVertices'] = mappingVertices
+      args['mappingNormals'] = mappingNormals
       args['scales'] = scales
       self.AsCSAnimeshLib(func, depth, totalVertices, dontClose, **args)
 
@@ -640,6 +644,7 @@ def GetTransformedCopy(self, matrix = None):
   # Transform the copied object
   if matrix:
     obCpy.data.transform(matrix)
+    obCpy.data.calc_normals()
 
   return obCpy
 

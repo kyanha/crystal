@@ -119,12 +119,13 @@ bpy.types.Mesh.AsCSRef = MeshAsCSRef
 
 #======= Mapping buffers ===========================================
 
-def GetCSMappingBuffer (self):
+def GetCSMappingBuffers (self):
   """ Generate mapping buffers between Blender and CS vertices.
       Return mapVert, list defining the Blender vertex corresponding
-      to each CS vertex, and mapBuf, list defining a list of mappingVertex
+      to each CS vertex; mapBuf, list defining a list of mappingVertex
       for each Blender vertex (i.e. the face, the index of this vertex in 
-      the face and the corresponding CS vertex)
+      the face and the corresponding CS vertex); and normals, list defining
+      the CS vertex normals
   """
 
   # Determine the UV texture: we only use the active UV texture or the first one
@@ -137,21 +138,50 @@ def GetCSMappingBuffer (self):
     tface = None
 
   epsilon = 1e-9
+  forceSmooth = False
   mapBuf = []
   mapVert = []
+  normals = []
   csIndex = 0
   for vertex in self.vertices:
     mapBuf.append([])
 
+  # For all faces of the mesh
   for indexF, face in enumerate(self.faces):
+    faceNormal = face.normal
+    faceVerts = set(face.vertices)
+
+    # For all vertices of the face
     tt = [2,1,0] if len(face.vertices)==3 else [3, 2, 1, 0]
     for i in tt:
+      vertexNormal = self.vertices[face.vertices[i]].normal
+
+      # Evaluate face smoothness using the "use_auto_smooth" mesh property
+      # (along with the "auto_smooth_angle") and the "use_smooth" properties of 
+      # the current face and its adjacent faces
+      smooth = forceSmooth or (face.use_smooth and not self.use_auto_smooth)
+      if not smooth and not faceNormal:
+        print("WARNING: mesh '%s' has no normals. Setting smooth mode."%(self.name))
+        forceSmooth = True
+        smooth = True
+      if not smooth and face.use_smooth and self.use_auto_smooth:
+        for indexf, f in enumerate(self.faces):
+          if face!=f and f.use_smooth and len(faceVerts.intersection(set(f.vertices)))!=0:
+            # All set-smoothed faces with angles less than the specified 
+            # auto-smooth angle have 'smooth' normals, i.e. use vertex normals
+            angle = faceNormal.angle(f.normal, None)
+            if angle == None or abs(angle) < self.auto_smooth_angle:
+              smooth = True
+              break
+
+      newUVVertex = False
       if len(mapBuf[face.vertices[i]]) == 0:
         # Blender vertex is not defined in CS
         # => create a new CS vertex
         mappingVertex = {'face': indexF, 'vertex': i, 'csVertex': csIndex}
         mapBuf[face.vertices[i]].append(mappingVertex)
         mapVert.append(face.vertices[i])
+        normals.append(vertexNormal if smooth else faceNormal)
         csIndex += 1
       else:
         if tface == None:
@@ -160,9 +190,30 @@ def GetCSMappingBuffer (self):
             if mappedV == face.vertices[i]:
               # Blender vertex is already defined in CS 
               # (no (u,v) coordinates to differentiate the vertices in this case)
-              # => add a reference to the corresponding CS vertex
-              mappingVertex = {'face': indexF, 'vertex': i, 'csVertex': mappedI}
-              mapBuf[face.vertices[i]].append(mappingVertex)
+              if smooth:
+                # Only one normal per vertex in smooth mesh
+                # => add a reference to the corresponding CS vertex
+                mappingVertex = {'face': indexF, 'vertex': i, 'csVertex': mappedI}
+                mapBuf[face.vertices[i]].append(mappingVertex)
+              else:
+                # Not a smooth mesh
+                vertexFound = False
+                for mappedI, mappedV in enumerate(mapBuf[face.vertices[i]]):
+                  if faceNormal == self.faces[mappedV['face']].normal:
+                    # Blender vertex is defined in CS with the same face normal
+                    # => add a reference to the corresponding CS vertex
+                    vertexFound = True
+                    mappingVertex = {'face': indexF, 'vertex': i, 'csVertex': mappedV['csVertex']}
+                    mapBuf[face.vertices[i]].append(mappingVertex)
+                    break
+                if not vertexFound:
+                  # Blender vertex is defined in CS with a different face normal
+                  # => create a new CS vertex
+                  mappingVertex = {'face': indexF, 'vertex': i, 'csVertex': csIndex}
+                  mapBuf[face.vertices[i]].append(mappingVertex)
+                  mapVert.append(face.vertices[i])
+                  normals.append(faceNormal)
+                  csIndex += 1
               break
         else:
           # Mesh with texture coordinates
@@ -170,8 +221,10 @@ def GetCSMappingBuffer (self):
           uv = tface[indexF].uv[i]
           for mappedI, mappedV in enumerate(mapBuf[face.vertices[i]]):
             if (abs(uv[0] - tface[mappedV['face']].uv[mappedV['vertex']][0]) < epsilon) and \
-               (abs(uv[1] - tface[mappedV['face']].uv[mappedV['vertex']][1]) < epsilon):
+               (abs(uv[1] - tface[mappedV['face']].uv[mappedV['vertex']][1]) < epsilon) and \
+               (smooth or (faceNormal == self.faces[mappedV['face']].normal)):
               # Blender vertex is defined in CS with the same (u,v) coordinates
+              # and the same face normal
               # => add a reference to the corresponding CS vertex
               vertexFound = True
               mappingVertex = {'face': indexF, 'vertex': i, 'csVertex': mappedV['csVertex']}
@@ -179,15 +232,17 @@ def GetCSMappingBuffer (self):
               break
           if not vertexFound:
             # Blender vertex is defined in CS with different (u,v) coordinates
+            # and/or different face normal
             # => create a new CS vertex
             mappingVertex = {'face': indexF, 'vertex': i, 'csVertex': csIndex}
             mapBuf[face.vertices[i]].append(mappingVertex)
             mapVert.append(face.vertices[i])
+            normals.append(vertexNormal if smooth else faceNormal)
             csIndex += 1
 
-  return mapVert, mapBuf
+  return mapVert, mapBuf, normals
 
-bpy.types.Mesh.GetCSMappingBuffer = GetCSMappingBuffer
+bpy.types.Mesh.GetCSMappingBuffers = GetCSMappingBuffers
 
 
 #======= Armature ===========================================

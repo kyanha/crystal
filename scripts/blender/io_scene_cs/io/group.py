@@ -88,6 +88,7 @@ def WriteCSGroup(self, func, depth=0, use_imposter=False, dontClose=False):
   subMeshess = []
   mappingBuffers = []
   mappingVertices = []
+  mappingNormals = []
   indexV = 0
 
   for m, ob in self.allObjects():
@@ -108,7 +109,7 @@ def WriteCSGroup(self, func, depth=0, use_imposter=False, dontClose=False):
         obCpy = ob.GetTransformedCopy(matrix)
       meshData.append(obCpy)
       # Generate mapping buffers
-      mapVert, mapBuf = ob.data.GetCSMappingBuffer()
+      mapVert, mapBuf, norBuf = ob.data.GetCSMappingBuffers()
       numCSVertices = len(mapVert)
       if B2CS.properties.enableDoublesided and ob.data.show_double_sided:
         numCSVertices = 2*len(mapVert)
@@ -116,6 +117,7 @@ def WriteCSGroup(self, func, depth=0, use_imposter=False, dontClose=False):
       subMeshess.append(ob.data.GetSubMeshes(ob.name,mapBuf,indexV))
       mappingBuffers.append(mapBuf)
       mappingVertices.append(mapVert)
+      mappingNormals.append(norBuf)
       indexV += numCSVertices
 
       warning = "(WARNING: double sided mesh implies duplication of its vertices)" \
@@ -149,6 +151,7 @@ def WriteCSGroup(self, func, depth=0, use_imposter=False, dontClose=False):
     args['meshData'] = [meshData[indexObject]]
     args['mappingBuffers'] = [mappingBuffers[indexObject]]
     args['mappingVertices'] = [mappingVertices[indexObject]]
+    args['mappingNormals'] = [mappingNormals[indexObject]]
     for buf in GetRenderBuffers(**args):
       buf.AsCS(func, depth+8)   
 
@@ -226,6 +229,7 @@ def WriteCSGroup(self, func, depth=0, use_imposter=False, dontClose=False):
     args['meshData'] = meshData
     args['mappingBuffers'] = mappingBuffers
     args['mappingVertices'] = mappingVertices
+    args['mappingNormals'] = mappingNormals
     for buf in GetRenderBuffers(**args):
       buf.AsCS(func, depth+4)
     

@@ -117,6 +117,9 @@ class RenderBuffers:
     self.mappingVertices = []
     if 'mappingVertices' in kwargs:
       self.mappingVertices = kwargs['mappingVertices']
+    self.mappingNormals = []
+    if 'mappingNormals' in kwargs:
+      self.mappingNormals = kwargs['mappingNormals']
     self.scales = []
     if 'scales' in kwargs:
       self.scales = kwargs['scales']
@@ -156,10 +159,10 @@ class RenderBuffers:
 
         # Add the vertex normal to the CS normal buffer
         # Flip Y and Z axis.
-        self.normalBuffer.AddElement(tuple(ob.data.vertices[indexBlender].normal))
+        self.normalBuffer.AddElement(tuple(self.mappingNormals[i][indexCS]))
         if doubleSided:
           # Duplicate and inverse the vertex normal in case of a double sided mesh
-          nor = ob.data.vertices[indexBlender].normal
+          nor = self.mappingNormals[i][indexCS]
           self.normalBuffer.AddElement((-nor[0],-nor[1],-nor[2]))
         
         def findFace(csVertices, csIndex):
