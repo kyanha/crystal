@@ -78,7 +78,7 @@
 //	#define DEFAULT_NEWDELETE
 	#define DONT_TRACK_MEMORY_LEAKS
 
-	#define FUNCTION				extern "C"
+	#define FUNCTION				/*extern "C"*/
 
 	// Cosmetic stuff [mainly useful with multiple inheritance]
 	#define	override(base_class)	virtual

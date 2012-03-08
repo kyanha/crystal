@@ -31,7 +31,8 @@
 
 CS_PLUGIN_NAMESPACE_BEGIN(Ragdoll2)
 {
-SCF_IMPLEMENT_FACTORY(RagdollNodeManager);
+typedef RagdollNodeManager RagdollNodeManager2;
+SCF_IMPLEMENT_FACTORY(RagdollNodeManager2);
 
 void RagdollNodeManager::Report (int severity, const char* msg, ...) const
 {
