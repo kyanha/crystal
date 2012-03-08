@@ -49,7 +49,7 @@ def GetSubMeshesRaw(self, name, indexV, indexGroups, mappingBuffer = []):
       indexGroups[triplet] = []
     # Triangulate the mesh face
     indices = [v for v in face.vertices]
-    tt = [2,1,0] if len(indices)==3 else [2, 1, 0, 3, 2, 0]
+    tt = [2,1,0] if len(indices)==3 else [2,1,0,3,2,0]
     if len(mappingBuffer) == 0:
       # No mapping buffer => directly copy the index of Blender vertices
       for i in tt:
@@ -70,37 +70,38 @@ def GetSubMeshesRaw(self, name, indexV, indexGroups, mappingBuffer = []):
               break
       else:
         # Double sided mesh
-        backFaceIndices = []
-        for i in [2,1,0]:
-          # Add vertices composing the triangle of the front side of the mesh
+        # Search for CS indices of the vertices composing the face
+        frontFaceIndices = []
+        tt = [0,1,2] if len(indices)==3 else [0,1,2,3]
+        for i in tt:
           for mapV in mappingBuffer[face.vertices[i]]:
             if mapV['face'] == index and mapV['vertex'] == i:
               # front face:  cs index = firstIndex + 2*j  
               # back face:   cs index = firstIndex + 2*j + 1 
               # (where j is the cs index of the vertex for a single sided face)
-              indexGroups[triplet].append(firstIndex + 2 * mapV['csVertex'])
-              backFaceIndices.append(firstIndex + 2 * mapV['csVertex'] + 1)
-              indexV += 1
+              frontFaceIndices.append(firstIndex + 2 * mapV['csVertex'])
               break
+
+        # Add vertices composing the triangle
         for j in [2,1,0]:
-          # Add vertices composing the triangle of the back side of the mesh
-          indexGroups[triplet].append(backFaceIndices[j])
+          # front side of the mesh
+          indexGroups[triplet].append(frontFaceIndices[j])
+          indexV += 1
+        for j in [0,1,2]:
+          # back side of the mesh
+          indexGroups[triplet].append(frontFaceIndices[j] + 1)
           indexV += 1
 
+        # The face is not a triangle => triangulation
         if len(indices)!=3:
-          # Triangulation of the double sided mesh
-          backFaceIndices = []
-          for i in [3, 2, 0]:
-            # Add vertices composing the second triangle of the front side of the mesh
-            for mapV in mappingBuffer[face.vertices[i]]:
-              if mapV['face'] == index and mapV['vertex'] == i:
-                indexGroups[triplet].append(firstIndex + 2 * mapV['csVertex'])
-                backFaceIndices.append(firstIndex + 2 * mapV['csVertex'] + 1)
-                indexV += 1
-                break
-          for j in [0, 2, 1]:
-            # Add vertices composing the second triangle of the back side of the mesh
-            indexGroups[triplet].append(backFaceIndices[j])
+          # Add vertices composing the second triangle
+          for j in [3,2,0]:
+            # front side of the mesh
+            indexGroups[triplet].append(frontFaceIndices[j])
+            indexV += 1
+          for j in [3,0,2]:
+            # back side of the mesh
+            indexGroups[triplet].append(frontFaceIndices[j] + 1)
             indexV += 1
 
   return indexV, indexGroups
