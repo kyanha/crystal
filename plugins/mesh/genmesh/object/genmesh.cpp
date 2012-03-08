@@ -104,8 +104,8 @@ csGenmeshMeshObject::csGenmeshMeshObject (csGenmeshMeshObjectFactory* factory) :
   anim_ctrl_colors = false;
   anim_ctrl_bbox = false;
 
-  subMeshes.GetDefaultSubmesh()->parentSubMesh =
-    factory->subMeshes.GetDefaultSubmesh();
+  subMeshes.GetDefaultSubmesh()->SetParentSubMesh (
+    factory->subMeshes.GetDefaultSubmesh());
 
   svcontext.AttachNew (new csShaderVariableContext);
   bufferHolder.AttachNew (new csRenderBufferHolder);
@@ -221,7 +221,7 @@ void csGenmeshMeshObject::UpdateSubMeshProxies () const
         csRef<SubMeshProxy> proxy = subMeshes.FindSubMesh (name);
         if (!proxy.IsValid())
           proxy.AttachNew (new SubMeshProxy);
-        proxy->parentSubMesh = sm[i];
+        proxy->SetParentSubMesh (sm[i]);
         // Exploit fact that factory SMs are sorted already
         newSubMeshes.Push (proxy);
       }
@@ -482,7 +482,7 @@ csRenderMesh** csGenmeshMeshObject::GetRenderMeshes (
       static_cast<iShaderVariableContext*> (&subMesh), svcontext));
     meshPtr->variablecontext = mergedSVContext;
     meshPtr->object2world = o2wt;
-    meshPtr->bbox = anim_ctrl_bbox ? bboxes[i] : subMesh.parentSubMesh->GetObjectBoundingBox (positions);
+    meshPtr->bbox = anim_ctrl_bbox ? bboxes[i] : subMesh.GetParentSubMesh()->GetObjectBoundingBox (positions);
 
     meshPtr->buffers = smBufferHolder;
     meshPtr->geometryInstance = (void*)factory;
