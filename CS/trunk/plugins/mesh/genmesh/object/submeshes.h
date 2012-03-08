@@ -215,6 +215,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(Genmesh)
     public CS::ShaderVariableContextImpl
   {
   protected:
+    csWeakRef<SubMesh> parentSubMesh;
     enum
     {
       bitMaterial = 0,
@@ -223,6 +224,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(Genmesh)
       bitRenderPrio,
       bitBack2Front
     };
+    const char* name;
     csRef<iMaterialWrapper> material;
     // Override mixmode from parent.
     uint MixMode;
@@ -252,21 +254,26 @@ CS_PLUGIN_NAMESPACE_BEGIN(Genmesh)
     bool GetOverrideFlag (uint bit) const 
     { return overrideFlags.Check (1 << bit); }
   public:
-    csWeakRef<SubMesh> parentSubMesh;
     // Stuff below is used by GM for rendering
     csRenderMeshHolder rmHolder;
 
-    SubMeshProxy () : scfImplementationType (this), overrideFlags (0), forced_prog_lod_level(-1)
+    SubMeshProxy () : scfImplementationType (this), name (nullptr), overrideFlags (0), forced_prog_lod_level(-1)
     { }
     ~SubMeshProxy ()
     { }
+
+    SubMesh* GetParentSubMesh() const { return parentSubMesh; }
+    void SetParentSubMesh (SubMesh* sm)
+    {
+      parentSubMesh = sm;
+      name = sm->GetName();
+    }
 
     csRenderBufferHolder* GetBufferHolder (csRenderBufferHolder* copyFrom);
 
     const char* GetName() const 
     { 
-      if (parentSubMesh) return parentSubMesh->SubMesh::GetName();
-      return 0;
+      return name;
     }
     iRenderBuffer* GetIndices ()
     { 
