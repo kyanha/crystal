@@ -117,6 +117,8 @@ CS_PLUGIN_NAMESPACE_BEGIN(Ragdoll)
 
     virtual void BlendState (CS::Animation::AnimatedMeshState* state,
 			     float baseWeight = 1.0f);
+    virtual void TickAnimation (float dt);
+
   private:
     struct BoneData
     {
