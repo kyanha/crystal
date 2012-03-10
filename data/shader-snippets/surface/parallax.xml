@@ -91,6 +91,33 @@
 	  </block>
 	</input>
 	
+          <input name="heightMapScale" type="float" default="complex">
+            <block location="shadervars">
+               <shadervar name="tex height scale" type="float">0.01</shadervar>
+            </block>
+
+            <block location="cg:variablemap">
+              <variablemap variable="tex height scale" destination="fragmentIn.heightMapScale" />
+            </block>
+            <block location="glsl:variablemap">
+              <variablemap variable="tex height scale" destination="in_heightMapScale" />
+            </block>
+      
+            <block location="cg:fragmentIn">
+             <uniform type="float" name="heightMapScale" />
+            </block>
+            <block location="glsl:inputs">
+             <uniform type="float" name="in_heightMapScale" />
+            </block>
+      
+            <block location="cg:fragmentMain">
+              heightMapScale = fragmentIn.heightMapScale;
+            </block>
+            <block location="glsl:fragmentMain">
+              heightMapScale = in_heightMapScale;
+            </block>
+          </input>
+
 	<block location="tags">
 	  <tag>parallax</tag>
 	</block>
@@ -110,7 +137,7 @@
 	    float2 usedTC;
 	    usedTC = texCoord * tcScaleOffs.xy + tcScaleOffs.zw; 
 	    offset = ComputeParallaxOffset (texHeight, usedTC, 
-	      -normalize (eyeVec), 0.04);
+	      -normalize (eyeVec), heightMapScale);
 	  <?endif?>
 	  texCoordOffset = texCoord + offset;
 	</block>
@@ -120,7 +147,7 @@
 	    vec2 usedTC;
 	    usedTC = texCoord * tcScaleOffs.xy + tcScaleOffs.zw; 
 	    offset = ComputeParallaxOffset (texHeight, usedTC, 
-	      -normalize (eyeVec), 0.04);
+	      -normalize (eyeVec), heightMapScale);
 	  <?endif?>
 	  texCoordOffset = texCoord + offset;
 	</block>
