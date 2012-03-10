@@ -79,20 +79,24 @@ namespace CS
     void SPSBPD::csBoxClipperCached::operator delete (void* p, void* q)
     {
       csBoxClipperCached* bcc = reinterpret_cast<csBoxClipperCached*> (p);
-      bcc->owningPersistentData->FreeCachedClipper (bcc);
+      BoxClipperCacheRefCounted* bccCache (bcc->owningCache);
+      bccCache->FreeCachedClipper (bcc);
+      bccCache->DecRef();
     }
     void SPSBPD::csBoxClipperCached::operator delete (void* p)
     {
       csBoxClipperCached* bcc = reinterpret_cast<csBoxClipperCached*> (p);
-      bcc->owningPersistentData->FreeCachedClipper (bcc);
+      BoxClipperCacheRefCounted* bccCache (bcc->owningCache);
+      bccCache->FreeCachedClipper (bcc);
+      bccCache->DecRef();
     }
   
     //-----------------------------------------------------------------------
 
-    void SPSBPD::FreeCachedClipper (csBoxClipperCached* bcc)
+    void SPSBPD::BoxClipperCacheRefCounted::FreeCachedClipper (csBoxClipperCached* bcc)
     {
       CS::Utility::ResourceCache::ReuseConditionFlagged::StoredAuxiliaryInfo*
-	reuseAux = boxClipperCache.GetReuseAuxiliary (
+	reuseAux = GetReuseAuxiliary (
 	  reinterpret_cast<csBoxClipperCachedStore*> (bcc));
       reuseAux->reusable = true;
     }
@@ -100,15 +104,16 @@ namespace CS
     SPSBPD::PersistentData(int textCachOptions) :
       bufCache (CS::Utility::ResourceCache::ReuseConditionAfterTime<uint> (),
 	CS::Utility::ResourceCache::PurgeConditionAfterTime<uint> (10000)),
-      boxClipperCache (CS::Utility::ResourceCache::ReuseConditionFlagged (),
-	CS::Utility::ResourceCache::PurgeConditionAfterTime<uint> (10000)),
       texCache (csimg2D, "rgb8", // @@@ FIXME: Use same format as main view ...
 	CS_TEXTURE_3D | CS_TEXTURE_NOMIPMAPS | CS_TEXTURE_CLAMP,
 	"target", textCachOptions), 
       fixedTexCacheWidth (0), fixedTexCacheHeight (0)
     {
       bufCache.agedPurgeInterval = 5000;
-      boxClipperCache.agedPurgeInterval = 5000;
+      boxClipperCache.AttachNew (new BoxClipperCacheRefCounted (
+        CS::Utility::ResourceCache::ReuseConditionFlagged (),
+	CS::Utility::ResourceCache::PurgeConditionAfterTime<uint> (10000)));
+      boxClipperCache->agedPurgeInterval = 5000;
     }
 
     void SPSBPD::Initialize (iShaderManager* shmgr, iGraphics3D* g3d,
@@ -171,16 +176,17 @@ namespace CS
     {
       csRef<iClipper2D> clipper;
       PersistentData::csBoxClipperCachedStore* bccstore;
-      bccstore = persistentData.boxClipperCache.Query ();
+      bccstore = persistentData.boxClipperCache->Query ();
       if (bccstore == 0)
       {
         PersistentData::csBoxClipperCachedStore dummy;
-        bccstore = persistentData.boxClipperCache.AddActive (dummy);
+        bccstore = persistentData.boxClipperCache->AddActive (dummy);
       }
 #include "csutil/custom_new_disable.h"
       clipper.AttachNew (new (bccstore) PersistentData::csBoxClipperCached (
-                  &persistentData, box));
+        persistentData.boxClipperCache, box));
 #include "csutil/custom_new_enable.h"
+      persistentData.boxClipperCache->IncRef ();
       return csPtr<iClipper2D> (clipper);
     }
 
