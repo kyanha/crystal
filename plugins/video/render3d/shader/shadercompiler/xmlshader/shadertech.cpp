@@ -329,73 +329,16 @@ bool csXMLShaderTech::LoadPass (iDocumentNode *node, ShaderPass* pass,
   WritePass (pass, cachedPlugins, cacheFile);
 
   //if we got this far, load buffermappings
-  if (result && !ParseBuffers (*pass, GetPassNumber (pass),
+  int passNum (GetPassNumber (pass));
+  if (result && !ParseBuffers (*pass, passNum,
     node, hlp, resolveFP, resolveVP)) result = false;
 
   //get texturemappings
   if (result && !ParseTextures (*pass, node, hlp, resolveFP)) result = false;
 
   // Load pseudo-instancing binds
-  csRef<iDocumentNodeIterator> it = node->GetNodes (xmltokens.Request (
-    csXMLShaderCompiler::XMLTOKEN_INSTANCEPARAM));
-  while(it->HasNext ())
-  {
-    csRef<iDocumentNode> mapping = it->Next ();
-    if (mapping->GetType () != CS_NODE_ELEMENT) continue;
-
-    const char* dest = mapping->GetAttributeValue ("destination");
-    csVertexAttrib attrib = ParseVertexAttribute (dest, resolveVP, resolveFP);
-    if (attrib > CS_VATTRIB_INVALID)
-    {
-      const char *source = mapping->GetAttributeValue ("source");
-      if (source == 0)
-      {
-        SetFailReason ("invalid instanceparam, source missing.");
-        return false;
-      }
-
-      ShaderPass::InstanceMapping map;
-      map.variable = hlp.stringsSvName->Request (source);
-      map.destination = attrib;
-
-      pass->instances_binds.Push (map);
-    }
-    else
-    {
-      if (attrib != CS_VATTRIB_UNUSED)
-      {
-        SetFailReason ("invalid instanceparam destination.");
-        if(do_verbose)
-        {
-          parent->compiler->Report (CS_REPORTER_SEVERITY_WARNING,
-            "Shader %s, pass %d: invalid instanceparam destination %s",
-            CS::Quote::Single (parent->GetName ()), GetPassNumber (pass),
-	    CS::Quote::Single (dest));
-        }
-        return false;
-      }
-    }
-  }
-  pass->instances_binds.ShrinkBestFit ();
-  // Read number of instances SV
-  {
-    csRef<iDocumentNode> instancesNumNode = node->GetNode (xmltokens.Request (
-      csXMLShaderCompiler::XMLTOKEN_INSTANCESNUM));
-    if (instancesNumNode && (instancesNumNode->GetType() == CS_NODE_ELEMENT))
-    {
-      const char* source = instancesNumNode->GetContentsValue();
-      pass->instancesNumVar = hlp.stringsSvName->Request (source);
-    }
-  }
-  
-  if (cacheTo)
-  {
-    csMemFile perTagFile;
-    WritePassPerTag (*pass, &perTagFile);
-    cacheTo->CacheData (perTagFile.GetData(), perTagFile.GetSize(),
-      csString().Format ("/pass%ddata/%s_%s_%s", GetPassNumber (pass),
-      tagFP.GetDataSafe(), tagVP.GetDataSafe(), tagVPr.GetDataSafe()));
-  }
+  if (result && !ParseInstances (*pass, passNum, node, hlp, resolveFP, resolveVP))
+    result = false;
   
   return result;
 }
@@ -503,36 +446,7 @@ struct PassActionPrecache
 	vpr = *cacheP;
     }
 
-    if (result)
-    {
-      csRef<iShaderDestinationResolver> resolveFP;
-      if (fp) resolveFP = scfQueryInterface<iShaderDestinationResolver> (fp);
-      csRef<iShaderDestinationResolver> resolveVP;
-      if (vp) resolveVP = scfQueryInterface<iShaderDestinationResolver> (vp);
-      
-      csXMLShaderTech::ShaderPassPerTag passPerTag;
-      
-      //if we got this far, load buffermappings
-      if (result && !tech->ParseBuffers (passPerTag, passIndex,
-	node, hlp, resolveFP, resolveVP)) result = false;
-    
-      //get texturemappings
-      if (result && !tech->ParseTextures (passPerTag, node, hlp, resolveFP))
-	result = false;
-      
-      if (result)
-      {
-	csMemFile perTagFile;
-	tech->WritePassPerTag (passPerTag, &perTagFile);
-	cacheTo->CacheData (perTagFile.GetData(), perTagFile.GetSize(),
-	  csString().Format ("/pass%ddata/%s_%s_%s", passIndex,
-	  tags[0] ? tags[0] : "",
-	  tags[1] ? tags[1] : "",
-	  tags[2] ? tags[2] : ""));
-      }
-      
-      oneComboWorked |= result;
-    }
+    oneComboWorked |= result;
   
     return false;
   }
@@ -959,6 +873,66 @@ bool csXMLShaderTech::ParseTextures (ShaderPassPerTag& pass,
   return true;
 }
 
+bool csXMLShaderTech::ParseInstances (ShaderPassPerTag& pass, int passNum,
+                                      iDocumentNode* node,
+                                      LoadHelpers& hlp,
+                                      iShaderDestinationResolver* resolveFP,
+                                      iShaderDestinationResolver* resolveVP)
+{
+  csRef<iDocumentNodeIterator> it = node->GetNodes (xmltokens.Request (
+    csXMLShaderCompiler::XMLTOKEN_INSTANCEPARAM));
+  while(it->HasNext ())
+  {
+    csRef<iDocumentNode> mapping = it->Next ();
+    if (mapping->GetType () != CS_NODE_ELEMENT) continue;
+
+    const char* dest = mapping->GetAttributeValue ("destination");
+    csVertexAttrib attrib = ParseVertexAttribute (dest, resolveVP, resolveFP);
+    if (attrib > CS_VATTRIB_INVALID)
+    {
+      const char *source = mapping->GetAttributeValue ("source");
+      if (source == 0)
+      {
+        SetFailReason ("invalid instanceparam, source missing.");
+        return false;
+      }
+
+      ShaderPass::InstanceMapping map;
+      map.variable = hlp.stringsSvName->Request (source);
+      map.destination = attrib;
+
+      pass.instances_binds.Push (map);
+    }
+    else
+    {
+      if (attrib != CS_VATTRIB_UNUSED)
+      {
+        SetFailReason ("invalid instanceparam destination.");
+        if(do_verbose)
+        {
+          parent->compiler->Report (CS_REPORTER_SEVERITY_WARNING,
+            "Shader %s, pass %d: invalid instanceparam destination %s",
+            CS::Quote::Single (parent->GetName ()), passNum,
+	    CS::Quote::Single (dest));
+        }
+        return false;
+      }
+    }
+  }
+  pass.instances_binds.ShrinkBestFit ();
+  // Read number of instances SV
+  {
+    csRef<iDocumentNode> instancesNumNode = node->GetNode (xmltokens.Request (
+      csXMLShaderCompiler::XMLTOKEN_INSTANCESNUM));
+    if (instancesNumNode && (instancesNumNode->GetType() == CS_NODE_ELEMENT))
+    {
+      const char* source = instancesNumNode->GetContentsValue();
+      pass.instancesNumVar = hlp.stringsSvName->Request (source);
+    }
+  }
+  return true;
+}
+
 // Used to generate data written on disk!
 enum
 {
@@ -1052,115 +1026,6 @@ bool csXMLShaderTech::WritePass (ShaderPass* pass,
   return true;
 }
   
-bool csXMLShaderTech::WritePassPerTag (const ShaderPassPerTag& pass,
-                                       iFile* cacheFile)
-{
-  if (!cacheFile) return false;
-
-  uint32 diskMagic = csLittleEndian::UInt32 (cacheFileMagic);
-  if (cacheFile->Write ((char*)&diskMagic, sizeof (diskMagic))
-      != sizeof (diskMagic)) return false;
-      
-  for (int i = 0; i < CS_VATTRIB_SPECIFIC_NUM; i++)
-  {
-    int32 diskMapping = csLittleEndian::Int32 (pass.defaultMappings[i]);
-    if (cacheFile->Write ((char*)&diskMapping, sizeof (diskMapping))
-	!= sizeof (diskMapping)) return false;
-  }
-  {
-    uint32 diskNumBuffers = csLittleEndian::UInt32 (
-      (uint)pass.custommapping_buffer.GetSize());
-    if (cacheFile->Write ((char*)&diskNumBuffers, sizeof (diskNumBuffers))
-	!= sizeof (diskNumBuffers)) return false;
-  }
-  for (size_t i = 0; i < pass.custommapping_buffer.GetSize(); i++)
-  {
-    int32 diskMapping = csLittleEndian::Int32 (pass.custommapping_buffer[i]);
-    if (cacheFile->Write ((char*)&diskMapping, sizeof (diskMapping))
-	!= sizeof (diskMapping)) return false;
-	
-    int32 diskAttr = csLittleEndian::Int32 (pass.custommapping_attrib[i]);
-    if (cacheFile->Write ((char*)&diskAttr, sizeof (diskAttr))
-	!= sizeof (diskAttr)) return false;
-	
-    if (!WriteShadervarName (pass.custommapping_id[i], cacheFile))
-      return false;
-  }
-
-  {
-    uint32 diskNumTextures = csLittleEndian::UInt32 (
-      (uint)pass.textures.GetSize());
-    if (cacheFile->Write ((char*)&diskNumTextures, sizeof (diskNumTextures))
-	!= sizeof (diskNumTextures)) return false;
-  }
-  for (size_t i = 0; i < pass.textures.GetSize(); i++)
-  {
-    if (!WriteShadervarName (pass.textures[i].tex.id, cacheFile))
-      return false;
-      
-    uint32 diskNumIndices = csLittleEndian::UInt32 (
-      (uint)pass.textures[i].tex.indices.GetSize());
-    if (cacheFile->Write ((char*)&diskNumIndices, sizeof (diskNumIndices))
-	!= sizeof (diskNumIndices)) return false;
-    for (size_t n = 0; n < pass.textures[i].tex.indices.GetSize(); n++)
-    {
-      uint32 diskIndex = csLittleEndian::UInt32 (
-	(uint)pass.textures[i].tex.indices[n]);
-      if (cacheFile->Write ((char*)&diskIndex, sizeof (diskIndex))
-	  != sizeof (diskIndex)) return false;
-    }
-    
-    if (!WriteShadervarName (pass.textures[i].fallback.id, cacheFile))
-      return false;
-      
-    diskNumIndices = csLittleEndian::UInt32 (
-      (uint)pass.textures[i].fallback.indices.GetSize());
-    if (cacheFile->Write ((char*)&diskNumIndices, sizeof (diskNumIndices))
-	!= sizeof (diskNumIndices)) return false;
-    for (size_t n = 0; n < pass.textures[i].fallback.indices.GetSize(); n++)
-    {
-      uint32 diskIndex = csLittleEndian::UInt32 (
-	(uint)pass.textures[i].fallback.indices[n]);
-      if (cacheFile->Write ((char*)&diskIndex, sizeof (diskIndex))
-	  != sizeof (diskIndex)) return false;
-    }
-    
-    int32 diskTU = csLittleEndian::Int32 (pass.textures[i].textureUnit);
-    if (cacheFile->Write ((char*)&diskTU, sizeof (diskTU))
-	!= sizeof (diskTU)) return false;
-    
-    int16 diskCompareFunc = csLittleEndian::Int16 (
-      pass.textures[i].texCompare.function);
-    if (cacheFile->Write ((char*)&diskCompareFunc, sizeof (diskCompareFunc))
-	!= sizeof (diskCompareFunc)) return false;
-    
-    int16 diskCompareMode = csLittleEndian::Int16 (
-      pass.textures[i].texCompare.mode);
-    if (cacheFile->Write ((char*)&diskCompareMode, sizeof (diskCompareMode))
-	!= sizeof (diskCompareMode)) return false;
-  }
-  
-  {
-    uint32 diskNumInstances = csLittleEndian::UInt32 (
-      (uint)pass.instances_binds.GetSize());
-    if (cacheFile->Write ((char*)&diskNumInstances, sizeof (diskNumInstances))
-	!= sizeof (diskNumInstances)) return false;
-  }
-  for (size_t i = 0; i < pass.instances_binds.GetSize(); i++)
-  {
-    if (!WriteShadervarName (pass.instances_binds[i].variable, cacheFile))
-      return false;
-    
-    int32 diskAttr = csLittleEndian::Int32 (pass.instances_binds[i].destination);
-    if (cacheFile->Write ((char*)&diskAttr, sizeof (diskAttr))
-	!= sizeof (diskAttr)) return false;
-  }
-  if (!WriteShadervarName (pass.instancesNumVar, cacheFile))
-    return false;
-
-  return true;
-}
-  
 iShaderProgram::CacheLoadResult csXMLShaderTech::LoadPassFromCache (
   ShaderPass* pass, iDocumentNode* node, size_t variant, iFile* cacheFile,
   iHierarchicalCache* cache)
@@ -1178,6 +1043,8 @@ iShaderProgram::CacheLoadResult csXMLShaderTech::LoadPassFromCache (
   iShaderProgram::CacheLoadResult loadRes;
 
   iBase *previous = 0;
+  csRef<iShaderDestinationResolver> resolveFP;
+  csRef<iShaderDestinationResolver> resolveVP;
 
   if (plugins.unified.available)
   {
@@ -1190,6 +1057,8 @@ iShaderProgram::CacheLoadResult csXMLShaderTech::LoadPassFromCache (
                           tagVP, passNum);
     tagFP = tagVP;
     previous = pass->program;
+    resolveVP = scfQueryInterface<iShaderDestinationResolver> (pass->program);
+    resolveFP = resolveVP;
   }
   else
   {
@@ -1218,6 +1087,9 @@ iShaderProgram::CacheLoadResult csXMLShaderTech::LoadPassFromCache (
 
     previous = shader->GetPrevious ();
 
+    resolveVP = scfQueryInterface<iShaderDestinationResolver> (vp);
+    resolveFP = scfQueryInterface<iShaderDestinationResolver> (fp);
+
     // assign wrapper
     pass->program = shader;
   }
@@ -1233,19 +1105,20 @@ iShaderProgram::CacheLoadResult csXMLShaderTech::LoadPassFromCache (
     if (loadRes != iShaderProgram::loadSuccessShaderValid) return loadRes;
   }
   
-  csRef<iDataBuffer> perTagData = cache->ReadCache (
-    csString().Format ("/pass%ddata/%s_%s_%s", GetPassNumber (pass),
-      tagFP.GetDataSafe(), tagVP.GetDataSafe(), tagVPr.GetDataSafe()));
-  if (!perTagData.IsValid())
-  {
-    SetFailReason("Per tag data failed to be read from cache.");
-    return iShaderProgram::loadFail;
-  }
+  LoadHelpers hlp;
+  hlp.synldr = parent->compiler->synldr;
+  hlp.strings = parent->compiler->strings;
+  hlp.stringsSvName = parent->compiler->stringsSvName;
 
-  csMemFile perTagCacheFile (perTagData, true);
-  if (!ReadPassPerTag (*pass, &perTagCacheFile))
+  //if we got this far, load buffermappings
+  if (!ParseBuffers (*pass, GetPassNumber (pass),
+      node, hlp, resolveFP, resolveVP))
     return iShaderProgram::loadFail;
-  
+
+  //get texturemappings
+  if (!ParseTextures (*pass, node, hlp, resolveFP))
+    return iShaderProgram::loadFail;
+
   return iShaderProgram::loadSuccessShaderValid;
 }
 
@@ -1329,137 +1202,6 @@ bool csXMLShaderTech::ReadPass (ShaderPass* pass,
 	!= sizeof (diskMinLights)) return false;
     pass->minLights = csLittleEndian::Int32 (diskMinLights);
   }
-  return true;
-}
-  
-bool csXMLShaderTech::ReadPassPerTag (ShaderPassPerTag& pass, 
-                                      iFile* cacheFile)
-{
-  if (!cacheFile) return false;
-
-  uint32 diskMagic;
-  if (cacheFile->Read ((char*)&diskMagic, sizeof (diskMagic))
-      != sizeof (diskMagic)) return false;
-  if (csLittleEndian::UInt32 (diskMagic) != cacheFileMagic)
-    return false;
-    
-  for (int i = 0; i < CS_VATTRIB_SPECIFIC_NUM; i++)
-  {
-    int32 diskMapping;
-    if (cacheFile->Read ((char*)&diskMapping, sizeof (diskMapping))
-	!= sizeof (diskMapping)) return false;
-    pass.defaultMappings[i] =
-      (csRenderBufferName)csLittleEndian::Int32 (diskMapping);
-  }
-  
-  {
-    size_t numBuffers;
-    uint32 diskNumBuffers;
-    if (cacheFile->Read ((char*)&diskNumBuffers, sizeof (diskNumBuffers))
-	!= sizeof (diskNumBuffers)) return false;
-    numBuffers = csLittleEndian::UInt32 (diskNumBuffers);
-    for (size_t i = 0; i < numBuffers; i++)
-    {
-      int32 diskMapping;
-      if (cacheFile->Read ((char*)&diskMapping, sizeof (diskMapping))
-	  != sizeof (diskMapping)) return false;
-      pass.custommapping_buffer.Push (
-        (csRenderBufferName)csLittleEndian::Int32 (diskMapping));
-	  
-      int32 diskAttr;
-      if (cacheFile->Read ((char*)&diskAttr, sizeof (diskAttr))
-	  != sizeof (diskAttr)) return false;
-      pass.custommapping_attrib.Push (
-        (csVertexAttrib)csLittleEndian::Int32 (diskAttr));
-
-      pass.custommapping_id.Push (ReadShadervarName (cacheFile));
-    }
-    pass.custommapping_buffer.ShrinkBestFit();
-    pass.custommapping_attrib.ShrinkBestFit();
-    pass.custommapping_id.ShrinkBestFit();
-  }
-
-  {
-    size_t numTextures;
-    uint32 diskNumTextures;
-    if (cacheFile->Read ((char*)&diskNumTextures, sizeof (diskNumTextures))
-	!= sizeof (diskNumTextures)) return false;
-    numTextures = csLittleEndian::UInt32 (diskNumTextures);
-    for (size_t i = 0; i < numTextures; i++)
-    {
-      ShaderPass::TextureMapping mapping;
-      mapping.tex.id = ReadShadervarName (cacheFile);
-	
-      size_t numIndices;
-      uint32 diskNumIndices;
-      if (cacheFile->Read ((char*)&diskNumIndices, sizeof (diskNumIndices))
-	  != sizeof (diskNumIndices)) return false;
-      numIndices = csLittleEndian::UInt32 (diskNumIndices);
-      for (size_t n = 0; n < numIndices; n++)
-      {
-	uint32 diskIndex;
-	if (cacheFile->Read ((char*)&diskIndex, sizeof (diskIndex))
-	    != sizeof (diskIndex)) return false;
-	mapping.tex.indices.Push (csLittleEndian::UInt32 (diskIndex));
-      }
-      
-      mapping.fallback.id = ReadShadervarName (cacheFile);
-	
-      if (cacheFile->Read ((char*)&diskNumIndices, sizeof (diskNumIndices))
-	  != sizeof (diskNumIndices)) return false;
-      numIndices = csLittleEndian::UInt32 (diskNumIndices);
-      for (size_t n = 0; n < numIndices; n++)
-      {
-	uint32 diskIndex;
-	if (cacheFile->Read ((char*)&diskIndex, sizeof (diskIndex))
-	    != sizeof (diskIndex)) return false;
-	mapping.fallback.indices.Push (csLittleEndian::UInt32 (diskIndex));
-      }
-      
-      int32 diskTU;
-      if (cacheFile->Read ((char*)&diskTU, sizeof (diskTU))
-	  != sizeof (diskTU)) return false;
-      mapping.textureUnit = csLittleEndian::Int32 (diskTU);
-      
-      int16 diskCompareFunc;
-      if (cacheFile->Read ((char*)&diskCompareFunc, sizeof (diskCompareFunc))
-	  != sizeof (diskCompareFunc)) return false;
-      mapping.texCompare.function = (CS::Graphics::TextureComparisonMode::Function)
-        csLittleEndian::Int16 (diskCompareFunc);
-      
-      int16 diskCompareMode;
-      if (cacheFile->Read ((char*)&diskCompareMode, sizeof (diskCompareMode))
-	  != sizeof (diskCompareMode)) return false;
-      mapping.texCompare.mode = (CS::Graphics::TextureComparisonMode::Mode)
-        csLittleEndian::Int16 (diskCompareMode);
-      
-      pass.textures.Push (mapping);
-    }
-    pass.textures.ShrinkBestFit();
-  }  
-
-  {
-    size_t numInstances;
-    uint32 diskNumInstances;
-    if (cacheFile->Read ((char*)&diskNumInstances, sizeof (diskNumInstances))
-	!= sizeof (diskNumInstances)) return false;
-    numInstances = csLittleEndian::UInt32 (diskNumInstances);
-    for (size_t i = 0; i < numInstances; i++)
-    {
-      ShaderPassPerTag::InstanceMapping newInst;
-      newInst.variable = ReadShadervarName (cacheFile);
-      
-      int32 diskAttr;
-      if (cacheFile->Read ((char*)&diskAttr, sizeof (diskAttr))
-	  != sizeof (diskAttr)) return false;
-      newInst.destination = (csVertexAttrib)csLittleEndian::Int32 (diskAttr);
-
-      pass.instances_binds.Push (newInst);
-    }
-    pass.instances_binds.ShrinkBestFit();
-  }
-  pass.instancesNumVar = ReadShadervarName (cacheFile);
-
   return true;
 }
   
