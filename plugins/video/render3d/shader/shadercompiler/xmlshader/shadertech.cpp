@@ -212,9 +212,13 @@ bool csXMLShaderTech::LoadPass (iDocumentNode *node, ShaderPass* pass,
 
   if (cachedPlugins.unified.programNode)
   {
+    csRef<iHierarchicalCache> progCache;
+    if (cacheTo)
+      progCache = cacheTo->GetRootedCache (csString().Format ("/pass%dprog",
+                                           GetPassNumber (pass)));
     // new unified syntax detected
     pass->program = LoadProgram (0, cachedPlugins.unified.programNode,
-                                 pass, variant, 0, cachedPlugins.unified, tagVP);
+                                 pass, variant, progCache, cachedPlugins.unified, tagVP);
     if (!pass->program)
       return false;
 
@@ -1178,16 +1182,14 @@ iShaderProgram::CacheLoadResult csXMLShaderTech::LoadPassFromCache (
   if (plugins.unified.available)
   {
     // new unified syntax
-
-    // what do for the vproc shader? need to have the specific cache
-    // used to compile the VP
-
-    // assign tags
-
-    // previous = foobar;
-    LoadProgramFromCache (0, 0, plugins.unified, pass->program,
-                          tagVP, GetPassNumber (pass));
+    int passNum (GetPassNumber (pass));
+    csRef<iHierarchicalCache> progCache;
+    if (cache)
+      progCache = cache->GetRootedCache (csString().Format ("/pass%dprog", passNum));
+    LoadProgramFromCache (0, progCache, plugins.unified, pass->program,
+                          tagVP, passNum);
     tagFP = tagVP;
+    previous = pass->program;
   }
   else
   {
