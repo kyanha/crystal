@@ -90,16 +90,17 @@ namespace RenderManager
       CS::Utility::GenericResourceCache<PortalBuffers, csTicks,
         PortalBufferConstraint> bufCache;
 
+      struct BoxClipperCacheRefCounted;
       /**
        * Cache-helper for box clipper caching
        */
       struct CS_CRYSTALSPACE_EXPORT csBoxClipperCached : public csBoxClipper
       {
-        PersistentData* owningPersistentData;
+        BoxClipperCacheRefCounted* owningCache;
 
-        csBoxClipperCached (PersistentData* owningPersistentData,
+        csBoxClipperCached (BoxClipperCacheRefCounted* owningCache,
           const csBox2& box) : csBoxClipper (box),
-          owningPersistentData (owningPersistentData)
+          owningCache (owningCache)
         { }
 
         void operator delete (void* p, void* q);
@@ -115,11 +116,20 @@ namespace RenderManager
 	  memset (bytes, 0, sizeof (bytes));
 	}
       };
-      CS::Utility::GenericResourceCache<csBoxClipperCachedStore, csTicks,
+      typedef CS::Utility::GenericResourceCache<csBoxClipperCachedStore, csTicks,
         CS::Utility::ResourceCache::SortingNone,
-        CS::Utility::ResourceCache::ReuseConditionFlagged> boxClipperCache;
+        CS::Utility::ResourceCache::ReuseConditionFlagged> BoxClipperCacheType;
+      struct BoxClipperCacheRefCounted : public BoxClipperCacheType,
+                                         public CS::Utility::FastRefCount<BoxClipperCacheRefCounted>
+      {
+        BoxClipperCacheRefCounted (
+          const CS::Utility::ResourceCache::ReuseConditionFlagged& reuse,
+          const CS::Utility::ResourceCache::PurgeConditionAfterTime<uint>& purge)
+          : BoxClipperCacheType (reuse, purge) {}
 
-      void FreeCachedClipper (csBoxClipperCached* bcc);
+        void FreeCachedClipper (csBoxClipperCached* bcc);
+      };
+      csRef<BoxClipperCacheRefCounted> boxClipperCache;
 
       CS::ShaderVarStringID svNameTexPortal;
     #ifdef CS_DEBUG
@@ -169,7 +179,7 @@ namespace RenderManager
         csTicks time = csGetTicks ();
         texCache.AdvanceFrame (time);
         bufCache.AdvanceTime (time);
-        boxClipperCache.AdvanceTime (time);
+        boxClipperCache->AdvanceTime (time);
       }
     };
   
