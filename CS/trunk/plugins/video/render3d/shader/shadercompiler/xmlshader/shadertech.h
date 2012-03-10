@@ -183,6 +183,9 @@ CS_PLUGIN_NAMESPACE_BEGIN(XMLShader)
       iShaderDestinationResolver* resolveVP);
     bool ParseTextures (ShaderPassPerTag& pass, 
       iDocumentNode* node, LoadHelpers& helpers, iShaderDestinationResolver* resolveFP);
+    bool ParseInstances (ShaderPassPerTag& pass, int passNum,
+      iDocumentNode* node, LoadHelpers& helpers, 
+      iShaderDestinationResolver* resolveFP, iShaderDestinationResolver* resolveVP);
 
     bool WritePass (ShaderPass* pass, const CachedPlugins& plugins,
       iFile* cacheFile);
@@ -192,10 +195,6 @@ CS_PLUGIN_NAMESPACE_BEGIN(XMLShader)
     bool ReadPass (ShaderPass* pass, iFile* cacheFile,
       CachedPlugins& plugins);
 
-    bool WritePassPerTag (const ShaderPassPerTag& pass, 
-      iFile* cacheFile);
-    bool ReadPassPerTag (ShaderPassPerTag& pass, iFile* cacheFile);
-    
     bool WriteShadervarName (CS::ShaderVarStringID svid, iFile* cacheFile);
     CS::ShaderVarStringID ReadShadervarName (iFile* cacheFile);
 
