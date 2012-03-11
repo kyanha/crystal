@@ -2134,7 +2134,21 @@ bool csShaderExpression::parse_xml (cons* head, iDocumentNode* node)
 
 bool csShaderExpression::parse_sexp (cons* head, iDocumentNode* node)
 {
-  const char* text = node->GetContentsValue ();
+  // Concatenate all text node children into the expression string
+  csString textStr;
+  csRef<iDocumentNodeIterator> contentsNodes (node->GetNodes());
+  while (contentsNodes->HasNext())
+  {
+    csRef<iDocumentNode> content = contentsNodes->Next();
+    if (content->GetType() == CS_NODE_TEXT)
+      textStr.Append (content->GetValue());
+    else
+      /* Non-text nodes (e.g. comments) shall serve as whitespace in the
+       * expression */
+      textStr.Append (" ");
+  }
+
+  const char* text = textStr.GetData();
   cons* cptr = head;
 
   if (!text || !*text) return false;
