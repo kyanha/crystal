@@ -83,25 +83,25 @@ def GetSubMeshesRaw(self, name, indexV, indexGroups, mappingBuffer = []):
               break
 
         # Add vertices composing the triangle
-        for j in [2,1,0]:
-          # front side of the mesh
-          indexGroups[triplet].append(frontFaceIndices[j])
-          indexV += 1
         for j in [0,1,2]:
-          # back side of the mesh
+          # front side of the mesh
           indexGroups[triplet].append(frontFaceIndices[j] + 1)
+          indexV += 1
+        for j in [2,1,0]:
+          # back side of the mesh
+          indexGroups[triplet].append(frontFaceIndices[j])
           indexV += 1
 
         # The face is not a triangle => triangulation
         if len(indices)!=3:
           # Add vertices composing the second triangle
-          for j in [3,2,0]:
-            # front side of the mesh
-            indexGroups[triplet].append(frontFaceIndices[j])
-            indexV += 1
           for j in [3,0,2]:
-            # back side of the mesh
+            # front side of the mesh
             indexGroups[triplet].append(frontFaceIndices[j] + 1)
+            indexV += 1
+          for j in [3,2,0]:
+            # back side of the mesh
+            indexGroups[triplet].append(frontFaceIndices[j])
             indexV += 1
 
   return indexV, indexGroups
