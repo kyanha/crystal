@@ -61,6 +61,14 @@ class SubMesh:
     SubMesh.IndexBuffer(self.indices).AsCS(func, depth+2, animesh)
     func(' '*depth +'</submesh>')
 
+  def AsCSTriangles(self, func, depth=0, animesh=False):
+    if self.material:
+      func(' '*depth +'<material>'+self.material.uname+'</material>')
+    text = ''
+    for i, index in enumerate(self.indices):
+      text += '%d ' % (index)
+    func(' '*depth +'<triangles>'+text+'</triangles>')
+
   def GetDependencies(self):
     dependencies = EmptyDependencies()
     if self.material:

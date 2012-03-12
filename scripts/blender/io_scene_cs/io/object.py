@@ -372,8 +372,11 @@ def AsCSGenmeshLib(self, func, depth=0, **kwargs):
     buf.AsCS(func, depth+4, False)
 
   # Export mesh's submeshes
-  for sub in subMeshes:
-    sub.AsCS(func, depth+4, False)
+  if len(subMeshes)==1:
+    subMeshes[0].AsCSTriangles(func, depth+4, False)
+  else:
+    for sub in subMeshes:
+      sub.AsCS(func, depth+4, False)
 
   func(' '*depth + '  </params>')
 
