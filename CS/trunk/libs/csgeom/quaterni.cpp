@@ -25,7 +25,7 @@
 
 void csQuaternion::SetEulerAngles (const csVector3& angles)
 {
-  csVector3 halfAngles = angles / 2.0f;
+  csVector3 halfAngles = angles * 0.5f;
   const float cx = cosf (halfAngles.x);
   const float sx = sinf (halfAngles.x);
   const float cy = cosf (halfAngles.y);
@@ -54,9 +54,9 @@ csVector3 csQuaternion::GetEulerAngles () const
   angles.z = atan2f (2.0f * (v.x*v.y + w*v.z), (w*w + v.x*v.x - v.y*v.y - v.z*v.z));
   float sine = -2.0f * (v.x*v.z - w*v.y);
 
-  if(sine >= 1)     //cases whewe value is 1 ow -1 cause NAN
+  if (sine >= 1)     // cases where value is 1 or -1 cause NAN
     angles.y = case1;
-  else if ( sine <= -1 )
+  else if (sine <= -1)
     angles.y = case2;
   else
     angles.y = asinf (sine);
