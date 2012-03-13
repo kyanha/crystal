@@ -36,6 +36,8 @@
 
 CS_PLUGIN_NAMESPACE_BEGIN(Bodymesh)
 {
+  using namespace CS::Animation;
+
   class BodyBone;
   class BodyChainNode;
 
@@ -204,14 +206,23 @@ CS_PLUGIN_NAMESPACE_BEGIN(Bodymesh)
     virtual void RemoveBodyBone (CS::Animation::BoneID bone);
     virtual void ClearBodyBones ();
 
-    virtual CS::Animation::iBodyChain* CreateBodyChain (const char *name,
-							CS::Animation::BoneID rootBone);
+    virtual CS::Animation::iBodyChain* CreateBodyChain
+      (const char *name, CS::Animation::BoneID rootBone);
     virtual CS::Animation::iBodyChain* FindBodyChain (const char *name) const;
     virtual csPtr<CS::Animation::iBodyChainIterator> GetBodyChains () const;
     virtual void RemoveBodyChain (const char* name);
     virtual void ClearBodyChains ();
 
+    virtual void PopulateDefaultColliders
+      (const CS::Mesh::iAnimatedMeshFactory* animeshFactory,
+       ColliderType colliderType = COLLIDER_CAPSULE);
+    virtual void PopulateDefaultBodyChains ();
+
   private:
+    void PopulateDefaultBodyChainNode (BodyChainNode* parentNode,
+				       const csArray<CS::Animation::BoneID> &bones,
+				       size_t index);
+
     csString name;
     BodyManager* manager;
     // This is a weakref to avoid circular references between animesh,
@@ -249,6 +260,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(Bodymesh)
     csRefArray<BodyBoneCollider> colliders;
 
     friend class BodyChainNode;
+    friend class BodySkeleton;
   };
 
   class BodyChain : public scfImplementation1<BodyChain, CS::Animation::iBodyChain>
