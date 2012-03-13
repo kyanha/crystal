@@ -22,7 +22,7 @@
 #define __CS_IMESH_BODYMESH_H__
 
 /**\file
- * Physical description of an animated mesh.
+ * Physical description of a CS::Mesh::iAnimatedMesh.
  */
 
 #include "csutil/scf_interface.h"
@@ -32,6 +32,14 @@
 
 /**\addtogroup meshplugins
  * @{ */
+
+namespace CS {
+namespace Mesh {
+
+struct iAnimatedMeshFactory;
+
+} // namespace Mesh
+} // namespace CS
 
 namespace CS {
 namespace Animation {
@@ -44,6 +52,17 @@ struct iBodyChainNode;
 struct iBodyBoneProperties;
 struct iBodyBoneJoint;
 struct iBodyBoneCollider;
+
+/**
+ * The type of a collider.
+ */
+enum ColliderType
+{
+  COLLIDER_BOX = 0,    /*!< Box collider */
+  COLLIDER_SPHERE,     /*!< Sphere collider */
+  COLLIDER_CYLINDER,   /*!< Cylinder collider */
+  COLLIDER_CAPSULE     /*!< Capsule collider */
+};
 
 /**
  * A class to manage the creation and deletion of bodies' skeletons.
@@ -95,14 +114,14 @@ struct iBodyChainIterator : public virtual iBase
 
 
 /**
- * This class holds the physical description of the skeleton of an animated mesh.
+ * This class holds the physical description of the skeleton of an CS::Mesh::iAnimatedMesh.
  * For each relevant bone of the skeleton, one has to define an CS::Animation::iBodyBone that 
  * will hold the colliders, joint and properties of the bone.
  * Subtrees of the skeleton are defined through the CS::Animation::iBodyChain object.
  */
 struct iBodySkeleton : public virtual iBase
 {
-  SCF_INTERFACE(CS::Animation::iBodySkeleton, 3, 0, 0);
+  SCF_INTERFACE(CS::Animation::iBodySkeleton, 3, 0, 1);
 
   /**
    * Return the name of the body skeleton.
@@ -177,17 +196,44 @@ struct iBodySkeleton : public virtual iBase
    * Delete all body chains.
    */
   virtual void ClearBodyChains () = 0;
+
+  /**
+   * Populate this body skeleton with default colliders for all the bones of the
+   * skeleton. For each bone, if there are no colliders already defined, then
+   * this method will create a new collider based on the bounding box of the bone.
+   *
+   * If at least one collider exists for the parent bone, then a joint will also
+   * be created between the two bones. By default, the joints are constrained in
+   * translation and free in rotation.
+
+   * \param animeshFactory The animesh factory associated with this skeleton.
+   * \param colliderType The type of colliders to use
+   */
+  virtual void PopulateDefaultColliders
+    (const CS::Mesh::iAnimatedMeshFactory* animeshFactory,
+     ColliderType colliderType = COLLIDER_CAPSULE) = 0;
+
+  /**
+   * Populate this body skeleton with default body chains. This method will try to
+   * create as less body chains as possible, covering all the bones that contains
+   * at least one collider.
+   *
+   * The name of the chains that are created are of the format 'default_' + \a root_bone_name.
+   *
+   * \note This method should work well when called after PopulateDefaultColliders().
+   */
+  virtual void PopulateDefaultBodyChains () = 0;
 };
 
 /**
- * A body bone holds the physical description of the bone of an animated mesh.
+ * A body bone holds the physical description of the bone of an CS::Mesh::iAnimatedMesh.
  */
 struct iBodyBone : public virtual iBase
 {
   SCF_INTERFACE(CS::Animation::iBodyBone, 1, 0, 0);
 
   /**
-   * Return the ID of the bone of the animated mesh associated with this body bone.
+   * Return the ID of the bone of the CS::Mesh::iAnimatedMesh associated with this body bone.
    */
   virtual BoneID GetAnimeshBone () const = 0;
 
@@ -233,7 +279,7 @@ struct iBodyBone : public virtual iBase
 };
 
 /**
- * A body chain is a subtree of the skeleton of an animated mesh. It is used
+ * A body chain is a subtree of the skeleton of an CS::Mesh::iAnimatedMesh. It is used
  * to apply varying animation controllers on different parts of the skeleton.
  */
 struct iBodyChain : public virtual iBase
@@ -293,7 +339,8 @@ struct iBodyChainNode : public virtual iBase
   SCF_INTERFACE(CS::Animation::iBodyChainNode, 2, 0, 1);
 
   /**
-   * Return the ID of the bone of the animated mesh associated with this node.
+   * Return the ID of the bone of the CS::Mesh::iAnimatedMesh associated with
+   * this node.
    */
   virtual BoneID GetAnimeshBone () const = 0;
 
@@ -343,22 +390,26 @@ struct iBodyBoneProperties : public virtual iBase
   virtual float GetMass () const = 0;
 
   /**
-   * Set the center of mass of the rigid body of this bone. This is only useful if you use the ODE physical plugin.
+   * Set the center of mass of the rigid body of this bone. This is only
+   * useful if you use the ODE physical plugin.
    */
   virtual void SetCenter (const csVector3 &center) = 0;
 
   /**
-   * Get the center of mass of the rigid body of this bone. This is only useful if you use the ODE physical plugin.
+   * Get the center of mass of the rigid body of this bone. This is only
+   * useful if you use the ODE physical plugin.
    */
   virtual csVector3 GetCenter () const = 0;
 
   /**
-   * Set the matrix of inertia of the rigid body of this bone. This is only useful if you use the ODE physical plugin.
+   * Set the matrix of inertia of the rigid body of this bone. This is only
+   * useful if you use the ODE physical plugin.
    */
   virtual void SetInertia (const csMatrix3 &inertia) = 0;
 
   /**
-   * Get the matrix of inertia of the rigid body of this bone. This is only useful if you use the ODE physical plugin.
+   * Get the matrix of inertia of the rigid body of this bone. This is only
+   * useful if you use the ODE physical plugin.
    */
   virtual csMatrix3 GetInertia () const = 0;
 };
