@@ -166,6 +166,10 @@ class AnimatedMeshState(core.csRefCount):
 AnimatedMeshState_swigregister = _animation.AnimatedMeshState_swigregister
 AnimatedMeshState_swigregister(AnimatedMeshState)
 
+COLLIDER_BOX = _animation.COLLIDER_BOX
+COLLIDER_SPHERE = _animation.COLLIDER_SPHERE
+COLLIDER_CYLINDER = _animation.COLLIDER_CYLINDER
+COLLIDER_CAPSULE = _animation.COLLIDER_CAPSULE
 class iBodyManager(core.iBase):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
     def __init__(self, *args, **kwargs): raise AttributeError, "No constructor defined"
@@ -219,6 +223,8 @@ class iBodySkeleton(core.iBase):
     def GetBodyChains(*args): return _animation.iBodySkeleton_GetBodyChains(*args)
     def RemoveBodyChain(*args): return _animation.iBodySkeleton_RemoveBodyChain(*args)
     def ClearBodyChains(*args): return _animation.iBodySkeleton_ClearBodyChains(*args)
+    def PopulateDefaultColliders(*args): return _animation.iBodySkeleton_PopulateDefaultColliders(*args)
+    def PopulateDefaultBodyChains(*args): return _animation.iBodySkeleton_PopulateDefaultBodyChains(*args)
     scfGetVersion = staticmethod(_animation.iBodySkeleton_scfGetVersion)
     __swig_destroy__ = _animation.delete_iBodySkeleton
     __del__ = lambda self : None;
