@@ -120,7 +120,7 @@ struct ShadowSamplerNoisy : ShadowSampler
     float2 noiseScale = float2(1.0/256.0);
     
     float2 noiseCoords = shadowMapCoordsProjUnscaled * noiseMapScale;
-    half2 noise = h4tex2D (lightPropsSM.shadowMapNoise, noiseCoords).xy * noiseScale;
+    half2 noise = h4tex2D (lightPropsSM_shadowMapNoise, noiseCoords).xy * noiseScale;
     //debug (float4 (noise.x, noise.y, 0, 1));
       
     // @@@ The offsets could probably be better.

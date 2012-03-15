@@ -88,8 +88,8 @@ struct LightSpaceWorld : LightSpace
 
   void Init (int lightNum, float4 surfPositionWorld)
   {
-    float4 pos = lightProps.posWorld[lightNum];
-    float4x4 lightTransform = lightProps.transform[lightNum];
+    float4 pos = lightProps_posWorld[lightNum];
+    float4x4 lightTransform = lightProps_transform[lightNum];
     float3 lightDirW = mul (lightTransform, float4 (0, 0, 1, 0)).xyz;
     dir = lightDirW;
     /* Compute distance between surface and light with float precision to
@@ -113,8 +113,8 @@ struct LightSpaceTangent : LightSpace
                float4x4 world2tangent, float4 surfPositionWorld,
                out half3 vp_dir, out float3 vp_surfToLight)
   {
-    float4 pos = lightProps.posWorld[lightNum];
-    float4x4 lightTransform = lightProps.transform[lightNum];
+    float4 pos = lightProps_posWorld[lightNum];
+    float4x4 lightTransform = lightProps_transform[lightNum];
     float4 lightDirW = mul (lightTransform, float4 (0, 0, 1, 0));
     vp_dir = mul (world2tangent, lightDirW).xyz;
     vp_surfToLight = mul (world2tangent, float4 ((pos - surfPositionWorld).xyz, 0)).xyz;
@@ -263,8 +263,8 @@ Light GetCurrentLight (LightSpace lightSpace, int lightNum)
 <?elsif vars."light type".int == consts.CS_LIGHT_SPOTLIGHT ?>
   LightSpot ls;
   ls.Init (lightSpace, 
-    lightProps.falloffInner[lightNum],
-    lightProps.falloffOuter[lightNum]);
+    lightProps_falloffInner[lightNum],
+    lightProps_falloffOuter[lightNum]);
   return ls;
 <?else?>
 <?! Assume point light ?>

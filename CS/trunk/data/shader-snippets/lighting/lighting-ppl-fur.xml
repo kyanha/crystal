@@ -107,16 +107,16 @@
           for (int l = 0; l < maxLights; l++)
 	  {
 	    int i = lightOffset + l;
-	    if ((i >= minLights) && (i >= lightProps.count)) break;
+	    if ((i >= minLights) && (i >= lightProps_count)) break;
 	  ]]>
 	    LightSpaceWorld lightSpace;
 	    lightSpace.Init (i, positionW);
 	    
 	    Light light = GetCurrentLight (lightSpace, i);
-	    float4 lightAttenuationVec = lightProps.attenuationVec[i];
+	    float4 lightAttenuationVec = lightProps_attenuationVec[i];
 	    float3 d, s;
 	    ComputeLightKajiyaKay (lightSpace, light, myEyeToSurf, normal, shininess,
-	      lightProps.colorDiffuse[i], lightProps.colorSpecular[i],
+	      lightProps_colorDiffuse[i], lightProps_colorSpecular[i],
 	      lightAttenuationVec, 1, d, s);
 	    
 	    diffuseColor += d;
@@ -134,15 +134,15 @@
           for (int l = 0; l < maxLights; l++)
           {
             int i = lightOffset + l;
-            if ((i >= minLights) && (i >= lightProps.count)) break;
+            if ((i >= minLights) && (i >= lightProps_count)) break;
           ]]>
             LightSpace lightSpace = MakeLightSpaceWorld (i, positionW);
             
             Light light = GetCurrentLight (lightSpace, i);
-            vec4 lightAttenuationVec = lightProps.attenuationVec[i];
+            vec4 lightAttenuationVec = lightProps_attenuationVec[i];
             vec3 d, s;
             ComputeLightKajiyaKay (lightSpace, light, myEyeToSurf, normal, shininess,
-              lightProps.colorDiffuse[i], lightProps.colorSpecular[i],
+              lightProps_colorDiffuse[i], lightProps_colorSpecular[i],
               lightAttenuationVec, 1.0, d, s);
             
             diffuseColor += d;

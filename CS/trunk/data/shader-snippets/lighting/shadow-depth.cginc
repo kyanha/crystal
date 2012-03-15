@@ -38,12 +38,12 @@ struct ShadowShadowMapDepth : ShadowShadowMap
                out float4 vp_shadowMapCoords,
                out float vp_gradientApprox)
   {
-    float4x4 lightTransformInv = lightProps.transformInv[lightNum];
+    float4x4 lightTransformInv = lightProps_transformInv[lightNum];
     // Transform world position into light space
     float4 view_pos = mul(lightTransformInv, surfPositionWorld);
     // Transform position in light space into "shadow map space"
     float4 shadowMapCoords;
-    shadowMapTF = lightPropsSM.shadowMapTF[lightNum];
+    shadowMapTF = lightPropsSM_shadowMapTF[lightNum];
     /* CS' render-to-texture Y-flips render targets (so the upper left
        gets rendered to 0,0), we need to unflip here again. */
     float4x4 flipY;
@@ -70,9 +70,9 @@ struct ShadowShadowMapDepth : ShadowShadowMap
   void Init (int lightNum, float4 vp_shadowMapCoords, float vp_gradient)
   {
     shadowMapCoords = vp_shadowMapCoords;
-    shadowMap = lightPropsSM.shadowMap[lightNum];
+    shadowMap = lightPropsSM_shadowMap[lightNum];
     gradient = vp_gradient;
-    shadowMapUnscale = lightPropsSM.shadowMapUnscale[lightNum];
+    shadowMapUnscale = lightPropsSM_shadowMapUnscale[lightNum];
     
     // Project SM coordinates
     shadowMapCoordsProj = shadowMapCoords;

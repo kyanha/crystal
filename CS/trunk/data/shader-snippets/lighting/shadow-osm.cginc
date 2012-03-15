@@ -37,11 +37,11 @@ struct ShadowShadowMapDepth : ShadowShadowMap
                out float4 vp_shadowMapCoords,
                out float vp_distance)
   {
-    float4x4 lightTransformInv = lightProps.transformInv[lightNum];
+    float4x4 lightTransformInv = lightProps_transformInv[lightNum];
     // Transform world position into light space
     float4 view_pos = mul(lightTransformInv, surfPositionWorld);
 
-    float4x4 shadowMapTF = lightPropsOM.opacityMapTF[lightNum];
+    float4x4 shadowMapTF = lightPropsOM_opacityMapTF[lightNum];
     /* CS' render-to-texture Y-flips render targets (so the upper left
        gets rendered to 0,0), we need to unflip here again. */
     float4x4 flipY;
@@ -117,13 +117,13 @@ struct ShadowShadowMapDepth : ShadowShadowMap
   
     <?Generate I 0 7?>
       if (i == 4 * $I$)
-        return blurTex2D(lightPropsOM.opacityMap[8 * lightNum + $I$], position).r;
+        return blurTex2D(lightPropsOM_opacityMap[8 * lightNum + $I$], position).r;
       if (i == 4 * $I$ + 1)
-        return blurTex2D(lightPropsOM.opacityMap[8 * lightNum + $I$], position).g;
+        return blurTex2D(lightPropsOM_opacityMap[8 * lightNum + $I$], position).g;
       if (i == 4 * $I$ + 2)
-        return blurTex2D(lightPropsOM.opacityMap[8 * lightNum + $I$], position).b;
+        return blurTex2D(lightPropsOM_opacityMap[8 * lightNum + $I$], position).b;
       if (i == 4 * $I$ + 3)
-        return blurTex2D(lightPropsOM.opacityMap[8 * lightNum + $I$], position).a;	    
+        return blurTex2D(lightPropsOM_opacityMap[8 * lightNum + $I$], position).a;	    
     <?Endgenerate?>
         
 <![CDATA[  
@@ -134,9 +134,9 @@ struct ShadowShadowMapDepth : ShadowShadowMap
   half GetVisibility()
   { 
     EPS = 0.0001;
-    bias = 1.0 / lightPropsOM.size[lightNum];
+    bias = 1.0 / lightPropsOM_size[lightNum];
     half inLight;
-    int numSplits = lightPropsOM.opacityMapNumSplits[lightNum];
+    int numSplits = lightPropsOM_opacityMapNumSplits[lightNum];
   
     float3 shadowMapCoordsBiased = (float3(0.5)*shadowMapCoordsProj.xyz) + float3(0.5);
     float2 position = shadowMapCoordsBiased.xy;
@@ -144,16 +144,16 @@ struct ShadowShadowMapDepth : ShadowShadowMap
     int i;
 
     float compareDepth = (1 - shadowMapCoordsBiased.z) - EPS;
-    float depthStart = tex2D(lightPropsOM.shadowMapStart[lightNum], position).x;
-    float depthEnd = tex2D(lightPropsOM.shadowMapEnd[lightNum], position).x;    
+    float depthStart = tex2D(lightPropsOM_shadowMapStart[lightNum], position).x;
+    float depthEnd = tex2D(lightPropsOM_shadowMapEnd[lightNum], position).x;    
       
-    i = min( tex2D( lightPropsOM.splitFunc[lightNum], 
+    i = min( tex2D( lightPropsOM_splitFunc[lightNum], 
       float2( min( (compareDepth - depthStart) / 
       abs(1 - depthEnd - depthStart) , 0.9999 ) , 0 ) ).x * (numSplits - 1), 
       numSplits - 1);      
 
     float previousMap = getMapValue(i, position) * 
-      getVisibility( lightPropsOM.shadowMapStart[lightNum] , position, compareDepth ); 
+      getVisibility( lightPropsOM_shadowMapStart[lightNum] , position, compareDepth ); 
 
     i = i * (i != -1);
     inLight = previousMap; 
