@@ -22,32 +22,32 @@
   <?Template Lighting_Variablemaps?>
     <!-- Cg shader plugin magic makes arrays work -->
     <variablemap variable="light count" 
-		 destination="lightProps.count" />
+		 destination="lightProps_count" />
     <variablemap variable="light position world" 
-		 destination="lightProps.posWorld" />
+		 destination="lightProps_posWorld" />
     <variablemap variable="light diffuse" 
-		 destination="lightProps.colorDiffuse" />
+		 destination="lightProps_colorDiffuse" />
     <variablemap variable="light specular" 
-		 destination="lightProps.colorSpecular" />
+		 destination="lightProps_colorSpecular" />
     <variablemap variable="light attenuation" 
-		 destination="lightProps.attenuationVec" />
+		 destination="lightProps_attenuationVec" />
     <variablemap variable="light inner falloff" 
-		 destination="lightProps.falloffInner" />
+		 destination="lightProps_falloffInner" />
     <variablemap variable="light outer falloff" 
-		 destination="lightProps.falloffOuter" />
+		 destination="lightProps_falloffOuter" />
     <variablemap variable="light transform world" 
-		 destination="lightProps.transform" />
+		 destination="lightProps_transform" />
     <variablemap variable="light transform world inverse" 
-		 destination="lightProps.transformInv" />
+		 destination="lightProps_transformInv" />
   <?Endtemplate?>
   
   <?Template Lighting_ShadowMap_Variablemaps?>
     <variablemap variable="light shadow map projection" 
-		 destination="lightPropsSM.shadowMapTF" />
+		 destination="lightPropsSM_shadowMapTF" />
     <variablemap variable="light shadow map pixel size" 
-		 destination="lightPropsSM.shadowMapPixels" />
+		 destination="lightPropsSM_shadowMapPixels" />
     <variablemap variable="light shadow map unscale" 
-		 destination="lightPropsSM.shadowMapUnscale" />
+		 destination="lightPropsSM_shadowMapUnscale" />
   <?Endtemplate?>
   
 <!--  
@@ -55,11 +55,11 @@
 -->
   <?Template Lighting_OpacityMap_Variablemaps?> 
     <variablemap variable="light shadow map projection" 
-		 destination="lightPropsOM.opacityMapTF" />
+		 destination="lightPropsOM_opacityMapTF" />
     <variablemap variable="light numSplits" 
-		 destination="lightPropsOM.opacityMapNumSplits" />		       
+		 destination="lightPropsOM_opacityMapNumSplits" />		       
     <variablemap variable="light shadow map size" 
-		 destination="lightPropsOM.size" />		      
+		 destination="lightPropsOM_size" />		      
   <?Endtemplate?>  
   
   <?SEndIf?>
