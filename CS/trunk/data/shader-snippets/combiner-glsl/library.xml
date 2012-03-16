@@ -47,21 +47,21 @@
   
   <coercion from="float" to="rgb" cost="0">
     <block location="fragmentMain">
-      output = float3 (input);
+      result = float3 (value);
     </block>
 
     <block location="vertexMain">
-      output = float3 (input);
+      result = float3 (value);
     </block>
   </coercion>
   
   <coercion from="float" to="rgba" cost="0">
     <block location="fragmentMain">
-      output = float4 (input);
+      result = vec4 (value);
     </block>
 
     <block location="vertexMain">
-      output = float4 (input);
+      result = vec4 (value);
     </block>
   </coercion>
   
@@ -88,16 +88,11 @@
     <input file="/shader-snippets/combiner-glsl/ModelView.inp" private="yes" />
     
     <block location="vertexMain">
-      output = mul (ModelView, input);
+      result = ModelView * value;
     </block>
     
     <block location="fragmentMain">
-    #if FRAGMENT_PROGRAM_LEVEL >= 0x200
-      output = mul (ModelView, input);
-    #else
-      /* PS1.x can't do matrix mul ...
-         Leave 'output' deliberately undefined to catch (undesired) uses of it */
-    #endif
+      result = ModelView * value;
     </block>
   </coercion>
   
@@ -141,16 +136,11 @@
     <input file="/shader-snippets/combiner-glsl/ModelView.inp" private="yes" />
     
     <block location="vertexMain">
-      output = mul (ModelView, float4 (input, 0)).xyz;
+      result = (ModelView * vec4 (value, 0)).xyz;
     </block>
     
     <block location="fragmentMain">
-    #if FRAGMENT_PROGRAM_LEVEL >= 0x200
-      output = mul (ModelView, float4 (input, 0)).xyz;
-    #else
-      /* PS1.x can't do matrix mul ...
-         Leave 'output' deliberately undefined to catch (undesired) uses of it */
-    #endif
+      result = (ModelView * vec4 (value, 0)).xyz;
     </block>
   </coercion>
   
@@ -170,7 +160,7 @@
     </input>
     
     <block location="vertexMain">
-      output = mul (ModelViewIT, float4 (input, 0)).xyz;
+      result = (ModelViewIT * vec4 (value, 0)).xyz;
     </block>
   </coercion>
   
@@ -206,16 +196,11 @@
     <input file="/shader-snippets/combiner-glsl/ModelView.inp" private="yes" />
     
     <block location="vertexMain">
-      output = mul (ModelView, float4 (input, 0)).xyz;
+      result = (ModelView * vec4 (value, 0)).xyz;
     </block>
     
     <block location="fragmentMain">
-    #if FRAGMENT_PROGRAM_LEVEL >= 0x200
-      output = mul (ModelView, float4 (input, 0)).xyz;
-    #else
-      /* PS1.x can't do matrix mul ...
-         Leave 'output' deliberately undefined to catch (undesired) uses of it */
-    #endif
+      result = (ModelView * vec4 (value, 0)).xyz;
     </block>
   </coercion>
   
@@ -309,16 +294,11 @@
     </input>
     
     <block location="vertexMain">
-      output =  mul (worldToCamera, float4 (input, 0)).xyz;
+      result =  (worldToCamera * vec4 (value, 0)).xyz;
     </block>
     
     <block location="fragmentMain">
-    #if FRAGMENT_PROGRAM_LEVEL >= 0x200
-      output =  mul (worldToCamera, float4 (input, 0)).xyz;
-    #else
-      /* PS1.x can't do matrix mul ...
-         Leave 'output' deliberately undefined to catch (undesired) uses of it */
-    #endif
+      result =  (worldToCamera * vec4 (value, 0)).xyz;
     </block>
   </coercion>
   
@@ -328,16 +308,11 @@
     <input file="/shader-snippets/combiner-glsl/ModelView.inp" private="yes" />
     
     <block location="vertexMain">
-      output = mul (ModelView, float4 (input, 0)).xyz;
+      result = (ModelView * vec4 (value, 0)).xyz;
     </block>
     
     <block location="fragmentMain">
-    #if FRAGMENT_PROGRAM_LEVEL >= 0x200
-      output = mul (ModelView, float4 (input, 0)).xyz;
-    #else
-      /* PS1.x can't do matrix mul ...
-         Leave 'output' deliberately undefined to catch (undesired) uses of it */
-    #endif
+      result = (ModelView * vec4 (value, 0)).xyz;
     </block>
   </coercion>
   
