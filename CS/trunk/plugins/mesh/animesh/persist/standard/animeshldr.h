@@ -58,6 +58,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(Animeshldr)
     iObjectRegistry* object_reg;
 
     csRef<iSyntaxService> synldr;
+    csRef<iEngine> engine;
     csRef<CS::Animation::iSkeletonManager> skelMgr;
 
     csStringHash xmltokens;
