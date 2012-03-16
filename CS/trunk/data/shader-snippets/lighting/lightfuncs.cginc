@@ -50,28 +50,24 @@ half Light_Spot (half3 surfToLight, half3 lightDir, half falloffInner, half fall
 }
 
 
-struct LightProperties
-{
-  // Number of lights provided
-  int count;
-  // Light world-space position
-  float4 posWorld[MAX_LIGHTS];
-  // Transformation from light space to world space
-  float4x4 transform[MAX_LIGHTS];
-  // Transformation from world space to light space
-  float4x4 transformInv[MAX_LIGHTS];
-  // Diffuse color
-  float3 colorDiffuse[MAX_LIGHTS];
-  // Specular color
-  float3 colorSpecular[MAX_LIGHTS];
-  // Attenuation vector (XYZ are CLQ coefficients; W is light radius)
-  float4 attenuationVec[MAX_LIGHTS];
-  // Cosine of inner falloff angle
-  float falloffInner[MAX_LIGHTS];
-  // Cosine of outerr falloff angle
-  float falloffOuter[MAX_LIGHTS];
-};
-LightProperties lightProps;
+// Number of lights provided
+int lightProps_count;
+// Light world-space position
+float4 lightProps_posWorld[MAX_LIGHTS];
+// Transformation from light space to world space
+float4x4 lightProps_transform[MAX_LIGHTS];
+// Transformation from world space to light space
+float4x4 lightProps_transformInv[MAX_LIGHTS];
+// Diffuse color
+float3 lightProps_colorDiffuse[MAX_LIGHTS];
+// Specular color
+float3 lightProps_colorSpecular[MAX_LIGHTS];
+// Attenuation vector (XYZ are CLQ coefficients; W is light radius)
+float4 lightProps_attenuationVec[MAX_LIGHTS];
+// Cosine of inner falloff angle
+float lightProps_falloffInner[MAX_LIGHTS];
+// Cosine of outerr falloff angle
+float lightProps_falloffOuter[MAX_LIGHTS];
 
 interface LightSpace
 {
@@ -170,38 +166,30 @@ struct ShadowShadowShadowMapWrapper : Shadow
   half GetVisibility() { return shadow.GetVisibility(); }
 };
 
-struct LightPropertiesShadowMap
-{
-  // Transformation from light to shadow map space
-  float4x4 shadowMapTF[MAX_LIGHTS];
-  // Shadow map
-  sampler2D shadowMap[MAX_LIGHTS];
-  // Shadow map pixel size + dimensions
-  float4 shadowMapPixels[MAX_LIGHTS];
-  float4 shadowMapUnscale[MAX_LIGHTS];
+// Transformation from light to shadow map space
+float4x4 lightPropsSM_shadowMapTF[MAX_LIGHTS];
+// Shadow map
+sampler2D lightPropsSM_shadowMap[MAX_LIGHTS];
+// Shadow map pixel size + dimensions
+float4 lightPropsSM_shadowMapPixels[MAX_LIGHTS];
+float4 lightPropsSM_shadowMapUnscale[MAX_LIGHTS];
   
-  sampler2D shadowMapNoise;
-};
-LightPropertiesShadowMap lightPropsSM;
+sampler2D lightPropsSM_shadowMapNoise;
 
 // Added properties for opacity shadow maps
-struct LightPropertiesOpacityMap
-{
-  // Transformation from light to shadow map space
-  float4x4 opacityMapTF[MAX_LIGHTS];
-  // Depth map start
-  sampler2D shadowMapStart[MAX_LIGHTS];  
-  // Depth map end
-  sampler2D shadowMapEnd[MAX_LIGHTS];  
-  // Depth map size
-  float size[MAX_LIGHTS];
-  // Split function
-  sampler2D splitFunc[MAX_LIGHTS];    
-  // OSM
-  sampler2D opacityMap[MAX_OSM * MAX_LIGHTS];
-  int opacityMapNumSplits[MAX_LIGHTS];
-};
-LightPropertiesOpacityMap lightPropsOM;
+// Transformation from light to shadow map space
+float4x4 lightPropsOM_opacityMapTF[MAX_LIGHTS];
+// Depth map start
+sampler2D lightPropsOM_shadowMapStart[MAX_LIGHTS];  
+// Depth map end
+sampler2D lightPropsOM_shadowMapEnd[MAX_LIGHTS];  
+// Depth map size
+float lightPropsOM_size[MAX_LIGHTS];
+// Split function
+sampler2D lightPropsOM_splitFunc[MAX_LIGHTS];    
+// OSM
+sampler2D lightPropsOM_opacityMap[MAX_OSM * MAX_LIGHTS];
+int lightPropsOM_opacityMapNumSplits[MAX_LIGHTS];
 
 // Common interface for all light types
 interface Light
