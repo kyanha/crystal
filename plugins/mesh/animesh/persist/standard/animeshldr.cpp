@@ -230,6 +230,8 @@ CS_PLUGIN_NAMESPACE_BEGIN(Animeshldr)
           csRef<iRenderBuffer> indexBuffer;
           
           csRef<iMaterialWrapper> material;
+	  csZBufMode zmode = (csZBufMode)~0;
+	  CS::Graphics::RenderPriority renderPriority;
 
           csRef<iDocumentNodeIterator> it = child->GetNodes ();
           while (it->HasNext ())
@@ -262,7 +264,11 @@ CS_PLUGIN_NAMESPACE_BEGIN(Animeshldr)
                 }
               }
               break;
+	    case XMLTOKEN_PRIORITY:
+	      renderPriority = engine->GetRenderPriority (child2->GetContentsValue ());
+	      break;
             default:
+	      if (synldr->ParseZMode (child2, zmode)) break;
               synldr->ReportBadToken (child2);
               return 0;
             }
@@ -274,6 +280,10 @@ CS_PLUGIN_NAMESPACE_BEGIN(Animeshldr)
               child->GetAttributeValue("name"), child->GetAttributeValueAsBool("visible", true));
 	    if (material)
 	      smf->SetMaterial(material);
+	    if (zmode != (csZBufMode)~0)
+	      smf->SetZBufMode (zmode);
+	    if (renderPriority.IsValid ())
+	      smf->SetRenderPriority (renderPriority);
           }
         }
         break;
@@ -490,6 +500,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(Animeshldr)
     object_reg = objReg;
 
     synldr = csQueryRegistry<iSyntaxService> (object_reg);
+    engine = csQueryRegistry<iEngine> (object_reg);
 
     InitTokenTable (xmltokens);
     return true;
