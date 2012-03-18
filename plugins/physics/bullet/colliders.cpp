@@ -22,9 +22,6 @@
 #include "cssysdef.h"
 
 #include "csgeom/sphere.h"
-#include "csutil/stringquote.h"
-#include "igeom/trimesh.h"
-#include "imesh/objmodel.h"
 #include "iengine/movable.h"
 
 // Bullet includes.
@@ -38,80 +35,6 @@
 
 CS_PLUGIN_NAMESPACE_BEGIN(Bullet)
 {
-
-//----------------------- Triangle mesh tools ----------------------------
-
-static csRef<iTriangleMesh> FindColdetTriangleMesh(iMeshWrapper* mesh,
-				csStringID base_id, csStringID colldet_id)
-{
-  iObjectModel* objmodel = mesh->GetMeshObject ()->GetObjectModel ();
-  csRef<iTriangleMesh> trimesh;
-  bool use_trimesh = objmodel->IsTriangleDataSet (base_id);
-  if (use_trimesh)
-  {
-    if (objmodel->GetTriangleData(colldet_id))
-      trimesh = objmodel->GetTriangleData (colldet_id);
-    else
-      trimesh = objmodel->GetTriangleData (base_id);
-  }
-
-  if (!trimesh || trimesh->GetVertexCount () == 0
-      || trimesh->GetTriangleCount () == 0)
-  {
-    csFPrintf (stderr, "csBulletRigidBody: No collision polygons, triangles or vertices on mesh factory %s\n",
-      CS::Quote::Single (mesh->QueryObject()->GetName()));
-
-    return 0;
-  }
-  return trimesh;
-}
-
-#include "csutil/custom_new_disable.h"
-
-static btTriangleIndexVertexArray* GenerateTriMeshData
-  (iMeshWrapper* mesh, int*& indices, size_t& triangleCount, btVector3*& vertices,
-   size_t& vertexCount, csStringID base_id, csStringID colldet_id,
-   float internalScale)
-{
-  csRef<iTriangleMesh> trimesh = FindColdetTriangleMesh(mesh, base_id, colldet_id);
-  if (!trimesh)
-    return 0;
-
-  // TODO: remove double vertices
-  csTriangle *c_triangle = trimesh->GetTriangles();
-  triangleCount = trimesh->GetTriangleCount();
-  vertexCount = trimesh->GetVertexCount ();
-
-  delete[] indices;
-  indices = new int[triangleCount * 3];
-  int indexStride = 3 * sizeof (int);
-
-  size_t i;
-  int* id = indices;
-  for (i = 0 ; i < triangleCount ; i++)
-  {
-    *id++ = c_triangle[i].a;
-    *id++ = c_triangle[i].b;
-    *id++ = c_triangle[i].c;
-  }
-
-  delete[] vertices;
-  vertices = new btVector3[vertexCount];
-  csVector3 *c_vertex = trimesh->GetVertices();
-  int vertexStride = sizeof (btVector3);
-
-  for (i = 0 ; i < vertexCount ; i++)
-    vertices[i].setValue (c_vertex[i].x * internalScale,
-			  c_vertex[i].y * internalScale,
-			  c_vertex[i].z * internalScale);
-
-  btTriangleIndexVertexArray* indexVertexArrays =
-    new btTriangleIndexVertexArray ((int)triangleCount, indices, (int)indexStride,
-	(int)vertexCount, (btScalar*) &vertices[0].x (), vertexStride);
-  return indexVertexArrays;
-}
-
-#include "csutil/custom_new_enable.h"
 
 //--------------------- csBulletCollider -----------------------------------
 
@@ -187,16 +110,15 @@ bool csBulletCollider::CreateConvexMeshGeometry (iMeshWrapper* mesh)
   delete[] vertices; vertices = 0;
   delete[] indices; indices = 0;
 
-  btTriangleIndexVertexArray* indexVertexArrays =
-    GenerateTriMeshData (mesh, indices, triangleCount, vertices, vertexCount,
-			 dynSys->baseId, dynSys->colldetId, dynSys->internalScale);
+  btTriangleIndexVertexArray* indexVertexArrays = GenerateTriMeshData
+    (mesh, indices, triangleCount, vertices, vertexCount, dynSys->internalScale, dynSys->dynamics);
   if (!indexVertexArrays)
     return false;
 
   //shape = new btConvexTriangleMeshShape (indexVertexArrays);
   btConvexHullShape* convexShape = new btConvexHullShape ();
   for (size_t i = 0; i < vertexCount; i++)
-    convexShape->addPoint(*(vertices + i));
+    convexShape->addPoint (*(vertices + i));
   shape = convexShape;
 
   geomType = CONVEXMESH_COLLIDER_GEOMETRY;
@@ -216,9 +138,8 @@ bool csBulletCollider::CreateMeshGeometry (iMeshWrapper* mesh)
   delete[] vertices; vertices = 0;
   delete[] indices; indices = 0;
 
-  btTriangleIndexVertexArray* indexVertexArrays =
-    GenerateTriMeshData (mesh, indices, triangleCount, vertices, vertexCount,
-			 dynSys->baseId, dynSys->colldetId, dynSys->internalScale);
+  btTriangleIndexVertexArray* indexVertexArrays = GenerateTriMeshData
+    (mesh, indices, triangleCount, vertices, vertexCount, dynSys->internalScale, dynSys->dynamics);
   if (!indexVertexArrays)
     return false;
 

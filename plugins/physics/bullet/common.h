@@ -26,11 +26,13 @@
 #include "csgeom/matrix3.h"
 #include "csgeom/transfrm.h"
 #include "csgeom/vector3.h"
+#include "csutil/cscolor.h"
+#include "iengine/camera.h"
+#include "imesh/objmodel.h"
+#include "ivaria/view.h"
 #include "ivideo/graph2d.h"
 #include "ivideo/graph3d.h"
-#include "ivaria/view.h"
-#include "iengine/camera.h"
-#include "csutil/cscolor.h"
+#include "igeom/trimesh.h"
 
 CS_PLUGIN_NAMESPACE_BEGIN(Bullet)
 {
@@ -241,6 +243,75 @@ public:
 
   virtual void getWorldTransform (btTransform& trans) const;
 };
+
+//------------------------ Triangle mesh tools ----------------------
+
+static iTriangleMesh* FindTriangleMesh (iObjectModel* model, csBulletDynamics* dynamics)
+{
+  iTriangleMesh* trimesh;
+  if (model->IsTriangleDataSet (dynamics->baseID))
+  {
+    trimesh = model->GetTriangleData (dynamics->colldetID);
+    if (!trimesh)
+      trimesh = model->GetTriangleData (dynamics->baseID);
+  }
+
+  if (!trimesh || !trimesh->GetVertexCount () || !trimesh->GetTriangleCount ())
+  {
+    dynamics->ReportError
+      ("Creation of a physical body failed: no collision polygons, triangles or vertices on object model\n");
+    return nullptr;
+  }
+
+  return trimesh;
+}
+
+#include "csutil/custom_new_disable.h"
+
+static inline btTriangleIndexVertexArray* GenerateTriMeshData
+  (iMeshWrapper* mesh, int*& indices, size_t& triangleCount, btVector3*& vertices,
+   size_t& vertexCount, float internalScale, csBulletDynamics* dynamics)
+{
+  iTriangleMesh* trimesh = FindTriangleMesh
+    (mesh->GetMeshObject ()->GetObjectModel (), dynamics);
+  if (!trimesh)
+    return 0;
+
+  // TODO: remove double vertices
+  csTriangle *c_triangle = trimesh->GetTriangles();
+  triangleCount = trimesh->GetTriangleCount();
+  vertexCount = trimesh->GetVertexCount ();
+
+  delete[] indices;
+  indices = new int[triangleCount * 3];
+  int indexStride = 3 * sizeof (int);
+
+  size_t i;
+  int* id = indices;
+  for (i = 0 ; i < triangleCount ; i++)
+  {
+    *id++ = c_triangle[i].a;
+    *id++ = c_triangle[i].b;
+    *id++ = c_triangle[i].c;
+  }
+
+  delete[] vertices;
+  vertices = new btVector3[vertexCount];
+  csVector3 *c_vertex = trimesh->GetVertices();
+  int vertexStride = sizeof (btVector3);
+
+  for (i = 0 ; i < vertexCount ; i++)
+    vertices[i].setValue (c_vertex[i].x * internalScale,
+			  c_vertex[i].y * internalScale,
+			  c_vertex[i].z * internalScale);
+
+  btTriangleIndexVertexArray* indexVertexArrays =
+    new btTriangleIndexVertexArray ((int)triangleCount, indices, (int)indexStride,
+	(int)vertexCount, (btScalar*) &vertices[0].x (), vertexStride);
+  return indexVertexArrays;
+}
+
+#include "csutil/custom_new_enable.h"
 
 }
 CS_PLUGIN_NAMESPACE_END(Bullet)

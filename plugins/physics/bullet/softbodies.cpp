@@ -176,6 +176,8 @@ void csBulletSoftBody::RemoveAnchor (size_t vertexIndex)
     if (this->body->m_anchors[i].m_node == &this->body->m_nodes[vertexIndex])
     {
       // TODO: this is not possible within Bullet
+      dynSys->dynamics->ReportWarning
+	("Removal of anchor %zu is not possible within the Bullet API. Expect wrong behavior.", vertexIndex);
       //btSoftBody::Anchor* anchor = this->body->m_anchors[i];
       //this->body->m_anchors.remove (i);
       return;

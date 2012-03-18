@@ -55,9 +55,21 @@ private:
   csRefArray<iDynamicsStepCallback> stepCallbacks;
 
 public:
+  csStringID colldetID;
+  csStringID baseID;
+
+public:
   csBulletDynamics (iBase *iParent);
   virtual ~csBulletDynamics ();
 
+  // Error reporting
+  void ReportError (const char* description, ...);
+  void ReportWarning (const char* description, ...);
+
+  //-- iComponent
+  virtual bool Initialize (iObjectRegistry* object_reg);  
+
+  //-- iDynamics
   virtual csPtr<iDynamicSystem> CreateSystem ();
   virtual void RemoveSystem (iDynamicSystem* system);
   virtual void RemoveSystems ();
@@ -69,9 +81,6 @@ public:
   { stepCallbacks.Push (callback); }
   virtual void RemoveStepCallback (iDynamicsStepCallback *callback)
   { stepCallbacks.Delete (callback); }
-
-  //  iComponent
-  virtual bool Initialize (iObjectRegistry* object_reg);  
 };
 
 using namespace CS::Physics::Bullet;
@@ -88,6 +97,9 @@ class csBulletDynamicsSystem : public scfImplementationExt2<
   friend class csBulletJoint;
   friend class csBulletPivotJoint;
   friend class HeightMapCollider;
+
+public:
+  csBulletDynamics* dynamics;
 
 private:
   bool isSoftWorld;
@@ -120,10 +132,6 @@ private:
   float angularDisableThreshold;
   float timeDisableThreshold;
 
-  // For getting collision mesh data.
-  csStringID baseId;
-  csStringID colldetId;
-
   csBulletDebugDraw* debugDraw;
 
   void CheckCollisions();
@@ -131,7 +139,7 @@ private:
 		      btPersistentManifold &contactManifold);
 
 public:
-  csBulletDynamicsSystem (iObjectRegistry* object_reg);
+  csBulletDynamicsSystem (iObjectRegistry* object_reg, csBulletDynamics* dynamics);
   virtual ~csBulletDynamicsSystem ();
 
   //-- iDynamicsSystem
@@ -217,7 +225,8 @@ public:
 				  uint segmentCount1, uint segmentCount2,
 				  bool withDiagonals = false);
   virtual iSoftBody* CreateSoftBody (iGeneralFactoryState* genmeshFactory,
-				     const csOrthoTransform& bodyTransform);
+				     const csOrthoTransform& bodyTransform,
+				     MeshDuplicationMode duplicationMode = MESH_DUPLICATION_NONE);
   virtual iSoftBody* CreateSoftBody (csVector3* vertices, size_t vertexCount,
 				     csTriangle* triangles, size_t triangleCount);
   virtual void RemoveSoftBody (iSoftBody* body);

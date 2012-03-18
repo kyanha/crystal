@@ -19,12 +19,14 @@ Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 #include "cssysdef.h"
 #include "csgeom/sphere.h"
 #include "csgeom/tri.h"
+#include "csutil/sysfunc.h"
 #include "iengine/mesh.h"
 #include "iengine/light.h"
 #include "imesh/genmesh.h"
 #include "imesh/object.h"
-#include "csutil/sysfunc.h"
+#include "imesh/objmodel.h"
 #include "iutil/objreg.h"
+#include "ivaria/reporter.h"
 #include "ivaria/view.h"
 
 #include "csutil/custom_new_disable.h"
@@ -66,16 +68,43 @@ csBulletDynamics::~csBulletDynamics ()
   systems.DeleteAll ();
 }
 
+void csBulletDynamics::ReportError (const char* description, ...)
+{
+  va_list arg;
+  va_start (arg, description);
+  csReportV (object_reg, CS_REPORTER_SEVERITY_ERROR,
+	     "crystalspace.dynamics.bullet",
+	     description, arg);
+  va_end (arg);
+}
+
+void csBulletDynamics::ReportWarning (const char* description, ...)
+{
+  va_list arg;
+  va_start (arg, description);
+  csReportV (object_reg, CS_REPORTER_SEVERITY_WARNING,
+	     "crystalspace.dynamics.bullet",
+	     description, arg);
+  va_end (arg);
+}
+
 bool csBulletDynamics::Initialize (iObjectRegistry* object_reg)
 {
   csBulletDynamics::object_reg = object_reg;
+
+  // Initialize the mesh IDs
+  csRef<iStringSet> strings = csQueryRegistryTagInterface<iStringSet>
+    (object_reg, "crystalspace.shared.stringset");
+  colldetID = strings->Request ("colldet");
+  baseID = strings->Request ("base");
+
   return true;
 }
 
 csPtr< ::iDynamicSystem> csBulletDynamics::CreateSystem ()
 {
   csRef<csBulletDynamicsSystem> system;
-  system.AttachNew (new csBulletDynamicsSystem (object_reg));
+  system.AttachNew (new csBulletDynamicsSystem (object_reg, this));
   systems.Push (system);
 
   return csPtr< ::iDynamicSystem> (system);
@@ -113,8 +142,8 @@ void csBulletDynamics::Step (float stepsize)
 #define AABB_DIMENSIONS 10000.0f
 
 csBulletDynamicsSystem::csBulletDynamicsSystem
-  (iObjectRegistry* object_reg)
-    : scfImplementationType (this), isSoftWorld (false), softWorldInfo (0),
+(iObjectRegistry* object_reg, csBulletDynamics* dynamics)
+  : scfImplementationType (this), dynamics (dynamics), isSoftWorld (false), softWorldInfo (0),
       gimpactRegistered (false), internalScale (1.0f), inverseInternalScale (1.0f),
       worldTimeStep (1.0f / 60.0f), worldMaxSteps (1), linearDampening (0.0f),
       angularDampening (0.0f), autoDisableEnabled (true),
@@ -138,12 +167,6 @@ csBulletDynamicsSystem::csBulletDynamicsSystem
 
   // register default callback
   moveCb.AttachNew (new csBulletDefaultMoveCallback ());
-
-  // init string IDs
-  csRef<iStringSet> strings = csQueryRegistryTagInterface<iStringSet> (
-      object_reg, "crystalspace.shared.stringset");
-  baseId = strings->Request ("base");
-  colldetId = strings->Request ("colldet");
 }
 
 csBulletDynamicsSystem::~csBulletDynamicsSystem ()
@@ -978,32 +1001,68 @@ iSoftBody* csBulletDynamicsSystem::CreateCloth
 }
 
 iSoftBody* csBulletDynamicsSystem::CreateSoftBody
-(iGeneralFactoryState* genmeshFactory, const csOrthoTransform& bodyTransform)
+(iGeneralFactoryState* genmeshFactory, const csOrthoTransform& bodyTransform,
+ MeshDuplicationMode duplicationMode)
 {
-  CS_ASSERT(isSoftWorld);
+  CS_ASSERT (isSoftWorld);
 
-  btScalar* vertices = new btScalar[genmeshFactory->GetVertexCount () * 3];
-  for (int i = 0; i < genmeshFactory->GetVertexCount (); i++)
+  // Find the triangle model of the mesh factory
+  csRef<iMeshObjectFactory> objectFactory = scfQueryInterface<iMeshObjectFactory> (genmeshFactory);
+  iTriangleMesh* triangleMesh = FindTriangleMesh (objectFactory->GetObjectModel (), dynamics);
+
+  // Check that the count of vertices and triangles is OK
+  CS_ASSERT (duplicationMode == MESH_DUPLICATION_NONE
+	     || (triangleMesh->GetVertexCount () % 2 == 0 || triangleMesh->GetTriangleCount () % 2 == 0));
+
+  // Create the array of vertices
+  int vertexCount = duplicationMode == MESH_DUPLICATION_NONE ?
+    triangleMesh->GetVertexCount () : triangleMesh->GetVertexCount () / 2;
+  btScalar* vertices = new btScalar[vertexCount * 3];
+  csVector3* originalVertices = triangleMesh->GetVertices ();
+  int j = 0;
+  for (int i = 0; i < vertexCount; i++)
   {
-    csVector3 vertex = genmeshFactory->GetVertices ()[i]
-      * bodyTransform.GetInverse() * internalScale;
+    csVector3 vertex = originalVertices[j] * bodyTransform.GetInverse() * internalScale;
     vertices[i * 3] = vertex[0];
     vertices[i * 3 + 1] = vertex[1];
     vertices[i * 3 + 2] = vertex[2];
+
+    if (duplicationMode == MESH_DUPLICATION_INTERLEAVED) j += 2;
+    else j++;
   }
 
-  int* triangles = new int[genmeshFactory->GetTriangleCount () * 3];
-  for (int i = 0; i < genmeshFactory->GetTriangleCount (); i++)
+  // Create the array of triangles
+  int triangleCount = duplicationMode == MESH_DUPLICATION_NONE ?
+    triangleMesh->GetTriangleCount () : triangleMesh->GetTriangleCount () / 2;
+  int* triangles = new int[triangleCount * 3];
+  csTriangle* originalTriangles = triangleMesh->GetTriangles ();
+  j = 0;
+  for (int i = 0; i < triangleCount; i++)
   {
-    csTriangle& triangle = genmeshFactory->GetTriangles ()[i];
-    triangles[i * 3] = triangle.a;
-    triangles[i * 3 + 1] = triangle.b;
-    triangles[i * 3 + 2] = triangle.c;
+    csTriangle& triangle = originalTriangles[j];
+
+    if (duplicationMode == MESH_DUPLICATION_INTERLEAVED)
+    {
+      triangles[i * 3] = triangle.a / 2;
+      triangles[i * 3 + 1] = triangle.b / 2;
+      triangles[i * 3 + 2] = triangle.c / 2;
+
+      j += 2;
+    }
+    else
+    {
+      triangles[i * 3] = triangle.a;
+      triangles[i * 3 + 1] = triangle.b;
+      triangles[i * 3 + 2] = triangle.c;
+
+      j++;
+    }
   }
 
+  // Create the soft body
+  // TODO: warning message for empty meshes
   btSoftBody* body = btSoftBodyHelpers::CreateFromTriMesh
-    (*softWorldInfo, vertices, triangles, genmeshFactory->GetTriangleCount (),
-     false);
+    (*softWorldInfo, vertices, triangles, triangleCount, false);
 
   body->m_cfg.piterations = 10;
   body->m_cfg.collisions |= btSoftBody::fCollision::VF_SS;
