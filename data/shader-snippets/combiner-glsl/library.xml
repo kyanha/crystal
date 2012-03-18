@@ -47,11 +47,11 @@
   
   <coercion from="float" to="rgb" cost="0">
     <block location="fragmentMain">
-      result = float3 (value);
+      result = vec3 (value);
     </block>
 
     <block location="vertexMain">
-      result = float3 (value);
+      result = vec3 (value);
     </block>
   </coercion>
   
@@ -146,21 +146,9 @@
   
   <coercion from="direction_camera" to="direction_world" cost="3">
     <!-- Slightly dirty: float4x4 is no weaver type, so gets written out 
-	 verbatim -->
-    <input name="ModelViewIT" type="float4x4" default="complex"
-	private="yes">
-      <block location="vertexIn">
-	<uniform type="float4x4" name="ModelViewIT" 
-	  binding="state.matrix.modelview.invtrans" />
-      </block>
-      
-      <block location="vertexMain">
-	ModelViewIT = vertexIn.ModelViewIT;
-      </block>
-    </input>
-    
+	 verbatim -->    
     <block location="vertexMain">
-      result = (ModelViewIT * vec4 (value, 0)).xyz;
+      result = (gl_ModelViewMatrixInverse * vec4 (value, 0)).xyz;
     </block>
   </coercion>
   
@@ -269,27 +257,21 @@
 	 verbatim -->
     <input name="worldToCamera" type="float4x4" default="complex" 
 	private="yes">
-      <block location="vertexIn">
-	<uniform type="float4x4" name="worldToCamera" />
-      </block>
-      
-      <block location="fragmentIn">
-	<uniform type="float4x4" name="worldToCamera" />
+      <block location="inputs">
+	<uniform type="float4x4" name="in_worldToCamera" />
       </block>
       
       <block location="vertexMain">
-	worldToCamera = vertexIn.worldToCamera;
+	worldToCamera = in_worldToCamera;
       </block>
 
       <block location="fragmentMain">
-	worldToCamera = fragmentIn.worldToCamera;
+	worldToCamera = in_worldToCamera;
       </block>
 
       <block location="variablemap">
 	<variablemap variable="world2camera transform" 
-	  destination="vertexIn.world2camera" />
-	<variablemap variable="world2camera transform" 
-	  destination="fragmentIn.world2camera" />
+	  destination="in_world2camera" />
       </block>
     </input>
     
