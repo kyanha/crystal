@@ -1855,7 +1855,7 @@ void Simple::SpawnCloth ()
     scfQueryInterface<iGeneralMeshState> (mesh->GetMeshObject ());
   csRef<CS::Animation::iSoftBodyAnimationControl> animationControl =
     scfQueryInterface<CS::Animation::iSoftBodyAnimationControl> (meshState->GetAnimationControl ());
-  animationControl->SetSoftBody (body, true);
+  animationControl->SetSoftBody (body, CS::Physics::Bullet::MESH_DUPLICATION_CONTIGUOUS);
 }
 
 void Simple::SpawnSoftBody ()
