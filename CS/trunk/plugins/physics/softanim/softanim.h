@@ -85,7 +85,9 @@ class SoftBodyControl : public scfImplementation2<SoftBodyControl,
     SoftBodyControl (SoftBodyControlFactory* factory, iMeshObject* mesh);
 
     //-- CS::Animation::iSoftBodyAnimationControl
-    virtual void SetSoftBody (CS::Physics::Bullet::iSoftBody* body, bool doubleSided = false);
+    virtual void SetSoftBody (CS::Physics::Bullet::iSoftBody* body,
+			      CS::Physics::Bullet::MeshDuplicationMode duplicationMode
+			      = CS::Physics::Bullet::MESH_DUPLICATION_NONE);
     virtual CS::Physics::Bullet::iSoftBody* GetSoftBody ();
 
     virtual void CreateAnimatedMeshAnchor (CS::Mesh::iAnimatedMesh* animesh,
@@ -120,7 +122,7 @@ class SoftBodyControl : public scfImplementation2<SoftBodyControl,
     SoftBodyControlFactory* factory;
     csWeakRef<iMeshObject> mesh;
     csRef<CS::Physics::Bullet::iSoftBody> softBody;
-    bool doubleSided;
+    CS::Physics::Bullet::MeshDuplicationMode duplicationMode;
     csDirtyAccessArray<csVector3> vertices;
     csDirtyAccessArray<csVector3> normals;
     csBox3 bbox;
@@ -130,8 +132,8 @@ class SoftBodyControl : public scfImplementation2<SoftBodyControl,
 
     struct Anchor
     {
-      csWeakRef<CS::Mesh::iAnimatedMesh> animesh;
-      csWeakRef<iRigidBody> body;
+      csRef<CS::Mesh::iAnimatedMesh> animesh;
+      csRef<iRigidBody> body;
       size_t bodyVertexIndex;
       size_t animeshVertexIndex;
     };
