@@ -721,11 +721,7 @@ void KrystalScene::ResetSoftBodies ()
     if (vertices[duplicationMode == CS::Physics::Bullet::MESH_DUPLICATION_INTERLEAVED ? i * 2 : i][2] > 0.05f)
       hairsBody->AnchorVertex (i, headBody);
   }
-/*
-  for (int i = 0; i < hairsFactoryState->GetVertexCount (); i++)
-    if (vertices[i][2] > 0.05f)
-      hairsBody->AnchorVertex (i, headBody);
-*/
+
   //------------------ Setup of the skirt ------------------
 
   // Find the position of the 'ToSpine' bone of Krystal
