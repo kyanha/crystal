@@ -672,11 +672,28 @@ void KrystalScene::ResetSoftBodies ()
   if (skirtBody)
     avatarTest->bulletDynamicSystem->RemoveSoftBody (skirtBody);
 
+  csQuaternion boneRotation;
+  csVector3 boneOffset;
+  CS::Physics::Bullet::MeshDuplicationMode duplicationMode;
+  csRef<CS::Animation::iSoftBodyAnimationControl> animationControl;
+  const csVector3* vertices;
+  int vertexCount;
+
+  //------------------ Setup of the hairs ------------------
+
+  // Find the position of the 'Head' bone of Krystal
+  animesh->GetSkeleton ()->GetTransformAbsSpace
+    (animeshFactory->GetSkeletonFactory ()->FindBone ("Head"), boneRotation, boneOffset);
+  csOrthoTransform headTransform (csMatrix3 (boneRotation.GetConjugate ()),
+				  boneOffset);
+
   // Create the soft body for the hairs
   csRef<iGeneralFactoryState> hairsFactoryState =
     scfQueryInterface<iGeneralFactoryState> (hairsMeshFact->GetMeshObjectFactory ());
+  duplicationMode = CS::Physics::Bullet::MESH_DUPLICATION_INTERLEAVED;
+  //duplicationMode = CS::Physics::Bullet::MESH_DUPLICATION_NONE;
   hairsBody = avatarTest->bulletDynamicSystem->CreateSoftBody
-    (hairsFactoryState, csOrthoTransform (csMatrix3 (), csVector3 (0.0f)));
+    (hairsFactoryState, headTransform, duplicationMode);
   hairsBody->SetMass (2.0f);
   hairsBody->SetRigidity (0.02f);
   hairsBody->GenerateBendingConstraints (3);
@@ -684,14 +701,35 @@ void KrystalScene::ResetSoftBodies ()
   // Init the animation control for the animation of the genmesh
   csRef<iGeneralMeshState> hairsMeshState =
     scfQueryInterface<iGeneralMeshState> (hairsMesh->GetMeshObject ());
-  csRef<CS::Animation::iSoftBodyAnimationControl> animationControl =
-    scfQueryInterface<CS::Animation::iSoftBodyAnimationControl> (hairsMeshState->GetAnimationControl ());
-  animationControl->SetSoftBody (hairsBody);
+  animationControl = scfQueryInterface<CS::Animation::iSoftBodyAnimationControl>
+  (hairsMeshState->GetAnimationControl ());
+  animationControl->SetSoftBody (hairsBody, duplicationMode);
+
+  // Find the rigid body of the head of Krystal
+  iRigidBody* headBody = ragdollNode->GetBoneRigidBody
+    (animeshFactory->GetSkeletonFactory ()->FindBone ("Head"));
+
+  // Anchor the soft body to the rigid body of the head. Since the vertices of the head do not move
+  // relatively to this body, then we can use a simple 'static' anchoring. In order to find what are the
+  // vertices that needs to be anchored, we simply select the ones higher than a threshold value.
+  // If the mesh is double sided then we iterate only on half of the vertices.
+  vertices = hairsFactoryState->GetVertices ();
+  vertexCount = duplicationMode == CS::Physics::Bullet::MESH_DUPLICATION_NONE ?
+    hairsFactoryState->GetVertexCount () : hairsFactoryState->GetVertexCount () / 2;
+  for (int i = 0; i < vertexCount; i++)
+  {
+    if (vertices[duplicationMode == CS::Physics::Bullet::MESH_DUPLICATION_INTERLEAVED ? i * 2 : i][2] > 0.05f)
+      hairsBody->AnchorVertex (i, headBody);
+  }
+/*
+  for (int i = 0; i < hairsFactoryState->GetVertexCount (); i++)
+    if (vertices[i][2] > 0.05f)
+      hairsBody->AnchorVertex (i, headBody);
+*/
+  //------------------ Setup of the skirt ------------------
 
   // Find the position of the 'ToSpine' bone of Krystal
-  csQuaternion boneRotation;
-  csVector3 boneOffset;
-  animeshFactory->GetSkeletonFactory ()->GetTransformAbsSpace
+  animesh->GetSkeleton ()->GetTransformAbsSpace
     (animeshFactory->GetSkeletonFactory ()->FindBone ("ToSpine"), boneRotation, boneOffset);
   csOrthoTransform spineTransform (csMatrix3 (boneRotation.GetConjugate ()),
 				  boneOffset);
@@ -699,8 +737,9 @@ void KrystalScene::ResetSoftBodies ()
   // Create the soft body for the skirt
   csRef<iGeneralFactoryState> skirtFactoryState =
     scfQueryInterface<iGeneralFactoryState> (skirtMeshFact->GetMeshObjectFactory ());
+  duplicationMode = CS::Physics::Bullet::MESH_DUPLICATION_INTERLEAVED;
   skirtBody = avatarTest->bulletDynamicSystem->CreateSoftBody
-    (skirtFactoryState, spineTransform);
+    (skirtFactoryState, spineTransform, duplicationMode);
   skirtBody->SetMass (2.0f);
   skirtBody->SetRigidity (0.02f);
   skirtBody->GenerateBendingConstraints (3);
@@ -710,36 +749,22 @@ void KrystalScene::ResetSoftBodies ()
     scfQueryInterface<iGeneralMeshState> (skirtMesh->GetMeshObject ());
   animationControl =
     scfQueryInterface<CS::Animation::iSoftBodyAnimationControl> (skirtMeshState->GetAnimationControl ());
-  animationControl->SetSoftBody (skirtBody);
-
-  // Find the rigid body of the head of Krystal
-  iRigidBody* headBody = ragdollNode->GetBoneRigidBody
-    (animeshFactory->GetSkeletonFactory ()->FindBone ("Head"));
-
-  // Attach the hairs to the rigid body of the head of Krystal.
-  // We are lazy and simply attach all the vertices higher than a threshold.
-  for (size_t i = 0; i < hairsBody->GetVertexCount (); i++)
-    if (hairsBody->GetVertexPosition (i)[1] > 1.7f)
-      hairsBody->AnchorVertex (i, headBody);
+  animationControl->SetSoftBody (skirtBody, duplicationMode);
 
   // Find the rigid body of the spine of Krystal
   iRigidBody* spineBody = ragdollNode->GetBoneRigidBody
     (animeshFactory->GetSkeletonFactory ()->FindBone ("ToSpine"));
 
-  // Attach the skirt to the rigid body of the spine of Krystal.
-  // The indices of the vertices have been found by a manual investigation
-  // of the vertex list
-  animationControl->CreateAnimatedMeshAnchor (animesh, spineBody, 7);
-  animationControl->CreateAnimatedMeshAnchor (animesh, spineBody, 8);
-  animationControl->CreateAnimatedMeshAnchor (animesh, spineBody, 10);
-  animationControl->CreateAnimatedMeshAnchor (animesh, spineBody, 67);
-  animationControl->CreateAnimatedMeshAnchor (animesh, spineBody, 68);
-  animationControl->CreateAnimatedMeshAnchor (animesh, spineBody, 69);
-  animationControl->CreateAnimatedMeshAnchor (animesh, spineBody, 70);
-  animationControl->CreateAnimatedMeshAnchor (animesh, spineBody, 71);
-  animationControl->CreateAnimatedMeshAnchor (animesh, spineBody, 76);
-  animationControl->CreateAnimatedMeshAnchor (animesh, spineBody, 77);
-  animationControl->CreateAnimatedMeshAnchor (animesh, spineBody, 78);
-  animationControl->CreateAnimatedMeshAnchor (animesh, spineBody, 79);
-  animationControl->CreateAnimatedMeshAnchor (animesh, spineBody, 80);
+  // Anchor the soft body to the rigid body of the spine. Since the vertices of the spine do actually move
+  // relatively to this body, then we have to use a more sophisticated 'dynamic' anchoring. In order to find
+  // what are the vertices that needs to be anchored, we simply select the ones higher than a threshold value.
+  // If the mesh is double sided then we iterate only on half of the vertices.
+  vertices = skirtFactoryState->GetVertices ();
+  vertexCount = duplicationMode == CS::Physics::Bullet::MESH_DUPLICATION_NONE ?
+    skirtFactoryState->GetVertexCount () : skirtFactoryState->GetVertexCount () / 2;
+  for (int i = 0; i < vertexCount; i++)
+  {
+    if (vertices[duplicationMode == CS::Physics::Bullet::MESH_DUPLICATION_INTERLEAVED ? i * 2 : i][2] > 0.04f)
+      animationControl->CreateAnimatedMeshAnchor (animesh, spineBody, i);
+  }
 }
