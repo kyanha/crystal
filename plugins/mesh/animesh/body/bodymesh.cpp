@@ -96,8 +96,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(Bodymesh)
 			      CS::Animation::iSkeletonFactory* skeletonFactory)
     : scfImplementationType (this), name (name), manager (manager),
     skeletonFactory (skeletonFactory)
-  {
-  }
+  {}
 
   const char* BodySkeleton::GetName () const
   {
@@ -481,24 +480,22 @@ CS_PLUGIN_NAMESPACE_BEGIN(Bodymesh)
 
   BodyChain::BodyChain (BodySkeleton* bodySkeleton, const char *name,
 			CS::Animation::BoneID rootBone)
-    : scfImplementationType (this), name (name), bodySkeleton (bodySkeleton)
-  {
-    rootNode.AttachNew (new BodyChainNode (rootBone));
-  }
+    : scfImplementationType (this), name (name), bodySkeleton (bodySkeleton), rootNode (rootBone)
+  {}
 
   const char* BodyChain::GetName () const
   {
     return name;
   }
 
-  CS::Animation::iBodySkeleton* BodyChain::GetBodySkeleton () const
+  CS::Animation::iBodySkeleton* BodyChain::GetBodySkeleton ()
   {
     return bodySkeleton;
   }
 
-  CS::Animation::iBodyChainNode* BodyChain::GetRootNode () const
+  CS::Animation::iBodyChainNode* BodyChain::GetRootNode ()
   {
-    return rootNode;
+    return &rootNode;
   }
 
   void CollectAllNodes (csHash<csRef<BodyChainNode>, CS::Animation::BoneID>& nodeHash,
@@ -525,7 +522,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(Bodymesh)
 
     // collect all nodes of this chain
     csHash<csRef<BodyChainNode>, CS::Animation::BoneID> currentHash;
-    CollectAllNodes (currentHash, rootNode);
+    CollectAllNodes (currentHash, &rootNode);
 
     // check that the sub bone is not already in the chain
     if (currentHash.Contains (subBone))
@@ -549,7 +546,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(Bodymesh)
 	bodySkeleton->manager->Report (CS_REPORTER_SEVERITY_ERROR,
 			 "The specified child bone %i (%s) is not really a child of root bone %i (%s)",
 			 subBone, bodySkeleton->skeletonFactory->GetBoneName (subBone),
-			 rootNode->boneID, bodySkeleton->skeletonFactory->GetBoneName (rootNode->boneID));
+			 rootNode.boneID, bodySkeleton->skeletonFactory->GetBoneName (rootNode.boneID));
 	return false;
       }
 
@@ -579,7 +576,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(Bodymesh)
   {
 #ifdef CS_DEBUG
     // check if the chain is really empty
-    if (rootNode->children.GetSize ())
+    if (rootNode.children.GetSize ())
     {
       bodySkeleton->manager->Report (CS_REPORTER_SEVERITY_ERROR,
 				     "The chain %s is not empty while trying to add all sub chains",
@@ -592,14 +589,14 @@ CS_PLUGIN_NAMESPACE_BEGIN(Bodymesh)
     // When this method will return, all the bones that are not sub child of this chain will
     // be decref'd and therefore deleted.
     csHash<csRef<BodyChainNode>, CS::Animation::BoneID> nodeHash;
-    nodeHash.Put (rootNode->boneID, rootNode);
+    nodeHash.Put (rootNode.boneID, &rootNode);
     CS::Animation::BoneID maxBoneID = bodySkeleton->skeletonFactory->GetTopBoneID ();
     CS::Animation::BoneID rootBoneID = 0;
 
     for (CS::Animation::BoneID boneIt = 0; boneIt < maxBoneID; boneIt++)
     {
       // check if this is the root of this chain
-      if (rootNode->boneID == boneIt)
+      if (rootNode.boneID == boneIt)
 	continue;
 
       // find or create an entry in the node hash
@@ -638,19 +635,19 @@ CS_PLUGIN_NAMESPACE_BEGIN(Bodymesh)
   void BodyChain::DebugPrint () const
   {
     csPrintf ("Bone chain %s:\n", name.GetData ());
-    Print (rootNode);
+    Print (&rootNode);
   }
 
-  void BodyChain::Print (BodyChainNode* node, size_t level) const
+  void BodyChain::Print (const BodyChainNode* node, size_t level) const
   {
     for (size_t i = 0; i < level; i++)
       csPrintf (" ");
     csPrintf ("+ bone %zu: %s\n", node->boneID,
 	      bodySkeleton->skeletonFactory->GetBoneName (node->boneID));
 
-    for (csRefArray<BodyChainNode>::Iterator it = node->children.GetIterator (); it.HasNext (); )
+    for (csRefArray<BodyChainNode>::ConstIterator it = node->children.GetIterator (); it.HasNext (); )
     {
-      BodyChainNode*& node = it.Next ();
+      csRef<BodyChainNode> node = it.Next ();
       Print (node, level + 1);
     }
   }
@@ -658,10 +655,10 @@ CS_PLUGIN_NAMESPACE_BEGIN(Bodymesh)
   void BodyChain::PopulateBoneMask (csBitArray& boneMask) const
   {
     boneMask.SetSize (bodySkeleton->skeletonFactory->GetTopBoneID () + 1);
-    PopulateMask (rootNode, boneMask);
+    PopulateMask (&rootNode, boneMask);
   }
 
-  void BodyChain::PopulateMask (BodyChainNode* node, csBitArray& boneMask) const
+  void BodyChain::PopulateMask (const BodyChainNode* node, csBitArray& boneMask) const
   {
     boneMask.SetBit (node->GetAnimeshBone ());
     for (size_t i = 0; i < node->GetChildCount (); i++)

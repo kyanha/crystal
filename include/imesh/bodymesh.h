@@ -294,12 +294,12 @@ struct iBodyChain : public virtual iBase
   /**
    * Get the associated physical description of the skeleton
    */
-  virtual iBodySkeleton* GetBodySkeleton () const = 0;
+  virtual iBodySkeleton* GetBodySkeleton () = 0;
 
   /**
    * Get the root node of this chain.
    */
-  virtual iBodyChainNode* GetRootNode () const = 0;
+  virtual iBodyChainNode* GetRootNode () = 0;
 
   /**
    * Add a sub-chain to this chain, ie all nodes from the root of the chain to the given subBone.
