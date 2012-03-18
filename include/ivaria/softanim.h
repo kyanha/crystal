@@ -27,18 +27,7 @@
 
 #include "csutil/scf_interface.h"
 #include "imesh/genmesh.h"
-
-struct iRigidBody;
-
-namespace CS {
-namespace Physics {
-namespace Bullet {
-
-struct iSoftBody;
-
-} // namespace Bullet
-} // namespace Physics
-} // namespace CS
+#include "ivaria/bullet.h"
 
 namespace CS {
 namespace Mesh {
@@ -109,12 +98,15 @@ struct iSoftBodyAnimationControl : public iGenMeshAnimationControl
    * Set the soft body to be used to animate the genmesh. You can switch this soft body
    * at any time, the animation of the genmesh will just be adapted to the new soft body.
    * \param body The soft body that will be used to animate this genmesh.
-   * \param doubleSided True if the genmesh is double-sided (ie this is a cloth
-   * soft body), false otherwise. If the genmesh is double-sided, then the duplicated
-   * vertices must be added at the end of the vertex array, so that a vertex of index
-   * 'i' is duplicated at index 'i + body->GetVertexCount ()'.
+   * \param duplicationMode The duplication mode of the faces of the mesh. If the soft body has
+   * been created using CS::Physics::Bullet::iDynamicSystem::CreateSoftBody(iGeneralFactoryState*,const csOrthoTransform&,MeshDuplicationMode),
+   * then you should use the same parameter for both methods. A soft body created with
+   * CS::Physics::Bullet::iDynamicSystem::CreateCloth() should use a value of
+   * CS::Physics::Bullet::MESH_DUPLICATION_CONTIGUOUS.
    */
-  virtual void SetSoftBody (CS::Physics::Bullet::iSoftBody* body, bool doubleSided = false) = 0;
+  virtual void SetSoftBody (CS::Physics::Bullet::iSoftBody* body,
+			    CS::Physics::Bullet::MeshDuplicationMode duplicationMode
+			    = CS::Physics::Bullet::MESH_DUPLICATION_NONE) = 0;
 
   /**
    * Get the soft body used to animate the genmesh.

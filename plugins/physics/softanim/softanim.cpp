@@ -122,15 +122,18 @@ CS_PLUGIN_NAMESPACE_BEGIN(SoftAnim)
       bboxes[i] = bbox;
   }
 
-  void SoftBodyControl::SetSoftBody (CS::Physics::Bullet::iSoftBody* body, bool doubleSided)
+  void SoftBodyControl::SetSoftBody (CS::Physics::Bullet::iSoftBody* body,
+				     CS::Physics::Bullet::MeshDuplicationMode duplicationMode)
   {
     CS_ASSERT (body);
 
     // Reset the data
     softBody = body;
-    this->doubleSided = doubleSided;
-    vertices.SetSize (doubleSided ? softBody->GetVertexCount () * 2 : softBody->GetVertexCount ());
-    normals.SetSize (doubleSided ? softBody->GetVertexCount () * 2 : softBody->GetVertexCount ());
+    this->duplicationMode = duplicationMode;
+    size_t vertexCount = duplicationMode != CS::Physics::Bullet::MESH_DUPLICATION_NONE ?
+      softBody->GetVertexCount () * 2 : softBody->GetVertexCount ();
+    vertices.SetSize (vertexCount);
+    normals.SetSize (vertexCount);
     anchors.DeleteAll ();
 
     // Initialize the vertices and mesh position
@@ -165,23 +168,22 @@ CS_PLUGIN_NAMESPACE_BEGIN(SoftAnim)
 	mesh->GetMeshWrapper ()->GetMovable ()->GetFullTransform ();
 
       // Create a walker for the position buffer of the animesh
-      iRenderBuffer* positions = animesh->GetAnimatedMeshFactory ()->GetVertices ();
-      csVertexListWalker<float, csVector3> positionWalker (positions);
+      csRenderBufferHolder holder;
+      animesh->GetRenderBufferAccessor ()->PreGetBuffer (&holder, CS_BUFFER_POSITION);
+      csRenderBufferLock<csVector3> positions (holder.GetRenderBuffer (CS_BUFFER_POSITION));
 
       // Iterate on all vertices
       float closestDistance = 100000.0f;
       size_t closestVertex = (size_t) ~0;
-      for (size_t i = 0; i < positionWalker.GetSize (); i++)
+      for (size_t i = 0; i < positions.GetSize (); i++)
       {
 	float distance = (softBody->GetVertexPosition (bodyVertexIndex)
-			  - animeshTransform.This2Other ((*positionWalker))).Norm ();
+			  - animeshTransform.This2Other ((positions[i]))).Norm ();
 	if (distance < closestDistance)
 	{
 	  closestDistance = distance;
 	  closestVertex = i;
 	}
-
-	++positionWalker;
       }
 
       CS_ASSERT(closestVertex != (size_t) ~0);
@@ -269,27 +271,30 @@ CS_PLUGIN_NAMESPACE_BEGIN(SoftAnim)
     for (size_t i = 0; i < softBody->GetVertexCount (); i++)
     {
       csVector3 position = softBody->GetVertexPosition (i);
+      int meshIndex = duplicationMode == CS::Physics::Bullet::MESH_DUPLICATION_INTERLEAVED ? 2 * i : i;
 
       // Check that the vertex is still valid
       if (CS::IsNaN (position[0]) || CS::IsNaN (position[1]) || CS::IsNaN (position[2]))
-	position = vertices[i] + lastPosition;
+	position = vertices[meshIndex] + lastPosition;
 
       else
       {
-	vertices[i] = position - lastPosition;
-	normals[i] = softBody->GetVertexNormal (i);
+	vertices[meshIndex] = position - lastPosition;
+	normals[meshIndex] = softBody->GetVertexNormal (i);
       }
 
+      // Update the center of the mesh and its bounding box
       meshPosition += position;
+      bbox.AddBoundingVertex (vertices[meshIndex]);
 
-      // Update the double side if needed
-      if (doubleSided)
+      // Update the duplicated vertex if needed
+      if (duplicationMode != CS::Physics::Bullet::MESH_DUPLICATION_NONE)
       {
-	vertices[i + softBody->GetVertexCount ()] = vertices[i];
-	normals[i + softBody->GetVertexCount ()] = - normals[i];
+	size_t index = duplicationMode == CS::Physics::Bullet::MESH_DUPLICATION_INTERLEAVED ?
+	  meshIndex + 1 : i + softBody->GetVertexCount ();
+	vertices[index] = vertices[meshIndex];
+	normals[index] = - normals[meshIndex];
       }
-
-      bbox.AddBoundingVertex (vertices[i]);
     }
     meshPosition /= softBody->GetVertexCount ();
 
@@ -318,7 +323,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(SoftAnim)
       // Compute the new position of the anchor
       csRef<iMeshObject> mesh = scfQueryInterface<iMeshObject> (anchor.animesh);
       csVector3 newPosition =
-	mesh->GetMeshWrapper ()->GetMovable ()->GetTransform ().This2Other
+	mesh->GetMeshWrapper ()->GetMovable ()->GetFullTransform ().This2Other
 	(positions[anchor.animeshVertexIndex]);
       softBody->UpdateAnchor (anchor.bodyVertexIndex, newPosition);
     }
@@ -336,8 +341,9 @@ CS_PLUGIN_NAMESPACE_BEGIN(SoftAnim)
     if (!softBody)
       return normals;
 
-    CS_ASSERT(doubleSided ? num_normals == 2 * (int) softBody->GetVertexCount ()
-	      : num_normals == (int) softBody->GetVertexCount ());
+    CS_ASSERT (duplicationMode != CS::Physics::Bullet::MESH_DUPLICATION_NONE ?
+	       num_normals == 2 * (int) softBody->GetVertexCount ()
+	       : num_normals == (int) softBody->GetVertexCount ());
 
     return this->normals.GetArray ();
   }
@@ -354,7 +360,8 @@ CS_PLUGIN_NAMESPACE_BEGIN(SoftAnim)
     if (!softBody)
       return verts;
 
-    CS_ASSERT(doubleSided ? num_verts == 2 * (int) softBody->GetVertexCount ()
+    CS_ASSERT (duplicationMode != CS::Physics::Bullet::MESH_DUPLICATION_NONE ?
+	      num_verts == 2 * (int) softBody->GetVertexCount ()
 	      : num_verts == (int) softBody->GetVertexCount ());
 
     return vertices.GetArray ();
