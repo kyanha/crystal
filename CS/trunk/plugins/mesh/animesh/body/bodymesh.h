@@ -22,7 +22,8 @@
 #define __CS_BODYMESH_H__
 
 #include "csutil/scf_implementation.h"
-#include "iutil/comp.h"
+#include "csgeom/matrix3.h"
+#include "csgeom/plane3.h"
 #include "csutil/weakref.h"
 #include "csutil/leakguard.h"
 #include "csutil/hash.h"
@@ -30,9 +31,8 @@
 #include "csutil/refarr.h"
 #include "imesh/animesh.h"
 #include "imesh/bodymesh.h"
+#include "iutil/comp.h"
 #include "ivaria/dynamics.h"
-#include <csgeom/matrix3.h>
-#include <csgeom/plane3.h>
 
 CS_PLUGIN_NAMESPACE_BEGIN(Bodymesh)
 {
@@ -263,34 +263,6 @@ CS_PLUGIN_NAMESPACE_BEGIN(Bodymesh)
     friend class BodySkeleton;
   };
 
-  class BodyChain : public scfImplementation1<BodyChain, CS::Animation::iBodyChain>
-  {
-  public:
-    CS_LEAKGUARD_DECLARE(BodyChain);
-
-    BodyChain (BodySkeleton* bodySkeleton, const char *name,
-	       CS::Animation::BoneID rootBone);
-
-    virtual const char* GetName () const;
-    virtual CS::Animation::iBodySkeleton* GetBodySkeleton () const;
-    virtual CS::Animation::iBodyChainNode* GetRootNode () const;
-
-    virtual bool AddSubChain (CS::Animation::BoneID subBone);
-    virtual bool AddAllSubChains ();
-
-    virtual void DebugPrint () const;
-
-    virtual void PopulateBoneMask (csBitArray& boneMask) const;
-
-  private:
-    void Print (BodyChainNode* node, size_t level = 0) const;
-    void PopulateMask (BodyChainNode* node, csBitArray& boneMask) const;
-
-    csString name;
-    csRef<BodySkeleton> bodySkeleton;
-    csRef<BodyChainNode> rootNode;
-  };
-
   class BodyChainNode : public scfImplementation1<BodyChainNode,
     CS::Animation::iBodyChainNode>
   {
@@ -314,10 +286,38 @@ CS_PLUGIN_NAMESPACE_BEGIN(Bodymesh)
     void Print (size_t level = 0) const;
 
     CS::Animation::BoneID boneID;
-    csWeakRef<BodyChainNode> parent;
+    BodyChainNode* parent;
     csRefArray<BodyChainNode> children;
 
     friend class BodyChain;
+  };
+
+  class BodyChain : public scfImplementation1<BodyChain, CS::Animation::iBodyChain>
+  {
+  public:
+    CS_LEAKGUARD_DECLARE(BodyChain);
+
+    BodyChain (BodySkeleton* bodySkeleton, const char *name,
+	       CS::Animation::BoneID rootBone);
+
+    virtual const char* GetName () const;
+    virtual CS::Animation::iBodySkeleton* GetBodySkeleton ();
+    virtual CS::Animation::iBodyChainNode* GetRootNode ();
+
+    virtual bool AddSubChain (CS::Animation::BoneID subBone);
+    virtual bool AddAllSubChains ();
+
+    virtual void DebugPrint () const;
+
+    virtual void PopulateBoneMask (csBitArray& boneMask) const;
+
+  private:
+    void Print (const BodyChainNode* node, size_t level = 0) const;
+    void PopulateMask (const BodyChainNode* node, csBitArray& boneMask) const;
+
+    csString name;
+    BodySkeleton* bodySkeleton;
+    BodyChainNode rootNode;
   };
 
 }
