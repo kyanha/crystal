@@ -92,19 +92,21 @@ def ExportMaterials(func, depth, path, dependencies, use_imposter):
       use_imposter: indicates if an imposter shader is defined
   """
   # Export textures 
-  func(' '*depth +"<textures>")
-  for name, tex in dependencies['T'].items():
-    tex.AsCS(func, depth+2)
-    tex.save_export(B2CS.properties.exportPath)
-  func(' '*depth +"</textures>")
+  if len(dependencies['T'].keys()) > 0:
+    func(' '*depth +"<textures>")
+    for name, tex in dependencies['T'].items():
+      tex.AsCS(func, depth+2)
+      tex.save_export(B2CS.properties.exportPath)
+    func(' '*depth +"</textures>")
 
   # Export materials
   shaders = {}
-  func(' '*depth +"<materials>")
-  for name, mat in dependencies['M'].items():
-    mat.AsCS(func, depth+2)
-    shaders.update(mat.GetShaders())
-  func(' '*depth +"</materials>")
+  if len(dependencies['M'].keys()) > 0:
+    func(' '*depth +"<materials>")
+    for name, mat in dependencies['M'].items():
+      mat.AsCS(func, depth+2)
+      shaders.update(mat.GetShaders())
+    func(' '*depth +"</materials>")
 
   # Export shaders
   if use_imposter:
@@ -112,7 +114,8 @@ def ExportMaterials(func, depth, path, dependencies, use_imposter):
     func(' '*depth +"  <shader><file>/shader/lighting/lighting_imposter.xml</file></shader>")
     func(' '*depth +"</shaders>")
   else:
-    func(' '*depth +"<shaders>")
-    for shader in shaders:
-      func(' '*depth +"  <shader><file>"+shader+"</file></shader>")
-    func(' '*depth +"</shaders>")
+    if len(shaders) > 0:
+      func(' '*depth +"<shaders>")
+      for shader in shaders:
+        func(' '*depth +"  <shader><file>"+shader+"</file></shader>")
+      func(' '*depth +"</shaders>")
