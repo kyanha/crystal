@@ -155,16 +155,24 @@ CS_PLUGIN_NAMESPACE_BEGIN(SLCombiner)
       blockNode->SetAttribute ("location",
         csString().Format ("%s:fragmentMain", locationPrefix));
       contents = blockNode->CreateNodeBefore (CS_NODE_TEXT);
-      contents->SetValue (csString().Format ("%s = in_%s;",
-        outputName, ident.GetData()));
+      if (!isTexture)
+        contents->SetValue (csString().Format ("%s = in_%s;",
+          outputName, ident.GetData()));
+      else
+        contents->SetValue (csString().Format ("#sampler_assign %s in_%s",
+          outputName, ident.GetData()));
 
       blockNode = node->CreateNodeBefore (CS_NODE_ELEMENT);
       blockNode->SetValue ("block");
       blockNode->SetAttribute ("location",
         csString().Format ("%s:vertexMain", locationPrefix));
       contents = blockNode->CreateNodeBefore (CS_NODE_TEXT);
-      contents->SetValue (csString().Format ("%s = in_%s;",
-        outputName, ident.GetData()));
+      if (!isTexture)
+        contents->SetValue (csString().Format ("%s = in_%s;",
+          outputName, ident.GetData()));
+      else
+        contents->SetValue (csString().Format ("#sampler_assign %s in_%s",
+          outputName, ident.GetData()));
     }
   }
 
