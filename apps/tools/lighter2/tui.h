@@ -93,7 +93,8 @@ namespace lighter
     void DrawSimpleEnd ();
 
     // Reporting stuff
-    csString messageBuffer[4];
+    enum { messageBufferSize = 4 };
+    csString messageBuffer[messageBufferSize];
     uint messageBufferEnd;
 
     // Setting determining simple output mode instead of full TUI
