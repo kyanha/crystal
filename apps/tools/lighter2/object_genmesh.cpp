@@ -20,6 +20,7 @@
 
 #include <algorithm>
 
+#include "filetools.h"
 #include "lighter.h"
 #include "lightmap.h"
 #include "lightmapuv.h"
@@ -394,6 +395,9 @@ namespace lighter
       if (smInfo->sourceSubmesh)
       {
         newEntry.name = smInfo->sourceSubmesh->GetName();
+        // Assign default submesh name
+        if (newEntry.name.IsEmpty())
+          newEntry.name.Format ("SM%zu", submeshIndex);
         int n = 0;
         while (usedNames.Contains (newEntry.name))
         {
@@ -450,7 +454,12 @@ namespace lighter
           CS_BUF_STATIC, CS_BUFCOMP_UNSIGNED_INT, 
           minIndex, maxIndex);
       indices->SetData (indexArray.GetArray ());
-      indices = lighter::WrapBuffer (indices, csString().Format ("i%zu", i),
+      csString indicesName;
+      if (!allocatedSubmeshes[i].name.IsEmpty())
+        indicesName.Format ("%s_i", MakeFilename (allocatedSubmeshes[i].name).GetData());
+      else
+        indicesName.Format ("i%zu", i);
+      indices = lighter::WrapBuffer (indices, indicesName,
         factFN);
 
       const ObjectFactory_Genmesh::Submesh* srcSubmesh = 
