@@ -122,23 +122,24 @@ namespace lighter
 
     for (size_t i = descrSplit.GetSize(); i-- > 0;)
     {
-      csString& buf = messageBuffer[messageBufferEnd];
-      buf.Clear ();
-
-      buf.Append (TUI_SEVERITY_TEXT[severity]);
-      csString tmp(descrSplit[i]);
-      buf.Append (tmp.Slice (0,74).PadRight (74));
-
       if (simpleMode)
       {
         if (!prevWasReporter)
           csPrintf ("\n");
-        csPrintf ("%s\n", buf.GetDataSafe ());
+        csPrintf ("%s\n", descrSplit[i]);
         prevWasReporter = true;
       }
+      else
+      {
+        csString& buf = messageBuffer[messageBufferEnd];
+        buf.Clear ();
 
-      messageBufferEnd++;
-      if(messageBufferEnd > 3) messageBufferEnd = 0;
+        buf.Append (TUI_SEVERITY_TEXT[severity]);
+        csString tmp(descrSplit[i]);
+        buf.Append (tmp.Slice (0,74).PadRight (74));
+      }
+
+      messageBufferEnd = (messageBufferEnd + 1) % messageBufferSize;
     }
 
     // Print them
@@ -425,14 +426,14 @@ namespace lighter
 
     // Draw the four buffers, starting with messageBufferEnd
     int row = messageBufferEnd-1;
-    if(row <  0) row = 3;
+    if(row <  0) row += messageBufferSize;
 
     for(uint i = 0; i < 4; i++)
     {
       csPrintf ("%s", messageBuffer[row].GetDataSafe ());
       
       row--;
-      if(row < 0) row = 3;
+      if(row <  0) row += messageBufferSize;
       csPrintf (CS_ANSI_CURSOR_DOWN(1));
       csPrintf (CS_ANSI_CURSOR_BWD(100) CS_ANSI_CURSOR_FWD(2));
     }
