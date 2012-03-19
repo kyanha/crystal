@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8" ?> 
 <!--
   Copyright (C) 2008 by Frank Richter
 
@@ -18,6 +19,7 @@
 <snippet>
   <technique priority="100">
     <combiner name="cg" plugin="crystalspace.graphics3d.shader.combiner.glcg" />
+    <combiner name="glsl" plugin="crystalspace.graphics3d.shader.combiner.glsl" />
     
     <block location="cg:vertexMain">
       <?if (vars."pass number".int == 0) && (vars."pass do_ambient") ?>
@@ -33,6 +35,24 @@
       ambient = float3(1);
       <?else?>
       ambient = float3(0);
+      <?endif?>
+      ambient_attr_perfragment = false;
+    </block>
+
+    <block location="glsl:vertexMain">
+      <?if (vars."pass number".int == 0) && (vars."pass do_ambient") ?>
+      ambient = vec3(1.0);
+      <?else?>
+      ambient = vec3(0.0);
+      <?endif?>
+      ambient_attr_perfragment = false;
+    </block>
+      
+    <block location="glsl:fragmentMain">
+      <?if (vars."pass number".int == 0) && (vars."pass do_ambient") ?>
+      ambient = vec3(1.0);
+      <?else?>
+      ambient = vec3(0.0);
       <?endif?>
       ambient_attr_perfragment = false;
     </block>

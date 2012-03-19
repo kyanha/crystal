@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8" ?> 
 <!--
   Copyright (C) 2007 by Frank Richter
 	    (C) 2007 by Jorrit Tyberghein
@@ -19,34 +20,59 @@
 <snippet>
   <technique priority="100">
     <combiner name="cg" plugin="crystalspace.graphics3d.shader.combiner.glcg" />
+    <combiner name="glsl" plugin="crystalspace.graphics3d.shader.combiner.glsl" />
     
     <input file="/shader-snippets/texCoord.inp" />
     
     <input name="texNormal" type="tex2d" default="complex">
-      <block location="pass">
+      <block location="cg:pass">
 	<texture name="tex normal" destination="fragmentIn.texNormal" />
+      </block>
+
+      <block location="glsl:pass">
+	<texture name="tex normal" destination="in_texNormal" />
       </block>
       
       <block location="cg:fragmentIn">
 	<uniform type="tex2d" name="texNormal" />
       </block>
+
+      <block location="glsl:inputs">
+	<uniform type="tex2d" name="in_texNormal" />
+      </block>
       
       <block location="cg:fragmentMain">
 	texNormal = fragmentIn.texNormal;
       </block>
+
+      <block location="glsl:fragmentMain">
+	#sampler_assign texNormal in_texNormal
+      </block>
     </input>
     
     <input name="texNormalCompressed" type="tex2d" default="complex">
-      <block location="pass">
+      <block location="cg:pass">
 	<texture name="tex normal compressed" destination="fragmentIn.texNormalCompressed" />
+      </block>
+
+      <block location="glsl:pass">
+	<texture name="tex normal compressed" destination="in_texNormalCompressed" />
       </block>
       
       <block location="cg:fragmentIn">
 	<uniform type="tex2d" name="texNormalCompressed" />
       </block>
+
+      <block location="glsl:inputs">
+	<uniform type="tex2d" name="in_texNormalCompressed" />
+      </block>
       
       <block location="cg:fragmentMain">
 	texNormalCompressed = fragmentIn.texNormalCompressed;
+      </block>
+
+      <block location="glsl:fragmentMain">
+	#sampler_assign texNormalCompressed in_texNormalCompressed
       </block>
     </input>
 
@@ -58,13 +84,25 @@
       <block location="cg:variablemap">
 	  <variablemap variable="texture scale" destination="fragmentIn.texture_scale" />
       </block>
+
+      <block location="glsl:variablemap">
+	  <variablemap variable="texture scale" destination="in_texture_scale" />
+      </block>
       
       <block location="cg:fragmentIn">
 	  <uniform type="float2" name="texture_scale" />
       </block>
+
+      <block location="glsl:inputs">
+	  <uniform type="float2" name="in_texture_scale" />
+      </block>
       
       <block location="cg:fragmentMain">
 	  texture_scale = fragmentIn.texture_scale;
+      </block>
+
+      <block location="glsl:fragmentMain">
+	  texture_scale = in_texture_scale;
       </block>
     </input>
     
@@ -81,9 +119,32 @@
       normal_attr_perfragment = false;
     <?endif?>
     </block>
+
+    <block location="glsl:fragmentMain">
+    <?if vars."tex normal compressed".texture ?>
+      normal = vec3 (texture2D (texNormalCompressed, texCoord*texture_scale).wy*2.0-1.0, 0.0);
+      normal.z = sqrt (1.0 - dot (normal.xy, normal.xy));
+      normal_attr_perfragment = true;
+    <?elsif vars."tex normal".texture ?>
+      normal = normalize (texture2D (texNormal, texCoord*texture_scale).xyz*2.0-1.0);
+      normal_attr_perfragment = true;
+    <?else?>
+      normal = vec3 (0.0, 0.0, 1.0);
+      normal_attr_perfragment = false;
+    <?endif?>
+    </block>
     
     <block location="cg:vertexMain">
       normal = half3 (0, 0, 1);
+    <?if vars."tex normal".texture || vars."tex normal compressed".texture?>
+      normal_attr_perfragment = true;
+    <?else?>
+      normal_attr_perfragment = false;
+    <?endif?>
+    </block>
+
+    <block location="glsl:vertexMain">
+      normal = vec3 (0.0, 0.0, 1.0);
     <?if vars."tex normal".texture || vars."tex normal compressed".texture?>
       normal_attr_perfragment = true;
     <?else?>

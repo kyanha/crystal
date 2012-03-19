@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8" ?> 
 <!--
   Copyright (C) 2008 by Frank Richter
 
@@ -20,6 +21,7 @@
     <snippet id="tangent_normal_kill_z">
       <technique priority="100">
 	<combiner name="cg" plugin="crystalspace.graphics3d.shader.combiner.glcg" />
+	<combiner name="glsl" plugin="crystalspace.graphics3d.shader.combiner.glsl" />
 	
 	<input name="N" type="normal_tangent" />
 	
@@ -32,6 +34,16 @@
 	  result = N;
 	  result.z = 0;
 	</block>
+
+	<block location="glsl:fragmentMain">
+	  result = N;
+	  result.z = 0.0;
+	</block>
+	
+	<block location="glsl:vertexMain">
+	  result = N;
+	  result.z = 0.0;
+	</block>
 	
 	<output name="result" type="direction_tangent" />
       </technique>
@@ -40,6 +52,7 @@
     <snippet id="actual_perturb">
       <technique priority="100">
 	<combiner name="cg" plugin="crystalspace.graphics3d.shader.combiner.glcg" />
+	<combiner name="glsl" plugin="crystalspace.graphics3d.shader.combiner.glsl" />
 	
 	<input name="perturbScaleXlate" type="float4" default="value" defval="1,1,0,0" />
 	<input name="N" type="direction_camera" />
@@ -49,6 +62,14 @@
 	</block>
     
 	<block location="cg:vertexMain">
+	  result = N.xy * perturbScaleXlate.xy + perturbScaleXlate.zw;
+	</block>
+
+	<block location="glsl:fragmentMain">
+	  result = N.xy * perturbScaleXlate.xy + perturbScaleXlate.zw;
+	</block>
+    
+	<block location="glsl:vertexMain">
 	  result = N.xy * perturbScaleXlate.xy + perturbScaleXlate.zw;
 	</block>
 	

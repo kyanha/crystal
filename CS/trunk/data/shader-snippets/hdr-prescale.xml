@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8" ?> 
 <!--
   Copyright (C) 2008 by Frank Richter
 
@@ -18,6 +19,7 @@
 <snippet>
   <technique priority="100">
     <combiner name="cg" plugin="crystalspace.graphics3d.shader.combiner.glcg" />
+    <combiner name="glsl" plugin="crystalspace.graphics3d.shader.combiner.glsl" />
     
     <input name="a" type="rgba" />
     <input name="hdrScale" type="float4" default="complex" private="yes">
@@ -40,6 +42,18 @@
 	 <variablemap variable="hdr scale" destination="vertexIn.hdrScale" />
 	 <variablemap variable="hdr scale" destination="fragmentIn.hdrScale" />
       </block>
+      <block location="glsl:inputs">
+        <uniform type="float4" name="in_hdrScale" />
+      </block>
+      <block location="glsl:vertexMain">
+        hdrScale = in_hdrScale;
+      </block>
+      <block location="glsl:fragmentMain">
+        hdrScale = in_hdrScale;
+      </block>
+      <block location="glsl:variablemap">
+         <variablemap variable="hdr scale" destination="in_hdrScale" />
+      </block>
     </input>
       
     <block location="cg:fragmentMain">
@@ -58,6 +72,14 @@
       // HDR not supported sensibly on old HW
       result = a;
     #endif
+    </block>
+
+    <block location="glsl:fragmentMain">
+      result = vec4 (a.rgb*hdrScale.x+hdrScale.z, a.a);
+    </block>
+
+    <block location="glsl:vertexMain">
+      result = vec4 (a.rgb*hdrScale.x+hdrScale.z, a.a);
     </block>
     
     <output name="result" type="rgba" />
