@@ -106,6 +106,9 @@ CS_PLUGIN_NAMESPACE_BEGIN(ShaderWeaver)
       
       virtual bool IsCompound() const = 0;
       
+      virtual bool HasCombiner (const char* combinerId) const = 0;
+      virtual const CombinerPlugin* GetCombiner (const char* name) const = 0;
+      
       virtual BasicIterator<const Input>* GetInputs() const = 0;
       virtual BasicIterator<const Output>* GetOutputs() const = 0;
       
@@ -133,7 +136,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(ShaderWeaver)
       void AddInput (const Input& input) { inputs.Push (input); }
       void AddOutput (const Output& output) { outputs.Push (output); }
     
-      bool HasCombiner (const char* combinerId) const
+      virtual bool HasCombiner (const char* combinerId) const
       {
         if (combiners.GetSize() == 0) return true; // always allow “combiner-neutral” snippets
         CombinerHash::ConstGlobalIterator combinersIt (combiners.GetIterator());
@@ -144,10 +147,10 @@ CS_PLUGIN_NAMESPACE_BEGIN(ShaderWeaver)
         }
         return false;
       }
-      const char* GetCombinerId (const char* name) const
+      virtual const CombinerPlugin* GetCombiner (const char* name) const
       {
         const CombinerPlugin* comb (combiners.GetElementPointer (name));
-        return comb ? comb->classId.GetData() : name;
+        return comb;
       }
       virtual BasicIterator<const Block>* GetBlocks() const
       { return new BasicIteratorImpl<const Block, csArray<Block> > (blocks); }
@@ -187,7 +190,8 @@ CS_PLUGIN_NAMESPACE_BEGIN(ShaderWeaver)
       csArray<Snippet*> inSnippets;
       /// "Output" snippets - those having no connections out
       csArray<Snippet*> outSnippets;
-      Technique::CombinerPlugin combiner;
+      typedef csHash<CombinerPlugin, csString> CombinerHash;
+      CombinerHash combiners;
       csHash<ExplicitConnectionsHash, csPtrKey<Snippet> > explicitConnections;
     public:
       CompoundTechnique (const Snippet* owner, const char* snippetName) : 
@@ -205,8 +209,30 @@ CS_PLUGIN_NAMESPACE_BEGIN(ShaderWeaver)
       { return explicitConnections.GetOrCreate (to); }
       const ExplicitConnectionsHash* GetExplicitConnections (Snippet* to) const
       { return explicitConnections.GetElementPointer (to); }
-      
-      const CombinerPlugin& GetCombiner () const { return combiner; }
+
+
+      virtual bool HasCombiner (const char* combinerId) const
+      {
+        if (combiners.GetSize() == 0) return true; // always allow “combiner-neutral” snippets
+        CombinerHash::ConstGlobalIterator combinersIt (combiners.GetIterator());
+        while (combinersIt.HasNext())
+        {
+          const CombinerPlugin& combiner (combinersIt.Next());
+          if (combiner.classId.Compare (combinerId)) return true;
+        }
+        return false;
+      }
+      virtual const CombinerPlugin* GetCombiner (const char* name) const
+      {
+        const CombinerPlugin* comb (combiners.GetElementPointer (name));
+        return comb;
+      }
+      const CombinerPlugin& GetCombiner () const
+      {
+        CS_ASSERT(combiners.GetSize() == 1);
+        CombinerHash::ConstGlobalIterator it = combiners.GetIterator();
+        return it.Next();
+      }
       virtual BasicIterator<const Block>* GetBlocks() const { return 0; }
       virtual BasicIterator<const Input>* GetInputs() const;
       virtual BasicIterator<const Output>* GetOutputs() const;

@@ -1203,16 +1203,15 @@ CS_PLUGIN_NAMESPACE_BEGIN(ShaderWeaver)
 
     csString combinerClassId;
     csRef<iDocumentNode> combiner_params;
-    if (tech->IsCompound())
+    const Snippet::Technique::CombinerPlugin* requested (tech->GetCombiner(requestedName));
+    if(requested)
     {
-      const Snippet::Technique::CombinerPlugin& requested (
-        static_cast<const Snippet::CompoundTechnique*> (tech)->GetCombiner ());
-      combinerClassId = requested.classId;
-      combiner_params = requested.params;
+      combinerClassId = requested->classId;
+      combiner_params = requested->params;
     }
     else
     {
-      combinerClassId = static_cast<const Snippet::AtomTechnique*> (tech)->GetCombinerId (requestedName);
+      combinerClassId = requestedName;
     }
     if (comb.classId != combinerClassId) return 0;
     if (combiner_params && !used->CompatibleParams (combiner_params)) return 0;

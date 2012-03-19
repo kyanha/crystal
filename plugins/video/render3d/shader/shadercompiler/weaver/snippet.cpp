@@ -489,7 +489,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(ShaderWeaver)
             continue;
           }
 
-          combinerLoader->GenerateSVInputBlocks (svBlocksNode, "c",
+          combinerLoader->GenerateSVInputBlocks (svBlocksNode, combinerName,
             svName, newInput.type, newInput.name, newInput.name);
           if (!ReadBlocks (compiler, svBlocksNode, newInput.complexBlocks,
               aliases, combinerName))
@@ -980,27 +980,23 @@ CS_PLUGIN_NAMESPACE_BEGIN(ShaderWeaver)
   void Snippet::HandleCombinerNode (CompoundTechnique& tech, 
 				    iDocumentNode* node)
   {
-    if (!tech.combiner.classId.IsEmpty())
-    {
-      compiler->Report (CS_REPORTER_SEVERITY_WARNING, node,
-	"Multiple %s nodes",
-	CS::Quote::Single ("combiner"));
-    }
-  
     Technique::CombinerPlugin newCombiner;
+    csString combinerName = node->GetAttributeValue ("name");
+    if (name.IsEmpty())
+    {
+      combinerName = "c";
+    }
     newCombiner.classId = node->GetAttributeValue ("plugin");
     if (newCombiner.classId.IsEmpty())
     {
       compiler->Report (CS_REPORTER_SEVERITY_WARNING, node,
-	"%s node without %s attribute",
-	CS::Quote::Single ("combiner"),
-	CS::Quote::Single ("plugin"));
+        "%s node without %s attribute",
+        CS::Quote::Single ("combiner"), CS::Quote::Single ("plugin"));
       return;
     }
     newCombiner.params = node;
-    
-    if (tech.combiner.classId.IsEmpty())
-      tech.combiner = newCombiner;
+
+    tech.combiners.Put(combinerName, newCombiner);
   }
 
   CS_IDENT_STRING_LIST(SVTypes)
@@ -1021,7 +1017,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(ShaderWeaver)
 				     iDocumentNode* node,
                                      const FileAliases& aliases)
   {
-    if (tech.combiner.classId.IsEmpty())
+    if (tech.combiners.IsEmpty())
     {
       compiler->Report (CS_REPORTER_SEVERITY_WARNING, node,
 	"Need a combiner to use <parameter>");
@@ -1050,15 +1046,6 @@ CS_PLUGIN_NAMESPACE_BEGIN(ShaderWeaver)
       csShaderProgram::ParamVector | csShaderProgram::ParamShaderExp)) return;
     if (!param.valid) return;
 
-    csRef<WeaverCommon::iCombinerLoader> combinerLoader = 
-      csLoadPluginCheck<WeaverCommon::iCombinerLoader> (compiler->objectreg,
-        tech.combiner.classId, false);
-    if (!combinerLoader.IsValid())
-    {
-      // Don't complain, will happen later anyway
-      return;
-    }
-
     csRef<iDocumentNode> snippetNode = 
       compiler->CreateAutoNode (CS_NODE_ELEMENT);
     snippetNode->SetValue ("snippet");
@@ -1066,12 +1053,19 @@ CS_PLUGIN_NAMESPACE_BEGIN(ShaderWeaver)
     csRef<iDocumentNode> techNode = 
       snippetNode->CreateNodeBefore (CS_NODE_ELEMENT);
     techNode->SetValue ("technique");
+
+    CompoundTechnique::CombinerHash::GlobalIterator it = tech.combiners.GetIterator();
+    while (it.HasNext())
     {
+      csString combinerName;
+      CompoundTechnique::CombinerPlugin combiner;
+      combiner = it.Next(combinerName);
+
       csRef<iDocumentNode> combinerNode = 
         techNode->CreateNodeBefore (CS_NODE_ELEMENT);
       combinerNode->SetValue ("combiner");
-      combinerNode->SetAttribute ("name", "c");
-      combinerNode->SetAttribute ("plugin", tech.combiner.classId);
+      combinerNode->SetAttribute ("name", combinerName);
+      combinerNode->SetAttribute ("plugin", combiner.classId);
     }
     csString weaverType;
 
@@ -1108,8 +1102,25 @@ CS_PLUGIN_NAMESPACE_BEGIN(ShaderWeaver)
 
       csVector4 v;
       param.var->GetValue (v);
-      combinerLoader->GenerateConstantInputBlocks (techNode, "c", v, 
-        numComps, "value");
+      it.Reset();
+      while (it.HasNext())
+      {
+        csString combinerName;
+        CompoundTechnique::CombinerPlugin combiner;
+        combiner = it.Next(combinerName);
+
+        csRef<WeaverCommon::iCombinerLoader> combinerLoader = 
+          csLoadPluginCheck<WeaverCommon::iCombinerLoader> (compiler->objectreg,
+            combiner.classId, false);
+        if (!combinerLoader.IsValid())
+        {
+          // Don't complain, will happen later anyway
+          continue;
+        }
+
+        combinerLoader->GenerateConstantInputBlocks (techNode, combinerName, v, 
+          numComps, "value");
+      }
     }
     else
     {
@@ -1121,8 +1132,26 @@ CS_PLUGIN_NAMESPACE_BEGIN(ShaderWeaver)
 	  CS::Quote::Single ("weavertype"));
         return;
       }
-      combinerLoader->GenerateSVInputBlocks (techNode, "c", 
-        compiler->svstrings->Request (param.name), weaverType, "value", id);
+
+      it.Reset();
+      while (it.HasNext())
+      {
+        csString combinerName;
+        CompoundTechnique::CombinerPlugin combiner;
+        combiner = it.Next(combinerName);
+
+        csRef<WeaverCommon::iCombinerLoader> combinerLoader = 
+          csLoadPluginCheck<WeaverCommon::iCombinerLoader> (compiler->objectreg,
+            combiner.classId, false);
+        if (!combinerLoader.IsValid())
+        {
+          // Don't complain, will happen later anyway
+          continue;
+        }
+
+        combinerLoader->GenerateSVInputBlocks (techNode, combinerName, 
+          compiler->svstrings->Request (param.name), weaverType, "value", id);
+      }
     }
 
     {
@@ -1140,7 +1169,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(ShaderWeaver)
 				   iDocumentNode* node,
                                    const FileAliases& aliases)
   {
-    if (tech.combiner.classId.IsEmpty())
+    if (tech.combiners.IsEmpty())
     {
       compiler->Report (CS_REPORTER_SEVERITY_WARNING, node,
 	"Need a combiner to use <varying>");
@@ -1161,15 +1190,6 @@ CS_PLUGIN_NAMESPACE_BEGIN(ShaderWeaver)
 	  "Duplicate snippet id %s", CS::Quote::Single (id));
 	return;
     }
-
-    csRef<WeaverCommon::iCombinerLoader> combinerLoader = 
-      csLoadPluginCheck<WeaverCommon::iCombinerLoader> (compiler->objectreg,
-        tech.combiner.classId, false);
-    if (!combinerLoader.IsValid())
-    {
-      // Don't complain, will happen later anyway
-      return;
-    }
     
     const char* source = node->GetAttributeValue ("source");
     if (!source || !*source)
@@ -1187,12 +1207,19 @@ CS_PLUGIN_NAMESPACE_BEGIN(ShaderWeaver)
     csRef<iDocumentNode> techNode = 
       snippetNode->CreateNodeBefore (CS_NODE_ELEMENT);
     techNode->SetValue ("technique");
+
+    CompoundTechnique::CombinerHash::GlobalIterator it = tech.combiners.GetIterator();
+    while (it.HasNext())
     {
+      csString combinerName;
+      CompoundTechnique::CombinerPlugin combiner;
+      combiner = it.Next(combinerName);
+
       csRef<iDocumentNode> combinerNode = 
         techNode->CreateNodeBefore (CS_NODE_ELEMENT);
       combinerNode->SetValue ("combiner");
-      combinerNode->SetAttribute ("name", "c");
-      combinerNode->SetAttribute ("plugin", tech.combiner.classId);
+      combinerNode->SetAttribute ("name", combinerName);
+      combinerNode->SetAttribute ("plugin", combiner.classId);
     }
     
     csString weaverType;
@@ -1204,8 +1231,26 @@ CS_PLUGIN_NAMESPACE_BEGIN(ShaderWeaver)
 	CS::Quote::Single ("weavertype"));
       return;
     }
-    combinerLoader->GenerateBufferInputBlocks (techNode, "c", 
-      source, weaverType, "output", id);
+
+    it.Reset();
+    while (it.HasNext())
+    {
+      csString combinerName;
+      CompoundTechnique::CombinerPlugin combiner;
+      combiner = it.Next(combinerName);
+
+      csRef<WeaverCommon::iCombinerLoader> combinerLoader = 
+        csLoadPluginCheck<WeaverCommon::iCombinerLoader> (compiler->objectreg,
+          combiner.classId, false);
+      if (!combinerLoader.IsValid())
+      {
+        // Don't complain, will happen later anyway
+        continue;
+      }
+
+      combinerLoader->GenerateBufferInputBlocks (techNode, combinerName, 
+          source, weaverType, "output", id);
+    }
 
     {
       csRef<iDocumentNode> outputNode = 
@@ -1222,7 +1267,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(ShaderWeaver)
 				     iDocumentNode* node,
 				     const FileAliases& aliases)
   {
-    if (tech.combiner.classId.IsEmpty())
+    if (tech.combiners.IsEmpty())
     {
       compiler->Report (CS_REPORTER_SEVERITY_WARNING, node,
 	"Need a combiner to use <input> in compound snippets");
@@ -1243,15 +1288,6 @@ CS_PLUGIN_NAMESPACE_BEGIN(ShaderWeaver)
 	"Duplicate snippet id %s", CS::Quote::Single (id));
       return;
     }
-
-    csRef<WeaverCommon::iCombinerLoader> combinerLoader = 
-      csLoadPluginCheck<WeaverCommon::iCombinerLoader> (compiler->objectreg,
-        tech.combiner.classId, false);
-    if (!combinerLoader.IsValid())
-    {
-      // Don't complain, will happen later anyway
-      return;
-    }
     
     csRef<iDocumentNode> snippetNode = 
       compiler->CreateAutoNode (CS_NODE_ELEMENT);
@@ -1260,12 +1296,19 @@ CS_PLUGIN_NAMESPACE_BEGIN(ShaderWeaver)
     csRef<iDocumentNode> techNode = 
       snippetNode->CreateNodeBefore (CS_NODE_ELEMENT);
     techNode->SetValue ("technique");
+
+    CompoundTechnique::CombinerHash::GlobalIterator it = tech.combiners.GetIterator();
+    while (it.HasNext())
     {
+      csString combinerName;
+      CompoundTechnique::CombinerPlugin combiner;
+      combiner = it.Next(combinerName);
+
       csRef<iDocumentNode> combinerNode = 
         techNode->CreateNodeBefore (CS_NODE_ELEMENT);
       combinerNode->SetValue ("combiner");
-      combinerNode->SetAttribute ("name", "c");
-      combinerNode->SetAttribute ("plugin", tech.combiner.classId);
+      combinerNode->SetAttribute ("name", combinerName);
+      combinerNode->SetAttribute ("plugin", combiner.classId);
     }
     
     csString weaverType;
