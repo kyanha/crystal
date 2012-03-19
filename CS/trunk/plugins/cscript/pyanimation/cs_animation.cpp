@@ -6664,10 +6664,10 @@ SWIGINTERN PyObject *_wrap_iBodyChain_GetBodySkeleton(PyObject *SWIGUNUSEDPARM(s
   if(!PyArg_UnpackTuple(args,(char *)"iBodyChain_GetBodySkeleton",1,1,&obj0)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_CS__Animation__iBodyChain, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "iBodyChain_GetBodySkeleton" "', argument " "1"" of type '" "CS::Animation::iBodyChain const *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "iBodyChain_GetBodySkeleton" "', argument " "1"" of type '" "CS::Animation::iBodyChain *""'"); 
   }
   arg1 = reinterpret_cast< CS::Animation::iBodyChain * >(argp1);
-  result = (CS::Animation::iBodySkeleton *)((CS::Animation::iBodyChain const *)arg1)->GetBodySkeleton();
+  result = (CS::Animation::iBodySkeleton *)(arg1)->GetBodySkeleton();
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_CS__Animation__iBodySkeleton, 0 |  0 );
   return resultobj;
 fail:
@@ -6686,10 +6686,10 @@ SWIGINTERN PyObject *_wrap_iBodyChain_GetRootNode(PyObject *SWIGUNUSEDPARM(self)
   if(!PyArg_UnpackTuple(args,(char *)"iBodyChain_GetRootNode",1,1,&obj0)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_CS__Animation__iBodyChain, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "iBodyChain_GetRootNode" "', argument " "1"" of type '" "CS::Animation::iBodyChain const *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "iBodyChain_GetRootNode" "', argument " "1"" of type '" "CS::Animation::iBodyChain *""'"); 
   }
   arg1 = reinterpret_cast< CS::Animation::iBodyChain * >(argp1);
-  result = (CS::Animation::iBodyChainNode *)((CS::Animation::iBodyChain const *)arg1)->GetRootNode();
+  result = (CS::Animation::iBodyChainNode *)(arg1)->GetRootNode();
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_CS__Animation__iBodyChainNode, 0 |  0 );
   return resultobj;
 fail:
