@@ -18,6 +18,7 @@
 
 #include "common.h"
 
+#include "filetools.h"
 #include "lightmap.h"
 #include "lighter.h"
 
@@ -301,12 +302,7 @@ namespace lighter
 
   csString Lightmap::GetTextureNameFromFilename (const csString& file)
   {
-    csString out (file);
-    out.ReplaceAll ("\\", "_"); //replace bad characters
-    out.ReplaceAll ("/", "_"); 
-    out.ReplaceAll (" ", "_"); 
-    out.ReplaceAll (".", "_"); 
-    return out;
+    return MakeFilename (file);
   }
 
   //-------------------------------------------------------------------------
