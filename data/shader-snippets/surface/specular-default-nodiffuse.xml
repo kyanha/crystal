@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8" ?> 
 <!--
   Copyright (C) 2008 by Frank Richter
 
@@ -20,21 +21,35 @@
 <snippet>
   <technique priority="100">
     <combiner name="cg" plugin="crystalspace.graphics3d.shader.combiner.glcg" />
+    <combiner name="glsl" plugin="crystalspace.graphics3d.shader.combiner.glsl" />
     
     <input file="/shader-snippets/texCoord.inp"	/>
     
     <input name="texSpecular" type="tex2d" default="complex">
-      <block location="pass">
+      <block location="cg:pass">
 	<texture name="tex specular" destination="fragmentIn.texSpecular"
+		 fallback="standardtex white" />
+      </block>
+
+      <block location="glsl:pass">
+	<texture name="tex specular" destination="in_texSpecular"
 		 fallback="standardtex white" />
       </block>
       
       <block location="cg:fragmentIn">
 	<uniform type="tex2d" name="texSpecular" />
       </block>
+
+      <block location="glsl:inputs">
+	<uniform type="tex2d" name="in_texSpecular" />
+      </block>
       
       <block location="cg:fragmentMain">
 	texSpecular = fragmentIn.texSpecular;
+      </block>
+
+      <block location="glsl:fragmentMain">
+	#sampler_assign texSpecular in_texSpecular
       </block>
     </input>
     
@@ -53,6 +68,10 @@
 	<variablemap variable="specular" destination="fragmentIn.specular" />
 	<variablemap variable="specular" destination="vertexIn.specular" />
       </block>
+
+      <block location="glsl:variablemap">
+	<variablemap variable="specular" destination="in_specular" />
+      </block>
       
       <block location="cg:fragmentIn">
 	<uniform type="rgb" name="specular" />
@@ -61,13 +80,25 @@
       <block location="cg:vertexIn">
 	<uniform type="rgb" name="specular" />
       </block>
+
+      <block location="glsl:inputs">
+	<uniform type="rgb" name="in_specular" />
+      </block>
       
       <block location="cg:fragmentMain">
 	specular = fragmentIn.specular;
       </block>
 
+      <block location="glsl:fragmentMain">
+	specular = in_specular;
+      </block>
+
       <block location="cg:vertexMain">
 	specular = vertexIn.specular;
+      </block>
+
+      <block location="glsl:vertexMain">
+	specular = in_specular;
       </block>
     </input>
       
@@ -79,9 +110,20 @@
       specularColor = specular*surfaceColorWithAlpha.a;
       specularColor_attr_perfragment = true;
     </block>
+
+    <block location="glsl:vertexMain">
+      specularColor = specular*surfaceColorWithAlpha.a;
+      specularColor_attr_perfragment = true;
+    </block>
     
     <block location="cg:fragmentMain">
       specularColor = tex2D (texSpecular, texCoord).rgb * specular;
+      specularColor_attr_perfragment = true;
+      specularColor *= surfaceColorWithAlpha.a;
+    </block>
+
+    <block location="glsl:fragmentMain">
+      specularColor = texture2D (texSpecular, texCoord).rgb * specular;
       specularColor_attr_perfragment = true;
       specularColor *= surfaceColorWithAlpha.a;
     </block>
@@ -93,6 +135,7 @@
   
   <technique priority="50">
     <combiner name="cg" plugin="crystalspace.graphics3d.shader.combiner.glcg" />
+    <combiner name="glsl" plugin="crystalspace.graphics3d.shader.combiner.glsl" />
     
     <block location="cg:vertexMain">
       specularColor = float3(0);
@@ -101,6 +144,16 @@
     
     <block location="cg:fragmentMain">
       specularColor = float3(0);
+      specularColor_attr_perfragment = false;
+    </block>
+
+    <block location="glsl:vertexMain">
+      specularColor = vec3(0);
+      specularColor_attr_perfragment = false;
+    </block>
+    
+    <block location="glsl:fragmentMain">
+      specularColor = vec3(0);
       specularColor_attr_perfragment = false;
     </block>
     

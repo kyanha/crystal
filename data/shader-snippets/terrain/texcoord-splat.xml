@@ -19,6 +19,7 @@
 <snippet>
   <technique priority="100">
     <combiner name="cg" plugin="crystalspace.graphics3d.shader.combiner.glcg" />
+    <combiner name="glsl" plugin="crystalspace.graphics3d.shader.combiner.glsl" />
     
     <input file="/shader-snippets/texCoord.inp"	/>
 
@@ -31,6 +32,10 @@
 	  <variablemap variable="texture scale" destination="vertexIn.texture_scale" />
 	  <variablemap variable="texture scale" destination="fragmentIn.texture_scale" />
       </block>
+
+      <block location="glsl:variablemap">
+	  <variablemap variable="texture scale" destination="in_texture_scale" />
+      </block>
       
       <block location="cg:vertexIn">
 	  <uniform type="float2" name="texture_scale" />
@@ -40,12 +45,24 @@
 	  <uniform type="float2" name="texture_scale" />
       </block>
       
+      <block location="glsl:inputs">
+	  <uniform type="float2" name="in_texture_scale" />
+      </block>
+            
       <block location="cg:vertexMain">
 	  texture_scale = vertexIn.texture_scale;
       </block>
-      
+
       <block location="cg:fragmentMain">
 	  texture_scale = fragmentIn.texture_scale;
+      </block>
+
+      <block location="glsl:vertexMain">
+	  texture_scale = in_texture_scale;
+      </block>
+      
+      <block location="glsl:fragmentMain">
+	  texture_scale = in_texture_scale;
       </block>
     </input>
     
@@ -54,6 +71,14 @@
     </block>
     
     <block location="cg:fragmentMain">
+      splatCoord = texCoord*texture_scale;
+    </block>
+
+    <block location="glsl:vertexMain">
+      splatCoord = texCoord*texture_scale;
+    </block>
+
+    <block location="glsl:fragmentMain">
       splatCoord = texCoord*texture_scale;
     </block>
     

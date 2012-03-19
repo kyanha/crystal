@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8" ?>
 <!--
   Copyright (C) 2007 by Frank Richter
 	    (C) 2007 by Jorrit Tyberghein
@@ -19,6 +20,7 @@
 <snippet>
   <technique priority="100">
     <combiner name="cg" plugin="crystalspace.graphics3d.shader.combiner.glcg" />
+    <combiner name="glsl" plugin="crystalspace.graphics3d.shader.combiner.glsl" />
     
     <input name="a" type="rgba" />
     <input name="b" type="rgba" />
@@ -30,6 +32,14 @@
 
     <block location="cg:vertexMain">
       result = lerp (a, b, factor);
+    </block>
+
+    <block location="glsl:fragmentMain">
+      result = mix (a, b, factor);
+    </block>
+
+    <block location="glsl:vertexMain">
+      result = mix (a, b, factor);
     </block>
     
     <output name="result" type="rgba" />

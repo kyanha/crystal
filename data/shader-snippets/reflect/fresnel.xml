@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8" ?> 
 <!--
   Copyright (C) 2007 by Frank Richter
 	    (C) 2007 by Jorrit Tyberghein
@@ -23,6 +24,7 @@
     <snippet id="fresnel">
       <technique priority="100">
 	<combiner name="cg" plugin="crystalspace.graphics3d.shader.combiner.glcg" />
+	<combiner name="glsl" plugin="crystalspace.graphics3d.shader.combiner.glsl" />
 	
 	<!-- Vector from eye to position -->
 	<input name="eyeVec" type="direction_world" />
@@ -31,6 +33,10 @@
 	  
 	<block location="cg:definitions">
 	  <?Include /shader-snippets/cg-common.cginc?>
+	</block>
+
+	<block location="glsl:definitions">
+	  <?Include /shader-snippets/glsl-common.glsli?>
 	</block>
 	
 	<block location="cg:fragmentMain">
@@ -45,6 +51,20 @@
 	<block location="cg:vertexMain">
 	  const float R0 = 0.02040781341208;
 	  result = fresnel_2 (normalize (eyeVec), normal, 1.0-R0, R0, 2);
+	</block>
+
+	<block location="glsl:fragmentMain">
+	  // Calculated from 1.3333, which is approx. refraction index for water
+	  // R0 is: 
+	  // float const R0 =  pow(1.0-refractionIndexRatio, 2.0)  
+	  //                 / pow(1.0+refractionIndexRatio, 2.0); 
+	  const float R0 = 0.02040781341208;
+	  result = fresnel_2 (normalize (eyeVec), normal, 1.0-R0, R0, 2.0);
+	</block>
+    
+	<block location="glsl:vertexMain">
+	  const float R0 = 0.02040781341208;
+	  result = fresnel_2 (normalize (eyeVec), normal, 1.0-R0, R0, 2.0);
 	</block>
 	
 	<output name="result" type="float" />

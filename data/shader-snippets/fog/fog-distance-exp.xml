@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8" ?> 
 <!--
   Copyright (C) 2008 by Frank Richter
 
@@ -18,6 +19,7 @@
 <snippet>
   <technique priority="100">
     <combiner name="cg" plugin="crystalspace.graphics3d.shader.combiner.glcg" />
+    <combiner name="glsl" plugin="crystalspace.graphics3d.shader.combiner.glsl" />
 
     <input name="distance" type="float" />
     <input name="unfoggedColor" type="rgba" />
@@ -34,6 +36,18 @@
       float f = 1-exp (-distance * fogDensity);
       float4 fogFaded = fogColor*f;
       foggedColor = unfoggedColor*(1-fogFaded.a) + fogFaded;
+    </block>
+
+    <block location="glsl:vertexMain">
+      float f = 1.0-exp (-distance * fogDensity);
+      vec4 fogFaded = fogColor*f;
+      foggedColor = unfoggedColor*(1.0-fogFaded.a) + fogFaded;
+    </block>
+    
+    <block location="glsl:fragmentMain">
+      float f = 1.0-exp (-distance * fogDensity);
+      vec4 fogFaded = fogColor*f;
+      foggedColor = unfoggedColor*(1.0-fogFaded.a) + fogFaded;
     </block>
     
     <output name="foggedColor" type="rgba" />
