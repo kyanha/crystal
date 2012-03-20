@@ -139,10 +139,11 @@ def WriteCSGroup(self, func, depth=0, use_imposter=False, dontClose=False):
     func(' '*depth + '      <plugin>crystalspace.mesh.loader.factory.genmesh</plugin>')
     #if use_imposter:
     #  func(' '*depth + '      <imposter range="10.0" tolerance="45.0" camera_tolerance="45.0" shader="lighting_imposter"/>')
-    if ob.data.priority != 'object':
-      func(' '*depth + '      <priority>%s</priority>'%(ob.data.priority))
-    if ob.data.zbuf_mode != 'zuse':
-      func(' '*depth + '      <%s/>'%(ob.data.zbuf_mode))
+    mat = ob.GetDefaultMaterial()
+    if mat != None and mat.priority != 'object':
+      func(' '*depth + '      <priority>%s</priority>'%(mat.priority))
+    if mat != None and mat.zbuf_mode != 'zuse':
+      func(' '*depth + '      <%s/>'%(mat.zbuf_mode))
     func(' '*depth + '      <params>')
 
     # Export render buffers
@@ -200,11 +201,11 @@ def WriteCSGroup(self, func, depth=0, use_imposter=False, dontClose=False):
     #if use_imposter:
     #  func(' '*depth + '  <imposter range="10.0" tolerance="45.0" camera_tolerance="45.0" shader="lighting_imposter"/>')
     for m, ob in self.allObjects():
-      if ob.data.priority != 'object':
-        func(' '*depth + '  <priority>%s</priority>'%(ob.data.priority))
-      if ob.data.zbuf_mode != 'zuse':
-        func(' '*depth + '  <%s/>'%(ob.data.zbuf_mode))
-
+      mat = ob.GetDefaultMaterial(notifications = False)
+      if mat != None and mat.priority != 'object':
+        func(' '*depth + '  <priority>%s</priority>'%(mat.priority))
+      if mat != None and mat.zbuf_mode != 'zuse':
+        func(' '*depth + '  <%s/>'%(mat.zbuf_mode))
     func(' '*depth + '  <params>')
     
     def SubmeshesLackMaterial(subMeshess):
@@ -216,13 +217,14 @@ def WriteCSGroup(self, func, depth=0, use_imposter=False, dontClose=False):
 
     # There is a submesh without a material
     if SubmeshesLackMaterial(subMeshess):
+      mat = None
       for m, ob in self.allObjects():
-        if ob.data.GetMaterial(0):
-          mat = ob.data.GetMaterial(0).uname
-          break        
-      if not mat:
+        mat = ob.GetDefaultMaterial(notifications = False)
+        if mat != None:
+          break
+      if mat == None:
         print('WARNING: Factory "%s" has no material!'%(self.name))
-      func(' '*depth + '    <material>%s</material>'%(str(mat)))   
+      func(' '*depth + '    <material>%s</material>'%(mat.uname if mat!=None else 'None'))   
   
     # Export the render buffers of all objects composing the group
     args = {}

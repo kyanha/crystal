@@ -90,15 +90,17 @@ class Hierarchy:
     if self.object.type == 'ARMATURE':
       for child in self.object.children:
         if child.parent_type!='BONE':
-          if child.data.priority != 'object':
-            func(' '*depth + '  <priority>%s</priority>'%(child.data.priority))
-          if child.data.zbuf_mode != 'zuse':
-            func(' '*depth + '  <%s/>'%(child.data.zbuf_mode))
-    else:      
-      if self.object.data.priority != 'object':
-        func(' '*depth + '  <priority>%s</priority>'%(self.object.data.priority))
-      if self.object.data.zbuf_mode != 'zuse':
-        func(' '*depth + '  <%s/>'%(self.object.data.zbuf_mode))
+          mat = child.GetDefaultMaterial()
+          if mat != None and mat.priority != 'object':
+            func(' '*depth + '  <priority>%s</priority>'%(mat.priority))
+          if mat != None and mat.zbuf_mode != 'zuse':
+            func(' '*depth + '  <%s/>'%(mat.zbuf_mode))
+    else:
+      mat = self.object.GetDefaultMaterial()
+      if mat != None and mat.priority != 'object':
+        func(' '*depth + '  <priority>%s</priority>'%(mat.priority))
+      if mat != None and mat.zbuf_mode != 'zuse':
+        func(' '*depth + '  <%s/>'%(mat.zbuf_mode))
       
 
   def AsCSLib(self, path='', animesh=False, **kwargs):
@@ -260,27 +262,8 @@ class Hierarchy:
     func(" "*depth + "  <params>")
 
     # Take the first found material as default object material
-    if self.object.type == 'ARMATURE':
-      # Armature object
-      foundMaterial = False
-      for child in self.object.children:
-        if child.type == 'MESH' and len(child.data.uv_textures) != 0:
-          if child.data.GetMaterial(0):
-            mat = child.data.GetMaterial(0).uname
-            func(" "*depth + "    <material>%s</material>"%(str(mat)))
-            foundMaterial = True
-            break
-      if not foundMaterial:
-        func(" "*depth + "    <material>None</material>")
-        print('ERROR: armature object "%s" has no child with texture coordinates'%(self.object.name))
-    else:
-      # Mesh object
-      if len(self.object.data.uv_textures) != 0 and self.object.data.GetMaterial(0):
-        mat = self.object.data.GetMaterial(0).uname
-        func(" "*depth + "    <material>%s</material>"%(str(mat)))
-      else:
-        func(" "*depth + "    <material>None</material>")
-        print('ERROR: mesh object "%s" has no texture coordinates'%(self.object.name))
+    mat = self.object.GetDefaultMaterial()
+    func(" "*depth + "    <material>%s</material>"%(mat.uname if mat!=None else 'None'))
 
     # Export object's render buffers
     print('EXPORT factory "%s"' % (self.object.name))
@@ -341,10 +324,11 @@ def AsCSGenmeshLib(self, func, depth=0, **kwargs):
   func(' '*depth + '  <plugin>crystalspace.mesh.loader.factory.genmesh</plugin>')
   if self.data.use_imposter:
     func(' '*depth + '  <imposter range="100.0" tolerance="0.4" camera_tolerance="0.4" shader="lighting_imposter"/>')
-  if self.data.priority != 'object':
-    func(' '*depth + '  <priority>%s</priority>'%(self.data.priority))
-  if self.data.zbuf_mode != 'zuse':
-    func(' '*depth + '  <%s/>'%(self.data.zbuf_mode))
+  mat = self.GetDefaultMaterial()
+  if mat != None and mat.priority != 'object':
+    func(' '*depth + '  <priority>%s</priority>'%(mat.priority))
+  if mat != None and mat.zbuf_mode != 'zuse':
+    func(' '*depth + '  <%s/>'%(mat.zbuf_mode))
   func(' '*depth + '  <params>')
 
   # Recover submeshes from kwargs
@@ -360,12 +344,7 @@ def AsCSGenmeshLib(self, func, depth=0, **kwargs):
 
   if SubmeshesLackMaterial(subMeshes):
     #This mesh has a submesh without a material
-    if self.data.GetMaterial(0):
-      mat = self.data.GetMaterial(0).uname
-    else:
-      mat = None
-    print('WARNING: Factory "%s" has no material'%(self.name))
-    func(' '*depth + '    <material>%s</material>'%(str(mat)))
+    func(' '*depth + '    <material>%s</material>'%(mat.uname if mat!=None else 'None'))
 
   # Export mesh's render buffers
   for buf in GetRenderBuffers(**kwargs):
@@ -562,6 +541,40 @@ def ObjectDependencies(self, empty=None):
   return dependencies
 
 bpy.types.Object.GetDependencies = ObjectDependencies
+
+
+def GetDefaultMaterial (self, notifications = True):
+  """ Get the default material of this armature or mesh object
+  """
+  # Initialize default material with 'None'
+  mat = None
+
+  # Armature object
+  if self.type == 'ARMATURE':
+    # Take the first found material among children as default object material
+    foundMaterial = False
+    for child in self.children:
+      if child.type == 'MESH' and len(child.data.uv_textures) != 0:
+        if child.data.GetMaterial(0):
+          mat = child.data.GetMaterial(0)
+          foundMaterial = True
+          break
+    if not foundMaterial and notifications:
+      print('ERROR: armature object "%s" has no child with texture coordinates'%(self.name))
+  elif self.type == 'MESH':
+    # Mesh object
+    if len(self.data.uv_textures) != 0 and self.data.GetMaterial(0):
+      # Take the first defined material as default object material
+      mat = self.data.GetMaterial(0)
+    elif notifications:
+      if len(self.data.uv_textures) == 0:
+        print('ERROR: mesh object "%s" has no texture coordinates'%(self.name))
+      if not self.data.GetMaterial(0):
+        print('WARNING: Factory "%s" has no material'%(self.name))
+          
+  return mat
+
+bpy.types.Object.GetDefaultMaterial = GetDefaultMaterial
 
 
 def GetMaterialDeps(self):
