@@ -293,40 +293,6 @@ namespace lighter
   DirectionalLight::~DirectionalLight ()
   {}
 
-  csColor DirectionalLight::SampleLight (const csVector3& point, const csVector3& n,
-    float u1, float u2, csVector3& lightVec, float& pdf, VisibilityTester& vistest,
-    const csPlane3* visLimitPlane)
-  {
-    lightVec = position - point;
-
-    float dot = -dir * lightVec;
-
-    // project the point onto the light plane
-    csVector3 P = point - dir * dot;
-    // uncomment this define to have attenuation calculated based on the distance from point
-    // to light plane, as opposed to from point to light centre
-//#define ATTENUATION_POINT_P
-#ifdef ATTENUATION_POINT_P
-    float sqD = dot * dot;
-#else
-    float sqD = lightVec.SquaredNorm ();
-#endif // ATTENUATION_POINT_P
-    lightVec = -dir;
-
-    pdf = 1;
-
-    csSegment3 visSegment (P, point);
-
-    if (visLimitPlane)
-      csIntersect3::SegmentPlane (*visLimitPlane, visSegment);
-
-    vistest.AddSegment (ownerSector->kdTree, visSegment.Start (), visSegment.End ());
-
-    csColor res = color * ComputeAttenuation (sqD);
-
-    return res;
-  }
-
   csColor DirectionalLight::GetPower () const
   {
     return color;
@@ -349,6 +315,64 @@ namespace lighter
   void DirectionalLight::SetDirection (csVector3 d)
   {
     dir = d;
+  }
+
+csColor DirectionalLightAttenuationPlane::SampleLight (const csVector3& point, const csVector3& n,
+    float u1, float u2, csVector3& lightVec, float& pdf, VisibilityTester& vistest,
+    const csPlane3* visLimitPlane)
+  {
+    lightVec = position - point;
+
+    float dot = -dir * lightVec;
+
+    // project the point onto the light plane
+    csVector3 P = point - dir * dot;
+    // have attenuation calculated based on the distance from point
+    // to light plane
+    float sqD = dot * dot;
+    lightVec = -dir;
+
+    pdf = 1;
+
+    csSegment3 visSegment (P, point);
+
+    if (visLimitPlane)
+      csIntersect3::SegmentPlane (*visLimitPlane, visSegment);
+
+    vistest.AddSegment (ownerSector->kdTree, visSegment.Start (), visSegment.End ());
+
+    csColor res = color * ComputeAttenuation (sqD);
+
+    return res;
+  }
+
+csColor DirectionalLightAttenuationPoint::SampleLight (const csVector3& point, const csVector3& n,
+    float u1, float u2, csVector3& lightVec, float& pdf, VisibilityTester& vistest,
+    const csPlane3* visLimitPlane)
+  {
+    lightVec = position - point;
+
+    float dot = -dir * lightVec;
+
+    // project the point onto the light plane
+    csVector3 P = point - dir * dot;
+    // have attenuation calculated based on the distance from point
+    // to light centre
+    float sqD = lightVec.SquaredNorm ();
+    lightVec = -dir;
+
+    pdf = 1;
+
+    csSegment3 visSegment (P, point);
+
+    if (visLimitPlane)
+      csIntersect3::SegmentPlane (*visLimitPlane, visSegment);
+
+    vistest.AddSegment (ownerSector->kdTree, visSegment.Start (), visSegment.End ());
+
+    csColor res = color * ComputeAttenuation (sqD);
+
+    return res;
   }
 
 

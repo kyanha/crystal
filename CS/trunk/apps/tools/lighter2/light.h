@@ -337,10 +337,6 @@ namespace lighter
 
     virtual ~DirectionalLight();
 
-    virtual csColor SampleLight (const csVector3& point, const csVector3& n,
-      float u1, float u2, csVector3& lightVec, float& pdf, VisibilityTester& vistest,
-      const csPlane3* visLimitPlane = 0);
-
     /**
      * Return light power over S2 sphere
     */
@@ -378,7 +374,27 @@ namespace lighter
     float length;
     csVector3 dir;
   };
-  
+  // Directional light: use distance from light plane for attenuation (correct)
+  class DirectionalLightAttenuationPlane : public DirectionalLight
+  {
+  public:
+    DirectionalLightAttenuationPlane (Sector* owner) : DirectionalLight (owner) {}
+
+    virtual csColor SampleLight (const csVector3& point, const csVector3& n,
+      float u1, float u2, csVector3& lightVec, float& pdf, VisibilityTester& vistest,
+      const csPlane3* visLimitPlane = 0);
+  };
+  // Directional light: use distance from light plane for attenuation (incorrect)
+  class DirectionalLightAttenuationPoint : public DirectionalLight
+  {
+  public:
+    DirectionalLightAttenuationPoint (Sector* owner) : DirectionalLight (owner) {}
+
+    virtual csColor SampleLight (const csVector3& point, const csVector3& n,
+      float u1, float u2, csVector3& lightVec, float& pdf, VisibilityTester& vistest,
+      const csPlane3* visLimitPlane = 0);
+  };
+
   // Proxy light, used when light source is in different sector
   class ProxyLight : public Light
   {

@@ -36,6 +36,7 @@ namespace lighter
     lighterProperties.globalAmbient = true;
     lighterProperties.forceRealistic = false;
     lighterProperties.lightPowerScale = 1.0;
+    lighterProperties.dirLightAttnCenter = false;
     lighterProperties.PMLightScale = 1.0;
     lighterProperties.directionalLMs = false;
     lighterProperties.specularDirectionMaps = false;
@@ -116,6 +117,9 @@ namespace lighter
       true);
 
     lighterProperties.forceRealistic = cfgFile->GetBool ("lighter2.forceRealistic", 
+      false);
+
+    lighterProperties.dirLightAttnCenter = cfgFile->GetBool ("lighter2.dirLightAttnCenter",
       false);
 
     lighterProperties.lightPowerScale = cfgFile->GetFloat ("lighter2.lightPowerScale", 
