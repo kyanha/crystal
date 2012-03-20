@@ -1,6 +1,6 @@
 import bpy
 
-from io_scene_cs.utilities import rnaType, rnaOperator, B2CS, BoolProperty
+from io_scene_cs.utilities import rnaType, rnaOperator, B2CS, BoolProperty, EnumProperty
 
 from io_scene_cs.utilities import RemovePanels, RestorePanels 
 
@@ -98,6 +98,39 @@ class TEXTURE_PT_B2CS_texture(csTexturePanel, bpy.types.Panel):
         if tex.texture.image:
           row.prop(tex.texture.image, "binAlpha")
 
+        row = layout.row()
+        split = row.split(percentage=0.5)
+        colL = split.column()
+        colL.label(text="Render Priority:")
+        colR = split.column()
+        colR.prop(idblock, "priority", text="")
+
+        row = layout.row()
+        split = row.split(percentage=0.5)
+        colL = split.column()
+        colL.label(text="Z-buffer Mode:")
+        colR = split.column()
+        colR.prop(idblock, "zbuf_mode", text="")
+
 
 
 BoolProperty(['Image'], attr="binAlpha", name="Binary Alpha", description="Use binary alpha for this texture")
+
+EnumProperty(['Material'], 
+     attr="priority", 
+     name="Render priority",
+     description="Priority level in which the object will be renderered", 
+     items=[('init','init',''),('sky','sky',''),('sky2','sky2',''),
+            ('portal','portal',''),('wall','wall',''),('wall2','wall2',''),('object','object',''),
+            ('object2','object2',''),('transp','transp',''),('alpha','alpha',''),('final','final','')],
+     default='object')
+
+EnumProperty(['Material'],
+     attr="zbuf_mode",
+     name="Z-buffer mode",
+     description="Behavior of the rendering of the object regarding the Z-Buffer",
+     items=[('znone','Z-None',"Don't test or write"),
+            ('zfill','Z-Fill',"Write unconditionally"),
+            ('ztest','Z-Test',"Test only"),
+            ('zuse','Z-Use',"Test, write if successful")],
+     default='zuse')
