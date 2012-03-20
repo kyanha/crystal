@@ -1098,6 +1098,27 @@ namespace lighter
           globalConfig.GetLighterProperties ().lightPowerScale);
       }
 
+      // Whether light should be (incorrectly) attenuated by distance to center
+      bool attenuationDistPoint (globalConfig.GetLighterProperties().dirLightAttnCenter);
+
+      // Look for lighter2-specific settings
+      {
+        csRef<iObjectIterator> objiter =
+          light->QueryObject ()->GetIterator();
+        while (objiter->HasNext())
+        {
+          iObject* obj = objiter->Next();
+          csRef<iKeyValuePair> kvp =
+            scfQueryInterface<iKeyValuePair> (obj);
+          if (kvp.IsValid() && (strcmp (kvp->GetKey(), "lighter2") == 0))
+          {
+            const char* vDirLightAttnCenter = kvp->GetValue ("dirLightAttnCenter");
+            if (vDirLightAttnCenter != 0)
+              attenuationDistPoint = (strcmp (vDirLightAttnCenter, "yes") == 0);
+          }
+        }
+      }
+
       // IneQuation was here
       csRef<Light> intLight;
 
@@ -1106,7 +1127,10 @@ namespace lighter
         case CS_LIGHT_DIRECTIONAL:
           {
             csRef<DirectionalLight> dirLight;
-            dirLight.AttachNew (new DirectionalLight (radSector));
+            if (attenuationDistPoint)
+              dirLight.AttachNew (new DirectionalLightAttenuationPoint (radSector));
+            else
+              dirLight.AttachNew (new DirectionalLightAttenuationPlane (radSector));
 
             dirLight->SetRadius (light->GetDirectionalCutoffRadius ());
             dirLight->SetLength (light->GetCutoffDistance ());

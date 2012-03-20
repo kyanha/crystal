@@ -52,6 +52,8 @@ namespace lighter
       bool globalAmbient;
       // Override lighting attenuation to be realistic for all lights
       bool forceRealistic;
+      // Attenuate directional lights by distance to their center
+      bool dirLightAttnCenter;
       // Scale the power of all light sources evenly by indicated value
       float lightPowerScale;
       // Scale the power of all light source for photonmapping only
