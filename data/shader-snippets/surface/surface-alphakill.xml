@@ -24,6 +24,7 @@
     <snippet id="alphakill">
       <technique priority="100">
 	<combiner name="cg" plugin="crystalspace.graphics3d.shader.combiner.glcg" />
+	<combiner name="glsl" plugin="crystalspace.graphics3d.shader.combiner.glsl" />
 	
 	<input name="surfaceColor" type="rgba">
           <attribute name="perfragment" type="bool" />
@@ -34,9 +35,21 @@
 	  surfaceOutput = surfaceColor;
 	  surfaceOutput_attr_perfragment = surfaceColor_attr_perfragment;
 	</block>
+
+	<block location="glsl:vertexMain">
+	  surfaceOutput = surfaceColor;
+	  surfaceOutput_attr_perfragment = surfaceColor_attr_perfragment;
+	</block>
 	
 	<block location="cg:fragmentMain">
 	  clip (surfaceColor.a - alphaThreshold);
+	  surfaceOutput = surfaceColor;
+	  surfaceOutput_attr_perfragment = surfaceColor_attr_perfragment;
+	</block>
+
+	<block location="glsl:fragmentMain">
+	  if (surfaceColor.a &lt; alphaThreshold)
+            discard;
 	  surfaceOutput = surfaceColor;
 	  surfaceOutput_attr_perfragment = surfaceColor_attr_perfragment;
 	</block>

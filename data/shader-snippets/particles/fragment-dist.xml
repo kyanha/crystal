@@ -28,36 +28,45 @@
     <snippet id="framebufferTC">
       <technique priority="100">
 	<combiner name="cg" plugin="crystalspace.graphics3d.shader.combiner.glcg" />
+	<combiner name="glsl" plugin="crystalspace.graphics3d.shader.combiner.glsl" />
 	
 	<input name="positionO" type="position4_object" />
 	
-	<input name="ModelViewProj" type="float4x4" default="complex" private="yes">
-	  <block location="cg:vertexIn">
-	    <uniform type="float4x4" name="ModelViewProj" binding="state.matrix.mvp" />
-	  </block>
-	  
-	  <block location="cg:vertexMain">
-	    ModelViewProj = vertexIn.ModelViewProj;
-	  </block>
-	</input>
+        <input file="/shader-snippets/ModelViewProj.inp" private="yes" />
 	
 	<input name="fbTexXform" type="float4" default="complex" private="yes">
 	  <block location="cg:vertexIn">
 	    <uniform type="float4" name="fbTexXform" />
 	  </block>
+
+	  <block location="glsl:inputs">
+	    <uniform type="float4" name="in_fbTexXform" />
+	  </block>
 	  
 	  <block location="cg:variablemap">
 	    <variablemap variable="framebuffer coord xform" destination="vertexIn.fbTexXform" />
 	  </block>
+
+	  <block location="glsl:variablemap">
+	    <variablemap variable="framebuffer coord xform" destination="in_fbTexXform" />
+	  </block>
 	  
 	  <block location="cg:vertexMain">
 	    fbTexXform = vertexIn.fbTexXform;
+	  </block>
+
+	  <block location="glsl:vertexMain">
+	    fbTexXform = in_fbTexXform;
 	  </block>
 	</input>
 	
 	<input name="textureToScreen" type="float2" default="complex" private="yes">
 	  <block location="cg:fragmentIn">
 	    <uniform type="float2" name="textureToScreen" />
+	  </block>
+
+	  <block location="glsl:inputs">
+	    <uniform type="float2" name="in_textureToScreen" />
 	  </block>
 	  
 	  <block location="cg:variablemap">
@@ -69,13 +78,31 @@
 	      </sexp>
 	    </variablemap>
 	  </block>
+
+	  <block location="glsl:variablemap">
+	    <variablemap destination="in_textureToScreen" type="expr">
+	      <sexp>(make-vector
+		(/ 1 (elt1 "framebuffer coord xform"))
+		(/ 1 (elt2 "framebuffer coord xform"))
+		)
+	      </sexp>
+	    </variablemap>
+	  </block>
 	  
 	  <block location="cg:fragmentMain">
 	    textureToScreen = fragmentIn.textureToScreen;
 	  </block>
+
+	  <block location="glsl:fragmentMain">
+	    textureToScreen = in_textureToScreen;
+	  </block>
 	</input>
 	
 	<block location="cg:vertexToFragment">
+	  <varying type="texcoord3" name="framebufferTC" />
+	</block>
+
+	<block location="glsl:vertexToFragment">
 	  <varying type="texcoord3" name="framebufferTC" />
 	</block>
 	
@@ -85,8 +112,19 @@
 	  float2 xlate = fbTexXform.zw * framebufferTC.z;
 	  framebufferTC.xy = framebufferTC.xy * scale + xlate;
 	</block>
+
+	<block location="glsl:vertexMain">
+	  framebufferTC = (ModelViewProj * positionO).xyw; // == position_screen
+	  vec2 scale = fbTexXform.xy;
+	  vec2 xlate = fbTexXform.zw * framebufferTC.z;
+	  framebufferTC.xy = framebufferTC.xy * scale + xlate;
+	</block>
 	
 	<block location="cg:fragmentMain">
+	  tcToScreen = textureToScreen;
+	</block>
+
+	<block location="glsl:fragmentMain">
 	  tcToScreen = textureToScreen;
 	</block>
 	
@@ -98,20 +136,33 @@
     <snippet id="actualDist">
       <technique priority="100">
 	<combiner name="cg" plugin="crystalspace.graphics3d.shader.combiner.glcg" />
+	<combiner name="glsl" plugin="crystalspace.graphics3d.shader.combiner.glsl" />
 	
 	<input name="positionW" type="position4_world" />
 	
 	<input name="texFramebufferDepth" type="tex2d" default="complex">
-	  <block location="pass">
+	  <block location="cg:pass">
 	    <texture name="tex framebuffer depth" destination="fragmentIn.texFramebufferDepth" />
+	  </block>
+
+	  <block location="glsl:pass">
+	    <texture name="tex framebuffer depth" destination="in_texFramebufferDepth" />
 	  </block>
 	  
 	  <block location="cg:fragmentIn">
 	    <uniform type="tex2d" name="texFramebufferDepth" />
 	  </block>
+
+	  <block location="glsl:inputs">
+	    <uniform type="tex2d" name="in_texFramebufferDepth" />
+	  </block>
 	  
 	  <block location="cg:fragmentMain">
 	    texFramebufferDepth = fragmentIn.texFramebufferDepth;
+	  </block>
+
+	  <block location="glsl:fragmentMain">
+	    #sampler_assign texFramebufferDepth in_texFramebufferDepth
 	  </block>
 	</input>
 	
@@ -119,13 +170,27 @@
 	  <block location="cg:fragmentIn">
 	    <uniform type="float4x4" name="projectedToWorld" />
 	  </block>
+
+	  <block location="glsl:inputs">
+	    <uniform type="float4x4" name="in_projectedToWorld" />
+	  </block>
 	  
 	  <block location="cg:fragmentMain">
 	    projectedToWorld = fragmentIn.projectedToWorld;
 	  </block>
+
+	  <block location="glsl:fragmentMain">
+	    projectedToWorld = in_projectedToWorld;
+	  </block>
 	  
 	  <block location="cg:variablemap">
 	    <variablemap destination="fragmentIn.projectedToWorld" type="expr">
+	      <sexp>(* "world2camera transform" "projection transform inverse")</sexp>
+	    </variablemap>
+	  </block>
+
+	  <block location="glsl:variablemap">
+	    <variablemap destination="in_projectedToWorld" type="expr">
 	      <sexp>(* "world2camera transform" "projection transform inverse")</sexp>
 	    </variablemap>
 	  </block>
@@ -136,6 +201,11 @@
 	
 	<block location="cg:vertexMain">
 	  dist = 0;
+	  distSat = dist;
+	</block>
+
+	<block location="glsl:vertexMain">
+	  dist = 0.0;
 	  distSat = dist;
 	</block>
 	
@@ -155,6 +225,22 @@
 	  distSat = saturate (dist);
 	</block>
 	
+	<block location="glsl:fragmentMain">
+	  float inv_reflW = 1 / fbTC.z;
+	  
+	  float camDepth = texture2DProj (texFramebufferDepth, fbTC).x*-2.0 + 1.0;
+	  vec2 screenPos = (fbTC.xy * fbTC2screen * inv_reflW)-vec2(1.0);
+	  vec4 positionProjected = vec4 (
+	    screenPos.x, screenPos.y, camDepth, 1.0);
+	  vec4 positionUnprojectedW = projectedToWorld * positionProjected;
+	  positionUnprojectedW /= positionUnprojectedW.w;
+	  
+	  dist = length (positionW.xyz - positionUnprojectedW.xyz);
+	  
+	  dist = max (dist, 0);
+	  distSat = clamp (dist, 0.0, 1.0);
+	</block>
+
 	<output name="dist" type="float" />
 	<output name="distSat" type="float" />
       </technique>
