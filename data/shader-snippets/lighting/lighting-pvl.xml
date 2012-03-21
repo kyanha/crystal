@@ -22,6 +22,7 @@
     <snippet id="lighting">
       <technique priority="100">
 	<combiner name="cg" plugin="crystalspace.graphics3d.shader.combiner.glcg" />
+	<combiner name="glsl" plugin="crystalspace.graphics3d.shader.combiner.glsl" />
 	
 	<!-- Vector from eye to position -->
 	<input name="eyeToSurf" type="direction_world" />
@@ -43,16 +44,27 @@
 	<block location="cg:variablemap">
 	  <?Lighting_Variablemaps vertex?>
 	</block>
+	<block location="glsl:variablemap">
+	  <?Lighting_Variablemaps vertex?>
+	</block>
 	
 	<block location="cg:definitions">
 	  <?Include /shader-snippets/lighting/lightfuncs.cginc ?>
 	</block>
+        <block location="glsl:definitions">
+          <?Include /shader-snippets/lighting/lightfuncs.glsli?>
+        </block>
 	
 	<!-- Shader might be used together with shadowmap shader... -->
 	<block location="cg:clips"
 	       file="/shader-snippets/lighting/shadowclip.block" />
 	
 	<block location="cg:vertexToFragment">
+	  <varying type="rgb" name="diffuseColor" />
+	  <varying type="rgb" name="specularColor" />
+	</block>
+
+	<block location="glsl:vertexToFragment">
 	  <varying type="rgb" name="diffuseColor" />
 	  <varying type="rgb" name="specularColor" />
 	</block>
@@ -86,8 +98,42 @@
 	  diffuseColor_attr_perfragment = false;
 	  specularColor_attr_perfragment = false;
 	</block>
+
+	<block location="glsl:vertexMain">
+	  diffuseColor = vec3(0);
+	  specularColor = vec3(0);
+	  eyeToSurf = normalize (eyeToSurf);
+	  <![CDATA[
+	  for (int l = 0; l < maxLights; l++)
+	  {
+	    int i = lightOffset + l;
+	    if ((i >= minLights) && (i >= lightProps_count)) break;
+          ]]>
+		     
+            LightSpace lightSpace = MakeLightSpaceWorld (i, position);
+		      
+	    Light light = GetCurrentLight (lightSpace, i);
+	    vec4 lightAttenuationVec = lightProps_attenuationVec[i];
+	    vec3 d, s;
+	    ComputeLight (lightSpace, light, eyeToSurf, normal, shininess,
+	      lightProps_colorDiffuse[i], lightProps_colorSpecular[i],
+	      lightAttenuationVec, 1.0, d, s);
+		      
+	    diffuseColor += d;
+	    specularColor += s;
+	  }
+	  diffuseColor *= lightScale.x;
+	  specularColor *= lightScale.y;
+	  diffuseColor_attr_perfragment = false;
+	  specularColor_attr_perfragment = false;
+	</block>
 	
 	<block location="cg:fragmentMain">
+	  diffuseColor_attr_perfragment = false;
+	  specularColor_attr_perfragment = false;
+	</block>
+
+	<block location="glsl:fragmentMain">
 	  diffuseColor_attr_perfragment = false;
 	  specularColor_attr_perfragment = false;
 	</block>
