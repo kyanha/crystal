@@ -1053,8 +1053,9 @@ iShaderProgram::CacheLoadResult csXMLShaderTech::LoadPassFromCache (
     csRef<iHierarchicalCache> progCache;
     if (cache)
       progCache = cache->GetRootedCache (csString().Format ("/pass%dprog", passNum));
-    LoadProgramFromCache (0, progCache, plugins.unified, pass->program,
-                          tagVP, passNum);
+    loadRes = LoadProgramFromCache (0, progCache, plugins.unified, pass->program,
+                                    tagVP, passNum);
+    if (loadRes != iShaderProgram::loadSuccessShaderValid) return loadRes;
     tagFP = tagVP;
     previous = pass->program;
     resolveVP = scfQueryInterface<iShaderDestinationResolver> (pass->program);
