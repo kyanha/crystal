@@ -335,6 +335,22 @@ CS_PLUGIN_NAMESPACE_BEGIN(GLShaderGLSL)
             return false;
           break;
 
+        case XMLTOKEN_BINDATTRIBUTE:
+          {
+            const char* attrName = child->GetAttributeValue ("attrib");
+            if (!attrName || !*attrName)
+            {
+              synsrv->ReportError ("crystalspace.graphics3d.shader.glsl",
+                                   child,
+                                   "invalid value for %s attribute",
+                                   CS::Quote::Double ("attrib"));
+              return false;
+            }
+            boundAttribs.PutUnique (attrName,
+              child->GetAttributeValueAsInt ("location"));
+          }
+          break;
+
         case XMLTOKEN_VARIABLEMAP:
         case XMLTOKEN_DESCRIPTION:
           if (!ParseCommon (child))
@@ -361,8 +377,16 @@ CS_PLUGIN_NAMESPACE_BEGIN(GLShaderGLSL)
     const csGLExtensionManager* ext = shaderPlug->ext;
     csRef<csShaderVariable> var;
 
-    ext->glUseProgramObjectARB (program_id);
+    BoundAttribsHash::GlobalIterator boundAttribsIter (boundAttribs.GetIterator());
+    while (boundAttribsIter.HasNext())
+    {
+      csString attrib;
+      uint location = boundAttribsIter.Next (attrib);
+      ext->glBindAttribLocationARB (program_id, location, attrib);
+    }
     
+    ext->glUseProgramObjectARB (program_id);
+
     csHash<ProgramUniform, csString> uniforms;
     GLint activeUniforms (0);
     ext->glGetObjectParameterivARB (program_id, GL_OBJECT_ACTIVE_UNIFORMS_ARB,
@@ -570,6 +594,10 @@ CS_PLUGIN_NAMESPACE_BEGIN(GLShaderGLSL)
   {
     csVertexAttrib dest = CS_VATTRIB_INVALID;
     const csGLExtensionManager* ext = shaderPlug->ext;
+
+    uint* boundAttr = boundAttribs.GetElementPointer (binding);
+    if (boundAttr)
+      return (csVertexAttrib)(CS_VATTRIB_0 + *boundAttr);
 
     if (ext)
     {

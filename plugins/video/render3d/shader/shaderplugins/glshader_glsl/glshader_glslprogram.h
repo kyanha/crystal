@@ -51,6 +51,8 @@ CS_PLUGIN_NAMESPACE_BEGIN(GLShaderGLSL)
     bool validProgram;                // what for
     bool useTessellation;
 
+    typedef csHash<uint, csString> BoundAttribsHash;
+    BoundAttribsHash boundAttribs;
     csHash<int, csString> tuBindings;
 
     csRef<iDataBuffer> vpSource;
