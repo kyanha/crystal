@@ -198,6 +198,6 @@ def ExportCameras (func, depth, cameras):
       param cameras: list of cameras and their associated scene
   """
   keylist = cameras.keys()
-  for camName in sorted(keylist):
+  for camName in sorted(keylist, key=str.lower):
     cam = cameras[camName]
     cam['scene'].CameraAsCS(func, depth, cam['camera'])
