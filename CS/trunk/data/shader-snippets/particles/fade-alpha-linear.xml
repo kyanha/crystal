@@ -18,6 +18,7 @@
 <snippet>
   <technique priority="100">
     <combiner name="cg" plugin="crystalspace.graphics3d.shader.combiner.glcg" />
+    <combiner name="glsl" plugin="crystalspace.graphics3d.shader.combiner.glsl" />
 
     <input name="distance" type="float" />
     <input name="unfadedColor" type="rgba" />
@@ -27,9 +28,21 @@
       fadedColor = unfadedColor;
       fadedColor.a = unfadedColor.a * f;
     </block>
+
+    <block location="glsl:vertexMain">
+      float f = clamp (distance*0.5, 0.0, 1.0);
+      fadedColor = unfadedColor;
+      fadedColor.a = unfadedColor.a * f;
+    </block>
     
     <block location="cg:fragmentMain">
       float f = saturate (distance*0.5);
+      fadedColor = unfadedColor;
+      fadedColor.a = unfadedColor.a * f;
+    </block>
+
+    <block location="glsl:fragmentMain">
+      float f = clamp (distance*0.5, 0.0, 1.0);
       fadedColor = unfadedColor;
       fadedColor.a = unfadedColor.a * f;
     </block>

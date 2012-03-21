@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8" ?>
 <!--
   Copyright (C) 2008 by Frank Richter
 	    (C) 2008 by Jorrit Tyberghein
@@ -19,6 +20,7 @@
 <snippet>
   <technique priority="100">
     <combiner name="cg" plugin="crystalspace.graphics3d.shader.combiner.glcg" />
+    <combiner name="glsl" plugin="crystalspace.graphics3d.shader.combiner.glsl" />
     
     <input name="surfaceColor" type="rgba" >
       <attribute name="perfragment" type="bool" defval="true" />
@@ -33,6 +35,18 @@
     <block location="cg:vertexMain">
       outputColor = surfaceColor;
       outputColor.a = 1;
+      outputColor_attr_perfragment = surfaceColor_attr_perfragment;
+    </block>
+
+    <block location="glsl:fragmentMain">
+      outputColor = surfaceColor;
+      outputColor.a = 1.0;
+      outputColor_attr_perfragment = surfaceColor_attr_perfragment;
+    </block>
+
+    <block location="glsl:vertexMain">
+      outputColor = surfaceColor;
+      outputColor.a = 1.0;
       outputColor_attr_perfragment = surfaceColor_attr_perfragment;
     </block>
     

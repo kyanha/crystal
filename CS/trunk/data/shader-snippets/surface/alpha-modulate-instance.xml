@@ -19,6 +19,7 @@
 <snippet>
   <technique priority="100">
       <combiner name="cg" plugin="crystalspace.graphics3d.shader.combiner.glcg" />
+      <combiner name="glsl" plugin="crystalspace.graphics3d.shader.combiner.glsl" />
 
     <input name="inputColor" type="rgba" />
     <input file="/shader-snippets/meshgen-extra.inp" private="yes" />
@@ -31,12 +32,21 @@
       <block location="cg:fragmentIn">
         <uniform type="float4" name="meshgenFadeInfo" />
       </block>
+      <block location="glsl:inputs">
+        <uniform type="float4" name="in_meshgenFadeInfo" />
+      </block>
       
       <block location="cg:vertexMain">
         meshgenFadeInfo = vertexIn.meshgenFadeInfo;
       </block>
       <block location="cg:fragmentMain">
         meshgenFadeInfo = fragmentIn.meshgenFadeInfo;
+      </block>
+      <block location="glsl:vertexMain">
+        meshgenFadeInfo = in_meshgenFadeInfo;
+      </block>
+      <block location="glsl:fragmentMain">
+        meshgenFadeInfo = in_meshgenFadeInfo;
       </block>
 
       <block location="cg:variablemap">
@@ -45,9 +55,16 @@
         <variablemap variable="meshgen fade info" 
           destination="fragmentIn.meshgenFadeInfo" />
       </block>
+      <block location="glsl:variablemap">
+        <variablemap variable="meshgen fade info" 
+          destination="in_meshgenFadeInfo" />
+      </block>
     </input>
 
     <block location="cg:vertexToFragment">
+      <varying type="float" name="alpha_color" />
+    </block>
+    <block location="glsl:vertexToFragment">
       <varying type="float" name="alpha_color" />
     </block>
 
@@ -63,7 +80,24 @@
       outputColor.a = inputColor.a * alpha_color;
     </block>
 
+    <block location="glsl:vertexMain">
+      // Compute alpha at instance origin
+      vec4 origin_obj = instancingTransforms * vec4 (0, 0, 0, 1);
+      vec4 origin_eye = ModelView * origin_obj;
+      float dist = length (origin_eye.xyz);
+      vec2 fade_values = vec2(dist) * meshgenFadeInfo.xz + meshgenFadeInfo.yw;
+      alpha_color = clamp (min (fade_values.x, fade_values.y), 0.0, 1.0);
+      
+      outputColor.rgb = inputColor.rgb;
+      outputColor.a = inputColor.a * alpha_color;
+    </block>
+
     <block location="cg:fragmentMain">
+      outputColor.rgb = inputColor.rgb;
+      outputColor.a = inputColor.a * alpha_color;
+    </block>
+
+    <block location="glsl:fragmentMain">
       outputColor.rgb = inputColor.rgb;
       outputColor.a = inputColor.a * alpha_color;
     </block>

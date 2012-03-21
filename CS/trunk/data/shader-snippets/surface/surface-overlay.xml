@@ -23,6 +23,7 @@
     <snippet id="surface_overlay">
       <technique priority="100">
         <combiner name="cg" plugin="crystalspace.graphics3d.shader.combiner.glcg" />
+        <combiner name="glsl" plugin="crystalspace.graphics3d.shader.combiner.glsl" />
     
         <input file="/shader-snippets/texCoord.inp" />
 
@@ -31,20 +32,37 @@
         </input>
     
         <input name="texOverlay" type="tex2d" default="complex">    
-          <block location="pass">
+          <block location="cg:pass">
 	      <texture name="tex overlay" destination="fragmentIn.texOverlay" />
+          </block>
+
+          <block location="glsl:pass">
+	      <texture name="tex overlay" destination="in_texOverlay" />
           </block>
       
           <block location="cg:fragmentIn">
 	      <uniform type="tex2d" name="texOverlay" />
           </block>
+
+          <block location="glsl:inputs">
+	      <uniform type="tex2d" name="in_texOverlay" />
+          </block>
       
           <block location="cg:fragmentMain">
 	      texOverlay = fragmentIn.texOverlay;
           </block>
+
+          <block location="glsl:fragmentMain">
+	      #sampler_assign texOverlay in_texOverlay
+          </block>
         </input>
        
         <block location="cg:vertexMain">
+          surfaceColor = surfaceColorIn;
+          surfaceColor_attr_perfragment = surfaceColorIn_attr_perfragment;
+        </block>
+
+        <block location="glsl:vertexMain">
           surfaceColor = surfaceColorIn;
           surfaceColor_attr_perfragment = surfaceColorIn_attr_perfragment;
         </block>
@@ -61,6 +79,19 @@
           <?endif?>
         </block>
     
+        <block location="glsl:fragmentMain">
+          <?if vars."tex overlay".texture ?>
+            surfaceColor = surfaceColorIn;
+            float4 overlayTex = texture2D(texOverlay, texCoord);
+            surfaceColor.rgb = mix(overlayTex.rgb, surfaceColor.rgb, overlayTex.a);
+            surfaceColor_attr_perfragment = true;
+          <?else?>
+            surfaceColor = surfaceColorIn;
+            surfaceColor_attr_perfragment = surfaceColorIn_attr_perfragment;
+          <?endif?>
+        </block>
+
+
         <output name="surfaceColor" type="rgba">
           <attribute name="perfragment" type="bool" />
         </output>
@@ -68,6 +99,7 @@
   
       <technique priority="50">
         <combiner name="cg" plugin="crystalspace.graphics3d.shader.combiner.glcg" />
+        <combiner name="glsl" plugin="crystalspace.graphics3d.shader.combiner.glsl" />
     
         <input file="/shader-snippets/texCoord.inp" />
 
@@ -79,8 +111,18 @@
           surfaceColor = surfaceColorIn;
           surfaceColor_attr_perfragment = surfaceColorIn_attr_perfragment;
         </block>
+
+        <block location="glsl:vertexMain">
+          surfaceColor = surfaceColorIn;
+          surfaceColor_attr_perfragment = surfaceColorIn_attr_perfragment;
+        </block>
     
         <block location="cg:fragmentMain">
+          surfaceColor = surfaceColorIn;
+          surfaceColor_attr_perfragment = surfaceColorIn_attr_perfragment;
+        </block>
+
+        <block location="glsl:fragmentMain">
           surfaceColor = surfaceColorIn;
           surfaceColor_attr_perfragment = surfaceColorIn_attr_perfragment;
         </block>

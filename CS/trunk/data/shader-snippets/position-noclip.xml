@@ -19,6 +19,7 @@
 <snippet>
   <technique priority="100">
     <combiner name="cg" plugin="crystalspace.graphics3d.shader.combiner.glcg" />
+    <combiner name="glsl" plugin="crystalspace.graphics3d.shader.combiner.glsl" />
     
     <input name="Hposition" type="position4_object" default="complex">
       <block location="cg:vertexIn">
@@ -28,24 +29,27 @@
       <block location="cg:vertexMain">
 	Hposition = vertexIn.Hposition;
       </block>
+
+      <block location="glsl:inputs">
+        <!--varying type="position4" name="gl_Position"/-->
+      </block>
+
+      <block location="glsl:vertexMain">
+        Hposition = gl_Vertex;
+      </block>
     </input>
     
     <!-- Slightly dirty: float4x4 is no weaver type, so gets written out 
 	 verbatim -->
-    <input name="ModelViewProj" type="float4x4" default="complex">
-      <block location="cg:vertexIn">
-	<uniform type="float4x4" name="ModelViewProj" binding="state.matrix.mvp" />
-      </block>
-      
-      <block location="cg:vertexMain">
-	ModelViewProj = vertexIn.ModelViewProj;
-      </block>
-    </input>
+    <input file="/shader-snippets/ModelViewProj.inp" private="yes" />
     <input file="/shader-snippets/ModelView.inp" private="yes" />
 
     <input name="objectToWorld" type="float4x4" default="complex" private="yes">
       <block location="cg:vertexIn">
 	<uniform type="float4x4" name="objectToWorld" />
+      </block>
+      <block location="glsl:inputs">
+        <uniform type="float4x4" name="in_objectToWorld" />
       </block>
       
       <block location="cg:fragmentIn">
@@ -56,8 +60,16 @@
 	objectToWorld = vertexIn.objectToWorld;
       </block>
 
+      <block location="glsl:vertexMain">
+        objectToWorld = in_objectToWorld;
+      </block>
+
       <block location="cg:fragmentMain">
 	objectToWorld = fragmentIn.objectToWorld;
+      </block>
+
+      <block location="glsl:fragmentMain">
+        objectToWorld = in_objectToWorld;
       </block>
 
       <block location="cg:variablemap">
@@ -66,11 +78,23 @@
 	<variablemap variable="object2world transform" 
 	  destination="fragmentIn.objectToWorld" />
       </block>
+      <block location="glsl:variablemap">
+        <variablemap variable="object2world transform"
+          destination="in_objectToWorld" />
+      </block>
     </input>
 
     <block location="cg:vertexToFragment">
       <varying type="position4" name="position" binding="POSITION" />
       <!-- This is needed since POSITION semantics can't be used for input in an FP -->
+      <varying type="position4" name="position_screen" />
+      <varying type="position4" name="position_object"/>
+      <varying type="position4" name="position_world"/>
+      <varying type="position4" name="position_camera"/>
+    </block>
+
+    <block location="glsl:vertexToFragment">
+      <varying type="position4" name="position" />
       <varying type="position4" name="position_screen" />
       <varying type="position4" name="position_object"/>
       <varying type="position4" name="position_world"/>
@@ -84,6 +108,9 @@
     <block location="cg:definitions">
       <?Include /shader-snippets/cg-global_objectToWorld.cginc?>
     </block>
+    <block location="glsl:definitions">
+      <?Include /shader-snippets/glsl-global_objectToWorld.glsli?>
+    </block>
 	
     <block location="cg:vertexMain">
       position_object = Hposition;
@@ -95,12 +122,31 @@
 	 global variable for it. Set that */
       SetGlobalObjectToWorld (objectToWorld);
     </block>
+
+    <block location="glsl:vertexMain">
+      position_object = Hposition;
+      gl_Position = position_screen = position = ftransform();//ModelViewProj * position_object;
+      position_camera = ModelView * position_object;
+      position_world = objectToWorld * position_object;
+
+      /* The objectToWorld transform is needed in other places, so there is a
+         global variable for it. Set that */
+      SetGlobalObjectToWorld (objectToWorld);
+    </block>
     
     <block location="cg:fragmentMain">
       position = position_screen;
 
       /* The objectToWorld transform is needed in other places, so there is a 
 	 global variable for it. Set that */
+      SetGlobalObjectToWorld (objectToWorld);
+    </block>
+
+    <block location="glsl:fragmentMain">
+      position = position_screen;
+
+      /* The objectToWorld transform is needed in other places, so there is a 
+         global variable for it. Set that */
       SetGlobalObjectToWorld (objectToWorld);
     </block>
     

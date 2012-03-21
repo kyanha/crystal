@@ -19,6 +19,7 @@
 <snippet>
   <technique priority="100">
     <combiner name="cg" plugin="crystalspace.graphics3d.shader.combiner.glcg" />
+    <combiner name="glsl" plugin="crystalspace.graphics3d.shader.combiner.glsl" />
     
     <input name="Hposition" type="position4_object" default="complex">
       <block location="cg:vertexIn">
@@ -28,23 +29,27 @@
       <block location="cg:vertexMain">
 	Hposition = vertexIn.Hposition;
       </block>
+
+      <block location="glsl:inputs">
+        <!--varying type="position4" name="gl_Position"/-->
+      </block>
+
+      <block location="glsl:vertexMain">
+        Hposition = gl_Vertex;
+      </block>
     </input>
     
     <!-- Slightly dirty: float4x4 is no weaver type, so gets written out 
 	 verbatim -->
-    <input name="ModelViewProj" type="float4x4" default="complex">
-      <block location="cg:vertexIn">
-	<uniform type="float4x4" name="ModelViewProj" binding="state.matrix.mvp" />
-      </block>
-      
-      <block location="cg:vertexMain">
-	ModelViewProj = vertexIn.ModelViewProj;
-      </block>
-    </input>
+    <input file="/shader-snippets/ModelViewProj.inp" private="yes" />
+    <input file="/shader-snippets/ModelView.inp" private="yes" />
 
     <input name="objectToWorld" type="float4x4" default="complex" private="yes">
       <block location="cg:vertexIn">
 	<uniform type="float4x4" name="objectToWorld" />
+      </block>
+      <block location="glsl:inputs">
+        <uniform type="float4x4" name="in_objectToWorld" />
       </block>
       
       <block location="cg:fragmentIn">
@@ -55,8 +60,16 @@
 	objectToWorld = vertexIn.objectToWorld;
       </block>
 
+      <block location="glsl:vertexMain">
+        objectToWorld = in_objectToWorld;
+      </block>
+
       <block location="cg:fragmentMain">
 	objectToWorld = fragmentIn.objectToWorld;
+      </block>
+
+      <block location="glsl:fragmentMain">
+        objectToWorld = in_objectToWorld;
       </block>
 
       <block location="cg:variablemap">
@@ -64,6 +77,10 @@
 	  destination="vertexIn.objectToWorld" />
 	<variablemap variable="object2world transform" 
 	  destination="fragmentIn.objectToWorld" />
+      </block>
+      <block location="glsl:variablemap">
+        <variablemap variable="object2world transform"
+          destination="in_objectToWorld" />
       </block>
     </input>
 
@@ -76,13 +93,25 @@
       <block location="cg:variablemap">
 	  <variablemap variable="wind data" destination="vertexIn.wind_data" />
       </block>
+
+      <block location="glsl:variablemap">
+	  <variablemap variable="wind data" destination="in_wind_data" />
+      </block>
       
       <block location="cg:vertexIn">
 	  <uniform type="float3" name="wind_data" />
       </block>
+
+      <block location="glsl:inputs">
+	  <uniform type="float3" name="in_wind_data" />
+      </block>
       
       <block location="cg:vertexMain">
 	  wind_data = vertexIn.wind_data;
+      </block>
+
+      <block location="glsl:vertexMain">
+	  wind_data = in_wind_data;
       </block>
     </input>
 
@@ -91,13 +120,25 @@
       <block location="cg:vertexIn">
         <varying type="float" name="wind_seed" />
       </block>
+
+      <block location="glsl:inputs">
+        <varying type="float" name="in_wind_seed" />
+      </block>
   
       <block location="cg:vertexMain">
         wind_seed= vertexIn.wind_seed;
       </block>
 
-      <block location="pass">
+      <block location="glsl:vertexMain">
+        wind_seed= in_wind_seed;
+      </block>
+
+      <block location="cg:pass">
         <instanceparam source="wind seed" destination="vertexIn.wind_seed" />
+      </block>
+
+      <block location="glsl:pass">
+        <instanceparam source="wind seed" destination="in_wind_seed" />
       </block>
     </input>
 
@@ -105,23 +146,42 @@
       <block location="cg:variablemap">
 	  <variablemap variable="standard time" destination="vertexIn.standard_time" />
       </block>
+
+      <block location="glsl:variablemap">
+	  <variablemap variable="standard time" destination="in_standard_time" />
+      </block>
       
       <block location="cg:vertexIn">
+	  <uniform type="float" name="standard_time" />
+      </block>
+
+      <block location="glsl:inputs">
 	  <uniform type="float" name="standard_time" />
       </block>
       
       <block location="cg:vertexMain">
 	  standard_time = vertexIn.standard_time;
       </block>
-    </input>
 
-    <input file="/shader-snippets/ModelView.inp" private="yes" />
+      <block location="glsl:vertexMain">
+	  standard_time = in_standard_time;
+      </block>
+    </input>
 
     <input file="/shader-snippets/instancingTransforms.inp" private="yes" />
 
     <block location="cg:vertexToFragment">
       <varying type="position4" name="position" binding="POSITION" />
       <!-- This is needed since POSITION semantics can't be used for input in an FP -->
+      <varying type="position4" name="position_screen" />
+      <varying type="position4" name="position_object"/>
+      <varying type="position4" name="position_world"/>
+      <varying type="position4" name="position_camera"/>
+      <varying type="float3x4" name="o2w"/>
+    </block>
+
+    <block location="glsl:vertexToFragment">
+      <varying type="position4" name="position" />
       <varying type="position4" name="position_screen" />
       <varying type="position4" name="position_object"/>
       <varying type="position4" name="position_world"/>
@@ -142,6 +202,14 @@
 
     <block location="cg:definitions">
       <?Include /shader-snippets/cg-common.cginc?>
+    </block>
+
+    <block location="glsl:definitions">
+      <?Include /shader-snippets/glsl-global_objectToWorld.glsli?>
+    </block>
+
+    <block location="glsl:definitions">
+      <?Include /shader-snippets/glsl-common.glsli?>
     </block>
 
     <block location="cg:vertexMain">
@@ -166,6 +234,29 @@
 	complete_objectToWorld[1], 
 	complete_objectToWorld[2]);
     </block>
+
+    <block location="glsl:vertexMain">
+      mat4 complete_objectToWorld = instancingTransforms * objectToWorld;
+
+      if (Hposition.y > 0.0)
+        Hposition.xz += calcWindOffset(standard_time, wind_data.xy, wind_data.z, wind_seed);
+
+      position_object = Hposition;
+      position_world = complete_objectToWorld * position_object;
+      vec4 position_instanced = position_object * instancingTransforms;
+      position_camera = ModelView * position_instanced;
+      gl_Position = position_screen = position = ModelViewProj * position_instanced;
+      
+      //APPLY_CLIPPING_VP(position_camera, position_world, position_object);
+      
+      /* The objectToWorld transform is needed in other places, so there is a 
+	 global variable for it. Set that */
+      SetGlobalObjectToWorld (complete_objectToWorld);
+      // instanced params are only available in VPs, forward to FP manually
+      o2w = mat3x4(complete_objectToWorld[0],
+	complete_objectToWorld[1], 
+	complete_objectToWorld[2]);
+    </block>
     
     <block location="cg:fragmentMain">
       APPLY_CLIPPING_FP;
@@ -176,6 +267,17 @@
 	 global variable for it. Set that */
       SetGlobalObjectToWorld (
 	float4x4 (o2w[0], o2w[1], o2w[2], float4 (0, 0, 0, 1)));
+    </block>
+
+    <block location="glsl:fragmentMain">
+      //APPLY_CLIPPING_FP;
+      
+      position = position_screen;
+      
+      /* The objectToWorld transform is needed in other places, so there is a 
+	 global variable for it. Set that */
+      SetGlobalObjectToWorld (
+	mat4 (o2w[0], o2w[1], o2w[2], vec4 (0.0, 0.0, 0.0, 1.0)));
     </block>
     
     <output name="position" type="position4_screen" />

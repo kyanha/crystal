@@ -18,6 +18,51 @@
   Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 -->
 <shader compiler="shaderweaver" name="lighting_fullbright_instance_binalpha">
+  <technique priority="250">
+    <pass>
+      <!-- First pass: blend with alpha. 
+           Note that the 'binalpha' part is provided by the alphakill snippet -->
+      <mixmode>
+        <blendop src="srcalpha" dst="srcalpha_inv" />
+        <!-- Enable alphatest to discard entirely clear pixels
+             (see alphatestoptions below) -->
+        <alphatest>enable</alphatest>
+      </mixmode>
+      <alphatestoptions func="greater" threshold="0" />
+      <alphatocoverage/>
+      <!-- ATC provides an alpha-blending 'lookalike' -->
+      <atcmixmode>
+        <blendop src="one" dst="zero" />
+        <alphatest>disable</alphatest>
+      </atcmixmode>
+
+      <combiner plugin="crystalspace.graphics3d.shader.combiner.glsl" />
+
+      <!-- Snippets - the building blocks of this shader. -->
+      <snippet id="position" file="/shader-snippets/position-instance.xml" />
+      <snippet id="parallax" file="/shader-snippets/surface/parallax.xml" />
+      <snippet id="normalmap" file="/shader-snippets/surface/normalmap.xml" />
+      <snippet id="surface" file="/shader-snippets/surface/surface-alphakill.xml" />
+      <snippet id="apply_mixmode_alpha" file="/shader-snippets/mixmode-alpha.xml" />
+      <snippet id="apply_alpha" file="/shader-snippets/surface/alpha-none.xml" />
+      <snippet id="glow" file="/shader-snippets/lighting/glow.xml" />
+      <snippet id="apply_alpha_end" file="/shader-snippets/surface/alpha-modulate-instance.xml" />
+      <snippet id="sectorfog" file="/shader-snippets/fog/fog-sector.xml" />
+      <snippet id="hdrscale" file="/shader-snippets/hdr-postscale.xml" />
+      <!-- "connections" describe what snippets take input from what other
+           snippets (ie the "data flow" is modeled). The exact resolution of
+	   what output is linked to what input is done automatically. -->
+      <connection from="position" to="parallax" />
+      <connection from="parallax" to="surface" />
+      <connection from="surface" to="apply_mixmode_alpha" />
+      <connection from="apply_mixmode_alpha" to="apply_alpha" />
+      <connection from="apply_alpha" to="glow" />
+      <connection from="glow" to="apply_alpha_end" />
+      <connection from="apply_alpha_end" to="sectorfog" />
+      <connection from="sectorfog" to="hdrscale" />
+    </pass>
+  </technique>
+
   <technique priority="200">
     <pass>
       <!-- First pass: blend with alpha. 
