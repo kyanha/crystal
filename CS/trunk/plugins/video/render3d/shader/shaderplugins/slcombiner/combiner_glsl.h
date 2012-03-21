@@ -159,7 +159,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(SLCombiner)
     };
     void AppendProgramInput (const csRefArray<iDocumentNode>& nodes,
       DocNodeAppender& appender, ProgramType progType = progVP);
-    void AppendProgramInput_V2FDecl (const Snippet& snippet,
+    void AppendProgramInput_V2FDecl (const Snippet& snippet, ProgramType progType,
       DocNodeAppender& appender);
     void AppendProgramInput_V2FLocals (const Snippet& snippet,
       DocNodeAppender& appender);

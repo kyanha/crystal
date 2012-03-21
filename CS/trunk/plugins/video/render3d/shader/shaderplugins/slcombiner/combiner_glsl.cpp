@@ -559,7 +559,9 @@ CS_PLUGIN_NAMESPACE_BEGIN(SLCombiner)
     const char* outputName = 0;
     switch (target)
     {
-      case rtaColor0: outputName = "gl_FragColor"; break;
+      case rtaColor0:
+          outputName = (requiredVersion >= 130) ? "output_color" : "gl_FragColor";
+          break;
       case rtaDepth:  outputName = "gl_FragDepth"; break;
       default: CS_ASSERT_MSG ("Unsupported program output target", false);
     }
@@ -620,7 +622,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(SLCombiner)
 
       for (size_t s = 0; s < snippets.GetSize(); s++)
       {
-        AppendProgramInput_V2FDecl (snippets[s], appender);
+        AppendProgramInput_V2FDecl (snippets[s], progVP, appender);
       }
 
       for (size_t s = 0; s < snippets.GetSize(); s++)
@@ -688,12 +690,17 @@ CS_PLUGIN_NAMESPACE_BEGIN(SLCombiner)
 
       for (size_t s = 0; s < snippets.GetSize(); s++)
       {
-        AppendProgramInput_V2FDecl (snippets[s], appender);
+        AppendProgramInput_V2FDecl (snippets[s], progFP, appender);
       }
 
       for (size_t s = 0; s < snippets.GetSize(); s++)
       {
         AppendProgramInput (snippets[s].inputs, appender, progFP);
+      }
+
+      if (requiredVersion >= 130)
+      {
+        appender.Append ("out vec4 output_color;\n");
       }
 
       appender.Append ("void main ()\n");
@@ -877,9 +884,14 @@ CS_PLUGIN_NAMESPACE_BEGIN(SLCombiner)
   }
 
   void ShaderCombinerGLSL::AppendProgramInput_V2FDecl (
-    const Snippet& snippet, DocNodeAppender& appender)
+    const Snippet& snippet, ProgramType progType, DocNodeAppender& appender)
   {
     // FIXME: error handling here
+    const char* declarator;
+    if (requiredVersion >= 130)
+      declarator = (progType == progFP) ? "in" : "out";
+    else
+      declarator = "varying";
     for (size_t n = 0; n < snippet.vert2frag.GetSize(); n++)
     {
       iDocumentNode* node = snippet.vert2frag[n];
@@ -900,7 +912,8 @@ CS_PLUGIN_NAMESPACE_BEGIN(SLCombiner)
             if (type && *type)
             {
               csString str;
-              str.Format ("varying %s _v2f_%s_[%d];\n",
+              str.Format ("%s %s _v2f_%s_[%d];\n",
+                declarator,
                 GLSLType (type).GetData(), uniqueName.GetData(),
                 count);
               appender.Append (str);
@@ -912,7 +925,8 @@ CS_PLUGIN_NAMESPACE_BEGIN(SLCombiner)
             if (type && *type)
             {
               csString str;
-              str.Format ("varying %s _v2f_%s_;\n",
+              str.Format ("%s %s _v2f_%s_;\n",
+                declarator,
                 GLSLType (type).GetData(), uniqueName.GetData());
               appender.Append (str);
             }
@@ -1071,10 +1085,15 @@ CS_PLUGIN_NAMESPACE_BEGIN(SLCombiner)
             ShaderWeaver::QueryTypeInfo (type);
           if (name && *name && type && *type)
           {
+            const char* declarator;
+            if (id == ShaderCombinerLoaderCommon::XMLTOKEN_UNIFORM)
+              declarator = "uniform";
+            else if (requiredVersion >= 130)
+              declarator = "in";
+            else
+              declarator = "attribute";
             csString str;
-                str.Format ("%s %s %s;\n",
-              (id == ShaderCombinerLoaderCommon::XMLTOKEN_UNIFORM) ? "uniform" :
-              "attribute",
+            str.Format ("%s %s %s;\n", declarator,
               typeInfo ? GLSLType (typeInfo).GetData() : type,
               name);
             appender.Append (str);
