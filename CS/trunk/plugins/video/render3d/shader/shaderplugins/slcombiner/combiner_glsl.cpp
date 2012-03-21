@@ -252,7 +252,8 @@ CS_PLUGIN_NAMESPACE_BEGIN(SLCombiner)
   //---------------------------------------------------------------------
   
   ShaderCombinerGLSL::ShaderCombinerGLSL (ShaderCombinerLoaderGLSL* loader) :
-    scfImplementationType (this), loader (loader), uniqueCounter (0)
+    scfImplementationType (this), loader (loader), uniqueCounter (0),
+    requiredVersion (0)
   {
   }
 
@@ -487,6 +488,11 @@ CS_PLUGIN_NAMESPACE_BEGIN(SLCombiner)
     {
       destNodes = &definitions;
     }
+    else if (strcmp (location, "version") == 0)
+    {
+      requiredVersion = csMax (requiredVersion, blockNode->GetContentsValueAsInt());
+      return true;
+    }
 
     if (destNodes != 0)
     {
@@ -600,6 +606,11 @@ CS_PLUGIN_NAMESPACE_BEGIN(SLCombiner)
 
       DocNodeAppender appender (programNode);
 
+      if (requiredVersion > 0)
+      {
+        appender.Append (csString().Format ("#version %d\n", requiredVersion));
+      }
+
       if (definitions.GetSize() > 0)
       {
         appender.Append ("\n");
@@ -662,6 +673,11 @@ CS_PLUGIN_NAMESPACE_BEGIN(SLCombiner)
       programNode->SetValue ("fp");
 
       DocNodeAppender appender (programNode);
+
+      if (requiredVersion > 0)
+      {
+        appender.Append (csString().Format ("#version %d\n", requiredVersion));
+      }
 
       if (definitions.GetSize() > 0)
       {

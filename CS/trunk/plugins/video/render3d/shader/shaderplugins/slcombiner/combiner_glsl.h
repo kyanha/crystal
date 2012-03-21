@@ -139,6 +139,8 @@ CS_PLUGIN_NAMESPACE_BEGIN(SLCombiner)
     csRefArray<iDocumentNode> variableMaps;
     csString outputAssign[rtaNumAttachments];
     csRefArray<iDocumentNode> definitions;
+    /// Required GLSL version
+    int requiredVersion;
 
     struct Attribute
     {
