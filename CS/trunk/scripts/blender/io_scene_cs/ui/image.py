@@ -70,7 +70,7 @@ class TEXTURE_PT_B2CS_image(csTexturePanel, bpy.types.Panel):
             
 @rnaType
 class TEXTURE_PT_B2CS_texture(csTexturePanel, bpy.types.Panel):
-  bl_label = "Texture"
+  bl_label = "Crystal Space Texture"
 
 
   def draw(self, context):

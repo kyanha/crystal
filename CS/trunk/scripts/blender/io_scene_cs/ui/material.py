@@ -83,16 +83,16 @@ class MATERIAL_PT_B2CS__context_material(csMaterialPanel, bpy.types.Panel):
 
        
         
-EnumProperty(['Material'], attr="depthwrite_step", name="depthwrite", description="",
+EnumProperty(['Material'], attr="depthwrite_step", name="Depthwrite", description="",
   items=(("DEFAULT", "Default", "Default"),
         ("*null", "*null", "Shader with no effect.")),
   default="DEFAULT")
   
-EnumProperty(['Material'], attr="ambient_step", name="ambient", description="",
+EnumProperty(['Material'], attr="ambient_step", name="Ambient", description="",
   items=SHADERS,
   default="DEFAULT")
   
-EnumProperty(['Material'], attr="diffuse_step", name="diffuse", description="",
+EnumProperty(['Material'], attr="diffuse_step", name="Diffuse", description="",
   items=SHADERS,
   default="DEFAULT")
 
