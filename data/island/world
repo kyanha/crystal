@@ -40,16 +40,6 @@
         <texture name="prop_mushrooms_001_co">
             <file>textures/prop_mushrooms_001_col.dds</file>
         </texture>
-        <!--texture name="prop_mushrooms_001_ao">
-            <file>textures/prop_mushrooms_001_ao.dds</file>
-        </texture>
-        <texture name="prop_mushrooms_001_sp">
-            <file>textures/prop_mushrooms_001_spec.dds</file>
-        </texture>
-        <texture name="BUMPprop_mushrooms_001_no">
-            <file>textures/prop_mushrooms_001_nor.dds</file>
-            <class>normalmap</class>
-        </texture-->
         <texture name="prop_plants_groun.007">
             <file>textures/prop_plants_ground_002_col.png</file>
             <alpha>
@@ -64,6 +54,9 @@
             <alpha>
                 <binary />
             </alpha>
+        </texture>
+        <texture name="prop_rocks_rock_002_c">
+            <file>textures/prop_rocks_rock_002_col.dds</file>
         </texture>
     </textures>
 
@@ -82,12 +75,8 @@
             <texture>prop_mushrooms_001_co</texture>
             <shader type="oc_depthwrite">*null</shader>
             <shader type="oc_depthtest">z_only_instanced</shader>
-            <shader type="base">lighting_default_instance</shader>
-            <shader type="diffuse">lighting_default_instance</shader>
-            <!--shadervar name="tex normal compressed" type="texture">BUMPprop_mushrooms_001_no</shadervar>
-            <shadervar name="tex specular" type="texture">prop_mushrooms_001_sp</shadervar>
-            <shadervar name="tex ambient occlussion" type="texture">prop_mushrooms_001_ao</shadervar>
-            <shadervar name="visible_layers" type="int">1</shadervar-->
+            <shader type="base">lighting_default_instance_binalpha</shader>
+            <shader type="diffuse">lighting_default_instance_binalpha</shader>
         </material>
         <material name="plants1">
             <texture>prop_plants_groun.007</texture>
@@ -95,32 +84,20 @@
             <shader type="oc_depthtest">z_only_instanced</shader>
             <shader type="base">lighting_default_instance_binalpha</shader>
             <shader type="diffuse">lighting_default_instance_binalpha</shader>
-            <!--shader type="terrain splat">terrain_splatting</shader-->
-            <!--shader type="base">lighting_default_binalpha</shader>
-            <shader type="diffuse">lighting_default_binalpha</shader>
-            <shadervar name="tex normal compressed" type="texture">BUMPprop_plants_groun</shadervar>
-            <shadervar name="tex specular" type="texture">prop_plants_groun.008</shadervar>
-            <shadervar name="shininess" type="float">2</shadervar-->
         </material>
         <material name="tree_brown">
             <texture>trees_bark_002_col.pn</texture>
             <shader type="oc_depthwrite">*null</shader>
             <shader type="oc_depthtest">z_only_instanced</shader>
-            <shader type="base">lighting_default_instance</shader>
-            <shader type="diffuse">lighting_default_instance</shader>
-            <!--shader type="base">lighting_default_binalpha</shader>
-            <shader type="diffuse">lighting_default_binalpha</shader>
-            <shadervar name="tex normal compressed" type="texture">BUMPtrees_bark_002_nor.pn</shadervar>
-            <shadervar name="tex specular" type="texture">trees_bark_002_spec.p</shadervar-->
+            <shader type="base">lighting_default_instance_binalpha</shader>
+            <shader type="diffuse">lighting_default_instance_binalpha</shader>
         </material>
-        <material name="browntreeleaves">
-            <texture>trees_leaves_003_col.</texture>
+        <material name="rocks_rock_02">
+            <texture>prop_rocks_rock_002_c</texture>
             <shader type="oc_depthwrite">*null</shader>
             <shader type="oc_depthtest">z_only_instanced</shader>
             <shader type="base">lighting_default_instance_binalpha</shader>
             <shader type="diffuse">lighting_default_instance_binalpha</shader>
-            <!--shader type="base">lighting_default_binalpha</shader>
-            <shader type="diffuse">lighting_default_binalpha</shader-->
         </material>
     </materials>
 
@@ -130,7 +107,9 @@
     <library>factories/water</library>
     <library>factories/mushroom_or_001.004_mushroom_red_001mushroom_red_001_mushroom_red_001</library>
     <library>factories/flowers_purple_01.015_flower_001.124flowers_s_white_01_flower_001.020</library>
-    <library>factories/tree.cslib</library>
+    <library>factories/tree_generic_001.027_treebrown_002tree_generic_002_treebrown_002</library>
+    <library>factories/rocks_01.075_rocks_rock_02rocks_02_Circle.001</library>
+    <library>/lev/terrainf/grass.lib</library>
 
     <meshfact name="emitFact">
         <plugin>emitFact</plugin>
@@ -140,12 +119,12 @@
     <start name="start_position">
         <sector>TerrainSector</sector>
 	<position x="637.623" y="74.9038" z="-104.723" />
-        <!--position x="10" y="70" z="10" /-->
     	<up x="0.0119134" y="0.999872" z="-0.0106786" />
     	<forward x="-0.744546" y="0.0159989" z="0.667377" />
     </start>
 
     <sector name="TerrainSector">
+
         <cullerp plugin="crystalspace.culling.frustvis"/>
 
         <light name="sun">
@@ -184,9 +163,8 @@
 
         <meshobj name="water">
             <plugin>genmesh</plugin>
-            <!--noshadowreceive /-->
             <noshadowcast />
-            <priority>transp</priority>
+            <priority>object2</priority>
             <params>
                 <factory>water</factory>
             </params>
@@ -303,9 +281,9 @@
             </params>
         </meshobj>
 
-        <meshgen name="grass">
+        <meshgen name="terrain_foliage">
             <densityfactormap name="fertile">
-                <image>meshmaps/00000_00000.PNG</image>
+                <image>meshmaps/terrain_fertile.png</image>
                 <world2image>
                     <m11>0.001953125</m11>
                     <m12>0</m12>
@@ -326,30 +304,86 @@
                 </world2image>
             </densityfactormap>
             <geometry>
-                <factory maxdist="30" name="flowers_purple_01.015_flower_001.124flowers_s_white_01_flower_001.020" />
+                <factory maxdist="35" name="flowers_purple_01.015_flower_001.124flowers_s_white_01_flower_001.020" />
                 <radius>0</radius>
                 <density>.5</density>
                 <densityfactormap factor="1">fertile</densityfactormap>
             </geometry>
             <geometry>
-                <factory maxdist="30" name="mushroom_or_001.004_mushroom_red_001mushroom_red_001_mushroom_red_001" />
+                <factory maxdist="35" name="mushroom_or_001.004_mushroom_red_001mushroom_red_001_mushroom_red_001" />
                 <radius>0.1</radius>
-                <density>.005</density>
-                <densityfactormap factor="1">fertile</densityfactormap>
+                <density>.01</density>
+                <densityfactormap factor="0.15">fertile</densityfactormap>
             </geometry>
             <geometry>
-                <factory maxdist="40" name="tree" />
+                <factory maxdist="80" name="tree_generic_001.027_treebrown_002tree_generic_002_treebrown_002" />
                 <radius>.4</radius>
-                <density>.05</density>
+                <density>.01</density>
+                <densityfactormap factor="0.5">fertile</densityfactormap>
+            </geometry>
+            <geometry>
+                <factory maxdist="30" name="rocks_01.075_rocks_rock_02rocks_02_Circle.001" />
+                <radius>.15</radius>
+                <density>.01</density>
                 <densityfactormap factor="1">fertile</densityfactormap>
             </geometry>
-            <!--<densityscale mindist="26" maxdist="30" maxfactor="0" />-->
             <alphascale mindist="22" maxdist="30" />
             <samplebox>
                 <min x="0" y="-200" z="0" />
                 <max x="512" y="300" z="512" />
             </samplebox>
             <meshobj>Terrain</meshobj>
+            <numblocks>300</numblocks>
+        </meshgen>
+
+        <meshgen name="water_terrain_foliage">
+            <densityfactormap name="watermap">
+                <image>meshmaps/water_ground.png</image>
+		<scale offsetx="0" offsety="0" w="1025" h="1025" />
+            </densityfactormap>
+            <geometry>
+                <factory maxdist="40" name="Grass" />
+                <radius>0</radius>
+                <density>.45</density>
+                <densityfactormap factor="1">watermap</densityfactormap>
+            </geometry>
+            <geometry>
+                <factory maxdist="30" name="rocks_01.075_rocks_rock_02rocks_02_Circle.001" />
+                <radius>.15</radius>
+                <density>.075</density>
+                <densityfactormap factor="1">watermap</densityfactormap>
+            </geometry>
+            <alphascale mindist="22" maxdist="30" />
+            <samplebox>
+                <min x="0" y="-200" z="0" />
+                <max x="512" y="49.5" z="512" />
+            </samplebox>
+            <meshobj>Terrain</meshobj>
+        </meshgen>
+
+        <meshgen name="water_ground_foliage">
+            <densityfactormap name="watermap">
+                <image>meshmaps/water_ground.png</image>
+		<scale offsetx="0" offsety="0" w="20000" h="20000" />
+            </densityfactormap>
+            <geometry>
+                <factory maxdist="40" name="Grass" />
+                <radius>0</radius>
+                <density>.45</density>
+                <densityfactormap factor="1">watermap</densityfactormap>
+            </geometry>
+            <geometry>
+                <factory maxdist="30" name="rocks_01.075_rocks_rock_02rocks_02_Circle.001" />
+                <radius>.15</radius>
+                <density>.075</density>
+                <densityfactormap factor="1">watermap</densityfactormap>
+            </geometry>
+            <alphascale mindist="22" maxdist="30" />
+            <samplebox>
+                <min x="-512" y="-200" z="-512" />
+                <max x="1024" y="49.5" z="1024" />
+            </samplebox>
+            <meshobj>ground</meshobj>
         </meshgen>
 
     </sector>
