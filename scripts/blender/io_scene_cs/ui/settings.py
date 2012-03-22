@@ -90,9 +90,9 @@ class RENDER_PT_csSettingsPanel(csSettingsPanel, bpy.types.Panel):
     layout = self.layout
     
     row = layout.row()
-    row.prop(B2CS.properties, "enableDoublesided")
-    row = layout.row()
     row.prop(B2CS.properties, "library")
+    row = layout.row()
+    row.prop(B2CS.properties, "enableDoublesided")
     row = layout.row()
     row.prop(B2CS.properties, "exportPath")
       

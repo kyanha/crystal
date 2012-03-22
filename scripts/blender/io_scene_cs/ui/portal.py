@@ -10,7 +10,7 @@ class MESH_PT_csPortal(bpy.types.Panel):
   bl_region_type = "WINDOW"
   bl_context = "data"
   b2cs_context = "data"
-  bl_label = "Crystal Space Portal Tool"
+  bl_label = "Crystal Space Portal"
   REMOVED = []
 
   def draw(self, context):    
@@ -50,7 +50,7 @@ class MESH_PT_csPortal(bpy.types.Panel):
 BoolProperty(['Mesh'], 
              attr="portal", 
              name="Portal", 
-             description="This mesh is defined as a cs portal", 
+             description="Whether or not this mesh is defined as a CS portal", 
              default=False)
 
 StringProperty(['Mesh'], 
