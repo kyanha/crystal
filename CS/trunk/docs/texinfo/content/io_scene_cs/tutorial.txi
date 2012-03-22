@@ -17,11 +17,12 @@ The panel is composed of several buttons and controls to configure and run the e
 
 @itemize @bullet
 @item
-@strong{Enable double sided meshes}: enable the @samp{double sided} property to be preserved 
-by the exporter; if disabled, double sided meshes are exported as single sided.
-@item
 @strong{Export as a CS library}: whether the scene should be exported as a @samp{library}
 or a @samp{world} file.
+@item
+@strong{Enable double sided meshes}: globally enable the setting of the @samp{double sided}
+property. If it is disabled, then all meshes that are exported will be single sided,
+whatever their specific setting.
 @item
 @strong{Export path}: path to the folder where the generated files will be put.
 @item
@@ -133,9 +134,8 @@ camera pans away from the set view too fast. Ensure that you added a floor below
 your camera.
 @item
 Check the console to ensure that your entire scene is being exported. Sometimes only the
-camera will be exported hence you will only see black. If you have this problem, ensure that
-the visibility of some objects is activated in the viewport. If so, you can also select 
-all the objects in your scene (Hotkey @samp{A}) and then press @samp{Export and Run}.
+camera will be exported hence you will only see a black screen. If you have this problem,
+then check that the visibility of your objects is activated in the viewport.
 @item
 Check that the normals from the visible objects are pointing in the correct direction. 
 If you made a cube surrounding the player this usually means you need to reverse its 
@@ -150,8 +150,6 @@ normals (in Blender and in Edit mode, press the hotkey @samp{W} then select
 This section presents the main objects and files that are created when a Blender scene is
 exported.
 
-Beware! Only @strong{visible objects} will be exported by @code{io_scene_cs}.
-
 The sectors, portals, lights and cameras are all exported in the @file{world} file. This
 also means that they will be exported only if the @samp{Export as a CS library} option
 is not checked. See the section on the @ref{XML File Format, format of the Crystal Space map files}
@@ -159,6 +157,10 @@ for more information on the @file{world} file.
 
 The materials and mesh factories are exported in a Crystal Space @samp{library} file,
 either in the @file{factories} directory or in the main @file{library} file.
+
+These objects are actually exported only if they are visible in the Blender scene (i.e.
+you haven't unchecked the @cite{Restrict visibility in the viewport} option in the
+@url{http://wiki.blender.org/index.php/Doc:2.6/Manual/Data_System/The_Outliner, Blender outliner}).
 
 @subsubheading Sectors and Portals
 
@@ -168,12 +170,8 @@ The concept of sectors corresponds to the one of the
 but Blender has no matching concept for the portals.
 
 Each scene in Blender will therefore be exported as a different sector in the Crystal
-Space @file{world} file.
-
-Check the portal tool page to learn more about the procedure to assign portals: 
-@menu
-* io_scene_cs Portals:: Portal tool
-@end menu
+Space @file{world} file. For the creation of the portals that will link together the sectors,
+please have a look at the @ref{io_scene_cs Portals, dedicated page}.
 
 @subsubheading Cameras
 
@@ -215,7 +213,6 @@ the subsurface scattering, the shadows, etc. Also, materials using the
 @url{http://wiki.blender.org/index.php/Doc:2.6/Manual/Composite_Nodes, node composition system}
 of Blender are not supported at all.
 
-@importss{content,io_scene_cs,portals.txi}
 
 @node io_scene_cs Export Genmesh, io_scene_cs Export Animesh, io_scene_cs Export Scenes, Blender
 @subsection Exporting Static Meshes
@@ -255,20 +252,23 @@ All this data is put in the corresponding library file in the @file{factories} d
 Instanced meshes can be defined using the @samp{Crystal Mesh Group} panel in the @samp{Object}
 context of the @samp{Properties} window.
 
-@subsubheading Warning on the @samp{Double Sided} mesh option
+@subsubheading Creating a Double Sided mesh
 
-By default, Blender activates the @samp{Double Sided} option on all meshes. In this case,
-the @code{io_scene_cs} add-on will duplicate all faces, vertices, normals, etc of the mesh,
-implying much more memory and display costs. Therefore, be sure to deactivate this option
-whenever you don't need it.
+It is possible to export a mesh as double sided, e.g. if you have a flat object that you would
+like to see from both sides. In this case, the @code{io_scene_cs} add-on will duplicate all
+faces, vertices, normals, etc of the mesh, implying much more memory and display costs. Therefore,
+you have to be sure to use this option only if you need it.
 
-The @samp{Double Sided} option is found in the @samp{Object Data} context of the
-@samp{Properties} window.
+The Blender @samp{Double Sided} option is found in the @samp{Object Data} context of the
+@samp{Properties} window:
 
 @picturess{content,io_scene_cs,blender_double_sided}
 
-The @samp{Enable double sided meshes} option of the @code{io_scene_cs} add-on is set by default
-to false, implying double sided meshes to be exported as single sided ones.
+By default, this option is enabled for all new meshes that are created. Since this behavior is not
+friendly with the expectations of the @code{io_scene_cs} script, a global setting has been added
+in the @ref{io_scene_cs First Steps, main export panel}, allowing to enable or not the use of the
+@samp{Double Sided} option. If you don't uncheck this last setting, then all meshes are exported
+as single sided.
 
 @subsubheading Warning on the Blender Object Modifiers
 
@@ -277,7 +277,7 @@ context of the @samp{Properties} window are not supported by the @code{io_scene_
 Please make sure that all modifiers are either applied or removed before exporting your mesh.
 
 
-@node io_scene_cs Export Animesh, io_scene_cs ToDo, io_scene_cs Export Genmesh, Blender
+@node io_scene_cs Export Animesh, io_scene_cs Portals, io_scene_cs Export Genmesh, Blender
 @subsection Exporting Animated Meshes
 
 If a Blender mesh object contains either an armature or any shape keys, then it will be
@@ -296,6 +296,9 @@ the animated mesh factory, in a file of the same name than the Blender mesh.
 the skeleton factory and the animations, in a file of the same name than the Blender mesh
 plus the @samp{_rig} postfix.
 @end itemize
+
+Similarly to the @ref{io_scene_cs Export Genmesh, static meshes}, it is possible to define
+an Animesh as @samp{Double Sided}.
 
 @subsubheading Submeshes
 
@@ -371,37 +374,3 @@ If you're planning to change the default scale of the armature used to attach so
 you must first define the socket on the armature with its default scale of 1. Afterwards, 
 you can change the armature's scale: in the same way as Blender, the exported socket object 
 will be scaled proportionally to the armature.
-
-@subsubheading Warning on the @samp{Double Sided} mesh option
-
-Similarly to the @ref{io_scene_cs Export Genmesh, static meshes}, if the
-@samp{Double Sided} option is checked for the Animesh, then it will be exported with
-a doubled amount of vertices and other render buffers. Uncheck this option whenever
-you can.
-
-To avoid unexpected duplication of vertices, the @samp{Enable double sided meshes} option 
-of the exporter is set by default to false, disabling this mesh property during the export.
-
-@node io_scene_cs ToDo, , io_scene_cs Export Animesh, Blender
-@subsection ToDo
-
-This section lists the main features of the exporter that are still lacking. Please
-contact the Crystal Space mailing list if you wish to help and add support for them.
-
-@itemize @bullet
-@item
-All lamps are exported as simple point light sources
-@item
-Limited support of the camera properties
-@item
-Limited support of the material properties
-@item
-No support for terrains
-@item
-No support for particles
-@item
-No support for colliders, physical properties, and iBodySkeleton
-@item
-No support for trees of armatures: only the root armature is exported, not the children
-ones
-@end itemize
