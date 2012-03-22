@@ -76,6 +76,10 @@ class MATERIAL_PT_B2CS__context_material(csMaterialPanel, bpy.types.Panel):
           row.prop(mat, "ambient_step")
           row = layout.row()
           row.prop(mat, "diffuse_step")
+          row = layout.row()
+          row.prop(mat, "priority")
+          row = layout.row()
+          row.prop(mat, "zbuf_mode")
 
        
         
@@ -91,3 +95,18 @@ EnumProperty(['Material'], attr="ambient_step", name="ambient", description="",
 EnumProperty(['Material'], attr="diffuse_step", name="diffuse", description="",
   items=SHADERS,
   default="DEFAULT")
+
+EnumProperty(['Material'], attr="priority", name="Render priority",
+     description="Priority level in which the object will be renderered", 
+     items=[('init','init',''),('sky','sky',''),('sky2','sky2',''),
+            ('portal','portal',''),('wall','wall',''),('wall2','wall2',''),('object','object',''),
+            ('object2','object2',''),('transp','transp',''),('alpha','alpha',''),('final','final','')],
+     default='object')
+
+EnumProperty(['Material'], attr="zbuf_mode", name="Z-buffer mode",
+     description="Behavior of the rendering of the object regarding the Z-Buffer",
+     items=[('znone','Z-None',"Don't test or write"),
+            ('zfill','Z-Fill',"Write unconditionally"),
+            ('ztest','Z-Test',"Test only"),
+            ('zuse','Z-Use',"Test, write if successful")],
+     default='zuse')
