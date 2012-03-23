@@ -67,10 +67,24 @@ and triangles defining the shape of the mesh. Similarly to a @ref{MeshObject Gen
 it will hold render buffers for the vertices, the triangles, the normals, the UV mapping,
 the colors, the tangents and the binormals.
 
+@subsubheading The animation packet
+
+The animation packets are defined by the classes @code{CS::Animation::iSkeletonAnimPacket}
+and @code{CS::Animation::iSkeletonAnimPacketFactory}.
+
+Animation packets are logical sets of animations, animation nodes, and skeletons that
+can be loaded or unloaded at once. Only one animation packet can be set per Animesh,
+but animations and animation nodes can link to some data in other animation packets,
+so several packets can coexist at the same time for a given Animesh.
+
+That's the animation packet of the Animesh that will define the skeleton in use, you
+must therefore pass by the animation packet if you want to get access to the skeleton
+of the Animesh.
+
 @subsubheading The skeleton
 
 The skeleton is defined by the classes @code{CS::Animation::iSkeleton} and
- @code{CS::Animation::iSkeletonFactory}.
+@code{CS::Animation::iSkeletonFactory}.
 
 The skeleton of an Animesh is a tree of articulated bones that can be positioned
 separately. Changing the pose of the skeleton of an Animesh will affect the envelope
