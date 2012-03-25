@@ -73,10 +73,13 @@ library file in <tt>&lsquo;CS/data/krystal/anims_idle.cslib&rsquo;</tt>.
 <p>These are the objects <code>CS::Animation::iSkeletonAnimationNode</code> and
 <code>CS::Animation::iSkeletonAnimationNodeFactory</code>.
 </p>
-<p>This animation node allows the storage and playback of raw animation data. Key
-frames are defined with a time stamp and some key values for the orientation and
-position of the bones of the skeleton. When playing back the animation, the data
-will be interpolated between the available key frames.
+<p>This animation node allows the storage and playback of raw animation data. In this
+sense, they are probably the most used animation nodes since they are the main way
+to store pre-defined animations.
+</p>
+<p>The key frames of the animations are defined with a time stamp and some key values
+for the orientation and position of the bones of the skeleton. When playing back the
+animation, the data will be interpolated between the available key frames.
 </p>
 <p>The node can be configured to be played cyclically or not.
 </p>
@@ -101,6 +104,9 @@ between the two states, allowing for a smooth transition between two states.
 <p>Automatic transitions can also be defined, they will be followed automatically at
 the end of the current playing state if no other state has been asked by the user
 to switch to.
+</p>
+<p>An example of Finite State Machine being used to drive the locomotion of a character
+can be found in CEL, within the <samp>&lsquo;pcactormove&rsquo;</samp> property class.
 </p>
 <a name="3"></a>
 <h4 class="subsubheading"> Blending node </h4>
@@ -173,6 +179,17 @@ state).
 avatar classically animated, and sub-trees such as hair, clothes or accessories
 animated by the physical simulation.
 </p>
+<p>In order to use a ragdoll animation node, you must first define a body skeleton
+(see section <a href="MeshObject-Animesh.html#0">Animesh Mesh Object</a>), that will define the colliders and physical
+properties that the ragdoll node must use for all bones of the skeleton. Once done,
+you must also define in the body skeleton some body chains that will allow you to
+designate the set of bones that you want to manipulate within the ragdoll node.
+</p>
+<p>Whenever you change the dynamic state of some of the body chains, the ragdoll node
+will create and update automatically the rigid bodies and joints of the skeleton. You
+can use the ragdoll node to access those physical objects and manipulate them
+externally.
+</p>
 <a name="9"></a>
 <h4 class="subsubheading"> Inverse Kinematics </h4>
 
@@ -196,6 +213,12 @@ the path of the arm to the effector, the drawback is that the physical simulatio
 behave strangely if the motion of the target of the effector is not manipulated wisely.
 </li></ul>
 
+<p>In order to use Inverse Kinematics animation nodes, you must first define a body skeleton
+and some body chains within it. The body chains will be used to designate the set of
+bones that will be manipulated by the IK animation node (e.g. the arms). For the animation
+node based on the physical simulation, you must also use a ragdoll animation node in
+combination, therefore a definition for all colliders and joints of the body chains.
+</p>
 <a name="10"></a>
 <h4 class="subsubheading"> Retarget </h4>
 
@@ -213,7 +236,9 @@ a similar topology and limb proportions, otherwise the results won't look good.
 <p>These are the objects <code>CS::Animation::iSkeletonDebugNode</code> and
 <code>CS::Animation::iSkeletonDebugNodeFactory</code>.
 </p>
-<p>This node currently simply allows to display the state of part or the whole skeleton.
+<p>This node currently simply allows to display the state of part or the whole skeleton. It
+is useful if you want to visualize either the skeleton of your mesh or the actual effects
+of the animations and animation nodes that you have defined.
 </p>
 <a name="12"></a>
 <h4 class="subsubheading"> Noise </h4>
