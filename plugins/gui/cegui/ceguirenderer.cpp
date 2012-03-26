@@ -211,14 +211,20 @@ CS_PLUGIN_NAMESPACE_BEGIN(cegui)
   //----------------------------------------------------------------------------//
   bool Renderer::Initialize (iScript* script)
   {
-    // Load the configuration file
+    // Load the configuration file and the path for the log file
     csString logFile = "/tmp/CEGUI.log";
     csRef<iVFS> vfs = csQueryRegistry<iVFS> (obj_reg);
     if (vfs)
     {
+      // Read the config file
       csRef<iConfigManager> cfg = csQueryRegistry<iConfigManager> (obj_reg);
       cfg->AddDomain ("/config/cegui.cfg", vfs, iConfigManager::ConfigPriorityPlugin);
       logFile = cfg->GetStr ("CEGUI.LogFile", logFile);
+
+      // Convert the virtual path of the log file in a physical path
+      csRef<iDataBuffer> buffer (vfs->GetRealPath (logFile));
+      if (buffer)
+	logFile = (char *) buffer->GetData ();
     }
 
     // Find the 3D renderer
