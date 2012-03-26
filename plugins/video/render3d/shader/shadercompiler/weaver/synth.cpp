@@ -421,17 +421,27 @@ CS_PLUGIN_NAMESPACE_BEGIN(ShaderWeaver)
     // Two outputs are needed: color (usually from the fragment part)...
     const Snippet::Technique* outTechniqueColor;
     Snippet::Technique::Output theColorOutput;
-    if (!FindOutput (graph, "rgba", combiner, outTechniqueColor, theColorOutput))
+    if (!(FindExplicitOutput(graph, "color0", "rgba", combiner, outTechniqueColor, theColorOutput)
+        || FindOutput (graph, "rgba", combiner, outTechniqueColor, theColorOutput)))
     {
       compiler->Report (CS_REPORTER_SEVERITY_WARNING, errorNode,
 	"No suitable color output found");
       return false;
     }
     
+    // Optional: additional color outputs
+    const Snippet::Technique* outTechniqueColors[rtaNumAttachments - rtaColor1];
+    Snippet::Technique::Output theColorOutputs[rtaNumAttachments - rtaColor1];
+    bool hasOutputColor[rtaNumAttachments - rtaColor1];
+    for (size_t i = 0; i < rtaNumAttachments - rtaColor1; ++i)
+      hasOutputColor[i] = FindExplicitOutput (graph, csString("color").Append(i+1), "rgba",
+                                     combiner, outTechniqueColors[i], theColorOutputs[i]);
+    
     // ...and position (usually from the vertex part).
     const Snippet::Technique* outTechniquePos;
     Snippet::Technique::Output thePosOutput;
-    if (!FindOutput (graph, "position4_screen", combiner, outTechniquePos, thePosOutput))
+    if (!(FindExplicitOutput (graph, "position", "position4_screen", combiner, outTechniquePos, thePosOutput)
+        || FindOutput (graph, "position4_screen", combiner, outTechniquePos, thePosOutput)))
     {
       compiler->Report (CS_REPORTER_SEVERITY_WARNING, errorNode,
 	"No suitable position output found");
@@ -441,8 +451,9 @@ CS_PLUGIN_NAMESPACE_BEGIN(ShaderWeaver)
     // Optional: fragment depth
     const Snippet::Technique* outTechniqueDepth;
     Snippet::Technique::Output theDepthOutput;
-    bool hasOutputDepth = FindOutput (graph, "depth", combiner,
-      outTechniqueDepth, theDepthOutput);
+    bool hasOutputDepth =
+           FindExplicitOutput (graph, "depth", "depth", combiner, outTechniqueDepth, theDepthOutput)
+        || FindOutput (graph, "depth", combiner, outTechniqueDepth, theDepthOutput);
     
     
     // Generate special technique for output
@@ -454,6 +465,30 @@ CS_PLUGIN_NAMESPACE_BEGIN(ShaderWeaver)
       conn.from = outTechniqueColor;
       conn.to = generatedOutputColor;
       graph.AddConnection (conn);
+    }
+    csRefArray<Snippet::Technique> generatedOutputColors(rtaNumAttachments - rtaColor1);
+    for (size_t i = 0; i < rtaNumAttachments - rtaColor1; ++i)
+    {
+      csRef<Snippet::Technique> generatedOutput;
+      if (hasOutputColor[i])
+      {
+        csString outputName = csString("outputColor").Append(i+1);
+        generatedOutput.AttachNew(snippet->CreatePassthrough(outputName, "rgba"));
+        graph.AddTechnique (generatedOutput);
+        { // add connection
+	  TechniqueGraph::Connection conn;
+	  conn.from = outTechniqueColors[i];
+	  conn.to = generatedOutput;
+	  graph.AddConnection (conn);
+        }
+        { // add explicit connection to prevent confusion with color0 from same snippet
+          TechniqueGraph::ExplicitConnectionSource conn;
+          conn.from = outTechniqueColors[i];
+          conn.outputName = theColorOutputs[i].name;
+          graph.GetExplicitConnections(generatedOutput).Put(outputName, conn);
+        }
+      }
+      generatedOutputColors.Push(generatedOutput);
     }
     csRef<Snippet::Technique> generatedOutputDepth;
     generatedOutputDepth.AttachNew (
@@ -475,6 +510,9 @@ CS_PLUGIN_NAMESPACE_BEGIN(ShaderWeaver)
      */
     SynthesizeNodeTree synthTree (*this);
     synthTree.AddAllInputNodes (graph, generatedOutputColor, combiner);
+    for (size_t i = 0; i < rtaNumAttachments - rtaColor1; ++i)
+      if (hasOutputColor[i])
+        synthTree.AddAllInputNodes (graph, generatedOutputColors[i], combiner);
     if (hasOutputDepth)
       synthTree.AddAllInputNodes (graph, generatedOutputDepth, combiner);
     synthTree.AddAllInputNodes (graph, outTechniquePos, combiner);
@@ -768,6 +806,9 @@ CS_PLUGIN_NAMESPACE_BEGIN(ShaderWeaver)
     {
       csArray<const Snippet::Technique*> outputs;
       outputs.Push (generatedOutputColor);
+      for (size_t i = 0; i < rtaNumAttachments - rtaColor1; ++i)
+        if (hasOutputColor[i])
+          outputs.Push(generatedOutputColors[i]);
       if (hasOutputDepth) outputs.Push (generatedOutputDepth);
       outputs.Push (outTechniquePos);
       if (!synthTree.Rebuild (graph, outputs)) return false;
@@ -903,6 +944,19 @@ CS_PLUGIN_NAMESPACE_BEGIN(ShaderWeaver)
       combiner->SetOutput (rtaColor0, outputRenamed,
         GetAnnotation ("Map color output"));
     }
+    for (size_t i = 0; i < rtaNumAttachments - rtaColor1; ++i)
+    {
+      if (!hasOutputColor[i])
+        continue;
+
+      csString outputRenamed =
+        synthTree.GetNodeForTech (generatedOutputColors[i]).outputRenames.Get (
+          csString("outputColor").Append(i+1), (const char*)0);
+      CS_ASSERT(!outputRenamed.IsEmpty());
+      
+      combiner->SetOutput ((csRenderTargetAttachment)(rtaColor1+i), outputRenamed,
+        GetAnnotation ("Map color output %d", i+1));
+    }
     if (hasOutputDepth)
     {
       csString outputRenamed = 
@@ -987,6 +1041,70 @@ CS_PLUGIN_NAMESPACE_BEGIN(ShaderWeaver)
       }
     }
     
+    return outTechnique != 0;
+  }
+  
+  bool Synthesizer::SynthesizeTechnique::FindExplicitOutput (const TechniqueGraph& graph,
+    const char* outputName, const char* desiredType, WeaverCommon::iCombiner* combiner,
+    const Snippet::Technique*& outTechnique, Snippet::Technique::Output& theOutput)
+  {
+    const TechniqueGraph::ExplicitConnectionsHash* explicitConns =
+      graph.GetExplicitConnections (0); // connections to our fake output snippet
+    if (!explicitConns) return false;
+    
+    outTechnique = 0;
+    uint coerceCost = WeaverCommon::NoCoercion;
+    TechniqueGraph::ExplicitConnectionsHash::ConstIterator connIt (
+      explicitConns->GetIterator (outputName));
+    while (connIt.HasNext())
+    {
+      const TechniqueGraph::ExplicitConnectionSource* src =
+        &connIt.Next ();
+    
+      const WeaverCommon::TypeInfo* inputTypeInfo = 
+	WeaverCommon::QueryTypeInfo (desiredType);
+    
+      const Snippet::Technique* tech = src->from;
+      CS::Utility::ScopedDelete<BasicIterator<const Snippet::Technique::Output> > 
+	outputIt (tech->GetOutputs());
+      while (outputIt->HasNext())
+      {
+	const Snippet::Technique::Output& outp = outputIt->Next();
+	if (outp.name != src->outputName) continue;
+	if (outp.type == desiredType)
+	{
+	  outTechnique = tech;
+	  theOutput = outp;
+	  return true;
+	}
+	uint cost = combiner->CoerceCost (outp.type, desiredType);
+	if (cost < coerceCost)
+	{
+	  outTechnique = tech;
+	  theOutput = outp;
+	  coerceCost = cost;
+	}
+	// See if maybe we can just drop a property.
+	const WeaverCommon::TypeInfo* outputTypeInfo = 
+	  WeaverCommon::QueryTypeInfo (outp.type);
+	if (inputTypeInfo && outputTypeInfo
+	  && (outputTypeInfo->baseType == inputTypeInfo->baseType)
+	  && (outputTypeInfo->samplerIsCube == inputTypeInfo->samplerIsCube)
+	  && (outputTypeInfo->dimensions == inputTypeInfo->dimensions)
+	  && ((outputTypeInfo->semantics == inputTypeInfo->semantics)
+	    || (inputTypeInfo->semantics == WeaverCommon::TypeInfo::NoSemantics))
+	  && ((outputTypeInfo->space == inputTypeInfo->space)
+	    || (inputTypeInfo->space == WeaverCommon::TypeInfo::NoSpace))
+	  && ((outputTypeInfo->unit == inputTypeInfo->unit)
+	    || (!inputTypeInfo->unit)))
+	{
+	  outTechnique = tech;
+	  theOutput = outp;
+	  return true;
+	}
+      }
+    }
+
     return outTechnique != 0;
   }
       

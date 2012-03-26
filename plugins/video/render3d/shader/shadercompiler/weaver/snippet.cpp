@@ -763,6 +763,11 @@ CS_PLUGIN_NAMESPACE_BEGIN(ShaderWeaver)
 	    HandleConnectionNode (*newTech, child);
 	  }
 	  break;
+        case WeaverCompiler::XMLTOKEN_OUTPUT:
+          {
+            HandleOutputNode (*newTech, child);
+          }
+          break;
         case WeaverCompiler::XMLTOKEN_PARAMETER:
           {
             HandleParameterNode (*newTech, child, aliases);
@@ -977,6 +982,72 @@ CS_PLUGIN_NAMESPACE_BEGIN(ShaderWeaver)
     }
   }
     
+  void Snippet::HandleOutputNode (CompoundTechnique& tech, 
+                                      iDocumentNode* node)
+  {
+    Connection newConn;
+    newConn.to = 0;
+
+    {
+      const char* snippetId = node->GetAttributeValue ("snippet");
+      if (snippetId == 0)
+      {
+	  compiler->Report (CS_REPORTER_SEVERITY_WARNING, node,
+	    "%s node lacks %s attribute",
+	    CS::Quote::Single ("output"),
+	    CS::Quote::Single ("snippet"));
+	  return;
+      }
+      
+      newConn.from = tech.GetSnippet (snippetId);
+      if (newConn.from == 0)
+      {
+	  compiler->Report (CS_REPORTER_SEVERITY_WARNING, node,
+	    "Invalid %s attribute %s",
+	    CS::Quote::Single ("snippet"),
+	    snippetId);
+	  return;
+      }
+    }
+
+    const char* toId = node->GetAttributeValue ("to");
+    if (toId == 0)
+    {
+	compiler->Report (CS_REPORTER_SEVERITY_WARNING, node,
+	  "%s node lacks %s attribute",
+	  CS::Quote::Single ("output"),
+	  CS::Quote::Single ("to"));
+	return;
+    }
+
+    tech.AddConnection (newConn);
+
+    const char* fromId = node->GetAttributeValue("name");
+    if (fromId == 0)
+    {
+	compiler->Report (CS_REPORTER_SEVERITY_WARNING, node,
+	  "%s node lacks %s attribute",
+	  CS::Quote::Single ("output"),
+	  CS::Quote::Single ("name"));
+	return;
+    }
+
+    ExplicitConnectionsHash& explConn =
+      tech.GetExplicitConnections (0);
+    if (explConn.Contains (toId))
+    {
+      compiler->Report (CS_REPORTER_SEVERITY_WARNING, node,
+        "An explicit output was already mapped to %s", CS::Quote::Single (toId));
+    }
+    else
+    {
+      ExplicitConnectionSource connSrc;
+      connSrc.from = newConn.from;
+      connSrc.outputName = fromId;
+      explConn.Put (toId, connSrc);
+    }
+  }
+  
   void Snippet::HandleCombinerNode (CompoundTechnique& tech, 
 				    iDocumentNode* node)
   {
@@ -1715,13 +1786,43 @@ CS_PLUGIN_NAMESPACE_BEGIN(ShaderWeaver)
 	for (size_t g = 0; g < graphs.GetSize(); g++)
 	{
 	  GraphInfo& graphInfo = graphs[g];
+
+          { // transfer explicit output connections
+	    const Snippet::ExplicitConnectionsHash* explicitConns =
+	      compTech->GetExplicitConnections (0);
+	    if (explicitConns)
+            {
+              TechniqueGraph::ExplicitConnectionsHash newExplicitConns;
+	      Snippet::ExplicitConnectionsHash::ConstGlobalIterator
+	        explicitConnIt = explicitConns->GetIterator ();
+	      while (explicitConnIt.HasNext())
+	      {
+		csString dest;
+		const Snippet::ExplicitConnectionSource& source = 
+		  explicitConnIt.Next (dest);
+		TechniqueGraph::ExplicitConnectionSource newSource;
+		SnippetToTechMap::Iterator fromIt = 
+		  graphInfo.snippetToTechOut.GetIterator (source.from);
+		while (fromIt.HasNext())
+		{
+		  newSource.from = fromIt.Next();
+		  newSource.outputName = source.outputName;
+		  newExplicitConns.Put (dest, newSource);
+		}
+	      }
+              graphInfo.graph.GetExplicitConnections (0) =
+		newExplicitConns;
+	    }
+          }
+
 	  snippetIter.Reset();
 	  while (snippetIter.HasNext())
 	  {
-	    Snippet* toSnippet = snippetIter.Next ();
+            Snippet* toSnippet = snippetIter.Next();
 	    const Snippet::ExplicitConnectionsHash* explicitConns =
 	      compTech->GetExplicitConnections (toSnippet);
-	    if (!explicitConns) continue;
+	    if (!explicitConns)
+              continue;
 	    
 	    TechniqueGraph::ExplicitConnectionsHash newExplicitConns;
 	    SnippetToTechMap::Iterator toIt = 

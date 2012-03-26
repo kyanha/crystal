@@ -701,16 +701,23 @@ CS_PLUGIN_NAMESPACE_BEGIN(SLCombiner)
                                     const char* name,
                                     const char* annotation)
   {
-    const char* outputName = 0;
-    switch (target)
+    csString outputName;
+    if(target == rtaDepth)
     {
-      case rtaColor0: outputName = "color0"; break;
-      case rtaDepth:  outputName = "depth"; break;
-      default: CS_ASSERT_MSG ("Unsupported program output target", false);
+      outputName = "depth";
+     }
+    else if(target < rtaNumAttachments)
+    {
+      outputName.Format("color%d", target - rtaColor0);
     }
+    else
+    {
+      CS_ASSERT_MSG ("Unsupported program output target", false);
+    }
+
     outputAssign[target].Empty();
     if (annotation) outputAssign[target].Append (MakeComment (annotation));
-    outputAssign[target].AppendFmt ("OUT.%s = %s;\n", outputName, name);
+    outputAssign[target].AppendFmt ("OUT.%s = %s;\n", outputName.GetData(), name);
   }
   
   csPtr<WeaverCommon::iCoerceChainIterator> 
@@ -909,7 +916,10 @@ CS_PLUGIN_NAMESPACE_BEGIN(SLCombiner)
       
       appender.Append ("struct FragmentOutput\n");
       appender.Append ("{\n");
-      appender.Append ("  float4 color0 : COLOR0;\n");
+      for(size_t s = 0; s < rtaNumAttachments - rtaColor0; ++s)
+      {
+        appender.AppendFmt ("  float4 color%d : COLOR%d;\n", s, s);
+      }
       appender.Append ("  float depth : DEPTH;\n");
       appender.Append ("};\n\n");
       

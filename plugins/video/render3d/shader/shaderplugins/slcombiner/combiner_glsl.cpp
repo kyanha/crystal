@@ -556,19 +556,25 @@ CS_PLUGIN_NAMESPACE_BEGIN(SLCombiner)
                                       const char* name,
                                       const char* annotation)
   {
-    const char* outputName = 0;
-    switch (target)
+    csString outputName;
+    if(target == rtaDepth)
     {
-      case rtaColor0:
-          outputName = (requiredVersion >= 130) ? "output_color" : "gl_FragColor";
-          break;
-      case rtaDepth:  outputName = "gl_FragDepth"; break;
-      default: CS_ASSERT_MSG ("Unsupported program output target", false);
+      outputName = "gl_FragDepth";
     }
+    else if(target < rtaNumAttachments)
+    {
+      outputName.Format("%s[%d]", (requiredVersion >= 130) ? "output_color" : "gl_FragData",
+                                  target - rtaColor0);
+    }
+    else
+    {
+      CS_ASSERT_MSG ("Unsupported program output target", false);
+    }
+
     outputAssign[target].Empty();
     if (annotation)
       AppendComment (outputAssign[target], annotation);
-    outputAssign[target].AppendFmt ("%s = %s;\n", outputName, name);
+    outputAssign[target].AppendFmt ("%s = %s;\n", outputName.GetData(), name);
   }
 
   csPtr<WeaverCommon::iCoerceChainIterator>
@@ -700,7 +706,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(SLCombiner)
 
       if (requiredVersion >= 130)
       {
-        appender.Append ("out vec4 output_color;\n");
+        appender.AppendFmt ("out vec4 output_color[%d];\n", rtaNumAttachments - rtaColor0);
       }
 
       appender.Append ("void main ()\n");
