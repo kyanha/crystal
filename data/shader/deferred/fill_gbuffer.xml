@@ -18,47 +18,41 @@
   License along with this library; if not, write to the Free
   Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 -->
-<shader compiler="xmlshader" name="fill_gbuffer" lights="0">
+<shader compiler="shaderweaver" name="fill_gbuffer" lights="0">
   <shadervars>
     <shadervar name="specular" type="vector4">1,1,1,1</shadervar>
   </shadervars>
 
-  <technique priority="200" lights="0">
+  <alias name="ambient" file="/shader-snippets/lighting/ambient-static.xml" />
+  <alias name="apply_alpha" file="/shader-snippets/surface/alpha-premult.xml" />
+  <alias name="lighting" file="/shader-snippets/lighting/lighting-none.xml" />
+  <alias name="fill_buffer" file="/shader-snippets/deferred/fill_gbuffer.xml" />
+
+  <technique priority="300" lights="0">
     <pass>
+      <combiner plugin="crystalspace.graphics3d.shader.combiner.glsl" />
 
       <!-- Makes sure no blending occures. -->
       <mixmode>
         <blendop src="one" dst="zero" />
         <alphatest>disable</alphatest>
       </mixmode>
-      
-      <buffer source="normal" destination="normal" />
-      <buffer source="texture coordinate 0" destination="texture coordinate 0" />
-      <buffer source="texture coordinates lightmap" destination="texture coordinate 1" />
-      <buffer source="tangent" destination="texture coordinate 2" />
-      <buffer source="binormal" destination="texture coordinate 3" />
-      <vp plugin="glcg">
-        <cgvp>
-          <?Include fill_gbuffer_vp.inc ?>
-        </cgvp>
-      </vp>
 
-      <texture destination="TexDiffuse" name="tex diffuse" />
-      <texture destination="TexSpecular" name="tex specular" fallback="tex diffuse" />
-      <texture destination="TexHeight" name="tex height" />
-      <texture destination="TexNormal" name="tex normal" />
-      <texture destination="TexNormalCompressed" name="tex normal compressed" />
-      <texture destination="TexLightMap" name="tex lightmap" />
-      <texture destination="TexLightMapDir1" name="tex lightmap dir 1" />
-      <texture destination="TexLightMapDir2" name="tex lightmap dir 2" />
-      <texture destination="TexLightMapDir3" name="tex lightmap dir 3" />
-      <fp plugin="glcg">
-        <cgfp>
-          <?Include fill_gbuffer_fp.inc ?>
-        </cgfp>
-      </fp>
-      
+      <snippet id="shared" file="/shader-snippets/lighting/lighting_default_deferred-shared.xml" />
     </pass>
   </technique>
 
+  <technique priority="200" lights="0">
+    <pass>
+      <combiner plugin="crystalspace.graphics3d.shader.combiner.glcg" />
+
+      <!-- Makes sure no blending occures. -->
+      <mixmode>
+        <blendop src="one" dst="zero" />
+        <alphatest>disable</alphatest>
+      </mixmode>
+
+      <snippet id="shared" file="/shader-snippets/lighting/lighting_default_deferred-shared.xml" />
+    </pass>
+  </technique>
 </shader>

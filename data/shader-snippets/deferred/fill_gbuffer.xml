@@ -1,0 +1,97 @@
+<!--
+  Copyright (C) 2007 by Frank Richter
+	    (C) 2007 by Jorrit Tyberghein
+
+  This library is free software; you can redistribute it and/or
+  modify it under the terms of the GNU Library General Public
+  License as published by the Free Software Foundation; either
+  version 2 of the License, or (at your option) any later version.
+
+  This library is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+  Library General Public License for more details.
+
+  You should have received a copy of the GNU Library General Public
+  License along with this library; if not, write to the Free
+  Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+-->
+<snippet type="compound">
+  <technique priority="100">
+    <snippet id="forward_normal">
+      <technique priority="100">
+	<combiner name="cg" plugin="crystalspace.graphics3d.shader.combiner.glcg" />
+        <combiner name="glsl" plugin="crystalspace.graphics3d.shader.combiner.glsl" />
+	
+	<!-- Surface normal -->
+	<input name="i_normal" type="normal_tangent" default="value" defval="0,0,1"/>
+	<output name="o_normal" type="normal_tangent" />
+	
+	<block location="cg:vertexMain">
+	  o_normal = i_normal;
+	</block>
+        <block location="glsl:vertexMain">
+          o_normal = i_normal;
+        </block>
+	<block location="cg:fragmentMain">
+	  o_normal = i_normal;
+	</block>
+        <block location="glsl:fragmentMain">
+          o_normal = i_normal;
+        </block>
+      </technique>
+    </snippet>
+
+    <snippet id="fill_gbuffer">
+      <technique priority="100">
+        <combiner name="cg" plugin="crystalspace.graphics3d.shader.combiner.glcg" />
+        <combiner name="glsl" plugin="crystalspace.graphics3d.shader.combiner.glsl" />
+
+        <input name="lightSpecular" type="rgb" default="value" defval="0">
+          <attribute name="perfragment" type="bool" defval="true" />
+        </input>
+        <input name="surfaceDiffuse" type="rgba" default="value" defval="1">
+          <attribute name="perfragment" type="bool" defval="true" />
+        </input>
+        <input name="surfaceSpecular" type="rgb" default="value" defval="0">
+          <attribute name="perfragment" type="bool" defval="true" />
+        </input>
+        <input name="ambient" type="rgb" default="value" defval="0">
+          <attribute name="perfragment" type="bool" defval="true" />
+        </input>
+        <input name="normal" type="normal_camera">
+          <attribute name="perfragment" type="bool" defval="true" />
+        </input>
+
+        <output name="outputDiffuse" type="rgba" />
+        <output name="outputNormal"  type="rgba" />
+        <output name="outputAmbient" type="rgba" />
+
+        <block location="cg:fragmentMain">
+          normal = (normalize (normal) + 1) * 0.5;
+          float3 specular = surfaceSpecular.xyz + lightSpecular;
+
+          outputDiffuse = float4 (surfaceDiffuse.xyz, specular.x);
+          outputNormal  = float4 (normal,             specular.y);
+          outputAmbient = float4 (ambient,            specular.z);
+        </block>
+        <block location="glsl:fragmentMain">
+          normal = (normalize (normal) + 1) * 0.5;
+          vec3 specular = surfaceSpecular.xyz + lightSpecular;
+
+          outputDiffuse = vec4 (surfaceDiffuse.xyz, specular.x);
+          outputNormal  = vec4 (normal,             specular.y);
+          outputAmbient = vec4 (ambient,            specular.z);
+        </block>
+      </technique>
+    </snippet>
+
+    <connection from="forward_normal" to="fill_gbuffer">
+      <explicit from="o_normal" to="normal" />
+    </connection>
+
+    <output snippet="fill_gbuffer" name="outputDiffuse" to="color0" />
+    <output snippet="fill_gbuffer" name="outputNormal" to="color1" />
+    <output snippet="fill_gbuffer" name="outputAmbient" to="color2" />
+  </technique>
+</snippet>
