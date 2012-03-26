@@ -152,6 +152,11 @@ CS_PLUGIN_NAMESPACE_BEGIN(ShaderWeaver)
 	CS::PluginCommon::ShaderWeaver::iCombiner* combiner,
 	const Snippet::Technique*& outTechnique,
 	Snippet::Technique::Output& theOutput);
+      bool FindExplicitOutput (const TechniqueGraph& graph,
+	const char* outputName, const char* desiredType,
+	CS::PluginCommon::ShaderWeaver::iCombiner* combiner,
+	const Snippet::Technique*& outTechnique,
+	Snippet::Technique::Output& theOutput);
 	
       typedef csSet<csConstPtrKey<Snippet::Technique::Output> > UsedOutputsHash;
       bool FindInput (const TechniqueGraph& graph,
