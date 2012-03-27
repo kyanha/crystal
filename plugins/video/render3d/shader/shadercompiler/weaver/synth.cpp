@@ -955,7 +955,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(ShaderWeaver)
       CS_ASSERT(!outputRenamed.IsEmpty());
       
       combiner->SetOutput ((csRenderTargetAttachment)(rtaColor1+i), outputRenamed,
-        GetAnnotation ("Map color output %d", i+1));
+        GetAnnotation ("Map color output %zu", i+1));
     }
     if (hasOutputDepth)
     {
