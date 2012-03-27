@@ -540,12 +540,10 @@ sub svn_queue_remove {
     my $file = basename($dst);
     if (-d $dst) {
 	print "Pruning directory: $file\n";
-	remove_file($dst);
 	push(@OUTDATED_FILES, $dst);
     }
     else {
 	print "Removing file: $file\n";
-	remove_file($dst);
 	push(@OUTDATED_FILES, $dst);
     }
 }
