@@ -1266,12 +1266,19 @@ CS_PLUGIN_NAMESPACE_BEGIN(SLCombiner)
       case ShaderWeaver::TypeInfo::MatrixB:
       case ShaderWeaver::TypeInfo::MatrixI:
         {
-          if ((typeInfo->baseType == ShaderWeaver::TypeInfo::Matrix)
-              && (typeInfo->dimensions == typeInfo->dimensions2))
-            return csString().Format ("mat%d", typeInfo->dimensions);
+          if (typeInfo->baseType == ShaderWeaver::TypeInfo::Matrix)
+          {
+            if(typeInfo->dimensions == typeInfo->dimensions2)
+              return csString().Format ("mat%d", typeInfo->dimensions);
+            else
+            {
+              // @@@ NOTE: only requires 100 for GLSL ES - maybe we should keep track of both minimas?
+              requiredVersion = csMax(requiredVersion, 120);
+              return csString().Format ("mat%dx%d", typeInfo->dimensions, typeInfo->dimensions2);
+            }
+          }
           /* @@@ FIXME: Support:
-           * - non-square matrices
-           * - non-float matrices
+           * - non-float matrices (not supported as of GLSL 420)
            */
           break;
         }
