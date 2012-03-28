@@ -1273,7 +1273,8 @@ CS_PLUGIN_NAMESPACE_BEGIN(SLCombiner)
             else
             {
               // @@@ NOTE: only requires 100 for GLSL ES - maybe we should keep track of both minimas?
-              requiredVersion = csMax(requiredVersion, 120);
+              // @@@ FIXME: can't set version here as it's already too late, it was already outputted
+              //requiredVersion = csMax(requiredVersion, 120);
               return csString().Format ("mat%dx%d", typeInfo->dimensions, typeInfo->dimensions2);
             }
           }
