@@ -66,7 +66,7 @@ class csConditionEvaluator :
   public csRefCount,
   public CS::Memory::CustomAllocated
 {
-  typedef CS::Threading::Mutex MutexType;
+  typedef CS::Threading::RecursiveMutex MutexType;
   typedef CS::Threading::ScopedLock<MutexType> LockType;
   mutable MutexType mutex;
 
