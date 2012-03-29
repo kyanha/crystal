@@ -2,7 +2,7 @@
 #==============================================================================
 #
 #    Automated Task Processing, Publishing, and SVN Update Script
-#    Copyright (C) 2000-2005 by Eric Sunshine <sunshine@sunshineco.com>
+#    Copyright (C) 2000-2012 by Eric Sunshine <sunshine@sunshineco.com>
 #                       2006 by Marten Svanfeldt <developer@svanfeldt.com>
 #
 #    This program is free software; you can redistribute it and/or modify
@@ -284,10 +284,10 @@ use warnings;
 $Getopt::Long::ignorecase = 0;
 
 my $PROG_NAME = 'jobber-svn.pl';
-my $PROG_VERSION = '40';
+my $PROG_VERSION = '42';
 my $AUTHOR_NAME = 'Eric Sunshine';
 my $AUTHOR_EMAIL = 'sunshine@sunshineco.com';
-my $COPYRIGHT = "Copyright (C) 2000-2005 by $AUTHOR_NAME <$AUTHOR_EMAIL>\nConverted for SVN support by Marten Svanfeldt";
+my $COPYRIGHT = "Copyright (C) 2000-2012 by $AUTHOR_NAME <$AUTHOR_EMAIL>\nConverted for SVN support by Marten Svanfeldt";
 
 my $ARCHIVER_BZIP2 = {
     'name'      => 'bzip2',
@@ -610,13 +610,16 @@ sub svn_checkout {
 sub svn_update {
     my $message = 'Modification summary:';
     my $line = '-' x length($message);
-    my $dirs = '';
+    my %dirs = ();
     foreach my $task (@jobber_tasks) {
-	$dirs .= " @{$task->{'olddirs'}}" if exists $task->{'olddirs'};
+	if (exists $task->{'olddirs'}) {
+	    $dirs{$_} = 1 foreach @{$task->{'olddirs'}};
+	}
     }
-    if ($dirs) {
+    if (%dirs) {
         print "$line\n$message\n";
-        my $changes = run_command("$jobber_svn_command status $dirs $jobber_svn_flags");
+        my $paths = join(' ', keys(%dirs));
+        my $changes = run_command("$jobber_svn_command status $paths $jobber_svn_flags");
 	print $changes ? $changes : "  No files modified\n", "$line\n";
     }
 }
