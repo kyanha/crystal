@@ -23,7 +23,6 @@
   <!-- Terrain doesn't provide lightmap TCs, uses default TCs for that -->
   <alias name="lightmaptc" file="/shader-snippets/texcoord-default.xml" />
   <alias name="apply_alpha" file="/shader-snippets/surface/alpha-nochange.xml" />
-  <alias name="lighting" file="/shader-snippets/lighting/lighting-none.xml" />
   <alias name="surface" file="/shader-snippets/surface/surface-alphasplat.xml" />
   <alias name="normalmap" file="/shader-snippets/surface/normalmap.xml" />
 
@@ -37,15 +36,13 @@
         <alphatest>disable</alphatest>
       </mixmode>
 
-      <!-- The meat of the shader is actually in a snippet. to be shared more
-	   easily across all techniques -->
-      <snippet id="shared" file="/shader-snippets/lighting/lighting_default_deferred-shared.xml" />
+      <snippet id="shared" file="/shader-snippets/deferred/fill_gbuffer-shared.xml" />
     </pass>
   </technique>
 
   <technique priority="200">
     <pass>
-      <combiner plugin="crystalspace.graphics3d.shader.combiner.cg" />
+      <combiner plugin="crystalspace.graphics3d.shader.combiner.glcg" />
 
       <!-- Makes sure no blending occures. -->
       <mixmode>
@@ -53,9 +50,7 @@
         <alphatest>disable</alphatest>
       </mixmode>
 
-      <!-- The meat of the shader is actually in a snippet. to be shared more
-	   easily across all techniques -->
-      <snippet id="shared" file="/shader-snippets/lighting/lighting_default_deferred-shared.xml" />
+      <snippet id="shared" file="/shader-snippets/deferred/fill_gbuffer-shared.xml" />
     </pass>
   </technique>
 </shader>

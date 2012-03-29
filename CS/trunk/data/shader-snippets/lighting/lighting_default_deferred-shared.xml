@@ -2,7 +2,6 @@
 <!--
   Copyright (C) 2007-2008 by Frank Richter
 	    (C) 2007 by Jorrit Tyberghein
-	    (C) 2012 by Jorrit Tyberghein
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Library General Public
@@ -31,17 +30,9 @@
 	but also provide "default" snippets and thus does not require users
 	of this snippets to provide all aliases.
       -->
-    <alias name="position" weak="yes" file="/shader-snippets/position.xml" />
-    <alias name="texcoord" weak="yes" file="/shader-snippets/texcoord-default.xml" />
-    <alias name="parallax" weak="yes" file="/shader-snippets/surface/parallax-occlusion.xml" />
-    <alias name="normalmap" weak="yes" file="/shader-snippets/surface/normalmap.xml" />
-    <alias name="surface" weak="yes" file="/shader-snippets/surface/surface-classic.xml" />
-    <alias name="specular" weak="yes" file="/shader-snippets/surface/specular-weirdold.xml" />
-    <alias name="shininess" weak="yes" file="/shader-snippets/surface/shininess-default.xml" />
-    <alias name="staticspecular" weak="yes" file="/shader-snippets/lighting/staticspec-default.xml" />
-    <alias name="lightmaptc" weak="yes" file="/shader-snippets/texcoord-lightmap.xml" />
-    <alias name="apply_mixmode_alpha" weak="yes" file="/shader-snippets/mixmode-alpha.xml" />
-    <alias name="fill_buffer" weak="yes" file="/shader-snippets/deferred/fill_gbuffer.xml" />
+    <alias name="use_buffer" weak="yes" file="/shader-snippets/deferred/use_gbuffer.xml" />
+    <alias name="ambient_modulate" weak="yes" file="/shader-snippets/lighting/ambient-null.xml" />
+    <alias name="apply_alpha_end" weak="yes" file="/shader-snippets/surface/alpha-nochange.xml" />
 
     <!--
 	Snippets - the building blocks of this shader.
@@ -52,62 +43,40 @@
 	does static normal mapped light mapping) and static specular more
 	important than a parallax effect.
     -->
-    <snippet id="position" filealias="position" />
-    <snippet id="texcoord" filealias="texcoord" />
-    <snippet id="specular" filealias="specular" />
-    <snippet id="shininess" filealias="shininess" />
-    <snippet id="normalmap" filealias="normalmap" />
-    <snippet id="ambient_lightmaptc" filealias="lightmaptc" />
-    <snippet id="ambient" filealias="ambient" />
-    <snippet id="staticspecular" filealias="staticspecular" />
-    <snippet id="parallax" filealias="parallax" />
-    <snippet id="surface" filealias="surface" />
-    <snippet id="apply_mixmode_alpha" filealias="apply_mixmode_alpha" />
-    <snippet id="apply_alpha" filealias="apply_alpha" />
+    <snippet id="position" file="/shader-snippets/position.xml" />
+    <snippet id="use_buffer" filealias="use_buffer" />
+    <snippet id="ambient_modulate" filealias="ambient_modulate" />
+    <snippet id="modulate" file="/shader-snippets/modulate.xml" />
     <snippet id="lighting" filealias="lighting" />
-    <snippet id="add_specular" file="/shader-snippets/add.xml" />
-    <snippet id="fill_buffer" filealias="fill_buffer" />
+    <snippet id="apply_lighting" file="/shader-snippets/lighting/apply-lighting.xml" />
+    <snippet id="sectorfog" file="/shader-snippets/fog/fog-sector.xml" />
+    <snippet id="apply_alpha_end" filealias="apply_alpha_end" />
+    <snippet id="hdrscale" file="/shader-snippets/hdr-postscale.xml" />
     <!-- "connections" describe what snippets take input from what other
 	  snippets (ie the "data flow" is modeled). The exact resolution of
 	  what output is linked to what input is done automatically. -->
-    <connection from="position" to="parallax" />
-    <connection from="position" to="lighting" />
-    <connection from="texcoord" to="parallax" />
-    <connection from="parallax" to="surface" />
-    <connection from="parallax" to="normalmap" />
-    <connection from="parallax" to="specular" />
-    <connection from="parallax" to="shininess" />
-    <connection from="ambient_lightmaptc" to="ambient">
-      <explicit from="result" to="texCoordLM" />
-    </connection>
-    <connection from="normalmap" to="ambient" />
-    <connection from="normalmap" to="lighting" />
-    <connection from="normalmap" to="staticspecular" />
-    <connection from="shininess" to="staticspecular" />
-    <connection from="surface" to="apply_mixmode_alpha" />
-    <connection from="shininess" to="lighting" />
-    <connection from="apply_mixmode_alpha" to="specular" />
-    <connection from="apply_mixmode_alpha" to="apply_alpha" />
-    <connection from="apply_alpha" to="fill_buffer">
-      <explicit from="outputColor" to="surfaceDiffuse" />
-    </connection>
-    <connection from="lighting" to="fill_buffer">
+    <connection from="position" to="use_buffer" />
+    <connection from="use_buffer" to="lighting" />
+    <connection from="use_buffer" to="lighting" />
+    <connection from="lighting" to="apply_lighting">
+      <explicit from="specularColor" to="lightSpecular" />
       <explicit from="diffuseColor" to="lightDiffuse" />
     </connection>
-    <connection from="lighting" to="add_specular">
-      <explicit from="specularColor" to="a" />
+    <connection from="use_buffer" to="modulate">
+      <explicit from="ambient" to="a" />
     </connection>
-    <connection from="staticspecular" to="add_specular">
-      <explicit from="specular" to="b" />
+    <connection from="ambient_modulate" to="modulate">
+      <explicit from="ambient" to="b" />
     </connection>
-    <connection from="add_specular" to="fill_buffer">
-      <explicit from="result" to="lightSpecular" />
+    <connection from="modulate" to="apply_lighting">
+      <explicit from="result" to="ambient" />
     </connection>
-    <connection from="ambient" to="fill_buffer">
-      <explicit from="ambient" to="ambient" />
+    <connection from="use_buffer" to="apply_lighting">
+      <explicit from="diffuse" to="surfaceDiffuse" />
+      <explicit from="specular" to="surfaceSpecular" />
     </connection>
-    <connection from="specular" to="fill_buffer">
-      <explicit from="specularColor" to="surfaceSpecular" />
-    </connection>
+    <connection from="apply_lighting" to="apply_alpha_end" />
+    <connection from="apply_alpha_end" to="sectorfog" />
+    <connection from="sectorfog" to="hdrscale" />
   </technique>
 </snippet>

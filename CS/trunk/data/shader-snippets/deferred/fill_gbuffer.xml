@@ -18,50 +18,16 @@
 -->
 <snippet type="compound">
   <technique priority="100">
-    <snippet id="forward_normal">
-      <technique priority="100">
-	<combiner name="cg" plugin="crystalspace.graphics3d.shader.combiner.glcg" />
-        <combiner name="glsl" plugin="crystalspace.graphics3d.shader.combiner.glsl" />
-	
-	<!-- Surface normal -->
-	<input name="i_normal" type="normal_tangent" default="value" defval="0,0,1"/>
-	<output name="o_normal" type="normal_tangent" />
-	
-	<block location="cg:vertexMain">
-	  o_normal = i_normal;
-	</block>
-        <block location="glsl:vertexMain">
-          o_normal = i_normal;
-        </block>
-	<block location="cg:fragmentMain">
-	  o_normal = i_normal;
-	</block>
-        <block location="glsl:fragmentMain">
-          o_normal = i_normal;
-        </block>
-      </technique>
-    </snippet>
-
     <snippet id="fill_gbuffer">
       <technique priority="100">
         <combiner name="cg" plugin="crystalspace.graphics3d.shader.combiner.glcg" />
         <combiner name="glsl" plugin="crystalspace.graphics3d.shader.combiner.glsl" />
 
-        <input name="lightSpecular" type="rgb" default="value" defval="0">
-          <attribute name="perfragment" type="bool" defval="true" />
-        </input>
-        <input name="surfaceDiffuse" type="rgba" default="value" defval="1">
-          <attribute name="perfragment" type="bool" defval="true" />
-        </input>
-        <input name="surfaceSpecular" type="rgb" default="value" defval="0">
-          <attribute name="perfragment" type="bool" defval="true" />
-        </input>
-        <input name="ambient" type="rgb" default="value" defval="0">
-          <attribute name="perfragment" type="bool" defval="true" />
-        </input>
-        <input name="normal" type="normal_camera">
-          <attribute name="perfragment" type="bool" defval="true" />
-        </input>
+        <input name="normal" type="normal_camera" defval="0,0,1" />
+        <input name="ambient" type="rgb" default="value" defval="0" />
+        <input name="shininess" type="float" default="value" defval="32" />
+        <input name="surfaceDiffuse" type="rgba" default="value" defval="1" />
+        <input name="surfaceSpecular" type="rgb" default="value" defval="0" />
 
         <output name="outputDiffuse" type="rgba" />
         <output name="outputNormal"  type="rgba" />
@@ -69,26 +35,20 @@
 
         <block location="cg:fragmentMain">
           normal = (normalize (normal) + 1) * 0.5;
-          float3 specular = surfaceSpecular.xyz + lightSpecular;
 
-          outputDiffuse = float4 (surfaceDiffuse.xyz, specular.x);
-          outputNormal  = float4 (normal,             specular.y);
-          outputAmbient = float4 (ambient,            specular.z);
+          outputDiffuse = float4 (surfaceDiffuse.xyz,   surfaceSpecular.x);
+          outputNormal  = float4 (normal.xy, shininess, surfaceSpecular.y);
+          outputAmbient = float4 (ambient,              surfaceSpecular.z);
         </block>
         <block location="glsl:fragmentMain">
           normal = (normalize (normal) + 1) * 0.5;
-          vec3 specular = surfaceSpecular.xyz + lightSpecular;
 
-          outputDiffuse = vec4 (surfaceDiffuse.xyz, specular.x);
-          outputNormal  = vec4 (normal,             specular.y);
-          outputAmbient = vec4 (ambient,            specular.z);
+          outputDiffuse = vec4 (surfaceDiffuse.xyz,   surfaceSpecular.x);
+          outputNormal  = vec4 (normal.xy, shininess, surfaceSpecular.y);
+          outputAmbient = vec4 (ambient,              surfaceSpecular.z);
         </block>
       </technique>
     </snippet>
-
-    <connection from="forward_normal" to="fill_gbuffer">
-      <explicit from="o_normal" to="normal" />
-    </connection>
 
     <output snippet="fill_gbuffer" name="outputDiffuse" to="color0" />
     <output snippet="fill_gbuffer" name="outputNormal" to="color1" />
