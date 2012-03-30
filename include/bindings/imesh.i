@@ -14,6 +14,10 @@
 #include "iutil.h"
 #include "ivaria.h"
 #include "ivideo.h"
+
+// Deprecated gmeshskelanim interfaces
+#include "imesh/gmeshskel2.h"
+#include "imesh/skeleton.h"
 %}
 
 #ifndef SWIGIMPORTED
