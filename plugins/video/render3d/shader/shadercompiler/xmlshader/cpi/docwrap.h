@@ -248,51 +248,6 @@ protected:
     size_t condLen, iDocumentNode* node);
   void CreateElseWrapper (NodeProcessingState* state, 
     WrapperStackEntry& elseWrapper);
-  template<typename ConditionEval>
-  void ProcessInclude (ConditionEval& eval, const TempString<>& filename, 
-    NodeProcessingState* state, iDocumentNode* node, uint parseOptions);
-  /**
-   * Process a node when a Template or Generate is active.
-   * Returns 'true' if the node was handled.
-   */
-  template<typename ConditionEval>
-  bool ProcessTemplate (ConditionEval& eval, iDocumentNode* templNode, 
-    NodeProcessingState* state, uint parseOptions);
-  bool InvokeTemplate (Template* templ, const Template::Params& params,
-    Template::Nodes& templatedNodes);
-  template<typename ConditionEval>
-  bool InvokeTemplate (ConditionEval& eval, const char* name, 
-    iDocumentNode* node, NodeProcessingState* state, 
-    const Template::Params& params, uint parseOptions);
-  /// Validate that a 'Template' was properly matched by an 'Endtemplate'
-  void ValidateTemplateEnd (iDocumentNode* node, 
-    NodeProcessingState* state);
-  /// Validate that a 'Generate' was properly matched by an 'Endgenerate'
-  void ValidateGenerateEnd (iDocumentNode* node, 
-    NodeProcessingState* state);
-  /// Validate that an 'SIfDef' was properly matched by an 'SEndIf'
-  void ValidateStaticIfEnd (iDocumentNode* node, 
-    NodeProcessingState* state);
-  void ParseTemplateArguments (const char* str, 
-    Template::Params& strings, bool omitEmpty);
-  /**
-   * Process a node when a static conditition is active.
-   * Returns 'true' if the node was handled.
-   */
-  bool ProcessStaticIf (NodeProcessingState* state, iDocumentNode* node);
-
-  /// Process a "Template" or "TemplateWeak" instruction
-  bool ProcessInstrTemplate (NodeProcessingState* state, iDocumentNode* node, 
-    const TempString<>& args, bool weak);
-  /// Process a "Define" instruction
-  bool ProcessDefine (NodeProcessingState* state, iDocumentNode* node, 
-    const TempString<>& args);
-  /// Process an "Undef" instruction
-  bool ProcessUndef (NodeProcessingState* state, iDocumentNode* node, 
-    const TempString<>& args);
-  /// Process a static "IfDef"/"IfNDef" instruction
-  bool ProcessStaticIfDef (NodeProcessingState* state, iDocumentNode* node, 
-    const TempString<>& args, bool invert);
 
   template<typename ConditionEval>
   void ProcessSingleWrappedNode (ConditionEval& eval, 
@@ -424,9 +379,8 @@ public:
 
 enum
 {
-  wdnfpoExpandTemplates = 1,
-  wdnfpoHandleConditions = 2,
-  wdnfpoOnlyOneLevelConditions = 4
+  wdnfpoHandleConditions = 1,
+  wdnfpoOnlyOneLevelConditions = 2
 };
 
 class csWrappedDocumentNodeFactory
@@ -447,23 +401,6 @@ class csWrappedDocumentNodeFactory
 #include "cstool/tokenlist.h"
 #undef CS_TOKEN_ITEM_FILE
 #undef CS_TOKEN_LIST_TOKEN_PREFIX
-  enum
-  {
-    PITOKEN_TEMPLATE_NEW = 0xfeeb1e,
-    PITOKEN_TEMPLATEWEAK,
-    PITOKEN_ENDTEMPLATE_NEW,
-    PITOKEN_INCLUDE_NEW,
-    PITOKEN_GENERATE,
-    PITOKEN_ENDGENERATE,
-    PITOKEN_DEFINE,
-    PITOKEN_UNDEF,
-    PITOKEN_STATIC_IFDEF,
-    PITOKEN_STATIC_IFNDEF,
-    PITOKEN_STATIC_ELSIFDEF,
-    PITOKEN_STATIC_ELSIFNDEF,
-    PITOKEN_STATIC_ELSE,
-    PITOKEN_STATIC_ENDIF
-  };
 
   void DebugProcessing (const char* msg, ...) CS_GNUC_PRINTF (2, 3);
 public:
@@ -488,7 +425,7 @@ public:
     uint parseOptions, const MyBitArrayTemp* presetCondResults = 0);
   csWrappedDocumentNode* CreateWrapperStatic (iDocumentNode* wrappedNode,
     iConditionResolver* resolver, csString* dumpOut,
-    uint parseOptions = wdnfpoExpandTemplates | wdnfpoHandleConditions);
+    uint parseOptions = wdnfpoHandleConditions);
     
   csWrappedDocumentNode* CreateWrapperFromCache (iFile* cacheFile,
     iConditionResolver* resolver, csConditionEvaluator& evaluator,
