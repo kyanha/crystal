@@ -26,6 +26,7 @@
 #include "iutil/plugin.h"
 #include "iutil/vfs.h"
 #include "iutil/verbositymanager.h"
+#include "ivaria/docpreproc.h"
 #include "ivaria/keyval.h"
 #include "ivaria/reporter.h"
 
@@ -118,6 +119,11 @@ bool csXMLShaderCompiler::Initialize (iObjectRegistry* object_reg)
   synldr = csQueryRegistryOrLoad<iSyntaxService> (object_reg,
     "crystalspace.syntax.loader.service.text");
   if (!synldr)
+    return false;
+
+  docpp = csQueryRegistryOrLoad<CS::DocSystem::iDocumentPreprocessor> (object_reg,
+    "crystalspace.document.preprocessor");
+  if (!docpp)
     return false;
 
   csRef<iVerbosityManager> verbosemgr (
@@ -372,6 +378,11 @@ csPtr<iDocument> csXMLShaderCompiler::CreateCachingDoc ()
   if (!docsys.IsValid()) docsys = xmlDocSys;
   
   return csPtr<iDocument> (docsys->CreateDocument());
+}
+
+csPtr<iDocumentNode> csXMLShaderCompiler::PreprocessedNode (iDocumentNode* node)
+{
+  return docpp->Process (node);
 }
 
 }
