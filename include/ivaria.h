@@ -32,6 +32,7 @@
 #include "ivaria/conin.h"
 #include "ivaria/conout.h"
 #include "ivaria/decal.h"
+#include "ivaria/docpreproc.h"
 #include "ivaria/dynamics.h"
 #include "ivaria/dynamicsdebug.h"
 #include "ivaria/engseq.h"
