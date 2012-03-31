@@ -381,7 +381,7 @@ bool RMDeferred::RenderView(iView *view, bool recursePortals)
   startContext->drawFlags |= (CSDRAW_CLEARSCREEN | CSDRAW_CLEARZBUFFER);
 
   // Add gbuffer textures to be visualized.
-  //if (showGBuffer)
+  if (showGBuffer)
     ShowGBuffer (renderTree);
 
   CS::Math::Matrix4 perspectiveFixup;
