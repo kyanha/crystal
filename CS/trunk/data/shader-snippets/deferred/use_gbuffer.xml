@@ -167,17 +167,16 @@
       float4 gBuffer2     = tex2D (texGBuffer2,     texCoord);
       float  gBufferDepth = tex2D (texGBufferDepth, texCoord).x;
 
-      diffuse   = float4(gBuffer0.xyz, 1.0);
+      diffuse   = gBuffer0;
       diffuse_attr_perfragment = true;
       normal.xy = gBuffer1.xy * 2.0 - 1.0;
       normal.z  = -sqrt (1.0 - dot (normal.xy, normal.xy));
       normal_attr_perfragment = true;
-      shininess = gBuffer1.z;
       shininess = 32;
       shininess_attr_perfragment = true;
-      ambient   = gBuffer2.xyz;
+      ambient   = gBuffer2.rgb;
       ambient_attr_perfragment = true;
-      specular  = float3(gBuffer0.w, gBuffer1.w, gBuffer2.w);
+      specular  = float3(gBuffer1.ba, gBuffer2.a);
       specular_attr_perfragment = true;
       position  = mul(ProjInv, float4(screenXY.x, -screenXY.y, 1.0 - 2.0 * gBufferDepth, 1.0));
       position /= position.w;
@@ -193,16 +192,16 @@
       vec4  gBuffer2     = texture2D (texGBuffer2,     texCoord);
       float gBufferDepth = texture2D (texGBufferDepth, texCoord).x;
 
-      diffuse   = vec4(gBuffer0.rgb, 1.0);
+      diffuse   = vec4(gBuffer0);
       diffuse_attr_perfragment = true;
       normal.xy = gBuffer1.xy * 2.0 - 1.0;
       normal.z  = -sqrt (1.0 - dot (normal.xy, normal.xy));
       normal_attr_perfragment = true;
-      shininess = gBuffer1.z;
+      shininess = 32;
       shininess_attr_perfragment = true;
       ambient   = gBuffer2.rgb;
       ambient_attr_perfragment = true;
-      specular  = vec3(gBuffer0.a, gBuffer1.a, gBuffer2.a);
+      specular  = vec3(gBuffer1.ba, gBuffer2.a);
       specular_attr_perfragment = true;
       position  = ProjInv * vec4(screenXY.x, -screenXY.y, 1.0 - 2.0 * gBufferDepth, 1.0);
       position /= position.w;
