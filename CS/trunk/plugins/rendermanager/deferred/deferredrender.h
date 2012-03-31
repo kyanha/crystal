@@ -171,6 +171,25 @@ CS_PLUGIN_NAMESPACE_BEGIN(RMDeferred)
       iCamera *cam = rview->GetCamera ();
       iClipper2D *clipper = rview->GetClipper ();
 
+      // Any rendering required for visculling needs to be done once only per sector.
+      {
+        int drawFlags = CSDRAW_3DGRAPHICS | context->drawFlags;
+        graphics3D->BeginDraw (drawFlags);
+        csArray<iSector*> sectors;
+        for (size_t c = 0; c < contextStack.GetSize (); ++c)
+        {
+          typename RenderTree::ContextNode* ctx = contextStack[c];
+
+          size_t numSectors = sectors.GetSize ();
+          if (sectors.PushSmart (ctx->sector) == numSectors)
+          {
+            graphics3D->SetWorldToCamera (ctx->cameraTransform.GetInverse ());
+            ctx->sector->GetVisibilityCuller ()->RenderViscull (rview, ctx->shadervars);
+          }
+        }
+        graphics3D->FinishDraw ();
+      }
+
       // Create the light renderer here so we do not needlessly recreate it latter.
       DeferredLightRenderer lightRender (graphics3D,
                                          shaderMgr,
