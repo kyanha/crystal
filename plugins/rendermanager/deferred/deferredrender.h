@@ -112,7 +112,6 @@ CS_PLUGIN_NAMESPACE_BEGIN(RMDeferred)
     DeferredTreeRenderer(iGraphics3D *g3d, 
                          iShaderManager *shaderMgr,
                          iStringSet *stringSet,
-                         GBuffer &gbuffer,
                          DeferredLightRenderer::PersistentData &lightRenderPersistent,
                          int deferredLayer,
                          int zonlyLayer,
@@ -122,7 +121,6 @@ CS_PLUGIN_NAMESPACE_BEGIN(RMDeferred)
     graphics3D(g3d),
     shaderMgr(shaderMgr),
     stringSet(stringSet),
-    gbuffer(gbuffer),
     lightRenderPersistent(lightRenderPersistent),
     deferredLayer(deferredLayer),
     zonlyLayer(zonlyLayer),
@@ -142,7 +140,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(RMDeferred)
      */
     void operator()(typename RenderTree::ContextNode *context)
     {
-      if (IsNew (*context))
+      if (IsNew (context))
       {
         // New context, render out the old ones
         RenderContextStack ();
@@ -150,6 +148,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(RMDeferred)
         lastAccumBuf = context->renderTargets[rtaColor0].texHandle;
         lastSubTex = context->renderTargets[rtaColor0].subtexture;
         lastRenderView = context->renderView;
+        lastGBuffer = context->gbuffer;
       }
       
       contextStack.Push (context);
@@ -168,6 +167,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(RMDeferred)
 
       CS::RenderManager::RenderView *rview = context->renderView;
 
+      GBuffer* gbuffer = context->gbuffer;
       iCamera *cam = rview->GetCamera ();
       iClipper2D *clipper = rview->GetClipper ();
 
@@ -176,11 +176,11 @@ CS_PLUGIN_NAMESPACE_BEGIN(RMDeferred)
                                          shaderMgr,
                                          stringSet,
                                          rview,
-                                         gbuffer,
+                                         *gbuffer,
                                          lightRenderPersistent);
 
       // Fill the gbuffer
-      gbuffer.Attach ();
+      gbuffer->Attach ();
       {
         graphics3D->SetZMode (CS_ZBUF_MESH);
 
@@ -204,10 +204,29 @@ CS_PLUGIN_NAMESPACE_BEGIN(RMDeferred)
         
         graphics3D->FinishDraw ();
       }
-      gbuffer.Detach ();
+      gbuffer->Detach ();
 
-      // Fills the accumulation buffer
-      AttachAccumBuffer (context, false);
+      // Assume that the accumulation texture matches the gbuffer dimensions.
+  #if CS_DEBUG
+      int subTex;
+      iTextureHandle* buf = GetAccumBuffer(context, subTex);
+      CS_ASSERT(buf);
+
+      int w, h;
+      int bufW, bufH;
+      gbuffer->GetDimensions (w, h);
+      buf->GetRendererDimensions (bufW, bufH);
+
+      CS_ASSERT (w == bufW && h == bufH);
+  #endif
+
+      // attach render targets.
+      for (int a = rtaColor0; a < rtaNumAttachments; a++)
+        graphics3D->SetRenderTarget (context->renderTargets[a].texHandle, true,
+	    context->renderTargets[a].subtexture, csRenderTargetAttachment (a));
+      CS_ASSERT(graphics3D->ValidateRenderTargets ());
+
+      // Fill the accumulation buffer
       {
         graphics3D->SetZMode (CS_ZBUF_MESH);
 
@@ -227,10 +246,11 @@ CS_PLUGIN_NAMESPACE_BEGIN(RMDeferred)
           ForEachLight (*context, lightRender);
         }
       }
-      DetachAccumBuffer ();
 
       // Draws the forward shaded objects.
-      AttachAccumBuffer (context, true);
+      if (gbuffer->HasDepthBuffer ())
+        graphics3D->SetRenderTarget (gbuffer->GetDepthBuffer (), false, 0, rtaDepth);
+      CS_ASSERT(graphics3D->ValidateRenderTargets ());
       {
         graphics3D->SetZMode (CS_ZBUF_MESH);
 
@@ -250,91 +270,34 @@ CS_PLUGIN_NAMESPACE_BEGIN(RMDeferred)
 
         graphics3D->FinishDraw ();
       }
-      DetachAccumBuffer ();
+      graphics3D->UnsetRenderTargets ();
+
+      /* @@@ FIXME: When switching from RT to screen with a clipper set
+         the clip rect gets wrong (stays at RT size). This workaround ensures
+         that no "old" clip rect is stored which is restored later.
+         Should really be fixed in the renderer. */
+      graphics3D->SetClipper (nullptr, CS_CLIPPER_TOPLEVEL);
 
       contextStack.Empty ();
-    }
-
-    /**
-     * Attaches the accumulation buffer stored with the given context.
-     */
-    bool AttachAccumBuffer(typename RenderTree::ContextNode *context, bool useGbufferDepth)
-    {
-      int subTex;
-      iTextureHandle *buf = GetAccumBuffer (context, subTex);
-      
-      CS_ASSERT (buf);
-
-      return AttachAccumBuffer (buf, subTex, useGbufferDepth);
-    }
-
-    /**
-     * Attaches the given accumulation buffer and uses the gbuffers depth if requested.
-     */
-    bool AttachAccumBuffer(iTextureHandle *buf, int subTex, bool useGbufferDepth)
-    {
-      CS_ASSERT (buf);
-
-      // Assume that the accumulation texture matches the gbuffer dimensions.
-  #if CS_DEBUG
-      int w, h;
-      int bufW, bufH;
-      gbuffer.GetDimensions (w, h);
-      buf->GetRendererDimensions (bufW, bufH);
-
-      CS_ASSERT (w == bufW && h == bufH);
-  #endif
-
-      if (!graphics3D->SetRenderTarget (buf, false, subTex, rtaColor0))
-        return false;
-
-      if (useGbufferDepth && gbuffer.HasDepthBuffer ())
-      {
-        if (!graphics3D->SetRenderTarget (gbuffer.GetDepthBuffer (), false, 0, rtaDepth))
-          return false; 
-      }
-
-      if (!graphics3D->ValidateRenderTargets ())
-        return false;
-
-      return true;
-    }
-
-    /**
-     * Detaches the accumulation buffer.
-     */
-    void DetachAccumBuffer()
-    {
-      graphics3D->UnsetRenderTargets ();
     }
 
      /**
       * Returns the contexts accumulation buffer or NULL if no such buffer exists.
       */
-    iTextureHandle *GetAccumBuffer(typename RenderTree::ContextNode *context, int &subTex)
+    iTextureHandle* GetAccumBuffer(typename RenderTree::ContextNode* context, int &subTex)
     {
       subTex = context->renderTargets[rtaColor0].subtexture;
       return context->renderTargets[rtaColor0].texHandle;
     }
 
     /**
-     * Returns true if the given context has a valid accumulation buffer.
-     */
-    bool HasAccumBuffer(typename RenderTree::ContextNode *context)
-    {
-      int subTex;
-      iTextureHandle *buf = GetAccumBuffer (context, subTex);
-      return buf != (iTextureHandle*) nullptr; 
-    }
-
-    /**
      * Returns true if the given context has the same accumulation buffer 
      * as the last context.
      */
-    bool HasSameAccumBuffer(typename RenderTree::ContextNode &context)
+    bool HasSameAccumBuffer(typename RenderTree::ContextNode* context)
     {
       int subTex;
-      iTextureHandle *buf = GetAccumBuffer (&context, subTex);
+      iTextureHandle *buf = GetAccumBuffer (context, subTex);
 
       return buf == lastAccumBuf && subTex == lastSubTex;
     }
@@ -343,17 +306,26 @@ CS_PLUGIN_NAMESPACE_BEGIN(RMDeferred)
      * Returns true if the given context has the same render view as the 
      * last context.
      */
-    bool HasSameRenderView(typename RenderTree::ContextNode &context)
+    bool HasSameRenderView(typename RenderTree::ContextNode* context)
     {
-      return context.renderView == lastRenderView;
+      return context->renderView == lastRenderView;
+    }
+
+    /**
+     * Returns true if the given context has the same GBuffer as the 
+     * last context.
+     */
+    bool HasSameGBuffer(typename RenderTree::ContextNode* context)
+    {
+      return context->gbuffer == lastGBuffer;
     }
 
     /**
      * Returns true if the given context is different from the last context.
      */
-    bool IsNew(typename RenderTree::ContextNode &context)
+    bool IsNew(typename RenderTree::ContextNode* context)
     {
-      return !HasSameAccumBuffer (context) || !HasSameRenderView (context);
+      return !HasSameAccumBuffer (context) || !HasSameRenderView (context) || !HasSameGBuffer (context);
     }
 
   private:
@@ -364,7 +336,6 @@ CS_PLUGIN_NAMESPACE_BEGIN(RMDeferred)
     iShaderManager *shaderMgr;
     iStringSet *stringSet;
 
-    GBuffer &gbuffer;
     DeferredLightRenderer::PersistentData &lightRenderPersistent;
 
     csArray<typename RenderTree::ContextNode*> contextStack;
@@ -372,6 +343,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(RMDeferred)
     int deferredLayer;
     int zonlyLayer;
 
+    GBuffer* lastGBuffer;
     iTextureHandle *lastAccumBuf;
     int lastSubTex;
     CS::RenderManager::RenderView *lastRenderView;

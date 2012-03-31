@@ -417,13 +417,8 @@ CS_PLUGIN_NAMESPACE_BEGIN(RMDeferred)
         float w = graphics3D->GetDriver2D ()->GetWidth ();
         float h = graphics3D->GetDriver2D ()->GetHeight ();
 
-        quadVerts[0] = csVector3 (0.0f, 0.0f, 0.0f);
-        quadVerts[1] = csVector3 (0.0f,    h, 0.0f);
-        quadVerts[2] = csVector3 (   w,    h, 0.0f);
-        quadVerts[3] = csVector3 (   w, 0.0f, 0.0f);
-
         quadMesh.meshtype = CS_MESHTYPE_TRIANGLEFAN;
-        quadMesh.vertices = quadVerts;
+        quadMesh.vertices = nullptr;
         quadMesh.vertexCount = 4;
         quadMesh.z_buf_mode = CS_ZBUF_NONE;
         quadMesh.mixmode = CS_FX_ADD;
@@ -456,9 +451,6 @@ CS_PLUGIN_NAMESPACE_BEGIN(RMDeferred)
         iShaderVarStringSet *svStringSet = shaderManager->GetSVNameStringset ();
         lightVolumeColorSV = lightVolumeShader->GetVariableAdd (svStringSet->Request("static color"));
       }
-
-      private:
-        csVector3 quadVerts[4];
     };
 
     DeferredLightRenderer(iGraphics3D *g3d, 
@@ -738,7 +730,16 @@ CS_PLUGIN_NAMESPACE_BEGIN(RMDeferred)
 
       graphics3D->SetWorldToCamera (csReversibleTransform ());
       graphics3D->SetProjectionMatrix (CreateOrthoProj (graphics3D));
+      int w = graphics3D->GetWidth();
+      int h = graphics3D->GetHeight();
       
+      csVector3 quadVerts[4];
+      quadVerts[0] = csVector3 (0.0f, 0.0f, 0.0f);
+      quadVerts[1] = csVector3 (0.0f,    h, 0.0f);
+      quadVerts[2] = csVector3 (   w,    h, 0.0f);
+      quadVerts[3] = csVector3 (   w, 0.0f, 0.0f);
+
+      persistentData.quadMesh.vertices = quadVerts;
       persistentData.quadMesh.shader = shader;
       persistentData.quadMesh.z_buf_mode = zmode;
       
