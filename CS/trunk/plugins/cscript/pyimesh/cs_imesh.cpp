@@ -2988,6 +2988,10 @@ namespace swig {
 #include "ivaria.h"
 #include "ivideo.h"
 
+// Deprecated gmeshskelanim interfaces
+#include "imesh/gmeshskel2.h"
+#include "imesh/skeleton.h"
+
 
 /* Funtions to set the modules global SCF pointer, this is needed
    when working on a pure scripting environment, as then this code
