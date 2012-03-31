@@ -265,8 +265,12 @@ CS_PLUGIN_NAMESPACE_BEGIN(RMDeferred)
           ForEachLight (*context, lightRender);
         }
       }
+      graphics3D->UnsetRenderTargets ();
 
       // Draws the forward shaded objects.
+      for (int a = rtaColor0; a < rtaNumAttachments; a++)
+        graphics3D->SetRenderTarget (context->renderTargets[a].texHandle, true,
+	    context->renderTargets[a].subtexture, csRenderTargetAttachment (a));
       if (gbuffer->HasDepthBuffer ())
         graphics3D->SetRenderTarget (gbuffer->GetDepthBuffer (), false, 0, rtaDepth);
       CS_ASSERT(graphics3D->ValidateRenderTargets ());
