@@ -46,8 +46,9 @@ CS_PLUGIN_NAMESPACE_BEGIN(RMDeferred)
   template<typename RenderTreeType, typename LayerConfigType>
   class StandardContextSetup;
 
-  class RMDeferred : public scfImplementation5<RMDeferred, 
+  class RMDeferred : public scfImplementation6<RMDeferred, 
                                                iRenderManager,
+                                               iRenderManagerTargets,
                                                scfFakeInterface<iRenderManagerVisCull>,
                                                iComponent,
                                                scfFakeInterface<iRenderManagerPostEffects>,
@@ -68,6 +69,22 @@ CS_PLUGIN_NAMESPACE_BEGIN(RMDeferred)
     virtual bool RenderView(iView *view);
     virtual bool PrecacheView(iView *view);
 
+    //---- iRenderManagerTargets Interface ----
+    virtual void RegisterRenderTarget (iTextureHandle* target, 
+      iView* view, int subtexture = 0, uint flags = 0)
+    {
+      targets.RegisterRenderTarget (target, view, subtexture, flags);
+    }
+    virtual void UnregisterRenderTarget (iTextureHandle* target,
+      int subtexture = 0)
+    {
+      targets.UnregisterRenderTarget (target, subtexture);
+    }
+    virtual void MarkAsUsed (iTextureHandle* target)
+    {
+      targets.MarkAsUsed (target);
+    }
+
     typedef StandardContextSetup<RenderTreeType, CS::RenderManager::MultipleRenderLayer> 
       ContextSetupType;
 
@@ -77,12 +94,26 @@ CS_PLUGIN_NAMESPACE_BEGIN(RMDeferred)
     typedef CS::RenderManager::LightSetup<RenderTreeType, CS::RenderManager::MultipleRenderLayer> 
       LightSetupType;
 
+    typedef CS::RenderManager::DependentTargetManager<RenderTreeType, RMDeferred>
+      TargetManagerType;
+
     //---- iDebugHelper Interface ----
     virtual bool DebugCommand(const char *cmd);
 
   public:
 
     bool RenderView(iView *view, bool recursePortals);
+    bool HandleTarget (RenderTreeType& renderTree, 
+      const TargetManagerType::TargetSettings& settings,
+      bool recursePortals, iGraphics3D* g3d);
+
+    // Target manager handler
+    bool HandleTargetSetup (CS::ShaderVarStringID svName, csShaderVariable* sv, 
+      iTextureHandle* textureHandle, iView*& localView)
+    {
+      return false;
+    }
+
     void AddDeferredLayer(CS::RenderManager::MultipleRenderLayer &layers, int &addedLayer);
     void AddZOnlyLayer(CS::RenderManager::MultipleRenderLayer &layers, int &addedLayer);
 
@@ -106,9 +137,13 @@ CS_PLUGIN_NAMESPACE_BEGIN(RMDeferred)
     csRef<iLightManager> lightManager;
     csRef<iStringSet> stringSet;
 
+    TargetManagerType targets;
+    csSet<RenderTreeType::ContextNode*> contextsScannedForTargets;
+
     csRef<iTextureHandle> accumBuffer;
 
     GBuffer gbuffer;
+    GBuffer::Description gbufferDescription;
 
     int deferredLayer;
     int zonlyLayer;

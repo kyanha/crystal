@@ -22,6 +22,7 @@
 #include "cssysdef.h"
 
 #include "csutil/scfstr.h"
+#include "csutil/refcount.h"
 #include "itexture.h"
 
 CS_PLUGIN_NAMESPACE_BEGIN(RMDeferred)
@@ -31,7 +32,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(RMDeferred)
    * Utility class for holding a collection of render targets used 
    * for deferred shading.
    */
-  class GBuffer
+  class GBuffer : public CS::Utility::FastRefCount<GBuffer>
   {
   public:
 

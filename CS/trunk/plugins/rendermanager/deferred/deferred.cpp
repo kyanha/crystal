@@ -83,19 +83,21 @@ public:
   typedef StandardContextSetup<RenderTreeType, LayerConfigType> ThisType;
   typedef StandardPortalSetup<RenderTreeType, ThisType> PortalSetupType;
 
-  StandardContextSetup(RMDeferred *rmanager, const LayerConfigType &layerConfig)
+  StandardContextSetup(RMDeferred *rmanager, const LayerConfigType &layerConfig, GBuffer* gbuffer)
     : 
-  rmanager(rmanager), 
+  rmanager(rmanager),
+  gbuffer(gbuffer), 
   layerConfig(layerConfig),
   recurseCount(0), 
   deferredLayer(rmanager->deferredLayer),
   zonlyLayer(rmanager->zonlyLayer),
   maxPortalRecurse(rmanager->maxPortalRecurse)
   {}
-  
+
   StandardContextSetup (const StandardContextSetup &other, const LayerConfigType &layerConfig)
     :
   rmanager(other.rmanager), 
+  gbuffer(other.gbuffer),
   layerConfig(layerConfig),
   recurseCount(other.recurseCount),
   deferredLayer(other.deferredLayer),
@@ -107,6 +109,9 @@ public:
     typename PortalSetupType::ContextSetupData &portalSetupData,
     bool recursePortals = true)
   {
+    // set custom gbuffer if there is one
+    context.gbuffer = gbuffer;
+
     CS::RenderManager::RenderView* rview = context.renderView;
     iSector* sector = rview->GetThisSector ();
 
@@ -174,6 +179,7 @@ public:
 private:
 
   RMDeferred *rmanager;
+  csRef<GBuffer> gbuffer;
 
   const LayerConfigType &layerConfig;
 
@@ -187,7 +193,8 @@ private:
 RMDeferred::RMDeferred(iBase *parent) 
   : 
 scfImplementationType(this, parent),
-portalPersistent(CS::RenderManager::TextureCache::tcacheExactSizeMatch)
+portalPersistent(CS::RenderManager::TextureCache::tcacheExactSizeMatch),
+targets (*this)
 {
   SetTreePersistent (treePersistent);
 }
@@ -305,14 +312,13 @@ bool RMDeferred::Initialize(iObjectRegistry *registry)
   int bufferCount = cfg->GetInt ("RenderManager.Deferred.GBuffer.BufferCount", 3);
   bool hasDepthBuffer = cfg->GetBool ("RenderManager.Deferred.GBuffer.DepthBuffer", true);
 
-  GBuffer::Description desc;
-  desc.colorBufferCount = bufferCount;
-  desc.hasDepthBuffer = hasDepthBuffer;
-  desc.width = graphics2D->GetWidth ();
-  desc.height = graphics2D->GetHeight ();
-  desc.colorBufferFormat = gbufferFmt;
+  gbufferDescription.colorBufferCount = bufferCount;
+  gbufferDescription.hasDepthBuffer = hasDepthBuffer;
+  gbufferDescription.width = graphics2D->GetWidth ();
+  gbufferDescription.height = graphics2D->GetHeight ();
+  gbufferDescription.colorBufferFormat = gbufferFmt;
 
-  if (!gbuffer.Initialize (desc, 
+  if (!gbuffer.Initialize (gbufferDescription, 
                            graphics3D, 
                            shaderManager->GetSVNameStringset (), 
                            objRegistry))
@@ -321,8 +327,8 @@ bool RMDeferred::Initialize(iObjectRegistry *registry)
   }
 
   // Fix portal texture cache to only query textures that match the gbuffer dimensions.
-  portalPersistent.fixedTexCacheWidth = desc.width;
-  portalPersistent.fixedTexCacheHeight = desc.height;
+  portalPersistent.fixedTexCacheWidth = gbufferDescription.width;
+  portalPersistent.fixedTexCacheHeight = gbufferDescription.height;
 
   // Make sure the texture cache creates matching texture buffers.
   portalPersistent.texCache.SetFormat (accumFmt);
@@ -358,6 +364,7 @@ bool RMDeferred::RenderView(iView *view, bool recursePortals)
   float b =  invFov * (frameHeight - camera->GetShiftY ());
   rview->SetFrustum (l, r, t, b);
 
+  contextsScannedForTargets.Empty ();
   portalPersistent.UpdateNewFrame ();
   lightPersistent.UpdateNewFrame ();
 
@@ -382,31 +389,44 @@ bool RMDeferred::RenderView(iView *view, bool recursePortals)
 
   bool hasPostEffects = (postEffects.GetScreenTarget () != (iTextureHandle*)nullptr);
 
+  if (hasPostEffects)
+  {
+    startContext->renderTargets[rtaColor0].texHandle = postEffects.GetScreenTarget ();
+    startContext->perspectiveFixup = perspectiveFixup;
+  }
+  else
+  {
+    startContext->renderTargets[rtaColor0].texHandle = accumBuffer;
+    startContext->renderTargets[rtaColor0].subtexture = 0;
+  }
+
   // Setup the main context
   {
-    ContextSetupType contextSetup (this, renderLayer);
+    ContextSetupType contextSetup (this, renderLayer, &gbuffer);
     ContextSetupType::PortalSetupType::ContextSetupData portalData (startContext);
 
-    if (hasPostEffects)
-    {
-      startContext->renderTargets[rtaColor0].texHandle = postEffects.GetScreenTarget ();
-      startContext->perspectiveFixup = perspectiveFixup;
-    }
-    else
-    {
-      startContext->renderTargets[rtaColor0].texHandle = accumBuffer;
-      startContext->renderTargets[rtaColor0].subtexture = 0;
-    }
-
     contextSetup (*startContext, portalData, recursePortals);
+
+    targets.StartRendering (shaderManager);
+    targets.EnqueueTargets (renderTree, shaderManager, renderLayer, contextsScannedForTargets);
   }
+
+  // Setup all dependent targets
+  while (targets.HaveMoreTargets ())
+  {
+    TargetManagerType::TargetSettings ts;
+    targets.GetNextTarget (ts);
+
+    HandleTarget (renderTree, ts, recursePortals, graphics3D);
+  }
+
+  targets.FinishRendering ();
 
   // Render all contexts.
   {
     DeferredTreeRenderer<RenderTreeType> render (graphics3D,
                                                  shaderManager,
                                                  stringSet,
-                                                 gbuffer,
                                                  lightRenderPersistent,
                                                  deferredLayer,
                                                  zonlyLayer,
@@ -441,6 +461,48 @@ bool RMDeferred::PrecacheView(iView *view)
   return RenderView (view, false);
 
   postEffects.ClearIntermediates ();
+}
+
+bool RMDeferred::HandleTarget (RenderTreeType& renderTree,
+                               const TargetManagerType::TargetSettings& settings,
+                               bool recursePortals, iGraphics3D* g3d)
+{
+  // Prepare
+  csRef<CS::RenderManager::RenderView> rview;
+  rview = treePersistent.renderViews.GetRenderView (settings.view);
+  iCamera* c = settings.view->GetCamera ();
+  rview->SetOriginalCamera (c);
+
+  iSector* startSector = rview->GetThisSector ();
+
+  if (!startSector)
+    return false;
+
+  RenderTreeType::ContextNode* startContext = renderTree.CreateContext (rview);
+  startContext->renderTargets[rtaColor0].texHandle = settings.target;
+  startContext->renderTargets[rtaColor0].subtexture = settings.targetSubTexture;
+  startContext->drawFlags = settings.drawFlags;
+
+  settings.target->GetRendererDimensions(gbufferDescription.width, gbufferDescription.height);
+  csRef<GBuffer> buffer;
+  buffer.AttachNew(new GBuffer);
+
+  if (!buffer->Initialize (gbufferDescription, 
+                           g3d, 
+                           shaderManager->GetSVNameStringset (), 
+                           objRegistry))
+  {
+    return false;
+  }
+
+  ContextSetupType contextSetup (this, renderLayer, buffer);
+  ContextSetupType::PortalSetupType::ContextSetupData portalData (startContext);
+
+  contextSetup (*startContext, portalData, recursePortals);
+  
+  targets.EnqueueTargets (renderTree, shaderManager, renderLayer, contextsScannedForTargets);
+
+  return true;
 }
 
 //----------------------------------------------------------------------

@@ -32,6 +32,8 @@
 #include "csplugincommon/rendermanager/renderview.h"
 #include "csplugincommon/rendermanager/svarrayholder.h"
 
+#include "gbuffer.h"
+
 CS_PLUGIN_NAMESPACE_BEGIN(RMDeferred)
 {
   /**
@@ -53,6 +55,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(RMDeferred)
     struct ContextNodeExtraDataType 
       : public CS::RenderManager::RenderTreeLightingTraits::ContextNodeExtraDataType
     {
+      csRef<GBuffer> gbuffer;
     };
     
     /// Any extra data per mesh in a single mesh 
