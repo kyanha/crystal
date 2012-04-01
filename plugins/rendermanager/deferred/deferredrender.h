@@ -38,12 +38,13 @@ CS_PLUGIN_NAMESPACE_BEGIN(RMDeferred)
   {
   public:
 
-    ForwardMeshTreeRenderer(iGraphics3D* g3d, iShaderManager *shaderMgr, int deferredLayer)
+    ForwardMeshTreeRenderer(iGraphics3D* g3d, iShaderManager *shaderMgr, int deferredLayer, int zonlyLayer)
       : 
     meshRender(g3d, shaderMgr),
     graphics3D(g3d),
     shaderMgr(shaderMgr),
-    deferredLayer(deferredLayer)
+    deferredLayer(deferredLayer),
+    zonlyLayer(zonlyLayer)
     {}
 
     ~ForwardMeshTreeRenderer() {}
@@ -67,7 +68,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(RMDeferred)
       size_t layerCount = context->svArrays.GetNumLayers ();
       for (size_t layer = 0; layer < layerCount; ++layer)
       {
-        if ((int)layer == deferredLayer)
+        if ((int)layer == deferredLayer || (int)layer == zonlyLayer)
           continue;
 
         meshRender.SetLayer (layer);
@@ -83,6 +84,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(RMDeferred)
     iShaderManager *shaderMgr;
 
     int deferredLayer;
+    int zonlyLayer;
   };
 
   /**
@@ -171,10 +173,21 @@ CS_PLUGIN_NAMESPACE_BEGIN(RMDeferred)
       iCamera *cam = rview->GetCamera ();
       iClipper2D *clipper = rview->GetClipper ();
 
-      // Any rendering required for visculling needs to be done once only per sector.
+      // Fill the gbuffer
+      gbuffer->Attach ();
       {
+        // Setup the camera etc.
+        graphics3D->SetProjectionMatrix (context->perspectiveFixup * cam->GetProjectionMatrix ());
+        graphics3D->SetClipper (clipper, CS_CLIPPER_TOPLEVEL);
+
         int drawFlags = CSDRAW_3DGRAPHICS | context->drawFlags;
+        drawFlags |= CSDRAW_CLEARSCREEN | CSDRAW_CLEARZBUFFER;
         graphics3D->BeginDraw (drawFlags);
+        graphics3D->SetWorldToCamera (context->cameraTransform.GetInverse ());
+
+        graphics3D->SetZMode (CS_ZBUF_MESH);
+
+        // Any rendering required for visculling needs to be done once only per sector.
         csArray<iSector*> sectors;
         for (size_t c = 0; c < contextStack.GetSize (); ++c)
         {
@@ -187,30 +200,6 @@ CS_PLUGIN_NAMESPACE_BEGIN(RMDeferred)
             ctx->sector->GetVisibilityCuller ()->RenderViscull (rview, ctx->shadervars);
           }
         }
-        graphics3D->FinishDraw ();
-      }
-
-      // Create the light renderer here so we do not needlessly recreate it latter.
-      DeferredLightRenderer lightRender (graphics3D,
-                                         shaderMgr,
-                                         stringSet,
-                                         rview,
-                                         *gbuffer,
-                                         lightRenderPersistent);
-
-      // Fill the gbuffer
-      gbuffer->Attach ();
-      {
-        graphics3D->SetZMode (CS_ZBUF_MESH);
-
-        // Setup the camera etc.
-        graphics3D->SetProjectionMatrix (context->perspectiveFixup * cam->GetProjectionMatrix ());
-        graphics3D->SetClipper (clipper, CS_CLIPPER_TOPLEVEL);
-
-        int drawFlags = CSDRAW_3DGRAPHICS | context->drawFlags;
-        drawFlags |= CSDRAW_CLEARSCREEN | CSDRAW_CLEARZBUFFER;
-        graphics3D->BeginDraw (drawFlags);
-        graphics3D->SetWorldToCamera (context->cameraTransform.GetInverse ());
 
         meshRender.SetLayer (deferredLayer);
 
@@ -240,60 +229,79 @@ CS_PLUGIN_NAMESPACE_BEGIN(RMDeferred)
   #endif
 
       // attach render targets.
-      for (int a = rtaColor0; a < rtaNumAttachments; a++)
+      for (int a = 0; a < rtaNumAttachments; a++)
         graphics3D->SetRenderTarget (context->renderTargets[a].texHandle, true,
 	    context->renderTargets[a].subtexture, csRenderTargetAttachment (a));
       CS_ASSERT(graphics3D->ValidateRenderTargets ());
 
       // Fill the accumulation buffer
       {
-        graphics3D->SetZMode (CS_ZBUF_MESH);
-
         int drawFlags = CSDRAW_3DGRAPHICS | context->drawFlags;
-        drawFlags |= CSDRAW_CLEARSCREEN | CSDRAW_CLEARZBUFFER;
+        drawFlags |=  CSDRAW_CLEARSCREEN;
+        drawFlags &= ~CSDRAW_CLEARZBUFFER;
 
         graphics3D->BeginDraw (drawFlags);
         graphics3D->SetWorldToCamera (context->cameraTransform.GetInverse ());
-        
-        lightRender.OutputAmbientLight ();
 
-        // Iterate through lights adding results into accumulation buffer.
-        for (size_t i = 0; i < ctxCount; i++)
+        // z only pass
+        // @@@FIXME: this should be done during gbuffer fill pass
+        //           and copy the depth buffer from the gbuffer here
+        //           if the gbuffer has a depth buffer
         {
-          typename RenderTree::ContextNode *context = contextStack[i];
+          graphics3D->SetZMode (CS_ZBUF_MESH);
+          meshRender.SetLayer (zonlyLayer);
 
-          ForEachLight (*context, lightRender);
-        }
-      }
-      graphics3D->UnsetRenderTargets ();
+          for (size_t i = 0; i < ctxCount; i++)
+          {
+            typename RenderTree::ContextNode *context = contextStack[i];
 
-      // Draws the forward shaded objects.
-      for (int a = rtaColor0; a < rtaNumAttachments; a++)
-        graphics3D->SetRenderTarget (context->renderTargets[a].texHandle, true,
-	    context->renderTargets[a].subtexture, csRenderTargetAttachment (a));
-      if (gbuffer->HasDepthBuffer ())
-        graphics3D->SetRenderTarget (gbuffer->GetDepthBuffer (), false, 0, rtaDepth);
-      CS_ASSERT(graphics3D->ValidateRenderTargets ());
-      {
-        graphics3D->SetZMode (CS_ZBUF_MESH);
-
-        ForwardMeshTreeRenderer<RenderTree> render (graphics3D, shaderMgr, deferredLayer);
-        LightVolumeRenderer lightVolumeRender (lightRender, true, 0.2f);
-
-        for (size_t i = 0; i < ctxCount; i++)
-        {
-          typename RenderTree::ContextNode *context = contextStack[i];
-
-          render (context);
-
-          // Output light volumes.
-          if (drawLightVolumes)
-            ForEachLight (*context, lightVolumeRender);
+            ForEachMeshNode (*context, meshRender);
+          }
         }
 
+        graphics3D->SetZMode (CS_ZBUF_MESH2);
+
+        // forward rendering
+        {
+          ForwardMeshTreeRenderer<RenderTree> render (graphics3D, shaderMgr, deferredLayer, zonlyLayer);
+
+          for (size_t i = 0; i < ctxCount; i++)
+          {
+            typename RenderTree::ContextNode *context = contextStack[i];
+
+            render (context);
+          }
+        }
+
+        // deferred lighting
+        {
+          DeferredLightRenderer lightRender (graphics3D,
+                                             shaderMgr,
+                                             stringSet,
+                                             rview,
+                                             *gbuffer,
+                                             lightRenderPersistent);
+          LightVolumeRenderer lightVolumeRender (lightRender, true, 0.2f);
+
+          // ambient light
+          lightRender.OutputAmbientLight ();
+
+          for (size_t i = 0; i < ctxCount; i++)
+          {
+            typename RenderTree::ContextNode *context = contextStack[i];
+
+            // other light types
+            ForEachLight (*context, lightRender);
+
+            // Output light volumes.
+            if (drawLightVolumes)
+              ForEachLight (*context, lightVolumeRender);
+          }
+        }
+
+        // finish draw also unsets render targets
         graphics3D->FinishDraw ();
       }
-      graphics3D->UnsetRenderTargets ();
 
       /* @@@ FIXME: When switching from RT to screen with a clipper set
          the clip rect gets wrong (stays at RT size). This workaround ensures
