@@ -230,7 +230,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(RMDeferred)
 
       // attach render targets.
       for (int a = 0; a < rtaNumAttachments; a++)
-        graphics3D->SetRenderTarget (context->renderTargets[a].texHandle, true,
+        graphics3D->SetRenderTarget (context->renderTargets[a].texHandle, false,
 	    context->renderTargets[a].subtexture, csRenderTargetAttachment (a));
       CS_ASSERT(graphics3D->ValidateRenderTargets ());
 
