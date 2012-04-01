@@ -23,6 +23,33 @@
         <combiner name="cg" plugin="crystalspace.graphics3d.shader.combiner.glcg" />
         <combiner name="glsl" plugin="crystalspace.graphics3d.shader.combiner.glsl" />
 
+        <input name="texGlow" type="tex2d" default="complex"
+            condition='vars."tex glow".texture'>
+          <block location="cg:pass">
+            <texture name="tex glow" destination="fragmentIn.texGlow" />
+          </block>
+      
+          <block location="glsl:pass">
+            <texture name="tex glow" destination="in_texGlow" />
+          </block>
+      
+          <block location="cg:fragmentIn">
+	    <uniform type="tex2d" name="texGlow" />
+          </block>
+      
+          <block location="glsl:inputs">
+            <uniform type="tex2d" name="in_texGlow" />
+          </block>
+      
+          <block location="cg:fragmentMain">
+            texGlow = fragmentIn.texGlow;
+          </block>
+
+          <block location="glsl:fragmentMain">
+            #sampler_assign texGlow in_texGlow
+          </block>
+        </input>
+
         <input name="normal" type="normal_camera" defval="0,0,1" />
         <input name="ambient" type="rgb" default="value" defval="0" />
         <input name="shininess" type="float" default="value" defval="32" />
@@ -32,26 +59,42 @@
         <output name="outputDiffuse" type="rgba" />
         <output name="outputNormal"  type="rgba" />
         <output name="outputAmbient" type="rgba" />
+        <output name="outputGlow"    type="rgba" />
 
         <block location="cg:fragmentMain">
           normal = (normalize (normal) + 1) * 0.5;
 
+          <?if vars."tex glow".texture ?>
+            float3 glow = tex2D (texGlow, texCoordGlow).rgb;
+          <?else?>
+            float3 glow = float3(0);
+          <?endif?>
+
           outputDiffuse = float4 (surfaceDiffuse);
-          outputNormal  = float4 (normal.xy, surfaceSpecular.xy);
-          outputAmbient = float4 (ambient,   surfaceSpecular.z);
+          outputNormal  = float4 (normal.xy, shininess, surfaceSpecular.x);
+          outputAmbient = float4 (ambient,   surfaceSpecular.y);
+          outputGlow    = float4 (glow,      surfaceSpecular.z);
         </block>
         <block location="glsl:fragmentMain">
+          <?if vars."tex glow".texture ?>
+            vec3 glow = texture2D (texGlow, texCoordGlow).rgb;
+          <?else?>
+            vec3 glow = vec3(0);
+          <?endif?>
+
           normal = (normalize (normal) + 1) * 0.5;
 
           outputDiffuse = vec4 (surfaceDiffuse);
-          outputNormal  = vec4 (normal.xy, surfaceSpecular.xy);
-          outputAmbient = vec4 (ambient,   surfaceSpecular.z);
+          outputNormal  = vec4 (normal.xy, shininess, surfaceSpecular.x);
+          outputAmbient = vec4 (ambient,   surfaceSpecular.y);
+          outputGlow    = vec4 (glow,      surfaceSpecular.z);
         </block>
       </technique>
     </snippet>
 
     <output snippet="fill_gbuffer" name="outputDiffuse" to="color0" />
-    <output snippet="fill_gbuffer" name="outputNormal" to="color1" />
+    <output snippet="fill_gbuffer" name="outputNormal"  to="color1" />
     <output snippet="fill_gbuffer" name="outputAmbient" to="color2" />
+    <output snippet="fill_gbuffer" name="outputGlow"    to="color3" />
   </technique>
 </snippet>
