@@ -173,6 +173,33 @@ CS_PLUGIN_NAMESPACE_BEGIN(RMDeferred)
       iCamera *cam = rview->GetCamera ();
       iClipper2D *clipper = rview->GetClipper ();
 
+      // Any rendering required for visculling needs to be done once only per sector.
+      {
+        graphics3D->SetProjectionMatrix (context->perspectiveFixup * cam->GetProjectionMatrix ());
+        graphics3D->SetClipper (clipper, CS_CLIPPER_TOPLEVEL);
+
+        int drawFlags = CSDRAW_3DGRAPHICS | context->drawFlags;
+        drawFlags |= CSDRAW_CLEARSCREEN | CSDRAW_CLEARZBUFFER;
+        graphics3D->BeginDraw (drawFlags);
+
+        graphics3D->SetZMode (CS_ZBUF_MESH);
+
+        csArray<iSector*> sectors;
+        for (size_t c = 0; c < contextStack.GetSize (); ++c)
+        {
+          typename RenderTree::ContextNode* ctx = contextStack[c];
+
+          size_t numSectors = sectors.GetSize ();
+          if (sectors.PushSmart (ctx->sector) == numSectors)
+          {
+            graphics3D->SetWorldToCamera (ctx->cameraTransform.GetInverse ());
+            ctx->sector->GetVisibilityCuller ()->RenderViscull (rview, ctx->shadervars);
+          }
+        }
+
+        graphics3D->FinishDraw();
+      }
+
       // Fill the gbuffer
       gbuffer->Attach ();
       {
@@ -186,20 +213,6 @@ CS_PLUGIN_NAMESPACE_BEGIN(RMDeferred)
         graphics3D->SetWorldToCamera (context->cameraTransform.GetInverse ());
 
         graphics3D->SetZMode (CS_ZBUF_MESH);
-
-        // Any rendering required for visculling needs to be done once only per sector.
-        csArray<iSector*> sectors;
-        for (size_t c = 0; c < contextStack.GetSize (); ++c)
-        {
-          typename RenderTree::ContextNode* ctx = contextStack[c];
-
-          size_t numSectors = sectors.GetSize ();
-          if (sectors.PushSmart (ctx->sector) == numSectors)
-          {
-            graphics3D->SetWorldToCamera (ctx->cameraTransform.GetInverse ());
-            ctx->sector->GetVisibilityCuller ()->RenderViscull (rview, ctx->shadervars);
-          }
-        }
 
         meshRender.SetLayer (deferredLayer);
 
