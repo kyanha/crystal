@@ -33,7 +33,8 @@
       </block>
       <block location="glsl:inputs">
         <uniform type="tex2d" name="in_texGBuffer0" />
-      </block>      <block location="cg:variablemap">
+      </block>
+      <block location="cg:variablemap">
         <variablemap variable="projection transform inverse" destination="fragmentIn.ProjInv" />
       </block>
       
@@ -91,6 +92,29 @@
       </block>
     </input>
 
+    <input name="texGBuffer3" type="tex2d" default="complex">
+      <block location="cg:pass">
+        <texture name="tex gbuffer 3" destination="fragmentIn.GBuffer3" />
+      </block>
+      <block location="glsl:pass">
+        <texture name="tex gbuffer 3" destination="in_texGBuffer3" />
+      </block>
+      
+      <block location="cg:fragmentIn">
+        <uniform type="tex2d" name="texGBuffer3" />
+      </block>
+      <block location="glsl:inputs">
+        <uniform type="tex2d" name="in_texGBuffer3" />
+      </block>
+      
+      <block location="cg:fragmentMain">
+        texGBuffer3 = fragmentIn.texGBuffer3;
+      </block>
+      <block location="glsl:fragmentMain">
+        #sampler_assign texGBuffer3 in_texGBuffer3
+      </block>
+    </input>
+
     <input name="texGBufferDepth" type="tex2d" default="complex">
       <block location="cg:pass">
         <texture name="tex gbuffer depth" destination="fragmentIn.GBufferDepth" />
@@ -145,6 +169,7 @@
       normal    = float3(0.0, 0.0, 1.0);
       ambient   = float3(0.0);
       specular  = float3(0.0);
+      glow      = float4(0.0);
       shininess = 0.0;
       position  = positionS;
     </block>
@@ -154,6 +179,7 @@
       normal   = vec3(0.0, 0.0, 1.0);
       ambient  = vec3(0.0);
       specular = vec3(0.0);
+      glow     = vec4(0.0);
       shininess = 0.0;
       position = positionS;
     </block>
@@ -165,19 +191,22 @@
       float4 gBuffer0     = tex2D (texGBuffer0,     texCoord);
       float4 gBuffer1     = tex2D (texGBuffer1,     texCoord);
       float4 gBuffer2     = tex2D (texGBuffer2,     texCoord);
+      float4 gBuffer3     = tex2D (texGBuffer3,     texCoord);
       float  gBufferDepth = tex2D (texGBufferDepth, texCoord).x;
 
       diffuse   = gBuffer0;
       diffuse_attr_perfragment = true;
       normal.xy = gBuffer1.xy * 2.0 - 1.0;
-      normal.z  = -sqrt (1.0 - dot (normal.xy, normal.xy));
+      normal.z  = -sqrt (1.0 - saturate(dot (normal.xy, normal.xy)));
       normal_attr_perfragment = true;
-      shininess = 32;
+      shininess = gBuffer1.z;
       shininess_attr_perfragment = true;
       ambient   = gBuffer2.rgb;
       ambient_attr_perfragment = true;
-      specular  = float3(gBuffer1.ba, gBuffer2.a);
+      specular  = float3(gBuffer1.a, gBuffer2.a, gBuffer3.a);
       specular_attr_perfragment = true;
+      glow      = float4(gBuffer3.rgb, 0.0);
+      glow_attr_perfragment = true;
       position  = mul(ProjInv, float4(screenXY.x, -screenXY.y, 1.0 - 2.0 * gBufferDepth, 1.0));
       position /= position.w;
       position_attr_perfragment = true;
@@ -190,19 +219,22 @@
       vec4  gBuffer0     = texture2D (texGBuffer0,     texCoord);
       vec4  gBuffer1     = texture2D (texGBuffer1,     texCoord);
       vec4  gBuffer2     = texture2D (texGBuffer2,     texCoord);
+      vec4  gBuffer3     = texture2D (texGBuffer3,     texCoord);
       float gBufferDepth = texture2D (texGBufferDepth, texCoord).x;
 
       diffuse   = vec4(gBuffer0);
       diffuse_attr_perfragment = true;
       normal.xy = gBuffer1.xy * 2.0 - 1.0;
-      normal.z  = -sqrt (1.0 - dot (normal.xy, normal.xy));
+      normal.z  = -sqrt (1.0 - clamp(dot (normal.xy, normal.xy), 0.0, 1.0));
       normal_attr_perfragment = true;
-      shininess = 32;
+      shininess = gBuffer1.z;
       shininess_attr_perfragment = true;
       ambient   = gBuffer2.rgb;
       ambient_attr_perfragment = true;
-      specular  = vec3(gBuffer1.ba, gBuffer2.a);
+      specular  = vec3(gBuffer1.a, gBuffer2.a, gBuffer3.a);
       specular_attr_perfragment = true;
+      glow      = vec4(gBuffer3.rgb, 0.0);
+      glow_attr_perfragment = true;
       position  = ProjInv * vec4(screenXY.x, -screenXY.y, 1.0 - 2.0 * gBufferDepth, 1.0);
       position /= position.w;
       position_attr_perfragment = true;
@@ -215,6 +247,9 @@
       <attribute name="perfragment" type="bool" />
     </output>
     <output name="specular" type="rgb">
+      <attribute name="perfragment" type="bool" />
+    </output>
+    <output name="glow" type="rgba">
       <attribute name="perfragment" type="bool" />
     </output>
     <output name="shininess" type="float">
