@@ -237,8 +237,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(RMDeferred)
       // Fill the accumulation buffer
       {
         int drawFlags = CSDRAW_3DGRAPHICS | context->drawFlags;
-        drawFlags |=  CSDRAW_CLEARSCREEN;
-        drawFlags &= ~CSDRAW_CLEARZBUFFER;
+        drawFlags |=  CSDRAW_CLEARSCREEN | CSDRAW_CLEARZBUFFER;
 
         graphics3D->BeginDraw (drawFlags);
         graphics3D->SetWorldToCamera (context->cameraTransform.GetInverse ());
