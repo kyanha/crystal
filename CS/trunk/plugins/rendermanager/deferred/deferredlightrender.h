@@ -414,9 +414,6 @@ CS_PLUGIN_NAMESPACE_BEGIN(RMDeferred)
           directionalLightShader);
 
         // Builds the quad.
-        float w = graphics3D->GetDriver2D ()->GetWidth ();
-        float h = graphics3D->GetDriver2D ()->GetHeight ();
-
         quadMesh.meshtype = CS_MESHTYPE_TRIANGLEFAN;
         quadMesh.vertices = nullptr;
         quadMesh.vertexCount = 4;
