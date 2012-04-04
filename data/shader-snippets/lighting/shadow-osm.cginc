@@ -95,15 +95,15 @@ struct ShadowShadowMapDepth : ShadowShadowMap
       position.y > 1 - EPS)
       return 0;
      
-    sum += compareDepth > tex2D(tex, position + float2(-bias, -bias));
-    sum += compareDepth > tex2D(tex, position + float2(-bias, 0));
-    sum += compareDepth > tex2D(tex, position + float2(-bias, bias));
-    sum += compareDepth > tex2D(tex, position + float2(0, -bias));
-    sum += compareDepth > tex2D(tex, position + float2(0, 0));
-    sum += compareDepth > tex2D(tex, position + float2(0, bias));
-    sum += compareDepth > tex2D(tex, position + float2(bias, -bias));
-    sum += compareDepth > tex2D(tex, position + float2(bias, 0));
-    sum += compareDepth > tex2D(tex, position + float2(bias, bias));
+    sum += float(compareDepth > tex2D(tex, position + float2(-bias, -bias)));
+    sum += float(compareDepth > tex2D(tex, position + float2(-bias, 0)));
+    sum += float(compareDepth > tex2D(tex, position + float2(-bias, bias)));
+    sum += float(compareDepth > tex2D(tex, position + float2(0, -bias)));
+    sum += float(compareDepth > tex2D(tex, position + float2(0, 0)));
+    sum += float(compareDepth > tex2D(tex, position + float2(0, bias)));
+    sum += float(compareDepth > tex2D(tex, position + float2(bias, -bias)));
+    sum += float(compareDepth > tex2D(tex, position + float2(bias, 0)));
+    sum += float(compareDepth > tex2D(tex, position + float2(bias, bias)));
     
     sum /= 9.0; 
 
