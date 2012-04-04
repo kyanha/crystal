@@ -55,5 +55,6 @@
 #include "ivaria/terraform.h"
 #include "ivaria/translator.h"
 #include "ivaria/view.h"
+#include "ivaria/blobs.h"
 #endif /* __IVARIA_H__ */
 
