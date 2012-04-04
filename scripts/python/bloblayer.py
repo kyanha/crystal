@@ -22,7 +22,7 @@ from math import sqrt
 
 try:
     from cspace import *
-except:
+except ImportError:
     print "WARNING: Failed to import module cspace"
     traceback.print_exc()
     sys.exit(1) # die!!
@@ -58,7 +58,12 @@ class Coordinate(object):
     def __repr__(self):
         return '('+str(self.x)+','+str(self.y)+')'
     def Interpolate(self,pos2,d):
-        return Coordinate(int(self.x + (pos2.x-self.x)*d), int(self.y + (pos2.y-self.y)*d))
+        return Coordinate(self.x + (pos2.x-self.x)*d, self.y + (pos2.y-self.y)*d)
+    def Distance(self,other):
+        dx = self.x - other.x
+        dy = self.y - other.y
+        return sqrt(dx * dx + dy * dy)
+
     def Get(self):
         return self.x,self.y
     def Set(self,x,y):
@@ -383,13 +388,13 @@ class Blob(MovingObject):
 
     def Move(self,pos):
         self.pos = pos
-        self.csblob.Move(pos.x,pos.y)
+        self.csblob.Move(int(pos.x),int(pos.y))
     def Scale(self,w,h):
         self.w = w
         self.h = h
         self.csblob.Scale(w,h)
     def In(self,pos):
-        return self.csblob.In(pos.x,pos.y)
+        return self.csblob.In(int(pos.x),int(pos.y))
         #return self.inside_algo(self,pos)
 
 #####################################################################
