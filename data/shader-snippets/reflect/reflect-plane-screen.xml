@@ -233,14 +233,14 @@
 
 	<block location="glsl:fragmentMain">
 	  vec3 tc = reflTC.xyw;
-	  float inv_reflW = 1 / reflTC.w;
+	  float inv_reflW = 1.0 / reflTC.w;
 	  
 	  /* The depth offset can mitigate issues from depth precision when large scales
 	     are involved (eg csisland) */
 	  float camDepth = texture2DProj (texReflectDepth, tc).x*-2.0 + 1.0 + (1.0/8388608.0);
 	  vec2 screenPos = (reflTC.xy * reflTC2screen.xy * inv_reflW)+reflTC2screen.zw;
 	  vec4 positionProjected = vec4 (
-	    screenPos.x, screenPos.y, camDepth, 1);
+	    screenPos.x, screenPos.y, camDepth, 1.0);
 	  vec4 positionUnprojectedC = projectedToCamera * positionProjected;
 	  positionUnprojectedC /= positionUnprojectedC.w;
 	  
