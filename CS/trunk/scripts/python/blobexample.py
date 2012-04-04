@@ -50,6 +50,7 @@ class Ball(object):
         x = random.randint(0,self.app.width)
         y = random.randint(0,self.app.height)
         self.desired = Coordinate(x,y)
+        self.nexttime = random.random() * 1.0
 
     def __hash__(self):
         return hash(self.blob)
@@ -57,11 +58,19 @@ class Ball(object):
     def __eq__(self,other):
         return self.blob == other.blob
 
-    def update(self):
-        if random.randint(0,100) == 1:
+    def update(self,elapsed):
+        self.nexttime -= elapsed
+        if self.nexttime <= 0.0:
             self.pick_random_pos()
-        self.imaginarypos = self.imaginarypos.Interpolate(self.desired,.01)
-        self.blob.Move(self.blob.pos.Interpolate(self.imaginarypos,.01))
+
+        distance = self.imaginarypos.Distance(self.desired)
+        if distance > 0.00001:
+            self.imaginarypos = self.imaginarypos.Interpolate(self.desired,900.0*elapsed/distance)
+
+        distance = self.imaginarypos.Distance(self.blob.pos)
+        if distance > 0.00001:
+            self.blob.Move(self.blob.pos.Interpolate(self.imaginarypos,400.0*elapsed/distance))
+
         other = self.app.blobs.CheckCollision(self.blob.csblob)
         if other is not None:
             print 'Bam!'
@@ -119,15 +128,16 @@ class BlobExample(cs.CrystalSpace):
         self.RemoveMovingObject(flare)
 
     def Frame(self):
+        elapsed = self.vc.GetElapsedSeconds()
         for ball in self.balls:
-            ball.update()
+            ball.update(elapsed)
         for ball in self.tocollide:
             pos = ball.blob.pos
             pos.x += ball.w
             pos.y += ball.h
             self.balls.remove(ball)
             ball.destroy()
-            if random.randint(0,5) == 1:
+            if random.randint(0,3) == 1:
                 self.create_balls(pos)
             else:
                 self.start_flare(pos)
