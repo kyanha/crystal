@@ -19,6 +19,7 @@ ARRAY_CHANGE_ALL_TEMPLATE(csCollisionPair)
 %include "ivaria/movierecorder.h"
 %include "ivaria/mapnode.h"
 %include "ivaria/sequence.h"
+%include "ivaria/blobs.h"
 
 %ignore *::Call (const char *name, const char *format, ...);
 %ignore *::Call (const char *name, int &ret, const char *fmt, ...);
