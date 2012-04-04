@@ -174,15 +174,6 @@ public:
  *
  * These meshes are animated by the skeletal animation system (see
  * CS::Animation::iSkeletonFactory) and by morphing (see CS::Mesh::iAnimatedMeshMorphTarget).
- * 
- * To improve the morphing process, mesh factories are segmented into subsets. All
- * vertices of a subset are influenced by the same morph targets (i.e. the offsets
- * corresponding to these vertices in the morph targets are non-zero). All null 
- * entries of a morph target are removed from the offset buffer. Thus, segmentation 
- * into subsets improves memory usage and computational resources since morph targets 
- * are only applied to a vertex when they contain deformations. Subset with index 0
- * regroups the vertices which are not influenced by any morph target and
- * consequently will never be morphed.
  */
 struct iAnimatedMeshFactory : public virtual iBase
 {
@@ -497,8 +488,16 @@ struct iAnimatedMeshFactory : public virtual iBase
 
   /**
    * Create a new user-defined subset and return its index.
+   * 
+   * To improve the morphing process, mesh factories are segmented into subsets. All
+   * vertices of a subset are influenced by the same morph targets (i.e. the offsets
+   * corresponding to these vertices in the morph targets are non-zero). All null 
+   * entries of a morph target are removed from the offset buffer. Thus, segmentation 
+   * into subsets improves memory usage and computational resources since morph targets 
+   * are only applied to a vertex when they contain deformations.
+   * 
    * The first subset (with index 0) regroups the vertices of the mesh object 
-   * which are not influenced by any morph target, e.i. all corresponding 
+   * which are not influenced by any morph target, i.e. all corresponding 
    * offsets are null.
    */
   virtual size_t AddSubset () = 0;
