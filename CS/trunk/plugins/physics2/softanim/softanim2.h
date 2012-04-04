@@ -68,7 +68,7 @@ public:
   virtual const char* Save (iDocumentNode* parent);
 
 private:
-  SoftBodyControlType* type;
+  csRef<SoftBodyControlType> type;
 
 };
 
