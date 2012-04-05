@@ -211,6 +211,14 @@ struct iBlobViewPort : public virtual iBase
 {
   SCF_INTERFACE (iBlobViewPort, 1, 0, 0);
 
+  /**
+   * Set the default scroll speed factor as used by ScrollRelative
+   * and ScrollVisible. Default is 1.0f which is very fast. Bigger numbers
+   * mean the scrolling will take longer.
+   */
+  virtual void SetScrollSpeed (float factor) = 0;
+  virtual float GetScrollSpeed () const = 0;
+
   virtual bool Scroll (int x, int y) = 0;
   virtual int GetScrollX () const = 0;
   virtual int GetScrollY () const = 0;

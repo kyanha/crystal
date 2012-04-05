@@ -327,6 +327,7 @@ public:
   csBlobManager* mgr;
   int x1, y1, x2, y2;
   int scrollx, scrolly;
+  float scrollspeed;
   csArray<iMovingObject*> objects;
 
   float start_scrollx;
@@ -344,10 +345,13 @@ public:
   {
     scrollx = scrolly = 0;
     scroll_total_time = -1.0f;
+    scrollspeed = 1.0f;
   }
   virtual ~csBlobViewPort () { }
   bool Update (csTicks current);
   virtual bool Scroll (int x, int y);
+  virtual void SetScrollSpeed (float factor) { scrollspeed = factor; }
+  virtual float GetScrollSpeed () const { return scrollspeed; }
   virtual int GetScrollX () const { return scrollx; }
   virtual int GetScrollY () const { return scrolly; }
   virtual csTicks ScrollRelative (int dx, int dy);

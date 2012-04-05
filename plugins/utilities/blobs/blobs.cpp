@@ -862,6 +862,7 @@ csTicks csBlobViewPort::InitiateScroll (int newx, int newy)
     scroll_total_time = dist/2.0f;
   else
     scroll_total_time = dist/4.0f;
+  scroll_total_time *= scrollspeed;
   return csTicks (scroll_total_time);
 }
 
