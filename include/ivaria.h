@@ -22,6 +22,7 @@
  * subdirectory of the top Crystal Space include directory.
  */
 #include "cssysdef.h"
+#include "ivaria/blobs.h"
 #include "ivaria/bugplug.h"
 #include "ivaria/bullet.h"
 #include "ivaria/bullet2.h"
@@ -55,6 +56,5 @@
 #include "ivaria/terraform.h"
 #include "ivaria/translator.h"
 #include "ivaria/view.h"
-#include "ivaria/blobs.h"
 #endif /* __IVARIA_H__ */
 
