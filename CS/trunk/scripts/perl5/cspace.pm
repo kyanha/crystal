@@ -8634,6 +8634,303 @@ sub ACQUIRE {
 }
 
 
+############# Class : cspace::iImageModifier ##############
+
+package cspace::iImageModifier;
+use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
+@ISA = qw( cspace::iBase cspace );
+%OWNER = ();
+%ITERATORS = ();
+*GetName = *cspacec::iImageModifier_GetName;
+*Modify = *cspacec::iImageModifier_Modify;
+*scfGetVersion = *cspacec::iImageModifier_scfGetVersion;
+sub DESTROY {
+    return unless $_[0]->isa('HASH');
+    my $self = tied(%{$_[0]});
+    return unless defined $self;
+    delete $ITERATORS{$self};
+    if (exists $OWNER{$self}) {
+        cspacec::delete_iImageModifier($self);
+        delete $OWNER{$self};
+    }
+}
+
+sub DISOWN {
+    my $self = shift;
+    my $ptr = tied(%$self);
+    delete $OWNER{$ptr};
+}
+
+sub ACQUIRE {
+    my $self = shift;
+    my $ptr = tied(%$self);
+    $OWNER{$ptr} = 1;
+}
+
+
+############# Class : cspace::iBlobImage ##############
+
+package cspace::iBlobImage;
+use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
+@ISA = qw( cspace::iBase cspace );
+%OWNER = ();
+%ITERATORS = ();
+*scfGetVersion = *cspacec::iBlobImage_scfGetVersion;
+sub DESTROY {
+    return unless $_[0]->isa('HASH');
+    my $self = tied(%{$_[0]});
+    return unless defined $self;
+    delete $ITERATORS{$self};
+    if (exists $OWNER{$self}) {
+        cspacec::delete_iBlobImage($self);
+        delete $OWNER{$self};
+    }
+}
+
+sub DISOWN {
+    my $self = shift;
+    my $ptr = tied(%$self);
+    delete $OWNER{$ptr};
+}
+
+sub ACQUIRE {
+    my $self = shift;
+    my $ptr = tied(%$self);
+    $OWNER{$ptr} = 1;
+}
+
+
+############# Class : cspace::iMovingObject ##############
+
+package cspace::iMovingObject;
+use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
+@ISA = qw( cspace::iBase cspace );
+%OWNER = ();
+%ITERATORS = ();
+*SetViewPort = *cspacec::iMovingObject_SetViewPort;
+*GetViewPort = *cspacec::iMovingObject_GetViewPort;
+*GetID = *cspacec::iMovingObject_GetID;
+*GetName = *cspacec::iMovingObject_GetName;
+*GetLayer = *cspacec::iMovingObject_GetLayer;
+*Update = *cspacec::iMovingObject_Update;
+*Draw = *cspacec::iMovingObject_Draw;
+*Move = *cspacec::iMovingObject_Move;
+*Scale = *cspacec::iMovingObject_Scale;
+*In = *cspacec::iMovingObject_In;
+*GetX = *cspacec::iMovingObject_GetX;
+*GetY = *cspacec::iMovingObject_GetY;
+*GetWidth = *cspacec::iMovingObject_GetWidth;
+*GetHeight = *cspacec::iMovingObject_GetHeight;
+*GetRealX = *cspacec::iMovingObject_GetRealX;
+*GetRealY = *cspacec::iMovingObject_GetRealY;
+*Hide = *cspacec::iMovingObject_Hide;
+*Show = *cspacec::iMovingObject_Show;
+*IsHidden = *cspacec::iMovingObject_IsHidden;
+*SetClickable = *cspacec::iMovingObject_SetClickable;
+*IsClickable = *cspacec::iMovingObject_IsClickable;
+*SetLineMover = *cspacec::iMovingObject_SetLineMover;
+*SetPathMover = *cspacec::iMovingObject_SetPathMover;
+*AddPathSegment = *cspacec::iMovingObject_AddPathSegment;
+*scfGetVersion = *cspacec::iMovingObject_scfGetVersion;
+sub DESTROY {
+    return unless $_[0]->isa('HASH');
+    my $self = tied(%{$_[0]});
+    return unless defined $self;
+    delete $ITERATORS{$self};
+    if (exists $OWNER{$self}) {
+        cspacec::delete_iMovingObject($self);
+        delete $OWNER{$self};
+    }
+}
+
+sub DISOWN {
+    my $self = shift;
+    my $ptr = tied(%$self);
+    delete $OWNER{$ptr};
+}
+
+sub ACQUIRE {
+    my $self = shift;
+    my $ptr = tied(%$self);
+    $OWNER{$ptr} = 1;
+}
+
+
+############# Class : cspace::iGeom ##############
+
+package cspace::iGeom;
+use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
+@ISA = qw( cspace::iMovingObject cspace );
+%OWNER = ();
+%ITERATORS = ();
+*Box = *cspacec::iGeom_Box;
+*Line = *cspacec::iGeom_Line;
+*Text = *cspacec::iGeom_Text;
+*Blob = *cspacec::iGeom_Blob;
+*Remove = *cspacec::iGeom_Remove;
+*ChangeColor = *cspacec::iGeom_ChangeColor;
+*ChangeText = *cspacec::iGeom_ChangeText;
+*ChangeBlobImage = *cspacec::iGeom_ChangeBlobImage;
+*ScaleGeom = *cspacec::iGeom_ScaleGeom;
+*GetGeomWidth = *cspacec::iGeom_GetGeomWidth;
+*GetGeomHeight = *cspacec::iGeom_GetGeomHeight;
+*scfGetVersion = *cspacec::iGeom_scfGetVersion;
+sub DESTROY {
+    return unless $_[0]->isa('HASH');
+    my $self = tied(%{$_[0]});
+    return unless defined $self;
+    delete $ITERATORS{$self};
+    if (exists $OWNER{$self}) {
+        cspacec::delete_iGeom($self);
+        delete $OWNER{$self};
+    }
+}
+
+sub DISOWN {
+    my $self = shift;
+    my $ptr = tied(%$self);
+    delete $OWNER{$ptr};
+}
+
+sub ACQUIRE {
+    my $self = shift;
+    my $ptr = tied(%$self);
+    $OWNER{$ptr} = 1;
+}
+
+
+############# Class : cspace::iBlob ##############
+
+package cspace::iBlob;
+use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
+@ISA = qw( cspace::iMovingObject cspace );
+%OWNER = ();
+%ITERATORS = ();
+*AddImage = *cspacec::iBlob_AddImage;
+*RemoveSecondaryImages = *cspacec::iBlob_RemoveSecondaryImages;
+*SetModifier = *cspacec::iBlob_SetModifier;
+*ClearModifier = *cspacec::iBlob_ClearModifier;
+*SetAlpha = *cspacec::iBlob_SetAlpha;
+*AnimateAlpha = *cspacec::iBlob_AnimateAlpha;
+*SetHorizontalSwap = *cspacec::iBlob_SetHorizontalSwap;
+*AddAnimationImage = *cspacec::iBlob_AddAnimationImage;
+*PlayAnimation = *cspacec::iBlob_PlayAnimation;
+*StopAnimations = *cspacec::iBlob_StopAnimations;
+*scfGetVersion = *cspacec::iBlob_scfGetVersion;
+sub DESTROY {
+    return unless $_[0]->isa('HASH');
+    my $self = tied(%{$_[0]});
+    return unless defined $self;
+    delete $ITERATORS{$self};
+    if (exists $OWNER{$self}) {
+        cspacec::delete_iBlob($self);
+        delete $OWNER{$self};
+    }
+}
+
+sub DISOWN {
+    my $self = shift;
+    my $ptr = tied(%$self);
+    delete $OWNER{$ptr};
+}
+
+sub ACQUIRE {
+    my $self = shift;
+    my $ptr = tied(%$self);
+    $OWNER{$ptr} = 1;
+}
+
+
+############# Class : cspace::iBlobViewPort ##############
+
+package cspace::iBlobViewPort;
+use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
+@ISA = qw( cspace::iBase cspace );
+%OWNER = ();
+%ITERATORS = ();
+*Scroll = *cspacec::iBlobViewPort_Scroll;
+*GetScrollX = *cspacec::iBlobViewPort_GetScrollX;
+*GetScrollY = *cspacec::iBlobViewPort_GetScrollY;
+*ScrollRelative = *cspacec::iBlobViewPort_ScrollRelative;
+*ScrollVisible = *cspacec::iBlobViewPort_ScrollVisible;
+*ClearModifier = *cspacec::iBlobViewPort_ClearModifier;
+*SetModifier = *cspacec::iBlobViewPort_SetModifier;
+*scfGetVersion = *cspacec::iBlobViewPort_scfGetVersion;
+sub DESTROY {
+    return unless $_[0]->isa('HASH');
+    my $self = tied(%{$_[0]});
+    return unless defined $self;
+    delete $ITERATORS{$self};
+    if (exists $OWNER{$self}) {
+        cspacec::delete_iBlobViewPort($self);
+        delete $OWNER{$self};
+    }
+}
+
+sub DISOWN {
+    my $self = shift;
+    my $ptr = tied(%$self);
+    delete $OWNER{$ptr};
+}
+
+sub ACQUIRE {
+    my $self = shift;
+    my $ptr = tied(%$self);
+    $OWNER{$ptr} = 1;
+}
+
+
+############# Class : cspace::iBlobManager ##############
+
+package cspace::iBlobManager;
+use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
+@ISA = qw( cspace::iBase cspace );
+%OWNER = ();
+%ITERATORS = ();
+*Update = *cspacec::iBlobManager_Update;
+*GetGrayScaleImageModifier = *cspacec::iBlobManager_GetGrayScaleImageModifier;
+*GetColorizedImageModifier = *cspacec::iBlobManager_GetColorizedImageModifier;
+*GetBlurImageModifier = *cspacec::iBlobManager_GetBlurImageModifier;
+*GetCombinedImageModifier = *cspacec::iBlobManager_GetCombinedImageModifier;
+*LoadTexture = *cspacec::iBlobManager_LoadTexture;
+*MapTexture = *cspacec::iBlobManager_MapTexture;
+*CreateBlobViewPort = *cspacec::iBlobManager_CreateBlobViewPort;
+*FindMovingObject = *cspacec::iBlobManager_FindMovingObject;
+*CreateBlobImage = *cspacec::iBlobManager_CreateBlobImage;
+*RemoveBlobImage = *cspacec::iBlobManager_RemoveBlobImage;
+*RemoveBlobImages = *cspacec::iBlobManager_RemoveBlobImages;
+*FindBlobImage = *cspacec::iBlobManager_FindBlobImage;
+*CreateBlob = *cspacec::iBlobManager_CreateBlob;
+*CreateGeom = *cspacec::iBlobManager_CreateGeom;
+*RemoveMovingObject = *cspacec::iBlobManager_RemoveMovingObject;
+*RemoveMovingObjects = *cspacec::iBlobManager_RemoveMovingObjects;
+*MovingObjectToFront = *cspacec::iBlobManager_MovingObjectToFront;
+*CheckCollision = *cspacec::iBlobManager_CheckCollision;
+*scfGetVersion = *cspacec::iBlobManager_scfGetVersion;
+sub DESTROY {
+    return unless $_[0]->isa('HASH');
+    my $self = tied(%{$_[0]});
+    return unless defined $self;
+    delete $ITERATORS{$self};
+    if (exists $OWNER{$self}) {
+        cspacec::delete_iBlobManager($self);
+        delete $OWNER{$self};
+    }
+}
+
+sub DISOWN {
+    my $self = shift;
+    my $ptr = tied(%$self);
+    delete $OWNER{$ptr};
+}
+
+sub ACQUIRE {
+    my $self = shift;
+    my $ptr = tied(%$self);
+    $OWNER{$ptr} = 1;
+}
+
+
 ############# Class : cspace::iScriptValue ##############
 
 package cspace::iScriptValue;
