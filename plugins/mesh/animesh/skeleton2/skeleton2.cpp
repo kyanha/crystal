@@ -143,8 +143,8 @@ CS_PLUGIN_NAMESPACE_BEGIN(Skeleton2)
     if (bone == allBones.GetSize () - 1)
     {
       // Find the index of the first bone still allocated
-      size_t index = bone - 1;
-      while (index && !allBones[index].created)
+      size_t index = bone;
+      while (index-1 && !allBones[index-1].created)
 	index--;
 
       allBones.SetSize (index);
