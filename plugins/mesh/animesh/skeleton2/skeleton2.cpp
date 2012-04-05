@@ -140,10 +140,15 @@ CS_PLUGIN_NAMESPACE_BEGIN(Skeleton2)
     CS_ASSERT(bone < allBones.GetSize () && allBones[bone].created);
 
     // If the bone is the last of the list then resize the list
-    if (bone == allBones.GetSize ()-1)
+    if (bone == allBones.GetSize () - 1)
     {
-      allBones.SetSize (bone);
-      boneNames.SetSize (bone);
+      // Find the index of the first bone still allocated
+      size_t index = bone;
+      while (index && !allBones[index].created)
+	index--;
+
+      allBones.SetSize (index);
+      boneNames.SetSize (index);
     }
 
     // Else mark the bone as deleted
