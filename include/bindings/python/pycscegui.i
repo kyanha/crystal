@@ -34,6 +34,10 @@
 %{
 #include "crystalspace.h"
 #include "ivaria/icegui.h"
+
+// Deprecated gmeshskelanim interfaces
+#include "imesh/gmeshskel2.h"
+#include "imesh/skeleton.h"
 %}
 
 INTERFACE_PRE(iCEGUI);
