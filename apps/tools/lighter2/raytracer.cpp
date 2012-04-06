@@ -196,8 +196,6 @@ namespace lighter
         //float thit = (node->inner.splitLocation - ray.origin[dim]) / ray.direction[dim];
         const float thit = (node->inner.splitLocation - ray.origin[dim]) * state.invD[dim];
 
-        const csVector3 hitPoint = myRay.origin + myRay.direction * thit;
-
         KDTreeNode *nearNode, *farNode, *leftNode;
         leftNode = KDTreeNode_Op::GetLeft (node);
 
