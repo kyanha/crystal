@@ -439,7 +439,7 @@ struct SoftBodyHelper
 
     // Create the vertices of the genmesh
     size_t vertexCount = cloth->GetVertexCount ();
-    gmstate->SetVertexCount (vertexCount * 2);
+    gmstate->SetVertexCount (int (vertexCount * 2));
     csVector3* vertices = gmstate->GetVertices ();
     for (size_t i = 0; i < vertexCount; i++)
     {
@@ -448,15 +448,15 @@ struct SoftBodyHelper
     }
 
     // Create the triangles of the genmesh
-    gmstate->SetTriangleCount (cloth->GetTriangleCount () * 2);
+    gmstate->SetTriangleCount (int (cloth->GetTriangleCount ()) * 2);
     csTriangle* triangles = gmstate->GetTriangles ();
     for (size_t i = 0; i < cloth->GetTriangleCount (); i++)
     {
       csTriangle triangle = cloth->GetTriangle (i);
       triangles[i * 2] = triangle;
-      triangles[i * 2 + 1] = csTriangle (triangle[2] + vertexCount,
-					 triangle[1] + vertexCount,
-					 triangle[0] + vertexCount);
+      triangles[i * 2 + 1] = csTriangle (int (triangle[2] + vertexCount),
+					 int (triangle[1] + vertexCount),
+					 int (triangle[0] + vertexCount));
     }
 
     gmstate->CalculateNormals ();
