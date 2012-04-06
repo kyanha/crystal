@@ -184,7 +184,7 @@ namespace lighter
     size_t storedPhotons;     ///< Number of photons stored in the internal array
     size_t halfStoredPhotons; ///< Half the photons stored in the internal array
     size_t maxPhotons;        ///< Allocated size of internal array
-    int prevScale;            ///< Index of the last photon scaled with ScalePhotonPower
+    size_t prevScale;         ///< Index of the last photon scaled with ScalePhotonPower
     float coneK;              ///< K factor used to control cone filter
 
     float bboxMin[3];         ///< Minimum value in each dimension for bounding box computation

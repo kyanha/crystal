@@ -1186,7 +1186,7 @@ CS::Physics::iRigidBody* Simple::SpawnBox (bool setVelocity /* = true */)
   // Create and attach a box collider.
   csVector3 size (0.4f, 0.8f, 0.4f); // This should be the same size as the mesh
   csRef<CS::Collisions::iColliderBox> box = collisionSystem->CreateColliderBox (size);
-  box->SetMargin (0.05);
+  box->SetMargin (0.05f);
   rb->AddCollider (box, localTrans);
   rb->SetDensity (1.0f);
   rb->SetElasticity (0.8f);
@@ -1280,8 +1280,8 @@ CS::Physics::iRigidBody* Simple::SpawnCone (bool setVelocity /* = true */)
   // Use the camera transform.
   const csOrthoTransform& tc = view->GetCamera ()->GetTransform ();
 
-  const float radius (0.4);
-  const float length (0.8);
+  const float radius (0.4f);
+  const float length (0.8f);
 
   // We do a hardtransform here to make sure our cylinder has an artificial
   // offset. That way we can test if the physics engine supports that.
@@ -2373,7 +2373,7 @@ void Simple::CreateBoxRoom ()
   rb->SetState (CS::Physics::STATE_STATIC);
 
   // Set up some lights
-  room->SetDynamicAmbientLight (csColor (0.3, 0.3, 0.3));
+  room->SetDynamicAmbientLight (csColor (0.3f, 0.3f, 0.3f));
 
   csRef<iLight> light;
   iLightList* lightList = room->GetLights ();
@@ -2526,7 +2526,7 @@ void Simple::CreatePortalRoom ()
 					      csVector3 (0.0f, -4.999f, -1.0f))).GetInverse(), true);
 
   // Set up some lights
-  room->SetDynamicAmbientLight (csColor (0.3, 0.3, 0.3));
+  room->SetDynamicAmbientLight (csColor (0.3f, 0.3f, 0.3f));
 
   csRef<iLight> light;
   iLightList* lightList = room->GetLights ();

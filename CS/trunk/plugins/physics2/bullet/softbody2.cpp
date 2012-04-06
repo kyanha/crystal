@@ -218,7 +218,7 @@ void csBulletSoftBody::SetLinearVelocity (const csVector3& vel)
 csVector3 csBulletSoftBody::GetLinearVelocity (size_t index /* = 0 */) const
 {
   CS_ASSERT ( btBody && index < (size_t) btBody->m_nodes.size ());
-  return BulletToCS (btBody->m_nodes[index].m_v, system->getInverseInternalScale ());
+  return BulletToCS (btBody->m_nodes[int (index)].m_v, system->getInverseInternalScale ());
 }
 
 void csBulletSoftBody::SetFriction (float friction)
@@ -232,13 +232,13 @@ void csBulletSoftBody::SetFriction (float friction)
 void csBulletSoftBody::SetVertexMass (float mass, size_t index)
 {
   CS_ASSERT (btBody);
-  btBody->setMass (index, mass);
+  btBody->setMass (int (index), mass);
 }
 
 float csBulletSoftBody::GetVertexMass (size_t index)
 {
   CS_ASSERT (btBody);
-  return btBody->getMass (index);
+  return btBody->getMass (int (index));
 }
 
 size_t csBulletSoftBody::GetVertexCount ()
@@ -250,13 +250,13 @@ size_t csBulletSoftBody::GetVertexCount ()
 csVector3 csBulletSoftBody::GetVertexPosition (size_t index) const
 {
   CS_ASSERT(btBody && index < (size_t) btBody->m_nodes.size ());
-  return BulletToCS (btBody->m_nodes[index].m_x, system->getInverseInternalScale ());
+  return BulletToCS (btBody->m_nodes[int (index)].m_x, system->getInverseInternalScale ());
 }
 
 void csBulletSoftBody::AnchorVertex (size_t vertexIndex)
 {
   CS_ASSERT(vertexIndex < (size_t) btBody->m_nodes.size ());
-  btBody->setMass (vertexIndex, 0.0f);
+  btBody->setMass (int (vertexIndex), 0.0f);
   anchorCount ++;
 }
 
@@ -266,7 +266,7 @@ void csBulletSoftBody::AnchorVertex (size_t vertexIndex, iRigidBody* body)
   CS_ASSERT(rigidBody
     && vertexIndex < (size_t) this->btBody->m_nodes.size ()
     && rigidBody->btBody);
-  this->btBody->appendAnchor (vertexIndex, rigidBody->btBody);
+  this->btBody->appendAnchor (int (vertexIndex), rigidBody->btBody);
   anchorCount ++;
   rigidBody->anchorCount ++;
 }
@@ -286,7 +286,7 @@ void csBulletSoftBody::UpdateAnchor (size_t vertexIndex, csVector3& position)
 
   // Update the local position of the anchor
   for (int i = 0; i < this->btBody->m_anchors.size (); i++)
-    if (this->btBody->m_anchors[i].m_node == &this->btBody->m_nodes[vertexIndex])
+    if (this->btBody->m_anchors[i].m_node == &this->btBody->m_nodes[int (vertexIndex)])
     {
       this->btBody->m_anchors[i].m_local =
         this->btBody->m_anchors[i].m_body->getInterpolationWorldTransform ().inverse ()
@@ -300,9 +300,9 @@ void csBulletSoftBody::RemoveAnchor (size_t vertexIndex)
   CS_ASSERT(vertexIndex < (size_t) btBody->m_nodes.size ());
 
   // Check if it is a fixed anchor
-  if (btBody->getMass (vertexIndex) < SMALL_EPSILON)
+  if (btBody->getMass (int (vertexIndex)) < SMALL_EPSILON)
   {
-    btBody->setMass (vertexIndex, btBody->getTotalMass () / btBody->m_nodes.size ());
+    btBody->setMass (int (vertexIndex), btBody->getTotalMass () / btBody->m_nodes.size ());
     anchorCount --;
     return;
   }
@@ -323,7 +323,7 @@ void csBulletSoftBody::RemoveAnchor (size_t vertexIndex)
 
   // Check if it is a simple 'rigid body' anchor
   for (int i = 0; i < this->btBody->m_anchors.size (); i++)
-    if (this->btBody->m_anchors[i].m_node == &this->btBody->m_nodes[vertexIndex])
+    if (this->btBody->m_anchors[i].m_node == &this->btBody->m_nodes[int (vertexIndex)])
     {
       // TODO: this is not possible within Bullet
       //btSoftBody::Anchor* anchor = this->body->m_anchors[i];
@@ -349,7 +349,7 @@ void csBulletSoftBody::SetLinearVelocity (const csVector3& velocity, size_t vert
 {
   CS_ASSERT (vertexIndex < (size_t) btBody->m_nodes.size ());
   btBody->addVelocity (CSToBullet (velocity, system->getInternalScale ())
-    - btBody->m_nodes[vertexIndex].m_v, vertexIndex);
+    - btBody->m_nodes[int (vertexIndex)].m_v, int (vertexIndex));
 }
 
 void csBulletSoftBody::SetWindVelocity (const csVector3& velocity)
@@ -370,7 +370,8 @@ void csBulletSoftBody::AddForce (const csVector3& force, size_t vertexIndex)
 {
   CS_ASSERT (vertexIndex < (size_t) btBody->m_nodes.size());
   //TODO: in softbodies.cpp the force was multiplied by 100, why?
-  btBody->addForce (CSToBullet (force, system->getInternalScale () * system->getInternalScale ()), vertexIndex);
+  btBody->addForce (CSToBullet (force, system->getInternalScale () * system->getInternalScale ()),
+    int (vertexIndex));
 }
 
 size_t csBulletSoftBody::GetTriangleCount ()
@@ -382,7 +383,7 @@ size_t csBulletSoftBody::GetTriangleCount ()
 csTriangle csBulletSoftBody::GetTriangle (size_t index) const
 {
   CS_ASSERT(index < (size_t) btBody->m_faces.size ());
-  btSoftBody::Face& face = btBody->m_faces[index];
+  btSoftBody::Face& face = btBody->m_faces[int (index)];
   return csTriangle (face.m_n[0] - &btBody->m_nodes[0],
     face.m_n[1] - &btBody->m_nodes[0],
     face.m_n[2] - &btBody->m_nodes[0]);
@@ -391,9 +392,9 @@ csTriangle csBulletSoftBody::GetTriangle (size_t index) const
 csVector3 csBulletSoftBody::GetVertexNormal (size_t index) const
 {
   CS_ASSERT(index < (size_t) btBody->m_nodes.size ());
-  csVector3 normal (btBody->m_nodes[index].m_n.getX (),
-    btBody->m_nodes[index].m_n.getY (),
-    btBody->m_nodes[index].m_n.getZ ());
+  csVector3 normal (btBody->m_nodes[int (index)].m_n.getX (),
+    btBody->m_nodes[int (index)].m_n.getY (),
+    btBody->m_nodes[int (index)].m_n.getZ ());
   normal.Normalize ();
   return normal;
 }
@@ -663,11 +664,11 @@ void csBulletSoftBody::UpdateAnchorInternalTick (btScalar timeStep)
   {
     AnimatedAnchor& anchor = it.Next ();
 
-    btVector3 delta = anchor.position - btBody->m_nodes[anchor.vertexIndex].m_x;
+    btVector3 delta = anchor.position - btBody->m_nodes[int (anchor.vertexIndex)].m_x;
     static const btScalar maxdrag = 10;
     if (delta.length2 () > maxdrag * maxdrag)
       delta = delta.normalized() * maxdrag;
-    btBody->m_nodes[anchor.vertexIndex].m_v += delta / timeStep;
+    btBody->m_nodes[int (anchor.vertexIndex)].m_v += delta / timeStep;
   }  
 }
 }

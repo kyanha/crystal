@@ -1772,9 +1772,9 @@ void csBulletSystem::DecomposeConcaveMesh (CS::Collisions::iCollisionObject* obj
   csVector3 *c_vertex = triMesh->GetVertices ();
 
   ConvexDecomposition::DecompDesc desc;
-  desc.mVcount       = triMesh->GetVertexCount ();
+  desc.mVcount       = uint (triMesh->GetVertexCount ());
   desc.mVertices     = (float*)c_vertex;
-  desc.mTcount       = triMesh->GetTriangleCount ();
+  desc.mTcount       = uint (triMesh->GetTriangleCount ());
   desc.mIndices      = (unsigned int *)c_triangle;
   desc.mDepth        = depth;
   desc.mCpercent     = cpercent;
@@ -1958,7 +1958,7 @@ csRef<CS::Physics::iSoftBody> csBulletSystem::CreateRope (csVector3 start,
   
   btSoftBody* body = btSoftBodyHelpers::CreateRope
     (*defaultInfo, CSToBullet (start, internalScale),
-    CSToBullet (end, internalScale), segmentCount - 1, 0);
+    CSToBullet (end, internalScale), int (segmentCount) - 1, 0);
 
   //hard-coded parameters for hair ropes
   body->m_cfg.kDP = 0.08f; // no elasticity
@@ -1983,11 +1983,11 @@ csRef<CS::Physics::iSoftBody> csBulletSystem::CreateRope (csVector3* vertices, s
     materials[i] = 1;
   }
 
-  btSoftBody* body = new btSoftBody(NULL, vertexCount, &nodes[0], &materials[0]);
+  btSoftBody* body = new btSoftBody(NULL, int (vertexCount), &nodes[0], &materials[0]);
 
   // Create the links between the nodes
   for (size_t i = 1; i < vertexCount; i++)
-    body->appendLink (i - 1, i);
+    body->appendLink (int (i - 1), int (i));
 
   //hard-coded parameters for hair ropes
   body->m_cfg.kDP = 0.08f; // no elasticity
@@ -2009,7 +2009,7 @@ csRef<CS::Physics::iSoftBody> csBulletSystem::CreateCloth (csVector3 corner1, cs
   btSoftBody* body = btSoftBodyHelpers::CreatePatch
     (*defaultInfo, CSToBullet (corner1, internalScale),
     CSToBullet (corner2, internalScale), CSToBullet (corner3, internalScale),
-    CSToBullet (corner4, internalScale), segmentCount1, segmentCount2, 0,
+    CSToBullet (corner4, internalScale), int (segmentCount1), int (segmentCount2), 0,
     withDiagonals);
   body->m_cfg.collisions |= btSoftBody::fCollision::VF_SS;
 
@@ -2081,7 +2081,7 @@ csRef<CS::Physics::iSoftBody> csBulletSystem::CreateSoftBody (csVector3* vertice
   }
 
   btSoftBody* body = btSoftBodyHelpers::CreateFromTriMesh
-    (*defaultInfo, btVertices, btTriangles, triangleCount, false);
+    (*defaultInfo, btVertices, btTriangles, int (triangleCount), false);
 
   body->m_cfg.piterations = 10;
   body->m_cfg.collisions |=	btSoftBody::fCollision::SDF_RS;
