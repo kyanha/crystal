@@ -1113,8 +1113,9 @@ iShaderProgram::CacheLoadResult csXMLShaderTech::LoadPassFromCache (
   hlp.strings = parent->compiler->strings;
   hlp.stringsSvName = parent->compiler->stringsSvName;
 
+  int passNum (GetPassNumber (pass));
   //if we got this far, load buffermappings
-  if (!ParseBuffers (*pass, GetPassNumber (pass),
+  if (!ParseBuffers (*pass, passNum,
       node, hlp, resolveFP, resolveVP))
     return iShaderProgram::loadFail;
 
@@ -1122,6 +1123,10 @@ iShaderProgram::CacheLoadResult csXMLShaderTech::LoadPassFromCache (
   if (!ParseTextures (*pass, node, hlp, resolveFP))
     return iShaderProgram::loadFail;
 
+  // Load pseudo-instancing binds
+  if (!ParseInstances (*pass, passNum, node, hlp, resolveFP, resolveVP))
+    return iShaderProgram::loadFail;
+  
   return iShaderProgram::loadSuccessShaderValid;
 }
 
