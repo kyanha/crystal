@@ -78,8 +78,10 @@ public:
                            const csShaderVariableStack &stack);
 
   // wrapper specific functions: set vertex/fragment shaders
-  void SetVP (csRef<iShaderProgram> vp);
-  void SetFP (csRef<iShaderProgram> fp);
+  void SetVP (iShaderProgram* vp);
+  iShaderProgram* GetVP() { return vp; }
+  void SetFP (iShaderProgram* fp);
+  iShaderProgram* GetFP() { return fp; }
 
   iShaderProgram::CacheLoadResult LoadVPFromCache (
     csXMLShaderTech *tech,

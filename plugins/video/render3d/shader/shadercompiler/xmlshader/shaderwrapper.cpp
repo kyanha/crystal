@@ -95,12 +95,12 @@ void csXMLShaderWrapper::SetupState (const CS::Graphics::RenderMesh *mesh,
   if (fp) fp->SetupState (mesh, modes, stack);
 }
 
-void csXMLShaderWrapper::SetVP (csRef<iShaderProgram> vp)
+void csXMLShaderWrapper::SetVP (iShaderProgram* vp)
 {
   this->vp = vp;
 }
 
-void csXMLShaderWrapper::SetFP (csRef<iShaderProgram> fp)
+void csXMLShaderWrapper::SetFP (iShaderProgram* fp)
 {
   this->fp = fp;
 }
