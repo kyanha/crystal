@@ -24,21 +24,15 @@ Crystal Space supports progressive LODs for genmeshes.
 The steps to create a genmesh with progressive LOD support in Crystal Space are
 described below.
 
-@itemize
+@itemize @bullet
 @item
-
-Create a mesh in your favorite modeling tool and export it to Crystal Space's
-xml format.
-
+Create a mesh in your favorite modeling tool and export it to the Crystal Space's
+XML format.
 @item
-
-Use the @emph{lod} command line tool to apply LOD processing to this mesh. The
+Use the @file{cslodgen} command line tool to apply LOD processing to this mesh. The
 result is typically saved into a new file. See below for details.
-
 @item
-
-Test the generated mesh in @emph{lodview}.
-
+Test the generated mesh in @file{cslodview}.
 @item
 
 Add C++ commands to your application to either enable automatic LODs or choose a
@@ -48,11 +42,11 @@ information is loaded with your meshes.
 
 @end itemize
 
-@subsubheading The @emph{lod} tool
+@subsubheading The @file{cslodgen} tool
 
-The @emph{lod} tool processes a mesh and generates progressive LODs for it. The
-results can be saved to a new file, which will contain the original mesh and all
-low LOD representations of it.
+The @file{cslodgen} tool processes a mesh and generates progressive LODs for it. The
+results can be saved to a new file, which will contain the original mesh and allow
+LOD representations of it.
 
 The tool works by selecting the best collapse to perform at each collapse step.
 At the end, it stores information on the mesh that defines the order of
@@ -60,16 +54,16 @@ collapses. Selecting the best collapse is done by performing many collapses on a
 copy of the original mesh and using a heuristic to test how much different the
 collapsed mesh is from the original mesh.
 
-The @emph{lod} tool source is in @file{apps/tools/lod}. You can test it by using
+The @file{cslodgen} tool source is in @file{apps/tools/lod}. You can test it by using
 sample data in @file{/data/lodtest} (mounted in VFS in @file{/lev/lodtest}).
 
-This is a typical usage example of the @emph{lod} tool:
+This is a typical usage example of the @file{cslodgen} tool:
 
 @example
 lod -i=/lev/lodtest/lodbarrel -mindist=5 -maxdist=50
 @end example
 
-These are the command line options for the @emph{lod} tool:
+These are the command line options for the @file{cslodgen} tool:
 
 @example
 lod -i=<input_file> -o=<output_file> -mindist=d -maxdist=d [-em=<fast|precise>]
@@ -86,15 +80,15 @@ lod -i=<input_file> -o=<output_file> -mindist=d -maxdist=d [-em=<fast|precise>]
 
 @end example
 
-@itemize
+@itemize @bullet
 @item
 
-@b{<input_file>}: It can be either a Crystal Space mesh or library file, or a
+@b{-i=<input_file>}: It can be either a Crystal Space mesh or library file, or a
 zip file containing a world file.
 
 @item
 
-@b{<output_file>}: The destination file. If not provided, the tool will append
+@b{-o=<output_file>}: The destination file. If not provided, the tool will append
 _lod to the name of the input file.
 
 @item
@@ -132,16 +126,16 @@ existing file-specified distances.
 
 @end itemize
 
-@subsubheading The @emph{lodview} tool
+@subsubheading The @file{cslodview} tool
 
-The @emph{lodview} tool allows visualizing and changing LOD levels in order to
+The @file{cslodview} tool allows visualizing and changing LOD levels in order to
 test the results. Here are the command line parameters:
 
 @example
-lodview <filename> [-m=<num>] -adap
+cslodview <filename> [-m=<num>] -adap
 
-  -m=<num>   multiple sprites, large room (will show num^2 sprites)
-  -adap      adaptive LODs (best if used with -m)
+-m=<num>   multiple sprites, large room (will show num^2 sprites)
+-adap      adaptive LODs (best if used with -m)
 @end example
 
 If adaptive LODs are used, the system will try to keep a frame rate close to 30
@@ -149,15 +143,17 @@ fps by biasing the LOD levels of the rendered models.
 
 When viewing the model, use the following keys:
 
-@example
-  'k' / 'l':  increase/reduce LOD resolution, to manually view LOD levels.
-  'a':  toggle auto LODs based on distance.
-@end example
+@itemize @bullet
+@item
+'k' / 'l':  increase/reduce LOD resolution, to manually view LOD levels.
+@item
+'a':  toggle auto LODs based on distance.
+@end itemize
 
 @subsubheading The XML LOD tags
 
 The LOD tags reside inside the <params> section of a genmesh factory. The
-example below shows a typical output file from the @emph{lod} tool.
+example below shows a typical output file from the @file{cslodgen} tool.
 
 @example
 <meshfact name="@dots{}">
@@ -195,7 +191,7 @@ to a distance in which the model is tiny on screen. If you look at the
 lowest-resolution LODs of your model up close, the results will look bad ---
 remember, it was designed to be seen from very far away.
 
-The @emph{lod} tool works on each submesh of the model separately. It can
+The @file{cslodgen} tool works on each submesh of the model separately. It can
 potentially change the bounded volume of your submesh. This means that, if you
 have a model that has two submeshes touching each other, they will probably not
 be touching each other anymore at the lowest resolutions. If this is your case
@@ -207,7 +203,7 @@ them into a single submesh.
 A CS application talks with the progressive LOD system through the following
 interfaces:
 
-@itemize
+@itemize @bullet
 @item
 iEngine
 @item
@@ -222,7 +218,7 @@ iGeneralFactoryState
 
 Please refer to the API documentation of these interfaces for details.
 
-Examining the @emph{lodview} source code in @file{apps/tools/lod/LodView.cpp|h}
+Examining the @file{cslodview} source code in @file{apps/tools/lod/lodview.cpp|h}
 is a good way to learn the progressive LOD API.
 
 
