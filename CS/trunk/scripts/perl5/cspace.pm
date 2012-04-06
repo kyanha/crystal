@@ -8848,6 +8848,8 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 @ISA = qw( cspace::iBase cspace );
 %OWNER = ();
 %ITERATORS = ();
+*SetScrollSpeed = *cspacec::iBlobViewPort_SetScrollSpeed;
+*GetScrollSpeed = *cspacec::iBlobViewPort_GetScrollSpeed;
 *Scroll = *cspacec::iBlobViewPort_Scroll;
 *GetScrollX = *cspacec::iBlobViewPort_GetScrollX;
 *GetScrollY = *cspacec::iBlobViewPort_GetScrollY;
