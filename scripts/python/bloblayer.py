@@ -318,11 +318,17 @@ class Blob(MovingObject):
     def __eq__(self,other):
         if other is None:
             return False
-        if self.csblob is None and other.csblob is None:
+        if self is other:
             return True
-        if self.csblob is None or other.csblob is None:
+        try:
+            othercsblob = other.csblob
+        except AttributeError:
+            othercsblob = None
+        if self.csblob is None and othercsblob is None:
+            return True
+        if self.csblob is None or othercsblob is None:
             return False
-        return self.csblob.GetID () == other.csblob.GetID ()
+        return self.csblob.GetID () == othercsblob.GetID ()
 
     def GetRealPos(self):
         x = self.csblob.GetRealX()
