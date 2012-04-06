@@ -1406,6 +1406,8 @@ class iBlobViewPort(core.iBase):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
     def __init__(self, *args, **kwargs): raise AttributeError, "No constructor defined"
     __repr__ = _swig_repr
+    def SetScrollSpeed(*args): return _ivaria.iBlobViewPort_SetScrollSpeed(*args)
+    def GetScrollSpeed(*args): return _ivaria.iBlobViewPort_GetScrollSpeed(*args)
     def Scroll(*args): return _ivaria.iBlobViewPort_Scroll(*args)
     def GetScrollX(*args): return _ivaria.iBlobViewPort_GetScrollX(*args)
     def GetScrollY(*args): return _ivaria.iBlobViewPort_GetScrollY(*args)

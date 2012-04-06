@@ -38905,6 +38905,58 @@ SWIGINTERN PyObject *iBlob_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject
   return SWIG_Py_Void();
 }
 
+SWIGINTERN PyObject *_wrap_iBlobViewPort_SetScrollSpeed(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  iBlobViewPort *arg1 = (iBlobViewPort *) 0 ;
+  float arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  float val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"iBlobViewPort_SetScrollSpeed",2,2,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_iBlobViewPort, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "iBlobViewPort_SetScrollSpeed" "', argument " "1"" of type '" "iBlobViewPort *""'"); 
+  }
+  arg1 = reinterpret_cast< iBlobViewPort * >(argp1);
+  ecode2 = SWIG_AsVal_float(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "iBlobViewPort_SetScrollSpeed" "', argument " "2"" of type '" "float""'");
+  } 
+  arg2 = static_cast< float >(val2);
+  (arg1)->SetScrollSpeed(arg2);
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_iBlobViewPort_GetScrollSpeed(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  iBlobViewPort *arg1 = (iBlobViewPort *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  float result;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"iBlobViewPort_GetScrollSpeed",1,1,&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_iBlobViewPort, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "iBlobViewPort_GetScrollSpeed" "', argument " "1"" of type '" "iBlobViewPort const *""'"); 
+  }
+  arg1 = reinterpret_cast< iBlobViewPort * >(argp1);
+  result = (float)((iBlobViewPort const *)arg1)->GetScrollSpeed();
+  resultobj = SWIG_From_float(static_cast< float >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_iBlobViewPort_Scroll(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   iBlobViewPort *arg1 = (iBlobViewPort *) 0 ;
@@ -45699,6 +45751,8 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"iBlob_scfGetVersion", _wrap_iBlob_scfGetVersion, METH_VARARGS, NULL},
 	 { (char *)"delete_iBlob", _wrap_delete_iBlob, METH_VARARGS, NULL},
 	 { (char *)"iBlob_swigregister", iBlob_swigregister, METH_VARARGS, NULL},
+	 { (char *)"iBlobViewPort_SetScrollSpeed", _wrap_iBlobViewPort_SetScrollSpeed, METH_VARARGS, NULL},
+	 { (char *)"iBlobViewPort_GetScrollSpeed", _wrap_iBlobViewPort_GetScrollSpeed, METH_VARARGS, NULL},
 	 { (char *)"iBlobViewPort_Scroll", _wrap_iBlobViewPort_Scroll, METH_VARARGS, NULL},
 	 { (char *)"iBlobViewPort_GetScrollX", _wrap_iBlobViewPort_GetScrollX, METH_VARARGS, NULL},
 	 { (char *)"iBlobViewPort_GetScrollY", _wrap_iBlobViewPort_GetScrollY, METH_VARARGS, NULL},
