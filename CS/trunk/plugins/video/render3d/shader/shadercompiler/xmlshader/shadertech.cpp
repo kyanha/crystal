@@ -1078,18 +1078,20 @@ iShaderProgram::CacheLoadResult csXMLShaderTech::LoadPassFromCache (
       loadRes = shader->LoadFPFromCache (this, cache, plugins.fp, tagFP,
                                          GetPassNumber (pass));
       if (loadRes != iShaderProgram::loadSuccessShaderValid) return loadRes;
+      fp = shader->GetFP();
     }
     if (plugins.vp.available)
     {
       loadRes = shader->LoadVPFromCache (this, cache, plugins.vp, tagVP,
                                          GetPassNumber (pass));
       if (loadRes != iShaderProgram::loadSuccessShaderValid) return loadRes;
+      vp = shader->GetVP();
     }
 
     previous = shader->GetPrevious ();
 
-    resolveVP = scfQueryInterface<iShaderDestinationResolver> (vp);
-    resolveFP = scfQueryInterface<iShaderDestinationResolver> (fp);
+    resolveVP = scfQueryInterfaceSafe<iShaderDestinationResolver> (vp);
+    resolveFP = scfQueryInterfaceSafe<iShaderDestinationResolver> (fp);
 
     // assign wrapper
     pass->program = shader;
