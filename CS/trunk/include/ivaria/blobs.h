@@ -263,7 +263,7 @@ struct iBlobManager : public virtual iBase
    * When defining blobs or animations you can use small or big textures
    * automatically.
    */
-  virtual void MapTexture (const char* big, const char* small,
+  virtual void MapTexture (const char* bigtxt, const char* smalltxt,
       int x, int y, int w, int h) = 0;
 
   virtual iBlobViewPort* CreateBlobViewPort (int x1, int y1, int x2, int y2) = 0;
