@@ -382,6 +382,7 @@ CS_WRAP_PTR_IMPLEMENT(csWrapPtr)
   %extend T
   {
     static int scfGetVersion() { return scfInterfaceTraits<T>::GetVersion(); }
+    static char const* scfGetName() { return scfInterfaceTraits<T>::GetName(); }
     virtual ~T() { if (self) self->DecRef (); }
   }
   LANG_POST(T)

@@ -253,7 +253,7 @@ CS_WRAP_PTR_TYPEMAP(csWrapPtr)
 
 %typemap(in) (const char * iface, int iface_ver) (csString className)
 {
-  PyObject *pyname = PyObject_GetAttrString($input, "__name__");
+  PyObject *pyname = PyObject_CallMethod($input, "scfGetName", NULL);
   className = csString(PyString_AsString(pyname));
   Py_XDECREF(pyname);
   $1 = (char*)className.GetData(); // SWIG declares $1 non-const for some reason
