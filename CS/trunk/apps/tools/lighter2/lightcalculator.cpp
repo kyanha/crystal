@@ -150,9 +150,6 @@ namespace lighter
     // Loop through all submesh elements
     for (size_t submesh = 0; submesh < submeshArray.GetSize (); ++submesh)
     {
-      // Reset area/pixel ratio
-      float area2pixel = 1.0f;
-
       // Loop through all element primitives    
       PrimitiveArray& primArray = submeshArray[submesh];
 
@@ -161,10 +158,6 @@ namespace lighter
       {
         // Get next primitive
         Primitive& prim = primArray[pidx];
-
-        // Compute area/pixel ratio
-        area2pixel = 
-          1.0f / (prim.GetuFormVector () % prim.GetvFormVector ()).Norm();
 
         // Get reference to this primitive's lightmap (non pseudo-dynamic)
         size_t numElements = prim.GetElementCount ();        

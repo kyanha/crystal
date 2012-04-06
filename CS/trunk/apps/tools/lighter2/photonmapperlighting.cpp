@@ -297,7 +297,7 @@ namespace lighter
 
       // Setting one time light properties
 
-      float spLength , spRadius, innerFalloff, outterFalloff;
+      float spRadius, innerFalloff, outterFalloff;
       csVector3 lightDir;
       switch (curLightType) 
       {
@@ -307,7 +307,6 @@ namespace lighter
         {
 
           lightDir = ((DirectionalLight*)curLight)->GetDirection();
-          spLength = ((DirectionalLight*)curLight)->GetLength();
           spRadius = ((DirectionalLight*)curLight)->GetRadius();
         }
         break;
@@ -414,7 +413,7 @@ namespace lighter
 
           // Setting one time light properties
       
-          float spLength , spRadius, spanAngle;
+          float spRadius, spanAngle;
           csVector3 lightDir, objDir, pseudoPos;
 
           switch (curLightType)
@@ -424,7 +423,6 @@ namespace lighter
           case CS_LIGHT_DIRECTIONAL:
             {
               lightDir = ((DirectionalLight*)curLight)->GetDirection();
-              spLength = ((DirectionalLight*)curLight)->GetLength();
               spRadius = ((DirectionalLight*)curLight)->GetRadius();
 
               csVector3 posDir = sphere.GetCenter()-pos;

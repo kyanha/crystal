@@ -488,10 +488,6 @@ csColor DirectionalLightAttenuationPoint::SampleLight (const csVector3& point, c
 
     vistest.AddSegment (ownerSector->kdTree, visSegment.Start (), visSegment.End ());
 
-    // Retransform values
-    const csVector3 parentPos = proxyTransform.This2Other (point);
-    const csVector3 parentNormal = proxyTransform.This2OtherRelative (n);
-
     csVector3 parentLightVec;
     csPlane3 transformedPlane;
     transformedPlane = proxyTransform.Other2This (portalPlane);
