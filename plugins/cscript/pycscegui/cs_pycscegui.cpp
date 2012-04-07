@@ -3024,6 +3024,10 @@ namespace swig {
 #include "crystalspace.h"
 #include "ivaria/icegui.h"
 
+// Deprecated gmeshskelanim interfaces
+#include "imesh/gmeshskel2.h"
+#include "imesh/skeleton.h"
+
 
 SWIGINTERNINLINE PyObject*
   SWIG_From_bool  (bool value)
@@ -3170,6 +3174,44 @@ SWIGINTERNINLINE PyObject *
 SWIG_From_int  (int value)
 {    
   return SWIG_From_long  (value);
+}
+
+SWIGINTERN char const *iCEGUI_scfGetName(){ return scfInterfaceTraits<iCEGUI>::GetName(); }
+
+SWIGINTERN swig_type_info*
+SWIG_pchar_descriptor(void)
+{
+  static int init = 0;
+  static swig_type_info* info = 0;
+  if (!init) {
+    info = SWIG_TypeQuery("_p_char");
+    init = 1;
+  }
+  return info;
+}
+
+
+SWIGINTERNINLINE PyObject *
+SWIG_FromCharPtrAndSize(const char* carray, size_t size)
+{
+  if (carray) {
+    if (size > INT_MAX) {
+      swig_type_info* pchar_descriptor = SWIG_pchar_descriptor();
+      return pchar_descriptor ? 
+	SWIG_NewPointerObj(const_cast< char * >(carray), pchar_descriptor, 0) : SWIG_Py_Void();
+    } else {
+      return PyString_FromStringAndSize(carray, static_cast< int >(size));
+    }
+  } else {
+    return SWIG_Py_Void();
+  }
+}
+
+
+SWIGINTERNINLINE PyObject * 
+SWIG_FromCharPtr(const char *cptr)
+{ 
+  return SWIG_FromCharPtrAndSize(cptr, (cptr ? strlen(cptr) : 0));
 }
 
 SWIGINTERN void delete_iCEGUI(iCEGUI *self){ if (self) self->DecRef (); }
@@ -3696,6 +3738,19 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_iCEGUI_scfGetName(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  char *result = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"iCEGUI_scfGetName",0,0)) SWIG_fail;
+  result = (char *)iCEGUI_scfGetName();
+  resultobj = SWIG_FromCharPtr((const char *)result);
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_delete_iCEGUI(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   iCEGUI *arg1 = (iCEGUI *) 0 ;
@@ -3745,6 +3800,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"iCEGUI_SetAutoRender", _wrap_iCEGUI_SetAutoRender, METH_VARARGS, NULL},
 	 { (char *)"iCEGUI_GetAutoRender", _wrap_iCEGUI_GetAutoRender, METH_VARARGS, NULL},
 	 { (char *)"iCEGUI_scfGetVersion", _wrap_iCEGUI_scfGetVersion, METH_VARARGS, NULL},
+	 { (char *)"iCEGUI_scfGetName", _wrap_iCEGUI_scfGetName, METH_VARARGS, NULL},
 	 { (char *)"delete_iCEGUI", _wrap_delete_iCEGUI, METH_VARARGS, NULL},
 	 { (char *)"iCEGUI_swigregister", iCEGUI_swigregister, METH_VARARGS, NULL},
 	 { NULL, NULL, 0, NULL }

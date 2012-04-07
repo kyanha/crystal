@@ -130,6 +130,7 @@ class iGraphics2D(core.iBase):
     def GetHWVendor(*args): return _ivideo.iGraphics2D_GetHWVendor(*args)
     def DrawLineProjected(*args): return _ivideo.iGraphics2D_DrawLineProjected(*args)
     scfGetVersion = staticmethod(_ivideo.iGraphics2D_scfGetVersion)
+    scfGetName = staticmethod(_ivideo.iGraphics2D_scfGetName)
     __swig_destroy__ = _ivideo.delete_iGraphics2D
     __del__ = lambda self : None;
     def _PerformExtension(*args): return _ivideo.iGraphics2D__PerformExtension(*args)
@@ -139,6 +140,7 @@ class iGraphics2D(core.iBase):
 iGraphics2D_swigregister = _ivideo.iGraphics2D_swigregister
 iGraphics2D_swigregister(iGraphics2D)
 iGraphics2D_scfGetVersion = _ivideo.iGraphics2D_scfGetVersion
+iGraphics2D_scfGetName = _ivideo.iGraphics2D_scfGetName
 
 CSDRAW_2DGRAPHICS = _ivideo.CSDRAW_2DGRAPHICS
 CSDRAW_3DGRAPHICS = _ivideo.CSDRAW_3DGRAPHICS
@@ -426,11 +428,13 @@ class iGraphics3D(core.iBase):
     def SetTessellation(*args): return _ivideo.iGraphics3D_SetTessellation(*args)
     def GetTessellation(*args): return _ivideo.iGraphics3D_GetTessellation(*args)
     scfGetVersion = staticmethod(_ivideo.iGraphics3D_scfGetVersion)
+    scfGetName = staticmethod(_ivideo.iGraphics3D_scfGetName)
     __swig_destroy__ = _ivideo.delete_iGraphics3D
     __del__ = lambda self : None;
 iGraphics3D_swigregister = _ivideo.iGraphics3D_swigregister
 iGraphics3D_swigregister(iGraphics3D)
 iGraphics3D_scfGetVersion = _ivideo.iGraphics3D_scfGetVersion
+iGraphics3D_scfGetName = _ivideo.iGraphics3D_scfGetName
 
 csmcNone = _ivideo.csmcNone
 csmcArrow = _ivideo.csmcArrow
@@ -658,11 +662,13 @@ class iFont(core.iBase):
     def GetUnderlinePosition(*args): return _ivideo.iFont_GetUnderlinePosition(*args)
     def GetUnderlineThickness(*args): return _ivideo.iFont_GetUnderlineThickness(*args)
     scfGetVersion = staticmethod(_ivideo.iFont_scfGetVersion)
+    scfGetName = staticmethod(_ivideo.iFont_scfGetName)
     __swig_destroy__ = _ivideo.delete_iFont
     __del__ = lambda self : None;
 iFont_swigregister = _ivideo.iFont_swigregister
 iFont_swigregister(iFont)
 iFont_scfGetVersion = _ivideo.iFont_scfGetVersion
+iFont_scfGetName = _ivideo.iFont_scfGetName
 
 class iFontServer(core.iBase):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
@@ -672,11 +678,13 @@ class iFontServer(core.iBase):
     def SetWarnOnError(*args): return _ivideo.iFontServer_SetWarnOnError(*args)
     def GetWarnOnError(*args): return _ivideo.iFontServer_GetWarnOnError(*args)
     scfGetVersion = staticmethod(_ivideo.iFontServer_scfGetVersion)
+    scfGetName = staticmethod(_ivideo.iFontServer_scfGetName)
     __swig_destroy__ = _ivideo.delete_iFontServer
     __del__ = lambda self : None;
 iFontServer_swigregister = _ivideo.iFontServer_swigregister
 iFontServer_swigregister(iFontServer)
 iFontServer_scfGetVersion = _ivideo.iFontServer_scfGetVersion
+iFontServer_scfGetName = _ivideo.iFontServer_scfGetName
 
 class iHalo(core.iBase):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
@@ -688,11 +696,13 @@ class iHalo(core.iBase):
     def GetColor(*args): return _ivideo.iHalo_GetColor(*args)
     def Draw(*args): return _ivideo.iHalo_Draw(*args)
     scfGetVersion = staticmethod(_ivideo.iHalo_scfGetVersion)
+    scfGetName = staticmethod(_ivideo.iHalo_scfGetName)
     __swig_destroy__ = _ivideo.delete_iHalo
     __del__ = lambda self : None;
 iHalo_swigregister = _ivideo.iHalo_swigregister
 iHalo_swigregister(iHalo)
 iHalo_scfGetVersion = _ivideo.iHalo_scfGetVersion
+iHalo_scfGetName = _ivideo.iHalo_scfGetName
 
 class csShaderVariableStack(object):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
@@ -729,11 +739,13 @@ class iShaderVariableContext(core.iBase):
     def Clear(*args): return _ivideo.iShaderVariableContext_Clear(*args)
     def RemoveVariable(*args): return _ivideo.iShaderVariableContext_RemoveVariable(*args)
     scfGetVersion = staticmethod(_ivideo.iShaderVariableContext_scfGetVersion)
+    scfGetName = staticmethod(_ivideo.iShaderVariableContext_scfGetName)
     __swig_destroy__ = _ivideo.delete_iShaderVariableContext
     __del__ = lambda self : None;
 iShaderVariableContext_swigregister = _ivideo.iShaderVariableContext_swigregister
 iShaderVariableContext_swigregister(iShaderVariableContext)
 iShaderVariableContext_scfGetVersion = _ivideo.iShaderVariableContext_scfGetVersion
+iShaderVariableContext_scfGetName = _ivideo.iShaderVariableContext_scfGetName
 
 TagNeutral = _ivideo.TagNeutral
 TagForbidden = _ivideo.TagForbidden
@@ -769,11 +781,13 @@ class iShaderManager(iShaderVariableContext):
     def RemoveSubShaderCache(*args): return _ivideo.iShaderManager_RemoveSubShaderCache(*args)
     def RemoveAllSubShaderCaches(*args): return _ivideo.iShaderManager_RemoveAllSubShaderCaches(*args)
     scfGetVersion = staticmethod(_ivideo.iShaderManager_scfGetVersion)
+    scfGetName = staticmethod(_ivideo.iShaderManager_scfGetName)
     __swig_destroy__ = _ivideo.delete_iShaderManager
     __del__ = lambda self : None;
 iShaderManager_swigregister = _ivideo.iShaderManager_swigregister
 iShaderManager_swigregister(iShaderManager)
 iShaderManager_scfGetVersion = _ivideo.iShaderManager_scfGetVersion
+iShaderManager_scfGetName = _ivideo.iShaderManager_scfGetName
 
 class csShaderMetadata(object):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
@@ -827,11 +841,13 @@ class iShader(iShaderVariableContext):
     def GetTechniqueMetadata(*args): return _ivideo.iShader_GetTechniqueMetadata(*args)
     def ForceTechnique(*args): return _ivideo.iShader_ForceTechnique(*args)
     scfGetVersion = staticmethod(_ivideo.iShader_scfGetVersion)
+    scfGetName = staticmethod(_ivideo.iShader_scfGetName)
     __swig_destroy__ = _ivideo.delete_iShader
     __del__ = lambda self : None;
 iShader_swigregister = _ivideo.iShader_swigregister
 iShader_swigregister(iShader)
 iShader_scfGetVersion = _ivideo.iShader_scfGetVersion
+iShader_scfGetName = _ivideo.iShader_scfGetName
 
 class iShaderCompiler(core.iBase):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
@@ -955,11 +971,13 @@ class iTextureHandle(core.iBase):
     def GetMipmapLimits(*args): return _ivideo.iTextureHandle_GetMipmapLimits(*args)
     def Readback(*args): return _ivideo.iTextureHandle_Readback(*args)
     scfGetVersion = staticmethod(_ivideo.iTextureHandle_scfGetVersion)
+    scfGetName = staticmethod(_ivideo.iTextureHandle_scfGetName)
     __swig_destroy__ = _ivideo.delete_iTextureHandle
     __del__ = lambda self : None;
 iTextureHandle_swigregister = _ivideo.iTextureHandle_swigregister
 iTextureHandle_swigregister(iTextureHandle)
 iTextureHandle_scfGetVersion = _ivideo.iTextureHandle_scfGetVersion
+iTextureHandle_scfGetName = _ivideo.iTextureHandle_scfGetName
 
 CS_TEXTURE_2D = _ivideo.CS_TEXTURE_2D
 CS_TEXTURE_3D = _ivideo.CS_TEXTURE_3D
@@ -980,11 +998,13 @@ class iTextureManager(core.iBase):
     def GetMaxTextureSize(*args): return _ivideo.iTextureManager_GetMaxTextureSize(*args)
     def CreateTexture(*args): return _ivideo.iTextureManager_CreateTexture(*args)
     scfGetVersion = staticmethod(_ivideo.iTextureManager_scfGetVersion)
+    scfGetName = staticmethod(_ivideo.iTextureManager_scfGetName)
     __swig_destroy__ = _ivideo.delete_iTextureManager
     __del__ = lambda self : None;
 iTextureManager_swigregister = _ivideo.iTextureManager_swigregister
 iTextureManager_swigregister(iTextureManager)
 iTextureManager_scfGetVersion = _ivideo.iTextureManager_scfGetVersion
+iTextureManager_scfGetName = _ivideo.iTextureManager_scfGetName
 
 CS_MATERIAL_TEXTURE_DIFFUSE = _ivideo.CS_MATERIAL_TEXTURE_DIFFUSE
 class iMaterial(iShaderVariableContext):
@@ -997,11 +1017,13 @@ class iMaterial(iShaderVariableContext):
     def GetTexture(*args): return _ivideo.iMaterial_GetTexture(*args)
     def GetFirstShader(*args): return _ivideo.iMaterial_GetFirstShader(*args)
     scfGetVersion = staticmethod(_ivideo.iMaterial_scfGetVersion)
+    scfGetName = staticmethod(_ivideo.iMaterial_scfGetName)
     __swig_destroy__ = _ivideo.delete_iMaterial
     __del__ = lambda self : None;
 iMaterial_swigregister = _ivideo.iMaterial_swigregister
 iMaterial_swigregister(iMaterial)
 iMaterial_scfGetVersion = _ivideo.iMaterial_scfGetVersion
+iMaterial_scfGetName = _ivideo.iMaterial_scfGetName
 
 CS_FX_SETALPHA = _ivideo.CS_FX_SETALPHA
 CS_FX_SETALPHA_INT = _ivideo.CS_FX_SETALPHA_INT

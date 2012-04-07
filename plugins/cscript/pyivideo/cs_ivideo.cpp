@@ -3198,6 +3198,7 @@ SWIG_FromCharPtr(const char *cptr)
 }
 
 SWIGINTERN int iGraphics2D_scfGetVersion(){ return scfInterfaceTraits<iGraphics2D>::GetVersion(); }
+SWIGINTERN char const *iGraphics2D_scfGetName(){ return scfInterfaceTraits<iGraphics2D>::GetName(); }
 SWIGINTERN void delete_iGraphics2D(iGraphics2D *self){ if (self) self->DecRef (); }
 SWIGINTERN PyObject *iGraphics2D__PerformExtension(iGraphics2D *self,char const *clazz,char const *command,PyObject *args){
     if (!command || !strlen(command))
@@ -3268,6 +3269,7 @@ SWIG_AsVal_size_t (PyObject * obj, size_t *val)
 }
 
 SWIGINTERN int iGraphics3D_scfGetVersion(){ return scfInterfaceTraits<iGraphics3D>::GetVersion(); }
+SWIGINTERN char const *iGraphics3D_scfGetName(){ return scfInterfaceTraits<iGraphics3D>::GetName(); }
 SWIGINTERN void delete_iGraphics3D(iGraphics3D *self){ if (self) self->DecRef (); }
 
 SWIGINTERNINLINE PyObject *
@@ -3284,16 +3286,22 @@ SWIG_From_unsigned_SS_int  (unsigned int value)
 }
 
 SWIGINTERN int iFont_scfGetVersion(){ return scfInterfaceTraits<iFont>::GetVersion(); }
+SWIGINTERN char const *iFont_scfGetName(){ return scfInterfaceTraits<iFont>::GetName(); }
 SWIGINTERN void delete_iFont(iFont *self){ if (self) self->DecRef (); }
 SWIGINTERN int iFontServer_scfGetVersion(){ return scfInterfaceTraits<iFontServer>::GetVersion(); }
+SWIGINTERN char const *iFontServer_scfGetName(){ return scfInterfaceTraits<iFontServer>::GetName(); }
 SWIGINTERN void delete_iFontServer(iFontServer *self){ if (self) self->DecRef (); }
 SWIGINTERN int iHalo_scfGetVersion(){ return scfInterfaceTraits<iHalo>::GetVersion(); }
+SWIGINTERN char const *iHalo_scfGetName(){ return scfInterfaceTraits<iHalo>::GetName(); }
 SWIGINTERN void delete_iHalo(iHalo *self){ if (self) self->DecRef (); }
 SWIGINTERN int iShaderVariableContext_scfGetVersion(){ return scfInterfaceTraits<iShaderVariableContext>::GetVersion(); }
+SWIGINTERN char const *iShaderVariableContext_scfGetName(){ return scfInterfaceTraits<iShaderVariableContext>::GetName(); }
 SWIGINTERN void delete_iShaderVariableContext(iShaderVariableContext *self){ if (self) self->DecRef (); }
 SWIGINTERN int iShaderManager_scfGetVersion(){ return scfInterfaceTraits<iShaderManager>::GetVersion(); }
+SWIGINTERN char const *iShaderManager_scfGetName(){ return scfInterfaceTraits<iShaderManager>::GetName(); }
 SWIGINTERN void delete_iShaderManager(iShaderManager *self){ if (self) self->DecRef (); }
 SWIGINTERN int iShader_scfGetVersion(){ return scfInterfaceTraits<iShader>::GetVersion(); }
+SWIGINTERN char const *iShader_scfGetName(){ return scfInterfaceTraits<iShader>::GetName(); }
 SWIGINTERN void delete_iShader(iShader *self){ if (self) self->DecRef (); }
 SWIGINTERN csRef< iShader > const &csHash_Sl_csRef_Sl_iShader_Sg__Sc_csStringID_Sg____getitem__(csHash< csRef< iShader >,csStringID > *self,CS::StringID< CS::StringSetTag::General > const &key){ return self->Get(key,csRef< iShader >()); }
 SWIGINTERN bool csHash_Sl_csRef_Sl_iShader_Sg__Sc_csStringID_Sg____delitem__(csHash< csRef< iShader >,csStringID > *self,CS::StringID< CS::StringSetTag::General > const &key){ return self->DeleteAll(key); }
@@ -3302,10 +3310,13 @@ SWIGINTERN bool csHash_Sl_csRef_Sl_iShader_Sg__Sc_csStringID_Sg____nonzero__(csH
 SWIGINTERN void csHash_Sl_csRef_Sl_iShader_Sg__Sc_csStringID_Sg____setitem__(csHash< csRef< iShader >,csStringID > *self,CS::StringID< CS::StringSetTag::General > const &key,csRef< iShader > const &value){ self->PutUnique(key,value); }
 SWIGINTERN size_t csHash_Sl_csRef_Sl_iShader_Sg__Sc_csStringID_Sg____len__(csHash< csRef< iShader >,csStringID > *self){ return self->GetSize(); }
 SWIGINTERN int iTextureHandle_scfGetVersion(){ return scfInterfaceTraits<iTextureHandle>::GetVersion(); }
+SWIGINTERN char const *iTextureHandle_scfGetName(){ return scfInterfaceTraits<iTextureHandle>::GetName(); }
 SWIGINTERN void delete_iTextureHandle(iTextureHandle *self){ if (self) self->DecRef (); }
 SWIGINTERN int iTextureManager_scfGetVersion(){ return scfInterfaceTraits<iTextureManager>::GetVersion(); }
+SWIGINTERN char const *iTextureManager_scfGetName(){ return scfInterfaceTraits<iTextureManager>::GetName(); }
 SWIGINTERN void delete_iTextureManager(iTextureManager *self){ if (self) self->DecRef (); }
 SWIGINTERN int iMaterial_scfGetVersion(){ return scfInterfaceTraits<iMaterial>::GetVersion(); }
+SWIGINTERN char const *iMaterial_scfGetName(){ return scfInterfaceTraits<iMaterial>::GetName(); }
 SWIGINTERN void delete_iMaterial(iMaterial *self){ if (self) self->DecRef (); }
 #ifdef __cplusplus
 extern "C" {
@@ -6689,6 +6700,19 @@ SWIGINTERN PyObject *_wrap_iGraphics2D_scfGetVersion(PyObject *SWIGUNUSEDPARM(se
   if(!PyArg_UnpackTuple(args,(char *)"iGraphics2D_scfGetVersion",0,0)) SWIG_fail;
   result = (int)iGraphics2D_scfGetVersion();
   resultobj = SWIG_From_int(static_cast< int >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_iGraphics2D_scfGetName(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  char *result = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"iGraphics2D_scfGetName",0,0)) SWIG_fail;
+  result = (char *)iGraphics2D_scfGetName();
+  resultobj = SWIG_FromCharPtr((const char *)result);
   return resultobj;
 fail:
   return NULL;
@@ -12081,6 +12105,19 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_iGraphics3D_scfGetName(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  char *result = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"iGraphics3D_scfGetName",0,0)) SWIG_fail;
+  result = (char *)iGraphics3D_scfGetName();
+  resultobj = SWIG_FromCharPtr((const char *)result);
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_delete_iGraphics3D(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   iGraphics3D *arg1 = (iGraphics3D *) 0 ;
@@ -16041,6 +16078,19 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_iFont_scfGetName(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  char *result = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"iFont_scfGetName",0,0)) SWIG_fail;
+  result = (char *)iFont_scfGetName();
+  resultobj = SWIG_FromCharPtr((const char *)result);
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_delete_iFont(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   iFont *arg1 = (iFont *) 0 ;
@@ -16277,6 +16327,19 @@ SWIGINTERN PyObject *_wrap_iFontServer_scfGetVersion(PyObject *SWIGUNUSEDPARM(se
   if(!PyArg_UnpackTuple(args,(char *)"iFontServer_scfGetVersion",0,0)) SWIG_fail;
   result = (int)iFontServer_scfGetVersion();
   resultobj = SWIG_From_int(static_cast< int >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_iFontServer_scfGetName(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  char *result = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"iFontServer_scfGetName",0,0)) SWIG_fail;
+  result = (char *)iFontServer_scfGetName();
+  resultobj = SWIG_FromCharPtr((const char *)result);
   return resultobj;
 fail:
   return NULL;
@@ -16578,6 +16641,19 @@ SWIGINTERN PyObject *_wrap_iHalo_scfGetVersion(PyObject *SWIGUNUSEDPARM(self), P
   if(!PyArg_UnpackTuple(args,(char *)"iHalo_scfGetVersion",0,0)) SWIG_fail;
   result = (int)iHalo_scfGetVersion();
   resultobj = SWIG_From_int(static_cast< int >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_iHalo_scfGetName(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  char *result = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"iHalo_scfGetName",0,0)) SWIG_fail;
+  result = (char *)iHalo_scfGetName();
+  resultobj = SWIG_FromCharPtr((const char *)result);
   return resultobj;
 fail:
   return NULL;
@@ -17493,6 +17569,19 @@ SWIGINTERN PyObject *_wrap_iShaderVariableContext_scfGetVersion(PyObject *SWIGUN
   if(!PyArg_UnpackTuple(args,(char *)"iShaderVariableContext_scfGetVersion",0,0)) SWIG_fail;
   result = (int)iShaderVariableContext_scfGetVersion();
   resultobj = SWIG_From_int(static_cast< int >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_iShaderVariableContext_scfGetName(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  char *result = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"iShaderVariableContext_scfGetName",0,0)) SWIG_fail;
+  result = (char *)iShaderVariableContext_scfGetName();
+  resultobj = SWIG_FromCharPtr((const char *)result);
   return resultobj;
 fail:
   return NULL;
@@ -18574,6 +18663,19 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_iShaderManager_scfGetName(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  char *result = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"iShaderManager_scfGetName",0,0)) SWIG_fail;
+  result = (char *)iShaderManager_scfGetName();
+  resultobj = SWIG_FromCharPtr((const char *)result);
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_delete_iShaderManager(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   iShaderManager *arg1 = (iShaderManager *) 0 ;
@@ -19560,6 +19662,19 @@ SWIGINTERN PyObject *_wrap_iShader_scfGetVersion(PyObject *SWIGUNUSEDPARM(self),
   if(!PyArg_UnpackTuple(args,(char *)"iShader_scfGetVersion",0,0)) SWIG_fail;
   result = (int)iShader_scfGetVersion();
   resultobj = SWIG_From_int(static_cast< int >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_iShader_scfGetName(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  char *result = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"iShader_scfGetName",0,0)) SWIG_fail;
+  result = (char *)iShader_scfGetName();
+  resultobj = SWIG_FromCharPtr((const char *)result);
   return resultobj;
 fail:
   return NULL;
@@ -24047,6 +24162,19 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_iTextureHandle_scfGetName(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  char *result = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"iTextureHandle_scfGetName",0,0)) SWIG_fail;
+  result = (char *)iTextureHandle_scfGetName();
+  resultobj = SWIG_FromCharPtr((const char *)result);
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_delete_iTextureHandle(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   iTextureHandle *arg1 = (iTextureHandle *) 0 ;
@@ -24891,6 +25019,19 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_iTextureManager_scfGetName(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  char *result = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"iTextureManager_scfGetName",0,0)) SWIG_fail;
+  result = (char *)iTextureManager_scfGetName();
+  resultobj = SWIG_FromCharPtr((const char *)result);
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_delete_iTextureManager(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   iTextureManager *arg1 = (iTextureManager *) 0 ;
@@ -25151,6 +25292,19 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_iMaterial_scfGetName(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  char *result = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"iMaterial_scfGetName",0,0)) SWIG_fail;
+  result = (char *)iMaterial_scfGetName();
+  resultobj = SWIG_FromCharPtr((const char *)result);
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_delete_iMaterial(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   iMaterial *arg1 = (iMaterial *) 0 ;
@@ -25277,6 +25431,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"iGraphics2D_GetHWVendor", _wrap_iGraphics2D_GetHWVendor, METH_VARARGS, NULL},
 	 { (char *)"iGraphics2D_DrawLineProjected", _wrap_iGraphics2D_DrawLineProjected, METH_VARARGS, NULL},
 	 { (char *)"iGraphics2D_scfGetVersion", _wrap_iGraphics2D_scfGetVersion, METH_VARARGS, NULL},
+	 { (char *)"iGraphics2D_scfGetName", _wrap_iGraphics2D_scfGetName, METH_VARARGS, NULL},
 	 { (char *)"delete_iGraphics2D", _wrap_delete_iGraphics2D, METH_VARARGS, NULL},
 	 { (char *)"iGraphics2D__PerformExtension", _wrap_iGraphics2D__PerformExtension, METH_VARARGS, NULL},
 	 { (char *)"iGraphics2D_swigregister", iGraphics2D_swigregister, METH_VARARGS, NULL},
@@ -25418,6 +25573,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"iGraphics3D_SetTessellation", _wrap_iGraphics3D_SetTessellation, METH_VARARGS, NULL},
 	 { (char *)"iGraphics3D_GetTessellation", _wrap_iGraphics3D_GetTessellation, METH_VARARGS, NULL},
 	 { (char *)"iGraphics3D_scfGetVersion", _wrap_iGraphics3D_scfGetVersion, METH_VARARGS, NULL},
+	 { (char *)"iGraphics3D_scfGetName", _wrap_iGraphics3D_scfGetName, METH_VARARGS, NULL},
 	 { (char *)"delete_iGraphics3D", _wrap_delete_iGraphics3D, METH_VARARGS, NULL},
 	 { (char *)"iGraphics3D_swigregister", iGraphics3D_swigregister, METH_VARARGS, NULL},
 	 { (char *)"iNativeWindowManager_Alert", _wrap_iNativeWindowManager_Alert, METH_VARARGS, NULL},
@@ -25561,12 +25717,14 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"iFont_GetUnderlinePosition", _wrap_iFont_GetUnderlinePosition, METH_VARARGS, NULL},
 	 { (char *)"iFont_GetUnderlineThickness", _wrap_iFont_GetUnderlineThickness, METH_VARARGS, NULL},
 	 { (char *)"iFont_scfGetVersion", _wrap_iFont_scfGetVersion, METH_VARARGS, NULL},
+	 { (char *)"iFont_scfGetName", _wrap_iFont_scfGetName, METH_VARARGS, NULL},
 	 { (char *)"delete_iFont", _wrap_delete_iFont, METH_VARARGS, NULL},
 	 { (char *)"iFont_swigregister", iFont_swigregister, METH_VARARGS, NULL},
 	 { (char *)"iFontServer_LoadFont", _wrap_iFontServer_LoadFont, METH_VARARGS, NULL},
 	 { (char *)"iFontServer_SetWarnOnError", _wrap_iFontServer_SetWarnOnError, METH_VARARGS, NULL},
 	 { (char *)"iFontServer_GetWarnOnError", _wrap_iFontServer_GetWarnOnError, METH_VARARGS, NULL},
 	 { (char *)"iFontServer_scfGetVersion", _wrap_iFontServer_scfGetVersion, METH_VARARGS, NULL},
+	 { (char *)"iFontServer_scfGetName", _wrap_iFontServer_scfGetName, METH_VARARGS, NULL},
 	 { (char *)"delete_iFontServer", _wrap_delete_iFontServer, METH_VARARGS, NULL},
 	 { (char *)"iFontServer_swigregister", iFontServer_swigregister, METH_VARARGS, NULL},
 	 { (char *)"iHalo_GetWidth", _wrap_iHalo_GetWidth, METH_VARARGS, NULL},
@@ -25575,6 +25733,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"iHalo_GetColor", _wrap_iHalo_GetColor, METH_VARARGS, NULL},
 	 { (char *)"iHalo_Draw", _wrap_iHalo_Draw, METH_VARARGS, NULL},
 	 { (char *)"iHalo_scfGetVersion", _wrap_iHalo_scfGetVersion, METH_VARARGS, NULL},
+	 { (char *)"iHalo_scfGetName", _wrap_iHalo_scfGetName, METH_VARARGS, NULL},
 	 { (char *)"delete_iHalo", _wrap_delete_iHalo, METH_VARARGS, NULL},
 	 { (char *)"iHalo_swigregister", iHalo_swigregister, METH_VARARGS, NULL},
 	 { (char *)"new_csShaderVariableStack", _wrap_new_csShaderVariableStack, METH_VARARGS, NULL},
@@ -25599,6 +25758,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"iShaderVariableContext_Clear", _wrap_iShaderVariableContext_Clear, METH_VARARGS, NULL},
 	 { (char *)"iShaderVariableContext_RemoveVariable", _wrap_iShaderVariableContext_RemoveVariable, METH_VARARGS, NULL},
 	 { (char *)"iShaderVariableContext_scfGetVersion", _wrap_iShaderVariableContext_scfGetVersion, METH_VARARGS, NULL},
+	 { (char *)"iShaderVariableContext_scfGetName", _wrap_iShaderVariableContext_scfGetName, METH_VARARGS, NULL},
 	 { (char *)"delete_iShaderVariableContext", _wrap_delete_iShaderVariableContext, METH_VARARGS, NULL},
 	 { (char *)"iShaderVariableContext_swigregister", iShaderVariableContext_swigregister, METH_VARARGS, NULL},
 	 { (char *)"iShaderManager_RegisterShader", _wrap_iShaderManager_RegisterShader, METH_VARARGS, NULL},
@@ -25623,6 +25783,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"iShaderManager_RemoveSubShaderCache", _wrap_iShaderManager_RemoveSubShaderCache, METH_VARARGS, NULL},
 	 { (char *)"iShaderManager_RemoveAllSubShaderCaches", _wrap_iShaderManager_RemoveAllSubShaderCaches, METH_VARARGS, NULL},
 	 { (char *)"iShaderManager_scfGetVersion", _wrap_iShaderManager_scfGetVersion, METH_VARARGS, NULL},
+	 { (char *)"iShaderManager_scfGetName", _wrap_iShaderManager_scfGetName, METH_VARARGS, NULL},
 	 { (char *)"delete_iShaderManager", _wrap_delete_iShaderManager, METH_VARARGS, NULL},
 	 { (char *)"iShaderManager_swigregister", iShaderManager_swigregister, METH_VARARGS, NULL},
 	 { (char *)"csShaderMetadata_description_set", _wrap_csShaderMetadata_description_set, METH_VARARGS, NULL},
@@ -25653,6 +25814,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"iShader_GetTechniqueMetadata", _wrap_iShader_GetTechniqueMetadata, METH_VARARGS, NULL},
 	 { (char *)"iShader_ForceTechnique", _wrap_iShader_ForceTechnique, METH_VARARGS, NULL},
 	 { (char *)"iShader_scfGetVersion", _wrap_iShader_scfGetVersion, METH_VARARGS, NULL},
+	 { (char *)"iShader_scfGetName", _wrap_iShader_scfGetName, METH_VARARGS, NULL},
 	 { (char *)"delete_iShader", _wrap_delete_iShader, METH_VARARGS, NULL},
 	 { (char *)"iShader_swigregister", iShader_swigregister, METH_VARARGS, NULL},
 	 { (char *)"iShaderCompiler_GetName", _wrap_iShaderCompiler_GetName, METH_VARARGS, NULL},
@@ -25731,6 +25893,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"iTextureHandle_GetMipmapLimits", _wrap_iTextureHandle_GetMipmapLimits, METH_VARARGS, NULL},
 	 { (char *)"iTextureHandle_Readback", _wrap_iTextureHandle_Readback, METH_VARARGS, NULL},
 	 { (char *)"iTextureHandle_scfGetVersion", _wrap_iTextureHandle_scfGetVersion, METH_VARARGS, NULL},
+	 { (char *)"iTextureHandle_scfGetName", _wrap_iTextureHandle_scfGetName, METH_VARARGS, NULL},
 	 { (char *)"delete_iTextureHandle", _wrap_delete_iTextureHandle, METH_VARARGS, NULL},
 	 { (char *)"iTextureHandle_swigregister", iTextureHandle_swigregister, METH_VARARGS, NULL},
 	 { (char *)"iTextureManager_RegisterTexture", _wrap_iTextureManager_RegisterTexture, METH_VARARGS, NULL},
@@ -25738,6 +25901,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"iTextureManager_GetMaxTextureSize", _wrap_iTextureManager_GetMaxTextureSize, METH_VARARGS, NULL},
 	 { (char *)"iTextureManager_CreateTexture", _wrap_iTextureManager_CreateTexture, METH_VARARGS, NULL},
 	 { (char *)"iTextureManager_scfGetVersion", _wrap_iTextureManager_scfGetVersion, METH_VARARGS, NULL},
+	 { (char *)"iTextureManager_scfGetName", _wrap_iTextureManager_scfGetName, METH_VARARGS, NULL},
 	 { (char *)"delete_iTextureManager", _wrap_delete_iTextureManager, METH_VARARGS, NULL},
 	 { (char *)"iTextureManager_swigregister", iTextureManager_swigregister, METH_VARARGS, NULL},
 	 { (char *)"iMaterial_SetShader", _wrap_iMaterial_SetShader, METH_VARARGS, NULL},
@@ -25746,6 +25910,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"iMaterial_GetTexture", _wrap_iMaterial_GetTexture, METH_VARARGS, NULL},
 	 { (char *)"iMaterial_GetFirstShader", _wrap_iMaterial_GetFirstShader, METH_VARARGS, NULL},
 	 { (char *)"iMaterial_scfGetVersion", _wrap_iMaterial_scfGetVersion, METH_VARARGS, NULL},
+	 { (char *)"iMaterial_scfGetName", _wrap_iMaterial_scfGetName, METH_VARARGS, NULL},
 	 { (char *)"delete_iMaterial", _wrap_delete_iMaterial, METH_VARARGS, NULL},
 	 { (char *)"iMaterial_swigregister", iMaterial_swigregister, METH_VARARGS, NULL},
 	 { (char *)"CS_FX_SETALPHA", _wrap_CS_FX_SETALPHA, METH_VARARGS, NULL},

@@ -3131,6 +3131,7 @@ SWIG_From_unsigned_SS_long  (unsigned long value)
 }
 
 SWIGINTERN int iLight_scfGetVersion(){ return scfInterfaceTraits<iLight>::GetVersion(); }
+SWIGINTERN char const *iLight_scfGetName(){ return scfInterfaceTraits<iLight>::GetName(); }
 SWIGINTERN void delete_iLight(iLight *self){ if (self) self->DecRef (); }
 
 SWIGINTERNINLINE PyObject*
@@ -3211,8 +3212,10 @@ SWIGINTERN bool iLightList___contains____SWIG_1(iLightList *self,char const *nam
 		return false;
 	}
 SWIGINTERN int iLightList_scfGetVersion(){ return scfInterfaceTraits<iLightList>::GetVersion(); }
+SWIGINTERN char const *iLightList_scfGetName(){ return scfInterfaceTraits<iLightList>::GetName(); }
 SWIGINTERN void delete_iLightList(iLightList *self){ if (self) self->DecRef (); }
 SWIGINTERN int iLightIterator_scfGetVersion(){ return scfInterfaceTraits<iLightIterator>::GetVersion(); }
+SWIGINTERN char const *iLightIterator_scfGetName(){ return scfInterfaceTraits<iLightIterator>::GetName(); }
 SWIGINTERN void delete_iLightIterator(iLightIterator *self){ if (self) self->DecRef (); }
 
 SWIGINTERNINLINE PyObject *
@@ -3287,6 +3290,7 @@ SWIG_AsVal_bool (PyObject *obj, bool *val)
 }
 
 SWIGINTERN int iSector_scfGetVersion(){ return scfInterfaceTraits<iSector>::GetVersion(); }
+SWIGINTERN char const *iSector_scfGetName(){ return scfInterfaceTraits<iSector>::GetName(); }
 SWIGINTERN void delete_iSector(iSector *self){ if (self) self->DecRef (); }
 SWIGINTERN iSector *iSectorList___getitem____SWIG_0(iSectorList *self,int n){return self->Get(n);}
 SWIGINTERN bool iSectorList___contains____SWIG_0(iSectorList *self,iSector *obj){
@@ -3305,8 +3309,10 @@ SWIGINTERN bool iSectorList___contains____SWIG_1(iSectorList *self,char const *n
 		return false;
 	}
 SWIGINTERN int iSectorList_scfGetVersion(){ return scfInterfaceTraits<iSectorList>::GetVersion(); }
+SWIGINTERN char const *iSectorList_scfGetName(){ return scfInterfaceTraits<iSectorList>::GetName(); }
 SWIGINTERN void delete_iSectorList(iSectorList *self){ if (self) self->DecRef (); }
 SWIGINTERN int iSectorIterator_scfGetVersion(){ return scfInterfaceTraits<iSectorIterator>::GetVersion(); }
+SWIGINTERN char const *iSectorIterator_scfGetName(){ return scfInterfaceTraits<iSectorIterator>::GetName(); }
 SWIGINTERN void delete_iSectorIterator(iSectorIterator *self){ if (self) self->DecRef (); }
 
 SWIGINTERN int
@@ -3325,10 +3331,13 @@ SWIG_AsVal_unsigned_SS_int (PyObject * obj, unsigned int *val)
 }
 
 SWIGINTERN int iEngine_scfGetVersion(){ return scfInterfaceTraits<iEngine>::GetVersion(); }
+SWIGINTERN char const *iEngine_scfGetName(){ return scfInterfaceTraits<iEngine>::GetName(); }
 SWIGINTERN void delete_iEngine(iEngine *self){ if (self) self->DecRef (); }
 SWIGINTERN int iCamera_scfGetVersion(){ return scfInterfaceTraits<iCamera>::GetVersion(); }
+SWIGINTERN char const *iCamera_scfGetName(){ return scfInterfaceTraits<iCamera>::GetName(); }
 SWIGINTERN void delete_iCamera(iCamera *self){ if (self) self->DecRef (); }
 SWIGINTERN int iCameraPosition_scfGetVersion(){ return scfInterfaceTraits<iCameraPosition>::GetVersion(); }
+SWIGINTERN char const *iCameraPosition_scfGetName(){ return scfInterfaceTraits<iCameraPosition>::GetName(); }
 SWIGINTERN void delete_iCameraPosition(iCameraPosition *self){ if (self) self->DecRef (); }
 SWIGINTERN iCameraPosition *iCameraPositionList___getitem____SWIG_0(iCameraPositionList *self,int n){return self->Get(n);}
 SWIGINTERN bool iCameraPositionList___contains____SWIG_0(iCameraPositionList *self,iCameraPosition *obj){
@@ -3347,6 +3356,7 @@ SWIGINTERN bool iCameraPositionList___contains____SWIG_1(iCameraPositionList *se
 		return false;
 	}
 SWIGINTERN int iTextureWrapper_scfGetVersion(){ return scfInterfaceTraits<iTextureWrapper>::GetVersion(); }
+SWIGINTERN char const *iTextureWrapper_scfGetName(){ return scfInterfaceTraits<iTextureWrapper>::GetName(); }
 SWIGINTERN void delete_iTextureWrapper(iTextureWrapper *self){ if (self) self->DecRef (); }
 SWIGINTERN iTextureWrapper *iTextureList___getitem____SWIG_0(iTextureList *self,int n){return self->Get(n);}
 SWIGINTERN bool iTextureList___contains____SWIG_0(iTextureList *self,iTextureWrapper *obj){
@@ -3365,10 +3375,13 @@ SWIGINTERN bool iTextureList___contains____SWIG_1(iTextureList *self,char const 
 		return false;
 	}
 SWIGINTERN int iTextureList_scfGetVersion(){ return scfInterfaceTraits<iTextureList>::GetVersion(); }
+SWIGINTERN char const *iTextureList_scfGetName(){ return scfInterfaceTraits<iTextureList>::GetName(); }
 SWIGINTERN void delete_iTextureList(iTextureList *self){ if (self) self->DecRef (); }
 SWIGINTERN int iMaterialWrapper_scfGetVersion(){ return scfInterfaceTraits<iMaterialWrapper>::GetVersion(); }
+SWIGINTERN char const *iMaterialWrapper_scfGetName(){ return scfInterfaceTraits<iMaterialWrapper>::GetName(); }
 SWIGINTERN void delete_iMaterialWrapper(iMaterialWrapper *self){ if (self) self->DecRef (); }
 SWIGINTERN int iMaterialEngine_scfGetVersion(){ return scfInterfaceTraits<iMaterialEngine>::GetVersion(); }
+SWIGINTERN char const *iMaterialEngine_scfGetName(){ return scfInterfaceTraits<iMaterialEngine>::GetName(); }
 SWIGINTERN void delete_iMaterialEngine(iMaterialEngine *self){ if (self) self->DecRef (); }
 SWIGINTERN iMaterialWrapper *iMaterialList___getitem____SWIG_0(iMaterialList *self,int n){return self->Get(n);}
 SWIGINTERN bool iMaterialList___contains____SWIG_0(iMaterialList *self,iMaterialWrapper *obj){
@@ -3387,12 +3400,16 @@ SWIGINTERN bool iMaterialList___contains____SWIG_1(iMaterialList *self,char cons
 		return false;
 	}
 SWIGINTERN int iSceneNodeArray_scfGetVersion(){ return scfInterfaceTraits<iSceneNodeArray>::GetVersion(); }
+SWIGINTERN char const *iSceneNodeArray_scfGetName(){ return scfInterfaceTraits<iSceneNodeArray>::GetName(); }
 SWIGINTERN void delete_iSceneNodeArray(iSceneNodeArray *self){ if (self) self->DecRef (); }
 SWIGINTERN int iSceneNode_scfGetVersion(){ return scfInterfaceTraits<iSceneNode>::GetVersion(); }
+SWIGINTERN char const *iSceneNode_scfGetName(){ return scfInterfaceTraits<iSceneNode>::GetName(); }
 SWIGINTERN void delete_iSceneNode(iSceneNode *self){ if (self) self->DecRef (); }
 SWIGINTERN int iMeshWrapper_scfGetVersion(){ return scfInterfaceTraits<iMeshWrapper>::GetVersion(); }
+SWIGINTERN char const *iMeshWrapper_scfGetName(){ return scfInterfaceTraits<iMeshWrapper>::GetName(); }
 SWIGINTERN void delete_iMeshWrapper(iMeshWrapper *self){ if (self) self->DecRef (); }
 SWIGINTERN int iMeshFactoryWrapper_scfGetVersion(){ return scfInterfaceTraits<iMeshFactoryWrapper>::GetVersion(); }
+SWIGINTERN char const *iMeshFactoryWrapper_scfGetName(){ return scfInterfaceTraits<iMeshFactoryWrapper>::GetName(); }
 SWIGINTERN void delete_iMeshFactoryWrapper(iMeshFactoryWrapper *self){ if (self) self->DecRef (); }
 SWIGINTERN iMeshWrapper *iMeshList___getitem____SWIG_0(iMeshList *self,int n){return self->Get(n);}
 SWIGINTERN bool iMeshList___contains____SWIG_0(iMeshList *self,iMeshWrapper *obj){
@@ -3427,30 +3444,43 @@ SWIGINTERN bool iMeshFactoryList___contains____SWIG_1(iMeshFactoryList *self,cha
 		return false;
 	}
 SWIGINTERN int iMeshWrapperIterator_scfGetVersion(){ return scfInterfaceTraits<iMeshWrapperIterator>::GetVersion(); }
+SWIGINTERN char const *iMeshWrapperIterator_scfGetName(){ return scfInterfaceTraits<iMeshWrapperIterator>::GetName(); }
 SWIGINTERN void delete_iMeshWrapperIterator(iMeshWrapperIterator *self){ if (self) self->DecRef (); }
 SWIGINTERN int iMovableListener_scfGetVersion(){ return scfInterfaceTraits<iMovableListener>::GetVersion(); }
+SWIGINTERN char const *iMovableListener_scfGetName(){ return scfInterfaceTraits<iMovableListener>::GetName(); }
 SWIGINTERN void delete_iMovableListener(iMovableListener *self){ if (self) self->DecRef (); }
 SWIGINTERN int iMovable_scfGetVersion(){ return scfInterfaceTraits<iMovable>::GetVersion(); }
+SWIGINTERN char const *iMovable_scfGetName(){ return scfInterfaceTraits<iMovable>::GetName(); }
 SWIGINTERN void delete_iMovable(iMovable *self){ if (self) self->DecRef (); }
 SWIGINTERN int iVisibilityCuller_scfGetVersion(){ return scfInterfaceTraits<iVisibilityCuller>::GetVersion(); }
+SWIGINTERN char const *iVisibilityCuller_scfGetName(){ return scfInterfaceTraits<iVisibilityCuller>::GetName(); }
 SWIGINTERN void delete_iVisibilityCuller(iVisibilityCuller *self){ if (self) self->DecRef (); }
 SWIGINTERN int iPortal_scfGetVersion(){ return scfInterfaceTraits<iPortal>::GetVersion(); }
+SWIGINTERN char const *iPortal_scfGetName(){ return scfInterfaceTraits<iPortal>::GetName(); }
 SWIGINTERN void delete_iPortal(iPortal *self){ if (self) self->DecRef (); }
 SWIGINTERN int iPortalContainer_scfGetVersion(){ return scfInterfaceTraits<iPortalContainer>::GetVersion(); }
+SWIGINTERN char const *iPortalContainer_scfGetName(){ return scfInterfaceTraits<iPortalContainer>::GetName(); }
 SWIGINTERN void delete_iPortalContainer(iPortalContainer *self){ if (self) self->DecRef (); }
 SWIGINTERN int iRenderLoop_scfGetVersion(){ return scfInterfaceTraits<iRenderLoop>::GetVersion(); }
+SWIGINTERN char const *iRenderLoop_scfGetName(){ return scfInterfaceTraits<iRenderLoop>::GetName(); }
 SWIGINTERN void delete_iRenderLoop(iRenderLoop *self){ if (self) self->DecRef (); }
 SWIGINTERN int iRenderLoopManager_scfGetVersion(){ return scfInterfaceTraits<iRenderLoopManager>::GetVersion(); }
+SWIGINTERN char const *iRenderLoopManager_scfGetName(){ return scfInterfaceTraits<iRenderLoopManager>::GetName(); }
 SWIGINTERN void delete_iRenderLoopManager(iRenderLoopManager *self){ if (self) self->DecRef (); }
 SWIGINTERN int iRenderManager_scfGetVersion(){ return scfInterfaceTraits<iRenderManager>::GetVersion(); }
+SWIGINTERN char const *iRenderManager_scfGetName(){ return scfInterfaceTraits<iRenderManager>::GetName(); }
 SWIGINTERN void delete_iRenderManager(iRenderManager *self){ if (self) self->DecRef (); }
 SWIGINTERN int iRenderManagerTargets_scfGetVersion(){ return scfInterfaceTraits<iRenderManagerTargets>::GetVersion(); }
+SWIGINTERN char const *iRenderManagerTargets_scfGetName(){ return scfInterfaceTraits<iRenderManagerTargets>::GetName(); }
 SWIGINTERN void delete_iRenderManagerTargets(iRenderManagerTargets *self){ if (self) self->DecRef (); }
 SWIGINTERN int iRenderManagerPostEffects_scfGetVersion(){ return scfInterfaceTraits<iRenderManagerPostEffects>::GetVersion(); }
+SWIGINTERN char const *iRenderManagerPostEffects_scfGetName(){ return scfInterfaceTraits<iRenderManagerPostEffects>::GetName(); }
 SWIGINTERN void delete_iRenderManagerPostEffects(iRenderManagerPostEffects *self){ if (self) self->DecRef (); }
 SWIGINTERN int iCollection_scfGetVersion(){ return scfInterfaceTraits<iCollection>::GetVersion(); }
+SWIGINTERN char const *iCollection_scfGetName(){ return scfInterfaceTraits<iCollection>::GetName(); }
 SWIGINTERN void delete_iCollection(iCollection *self){ if (self) self->DecRef (); }
 SWIGINTERN int iCollectionArray_scfGetVersion(){ return scfInterfaceTraits<iCollectionArray>::GetVersion(); }
+SWIGINTERN char const *iCollectionArray_scfGetName(){ return scfInterfaceTraits<iCollectionArray>::GetName(); }
 SWIGINTERN void delete_iCollectionArray(iCollectionArray *self){ if (self) self->DecRef (); }
 #ifdef __cplusplus
 extern "C" {
@@ -4835,6 +4865,19 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_iLight_scfGetName(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  char *result = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"iLight_scfGetName",0,0)) SWIG_fail;
+  result = (char *)iLight_scfGetName();
+  resultobj = SWIG_FromCharPtr((const char *)result);
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_delete_iLight(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   iLight *arg1 = (iLight *) 0 ;
@@ -5499,6 +5542,19 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_iLightList_scfGetName(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  char *result = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"iLightList_scfGetName",0,0)) SWIG_fail;
+  result = (char *)iLightList_scfGetName();
+  resultobj = SWIG_FromCharPtr((const char *)result);
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_delete_iLightList(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   iLightList *arg1 = (iLightList *) 0 ;
@@ -5621,6 +5677,19 @@ SWIGINTERN PyObject *_wrap_iLightIterator_scfGetVersion(PyObject *SWIGUNUSEDPARM
   if(!PyArg_UnpackTuple(args,(char *)"iLightIterator_scfGetVersion",0,0)) SWIG_fail;
   result = (int)iLightIterator_scfGetVersion();
   resultobj = SWIG_From_int(static_cast< int >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_iLightIterator_scfGetName(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  char *result = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"iLightIterator_scfGetName",0,0)) SWIG_fail;
+  result = (char *)iLightIterator_scfGetName();
+  resultobj = SWIG_FromCharPtr((const char *)result);
   return resultobj;
 fail:
   return NULL;
@@ -9374,6 +9443,19 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_iSector_scfGetName(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  char *result = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"iSector_scfGetName",0,0)) SWIG_fail;
+  result = (char *)iSector_scfGetName();
+  resultobj = SWIG_FromCharPtr((const char *)result);
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_delete_iSector(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   iSector *arg1 = (iSector *) 0 ;
@@ -10004,6 +10086,19 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_iSectorList_scfGetName(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  char *result = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"iSectorList_scfGetName",0,0)) SWIG_fail;
+  result = (char *)iSectorList_scfGetName();
+  resultobj = SWIG_FromCharPtr((const char *)result);
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_delete_iSectorList(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   iSectorList *arg1 = (iSectorList *) 0 ;
@@ -10129,6 +10224,19 @@ SWIGINTERN PyObject *_wrap_iSectorIterator_scfGetVersion(PyObject *SWIGUNUSEDPAR
   if(!PyArg_UnpackTuple(args,(char *)"iSectorIterator_scfGetVersion",0,0)) SWIG_fail;
   result = (int)iSectorIterator_scfGetVersion();
   resultobj = SWIG_From_int(static_cast< int >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_iSectorIterator_scfGetName(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  char *result = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"iSectorIterator_scfGetName",0,0)) SWIG_fail;
+  result = (char *)iSectorIterator_scfGetName();
+  resultobj = SWIG_FromCharPtr((const char *)result);
   return resultobj;
 fail:
   return NULL;
@@ -19497,6 +19605,19 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_iEngine_scfGetName(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  char *result = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"iEngine_scfGetName",0,0)) SWIG_fail;
+  result = (char *)iEngine_scfGetName();
+  resultobj = SWIG_FromCharPtr((const char *)result);
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_delete_iEngine(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   iEngine *arg1 = (iEngine *) 0 ;
@@ -21532,6 +21653,19 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_iCamera_scfGetName(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  char *result = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"iCamera_scfGetName",0,0)) SWIG_fail;
+  result = (char *)iCamera_scfGetName();
+  resultobj = SWIG_FromCharPtr((const char *)result);
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_delete_iCamera(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   iCamera *arg1 = (iCamera *) 0 ;
@@ -22464,6 +22598,19 @@ SWIGINTERN PyObject *_wrap_iCameraPosition_scfGetVersion(PyObject *SWIGUNUSEDPAR
   if(!PyArg_UnpackTuple(args,(char *)"iCameraPosition_scfGetVersion",0,0)) SWIG_fail;
   result = (int)iCameraPosition_scfGetVersion();
   resultobj = SWIG_From_int(static_cast< int >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_iCameraPosition_scfGetName(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  char *result = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"iCameraPosition_scfGetName",0,0)) SWIG_fail;
+  result = (char *)iCameraPosition_scfGetName();
+  resultobj = SWIG_FromCharPtr((const char *)result);
   return resultobj;
 fail:
   return NULL;
@@ -23795,6 +23942,19 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_iTextureWrapper_scfGetName(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  char *result = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"iTextureWrapper_scfGetName",0,0)) SWIG_fail;
+  result = (char *)iTextureWrapper_scfGetName();
+  resultobj = SWIG_FromCharPtr((const char *)result);
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_delete_iTextureWrapper(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   iTextureWrapper *arg1 = (iTextureWrapper *) 0 ;
@@ -24665,6 +24825,19 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_iTextureList_scfGetName(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  char *result = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"iTextureList_scfGetName",0,0)) SWIG_fail;
+  result = (char *)iTextureList_scfGetName();
+  resultobj = SWIG_FromCharPtr((const char *)result);
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_delete_iTextureList(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   iTextureList *arg1 = (iTextureList *) 0 ;
@@ -24817,6 +24990,19 @@ SWIGINTERN PyObject *_wrap_iMaterialWrapper_scfGetVersion(PyObject *SWIGUNUSEDPA
   if(!PyArg_UnpackTuple(args,(char *)"iMaterialWrapper_scfGetVersion",0,0)) SWIG_fail;
   result = (int)iMaterialWrapper_scfGetVersion();
   resultobj = SWIG_From_int(static_cast< int >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_iMaterialWrapper_scfGetName(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  char *result = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"iMaterialWrapper_scfGetName",0,0)) SWIG_fail;
+  result = (char *)iMaterialWrapper_scfGetName();
+  resultobj = SWIG_FromCharPtr((const char *)result);
   return resultobj;
 fail:
   return NULL;
@@ -24993,6 +25179,19 @@ SWIGINTERN PyObject *_wrap_iMaterialEngine_scfGetVersion(PyObject *SWIGUNUSEDPAR
   if(!PyArg_UnpackTuple(args,(char *)"iMaterialEngine_scfGetVersion",0,0)) SWIG_fail;
   result = (int)iMaterialEngine_scfGetVersion();
   resultobj = SWIG_From_int(static_cast< int >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_iMaterialEngine_scfGetName(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  char *result = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"iMaterialEngine_scfGetName",0,0)) SWIG_fail;
+  result = (char *)iMaterialEngine_scfGetName();
+  resultobj = SWIG_FromCharPtr((const char *)result);
   return resultobj;
 fail:
   return NULL;
@@ -25978,6 +26177,19 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_iSceneNodeArray_scfGetName(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  char *result = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"iSceneNodeArray_scfGetName",0,0)) SWIG_fail;
+  result = (char *)iSceneNodeArray_scfGetName();
+  resultobj = SWIG_FromCharPtr((const char *)result);
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_delete_iSceneNodeArray(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   iSceneNodeArray *arg1 = (iSceneNodeArray *) 0 ;
@@ -26210,6 +26422,19 @@ SWIGINTERN PyObject *_wrap_iSceneNode_scfGetVersion(PyObject *SWIGUNUSEDPARM(sel
   if(!PyArg_UnpackTuple(args,(char *)"iSceneNode_scfGetVersion",0,0)) SWIG_fail;
   result = (int)iSceneNode_scfGetVersion();
   resultobj = SWIG_From_int(static_cast< int >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_iSceneNode_scfGetName(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  char *result = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"iSceneNode_scfGetName",0,0)) SWIG_fail;
+  result = (char *)iSceneNode_scfGetName();
+  resultobj = SWIG_FromCharPtr((const char *)result);
   return resultobj;
 fail:
   return NULL;
@@ -28851,6 +29076,19 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_iMeshWrapper_scfGetName(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  char *result = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"iMeshWrapper_scfGetName",0,0)) SWIG_fail;
+  result = (char *)iMeshWrapper_scfGetName();
+  resultobj = SWIG_FromCharPtr((const char *)result);
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_delete_iMeshWrapper(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   iMeshWrapper *arg1 = (iMeshWrapper *) 0 ;
@@ -29955,6 +30193,19 @@ SWIGINTERN PyObject *_wrap_iMeshFactoryWrapper_scfGetVersion(PyObject *SWIGUNUSE
   if(!PyArg_UnpackTuple(args,(char *)"iMeshFactoryWrapper_scfGetVersion",0,0)) SWIG_fail;
   result = (int)iMeshFactoryWrapper_scfGetVersion();
   resultobj = SWIG_From_int(static_cast< int >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_iMeshFactoryWrapper_scfGetName(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  char *result = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"iMeshFactoryWrapper_scfGetName",0,0)) SWIG_fail;
+  result = (char *)iMeshFactoryWrapper_scfGetName();
+  resultobj = SWIG_FromCharPtr((const char *)result);
   return resultobj;
 fail:
   return NULL;
@@ -31394,6 +31645,19 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_iMeshWrapperIterator_scfGetName(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  char *result = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"iMeshWrapperIterator_scfGetName",0,0)) SWIG_fail;
+  result = (char *)iMeshWrapperIterator_scfGetName();
+  resultobj = SWIG_FromCharPtr((const char *)result);
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_delete_iMeshWrapperIterator(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   iMeshWrapperIterator *arg1 = (iMeshWrapperIterator *) 0 ;
@@ -31489,6 +31753,19 @@ SWIGINTERN PyObject *_wrap_iMovableListener_scfGetVersion(PyObject *SWIGUNUSEDPA
   if(!PyArg_UnpackTuple(args,(char *)"iMovableListener_scfGetVersion",0,0)) SWIG_fail;
   result = (int)iMovableListener_scfGetVersion();
   resultobj = SWIG_From_int(static_cast< int >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_iMovableListener_scfGetName(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  char *result = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"iMovableListener_scfGetName",0,0)) SWIG_fail;
+  result = (char *)iMovableListener_scfGetName();
+  resultobj = SWIG_FromCharPtr((const char *)result);
   return resultobj;
 fail:
   return NULL;
@@ -32279,6 +32556,19 @@ SWIGINTERN PyObject *_wrap_iMovable_scfGetVersion(PyObject *SWIGUNUSEDPARM(self)
   if(!PyArg_UnpackTuple(args,(char *)"iMovable_scfGetVersion",0,0)) SWIG_fail;
   result = (int)iMovable_scfGetVersion();
   resultobj = SWIG_From_int(static_cast< int >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_iMovable_scfGetName(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  char *result = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"iMovable_scfGetName",0,0)) SWIG_fail;
+  result = (char *)iMovable_scfGetName();
+  resultobj = SWIG_FromCharPtr((const char *)result);
   return resultobj;
 fail:
   return NULL;
@@ -33650,6 +33940,19 @@ SWIGINTERN PyObject *_wrap_iVisibilityCuller_scfGetVersion(PyObject *SWIGUNUSEDP
   if(!PyArg_UnpackTuple(args,(char *)"iVisibilityCuller_scfGetVersion",0,0)) SWIG_fail;
   result = (int)iVisibilityCuller_scfGetVersion();
   resultobj = SWIG_From_int(static_cast< int >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_iVisibilityCuller_scfGetName(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  char *result = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"iVisibilityCuller_scfGetName",0,0)) SWIG_fail;
+  result = (char *)iVisibilityCuller_scfGetName();
+  resultobj = SWIG_FromCharPtr((const char *)result);
   return resultobj;
 fail:
   return NULL;
@@ -35540,6 +35843,19 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_iPortal_scfGetName(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  char *result = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"iPortal_scfGetName",0,0)) SWIG_fail;
+  result = (char *)iPortal_scfGetName();
+  resultobj = SWIG_FromCharPtr((const char *)result);
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_delete_iPortal(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   iPortal *arg1 = (iPortal *) 0 ;
@@ -35848,6 +36164,19 @@ SWIGINTERN PyObject *_wrap_iPortalContainer_scfGetVersion(PyObject *SWIGUNUSEDPA
   if(!PyArg_UnpackTuple(args,(char *)"iPortalContainer_scfGetVersion",0,0)) SWIG_fail;
   result = (int)iPortalContainer_scfGetVersion();
   resultobj = SWIG_From_int(static_cast< int >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_iPortalContainer_scfGetName(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  char *result = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"iPortalContainer_scfGetName",0,0)) SWIG_fail;
+  result = (char *)iPortalContainer_scfGetName();
+  resultobj = SWIG_FromCharPtr((const char *)result);
   return resultobj;
 fail:
   return NULL;
@@ -36213,6 +36542,19 @@ SWIGINTERN PyObject *_wrap_iRenderLoop_scfGetVersion(PyObject *SWIGUNUSEDPARM(se
   if(!PyArg_UnpackTuple(args,(char *)"iRenderLoop_scfGetVersion",0,0)) SWIG_fail;
   result = (int)iRenderLoop_scfGetVersion();
   resultobj = SWIG_From_int(static_cast< int >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_iRenderLoop_scfGetName(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  char *result = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"iRenderLoop_scfGetName",0,0)) SWIG_fail;
+  result = (char *)iRenderLoop_scfGetName();
+  resultobj = SWIG_FromCharPtr((const char *)result);
   return resultobj;
 fail:
   return NULL;
@@ -36684,6 +37026,19 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_iRenderLoopManager_scfGetName(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  char *result = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"iRenderLoopManager_scfGetName",0,0)) SWIG_fail;
+  result = (char *)iRenderLoopManager_scfGetName();
+  resultobj = SWIG_FromCharPtr((const char *)result);
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_delete_iRenderLoopManager(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   iRenderLoopManager *arg1 = (iRenderLoopManager *) 0 ;
@@ -36781,6 +37136,19 @@ SWIGINTERN PyObject *_wrap_iRenderManager_scfGetVersion(PyObject *SWIGUNUSEDPARM
   if(!PyArg_UnpackTuple(args,(char *)"iRenderManager_scfGetVersion",0,0)) SWIG_fail;
   result = (int)iRenderManager_scfGetVersion();
   resultobj = SWIG_From_int(static_cast< int >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_iRenderManager_scfGetName(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  char *result = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"iRenderManager_scfGetName",0,0)) SWIG_fail;
+  result = (char *)iRenderManager_scfGetName();
+  resultobj = SWIG_FromCharPtr((const char *)result);
   return resultobj;
 fail:
   return NULL;
@@ -37221,6 +37589,19 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_iRenderManagerTargets_scfGetName(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  char *result = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"iRenderManagerTargets_scfGetName",0,0)) SWIG_fail;
+  result = (char *)iRenderManagerTargets_scfGetName();
+  resultobj = SWIG_FromCharPtr((const char *)result);
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_delete_iRenderManagerTargets(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   iRenderManagerTargets *arg1 = (iRenderManagerTargets *) 0 ;
@@ -37342,6 +37723,19 @@ SWIGINTERN PyObject *_wrap_iRenderManagerPostEffects_scfGetVersion(PyObject *SWI
   if(!PyArg_UnpackTuple(args,(char *)"iRenderManagerPostEffects_scfGetVersion",0,0)) SWIG_fail;
   result = (int)iRenderManagerPostEffects_scfGetVersion();
   resultobj = SWIG_From_int(static_cast< int >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_iRenderManagerPostEffects_scfGetName(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  char *result = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"iRenderManagerPostEffects_scfGetName",0,0)) SWIG_fail;
+  result = (char *)iRenderManagerPostEffects_scfGetName();
+  resultobj = SWIG_FromCharPtr((const char *)result);
   return resultobj;
 fail:
   return NULL;
@@ -38120,6 +38514,19 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_iCollection_scfGetName(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  char *result = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"iCollection_scfGetName",0,0)) SWIG_fail;
+  result = (char *)iCollection_scfGetName();
+  resultobj = SWIG_FromCharPtr((const char *)result);
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_delete_iCollection(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   iCollection *arg1 = (iCollection *) 0 ;
@@ -38155,6 +38562,19 @@ SWIGINTERN PyObject *_wrap_iCollectionArray_scfGetVersion(PyObject *SWIGUNUSEDPA
   if(!PyArg_UnpackTuple(args,(char *)"iCollectionArray_scfGetVersion",0,0)) SWIG_fail;
   result = (int)iCollectionArray_scfGetVersion();
   resultobj = SWIG_From_int(static_cast< int >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_iCollectionArray_scfGetName(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  char *result = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"iCollectionArray_scfGetName",0,0)) SWIG_fail;
+  result = (char *)iCollectionArray_scfGetName();
+  resultobj = SWIG_FromCharPtr((const char *)result);
   return resultobj;
 fail:
   return NULL;
@@ -38240,6 +38660,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"iLight_GetLocalBBox", _wrap_iLight_GetLocalBBox, METH_VARARGS, NULL},
 	 { (char *)"iLight_GetWorldBBox", _wrap_iLight_GetWorldBBox, METH_VARARGS, NULL},
 	 { (char *)"iLight_scfGetVersion", _wrap_iLight_scfGetVersion, METH_VARARGS, NULL},
+	 { (char *)"iLight_scfGetName", _wrap_iLight_scfGetName, METH_VARARGS, NULL},
 	 { (char *)"delete_iLight", _wrap_delete_iLight, METH_VARARGS, NULL},
 	 { (char *)"iLight_swigregister", iLight_swigregister, METH_VARARGS, NULL},
 	 { (char *)"iLightList_GetCount", _wrap_iLightList_GetCount, METH_VARARGS, NULL},
@@ -38256,6 +38677,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"iLightList___getitem__", _wrap_iLightList___getitem__, METH_VARARGS, NULL},
 	 { (char *)"iLightList___contains__", _wrap_iLightList___contains__, METH_VARARGS, NULL},
 	 { (char *)"iLightList_scfGetVersion", _wrap_iLightList_scfGetVersion, METH_VARARGS, NULL},
+	 { (char *)"iLightList_scfGetName", _wrap_iLightList_scfGetName, METH_VARARGS, NULL},
 	 { (char *)"delete_iLightList", _wrap_delete_iLightList, METH_VARARGS, NULL},
 	 { (char *)"iLightList_swigregister", iLightList_swigregister, METH_VARARGS, NULL},
 	 { (char *)"iLightIterator_HasNext", _wrap_iLightIterator_HasNext, METH_VARARGS, NULL},
@@ -38263,6 +38685,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"iLightIterator_GetLastSector", _wrap_iLightIterator_GetLastSector, METH_VARARGS, NULL},
 	 { (char *)"iLightIterator_Reset", _wrap_iLightIterator_Reset, METH_VARARGS, NULL},
 	 { (char *)"iLightIterator_scfGetVersion", _wrap_iLightIterator_scfGetVersion, METH_VARARGS, NULL},
+	 { (char *)"iLightIterator_scfGetName", _wrap_iLightIterator_scfGetName, METH_VARARGS, NULL},
 	 { (char *)"delete_iLightIterator", _wrap_delete_iLightIterator, METH_VARARGS, NULL},
 	 { (char *)"iLightIterator_swigregister", iLightIterator_swigregister, METH_VARARGS, NULL},
 	 { (char *)"csFog_density_set", _wrap_csFog_density_set, METH_VARARGS, NULL},
@@ -38362,6 +38785,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"iSector_CallSectorCallbacks", _wrap_iSector_CallSectorCallbacks, METH_VARARGS, NULL},
 	 { (char *)"iSector_GetVisibleRenderMeshes", _wrap_iSector_GetVisibleRenderMeshes, METH_VARARGS, NULL},
 	 { (char *)"iSector_scfGetVersion", _wrap_iSector_scfGetVersion, METH_VARARGS, NULL},
+	 { (char *)"iSector_scfGetName", _wrap_iSector_scfGetName, METH_VARARGS, NULL},
 	 { (char *)"delete_iSector", _wrap_delete_iSector, METH_VARARGS, NULL},
 	 { (char *)"iSector_swigregister", iSector_swigregister, METH_VARARGS, NULL},
 	 { (char *)"iSectorList_GetCount", _wrap_iSectorList_GetCount, METH_VARARGS, NULL},
@@ -38377,6 +38801,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"iSectorList___getitem__", _wrap_iSectorList___getitem__, METH_VARARGS, NULL},
 	 { (char *)"iSectorList___contains__", _wrap_iSectorList___contains__, METH_VARARGS, NULL},
 	 { (char *)"iSectorList_scfGetVersion", _wrap_iSectorList_scfGetVersion, METH_VARARGS, NULL},
+	 { (char *)"iSectorList_scfGetName", _wrap_iSectorList_scfGetName, METH_VARARGS, NULL},
 	 { (char *)"delete_iSectorList", _wrap_delete_iSectorList, METH_VARARGS, NULL},
 	 { (char *)"iSectorList_swigregister", iSectorList_swigregister, METH_VARARGS, NULL},
 	 { (char *)"iSectorIterator_HasNext", _wrap_iSectorIterator_HasNext, METH_VARARGS, NULL},
@@ -38384,6 +38809,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"iSectorIterator_GetLastPosition", _wrap_iSectorIterator_GetLastPosition, METH_VARARGS, NULL},
 	 { (char *)"iSectorIterator_Reset", _wrap_iSectorIterator_Reset, METH_VARARGS, NULL},
 	 { (char *)"iSectorIterator_scfGetVersion", _wrap_iSectorIterator_scfGetVersion, METH_VARARGS, NULL},
+	 { (char *)"iSectorIterator_scfGetName", _wrap_iSectorIterator_scfGetName, METH_VARARGS, NULL},
 	 { (char *)"delete_iSectorIterator", _wrap_delete_iSectorIterator, METH_VARARGS, NULL},
 	 { (char *)"iSectorIterator_swigregister", iSectorIterator_swigregister, METH_VARARGS, NULL},
 	 { (char *)"iEngineFrameCallback_StartFrame", _wrap_iEngineFrameCallback_StartFrame, METH_VARARGS, NULL},
@@ -38510,6 +38936,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"iEngine_GetDefaultNearClipDistance", _wrap_iEngine_GetDefaultNearClipDistance, METH_VARARGS, NULL},
 	 { (char *)"iEngine_SetDefaultNearClipDistance", _wrap_iEngine_SetDefaultNearClipDistance, METH_VARARGS, NULL},
 	 { (char *)"iEngine_scfGetVersion", _wrap_iEngine_scfGetVersion, METH_VARARGS, NULL},
+	 { (char *)"iEngine_scfGetName", _wrap_iEngine_scfGetName, METH_VARARGS, NULL},
 	 { (char *)"delete_iEngine", _wrap_delete_iEngine, METH_VARARGS, NULL},
 	 { (char *)"iEngine_swigregister", iEngine_swigregister, METH_VARARGS, NULL},
 	 { (char *)"iLODControl_SetLOD", _wrap_iLODControl_SetLOD, METH_VARARGS, NULL},
@@ -38564,6 +38991,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"iCamera_SetViewportSize", _wrap_iCamera_SetViewportSize, METH_VARARGS, NULL},
 	 { (char *)"iCamera_GetInvProjectionMatrix", _wrap_iCamera_GetInvProjectionMatrix, METH_VARARGS, NULL},
 	 { (char *)"iCamera_scfGetVersion", _wrap_iCamera_scfGetVersion, METH_VARARGS, NULL},
+	 { (char *)"iCamera_scfGetName", _wrap_iCamera_scfGetName, METH_VARARGS, NULL},
 	 { (char *)"delete_iCamera", _wrap_delete_iCamera, METH_VARARGS, NULL},
 	 { (char *)"iCamera_swigregister", iCamera_swigregister, METH_VARARGS, NULL},
 	 { (char *)"iPerspectiveCamera_GetCamera", _wrap_iPerspectiveCamera_GetCamera, METH_VARARGS, NULL},
@@ -38600,6 +39028,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"iCameraPosition_GetFarPlane", _wrap_iCameraPosition_GetFarPlane, METH_VARARGS, NULL},
 	 { (char *)"iCameraPosition_Save", _wrap_iCameraPosition_Save, METH_VARARGS, NULL},
 	 { (char *)"iCameraPosition_scfGetVersion", _wrap_iCameraPosition_scfGetVersion, METH_VARARGS, NULL},
+	 { (char *)"iCameraPosition_scfGetName", _wrap_iCameraPosition_scfGetName, METH_VARARGS, NULL},
 	 { (char *)"delete_iCameraPosition", _wrap_delete_iCameraPosition, METH_VARARGS, NULL},
 	 { (char *)"iCameraPosition_swigregister", iCameraPosition_swigregister, METH_VARARGS, NULL},
 	 { (char *)"iCameraPositionList_NewCameraPosition", _wrap_iCameraPositionList_NewCameraPosition, METH_VARARGS, NULL},
@@ -38641,6 +39070,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"iTextureWrapper_SetTextureClass", _wrap_iTextureWrapper_SetTextureClass, METH_VARARGS, NULL},
 	 { (char *)"iTextureWrapper_GetTextureClass", _wrap_iTextureWrapper_GetTextureClass, METH_VARARGS, NULL},
 	 { (char *)"iTextureWrapper_scfGetVersion", _wrap_iTextureWrapper_scfGetVersion, METH_VARARGS, NULL},
+	 { (char *)"iTextureWrapper_scfGetName", _wrap_iTextureWrapper_scfGetName, METH_VARARGS, NULL},
 	 { (char *)"delete_iTextureWrapper", _wrap_delete_iTextureWrapper, METH_VARARGS, NULL},
 	 { (char *)"iTextureWrapper_swigregister", iTextureWrapper_swigregister, METH_VARARGS, NULL},
 	 { (char *)"iTextureList_NewTexture", _wrap_iTextureList_NewTexture, METH_VARARGS, NULL},
@@ -38658,6 +39088,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"iTextureList___getitem__", _wrap_iTextureList___getitem__, METH_VARARGS, NULL},
 	 { (char *)"iTextureList___contains__", _wrap_iTextureList___contains__, METH_VARARGS, NULL},
 	 { (char *)"iTextureList_scfGetVersion", _wrap_iTextureList_scfGetVersion, METH_VARARGS, NULL},
+	 { (char *)"iTextureList_scfGetName", _wrap_iTextureList_scfGetName, METH_VARARGS, NULL},
 	 { (char *)"delete_iTextureList", _wrap_delete_iTextureList, METH_VARARGS, NULL},
 	 { (char *)"iTextureList_swigregister", iTextureList_swigregister, METH_VARARGS, NULL},
 	 { (char *)"iMaterialWrapper_QueryObject", _wrap_iMaterialWrapper_QueryObject, METH_VARARGS, NULL},
@@ -38666,12 +39097,14 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"iMaterialWrapper_Visit", _wrap_iMaterialWrapper_Visit, METH_VARARGS, NULL},
 	 { (char *)"iMaterialWrapper_IsVisitRequired", _wrap_iMaterialWrapper_IsVisitRequired, METH_VARARGS, NULL},
 	 { (char *)"iMaterialWrapper_scfGetVersion", _wrap_iMaterialWrapper_scfGetVersion, METH_VARARGS, NULL},
+	 { (char *)"iMaterialWrapper_scfGetName", _wrap_iMaterialWrapper_scfGetName, METH_VARARGS, NULL},
 	 { (char *)"delete_iMaterialWrapper", _wrap_delete_iMaterialWrapper, METH_VARARGS, NULL},
 	 { (char *)"iMaterialWrapper_swigregister", iMaterialWrapper_swigregister, METH_VARARGS, NULL},
 	 { (char *)"iMaterialEngine_GetTextureWrapper", _wrap_iMaterialEngine_GetTextureWrapper, METH_VARARGS, NULL},
 	 { (char *)"iMaterialEngine_Visit", _wrap_iMaterialEngine_Visit, METH_VARARGS, NULL},
 	 { (char *)"iMaterialEngine_IsVisitRequired", _wrap_iMaterialEngine_IsVisitRequired, METH_VARARGS, NULL},
 	 { (char *)"iMaterialEngine_scfGetVersion", _wrap_iMaterialEngine_scfGetVersion, METH_VARARGS, NULL},
+	 { (char *)"iMaterialEngine_scfGetName", _wrap_iMaterialEngine_scfGetName, METH_VARARGS, NULL},
 	 { (char *)"delete_iMaterialEngine", _wrap_delete_iMaterialEngine, METH_VARARGS, NULL},
 	 { (char *)"iMaterialEngine_swigregister", iMaterialEngine_swigregister, METH_VARARGS, NULL},
 	 { (char *)"iMaterialList_NewMaterial", _wrap_iMaterialList_NewMaterial, METH_VARARGS, NULL},
@@ -38700,6 +39133,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"delete_iSceneNodeArrayReadOnly", _wrap_delete_iSceneNodeArrayReadOnly, METH_VARARGS, NULL},
 	 { (char *)"iSceneNodeArrayReadOnly_swigregister", iSceneNodeArrayReadOnly_swigregister, METH_VARARGS, NULL},
 	 { (char *)"iSceneNodeArray_scfGetVersion", _wrap_iSceneNodeArray_scfGetVersion, METH_VARARGS, NULL},
+	 { (char *)"iSceneNodeArray_scfGetName", _wrap_iSceneNodeArray_scfGetName, METH_VARARGS, NULL},
 	 { (char *)"delete_iSceneNodeArray", _wrap_delete_iSceneNodeArray, METH_VARARGS, NULL},
 	 { (char *)"iSceneNodeArray_swigregister", iSceneNodeArray_swigregister, METH_VARARGS, NULL},
 	 { (char *)"iSceneNode_GetMovable", _wrap_iSceneNode_GetMovable, METH_VARARGS, NULL},
@@ -38711,6 +39145,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"iSceneNode_GetChildren", _wrap_iSceneNode_GetChildren, METH_VARARGS, NULL},
 	 { (char *)"iSceneNode_GetChildrenArray", _wrap_iSceneNode_GetChildrenArray, METH_VARARGS, NULL},
 	 { (char *)"iSceneNode_scfGetVersion", _wrap_iSceneNode_scfGetVersion, METH_VARARGS, NULL},
+	 { (char *)"iSceneNode_scfGetName", _wrap_iSceneNode_scfGetName, METH_VARARGS, NULL},
 	 { (char *)"delete_iSceneNode", _wrap_delete_iSceneNode, METH_VARARGS, NULL},
 	 { (char *)"iSceneNode_swigregister", iSceneNode_swigregister, METH_VARARGS, NULL},
 	 { (char *)"iMeshDrawCallback_BeforeDrawing", _wrap_iMeshDrawCallback_BeforeDrawing, METH_VARARGS, NULL},
@@ -38795,6 +39230,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"iMeshWrapper_AddInstance", _wrap_iMeshWrapper_AddInstance, METH_VARARGS, NULL},
 	 { (char *)"iMeshWrapper_RemoveInstance", _wrap_iMeshWrapper_RemoveInstance, METH_VARARGS, NULL},
 	 { (char *)"iMeshWrapper_scfGetVersion", _wrap_iMeshWrapper_scfGetVersion, METH_VARARGS, NULL},
+	 { (char *)"iMeshWrapper_scfGetName", _wrap_iMeshWrapper_scfGetName, METH_VARARGS, NULL},
 	 { (char *)"delete_iMeshWrapper", _wrap_delete_iMeshWrapper, METH_VARARGS, NULL},
 	 { (char *)"iMeshWrapper_swigregister", iMeshWrapper_swigregister, METH_VARARGS, NULL},
 	 { (char *)"iMeshFactoryWrapper_QueryObject", _wrap_iMeshFactoryWrapper_QueryObject, METH_VARARGS, NULL},
@@ -38830,6 +39266,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"iMeshFactoryWrapper_GetExtraRenderMeshCount", _wrap_iMeshFactoryWrapper_GetExtraRenderMeshCount, METH_VARARGS, NULL},
 	 { (char *)"iMeshFactoryWrapper_RemoveExtraRenderMesh", _wrap_iMeshFactoryWrapper_RemoveExtraRenderMesh, METH_VARARGS, NULL},
 	 { (char *)"iMeshFactoryWrapper_scfGetVersion", _wrap_iMeshFactoryWrapper_scfGetVersion, METH_VARARGS, NULL},
+	 { (char *)"iMeshFactoryWrapper_scfGetName", _wrap_iMeshFactoryWrapper_scfGetName, METH_VARARGS, NULL},
 	 { (char *)"delete_iMeshFactoryWrapper", _wrap_delete_iMeshFactoryWrapper, METH_VARARGS, NULL},
 	 { (char *)"iMeshFactoryWrapper_swigregister", iMeshFactoryWrapper_swigregister, METH_VARARGS, NULL},
 	 { (char *)"iMeshList_GetCount", _wrap_iMeshList_GetCount, METH_VARARGS, NULL},
@@ -38869,11 +39306,13 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"iMeshWrapperIterator_Reset", _wrap_iMeshWrapperIterator_Reset, METH_VARARGS, NULL},
 	 { (char *)"iMeshWrapperIterator_HasNext", _wrap_iMeshWrapperIterator_HasNext, METH_VARARGS, NULL},
 	 { (char *)"iMeshWrapperIterator_scfGetVersion", _wrap_iMeshWrapperIterator_scfGetVersion, METH_VARARGS, NULL},
+	 { (char *)"iMeshWrapperIterator_scfGetName", _wrap_iMeshWrapperIterator_scfGetName, METH_VARARGS, NULL},
 	 { (char *)"delete_iMeshWrapperIterator", _wrap_delete_iMeshWrapperIterator, METH_VARARGS, NULL},
 	 { (char *)"iMeshWrapperIterator_swigregister", iMeshWrapperIterator_swigregister, METH_VARARGS, NULL},
 	 { (char *)"iMovableListener_MovableChanged", _wrap_iMovableListener_MovableChanged, METH_VARARGS, NULL},
 	 { (char *)"iMovableListener_MovableDestroyed", _wrap_iMovableListener_MovableDestroyed, METH_VARARGS, NULL},
 	 { (char *)"iMovableListener_scfGetVersion", _wrap_iMovableListener_scfGetVersion, METH_VARARGS, NULL},
+	 { (char *)"iMovableListener_scfGetName", _wrap_iMovableListener_scfGetName, METH_VARARGS, NULL},
 	 { (char *)"delete_iMovableListener", _wrap_delete_iMovableListener, METH_VARARGS, NULL},
 	 { (char *)"iMovableListener_swigregister", iMovableListener_swigregister, METH_VARARGS, NULL},
 	 { (char *)"iMovable_GetSceneNode", _wrap_iMovable_GetSceneNode, METH_VARARGS, NULL},
@@ -38899,6 +39338,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"iMovable_SetFullTransform", _wrap_iMovable_SetFullTransform, METH_VARARGS, NULL},
 	 { (char *)"iMovable_SetFullPosition", _wrap_iMovable_SetFullPosition, METH_VARARGS, NULL},
 	 { (char *)"iMovable_scfGetVersion", _wrap_iMovable_scfGetVersion, METH_VARARGS, NULL},
+	 { (char *)"iMovable_scfGetName", _wrap_iMovable_scfGetName, METH_VARARGS, NULL},
 	 { (char *)"delete_iMovable", _wrap_delete_iMovable, METH_VARARGS, NULL},
 	 { (char *)"iMovable_swigregister", iMovable_swigregister, METH_VARARGS, NULL},
 	 { (char *)"iVisibilityObjectIterator_HasNext", _wrap_iVisibilityObjectIterator_HasNext, METH_VARARGS, NULL},
@@ -38923,6 +39363,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"iVisibilityCuller_BeginPrecacheCulling", _wrap_iVisibilityCuller_BeginPrecacheCulling, METH_VARARGS, NULL},
 	 { (char *)"iVisibilityCuller_EndPrecacheCulling", _wrap_iVisibilityCuller_EndPrecacheCulling, METH_VARARGS, NULL},
 	 { (char *)"iVisibilityCuller_scfGetVersion", _wrap_iVisibilityCuller_scfGetVersion, METH_VARARGS, NULL},
+	 { (char *)"iVisibilityCuller_scfGetName", _wrap_iVisibilityCuller_scfGetName, METH_VARARGS, NULL},
 	 { (char *)"delete_iVisibilityCuller", _wrap_delete_iVisibilityCuller, METH_VARARGS, NULL},
 	 { (char *)"iVisibilityCuller_swigregister", iVisibilityCuller_swigregister, METH_VARARGS, NULL},
 	 { (char *)"iVisibilityObject_GetMovable", _wrap_iVisibilityObject_GetMovable, METH_VARARGS, NULL},
@@ -38976,6 +39417,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"iPortal_GetMaterial", _wrap_iPortal_GetMaterial, METH_VARARGS, NULL},
 	 { (char *)"iPortal_SetMaterial", _wrap_iPortal_SetMaterial, METH_VARARGS, NULL},
 	 { (char *)"iPortal_scfGetVersion", _wrap_iPortal_scfGetVersion, METH_VARARGS, NULL},
+	 { (char *)"iPortal_scfGetName", _wrap_iPortal_scfGetName, METH_VARARGS, NULL},
 	 { (char *)"delete_iPortal", _wrap_delete_iPortal, METH_VARARGS, NULL},
 	 { (char *)"iPortal_swigregister", iPortal_swigregister, METH_VARARGS, NULL},
 	 { (char *)"iPortalContainer_GetPortalCount", _wrap_iPortalContainer_GetPortalCount, METH_VARARGS, NULL},
@@ -38986,6 +39428,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"iPortalContainer_ComputeScreenPolygons", _wrap_iPortalContainer_ComputeScreenPolygons, METH_VARARGS, NULL},
 	 { (char *)"iPortalContainer_GetTotalVertexCount", _wrap_iPortalContainer_GetTotalVertexCount, METH_VARARGS, NULL},
 	 { (char *)"iPortalContainer_scfGetVersion", _wrap_iPortalContainer_scfGetVersion, METH_VARARGS, NULL},
+	 { (char *)"iPortalContainer_scfGetName", _wrap_iPortalContainer_scfGetName, METH_VARARGS, NULL},
 	 { (char *)"delete_iPortalContainer", _wrap_delete_iPortalContainer, METH_VARARGS, NULL},
 	 { (char *)"iPortalContainer_swigregister", iPortalContainer_swigregister, METH_VARARGS, NULL},
 	 { (char *)"iRenderStepContainer_AddStep", _wrap_iRenderStepContainer_AddStep, METH_VARARGS, NULL},
@@ -38997,6 +39440,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"iRenderStepContainer_swigregister", iRenderStepContainer_swigregister, METH_VARARGS, NULL},
 	 { (char *)"iRenderLoop_Draw", _wrap_iRenderLoop_Draw, METH_VARARGS, NULL},
 	 { (char *)"iRenderLoop_scfGetVersion", _wrap_iRenderLoop_scfGetVersion, METH_VARARGS, NULL},
+	 { (char *)"iRenderLoop_scfGetName", _wrap_iRenderLoop_scfGetName, METH_VARARGS, NULL},
 	 { (char *)"delete_iRenderLoop", _wrap_delete_iRenderLoop, METH_VARARGS, NULL},
 	 { (char *)"iRenderLoop_swigregister", iRenderLoop_swigregister, METH_VARARGS, NULL},
 	 { (char *)"iRenderLoopManager_Create", _wrap_iRenderLoopManager_Create, METH_VARARGS, NULL},
@@ -39007,23 +39451,27 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"iRenderLoopManager_Load", _wrap_iRenderLoopManager_Load, METH_VARARGS, NULL},
 	 { (char *)"iRenderLoopManager_UnregisterAll", _wrap_iRenderLoopManager_UnregisterAll, METH_VARARGS, NULL},
 	 { (char *)"iRenderLoopManager_scfGetVersion", _wrap_iRenderLoopManager_scfGetVersion, METH_VARARGS, NULL},
+	 { (char *)"iRenderLoopManager_scfGetName", _wrap_iRenderLoopManager_scfGetName, METH_VARARGS, NULL},
 	 { (char *)"delete_iRenderLoopManager", _wrap_delete_iRenderLoopManager, METH_VARARGS, NULL},
 	 { (char *)"iRenderLoopManager_swigregister", iRenderLoopManager_swigregister, METH_VARARGS, NULL},
 	 { (char *)"iRenderManager_RenderView", _wrap_iRenderManager_RenderView, METH_VARARGS, NULL},
 	 { (char *)"iRenderManager_PrecacheView", _wrap_iRenderManager_PrecacheView, METH_VARARGS, NULL},
 	 { (char *)"iRenderManager_scfGetVersion", _wrap_iRenderManager_scfGetVersion, METH_VARARGS, NULL},
+	 { (char *)"iRenderManager_scfGetName", _wrap_iRenderManager_scfGetName, METH_VARARGS, NULL},
 	 { (char *)"delete_iRenderManager", _wrap_delete_iRenderManager, METH_VARARGS, NULL},
 	 { (char *)"iRenderManager_swigregister", iRenderManager_swigregister, METH_VARARGS, NULL},
 	 { (char *)"iRenderManagerTargets_RegisterRenderTarget", _wrap_iRenderManagerTargets_RegisterRenderTarget, METH_VARARGS, NULL},
 	 { (char *)"iRenderManagerTargets_UnregisterRenderTarget", _wrap_iRenderManagerTargets_UnregisterRenderTarget, METH_VARARGS, NULL},
 	 { (char *)"iRenderManagerTargets_MarkAsUsed", _wrap_iRenderManagerTargets_MarkAsUsed, METH_VARARGS, NULL},
 	 { (char *)"iRenderManagerTargets_scfGetVersion", _wrap_iRenderManagerTargets_scfGetVersion, METH_VARARGS, NULL},
+	 { (char *)"iRenderManagerTargets_scfGetName", _wrap_iRenderManagerTargets_scfGetName, METH_VARARGS, NULL},
 	 { (char *)"delete_iRenderManagerTargets", _wrap_delete_iRenderManagerTargets, METH_VARARGS, NULL},
 	 { (char *)"iRenderManagerTargets_swigregister", iRenderManagerTargets_swigregister, METH_VARARGS, NULL},
 	 { (char *)"iRenderManagerPostEffects_ClearLayers", _wrap_iRenderManagerPostEffects_ClearLayers, METH_VARARGS, NULL},
 	 { (char *)"iRenderManagerPostEffects_AddLayersFromDocument", _wrap_iRenderManagerPostEffects_AddLayersFromDocument, METH_VARARGS, NULL},
 	 { (char *)"iRenderManagerPostEffects_AddLayersFromFile", _wrap_iRenderManagerPostEffects_AddLayersFromFile, METH_VARARGS, NULL},
 	 { (char *)"iRenderManagerPostEffects_scfGetVersion", _wrap_iRenderManagerPostEffects_scfGetVersion, METH_VARARGS, NULL},
+	 { (char *)"iRenderManagerPostEffects_scfGetName", _wrap_iRenderManagerPostEffects_scfGetName, METH_VARARGS, NULL},
 	 { (char *)"delete_iRenderManagerPostEffects", _wrap_delete_iRenderManagerPostEffects, METH_VARARGS, NULL},
 	 { (char *)"iRenderManagerPostEffects_swigregister", iRenderManagerPostEffects_swigregister, METH_VARARGS, NULL},
 	 { (char *)"iRenderManagerVisCull_GetVisCuller", _wrap_iRenderManagerVisCull_GetVisCuller, METH_VARARGS, NULL},
@@ -39051,9 +39499,11 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"iCollection_FindShader", _wrap_iCollection_FindShader, METH_VARARGS, NULL},
 	 { (char *)"iCollection_FindCameraPosition", _wrap_iCollection_FindCameraPosition, METH_VARARGS, NULL},
 	 { (char *)"iCollection_scfGetVersion", _wrap_iCollection_scfGetVersion, METH_VARARGS, NULL},
+	 { (char *)"iCollection_scfGetName", _wrap_iCollection_scfGetName, METH_VARARGS, NULL},
 	 { (char *)"delete_iCollection", _wrap_delete_iCollection, METH_VARARGS, NULL},
 	 { (char *)"iCollection_swigregister", iCollection_swigregister, METH_VARARGS, NULL},
 	 { (char *)"iCollectionArray_scfGetVersion", _wrap_iCollectionArray_scfGetVersion, METH_VARARGS, NULL},
+	 { (char *)"iCollectionArray_scfGetName", _wrap_iCollectionArray_scfGetName, METH_VARARGS, NULL},
 	 { (char *)"delete_iCollectionArray", _wrap_delete_iCollectionArray, METH_VARARGS, NULL},
 	 { (char *)"iCollectionArray_swigregister", iCollectionArray_swigregister, METH_VARARGS, NULL},
 	 { NULL, NULL, 0, NULL }

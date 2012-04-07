@@ -83,11 +83,13 @@ class iMissingLoaderData(core.iBase):
     def MissingSector(*args): return _imap.iMissingLoaderData_MissingSector(*args)
     def MissingLight(*args): return _imap.iMissingLoaderData_MissingLight(*args)
     scfGetVersion = staticmethod(_imap.iMissingLoaderData_scfGetVersion)
+    scfGetName = staticmethod(_imap.iMissingLoaderData_scfGetName)
     __swig_destroy__ = _imap.delete_iMissingLoaderData
     __del__ = lambda self : None;
 iMissingLoaderData_swigregister = _imap.iMissingLoaderData_swigregister
 iMissingLoaderData_swigregister(iMissingLoaderData)
 iMissingLoaderData_scfGetVersion = _imap.iMissingLoaderData_scfGetVersion
+iMissingLoaderData_scfGetName = _imap.iMissingLoaderData_scfGetName
 
 class csLoadResult(object):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
@@ -280,11 +282,13 @@ class iLoader(core.iBase):
     def LoadLibrary(*args): return _imap.iLoader_LoadLibrary(*args)
     def Load(*args): return _imap.iLoader_Load(*args)
     scfGetVersion = staticmethod(_imap.iLoader_scfGetVersion)
+    scfGetName = staticmethod(_imap.iLoader_scfGetName)
     __swig_destroy__ = _imap.delete_iLoader
     __del__ = lambda self : None;
 iLoader_swigregister = _imap.iLoader_swigregister
 iLoader_swigregister(iLoader)
 iLoader_scfGetVersion = _imap.iLoader_scfGetVersion
+iLoader_scfGetName = _imap.iLoader_scfGetName
 
 class iLoaderPlugin(core.iBase):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
@@ -293,11 +297,13 @@ class iLoaderPlugin(core.iBase):
     def Parse(*args): return _imap.iLoaderPlugin_Parse(*args)
     def IsThreadSafe(*args): return _imap.iLoaderPlugin_IsThreadSafe(*args)
     scfGetVersion = staticmethod(_imap.iLoaderPlugin_scfGetVersion)
+    scfGetName = staticmethod(_imap.iLoaderPlugin_scfGetName)
     __swig_destroy__ = _imap.delete_iLoaderPlugin
     __del__ = lambda self : None;
 iLoaderPlugin_swigregister = _imap.iLoaderPlugin_swigregister
 iLoaderPlugin_swigregister(iLoaderPlugin)
 iLoaderPlugin_scfGetVersion = _imap.iLoaderPlugin_scfGetVersion
+iLoaderPlugin_scfGetName = _imap.iLoaderPlugin_scfGetName
 
 class iBinaryLoaderPlugin(core.iBase):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
@@ -306,11 +312,13 @@ class iBinaryLoaderPlugin(core.iBase):
     def Parse(*args): return _imap.iBinaryLoaderPlugin_Parse(*args)
     def IsThreadSafe(*args): return _imap.iBinaryLoaderPlugin_IsThreadSafe(*args)
     scfGetVersion = staticmethod(_imap.iBinaryLoaderPlugin_scfGetVersion)
+    scfGetName = staticmethod(_imap.iBinaryLoaderPlugin_scfGetName)
     __swig_destroy__ = _imap.delete_iBinaryLoaderPlugin
     __del__ = lambda self : None;
 iBinaryLoaderPlugin_swigregister = _imap.iBinaryLoaderPlugin_swigregister
 iBinaryLoaderPlugin_swigregister(iBinaryLoaderPlugin)
 iBinaryLoaderPlugin_scfGetVersion = _imap.iBinaryLoaderPlugin_scfGetVersion
+iBinaryLoaderPlugin_scfGetName = _imap.iBinaryLoaderPlugin_scfGetName
 
 class iSaver(core.iBase):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')

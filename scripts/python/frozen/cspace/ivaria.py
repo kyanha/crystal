@@ -117,11 +117,13 @@ class iDecalTemplate(core.iBase):
     def SetClipping(*args): return _ivaria.iDecalTemplate_SetClipping(*args)
     def HasClipping(*args): return _ivaria.iDecalTemplate_HasClipping(*args)
     scfGetVersion = staticmethod(_ivaria.iDecalTemplate_scfGetVersion)
+    scfGetName = staticmethod(_ivaria.iDecalTemplate_scfGetName)
     __swig_destroy__ = _ivaria.delete_iDecalTemplate
     __del__ = lambda self : None;
 iDecalTemplate_swigregister = _ivaria.iDecalTemplate_swigregister
 iDecalTemplate_swigregister(iDecalTemplate)
 iDecalTemplate_scfGetVersion = _ivaria.iDecalTemplate_scfGetVersion
+iDecalTemplate_scfGetName = _ivaria.iDecalTemplate_scfGetName
 
 class iDecalAnimationControl(object):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
@@ -154,11 +156,13 @@ class iDecalManager(core.iBase):
     def GetDecal(*args): return _ivaria.iDecalManager_GetDecal(*args)
     def CreateDecal(*args): return _ivaria.iDecalManager_CreateDecal(*args)
     scfGetVersion = staticmethod(_ivaria.iDecalManager_scfGetVersion)
+    scfGetName = staticmethod(_ivaria.iDecalManager_scfGetName)
     __swig_destroy__ = _ivaria.delete_iDecalManager
     __del__ = lambda self : None;
 iDecalManager_swigregister = _ivaria.iDecalManager_swigregister
 iDecalManager_swigregister(iDecalManager)
 iDecalManager_scfGetVersion = _ivaria.iDecalManager_scfGetVersion
+iDecalManager_scfGetName = _ivaria.iDecalManager_scfGetName
 
 csConPageUp = _ivaria.csConPageUp
 csConPageDown = _ivaria.csConPageDown
@@ -203,11 +207,13 @@ class iConsoleOutput(core.iBase):
     def RegisterWatcher(*args): return _ivaria.iConsoleOutput_RegisterWatcher(*args)
     def PerformExtension(*args): return _ivaria.iConsoleOutput_PerformExtension(*args)
     scfGetVersion = staticmethod(_ivaria.iConsoleOutput_scfGetVersion)
+    scfGetName = staticmethod(_ivaria.iConsoleOutput_scfGetName)
     __swig_destroy__ = _ivaria.delete_iConsoleOutput
     __del__ = lambda self : None;
 iConsoleOutput_swigregister = _ivaria.iConsoleOutput_swigregister
 iConsoleOutput_swigregister(iConsoleOutput)
 iConsoleOutput_scfGetVersion = _ivaria.iConsoleOutput_scfGetVersion
+iConsoleOutput_scfGetName = _ivaria.iConsoleOutput_scfGetName
 
 class iConsoleExecCallback(core.iBase):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
@@ -215,11 +221,13 @@ class iConsoleExecCallback(core.iBase):
     __repr__ = _swig_repr
     def Execute(*args): return _ivaria.iConsoleExecCallback_Execute(*args)
     scfGetVersion = staticmethod(_ivaria.iConsoleExecCallback_scfGetVersion)
+    scfGetName = staticmethod(_ivaria.iConsoleExecCallback_scfGetName)
     __swig_destroy__ = _ivaria.delete_iConsoleExecCallback
     __del__ = lambda self : None;
 iConsoleExecCallback_swigregister = _ivaria.iConsoleExecCallback_swigregister
 iConsoleExecCallback_swigregister(iConsoleExecCallback)
 iConsoleExecCallback_scfGetVersion = _ivaria.iConsoleExecCallback_scfGetVersion
+iConsoleExecCallback_scfGetName = _ivaria.iConsoleExecCallback_scfGetName
 
 class iConsoleInput(core.iBase):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
@@ -236,11 +244,13 @@ class iConsoleInput(core.iBase):
     def SetPrompt(*args): return _ivaria.iConsoleInput_SetPrompt(*args)
     def HandleEvent(*args): return _ivaria.iConsoleInput_HandleEvent(*args)
     scfGetVersion = staticmethod(_ivaria.iConsoleInput_scfGetVersion)
+    scfGetName = staticmethod(_ivaria.iConsoleInput_scfGetName)
     __swig_destroy__ = _ivaria.delete_iConsoleInput
     __del__ = lambda self : None;
 iConsoleInput_swigregister = _ivaria.iConsoleInput_swigregister
 iConsoleInput_swigregister(iConsoleInput)
 iConsoleInput_scfGetVersion = _ivaria.iConsoleInput_scfGetVersion
+iConsoleInput_scfGetName = _ivaria.iConsoleInput_scfGetName
 
 class iStandardReporterListener(core.iBase):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
@@ -268,11 +278,13 @@ class iStandardReporterListener(core.iBase):
     def ShowMessageID(*args): return _ivaria.iStandardReporterListener_ShowMessageID(*args)
     def GetDebugFile(*args): return _ivaria.iStandardReporterListener_GetDebugFile(*args)
     scfGetVersion = staticmethod(_ivaria.iStandardReporterListener_scfGetVersion)
+    scfGetName = staticmethod(_ivaria.iStandardReporterListener_scfGetName)
     __swig_destroy__ = _ivaria.delete_iStandardReporterListener
     __del__ = lambda self : None;
 iStandardReporterListener_swigregister = _ivaria.iStandardReporterListener_swigregister
 iStandardReporterListener_swigregister(iStandardReporterListener)
 iStandardReporterListener_scfGetVersion = _ivaria.iStandardReporterListener_scfGetVersion
+iStandardReporterListener_scfGetName = _ivaria.iStandardReporterListener_scfGetName
 
 class iView(core.iBase):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
@@ -304,11 +316,13 @@ class iView(core.iBase):
     def NormalizedToScreen(*args): return _ivaria.iView_NormalizedToScreen(*args)
     def ScreenToNormalized(*args): return _ivaria.iView_ScreenToNormalized(*args)
     scfGetVersion = staticmethod(_ivaria.iView_scfGetVersion)
+    scfGetName = staticmethod(_ivaria.iView_scfGetName)
     __swig_destroy__ = _ivaria.delete_iView
     __del__ = lambda self : None;
 iView_swigregister = _ivaria.iView_swigregister
 iView_swigregister(iView)
 iView_scfGetVersion = _ivaria.iView_scfGetVersion
+iView_scfGetName = _ivaria.iView_scfGetName
 
 class iBugPlugRenderObject(core.iBase):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
@@ -349,11 +363,13 @@ class iBugPlug(core.iBase):
     def RemoveCounter(*args): return _ivaria.iBugPlug_RemoveCounter(*args)
     def ExecCommand(*args): return _ivaria.iBugPlug_ExecCommand(*args)
     scfGetVersion = staticmethod(_ivaria.iBugPlug_scfGetVersion)
+    scfGetName = staticmethod(_ivaria.iBugPlug_scfGetName)
     __swig_destroy__ = _ivaria.delete_iBugPlug
     __del__ = lambda self : None;
 iBugPlug_swigregister = _ivaria.iBugPlug_swigregister
 iBugPlug_swigregister(iBugPlug)
 iBugPlug_scfGetVersion = _ivaria.iBugPlug_scfGetVersion
+iBugPlug_scfGetName = _ivaria.iBugPlug_scfGetName
 
 class csCollisionPair(object):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
@@ -398,11 +414,13 @@ class iCollider(core.iBase):
     __repr__ = _swig_repr
     def GetColliderType(*args): return _ivaria.iCollider_GetColliderType(*args)
     scfGetVersion = staticmethod(_ivaria.iCollider_scfGetVersion)
+    scfGetName = staticmethod(_ivaria.iCollider_scfGetName)
     __swig_destroy__ = _ivaria.delete_iCollider
     __del__ = lambda self : None;
 iCollider_swigregister = _ivaria.iCollider_swigregister
 iCollider_swigregister(iCollider)
 iCollider_scfGetVersion = _ivaria.iCollider_scfGetVersion
+iCollider_scfGetName = _ivaria.iCollider_scfGetName
 
 class iCollideSystem(core.iBase):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
@@ -422,6 +440,7 @@ class iCollideSystem(core.iBase):
     def GetOneHitOnly(*args): return _ivaria.iCollideSystem_GetOneHitOnly(*args)
     def GetCollisionPairByIndex(*args): return _ivaria.iCollideSystem_GetCollisionPairByIndex(*args)
     scfGetVersion = staticmethod(_ivaria.iCollideSystem_scfGetVersion)
+    scfGetName = staticmethod(_ivaria.iCollideSystem_scfGetName)
     __swig_destroy__ = _ivaria.delete_iCollideSystem
     __del__ = lambda self : None;
     def GetCollisionPairs (self):
@@ -434,6 +453,7 @@ class iCollideSystem(core.iBase):
 iCollideSystem_swigregister = _ivaria.iCollideSystem_swigregister
 iCollideSystem_swigregister(iCollideSystem)
 iCollideSystem_scfGetVersion = _ivaria.iCollideSystem_scfGetVersion
+iCollideSystem_scfGetName = _ivaria.iCollideSystem_scfGetName
 
 class csCollisionPairArrayReadOnly(core.iBase):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
@@ -506,11 +526,13 @@ class iDynamics(core.iBase):
     def AddStepCallback(*args): return _ivaria.iDynamics_AddStepCallback(*args)
     def RemoveStepCallback(*args): return _ivaria.iDynamics_RemoveStepCallback(*args)
     scfGetVersion = staticmethod(_ivaria.iDynamics_scfGetVersion)
+    scfGetName = staticmethod(_ivaria.iDynamics_scfGetName)
     __swig_destroy__ = _ivaria.delete_iDynamics
     __del__ = lambda self : None;
 iDynamics_swigregister = _ivaria.iDynamics_swigregister
 iDynamics_swigregister(iDynamics)
 iDynamics_scfGetVersion = _ivaria.iDynamics_scfGetVersion
+iDynamics_scfGetName = _ivaria.iDynamics_scfGetName
 
 class iDynamicSystem(core.iBase):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
@@ -553,11 +575,13 @@ class iDynamicSystem(core.iBase):
     def AddBody(*args): return _ivaria.iDynamicSystem_AddBody(*args)
     def AddJoint(*args): return _ivaria.iDynamicSystem_AddJoint(*args)
     scfGetVersion = staticmethod(_ivaria.iDynamicSystem_scfGetVersion)
+    scfGetName = staticmethod(_ivaria.iDynamicSystem_scfGetName)
     __swig_destroy__ = _ivaria.delete_iDynamicSystem
     __del__ = lambda self : None;
 iDynamicSystem_swigregister = _ivaria.iDynamicSystem_swigregister
 iDynamicSystem_swigregister(iDynamicSystem)
 iDynamicSystem_scfGetVersion = _ivaria.iDynamicSystem_scfGetVersion
+iDynamicSystem_scfGetName = _ivaria.iDynamicSystem_scfGetName
 
 class iDynamicsMoveCallback(core.iBase):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
@@ -587,11 +611,13 @@ class iBodyGroup(core.iBase):
     def RemoveBody(*args): return _ivaria.iBodyGroup_RemoveBody(*args)
     def BodyInGroup(*args): return _ivaria.iBodyGroup_BodyInGroup(*args)
     scfGetVersion = staticmethod(_ivaria.iBodyGroup_scfGetVersion)
+    scfGetName = staticmethod(_ivaria.iBodyGroup_scfGetName)
     __swig_destroy__ = _ivaria.delete_iBodyGroup
     __del__ = lambda self : None;
 iBodyGroup_swigregister = _ivaria.iBodyGroup_swigregister
 iBodyGroup_swigregister(iBodyGroup)
 iBodyGroup_scfGetVersion = _ivaria.iBodyGroup_scfGetVersion
+iBodyGroup_scfGetName = _ivaria.iBodyGroup_scfGetName
 
 class iRigidBody(core.iBase):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
@@ -750,11 +776,13 @@ class iJoint(core.iBase):
     def GetAngularConstraintAxis(*args): return _ivaria.iJoint_GetAngularConstraintAxis(*args)
     def RebuildJoint(*args): return _ivaria.iJoint_RebuildJoint(*args)
     scfGetVersion = staticmethod(_ivaria.iJoint_scfGetVersion)
+    scfGetName = staticmethod(_ivaria.iJoint_scfGetName)
     __swig_destroy__ = _ivaria.delete_iJoint
     __del__ = lambda self : None;
 iJoint_swigregister = _ivaria.iJoint_swigregister
 iJoint_swigregister(iJoint)
 iJoint_scfGetVersion = _ivaria.iJoint_scfGetVersion
+iJoint_scfGetName = _ivaria.iJoint_scfGetName
 
 class iODEFrameUpdateCallback(core.iBase):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
@@ -795,11 +823,13 @@ class iODEDynamicState(core.iBase):
     def EnableFastObjects(*args): return _ivaria.iODEDynamicState_EnableFastObjects(*args)
     def FastObjectsEnabled(*args): return _ivaria.iODEDynamicState_FastObjectsEnabled(*args)
     scfGetVersion = staticmethod(_ivaria.iODEDynamicState_scfGetVersion)
+    scfGetName = staticmethod(_ivaria.iODEDynamicState_scfGetName)
     __swig_destroy__ = _ivaria.delete_iODEDynamicState
     __del__ = lambda self : None;
 iODEDynamicState_swigregister = _ivaria.iODEDynamicState_swigregister
 iODEDynamicState_swigregister(iODEDynamicState)
 iODEDynamicState_scfGetVersion = _ivaria.iODEDynamicState_scfGetVersion
+iODEDynamicState_scfGetName = _ivaria.iODEDynamicState_scfGetName
 
 class iODEDynamicSystemState(core.iBase):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
@@ -844,11 +874,13 @@ class iODEDynamicSystemState(core.iBase):
     def EnableOldInertia(*args): return _ivaria.iODEDynamicSystemState_EnableOldInertia(*args)
     def IsOldInertiaEnabled(*args): return _ivaria.iODEDynamicSystemState_IsOldInertiaEnabled(*args)
     scfGetVersion = staticmethod(_ivaria.iODEDynamicSystemState_scfGetVersion)
+    scfGetName = staticmethod(_ivaria.iODEDynamicSystemState_scfGetName)
     __swig_destroy__ = _ivaria.delete_iODEDynamicSystemState
     __del__ = lambda self : None;
 iODEDynamicSystemState_swigregister = _ivaria.iODEDynamicSystemState_swigregister
 iODEDynamicSystemState_swigregister(iODEDynamicSystemState)
 iODEDynamicSystemState_scfGetVersion = _ivaria.iODEDynamicSystemState_scfGetVersion
+iODEDynamicSystemState_scfGetName = _ivaria.iODEDynamicSystemState_scfGetName
 
 CS_ODE_JOINT_TYPE_UNKNOWN = _ivaria.CS_ODE_JOINT_TYPE_UNKNOWN
 CS_ODE_JOINT_TYPE_BALL = _ivaria.CS_ODE_JOINT_TYPE_BALL
@@ -887,11 +919,13 @@ class iODEJointState(core.iBase):
     def GetSuspensionERP(*args): return _ivaria.iODEJointState_GetSuspensionERP(*args)
     def GetSuspensionCFM(*args): return _ivaria.iODEJointState_GetSuspensionCFM(*args)
     scfGetVersion = staticmethod(_ivaria.iODEJointState_scfGetVersion)
+    scfGetName = staticmethod(_ivaria.iODEJointState_scfGetName)
     __swig_destroy__ = _ivaria.delete_iODEJointState
     __del__ = lambda self : None;
 iODEJointState_swigregister = _ivaria.iODEJointState_swigregister
 iODEJointState_swigregister(iODEJointState)
 iODEJointState_scfGetVersion = _ivaria.iODEJointState_scfGetVersion
+iODEJointState_scfGetName = _ivaria.iODEJointState_scfGetName
 
 class iODEGeneralJointState(core.iBase):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
@@ -939,11 +973,13 @@ class iODESliderJoint(iODEGeneralJointState):
     def GetSliderPosition(*args): return _ivaria.iODESliderJoint_GetSliderPosition(*args)
     def GetSliderPositionRate(*args): return _ivaria.iODESliderJoint_GetSliderPositionRate(*args)
     scfGetVersion = staticmethod(_ivaria.iODESliderJoint_scfGetVersion)
+    scfGetName = staticmethod(_ivaria.iODESliderJoint_scfGetName)
     __swig_destroy__ = _ivaria.delete_iODESliderJoint
     __del__ = lambda self : None;
 iODESliderJoint_swigregister = _ivaria.iODESliderJoint_swigregister
 iODESliderJoint_swigregister(iODESliderJoint)
 iODESliderJoint_scfGetVersion = _ivaria.iODESliderJoint_scfGetVersion
+iODESliderJoint_scfGetName = _ivaria.iODESliderJoint_scfGetName
 
 class iODEUniversalJoint(iODEGeneralJointState):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
@@ -957,11 +993,13 @@ class iODEUniversalJoint(iODEGeneralJointState):
     def GetUniversalAxis1(*args): return _ivaria.iODEUniversalJoint_GetUniversalAxis1(*args)
     def GetUniversalAxis2(*args): return _ivaria.iODEUniversalJoint_GetUniversalAxis2(*args)
     scfGetVersion = staticmethod(_ivaria.iODEUniversalJoint_scfGetVersion)
+    scfGetName = staticmethod(_ivaria.iODEUniversalJoint_scfGetName)
     __swig_destroy__ = _ivaria.delete_iODEUniversalJoint
     __del__ = lambda self : None;
 iODEUniversalJoint_swigregister = _ivaria.iODEUniversalJoint_swigregister
 iODEUniversalJoint_swigregister(iODEUniversalJoint)
 iODEUniversalJoint_scfGetVersion = _ivaria.iODEUniversalJoint_scfGetVersion
+iODEUniversalJoint_scfGetName = _ivaria.iODEUniversalJoint_scfGetName
 
 CS_ODE_AMOTOR_MODE_UNKNOWN = _ivaria.CS_ODE_AMOTOR_MODE_UNKNOWN
 CS_ODE_AMOTOR_MODE_USER = _ivaria.CS_ODE_AMOTOR_MODE_USER
@@ -982,11 +1020,13 @@ class iODEAMotorJoint(iODEGeneralJointState):
     def GetAMotorAngle(*args): return _ivaria.iODEAMotorJoint_GetAMotorAngle(*args)
     def GetAMotorAngleRate(*args): return _ivaria.iODEAMotorJoint_GetAMotorAngleRate(*args)
     scfGetVersion = staticmethod(_ivaria.iODEAMotorJoint_scfGetVersion)
+    scfGetName = staticmethod(_ivaria.iODEAMotorJoint_scfGetName)
     __swig_destroy__ = _ivaria.delete_iODEAMotorJoint
     __del__ = lambda self : None;
 iODEAMotorJoint_swigregister = _ivaria.iODEAMotorJoint_swigregister
 iODEAMotorJoint_swigregister(iODEAMotorJoint)
 iODEAMotorJoint_scfGetVersion = _ivaria.iODEAMotorJoint_scfGetVersion
+iODEAMotorJoint_scfGetName = _ivaria.iODEAMotorJoint_scfGetName
 
 class iODEHinge2Joint(iODEGeneralJointState):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
@@ -1004,11 +1044,13 @@ class iODEHinge2Joint(iODEGeneralJointState):
     def GetHingeAngleRate2(*args): return _ivaria.iODEHinge2Joint_GetHingeAngleRate2(*args)
     def GetAnchorError(*args): return _ivaria.iODEHinge2Joint_GetAnchorError(*args)
     scfGetVersion = staticmethod(_ivaria.iODEHinge2Joint_scfGetVersion)
+    scfGetName = staticmethod(_ivaria.iODEHinge2Joint_scfGetName)
     __swig_destroy__ = _ivaria.delete_iODEHinge2Joint
     __del__ = lambda self : None;
 iODEHinge2Joint_swigregister = _ivaria.iODEHinge2Joint_swigregister
 iODEHinge2Joint_swigregister(iODEHinge2Joint)
 iODEHinge2Joint_scfGetVersion = _ivaria.iODEHinge2Joint_scfGetVersion
+iODEHinge2Joint_scfGetName = _ivaria.iODEHinge2Joint_scfGetName
 
 class iODEHingeJoint(iODEGeneralJointState):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
@@ -1023,11 +1065,13 @@ class iODEHingeJoint(iODEGeneralJointState):
     def GetHingeAngleRate(*args): return _ivaria.iODEHingeJoint_GetHingeAngleRate(*args)
     def GetAnchorError(*args): return _ivaria.iODEHingeJoint_GetAnchorError(*args)
     scfGetVersion = staticmethod(_ivaria.iODEHingeJoint_scfGetVersion)
+    scfGetName = staticmethod(_ivaria.iODEHingeJoint_scfGetName)
     __swig_destroy__ = _ivaria.delete_iODEHingeJoint
     __del__ = lambda self : None;
 iODEHingeJoint_swigregister = _ivaria.iODEHingeJoint_swigregister
 iODEHingeJoint_swigregister(iODEHingeJoint)
 iODEHingeJoint_scfGetVersion = _ivaria.iODEHingeJoint_scfGetVersion
+iODEHingeJoint_scfGetName = _ivaria.iODEHingeJoint_scfGetName
 
 class iODEBallJoint(core.iBase):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
@@ -1044,11 +1088,13 @@ class iODEBallJoint(core.iBase):
     def GetFeedbackForce2(*args): return _ivaria.iODEBallJoint_GetFeedbackForce2(*args)
     def GetFeedbackTorque2(*args): return _ivaria.iODEBallJoint_GetFeedbackTorque2(*args)
     scfGetVersion = staticmethod(_ivaria.iODEBallJoint_scfGetVersion)
+    scfGetName = staticmethod(_ivaria.iODEBallJoint_scfGetName)
     __swig_destroy__ = _ivaria.delete_iODEBallJoint
     __del__ = lambda self : None;
 iODEBallJoint_swigregister = _ivaria.iODEBallJoint_swigregister
 iODEBallJoint_swigregister(iODEBallJoint)
 iODEBallJoint_scfGetVersion = _ivaria.iODEBallJoint_scfGetVersion
+iODEBallJoint_scfGetName = _ivaria.iODEBallJoint_scfGetName
 
 CS_SEQUENCE_LIGHTCHANGE_NONE = _ivaria.CS_SEQUENCE_LIGHTCHANGE_NONE
 CS_SEQUENCE_LIGHTCHANGE_LESS = _ivaria.CS_SEQUENCE_LIGHTCHANGE_LESS
@@ -1169,11 +1215,13 @@ class iEngineSequenceManager(core.iBase):
     def FireTimedOperation(*args): return _ivaria.iEngineSequenceManager_FireTimedOperation(*args)
     def DestroyTimedOperations(*args): return _ivaria.iEngineSequenceManager_DestroyTimedOperations(*args)
     scfGetVersion = staticmethod(_ivaria.iEngineSequenceManager_scfGetVersion)
+    scfGetName = staticmethod(_ivaria.iEngineSequenceManager_scfGetName)
     __swig_destroy__ = _ivaria.delete_iEngineSequenceManager
     __del__ = lambda self : None;
 iEngineSequenceManager_swigregister = _ivaria.iEngineSequenceManager_swigregister
 iEngineSequenceManager_swigregister(iEngineSequenceManager)
 iEngineSequenceManager_scfGetVersion = _ivaria.iEngineSequenceManager_scfGetVersion
+iEngineSequenceManager_scfGetName = _ivaria.iEngineSequenceManager_scfGetName
 
 class iMovieRecorder(core.iBase):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
@@ -1188,11 +1236,13 @@ class iMovieRecorder(core.iBase):
     def SetRecordingFile(*args): return _ivaria.iMovieRecorder_SetRecordingFile(*args)
     def SetFilenameFormat(*args): return _ivaria.iMovieRecorder_SetFilenameFormat(*args)
     scfGetVersion = staticmethod(_ivaria.iMovieRecorder_scfGetVersion)
+    scfGetName = staticmethod(_ivaria.iMovieRecorder_scfGetName)
     __swig_destroy__ = _ivaria.delete_iMovieRecorder
     __del__ = lambda self : None;
 iMovieRecorder_swigregister = _ivaria.iMovieRecorder_swigregister
 iMovieRecorder_swigregister(iMovieRecorder)
 iMovieRecorder_scfGetVersion = _ivaria.iMovieRecorder_scfGetVersion
+iMovieRecorder_scfGetName = _ivaria.iMovieRecorder_scfGetName
 
 class iMapNode(core.iBase):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
@@ -1210,11 +1260,13 @@ class iMapNode(core.iBase):
     def SetSector(*args): return _ivaria.iMapNode_SetSector(*args)
     def GetSector(*args): return _ivaria.iMapNode_GetSector(*args)
     scfGetVersion = staticmethod(_ivaria.iMapNode_scfGetVersion)
+    scfGetName = staticmethod(_ivaria.iMapNode_scfGetName)
     __swig_destroy__ = _ivaria.delete_iMapNode
     __del__ = lambda self : None;
 iMapNode_swigregister = _ivaria.iMapNode_swigregister
 iMapNode_swigregister(iMapNode)
 iMapNode_scfGetVersion = _ivaria.iMapNode_scfGetVersion
+iMapNode_scfGetName = _ivaria.iMapNode_scfGetName
 
 class iSequenceOperation(core.iBase):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
@@ -1223,11 +1275,13 @@ class iSequenceOperation(core.iBase):
     def Do(*args): return _ivaria.iSequenceOperation_Do(*args)
     def CleanupSequences(*args): return _ivaria.iSequenceOperation_CleanupSequences(*args)
     scfGetVersion = staticmethod(_ivaria.iSequenceOperation_scfGetVersion)
+    scfGetName = staticmethod(_ivaria.iSequenceOperation_scfGetName)
     __swig_destroy__ = _ivaria.delete_iSequenceOperation
     __del__ = lambda self : None;
 iSequenceOperation_swigregister = _ivaria.iSequenceOperation_swigregister
 iSequenceOperation_swigregister(iSequenceOperation)
 iSequenceOperation_scfGetVersion = _ivaria.iSequenceOperation_scfGetVersion
+iSequenceOperation_scfGetName = _ivaria.iSequenceOperation_scfGetName
 
 class iSequenceCondition(core.iBase):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
@@ -1235,11 +1289,13 @@ class iSequenceCondition(core.iBase):
     __repr__ = _swig_repr
     def Condition(*args): return _ivaria.iSequenceCondition_Condition(*args)
     scfGetVersion = staticmethod(_ivaria.iSequenceCondition_scfGetVersion)
+    scfGetName = staticmethod(_ivaria.iSequenceCondition_scfGetName)
     __swig_destroy__ = _ivaria.delete_iSequenceCondition
     __del__ = lambda self : None;
 iSequenceCondition_swigregister = _ivaria.iSequenceCondition_swigregister
 iSequenceCondition_swigregister(iSequenceCondition)
 iSequenceCondition_scfGetVersion = _ivaria.iSequenceCondition_scfGetVersion
+iSequenceCondition_scfGetName = _ivaria.iSequenceCondition_scfGetName
 
 class csSequenceOp(object):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
@@ -1271,11 +1327,13 @@ class iSequence(core.iBase):
     def Clear(*args): return _ivaria.iSequence_Clear(*args)
     def IsEmpty(*args): return _ivaria.iSequence_IsEmpty(*args)
     scfGetVersion = staticmethod(_ivaria.iSequence_scfGetVersion)
+    scfGetName = staticmethod(_ivaria.iSequence_scfGetName)
     __swig_destroy__ = _ivaria.delete_iSequence
     __del__ = lambda self : None;
 iSequence_swigregister = _ivaria.iSequence_swigregister
 iSequence_swigregister(iSequence)
 iSequence_scfGetVersion = _ivaria.iSequence_scfGetVersion
+iSequence_scfGetName = _ivaria.iSequence_scfGetName
 
 class iSequenceManager(core.iBase):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
@@ -1294,11 +1352,13 @@ class iSequenceManager(core.iBase):
     def DestroySequenceOperations(*args): return _ivaria.iSequenceManager_DestroySequenceOperations(*args)
     def GetUniqueID(*args): return _ivaria.iSequenceManager_GetUniqueID(*args)
     scfGetVersion = staticmethod(_ivaria.iSequenceManager_scfGetVersion)
+    scfGetName = staticmethod(_ivaria.iSequenceManager_scfGetName)
     __swig_destroy__ = _ivaria.delete_iSequenceManager
     __del__ = lambda self : None;
 iSequenceManager_swigregister = _ivaria.iSequenceManager_swigregister
 iSequenceManager_swigregister(iSequenceManager)
 iSequenceManager_scfGetVersion = _ivaria.iSequenceManager_scfGetVersion
+iSequenceManager_scfGetName = _ivaria.iSequenceManager_scfGetName
 
 class iImageModifier(core.iBase):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
@@ -1307,22 +1367,26 @@ class iImageModifier(core.iBase):
     def GetName(*args): return _ivaria.iImageModifier_GetName(*args)
     def Modify(*args): return _ivaria.iImageModifier_Modify(*args)
     scfGetVersion = staticmethod(_ivaria.iImageModifier_scfGetVersion)
+    scfGetName = staticmethod(_ivaria.iImageModifier_scfGetName)
     __swig_destroy__ = _ivaria.delete_iImageModifier
     __del__ = lambda self : None;
 iImageModifier_swigregister = _ivaria.iImageModifier_swigregister
 iImageModifier_swigregister(iImageModifier)
 iImageModifier_scfGetVersion = _ivaria.iImageModifier_scfGetVersion
+iImageModifier_scfGetName = _ivaria.iImageModifier_scfGetName
 
 class iBlobImage(core.iBase):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
     def __init__(self, *args, **kwargs): raise AttributeError, "No constructor defined"
     __repr__ = _swig_repr
     scfGetVersion = staticmethod(_ivaria.iBlobImage_scfGetVersion)
+    scfGetName = staticmethod(_ivaria.iBlobImage_scfGetName)
     __swig_destroy__ = _ivaria.delete_iBlobImage
     __del__ = lambda self : None;
 iBlobImage_swigregister = _ivaria.iBlobImage_swigregister
 iBlobImage_swigregister(iBlobImage)
 iBlobImage_scfGetVersion = _ivaria.iBlobImage_scfGetVersion
+iBlobImage_scfGetName = _ivaria.iBlobImage_scfGetName
 
 class iMovingObject(core.iBase):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
@@ -1353,11 +1417,13 @@ class iMovingObject(core.iBase):
     def SetPathMover(*args): return _ivaria.iMovingObject_SetPathMover(*args)
     def AddPathSegment(*args): return _ivaria.iMovingObject_AddPathSegment(*args)
     scfGetVersion = staticmethod(_ivaria.iMovingObject_scfGetVersion)
+    scfGetName = staticmethod(_ivaria.iMovingObject_scfGetName)
     __swig_destroy__ = _ivaria.delete_iMovingObject
     __del__ = lambda self : None;
 iMovingObject_swigregister = _ivaria.iMovingObject_swigregister
 iMovingObject_swigregister(iMovingObject)
 iMovingObject_scfGetVersion = _ivaria.iMovingObject_scfGetVersion
+iMovingObject_scfGetName = _ivaria.iMovingObject_scfGetName
 
 class iGeom(iMovingObject):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
@@ -1375,11 +1441,13 @@ class iGeom(iMovingObject):
     def GetGeomWidth(*args): return _ivaria.iGeom_GetGeomWidth(*args)
     def GetGeomHeight(*args): return _ivaria.iGeom_GetGeomHeight(*args)
     scfGetVersion = staticmethod(_ivaria.iGeom_scfGetVersion)
+    scfGetName = staticmethod(_ivaria.iGeom_scfGetName)
     __swig_destroy__ = _ivaria.delete_iGeom
     __del__ = lambda self : None;
 iGeom_swigregister = _ivaria.iGeom_swigregister
 iGeom_swigregister(iGeom)
 iGeom_scfGetVersion = _ivaria.iGeom_scfGetVersion
+iGeom_scfGetName = _ivaria.iGeom_scfGetName
 
 class iBlob(iMovingObject):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
@@ -1396,11 +1464,13 @@ class iBlob(iMovingObject):
     def PlayAnimation(*args): return _ivaria.iBlob_PlayAnimation(*args)
     def StopAnimations(*args): return _ivaria.iBlob_StopAnimations(*args)
     scfGetVersion = staticmethod(_ivaria.iBlob_scfGetVersion)
+    scfGetName = staticmethod(_ivaria.iBlob_scfGetName)
     __swig_destroy__ = _ivaria.delete_iBlob
     __del__ = lambda self : None;
 iBlob_swigregister = _ivaria.iBlob_swigregister
 iBlob_swigregister(iBlob)
 iBlob_scfGetVersion = _ivaria.iBlob_scfGetVersion
+iBlob_scfGetName = _ivaria.iBlob_scfGetName
 
 class iBlobViewPort(core.iBase):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
@@ -1416,11 +1486,13 @@ class iBlobViewPort(core.iBase):
     def ClearModifier(*args): return _ivaria.iBlobViewPort_ClearModifier(*args)
     def SetModifier(*args): return _ivaria.iBlobViewPort_SetModifier(*args)
     scfGetVersion = staticmethod(_ivaria.iBlobViewPort_scfGetVersion)
+    scfGetName = staticmethod(_ivaria.iBlobViewPort_scfGetName)
     __swig_destroy__ = _ivaria.delete_iBlobViewPort
     __del__ = lambda self : None;
 iBlobViewPort_swigregister = _ivaria.iBlobViewPort_swigregister
 iBlobViewPort_swigregister(iBlobViewPort)
 iBlobViewPort_scfGetVersion = _ivaria.iBlobViewPort_scfGetVersion
+iBlobViewPort_scfGetName = _ivaria.iBlobViewPort_scfGetName
 
 class iBlobManager(core.iBase):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
@@ -1446,11 +1518,13 @@ class iBlobManager(core.iBase):
     def MovingObjectToFront(*args): return _ivaria.iBlobManager_MovingObjectToFront(*args)
     def CheckCollision(*args): return _ivaria.iBlobManager_CheckCollision(*args)
     scfGetVersion = staticmethod(_ivaria.iBlobManager_scfGetVersion)
+    scfGetName = staticmethod(_ivaria.iBlobManager_scfGetName)
     __swig_destroy__ = _ivaria.delete_iBlobManager
     __del__ = lambda self : None;
 iBlobManager_swigregister = _ivaria.iBlobManager_swigregister
 iBlobManager_swigregister(iBlobManager)
 iBlobManager_scfGetVersion = _ivaria.iBlobManager_scfGetVersion
+iBlobManager_scfGetName = _ivaria.iBlobManager_scfGetName
 
 class iScriptValue(core.iBase):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
@@ -1493,11 +1567,13 @@ class iScriptObject(core.iBase):
     def Get(*args): return _ivaria.iScriptObject_Get(*args)
     def GetTruth(*args): return _ivaria.iScriptObject_GetTruth(*args)
     scfGetVersion = staticmethod(_ivaria.iScriptObject_scfGetVersion)
+    scfGetName = staticmethod(_ivaria.iScriptObject_scfGetName)
     __swig_destroy__ = _ivaria.delete_iScriptObject
     __del__ = lambda self : None;
 iScriptObject_swigregister = _ivaria.iScriptObject_swigregister
 iScriptObject_swigregister(iScriptObject)
 iScriptObject_scfGetVersion = _ivaria.iScriptObject_scfGetVersion
+iScriptObject_scfGetName = _ivaria.iScriptObject_scfGetName
 
 class iScript(core.iBase):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
@@ -1516,11 +1592,13 @@ class iScript(core.iBase):
     def Retrieve(*args): return _ivaria.iScript_Retrieve(*args)
     def GetTruth(*args): return _ivaria.iScript_GetTruth(*args)
     scfGetVersion = staticmethod(_ivaria.iScript_scfGetVersion)
+    scfGetName = staticmethod(_ivaria.iScript_scfGetName)
     __swig_destroy__ = _ivaria.delete_iScript
     __del__ = lambda self : None;
 iScript_swigregister = _ivaria.iScript_swigregister
 iScript_swigregister(iScript)
 iScript_scfGetVersion = _ivaria.iScript_scfGetVersion
+iScript_scfGetName = _ivaria.iScript_scfGetName
 
 class iSimpleFormerState(core.iBase):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
@@ -1534,11 +1612,13 @@ class iSimpleFormerState(core.iBase):
     def GetFloatMap(*args): return _ivaria.iSimpleFormerState_GetFloatMap(*args)
     def SetMaterialScale(*args): return _ivaria.iSimpleFormerState_SetMaterialScale(*args)
     scfGetVersion = staticmethod(_ivaria.iSimpleFormerState_scfGetVersion)
+    scfGetName = staticmethod(_ivaria.iSimpleFormerState_scfGetName)
     __swig_destroy__ = _ivaria.delete_iSimpleFormerState
     __del__ = lambda self : None;
 iSimpleFormerState_swigregister = _ivaria.iSimpleFormerState_swigregister
 iSimpleFormerState_swigregister(iSimpleFormerState)
 iSimpleFormerState_scfGetVersion = _ivaria.iSimpleFormerState_scfGetVersion
+iSimpleFormerState_scfGetName = _ivaria.iSimpleFormerState_scfGetName
 
 class iTerraFormer(core.iBase):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
@@ -1552,11 +1632,13 @@ class iTerraFormer(core.iBase):
     def SampleInteger(*args): return _ivaria.iTerraFormer_SampleInteger(*args)
     def QueryObject(*args): return _ivaria.iTerraFormer_QueryObject(*args)
     scfGetVersion = staticmethod(_ivaria.iTerraFormer_scfGetVersion)
+    scfGetName = staticmethod(_ivaria.iTerraFormer_scfGetName)
     __swig_destroy__ = _ivaria.delete_iTerraFormer
     __del__ = lambda self : None;
 iTerraFormer_swigregister = _ivaria.iTerraFormer_swigregister
 iTerraFormer_swigregister(iTerraFormer)
 iTerraFormer_scfGetVersion = _ivaria.iTerraFormer_scfGetVersion
+iTerraFormer_scfGetName = _ivaria.iTerraFormer_scfGetName
 
 class iTerraSampler(core.iBase):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
@@ -1572,11 +1654,13 @@ class iTerraSampler(core.iBase):
     def GetVersion(*args): return _ivaria.iTerraSampler_GetVersion(*args)
     def Cleanup(*args): return _ivaria.iTerraSampler_Cleanup(*args)
     scfGetVersion = staticmethod(_ivaria.iTerraSampler_scfGetVersion)
+    scfGetName = staticmethod(_ivaria.iTerraSampler_scfGetName)
     __swig_destroy__ = _ivaria.delete_iTerraSampler
     __del__ = lambda self : None;
 iTerraSampler_swigregister = _ivaria.iTerraSampler_swigregister
 iTerraSampler_swigregister(iTerraSampler)
 iTerraSampler_scfGetVersion = _ivaria.iTerraSampler_scfGetVersion
+iTerraSampler_scfGetName = _ivaria.iTerraSampler_scfGetName
 
 class iTranslator(core.iBase):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
@@ -1584,11 +1668,13 @@ class iTranslator(core.iBase):
     __repr__ = _swig_repr
     def GetMsg(*args): return _ivaria.iTranslator_GetMsg(*args)
     scfGetVersion = staticmethod(_ivaria.iTranslator_scfGetVersion)
+    scfGetName = staticmethod(_ivaria.iTranslator_scfGetName)
     __swig_destroy__ = _ivaria.delete_iTranslator
     __del__ = lambda self : None;
 iTranslator_swigregister = _ivaria.iTranslator_swigregister
 iTranslator_swigregister(iTranslator)
 iTranslator_scfGetVersion = _ivaria.iTranslator_scfGetVersion
+iTranslator_scfGetName = _ivaria.iTranslator_scfGetName
 
 def CS_REQUEST_REPORTERLISTENER ():
   return core.CS_REQUEST_PLUGIN("crystalspace.utilities.stdrep",

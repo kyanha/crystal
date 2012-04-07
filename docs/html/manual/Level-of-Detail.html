@@ -73,35 +73,36 @@ talk about the latter.
 </p>
 <p>Level of Detail (or <small>LOD</small>) is the technique of reducing high polygon
 models with a simpler representation that renders faster. In contrast with
-visibility culling, level of detail can performance even if there are
-a lot of objects visible at the same time. Level of Detail is practically
+visibility culling, level of detail can improve the performances even if there
+are a lot of objects visible at the same time. Level of Detail is practically
 the only way to improve performance in situations where there is not much
 culling opportunity (like in a space game).
 </p>
-<p>Crystal Space currently supports three kinds of <small>LOD</small>:
+<p>Crystal Space supports several types of <small>LOD</small>:
 </p>
-<ul class="toc">
+<ul>
 <li>
-Static <small>LOD</small>. With this kind of <small>LOD</small> you can let the engine
+Static <small>LOD</small>: With this kind of <small>LOD</small> you can let the engine
 automatically select between different versions of the same model based
-on distance.
+on the distance to the camera. This requires that you provide the different versions of
+the same model, which is explained in this section.
 </li><li>
-Progressive <small>LOD</small>. This kind of <small>LOD</small> is supported by 3D sprites and
-is also based on distance. The major difference is that this kind of <small>LOD</small>
-doesn't use discrete lod levels but instead allows the engine to select
-as many triangles from the original model as needed (while still preserving the
-original model as much as possible).
+<a href="Progressive-Level-of-Detail.html#0">Progressive <small>LOD</small></a>: The major difference compared
+with static <small>LOD</small> is that this kind of <small>LOD</small> doesn't use discrete <small>LOD</small> levels
+but instead allows the engine to select as many triangles from the original model as
+needed (while still preserving the original model as much as possible). Another advantage
+is that the progressive <small>LOD</small>s are computed automatically. This <small>LOD</small> system is
+currently only supported by Genmeshes. 
 </li><li>
-Terrain <small>LOD</small>. The terrain engine has built-in <small>LOD</small>.
+Imposters: The mesh can be automatically replaced by a procedural image representing
+the mesh from the current camera point of view. Displaying an image is much more cheap
+than a 3D mesh. Here again, the images are computed automatically and do not need any
+additional artistic work.
+</li><li>
+Per-mesh <small>LOD</small>: Some meshes such as the <a href="MeshObject-Terrain2.html#0">terrain</a> and the
+<a href="Furmesh-Mesh.html#0">fur</a> meshes have built-in <small>LOD</small> management.
 </li></ul>
 
-<p>In future we will also support other kinds of <small>LOD</small> like imposters.
-</p>
-<p>Also in future there will be a <small>LOD</small> manager. At this moment <small>LOD</small>
-is purely distance based but for a given distance the level of detail will
-not change. A <small>LOD</small> manager can decide to reduce the lod levels for
-certain objects in order to improve overall performance.
-</p>
 <a name="1"></a>
 <h4 class="subsubheading"> Static <small>LOD</small> From Map File </h4>
 
@@ -225,9 +226,6 @@ loddy_mesh-&gt;GetChildren ()-&gt;Add (loddy_meddetail);
 loddy_mesh-&gt;AddMeshToStaticLOD (1, loddy_meddetail);
 ...
 </pre></td></tr></table>
-<a name="3"></a>
-<h4 class="subsubheading"> Progressive <small>LOD</small> </h4>
-
 <p>To-Do<small class="dots">...</small> @@@
 </p>
 <hr size="1">

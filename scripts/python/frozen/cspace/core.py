@@ -383,6 +383,7 @@ class iBase(object):
     def GetInterfaceMetadata(*args): return _core.iBase_GetInterfaceMetadata(*args)
     def QueryInterface(*args): return _core.iBase_QueryInterface(*args)
     scfGetVersion = staticmethod(_core.iBase_scfGetVersion)
+    scfGetName = staticmethod(_core.iBase_scfGetName)
     def __eq__(self,other):
         if isinstance(other,iBase):
             return self.this == other.this
@@ -395,6 +396,7 @@ class iBase(object):
 iBase_swigregister = _core.iBase_swigregister
 iBase_swigregister(iBase)
 iBase_scfGetVersion = _core.iBase_scfGetVersion
+iBase_scfGetName = _core.iBase_scfGetName
 
 class iSCF(iBase):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
@@ -418,11 +420,13 @@ class iSCF(iBase):
     def ScanPluginsPath(*args): return _core.iSCF_ScanPluginsPath(*args)
     def RegisterPlugin(*args): return _core.iSCF_RegisterPlugin(*args)
     scfGetVersion = staticmethod(_core.iSCF_scfGetVersion)
+    scfGetName = staticmethod(_core.iSCF_scfGetName)
     __swig_destroy__ = _core.delete_iSCF
     __del__ = lambda self : None;
 iSCF_swigregister = _core.iSCF_swigregister
 iSCF_swigregister(iSCF)
 iSCF_scfGetVersion = _core.iSCF_scfGetVersion
+iSCF_scfGetName = _core.iSCF_scfGetName
 
 SCF_STATIC_CLASS_CONTEXT = _core.SCF_STATIC_CLASS_CONTEXT
 class iFactory(iBase):
@@ -436,11 +440,13 @@ class iFactory(iBase):
     def QueryClassID(*args): return _core.iFactory_QueryClassID(*args)
     def QueryModuleName(*args): return _core.iFactory_QueryModuleName(*args)
     scfGetVersion = staticmethod(_core.iFactory_scfGetVersion)
+    scfGetName = staticmethod(_core.iFactory_scfGetName)
     __swig_destroy__ = _core.delete_iFactory
     __del__ = lambda self : None;
 iFactory_swigregister = _core.iFactory_swigregister
 iFactory_swigregister(iFactory)
 iFactory_scfGetVersion = _core.iFactory_scfGetVersion
+iFactory_scfGetName = _core.iFactory_scfGetName
 
 SCF_VERBOSE_NONE = _core.SCF_VERBOSE_NONE
 SCF_VERBOSE_PLUGIN_SCAN = _core.SCF_VERBOSE_PLUGIN_SCAN
@@ -510,11 +516,13 @@ class iDebugHelper(iBase):
     def Dump(*args): return _core.iDebugHelper_Dump(*args)
     def DebugCommand(*args): return _core.iDebugHelper_DebugCommand(*args)
     scfGetVersion = staticmethod(_core.iDebugHelper_scfGetVersion)
+    scfGetName = staticmethod(_core.iDebugHelper_scfGetName)
     __swig_destroy__ = _core.delete_iDebugHelper
     __del__ = lambda self : None;
 iDebugHelper_swigregister = _core.iDebugHelper_swigregister
 iDebugHelper_swigregister(iDebugHelper)
 iDebugHelper_scfGetVersion = _core.iDebugHelper_scfGetVersion
+iDebugHelper_scfGetName = _core.iDebugHelper_scfGetName
 
 class iCommandLineParser(iBase):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
@@ -534,11 +542,13 @@ class iCommandLineParser(iBase):
     def GetOptionName(*args): return _core.iCommandLineParser_GetOptionName(*args)
     def GetOption(*args): return _core.iCommandLineParser_GetOption(*args)
     scfGetVersion = staticmethod(_core.iCommandLineParser_scfGetVersion)
+    scfGetName = staticmethod(_core.iCommandLineParser_scfGetName)
     __swig_destroy__ = _core.delete_iCommandLineParser
     __del__ = lambda self : None;
 iCommandLineParser_swigregister = _core.iCommandLineParser_swigregister
 iCommandLineParser_swigregister(iCommandLineParser)
 iCommandLineParser_scfGetVersion = _core.iCommandLineParser_scfGetVersion
+iCommandLineParser_scfGetName = _core.iCommandLineParser_scfGetName
 
 class csColor(object):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
@@ -660,11 +670,13 @@ class iStringSet(iGeneralStringSetBase):
     def __init__(self, *args, **kwargs): raise AttributeError, "No constructor defined"
     __repr__ = _swig_repr
     scfGetVersion = staticmethod(_core.iStringSet_scfGetVersion)
+    scfGetName = staticmethod(_core.iStringSet_scfGetName)
     __swig_destroy__ = _core.delete_iStringSet
     __del__ = lambda self : None;
 iStringSet_swigregister = _core.iStringSet_swigregister
 iStringSet_swigregister(iStringSet)
 iStringSet_scfGetVersion = _core.iStringSet_scfGetVersion
+iStringSet_scfGetName = _core.iStringSet_scfGetName
 
 class csStringIDSet(object):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
@@ -865,11 +877,13 @@ class iReporterListener(iBase):
     def Report(*args): return _core.iReporterListener_Report(*args)
     def ReportWait(*args): return _core.iReporterListener_ReportWait(*args)
     scfGetVersion = staticmethod(_core.iReporterListener_scfGetVersion)
+    scfGetName = staticmethod(_core.iReporterListener_scfGetName)
     __swig_destroy__ = _core.delete_iReporterListener
     __del__ = lambda self : None;
 iReporterListener_swigregister = _core.iReporterListener_swigregister
 iReporterListener_swigregister(iReporterListener)
 iReporterListener_scfGetVersion = _core.iReporterListener_scfGetVersion
+iReporterListener_scfGetName = _core.iReporterListener_scfGetName
 
 class iReporterIterator(iBase):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
@@ -881,11 +895,13 @@ class iReporterIterator(iBase):
     def GetMessageId(*args): return _core.iReporterIterator_GetMessageId(*args)
     def GetMessageDescription(*args): return _core.iReporterIterator_GetMessageDescription(*args)
     scfGetVersion = staticmethod(_core.iReporterIterator_scfGetVersion)
+    scfGetName = staticmethod(_core.iReporterIterator_scfGetName)
     __swig_destroy__ = _core.delete_iReporterIterator
     __del__ = lambda self : None;
 iReporterIterator_swigregister = _core.iReporterIterator_swigregister
 iReporterIterator_swigregister(iReporterIterator)
 iReporterIterator_scfGetVersion = _core.iReporterIterator_scfGetVersion
+iReporterIterator_scfGetName = _core.iReporterIterator_scfGetName
 
 class iReporter(iBase):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
@@ -903,11 +919,13 @@ class iReporter(iBase):
     def ReportBug(*args): return _core.iReporter_ReportBug(*args)
     def ReportDebug(*args): return _core.iReporter_ReportDebug(*args)
     scfGetVersion = staticmethod(_core.iReporter_scfGetVersion)
+    scfGetName = staticmethod(_core.iReporter_scfGetName)
     __swig_destroy__ = _core.delete_iReporter
     __del__ = lambda self : None;
 iReporter_swigregister = _core.iReporter_swigregister
 iReporter_swigregister(iReporter)
 iReporter_scfGetVersion = _core.iReporter_scfGetVersion
+iReporter_scfGetName = _core.iReporter_scfGetName
 
 class csReporterHelper(object):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
@@ -929,11 +947,13 @@ class iComponent(iBase):
     __repr__ = _swig_repr
     def Initialize(*args): return _core.iComponent_Initialize(*args)
     scfGetVersion = staticmethod(_core.iComponent_scfGetVersion)
+    scfGetName = staticmethod(_core.iComponent_scfGetName)
     __swig_destroy__ = _core.delete_iComponent
     __del__ = lambda self : None;
 iComponent_swigregister = _core.iComponent_swigregister
 iComponent_swigregister(iComponent)
 iComponent_scfGetVersion = _core.iComponent_scfGetVersion
+iComponent_scfGetName = _core.iComponent_scfGetName
 
 class iCacheManager(iBase):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
@@ -950,11 +970,13 @@ class iCacheManager(iBase):
     def ClearCache(*args): return _core.iCacheManager_ClearCache(*args)
     def Flush(*args): return _core.iCacheManager_Flush(*args)
     scfGetVersion = staticmethod(_core.iCacheManager_scfGetVersion)
+    scfGetName = staticmethod(_core.iCacheManager_scfGetName)
     __swig_destroy__ = _core.delete_iCacheManager
     __del__ = lambda self : None;
 iCacheManager_swigregister = _core.iCacheManager_swigregister
 iCacheManager_swigregister(iCacheManager)
 iCacheManager_scfGetVersion = _core.iCacheManager_scfGetVersion
+iCacheManager_scfGetName = _core.iCacheManager_scfGetName
 
 class csFileTime(object):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
@@ -1005,11 +1027,13 @@ class iFile(iBase):
     def GetAllData(*args): return _core.iFile_GetAllData(*args)
     def GetPartialView(*args): return _core.iFile_GetPartialView(*args)
     scfGetVersion = staticmethod(_core.iFile_scfGetVersion)
+    scfGetName = staticmethod(_core.iFile_scfGetName)
     __swig_destroy__ = _core.delete_iFile
     __del__ = lambda self : None;
 iFile_swigregister = _core.iFile_swigregister
 iFile_swigregister(iFile)
 iFile_scfGetVersion = _core.iFile_scfGetVersion
+iFile_scfGetName = _core.iFile_scfGetName
 
 class iVFS(iBase):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
@@ -1041,11 +1065,13 @@ class iVFS(iBase):
     def GetMounts(*args): return _core.iVFS_GetMounts(*args)
     def GetRealMountPaths(*args): return _core.iVFS_GetRealMountPaths(*args)
     scfGetVersion = staticmethod(_core.iVFS_scfGetVersion)
+    scfGetName = staticmethod(_core.iVFS_scfGetName)
     __swig_destroy__ = _core.delete_iVFS
     __del__ = lambda self : None;
 iVFS_swigregister = _core.iVFS_swigregister
 iVFS_swigregister(iVFS)
 iVFS_scfGetVersion = _core.iVFS_scfGetVersion
+iVFS_scfGetName = _core.iVFS_scfGetName
 
 class iObjectNameChangeListener(iBase):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
@@ -1077,11 +1103,13 @@ class iObject(iBase):
     def RemoveNameChangeListener(*args): return _core.iObject_RemoveNameChangeListener(*args)
     def GetChild(*args): return _core.iObject_GetChild(*args)
     scfGetVersion = staticmethod(_core.iObject_scfGetVersion)
+    scfGetName = staticmethod(_core.iObject_scfGetName)
     __swig_destroy__ = _core.delete_iObject
     __del__ = lambda self : None;
 iObject_swigregister = _core.iObject_swigregister
 iObject_swigregister(iObject)
 iObject_scfGetVersion = _core.iObject_scfGetVersion
+iObject_scfGetName = _core.iObject_scfGetName
 
 class iObjectIterator(iBase):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
@@ -1096,11 +1124,13 @@ class iObjectIterator(iBase):
         while self.HasNext():
             yield self.Next() 
     scfGetVersion = staticmethod(_core.iObjectIterator_scfGetVersion)
+    scfGetName = staticmethod(_core.iObjectIterator_scfGetName)
     __swig_destroy__ = _core.delete_iObjectIterator
     __del__ = lambda self : None;
 iObjectIterator_swigregister = _core.iObjectIterator_swigregister
 iObjectIterator_swigregister(iObjectIterator)
 iObjectIterator_scfGetVersion = _core.iObjectIterator_scfGetVersion
+iObjectIterator_scfGetName = _core.iObjectIterator_scfGetName
 
 class iObjectRegistry(iBase):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
@@ -1111,11 +1141,13 @@ class iObjectRegistry(iBase):
     def Unregister(*args): return _core.iObjectRegistry_Unregister(*args)
     def Get(*args): return _core.iObjectRegistry_Get(*args)
     scfGetVersion = staticmethod(_core.iObjectRegistry_scfGetVersion)
+    scfGetName = staticmethod(_core.iObjectRegistry_scfGetName)
     __swig_destroy__ = _core.delete_iObjectRegistry
     __del__ = lambda self : None;
 iObjectRegistry_swigregister = _core.iObjectRegistry_swigregister
 iObjectRegistry_swigregister(iObjectRegistry)
 iObjectRegistry_scfGetVersion = _core.iObjectRegistry_scfGetVersion
+iObjectRegistry_scfGetName = _core.iObjectRegistry_scfGetName
 
 class iObjectRegistryIterator(iBase):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
@@ -1144,11 +1176,13 @@ class iVirtualClock(iBase):
     def GetElapsedSeconds(*args): return _core.iVirtualClock_GetElapsedSeconds(*args)
     def GetCurrentMicroTicks(*args): return _core.iVirtualClock_GetCurrentMicroTicks(*args)
     scfGetVersion = staticmethod(_core.iVirtualClock_scfGetVersion)
+    scfGetName = staticmethod(_core.iVirtualClock_scfGetName)
     __swig_destroy__ = _core.delete_iVirtualClock
     __del__ = lambda self : None;
 iVirtualClock_swigregister = _core.iVirtualClock_swigregister
 iVirtualClock_swigregister(iVirtualClock)
 iVirtualClock_scfGetVersion = _core.iVirtualClock_scfGetVersion
+iVirtualClock_scfGetName = _core.iVirtualClock_scfGetName
 
 CS_MAX_MOUSE_COUNT = _core.CS_MAX_MOUSE_COUNT
 CS_MAX_MOUSE_AXES = _core.CS_MAX_MOUSE_AXES
@@ -1164,11 +1198,13 @@ class iEventAttributeIterator(iBase):
     def Next(*args): return _core.iEventAttributeIterator_Next(*args)
     def Reset(*args): return _core.iEventAttributeIterator_Reset(*args)
     scfGetVersion = staticmethod(_core.iEventAttributeIterator_scfGetVersion)
+    scfGetName = staticmethod(_core.iEventAttributeIterator_scfGetName)
     __swig_destroy__ = _core.delete_iEventAttributeIterator
     __del__ = lambda self : None;
 iEventAttributeIterator_swigregister = _core.iEventAttributeIterator_swigregister
 iEventAttributeIterator_swigregister(iEventAttributeIterator)
 iEventAttributeIterator_scfGetVersion = _core.iEventAttributeIterator_scfGetVersion
+iEventAttributeIterator_scfGetName = _core.iEventAttributeIterator_scfGetName
 
 class csKeyEventData(object):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
@@ -1293,6 +1329,7 @@ class iEvent(iBase):
     Joystick = _swig_property(_core.iEvent_Joystick_get)
     Command = _swig_property(_core.iEvent_Command_get)
     scfGetVersion = staticmethod(_core.iEvent_scfGetVersion)
+    scfGetName = staticmethod(_core.iEvent_scfGetName)
     __swig_destroy__ = _core.delete_iEvent
     __del__ = lambda self : None;
     Name = property(GetName)
@@ -1300,6 +1337,7 @@ class iEvent(iBase):
 iEvent_swigregister = _core.iEvent_swigregister
 iEvent_swigregister(iEvent)
 iEvent_scfGetVersion = _core.iEvent_scfGetVersion
+iEvent_scfGetName = _core.iEvent_scfGetName
 
 class iEventPlug(iBase):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
@@ -1309,11 +1347,13 @@ class iEventPlug(iBase):
     def QueryEventPriority(*args): return _core.iEventPlug_QueryEventPriority(*args)
     def EnableEvents(*args): return _core.iEventPlug_EnableEvents(*args)
     scfGetVersion = staticmethod(_core.iEventPlug_scfGetVersion)
+    scfGetName = staticmethod(_core.iEventPlug_scfGetName)
     __swig_destroy__ = _core.delete_iEventPlug
     __del__ = lambda self : None;
 iEventPlug_swigregister = _core.iEventPlug_swigregister
 iEventPlug_swigregister(iEventPlug)
 iEventPlug_scfGetVersion = _core.iEventPlug_scfGetVersion
+iEventPlug_scfGetName = _core.iEventPlug_scfGetName
 
 class iEventOutlet(iBase):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
@@ -1327,11 +1367,13 @@ class iEventOutlet(iBase):
     def Broadcast(*args): return _core.iEventOutlet_Broadcast(*args)
     def ImmediateBroadcast(*args): return _core.iEventOutlet_ImmediateBroadcast(*args)
     scfGetVersion = staticmethod(_core.iEventOutlet_scfGetVersion)
+    scfGetName = staticmethod(_core.iEventOutlet_scfGetName)
     __swig_destroy__ = _core.delete_iEventOutlet
     __del__ = lambda self : None;
 iEventOutlet_swigregister = _core.iEventOutlet_swigregister
 iEventOutlet_swigregister(iEventOutlet)
 iEventOutlet_scfGetVersion = _core.iEventOutlet_scfGetVersion
+iEventOutlet_scfGetName = _core.iEventOutlet_scfGetName
 
 class iEventCord(iBase):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
@@ -1582,11 +1624,13 @@ class iEventQueue(iBase):
     def IsEmpty(*args): return _core.iEventQueue_IsEmpty(*args)
     def RemoveAllListeners(*args): return _core.iEventQueue_RemoveAllListeners(*args)
     scfGetVersion = staticmethod(_core.iEventQueue_scfGetVersion)
+    scfGetName = staticmethod(_core.iEventQueue_scfGetName)
     __swig_destroy__ = _core.delete_iEventQueue
     __del__ = lambda self : None;
 iEventQueue_swigregister = _core.iEventQueue_swigregister
 iEventQueue_swigregister(iEventQueue)
 iEventQueue_scfGetVersion = _core.iEventQueue_scfGetVersion
+iEventQueue_scfGetName = _core.iEventQueue_scfGetName
 
 class iEventNameRegistry(iBase):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
@@ -1598,11 +1642,13 @@ class iEventNameRegistry(iBase):
     def IsImmediateChildOf(*args): return _core.iEventNameRegistry_IsImmediateChildOf(*args)
     def IsKindOf(*args): return _core.iEventNameRegistry_IsKindOf(*args)
     scfGetVersion = staticmethod(_core.iEventNameRegistry_scfGetVersion)
+    scfGetName = staticmethod(_core.iEventNameRegistry_scfGetName)
     __swig_destroy__ = _core.delete_iEventNameRegistry
     __del__ = lambda self : None;
 iEventNameRegistry_swigregister = _core.iEventNameRegistry_swigregister
 iEventNameRegistry_swigregister(iEventNameRegistry)
 iEventNameRegistry_scfGetVersion = _core.iEventNameRegistry_scfGetVersion
+iEventNameRegistry_scfGetName = _core.iEventNameRegistry_scfGetName
 
 class csEventNameRegistry(object):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
@@ -1635,6 +1681,7 @@ class iEventHandler(iBase):
     def InstancePrec(*args): return _core.iEventHandler_InstancePrec(*args)
     def InstanceSucc(*args): return _core.iEventHandler_InstanceSucc(*args)
     scfGetVersion = staticmethod(_core.iEventHandler_scfGetVersion)
+    scfGetName = staticmethod(_core.iEventHandler_scfGetName)
     __swig_destroy__ = _core.delete_iEventHandler
     __del__ = lambda self : None;
 iEventHandler_swigregister = _core.iEventHandler_swigregister
@@ -1645,6 +1692,7 @@ csevJoystick = _core.csevJoystick
 csevJoystickOp = _core.csevJoystickOp
 csevCanvasOp = _core.csevCanvasOp
 iEventHandler_scfGetVersion = _core.iEventHandler_scfGetVersion
+iEventHandler_scfGetName = _core.iEventHandler_scfGetName
 
 class iPluginIterator(iBase):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
@@ -1656,11 +1704,13 @@ class iPluginIterator(iBase):
         while self.HasNext():
             yield self.Next() 
     scfGetVersion = staticmethod(_core.iPluginIterator_scfGetVersion)
+    scfGetName = staticmethod(_core.iPluginIterator_scfGetName)
     __swig_destroy__ = _core.delete_iPluginIterator
     __del__ = lambda self : None;
 iPluginIterator_swigregister = _core.iPluginIterator_swigregister
 iPluginIterator_swigregister(iPluginIterator)
 iPluginIterator_scfGetVersion = _core.iPluginIterator_scfGetVersion
+iPluginIterator_scfGetName = _core.iPluginIterator_scfGetName
 
 class iPluginManager(iBase):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
@@ -1689,11 +1739,13 @@ class iPluginManager(iBase):
     def QueryTagPluginInstance(*args): return _core.iPluginManager_QueryTagPluginInstance(*args)
     def LoadPlugin(*args): return _core.iPluginManager_LoadPlugin(*args)
     scfGetVersion = staticmethod(_core.iPluginManager_scfGetVersion)
+    scfGetName = staticmethod(_core.iPluginManager_scfGetName)
     __swig_destroy__ = _core.delete_iPluginManager
     __del__ = lambda self : None;
 iPluginManager_swigregister = _core.iPluginManager_swigregister
 iPluginManager_swigregister(iPluginManager)
 iPluginManager_scfGetVersion = _core.iPluginManager_scfGetVersion
+iPluginManager_scfGetName = _core.iPluginManager_scfGetName
 
 class scfObject(iObject):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
@@ -1799,11 +1851,13 @@ class iPath(iBase):
     def GetInterpolatedForward(*args): return _core.iPath_GetInterpolatedForward(*args)
     def QueryObject(*args): return _core.iPath_QueryObject(*args)
     scfGetVersion = staticmethod(_core.iPath_scfGetVersion)
+    scfGetName = staticmethod(_core.iPath_scfGetName)
     __swig_destroy__ = _core.delete_iPath
     __del__ = lambda self : None;
 iPath_swigregister = _core.iPath_swigregister
 iPath_swigregister(iPath)
 iPath_scfGetVersion = _core.iPath_scfGetVersion
+iPath_scfGetName = _core.iPath_scfGetName
 
 class scfPath(csObject,iPath):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
@@ -1845,11 +1899,13 @@ class iTriangleMesh(iBase):
     def GetVertexByIndex(*args): return _core.iTriangleMesh_GetVertexByIndex(*args)
     def GetTriangleByIndex(*args): return _core.iTriangleMesh_GetTriangleByIndex(*args)
     scfGetVersion = staticmethod(_core.iTriangleMesh_scfGetVersion)
+    scfGetName = staticmethod(_core.iTriangleMesh_scfGetName)
     __swig_destroy__ = _core.delete_iTriangleMesh
     __del__ = lambda self : None;
 iTriangleMesh_swigregister = _core.iTriangleMesh_swigregister
 iTriangleMesh_swigregister(iTriangleMesh)
 iTriangleMesh_scfGetVersion = _core.iTriangleMesh_scfGetVersion
+iTriangleMesh_scfGetName = _core.iTriangleMesh_scfGetName
 
 csComposeNoChar = _core.csComposeNoChar
 csComposeNormalChar = _core.csComposeNormalChar
@@ -1878,11 +1934,13 @@ class iKeyboardDriver(iBase):
     def GetModifiersState(*args): return _core.iKeyboardDriver_GetModifiersState(*args)
     def GetKeyState(*args): return _core.iKeyboardDriver_GetKeyState(*args)
     scfGetVersion = staticmethod(_core.iKeyboardDriver_scfGetVersion)
+    scfGetName = staticmethod(_core.iKeyboardDriver_scfGetName)
     __swig_destroy__ = _core.delete_iKeyboardDriver
     __del__ = lambda self : None;
 iKeyboardDriver_swigregister = _core.iKeyboardDriver_swigregister
 iKeyboardDriver_swigregister(iKeyboardDriver)
 iKeyboardDriver_scfGetVersion = _core.iKeyboardDriver_scfGetVersion
+iKeyboardDriver_scfGetName = _core.iKeyboardDriver_scfGetName
 
 class iMouseDriver(iBase):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
@@ -1897,11 +1955,13 @@ class iMouseDriver(iBase):
     def DoButton(*args): return _core.iMouseDriver_DoButton(*args)
     def DoMotion(*args): return _core.iMouseDriver_DoMotion(*args)
     scfGetVersion = staticmethod(_core.iMouseDriver_scfGetVersion)
+    scfGetName = staticmethod(_core.iMouseDriver_scfGetName)
     __swig_destroy__ = _core.delete_iMouseDriver
     __del__ = lambda self : None;
 iMouseDriver_swigregister = _core.iMouseDriver_swigregister
 iMouseDriver_swigregister(iMouseDriver)
 iMouseDriver_scfGetVersion = _core.iMouseDriver_scfGetVersion
+iMouseDriver_scfGetName = _core.iMouseDriver_scfGetName
 
 class iJoystickDriver(iBase):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
@@ -1913,11 +1973,13 @@ class iJoystickDriver(iBase):
     def DoButton(*args): return _core.iJoystickDriver_DoButton(*args)
     def DoMotion(*args): return _core.iJoystickDriver_DoMotion(*args)
     scfGetVersion = staticmethod(_core.iJoystickDriver_scfGetVersion)
+    scfGetName = staticmethod(_core.iJoystickDriver_scfGetName)
     __swig_destroy__ = _core.delete_iJoystickDriver
     __del__ = lambda self : None;
 iJoystickDriver_swigregister = _core.iJoystickDriver_swigregister
 iJoystickDriver_swigregister(iJoystickDriver)
 iJoystickDriver_scfGetVersion = _core.iJoystickDriver_scfGetVersion
+iJoystickDriver_scfGetName = _core.iJoystickDriver_scfGetName
 
 class iConfigFile(iBase):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
@@ -1948,11 +2010,13 @@ class iConfigFile(iBase):
     def GetEOFComment(*args): return _core.iConfigFile_GetEOFComment(*args)
     def SetEOFComment(*args): return _core.iConfigFile_SetEOFComment(*args)
     scfGetVersion = staticmethod(_core.iConfigFile_scfGetVersion)
+    scfGetName = staticmethod(_core.iConfigFile_scfGetName)
     __swig_destroy__ = _core.delete_iConfigFile
     __del__ = lambda self : None;
 iConfigFile_swigregister = _core.iConfigFile_swigregister
 iConfigFile_swigregister(iConfigFile)
 iConfigFile_scfGetVersion = _core.iConfigFile_scfGetVersion
+iConfigFile_scfGetName = _core.iConfigFile_scfGetName
 
 class iConfigIterator(iBase):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
@@ -1971,11 +2035,13 @@ class iConfigIterator(iBase):
     def GetTuple(*args): return _core.iConfigIterator_GetTuple(*args)
     def GetComment(*args): return _core.iConfigIterator_GetComment(*args)
     scfGetVersion = staticmethod(_core.iConfigIterator_scfGetVersion)
+    scfGetName = staticmethod(_core.iConfigIterator_scfGetName)
     __swig_destroy__ = _core.delete_iConfigIterator
     __del__ = lambda self : None;
 iConfigIterator_swigregister = _core.iConfigIterator_swigregister
 iConfigIterator_swigregister(iConfigIterator)
 iConfigIterator_scfGetVersion = _core.iConfigIterator_scfGetVersion
+iConfigIterator_scfGetName = _core.iConfigIterator_scfGetName
 
 class iConfigManager(iConfigFile):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
@@ -2004,11 +2070,13 @@ class iConfigManager(iConfigFile):
     def GetDynamicDomainPriority(*args): return _core.iConfigManager_GetDynamicDomainPriority(*args)
     def FlushRemoved(*args): return _core.iConfigManager_FlushRemoved(*args)
     scfGetVersion = staticmethod(_core.iConfigManager_scfGetVersion)
+    scfGetName = staticmethod(_core.iConfigManager_scfGetName)
     __swig_destroy__ = _core.delete_iConfigManager
     __del__ = lambda self : None;
 iConfigManager_swigregister = _core.iConfigManager_swigregister
 iConfigManager_swigregister(iConfigManager)
 iConfigManager_scfGetVersion = _core.iConfigManager_scfGetVersion
+iConfigManager_scfGetName = _core.iConfigManager_scfGetName
 
 class iStringArray(iBase):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
@@ -2046,11 +2114,13 @@ class iStringArray(iBase):
                     yield self.__getitem__(idx)
     def __iter__(self): return self.content_iterator()  
     scfGetVersion = staticmethod(_core.iStringArray_scfGetVersion)
+    scfGetName = staticmethod(_core.iStringArray_scfGetName)
     __swig_destroy__ = _core.delete_iStringArray
     __del__ = lambda self : None;
 iStringArray_swigregister = _core.iStringArray_swigregister
 iStringArray_swigregister(iStringArray)
 iStringArray_scfGetVersion = _core.iStringArray_scfGetVersion
+iStringArray_scfGetName = _core.iStringArray_scfGetName
 
 CS_NODE_DOCUMENT = _core.CS_NODE_DOCUMENT
 CS_NODE_ELEMENT = _core.CS_NODE_ELEMENT
@@ -2071,11 +2141,13 @@ class iDocumentAttributeIterator(iBase):
         while self.HasNext():
             yield self.Next() 
     scfGetVersion = staticmethod(_core.iDocumentAttributeIterator_scfGetVersion)
+    scfGetName = staticmethod(_core.iDocumentAttributeIterator_scfGetName)
     __swig_destroy__ = _core.delete_iDocumentAttributeIterator
     __del__ = lambda self : None;
 iDocumentAttributeIterator_swigregister = _core.iDocumentAttributeIterator_swigregister
 iDocumentAttributeIterator_swigregister(iDocumentAttributeIterator)
 iDocumentAttributeIterator_scfGetVersion = _core.iDocumentAttributeIterator_scfGetVersion
+iDocumentAttributeIterator_scfGetName = _core.iDocumentAttributeIterator_scfGetName
 
 class iDocumentAttribute(iBase):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
@@ -2091,11 +2163,13 @@ class iDocumentAttribute(iBase):
     def SetValueAsInt(*args): return _core.iDocumentAttribute_SetValueAsInt(*args)
     def SetValueAsFloat(*args): return _core.iDocumentAttribute_SetValueAsFloat(*args)
     scfGetVersion = staticmethod(_core.iDocumentAttribute_scfGetVersion)
+    scfGetName = staticmethod(_core.iDocumentAttribute_scfGetName)
     __swig_destroy__ = _core.delete_iDocumentAttribute
     __del__ = lambda self : None;
 iDocumentAttribute_swigregister = _core.iDocumentAttribute_swigregister
 iDocumentAttribute_swigregister(iDocumentAttribute)
 iDocumentAttribute_scfGetVersion = _core.iDocumentAttribute_scfGetVersion
+iDocumentAttribute_scfGetName = _core.iDocumentAttribute_scfGetName
 
 class iDocumentNodeIterator(iBase):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
@@ -2109,11 +2183,13 @@ class iDocumentNodeIterator(iBase):
         while self.HasNext():
             yield self.Next() 
     scfGetVersion = staticmethod(_core.iDocumentNodeIterator_scfGetVersion)
+    scfGetName = staticmethod(_core.iDocumentNodeIterator_scfGetName)
     __swig_destroy__ = _core.delete_iDocumentNodeIterator
     __del__ = lambda self : None;
 iDocumentNodeIterator_swigregister = _core.iDocumentNodeIterator_swigregister
 iDocumentNodeIterator_swigregister(iDocumentNodeIterator)
 iDocumentNodeIterator_scfGetVersion = _core.iDocumentNodeIterator_scfGetVersion
+iDocumentNodeIterator_scfGetName = _core.iDocumentNodeIterator_scfGetName
 
 class iDocumentNode(iBase):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
@@ -2146,11 +2222,13 @@ class iDocumentNode(iBase):
     def SetAttributeAsInt(*args): return _core.iDocumentNode_SetAttributeAsInt(*args)
     def SetAttributeAsFloat(*args): return _core.iDocumentNode_SetAttributeAsFloat(*args)
     scfGetVersion = staticmethod(_core.iDocumentNode_scfGetVersion)
+    scfGetName = staticmethod(_core.iDocumentNode_scfGetName)
     __swig_destroy__ = _core.delete_iDocumentNode
     __del__ = lambda self : None;
 iDocumentNode_swigregister = _core.iDocumentNode_swigregister
 iDocumentNode_swigregister(iDocumentNode)
 iDocumentNode_scfGetVersion = _core.iDocumentNode_scfGetVersion
+iDocumentNode_scfGetName = _core.iDocumentNode_scfGetName
 
 class iDocument(iBase):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
@@ -2163,11 +2241,13 @@ class iDocument(iBase):
     def Changeable(*args): return _core.iDocument_Changeable(*args)
     def Write(*args): return _core.iDocument_Write(*args)
     scfGetVersion = staticmethod(_core.iDocument_scfGetVersion)
+    scfGetName = staticmethod(_core.iDocument_scfGetName)
     __swig_destroy__ = _core.delete_iDocument
     __del__ = lambda self : None;
 iDocument_swigregister = _core.iDocument_swigregister
 iDocument_swigregister(iDocument)
 iDocument_scfGetVersion = _core.iDocument_scfGetVersion
+iDocument_scfGetName = _core.iDocument_scfGetName
 
 class iDocumentSystem(iBase):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
@@ -2175,11 +2255,13 @@ class iDocumentSystem(iBase):
     __repr__ = _swig_repr
     def CreateDocument(*args): return _core.iDocumentSystem_CreateDocument(*args)
     scfGetVersion = staticmethod(_core.iDocumentSystem_scfGetVersion)
+    scfGetName = staticmethod(_core.iDocumentSystem_scfGetName)
     __swig_destroy__ = _core.delete_iDocumentSystem
     __del__ = lambda self : None;
 iDocumentSystem_swigregister = _core.iDocumentSystem_swigregister
 iDocumentSystem_swigregister(iDocumentSystem)
 iDocumentSystem_scfGetVersion = _core.iDocumentSystem_scfGetVersion
+iDocumentSystem_scfGetName = _core.iDocumentSystem_scfGetName
 
 class scfConfigFile(iConfigFile):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
@@ -2268,11 +2350,13 @@ class iDataBuffer(iBase):
     def GetUint8(*args): return _core.iDataBuffer_GetUint8(*args)
     def AsBuffer(*args): return _core.iDataBuffer_AsBuffer(*args)
     scfGetVersion = staticmethod(_core.iDataBuffer_scfGetVersion)
+    scfGetName = staticmethod(_core.iDataBuffer_scfGetName)
     __swig_destroy__ = _core.delete_iDataBuffer
     __del__ = lambda self : None;
 iDataBuffer_swigregister = _core.iDataBuffer_swigregister
 iDataBuffer_swigregister(iDataBuffer)
 iDataBuffer_scfGetVersion = _core.iDataBuffer_scfGetVersion
+iDataBuffer_scfGetName = _core.iDataBuffer_scfGetName
 
 CSKEY_SHIFT_NUM = _core.CSKEY_SHIFT_NUM
 CSKEY_CTRL_NUM = _core.CSKEY_CTRL_NUM

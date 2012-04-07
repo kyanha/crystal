@@ -82,6 +82,7 @@ class iCEGUI(cspace.iBase):
     def SetAutoRender(*args): return _pycscegui.iCEGUI_SetAutoRender(*args)
     def GetAutoRender(*args): return _pycscegui.iCEGUI_GetAutoRender(*args)
     scfGetVersion = staticmethod(_pycscegui.iCEGUI_scfGetVersion)
+    scfGetName = staticmethod(_pycscegui.iCEGUI_scfGetName)
     __swig_destroy__ = _pycscegui.delete_iCEGUI
     __del__ = lambda self : None;
     SchemeManager = property(_pycscegui.iCEGUI_GetSchemeManagerPtr)  
@@ -96,6 +97,7 @@ class iCEGUI(cspace.iBase):
 iCEGUI_swigregister = _pycscegui.iCEGUI_swigregister
 iCEGUI_swigregister(iCEGUI)
 iCEGUI_scfGetVersion = _pycscegui.iCEGUI_scfGetVersion
+iCEGUI_scfGetName = _pycscegui.iCEGUI_scfGetName
 
 SWIG_BUILD_VERSION = 0x010336
 

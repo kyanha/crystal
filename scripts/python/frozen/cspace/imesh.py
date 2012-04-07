@@ -75,11 +75,13 @@ class iObjectModelListener(core.iBase):
     __repr__ = _swig_repr
     def ObjectModelChanged(*args): return _imesh.iObjectModelListener_ObjectModelChanged(*args)
     scfGetVersion = staticmethod(_imesh.iObjectModelListener_scfGetVersion)
+    scfGetName = staticmethod(_imesh.iObjectModelListener_scfGetName)
     __swig_destroy__ = _imesh.delete_iObjectModelListener
     __del__ = lambda self : None;
 iObjectModelListener_swigregister = _imesh.iObjectModelListener_swigregister
 iObjectModelListener_swigregister(iObjectModelListener)
 iObjectModelListener_scfGetVersion = _imesh.iObjectModelListener_scfGetVersion
+iObjectModelListener_scfGetName = _imesh.iObjectModelListener_scfGetName
 
 class iTriangleMeshIterator(core.iBase):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
@@ -88,11 +90,13 @@ class iTriangleMeshIterator(core.iBase):
     def HasNext(*args): return _imesh.iTriangleMeshIterator_HasNext(*args)
     def Next(*args): return _imesh.iTriangleMeshIterator_Next(*args)
     scfGetVersion = staticmethod(_imesh.iTriangleMeshIterator_scfGetVersion)
+    scfGetName = staticmethod(_imesh.iTriangleMeshIterator_scfGetName)
     __swig_destroy__ = _imesh.delete_iTriangleMeshIterator
     __del__ = lambda self : None;
 iTriangleMeshIterator_swigregister = _imesh.iTriangleMeshIterator_swigregister
 iTriangleMeshIterator_swigregister(iTriangleMeshIterator)
 iTriangleMeshIterator_scfGetVersion = _imesh.iTriangleMeshIterator_scfGetVersion
+iTriangleMeshIterator_scfGetName = _imesh.iTriangleMeshIterator_scfGetName
 
 class iObjectModel(core.iBase):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
@@ -112,11 +116,13 @@ class iObjectModel(core.iBase):
     def AddListener(*args): return _imesh.iObjectModel_AddListener(*args)
     def RemoveListener(*args): return _imesh.iObjectModel_RemoveListener(*args)
     scfGetVersion = staticmethod(_imesh.iObjectModel_scfGetVersion)
+    scfGetName = staticmethod(_imesh.iObjectModel_scfGetName)
     __swig_destroy__ = _imesh.delete_iObjectModel
     __del__ = lambda self : None;
 iObjectModel_swigregister = _imesh.iObjectModel_swigregister
 iObjectModel_swigregister(iObjectModel)
 iObjectModel_scfGetVersion = _imesh.iObjectModel_scfGetVersion
+iObjectModel_scfGetName = _imesh.iObjectModel_scfGetName
 
 class iGeneralFactorySubMesh(core.iBase):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
@@ -195,11 +201,13 @@ class iGeneralMeshState(iGeneralMeshCommonState):
     def FindSubMesh(*args): return _imesh.iGeneralMeshState_FindSubMesh(*args)
     def ForceProgLODLevel(*args): return _imesh.iGeneralMeshState_ForceProgLODLevel(*args)
     scfGetVersion = staticmethod(_imesh.iGeneralMeshState_scfGetVersion)
+    scfGetName = staticmethod(_imesh.iGeneralMeshState_scfGetName)
     __swig_destroy__ = _imesh.delete_iGeneralMeshState
     __del__ = lambda self : None;
 iGeneralMeshState_swigregister = _imesh.iGeneralMeshState_swigregister
 iGeneralMeshState_swigregister(iGeneralMeshState)
 iGeneralMeshState_scfGetVersion = _imesh.iGeneralMeshState_scfGetVersion
+iGeneralMeshState_scfGetName = _imesh.iGeneralMeshState_scfGetName
 
 class iGeneralFactoryState(iGeneralMeshCommonState):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
@@ -266,11 +274,13 @@ class iGeneralFactoryState(iGeneralMeshCommonState):
     def GetColorsAsBuffer(*args): return _imesh.iGeneralFactoryState_GetColorsAsBuffer(*args)
     def GetTrianglesAsBuffer(*args): return _imesh.iGeneralFactoryState_GetTrianglesAsBuffer(*args)
     scfGetVersion = staticmethod(_imesh.iGeneralFactoryState_scfGetVersion)
+    scfGetName = staticmethod(_imesh.iGeneralFactoryState_scfGetName)
     __swig_destroy__ = _imesh.delete_iGeneralFactoryState
     __del__ = lambda self : None;
 iGeneralFactoryState_swigregister = _imesh.iGeneralFactoryState_swigregister
 iGeneralFactoryState_swigregister(iGeneralFactoryState)
 iGeneralFactoryState_scfGetVersion = _imesh.iGeneralFactoryState_scfGetVersion
+iGeneralFactoryState_scfGetName = _imesh.iGeneralFactoryState_scfGetName
 
 class iGenMeshAnimationControl(core.iBase):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
@@ -346,11 +356,13 @@ class iSkeletonBone(core.iBase):
     def SetTransformMode(*args): return _imesh.iSkeletonBone_SetTransformMode(*args)
     def GetTransformMode(*args): return _imesh.iSkeletonBone_GetTransformMode(*args)
     scfGetVersion = staticmethod(_imesh.iSkeletonBone_scfGetVersion)
+    scfGetName = staticmethod(_imesh.iSkeletonBone_scfGetName)
     __swig_destroy__ = _imesh.delete_iSkeletonBone
     __del__ = lambda self : None;
 iSkeletonBone_swigregister = _imesh.iSkeletonBone_swigregister
 iSkeletonBone_swigregister(iSkeletonBone)
 iSkeletonBone_scfGetVersion = _imesh.iSkeletonBone_scfGetVersion
+iSkeletonBone_scfGetName = _imesh.iSkeletonBone_scfGetName
 
 class iSkeletonBoneUpdateCallback(core.iBase):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
@@ -471,11 +483,13 @@ class iSkeleton(core.iBase):
     def UpdateAnimation(*args): return _imesh.iSkeleton_UpdateAnimation(*args)
     def UpdateBones(*args): return _imesh.iSkeleton_UpdateBones(*args)
     scfGetVersion = staticmethod(_imesh.iSkeleton_scfGetVersion)
+    scfGetName = staticmethod(_imesh.iSkeleton_scfGetName)
     __swig_destroy__ = _imesh.delete_iSkeleton
     __del__ = lambda self : None;
 iSkeleton_swigregister = _imesh.iSkeleton_swigregister
 iSkeleton_swigregister(iSkeleton)
 iSkeleton_scfGetVersion = _imesh.iSkeleton_scfGetVersion
+iSkeleton_scfGetName = _imesh.iSkeleton_scfGetName
 
 class iSkeletonSocket(core.iBase):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
@@ -492,11 +506,13 @@ class iSkeletonSocket(core.iBase):
     def GetSceneNode(*args): return _imesh.iSkeletonSocket_GetSceneNode(*args)
     def GetFactory(*args): return _imesh.iSkeletonSocket_GetFactory(*args)
     scfGetVersion = staticmethod(_imesh.iSkeletonSocket_scfGetVersion)
+    scfGetName = staticmethod(_imesh.iSkeletonSocket_scfGetName)
     __swig_destroy__ = _imesh.delete_iSkeletonSocket
     __del__ = lambda self : None;
 iSkeletonSocket_swigregister = _imesh.iSkeletonSocket_swigregister
 iSkeletonSocket_swigregister(iSkeletonSocket)
 iSkeletonSocket_scfGetVersion = _imesh.iSkeletonSocket_scfGetVersion
+iSkeletonSocket_scfGetName = _imesh.iSkeletonSocket_scfGetName
 
 class iSkeletonBoneRagdollInfo(core.iBase):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
@@ -537,11 +553,13 @@ class iSkeletonBoneRagdollInfo(core.iBase):
     def SetJointMaxTransContraints(*args): return _imesh.iSkeletonBoneRagdollInfo_SetJointMaxTransContraints(*args)
     def GetJointMaxTransContraints(*args): return _imesh.iSkeletonBoneRagdollInfo_GetJointMaxTransContraints(*args)
     scfGetVersion = staticmethod(_imesh.iSkeletonBoneRagdollInfo_scfGetVersion)
+    scfGetName = staticmethod(_imesh.iSkeletonBoneRagdollInfo_scfGetName)
     __swig_destroy__ = _imesh.delete_iSkeletonBoneRagdollInfo
     __del__ = lambda self : None;
 iSkeletonBoneRagdollInfo_swigregister = _imesh.iSkeletonBoneRagdollInfo_swigregister
 iSkeletonBoneRagdollInfo_swigregister(iSkeletonBoneRagdollInfo)
 iSkeletonBoneRagdollInfo_scfGetVersion = _imesh.iSkeletonBoneRagdollInfo_scfGetVersion
+iSkeletonBoneRagdollInfo_scfGetName = _imesh.iSkeletonBoneRagdollInfo_scfGetName
 
 class iSkeletonBoneFactory(core.iBase):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
@@ -562,11 +580,13 @@ class iSkeletonBoneFactory(core.iBase):
     def GetSkinBox(*args): return _imesh.iSkeletonBoneFactory_GetSkinBox(*args)
     def GetRagdollInfo(*args): return _imesh.iSkeletonBoneFactory_GetRagdollInfo(*args)
     scfGetVersion = staticmethod(_imesh.iSkeletonBoneFactory_scfGetVersion)
+    scfGetName = staticmethod(_imesh.iSkeletonBoneFactory_scfGetName)
     __swig_destroy__ = _imesh.delete_iSkeletonBoneFactory
     __del__ = lambda self : None;
 iSkeletonBoneFactory_swigregister = _imesh.iSkeletonBoneFactory_swigregister
 iSkeletonBoneFactory_swigregister(iSkeletonBoneFactory)
 iSkeletonBoneFactory_scfGetVersion = _imesh.iSkeletonBoneFactory_scfGetVersion
+iSkeletonBoneFactory_scfGetName = _imesh.iSkeletonBoneFactory_scfGetName
 
 class iSkeletonSocketFactory(core.iBase):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
@@ -580,11 +600,13 @@ class iSkeletonSocketFactory(core.iBase):
     def SetBone(*args): return _imesh.iSkeletonSocketFactory_SetBone(*args)
     def GetBone(*args): return _imesh.iSkeletonSocketFactory_GetBone(*args)
     scfGetVersion = staticmethod(_imesh.iSkeletonSocketFactory_scfGetVersion)
+    scfGetName = staticmethod(_imesh.iSkeletonSocketFactory_scfGetName)
     __swig_destroy__ = _imesh.delete_iSkeletonSocketFactory
     __del__ = lambda self : None;
 iSkeletonSocketFactory_swigregister = _imesh.iSkeletonSocketFactory_swigregister
 iSkeletonSocketFactory_swigregister(iSkeletonSocketFactory)
 iSkeletonSocketFactory_scfGetVersion = _imesh.iSkeletonSocketFactory_scfGetVersion
+iSkeletonSocketFactory_scfGetName = _imesh.iSkeletonSocketFactory_scfGetName
 
 class iSkeletonFactory(core.iBase):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
@@ -608,11 +630,13 @@ class iSkeletonFactory(core.iBase):
     def RemoveSocket(*args): return _imesh.iSkeletonFactory_RemoveSocket(*args)
     def GetSocketsCount(*args): return _imesh.iSkeletonFactory_GetSocketsCount(*args)
     scfGetVersion = staticmethod(_imesh.iSkeletonFactory_scfGetVersion)
+    scfGetName = staticmethod(_imesh.iSkeletonFactory_scfGetName)
     __swig_destroy__ = _imesh.delete_iSkeletonFactory
     __del__ = lambda self : None;
 iSkeletonFactory_swigregister = _imesh.iSkeletonFactory_swigregister
 iSkeletonFactory_swigregister(iSkeletonFactory)
 iSkeletonFactory_scfGetVersion = _imesh.iSkeletonFactory_scfGetVersion
+iSkeletonFactory_scfGetName = _imesh.iSkeletonFactory_scfGetName
 
 class iSkeletonGraveyard(core.iBase):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
@@ -628,11 +652,13 @@ class iSkeletonGraveyard(core.iBase):
     def AddSkeleton(*args): return _imesh.iSkeletonGraveyard_AddSkeleton(*args)
     def RemoveSkeleton(*args): return _imesh.iSkeletonGraveyard_RemoveSkeleton(*args)
     scfGetVersion = staticmethod(_imesh.iSkeletonGraveyard_scfGetVersion)
+    scfGetName = staticmethod(_imesh.iSkeletonGraveyard_scfGetName)
     __swig_destroy__ = _imesh.delete_iSkeletonGraveyard
     __del__ = lambda self : None;
 iSkeletonGraveyard_swigregister = _imesh.iSkeletonGraveyard_swigregister
 iSkeletonGraveyard_swigregister(iSkeletonGraveyard)
 iSkeletonGraveyard_scfGetVersion = _imesh.iSkeletonGraveyard_scfGetVersion
+iSkeletonGraveyard_scfGetName = _imesh.iSkeletonGraveyard_scfGetName
 
 class iGenMeshSkeletonControlState(core.iBase):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
@@ -646,11 +672,13 @@ class iGenMeshSkeletonControlState(core.iBase):
     def GetAnimatedVertNormalsCount(*args): return _imesh.iGenMeshSkeletonControlState_GetAnimatedVertNormalsCount(*args)
     def GetSkeleton(*args): return _imesh.iGenMeshSkeletonControlState_GetSkeleton(*args)
     scfGetVersion = staticmethod(_imesh.iGenMeshSkeletonControlState_scfGetVersion)
+    scfGetName = staticmethod(_imesh.iGenMeshSkeletonControlState_scfGetName)
     __swig_destroy__ = _imesh.delete_iGenMeshSkeletonControlState
     __del__ = lambda self : None;
 iGenMeshSkeletonControlState_swigregister = _imesh.iGenMeshSkeletonControlState_swigregister
 iGenMeshSkeletonControlState_swigregister(iGenMeshSkeletonControlState)
 iGenMeshSkeletonControlState_scfGetVersion = _imesh.iGenMeshSkeletonControlState_scfGetVersion
+iGenMeshSkeletonControlState_scfGetName = _imesh.iGenMeshSkeletonControlState_scfGetName
 
 class AnimatedMeshBoneInfluence(object):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
@@ -951,11 +979,13 @@ class iSprite2DState(iSprite2DFactoryState):
     def GetVertexByIndex(*args): return _imesh.iSprite2DState_GetVertexByIndex(*args)
     def GetVertexCount(*args): return _imesh.iSprite2DState_GetVertexCount(*args)
     scfGetVersion = staticmethod(_imesh.iSprite2DState_scfGetVersion)
+    scfGetName = staticmethod(_imesh.iSprite2DState_scfGetName)
     __swig_destroy__ = _imesh.delete_iSprite2DState
     __del__ = lambda self : None;
 iSprite2DState_swigregister = _imesh.iSprite2DState_swigregister
 iSprite2DState_swigregister(iSprite2DState)
 iSprite2DState_scfGetVersion = _imesh.iSprite2DState_scfGetVersion
+iSprite2DState_scfGetName = _imesh.iSprite2DState_scfGetName
 
 CS_SPR_LIGHTING_HQ = _imesh.CS_SPR_LIGHTING_HQ
 CS_SPR_LIGHTING_LQ = _imesh.CS_SPR_LIGHTING_LQ
@@ -1093,11 +1123,13 @@ class iSprite3DState(core.iBase):
     def IsLodEnabled(*args): return _imesh.iSprite3DState_IsLodEnabled(*args)
     def FindSocket(*args): return _imesh.iSprite3DState_FindSocket(*args)
     scfGetVersion = staticmethod(_imesh.iSprite3DState_scfGetVersion)
+    scfGetName = staticmethod(_imesh.iSprite3DState_scfGetName)
     __swig_destroy__ = _imesh.delete_iSprite3DState
     __del__ = lambda self : None;
 iSprite3DState_swigregister = _imesh.iSprite3DState_swigregister
 iSprite3DState_swigregister(iSprite3DState)
 iSprite3DState_scfGetVersion = _imesh.iSprite3DState_scfGetVersion
+iSprite3DState_scfGetName = _imesh.iSprite3DState_scfGetName
 
 class iSpriteCal3DSocket(iSpriteSocket):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
@@ -1229,11 +1261,13 @@ class iSpriteCal3DState(core.iBase):
     def GetSkeleton(*args): return _imesh.iSpriteCal3DState_GetSkeleton(*args)
     def GetCal3DModel(*args): return _imesh.iSpriteCal3DState_GetCal3DModel(*args)
     scfGetVersion = staticmethod(_imesh.iSpriteCal3DState_scfGetVersion)
+    scfGetName = staticmethod(_imesh.iSpriteCal3DState_scfGetName)
     __swig_destroy__ = _imesh.delete_iSpriteCal3DState
     __del__ = lambda self : None;
 iSpriteCal3DState_swigregister = _imesh.iSpriteCal3DState_swigregister
 iSpriteCal3DState_swigregister(iSpriteCal3DState)
 iSpriteCal3DState_scfGetVersion = _imesh.iSpriteCal3DState_scfGetVersion
+iSpriteCal3DState_scfGetName = _imesh.iSpriteCal3DState_scfGetName
 
 CS_MESH_STATICPOS = _imesh.CS_MESH_STATICPOS
 CS_MESH_STATICSHAPE = _imesh.CS_MESH_STATICSHAPE
@@ -1243,11 +1277,13 @@ class iMaterialArray(object):
     def __init__(self, *args, **kwargs): raise AttributeError, "No constructor defined"
     __repr__ = _swig_repr
     scfGetVersion = staticmethod(_imesh.iMaterialArray_scfGetVersion)
+    scfGetName = staticmethod(_imesh.iMaterialArray_scfGetName)
     __swig_destroy__ = _imesh.delete_iMaterialArray
     __del__ = lambda self : None;
 iMaterialArray_swigregister = _imesh.iMaterialArray_swigregister
 iMaterialArray_swigregister(iMaterialArray)
 iMaterialArray_scfGetVersion = _imesh.iMaterialArray_scfGetVersion
+iMaterialArray_scfGetName = _imesh.iMaterialArray_scfGetName
 
 class iMeshObjectDrawCallback(core.iBase):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
@@ -1286,11 +1322,13 @@ class iMeshObject(core.iBase):
     def PositionChild(*args): return _imesh.iMeshObject_PositionChild(*args)
     def BuildDecal(*args): return _imesh.iMeshObject_BuildDecal(*args)
     scfGetVersion = staticmethod(_imesh.iMeshObject_scfGetVersion)
+    scfGetName = staticmethod(_imesh.iMeshObject_scfGetName)
     __swig_destroy__ = _imesh.delete_iMeshObject
     __del__ = lambda self : None;
 iMeshObject_swigregister = _imesh.iMeshObject_swigregister
 iMeshObject_swigregister(iMeshObject)
 iMeshObject_scfGetVersion = _imesh.iMeshObject_scfGetVersion
+iMeshObject_scfGetName = _imesh.iMeshObject_scfGetName
 
 class iMeshObjectFactory(core.iBase):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
@@ -1310,11 +1348,13 @@ class iMeshObjectFactory(core.iBase):
     def SetMixMode(*args): return _imesh.iMeshObjectFactory_SetMixMode(*args)
     def GetMixMode(*args): return _imesh.iMeshObjectFactory_GetMixMode(*args)
     scfGetVersion = staticmethod(_imesh.iMeshObjectFactory_scfGetVersion)
+    scfGetName = staticmethod(_imesh.iMeshObjectFactory_scfGetName)
     __swig_destroy__ = _imesh.delete_iMeshObjectFactory
     __del__ = lambda self : None;
 iMeshObjectFactory_swigregister = _imesh.iMeshObjectFactory_swigregister
 iMeshObjectFactory_swigregister(iMeshObjectFactory)
 iMeshObjectFactory_scfGetVersion = _imesh.iMeshObjectFactory_scfGetVersion
+iMeshObjectFactory_scfGetName = _imesh.iMeshObjectFactory_scfGetName
 
 class iMeshObjectType(core.iBase):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
@@ -1322,11 +1362,13 @@ class iMeshObjectType(core.iBase):
     __repr__ = _swig_repr
     def NewFactory(*args): return _imesh.iMeshObjectType_NewFactory(*args)
     scfGetVersion = staticmethod(_imesh.iMeshObjectType_scfGetVersion)
+    scfGetName = staticmethod(_imesh.iMeshObjectType_scfGetName)
     __swig_destroy__ = _imesh.delete_iMeshObjectType
     __del__ = lambda self : None;
 iMeshObjectType_swigregister = _imesh.iMeshObjectType_swigregister
 iMeshObjectType_swigregister(iMeshObjectType)
 iMeshObjectType_scfGetVersion = _imesh.iMeshObjectType_scfGetVersion
+iMeshObjectType_scfGetName = _imesh.iMeshObjectType_scfGetName
 
 class csCharArrayArray(core.CustomAllocated):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
@@ -1385,11 +1427,13 @@ class iTerrainObjectState(core.iBase):
     def SetLeftNeighbor(*args): return _imesh.iTerrainObjectState_SetLeftNeighbor(*args)
     def SetBottomNeighbor(*args): return _imesh.iTerrainObjectState_SetBottomNeighbor(*args)
     scfGetVersion = staticmethod(_imesh.iTerrainObjectState_scfGetVersion)
+    scfGetName = staticmethod(_imesh.iTerrainObjectState_scfGetName)
     __swig_destroy__ = _imesh.delete_iTerrainObjectState
     __del__ = lambda self : None;
 iTerrainObjectState_swigregister = _imesh.iTerrainObjectState_swigregister
 iTerrainObjectState_swigregister(iTerrainObjectState)
 iTerrainObjectState_scfGetVersion = _imesh.iTerrainObjectState_scfGetVersion
+iTerrainObjectState_scfGetName = _imesh.iTerrainObjectState_scfGetName
 
 class iTerrainFactoryState(core.iBase):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
@@ -1402,11 +1446,13 @@ class iTerrainFactoryState(core.iBase):
     def SaveState(*args): return _imesh.iTerrainFactoryState_SaveState(*args)
     def RestoreState(*args): return _imesh.iTerrainFactoryState_RestoreState(*args)
     scfGetVersion = staticmethod(_imesh.iTerrainFactoryState_scfGetVersion)
+    scfGetName = staticmethod(_imesh.iTerrainFactoryState_scfGetName)
     __swig_destroy__ = _imesh.delete_iTerrainFactoryState
     __del__ = lambda self : None;
 iTerrainFactoryState_swigregister = _imesh.iTerrainFactoryState_swigregister
 iTerrainFactoryState_swigregister(iTerrainFactoryState)
 iTerrainFactoryState_scfGetVersion = _imesh.iTerrainFactoryState_scfGetVersion
+iTerrainFactoryState_scfGetName = _imesh.iTerrainFactoryState_scfGetName
 
 class csLockedHeightData(object):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
@@ -1484,11 +1530,13 @@ class iTerrainCellCollisionProperties(core.iBase):
     def GetParameterName(*args): return _imesh.iTerrainCellCollisionProperties_GetParameterName(*args)
     def GetParameterValue(*args): return _imesh.iTerrainCellCollisionProperties_GetParameterValue(*args)
     scfGetVersion = staticmethod(_imesh.iTerrainCellCollisionProperties_scfGetVersion)
+    scfGetName = staticmethod(_imesh.iTerrainCellCollisionProperties_scfGetName)
     __swig_destroy__ = _imesh.delete_iTerrainCellCollisionProperties
     __del__ = lambda self : None;
 iTerrainCellCollisionProperties_swigregister = _imesh.iTerrainCellCollisionProperties_swigregister
 iTerrainCellCollisionProperties_swigregister(iTerrainCellCollisionProperties)
 iTerrainCellCollisionProperties_scfGetVersion = _imesh.iTerrainCellCollisionProperties_scfGetVersion
+iTerrainCellCollisionProperties_scfGetName = _imesh.iTerrainCellCollisionProperties_scfGetName
 
 class iTerrainCellRenderProperties(ivideo.iShaderVariableContext):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
@@ -1502,11 +1550,13 @@ class iTerrainCellRenderProperties(ivideo.iShaderVariableContext):
     def GetParameterName(*args): return _imesh.iTerrainCellRenderProperties_GetParameterName(*args)
     def GetParameterValue(*args): return _imesh.iTerrainCellRenderProperties_GetParameterValue(*args)
     scfGetVersion = staticmethod(_imesh.iTerrainCellRenderProperties_scfGetVersion)
+    scfGetName = staticmethod(_imesh.iTerrainCellRenderProperties_scfGetName)
     __swig_destroy__ = _imesh.delete_iTerrainCellRenderProperties
     __del__ = lambda self : None;
 iTerrainCellRenderProperties_swigregister = _imesh.iTerrainCellRenderProperties_swigregister
 iTerrainCellRenderProperties_swigregister(iTerrainCellRenderProperties)
 iTerrainCellRenderProperties_scfGetVersion = _imesh.iTerrainCellRenderProperties_scfGetVersion
+iTerrainCellRenderProperties_scfGetName = _imesh.iTerrainCellRenderProperties_scfGetName
 
 class iTerrainCellFeederProperties(core.iBase):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
@@ -1528,11 +1578,13 @@ class iTerrainCellFeederProperties(core.iBase):
     def SetHeightmapSmooth(*args): return _imesh.iTerrainCellFeederProperties_SetHeightmapSmooth(*args)
     def GetHeightmapSmooth(*args): return _imesh.iTerrainCellFeederProperties_GetHeightmapSmooth(*args)
     scfGetVersion = staticmethod(_imesh.iTerrainCellFeederProperties_scfGetVersion)
+    scfGetName = staticmethod(_imesh.iTerrainCellFeederProperties_scfGetName)
     __swig_destroy__ = _imesh.delete_iTerrainCellFeederProperties
     __del__ = lambda self : None;
 iTerrainCellFeederProperties_swigregister = _imesh.iTerrainCellFeederProperties_swigregister
 iTerrainCellFeederProperties_swigregister(iTerrainCellFeederProperties)
 iTerrainCellFeederProperties_scfGetVersion = _imesh.iTerrainCellFeederProperties_scfGetVersion
+iTerrainCellFeederProperties_scfGetName = _imesh.iTerrainCellFeederProperties_scfGetName
 
 class iTerrainDataFeeder(core.iBase):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
@@ -1543,11 +1595,13 @@ class iTerrainDataFeeder(core.iBase):
     def Load(*args): return _imesh.iTerrainDataFeeder_Load(*args)
     def SetParameter(*args): return _imesh.iTerrainDataFeeder_SetParameter(*args)
     scfGetVersion = staticmethod(_imesh.iTerrainDataFeeder_scfGetVersion)
+    scfGetName = staticmethod(_imesh.iTerrainDataFeeder_scfGetName)
     __swig_destroy__ = _imesh.delete_iTerrainDataFeeder
     __del__ = lambda self : None;
 iTerrainDataFeeder_swigregister = _imesh.iTerrainDataFeeder_swigregister
 iTerrainDataFeeder_swigregister(iTerrainDataFeeder)
 iTerrainDataFeeder_scfGetVersion = _imesh.iTerrainDataFeeder_scfGetVersion
+iTerrainDataFeeder_scfGetName = _imesh.iTerrainDataFeeder_scfGetName
 
 class csTerrainColliderCollideSegmentResult(object):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
@@ -1575,11 +1629,13 @@ class iTerrainCollider(core.iBase):
     def CollideTriangles(*args): return _imesh.iTerrainCollider_CollideTriangles(*args)
     def Collide(*args): return _imesh.iTerrainCollider_Collide(*args)
     scfGetVersion = staticmethod(_imesh.iTerrainCollider_scfGetVersion)
+    scfGetName = staticmethod(_imesh.iTerrainCollider_scfGetName)
     __swig_destroy__ = _imesh.delete_iTerrainCollider
     __del__ = lambda self : None;
 iTerrainCollider_swigregister = _imesh.iTerrainCollider_swigregister
 iTerrainCollider_swigregister(iTerrainCollider)
 iTerrainCollider_scfGetVersion = _imesh.iTerrainCollider_scfGetVersion
+iTerrainCollider_scfGetName = _imesh.iTerrainCollider_scfGetName
 
 class iTerrainRenderer(core.iBase):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
@@ -1593,11 +1649,13 @@ class iTerrainRenderer(core.iBase):
     def OnMaterialMaskUpdate(*args): return _imesh.iTerrainRenderer_OnMaterialMaskUpdate(*args)
     def OnAlphaMapUpdate(*args): return _imesh.iTerrainRenderer_OnAlphaMapUpdate(*args)
     scfGetVersion = staticmethod(_imesh.iTerrainRenderer_scfGetVersion)
+    scfGetName = staticmethod(_imesh.iTerrainRenderer_scfGetName)
     __swig_destroy__ = _imesh.delete_iTerrainRenderer
     __del__ = lambda self : None;
 iTerrainRenderer_swigregister = _imesh.iTerrainRenderer_swigregister
 iTerrainRenderer_swigregister(iTerrainRenderer)
 iTerrainRenderer_scfGetVersion = _imesh.iTerrainRenderer_scfGetVersion
+iTerrainRenderer_scfGetName = _imesh.iTerrainRenderer_scfGetName
 
 class iTerrainCellHeightDataCallback(core.iBase):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
@@ -1605,11 +1663,13 @@ class iTerrainCellHeightDataCallback(core.iBase):
     __repr__ = _swig_repr
     def OnHeightUpdate(*args): return _imesh.iTerrainCellHeightDataCallback_OnHeightUpdate(*args)
     scfGetVersion = staticmethod(_imesh.iTerrainCellHeightDataCallback_scfGetVersion)
+    scfGetName = staticmethod(_imesh.iTerrainCellHeightDataCallback_scfGetName)
     __swig_destroy__ = _imesh.delete_iTerrainCellHeightDataCallback
     __del__ = lambda self : None;
 iTerrainCellHeightDataCallback_swigregister = _imesh.iTerrainCellHeightDataCallback_swigregister
 iTerrainCellHeightDataCallback_swigregister(iTerrainCellHeightDataCallback)
 iTerrainCellHeightDataCallback_scfGetVersion = _imesh.iTerrainCellHeightDataCallback_scfGetVersion
+iTerrainCellHeightDataCallback_scfGetName = _imesh.iTerrainCellHeightDataCallback_scfGetName
 
 class iTerrainCellLoadCallback(core.iBase):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
@@ -1619,11 +1679,13 @@ class iTerrainCellLoadCallback(core.iBase):
     def OnCellPreLoad(*args): return _imesh.iTerrainCellLoadCallback_OnCellPreLoad(*args)
     def OnCellUnload(*args): return _imesh.iTerrainCellLoadCallback_OnCellUnload(*args)
     scfGetVersion = staticmethod(_imesh.iTerrainCellLoadCallback_scfGetVersion)
+    scfGetName = staticmethod(_imesh.iTerrainCellLoadCallback_scfGetName)
     __swig_destroy__ = _imesh.delete_iTerrainCellLoadCallback
     __del__ = lambda self : None;
 iTerrainCellLoadCallback_swigregister = _imesh.iTerrainCellLoadCallback_swigregister
 iTerrainCellLoadCallback_swigregister(iTerrainCellLoadCallback)
 iTerrainCellLoadCallback_scfGetVersion = _imesh.iTerrainCellLoadCallback_scfGetVersion
+iTerrainCellLoadCallback_scfGetName = _imesh.iTerrainCellLoadCallback_scfGetName
 
 class iTerrainSystem(core.iBase):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
@@ -1655,11 +1717,13 @@ class iTerrainSystem(core.iBase):
     def AddCell(*args): return _imesh.iTerrainSystem_AddCell(*args)
     def RemoveCell(*args): return _imesh.iTerrainSystem_RemoveCell(*args)
     scfGetVersion = staticmethod(_imesh.iTerrainSystem_scfGetVersion)
+    scfGetName = staticmethod(_imesh.iTerrainSystem_scfGetName)
     __swig_destroy__ = _imesh.delete_iTerrainSystem
     __del__ = lambda self : None;
 iTerrainSystem_swigregister = _imesh.iTerrainSystem_swigregister
 iTerrainSystem_swigregister(iTerrainSystem)
 iTerrainSystem_scfGetVersion = _imesh.iTerrainSystem_scfGetVersion
+iTerrainSystem_scfGetName = _imesh.iTerrainSystem_scfGetName
 
 class iTerrainCell(core.iBase):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
@@ -1716,11 +1780,13 @@ class iTerrainCell(core.iBase):
     def GetTangentData(*args): return _imesh.iTerrainCell_GetTangentData(*args)
     def GetBitangentData(*args): return _imesh.iTerrainCell_GetBitangentData(*args)
     scfGetVersion = staticmethod(_imesh.iTerrainCell_scfGetVersion)
+    scfGetName = staticmethod(_imesh.iTerrainCell_scfGetName)
     __swig_destroy__ = _imesh.delete_iTerrainCell
     __del__ = lambda self : None;
 iTerrainCell_swigregister = _imesh.iTerrainCell_swigregister
 iTerrainCell_swigregister(iTerrainCell)
 iTerrainCell_scfGetVersion = _imesh.iTerrainCell_scfGetVersion
+iTerrainCell_scfGetName = _imesh.iTerrainCell_scfGetName
 
 class iTerrainFactoryCell(core.iBase):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
@@ -1752,11 +1818,13 @@ class iTerrainFactoryCell(core.iBase):
     def SetSplatBaseMaterial(*args): return _imesh.iTerrainFactoryCell_SetSplatBaseMaterial(*args)
     def GetSplatBaseMaterial(*args): return _imesh.iTerrainFactoryCell_GetSplatBaseMaterial(*args)
     scfGetVersion = staticmethod(_imesh.iTerrainFactoryCell_scfGetVersion)
+    scfGetName = staticmethod(_imesh.iTerrainFactoryCell_scfGetName)
     __swig_destroy__ = _imesh.delete_iTerrainFactoryCell
     __del__ = lambda self : None;
 iTerrainFactoryCell_swigregister = _imesh.iTerrainFactoryCell_swigregister
 iTerrainFactoryCell_swigregister(iTerrainFactoryCell)
 iTerrainFactoryCell_scfGetVersion = _imesh.iTerrainFactoryCell_scfGetVersion
+iTerrainFactoryCell_scfGetName = _imesh.iTerrainFactoryCell_scfGetName
 
 class iTerrainFactory(core.iBase):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
@@ -1778,11 +1846,13 @@ class iTerrainFactory(core.iBase):
     def GetCell(*args): return _imesh.iTerrainFactory_GetCell(*args)
     def RemoveCell(*args): return _imesh.iTerrainFactory_RemoveCell(*args)
     scfGetVersion = staticmethod(_imesh.iTerrainFactory_scfGetVersion)
+    scfGetName = staticmethod(_imesh.iTerrainFactory_scfGetName)
     __swig_destroy__ = _imesh.delete_iTerrainFactory
     __del__ = lambda self : None;
 iTerrainFactory_swigregister = _imesh.iTerrainFactory_swigregister
 iTerrainFactory_swigregister(iTerrainFactory)
 iTerrainFactory_scfGetVersion = _imesh.iTerrainFactory_scfGetVersion
+iTerrainFactory_scfGetName = _imesh.iTerrainFactory_scfGetName
 
 CS_PARTICLE_SORT_NONE = _imesh.CS_PARTICLE_SORT_NONE
 CS_PARTICLE_SORT_DISTANCE = _imesh.CS_PARTICLE_SORT_DISTANCE
@@ -1872,11 +1942,13 @@ class iParticleEmitter(core.iBase):
     def ParticlesToEmit(*args): return _imesh.iParticleEmitter_ParticlesToEmit(*args)
     def EmitParticles(*args): return _imesh.iParticleEmitter_EmitParticles(*args)
     scfGetVersion = staticmethod(_imesh.iParticleEmitter_scfGetVersion)
+    scfGetName = staticmethod(_imesh.iParticleEmitter_scfGetName)
     __swig_destroy__ = _imesh.delete_iParticleEmitter
     __del__ = lambda self : None;
 iParticleEmitter_swigregister = _imesh.iParticleEmitter_swigregister
 iParticleEmitter_swigregister(iParticleEmitter)
 iParticleEmitter_scfGetVersion = _imesh.iParticleEmitter_scfGetVersion
+iParticleEmitter_scfGetName = _imesh.iParticleEmitter_scfGetName
 
 class iParticleEffector(core.iBase):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
@@ -1885,11 +1957,13 @@ class iParticleEffector(core.iBase):
     def Clone(*args): return _imesh.iParticleEffector_Clone(*args)
     def EffectParticles(*args): return _imesh.iParticleEffector_EffectParticles(*args)
     scfGetVersion = staticmethod(_imesh.iParticleEffector_scfGetVersion)
+    scfGetName = staticmethod(_imesh.iParticleEffector_scfGetName)
     __swig_destroy__ = _imesh.delete_iParticleEffector
     __del__ = lambda self : None;
 iParticleEffector_swigregister = _imesh.iParticleEffector_swigregister
 iParticleEffector_swigregister(iParticleEffector)
 iParticleEffector_scfGetVersion = _imesh.iParticleEffector_scfGetVersion
+iParticleEffector_scfGetName = _imesh.iParticleEffector_scfGetName
 
 class iParticleSystemBase(core.iBase):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
@@ -1922,11 +1996,13 @@ class iParticleSystemBase(core.iBase):
     def RemoveEffector(*args): return _imesh.iParticleSystemBase_RemoveEffector(*args)
     def GetEffectorCount(*args): return _imesh.iParticleSystemBase_GetEffectorCount(*args)
     scfGetVersion = staticmethod(_imesh.iParticleSystemBase_scfGetVersion)
+    scfGetName = staticmethod(_imesh.iParticleSystemBase_scfGetName)
     __swig_destroy__ = _imesh.delete_iParticleSystemBase
     __del__ = lambda self : None;
 iParticleSystemBase_swigregister = _imesh.iParticleSystemBase_swigregister
 iParticleSystemBase_swigregister(iParticleSystemBase)
 iParticleSystemBase_scfGetVersion = _imesh.iParticleSystemBase_scfGetVersion
+iParticleSystemBase_scfGetName = _imesh.iParticleSystemBase_scfGetName
 
 class iParticleSystemFactory(iParticleSystemBase):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
@@ -1935,11 +2011,13 @@ class iParticleSystemFactory(iParticleSystemBase):
     def SetDeepCreation(*args): return _imesh.iParticleSystemFactory_SetDeepCreation(*args)
     def GetDeepCreation(*args): return _imesh.iParticleSystemFactory_GetDeepCreation(*args)
     scfGetVersion = staticmethod(_imesh.iParticleSystemFactory_scfGetVersion)
+    scfGetName = staticmethod(_imesh.iParticleSystemFactory_scfGetName)
     __swig_destroy__ = _imesh.delete_iParticleSystemFactory
     __del__ = lambda self : None;
 iParticleSystemFactory_swigregister = _imesh.iParticleSystemFactory_swigregister
 iParticleSystemFactory_swigregister(iParticleSystemFactory)
 iParticleSystemFactory_scfGetVersion = _imesh.iParticleSystemFactory_scfGetVersion
+iParticleSystemFactory_scfGetName = _imesh.iParticleSystemFactory_scfGetName
 
 class iParticleSystem(iParticleSystemBase):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
@@ -1951,11 +2029,13 @@ class iParticleSystem(iParticleSystemBase):
     def LockForExternalControl(*args): return _imesh.iParticleSystem_LockForExternalControl(*args)
     def Advance(*args): return _imesh.iParticleSystem_Advance(*args)
     scfGetVersion = staticmethod(_imesh.iParticleSystem_scfGetVersion)
+    scfGetName = staticmethod(_imesh.iParticleSystem_scfGetName)
     __swig_destroy__ = _imesh.delete_iParticleSystem
     __del__ = lambda self : None;
 iParticleSystem_swigregister = _imesh.iParticleSystem_swigregister
 iParticleSystem_swigregister(iParticleSystem)
 iParticleSystem_scfGetVersion = _imesh.iParticleSystem_scfGetVersion
+iParticleSystem_scfGetName = _imesh.iParticleSystem_scfGetName
 
 CS_PARTICLE_BUILTIN_CENTER = _imesh.CS_PARTICLE_BUILTIN_CENTER
 CS_PARTICLE_BUILTIN_VOLUME = _imesh.CS_PARTICLE_BUILTIN_VOLUME
@@ -1973,11 +2053,13 @@ class iParticleBuiltinEmitterBase(iParticleEmitter):
     def SetInitialVelocity(*args): return _imesh.iParticleBuiltinEmitterBase_SetInitialVelocity(*args)
     def GetInitialVelocity(*args): return _imesh.iParticleBuiltinEmitterBase_GetInitialVelocity(*args)
     scfGetVersion = staticmethod(_imesh.iParticleBuiltinEmitterBase_scfGetVersion)
+    scfGetName = staticmethod(_imesh.iParticleBuiltinEmitterBase_scfGetName)
     __swig_destroy__ = _imesh.delete_iParticleBuiltinEmitterBase
     __del__ = lambda self : None;
 iParticleBuiltinEmitterBase_swigregister = _imesh.iParticleBuiltinEmitterBase_swigregister
 iParticleBuiltinEmitterBase_swigregister(iParticleBuiltinEmitterBase)
 iParticleBuiltinEmitterBase_scfGetVersion = _imesh.iParticleBuiltinEmitterBase_scfGetVersion
+iParticleBuiltinEmitterBase_scfGetName = _imesh.iParticleBuiltinEmitterBase_scfGetName
 
 class iParticleBuiltinEmitterSphere(iParticleBuiltinEmitterBase):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
@@ -1986,11 +2068,13 @@ class iParticleBuiltinEmitterSphere(iParticleBuiltinEmitterBase):
     def SetRadius(*args): return _imesh.iParticleBuiltinEmitterSphere_SetRadius(*args)
     def GetRadius(*args): return _imesh.iParticleBuiltinEmitterSphere_GetRadius(*args)
     scfGetVersion = staticmethod(_imesh.iParticleBuiltinEmitterSphere_scfGetVersion)
+    scfGetName = staticmethod(_imesh.iParticleBuiltinEmitterSphere_scfGetName)
     __swig_destroy__ = _imesh.delete_iParticleBuiltinEmitterSphere
     __del__ = lambda self : None;
 iParticleBuiltinEmitterSphere_swigregister = _imesh.iParticleBuiltinEmitterSphere_swigregister
 iParticleBuiltinEmitterSphere_swigregister(iParticleBuiltinEmitterSphere)
 iParticleBuiltinEmitterSphere_scfGetVersion = _imesh.iParticleBuiltinEmitterSphere_scfGetVersion
+iParticleBuiltinEmitterSphere_scfGetName = _imesh.iParticleBuiltinEmitterSphere_scfGetName
 
 class iParticleBuiltinEmitterCone(iParticleBuiltinEmitterBase):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
@@ -2001,11 +2085,13 @@ class iParticleBuiltinEmitterCone(iParticleBuiltinEmitterBase):
     def SetConeAngle(*args): return _imesh.iParticleBuiltinEmitterCone_SetConeAngle(*args)
     def GetConeAngle(*args): return _imesh.iParticleBuiltinEmitterCone_GetConeAngle(*args)
     scfGetVersion = staticmethod(_imesh.iParticleBuiltinEmitterCone_scfGetVersion)
+    scfGetName = staticmethod(_imesh.iParticleBuiltinEmitterCone_scfGetName)
     __swig_destroy__ = _imesh.delete_iParticleBuiltinEmitterCone
     __del__ = lambda self : None;
 iParticleBuiltinEmitterCone_swigregister = _imesh.iParticleBuiltinEmitterCone_swigregister
 iParticleBuiltinEmitterCone_swigregister(iParticleBuiltinEmitterCone)
 iParticleBuiltinEmitterCone_scfGetVersion = _imesh.iParticleBuiltinEmitterCone_scfGetVersion
+iParticleBuiltinEmitterCone_scfGetName = _imesh.iParticleBuiltinEmitterCone_scfGetName
 
 class iParticleBuiltinEmitterBox(iParticleBuiltinEmitterBase):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
@@ -2014,11 +2100,13 @@ class iParticleBuiltinEmitterBox(iParticleBuiltinEmitterBase):
     def SetBox(*args): return _imesh.iParticleBuiltinEmitterBox_SetBox(*args)
     def GetBox(*args): return _imesh.iParticleBuiltinEmitterBox_GetBox(*args)
     scfGetVersion = staticmethod(_imesh.iParticleBuiltinEmitterBox_scfGetVersion)
+    scfGetName = staticmethod(_imesh.iParticleBuiltinEmitterBox_scfGetName)
     __swig_destroy__ = _imesh.delete_iParticleBuiltinEmitterBox
     __del__ = lambda self : None;
 iParticleBuiltinEmitterBox_swigregister = _imesh.iParticleBuiltinEmitterBox_swigregister
 iParticleBuiltinEmitterBox_swigregister(iParticleBuiltinEmitterBox)
 iParticleBuiltinEmitterBox_scfGetVersion = _imesh.iParticleBuiltinEmitterBox_scfGetVersion
+iParticleBuiltinEmitterBox_scfGetName = _imesh.iParticleBuiltinEmitterBox_scfGetName
 
 class iParticleBuiltinEmitterCylinder(iParticleBuiltinEmitterBase):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
@@ -2029,11 +2117,13 @@ class iParticleBuiltinEmitterCylinder(iParticleBuiltinEmitterBase):
     def SetExtent(*args): return _imesh.iParticleBuiltinEmitterCylinder_SetExtent(*args)
     def GetExtent(*args): return _imesh.iParticleBuiltinEmitterCylinder_GetExtent(*args)
     scfGetVersion = staticmethod(_imesh.iParticleBuiltinEmitterCylinder_scfGetVersion)
+    scfGetName = staticmethod(_imesh.iParticleBuiltinEmitterCylinder_scfGetName)
     __swig_destroy__ = _imesh.delete_iParticleBuiltinEmitterCylinder
     __del__ = lambda self : None;
 iParticleBuiltinEmitterCylinder_swigregister = _imesh.iParticleBuiltinEmitterCylinder_swigregister
 iParticleBuiltinEmitterCylinder_swigregister(iParticleBuiltinEmitterCylinder)
 iParticleBuiltinEmitterCylinder_scfGetVersion = _imesh.iParticleBuiltinEmitterCylinder_scfGetVersion
+iParticleBuiltinEmitterCylinder_scfGetName = _imesh.iParticleBuiltinEmitterCylinder_scfGetName
 
 class iParticleBuiltinEmitterFactory(core.iBase):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
@@ -2044,11 +2134,13 @@ class iParticleBuiltinEmitterFactory(core.iBase):
     def CreateBox(*args): return _imesh.iParticleBuiltinEmitterFactory_CreateBox(*args)
     def CreateCylinder(*args): return _imesh.iParticleBuiltinEmitterFactory_CreateCylinder(*args)
     scfGetVersion = staticmethod(_imesh.iParticleBuiltinEmitterFactory_scfGetVersion)
+    scfGetName = staticmethod(_imesh.iParticleBuiltinEmitterFactory_scfGetName)
     __swig_destroy__ = _imesh.delete_iParticleBuiltinEmitterFactory
     __del__ = lambda self : None;
 iParticleBuiltinEmitterFactory_swigregister = _imesh.iParticleBuiltinEmitterFactory_swigregister
 iParticleBuiltinEmitterFactory_swigregister(iParticleBuiltinEmitterFactory)
 iParticleBuiltinEmitterFactory_scfGetVersion = _imesh.iParticleBuiltinEmitterFactory_scfGetVersion
+iParticleBuiltinEmitterFactory_scfGetName = _imesh.iParticleBuiltinEmitterFactory_scfGetName
 
 class iParticleBuiltinEffectorForce(iParticleEffector):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
@@ -2061,11 +2153,13 @@ class iParticleBuiltinEffectorForce(iParticleEffector):
     def SetRandomAcceleration(*args): return _imesh.iParticleBuiltinEffectorForce_SetRandomAcceleration(*args)
     def GetRandomAcceleration(*args): return _imesh.iParticleBuiltinEffectorForce_GetRandomAcceleration(*args)
     scfGetVersion = staticmethod(_imesh.iParticleBuiltinEffectorForce_scfGetVersion)
+    scfGetName = staticmethod(_imesh.iParticleBuiltinEffectorForce_scfGetName)
     __swig_destroy__ = _imesh.delete_iParticleBuiltinEffectorForce
     __del__ = lambda self : None;
 iParticleBuiltinEffectorForce_swigregister = _imesh.iParticleBuiltinEffectorForce_swigregister
 iParticleBuiltinEffectorForce_swigregister(iParticleBuiltinEffectorForce)
 iParticleBuiltinEffectorForce_scfGetVersion = _imesh.iParticleBuiltinEffectorForce_scfGetVersion
+iParticleBuiltinEffectorForce_scfGetName = _imesh.iParticleBuiltinEffectorForce_scfGetName
 
 class iParticleBuiltinEffectorLinColor(iParticleEffector):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
@@ -2080,11 +2174,13 @@ class iParticleBuiltinEffectorLinColor(iParticleEffector):
     def GetEndTTL(*args): return _imesh.iParticleBuiltinEffectorLinColor_GetEndTTL(*args)
     def GetColorCount(*args): return _imesh.iParticleBuiltinEffectorLinColor_GetColorCount(*args)
     scfGetVersion = staticmethod(_imesh.iParticleBuiltinEffectorLinColor_scfGetVersion)
+    scfGetName = staticmethod(_imesh.iParticleBuiltinEffectorLinColor_scfGetName)
     __swig_destroy__ = _imesh.delete_iParticleBuiltinEffectorLinColor
     __del__ = lambda self : None;
 iParticleBuiltinEffectorLinColor_swigregister = _imesh.iParticleBuiltinEffectorLinColor_swigregister
 iParticleBuiltinEffectorLinColor_swigregister(iParticleBuiltinEffectorLinColor)
 iParticleBuiltinEffectorLinColor_scfGetVersion = _imesh.iParticleBuiltinEffectorLinColor_scfGetVersion
+iParticleBuiltinEffectorLinColor_scfGetName = _imesh.iParticleBuiltinEffectorLinColor_scfGetName
 
 CS_PARTICLE_BUILTIN_SPIRAL = _imesh.CS_PARTICLE_BUILTIN_SPIRAL
 CS_PARTICLE_BUILTIN_RADIALPOINT = _imesh.CS_PARTICLE_BUILTIN_RADIALPOINT
@@ -2148,11 +2244,13 @@ class iParticleBuiltinEffectorLinear(iParticleEffector):
     def GetEndTTL(*args): return _imesh.iParticleBuiltinEffectorLinear_GetEndTTL(*args)
     def GetParameterSetCount(*args): return _imesh.iParticleBuiltinEffectorLinear_GetParameterSetCount(*args)
     scfGetVersion = staticmethod(_imesh.iParticleBuiltinEffectorLinear_scfGetVersion)
+    scfGetName = staticmethod(_imesh.iParticleBuiltinEffectorLinear_scfGetName)
     __swig_destroy__ = _imesh.delete_iParticleBuiltinEffectorLinear
     __del__ = lambda self : None;
 iParticleBuiltinEffectorLinear_swigregister = _imesh.iParticleBuiltinEffectorLinear_swigregister
 iParticleBuiltinEffectorLinear_swigregister(iParticleBuiltinEffectorLinear)
 iParticleBuiltinEffectorLinear_scfGetVersion = _imesh.iParticleBuiltinEffectorLinear_scfGetVersion
+iParticleBuiltinEffectorLinear_scfGetName = _imesh.iParticleBuiltinEffectorLinear_scfGetName
 
 class iParticleBuiltinEffectorLight(iParticleEffector):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
@@ -2175,11 +2273,13 @@ class iParticleBuiltinEffectorFactory(core.iBase):
     def CreateLinear(*args): return _imesh.iParticleBuiltinEffectorFactory_CreateLinear(*args)
     def CreateLight(*args): return _imesh.iParticleBuiltinEffectorFactory_CreateLight(*args)
     scfGetVersion = staticmethod(_imesh.iParticleBuiltinEffectorFactory_scfGetVersion)
+    scfGetName = staticmethod(_imesh.iParticleBuiltinEffectorFactory_scfGetName)
     __swig_destroy__ = _imesh.delete_iParticleBuiltinEffectorFactory
     __del__ = lambda self : None;
 iParticleBuiltinEffectorFactory_swigregister = _imesh.iParticleBuiltinEffectorFactory_swigregister
 iParticleBuiltinEffectorFactory_swigregister(iParticleBuiltinEffectorFactory)
 iParticleBuiltinEffectorFactory_scfGetVersion = _imesh.iParticleBuiltinEffectorFactory_scfGetVersion
+iParticleBuiltinEffectorFactory_scfGetName = _imesh.iParticleBuiltinEffectorFactory_scfGetName
 
 
 
