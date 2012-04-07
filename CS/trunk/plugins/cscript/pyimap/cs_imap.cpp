@@ -2985,6 +2985,31 @@ SWIG_AsCharPtrAndSize(PyObject *obj, char** cptr, size_t* psize, int *alloc)
 
 
 SWIGINTERN int iMissingLoaderData_scfGetVersion(){ return scfInterfaceTraits<iMissingLoaderData>::GetVersion(); }
+SWIGINTERN char const *iMissingLoaderData_scfGetName(){ return scfInterfaceTraits<iMissingLoaderData>::GetName(); }
+
+SWIGINTERNINLINE PyObject *
+SWIG_FromCharPtrAndSize(const char* carray, size_t size)
+{
+  if (carray) {
+    if (size > INT_MAX) {
+      swig_type_info* pchar_descriptor = SWIG_pchar_descriptor();
+      return pchar_descriptor ? 
+	SWIG_NewPointerObj(const_cast< char * >(carray), pchar_descriptor, 0) : SWIG_Py_Void();
+    } else {
+      return PyString_FromStringAndSize(carray, static_cast< int >(size));
+    }
+  } else {
+    return SWIG_Py_Void();
+  }
+}
+
+
+SWIGINTERNINLINE PyObject * 
+SWIG_FromCharPtr(const char *cptr)
+{ 
+  return SWIG_FromCharPtrAndSize(cptr, (cptr ? strlen(cptr) : 0));
+}
+
 SWIGINTERN void delete_iMissingLoaderData(iMissingLoaderData *self){ if (self) self->DecRef (); }
 
 SWIGINTERN int
@@ -3194,10 +3219,13 @@ SWIG_AsVal_unsigned_SS_long (PyObject *obj, unsigned long *val)
 }
 
 SWIGINTERN int iLoader_scfGetVersion(){ return scfInterfaceTraits<iLoader>::GetVersion(); }
+SWIGINTERN char const *iLoader_scfGetName(){ return scfInterfaceTraits<iLoader>::GetName(); }
 SWIGINTERN void delete_iLoader(iLoader *self){ if (self) self->DecRef (); }
 SWIGINTERN int iLoaderPlugin_scfGetVersion(){ return scfInterfaceTraits<iLoaderPlugin>::GetVersion(); }
+SWIGINTERN char const *iLoaderPlugin_scfGetName(){ return scfInterfaceTraits<iLoaderPlugin>::GetName(); }
 SWIGINTERN void delete_iLoaderPlugin(iLoaderPlugin *self){ if (self) self->DecRef (); }
 SWIGINTERN int iBinaryLoaderPlugin_scfGetVersion(){ return scfInterfaceTraits<iBinaryLoaderPlugin>::GetVersion(); }
+SWIGINTERN char const *iBinaryLoaderPlugin_scfGetName(){ return scfInterfaceTraits<iBinaryLoaderPlugin>::GetName(); }
 SWIGINTERN void delete_iBinaryLoaderPlugin(iBinaryLoaderPlugin *self){ if (self) self->DecRef (); }
 #ifdef __cplusplus
 extern "C" {
@@ -3505,6 +3533,19 @@ SWIGINTERN PyObject *_wrap_iMissingLoaderData_scfGetVersion(PyObject *SWIGUNUSED
   if(!PyArg_UnpackTuple(args,(char *)"iMissingLoaderData_scfGetVersion",0,0)) SWIG_fail;
   result = (int)iMissingLoaderData_scfGetVersion();
   resultobj = SWIG_From_int(static_cast< int >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_iMissingLoaderData_scfGetName(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  char *result = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"iMissingLoaderData_scfGetName",0,0)) SWIG_fail;
+  result = (char *)iMissingLoaderData_scfGetName();
+  resultobj = SWIG_FromCharPtr((const char *)result);
   return resultobj;
 fail:
   return NULL;
@@ -34767,6 +34808,19 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_iLoader_scfGetName(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  char *result = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"iLoader_scfGetName",0,0)) SWIG_fail;
+  result = (char *)iLoader_scfGetName();
+  resultobj = SWIG_FromCharPtr((const char *)result);
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_delete_iLoader(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   iLoader *arg1 = (iLoader *) 0 ;
@@ -34892,6 +34946,19 @@ SWIGINTERN PyObject *_wrap_iLoaderPlugin_scfGetVersion(PyObject *SWIGUNUSEDPARM(
   if(!PyArg_UnpackTuple(args,(char *)"iLoaderPlugin_scfGetVersion",0,0)) SWIG_fail;
   result = (int)iLoaderPlugin_scfGetVersion();
   resultobj = SWIG_From_int(static_cast< int >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_iLoaderPlugin_scfGetName(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  char *result = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"iLoaderPlugin_scfGetName",0,0)) SWIG_fail;
+  result = (char *)iLoaderPlugin_scfGetName();
+  resultobj = SWIG_FromCharPtr((const char *)result);
   return resultobj;
 fail:
   return NULL;
@@ -35183,6 +35250,19 @@ SWIGINTERN PyObject *_wrap_iBinaryLoaderPlugin_scfGetVersion(PyObject *SWIGUNUSE
   if(!PyArg_UnpackTuple(args,(char *)"iBinaryLoaderPlugin_scfGetVersion",0,0)) SWIG_fail;
   result = (int)iBinaryLoaderPlugin_scfGetVersion();
   resultobj = SWIG_From_int(static_cast< int >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_iBinaryLoaderPlugin_scfGetName(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  char *result = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"iBinaryLoaderPlugin_scfGetName",0,0)) SWIG_fail;
+  result = (char *)iBinaryLoaderPlugin_scfGetName();
+  resultobj = SWIG_FromCharPtr((const char *)result);
   return resultobj;
 fail:
   return NULL;
@@ -35734,6 +35814,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"iMissingLoaderData_MissingSector", _wrap_iMissingLoaderData_MissingSector, METH_VARARGS, NULL},
 	 { (char *)"iMissingLoaderData_MissingLight", _wrap_iMissingLoaderData_MissingLight, METH_VARARGS, NULL},
 	 { (char *)"iMissingLoaderData_scfGetVersion", _wrap_iMissingLoaderData_scfGetVersion, METH_VARARGS, NULL},
+	 { (char *)"iMissingLoaderData_scfGetName", _wrap_iMissingLoaderData_scfGetName, METH_VARARGS, NULL},
 	 { (char *)"delete_iMissingLoaderData", _wrap_delete_iMissingLoaderData, METH_VARARGS, NULL},
 	 { (char *)"iMissingLoaderData_swigregister", iMissingLoaderData_swigregister, METH_VARARGS, NULL},
 	 { (char *)"csLoadResult_success_set", _wrap_csLoadResult_success_set, METH_VARARGS, NULL},
@@ -35849,16 +35930,19 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"iLoader_LoadLibrary", _wrap_iLoader_LoadLibrary, METH_VARARGS, NULL},
 	 { (char *)"iLoader_Load", _wrap_iLoader_Load, METH_VARARGS, NULL},
 	 { (char *)"iLoader_scfGetVersion", _wrap_iLoader_scfGetVersion, METH_VARARGS, NULL},
+	 { (char *)"iLoader_scfGetName", _wrap_iLoader_scfGetName, METH_VARARGS, NULL},
 	 { (char *)"delete_iLoader", _wrap_delete_iLoader, METH_VARARGS, NULL},
 	 { (char *)"iLoader_swigregister", iLoader_swigregister, METH_VARARGS, NULL},
 	 { (char *)"iLoaderPlugin_Parse", _wrap_iLoaderPlugin_Parse, METH_VARARGS, NULL},
 	 { (char *)"iLoaderPlugin_IsThreadSafe", _wrap_iLoaderPlugin_IsThreadSafe, METH_VARARGS, NULL},
 	 { (char *)"iLoaderPlugin_scfGetVersion", _wrap_iLoaderPlugin_scfGetVersion, METH_VARARGS, NULL},
+	 { (char *)"iLoaderPlugin_scfGetName", _wrap_iLoaderPlugin_scfGetName, METH_VARARGS, NULL},
 	 { (char *)"delete_iLoaderPlugin", _wrap_delete_iLoaderPlugin, METH_VARARGS, NULL},
 	 { (char *)"iLoaderPlugin_swigregister", iLoaderPlugin_swigregister, METH_VARARGS, NULL},
 	 { (char *)"iBinaryLoaderPlugin_Parse", _wrap_iBinaryLoaderPlugin_Parse, METH_VARARGS, NULL},
 	 { (char *)"iBinaryLoaderPlugin_IsThreadSafe", _wrap_iBinaryLoaderPlugin_IsThreadSafe, METH_VARARGS, NULL},
 	 { (char *)"iBinaryLoaderPlugin_scfGetVersion", _wrap_iBinaryLoaderPlugin_scfGetVersion, METH_VARARGS, NULL},
+	 { (char *)"iBinaryLoaderPlugin_scfGetName", _wrap_iBinaryLoaderPlugin_scfGetName, METH_VARARGS, NULL},
 	 { (char *)"delete_iBinaryLoaderPlugin", _wrap_delete_iBinaryLoaderPlugin, METH_VARARGS, NULL},
 	 { (char *)"iBinaryLoaderPlugin_swigregister", iBinaryLoaderPlugin_swigregister, METH_VARARGS, NULL},
 	 { (char *)"iSaver_SaveMapFile", _wrap_iSaver_SaveMapFile, METH_VARARGS, NULL},

@@ -3038,6 +3038,7 @@ SWIG_FromCharPtr(const char *cptr)
 }
 
 SWIGINTERN int iSndSysData_scfGetVersion(){ return scfInterfaceTraits<iSndSysData>::GetVersion(); }
+SWIGINTERN char const *iSndSysData_scfGetName(){ return scfInterfaceTraits<iSndSysData>::GetName(); }
 SWIGINTERN void delete_iSndSysData(iSndSysData *self){ if (self) self->DecRef (); }
 
 SWIGINTERN int
@@ -3127,18 +3128,25 @@ SWIGINTERNINLINE PyObject*
 }
 
 SWIGINTERN int iSndSysSoftwareFilter3D_scfGetVersion(){ return scfInterfaceTraits<iSndSysSoftwareFilter3D>::GetVersion(); }
+SWIGINTERN char const *iSndSysSoftwareFilter3D_scfGetName(){ return scfInterfaceTraits<iSndSysSoftwareFilter3D>::GetName(); }
 SWIGINTERN void delete_iSndSysSoftwareFilter3D(iSndSysSoftwareFilter3D *self){ if (self) self->DecRef (); }
 SWIGINTERN int iSndSysListener_scfGetVersion(){ return scfInterfaceTraits<iSndSysListener>::GetVersion(); }
+SWIGINTERN char const *iSndSysListener_scfGetName(){ return scfInterfaceTraits<iSndSysListener>::GetName(); }
 SWIGINTERN void delete_iSndSysListener(iSndSysListener *self){ if (self) self->DecRef (); }
 SWIGINTERN int iSndSysLoader_scfGetVersion(){ return scfInterfaceTraits<iSndSysLoader>::GetVersion(); }
+SWIGINTERN char const *iSndSysLoader_scfGetName(){ return scfInterfaceTraits<iSndSysLoader>::GetName(); }
 SWIGINTERN void delete_iSndSysLoader(iSndSysLoader *self){ if (self) self->DecRef (); }
 SWIGINTERN int iSndSysWrapper_scfGetVersion(){ return scfInterfaceTraits<iSndSysWrapper>::GetVersion(); }
+SWIGINTERN char const *iSndSysWrapper_scfGetName(){ return scfInterfaceTraits<iSndSysWrapper>::GetName(); }
 SWIGINTERN void delete_iSndSysWrapper(iSndSysWrapper *self){ if (self) self->DecRef (); }
 SWIGINTERN int iSndSysManager_scfGetVersion(){ return scfInterfaceTraits<iSndSysManager>::GetVersion(); }
+SWIGINTERN char const *iSndSysManager_scfGetName(){ return scfInterfaceTraits<iSndSysManager>::GetName(); }
 SWIGINTERN void delete_iSndSysManager(iSndSysManager *self){ if (self) self->DecRef (); }
 SWIGINTERN int iSndSysSource_scfGetVersion(){ return scfInterfaceTraits<iSndSysSource>::GetVersion(); }
+SWIGINTERN char const *iSndSysSource_scfGetName(){ return scfInterfaceTraits<iSndSysSource>::GetName(); }
 SWIGINTERN void delete_iSndSysSource(iSndSysSource *self){ if (self) self->DecRef (); }
 SWIGINTERN int iSndSysSource3D_scfGetVersion(){ return scfInterfaceTraits<iSndSysSource3D>::GetVersion(); }
+SWIGINTERN char const *iSndSysSource3D_scfGetName(){ return scfInterfaceTraits<iSndSysSource3D>::GetName(); }
 SWIGINTERN void delete_iSndSysSource3D(iSndSysSource3D *self){ if (self) self->DecRef (); }
 
 SWIGINTERN int
@@ -3152,10 +3160,13 @@ SWIG_AsVal_bool (PyObject *obj, bool *val)
 }
 
 SWIGINTERN int iSndSysStream_scfGetVersion(){ return scfInterfaceTraits<iSndSysStream>::GetVersion(); }
+SWIGINTERN char const *iSndSysStream_scfGetName(){ return scfInterfaceTraits<iSndSysStream>::GetName(); }
 SWIGINTERN void delete_iSndSysStream(iSndSysStream *self){ if (self) self->DecRef (); }
 SWIGINTERN int iSndSysRenderer_scfGetVersion(){ return scfInterfaceTraits<iSndSysRenderer>::GetVersion(); }
+SWIGINTERN char const *iSndSysRenderer_scfGetName(){ return scfInterfaceTraits<iSndSysRenderer>::GetName(); }
 SWIGINTERN void delete_iSndSysRenderer(iSndSysRenderer *self){ if (self) self->DecRef (); }
 SWIGINTERN int iSndSysSoftwareDriver_scfGetVersion(){ return scfInterfaceTraits<iSndSysSoftwareDriver>::GetVersion(); }
+SWIGINTERN char const *iSndSysSoftwareDriver_scfGetName(){ return scfInterfaceTraits<iSndSysSoftwareDriver>::GetName(); }
 SWIGINTERN void delete_iSndSysSoftwareDriver(iSndSysSoftwareDriver *self){ if (self) self->DecRef (); }
 #ifdef __cplusplus
 extern "C" {
@@ -3362,6 +3373,19 @@ SWIGINTERN PyObject *_wrap_iSndSysData_scfGetVersion(PyObject *SWIGUNUSEDPARM(se
   if(!PyArg_UnpackTuple(args,(char *)"iSndSysData_scfGetVersion",0,0)) SWIG_fail;
   result = (int)iSndSysData_scfGetVersion();
   resultobj = SWIG_From_int(static_cast< int >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_iSndSysData_scfGetName(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  char *result = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"iSndSysData_scfGetName",0,0)) SWIG_fail;
+  result = (char *)iSndSysData_scfGetName();
+  resultobj = SWIG_FromCharPtr((const char *)result);
   return resultobj;
 fail:
   return NULL;
@@ -4247,6 +4271,19 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_iSndSysSoftwareFilter3D_scfGetName(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  char *result = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"iSndSysSoftwareFilter3D_scfGetName",0,0)) SWIG_fail;
+  result = (char *)iSndSysSoftwareFilter3D_scfGetName();
+  resultobj = SWIG_FromCharPtr((const char *)result);
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_delete_iSndSysSoftwareFilter3D(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   iSndSysSoftwareFilter3D *arg1 = (iSndSysSoftwareFilter3D *) 0 ;
@@ -4638,6 +4675,19 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_iSndSysListener_scfGetName(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  char *result = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"iSndSysListener_scfGetName",0,0)) SWIG_fail;
+  result = (char *)iSndSysListener_scfGetName();
+  resultobj = SWIG_FromCharPtr((const char *)result);
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_delete_iSndSysListener(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   iSndSysListener *arg1 = (iSndSysListener *) 0 ;
@@ -5015,6 +5065,19 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_iSndSysLoader_scfGetName(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  char *result = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"iSndSysLoader_scfGetName",0,0)) SWIG_fail;
+  result = (char *)iSndSysLoader_scfGetName();
+  resultobj = SWIG_FromCharPtr((const char *)result);
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_delete_iSndSysLoader(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   iSndSysLoader *arg1 = (iSndSysLoader *) 0 ;
@@ -5124,6 +5187,19 @@ SWIGINTERN PyObject *_wrap_iSndSysWrapper_scfGetVersion(PyObject *SWIGUNUSEDPARM
   if(!PyArg_UnpackTuple(args,(char *)"iSndSysWrapper_scfGetVersion",0,0)) SWIG_fail;
   result = (int)iSndSysWrapper_scfGetVersion();
   resultobj = SWIG_From_int(static_cast< int >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_iSndSysWrapper_scfGetName(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  char *result = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"iSndSysWrapper_scfGetName",0,0)) SWIG_fail;
+  result = (char *)iSndSysWrapper_scfGetName();
+  resultobj = SWIG_FromCharPtr((const char *)result);
   return resultobj;
 fail:
   return NULL;
@@ -5422,6 +5498,19 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_iSndSysManager_scfGetName(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  char *result = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"iSndSysManager_scfGetName",0,0)) SWIG_fail;
+  result = (char *)iSndSysManager_scfGetName();
+  resultobj = SWIG_FromCharPtr((const char *)result);
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_delete_iSndSysManager(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   iSndSysManager *arg1 = (iSndSysManager *) 0 ;
@@ -5563,6 +5652,19 @@ SWIGINTERN PyObject *_wrap_iSndSysSource_scfGetVersion(PyObject *SWIGUNUSEDPARM(
   if(!PyArg_UnpackTuple(args,(char *)"iSndSysSource_scfGetVersion",0,0)) SWIG_fail;
   result = (int)iSndSysSource_scfGetVersion();
   resultobj = SWIG_From_int(static_cast< int >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_iSndSysSource_scfGetName(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  char *result = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"iSndSysSource_scfGetName",0,0)) SWIG_fail;
+  result = (char *)iSndSysSource_scfGetName();
+  resultobj = SWIG_FromCharPtr((const char *)result);
   return resultobj;
 fail:
   return NULL;
@@ -5965,6 +6067,19 @@ SWIGINTERN PyObject *_wrap_iSndSysSource3D_scfGetVersion(PyObject *SWIGUNUSEDPAR
   if(!PyArg_UnpackTuple(args,(char *)"iSndSysSource3D_scfGetVersion",0,0)) SWIG_fail;
   result = (int)iSndSysSource3D_scfGetVersion();
   resultobj = SWIG_From_int(static_cast< int >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_iSndSysSource3D_scfGetName(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  char *result = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"iSndSysSource3D_scfGetName",0,0)) SWIG_fail;
+  result = (char *)iSndSysSource3D_scfGetName();
+  resultobj = SWIG_FromCharPtr((const char *)result);
   return resultobj;
 fail:
   return NULL;
@@ -7554,6 +7669,19 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_iSndSysStream_scfGetName(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  char *result = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"iSndSysStream_scfGetName",0,0)) SWIG_fail;
+  result = (char *)iSndSysStream_scfGetName();
+  resultobj = SWIG_FromCharPtr((const char *)result);
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_delete_iSndSysStream(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   iSndSysStream *arg1 = (iSndSysStream *) 0 ;
@@ -8009,6 +8137,19 @@ SWIGINTERN PyObject *_wrap_iSndSysRenderer_scfGetVersion(PyObject *SWIGUNUSEDPAR
   if(!PyArg_UnpackTuple(args,(char *)"iSndSysRenderer_scfGetVersion",0,0)) SWIG_fail;
   result = (int)iSndSysRenderer_scfGetVersion();
   resultobj = SWIG_From_int(static_cast< int >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_iSndSysRenderer_scfGetName(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  char *result = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"iSndSysRenderer_scfGetName",0,0)) SWIG_fail;
+  result = (char *)iSndSysRenderer_scfGetName();
+  resultobj = SWIG_FromCharPtr((const char *)result);
   return resultobj;
 fail:
   return NULL;
@@ -8487,6 +8628,19 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_iSndSysSoftwareDriver_scfGetName(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  char *result = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"iSndSysSoftwareDriver_scfGetName",0,0)) SWIG_fail;
+  result = (char *)iSndSysSoftwareDriver_scfGetName();
+  resultobj = SWIG_FromCharPtr((const char *)result);
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_delete_iSndSysSoftwareDriver(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   iSndSysSoftwareDriver *arg1 = (iSndSysSoftwareDriver *) 0 ;
@@ -8525,6 +8679,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"iSndSysData_SetDescription", _wrap_iSndSysData_SetDescription, METH_VARARGS, NULL},
 	 { (char *)"iSndSysData_GetDescription", _wrap_iSndSysData_GetDescription, METH_VARARGS, NULL},
 	 { (char *)"iSndSysData_scfGetVersion", _wrap_iSndSysData_scfGetVersion, METH_VARARGS, NULL},
+	 { (char *)"iSndSysData_scfGetName", _wrap_iSndSysData_scfGetName, METH_VARARGS, NULL},
 	 { (char *)"delete_iSndSysData", _wrap_delete_iSndSysData, METH_VARARGS, NULL},
 	 { (char *)"iSndSysData_swigregister", iSndSysData_swigregister, METH_VARARGS, NULL},
 	 { (char *)"iSndSysSoftwareFilter3DProperties_clean_buffer_set", _wrap_iSndSysSoftwareFilter3DProperties_clean_buffer_set, METH_VARARGS, NULL},
@@ -8555,6 +8710,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"iSndSysSoftwareFilter3D_GetSubFilter", _wrap_iSndSysSoftwareFilter3D_GetSubFilter, METH_VARARGS, NULL},
 	 { (char *)"iSndSysSoftwareFilter3D_GetPtr", _wrap_iSndSysSoftwareFilter3D_GetPtr, METH_VARARGS, NULL},
 	 { (char *)"iSndSysSoftwareFilter3D_scfGetVersion", _wrap_iSndSysSoftwareFilter3D_scfGetVersion, METH_VARARGS, NULL},
+	 { (char *)"iSndSysSoftwareFilter3D_scfGetName", _wrap_iSndSysSoftwareFilter3D_scfGetName, METH_VARARGS, NULL},
 	 { (char *)"delete_iSndSysSoftwareFilter3D", _wrap_delete_iSndSysSoftwareFilter3D, METH_VARARGS, NULL},
 	 { (char *)"iSndSysSoftwareFilter3D_swigregister", iSndSysSoftwareFilter3D_swigregister, METH_VARARGS, NULL},
 	 { (char *)"iSndSysSoftwareOutputFilter_FormatNotify", _wrap_iSndSysSoftwareOutputFilter_FormatNotify, METH_VARARGS, NULL},
@@ -8570,6 +8726,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"iSndSysListener_GetDistanceFactor", _wrap_iSndSysListener_GetDistanceFactor, METH_VARARGS, NULL},
 	 { (char *)"iSndSysListener_GetRollOffFactor", _wrap_iSndSysListener_GetRollOffFactor, METH_VARARGS, NULL},
 	 { (char *)"iSndSysListener_scfGetVersion", _wrap_iSndSysListener_scfGetVersion, METH_VARARGS, NULL},
+	 { (char *)"iSndSysListener_scfGetName", _wrap_iSndSysListener_scfGetName, METH_VARARGS, NULL},
 	 { (char *)"delete_iSndSysListener", _wrap_delete_iSndSysListener, METH_VARARGS, NULL},
 	 { (char *)"iSndSysListener_swigregister", iSndSysListener_swigregister, METH_VARARGS, NULL},
 	 { (char *)"iSndSysListenerDoppler_SetVelocity", _wrap_iSndSysListenerDoppler_SetVelocity, METH_VARARGS, NULL},
@@ -8582,12 +8739,14 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"iSndSysListenerDoppler_swigregister", iSndSysListenerDoppler_swigregister, METH_VARARGS, NULL},
 	 { (char *)"iSndSysLoader_LoadSound", _wrap_iSndSysLoader_LoadSound, METH_VARARGS, NULL},
 	 { (char *)"iSndSysLoader_scfGetVersion", _wrap_iSndSysLoader_scfGetVersion, METH_VARARGS, NULL},
+	 { (char *)"iSndSysLoader_scfGetName", _wrap_iSndSysLoader_scfGetName, METH_VARARGS, NULL},
 	 { (char *)"delete_iSndSysLoader", _wrap_delete_iSndSysLoader, METH_VARARGS, NULL},
 	 { (char *)"iSndSysLoader_swigregister", iSndSysLoader_swigregister, METH_VARARGS, NULL},
 	 { (char *)"iSndSysWrapper_QueryObject", _wrap_iSndSysWrapper_QueryObject, METH_VARARGS, NULL},
 	 { (char *)"iSndSysWrapper_GetData", _wrap_iSndSysWrapper_GetData, METH_VARARGS, NULL},
 	 { (char *)"iSndSysWrapper_SetData", _wrap_iSndSysWrapper_SetData, METH_VARARGS, NULL},
 	 { (char *)"iSndSysWrapper_scfGetVersion", _wrap_iSndSysWrapper_scfGetVersion, METH_VARARGS, NULL},
+	 { (char *)"iSndSysWrapper_scfGetName", _wrap_iSndSysWrapper_scfGetName, METH_VARARGS, NULL},
 	 { (char *)"delete_iSndSysWrapper", _wrap_delete_iSndSysWrapper, METH_VARARGS, NULL},
 	 { (char *)"iSndSysWrapper_swigregister", iSndSysWrapper_swigregister, METH_VARARGS, NULL},
 	 { (char *)"iSndSysManager_CreateSound", _wrap_iSndSysManager_CreateSound, METH_VARARGS, NULL},
@@ -8597,6 +8756,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"iSndSysManager_GetSound", _wrap_iSndSysManager_GetSound, METH_VARARGS, NULL},
 	 { (char *)"iSndSysManager_FindSoundByName", _wrap_iSndSysManager_FindSoundByName, METH_VARARGS, NULL},
 	 { (char *)"iSndSysManager_scfGetVersion", _wrap_iSndSysManager_scfGetVersion, METH_VARARGS, NULL},
+	 { (char *)"iSndSysManager_scfGetName", _wrap_iSndSysManager_scfGetName, METH_VARARGS, NULL},
 	 { (char *)"delete_iSndSysManager", _wrap_delete_iSndSysManager, METH_VARARGS, NULL},
 	 { (char *)"iSndSysManager_swigregister", iSndSysManager_swigregister, METH_VARARGS, NULL},
 	 { (char *)"iSndSysSource_SetVolume", _wrap_iSndSysSource_SetVolume, METH_VARARGS, NULL},
@@ -8604,6 +8764,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"iSndSysSource_GetStream", _wrap_iSndSysSource_GetStream, METH_VARARGS, NULL},
 	 { (char *)"iSndSysSource_GetPtr", _wrap_iSndSysSource_GetPtr, METH_VARARGS, NULL},
 	 { (char *)"iSndSysSource_scfGetVersion", _wrap_iSndSysSource_scfGetVersion, METH_VARARGS, NULL},
+	 { (char *)"iSndSysSource_scfGetName", _wrap_iSndSysSource_scfGetName, METH_VARARGS, NULL},
 	 { (char *)"delete_iSndSysSource", _wrap_delete_iSndSysSource, METH_VARARGS, NULL},
 	 { (char *)"iSndSysSource_swigregister", iSndSysSource_swigregister, METH_VARARGS, NULL},
 	 { (char *)"iSndSysSourceSoftware_MergeIntoBuffer", _wrap_iSndSysSourceSoftware_MergeIntoBuffer, METH_VARARGS, NULL},
@@ -8621,6 +8782,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"iSndSysSource3D_GetMinimumDistance", _wrap_iSndSysSource3D_GetMinimumDistance, METH_VARARGS, NULL},
 	 { (char *)"iSndSysSource3D_GetMaximumDistance", _wrap_iSndSysSource3D_GetMaximumDistance, METH_VARARGS, NULL},
 	 { (char *)"iSndSysSource3D_scfGetVersion", _wrap_iSndSysSource3D_scfGetVersion, METH_VARARGS, NULL},
+	 { (char *)"iSndSysSource3D_scfGetName", _wrap_iSndSysSource3D_scfGetName, METH_VARARGS, NULL},
 	 { (char *)"delete_iSndSysSource3D", _wrap_delete_iSndSysSource3D, METH_VARARGS, NULL},
 	 { (char *)"iSndSysSource3D_swigregister", iSndSysSource3D_swigregister, METH_VARARGS, NULL},
 	 { (char *)"iSndSysSource3DDirectionalSimple_SetDirection", _wrap_iSndSysSource3DDirectionalSimple_SetDirection, METH_VARARGS, NULL},
@@ -8684,6 +8846,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"iSndSysStream_SetLoopBoundaries", _wrap_iSndSysStream_SetLoopBoundaries, METH_VARARGS, NULL},
 	 { (char *)"iSndSysStream_PendingSeek", _wrap_iSndSysStream_PendingSeek, METH_VARARGS, NULL},
 	 { (char *)"iSndSysStream_scfGetVersion", _wrap_iSndSysStream_scfGetVersion, METH_VARARGS, NULL},
+	 { (char *)"iSndSysStream_scfGetName", _wrap_iSndSysStream_scfGetName, METH_VARARGS, NULL},
 	 { (char *)"delete_iSndSysStream", _wrap_delete_iSndSysStream, METH_VARARGS, NULL},
 	 { (char *)"iSndSysStream_swigregister", iSndSysStream_swigregister, METH_VARARGS, NULL},
 	 { (char *)"iSndSysStreamCallback_StreamLoopNotification", _wrap_iSndSysStreamCallback_StreamLoopNotification, METH_VARARGS, NULL},
@@ -8702,6 +8865,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"iSndSysRenderer_RegisterCallback", _wrap_iSndSysRenderer_RegisterCallback, METH_VARARGS, NULL},
 	 { (char *)"iSndSysRenderer_UnregisterCallback", _wrap_iSndSysRenderer_UnregisterCallback, METH_VARARGS, NULL},
 	 { (char *)"iSndSysRenderer_scfGetVersion", _wrap_iSndSysRenderer_scfGetVersion, METH_VARARGS, NULL},
+	 { (char *)"iSndSysRenderer_scfGetName", _wrap_iSndSysRenderer_scfGetName, METH_VARARGS, NULL},
 	 { (char *)"delete_iSndSysRenderer", _wrap_delete_iSndSysRenderer, METH_VARARGS, NULL},
 	 { (char *)"iSndSysRenderer_swigregister", iSndSysRenderer_swigregister, METH_VARARGS, NULL},
 	 { (char *)"iSndSysRendererCallback_StreamAddNotification", _wrap_iSndSysRendererCallback_StreamAddNotification, METH_VARARGS, NULL},
@@ -8723,6 +8887,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"iSndSysSoftwareDriver_StartThread", _wrap_iSndSysSoftwareDriver_StartThread, METH_VARARGS, NULL},
 	 { (char *)"iSndSysSoftwareDriver_StopThread", _wrap_iSndSysSoftwareDriver_StopThread, METH_VARARGS, NULL},
 	 { (char *)"iSndSysSoftwareDriver_scfGetVersion", _wrap_iSndSysSoftwareDriver_scfGetVersion, METH_VARARGS, NULL},
+	 { (char *)"iSndSysSoftwareDriver_scfGetName", _wrap_iSndSysSoftwareDriver_scfGetName, METH_VARARGS, NULL},
 	 { (char *)"delete_iSndSysSoftwareDriver", _wrap_delete_iSndSysSoftwareDriver, METH_VARARGS, NULL},
 	 { (char *)"iSndSysSoftwareDriver_swigregister", iSndSysSoftwareDriver_swigregister, METH_VARARGS, NULL},
 	 { NULL, NULL, 0, NULL }

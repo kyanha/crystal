@@ -116,11 +116,13 @@ class iImage(core.iBase):
     def GetCookedImageFormat(*args): return _csgfx.iImage_GetCookedImageFormat(*args)
     def GetCookedImageData(*args): return _csgfx.iImage_GetCookedImageData(*args)
     scfGetVersion = staticmethod(_csgfx.iImage_scfGetVersion)
+    scfGetName = staticmethod(_csgfx.iImage_scfGetName)
     __swig_destroy__ = _csgfx.delete_iImage
     __del__ = lambda self : None;
 iImage_swigregister = _csgfx.iImage_swigregister
 iImage_swigregister(iImage)
 iImage_scfGetVersion = _csgfx.iImage_scfGetVersion
+iImage_scfGetName = _csgfx.iImage_scfGetName
 
 class csImageIOFileFormatDescriptions(core.CustomAllocated):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
@@ -180,11 +182,13 @@ class iImageIO(core.iBase):
     def Load(*args): return _csgfx.iImageIO_Load(*args)
     def Save(*args): return _csgfx.iImageIO_Save(*args)
     scfGetVersion = staticmethod(_csgfx.iImageIO_scfGetVersion)
+    scfGetName = staticmethod(_csgfx.iImageIO_scfGetName)
     __swig_destroy__ = _csgfx.delete_iImageIO
     __del__ = lambda self : None;
 iImageIO_swigregister = _csgfx.iImageIO_swigregister
 iImageIO_swigregister(iImageIO)
 iImageIO_scfGetVersion = _csgfx.iImageIO_scfGetVersion
+iImageIO_scfGetName = _csgfx.iImageIO_scfGetName
 
 class iAnimatedImage(core.iBase):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
@@ -193,11 +197,13 @@ class iAnimatedImage(core.iBase):
     def Animate(*args): return _csgfx.iAnimatedImage_Animate(*args)
     def IsAnimated(*args): return _csgfx.iAnimatedImage_IsAnimated(*args)
     scfGetVersion = staticmethod(_csgfx.iAnimatedImage_scfGetVersion)
+    scfGetName = staticmethod(_csgfx.iAnimatedImage_scfGetName)
     __swig_destroy__ = _csgfx.delete_iAnimatedImage
     __del__ = lambda self : None;
 iAnimatedImage_swigregister = _csgfx.iAnimatedImage_swigregister
 iAnimatedImage_swigregister(iAnimatedImage)
 iAnimatedImage_scfGetVersion = _csgfx.iAnimatedImage_scfGetVersion
+iAnimatedImage_scfGetName = _csgfx.iAnimatedImage_scfGetName
 
 class iProcTexture(core.iBase):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
@@ -267,6 +273,7 @@ class iShaderVarStringSet(iShaderVarStringSetBase):
     def __init__(self, *args, **kwargs): raise AttributeError, "No constructor defined"
     __repr__ = _swig_repr
     scfGetVersion = staticmethod(_csgfx.iShaderVarStringSet_scfGetVersion)
+    scfGetName = staticmethod(_csgfx.iShaderVarStringSet_scfGetName)
     __swig_destroy__ = _csgfx.delete_iShaderVarStringSet
     __del__ = lambda self : None;
 iShaderVarStringSet_swigregister = _csgfx.iShaderVarStringSet_swigregister
@@ -274,6 +281,7 @@ iShaderVarStringSet_swigregister(iShaderVarStringSet)
 cvar = _csgfx.cvar
 InvalidShaderVarStringID = cvar.InvalidShaderVarStringID
 iShaderVarStringSet_scfGetVersion = _csgfx.iShaderVarStringSet_scfGetVersion
+iShaderVarStringSet_scfGetName = _csgfx.iShaderVarStringSet_scfGetName
 
 class iShaderVariableAccessor(core.iBase):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')

@@ -77,11 +77,13 @@ class iSndSysData(core.iBase):
     def SetDescription(*args): return _isndsys.iSndSysData_SetDescription(*args)
     def GetDescription(*args): return _isndsys.iSndSysData_GetDescription(*args)
     scfGetVersion = staticmethod(_isndsys.iSndSysData_scfGetVersion)
+    scfGetName = staticmethod(_isndsys.iSndSysData_scfGetName)
     __swig_destroy__ = _isndsys.delete_iSndSysData
     __del__ = lambda self : None;
 iSndSysData_swigregister = _isndsys.iSndSysData_swigregister
 iSndSysData_swigregister(iSndSysData)
 iSndSysData_scfGetVersion = _isndsys.iSndSysData_scfGetVersion
+iSndSysData_scfGetName = _isndsys.iSndSysData_scfGetName
 
 class iSndSysSoftwareFilter3DProperties(object):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
@@ -114,11 +116,13 @@ class iSndSysSoftwareFilter3D(core.iBase):
     def GetSubFilter(*args): return _isndsys.iSndSysSoftwareFilter3D_GetSubFilter(*args)
     def GetPtr(*args): return _isndsys.iSndSysSoftwareFilter3D_GetPtr(*args)
     scfGetVersion = staticmethod(_isndsys.iSndSysSoftwareFilter3D_scfGetVersion)
+    scfGetName = staticmethod(_isndsys.iSndSysSoftwareFilter3D_scfGetName)
     __swig_destroy__ = _isndsys.delete_iSndSysSoftwareFilter3D
     __del__ = lambda self : None;
 iSndSysSoftwareFilter3D_swigregister = _isndsys.iSndSysSoftwareFilter3D_swigregister
 iSndSysSoftwareFilter3D_swigregister(iSndSysSoftwareFilter3D)
 iSndSysSoftwareFilter3D_scfGetVersion = _isndsys.iSndSysSoftwareFilter3D_scfGetVersion
+iSndSysSoftwareFilter3D_scfGetName = _isndsys.iSndSysSoftwareFilter3D_scfGetName
 
 class iSndSysSoftwareOutputFilter(core.iBase):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
@@ -147,11 +151,13 @@ class iSndSysListener(core.iBase):
     def GetDistanceFactor(*args): return _isndsys.iSndSysListener_GetDistanceFactor(*args)
     def GetRollOffFactor(*args): return _isndsys.iSndSysListener_GetRollOffFactor(*args)
     scfGetVersion = staticmethod(_isndsys.iSndSysListener_scfGetVersion)
+    scfGetName = staticmethod(_isndsys.iSndSysListener_scfGetName)
     __swig_destroy__ = _isndsys.delete_iSndSysListener
     __del__ = lambda self : None;
 iSndSysListener_swigregister = _isndsys.iSndSysListener_swigregister
 iSndSysListener_swigregister(iSndSysListener)
 iSndSysListener_scfGetVersion = _isndsys.iSndSysListener_scfGetVersion
+iSndSysListener_scfGetName = _isndsys.iSndSysListener_scfGetName
 
 class iSndSysListenerDoppler(core.iBase):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
@@ -174,11 +180,13 @@ class iSndSysLoader(core.iBase):
     __repr__ = _swig_repr
     def LoadSound(*args): return _isndsys.iSndSysLoader_LoadSound(*args)
     scfGetVersion = staticmethod(_isndsys.iSndSysLoader_scfGetVersion)
+    scfGetName = staticmethod(_isndsys.iSndSysLoader_scfGetName)
     __swig_destroy__ = _isndsys.delete_iSndSysLoader
     __del__ = lambda self : None;
 iSndSysLoader_swigregister = _isndsys.iSndSysLoader_swigregister
 iSndSysLoader_swigregister(iSndSysLoader)
 iSndSysLoader_scfGetVersion = _isndsys.iSndSysLoader_scfGetVersion
+iSndSysLoader_scfGetName = _isndsys.iSndSysLoader_scfGetName
 
 class iSndSysWrapper(core.iBase):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
@@ -188,11 +196,13 @@ class iSndSysWrapper(core.iBase):
     def GetData(*args): return _isndsys.iSndSysWrapper_GetData(*args)
     def SetData(*args): return _isndsys.iSndSysWrapper_SetData(*args)
     scfGetVersion = staticmethod(_isndsys.iSndSysWrapper_scfGetVersion)
+    scfGetName = staticmethod(_isndsys.iSndSysWrapper_scfGetName)
     __swig_destroy__ = _isndsys.delete_iSndSysWrapper
     __del__ = lambda self : None;
 iSndSysWrapper_swigregister = _isndsys.iSndSysWrapper_swigregister
 iSndSysWrapper_swigregister(iSndSysWrapper)
 iSndSysWrapper_scfGetVersion = _isndsys.iSndSysWrapper_scfGetVersion
+iSndSysWrapper_scfGetName = _isndsys.iSndSysWrapper_scfGetName
 
 class iSndSysManager(core.iBase):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
@@ -205,11 +215,13 @@ class iSndSysManager(core.iBase):
     def GetSound(*args): return _isndsys.iSndSysManager_GetSound(*args)
     def FindSoundByName(*args): return _isndsys.iSndSysManager_FindSoundByName(*args)
     scfGetVersion = staticmethod(_isndsys.iSndSysManager_scfGetVersion)
+    scfGetName = staticmethod(_isndsys.iSndSysManager_scfGetName)
     __swig_destroy__ = _isndsys.delete_iSndSysManager
     __del__ = lambda self : None;
 iSndSysManager_swigregister = _isndsys.iSndSysManager_swigregister
 iSndSysManager_swigregister(iSndSysManager)
 iSndSysManager_scfGetVersion = _isndsys.iSndSysManager_scfGetVersion
+iSndSysManager_scfGetName = _isndsys.iSndSysManager_scfGetName
 
 CS_SNDSYS_SOURCE_DISTANCE_INFINITE = _isndsys.CS_SNDSYS_SOURCE_DISTANCE_INFINITE
 class iSndSysSource(core.iBase):
@@ -221,11 +233,13 @@ class iSndSysSource(core.iBase):
     def GetStream(*args): return _isndsys.iSndSysSource_GetStream(*args)
     def GetPtr(*args): return _isndsys.iSndSysSource_GetPtr(*args)
     scfGetVersion = staticmethod(_isndsys.iSndSysSource_scfGetVersion)
+    scfGetName = staticmethod(_isndsys.iSndSysSource_scfGetName)
     __swig_destroy__ = _isndsys.delete_iSndSysSource
     __del__ = lambda self : None;
 iSndSysSource_swigregister = _isndsys.iSndSysSource_swigregister
 iSndSysSource_swigregister(iSndSysSource)
 iSndSysSource_scfGetVersion = _isndsys.iSndSysSource_scfGetVersion
+iSndSysSource_scfGetName = _isndsys.iSndSysSource_scfGetName
 
 class iSndSysSourceSoftware(iSndSysSource):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
@@ -260,11 +274,13 @@ class iSndSysSource3D(core.iBase):
     def GetMinimumDistance(*args): return _isndsys.iSndSysSource3D_GetMinimumDistance(*args)
     def GetMaximumDistance(*args): return _isndsys.iSndSysSource3D_GetMaximumDistance(*args)
     scfGetVersion = staticmethod(_isndsys.iSndSysSource3D_scfGetVersion)
+    scfGetName = staticmethod(_isndsys.iSndSysSource3D_scfGetName)
     __swig_destroy__ = _isndsys.delete_iSndSysSource3D
     __del__ = lambda self : None;
 iSndSysSource3D_swigregister = _isndsys.iSndSysSource3D_swigregister
 iSndSysSource3D_swigregister(iSndSysSource3D)
 iSndSysSource3D_scfGetVersion = _isndsys.iSndSysSource3D_scfGetVersion
+iSndSysSource3D_scfGetName = _isndsys.iSndSysSource3D_scfGetName
 
 class iSndSysSource3DDirectionalSimple(core.iBase):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
@@ -368,6 +384,7 @@ class iSndSysStream(core.iBase):
     def SetLoopBoundaries(*args): return _isndsys.iSndSysStream_SetLoopBoundaries(*args)
     def PendingSeek(*args): return _isndsys.iSndSysStream_PendingSeek(*args)
     scfGetVersion = staticmethod(_isndsys.iSndSysStream_scfGetVersion)
+    scfGetName = staticmethod(_isndsys.iSndSysStream_scfGetName)
     __swig_destroy__ = _isndsys.delete_iSndSysStream
     __del__ = lambda self : None;
 iSndSysStream_swigregister = _isndsys.iSndSysStream_swigregister
@@ -375,6 +392,7 @@ iSndSysStream_swigregister(iSndSysStream)
 cvar = _isndsys.cvar
 CS_SNDSYS_STREAM_UNKNOWN_LENGTH = cvar.CS_SNDSYS_STREAM_UNKNOWN_LENGTH
 iSndSysStream_scfGetVersion = _isndsys.iSndSysStream_scfGetVersion
+iSndSysStream_scfGetName = _isndsys.iSndSysStream_scfGetName
 
 class iSndSysStreamCallback(core.iBase):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
@@ -405,11 +423,13 @@ class iSndSysRenderer(core.iBase):
     def RegisterCallback(*args): return _isndsys.iSndSysRenderer_RegisterCallback(*args)
     def UnregisterCallback(*args): return _isndsys.iSndSysRenderer_UnregisterCallback(*args)
     scfGetVersion = staticmethod(_isndsys.iSndSysRenderer_scfGetVersion)
+    scfGetName = staticmethod(_isndsys.iSndSysRenderer_scfGetName)
     __swig_destroy__ = _isndsys.delete_iSndSysRenderer
     __del__ = lambda self : None;
 iSndSysRenderer_swigregister = _isndsys.iSndSysRenderer_swigregister
 iSndSysRenderer_swigregister(iSndSysRenderer)
 iSndSysRenderer_scfGetVersion = _isndsys.iSndSysRenderer_scfGetVersion
+iSndSysRenderer_scfGetName = _isndsys.iSndSysRenderer_scfGetName
 
 class iSndSysRendererCallback(core.iBase):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
@@ -455,11 +475,13 @@ class iSndSysSoftwareDriver(core.iBase):
     def StartThread(*args): return _isndsys.iSndSysSoftwareDriver_StartThread(*args)
     def StopThread(*args): return _isndsys.iSndSysSoftwareDriver_StopThread(*args)
     scfGetVersion = staticmethod(_isndsys.iSndSysSoftwareDriver_scfGetVersion)
+    scfGetName = staticmethod(_isndsys.iSndSysSoftwareDriver_scfGetName)
     __swig_destroy__ = _isndsys.delete_iSndSysSoftwareDriver
     __del__ = lambda self : None;
 iSndSysSoftwareDriver_swigregister = _isndsys.iSndSysSoftwareDriver_swigregister
 iSndSysSoftwareDriver_swigregister(iSndSysSoftwareDriver)
 iSndSysSoftwareDriver_scfGetVersion = _isndsys.iSndSysSoftwareDriver_scfGetVersion
+iSndSysSoftwareDriver_scfGetName = _isndsys.iSndSysSoftwareDriver_scfGetName
 
 
 

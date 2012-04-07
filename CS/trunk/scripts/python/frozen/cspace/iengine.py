@@ -141,11 +141,13 @@ class iLight(core.iBase):
     def GetLocalBBox(*args): return _iengine.iLight_GetLocalBBox(*args)
     def GetWorldBBox(*args): return _iengine.iLight_GetWorldBBox(*args)
     scfGetVersion = staticmethod(_iengine.iLight_scfGetVersion)
+    scfGetName = staticmethod(_iengine.iLight_scfGetName)
     __swig_destroy__ = _iengine.delete_iLight
     __del__ = lambda self : None;
 iLight_swigregister = _iengine.iLight_swigregister
 iLight_swigregister(iLight)
 iLight_scfGetVersion = _iengine.iLight_scfGetVersion
+iLight_scfGetName = _iengine.iLight_scfGetName
 
 class iLightList(core.iBase):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
@@ -169,11 +171,13 @@ class iLightList(core.iBase):
     def __getitem__(*args): return _iengine.iLightList___getitem__(*args)
     def __contains__(*args): return _iengine.iLightList___contains__(*args)
     scfGetVersion = staticmethod(_iengine.iLightList_scfGetVersion)
+    scfGetName = staticmethod(_iengine.iLightList_scfGetName)
     __swig_destroy__ = _iengine.delete_iLightList
     __del__ = lambda self : None;
 iLightList_swigregister = _iengine.iLightList_swigregister
 iLightList_swigregister(iLightList)
 iLightList_scfGetVersion = _iengine.iLightList_scfGetVersion
+iLightList_scfGetName = _iengine.iLightList_scfGetName
 
 class iLightIterator(core.iBase):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
@@ -187,11 +191,13 @@ class iLightIterator(core.iBase):
         while self.HasNext():
             yield self.Next() 
     scfGetVersion = staticmethod(_iengine.iLightIterator_scfGetVersion)
+    scfGetName = staticmethod(_iengine.iLightIterator_scfGetName)
     __swig_destroy__ = _iengine.delete_iLightIterator
     __del__ = lambda self : None;
 iLightIterator_swigregister = _iengine.iLightIterator_swigregister
 iLightIterator_swigregister(iLightIterator)
 iLightIterator_scfGetVersion = _iengine.iLightIterator_scfGetVersion
+iLightIterator_scfGetName = _iengine.iLightIterator_scfGetName
 
 CS_FOG_MODE_NONE = _iengine.CS_FOG_MODE_NONE
 CS_FOG_MODE_LINEAR_CRYSTALSPACE = _iengine.CS_FOG_MODE_LINEAR_CRYSTALSPACE
@@ -335,11 +341,13 @@ class iSector(core.iBase):
     def CallSectorCallbacks(*args): return _iengine.iSector_CallSectorCallbacks(*args)
     def GetVisibleRenderMeshes(*args): return _iengine.iSector_GetVisibleRenderMeshes(*args)
     scfGetVersion = staticmethod(_iengine.iSector_scfGetVersion)
+    scfGetName = staticmethod(_iengine.iSector_scfGetName)
     __swig_destroy__ = _iengine.delete_iSector
     __del__ = lambda self : None;
 iSector_swigregister = _iengine.iSector_swigregister
 iSector_swigregister(iSector)
 iSector_scfGetVersion = _iengine.iSector_scfGetVersion
+iSector_scfGetName = _iengine.iSector_scfGetName
 
 class iSectorList(core.iBase):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
@@ -362,11 +370,13 @@ class iSectorList(core.iBase):
     def __getitem__(*args): return _iengine.iSectorList___getitem__(*args)
     def __contains__(*args): return _iengine.iSectorList___contains__(*args)
     scfGetVersion = staticmethod(_iengine.iSectorList_scfGetVersion)
+    scfGetName = staticmethod(_iengine.iSectorList_scfGetName)
     __swig_destroy__ = _iengine.delete_iSectorList
     __del__ = lambda self : None;
 iSectorList_swigregister = _iengine.iSectorList_swigregister
 iSectorList_swigregister(iSectorList)
 iSectorList_scfGetVersion = _iengine.iSectorList_scfGetVersion
+iSectorList_scfGetName = _iengine.iSectorList_scfGetName
 
 class iSectorIterator(core.iBase):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
@@ -380,11 +390,13 @@ class iSectorIterator(core.iBase):
         while self.HasNext():
             yield self.Next() 
     scfGetVersion = staticmethod(_iengine.iSectorIterator_scfGetVersion)
+    scfGetName = staticmethod(_iengine.iSectorIterator_scfGetName)
     __swig_destroy__ = _iengine.delete_iSectorIterator
     __del__ = lambda self : None;
 iSectorIterator_swigregister = _iengine.iSectorIterator_swigregister
 iSectorIterator_swigregister(iSectorIterator)
 iSectorIterator_scfGetVersion = _iengine.iSectorIterator_scfGetVersion
+iSectorIterator_scfGetName = _iengine.iSectorIterator_scfGetName
 
 CS_RENDPRI_SORT_NONE = _iengine.CS_RENDPRI_SORT_NONE
 CS_RENDPRI_SORT_BACK2FRONT = _iengine.CS_RENDPRI_SORT_BACK2FRONT
@@ -533,11 +545,13 @@ class iEngine(core.iBase):
     def GetDefaultNearClipDistance(*args): return _iengine.iEngine_GetDefaultNearClipDistance(*args)
     def SetDefaultNearClipDistance(*args): return _iengine.iEngine_SetDefaultNearClipDistance(*args)
     scfGetVersion = staticmethod(_iengine.iEngine_scfGetVersion)
+    scfGetName = staticmethod(_iengine.iEngine_scfGetName)
     __swig_destroy__ = _iengine.delete_iEngine
     __del__ = lambda self : None;
 iEngine_swigregister = _iengine.iEngine_swigregister
 iEngine_swigregister(iEngine)
 iEngine_scfGetVersion = _iengine.iEngine_scfGetVersion
+iEngine_scfGetName = _iengine.iEngine_scfGetName
 
 class iLODControl(core.iBase):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
@@ -616,11 +630,13 @@ class iCamera(core.iBase):
     def SetViewportSize(*args): return _iengine.iCamera_SetViewportSize(*args)
     def GetInvProjectionMatrix(*args): return _iengine.iCamera_GetInvProjectionMatrix(*args)
     scfGetVersion = staticmethod(_iengine.iCamera_scfGetVersion)
+    scfGetName = staticmethod(_iengine.iCamera_scfGetName)
     __swig_destroy__ = _iengine.delete_iCamera
     __del__ = lambda self : None;
 iCamera_swigregister = _iengine.iCamera_swigregister
 iCamera_swigregister(iCamera)
 iCamera_scfGetVersion = _iengine.iCamera_scfGetVersion
+iCamera_scfGetName = _iengine.iCamera_scfGetName
 
 class iPerspectiveCamera(core.iBase):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
@@ -674,11 +690,13 @@ class iCameraPosition(core.iBase):
     def GetFarPlane(*args): return _iengine.iCameraPosition_GetFarPlane(*args)
     def Save(*args): return _iengine.iCameraPosition_Save(*args)
     scfGetVersion = staticmethod(_iengine.iCameraPosition_scfGetVersion)
+    scfGetName = staticmethod(_iengine.iCameraPosition_scfGetName)
     __swig_destroy__ = _iengine.delete_iCameraPosition
     __del__ = lambda self : None;
 iCameraPosition_swigregister = _iengine.iCameraPosition_swigregister
 iCameraPosition_swigregister(iCameraPosition)
 iCameraPosition_scfGetVersion = _iengine.iCameraPosition_scfGetVersion
+iCameraPosition_scfGetName = _iengine.iCameraPosition_scfGetName
 
 class iCameraPositionList(core.iBase):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
@@ -741,11 +759,13 @@ class iTextureWrapper(core.iBase):
     def SetTextureClass(*args): return _iengine.iTextureWrapper_SetTextureClass(*args)
     def GetTextureClass(*args): return _iengine.iTextureWrapper_GetTextureClass(*args)
     scfGetVersion = staticmethod(_iengine.iTextureWrapper_scfGetVersion)
+    scfGetName = staticmethod(_iengine.iTextureWrapper_scfGetName)
     __swig_destroy__ = _iengine.delete_iTextureWrapper
     __del__ = lambda self : None;
 iTextureWrapper_swigregister = _iengine.iTextureWrapper_swigregister
 iTextureWrapper_swigregister(iTextureWrapper)
 iTextureWrapper_scfGetVersion = _iengine.iTextureWrapper_scfGetVersion
+iTextureWrapper_scfGetName = _iengine.iTextureWrapper_scfGetName
 
 class iTextureList(core.iBase):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
@@ -770,11 +790,13 @@ class iTextureList(core.iBase):
     def __getitem__(*args): return _iengine.iTextureList___getitem__(*args)
     def __contains__(*args): return _iengine.iTextureList___contains__(*args)
     scfGetVersion = staticmethod(_iengine.iTextureList_scfGetVersion)
+    scfGetName = staticmethod(_iengine.iTextureList_scfGetName)
     __swig_destroy__ = _iengine.delete_iTextureList
     __del__ = lambda self : None;
 iTextureList_swigregister = _iengine.iTextureList_swigregister
 iTextureList_swigregister(iTextureList)
 iTextureList_scfGetVersion = _iengine.iTextureList_scfGetVersion
+iTextureList_scfGetName = _iengine.iTextureList_scfGetName
 
 class iMaterialWrapper(core.iBase):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
@@ -786,11 +808,13 @@ class iMaterialWrapper(core.iBase):
     def Visit(*args): return _iengine.iMaterialWrapper_Visit(*args)
     def IsVisitRequired(*args): return _iengine.iMaterialWrapper_IsVisitRequired(*args)
     scfGetVersion = staticmethod(_iengine.iMaterialWrapper_scfGetVersion)
+    scfGetName = staticmethod(_iengine.iMaterialWrapper_scfGetName)
     __swig_destroy__ = _iengine.delete_iMaterialWrapper
     __del__ = lambda self : None;
 iMaterialWrapper_swigregister = _iengine.iMaterialWrapper_swigregister
 iMaterialWrapper_swigregister(iMaterialWrapper)
 iMaterialWrapper_scfGetVersion = _iengine.iMaterialWrapper_scfGetVersion
+iMaterialWrapper_scfGetName = _iengine.iMaterialWrapper_scfGetName
 
 class iMaterialEngine(core.iBase):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
@@ -800,11 +824,13 @@ class iMaterialEngine(core.iBase):
     def Visit(*args): return _iengine.iMaterialEngine_Visit(*args)
     def IsVisitRequired(*args): return _iengine.iMaterialEngine_IsVisitRequired(*args)
     scfGetVersion = staticmethod(_iengine.iMaterialEngine_scfGetVersion)
+    scfGetName = staticmethod(_iengine.iMaterialEngine_scfGetName)
     __swig_destroy__ = _iengine.delete_iMaterialEngine
     __del__ = lambda self : None;
 iMaterialEngine_swigregister = _iengine.iMaterialEngine_swigregister
 iMaterialEngine_swigregister(iMaterialEngine)
 iMaterialEngine_scfGetVersion = _iengine.iMaterialEngine_scfGetVersion
+iMaterialEngine_scfGetName = _iengine.iMaterialEngine_scfGetName
 
 class iMaterialList(core.iBase):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
@@ -854,11 +880,13 @@ class iSceneNodeArray(iSceneNodeArrayReadOnly):
     def __init__(self, *args, **kwargs): raise AttributeError, "No constructor defined"
     __repr__ = _swig_repr
     scfGetVersion = staticmethod(_iengine.iSceneNodeArray_scfGetVersion)
+    scfGetName = staticmethod(_iengine.iSceneNodeArray_scfGetName)
     __swig_destroy__ = _iengine.delete_iSceneNodeArray
     __del__ = lambda self : None;
 iSceneNodeArray_swigregister = _iengine.iSceneNodeArray_swigregister
 iSceneNodeArray_swigregister(iSceneNodeArray)
 iSceneNodeArray_scfGetVersion = _iengine.iSceneNodeArray_scfGetVersion
+iSceneNodeArray_scfGetName = _iengine.iSceneNodeArray_scfGetName
 
 class iSceneNode(core.iBase):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
@@ -873,11 +901,13 @@ class iSceneNode(core.iBase):
     def GetChildren(*args): return _iengine.iSceneNode_GetChildren(*args)
     def GetChildrenArray(*args): return _iengine.iSceneNode_GetChildrenArray(*args)
     scfGetVersion = staticmethod(_iengine.iSceneNode_scfGetVersion)
+    scfGetName = staticmethod(_iengine.iSceneNode_scfGetName)
     __swig_destroy__ = _iengine.delete_iSceneNode
     __del__ = lambda self : None;
 iSceneNode_swigregister = _iengine.iSceneNode_swigregister
 iSceneNode_swigregister(iSceneNode)
 iSceneNode_scfGetVersion = _iengine.iSceneNode_scfGetVersion
+iSceneNode_scfGetName = _iengine.iSceneNode_scfGetName
 
 CS_ENTITY_DETAIL = _iengine.CS_ENTITY_DETAIL
 CS_ENTITY_CAMERA = _iengine.CS_ENTITY_CAMERA
@@ -994,11 +1024,13 @@ class iMeshWrapper(core.iBase):
     def AddInstance(*args): return _iengine.iMeshWrapper_AddInstance(*args)
     def RemoveInstance(*args): return _iengine.iMeshWrapper_RemoveInstance(*args)
     scfGetVersion = staticmethod(_iengine.iMeshWrapper_scfGetVersion)
+    scfGetName = staticmethod(_iengine.iMeshWrapper_scfGetName)
     __swig_destroy__ = _iengine.delete_iMeshWrapper
     __del__ = lambda self : None;
 iMeshWrapper_swigregister = _iengine.iMeshWrapper_swigregister
 iMeshWrapper_swigregister(iMeshWrapper)
 iMeshWrapper_scfGetVersion = _iengine.iMeshWrapper_scfGetVersion
+iMeshWrapper_scfGetName = _iengine.iMeshWrapper_scfGetName
 
 class iMeshFactoryWrapper(core.iBase):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
@@ -1037,11 +1069,13 @@ class iMeshFactoryWrapper(core.iBase):
     def GetExtraRenderMeshCount(*args): return _iengine.iMeshFactoryWrapper_GetExtraRenderMeshCount(*args)
     def RemoveExtraRenderMesh(*args): return _iengine.iMeshFactoryWrapper_RemoveExtraRenderMesh(*args)
     scfGetVersion = staticmethod(_iengine.iMeshFactoryWrapper_scfGetVersion)
+    scfGetName = staticmethod(_iengine.iMeshFactoryWrapper_scfGetName)
     __swig_destroy__ = _iengine.delete_iMeshFactoryWrapper
     __del__ = lambda self : None;
 iMeshFactoryWrapper_swigregister = _iengine.iMeshFactoryWrapper_swigregister
 iMeshFactoryWrapper_swigregister(iMeshFactoryWrapper)
 iMeshFactoryWrapper_scfGetVersion = _iengine.iMeshFactoryWrapper_scfGetVersion
+iMeshFactoryWrapper_scfGetName = _iengine.iMeshFactoryWrapper_scfGetName
 
 class iMeshList(core.iBase):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
@@ -1116,11 +1150,13 @@ class iMeshWrapperIterator(core.iBase):
         while self.HasNext():
             yield self.Next() 
     scfGetVersion = staticmethod(_iengine.iMeshWrapperIterator_scfGetVersion)
+    scfGetName = staticmethod(_iengine.iMeshWrapperIterator_scfGetName)
     __swig_destroy__ = _iengine.delete_iMeshWrapperIterator
     __del__ = lambda self : None;
 iMeshWrapperIterator_swigregister = _iengine.iMeshWrapperIterator_swigregister
 iMeshWrapperIterator_swigregister(iMeshWrapperIterator)
 iMeshWrapperIterator_scfGetVersion = _iengine.iMeshWrapperIterator_scfGetVersion
+iMeshWrapperIterator_scfGetName = _iengine.iMeshWrapperIterator_scfGetName
 
 class iMovableListener(core.iBase):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
@@ -1129,11 +1165,13 @@ class iMovableListener(core.iBase):
     def MovableChanged(*args): return _iengine.iMovableListener_MovableChanged(*args)
     def MovableDestroyed(*args): return _iengine.iMovableListener_MovableDestroyed(*args)
     scfGetVersion = staticmethod(_iengine.iMovableListener_scfGetVersion)
+    scfGetName = staticmethod(_iengine.iMovableListener_scfGetName)
     __swig_destroy__ = _iengine.delete_iMovableListener
     __del__ = lambda self : None;
 iMovableListener_swigregister = _iengine.iMovableListener_swigregister
 iMovableListener_swigregister(iMovableListener)
 iMovableListener_scfGetVersion = _iengine.iMovableListener_scfGetVersion
+iMovableListener_scfGetName = _iengine.iMovableListener_scfGetName
 
 class iMovable(core.iBase):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
@@ -1162,11 +1200,13 @@ class iMovable(core.iBase):
     def SetFullTransform(*args): return _iengine.iMovable_SetFullTransform(*args)
     def SetFullPosition(*args): return _iengine.iMovable_SetFullPosition(*args)
     scfGetVersion = staticmethod(_iengine.iMovable_scfGetVersion)
+    scfGetName = staticmethod(_iengine.iMovable_scfGetName)
     __swig_destroy__ = _iengine.delete_iMovable
     __del__ = lambda self : None;
 iMovable_swigregister = _iengine.iMovable_swigregister
 iMovable_swigregister(iMovable)
 iMovable_scfGetVersion = _iengine.iMovable_scfGetVersion
+iMovable_scfGetName = _iengine.iMovable_scfGetName
 
 class iVisibilityObjectIterator(core.iBase):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
@@ -1211,11 +1251,13 @@ class iVisibilityCuller(core.iBase):
     def BeginPrecacheCulling(*args): return _iengine.iVisibilityCuller_BeginPrecacheCulling(*args)
     def EndPrecacheCulling(*args): return _iengine.iVisibilityCuller_EndPrecacheCulling(*args)
     scfGetVersion = staticmethod(_iengine.iVisibilityCuller_scfGetVersion)
+    scfGetName = staticmethod(_iengine.iVisibilityCuller_scfGetName)
     __swig_destroy__ = _iengine.delete_iVisibilityCuller
     __del__ = lambda self : None;
 iVisibilityCuller_swigregister = _iengine.iVisibilityCuller_swigregister
 iVisibilityCuller_swigregister(iVisibilityCuller)
 iVisibilityCuller_scfGetVersion = _iengine.iVisibilityCuller_scfGetVersion
+iVisibilityCuller_scfGetName = _iengine.iVisibilityCuller_scfGetName
 
 CS_CULLER_HINT_GOODOCCLUDER = _iengine.CS_CULLER_HINT_GOODOCCLUDER
 CS_CULLER_HINT_BADOCCLUDER = _iengine.CS_CULLER_HINT_BADOCCLUDER
@@ -1297,11 +1339,13 @@ class iPortal(core.iBase):
     def GetMaterial(*args): return _iengine.iPortal_GetMaterial(*args)
     def SetMaterial(*args): return _iengine.iPortal_SetMaterial(*args)
     scfGetVersion = staticmethod(_iengine.iPortal_scfGetVersion)
+    scfGetName = staticmethod(_iengine.iPortal_scfGetName)
     __swig_destroy__ = _iengine.delete_iPortal
     __del__ = lambda self : None;
 iPortal_swigregister = _iengine.iPortal_swigregister
 iPortal_swigregister(iPortal)
 iPortal_scfGetVersion = _iengine.iPortal_scfGetVersion
+iPortal_scfGetName = _iengine.iPortal_scfGetName
 
 class iPortalContainer(core.iBase):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
@@ -1315,11 +1359,13 @@ class iPortalContainer(core.iBase):
     def ComputeScreenPolygons(*args): return _iengine.iPortalContainer_ComputeScreenPolygons(*args)
     def GetTotalVertexCount(*args): return _iengine.iPortalContainer_GetTotalVertexCount(*args)
     scfGetVersion = staticmethod(_iengine.iPortalContainer_scfGetVersion)
+    scfGetName = staticmethod(_iengine.iPortalContainer_scfGetName)
     __swig_destroy__ = _iengine.delete_iPortalContainer
     __del__ = lambda self : None;
 iPortalContainer_swigregister = _iengine.iPortalContainer_swigregister
 iPortalContainer_swigregister(iPortalContainer)
 iPortalContainer_scfGetVersion = _iengine.iPortalContainer_scfGetVersion
+iPortalContainer_scfGetName = _iengine.iPortalContainer_scfGetName
 
 class iRenderStepContainer(core.iBase):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
@@ -1342,11 +1388,13 @@ class iRenderLoop(iRenderStepContainer):
     __repr__ = _swig_repr
     def Draw(*args): return _iengine.iRenderLoop_Draw(*args)
     scfGetVersion = staticmethod(_iengine.iRenderLoop_scfGetVersion)
+    scfGetName = staticmethod(_iengine.iRenderLoop_scfGetName)
     __swig_destroy__ = _iengine.delete_iRenderLoop
     __del__ = lambda self : None;
 iRenderLoop_swigregister = _iengine.iRenderLoop_swigregister
 iRenderLoop_swigregister(iRenderLoop)
 iRenderLoop_scfGetVersion = _iengine.iRenderLoop_scfGetVersion
+iRenderLoop_scfGetName = _iengine.iRenderLoop_scfGetName
 
 class iRenderLoopManager(core.iBase):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
@@ -1360,11 +1408,13 @@ class iRenderLoopManager(core.iBase):
     def Load(*args): return _iengine.iRenderLoopManager_Load(*args)
     def UnregisterAll(*args): return _iengine.iRenderLoopManager_UnregisterAll(*args)
     scfGetVersion = staticmethod(_iengine.iRenderLoopManager_scfGetVersion)
+    scfGetName = staticmethod(_iengine.iRenderLoopManager_scfGetName)
     __swig_destroy__ = _iengine.delete_iRenderLoopManager
     __del__ = lambda self : None;
 iRenderLoopManager_swigregister = _iengine.iRenderLoopManager_swigregister
 iRenderLoopManager_swigregister(iRenderLoopManager)
 iRenderLoopManager_scfGetVersion = _iengine.iRenderLoopManager_scfGetVersion
+iRenderLoopManager_scfGetName = _iengine.iRenderLoopManager_scfGetName
 
 class iRenderManager(core.iBase):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
@@ -1373,11 +1423,13 @@ class iRenderManager(core.iBase):
     def RenderView(*args): return _iengine.iRenderManager_RenderView(*args)
     def PrecacheView(*args): return _iengine.iRenderManager_PrecacheView(*args)
     scfGetVersion = staticmethod(_iengine.iRenderManager_scfGetVersion)
+    scfGetName = staticmethod(_iengine.iRenderManager_scfGetName)
     __swig_destroy__ = _iengine.delete_iRenderManager
     __del__ = lambda self : None;
 iRenderManager_swigregister = _iengine.iRenderManager_swigregister
 iRenderManager_swigregister(iRenderManager)
 iRenderManager_scfGetVersion = _iengine.iRenderManager_scfGetVersion
+iRenderManager_scfGetName = _iengine.iRenderManager_scfGetName
 
 class iRenderManagerTargets(core.iBase):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
@@ -1390,11 +1442,13 @@ class iRenderManagerTargets(core.iBase):
     def UnregisterRenderTarget(*args): return _iengine.iRenderManagerTargets_UnregisterRenderTarget(*args)
     def MarkAsUsed(*args): return _iengine.iRenderManagerTargets_MarkAsUsed(*args)
     scfGetVersion = staticmethod(_iengine.iRenderManagerTargets_scfGetVersion)
+    scfGetName = staticmethod(_iengine.iRenderManagerTargets_scfGetName)
     __swig_destroy__ = _iengine.delete_iRenderManagerTargets
     __del__ = lambda self : None;
 iRenderManagerTargets_swigregister = _iengine.iRenderManagerTargets_swigregister
 iRenderManagerTargets_swigregister(iRenderManagerTargets)
 iRenderManagerTargets_scfGetVersion = _iengine.iRenderManagerTargets_scfGetVersion
+iRenderManagerTargets_scfGetName = _iengine.iRenderManagerTargets_scfGetName
 
 class iRenderManagerPostEffects(core.iBase):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
@@ -1404,11 +1458,13 @@ class iRenderManagerPostEffects(core.iBase):
     def AddLayersFromDocument(*args): return _iengine.iRenderManagerPostEffects_AddLayersFromDocument(*args)
     def AddLayersFromFile(*args): return _iengine.iRenderManagerPostEffects_AddLayersFromFile(*args)
     scfGetVersion = staticmethod(_iengine.iRenderManagerPostEffects_scfGetVersion)
+    scfGetName = staticmethod(_iengine.iRenderManagerPostEffects_scfGetName)
     __swig_destroy__ = _iengine.delete_iRenderManagerPostEffects
     __del__ = lambda self : None;
 iRenderManagerPostEffects_swigregister = _iengine.iRenderManagerPostEffects_swigregister
 iRenderManagerPostEffects_swigregister(iRenderManagerPostEffects)
 iRenderManagerPostEffects_scfGetVersion = _iengine.iRenderManagerPostEffects_scfGetVersion
+iRenderManagerPostEffects_scfGetName = _iengine.iRenderManagerPostEffects_scfGetName
 
 class iRenderManagerVisCull(core.iBase):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
@@ -1453,22 +1509,26 @@ class iCollection(core.iBase):
     def FindShader(*args): return _iengine.iCollection_FindShader(*args)
     def FindCameraPosition(*args): return _iengine.iCollection_FindCameraPosition(*args)
     scfGetVersion = staticmethod(_iengine.iCollection_scfGetVersion)
+    scfGetName = staticmethod(_iengine.iCollection_scfGetName)
     __swig_destroy__ = _iengine.delete_iCollection
     __del__ = lambda self : None;
 iCollection_swigregister = _iengine.iCollection_swigregister
 iCollection_swigregister(iCollection)
 iCollection_scfGetVersion = _iengine.iCollection_scfGetVersion
+iCollection_scfGetName = _iengine.iCollection_scfGetName
 
 class iCollectionArray(object):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
     def __init__(self, *args, **kwargs): raise AttributeError, "No constructor defined"
     __repr__ = _swig_repr
     scfGetVersion = staticmethod(_iengine.iCollectionArray_scfGetVersion)
+    scfGetName = staticmethod(_iengine.iCollectionArray_scfGetName)
     __swig_destroy__ = _iengine.delete_iCollectionArray
     __del__ = lambda self : None;
 iCollectionArray_swigregister = _iengine.iCollectionArray_swigregister
 iCollectionArray_swigregister(iCollectionArray)
 iCollectionArray_scfGetVersion = _iengine.iCollectionArray_scfGetVersion
+iCollectionArray_scfGetName = _iengine.iCollectionArray_scfGetName
 
 def CS_REQUEST_ENGINE ():
    return core.CS_REQUEST_PLUGIN("crystalspace.engine.3d", iEngine)

@@ -81,21 +81,15 @@ Crystal Space supports progressive LODs for genmeshes.
 <p>The steps to create a genmesh with progressive LOD support in Crystal Space are
 described below.
 </p>
-<ul class="toc">
+<ul>
 <li>
-
-Create a mesh in your favorite modeling tool and export it to Crystal Space's
-xml format.
-
+Create a mesh in your favorite modeling tool and export it to the Crystal Space's
+XML format.
 </li><li>
-
-Use the <em>lod</em> command line tool to apply LOD processing to this mesh. The
+Use the <tt>&lsquo;cslodgen&rsquo;</tt> command line tool to apply LOD processing to this mesh. The
 result is typically saved into a new file. See below for details.
-
 </li><li>
-
-Test the generated mesh in <em>lodview</em>.
-
+Test the generated mesh in <tt>&lsquo;cslodview&rsquo;</tt>.
 </li><li>
 
 Add C++ commands to your application to either enable automatic LODs or choose a
@@ -106,11 +100,11 @@ information is loaded with your meshes.
 </li></ul>
 
 <a name="1"></a>
-<h4 class="subsubheading"> The <em>lod</em> tool </h4>
+<h4 class="subsubheading"> The <tt>&lsquo;cslodgen&rsquo;</tt> tool </h4>
 
-<p>The <em>lod</em> tool processes a mesh and generates progressive LODs for it. The
-results can be saved to a new file, which will contain the original mesh and all
-low LOD representations of it.
+<p>The <tt>&lsquo;cslodgen&rsquo;</tt> tool processes a mesh and generates progressive LODs for it. The
+results can be saved to a new file, which will contain the original mesh and allow
+LOD representations of it.
 </p>
 <p>The tool works by selecting the best collapse to perform at each collapse step.
 At the end, it stores information on the mesh that defines the order of
@@ -118,14 +112,14 @@ collapses. Selecting the best collapse is done by performing many collapses on a
 copy of the original mesh and using a heuristic to test how much different the
 collapsed mesh is from the original mesh.
 </p>
-<p>The <em>lod</em> tool source is in <tt>&lsquo;apps/tools/lod&rsquo;</tt>. You can test it by using
+<p>The <tt>&lsquo;cslodgen&rsquo;</tt> tool source is in <tt>&lsquo;apps/tools/lod&rsquo;</tt>. You can test it by using
 sample data in <tt>&lsquo;/data/lodtest&rsquo;</tt> (mounted in VFS in <tt>&lsquo;/lev/lodtest&rsquo;</tt>).
 </p>
-<p>This is a typical usage example of the <em>lod</em> tool:
+<p>This is a typical usage example of the <tt>&lsquo;cslodgen&rsquo;</tt> tool:
 </p>
 <table><tr><td>&nbsp;</td><td><pre class="example">lod -i=/lev/lodtest/lodbarrel -mindist=5 -maxdist=50
 </pre></td></tr></table>
-<p>These are the command line options for the <em>lod</em> tool:
+<p>These are the command line options for the <tt>&lsquo;cslodgen&rsquo;</tt> tool:
 </p>
 <table><tr><td>&nbsp;</td><td><pre class="example">lod -i=&lt;input_file&gt; -o=&lt;output_file&gt; -mindist=d -maxdist=d [-em=&lt;fast|precise&gt;]
     [-v] [-force]
@@ -140,15 +134,15 @@ sample data in <tt>&lsquo;/data/lodtest&rsquo;</tt> (mounted in VFS in <tt>&lsqu
           Mindist and maxdist *need* to be either in cmdline or input file.
 
 </pre></td></tr></table>
-<ul class="toc">
+<ul>
 <li>
 
-<b>&lt;input_file&gt;</b>: It can be either a Crystal Space mesh or library file, or a
+<b>-i=&lt;input_file&gt;</b>: It can be either a Crystal Space mesh or library file, or a
 zip file containing a world file.
 
 </li><li>
 
-<b>&lt;output_file&gt;</b>: The destination file. If not provided, the tool will append
+<b>-o=&lt;output_file&gt;</b>: The destination file. If not provided, the tool will append
 _lod to the name of the input file.
 
 </li><li>
@@ -187,29 +181,33 @@ existing file-specified distances.
 </li></ul>
 
 <a name="2"></a>
-<h4 class="subsubheading"> The <em>lodview</em> tool </h4>
+<h4 class="subsubheading"> The <tt>&lsquo;cslodview&rsquo;</tt> tool </h4>
 
-<p>The <em>lodview</em> tool allows visualizing and changing LOD levels in order to
+<p>The <tt>&lsquo;cslodview&rsquo;</tt> tool allows visualizing and changing LOD levels in order to
 test the results. Here are the command line parameters:
 </p>
-<table><tr><td>&nbsp;</td><td><pre class="example">lodview &lt;filename&gt; [-m=&lt;num&gt;] -adap
+<table><tr><td>&nbsp;</td><td><pre class="example">cslodview &lt;filename&gt; [-m=&lt;num&gt;] -adap
 
-  -m=&lt;num&gt;   multiple sprites, large room (will show num^2 sprites)
-  -adap      adaptive LODs (best if used with -m)
+-m=&lt;num&gt;   multiple sprites, large room (will show num^2 sprites)
+-adap      adaptive LODs (best if used with -m)
 </pre></td></tr></table>
 <p>If adaptive LODs are used, the system will try to keep a frame rate close to 30
 fps by biasing the LOD levels of the rendered models.
 </p>
 <p>When viewing the model, use the following keys:
 </p>
-<table><tr><td>&nbsp;</td><td><pre class="example">  'k' / 'l':  increase/reduce LOD resolution, to manually view LOD levels.
-  'a':  toggle auto LODs based on distance.
-</pre></td></tr></table>
+<ul>
+<li>
+'k' / 'l':  increase/reduce LOD resolution, to manually view LOD levels.
+</li><li>
+'a':  toggle auto LODs based on distance.
+</li></ul>
+
 <a name="3"></a>
 <h4 class="subsubheading"> The XML LOD tags </h4>
 
 <p>The LOD tags reside inside the &lt;params&gt; section of a genmesh factory. The
-example below shows a typical output file from the <em>lod</em> tool.
+example below shows a typical output file from the <tt>&lsquo;cslodgen&rsquo;</tt> tool.
 </p>
 <table><tr><td>&nbsp;</td><td><pre class="example">&lt;meshfact name=&quot;...&quot;&gt;
   &lt;plugin&gt;crystalspace.mesh.loader.factory.genmesh&lt;/plugin&gt;
@@ -246,7 +244,7 @@ to a distance in which the model is tiny on screen. If you look at the
 lowest-resolution LODs of your model up close, the results will look bad &mdash;
 remember, it was designed to be seen from very far away.
 </p>
-<p>The <em>lod</em> tool works on each submesh of the model separately. It can
+<p>The <tt>&lsquo;cslodgen&rsquo;</tt> tool works on each submesh of the model separately. It can
 potentially change the bounded volume of your submesh. This means that, if you
 have a model that has two submeshes touching each other, they will probably not
 be touching each other anymore at the lowest resolutions. If this is your case
@@ -259,7 +257,7 @@ them into a single submesh.
 <p>A CS application talks with the progressive LOD system through the following
 interfaces:
 </p>
-<ul class="toc">
+<ul>
 <li>
 iEngine
 </li><li>
@@ -274,7 +272,7 @@ iGeneralFactoryState
 
 <p>Please refer to the API documentation of these interfaces for details.
 </p>
-<p>Examining the <em>lodview</em> source code in <tt>&lsquo;apps/tools/lod/LodView.cpp|h&rsquo;</tt>
+<p>Examining the <tt>&lsquo;cslodview&rsquo;</tt> source code in <tt>&lsquo;apps/tools/lod/lodview.cpp|h&rsquo;</tt>
 is a good way to learn the progressive LOD API.
 </p>
 

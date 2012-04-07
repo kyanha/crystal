@@ -842,6 +842,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *GetInterfaceMetadata = *cspacec::iBase_GetInterfaceMetadata;
 *QueryInterface = *cspacec::iBase_QueryInterface;
 *scfGetVersion = *cspacec::iBase_scfGetVersion;
+*scfGetName = *cspacec::iBase_scfGetName;
 sub DISOWN {
     my $self = shift;
     my $ptr = tied(%$self);
@@ -880,6 +881,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *ScanPluginsPath = *cspacec::iSCF_ScanPluginsPath;
 *RegisterPlugin = *cspacec::iSCF_RegisterPlugin;
 *scfGetVersion = *cspacec::iSCF_scfGetVersion;
+*scfGetName = *cspacec::iSCF_scfGetName;
 sub DESTROY {
     return unless $_[0]->isa('HASH');
     my $self = tied(%{$_[0]});
@@ -918,6 +920,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *QueryClassID = *cspacec::iFactory_QueryClassID;
 *QueryModuleName = *cspacec::iFactory_QueryModuleName;
 *scfGetVersion = *cspacec::iFactory_scfGetVersion;
+*scfGetName = *cspacec::iFactory_scfGetName;
 sub DESTROY {
     return unless $_[0]->isa('HASH');
     my $self = tied(%{$_[0]});
@@ -1039,6 +1042,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *Dump = *cspacec::iDebugHelper_Dump;
 *DebugCommand = *cspacec::iDebugHelper_DebugCommand;
 *scfGetVersion = *cspacec::iDebugHelper_scfGetVersion;
+*scfGetName = *cspacec::iDebugHelper_scfGetName;
 sub DESTROY {
     return unless $_[0]->isa('HASH');
     my $self = tied(%{$_[0]});
@@ -1084,6 +1088,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *GetOptionName = *cspacec::iCommandLineParser_GetOptionName;
 *GetOption = *cspacec::iCommandLineParser_GetOption;
 *scfGetVersion = *cspacec::iCommandLineParser_scfGetVersion;
+*scfGetName = *cspacec::iCommandLineParser_scfGetName;
 sub DESTROY {
     return unless $_[0]->isa('HASH');
     my $self = tied(%{$_[0]});
@@ -1369,6 +1374,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 %OWNER = ();
 %ITERATORS = ();
 *scfGetVersion = *cspacec::iStringSet_scfGetVersion;
+*scfGetName = *cspacec::iStringSet_scfGetName;
 sub DESTROY {
     return unless $_[0]->isa('HASH');
     my $self = tied(%{$_[0]});
@@ -1458,6 +1464,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *StartsWith = *cspacec::iString_StartsWith;
 *__ne__ = *cspacec::iString___ne__;
 *scfGetVersion = *cspacec::iString_scfGetVersion;
+*scfGetName = *cspacec::iString_scfGetName;
 sub DESTROY {
     return unless $_[0]->isa('HASH');
     my $self = tied(%{$_[0]});
@@ -1823,6 +1830,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *Report = *cspacec::iReporterListener_Report;
 *ReportWait = *cspacec::iReporterListener_ReportWait;
 *scfGetVersion = *cspacec::iReporterListener_scfGetVersion;
+*scfGetName = *cspacec::iReporterListener_scfGetName;
 sub DESTROY {
     return unless $_[0]->isa('HASH');
     my $self = tied(%{$_[0]});
@@ -1860,6 +1868,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *GetMessageId = *cspacec::iReporterIterator_GetMessageId;
 *GetMessageDescription = *cspacec::iReporterIterator_GetMessageDescription;
 *scfGetVersion = *cspacec::iReporterIterator_scfGetVersion;
+*scfGetName = *cspacec::iReporterIterator_scfGetName;
 sub DESTROY {
     return unless $_[0]->isa('HASH');
     my $self = tied(%{$_[0]});
@@ -1903,6 +1912,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *ReportBug = *cspacec::iReporter_ReportBug;
 *ReportDebug = *cspacec::iReporter_ReportDebug;
 *scfGetVersion = *cspacec::iReporter_scfGetVersion;
+*scfGetName = *cspacec::iReporter_scfGetName;
 sub DESTROY {
     return unless $_[0]->isa('HASH');
     my $self = tied(%{$_[0]});
@@ -1974,6 +1984,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 %ITERATORS = ();
 *Initialize = *cspacec::iComponent_Initialize;
 *scfGetVersion = *cspacec::iComponent_scfGetVersion;
+*scfGetName = *cspacec::iComponent_scfGetName;
 sub DESTROY {
     return unless $_[0]->isa('HASH');
     my $self = tied(%{$_[0]});
@@ -2016,6 +2027,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *ClearCache = *cspacec::iCacheManager_ClearCache;
 *Flush = *cspacec::iCacheManager_Flush;
 *scfGetVersion = *cspacec::iCacheManager_scfGetVersion;
+*scfGetName = *cspacec::iCacheManager_scfGetName;
 sub DESTROY {
     return unless $_[0]->isa('HASH');
     my $self = tied(%{$_[0]});
@@ -2108,6 +2120,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *GetAllData = *cspacec::iFile_GetAllData;
 *GetPartialView = *cspacec::iFile_GetPartialView;
 *scfGetVersion = *cspacec::iFile_scfGetVersion;
+*scfGetName = *cspacec::iFile_scfGetName;
 sub DESTROY {
     return unless $_[0]->isa('HASH');
     my $self = tied(%{$_[0]});
@@ -2165,6 +2178,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *GetMounts = *cspacec::iVFS_GetMounts;
 *GetRealMountPaths = *cspacec::iVFS_GetRealMountPaths;
 *scfGetVersion = *cspacec::iVFS_scfGetVersion;
+*scfGetName = *cspacec::iVFS_scfGetName;
 sub DESTROY {
     return unless $_[0]->isa('HASH');
     my $self = tied(%{$_[0]});
@@ -2244,6 +2258,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *RemoveNameChangeListener = *cspacec::iObject_RemoveNameChangeListener;
 *GetChild = *cspacec::iObject_GetChild;
 *scfGetVersion = *cspacec::iObject_scfGetVersion;
+*scfGetName = *cspacec::iObject_scfGetName;
 sub DESTROY {
     return unless $_[0]->isa('HASH');
     my $self = tied(%{$_[0]});
@@ -2281,6 +2296,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *HasNext = *cspacec::iObjectIterator_HasNext;
 *FindName = *cspacec::iObjectIterator_FindName;
 *scfGetVersion = *cspacec::iObjectIterator_scfGetVersion;
+*scfGetName = *cspacec::iObjectIterator_scfGetName;
 sub DESTROY {
     return unless $_[0]->isa('HASH');
     my $self = tied(%{$_[0]});
@@ -2317,6 +2333,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *Unregister = *cspacec::iObjectRegistry_Unregister;
 *Get = *cspacec::iObjectRegistry_Get;
 *scfGetVersion = *cspacec::iObjectRegistry_scfGetVersion;
+*scfGetName = *cspacec::iObjectRegistry_scfGetName;
 sub DESTROY {
     return unless $_[0]->isa('HASH');
     my $self = tied(%{$_[0]});
@@ -2392,6 +2409,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *GetElapsedSeconds = *cspacec::iVirtualClock_GetElapsedSeconds;
 *GetCurrentMicroTicks = *cspacec::iVirtualClock_GetCurrentMicroTicks;
 *scfGetVersion = *cspacec::iVirtualClock_scfGetVersion;
+*scfGetName = *cspacec::iVirtualClock_scfGetName;
 sub DESTROY {
     return unless $_[0]->isa('HASH');
     my $self = tied(%{$_[0]});
@@ -2427,6 +2445,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *Next = *cspacec::iEventAttributeIterator_Next;
 *Reset = *cspacec::iEventAttributeIterator_Reset;
 *scfGetVersion = *cspacec::iEventAttributeIterator_scfGetVersion;
+*scfGetName = *cspacec::iEventAttributeIterator_scfGetName;
 sub DESTROY {
     return unless $_[0]->isa('HASH');
     my $self = tied(%{$_[0]});
@@ -2686,6 +2705,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *swig_Command_get = *cspacec::iEvent_Command_get;
 *swig_Command_set = *cspacec::iEvent_Command_set;
 *scfGetVersion = *cspacec::iEvent_scfGetVersion;
+*scfGetName = *cspacec::iEvent_scfGetName;
 sub DESTROY {
     return unless $_[0]->isa('HASH');
     my $self = tied(%{$_[0]});
@@ -2721,6 +2741,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *QueryEventPriority = *cspacec::iEventPlug_QueryEventPriority;
 *EnableEvents = *cspacec::iEventPlug_EnableEvents;
 *scfGetVersion = *cspacec::iEventPlug_scfGetVersion;
+*scfGetName = *cspacec::iEventPlug_scfGetName;
 sub DESTROY {
     return unless $_[0]->isa('HASH');
     my $self = tied(%{$_[0]});
@@ -2760,6 +2781,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *Broadcast = *cspacec::iEventOutlet_Broadcast;
 *ImmediateBroadcast = *cspacec::iEventOutlet_ImmediateBroadcast;
 *scfGetVersion = *cspacec::iEventOutlet_scfGetVersion;
+*scfGetName = *cspacec::iEventOutlet_scfGetName;
 sub DESTROY {
     return unless $_[0]->isa('HASH');
     my $self = tied(%{$_[0]});
@@ -3103,6 +3125,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *IsEmpty = *cspacec::iEventQueue_IsEmpty;
 *RemoveAllListeners = *cspacec::iEventQueue_RemoveAllListeners;
 *scfGetVersion = *cspacec::iEventQueue_scfGetVersion;
+*scfGetName = *cspacec::iEventQueue_scfGetName;
 sub DESTROY {
     return unless $_[0]->isa('HASH');
     my $self = tied(%{$_[0]});
@@ -3140,6 +3163,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *IsImmediateChildOf = *cspacec::iEventNameRegistry_IsImmediateChildOf;
 *IsKindOf = *cspacec::iEventNameRegistry_IsKindOf;
 *scfGetVersion = *cspacec::iEventNameRegistry_scfGetVersion;
+*scfGetName = *cspacec::iEventNameRegistry_scfGetName;
 sub DESTROY {
     return unless $_[0]->isa('HASH');
     my $self = tied(%{$_[0]});
@@ -3216,6 +3240,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *InstancePrec = *cspacec::iEventHandler_InstancePrec;
 *InstanceSucc = *cspacec::iEventHandler_InstanceSucc;
 *scfGetVersion = *cspacec::iEventHandler_scfGetVersion;
+*scfGetName = *cspacec::iEventHandler_scfGetName;
 sub DESTROY {
     return unless $_[0]->isa('HASH');
     my $self = tied(%{$_[0]});
@@ -3250,6 +3275,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *HasNext = *cspacec::iPluginIterator_HasNext;
 *Next = *cspacec::iPluginIterator_Next;
 *scfGetVersion = *cspacec::iPluginIterator_scfGetVersion;
+*scfGetName = *cspacec::iPluginIterator_scfGetName;
 sub DESTROY {
     return unless $_[0]->isa('HASH');
     my $self = tied(%{$_[0]});
@@ -3304,6 +3330,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *QueryTagPluginInstance = *cspacec::iPluginManager_QueryTagPluginInstance;
 *LoadPlugin = *cspacec::iPluginManager_LoadPlugin;
 *scfGetVersion = *cspacec::iPluginManager_scfGetVersion;
+*scfGetName = *cspacec::iPluginManager_scfGetName;
 sub DESTROY {
     return unless $_[0]->isa('HASH');
     my $self = tied(%{$_[0]});
@@ -3514,6 +3541,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *GetInterpolatedForward = *cspacec::iPath_GetInterpolatedForward;
 *QueryObject = *cspacec::iPath_QueryObject;
 *scfGetVersion = *cspacec::iPath_scfGetVersion;
+*scfGetName = *cspacec::iPath_scfGetName;
 sub DESTROY {
     return unless $_[0]->isa('HASH');
     my $self = tied(%{$_[0]});
@@ -3580,6 +3608,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *GetVertexByIndex = *cspacec::iTriangleMesh_GetVertexByIndex;
 *GetTriangleByIndex = *cspacec::iTriangleMesh_GetTriangleByIndex;
 *scfGetVersion = *cspacec::iTriangleMesh_scfGetVersion;
+*scfGetName = *cspacec::iTriangleMesh_scfGetName;
 sub DESTROY {
     return unless $_[0]->isa('HASH');
     my $self = tied(%{$_[0]});
@@ -3652,6 +3681,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *GetModifiersState = *cspacec::iKeyboardDriver_GetModifiersState;
 *GetKeyState = *cspacec::iKeyboardDriver_GetKeyState;
 *scfGetVersion = *cspacec::iKeyboardDriver_scfGetVersion;
+*scfGetName = *cspacec::iKeyboardDriver_scfGetName;
 sub DESTROY {
     return unless $_[0]->isa('HASH');
     my $self = tied(%{$_[0]});
@@ -3692,6 +3722,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *DoButton = *cspacec::iMouseDriver_DoButton;
 *DoMotion = *cspacec::iMouseDriver_DoMotion;
 *scfGetVersion = *cspacec::iMouseDriver_scfGetVersion;
+*scfGetName = *cspacec::iMouseDriver_scfGetName;
 sub DESTROY {
     return unless $_[0]->isa('HASH');
     my $self = tied(%{$_[0]});
@@ -3729,6 +3760,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *DoButton = *cspacec::iJoystickDriver_DoButton;
 *DoMotion = *cspacec::iJoystickDriver_DoMotion;
 *scfGetVersion = *cspacec::iJoystickDriver_scfGetVersion;
+*scfGetName = *cspacec::iJoystickDriver_scfGetName;
 sub DESTROY {
     return unless $_[0]->isa('HASH');
     my $self = tied(%{$_[0]});
@@ -3785,6 +3817,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *GetEOFComment = *cspacec::iConfigFile_GetEOFComment;
 *SetEOFComment = *cspacec::iConfigFile_SetEOFComment;
 *scfGetVersion = *cspacec::iConfigFile_scfGetVersion;
+*scfGetName = *cspacec::iConfigFile_scfGetName;
 sub DESTROY {
     return unless $_[0]->isa('HASH');
     my $self = tied(%{$_[0]});
@@ -3829,6 +3862,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *GetTuple = *cspacec::iConfigIterator_GetTuple;
 *GetComment = *cspacec::iConfigIterator_GetComment;
 *scfGetVersion = *cspacec::iConfigIterator_scfGetVersion;
+*scfGetName = *cspacec::iConfigIterator_scfGetName;
 sub DESTROY {
     return unless $_[0]->isa('HASH');
     my $self = tied(%{$_[0]});
@@ -3883,6 +3917,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *GetDynamicDomainPriority = *cspacec::iConfigManager_GetDynamicDomainPriority;
 *FlushRemoved = *cspacec::iConfigManager_FlushRemoved;
 *scfGetVersion = *cspacec::iConfigManager_scfGetVersion;
+*scfGetName = *cspacec::iConfigManager_scfGetName;
 sub DESTROY {
     return unless $_[0]->isa('HASH');
     my $self = tied(%{$_[0]});
@@ -3929,6 +3964,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *IsEmpty = *cspacec::iStringArray_IsEmpty;
 *Put = *cspacec::iStringArray_Put;
 *scfGetVersion = *cspacec::iStringArray_scfGetVersion;
+*scfGetName = *cspacec::iStringArray_scfGetName;
 sub DESTROY {
     return unless $_[0]->isa('HASH');
     my $self = tied(%{$_[0]});
@@ -3963,6 +3999,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *HasNext = *cspacec::iDocumentAttributeIterator_HasNext;
 *Next = *cspacec::iDocumentAttributeIterator_Next;
 *scfGetVersion = *cspacec::iDocumentAttributeIterator_scfGetVersion;
+*scfGetName = *cspacec::iDocumentAttributeIterator_scfGetName;
 sub DESTROY {
     return unless $_[0]->isa('HASH');
     my $self = tied(%{$_[0]});
@@ -4004,6 +4041,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *SetValueAsInt = *cspacec::iDocumentAttribute_SetValueAsInt;
 *SetValueAsFloat = *cspacec::iDocumentAttribute_SetValueAsFloat;
 *scfGetVersion = *cspacec::iDocumentAttribute_scfGetVersion;
+*scfGetName = *cspacec::iDocumentAttribute_scfGetName;
 sub DESTROY {
     return unless $_[0]->isa('HASH');
     my $self = tied(%{$_[0]});
@@ -4040,6 +4078,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *GetNextPosition = *cspacec::iDocumentNodeIterator_GetNextPosition;
 *GetEndPosition = *cspacec::iDocumentNodeIterator_GetEndPosition;
 *scfGetVersion = *cspacec::iDocumentNodeIterator_scfGetVersion;
+*scfGetName = *cspacec::iDocumentNodeIterator_scfGetName;
 sub DESTROY {
     return unless $_[0]->isa('HASH');
     my $self = tied(%{$_[0]});
@@ -4098,6 +4137,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *SetAttributeAsInt = *cspacec::iDocumentNode_SetAttributeAsInt;
 *SetAttributeAsFloat = *cspacec::iDocumentNode_SetAttributeAsFloat;
 *scfGetVersion = *cspacec::iDocumentNode_scfGetVersion;
+*scfGetName = *cspacec::iDocumentNode_scfGetName;
 sub DESTROY {
     return unless $_[0]->isa('HASH');
     my $self = tied(%{$_[0]});
@@ -4136,6 +4176,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *Changeable = *cspacec::iDocument_Changeable;
 *Write = *cspacec::iDocument_Write;
 *scfGetVersion = *cspacec::iDocument_scfGetVersion;
+*scfGetName = *cspacec::iDocument_scfGetName;
 sub DESTROY {
     return unless $_[0]->isa('HASH');
     my $self = tied(%{$_[0]});
@@ -4169,6 +4210,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 %ITERATORS = ();
 *CreateDocument = *cspacec::iDocumentSystem_CreateDocument;
 *scfGetVersion = *cspacec::iDocumentSystem_scfGetVersion;
+*scfGetName = *cspacec::iDocumentSystem_scfGetName;
 sub DESTROY {
     return unless $_[0]->isa('HASH');
     my $self = tied(%{$_[0]});
@@ -4366,6 +4408,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *__ref__ = *cspacec::iDataBuffer___ref__;
 *GetUint8 = *cspacec::iDataBuffer_GetUint8;
 *scfGetVersion = *cspacec::iDataBuffer_scfGetVersion;
+*scfGetName = *cspacec::iDataBuffer_scfGetName;
 sub DESTROY {
     return unless $_[0]->isa('HASH');
     my $self = tied(%{$_[0]});
@@ -4765,6 +4808,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *MissingSector = *cspacec::iMissingLoaderData_MissingSector;
 *MissingLight = *cspacec::iMissingLoaderData_MissingLight;
 *scfGetVersion = *cspacec::iMissingLoaderData_scfGetVersion;
+*scfGetName = *cspacec::iMissingLoaderData_scfGetName;
 sub DESTROY {
     return unless $_[0]->isa('HASH');
     my $self = tied(%{$_[0]});
@@ -5209,6 +5253,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *LoadLibrary = *cspacec::iLoader_LoadLibrary;
 *Load = *cspacec::iLoader_Load;
 *scfGetVersion = *cspacec::iLoader_scfGetVersion;
+*scfGetName = *cspacec::iLoader_scfGetName;
 sub DESTROY {
     return unless $_[0]->isa('HASH');
     my $self = tied(%{$_[0]});
@@ -5243,6 +5288,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *Parse = *cspacec::iLoaderPlugin_Parse;
 *IsThreadSafe = *cspacec::iLoaderPlugin_IsThreadSafe;
 *scfGetVersion = *cspacec::iLoaderPlugin_scfGetVersion;
+*scfGetName = *cspacec::iLoaderPlugin_scfGetName;
 sub DESTROY {
     return unless $_[0]->isa('HASH');
     my $self = tied(%{$_[0]});
@@ -5277,6 +5323,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *Parse = *cspacec::iBinaryLoaderPlugin_Parse;
 *IsThreadSafe = *cspacec::iBinaryLoaderPlugin_IsThreadSafe;
 *scfGetVersion = *cspacec::iBinaryLoaderPlugin_scfGetVersion;
+*scfGetName = *cspacec::iBinaryLoaderPlugin_scfGetName;
 sub DESTROY {
     return unless $_[0]->isa('HASH');
     my $self = tied(%{$_[0]});
@@ -5352,6 +5399,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *SetDescription = *cspacec::iSndSysData_SetDescription;
 *GetDescription = *cspacec::iSndSysData_GetDescription;
 *scfGetVersion = *cspacec::iSndSysData_scfGetVersion;
+*scfGetName = *cspacec::iSndSysData_scfGetName;
 sub DESTROY {
     return unless $_[0]->isa('HASH');
     my $self = tied(%{$_[0]});
@@ -5445,6 +5493,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *GetSubFilter = *cspacec::iSndSysSoftwareFilter3D_GetSubFilter;
 *GetPtr = *cspacec::iSndSysSoftwareFilter3D_GetPtr;
 *scfGetVersion = *cspacec::iSndSysSoftwareFilter3D_scfGetVersion;
+*scfGetName = *cspacec::iSndSysSoftwareFilter3D_scfGetName;
 sub DESTROY {
     return unless $_[0]->isa('HASH');
     my $self = tied(%{$_[0]});
@@ -5518,6 +5567,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *GetDistanceFactor = *cspacec::iSndSysListener_GetDistanceFactor;
 *GetRollOffFactor = *cspacec::iSndSysListener_GetRollOffFactor;
 *scfGetVersion = *cspacec::iSndSysListener_scfGetVersion;
+*scfGetName = *cspacec::iSndSysListener_scfGetName;
 sub DESTROY {
     return unless $_[0]->isa('HASH');
     my $self = tied(%{$_[0]});
@@ -5588,6 +5638,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 %ITERATORS = ();
 *LoadSound = *cspacec::iSndSysLoader_LoadSound;
 *scfGetVersion = *cspacec::iSndSysLoader_scfGetVersion;
+*scfGetName = *cspacec::iSndSysLoader_scfGetName;
 sub DESTROY {
     return unless $_[0]->isa('HASH');
     my $self = tied(%{$_[0]});
@@ -5623,6 +5674,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *GetData = *cspacec::iSndSysWrapper_GetData;
 *SetData = *cspacec::iSndSysWrapper_SetData;
 *scfGetVersion = *cspacec::iSndSysWrapper_scfGetVersion;
+*scfGetName = *cspacec::iSndSysWrapper_scfGetName;
 sub DESTROY {
     return unless $_[0]->isa('HASH');
     my $self = tied(%{$_[0]});
@@ -5661,6 +5713,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *GetSound = *cspacec::iSndSysManager_GetSound;
 *FindSoundByName = *cspacec::iSndSysManager_FindSoundByName;
 *scfGetVersion = *cspacec::iSndSysManager_scfGetVersion;
+*scfGetName = *cspacec::iSndSysManager_scfGetName;
 sub DESTROY {
     return unless $_[0]->isa('HASH');
     my $self = tied(%{$_[0]});
@@ -5697,6 +5750,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *GetStream = *cspacec::iSndSysSource_GetStream;
 *GetPtr = *cspacec::iSndSysSource_GetPtr;
 *scfGetVersion = *cspacec::iSndSysSource_scfGetVersion;
+*scfGetName = *cspacec::iSndSysSource_scfGetName;
 sub DESTROY {
     return unless $_[0]->isa('HASH');
     my $self = tied(%{$_[0]});
@@ -5801,6 +5855,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *GetMinimumDistance = *cspacec::iSndSysSource3D_GetMinimumDistance;
 *GetMaximumDistance = *cspacec::iSndSysSource3D_GetMaximumDistance;
 *scfGetVersion = *cspacec::iSndSysSource3D_scfGetVersion;
+*scfGetName = *cspacec::iSndSysSource3D_scfGetName;
 sub DESTROY {
     return unless $_[0]->isa('HASH');
     my $self = tied(%{$_[0]});
@@ -6014,6 +6069,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *SetLoopBoundaries = *cspacec::iSndSysStream_SetLoopBoundaries;
 *PendingSeek = *cspacec::iSndSysStream_PendingSeek;
 *scfGetVersion = *cspacec::iSndSysStream_scfGetVersion;
+*scfGetName = *cspacec::iSndSysStream_scfGetName;
 sub DESTROY {
     return unless $_[0]->isa('HASH');
     my $self = tied(%{$_[0]});
@@ -6090,6 +6146,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *RegisterCallback = *cspacec::iSndSysRenderer_RegisterCallback;
 *UnregisterCallback = *cspacec::iSndSysRenderer_UnregisterCallback;
 *scfGetVersion = *cspacec::iSndSysRenderer_scfGetVersion;
+*scfGetName = *cspacec::iSndSysRenderer_scfGetName;
 sub DESTROY {
     return unless $_[0]->isa('HASH');
     my $self = tied(%{$_[0]});
@@ -6227,6 +6284,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *StartThread = *cspacec::iSndSysSoftwareDriver_StartThread;
 *StopThread = *cspacec::iSndSysSoftwareDriver_StopThread;
 *scfGetVersion = *cspacec::iSndSysSoftwareDriver_scfGetVersion;
+*scfGetName = *cspacec::iSndSysSoftwareDriver_scfGetName;
 sub DESTROY {
     return unless $_[0]->isa('HASH');
     my $self = tied(%{$_[0]});
@@ -6331,6 +6389,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *SetClipping = *cspacec::iDecalTemplate_SetClipping;
 *HasClipping = *cspacec::iDecalTemplate_HasClipping;
 *scfGetVersion = *cspacec::iDecalTemplate_scfGetVersion;
+*scfGetName = *cspacec::iDecalTemplate_scfGetName;
 sub DESTROY {
     return unless $_[0]->isa('HASH');
     my $self = tied(%{$_[0]});
@@ -6433,6 +6492,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *GetDecal = *cspacec::iDecalManager_GetDecal;
 *CreateDecal = *cspacec::iDecalManager_CreateDecal;
 *scfGetVersion = *cspacec::iDecalManager_scfGetVersion;
+*scfGetName = *cspacec::iDecalManager_scfGetName;
 sub DESTROY {
     return unless $_[0]->isa('HASH');
     my $self = tied(%{$_[0]});
@@ -6518,6 +6578,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *RegisterWatcher = *cspacec::iConsoleOutput_RegisterWatcher;
 *PerformExtension = *cspacec::iConsoleOutput_PerformExtension;
 *scfGetVersion = *cspacec::iConsoleOutput_scfGetVersion;
+*scfGetName = *cspacec::iConsoleOutput_scfGetName;
 sub DESTROY {
     return unless $_[0]->isa('HASH');
     my $self = tied(%{$_[0]});
@@ -6551,6 +6612,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 %ITERATORS = ();
 *Execute = *cspacec::iConsoleExecCallback_Execute;
 *scfGetVersion = *cspacec::iConsoleExecCallback_scfGetVersion;
+*scfGetName = *cspacec::iConsoleExecCallback_scfGetName;
 sub DESTROY {
     return unless $_[0]->isa('HASH');
     my $self = tied(%{$_[0]});
@@ -6593,6 +6655,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *SetPrompt = *cspacec::iConsoleInput_SetPrompt;
 *HandleEvent = *cspacec::iConsoleInput_HandleEvent;
 *scfGetVersion = *cspacec::iConsoleInput_scfGetVersion;
+*scfGetName = *cspacec::iConsoleInput_scfGetName;
 sub DESTROY {
     return unless $_[0]->isa('HASH');
     my $self = tied(%{$_[0]});
@@ -6646,6 +6709,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *ShowMessageID = *cspacec::iStandardReporterListener_ShowMessageID;
 *GetDebugFile = *cspacec::iStandardReporterListener_GetDebugFile;
 *scfGetVersion = *cspacec::iStandardReporterListener_scfGetVersion;
+*scfGetName = *cspacec::iStandardReporterListener_scfGetName;
 sub DESTROY {
     return unless $_[0]->isa('HASH');
     my $self = tied(%{$_[0]});
@@ -6703,6 +6767,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *NormalizedToScreen = *cspacec::iView_NormalizedToScreen;
 *ScreenToNormalized = *cspacec::iView_ScreenToNormalized;
 *scfGetVersion = *cspacec::iView_scfGetVersion;
+*scfGetName = *cspacec::iView_scfGetName;
 sub DESTROY {
     return unless $_[0]->isa('HASH');
     my $self = tied(%{$_[0]});
@@ -6791,6 +6856,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *RemoveCounter = *cspacec::iBugPlug_RemoveCounter;
 *ExecCommand = *cspacec::iBugPlug_ExecCommand;
 *scfGetVersion = *cspacec::iBugPlug_scfGetVersion;
+*scfGetName = *cspacec::iBugPlug_scfGetName;
 sub DESTROY {
     return unless $_[0]->isa('HASH');
     my $self = tied(%{$_[0]});
@@ -6921,6 +6987,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 %ITERATORS = ();
 *GetColliderType = *cspacec::iCollider_GetColliderType;
 *scfGetVersion = *cspacec::iCollider_scfGetVersion;
+*scfGetName = *cspacec::iCollider_scfGetName;
 sub DESTROY {
     return unless $_[0]->isa('HASH');
     my $self = tied(%{$_[0]});
@@ -6966,6 +7033,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *GetOneHitOnly = *cspacec::iCollideSystem_GetOneHitOnly;
 *GetCollisionPairByIndex = *cspacec::iCollideSystem_GetCollisionPairByIndex;
 *scfGetVersion = *cspacec::iCollideSystem_scfGetVersion;
+*scfGetName = *cspacec::iCollideSystem_scfGetName;
 sub DESTROY {
     return unless $_[0]->isa('HASH');
     my $self = tied(%{$_[0]});
@@ -7152,6 +7220,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *AddStepCallback = *cspacec::iDynamics_AddStepCallback;
 *RemoveStepCallback = *cspacec::iDynamics_RemoveStepCallback;
 *scfGetVersion = *cspacec::iDynamics_scfGetVersion;
+*scfGetName = *cspacec::iDynamics_scfGetName;
 sub DESTROY {
     return unless $_[0]->isa('HASH');
     my $self = tied(%{$_[0]});
@@ -7220,6 +7289,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *AddBody = *cspacec::iDynamicSystem_AddBody;
 *AddJoint = *cspacec::iDynamicSystem_AddJoint;
 *scfGetVersion = *cspacec::iDynamicSystem_scfGetVersion;
+*scfGetName = *cspacec::iDynamicSystem_scfGetName;
 sub DESTROY {
     return unless $_[0]->isa('HASH');
     my $self = tied(%{$_[0]});
@@ -7319,6 +7389,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *RemoveBody = *cspacec::iBodyGroup_RemoveBody;
 *BodyInGroup = *cspacec::iBodyGroup_BodyInGroup;
 *scfGetVersion = *cspacec::iBodyGroup_scfGetVersion;
+*scfGetName = *cspacec::iBodyGroup_scfGetName;
 sub DESTROY {
     return unless $_[0]->isa('HASH');
     my $self = tied(%{$_[0]});
@@ -7561,6 +7632,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *GetAngularConstraintAxis = *cspacec::iJoint_GetAngularConstraintAxis;
 *RebuildJoint = *cspacec::iJoint_RebuildJoint;
 *scfGetVersion = *cspacec::iJoint_scfGetVersion;
+*scfGetName = *cspacec::iJoint_scfGetName;
 sub DESTROY {
     return unless $_[0]->isa('HASH');
     my $self = tied(%{$_[0]});
@@ -7649,6 +7721,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *EnableFastObjects = *cspacec::iODEDynamicState_EnableFastObjects;
 *FastObjectsEnabled = *cspacec::iODEDynamicState_FastObjectsEnabled;
 *scfGetVersion = *cspacec::iODEDynamicState_scfGetVersion;
+*scfGetName = *cspacec::iODEDynamicState_scfGetName;
 sub DESTROY {
     return unless $_[0]->isa('HASH');
     my $self = tied(%{$_[0]});
@@ -7719,6 +7792,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *EnableOldInertia = *cspacec::iODEDynamicSystemState_EnableOldInertia;
 *IsOldInertiaEnabled = *cspacec::iODEDynamicSystemState_IsOldInertiaEnabled;
 *scfGetVersion = *cspacec::iODEDynamicSystemState_scfGetVersion;
+*scfGetName = *cspacec::iODEDynamicSystemState_scfGetName;
 sub DESTROY {
     return unless $_[0]->isa('HASH');
     my $self = tied(%{$_[0]});
@@ -7774,6 +7848,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *GetSuspensionERP = *cspacec::iODEJointState_GetSuspensionERP;
 *GetSuspensionCFM = *cspacec::iODEJointState_GetSuspensionCFM;
 *scfGetVersion = *cspacec::iODEJointState_scfGetVersion;
+*scfGetName = *cspacec::iODEJointState_scfGetName;
 sub DESTROY {
     return unless $_[0]->isa('HASH');
     my $self = tied(%{$_[0]});
@@ -7869,6 +7944,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *GetSliderPosition = *cspacec::iODESliderJoint_GetSliderPosition;
 *GetSliderPositionRate = *cspacec::iODESliderJoint_GetSliderPositionRate;
 *scfGetVersion = *cspacec::iODESliderJoint_scfGetVersion;
+*scfGetName = *cspacec::iODESliderJoint_scfGetName;
 sub DESTROY {
     return unless $_[0]->isa('HASH');
     my $self = tied(%{$_[0]});
@@ -7908,6 +7984,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *GetUniversalAxis1 = *cspacec::iODEUniversalJoint_GetUniversalAxis1;
 *GetUniversalAxis2 = *cspacec::iODEUniversalJoint_GetUniversalAxis2;
 *scfGetVersion = *cspacec::iODEUniversalJoint_scfGetVersion;
+*scfGetName = *cspacec::iODEUniversalJoint_scfGetName;
 sub DESTROY {
     return unless $_[0]->isa('HASH');
     my $self = tied(%{$_[0]});
@@ -7950,6 +8027,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *GetAMotorAngle = *cspacec::iODEAMotorJoint_GetAMotorAngle;
 *GetAMotorAngleRate = *cspacec::iODEAMotorJoint_GetAMotorAngleRate;
 *scfGetVersion = *cspacec::iODEAMotorJoint_scfGetVersion;
+*scfGetName = *cspacec::iODEAMotorJoint_scfGetName;
 sub DESTROY {
     return unless $_[0]->isa('HASH');
     my $self = tied(%{$_[0]});
@@ -7993,6 +8071,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *GetHingeAngleRate2 = *cspacec::iODEHinge2Joint_GetHingeAngleRate2;
 *GetAnchorError = *cspacec::iODEHinge2Joint_GetAnchorError;
 *scfGetVersion = *cspacec::iODEHinge2Joint_scfGetVersion;
+*scfGetName = *cspacec::iODEHinge2Joint_scfGetName;
 sub DESTROY {
     return unless $_[0]->isa('HASH');
     my $self = tied(%{$_[0]});
@@ -8033,6 +8112,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *GetHingeAngleRate = *cspacec::iODEHingeJoint_GetHingeAngleRate;
 *GetAnchorError = *cspacec::iODEHingeJoint_GetAnchorError;
 *scfGetVersion = *cspacec::iODEHingeJoint_scfGetVersion;
+*scfGetName = *cspacec::iODEHingeJoint_scfGetName;
 sub DESTROY {
     return unless $_[0]->isa('HASH');
     my $self = tied(%{$_[0]});
@@ -8075,6 +8155,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *GetFeedbackForce2 = *cspacec::iODEBallJoint_GetFeedbackForce2;
 *GetFeedbackTorque2 = *cspacec::iODEBallJoint_GetFeedbackTorque2;
 *scfGetVersion = *cspacec::iODEBallJoint_scfGetVersion;
+*scfGetName = *cspacec::iODEBallJoint_scfGetName;
 sub DESTROY {
     return unless $_[0]->isa('HASH');
     my $self = tied(%{$_[0]});
@@ -8328,6 +8409,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *FireTimedOperation = *cspacec::iEngineSequenceManager_FireTimedOperation;
 *DestroyTimedOperations = *cspacec::iEngineSequenceManager_DestroyTimedOperations;
 *scfGetVersion = *cspacec::iEngineSequenceManager_scfGetVersion;
+*scfGetName = *cspacec::iEngineSequenceManager_scfGetName;
 sub DESTROY {
     return unless $_[0]->isa('HASH');
     my $self = tied(%{$_[0]});
@@ -8368,6 +8450,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *SetRecordingFile = *cspacec::iMovieRecorder_SetRecordingFile;
 *SetFilenameFormat = *cspacec::iMovieRecorder_SetFilenameFormat;
 *scfGetVersion = *cspacec::iMovieRecorder_scfGetVersion;
+*scfGetName = *cspacec::iMovieRecorder_scfGetName;
 sub DESTROY {
     return unless $_[0]->isa('HASH');
     my $self = tied(%{$_[0]});
@@ -8411,6 +8494,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *SetSector = *cspacec::iMapNode_SetSector;
 *GetSector = *cspacec::iMapNode_GetSector;
 *scfGetVersion = *cspacec::iMapNode_scfGetVersion;
+*scfGetName = *cspacec::iMapNode_scfGetName;
 sub DESTROY {
     return unless $_[0]->isa('HASH');
     my $self = tied(%{$_[0]});
@@ -8445,6 +8529,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *Do = *cspacec::iSequenceOperation_Do;
 *CleanupSequences = *cspacec::iSequenceOperation_CleanupSequences;
 *scfGetVersion = *cspacec::iSequenceOperation_scfGetVersion;
+*scfGetName = *cspacec::iSequenceOperation_scfGetName;
 sub DESTROY {
     return unless $_[0]->isa('HASH');
     my $self = tied(%{$_[0]});
@@ -8478,6 +8563,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 %ITERATORS = ();
 *Condition = *cspacec::iSequenceCondition_Condition;
 *scfGetVersion = *cspacec::iSequenceCondition_scfGetVersion;
+*scfGetName = *cspacec::iSequenceCondition_scfGetName;
 sub DESTROY {
     return unless $_[0]->isa('HASH');
     my $self = tied(%{$_[0]});
@@ -8566,6 +8652,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *Clear = *cspacec::iSequence_Clear;
 *IsEmpty = *cspacec::iSequence_IsEmpty;
 *scfGetVersion = *cspacec::iSequence_scfGetVersion;
+*scfGetName = *cspacec::iSequence_scfGetName;
 sub DESTROY {
     return unless $_[0]->isa('HASH');
     my $self = tied(%{$_[0]});
@@ -8610,6 +8697,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *DestroySequenceOperations = *cspacec::iSequenceManager_DestroySequenceOperations;
 *GetUniqueID = *cspacec::iSequenceManager_GetUniqueID;
 *scfGetVersion = *cspacec::iSequenceManager_scfGetVersion;
+*scfGetName = *cspacec::iSequenceManager_scfGetName;
 sub DESTROY {
     return unless $_[0]->isa('HASH');
     my $self = tied(%{$_[0]});
@@ -8644,6 +8732,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *GetName = *cspacec::iImageModifier_GetName;
 *Modify = *cspacec::iImageModifier_Modify;
 *scfGetVersion = *cspacec::iImageModifier_scfGetVersion;
+*scfGetName = *cspacec::iImageModifier_scfGetName;
 sub DESTROY {
     return unless $_[0]->isa('HASH');
     my $self = tied(%{$_[0]});
@@ -8676,6 +8765,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 %OWNER = ();
 %ITERATORS = ();
 *scfGetVersion = *cspacec::iBlobImage_scfGetVersion;
+*scfGetName = *cspacec::iBlobImage_scfGetName;
 sub DESTROY {
     return unless $_[0]->isa('HASH');
     my $self = tied(%{$_[0]});
@@ -8732,6 +8822,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *SetPathMover = *cspacec::iMovingObject_SetPathMover;
 *AddPathSegment = *cspacec::iMovingObject_AddPathSegment;
 *scfGetVersion = *cspacec::iMovingObject_scfGetVersion;
+*scfGetName = *cspacec::iMovingObject_scfGetName;
 sub DESTROY {
     return unless $_[0]->isa('HASH');
     my $self = tied(%{$_[0]});
@@ -8775,6 +8866,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *GetGeomWidth = *cspacec::iGeom_GetGeomWidth;
 *GetGeomHeight = *cspacec::iGeom_GetGeomHeight;
 *scfGetVersion = *cspacec::iGeom_scfGetVersion;
+*scfGetName = *cspacec::iGeom_scfGetName;
 sub DESTROY {
     return unless $_[0]->isa('HASH');
     my $self = tied(%{$_[0]});
@@ -8817,6 +8909,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *PlayAnimation = *cspacec::iBlob_PlayAnimation;
 *StopAnimations = *cspacec::iBlob_StopAnimations;
 *scfGetVersion = *cspacec::iBlob_scfGetVersion;
+*scfGetName = *cspacec::iBlob_scfGetName;
 sub DESTROY {
     return unless $_[0]->isa('HASH');
     my $self = tied(%{$_[0]});
@@ -8858,6 +8951,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *ClearModifier = *cspacec::iBlobViewPort_ClearModifier;
 *SetModifier = *cspacec::iBlobViewPort_SetModifier;
 *scfGetVersion = *cspacec::iBlobViewPort_scfGetVersion;
+*scfGetName = *cspacec::iBlobViewPort_scfGetName;
 sub DESTROY {
     return unless $_[0]->isa('HASH');
     my $self = tied(%{$_[0]});
@@ -8909,6 +9003,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *MovingObjectToFront = *cspacec::iBlobManager_MovingObjectToFront;
 *CheckCollision = *cspacec::iBlobManager_CheckCollision;
 *scfGetVersion = *cspacec::iBlobManager_scfGetVersion;
+*scfGetName = *cspacec::iBlobManager_scfGetName;
 sub DESTROY {
     return unless $_[0]->isa('HASH');
     my $self = tied(%{$_[0]});
@@ -8997,6 +9092,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *Get = *cspacec::iScriptObject_Get;
 *GetTruth = *cspacec::iScriptObject_GetTruth;
 *scfGetVersion = *cspacec::iScriptObject_scfGetVersion;
+*scfGetName = *cspacec::iScriptObject_scfGetName;
 sub DESTROY {
     return unless $_[0]->isa('HASH');
     my $self = tied(%{$_[0]});
@@ -9040,6 +9136,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *Retrieve = *cspacec::iScript_Retrieve;
 *GetTruth = *cspacec::iScript_GetTruth;
 *scfGetVersion = *cspacec::iScript_scfGetVersion;
+*scfGetName = *cspacec::iScript_scfGetName;
 sub DESTROY {
     return unless $_[0]->isa('HASH');
     my $self = tied(%{$_[0]});
@@ -9079,6 +9176,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *GetFloatMap = *cspacec::iSimpleFormerState_GetFloatMap;
 *SetMaterialScale = *cspacec::iSimpleFormerState_SetMaterialScale;
 *scfGetVersion = *cspacec::iSimpleFormerState_scfGetVersion;
+*scfGetName = *cspacec::iSimpleFormerState_scfGetName;
 sub DESTROY {
     return unless $_[0]->isa('HASH');
     my $self = tied(%{$_[0]});
@@ -9118,6 +9216,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *SampleInteger = *cspacec::iTerraFormer_SampleInteger;
 *QueryObject = *cspacec::iTerraFormer_QueryObject;
 *scfGetVersion = *cspacec::iTerraFormer_scfGetVersion;
+*scfGetName = *cspacec::iTerraFormer_scfGetName;
 sub DESTROY {
     return unless $_[0]->isa('HASH');
     my $self = tied(%{$_[0]});
@@ -9159,6 +9258,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *GetVersion = *cspacec::iTerraSampler_GetVersion;
 *Cleanup = *cspacec::iTerraSampler_Cleanup;
 *scfGetVersion = *cspacec::iTerraSampler_scfGetVersion;
+*scfGetName = *cspacec::iTerraSampler_scfGetName;
 sub DESTROY {
     return unless $_[0]->isa('HASH');
     my $self = tied(%{$_[0]});
@@ -9192,6 +9292,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 %ITERATORS = ();
 *GetMsg = *cspacec::iTranslator_GetMsg;
 *scfGetVersion = *cspacec::iTranslator_scfGetVersion;
+*scfGetName = *cspacec::iTranslator_scfGetName;
 sub DESTROY {
     return unless $_[0]->isa('HASH');
     my $self = tied(%{$_[0]});
@@ -9282,6 +9383,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *GetCookedImageFormat = *cspacec::iImage_GetCookedImageFormat;
 *GetCookedImageData = *cspacec::iImage_GetCookedImageData;
 *scfGetVersion = *cspacec::iImage_scfGetVersion;
+*scfGetName = *cspacec::iImage_scfGetName;
 sub DESTROY {
     return unless $_[0]->isa('HASH');
     my $self = tied(%{$_[0]});
@@ -9423,6 +9525,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *Load = *cspacec::iImageIO_Load;
 *Save = *cspacec::iImageIO_Save;
 *scfGetVersion = *cspacec::iImageIO_scfGetVersion;
+*scfGetName = *cspacec::iImageIO_scfGetName;
 sub DESTROY {
     return unless $_[0]->isa('HASH');
     my $self = tied(%{$_[0]});
@@ -9457,6 +9560,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *Animate = *cspacec::iAnimatedImage_Animate;
 *IsAnimated = *cspacec::iAnimatedImage_IsAnimated;
 *scfGetVersion = *cspacec::iAnimatedImage_scfGetVersion;
+*scfGetName = *cspacec::iAnimatedImage_scfGetName;
 sub DESTROY {
     return unless $_[0]->isa('HASH');
     my $self = tied(%{$_[0]});
@@ -9492,6 +9596,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *SetAlwaysAnimate = *cspacec::iProcTexture_SetAlwaysAnimate;
 *GetFactory = *cspacec::iProcTexture_GetFactory;
 *scfGetVersion = *cspacec::iProcTexture_scfGetVersion;
+*scfGetName = *cspacec::iProcTexture_scfGetName;
 sub DESTROY {
     return unless $_[0]->isa('HASH');
     my $self = tied(%{$_[0]});
@@ -9639,6 +9744,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 %OWNER = ();
 %ITERATORS = ();
 *scfGetVersion = *cspacec::iShaderVarStringSet_scfGetVersion;
+*scfGetName = *cspacec::iShaderVarStringSet_scfGetName;
 sub DESTROY {
     return unless $_[0]->isa('HASH');
     my $self = tied(%{$_[0]});
@@ -10178,6 +10284,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *GetHWVendor = *cspacec::iGraphics2D_GetHWVendor;
 *DrawLineProjected = *cspacec::iGraphics2D_DrawLineProjected;
 *scfGetVersion = *cspacec::iGraphics2D_scfGetVersion;
+*scfGetName = *cspacec::iGraphics2D_scfGetName;
 sub DESTROY {
     return unless $_[0]->isa('HASH');
     my $self = tied(%{$_[0]});
@@ -10489,6 +10596,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *SetTessellation = *cspacec::iGraphics3D_SetTessellation;
 *GetTessellation = *cspacec::iGraphics3D_GetTessellation;
 *scfGetVersion = *cspacec::iGraphics3D_scfGetVersion;
+*scfGetName = *cspacec::iGraphics3D_scfGetName;
 sub DESTROY {
     return unless $_[0]->isa('HASH');
     my $self = tied(%{$_[0]});
@@ -11022,6 +11130,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *GetUnderlinePosition = *cspacec::iFont_GetUnderlinePosition;
 *GetUnderlineThickness = *cspacec::iFont_GetUnderlineThickness;
 *scfGetVersion = *cspacec::iFont_scfGetVersion;
+*scfGetName = *cspacec::iFont_scfGetName;
 sub DESTROY {
     return unless $_[0]->isa('HASH');
     my $self = tied(%{$_[0]});
@@ -11057,6 +11166,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *SetWarnOnError = *cspacec::iFontServer_SetWarnOnError;
 *GetWarnOnError = *cspacec::iFontServer_GetWarnOnError;
 *scfGetVersion = *cspacec::iFontServer_scfGetVersion;
+*scfGetName = *cspacec::iFontServer_scfGetName;
 sub DESTROY {
     return unless $_[0]->isa('HASH');
     my $self = tied(%{$_[0]});
@@ -11094,6 +11204,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *GetColor = *cspacec::iHalo_GetColor;
 *Draw = *cspacec::iHalo_Draw;
 *scfGetVersion = *cspacec::iHalo_scfGetVersion;
+*scfGetName = *cspacec::iHalo_scfGetName;
 sub DESTROY {
     return unless $_[0]->isa('HASH');
     my $self = tied(%{$_[0]});
@@ -11179,6 +11290,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *Clear = *cspacec::iShaderVariableContext_Clear;
 *RemoveVariable = *cspacec::iShaderVariableContext_RemoveVariable;
 *scfGetVersion = *cspacec::iShaderVariableContext_scfGetVersion;
+*scfGetName = *cspacec::iShaderVariableContext_scfGetName;
 sub DESTROY {
     return unless $_[0]->isa('HASH');
     my $self = tied(%{$_[0]});
@@ -11237,6 +11349,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *RemoveSubShaderCache = *cspacec::iShaderManager_RemoveSubShaderCache;
 *RemoveAllSubShaderCaches = *cspacec::iShaderManager_RemoveAllSubShaderCaches;
 *scfGetVersion = *cspacec::iShaderManager_scfGetVersion;
+*scfGetName = *cspacec::iShaderManager_scfGetName;
 sub DESTROY {
     return unless $_[0]->isa('HASH');
     my $self = tied(%{$_[0]});
@@ -11365,6 +11478,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *GetTechniqueMetadata = *cspacec::iShader_GetTechniqueMetadata;
 *ForceTechnique = *cspacec::iShader_ForceTechnique;
 *scfGetVersion = *cspacec::iShader_scfGetVersion;
+*scfGetName = *cspacec::iShader_scfGetName;
 sub DESTROY {
     return unless $_[0]->isa('HASH');
     my $self = tied(%{$_[0]});
@@ -11585,6 +11699,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *GetMipmapLimits = *cspacec::iTextureHandle_GetMipmapLimits;
 *Readback = *cspacec::iTextureHandle_Readback;
 *scfGetVersion = *cspacec::iTextureHandle_scfGetVersion;
+*scfGetName = *cspacec::iTextureHandle_scfGetName;
 sub DESTROY {
     return unless $_[0]->isa('HASH');
     my $self = tied(%{$_[0]});
@@ -11621,6 +11736,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *GetMaxTextureSize = *cspacec::iTextureManager_GetMaxTextureSize;
 *CreateTexture = *cspacec::iTextureManager_CreateTexture;
 *scfGetVersion = *cspacec::iTextureManager_scfGetVersion;
+*scfGetName = *cspacec::iTextureManager_scfGetName;
 sub DESTROY {
     return unless $_[0]->isa('HASH');
     my $self = tied(%{$_[0]});
@@ -11658,6 +11774,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *GetTexture = *cspacec::iMaterial_GetTexture;
 *GetFirstShader = *cspacec::iMaterial_GetFirstShader;
 *scfGetVersion = *cspacec::iMaterial_scfGetVersion;
+*scfGetName = *cspacec::iMaterial_scfGetName;
 sub DESTROY {
     return unless $_[0]->isa('HASH');
     my $self = tied(%{$_[0]});
@@ -14753,6 +14870,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 %ITERATORS = ();
 *ObjectModelChanged = *cspacec::iObjectModelListener_ObjectModelChanged;
 *scfGetVersion = *cspacec::iObjectModelListener_scfGetVersion;
+*scfGetName = *cspacec::iObjectModelListener_scfGetName;
 sub DESTROY {
     return unless $_[0]->isa('HASH');
     my $self = tied(%{$_[0]});
@@ -14787,6 +14905,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *HasNext = *cspacec::iTriangleMeshIterator_HasNext;
 *Next = *cspacec::iTriangleMeshIterator_Next;
 *scfGetVersion = *cspacec::iTriangleMeshIterator_scfGetVersion;
+*scfGetName = *cspacec::iTriangleMeshIterator_scfGetName;
 sub DESTROY {
     return unless $_[0]->isa('HASH');
     my $self = tied(%{$_[0]});
@@ -14832,6 +14951,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *AddListener = *cspacec::iObjectModel_AddListener;
 *RemoveListener = *cspacec::iObjectModel_RemoveListener;
 *scfGetVersion = *cspacec::iObjectModel_scfGetVersion;
+*scfGetName = *cspacec::iObjectModel_scfGetName;
 sub DESTROY {
     return unless $_[0]->isa('HASH');
     my $self = tied(%{$_[0]});
@@ -15024,6 +15144,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *FindSubMesh = *cspacec::iGeneralMeshState_FindSubMesh;
 *ForceProgLODLevel = *cspacec::iGeneralMeshState_ForceProgLODLevel;
 *scfGetVersion = *cspacec::iGeneralMeshState_scfGetVersion;
+*scfGetName = *cspacec::iGeneralMeshState_scfGetName;
 sub DESTROY {
     return unless $_[0]->isa('HASH');
     my $self = tied(%{$_[0]});
@@ -15091,6 +15212,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *GetTriangleByIndex = *cspacec::iGeneralFactoryState_GetTriangleByIndex;
 *GetColorByIndex = *cspacec::iGeneralFactoryState_GetColorByIndex;
 *scfGetVersion = *cspacec::iGeneralFactoryState_scfGetVersion;
+*scfGetName = *cspacec::iGeneralFactoryState_scfGetName;
 sub DESTROY {
     return unless $_[0]->isa('HASH');
     my $self = tied(%{$_[0]});
@@ -15251,6 +15373,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *SetTransformMode = *cspacec::iSkeletonBone_SetTransformMode;
 *GetTransformMode = *cspacec::iSkeletonBone_GetTransformMode;
 *scfGetVersion = *cspacec::iSkeletonBone_scfGetVersion;
+*scfGetName = *cspacec::iSkeletonBone_scfGetName;
 sub DESTROY {
     return unless $_[0]->isa('HASH');
     my $self = tied(%{$_[0]});
@@ -15529,6 +15652,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *UpdateAnimation = *cspacec::iSkeleton_UpdateAnimation;
 *UpdateBones = *cspacec::iSkeleton_UpdateBones;
 *scfGetVersion = *cspacec::iSkeleton_scfGetVersion;
+*scfGetName = *cspacec::iSkeleton_scfGetName;
 sub DESTROY {
     return unless $_[0]->isa('HASH');
     my $self = tied(%{$_[0]});
@@ -15571,6 +15695,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *GetSceneNode = *cspacec::iSkeletonSocket_GetSceneNode;
 *GetFactory = *cspacec::iSkeletonSocket_GetFactory;
 *scfGetVersion = *cspacec::iSkeletonSocket_scfGetVersion;
+*scfGetName = *cspacec::iSkeletonSocket_scfGetName;
 sub DESTROY {
     return unless $_[0]->isa('HASH');
     my $self = tied(%{$_[0]});
@@ -15637,6 +15762,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *SetJointMaxTransContraints = *cspacec::iSkeletonBoneRagdollInfo_SetJointMaxTransContraints;
 *GetJointMaxTransContraints = *cspacec::iSkeletonBoneRagdollInfo_GetJointMaxTransContraints;
 *scfGetVersion = *cspacec::iSkeletonBoneRagdollInfo_scfGetVersion;
+*scfGetName = *cspacec::iSkeletonBoneRagdollInfo_scfGetName;
 sub DESTROY {
     return unless $_[0]->isa('HASH');
     my $self = tied(%{$_[0]});
@@ -15683,6 +15809,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *GetSkinBox = *cspacec::iSkeletonBoneFactory_GetSkinBox;
 *GetRagdollInfo = *cspacec::iSkeletonBoneFactory_GetRagdollInfo;
 *scfGetVersion = *cspacec::iSkeletonBoneFactory_scfGetVersion;
+*scfGetName = *cspacec::iSkeletonBoneFactory_scfGetName;
 sub DESTROY {
     return unless $_[0]->isa('HASH');
     my $self = tied(%{$_[0]});
@@ -15722,6 +15849,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *SetBone = *cspacec::iSkeletonSocketFactory_SetBone;
 *GetBone = *cspacec::iSkeletonSocketFactory_GetBone;
 *scfGetVersion = *cspacec::iSkeletonSocketFactory_scfGetVersion;
+*scfGetName = *cspacec::iSkeletonSocketFactory_scfGetName;
 sub DESTROY {
     return unless $_[0]->isa('HASH');
     my $self = tied(%{$_[0]});
@@ -15771,6 +15899,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *RemoveSocket = *cspacec::iSkeletonFactory_RemoveSocket;
 *GetSocketsCount = *cspacec::iSkeletonFactory_GetSocketsCount;
 *scfGetVersion = *cspacec::iSkeletonFactory_scfGetVersion;
+*scfGetName = *cspacec::iSkeletonFactory_scfGetName;
 sub DESTROY {
     return unless $_[0]->isa('HASH');
     my $self = tied(%{$_[0]});
@@ -15812,6 +15941,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *AddSkeleton = *cspacec::iSkeletonGraveyard_AddSkeleton;
 *RemoveSkeleton = *cspacec::iSkeletonGraveyard_RemoveSkeleton;
 *scfGetVersion = *cspacec::iSkeletonGraveyard_scfGetVersion;
+*scfGetName = *cspacec::iSkeletonGraveyard_scfGetName;
 sub DESTROY {
     return unless $_[0]->isa('HASH');
     my $self = tied(%{$_[0]});
@@ -15851,6 +15981,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *GetAnimatedVertNormalsCount = *cspacec::iGenMeshSkeletonControlState_GetAnimatedVertNormalsCount;
 *GetSkeleton = *cspacec::iGenMeshSkeletonControlState_GetSkeleton;
 *scfGetVersion = *cspacec::iGenMeshSkeletonControlState_scfGetVersion;
+*scfGetName = *cspacec::iGenMeshSkeletonControlState_scfGetName;
 sub DESTROY {
     return unless $_[0]->isa('HASH');
     my $self = tied(%{$_[0]});
@@ -16476,6 +16607,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *GetVertexByIndex = *cspacec::iSprite2DState_GetVertexByIndex;
 *GetVertexCount = *cspacec::iSprite2DState_GetVertexCount;
 *scfGetVersion = *cspacec::iSprite2DState_scfGetVersion;
+*scfGetName = *cspacec::iSprite2DState_scfGetName;
 sub DESTROY {
     return unless $_[0]->isa('HASH');
     my $self = tied(%{$_[0]});
@@ -16717,6 +16849,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *IsLodEnabled = *cspacec::iSprite3DState_IsLodEnabled;
 *FindSocket = *cspacec::iSprite3DState_FindSocket;
 *scfGetVersion = *cspacec::iSprite3DState_scfGetVersion;
+*scfGetName = *cspacec::iSprite3DState_scfGetName;
 sub DESTROY {
     return unless $_[0]->isa('HASH');
     my $self = tied(%{$_[0]});
@@ -16967,6 +17100,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *GetSkeleton = *cspacec::iSpriteCal3DState_GetSkeleton;
 *GetCal3DModel = *cspacec::iSpriteCal3DState_GetCal3DModel;
 *scfGetVersion = *cspacec::iSpriteCal3DState_scfGetVersion;
+*scfGetName = *cspacec::iSpriteCal3DState_scfGetName;
 sub DESTROY {
     return unless $_[0]->isa('HASH');
     my $self = tied(%{$_[0]});
@@ -16999,6 +17133,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 %OWNER = ();
 %ITERATORS = ();
 *scfGetVersion = *cspacec::iMaterialArray_scfGetVersion;
+*scfGetName = *cspacec::iMaterialArray_scfGetName;
 sub DESTROY {
     return unless $_[0]->isa('HASH');
     my $self = tied(%{$_[0]});
@@ -17085,6 +17220,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *PositionChild = *cspacec::iMeshObject_PositionChild;
 *BuildDecal = *cspacec::iMeshObject_BuildDecal;
 *scfGetVersion = *cspacec::iMeshObject_scfGetVersion;
+*scfGetName = *cspacec::iMeshObject_scfGetName;
 sub DESTROY {
     return unless $_[0]->isa('HASH');
     my $self = tied(%{$_[0]});
@@ -17130,6 +17266,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *SetMixMode = *cspacec::iMeshObjectFactory_SetMixMode;
 *GetMixMode = *cspacec::iMeshObjectFactory_GetMixMode;
 *scfGetVersion = *cspacec::iMeshObjectFactory_scfGetVersion;
+*scfGetName = *cspacec::iMeshObjectFactory_scfGetName;
 sub DESTROY {
     return unless $_[0]->isa('HASH');
     my $self = tied(%{$_[0]});
@@ -17163,6 +17300,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 %ITERATORS = ();
 *NewFactory = *cspacec::iMeshObjectType_NewFactory;
 *scfGetVersion = *cspacec::iMeshObjectType_scfGetVersion;
+*scfGetName = *cspacec::iMeshObjectType_scfGetName;
 sub DESTROY {
     return unless $_[0]->isa('HASH');
     my $self = tied(%{$_[0]});
@@ -17277,6 +17415,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *SetLeftNeighbor = *cspacec::iTerrainObjectState_SetLeftNeighbor;
 *SetBottomNeighbor = *cspacec::iTerrainObjectState_SetBottomNeighbor;
 *scfGetVersion = *cspacec::iTerrainObjectState_scfGetVersion;
+*scfGetName = *cspacec::iTerrainObjectState_scfGetName;
 sub DESTROY {
     return unless $_[0]->isa('HASH');
     my $self = tied(%{$_[0]});
@@ -17315,6 +17454,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *SaveState = *cspacec::iTerrainFactoryState_SaveState;
 *RestoreState = *cspacec::iTerrainFactoryState_RestoreState;
 *scfGetVersion = *cspacec::iTerrainFactoryState_scfGetVersion;
+*scfGetName = *cspacec::iTerrainFactoryState_scfGetName;
 sub DESTROY {
     return unless $_[0]->isa('HASH');
     my $self = tied(%{$_[0]});
@@ -17543,6 +17683,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *GetParameterName = *cspacec::iTerrainCellCollisionProperties_GetParameterName;
 *GetParameterValue = *cspacec::iTerrainCellCollisionProperties_GetParameterValue;
 *scfGetVersion = *cspacec::iTerrainCellCollisionProperties_scfGetVersion;
+*scfGetName = *cspacec::iTerrainCellCollisionProperties_scfGetName;
 sub DESTROY {
     return unless $_[0]->isa('HASH');
     my $self = tied(%{$_[0]});
@@ -17582,6 +17723,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *GetParameterName = *cspacec::iTerrainCellRenderProperties_GetParameterName;
 *GetParameterValue = *cspacec::iTerrainCellRenderProperties_GetParameterValue;
 *scfGetVersion = *cspacec::iTerrainCellRenderProperties_scfGetVersion;
+*scfGetName = *cspacec::iTerrainCellRenderProperties_scfGetName;
 sub DESTROY {
     return unless $_[0]->isa('HASH');
     my $self = tied(%{$_[0]});
@@ -17629,6 +17771,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *SetHeightmapSmooth = *cspacec::iTerrainCellFeederProperties_SetHeightmapSmooth;
 *GetHeightmapSmooth = *cspacec::iTerrainCellFeederProperties_GetHeightmapSmooth;
 *scfGetVersion = *cspacec::iTerrainCellFeederProperties_scfGetVersion;
+*scfGetName = *cspacec::iTerrainCellFeederProperties_scfGetName;
 sub DESTROY {
     return unless $_[0]->isa('HASH');
     my $self = tied(%{$_[0]});
@@ -17665,6 +17808,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *Load = *cspacec::iTerrainDataFeeder_Load;
 *SetParameter = *cspacec::iTerrainDataFeeder_SetParameter;
 *scfGetVersion = *cspacec::iTerrainDataFeeder_scfGetVersion;
+*scfGetName = *cspacec::iTerrainDataFeeder_scfGetName;
 sub DESTROY {
     return unless $_[0]->isa('HASH');
     my $self = tied(%{$_[0]});
@@ -17748,6 +17892,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *CollideTriangles = *cspacec::iTerrainCollider_CollideTriangles;
 *Collide = *cspacec::iTerrainCollider_Collide;
 *scfGetVersion = *cspacec::iTerrainCollider_scfGetVersion;
+*scfGetName = *cspacec::iTerrainCollider_scfGetName;
 sub DESTROY {
     return unless $_[0]->isa('HASH');
     my $self = tied(%{$_[0]});
@@ -17787,6 +17932,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *OnMaterialMaskUpdate = *cspacec::iTerrainRenderer_OnMaterialMaskUpdate;
 *OnAlphaMapUpdate = *cspacec::iTerrainRenderer_OnAlphaMapUpdate;
 *scfGetVersion = *cspacec::iTerrainRenderer_scfGetVersion;
+*scfGetName = *cspacec::iTerrainRenderer_scfGetName;
 sub DESTROY {
     return unless $_[0]->isa('HASH');
     my $self = tied(%{$_[0]});
@@ -17820,6 +17966,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 %ITERATORS = ();
 *OnHeightUpdate = *cspacec::iTerrainCellHeightDataCallback_OnHeightUpdate;
 *scfGetVersion = *cspacec::iTerrainCellHeightDataCallback_scfGetVersion;
+*scfGetName = *cspacec::iTerrainCellHeightDataCallback_scfGetName;
 sub DESTROY {
     return unless $_[0]->isa('HASH');
     my $self = tied(%{$_[0]});
@@ -17855,6 +18002,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *OnCellPreLoad = *cspacec::iTerrainCellLoadCallback_OnCellPreLoad;
 *OnCellUnload = *cspacec::iTerrainCellLoadCallback_OnCellUnload;
 *scfGetVersion = *cspacec::iTerrainCellLoadCallback_scfGetVersion;
+*scfGetName = *cspacec::iTerrainCellLoadCallback_scfGetName;
 sub DESTROY {
     return unless $_[0]->isa('HASH');
     my $self = tied(%{$_[0]});
@@ -17912,6 +18060,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *AddCell = *cspacec::iTerrainSystem_AddCell;
 *RemoveCell = *cspacec::iTerrainSystem_RemoveCell;
 *scfGetVersion = *cspacec::iTerrainSystem_scfGetVersion;
+*scfGetName = *cspacec::iTerrainSystem_scfGetName;
 sub DESTROY {
     return unless $_[0]->isa('HASH');
     my $self = tied(%{$_[0]});
@@ -17994,6 +18143,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *GetTangentData = *cspacec::iTerrainCell_GetTangentData;
 *GetBitangentData = *cspacec::iTerrainCell_GetBitangentData;
 *scfGetVersion = *cspacec::iTerrainCell_scfGetVersion;
+*scfGetName = *cspacec::iTerrainCell_scfGetName;
 sub DESTROY {
     return unless $_[0]->isa('HASH');
     my $self = tied(%{$_[0]});
@@ -18051,6 +18201,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *SetSplatBaseMaterial = *cspacec::iTerrainFactoryCell_SetSplatBaseMaterial;
 *GetSplatBaseMaterial = *cspacec::iTerrainFactoryCell_GetSplatBaseMaterial;
 *scfGetVersion = *cspacec::iTerrainFactoryCell_scfGetVersion;
+*scfGetName = *cspacec::iTerrainFactoryCell_scfGetName;
 sub DESTROY {
     return unless $_[0]->isa('HASH');
     my $self = tied(%{$_[0]});
@@ -18098,6 +18249,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *GetCell = *cspacec::iTerrainFactory_GetCell;
 *RemoveCell = *cspacec::iTerrainFactory_RemoveCell;
 *scfGetVersion = *cspacec::iTerrainFactory_scfGetVersion;
+*scfGetName = *cspacec::iTerrainFactory_scfGetName;
 sub DESTROY {
     return unless $_[0]->isa('HASH');
     my $self = tied(%{$_[0]});
@@ -18282,6 +18434,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *ParticlesToEmit = *cspacec::iParticleEmitter_ParticlesToEmit;
 *EmitParticles = *cspacec::iParticleEmitter_EmitParticles;
 *scfGetVersion = *cspacec::iParticleEmitter_scfGetVersion;
+*scfGetName = *cspacec::iParticleEmitter_scfGetName;
 sub DESTROY {
     return unless $_[0]->isa('HASH');
     my $self = tied(%{$_[0]});
@@ -18316,6 +18469,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *Clone = *cspacec::iParticleEffector_Clone;
 *EffectParticles = *cspacec::iParticleEffector_EffectParticles;
 *scfGetVersion = *cspacec::iParticleEffector_scfGetVersion;
+*scfGetName = *cspacec::iParticleEffector_scfGetName;
 sub DESTROY {
     return unless $_[0]->isa('HASH');
     my $self = tied(%{$_[0]});
@@ -18374,6 +18528,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *RemoveEffector = *cspacec::iParticleSystemBase_RemoveEffector;
 *GetEffectorCount = *cspacec::iParticleSystemBase_GetEffectorCount;
 *scfGetVersion = *cspacec::iParticleSystemBase_scfGetVersion;
+*scfGetName = *cspacec::iParticleSystemBase_scfGetName;
 sub DESTROY {
     return unless $_[0]->isa('HASH');
     my $self = tied(%{$_[0]});
@@ -18408,6 +18563,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *SetDeepCreation = *cspacec::iParticleSystemFactory_SetDeepCreation;
 *GetDeepCreation = *cspacec::iParticleSystemFactory_GetDeepCreation;
 *scfGetVersion = *cspacec::iParticleSystemFactory_scfGetVersion;
+*scfGetName = *cspacec::iParticleSystemFactory_scfGetName;
 sub DESTROY {
     return unless $_[0]->isa('HASH');
     my $self = tied(%{$_[0]});
@@ -18445,6 +18601,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *LockForExternalControl = *cspacec::iParticleSystem_LockForExternalControl;
 *Advance = *cspacec::iParticleSystem_Advance;
 *scfGetVersion = *cspacec::iParticleSystem_scfGetVersion;
+*scfGetName = *cspacec::iParticleSystem_scfGetName;
 sub DESTROY {
     return unless $_[0]->isa('HASH');
     my $self = tied(%{$_[0]});
@@ -18485,6 +18642,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *SetInitialVelocity = *cspacec::iParticleBuiltinEmitterBase_SetInitialVelocity;
 *GetInitialVelocity = *cspacec::iParticleBuiltinEmitterBase_GetInitialVelocity;
 *scfGetVersion = *cspacec::iParticleBuiltinEmitterBase_scfGetVersion;
+*scfGetName = *cspacec::iParticleBuiltinEmitterBase_scfGetName;
 sub DESTROY {
     return unless $_[0]->isa('HASH');
     my $self = tied(%{$_[0]});
@@ -18519,6 +18677,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *SetRadius = *cspacec::iParticleBuiltinEmitterSphere_SetRadius;
 *GetRadius = *cspacec::iParticleBuiltinEmitterSphere_GetRadius;
 *scfGetVersion = *cspacec::iParticleBuiltinEmitterSphere_scfGetVersion;
+*scfGetName = *cspacec::iParticleBuiltinEmitterSphere_scfGetName;
 sub DESTROY {
     return unless $_[0]->isa('HASH');
     my $self = tied(%{$_[0]});
@@ -18555,6 +18714,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *SetConeAngle = *cspacec::iParticleBuiltinEmitterCone_SetConeAngle;
 *GetConeAngle = *cspacec::iParticleBuiltinEmitterCone_GetConeAngle;
 *scfGetVersion = *cspacec::iParticleBuiltinEmitterCone_scfGetVersion;
+*scfGetName = *cspacec::iParticleBuiltinEmitterCone_scfGetName;
 sub DESTROY {
     return unless $_[0]->isa('HASH');
     my $self = tied(%{$_[0]});
@@ -18589,6 +18749,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *SetBox = *cspacec::iParticleBuiltinEmitterBox_SetBox;
 *GetBox = *cspacec::iParticleBuiltinEmitterBox_GetBox;
 *scfGetVersion = *cspacec::iParticleBuiltinEmitterBox_scfGetVersion;
+*scfGetName = *cspacec::iParticleBuiltinEmitterBox_scfGetName;
 sub DESTROY {
     return unless $_[0]->isa('HASH');
     my $self = tied(%{$_[0]});
@@ -18625,6 +18786,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *SetExtent = *cspacec::iParticleBuiltinEmitterCylinder_SetExtent;
 *GetExtent = *cspacec::iParticleBuiltinEmitterCylinder_GetExtent;
 *scfGetVersion = *cspacec::iParticleBuiltinEmitterCylinder_scfGetVersion;
+*scfGetName = *cspacec::iParticleBuiltinEmitterCylinder_scfGetName;
 sub DESTROY {
     return unless $_[0]->isa('HASH');
     my $self = tied(%{$_[0]});
@@ -18661,6 +18823,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *CreateBox = *cspacec::iParticleBuiltinEmitterFactory_CreateBox;
 *CreateCylinder = *cspacec::iParticleBuiltinEmitterFactory_CreateCylinder;
 *scfGetVersion = *cspacec::iParticleBuiltinEmitterFactory_scfGetVersion;
+*scfGetName = *cspacec::iParticleBuiltinEmitterFactory_scfGetName;
 sub DESTROY {
     return unless $_[0]->isa('HASH');
     my $self = tied(%{$_[0]});
@@ -18699,6 +18862,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *SetRandomAcceleration = *cspacec::iParticleBuiltinEffectorForce_SetRandomAcceleration;
 *GetRandomAcceleration = *cspacec::iParticleBuiltinEffectorForce_GetRandomAcceleration;
 *scfGetVersion = *cspacec::iParticleBuiltinEffectorForce_scfGetVersion;
+*scfGetName = *cspacec::iParticleBuiltinEffectorForce_scfGetName;
 sub DESTROY {
     return unless $_[0]->isa('HASH');
     my $self = tied(%{$_[0]});
@@ -18739,6 +18903,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *GetEndTTL = *cspacec::iParticleBuiltinEffectorLinColor_GetEndTTL;
 *GetColorCount = *cspacec::iParticleBuiltinEffectorLinColor_GetColorCount;
 *scfGetVersion = *cspacec::iParticleBuiltinEffectorLinColor_scfGetVersion;
+*scfGetName = *cspacec::iParticleBuiltinEffectorLinColor_scfGetName;
 sub DESTROY {
     return unless $_[0]->isa('HASH');
     my $self = tied(%{$_[0]});
@@ -18872,6 +19037,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *GetEndTTL = *cspacec::iParticleBuiltinEffectorLinear_GetEndTTL;
 *GetParameterSetCount = *cspacec::iParticleBuiltinEffectorLinear_GetParameterSetCount;
 *scfGetVersion = *cspacec::iParticleBuiltinEffectorLinear_scfGetVersion;
+*scfGetName = *cspacec::iParticleBuiltinEffectorLinear_scfGetName;
 sub DESTROY {
     return unless $_[0]->isa('HASH');
     my $self = tied(%{$_[0]});
@@ -18942,6 +19108,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *CreateLinear = *cspacec::iParticleBuiltinEffectorFactory_CreateLinear;
 *CreateLight = *cspacec::iParticleBuiltinEffectorFactory_CreateLight;
 *scfGetVersion = *cspacec::iParticleBuiltinEffectorFactory_scfGetVersion;
+*scfGetName = *cspacec::iParticleBuiltinEffectorFactory_scfGetName;
 sub DESTROY {
     return unless $_[0]->isa('HASH');
     my $self = tied(%{$_[0]});
@@ -19050,6 +19217,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *GetLocalBBox = *cspacec::iLight_GetLocalBBox;
 *GetWorldBBox = *cspacec::iLight_GetWorldBBox;
 *scfGetVersion = *cspacec::iLight_scfGetVersion;
+*scfGetName = *cspacec::iLight_scfGetName;
 sub DESTROY {
     return unless $_[0]->isa('HASH');
     my $self = tied(%{$_[0]});
@@ -19090,6 +19258,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *FindByName = *cspacec::iLightList_FindByName;
 *FindByID = *cspacec::iLightList_FindByID;
 *scfGetVersion = *cspacec::iLightList_scfGetVersion;
+*scfGetName = *cspacec::iLightList_scfGetName;
 sub DESTROY {
     return unless $_[0]->isa('HASH');
     my $self = tied(%{$_[0]});
@@ -19126,6 +19295,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *GetLastSector = *cspacec::iLightIterator_GetLastSector;
 *Reset = *cspacec::iLightIterator_Reset;
 *scfGetVersion = *cspacec::iLightIterator_scfGetVersion;
+*scfGetName = *cspacec::iLightIterator_scfGetName;
 sub DESTROY {
     return unless $_[0]->isa('HASH');
     my $self = tied(%{$_[0]});
@@ -19443,6 +19613,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *CallSectorCallbacks = *cspacec::iSector_CallSectorCallbacks;
 *GetVisibleRenderMeshes = *cspacec::iSector_GetVisibleRenderMeshes;
 *scfGetVersion = *cspacec::iSector_scfGetVersion;
+*scfGetName = *cspacec::iSector_scfGetName;
 sub DESTROY {
     return unless $_[0]->isa('HASH');
     my $self = tied(%{$_[0]});
@@ -19482,6 +19653,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *Find = *cspacec::iSectorList_Find;
 *FindByName = *cspacec::iSectorList_FindByName;
 *scfGetVersion = *cspacec::iSectorList_scfGetVersion;
+*scfGetName = *cspacec::iSectorList_scfGetName;
 sub DESTROY {
     return unless $_[0]->isa('HASH');
     my $self = tied(%{$_[0]});
@@ -19518,6 +19690,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *GetLastPosition = *cspacec::iSectorIterator_GetLastPosition;
 *Reset = *cspacec::iSectorIterator_Reset;
 *scfGetVersion = *cspacec::iSectorIterator_scfGetVersion;
+*scfGetName = *cspacec::iSectorIterator_scfGetName;
 sub DESTROY {
     return unless $_[0]->isa('HASH');
     my $self = tied(%{$_[0]});
@@ -19731,6 +19904,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *GetDefaultNearClipDistance = *cspacec::iEngine_GetDefaultNearClipDistance;
 *SetDefaultNearClipDistance = *cspacec::iEngine_SetDefaultNearClipDistance;
 *scfGetVersion = *cspacec::iEngine_scfGetVersion;
+*scfGetName = *cspacec::iEngine_scfGetName;
 sub DESTROY {
     return unless $_[0]->isa('HASH');
     my $self = tied(%{$_[0]});
@@ -19901,6 +20075,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *SetViewportSize = *cspacec::iCamera_SetViewportSize;
 *GetInvProjectionMatrix = *cspacec::iCamera_GetInvProjectionMatrix;
 *scfGetVersion = *cspacec::iCamera_scfGetVersion;
+*scfGetName = *cspacec::iCamera_scfGetName;
 sub DESTROY {
     return unless $_[0]->isa('HASH');
     my $self = tied(%{$_[0]});
@@ -20024,6 +20199,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *GetFarPlane = *cspacec::iCameraPosition_GetFarPlane;
 *Save = *cspacec::iCameraPosition_Save;
 *scfGetVersion = *cspacec::iCameraPosition_scfGetVersion;
+*scfGetName = *cspacec::iCameraPosition_scfGetName;
 sub DESTROY {
     return unless $_[0]->isa('HASH');
     my $self = tied(%{$_[0]});
@@ -20147,6 +20323,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *SetTextureClass = *cspacec::iTextureWrapper_SetTextureClass;
 *GetTextureClass = *cspacec::iTextureWrapper_GetTextureClass;
 *scfGetVersion = *cspacec::iTextureWrapper_scfGetVersion;
+*scfGetName = *cspacec::iTextureWrapper_scfGetName;
 sub DESTROY {
     return unless $_[0]->isa('HASH');
     my $self = tied(%{$_[0]});
@@ -20188,6 +20365,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *Find = *cspacec::iTextureList_Find;
 *FindByName = *cspacec::iTextureList_FindByName;
 *scfGetVersion = *cspacec::iTextureList_scfGetVersion;
+*scfGetName = *cspacec::iTextureList_scfGetName;
 sub DESTROY {
     return unless $_[0]->isa('HASH');
     my $self = tied(%{$_[0]});
@@ -20225,6 +20403,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *Visit = *cspacec::iMaterialWrapper_Visit;
 *IsVisitRequired = *cspacec::iMaterialWrapper_IsVisitRequired;
 *scfGetVersion = *cspacec::iMaterialWrapper_scfGetVersion;
+*scfGetName = *cspacec::iMaterialWrapper_scfGetName;
 sub DESTROY {
     return unless $_[0]->isa('HASH');
     my $self = tied(%{$_[0]});
@@ -20260,6 +20439,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *Visit = *cspacec::iMaterialEngine_Visit;
 *IsVisitRequired = *cspacec::iMaterialEngine_IsVisitRequired;
 *scfGetVersion = *cspacec::iMaterialEngine_scfGetVersion;
+*scfGetName = *cspacec::iMaterialEngine_scfGetName;
 sub DESTROY {
     return unless $_[0]->isa('HASH');
     my $self = tied(%{$_[0]});
@@ -20370,6 +20550,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 %OWNER = ();
 %ITERATORS = ();
 *scfGetVersion = *cspacec::iSceneNodeArray_scfGetVersion;
+*scfGetName = *cspacec::iSceneNodeArray_scfGetName;
 sub DESTROY {
     return unless $_[0]->isa('HASH');
     my $self = tied(%{$_[0]});
@@ -20410,6 +20591,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *GetChildren = *cspacec::iSceneNode_GetChildren;
 *GetChildrenArray = *cspacec::iSceneNode_GetChildrenArray;
 *scfGetVersion = *cspacec::iSceneNode_scfGetVersion;
+*scfGetName = *cspacec::iSceneNode_scfGetName;
 sub DESTROY {
     return unless $_[0]->isa('HASH');
     my $self = tied(%{$_[0]});
@@ -20620,6 +20802,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *AddInstance = *cspacec::iMeshWrapper_AddInstance;
 *RemoveInstance = *cspacec::iMeshWrapper_RemoveInstance;
 *scfGetVersion = *cspacec::iMeshWrapper_scfGetVersion;
+*scfGetName = *cspacec::iMeshWrapper_scfGetName;
 sub DESTROY {
     return unless $_[0]->isa('HASH');
     my $self = tied(%{$_[0]});
@@ -20684,6 +20867,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *GetExtraRenderMeshCount = *cspacec::iMeshFactoryWrapper_GetExtraRenderMeshCount;
 *RemoveExtraRenderMesh = *cspacec::iMeshFactoryWrapper_RemoveExtraRenderMesh;
 *scfGetVersion = *cspacec::iMeshFactoryWrapper_scfGetVersion;
+*scfGetName = *cspacec::iMeshFactoryWrapper_scfGetName;
 sub DESTROY {
     return unless $_[0]->isa('HASH');
     my $self = tied(%{$_[0]});
@@ -20829,6 +21013,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *Reset = *cspacec::iMeshWrapperIterator_Reset;
 *HasNext = *cspacec::iMeshWrapperIterator_HasNext;
 *scfGetVersion = *cspacec::iMeshWrapperIterator_scfGetVersion;
+*scfGetName = *cspacec::iMeshWrapperIterator_scfGetName;
 sub DESTROY {
     return unless $_[0]->isa('HASH');
     my $self = tied(%{$_[0]});
@@ -20863,6 +21048,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *MovableChanged = *cspacec::iMovableListener_MovableChanged;
 *MovableDestroyed = *cspacec::iMovableListener_MovableDestroyed;
 *scfGetVersion = *cspacec::iMovableListener_scfGetVersion;
+*scfGetName = *cspacec::iMovableListener_scfGetName;
 sub DESTROY {
     return unless $_[0]->isa('HASH');
     my $self = tied(%{$_[0]});
@@ -20917,6 +21103,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *SetFullTransform = *cspacec::iMovable_SetFullTransform;
 *SetFullPosition = *cspacec::iMovable_SetFullPosition;
 *scfGetVersion = *cspacec::iMovable_scfGetVersion;
+*scfGetName = *cspacec::iMovable_scfGetName;
 sub DESTROY {
     return unless $_[0]->isa('HASH');
     my $self = tied(%{$_[0]});
@@ -21028,6 +21215,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *BeginPrecacheCulling = *cspacec::iVisibilityCuller_BeginPrecacheCulling;
 *EndPrecacheCulling = *cspacec::iVisibilityCuller_EndPrecacheCulling;
 *scfGetVersion = *cspacec::iVisibilityCuller_scfGetVersion;
+*scfGetName = *cspacec::iVisibilityCuller_scfGetName;
 sub DESTROY {
     return unless $_[0]->isa('HASH');
     my $self = tied(%{$_[0]});
@@ -21168,6 +21356,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *GetMaterial = *cspacec::iPortal_GetMaterial;
 *SetMaterial = *cspacec::iPortal_SetMaterial;
 *scfGetVersion = *cspacec::iPortal_scfGetVersion;
+*scfGetName = *cspacec::iPortal_scfGetName;
 sub DESTROY {
     return unless $_[0]->isa('HASH');
     my $self = tied(%{$_[0]});
@@ -21207,6 +21396,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *ComputeScreenPolygons = *cspacec::iPortalContainer_ComputeScreenPolygons;
 *GetTotalVertexCount = *cspacec::iPortalContainer_GetTotalVertexCount;
 *scfGetVersion = *cspacec::iPortalContainer_scfGetVersion;
+*scfGetName = *cspacec::iPortalContainer_scfGetName;
 sub DESTROY {
     return unless $_[0]->isa('HASH');
     my $self = tied(%{$_[0]});
@@ -21276,6 +21466,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 %ITERATORS = ();
 *Draw = *cspacec::iRenderLoop_Draw;
 *scfGetVersion = *cspacec::iRenderLoop_scfGetVersion;
+*scfGetName = *cspacec::iRenderLoop_scfGetName;
 sub DESTROY {
     return unless $_[0]->isa('HASH');
     my $self = tied(%{$_[0]});
@@ -21315,6 +21506,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *Load = *cspacec::iRenderLoopManager_Load;
 *UnregisterAll = *cspacec::iRenderLoopManager_UnregisterAll;
 *scfGetVersion = *cspacec::iRenderLoopManager_scfGetVersion;
+*scfGetName = *cspacec::iRenderLoopManager_scfGetName;
 sub DESTROY {
     return unless $_[0]->isa('HASH');
     my $self = tied(%{$_[0]});
@@ -21349,6 +21541,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *RenderView = *cspacec::iRenderManager_RenderView;
 *PrecacheView = *cspacec::iRenderManager_PrecacheView;
 *scfGetVersion = *cspacec::iRenderManager_scfGetVersion;
+*scfGetName = *cspacec::iRenderManager_scfGetName;
 sub DESTROY {
     return unless $_[0]->isa('HASH');
     my $self = tied(%{$_[0]});
@@ -21387,6 +21580,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *UnregisterRenderTarget = *cspacec::iRenderManagerTargets_UnregisterRenderTarget;
 *MarkAsUsed = *cspacec::iRenderManagerTargets_MarkAsUsed;
 *scfGetVersion = *cspacec::iRenderManagerTargets_scfGetVersion;
+*scfGetName = *cspacec::iRenderManagerTargets_scfGetName;
 sub DESTROY {
     return unless $_[0]->isa('HASH');
     my $self = tied(%{$_[0]});
@@ -21422,6 +21616,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *AddLayersFromDocument = *cspacec::iRenderManagerPostEffects_AddLayersFromDocument;
 *AddLayersFromFile = *cspacec::iRenderManagerPostEffects_AddLayersFromFile;
 *scfGetVersion = *cspacec::iRenderManagerPostEffects_scfGetVersion;
+*scfGetName = *cspacec::iRenderManagerPostEffects_scfGetName;
 sub DESTROY {
     return unless $_[0]->isa('HASH');
     my $self = tied(%{$_[0]});
@@ -21536,6 +21731,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *FindShader = *cspacec::iCollection_FindShader;
 *FindCameraPosition = *cspacec::iCollection_FindCameraPosition;
 *scfGetVersion = *cspacec::iCollection_scfGetVersion;
+*scfGetName = *cspacec::iCollection_scfGetName;
 sub DESTROY {
     return unless $_[0]->isa('HASH');
     my $self = tied(%{$_[0]});
@@ -21568,6 +21764,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 %OWNER = ();
 %ITERATORS = ();
 *scfGetVersion = *cspacec::iCollectionArray_scfGetVersion;
+*scfGetName = *cspacec::iCollectionArray_scfGetName;
 sub DESTROY {
     return unless $_[0]->isa('HASH');
     my $self = tied(%{$_[0]});
