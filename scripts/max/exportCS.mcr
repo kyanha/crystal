@@ -47,7 +47,7 @@ rollout Test1 "Export Level to CS" width:226 height:481
 	checkbox chkServer "Export as Server Map" pos:[21,231] width:168 height:26
 	on Test1 open do
 	(
-	   version = 56 as String
+	   version = 57 as String
 	   lblVersion.text = "V."+version
 	   
 	
@@ -102,6 +102,8 @@ rollout Test1 "Export Level to CS" width:226 height:481
 	    global xrelocate = 0
 	    global yrelocate = 0
 	    global zrelocate = 0
+		
+		global roomName = ""
 	
 	    -- functions declaration
 	    global tokenize
@@ -123,6 +125,7 @@ rollout Test1 "Export Level to CS" width:226 height:481
 	
 	    global emitNeeded = false
 	    global particleNeeded = false
+		global foliageNeeded = false
 	    global partMaterials = #()
 	    
 	    -- instanced materials
@@ -482,6 +485,10 @@ rollout Test1 "Export Level to CS" width:226 height:481
 	                  format "        <binary/>\n" to:outFile
 	                  format "      </alpha>\n" to:outFile
 	                )
+					--handles alpha texture for terrain, which needs no compression or changes
+					if (findString subm.name "_shader_alpha" !=undefined) then (
+					  format "      <class>lookup</class>\n" to:outFile
+					)
 	                format "    </texture>\n" to:outFile
 	                    
 	                append materialsWrittenToWorld diffuseImage
@@ -1220,7 +1227,14 @@ rollout Test1 "Export Level to CS" width:226 height:481
 	                )
 	
 	                format "  </effector> \n" to:outFile
-	
+
+                    particlebbox = getUserProp obj "BBOX"
+					if (particlebbox!=undefined) then (
+						particlebbox = tokenize particlebbox ","
+						format "   <minbb><min x=\"%\" y=\"%\" z=\"%\" />\n" particlebbox[1] particlebbox[2] particlebbox[3] to:outFile
+						format "                 <max x=\"%\" y=\"%\" z=\"%\" /></minbb>\n" particlebbox[4] particlebbox[5] particlebbox[6] to:outFile
+					)
+
 	                format "  </params> \n" to:outFile
 	                format "  </meshfact> \n" to:outFile
 	            ) else if (type == "particle" and not meshfact) then (
@@ -1685,6 +1699,8 @@ rollout Test1 "Export Level to CS" width:226 height:481
 	            if (warptarget==undefined) then (
 	                message = "ERROR: WARP TARGET "+ warp + " specified on object "+obj.name+" doesn't exist"
 	                messageBox message
+					enableSceneRedraw()
+					undo on
 	                return 1
 	            )
 	            -- calcs distance from warptarget
@@ -2208,6 +2224,8 @@ rollout Test1 "Export Level to CS" width:226 height:481
 	                message = "Export aborted: No UV maps assigned to genmesh object: " + factoryName
 	                messageBox message
 	                close outFile 
+					enableSceneRedraw()
+					undo on
 	                return 1
 	            )
 	
@@ -2265,6 +2283,8 @@ rollout Test1 "Export Level to CS" width:226 height:481
 	                        message = "PROBLEM on object " + factoryName + ".\n UV should not be welded on vertex " + (Tface[h] as String)
 	                        messageBox message
 	                        close outFile
+							enableSceneRedraw()
+							undo on
 	                        return 1
 	                    )
 	                    vertTInfo[Tface[h]]=curVert
@@ -2304,6 +2324,8 @@ rollout Test1 "Export Level to CS" width:226 height:481
 	                    message = "PROBLEM on object " + factoryName + ": UV mapping seems to be messed up. Please UnWrap it then collapse it.";
 	                    messageBox message
 	                    close outFile
+						enableSceneRedraw()
+						undo on
 	                    return 1
 	                )
 	                xvert = (vert.x * xscale) + xrelocate
@@ -2491,15 +2513,7 @@ rollout Test1 "Export Level to CS" width:226 height:481
 	            if (noshadows=="yes") then
 	                format "      <noshadows />\n" to:outFile
 	
-	
-	            if (colldet=="no") then format "<trimesh><id>colldet</id></trimesh>\n" to:outFile
-	
-	            -- check for no shadow setting
-	            -- NO MORE WORKING??
-	            noshadows = getUserProp obj "NOSHADOWS"
-	            if (noshadows=="yes") then
-	                format "      <noshadows />\n" to:outFile
-	
+	            if (colldet=="no") then format "<trimesh><id>colldet</id></trimesh>\n" to:outFile	
 	
 	            -- check if object uses a binary alpha texture
 	            if ((classOf obj.mat)==Standardmaterial) then (
@@ -2528,6 +2542,36 @@ rollout Test1 "Export Level to CS" width:226 height:481
 	            format "  </meshfact>\n" to:outFile
 	    )    
 	
+		fn OutputMeshGen obj meshgen outFile =
+	    (
+				-- TODO check for meshgen applied to multiple objects
+				factory1 = getUserProp meshgen "FACTORY1"
+				toks = tokenize factory1 ","
+				format "    <meshgen name=\"meshgen%\">\n" obj.name to:outFile
+				format "        <densityfactormap name=\"%\">\n" obj.name to:outFile
+				format "          <image>%</image>\n" toks[1]  to:outFile
+				format "          <scale w=\"1280\" h=\"1280\" />\n" to:outFile
+				format "        </densityfactormap>\n" to:outFile
+				format "        <geometry>\n" to:outFile
+				format "          <factory maxdist=\"%\" name=\"%\" />\n" toks[2] toks[3] to:outFile
+				format "          <radius>%</radius>\n" toks[4] to:outFile
+				format "          <density>%</density>\n" toks[5] to:outFile
+				format "          <densityfactormap factor=\"%\">%</densityfactormap>\n" toks[6] obj.name to:outFile
+				format "          <windbias>%</windbias>\n" toks[7] to:outFile
+				format "          <winddirection x=\".1\" y=\".1\" />\n" to:outFile
+				format "          <windspeed>1</windspeed>\n" to:outFile
+				format "        </geometry>\n" to:outFile
+
+				alpha = getUserProp meshgen "ALPHA"
+				toksalpha = tokenize alpha ","
+				format "        <alphascale mindist=\"%\" maxdist=\"%\" />\n" toksalpha[1] toksalpha[2] to:outFile
+				format "        <samplebox>\n" to:outFile
+				format "           <min x=\"-640\" y=\"-200\" z=\"-640\" />\n " to:outFile
+				format "           <max x=\"640\" y=\"200\" z=\"640\" />\n " to:outFile
+				format "        </samplebox>\n" to:outFile
+				format "        <meshobj>Terrain_%</meshobj>\n" roomName to:outFile
+				format "    </meshgen>\n" to:outFile
+		)
 	    -- ////////////////////////
 	    -- Main: program starts here
 	    -- ////////////////////////
@@ -2553,12 +2597,16 @@ rollout Test1 "Export Level to CS" width:226 height:481
 	    customPropNumber = fileProperties.findProperty #custom "roomname"
 	    if (customPropNumber==0) then (
 	        messageBox "Please click on File>File Properties and add a Custom Property called roomname with the name of the sector."
+			enableSceneRedraw()
+			undo on
 	        return 1
 	    )
 	    roomName = fileProperties.getPropertyValue #custom customPropNumber 
 	
 	    if (roomName==undefined) then (
 	       messageBox "ERROR: Please set a custom property named roomname"
+		   enableSceneRedraw()
+		   undo on
 	       return 1
 	    ) else (
 	       format "Roomname: %\n" roomName
@@ -2672,6 +2720,12 @@ rollout Test1 "Export Level to CS" width:226 height:481
 	            terrainobject = obj
 	            format "Terrain object found: %\n" obj.name
 	        )
+
+	        if (findString obj.name "_meshgen_" !=undefined) then (
+	            foliageNeeded = true
+	            format "Meshgen object found: %\n" obj.name
+	        )
+			
 	    )
 	    
 	    -- Check for instanced objects.
@@ -2721,7 +2775,13 @@ rollout Test1 "Export Level to CS" width:226 height:481
 	          format "    <plugin name=\"terrainFact\">crystalspace.mesh.loader.factory.terrain2</plugin>\n" to:outFile 
 	          format "    <plugin name=\"terrain\">crystalspace.mesh.loader.terrain2</plugin>\n" to:outFile 
 	      )
-	
+
+	      -- add plugins needed for foliage
+	      if (foliageNeeded) then (
+	          format "    <plugin name=\"foliageFact\">crystalspace.mesh.loader.factory.foliage</plugin>\n" to:outFile 
+	          format "    <plugin name=\"foliage\">crystalspace.mesh.loader.foliage</plugin>\n" to:outFile 
+	      )
+
 	    format "  </plugins>\n\n" to:outFile
 	
 
@@ -2782,6 +2842,8 @@ rollout Test1 "Export Level to CS" width:226 height:481
 	            message = "Object " + obj.name + " has an old _t_ tag. Please remove the _t_ and use TRASPARENT=yes or RANGETRASP=yes in the properties."
 	            messageBox message
 	            close outFile
+				enableSceneRedraw()
+				undo on
 	            return 1
 	        )
 	
@@ -2825,6 +2887,8 @@ rollout Test1 "Export Level to CS" width:226 height:481
 	
 	          if (terrx==undefined or terry==undefined or terrz==undefined or terrimage==undefined ) then (
 	            messageBox "ERROR: The terrain object doesn't have the necessary properties set."
+				enableSceneRedraw()
+				undo on
 	            return 1
 	          )
 	
@@ -2909,15 +2973,6 @@ rollout Test1 "Export Level to CS" width:226 height:481
                   istrasparent=true
                 )
                 
-                -- no shadow not supported on meshfact
-                -- no more used??
-                --noshadows = getUserProp obj "NOSHADOWS"
-                --if (noshadows=="yes") then
-                --    format "      <noshadows />\n" to:outFile
-
-                -- check for no lighting setting
-                lighting = getUserProp obj "LIGHTING"
-
                 -- check for colldet based on groups
                 --colldet = doesCollide obj collvisInfo
                 --check simple colldet setting
@@ -3155,6 +3210,14 @@ rollout Test1 "Export Level to CS" width:226 height:481
 	              )
 
 	              format "      </params><move><v x=\"%\" y=\"%\" z=\"%\" /></move><priority>wall</priority></meshobj>\n" terrx terrz terry to:outFile
+
+	                -- check if this object has a meshgen associated
+	                meshgen = obj.children[1]
+	                if (meshgen!=undefined and (findString meshgen.name "_meshgen_" != undefined)) then
+	                (
+						OutputMeshGen obj meshgen outFile
+	                )
+
 	              continue;
 	            ) -- end manage terrain
 	
@@ -3287,6 +3350,8 @@ rollout Test1 "Export Level to CS" width:226 height:481
 	                        message = "Export aborted: NO OBJECT FOUND AS GENMESH FACTORY OF " + obj.name
 	                        messageBox message
 	                        close outFile
+							enableSceneRedraw()
+							undo on
 	                        return 1
 	                    )
 	                )
@@ -3303,7 +3368,12 @@ rollout Test1 "Export Level to CS" width:226 height:481
 	                )
 	
 	                istrasparent=false
-	
+
+	                -- check maxdistance setting
+	                maxdistance = getUserProp obj "MAXDISTANCE"
+	                if (maxdistance!=undefined) then
+	                    format "       <maxrenderdist value='%' />\n" maxdistance to:outFile
+
 	                -- handles sky objects
 	                if (findString obj.name "_sky_" !=undefined) then (
 	                  format "      <priority>object2</priority>\n" to:outFile
@@ -3321,7 +3391,12 @@ rollout Test1 "Export Level to CS" width:226 height:481
 	                noshadows = getUserProp obj "NOSHADOWS"
 	                if (noshadows=="yes") then
 	                    format "      <noshadows />\n" to:outFile
-	        
+
+					-- check for no lighting setting
+					nolighting = getUserProp obj "NOLIGHTING"
+					if (nolighting=="yes") then
+						format "      <nolighting />\n" to:outFile
+	
 	
 	                -- for meshref <factory> must go outisde <params>
 	                if (lodlow!=undefined and isExplicitGenMesh) then
@@ -3447,51 +3522,12 @@ rollout Test1 "Export Level to CS" width:226 height:481
 	                    format "    </meshobj>\n" to:outFile
 	                else
 	                    format "    </meshref>\n" to:outFile
-	
-	
+
 	                -- check if this object has a meshgen associated
 	                meshgen = obj.children[1]
 	                if (meshgen!=undefined and (findString meshgen.name "_meshgen_" != undefined)) then
 	                (
-	                    -- TODO check for meshgen applied to multiple objects
-	                    factory1 = getUserProp meshgen "FACTORY1"
-	                    toks = tokenize factory1 ","
-	                    format "    <meshgen name=\"%\">\n" obj.name to:outFile
-	                    format "        <geometry>\n" to:outFile
-	                    format "        <factory maxdist=\"%\" name=\"%\" />\n" toks[1] toks[2] to:outFile
-	                    format "        <radius>%</radius>\n" toks[3] to:outFile
-	                    format "        <density>%</density>\n" toks[4] to:outFile
-	                    format "        <materialfactor material=\"%\" factor=\"0\" />\n" toks[5] to:outFile
-	                    format "        <defaultmaterialfactor>1</defaultmaterialfactor>\n" to:outFile
-	                    format "        </geometry>\n" to:outFile
-	                    
-	                    factory2 = getUserProp meshgen "FACTORY2"
-	                    if (factory2!=undefined) then (
-	                        toks = tokenize factory2 ","
-	                        format "        <geometry>\n" to:outFile
-	                        format "        <factory maxdist=\"%\" name=\"%\" />\n" toks[1] toks[2] to:outFile
-	                        format "        <radius>%</radius>\n" toks[3] to:outFile
-	                        format "        <density>%</density>\n" toks[4] to:outFile
-	                        format "        <materialfactor material=\"%\" factor=\"0\" />\n" toks[5] to:outFile
-	                        format "        <defaultmaterialfactor>1</defaultmaterialfactor>\n" to:outFile
-	                        format "        </geometry>\n" to:outFile
-	                    )
-	                    celldim = getUserProp meshgen "CELLDIM"
-	                    density = getUserProp meshgen "DENSITY"
-	                    alpha = getUserProp meshgen "ALPHA"
-	                    box = getUserProp meshgen "BOX"
-	                    toksdensity = tokenize density ","
-	                    toksalpha = tokenize alpha ","
-	                    toksbox = tokenize box ","
-	                    format "    <celldim>%</celldim>\n" celldim to:outFile
-	                    format "    <densityscale mindist=\"%\" maxdist=\"%\" maxfactor=\"%\" />\n" toksdensity[1] toksdensity[2] toksdensity[3] to:outFile
-	                    format "    <alphascale mindist=\"%\" maxdist=\"%\" />\n" toksalpha[1] toksalpha[2] to:outFile
-	                    format "    <samplebox>\n" to:outFile
-	                    format "            <min x=\"-256\" y=\"-200\" z=\"-256\" />\n " toksbox[1] toksbox[2] toksbox[3] to:outFile
-	                    format "            <max x=\"256\" y=\"200\" z=\"256\" />\n " toksbox[4] toksbox[5] toksbox[6] to:outFile
-	                    format "    </samplebox>\n" to:outFile
-	                    format "    <meshobj>%</meshobj>\n" obj.name to:outFile
-	                    format "     </meshgen>\n" to:outFile
+						OutputMeshGen obj meshgen outFile
 	                )
 	
 	                continue;
