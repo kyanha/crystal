@@ -130,6 +130,15 @@
 #     occur.  The script cleans up after itself, so nothing will be left in
 #     this directory after the script terminates. Default: "/tmp"
 #
+# $jobber_state_file [optional]
+#     Absolute path of file in which to save state between invocations of this
+#     script. This file will be created the first time the script is invoked.
+#     Saved state is consulted to determine whether changes have been committed
+#     to the repository since the previous invocation. If no commits are
+#     detected, then all processing is skipped, otherwise the project is
+#     checked out and @jobber_tasks invoked as usual.  If value is 'undef',
+#     then processing occurs unconditionally.  Default: undef
+#
 # @jobber_tasks [required]
 #     A list of tasks to perform on the checked-out source tree.  Typical tasks
 #     are those which repair outdated files, and those which generate
@@ -272,7 +281,7 @@ use warnings;
 $Getopt::Long::ignorecase = 0;
 
 my $PROG_NAME = 'jobber-svn.pl';
-my $PROG_VERSION = '42';
+my $PROG_VERSION = '43';
 my $AUTHOR_NAME = 'Eric Sunshine';
 my $AUTHOR_EMAIL = 'sunshine@sunshineco.com';
 my $COPYRIGHT = "Copyright (C) 2000-2012 by $AUTHOR_NAME <$AUTHOR_EMAIL>\nConverted for SVN support by Marten Svanfeldt";
@@ -303,6 +312,7 @@ my $jobber_package_dir = undef;
 my $jobber_public_group = undef;
 my $jobber_public_mode = undef;
 my $jobber_temp_dir = '/tmp';
+my $jobber_state_file = undef;
 my @jobber_tasks = ();
 my @jobber_archivers = ($ARCHIVER_BZIP2, $ARCHIVER_GZIP, $ARCHIVER_ZIP, $ARCHIVER_LZMA);
 my %jobber_properties = ();
@@ -508,6 +518,76 @@ sub scandir {
 }
 
 #------------------------------------------------------------------------------
+# Read the last revision number processed by this script. The file must contain
+# a single integer.
+#------------------------------------------------------------------------------
+sub load_state {
+    my $file = shift;
+    my $content;
+    {
+	local $/; # Slurp file mode.
+	open my $fh, '<', $file or return -1;
+	$content = <$fh>;
+	close $fh;
+    }
+    $content =~ /^\s*(\d+)\s*$/ or
+	expire('read state: malformed content', $content);
+    print "Previous revision: r$1\n";
+    return int($1);
+}
+
+#------------------------------------------------------------------------------
+# Write last revision number processed by this script.
+#------------------------------------------------------------------------------
+sub save_state {
+    my $file = shift;
+    my $number = shift;
+    open my $fh, '>', $file or expire('write state');
+    print $fh "$number\n";
+    close $fh;
+}
+
+#------------------------------------------------------------------------------
+# Strip -q/--quiet from client-supplied SVN flags for Subversion commands which
+# do not accept these options or for cases in which output suppression may be
+# inappropriate.
+#------------------------------------------------------------------------------
+sub svn_strip_quiet {
+    my $f = shift;
+    $f =~ s/(^|\s)-(q|-quiet)(?=\s|$)//g;
+    return $f;
+}
+
+
+#------------------------------------------------------------------------------
+# Get the current revision number of the given SVN branch.
+#------------------------------------------------------------------------------
+sub svn_get_branch_revno {
+    my $f = svn_strip_quiet($jobber_svn_flags);
+    my $out = run_command("$jobber_svn_command info $jobber_svn_base_url $f");
+    $out =~ /^\s*Last\s+Changed\s+Rev\s*:\s*(\d+)\s*$/m or
+	expire('branch revno: malformed server response', $out);
+    print "Current revision: r$1\n";
+    return $1;
+}
+
+#------------------------------------------------------------------------------
+# Compute the number of revisions on the SVN branch between the two given
+# revision numbers, inclusive.  Note that the computed value is not the same as
+# the numeric difference between r1 and r2, which would represent the count of
+# revisions, not only on this branch, but anywhere in the repository, due to
+# SVN's global revision number scheme.
+#------------------------------------------------------------------------------
+sub svn_count_branch_revs {
+    my $r1 = shift;
+    my $r2 = shift;
+    my $out = run_command("$jobber_svn_command log -r$r1:$r2 $jobber_svn_base_url -q $jobber_svn_flags");
+    my @revs = $out =~ /^r\d+\s+\|/mg;
+    print "Branch revision count for -r$r1:$r2: ", scalar @revs, "\n";
+    return scalar @revs;
+}
+
+#------------------------------------------------------------------------------
 # Invokes the SVN `delete` command on a number of files.
 #------------------------------------------------------------------------------
 sub svn_remove {
@@ -587,7 +667,7 @@ sub svn_examine {
 # Extract the appropriate files from the SVN repository.
 #------------------------------------------------------------------------------
 sub svn_checkout {
-    print "URL: $jobber_svn_base_url\n";
+    print "Retrieving: $jobber_svn_base_url\n";
     run_command("$jobber_svn_command co $jobber_svn_base_url $jobber_svn_flags");
 }
 
@@ -613,7 +693,8 @@ sub svn_update {
 
 #------------------------------------------------------------------------------
 # Commit files to the SVN repository.  The 'svn' command is smart enough to
-# only commit files which have actually changed.
+# only commit files which have actually changed. Returns the revision number
+# of the new commit or undef if no files changed.
 #------------------------------------------------------------------------------
 sub svn_commit_dirs {
     my ($message, @dirs) = @_;
@@ -624,9 +705,19 @@ sub svn_commit_dirs {
     print RESPFILE $message;
     close(RESPFILE);
 
-    run_command("$jobber_svn_command commit --username $jobber_svn_user -F $respFileName $dirsAsText $jobber_svn_flags")
+    # We need to capture the revision number of the new commit, however, if
+    # $jobber_svn_flags includes -q/--quiet, then emission of the new revision
+    # number is suppressed with all other output. Therefore, filter -q/--quiet
+    # out of $jobber_svn_flags.
+    my $f = svn_strip_quiet($jobber_svn_flags);
+
+    my $out = run_command("$jobber_svn_command commit --username $jobber_svn_user -F $respFileName $dirsAsText $f")
 	unless $TESTING;
     unlink($respFileName);
+
+    my ($committed_rev) = $out =~ /^Committed\s+revision\s+(\d+)/m;
+    print "Committed revision: ", $committed_rev ? "r$committed_rev\n" : "none\n";
+    return $committed_rev;
 }
 
 #------------------------------------------------------------------------------
@@ -645,7 +736,7 @@ sub svn_commit {
 	    $message .= "$task->{'name'}: $msg\n";
 	}
     }
-    svn_commit_dirs("$message", @dirs);
+    return svn_commit_dirs("$message", @dirs);
 }
 
 #------------------------------------------------------------------------------
@@ -878,7 +969,6 @@ sub time_now {
 # publishing packages.
 #------------------------------------------------------------------------------
 sub run {
-    print 'BEGIN: ', time_now(), "\n";
     my $convdir = conversion_dir();
     create_transient($convdir);
     svn_checkout();
@@ -886,10 +976,61 @@ sub run {
     run_tasks();
     apply_diffs();
     svn_update();
-    svn_commit();
+    my $committed_rev = svn_commit();
     publish_browseable();
     publish_packages();
     destroy_transient($convdir);
+    return $committed_rev;
+}
+
+#------------------------------------------------------------------------------
+# Check if any there have been any commits to the SVN branch since the last
+# run. If so, perform the defined tasks.
+#
+# Implementation note: We record in the state file the revision number we
+# committed if-and-only-if there have been no other commits on the SVN branch
+# between the time the script started and the time we made out commit (assuming
+# we committed anything). Only in this case, is it safe to skip processing on
+# the next run if the current branch revision number matches the saved state.
+# In all other cases, such as if a 3rd-party commits to this branch while we
+# are running or if we did not commit anything, then we can only record the
+# revision number of the branch when the script began. This ensures that
+# commits made on the branch while we are running will be seen and processed
+# when the script next runs. To detect if any commits have been made on the
+# branch between the time the script started and when we made a commit (if
+# any), we count the number of commits on the branch from
+# -r$current:$committed, inclusive. If the count is two, then we can be assured
+# that no 3rd-party committed to the branch while we were running.
+#------------------------------------------------------------------------------
+sub run_if_needed {
+    print 'BEGIN: ', time_now(), "\n";
+
+    if (!$jobber_state_file || $TESTING) {
+	run();
+    }
+    else {
+	my $last_rev = load_state($jobber_state_file);
+	my $current_rev = svn_get_branch_revno();
+	if ($current_rev == $last_rev) {
+	    print "Skipping processing; no new commits.\n";
+	}
+	else {
+	    my $committed_rev = run();
+	    if ($committed_rev) {
+		my $revs = svn_count_branch_revs($current_rev, $committed_rev);
+		if ($revs == 2) {
+		    save_state ($jobber_state_file, $committed_rev);
+		}
+		else {
+		    save_state ($jobber_state_file, $current_rev);
+		}
+	    }
+	    else {
+		save_state ($jobber_state_file, $current_rev);
+	    }
+	}
+    }
+
     print 'END: ', time_now(), "\n";
 }
 
@@ -1031,5 +1172,5 @@ sub usage_error {
 # Run the conversion.
 #------------------------------------------------------------------------------
 process_options();
-run();
+run_if_needed();
 dump_captured();
