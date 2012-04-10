@@ -130,18 +130,6 @@
 #     occur.  The script cleans up after itself, so nothing will be left in
 #     this directory after the script terminates. Default: "/tmp"
 #
-# @jobber_binary_override [optional] @@ NOT NEEDED
-#     Normally, jobber-svn.pl determines automatically whether files which it adds
-#     to the repository are binary or text (SVN needs to know this
-#     information).  There may be special cases, however, when text files need
-#     to be treated as binary files. This setting is a list of regular
-#     expressions which are matched against the names of files being added to
-#     the SVN repository.  If a filename matches one of these expressions, then
-#     it is considered binary (thus, the SVN "-kb" option is used).  An example
-#     of when this comes in handy is when dealing with Visual-C++ DSW and DSP
-#     project files in which the CRLF line-terminator must be preserved.
-#     Default: .dsw and .dsp files
-#
 # @jobber_tasks [required]
 #     A list of tasks to perform on the checked-out source tree.  Typical tasks
 #     are those which repair outdated files, and those which generate
@@ -315,7 +303,6 @@ my $jobber_package_dir = undef;
 my $jobber_public_group = undef;
 my $jobber_public_mode = undef;
 my $jobber_temp_dir = '/tmp';
-my @jobber_binary_override = ('(?i)\.(dsw|dsp)$');
 my @jobber_tasks = ();
 my @jobber_archivers = ($ARCHIVER_BZIP2, $ARCHIVER_GZIP, $ARCHIVER_ZIP, $ARCHIVER_LZMA);
 my %jobber_properties = ();
