@@ -1,5 +1,5 @@
 /*
-  Copyright (C) 2010 Christian Van Brussel, Institute of Information
+  Copyright (C) 2010-12 Christian Van Brussel, Institute of Information
       and Communication Technologies, Electronics and Applied Mathematics
       at Universite catholique de Louvain, Belgium
       http://www.uclouvain.be/en-icteam.html
@@ -38,6 +38,7 @@
 #include "ivaria/reporter.h"
 #include "ivideo/graph2d.h"
 #include "ivideo/graph3d.h"
+#include "cstool/genmeshbuilder.h"
 #include "cstool/materialbuilder.h"
 
 CS_PLUGIN_NAMESPACE_BEGIN(DebugNode)
@@ -124,22 +125,55 @@ CS_PLUGIN_NAMESPACE_BEGIN(DebugNode)
     g2d->DrawLineProjected (vXYz, vXYZ, projection, color);
   }
 
+  // --------------------------  Utility methods  --------------------------
+
+  // Generate a random color from an index
+  inline void GetRandomColor (int index, int& r, int& g, int& b)
+  {
+    int ii = (index + 1) * (index + 1);
+    r = 255 - (ii % 255);
+    g = 255 - ((ii * (index + 1)) % 255);
+    b = 255 - ((ii * ii) % 255);
+  }
+
+  inline void GetRandomColor (int index, int& color, iGraphics2D* g2d)
+  {
+    int r, g, b;
+    GetRandomColor (index, r, g, b);
+    color = g2d->FindRGB (r, g, b);
+  }
+
+  inline void GetRandomColor (int index, csColor& color)
+  {
+    int r, g, b;
+    GetRandomColor (index, r, g, b);
+    // 0.003922f equals 1 / 255
+    color.Set (r * 0.003922f, g * 0.003922f, b * 0.003922f);
+  }
+
   // --------------------------  DebugNode  --------------------------
 
   CS_LEAKGUARD_IMPLEMENT(DebugNode);
 
   DebugNode::DebugNode (DebugNodeFactory* factory, CS::Animation::iSkeleton* skeleton)
     : scfImplementationType (this),
-    CS::Animation::SkeletonAnimNodeSingle<DebugNodeFactory> (factory, skeleton)
+    CS::Animation::SkeletonAnimNodeSingle<DebugNodeFactory> (factory, skeleton),
+    lastColor (1.0f, 0.0f, 1.0f)
   {
   }
 
   void DebugNode::Draw (iCamera* camera, csColor color)
   {
+    // Remove the bone meshes if we don't need it anymore
+    if (!(factory->modes & CS::Animation::DEBUG_ELLIPSOIDS)
+	&& boneData.GetSize ())
+      RemoveBoneMeshes ();
+
     if (!factory->modes)
       return;
 
-    csRef<iGraphics3D> g3d = csQueryRegistry<iGraphics3D> (factory->manager->GetObjectRegistry());
+    csRef<iGraphics3D> g3d = csQueryRegistry<iGraphics3D>
+      (factory->manager->GetObjectRegistry ());
     csRef<iGraphics2D> g2d = g3d->GetDriver2D ();
     CS_ASSERT(g3d && g2d);
 
@@ -147,63 +181,41 @@ CS_PLUGIN_NAMESPACE_BEGIN(DebugNode)
     if (!g3d->BeginDraw (CSDRAW_2DGRAPHICS))
       return;
 
-    CS::Animation::iSkeletonFactory* fact = skeleton->GetFactory ();
+    CS::Animation::iSkeletonFactory* skeletonFactory = skeleton->GetFactory ();
     const CS::Math::Matrix4& projection (camera->GetProjectionMatrix ());
     csReversibleTransform object2camera =
       camera->GetTransform () / skeleton->GetSceneNode ()->GetMovable ()->GetFullTransform ();
 
-    // Setup the "end" positions and child count of all bones
-    const CS::Animation::BoneID lastId = fact->GetTopBoneID ();
-    csArray<csVector3> childPos;
-    csArray<int> numChild;
+    // Analyze the skeleton if not yet made
+    if (childPositions.GetSize () != skeletonFactory->GetTopBoneID () + 1)
+      AnalyzeSkeleton ();
 
-    childPos.SetSize (lastId+1, csVector3 (0));
-    numChild.SetSize (lastId+1, 0);
-
-    for (CS::Animation::BoneID i = 0; i < lastId+1; ++i)
+    // Iterate on all bones and draw each 2D debug primitives
+    const csArray<CS::Animation::BoneID> &bones =
+      skeletonFactory->GetBoneOrderList ();
+    for (size_t i = 0; i < bones.GetSize (); i++)
     {
-      if (!fact->HasBone (i))
-	continue;
+      const CS::Animation::BoneID &boneID = bones.Get (i);
 
-      CS::Animation::BoneID parent = fact->GetBoneParent (i);
-      if (parent != CS::Animation::InvalidBoneID)
-      {
-	csQuaternion q;
-	csVector3 v;
-	skeleton->GetTransformBoneSpace (i, q, v);
-
-	childPos[parent] += v;
-	numChild[parent] += 1;
-      }
-    }
-
-    // Now draw the bones and their bounding boxes
-    for (CS::Animation::BoneID i = 0; i <= lastId; i++)
-    {
-      if (!fact->HasBone (i)
-	  || (factory->boneMaskUsed
-	      && (factory->boneMask.GetSize () <= i
-		  || !factory->boneMask.IsBitSet (i)))
-	  || (!factory->leafBonesDisplayed && numChild[i] == 0))
+      // Check if the bone has to be displayed
+      if ((factory->boneMaskUsed
+	   && (factory->boneMask.GetSize () <= boneID
+	       || !factory->boneMask.IsBitSet (boneID)))
+	  || (!factory->leafBonesDisplayed && childCounts[boneID] == 0))
 	continue;
 
       // Set the color of the bone and its bounding box
       int colorI;
-      if (!factory->boneRandomColor) 
-	colorI = g2d->FindRGB (((int) color[0] * 255.0f),
-			       ((int) color[1] * 255.0f),
-			       ((int) color[2] * 255.0f));
+      if (!factory->boneRandomColor)
+	colorI = g2d->FindRGB ((int) (color[0] * 255.0f),
+			       (int) (color[1] * 255.0f),
+			       (int) (color[2] * 255.0f));
       else
-      {
-	int ii = (i+1)*(i+1);
-	colorI = g2d->FindRGB (255 - (ii % 255),
-			       255 - ((ii*(i+1)) % 255),
-			       255 - ((ii*ii) % 255));
-      }
+	GetRandomColor (boneID, colorI, g2d);
 
       csQuaternion rotation;
       csVector3 position;
-      skeleton->GetTransformAbsSpace (i, rotation, position);
+      skeleton->GetTransformAbsSpace (boneID, rotation, position);
 
       csVector3 bonePosition = object2camera * position;
 
@@ -229,15 +241,15 @@ CS_PLUGIN_NAMESPACE_BEGIN(DebugNode)
       {
 	csVector3 endLocal;
 
-	if (numChild[i] > 0)
-	  endLocal = childPos[i] / numChild[i];
+	if (childCounts[boneID] > 0)
+	  endLocal = childPositions[boneID] / childCounts[boneID];
 	else
 	{
 	  endLocal = csVector3 (0.0f, 0.0f, 1.0f);
 
-	  CS::Animation::BoneID parent = fact->GetBoneParent (i);
+	  CS::Animation::BoneID parent = skeletonFactory->GetBoneParent (boneID);
 	  if (parent != CS::Animation::InvalidBoneID)
-	    endLocal *= (childPos[parent] / numChild[parent]).Norm ();
+	    endLocal *= (childPositions[parent] / childCounts[parent]).Norm ();
 	}
 
 	csVector3 endGlobal = position + rotation.Rotate (endLocal);
@@ -267,7 +279,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(DebugNode)
       if (factory->modes & CS::Animation::DEBUG_BBOXES)
       {
 	csRef<CS::Mesh::iAnimatedMesh> animesh = skeleton->GetAnimatedMesh ();
-	csBox3 bbox = animesh->GetBoneBoundingBox (i);
+	csBox3 bbox = animesh->GetBoneBoundingBox (boneID);
 
 	// Bone to object space transform
 	csReversibleTransform object2bone (csMatrix3 (rotation.GetConjugate ()), position); 
@@ -291,5 +303,173 @@ CS_PLUGIN_NAMESPACE_BEGIN(DebugNode)
       DrawBox3D (g3d, objectBbox, object2camera, bbox_color);
     }
   }
+
+  void DebugNode::Stop ()
+  {
+    SkeletonAnimNodeSingleBase::Stop ();
+    if (boneData.GetSize ())
+      RemoveBoneMeshes ();
+  }
+
+  void DebugNode::BlendState (CS::Animation::AnimatedMeshState* state,
+			      float baseWeight)
+  {
+    CS::Animation::SkeletonAnimNodeSingle<DebugNodeFactory>::BlendState
+      (state, baseWeight);
+
+    if (!skeleton) return;
+
+    // Analyze the skeleton if not yet made
+    if (childPositions.GetSize () != skeleton->GetFactory ()->GetTopBoneID () + 1)
+      AnalyzeSkeleton ();
+
+    // Create the bone meshes if not already made
+    if (factory->modes & CS::Animation::DEBUG_ELLIPSOIDS
+	&& !boneData.GetSize ())
+    {
+      csRef<iEngine> engine = csQueryRegistry<iEngine>
+	(factory->manager->GetObjectRegistry ());
+
+      iMaterialWrapper* defaultMaterial = nullptr;
+
+      const csArray<CS::Animation::BoneID> &bones =
+	skeleton->GetFactory ()->GetBoneOrderList ();
+      for (size_t i = 0; i < bones.GetSize (); i++)
+      {
+	const CS::Animation::BoneID &boneID = bones.Get (i);
+
+	// Check if the bone has to be displayed
+	if ((factory->boneMaskUsed
+	     && (factory->boneMask.GetSize () <= boneID
+		 || !factory->boneMask.IsBitSet (boneID)))
+	    || (!factory->leafBonesDisplayed && childCounts[boneID] == 0))
+	continue;
+
+	// Check that the bounding box is not empty
+	const csBox3 &box = skeleton->GetAnimatedMesh ()->GetBoneBoundingBox (boneID);
+	if (box.Empty ()) continue;
+
+	BoneData data;
+	data.boneID = boneID;
+
+	// Create the bone mesh factory.
+	csString name = "debug_bone";
+	name += boneID;
+	csRef<iMeshFactoryWrapper> meshFactory = engine->CreateMeshFactory (
+	  "crystalspace.mesh.object.genmesh", name);
+	if (!meshFactory)
+	{
+	  //ReportError ("Error creating mesh object factory!");
+	  return;
+	}
+
+	csRef<iGeneralFactoryState> gmState = scfQueryInterface<iGeneralFactoryState>
+	  (meshFactory->GetMeshObjectFactory ());
+	csVector3 size = box.GetSize ();
+	size *= 0.5f;
+	csEllipsoid ellipsoid (box.GetCenter (), size);
+	gmState->GenerateSphere (ellipsoid, 16);
+
+	// Create the mesh.
+	data.mesh = engine->CreateMeshWrapper (meshFactory, name);
+
+	// Create the material
+	if (!factory->boneRandomColor)
+	{
+	  // Create the default material if not already made
+	  if (!defaultMaterial)
+	  {
+	    defaultMaterial = CS::Material::MaterialBuilder::CreateColorMaterial
+	      (factory->manager->GetObjectRegistry (), "debug_node", lastColor);
+	    materials.Push (defaultMaterial);
+	  }
+
+	  data.mesh->GetMeshObject ()->SetMaterialWrapper (defaultMaterial);
+	}
+	else
+	{
+	  // Create a new material for this bone
+	  csColor color;
+	  GetRandomColor (boneID, color);
+	  iMaterialWrapper* material =
+	    CS::Material::MaterialBuilder::CreateColorMaterial
+	    (factory->manager->GetObjectRegistry (), name, color);
+	  materials.Push (material);
+
+	  data.mesh->GetMeshObject ()->SetMaterialWrapper (material);
+	}
+
+	// Set the mesh as a child of the skeleton's iMovable
+	data.mesh->GetMovable ()->GetSceneNode ()->SetParent
+	  (skeleton->GetSceneNode ());
+
+	boneData.Push (data);
+      }
+    }
+
+    // Update the position of the bone meshes
+    csQuaternion rotation;
+    csVector3 offset;
+    for (size_t i = 0; i < boneData.GetSize (); i++)
+    {
+      BoneData& data = boneData.Get (i);
+      skeleton->GetTransformAbsSpace (data.boneID, rotation, offset);
+      csTransform transform (csMatrix3 (rotation.GetConjugate ()), offset);
+      data.mesh->GetMovable ()->SetTransform (transform);
+      data.mesh->GetMovable ()->UpdateMove ();
+    }
+  }
+
+  void DebugNode::AnalyzeSkeleton ()
+  {
+    // Setup the "end" positions and child count of all bones
+    CS::Animation::iSkeletonFactory* skeletonFactory = skeleton->GetFactory ();
+    size_t count = skeletonFactory->GetTopBoneID () + 1;
+    childPositions.DeleteAll ();
+    childPositions.SetSize (count, csVector3 (0));
+    childCounts.DeleteAll ();
+    childCounts.SetSize (count, 0);
+
+    const csArray<CS::Animation::BoneID> &bones =
+      skeletonFactory->GetBoneOrderList ();
+    for (size_t i = 0; i < bones.GetSize (); i++)
+    {
+      const CS::Animation::BoneID &boneID = bones.Get (i);
+
+      CS::Animation::BoneID parent = skeletonFactory->GetBoneParent (boneID);
+      if (parent != CS::Animation::InvalidBoneID)
+      {
+	csQuaternion q;
+	csVector3 v;
+	skeleton->GetTransformBoneSpace (boneID, q, v);
+
+	childPositions[parent] += v;
+	childCounts[parent] += 1;
+      }
+    }
+  }
+
+  void DebugNode::RemoveBoneMeshes ()
+  {
+    // Delete the meshes
+    for (size_t i = 0; i < boneData.GetSize (); i++)
+    {
+      BoneData& data = boneData.Get (i);
+      data.mesh->GetMovable ()->GetSceneNode ()->SetParent (nullptr);
+    }
+    boneData.DeleteAll ();
+
+    // Delete the materials
+    csRef<iEngine> engine = csQueryRegistry<iEngine>
+      (factory->manager->GetObjectRegistry ());
+    iMaterialList* materialList = engine->GetMaterialList ();
+    for (size_t i = 0; i < materials.GetSize (); i++)
+    {
+      iMaterialWrapper* material = materials.Get (i);
+      materialList->Remove (material);
+    }
+    materials.DeleteAll ();
+  }
+
 }
 CS_PLUGIN_NAMESPACE_END(DebugNode)

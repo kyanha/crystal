@@ -67,7 +67,8 @@ enum SkeletonDebugMode
   DEBUG_SQUARES = 1 << 2,     /*!< The debug shapes displayed are 2D squares at the bone positions. */
   DEBUG_IMAGES  = 1 << 3,     /*!< The debug shapes displayed are images at the bone positions.
 			       *   SetDebugImage() must therefore be used. */
-  DEBUG_BBOXES  = 1 << 4      /*!< The debug shapes displayed are the bounding boxes of the bones. */
+  DEBUG_BBOXES  = 1 << 4,     /*!< The debug shapes displayed are the bounding boxes of the bones. */
+  DEBUG_ELLIPSOIDS  = 1 << 5  /*!< The debug shapes displayed are 3D ellipsoids. */
 };
 
 /**

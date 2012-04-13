@@ -1,5 +1,5 @@
 /*
-  Copyright (C) 2010 Christian Van Brussel, Institute of Information
+  Copyright (C) 2010-12 Christian Van Brussel, Institute of Information
       and Communication Technologies, Electronics and Applied Mathematics
       at Universite catholique de Louvain, Belgium
       http://www.uclouvain.be/en-icteam.html
@@ -97,7 +97,31 @@ CS_PLUGIN_NAMESPACE_BEGIN(DebugNode)
 
     //-- CS::Animation::iSkeletonDebugNode
     virtual void Draw (iCamera* camera, csColor color = csColor (255, 0, 255));
+
+    //-- CS::Animation::iSkeletonAnimNode
+    virtual void Stop ();
+    virtual void BlendState (CS::Animation::AnimatedMeshState* state,
+			     float baseWeight = 1.0f);
+
   private:
+    void AnalyzeSkeleton ();
+    void RemoveBoneMeshes ();
+
+  private:
+
+    csArray<csVector3> childPositions;
+    csArray<int> childCounts;
+
+    struct BoneData
+    {
+      CS::Animation::BoneID boneID;
+      csRef<iMeshWrapper> mesh;
+    };
+
+    csArray<BoneData> boneData;
+    csRefArray<iMaterialWrapper> materials;
+    csColor lastColor;
+
     friend class DebugNodeFactory;
   };
 
