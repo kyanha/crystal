@@ -319,19 +319,21 @@ struct iAnimatedMeshFactory : public virtual iBase
    */
   virtual bool SetColors (iRenderBuffer* renderBuffer) = 0;
 
+  /** @} */
+
   /**
    * Update the mesh after modifying its geometry.
-   * It generates automatically a segmentation of the mesh and
-   * morph targets into subsets to optimize the morphing process.
    *
-   * \warning Invalidate() must be called once all morph targets
-   *   have been created on the animated mesh factory.
+   * Many internal data is updated or pre-computed during that process,
+   * such as the bone bounding boxes and the mesh subsets.
+   *
+   * \warning You must call this method whenever you changed the bone mapping,
+   * the size of the vertex buffers, the subsets, the bone bounding boxes or
+   * the list of morph targets.
    */
   virtual void Invalidate () = 0;
 
-  /** @} */
-
-  /**\name Bone interface and influence
+  /**\name Skeleton
   * @{ */
 
   /**
@@ -345,6 +347,11 @@ struct iAnimatedMeshFactory : public virtual iBase
    * Get the skeleton factory associated with the mesh factory.
    */
   virtual CS::Animation::iSkeletonFactory* GetSkeletonFactory () const = 0;
+
+  /** @} */
+
+  /**\name Bone influences
+  * @{ */
 
   /**
    * Set the requested number of bone influences per vertex.
