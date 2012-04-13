@@ -96,7 +96,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(DebugNode)
     ~DebugNode () {}
 
     //-- CS::Animation::iSkeletonDebugNode
-    virtual void Draw (iCamera* camera, csColor color = csColor (255, 0, 255));
+    virtual void Draw (iCamera* camera, csColor color = csColor (1.0f, 0.0f, 1.0f));
 
     //-- CS::Animation::iSkeletonAnimNode
     virtual void Stop ();
