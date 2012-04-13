@@ -1,5 +1,5 @@
 /*
-  Copyright (C) 2011 Christian Van Brussel, Institute of Information
+  Copyright (C) 2011-2012 Christian Van Brussel, Institute of Information
       and Communication Technologies, Electronics and Applied Mathematics
       at Universite catholique de Louvain, Belgium
       http://www.uclouvain.be/en-icteam.html
@@ -326,6 +326,165 @@ csPtr<iAnimatedMeshFactory> AnimatedMeshTools::ImportGeneralMesh
   factory->Invalidate ();
 
   return csPtr<iAnimatedMeshFactory> (factory);
+}
+
+void AnimatedMeshTools::PopulateSkeletonBoundingBoxes
+(CS::Mesh::iAnimatedMeshFactory* animeshFactory, csBitArray* boneMask)
+{
+  csQuaternion rotation;
+  csVector3 offset;
+
+  CS::Animation::iSkeletonFactory* skeletonFactory =
+    animeshFactory->GetSkeletonFactory ();
+  const csArray<CS::Animation::BoneID> &bones =
+    skeletonFactory->GetBoneOrderList ();
+
+  csArray<BBoxPopulationData> bonesData;
+  bonesData.SetSize (skeletonFactory->GetTopBoneID () + 1);
+
+  for (size_t i = 0; i < bones.GetSize (); i++)
+  {
+    const CS::Animation::BoneID &boneID = bones.Get (i);
+    BBoxPopulationData& boneData = bonesData[boneID];
+
+    // Add the position of all child bones as a bounding vertex of this bone
+    boneData.bbox.AddBoundingVertex (csVector3 (0.0f));
+
+    for (size_t j = i + 1; j < bones.GetSize (); j++)
+    {
+      const CS::Animation::BoneID &childID = bones.Get (j);
+      if (skeletonFactory->GetBoneParent (childID) == boneID)
+      {
+	skeletonFactory->GetTransformBoneSpace (childID, rotation, offset);
+	boneData.bbox.AddBoundingVertex (offset);
+	boneData.childrenCount++;
+      }
+    }
+
+    // Find the principal axis of the bounding box
+    csVector3 boneSize = boneData.bbox.GetSize ();
+    float min1 = boneSize[0];
+    float min2 = boneSize[0];
+
+    if (boneSize[1] < min1)
+    {
+      min1 = boneSize[1];
+      boneData.index1 = 1;
+    }
+
+    else
+    {
+      min2 = boneSize[1];
+      boneData.index2 = 1;
+      boneData.index3 = 1;
+    }
+
+    if (boneSize[2] < min1)
+    {
+      boneData.index2 = boneData.index1;
+      min2 = min1;
+      boneData.index1 = 2;
+      min1 = boneSize[2];
+    }
+
+    else
+    {
+      if (boneSize[2] < min2)
+      {
+	min2 = boneSize[2];
+	boneData.index2 = 2;
+      }
+
+      else boneData.index3 = 2;
+    }
+
+    if (fabs (boneSize[boneData.index3] > EPSILON))
+    {
+      // Set the size of the less important axis as the value of the middle axis
+      boneSize[boneData.index1] = min2;
+
+      // Scale a bit the bounding box
+      boneSize *= 1.3f;
+
+      // Apply the size to the bounding box
+      boneData.bbox.SetSize (boneSize);
+
+      // Propagate the size upward to the parents of this bone
+      CS::Animation::BoneID parentID = skeletonFactory->GetBoneParent (boneID);
+      while (parentID != CS::Animation::InvalidBoneID)
+      {
+	BBoxPopulationData& parentData = bonesData[parentID];
+	csVector3 parentSize = parentData.bbox.GetSize ();
+	parentSize[parentData.index1] =
+	  csMax (boneSize[boneData.index1], parentSize[parentData.index1]);
+	parentSize[parentData.index2] =
+	  csMax (boneSize[boneData.index2], parentSize[parentData.index2]);
+	parentData.bbox.SetSize (parentSize);
+
+	// Stop whenever we find another subtree
+	if (parentData.childrenCount > 1)
+	  break;
+
+	parentID = skeletonFactory->GetBoneParent (parentID);
+      }
+    }
+
+    // If this is a leaf bone, then propagate downward the size from the root
+    // of the subtree
+    if (!boneData.childrenCount)
+    {
+      // Find the list of bones in the subtree
+      CS::Animation::BoneID parentID = skeletonFactory->GetBoneParent (boneID);
+      csArray<CS::Animation::BoneID> boneList;
+      boneList.Push (boneID);
+
+      BBoxPopulationData* parentData;
+      while (parentID != CS::Animation::InvalidBoneID)
+      {
+	parentData = &bonesData[parentID];
+	if (parentData->childrenCount > 1)
+	  break;
+
+	boneList.Push (parentID);
+	parentID = skeletonFactory->GetBoneParent (parentID);
+      }
+
+      // Propagate the size of the root of the subtree to all bones
+      if (parentID != CS::Animation::InvalidBoneID)
+      {
+	BBoxPopulationData& parentData = bonesData[parentID];
+	csVector3 parentSize = parentData.bbox.GetSize ();
+	float parentSize1 = parentSize[parentData.index1] * 0.6f;
+	float parentSize2 = parentSize[parentData.index2] * 0.6f;
+
+	for (size_t i = 0; i < boneList.GetSize (); i++)
+	{
+	  const CS::Animation::BoneID& boneID = boneList[i];
+	  BBoxPopulationData& boneData = bonesData[boneID];
+	  csVector3 boneSize = boneData.bbox.GetSize ();
+
+	  boneSize[boneData.index1] = csMax (boneSize[boneData.index1], parentSize1);
+	  boneSize[boneData.index2] = csMax (boneSize[boneData.index2], parentSize2);
+	  boneData.bbox.SetSize (boneSize);
+	}
+      }
+    }
+  }
+
+  // Apply all bounding boxes to the animesh
+  for (size_t i = 0; i < bones.GetSize (); i++)
+  {
+    const CS::Animation::BoneID &boneID = bones.Get (i);
+
+    // Check that the bone is in the bone mask
+    if (boneMask
+	&& (boneMask->GetSize () <= boneID
+	    || !boneMask->IsBitSet (boneID)))
+      continue;
+
+    BBoxPopulationData& boneData = bonesData[boneID];
+    animeshFactory->SetBoneBoundingBox (boneID, boneData.bbox);
+  }
 }
 
 } //namespace Mesh
