@@ -149,7 +149,7 @@ struct iSkeletonDebugNode : public virtual iSkeletonAnimNode
   /**
    * Draw the 2D visual information
    */
-  virtual void Draw (iCamera* camera, csColor color = csColor (255, 0, 255)) = 0;
+  virtual void Draw (iCamera* camera, csColor color = csColor (1.0f, 0.0f, 1.0f)) = 0;
 };
 
 } // namespace Animation
