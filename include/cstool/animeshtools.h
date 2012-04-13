@@ -1,5 +1,5 @@
 /*
-  Copyright (C) 2011 Christian Van Brussel, Institute of Information
+  Copyright (C) 2011-2012 Christian Van Brussel, Institute of Information
       and Communication Technologies, Electronics and Applied Mathematics
       at Universite catholique de Louvain, Belgium
       http://www.uclouvain.be/en-icteam.html
@@ -71,6 +71,19 @@ class CS_CRYSTALSPACE_EXPORT AnimatedMeshTools
 						  const char* factoryName,
 						  const char* filename);
 
+  struct BBoxPopulationData
+  {
+    csBox3 bbox;
+    int childrenCount;
+    size_t index1;
+    size_t index2;
+    size_t index3;
+
+    BBoxPopulationData ()
+    : childrenCount (0), index1 (0), index2 (0), index3 (0) {}
+  };
+
+
  public:
 
   /**
@@ -136,6 +149,23 @@ class CS_CRYSTALSPACE_EXPORT AnimatedMeshTools
     (iObjectRegistry* object_reg, iGeneralFactoryState* genmesh,
      bool deleteMesh = true);
 
+  /**
+   * Populate an animesh factory with bone bounding boxes that are based only on
+   * the topology of the skeleton of the animesh.
+   *
+   * The behavior of this method is different from the default computing of the
+   * bone bounding boxes that is integrated in the animesh. The default behavior
+   * is based on the vertices of the animesh and their bone influences, while this
+   * method will compute the bone bounding boxes only based on the topology of the
+   * skeleton, not on the envelope of the mesh.
+   *
+   * \param animeshFactory The animesh to manipulate.
+   * \param boneMask An optional bone mask specifying the bones for which a bounding
+   * box has to be defined. All the bones that are not present in the mask will have
+   * their bounding box untouched.
+   */
+  static void PopulateSkeletonBoundingBoxes
+    (CS::Mesh::iAnimatedMeshFactory* animeshFactory, csBitArray* boneMask = nullptr);
 };
 
 } //namespace Mesh
