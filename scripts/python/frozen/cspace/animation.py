@@ -740,6 +740,7 @@ DEBUG_2DLINES = _animation.DEBUG_2DLINES
 DEBUG_SQUARES = _animation.DEBUG_SQUARES
 DEBUG_IMAGES = _animation.DEBUG_IMAGES
 DEBUG_BBOXES = _animation.DEBUG_BBOXES
+DEBUG_ELLIPSOIDS = _animation.DEBUG_ELLIPSOIDS
 class iSkeletonDebugNodeFactory(iSkeletonAnimNodeFactory):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
     def __init__(self, *args, **kwargs): raise AttributeError, "No constructor defined"
