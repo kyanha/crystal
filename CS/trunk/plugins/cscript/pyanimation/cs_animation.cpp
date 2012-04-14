@@ -21185,6 +21185,7 @@ SWIGEXPORT void SWIG_init(void) {
   SWIG_Python_SetConstant(d, "DEBUG_SQUARES",SWIG_From_int(static_cast< int >(CS::Animation::DEBUG_SQUARES)));
   SWIG_Python_SetConstant(d, "DEBUG_IMAGES",SWIG_From_int(static_cast< int >(CS::Animation::DEBUG_IMAGES)));
   SWIG_Python_SetConstant(d, "DEBUG_BBOXES",SWIG_From_int(static_cast< int >(CS::Animation::DEBUG_BBOXES)));
+  SWIG_Python_SetConstant(d, "DEBUG_ELLIPSOIDS",SWIG_From_int(static_cast< int >(CS::Animation::DEBUG_ELLIPSOIDS)));
   SWIG_Python_SetConstant(d, "STATE_INACTIVE",SWIG_From_int(static_cast< int >(CS::Animation::STATE_INACTIVE)));
   SWIG_Python_SetConstant(d, "STATE_DYNAMIC",SWIG_From_int(static_cast< int >(CS::Animation::STATE_DYNAMIC)));
   SWIG_Python_SetConstant(d, "STATE_KINEMATIC",SWIG_From_int(static_cast< int >(CS::Animation::STATE_KINEMATIC)));
