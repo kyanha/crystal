@@ -398,7 +398,7 @@ void AnimatedMeshTools::PopulateSkeletonBoundingBoxes
       else boneData.index3 = 2;
     }
 
-    if (fabs (boneSize[boneData.index3] > EPSILON))
+    if (fabs (boneSize[boneData.index3]) > EPSILON)
     {
       // Set the size of the less important axis as the value of the middle axis
       boneSize[boneData.index1] = min2;
