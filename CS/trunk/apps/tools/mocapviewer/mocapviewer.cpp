@@ -46,7 +46,7 @@ void MocapViewer::PrintHelp ()
 
   // Usage examples
   commandLineHelper.AddCommandLineExample
-    ("csmocapviewer csmocapviewer idle01.bvh");
+    ("csmocapviewer idle01.bvh");
   commandLineHelper.AddCommandLineExample
     ("csmocapviewer /lib/krystal/mocap/idle01.bvh");
   commandLineHelper.AddCommandLineExample
