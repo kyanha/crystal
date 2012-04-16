@@ -61,10 +61,10 @@ struct MocapParserResult
 };
 
 /**
- * Tool for parsing motion capture ressource files and importing them into an animation
+ * Tool for parsing motion capture resource files and importing them into an animation
  * data suitable for the CS::Mesh::iAnimatedMesh.
  *
- * You should be able to parse successively more than one ressource with the same parser.
+ * You should be able to parse successively more than one resource with the same parser.
  */
 class CS_CRYSTALSPACE_EXPORT MocapParser
 {
@@ -74,27 +74,27 @@ public:
 
   /**
    * Set the name of the animation packet that will be created. The default value is the
-   * name of the ressource file plus "_packet".
+   * name of the resource file plus "_packet".
    */
   virtual void SetPacketName (const char* name) = 0;
 
   /**
    * Set the name of the skeleton that will be created. The default value is the
-   * name of the ressource file plus "_skel".
+   * name of the resource file plus "_skel".
    */
   virtual void SetSkeletonName (const char* name) = 0;
 
   /**
    * Set the name of the animation that will be created. The default value is the
-   * name of the ressource file plus "_anim".
+   * name of the resource file plus "_anim".
    */
   virtual void SetAnimationName (const char* name) = 0;
 
   /**
-   * Set the VFS path of the ressource file containing the motion capture data. You may have
-   * to add more than one ressource depending on the motion capture file format.
+   * Set the VFS path of the resource file containing the motion capture data. You may have
+   * to add more than one resource depending on the motion capture file format.
    */
-  virtual bool SetRessourceFile (const char* filename) = 0;
+  virtual bool SetResourceFile (const char* filename) = 0;
 
   /**
    * Set the frame where to start importing the animation data. The default value is 0.
@@ -103,7 +103,7 @@ public:
 
   /**
    * Set the frame where to stop importing the animation data. A value of 0 means that
-   * all the animations until the end of the ressource file have to be imported. The
+   * all the animations until the end of the resource file have to be imported. The
    * default value is 0.
    */
   virtual void SetEndFrame (size_t frame) = 0;
@@ -114,13 +114,13 @@ public:
   virtual void SetGlobalScale (float scale) = 0;
 
   /**
-   * Parse the ressource files containing the motion capture data
+   * Parse the resource files containing the motion capture data
    */
   virtual MocapParserResult ParseData () = 0;
 };
 
 /**
- * Tool for parsing BVH (BioVision Hierarchical data) motion capture ressource files.
+ * Tool for parsing BVH (BioVision Hierarchical data) motion capture resource files.
  */
 class CS_CRYSTALSPACE_EXPORT BVHMocapParser : public MocapParser
 {
@@ -132,27 +132,27 @@ public:
 
   /**
    * Set the name of the animation packet that will be created. The default value is the
-   * name of the ressource file plus "_packet".
+   * name of the resource file plus "_packet".
    */
   virtual void SetPacketName (const char* name);
 
   /**
    * Set the name of the skeleton that will be created. The default value is the
-   * name of the ressource file plus "_skel".
+   * name of the resource file plus "_skel".
    */
   virtual void SetSkeletonName (const char* name);
 
   /**
    * Set the name of the animation that will be created. The default value is the
-   * name of the ressource file plus "_anim".
+   * name of the resource file plus "_anim".
    */
   virtual void SetAnimationName (const char* name);
 
   /**
-   * Set the VFS path of the ressource file containing the motion capture data. For the
-   * BVH file format there may be only one ressource file at a time.
+   * Set the VFS path of the resource file containing the motion capture data. For the
+   * BVH file format there may be only one resource file at a time.
    */
-  virtual bool SetRessourceFile (const char* filename);
+  virtual bool SetResourceFile (const char* filename);
 
   /**
    * Set the frame where to start importing the animation data. The default value is 0.
@@ -161,7 +161,7 @@ public:
 
   /**
    * Set the frame where to stop importing the animation data. A value of 0 means that
-   * all the animations until the end of the ressource file have to be imported. The
+   * all the animations until the end of the resource file have to be imported. The
    * default value is 0.
    */
   virtual void SetEndFrame (size_t frame);
