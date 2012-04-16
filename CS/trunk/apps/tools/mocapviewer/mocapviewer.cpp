@@ -354,7 +354,7 @@ bool MocapViewer::CreateScene ()
   // Load the configuration file
   csRef<iConfigManager> cfg = csQueryRegistry<iConfigManager> (GetObjectRegistry());
   cfg->AddDomain ("/config/csmocapviewer.cfg", vfs, iConfigManager::ConfigPriorityPlugin);
-  csString ressourcePath = cfg->GetStr ("MocapViewer.Settings.RessourcePath", "");
+  csString resourcePath = cfg->GetStr ("MocapViewer.Settings.ResourcePath", "");
   csString videoFormat = cfg->GetStr ("MocapViewer.Settings.VideoFormat", "");
   csString pldImage = cfg->GetStr ("MocapViewer.Settings.PLDImage", "");
   csString pldMode = cfg->GetStr ("MocapViewer.Settings.Display", "");
@@ -375,7 +375,7 @@ bool MocapViewer::CreateScene ()
 
   // Check if we need to add the default mocap data path to the filename
   if (!vfs->Exists (mocapFilename.GetData ()) 
-      && ressourcePath != "")
+      && resourcePath != "")
   {
     // Check if there is a slash in the mocapFilename
     size_t index = mocapFilename.FindLast ('\\');
@@ -383,7 +383,7 @@ bool MocapViewer::CreateScene ()
       index = mocapFilename.FindLast ('/');
 
     if (index == (size_t) -1)
-      mocapFilename = ressourcePath + mocapFilename;
+      mocapFilename = resourcePath + mocapFilename;
   }
 
   // Read the start and end frames
@@ -410,7 +410,7 @@ bool MocapViewer::CreateScene ()
 
   // Parse the BVH file
   CS::Animation::BVHMocapParser mocapParser (GetObjectRegistry ());
-  if (!mocapParser.SetRessourceFile (mocapFilename.GetData ()))
+  if (!mocapParser.SetResourceFile (mocapFilename.GetData ()))
     return false;
 
   if (startFrame > 0)
@@ -777,7 +777,7 @@ bool MocapViewer::CreateScene ()
 
   if (clp->GetBoolOption ("snoise", false))
   {
-    // Initialize the perlin noise modules
+    // Initialize the Perlin noise modules
     csRandomGen irandomGenerator1 (76249823);
     csRandomGen irandomGenerator2 (624395138);
     csRandomGen irandomGenerator3 (657324684);
@@ -1024,7 +1024,7 @@ bool MocapViewer::CreateScene ()
   int noiseCount;
   if (txt && sscanf (txt.GetData (), "%i", &noiseCount) == 1)
   {
-    // Initialize the perlin noise modules
+    // Initialize the Perlin noise modules
     csRandomGen irandomGenerator (406321958);
     csRandomGen irandomGenerator2 (18974329);
     csRandomFloatGen frandomGenerator (50963095);

@@ -15,8 +15,6 @@
   License along with this library; if not, write to the Free
   Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
-
-
 #include "cssysdef.h"
 
 #include "cstool/mocapparser.h"
@@ -276,7 +274,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(Skeleton2Ldr)
       mocapParser.SetPacketName (name);
 
       const char* file = node->GetAttributeValue ("file");
-      if (file) mocapParser.SetRessourceFile (file);
+      if (file) mocapParser.SetResourceFile (file);
 
       const char* skelName = node->GetAttributeValue ("skelname");
       if (skelName) mocapParser.SetSkeletonName (skelName);
