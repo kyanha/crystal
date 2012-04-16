@@ -164,6 +164,8 @@ CS_PLUGIN_NAMESPACE_BEGIN(DebugNode)
 
   void DebugNode::Draw (iCamera* camera, csColor color)
   {
+    lastColor = color;
+
     // Remove the bone meshes if we don't need it anymore
     if (!(factory->modes & CS::Animation::DEBUG_ELLIPSOIDS)
 	&& boneData.GetSize ())
