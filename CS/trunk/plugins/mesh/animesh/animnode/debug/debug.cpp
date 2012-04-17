@@ -224,7 +224,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(DebugNode)
       if (factory->modes & CS::Animation::DEBUG_IMAGES
 	  && factory->image)
       {
-	if (bonePosition < SMALL_Z)
+	if (bonePosition.z < SMALL_Z)
 	  continue;
 
 	csVector4 v1p (projection * csVector4 (bonePosition));
@@ -262,7 +262,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(DebugNode)
 
       if (factory->modes & CS::Animation::DEBUG_SQUARES)
       {
-	if (bonePosition < SMALL_Z)
+	if (bonePosition.z < SMALL_Z)
 	  continue;
 
 	csVector4 v1p (projection * csVector4 (bonePosition));
