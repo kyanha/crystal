@@ -1,5 +1,5 @@
 /*
-  Copyright (C) 2010-12 Christian Van Brussel, Institute of Information
+  Copyright (C) 2010-2012 Christian Van Brussel, Institute of Information
       and Communication Technologies, Electronics and Applied Mathematics
       at Universite catholique de Louvain, Belgium
       http://www.uclouvain.be/en-icteam.html
@@ -87,42 +87,26 @@ CS_PLUGIN_NAMESPACE_BEGIN(DebugNode)
     leafBonesDisplayed = displayed;
   }
 
+  void DebugNodeFactory::SetBoneOffset (CS::Animation::BoneID boneID, csVector3 offset)
+  {
+    csVector3& boneOffset = boneOffsets.GetOrCreate (boneID);
+    boneOffset = offset;
+  }
+
+  csVector3 DebugNodeFactory::GetBoneOffset (CS::Animation::BoneID boneID) const
+  {
+    const csVector3* offset = boneOffsets.GetElementPointer (boneID);
+    if (offset)
+      return *offset;
+    else
+      return csVector3 (0.0f);
+  }
+
   csPtr<CS::Animation::SkeletonAnimNodeSingleBase> DebugNodeFactory::ActualCreateInstance (
     CS::Animation::iSkeletonAnimPacket* packet,
     CS::Animation::iSkeleton* skeleton)
   {
     return csPtr<CS::Animation::SkeletonAnimNodeSingleBase> (new DebugNode (this, skeleton));
-  }
-
-  // --------------------------  DrawBox3D  --------------------------
-
-  static inline void DrawBox3D (iGraphics3D* g3d,
-				const csBox3& box,
-				const csReversibleTransform& tr,
-				int color)
-  {
-    csVector3 vxyz = tr * box.GetCorner (CS_BOX_CORNER_xyz);
-    csVector3 vXyz = tr * box.GetCorner (CS_BOX_CORNER_Xyz);
-    csVector3 vxYz = tr * box.GetCorner (CS_BOX_CORNER_xYz);
-    csVector3 vxyZ = tr * box.GetCorner (CS_BOX_CORNER_xyZ);
-    csVector3 vXYz = tr * box.GetCorner (CS_BOX_CORNER_XYz);
-    csVector3 vXyZ = tr * box.GetCorner (CS_BOX_CORNER_XyZ);
-    csVector3 vxYZ = tr * box.GetCorner (CS_BOX_CORNER_xYZ);
-    csVector3 vXYZ = tr * box.GetCorner (CS_BOX_CORNER_XYZ);
-    const CS::Math::Matrix4& projection (g3d->GetProjectionMatrix ());
-    iGraphics2D* g2d = g3d->GetDriver2D ();
-    g2d->DrawLineProjected (vxyz, vXyz, projection, color);
-    g2d->DrawLineProjected (vXyz, vXYz, projection, color);
-    g2d->DrawLineProjected (vXYz, vxYz, projection, color);
-    g2d->DrawLineProjected (vxYz, vxyz, projection, color);
-    g2d->DrawLineProjected (vxyZ, vXyZ, projection, color);
-    g2d->DrawLineProjected (vXyZ, vXYZ, projection, color);
-    g2d->DrawLineProjected (vXYZ, vxYZ, projection, color);
-    g2d->DrawLineProjected (vxYZ, vxyZ, projection, color);
-    g2d->DrawLineProjected (vxyz, vxyZ, projection, color);
-    g2d->DrawLineProjected (vxYz, vxYZ, projection, color);
-    g2d->DrawLineProjected (vXyz, vXyZ, projection, color);
-    g2d->DrawLineProjected (vXYz, vXYZ, projection, color);
   }
 
   // --------------------------  Utility methods  --------------------------
@@ -215,30 +199,37 @@ CS_PLUGIN_NAMESPACE_BEGIN(DebugNode)
       else
 	GetRandomColor (boneID, colorI, g2d);
 
+      // Compute the transform of the bone
       csQuaternion rotation;
       csVector3 position;
       skeleton->GetTransformAbsSpace (boneID, rotation, position);
 
-      csVector3 bonePosition = object2camera * position;
+      csVector3* offset = factory->boneOffsets[boneID];
+      if (offset)
+	position += *offset;
 
+      csOrthoTransform camera2bone (csMatrix3 (rotation.GetConjugate ()), position);
+      camera2bone /= object2camera;
+
+      // Display of the 'image' primitive
       if (factory->modes & CS::Animation::DEBUG_IMAGES
 	  && factory->image)
       {
-	if (bonePosition.z < SMALL_Z)
+	if (camera2bone.GetOrigin ().z < SMALL_Z)
 	  continue;
 
-	csVector4 v1p (projection * csVector4 (bonePosition));
+	csVector4 v1p (projection * csVector4 (camera2bone.GetOrigin ()));
 	v1p /= v1p.w;
 
 	int px1 = csQint ((v1p.x + 1) * (g2d->GetWidth() / 2));
 	int py1 = g2d->GetHeight () - 1 - csQint ((v1p.y + 1) * (g2d->GetHeight () / 2));
  
 	// TODO: images are not drawn correctly
-
 	factory->image->Draw (g3d, px1 - factory->image->Width () / 2,
 			      py1 - factory->image->Height () / 2);
       }
 
+      // Display of the '2D line' primitive
       if (factory->modes & CS::Animation::DEBUG_2DLINES)
       {
 	csVector3 endLocal;
@@ -257,52 +248,47 @@ CS_PLUGIN_NAMESPACE_BEGIN(DebugNode)
 	csVector3 endGlobal = position + rotation.Rotate (endLocal);
 	csVector3 boneEnd = object2camera * endGlobal;
 
-	g2d->DrawLineProjected (bonePosition, boneEnd, projection, colorI);
+	g2d->DrawLineProjected (camera2bone.GetOrigin (), boneEnd, projection, colorI);
       }
 
+      // Display of the 'square' primitive
       if (factory->modes & CS::Animation::DEBUG_SQUARES)
       {
-	if (bonePosition.z < SMALL_Z)
+	if (camera2bone.GetOrigin ().z < SMALL_Z)
 	  continue;
 
-	csVector4 v1p (projection * csVector4 (bonePosition));
+	csVector4 v1p (projection * csVector4 (camera2bone.GetOrigin ()));
 	v1p /= v1p.w;
 
 	int px1 = csQint ((v1p.x + 1) * (g2d->GetWidth() / 2));
 	int py1 = g2d->GetHeight () - 1 - csQint ((v1p.y + 1) * (g2d->GetHeight () / 2));
- 
-	size_t size = 5;
-	for (size_t i = 0; i < size; i++)
-	  for (size_t j = 0; j < size; j++)
-	    g2d->DrawPixel (px1 - size / 2 + i, py1 - size / 2 + j, colorI);
+
+	g2d->DrawBox (px1, py1, 5, 5, colorI);
       }
 
-      // Draw the bounding boxes
+      // Display of the 'bbox' primitive
       if (factory->modes & CS::Animation::DEBUG_BBOXES)
       {
-	csRef<CS::Mesh::iAnimatedMesh> animesh = skeleton->GetAnimatedMesh ();
-	csBox3 bbox = animesh->GetBoneBoundingBox (boneID);
+	csBox3 bbox = skeleton->GetAnimatedMesh ()->GetBoneBoundingBox (boneID);
 
-	// Bone to object space transform
-	csReversibleTransform object2bone (csMatrix3 (rotation.GetConjugate ()), position); 
-	csReversibleTransform bone2object = object2bone.GetInverse ();
-
-	// Bone to camera space transform
-	csReversibleTransform bone2camera = object2camera * bone2object;
-
-	// Draw the bounding box of the bone
 	if (!bbox.Empty ())
-	  DrawBox3D (g3d, bbox, bone2camera, colorI);
+	  g2d->DrawBoxProjected (bbox, camera2bone.GetInverse (),
+				 g3d->GetProjectionMatrix (), colorI);
       }
     }
 
-    // Draw the object bounding box
+    // Display of the global 'bbox' primitive for the whole mesh
     if (factory->modes & CS::Animation::DEBUG_BBOXES)
     {
-      csRef<iObjectModel> objectModel = scfQueryInterface<iObjectModel> (skeleton->GetAnimatedMesh ());
+      csRef<iObjectModel> objectModel = scfQueryInterface<iObjectModel>
+	(skeleton->GetAnimatedMesh ());
       csBox3 objectBbox = objectModel->GetObjectBoundingBox ();
-      int bbox_color = g2d->FindRGB (255, 255, 0);
-      DrawBox3D (g3d, objectBbox, object2camera, bbox_color);
+      if (!objectBbox.Empty ())
+      {
+	int bbox_color = g2d->FindRGB (255, 255, 0);
+	g2d->DrawBoxProjected (objectBbox, object2camera,
+			       g3d->GetProjectionMatrix (), bbox_color);
+      }
     }
   }
 
@@ -415,9 +401,15 @@ CS_PLUGIN_NAMESPACE_BEGIN(DebugNode)
     for (size_t i = 0; i < boneData.GetSize (); i++)
     {
       BoneData& data = boneData.Get (i);
+
       skeleton->GetTransformAbsSpace (data.boneID, rotation, offset);
-      csTransform transform (csMatrix3 (rotation.GetConjugate ()), offset);
-      data.mesh->GetMovable ()->SetTransform (transform);
+
+      csVector3* boneOffset = factory->boneOffsets[data.boneID];
+      if (boneOffset)
+	offset += *boneOffset;
+
+      data.mesh->GetMovable ()->SetTransform
+	(csTransform (csMatrix3 (rotation.GetConjugate ()), offset));
       data.mesh->GetMovable ()->UpdateMove ();
     }
   }

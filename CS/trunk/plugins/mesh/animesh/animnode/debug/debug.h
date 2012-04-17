@@ -68,6 +68,9 @@ CS_PLUGIN_NAMESPACE_BEGIN(DebugNode)
     inline virtual bool GetRandomColor () const
     { return boneRandomColor; }
 
+    virtual void SetBoneOffset (CS::Animation::BoneID boneID, csVector3 offset);
+    virtual csVector3 GetBoneOffset (CS::Animation::BoneID boneID) const;
+
     //-- CS::Animation::SkeletonAnimNodeFactorySingle
     csPtr<CS::Animation::SkeletonAnimNodeSingleBase> ActualCreateInstance (
       CS::Animation::iSkeletonAnimPacket* packet, CS::Animation::iSkeleton* skeleton);
@@ -79,6 +82,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(DebugNode)
     csBitArray boneMask;
     bool leafBonesDisplayed;
     bool boneRandomColor;
+    csHash<csVector3, CS::Animation::BoneID> boneOffsets;
 
     friend class DebugNode;
   };
