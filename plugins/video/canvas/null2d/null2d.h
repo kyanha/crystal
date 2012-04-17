@@ -71,6 +71,10 @@ public:
   virtual void DrawLineProjected (const csVector3& v1, const csVector3& v2,
     const CS::Math::Matrix4& projection, int color)
   { }
+  /// Draw a box in camera space
+  virtual void DrawBoxProjected (const csBox3& box, const csTransform& object2camera,
+    const CS::Math::Matrix4& projection, int color)
+  { }
   /// Draw a box of given width and height
   virtual void DrawBox (int , int , int , int , int )
   { }
