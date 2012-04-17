@@ -127,7 +127,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(VisualDebug)
 				255.0f * positionData.color[2]);
       csVector3 position = tr_w2c * positionData.position;
 
-      if (position < SMALL_Z)
+      if (position.z < SMALL_Z)
 	continue;
 
       csVector4 v1p (projection * csVector4 (position));
