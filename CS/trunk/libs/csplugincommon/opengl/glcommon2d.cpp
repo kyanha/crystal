@@ -19,7 +19,6 @@
 #include "cssysdef.h"
 #include "csqint.h"
 
-#include "csgeom/vector3.h"
 #include "igraphic/image.h"
 #include "igraphic/imageio.h"
 #include "iutil/document.h"
@@ -28,9 +27,11 @@
 #include "iutil/vfs.h"
 #include "ivaria/reporter.h"
 
+#include "csgeom/box.h"
 #include "csgeom/csrect.h"
 #include "csgeom/math.h"
 #include "csgeom/projections.h"
+#include "csgeom/vector3.h"
 #include "csplugincommon/opengl/assumedstate.h"
 #include "csplugincommon/opengl/glcommon2d.h"
 #include "csplugincommon/opengl/glstates.h"
@@ -622,6 +623,32 @@ bool csGraphics2DGLCommon::DrawLineNearClip (csVector3 & v1, csVector3 & v2)
     v2.z = SMALL_Z;
   }
   return true;
+}
+
+void csGraphics2DGLCommon::DrawBoxProjected
+(const csBox3& box, const csTransform& object2camera,
+ const CS::Math::Matrix4& projection, int color)
+{
+  csVector3 vxyz = object2camera * box.GetCorner (CS_BOX_CORNER_xyz);
+  csVector3 vXyz = object2camera * box.GetCorner (CS_BOX_CORNER_Xyz);
+  csVector3 vxYz = object2camera * box.GetCorner (CS_BOX_CORNER_xYz);
+  csVector3 vxyZ = object2camera * box.GetCorner (CS_BOX_CORNER_xyZ);
+  csVector3 vXYz = object2camera * box.GetCorner (CS_BOX_CORNER_XYz);
+  csVector3 vXyZ = object2camera * box.GetCorner (CS_BOX_CORNER_XyZ);
+  csVector3 vxYZ = object2camera * box.GetCorner (CS_BOX_CORNER_xYZ);
+  csVector3 vXYZ = object2camera * box.GetCorner (CS_BOX_CORNER_XYZ);
+  DrawLineProjected (vxyz, vXyz, projection, color);
+  DrawLineProjected (vXyz, vXYz, projection, color);
+  DrawLineProjected (vXYz, vxYz, projection, color);
+  DrawLineProjected (vxYz, vxyz, projection, color);
+  DrawLineProjected (vxyZ, vXyZ, projection, color);
+  DrawLineProjected (vXyZ, vXYZ, projection, color);
+  DrawLineProjected (vXYZ, vxYZ, projection, color);
+  DrawLineProjected (vxYZ, vxyZ, projection, color);
+  DrawLineProjected (vxyz, vxyZ, projection, color);
+  DrawLineProjected (vxYz, vxYZ, projection, color);
+  DrawLineProjected (vXyz, vXyZ, projection, color);
+  DrawLineProjected (vXYz, vXYZ, projection, color);
 }
 
 void csGraphics2DGLCommon::DrawBox (int x, int y, int w, int h, int color)

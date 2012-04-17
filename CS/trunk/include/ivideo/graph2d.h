@@ -39,7 +39,9 @@ struct iFont;
 struct iNativeWindow;
 struct iGraphics2D;
 
+class csBox3;
 class csRect;
+class csTransform;
 class csVector3;
 
 namespace CS {
@@ -93,7 +95,7 @@ struct csPixelCoord
  */
 struct iGraphics2D : public virtual iBase
 {
-  SCF_INTERFACE (iGraphics2D, 4, 0, 2);
+  SCF_INTERFACE (iGraphics2D, 4, 0, 3);
   
   /// Open the device.
   virtual bool Open () = 0;
@@ -350,6 +352,17 @@ struct iGraphics2D : public virtual iBase
    * \param color Color of the line.
    */
   virtual void DrawLineProjected (const csVector3& v1, const csVector3& v2,
+    const CS::Math::Matrix4& projection, int color) = 0;
+
+  /**
+   * Draw a box expressed in camera space.
+   * \param box The box to be drawn.
+   * \param v2 object2camera The transform from the box space to the camera space.
+   * \param projection Projection matrix to use for the camera. Typically, you
+   * would want to use the one returned by iCamera::GetProjectionMatrix().
+   * \param color Color of the line.
+   */
+  virtual void DrawBoxProjected (const csBox3& box, const csTransform& object2camera,
     const CS::Math::Matrix4& projection, int color) = 0;
 };
 
