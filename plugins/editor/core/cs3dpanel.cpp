@@ -503,26 +503,7 @@ void CS3DPanel::ProcessFrame ()
     int bbox_color = g2d->FindRGB (128, 255, 128);
     const csBox3& bbox = mesh->GetMeshObject ()
         ->GetObjectModel ()->GetObjectBoundingBox ();
-    csVector3 vxyz = tr_o2c * bbox.GetCorner (CS_BOX_CORNER_xyz);
-    csVector3 vXyz = tr_o2c * bbox.GetCorner (CS_BOX_CORNER_Xyz);
-    csVector3 vxYz = tr_o2c * bbox.GetCorner (CS_BOX_CORNER_xYz);
-    csVector3 vxyZ = tr_o2c * bbox.GetCorner (CS_BOX_CORNER_xyZ);
-    csVector3 vXYz = tr_o2c * bbox.GetCorner (CS_BOX_CORNER_XYz);
-    csVector3 vXyZ = tr_o2c * bbox.GetCorner (CS_BOX_CORNER_XyZ);
-    csVector3 vxYZ = tr_o2c * bbox.GetCorner (CS_BOX_CORNER_xYZ);
-    csVector3 vXYZ = tr_o2c * bbox.GetCorner (CS_BOX_CORNER_XYZ);
-    g2d->DrawLineProjected (vxyz, vXyz, projection, bbox_color);
-    g2d->DrawLineProjected (vXyz, vXYz, projection, bbox_color);
-    g2d->DrawLineProjected (vXYz, vxYz, projection, bbox_color);
-    g2d->DrawLineProjected (vxYz, vxyz, projection, bbox_color);
-    g2d->DrawLineProjected (vxyZ, vXyZ, projection, bbox_color);
-    g2d->DrawLineProjected (vXyZ, vXYZ, projection, bbox_color);
-    g2d->DrawLineProjected (vXYZ, vxYZ, projection, bbox_color);
-    g2d->DrawLineProjected (vxYZ, vxyZ, projection, bbox_color);
-    g2d->DrawLineProjected (vxyz, vxyZ, projection, bbox_color);
-    g2d->DrawLineProjected (vxYz, vxYZ, projection, bbox_color);
-    g2d->DrawLineProjected (vXyz, vXyZ, projection, bbox_color);
-    g2d->DrawLineProjected (vXYz, vXYZ, projection, bbox_color);
+    g2d->DrawBoxProjected (bbox, tr_o2c, projection, bbox_color);
   }
 }
 
