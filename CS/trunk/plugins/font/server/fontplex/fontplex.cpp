@@ -271,7 +271,7 @@ csPtr<iFont> csFontServerMultiplexer::LoadFont (const char *filename,
   {
     ParseFontLoaderOrder (*order, orderStr, false);
   }
-  else
+  else if (filename != 0)
   {
     order->PushSmart (csFontLoadOrderEntry (fontservers, filename, 1.0f, false));
   }
