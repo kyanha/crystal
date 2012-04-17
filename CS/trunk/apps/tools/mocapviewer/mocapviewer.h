@@ -1,5 +1,5 @@
 /*
-  Copyright (C) 2010-11 Christian Van Brussel, Institute of Information
+  Copyright (C) 2010-2012 Christian Van Brussel, Institute of Information
       and Communication Technologies, Electronics and Applied Mathematics
       at Universite catholique de Louvain, Belgium
       http://www.uclouvain.be/en-icteam.html
@@ -32,12 +32,21 @@
 #include "imesh/animnode/retarget.h"
 #include "imesh/animnode/skeleton2anim.h"
 
+#define SEED_COUNT 10
+
 struct iMovieRecorder;
 class csPixmap;
 
 class MocapViewer : public CS::Utility::DemoApplication,
   public scfImplementation1<MocapViewer, CS::Animation::iSkeletonAnimCallback>
 {
+  enum DisplayMode
+  {
+    DISPLAY_WIRE = 0,
+    DISPLAY_PLD,
+    DISPLAY_ELLIPSE
+  };
+
  private:
   bool CreateScene ();
 
@@ -49,12 +58,17 @@ class MocapViewer : public CS::Utility::DemoApplication,
   csRef<CS::Animation::iSkeletonRetargetNodeManager> retargetNodeManager;
   csRef<CS::Animation::iSkeletonDebugNode> debugNode;
   csRef<CS::Animation::iSkeletonAnimNode> animNode;
+  csRef<CS::Mesh::iAnimatedMesh> animesh;
   csRef<iMeshWrapper> meshWrapper;
   CS::Animation::MocapParserResult parsingResult;
+  CS::Animation::BoneID targetBoneID;
 
   // Display of information
   csPixmap* debugImage;
   bool printInfo;
+
+  // Random number generation
+  unsigned int seeds[SEED_COUNT];
 
   // Noise points
   CS::Math::Noise::Module::Perlin noiseX;
@@ -67,9 +81,8 @@ class MocapViewer : public CS::Utility::DemoApplication,
   CS::Math::Noise::Module::Perlin snoiseY;
   CS::Math::Noise::Module::Perlin snoiseZ;
 
-  // Scene time length
-  csTicks startTime;
-  csTicks timeLength;
+  // Scene duration
+  csTicks duration;
 
  public:
   MocapViewer ();
