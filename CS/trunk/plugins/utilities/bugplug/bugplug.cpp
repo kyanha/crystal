@@ -1575,35 +1575,6 @@ static inline void BugplugBox (iGraphics2D* G2D,
   G2D->DrawLine (x, y+h, x, y, bordercolor);
 }
 
-static inline void DrawBox3D (iGraphics3D* G3D, 
-                              const csBox3& box,
-                              const csReversibleTransform& tr,
-                              int color)
-{
-  csVector3 vxyz = tr * box.GetCorner (CS_BOX_CORNER_xyz);
-  csVector3 vXyz = tr * box.GetCorner (CS_BOX_CORNER_Xyz);
-  csVector3 vxYz = tr * box.GetCorner (CS_BOX_CORNER_xYz);
-  csVector3 vxyZ = tr * box.GetCorner (CS_BOX_CORNER_xyZ);
-  csVector3 vXYz = tr * box.GetCorner (CS_BOX_CORNER_XYz);
-  csVector3 vXyZ = tr * box.GetCorner (CS_BOX_CORNER_XyZ);
-  csVector3 vxYZ = tr * box.GetCorner (CS_BOX_CORNER_xYZ);
-  csVector3 vXYZ = tr * box.GetCorner (CS_BOX_CORNER_XYZ);
-  const CS::Math::Matrix4& projection (G3D->GetProjectionMatrix ());
-  iGraphics2D* G2D = G3D->GetDriver2D ();
-  G2D->DrawLineProjected (vxyz, vXyz, projection, color);
-  G2D->DrawLineProjected (vXyz, vXYz, projection, color);
-  G2D->DrawLineProjected (vXYz, vxYz, projection, color);
-  G2D->DrawLineProjected (vxYz, vxyz, projection, color);
-  G2D->DrawLineProjected (vxyZ, vXyZ, projection, color);
-  G2D->DrawLineProjected (vXyZ, vXYZ, projection, color);
-  G2D->DrawLineProjected (vXYZ, vxYZ, projection, color);
-  G2D->DrawLineProjected (vxYZ, vxyZ, projection, color);
-  G2D->DrawLineProjected (vxyz, vxyZ, projection, color);
-  G2D->DrawLineProjected (vxYz, vxYZ, projection, color);
-  G2D->DrawLineProjected (vXyz, vXyZ, projection, color);
-  G2D->DrawLineProjected (vXYz, vXYZ, projection, color);
-}
-
 bool csBugPlug::HandleFrame (iEvent& /*event*/)
 {
   SetupPlugin ();
@@ -1707,14 +1678,17 @@ bool csBugPlug::HandleFrame (iEvent& /*event*/)
 	  bbox_color = G3D->GetDriver2D ()->FindRGB (255, 0, 255);
           for (int n = 0; n < rmesh_num; n++)
           {
-            DrawBox3D (G3D, rmeshes[n]->bbox, tr_o2c, bbox_color);
+            G3D->GetDriver2D ()->DrawBoxProjected
+	      (rmeshes[n]->bbox, tr_o2c,
+	       G3D->GetProjectionMatrix (), bbox_color);
           }
         }
         
         bbox_color = G3D->GetDriver2D ()->FindRGB (0, 255, 255);
         const csBox3& bbox = selected_meshes[k]->GetMeshObject ()
 	  ->GetObjectModel ()->GetObjectBoundingBox ();
-	DrawBox3D (G3D, bbox, tr_o2c, bbox_color);
+	G3D->GetDriver2D ()->DrawBoxProjected
+	  (bbox, tr_o2c, G3D->GetProjectionMatrix (), bbox_color);
       }
       if (do_rad)
       {
