@@ -129,6 +129,7 @@ class iGraphics2D(core.iBase):
     def GetHWGLVersion(*args): return _ivideo.iGraphics2D_GetHWGLVersion(*args)
     def GetHWVendor(*args): return _ivideo.iGraphics2D_GetHWVendor(*args)
     def DrawLineProjected(*args): return _ivideo.iGraphics2D_DrawLineProjected(*args)
+    def DrawBoxProjected(*args): return _ivideo.iGraphics2D_DrawBoxProjected(*args)
     scfGetVersion = staticmethod(_ivideo.iGraphics2D_scfGetVersion)
     scfGetName = staticmethod(_ivideo.iGraphics2D_scfGetName)
     __swig_destroy__ = _ivideo.delete_iGraphics2D
