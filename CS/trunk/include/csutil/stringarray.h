@@ -319,11 +319,27 @@ class csStringArray :
                                   csArrayCapacityDefault>
 {
 public:
+  /**
+   * Constructor for an empty array of strings.
+   * \param limit Initial count of elements that are allocated in the array.
+   * \param threshold Amount of additional elements that are allocated when the
+   * maximum count is reached.
+   */
   csStringArray (size_t limit = 0, size_t threshold = 0)
     : CS::Utility::StringArray<CS::Memory::AllocatorMalloc, 
                                csArrayCapacityDefault> (limit, threshold)
   {
   }
+
+  /**
+   * Constructor for an array of string initialized by splitting a given string.
+   * \param str The string to split and place in this array.
+   * \param delimiters The delimiters to use to split the string.
+   * \param delimMode The way to split this array
+   * \param limit Initial count of elements that are allocated in the array.
+   * \param threshold Amount of additional elements that are allocated when the
+   * maximum count is reached.
+   */
   csStringArray (const char* str, const char* delimiters, 
                ConsecutiveDelimiterMode delimMode = delimSplitEach,
                size_t limit = 0, size_t threshold = 0)
