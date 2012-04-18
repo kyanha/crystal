@@ -10283,6 +10283,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *GetHWGLVersion = *cspacec::iGraphics2D_GetHWGLVersion;
 *GetHWVendor = *cspacec::iGraphics2D_GetHWVendor;
 *DrawLineProjected = *cspacec::iGraphics2D_DrawLineProjected;
+*DrawBoxProjected = *cspacec::iGraphics2D_DrawBoxProjected;
 *scfGetVersion = *cspacec::iGraphics2D_scfGetVersion;
 *scfGetName = *cspacec::iGraphics2D_scfGetName;
 sub DESTROY {

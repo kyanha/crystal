@@ -14154,6 +14154,84 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_iSkeletonDebugNodeFactory_SetBoneOffset(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  CS::Animation::iSkeletonDebugNodeFactory *arg1 = (CS::Animation::iSkeletonDebugNodeFactory *) 0 ;
+  CS::Animation::BoneID arg2 ;
+  csVector3 arg3 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  size_t val2 ;
+  int ecode2 = 0 ;
+  void *argp3 ;
+  int res3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"iSkeletonDebugNodeFactory_SetBoneOffset",3,3,&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_CS__Animation__iSkeletonDebugNodeFactory, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "iSkeletonDebugNodeFactory_SetBoneOffset" "', argument " "1"" of type '" "CS::Animation::iSkeletonDebugNodeFactory *""'"); 
+  }
+  arg1 = reinterpret_cast< CS::Animation::iSkeletonDebugNodeFactory * >(argp1);
+  ecode2 = SWIG_AsVal_size_t(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "iSkeletonDebugNodeFactory_SetBoneOffset" "', argument " "2"" of type '" "CS::Animation::BoneID""'");
+  } 
+  arg2 = static_cast< CS::Animation::BoneID >(val2);
+  {
+    res3 = SWIG_ConvertPtr(obj2, &argp3, SWIGTYPE_p_csVector3,  0  | 0);
+    if (!SWIG_IsOK(res3)) {
+      SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "iSkeletonDebugNodeFactory_SetBoneOffset" "', argument " "3"" of type '" "csVector3""'"); 
+    }  
+    if (!argp3) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "iSkeletonDebugNodeFactory_SetBoneOffset" "', argument " "3"" of type '" "csVector3""'");
+    } else {
+      csVector3 * temp = reinterpret_cast< csVector3 * >(argp3);
+      arg3 = *temp;
+      if (SWIG_IsNewObj(res3)) delete temp;
+    }
+  }
+  (arg1)->SetBoneOffset(arg2,arg3);
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_iSkeletonDebugNodeFactory_GetBoneOffset(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  CS::Animation::iSkeletonDebugNodeFactory *arg1 = (CS::Animation::iSkeletonDebugNodeFactory *) 0 ;
+  CS::Animation::BoneID arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  size_t val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  csVector3 result;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"iSkeletonDebugNodeFactory_GetBoneOffset",2,2,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_CS__Animation__iSkeletonDebugNodeFactory, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "iSkeletonDebugNodeFactory_GetBoneOffset" "', argument " "1"" of type '" "CS::Animation::iSkeletonDebugNodeFactory const *""'"); 
+  }
+  arg1 = reinterpret_cast< CS::Animation::iSkeletonDebugNodeFactory * >(argp1);
+  ecode2 = SWIG_AsVal_size_t(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "iSkeletonDebugNodeFactory_GetBoneOffset" "', argument " "2"" of type '" "CS::Animation::BoneID""'");
+  } 
+  arg2 = static_cast< CS::Animation::BoneID >(val2);
+  result = ((CS::Animation::iSkeletonDebugNodeFactory const *)arg1)->GetBoneOffset(arg2);
+  resultobj = SWIG_NewPointerObj((new csVector3(static_cast< const csVector3& >(result))), SWIGTYPE_p_csVector3, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_iSkeletonDebugNodeFactory_scfGetVersion(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   int result;
@@ -19224,6 +19302,8 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"iSkeletonDebugNodeFactory_GetChildNode", _wrap_iSkeletonDebugNodeFactory_GetChildNode, METH_VARARGS, NULL},
 	 { (char *)"iSkeletonDebugNodeFactory_SetRandomColor", _wrap_iSkeletonDebugNodeFactory_SetRandomColor, METH_VARARGS, NULL},
 	 { (char *)"iSkeletonDebugNodeFactory_GetRandomColor", _wrap_iSkeletonDebugNodeFactory_GetRandomColor, METH_VARARGS, NULL},
+	 { (char *)"iSkeletonDebugNodeFactory_SetBoneOffset", _wrap_iSkeletonDebugNodeFactory_SetBoneOffset, METH_VARARGS, NULL},
+	 { (char *)"iSkeletonDebugNodeFactory_GetBoneOffset", _wrap_iSkeletonDebugNodeFactory_GetBoneOffset, METH_VARARGS, NULL},
 	 { (char *)"iSkeletonDebugNodeFactory_scfGetVersion", _wrap_iSkeletonDebugNodeFactory_scfGetVersion, METH_VARARGS, NULL},
 	 { (char *)"iSkeletonDebugNodeFactory_scfGetName", _wrap_iSkeletonDebugNodeFactory_scfGetName, METH_VARARGS, NULL},
 	 { (char *)"delete_iSkeletonDebugNodeFactory", _wrap_delete_iSkeletonDebugNodeFactory, METH_VARARGS, NULL},

@@ -755,6 +755,8 @@ class iSkeletonDebugNodeFactory(iSkeletonAnimNodeFactory):
     def GetChildNode(*args): return _animation.iSkeletonDebugNodeFactory_GetChildNode(*args)
     def SetRandomColor(*args): return _animation.iSkeletonDebugNodeFactory_SetRandomColor(*args)
     def GetRandomColor(*args): return _animation.iSkeletonDebugNodeFactory_GetRandomColor(*args)
+    def SetBoneOffset(*args): return _animation.iSkeletonDebugNodeFactory_SetBoneOffset(*args)
+    def GetBoneOffset(*args): return _animation.iSkeletonDebugNodeFactory_GetBoneOffset(*args)
     scfGetVersion = staticmethod(_animation.iSkeletonDebugNodeFactory_scfGetVersion)
     scfGetName = staticmethod(_animation.iSkeletonDebugNodeFactory_scfGetName)
     __swig_destroy__ = _animation.delete_iSkeletonDebugNodeFactory
