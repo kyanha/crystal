@@ -26,6 +26,8 @@
 
 #include "csutil/scf.h"
 
+#include "ivaria/bodytype.h"
+
 
 struct iBodyGroup;
 struct iJoint;
@@ -825,19 +827,6 @@ struct iRigidBody : public virtual iBase
     const csOrthoTransform& trans, float friction, float density,
     float elasticity, float softness = 0.01f) = 0;
 };
-
-enum csColliderGeometryType
-{
-  NO_GEOMETRY,                  /*!< No geometry has been defined */
-  BOX_COLLIDER_GEOMETRY,        /*!< Box geometry */
-  PLANE_COLLIDER_GEOMETRY,      /*!< Plane geometry */
-  TRIMESH_COLLIDER_GEOMETRY,    /*!< Concave mesh geometry */
-  CONVEXMESH_COLLIDER_GEOMETRY, /*!< Convex mesh geometry */
-  CYLINDER_COLLIDER_GEOMETRY,   /*!< Cylinder geometry */
-  CAPSULE_COLLIDER_GEOMETRY,    /*!< Capsule geometry */
-  SPHERE_COLLIDER_GEOMETRY      /*!< Sphere geometry */
-};
-
 
 /**
  * This is the interface for attaching a collision callback to a collider
