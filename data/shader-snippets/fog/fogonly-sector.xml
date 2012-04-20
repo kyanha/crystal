@@ -118,7 +118,7 @@
       <variablemap destination="fogInput.fogSelect" type="expr">
         <sexp>(make-vector (|| (= "fog mode" 1) (= "fog mode" 3)) (|| (= "fog mode" 2) (= "fog mode" 4)))</sexp>
       </variablemap>
-      <?if (vars."fog mode".int != consts.CS_FOG_MODE_NONE) ?>
+      <?if (vars."fog mode".int != consts.CS_FOG_MODE_NONE) && (vars."fog density".float &gt; 0) ?>
       <!-- See the glshader_fixed plugin source for a detailed explanation 
             of the formular below. -->
       <variablemap destination="vertexIn.fogPlaneS" type="expr">
@@ -163,7 +163,7 @@
       <variablemap destination="in_fogSelect" type="expr">
         <sexp>(make-vector (|| (= "fog mode" 1) (= "fog mode" 3)) (|| (= "fog mode" 2) (= "fog mode" 4)))</sexp>
       </variablemap>
-      <?if (vars."fog mode".int != consts.CS_FOG_MODE_NONE) ?>
+      <?if (vars."fog mode".int != consts.CS_FOG_MODE_NONE) && (vars."fog density".float &gt; 0) ?>
       <!-- See the glshader_fixed plugin source for a detailed explanation 
             of the formular below. -->
       <variablemap destination="in_fogPlaneS" type="expr">
@@ -208,7 +208,7 @@
     
     <block location="cg:fragmentMain">
       foggedColor = float4(0);
-      <?if (vars."fog mode".int != consts.CS_FOG_MODE_NONE) ?>
+      <?if (vars."fog mode".int != consts.CS_FOG_MODE_NONE) && (vars."fog density".float &gt; 0) ?>
         float intensity = 1;
         <?if (vars."fog mode".int == consts.CS_FOG_MODE_CRYSTALSPACE) || (vars."fog mode".int == consts.CS_FOG_MODE_LINEAR) ?>
         intensity = tex2D (fragmentIn.fogTex, fogTC).a;
@@ -227,7 +227,7 @@
     
     <block location="glsl:fragmentMain">
       foggedColor = vec4(0);
-      <?if (vars."fog mode".int != consts.CS_FOG_MODE_NONE) ?>
+      <?if (vars."fog mode".int != consts.CS_FOG_MODE_NONE) && (vars."fog density".float &gt; 0) ?>
         float distance = length(eyePos);
         float intensity = 1.0;
         <?if (vars."fog mode".int == consts.CS_FOG_MODE_CRYSTALSPACE) || (vars."fog mode".int == consts.CS_FOG_MODE_LINEAR) ?>
