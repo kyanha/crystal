@@ -232,8 +232,9 @@ struct CubicSolution
   float X1, X2, X3;
   size_t count;
 
-  CubicSolution()
-  { count = 0; }
+  CubicSolution ()
+  : X1 (0.0f), X2 (0.0f), X3 (0.0f), count (0)
+  {}
 
   inline float operator[] (size_t n) const 
   { return (n&2) ? X3 : ( (n&1) ? X2 : X1 ) ; }

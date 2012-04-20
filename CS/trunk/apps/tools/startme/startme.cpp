@@ -398,11 +398,12 @@ bool StartMe::OnClick (const CEGUI::EventArgs& e)
     {
       csRef<iCommandLineParser> cmdline = csQueryRegistry<iCommandLineParser> (GetObjectRegistry());
       csString appdir = cmdline->GetAppDir ();
-      system (csString("\"") << appdir << CS_PATH_SEPARATOR <<
-        csInstallationPathsHelper::GetAppFilename (
-          demos[i].exec) << "\" " << 
-          demos[i].args);
-      break;
+      if (system (csString("\"") << appdir << CS_PATH_SEPARATOR <<
+		  csInstallationPathsHelper::GetAppFilename (
+		    demos[i].exec) << "\" " << 
+		  demos[i].args))
+	break;
+      else break;
     }
   return true;
 }

@@ -149,6 +149,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(SpeedNode)
 
     // find the anims bounding that speed value
     size_t newSlowNode, newFastNode;
+    newSlowNode = newFastNode = 0;
     for (size_t i = 0; i < factory->speedList.GetSize () - 1; i++)
     {
       if (speed == factory->speedList[i])

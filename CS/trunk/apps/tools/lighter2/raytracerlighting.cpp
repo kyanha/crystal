@@ -158,6 +158,7 @@ namespace lighter
 #endif
 
     size_t u, v;
+    u = v = 0;
     if (recordInfluence)
     {
       // @@@ redundant, outer primitive loop already does this
