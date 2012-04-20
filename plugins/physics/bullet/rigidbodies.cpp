@@ -63,8 +63,8 @@ void csBulletRigidBody::RebuildBody ()
 {
   // delete previous body
   bool wasBody = false;
-  btVector3 linearVelocity;
-  btVector3 angularVelocity;
+  btVector3 linearVelocity (0.0f, 0.0f, 0.0f);
+  btVector3 angularVelocity (0.0f, 0.0f, 0.0f);
   if (body)
   {
     // save body's state

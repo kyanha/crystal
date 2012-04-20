@@ -248,7 +248,7 @@ public:
 
 static iTriangleMesh* FindTriangleMesh (iObjectModel* model, csBulletDynamics* dynamics)
 {
-  iTriangleMesh* trimesh;
+  iTriangleMesh* trimesh = nullptr;
   if (model->IsTriangleDataSet (dynamics->baseID))
   {
     trimesh = model->GetTriangleData (dynamics->colldetID);

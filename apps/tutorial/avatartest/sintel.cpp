@@ -164,7 +164,7 @@ bool SintelScene::OnKeyboard (iEvent &ev)
 	  MorphComponent& component = it.Next ();
 
 	  // Find the corresponding active component
-	  ActiveMorphComponent* activeComponent;
+	  ActiveMorphComponent* activeComponent = nullptr;
 	  for (csArray<ActiveMorphComponent>::Iterator activeIt =
 		 activeMorphComponents.GetIterator (); activeIt.HasNext (); )
 	  {

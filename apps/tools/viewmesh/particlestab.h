@@ -804,7 +804,7 @@ bool ParticlesTab::UpdateX (const CEGUI::EventArgs& e)
   uint id;
   if (GetSelectedItemID("Particles/Edit/Properties", id))
   {
-    PropType type;
+    PropType type = Unknown;
     CEGUI::Listbox* list = (CEGUI::Listbox*)winMgr->getWindow("Particles/Edit/Properties");
     float scrollPos = list->getVertScrollbar()->getScrollPosition();
 
@@ -925,7 +925,7 @@ bool ParticlesTab::UpdateY (const CEGUI::EventArgs& e)
   uint id;
   if (GetSelectedItemID("Particles/Edit/Properties", id))
   {
-    PropType type;
+    PropType type = Unknown;
     CEGUI::Listbox* list = (CEGUI::Listbox*)winMgr->getWindow("Particles/Edit/Properties");
     float scrollPos = list->getVertScrollbar()->getScrollPosition();
 
@@ -1027,7 +1027,7 @@ bool ParticlesTab::UpdateZ (const CEGUI::EventArgs& e)
   uint id;
   if (GetSelectedItemID("Particles/Edit/Properties", id))
   {
-    PropType type;
+    PropType type = Unknown;
     CEGUI::Listbox* list = (CEGUI::Listbox*)winMgr->getWindow("Particles/Edit/Properties");
     float scrollPos = list->getVertScrollbar()->getScrollPosition();
 
@@ -1108,7 +1108,7 @@ bool ParticlesTab::UpdateA (const CEGUI::EventArgs& e)
   uint id;
   if (GetSelectedItemID("Particles/Edit/Properties", id))
   {
-    PropType type;
+    PropType type = Unknown;
     CEGUI::Listbox* list = (CEGUI::Listbox*)winMgr->getWindow("Particles/Edit/Properties");
     float scrollPos = list->getVertScrollbar()->getScrollPosition();
 

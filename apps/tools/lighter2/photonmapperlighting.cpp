@@ -298,7 +298,8 @@ namespace lighter
       // Setting one time light properties
 
       float spRadius, innerFalloff, outterFalloff;
-      csVector3 lightDir;
+      spRadius = innerFalloff = outterFalloff = 0.0f;
+      csVector3 lightDir (0.0f);
       switch (curLightType) 
       {
 
@@ -414,7 +415,10 @@ namespace lighter
           // Setting one time light properties
       
           float spRadius, spanAngle;
-          csVector3 lightDir, objDir, pseudoPos;
+	  spRadius = spanAngle = 0.0f;
+          csVector3 lightDir (0.0f);
+	  csVector3 objDir (0.0f);
+	  csVector3 pseudoPos (0.0f);
 
           switch (curLightType)
           {

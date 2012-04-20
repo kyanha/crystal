@@ -878,8 +878,12 @@ void LodGen::GenerateLODs()
       // Found the best vertices to collapse: 'min_v0', 'min_v1'.
       // Collapse them.
       CS_ASSERT(min_v0 != -1 && min_v1 != -1);
-      bool result = Collapse(k, min_v0, min_v1);
-      CS_ASSERT(result);
+      if (!Collapse(k, min_v0, min_v1))
+      {
+	Message("Error: failed to collapse vertices!\n");
+	break;
+      }
+
       sw = k.GetLastWindow();
       Message("t: %d d: %g v: %d -> %d\n", sw.end_index-sw.start_index, min_d, min_v0, min_v1);
       // For debug purposes
