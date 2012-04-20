@@ -23,6 +23,7 @@
  */
 #include "cssysdef.h"
 #include "ivaria/blobs.h"
+#include "ivaria/bodytype.h"
 #include "ivaria/bugplug.h"
 #include "ivaria/bullet.h"
 #include "ivaria/bullet2.h"

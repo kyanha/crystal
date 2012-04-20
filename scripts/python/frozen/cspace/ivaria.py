@@ -684,14 +684,6 @@ class iRigidBody(core.iBase):
 iRigidBody_swigregister = _ivaria.iRigidBody_swigregister
 iRigidBody_swigregister(iRigidBody)
 
-NO_GEOMETRY = _ivaria.NO_GEOMETRY
-BOX_COLLIDER_GEOMETRY = _ivaria.BOX_COLLIDER_GEOMETRY
-PLANE_COLLIDER_GEOMETRY = _ivaria.PLANE_COLLIDER_GEOMETRY
-TRIMESH_COLLIDER_GEOMETRY = _ivaria.TRIMESH_COLLIDER_GEOMETRY
-CONVEXMESH_COLLIDER_GEOMETRY = _ivaria.CONVEXMESH_COLLIDER_GEOMETRY
-CYLINDER_COLLIDER_GEOMETRY = _ivaria.CYLINDER_COLLIDER_GEOMETRY
-CAPSULE_COLLIDER_GEOMETRY = _ivaria.CAPSULE_COLLIDER_GEOMETRY
-SPHERE_COLLIDER_GEOMETRY = _ivaria.SPHERE_COLLIDER_GEOMETRY
 class iDynamicsColliderCollisionCallback(core.iBase):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
     def __init__(self, *args, **kwargs): raise AttributeError, "No constructor defined"
