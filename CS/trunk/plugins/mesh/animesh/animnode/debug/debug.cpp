@@ -89,7 +89,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(DebugNode)
 
   void DebugNodeFactory::SetBoneOffset (CS::Animation::BoneID boneID, csVector3 offset)
   {
-    csVector3& boneOffset = boneOffsets.GetOrCreate (boneID);
+    csVector3& boneOffset = boneOffsets.GetOrCreate (boneID, csVector3 (0.0f));
     boneOffset = offset;
   }
 
