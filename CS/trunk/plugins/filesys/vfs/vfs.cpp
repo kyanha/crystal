@@ -817,21 +817,27 @@ csPtr<iDataBuffer> DiskFile::GetAllData (bool nullterm)
       size_t oldpos = GetPos();
       if (!nullterm)
       {
-	newbuf = TryCreateMapping ();
+        newbuf = TryCreateMapping ();
       }
       // didn't succeed or not supported -
       // old style readin'
       if (!newbuf)
       {
-	SetPos (0);
+        SetPos (0);
+        char* data = (char*)Node->vfs->heap->Alloc (Size+1);
 
-	char* data = (char*)Node->vfs->heap->Alloc (Size+1);
+        //allocation fail just return as this is a failure.
+        if (data == 0)
+        {
+            return 0;
+        }
+        
         CS::DataBuffer<VfsHeap>* dbuf =
-	  new CS::DataBuffer<VfsHeap> (data, Size, true, Node->vfs->heap);
-	Read (data, Size);
-	*(data + Size) = 0;
+         new CS::DataBuffer<VfsHeap> (data, Size, true, Node->vfs->heap);
+        Read (data, Size);
+        *(data + Size) = 0;
 
-	newbuf = dbuf;
+        newbuf = dbuf;
       }
       // close file, set correct pos
       fclose (file);
