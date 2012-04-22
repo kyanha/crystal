@@ -92,6 +92,11 @@
 #     must allow "write" access to the repository if files are to be commited
 #     back to the repository. No default.
 #
+# $jobber_svn_mirror_url [optional]
+#     The URL of a read-only local repository mirror. If specified, is used
+#     only as an optimization to speed up the initial checkout.  All other SVN
+#     interaction is via $jobber_svn_base_url.  No default.
+#
 # $jobber_svn_user [required]
 #     The user to use for authentication when doing write operations on the
 #     repository. Notice that the password/certificate must be configured 
@@ -281,7 +286,7 @@ use warnings;
 $Getopt::Long::ignorecase = 0;
 
 my $PROG_NAME = 'jobber-svn.pl';
-my $PROG_VERSION = '43';
+my $PROG_VERSION = '44';
 my $AUTHOR_NAME = 'Eric Sunshine';
 my $AUTHOR_EMAIL = 'sunshine@sunshineco.com';
 my $COPYRIGHT = "Copyright (C) 2000-2012 by $AUTHOR_NAME <$AUTHOR_EMAIL>\nConverted for SVN support by Marten Svanfeldt";
@@ -305,6 +310,7 @@ my $ARCHIVER_LZMA = {
 
 my $jobber_project_root = undef;
 my $jobber_svn_base_url = undef;
+my $jobber_svn_mirror_url = undef;
 my $jobber_svn_flags = '';
 my $jobber_svn_user = '';
 my $jobber_browseable_dir = undef;
@@ -667,8 +673,15 @@ sub svn_examine {
 # Extract the appropriate files from the SVN repository.
 #------------------------------------------------------------------------------
 sub svn_checkout {
-    print "Retrieving: $jobber_svn_base_url\n";
-    run_command("$jobber_svn_command co $jobber_svn_base_url $jobber_svn_flags");
+    my $u = $jobber_svn_mirror_url || $jobber_svn_base_url;
+    print "Retrieving: $u\n";
+    run_command("$jobber_svn_command checkout $u $jobber_project_root $jobber_svn_flags");
+    change_directory($jobber_project_root);
+    if ($u ne $jobber_svn_base_url) {
+	print "Relocating: $jobber_svn_base_url\n";
+	run_command("$jobber_svn_command switch --relocate $u $jobber_svn_base_url $jobber_svn_flags");
+	run_command("$jobber_svn_command update $jobber_svn_flags");
+    }
 }
 
 #------------------------------------------------------------------------------
@@ -972,7 +985,6 @@ sub run {
     my $convdir = conversion_dir();
     create_transient($convdir);
     svn_checkout();
-    change_directory($jobber_project_root);
     run_tasks();
     apply_diffs();
     svn_update();
