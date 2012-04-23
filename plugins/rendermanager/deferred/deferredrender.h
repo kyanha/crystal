@@ -41,8 +41,6 @@ CS_PLUGIN_NAMESPACE_BEGIN(RMDeferred)
     ForwardMeshTreeRenderer(iGraphics3D* g3d, iShaderManager *shaderMgr, int deferredLayer, int zonlyLayer)
       : 
     meshRender(g3d, shaderMgr),
-    graphics3D(g3d),
-    shaderMgr(shaderMgr),
     deferredLayer(deferredLayer),
     zonlyLayer(zonlyLayer)
     {}
@@ -54,17 +52,6 @@ CS_PLUGIN_NAMESPACE_BEGIN(RMDeferred)
      */
     void operator()(typename RenderTree::ContextNode *context)
     {
-      CS::RenderManager::RenderView *rview = context->renderView;
-      
-      iCamera *cam = rview->GetCamera ();
-      iClipper2D *clipper = rview->GetClipper ();
-      
-      // Setup the camera etc.. @@should be delayed as well
-      graphics3D->SetProjectionMatrix (context->perspectiveFixup * cam->GetProjectionMatrix ());
-      graphics3D->SetClipper (clipper, CS_CLIPPER_TOPLEVEL);
-
-      graphics3D->SetWorldToCamera (context->cameraTransform.GetInverse ());
-
       size_t layerCount = context->svArrays.GetNumLayers ();
       for (size_t layer = 0; layer < layerCount; ++layer)
       {
@@ -79,9 +66,6 @@ CS_PLUGIN_NAMESPACE_BEGIN(RMDeferred)
   private:
 
     CS::RenderManager::SimpleContextRender<RenderTree> meshRender;
-
-    iGraphics3D *graphics3D;
-    iShaderManager *shaderMgr;
 
     int deferredLayer;
     int zonlyLayer;
@@ -173,60 +157,6 @@ CS_PLUGIN_NAMESPACE_BEGIN(RMDeferred)
       iCamera *cam = rview->GetCamera ();
       iClipper2D *clipper = rview->GetClipper ();
 
-      // Any rendering required for visculling needs to be done once only per sector.
-      {
-        graphics3D->SetProjectionMatrix (context->perspectiveFixup * cam->GetProjectionMatrix ());
-        graphics3D->SetClipper (clipper, CS_CLIPPER_TOPLEVEL);
-
-        int drawFlags = CSDRAW_3DGRAPHICS | context->drawFlags;
-        drawFlags |= CSDRAW_CLEARSCREEN | CSDRAW_CLEARZBUFFER;
-        graphics3D->BeginDraw (drawFlags);
-
-        graphics3D->SetZMode (CS_ZBUF_MESH);
-
-        csArray<iSector*> sectors;
-        for (size_t c = 0; c < contextStack.GetSize (); ++c)
-        {
-          typename RenderTree::ContextNode* ctx = contextStack[c];
-
-          size_t numSectors = sectors.GetSize ();
-          if (sectors.PushSmart (ctx->sector) == numSectors)
-          {
-            graphics3D->SetWorldToCamera (ctx->cameraTransform.GetInverse ());
-            ctx->sector->GetVisibilityCuller ()->RenderViscull (rview, ctx->shadervars);
-          }
-        }
-
-        graphics3D->FinishDraw();
-      }
-
-      // Fill the gbuffer
-      gbuffer->Attach ();
-      {
-        // Setup the camera etc.
-        graphics3D->SetProjectionMatrix (context->perspectiveFixup * cam->GetProjectionMatrix ());
-        graphics3D->SetClipper (clipper, CS_CLIPPER_TOPLEVEL);
-
-        int drawFlags = CSDRAW_3DGRAPHICS | context->drawFlags;
-        drawFlags |= CSDRAW_CLEARSCREEN | CSDRAW_CLEARZBUFFER;
-        graphics3D->BeginDraw (drawFlags);
-        graphics3D->SetWorldToCamera (context->cameraTransform.GetInverse ());
-
-        graphics3D->SetZMode (CS_ZBUF_MESH);
-
-        meshRender.SetLayer (deferredLayer);
-
-        for (size_t i = 0; i < ctxCount; i++)
-        {
-          typename RenderTree::ContextNode *context = contextStack[i];
-          
-          ForEachDeferredMeshNode (*context, meshRender);
-        }
-        
-        graphics3D->FinishDraw ();
-      }
-      gbuffer->Detach ();
-
       // Assume that the accumulation texture matches the gbuffer dimensions.
   #if CS_DEBUG
       int subTex;
@@ -241,33 +171,106 @@ CS_PLUGIN_NAMESPACE_BEGIN(RMDeferred)
       CS_ASSERT (w == bufW && h == bufH);
   #endif
 
-      // attach render targets.
-      for (int a = 0; a < rtaNumAttachments; a++)
-        graphics3D->SetRenderTarget (context->renderTargets[a].texHandle, false,
-	    context->renderTargets[a].subtexture, csRenderTargetAttachment (a));
-      CS_ASSERT(graphics3D->ValidateRenderTargets ());
-
-      // Fill the accumulation buffer
+      // Fill the gbuffer
+      gbuffer->Attach ();
+      if(!gbuffer->HasDepthBuffer())
       {
+	graphics3D->SetRenderTarget (context->renderTargets[rtaDepth].texHandle, false,
+            context->renderTargets[rtaDepth].subtexture, rtaDepth);
+      }
+      {
+        // Setup the camera etc.
+        graphics3D->SetProjectionMatrix (context->perspectiveFixup * cam->GetProjectionMatrix ());
+        graphics3D->SetClipper (clipper, CS_CLIPPER_TOPLEVEL);
+
         int drawFlags = CSDRAW_3DGRAPHICS | context->drawFlags;
-        drawFlags |=  CSDRAW_CLEARSCREEN | CSDRAW_CLEARZBUFFER;
+        drawFlags |= CSDRAW_CLEARSCREEN | CSDRAW_CLEARZBUFFER;
 
         graphics3D->BeginDraw (drawFlags);
-        graphics3D->SetWorldToCamera (context->cameraTransform.GetInverse ());
+
+        csSet<iSector*> sectors;
+        for (size_t c = 0; c < contextStack.GetSize (); ++c)
+        {
+          typename RenderTree::ContextNode* ctx = contextStack[c];
+
+          if (!sectors.Contains(ctx->sector))
+          {
+	    sectors.AddNoTest(ctx->sector);
+            graphics3D->SetWorldToCamera (ctx->cameraTransform.GetInverse ());
+            ctx->sector->GetVisibilityCuller ()->RenderViscull (rview, ctx->shadervars);
+          }
+        }
 
         // z only pass
-        // @@@FIXME: this should be done during gbuffer fill pass
-        //           and copy the depth buffer from the gbuffer here
-        //           if the gbuffer has a depth buffer
         {
           graphics3D->SetZMode (CS_ZBUF_MESH);
           meshRender.SetLayer (zonlyLayer);
 
           for (size_t i = 0; i < ctxCount; i++)
           {
-            typename RenderTree::ContextNode *context = contextStack[i];
+            typename RenderTree::ContextNode *ctx = contextStack[i];
 
-            ForEachMeshNode (*context, meshRender);
+	    graphics3D->SetWorldToCamera (ctx->cameraTransform.GetInverse ());
+            ForEachMeshNode (*ctx, meshRender);
+          }
+        }
+
+	// deferred pass
+	{
+	  graphics3D->SetZMode (CS_ZBUF_MESH2);
+
+	  meshRender.SetLayer (deferredLayer);
+
+	  for (size_t i = 0; i < ctxCount; i++)
+	  {
+            typename RenderTree::ContextNode *ctx = contextStack[i];
+          
+	    graphics3D->SetWorldToCamera (ctx->cameraTransform.GetInverse ());
+	    ForEachDeferredMeshNode (*ctx, meshRender);
+	  }
+	}
+        
+        graphics3D->FinishDraw ();
+      }
+      gbuffer->Detach ();
+
+      // attach render targets.
+      for (int a = rtaColor0; a < rtaNumAttachments; a++)
+        graphics3D->SetRenderTarget (context->renderTargets[a].texHandle, false,
+	    context->renderTargets[a].subtexture, csRenderTargetAttachment (a));
+      if (gbuffer->HasDepthBuffer())
+      {
+        graphics3D->SetRenderTarget (gbuffer->GetDepthBuffer(), false, 0, rtaDepth);
+      }
+      else
+      {
+        graphics3D->SetRenderTarget (context->renderTargets[rtaDepth].texHandle, false,
+            context->renderTargets[rtaDepth].subtexture, rtaDepth);
+      }
+      CS_ASSERT(graphics3D->ValidateRenderTargets ());
+
+      // Fill the accumulation buffer
+      {
+        int drawFlags = CSDRAW_3DGRAPHICS | context->drawFlags;
+        drawFlags |= CSDRAW_CLEARSCREEN;
+
+        // @@@FIXME: we want to re-use the depth buffer
+        //drawFlags &= ~CSDRAW_CLEARZBUFFER;
+
+        graphics3D->BeginDraw (drawFlags);
+
+        // z only pass
+        // @@@FIXME: we should not have to duplicate this here...
+        {
+          graphics3D->SetZMode (CS_ZBUF_MESH);
+          meshRender.SetLayer (zonlyLayer);
+
+          for (size_t i = 0; i < ctxCount; i++)
+          {
+            typename RenderTree::ContextNode *ctx = contextStack[i];
+
+	    graphics3D->SetWorldToCamera (ctx->cameraTransform.GetInverse ());
+            ForEachMeshNode (*ctx, meshRender);
           }
         }
 
@@ -279,9 +282,10 @@ CS_PLUGIN_NAMESPACE_BEGIN(RMDeferred)
 
           for (size_t i = 0; i < ctxCount; i++)
           {
-            typename RenderTree::ContextNode *context = contextStack[i];
+            typename RenderTree::ContextNode *ctx = contextStack[i];
 
-            render (context);
+	    graphics3D->SetWorldToCamera (ctx->cameraTransform.GetInverse ());
+            render (ctx);
           }
         }
 
@@ -300,26 +304,22 @@ CS_PLUGIN_NAMESPACE_BEGIN(RMDeferred)
 
           for (size_t i = 0; i < ctxCount; i++)
           {
-            typename RenderTree::ContextNode *context = contextStack[i];
+            typename RenderTree::ContextNode *ctx = contextStack[i];
+
+	    graphics3D->SetWorldToCamera (ctx->cameraTransform.GetInverse ());
 
             // other light types
-            ForEachLight (*context, lightRender);
+            ForEachLight (*ctx, lightRender);
 
             // Output light volumes.
             if (drawLightVolumes)
-              ForEachLight (*context, lightVolumeRender);
+              ForEachLight (*ctx, lightVolumeRender);
           }
         }
 
         // finish draw also unsets render targets
         graphics3D->FinishDraw ();
       }
-
-      /* @@@ FIXME: When switching from RT to screen with a clipper set
-         the clip rect gets wrong (stays at RT size). This workaround ensures
-         that no "old" clip rect is stored which is restored later.
-         Should really be fixed in the renderer. */
-      graphics3D->SetClipper (nullptr, CS_CLIPPER_TOPLEVEL);
 
       contextStack.Empty ();
     }
@@ -355,20 +355,11 @@ CS_PLUGIN_NAMESPACE_BEGIN(RMDeferred)
     }
 
     /**
-     * Returns true if the given context has the same GBuffer as the 
-     * last context.
-     */
-    bool HasSameGBuffer(typename RenderTree::ContextNode* context)
-    {
-      return context->gbuffer == lastGBuffer;
-    }
-
-    /**
      * Returns true if the given context is different from the last context.
      */
     bool IsNew(typename RenderTree::ContextNode* context)
     {
-      return !HasSameAccumBuffer (context) || !HasSameRenderView (context) || !HasSameGBuffer (context);
+      return !HasSameAccumBuffer (context) || !HasSameRenderView (context);
     }
 
   private:
