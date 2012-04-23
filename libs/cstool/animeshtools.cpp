@@ -215,7 +215,7 @@ bool AnimatedMeshTools::ImportMorphMesh
 
   csRef<iRenderBuffer> morphBuffer;
   csRef<iRenderBuffer> initialMorphBuffer;
-  csVector3* initialMorphIndices;
+  csVector3* initialMorphIndices = nullptr;
 
   if (deleteMesh)
     morphBuffer = morphMesh->GetVertices ();

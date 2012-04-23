@@ -160,7 +160,7 @@ int csSndSysBasicEventRecorder::ProcessEventQueue()
   {
     if (m_Active && m_pLogFile)
     {
-      LogString.Format("[%012" PRIu64 "] [%s] [%s] %s\n", pEntry->Time, GetEventLevelString(pEntry->Level),
+      LogString.Format("[%012" CS_PRIu64 "] [%s] [%s] %s\n", pEntry->Time, GetEventLevelString(pEntry->Level),
                        GetEventCategoryString(pEntry->Category), pEntry->Message.GetData());
       m_pLogFile->Write(LogString.GetData(), LogString.Length());
     }

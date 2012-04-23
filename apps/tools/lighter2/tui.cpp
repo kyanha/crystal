@@ -309,12 +309,12 @@ namespace lighter
     }
 
     // Output ray counters with suffix
-    csPrintf (CS_ANSI_CURSOR(12,9) "%6" PRIu64 " %s", directRays, siConv[directSuffix]);
-    csPrintf (CS_ANSI_CURSOR(12,10) "%6" PRIu64 " %s", lightRays, siConv[lightSuffix]);
-    csPrintf (CS_ANSI_CURSOR(12,11) "%6" PRIu64 " %s", reflectRays, siConv[reflectSuffix]);
-    csPrintf (CS_ANSI_CURSOR(12,12) "%6" PRIu64 " %s", refractRays, siConv[refractSuffix]);
-    csPrintf (CS_ANSI_CURSOR(12,13) "%6" PRIu64 " %s", finalGatherRays, siConv[finalGatherSuffix]);
-    csPrintf (CS_ANSI_CURSOR(10,15) "%8" PRIu64 " %s", totalRays, siConv[totalSuffix]);
+    csPrintf (CS_ANSI_CURSOR(12,9) "%6" CS_PRIu64 " %s", directRays, siConv[directSuffix]);
+    csPrintf (CS_ANSI_CURSOR(12,10) "%6" CS_PRIu64 " %s", lightRays, siConv[lightSuffix]);
+    csPrintf (CS_ANSI_CURSOR(12,11) "%6" CS_PRIu64 " %s", reflectRays, siConv[reflectSuffix]);
+    csPrintf (CS_ANSI_CURSOR(12,12) "%6" CS_PRIu64 " %s", refractRays, siConv[refractSuffix]);
+    csPrintf (CS_ANSI_CURSOR(12,13) "%6" CS_PRIu64 " %s", finalGatherRays, siConv[finalGatherSuffix]);
+    csPrintf (CS_ANSI_CURSOR(10,15) "%8" CS_PRIu64 " %s", totalRays, siConv[totalSuffix]);
 
     csPrintf (CS_ANSI_CURSOR(1,1));
   }
@@ -381,14 +381,14 @@ namespace lighter
     }
 
     // Output photon counters with suffix
-    csPrintf (CS_ANSI_CURSOR(33,9) "%6" PRIu64 " %s", photons, siConv[photonSuffix]);
-    csPrintf (CS_ANSI_CURSOR(33,10) "%6" PRIu64 " %s", lookups, siConv[lookupSuffix]);
-    csPrintf (CS_ANSI_CURSOR(33,11) "%6" PRIu64 " %s", KDdepth, siConv[KDdepthSuffix]);
+    csPrintf (CS_ANSI_CURSOR(33,9) "%6" CS_PRIu64 " %s", photons, siConv[photonSuffix]);
+    csPrintf (CS_ANSI_CURSOR(33,10) "%6" CS_PRIu64 " %s", lookups, siConv[lookupSuffix]);
+    csPrintf (CS_ANSI_CURSOR(33,11) "%6" CS_PRIu64 " %s", KDdepth, siConv[KDdepthSuffix]);
 
-    csPrintf (CS_ANSI_CURSOR(32,15) "%7" PRIu64 " %s", irPrim, siConv[primarySuffix]);
-    csPrintf (CS_ANSI_CURSOR(32,16) "%7" PRIu64 " %s", irSecnd, siConv[secondarySuffix]);
-    csPrintf (CS_ANSI_CURSOR(33,17) "%6" PRIu64 " %s", irLookups, siConv[irLookupsSuffix]);
-    csPrintf (CS_ANSI_CURSOR(33,18) "%6" PRIu64 " %s", irSplits, siConv[irSplitsSuffix]);
+    csPrintf (CS_ANSI_CURSOR(32,15) "%7" CS_PRIu64 " %s", irPrim, siConv[primarySuffix]);
+    csPrintf (CS_ANSI_CURSOR(32,16) "%7" CS_PRIu64 " %s", irSecnd, siConv[secondarySuffix]);
+    csPrintf (CS_ANSI_CURSOR(33,17) "%6" CS_PRIu64 " %s", irLookups, siConv[irLookupsSuffix]);
+    csPrintf (CS_ANSI_CURSOR(33,18) "%6" CS_PRIu64 " %s", irSplits, siConv[irSplitsSuffix]);
 
     csPrintf (CS_ANSI_CURSOR(1,1));
   }

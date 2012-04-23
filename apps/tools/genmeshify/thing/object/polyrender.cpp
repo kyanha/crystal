@@ -112,7 +112,7 @@ void csPolygonRenderer::PrepareBuffers (uint& indexStart, uint& indexEnd)
 	The Z part is simply dropped then.
       */
       csMatrix3 t_m;
-      csVector3 t_v;
+      csVector3 t_v (0.0f);
       if (static_data->tmapping)
       {
         t_m = static_data->tmapping->GetO2T ();
@@ -591,7 +591,7 @@ void csPolygonRenderer::BufferAccessor::PreGetBuffer (
 	int lmH = lm->GetHeight();
 
 	csMatrix3 t_m;
-	csVector3 t_v;
+	csVector3 t_v (0.0f);
 	if (static_data->tmapping)
 	{
 	  t_m = tmapping.GetO2T ();
