@@ -433,6 +433,9 @@ bool RMDeferred::RenderView(iView *view, bool recursePortals)
                                                  drawLightVolumes);
 
     ForEachContextReverse (renderTree, render);
+
+    // clear clipper
+    graphics3D->SetClipper (nullptr, CS_CLIPPER_TOPLEVEL);
   }
 
   if (hasPostEffects)
