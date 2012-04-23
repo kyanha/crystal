@@ -131,7 +131,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(Profiler)
       csString data, data2;
       for (size_t i = 0; i < allZones.GetSize (); ++i)
       {
-        data2.Format ("%" PRIu64 ", %u, ", allZones[i]->totalTime, allZones[i]->enterCount);
+        data2.Format ("%" CS_PRIu64 ", %u, ", allZones[i]->totalTime, allZones[i]->enterCount);
         data.Append (data2);
       }
       data.Append ("\n");
