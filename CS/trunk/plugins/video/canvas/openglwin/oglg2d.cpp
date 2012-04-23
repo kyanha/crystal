@@ -380,13 +380,9 @@ bool csGraphics2DOpenGL::Open ()
   m_bActivated = true;
 
   RECT wndRect;
-  int wwidth = fbWidth;
-  int wheight = fbHeight;
   DWORD exStyle = 0;
   DWORD style = WS_POPUP | WS_SYSMENU;
   windowModeStyle = WS_CAPTION;
-  int xpos = 0;
-  int ypos = 0;
   if (FullScreen)
   {
     /*exStyle |= WS_EX_TOPMOST;*/
