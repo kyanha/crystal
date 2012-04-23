@@ -188,18 +188,22 @@ CS_PLUGIN_NAMESPACE_BEGIN(RMDeferred)
 
         graphics3D->BeginDraw (drawFlags);
 
-        csSet<iSector*> sectors;
-        for (size_t c = 0; c < contextStack.GetSize (); ++c)
-        {
-          typename RenderTree::ContextNode* ctx = contextStack[c];
+	// Visibility Culling
+	{
+	  // visculling only needs to be rendered once per sector.
+	  csSet<iSector*> sectors;
+	  for (size_t c = 0; c < contextStack.GetSize (); ++c)
+	  {
+	    typename RenderTree::ContextNode* ctx = contextStack[c];
 
-          if (!sectors.Contains(ctx->sector))
-          {
-	    sectors.AddNoTest(ctx->sector);
-            graphics3D->SetWorldToCamera (ctx->cameraTransform.GetInverse ());
-            ctx->sector->GetVisibilityCuller ()->RenderViscull (rview, ctx->shadervars);
-          }
-        }
+	    if (!sectors.Contains(ctx->sector))
+	    {
+	      sectors.AddNoTest(ctx->sector);
+              graphics3D->SetWorldToCamera (ctx->cameraTransform.GetInverse ());
+	      ctx->sector->GetVisibilityCuller ()->RenderViscull (rview, ctx->shadervars);
+	    }
+	  }
+	}
 
         // z only pass
         {
