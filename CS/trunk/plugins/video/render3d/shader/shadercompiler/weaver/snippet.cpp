@@ -31,6 +31,7 @@
 #include "csutil/documenthelper.h"
 #include "csutil/fifo.h"
 #include "csutil/scopeddelete.h"
+#include "csutil/stringarray.h"
 #include "csutil/stringquote.h"
 
 #include "snippet.h"
@@ -597,9 +598,8 @@ CS_PLUGIN_NAMESPACE_BEGIN(ShaderWeaver)
       csRef<iDocumentNode> child = nodes->Next ();
       if (child->GetType() != CS_NODE_ELEMENT) continue;
       
-      Technique::Block newBlock;
-      csString location = child->GetAttributeValue ("location");
-      if (location.IsEmpty())
+      csString locationAttr = child->GetAttributeValue ("location");
+      if (locationAttr.IsEmpty())
       {
 	compiler->Report (CS_REPORTER_SEVERITY_WARNING, child,
 	  "%s node without %s attribute",
@@ -607,22 +607,30 @@ CS_PLUGIN_NAMESPACE_BEGIN(ShaderWeaver)
 	  CS::Quote::Single ("location"));
 	return false;
       }
-      size_t colon = location.FindFirst (':');
-      if (colon != (size_t)-1)
+
+      csRef<iDocumentNode> node (GetNodeOrFromFile (child, "block", compiler, aliases));
+      if (!node) return false;
+      csStringArray locationsSplit (locationAttr, ";");
+      for (size_t i = 0; i < locationsSplit.GetSize(); i++)
       {
-        // @@@ FIXME: Validate
-        newBlock.combinerName = location.Slice (0, colon);
-        newBlock.location = location.Slice (colon + 1);
+          csString location (locationsSplit[i]);
+          Technique::Block newBlock;
+          size_t colon = location.FindFirst (':');
+          if (colon != (size_t)-1)
+          {
+            // @@@ FIXME: Validate
+            newBlock.combinerName = location.Slice (0, colon);
+            newBlock.location = location.Slice (colon + 1);
+          }
+          else
+          {
+            newBlock.combinerName = defaultCombinerName;
+            newBlock.location = location;
+          }
+          newBlock.node = node;
+
+          blocks.Push (newBlock);
       }
-      else
-      {
-        newBlock.combinerName = defaultCombinerName;
-        newBlock.location = location;
-      }
-      newBlock.node = GetNodeOrFromFile (child, "block", compiler, aliases);
-      if (!newBlock.node) return false;
-      
-      blocks.Push (newBlock);
     }
     return true;
   }
