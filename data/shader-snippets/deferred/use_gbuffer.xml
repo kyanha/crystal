@@ -192,7 +192,7 @@
       float4 gBuffer1     = tex2D (texGBuffer1,     texCoord);
       float4 gBuffer2     = tex2D (texGBuffer2,     texCoord);
       float4 gBuffer3     = tex2D (texGBuffer3,     texCoord);
-      float  gBufferDepth = tex2D (texGBufferDepth, texCoord).x;
+      depth               = tex2D (texGBufferDepth, texCoord).x;
 
       diffuse   = gBuffer0;
       diffuse_attr_perfragment = true;
@@ -207,7 +207,7 @@
       specular_attr_perfragment = true;
       glow      = float4(gBuffer3.rgb, 0.0);
       glow_attr_perfragment = true;
-      position  = mul(ProjInv, float4(screenXY.x, -screenXY.y, 1.0 - 2.0 * gBufferDepth, 1.0));
+      position  = mul(ProjInv, float4(screenXY.x, -screenXY.y, 1.0 - 2.0 * depth, 1.0));
       position /= position.w;
       position_attr_perfragment = true;
     </block>
@@ -220,7 +220,7 @@
       vec4  gBuffer1     = texture2D (texGBuffer1,     texCoord);
       vec4  gBuffer2     = texture2D (texGBuffer2,     texCoord);
       vec4  gBuffer3     = texture2D (texGBuffer3,     texCoord);
-      float gBufferDepth = texture2D (texGBufferDepth, texCoord).x;
+      depth              = texture2D (texGBufferDepth, texCoord).x;
 
       diffuse   = vec4(gBuffer0);
       diffuse_attr_perfragment = true;
@@ -235,7 +235,7 @@
       specular_attr_perfragment = true;
       glow      = vec4(gBuffer3.rgb, 0.0);
       glow_attr_perfragment = true;
-      position  = ProjInv * vec4(screenXY.x, -screenXY.y, 1.0 - 2.0 * gBufferDepth, 1.0);
+      position  = ProjInv * vec4(screenXY.x, -screenXY.y, 1.0 - 2.0 * depth, 1.0);
       position /= position.w;
       position_attr_perfragment = true;
     </block>
@@ -259,6 +259,9 @@
       <attribute name="perfragment" type="bool" />
     </output>
     <output name="position" type="position4_world">
+      <attribute name="perfragment" type="bool" />
+    </output>
+    <output name="depth" type="depth">
       <attribute name="perfragment" type="bool" />
     </output>
   </technique>
