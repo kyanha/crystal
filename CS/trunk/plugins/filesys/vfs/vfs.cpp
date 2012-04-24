@@ -531,6 +531,14 @@ DiskFile::DiskFile (int Mode, VfsNode *ParentNode, size_t RIndex,
     *lastps = VFS_PATH_SEPARATOR;
   }
 
+  //check if what was opened is actually a regular file
+  if (file && !CS::Platform::IsRegularFile(fName) )
+  {
+    //if it was not close it as we cannot use it.
+    fclose (file);
+    file = nullptr;
+  }
+
   if (!file)
     CheckError ();
   if (Error == VFS_STATUS_OK)
