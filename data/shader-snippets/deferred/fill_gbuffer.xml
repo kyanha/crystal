@@ -23,6 +23,8 @@
         <combiner name="cg" plugin="crystalspace.graphics3d.shader.combiner.glcg" />
         <combiner name="glsl" plugin="crystalspace.graphics3d.shader.combiner.glsl" />
 
+        <input file="/shader-snippets/texCoord.inp"	
+          condition='vars."tex glow".texture' />
         <input name="texGlow" type="tex2d" default="complex"
             condition='vars."tex glow".texture'>
           <block location="cg:pass">
@@ -61,7 +63,20 @@
         <output name="outputAmbient" type="rgba" />
         <output name="outputGlow"    type="rgba" />
 
+        <!-- In PS1.x you can't use the same texcoords for multiple TUs,
+             so the glow coordinates have to be copied in tbe VP. -->
+        <block location="cg:vertexToFragment">
+          <varying type="texcoord2" name="texCoordGlow" />
+        </block>
+    
+        <block location="cg:vertexMain">
+          texCoordGlow = texCoord;
+        </block>
+
         <block location="cg:fragmentMain">
+          #if FRAGMENT_PROGRAM_LEVEL >= 0x200
+            texCoordGlow = texCoord;
+          #endif
           normal = (normalize (normal) + 1) * 0.5;
 
           <?if vars."tex glow".texture ?>
@@ -77,7 +92,7 @@
         </block>
         <block location="glsl:fragmentMain">
           <?if vars."tex glow".texture ?>
-            vec3 glow = texture2D (texGlow, texCoordGlow).rgb;
+            vec3 glow = texture2D (texGlow, texCoord).rgb;
           <?else?>
             vec3 glow = vec3(0);
           <?endif?>
