@@ -417,7 +417,6 @@ CS_PLUGIN_NAMESPACE_BEGIN(RMDeferred)
         quadMesh.meshtype = CS_MESHTYPE_TRIANGLEFAN;
         quadMesh.vertices = nullptr;
         quadMesh.vertexCount = 4;
-        quadMesh.z_buf_mode = CS_ZBUF_NONE;
         quadMesh.mixmode = CS_FX_ADD;
         quadMesh.alphaType.autoAlphaMode = false;
         quadMesh.alphaType.alphaType = csAlphaMode::alphaNone;
@@ -594,7 +593,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(RMDeferred)
       iMaterial *mat = persistentData.ambientMaterial->GetMaterial ();
       iShader *shader = mat->GetShader (stringSet->Request ("gbuffer use"));
 
-      DrawFullscreenQuad (shader, CS_ZBUF_NONE);
+      DrawFullscreenQuad (shader, CS_ZBUF_FILL);
     }
 
     /**
@@ -707,6 +706,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(RMDeferred)
           m->mixmode = mixmode;
           m->cullMode = cullMode;
           m->object2world = transform;
+	  m->z_buf_mode = CS_ZBUF_TEST;
 
           graphics3D->DrawMesh (m, *m, svStack);
 
