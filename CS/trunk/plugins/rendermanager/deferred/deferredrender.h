@@ -48,7 +48,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(RMDeferred)
     ~ForwardMeshTreeRenderer() {}
 
     /**
-     * Render all contexts.
+     * Render single context.
      */
     void operator()(typename RenderTree::ContextNode *context)
     {
@@ -81,7 +81,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(RMDeferred)
    * {
    *   DeferredTreeRenderer<RenderTree> 
    *     render (graphics3D, shaderManager, stringSet, 
-   *             gbuffer, lightRenderPersistent, deferredLayer, 
+   *             lightRenderPersistent, deferredLayer, 
    *             zonlyLayer, drawLightVolumes);
    *
    *   ForEachContextReverse (renderTree, render);
@@ -134,7 +134,6 @@ CS_PLUGIN_NAMESPACE_BEGIN(RMDeferred)
         lastAccumBuf = context->renderTargets[rtaColor0].texHandle;
         lastSubTex = context->renderTargets[rtaColor0].subtexture;
         lastRenderView = context->renderView;
-        lastGBuffer = context->gbuffer;
       }
       
       contextStack.Push (context);
@@ -239,62 +238,22 @@ CS_PLUGIN_NAMESPACE_BEGIN(RMDeferred)
       gbuffer->Detach ();
 
       // attach render targets.
-      for (int a = rtaColor0; a < rtaNumAttachments; a++)
+      for (int a = 0; a < rtaNumAttachments; a++)
         graphics3D->SetRenderTarget (context->renderTargets[a].texHandle, false,
 	    context->renderTargets[a].subtexture, csRenderTargetAttachment (a));
-      if (gbuffer->HasDepthBuffer())
-      {
-        graphics3D->SetRenderTarget (gbuffer->GetDepthBuffer(), false, 0, rtaDepth);
-      }
-      else
-      {
-        graphics3D->SetRenderTarget (context->renderTargets[rtaDepth].texHandle, false,
-            context->renderTargets[rtaDepth].subtexture, rtaDepth);
-      }
       CS_ASSERT(graphics3D->ValidateRenderTargets ());
 
       // Fill the accumulation buffer
       {
         int drawFlags = CSDRAW_3DGRAPHICS | context->drawFlags;
-        drawFlags |= CSDRAW_CLEARSCREEN;
-
-        // @@@FIXME: we want to re-use the depth buffer
-        //drawFlags &= ~CSDRAW_CLEARZBUFFER;
+        drawFlags |= CSDRAW_CLEARSCREEN | CSDRAW_CLEARZBUFFER;
 
         graphics3D->BeginDraw (drawFlags);
 
-        // z only pass
-        // @@@FIXME: we should not have to duplicate this here...
-        {
-          graphics3D->SetZMode (CS_ZBUF_MESH);
-          meshRender.SetLayer (zonlyLayer);
-
-          for (size_t i = 0; i < ctxCount; i++)
-          {
-            typename RenderTree::ContextNode *ctx = contextStack[i];
-
-	    graphics3D->SetWorldToCamera (ctx->cameraTransform.GetInverse ());
-            ForEachMeshNode (*ctx, meshRender);
-          }
-        }
-
-        graphics3D->SetZMode (CS_ZBUF_MESH2);
-
-        // forward rendering
-        {
-          ForwardMeshTreeRenderer<RenderTree> render (graphics3D, shaderMgr, deferredLayer, zonlyLayer);
-
-          for (size_t i = 0; i < ctxCount; i++)
-          {
-            typename RenderTree::ContextNode *ctx = contextStack[i];
-
-	    graphics3D->SetWorldToCamera (ctx->cameraTransform.GetInverse ());
-            render (ctx);
-          }
-        }
-
         // deferred lighting
         {
+	  graphics3D->SetZMode (CS_ZBUF_MESH);
+
           DeferredLightRenderer lightRender (graphics3D,
                                              shaderMgr,
                                              stringSet,
@@ -303,7 +262,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(RMDeferred)
                                              lightRenderPersistent);
           LightVolumeRenderer lightVolumeRender (lightRender, true, 0.2f);
 
-          // ambient light
+          // ambient light - also fills depth buffer
           lightRender.OutputAmbientLight ();
 
           for (size_t i = 0; i < ctxCount; i++)
@@ -318,6 +277,21 @@ CS_PLUGIN_NAMESPACE_BEGIN(RMDeferred)
             // Output light volumes.
             if (drawLightVolumes)
               ForEachLight (*ctx, lightVolumeRender);
+          }
+        }
+
+        // forward rendering
+        {
+	  graphics3D->SetZMode (CS_ZBUF_MESH2);
+
+          ForwardMeshTreeRenderer<RenderTree> render (graphics3D, shaderMgr, deferredLayer, zonlyLayer);
+
+          for (size_t i = 0; i < ctxCount; i++)
+          {
+            typename RenderTree::ContextNode *ctx = contextStack[i];
+
+	    graphics3D->SetWorldToCamera (ctx->cameraTransform.GetInverse ());
+            render (ctx);
           }
         }
 
@@ -381,7 +355,6 @@ CS_PLUGIN_NAMESPACE_BEGIN(RMDeferred)
     int deferredLayer;
     int zonlyLayer;
 
-    GBuffer* lastGBuffer;
     iTextureHandle *lastAccumBuf;
     int lastSubTex;
     CS::RenderManager::RenderView *lastRenderView;
