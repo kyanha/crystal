@@ -352,6 +352,26 @@ CS_CRYSTALSPACE_EXPORT csString GetTempFilename (const char* path/* = 0*/);
  */
 CS_CRYSTALSPACE_EXPORT int CreateDirectory (const char* path);
 
+/**
+ * Check attributes of a path.
+ * \param path Name of the path to check.
+ * \param buf The pointer where the result of the stat call will be
+ *            stored in case of success.
+ * \returns 0 on success, or an error code in case of failure.
+ *   (This is the error code the standard \c stat function would retutn in
+ *   \c errno).
+ */
+CS_CRYSTALSPACE_EXPORT int Stat (const char* path, struct stat* buf);
+
+/**
+ * Checks if the path rappresents a regular file.
+ * \param path Name of the path to check.
+ * \returns true if the path rappresents a regular file, false otherwise
+ *          (including error).
+ */
+CS_CRYSTALSPACE_EXPORT bool IsRegularFile (const char* path);
+
+
 }
 }
 
