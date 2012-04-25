@@ -451,9 +451,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(ShaderWeaver)
     // Optional: fragment depth
     const Snippet::Technique* outTechniqueDepth;
     Snippet::Technique::Output theDepthOutput;
-    bool hasOutputDepth =
-           FindExplicitOutput (graph, "depth", "depth", combiner, outTechniqueDepth, theDepthOutput)
-        || FindOutput (graph, "depth", combiner, outTechniqueDepth, theDepthOutput);
+    bool hasOutputDepth = FindExplicitOutput (graph, "depth", "depth", combiner, outTechniqueDepth, theDepthOutput);
     
     
     // Generate special technique for output
