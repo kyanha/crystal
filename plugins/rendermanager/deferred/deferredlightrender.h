@@ -417,7 +417,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(RMDeferred)
         quadMesh.meshtype = CS_MESHTYPE_TRIANGLEFAN;
         quadMesh.vertices = nullptr;
         quadMesh.vertexCount = 4;
-        quadMesh.mixmode = CS_FX_ADD;
+        quadMesh.mixmode = CS_FX_COPY;
         quadMesh.alphaType.autoAlphaMode = false;
         quadMesh.alphaType.alphaType = csAlphaMode::alphaNone;
 
@@ -688,8 +688,12 @@ CS_PLUGIN_NAMESPACE_BEGIN(RMDeferred)
       const size_t numPasses = shader->GetNumberOfPasses (ticket);
 
       CS::Graphics::MeshCullMode cullMode = CS::Graphics::cullNormal;
+      csZBufMode zMode = CS_ZBUF_TEST;
       if (insideLight)
+      {
         cullMode = CS::Graphics::cullFlipped;
+	zMode = CS_ZBUF_INVERT;
+      }
 
       for (size_t p = 0; p < numPasses; p++)
       {
@@ -706,7 +710,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(RMDeferred)
           m->mixmode = mixmode;
           m->cullMode = cullMode;
           m->object2world = transform;
-	  m->z_buf_mode = CS_ZBUF_TEST;
+	  m->z_buf_mode = zMode;
 
           graphics3D->DrawMesh (m, *m, svStack);
 
