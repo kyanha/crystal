@@ -266,6 +266,7 @@ csZBufMode csGLGraphics3D::GetZModePass2 (csZBufMode mode)
   {
     case CS_ZBUF_NONE:
     case CS_ZBUF_TEST:
+    case CS_ZBUF_INVERT:
     case CS_ZBUF_EQUAL:
       return mode;
     case CS_ZBUF_FILL:
