@@ -51,30 +51,6 @@ CS_PLUGIN_NAMESPACE_BEGIN(RMDeferred)
 
 SCF_IMPLEMENT_FACTORY(RMDeferred);
 
-/**
- * Draws the given texture over the contents of the entire screen.
- */
-void DrawFullscreenTexture(iTextureHandle *tex, iGraphics3D *graphics3D)
-{
-  iGraphics2D *graphics2D = graphics3D->GetDriver2D ();
-
-  int w, h;
-  tex->GetRendererDimensions (w, h);
-
-  graphics3D->SetZMode (CS_ZBUF_NONE);
-  graphics3D->BeginDraw (CSDRAW_2DGRAPHICS | CSDRAW_CLEARSCREEN);
-  graphics3D->DrawPixmap (tex, 
-                          0, 
-                          0,
-                          graphics2D->GetWidth (),
-                          graphics2D->GetHeight (),
-                          0,
-                          0,
-                          w,
-                          h,
-                          0);
-}
-
 //----------------------------------------------------------------------
 template<typename RenderTreeType, typename LayerConfigType>
 class StandardContextSetup
@@ -288,35 +264,20 @@ bool RMDeferred::Initialize(iObjectRegistry *registry)
     CS::RenderManager::AddDefaultBaseLayers (objRegistry, renderLayer);
   }
 
-  // Creates the accumulation buffer.
-  int flags = CS_TEXTURE_2D | CS_TEXTURE_NOMIPMAPS | CS_TEXTURE_CLAMP | CS_TEXTURE_NPOTS;
-  const char *accumFmt = cfg->GetStr ("RenderManager.Deferred.AccumBufferFormat", "rgb16_f");
-
-  scfString errStr;
-  accumBuffer = graphics3D->GetTextureManager ()->CreateTexture (graphics2D->GetWidth (),
-    graphics2D->GetHeight (),
-    csimg2D,
-    accumFmt,
-    flags,
-    &errStr);
-
-  if (!accumBuffer)
-  {
-    csReport(objRegistry, CS_REPORTER_SEVERITY_ERROR, messageID, 
-      "Could not create accumulation buffer: %s!", errStr.GetCsString ().GetDataSafe ());
-    return false;
-  }
-
   // Create GBuffer
   const char *gbufferFmt = cfg->GetStr ("RenderManager.Deferred.GBuffer.BufferFormat", "rgba16_f");
-  int bufferCount = cfg->GetInt ("RenderManager.Deferred.GBuffer.BufferCount", 3);
+  const char *accumFmt = cfg->GetStr ("RenderManager.Deferred.AccumBufferFormat", "rgb16_f");
+  int bufferCount = cfg->GetInt ("RenderManager.Deferred.GBuffer.BufferCount", 4);
+  int accumCount = cfg->GetInt ("RenderManager.Deferred.GBuffer.AccumBufferCount", 2);
   bool hasDepthBuffer = cfg->GetBool ("RenderManager.Deferred.GBuffer.DepthBuffer", true);
 
   gbufferDescription.colorBufferCount = bufferCount;
+  gbufferDescription.accumBufferCount = accumCount;
   gbufferDescription.hasDepthBuffer = hasDepthBuffer;
   gbufferDescription.width = graphics2D->GetWidth ();
   gbufferDescription.height = graphics2D->GetHeight ();
   gbufferDescription.colorBufferFormat = gbufferFmt;
+  gbufferDescription.accumBufferFormat = accumFmt;
 
   if (!gbuffer.Initialize (gbufferDescription, 
                            graphics3D, 
@@ -332,7 +293,7 @@ bool RMDeferred::Initialize(iObjectRegistry *registry)
 
   // Make sure the texture cache creates matching texture buffers.
   portalPersistent.texCache.SetFormat (accumFmt);
-  portalPersistent.texCache.SetFlags (flags);
+  portalPersistent.texCache.SetFlags (CS_TEXTURE_2D | CS_TEXTURE_NOMIPMAPS | CS_TEXTURE_CLAMP | CS_TEXTURE_NPOTS);
 
   RMViscullCommon::Initialize (objRegistry, "RenderManager.Deferred");
   
@@ -378,27 +339,17 @@ bool RMDeferred::RenderView(iView *view, bool recursePortals)
 
   RenderTreeType renderTree (treePersistent);
   RenderTreeType::ContextNode *startContext = renderTree.CreateContext (rview);
-  startContext->drawFlags |= (CSDRAW_CLEARSCREEN | CSDRAW_CLEARZBUFFER);
+  startContext->drawFlags |= CSDRAW_CLEARSCREEN;
 
   // Add gbuffer textures to be visualized.
   if (showGBuffer)
-    ShowGBuffer (renderTree);
+    ShowGBuffer (renderTree, &gbuffer);
 
   CS::Math::Matrix4 perspectiveFixup;
   postEffects.SetupView (view, perspectiveFixup);
 
-  bool hasPostEffects = (postEffects.GetScreenTarget () != (iTextureHandle*)nullptr);
-
-  if (hasPostEffects)
-  {
-    startContext->renderTargets[rtaColor0].texHandle = postEffects.GetScreenTarget ();
-    startContext->perspectiveFixup = perspectiveFixup;
-  }
-  else
-  {
-    startContext->renderTargets[rtaColor0].texHandle = accumBuffer;
-    startContext->renderTargets[rtaColor0].subtexture = 0;
-  }
+  startContext->renderTargets[rtaColor0].texHandle = postEffects.GetScreenTarget ();
+  startContext->perspectiveFixup = perspectiveFixup;
 
   // Setup the main context
   {
@@ -438,15 +389,7 @@ bool RMDeferred::RenderView(iView *view, bool recursePortals)
     graphics3D->SetClipper (nullptr, CS_CLIPPER_TOPLEVEL);
   }
 
-  if (hasPostEffects)
-  {
-    postEffects.DrawPostEffects (renderTree);
-  }
-  else
-  {
-    // Output the final result to the backbuffer.
-    DrawFullscreenTexture (accumBuffer, graphics3D);
-  }
+  postEffects.DrawPostEffects (renderTree);
 
   DebugFrameRender (rview, renderTree);
 
@@ -487,6 +430,7 @@ bool RMDeferred::HandleTarget (RenderTreeType& renderTree,
   startContext->drawFlags = settings.drawFlags;
 
   settings.target->GetRendererDimensions(gbufferDescription.width, gbufferDescription.height);
+
   csRef<GBuffer> buffer;
   buffer.AttachNew(new GBuffer);
 
@@ -497,6 +441,8 @@ bool RMDeferred::HandleTarget (RenderTreeType& renderTree,
   {
     return false;
   }
+
+  ShowGBuffer(renderTree, buffer);
 
   ContextSetupType contextSetup (this, renderLayer, buffer);
   ContextSetupType::PortalSetupType::ContextSetupData portalData (startContext);
@@ -588,24 +534,25 @@ int RMDeferred::LocateLayer(const CS::RenderManager::MultipleRenderLayer &layers
 }
 
 //----------------------------------------------------------------------
-void RMDeferred::ShowGBuffer(RenderTreeType &tree)
+void RMDeferred::ShowGBuffer(RenderTreeType &tree, GBuffer* buffer)
 {
-  size_t count = gbuffer.GetColorBufferCount ();
-  if (count > 0)
+  int w, h;
+  buffer->GetColorBuffer (0)->GetRendererDimensions (w, h);
+  float aspect = (float)w / h;
+
+  for (size_t i = 0; i < buffer->GetColorBufferCount(); i++)
   {
-    int w, h;
-    gbuffer.GetColorBuffer (0)->GetRendererDimensions (w, h);
-    float aspect = (float)w / h;
+    tree.AddDebugTexture (buffer->GetColorBuffer (i), aspect);
+  }
 
-    for (size_t i = 0; i < count; i++)
-    {
-      tree.AddDebugTexture (gbuffer.GetColorBuffer (i), aspect);
-    }
+  if (buffer->GetDepthBuffer ())
+  {
+    tree.AddDebugTexture (buffer->GetDepthBuffer (), aspect);
+  }
 
-    if (gbuffer.GetDepthBuffer ())
-    {
-      tree.AddDebugTexture (gbuffer.GetDepthBuffer (), aspect);
-    }
+  for (size_t i = 0; i < buffer->GetAccumulationBufferCount(); ++i)
+  {
+    tree.AddDebugTexture (buffer->GetAccumulationBuffer(i), aspect);
   }
 }
 

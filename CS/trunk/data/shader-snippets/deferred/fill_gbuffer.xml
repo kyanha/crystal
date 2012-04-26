@@ -74,12 +74,13 @@
         </block>
 
         <block location="cg:fragmentMain">
-          #if FRAGMENT_PROGRAM_LEVEL >= 0x200
-            texCoordGlow = texCoord;
-          #endif
           normal = (normalize (normal) + 1) * 0.5;
 
           <?if vars."tex glow".texture ?>
+            #if FRAGMENT_PROGRAM_LEVEL >= 0x200
+              texCoordGlow = texCoord;
+            #endif
+
             float3 glow = tex2D (texGlow, texCoordGlow).rgb;
           <?else?>
             float3 glow = float3(0);

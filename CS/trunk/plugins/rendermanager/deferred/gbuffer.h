@@ -45,14 +45,17 @@ CS_PLUGIN_NAMESPACE_BEGIN(RMDeferred)
       int height;
 
       size_t colorBufferCount;
+      size_t accumBufferCount;
       bool hasDepthBuffer;
 
       // Set to NULL to use the default format.
       const char *colorBufferFormat;
+      // Set to NULL to use the default format.
+      const char *accumBufferFormat;
     };
 
-    GBuffer() : graphics3D (nullptr), isAttached (false) {}
-    ~GBuffer() { CS_ASSERT(!IsAttached ()); }
+    GBuffer() : width(0), height(0), graphics3D(nullptr) {}
+    ~GBuffer() {}
 
     /// Initializes the gbuffer.
     bool Initialize(const Description &desc, 
@@ -63,12 +66,16 @@ CS_PLUGIN_NAMESPACE_BEGIN(RMDeferred)
       const char *messageID = "crystalspace.rendermanager.deferred.gbuffer";
 
       const int flags = CS_TEXTURE_2D | CS_TEXTURE_NOMIPMAPS | CS_TEXTURE_CLAMP | CS_TEXTURE_NPOTS;
-      const int w = desc.width;
-      const int h = desc.height;
+      width = desc.width;
+      height = desc.height;
 
       const char *colorFmt = desc.colorBufferFormat;
       if (!colorFmt)
         colorFmt = "rgba16_f";
+
+      const char *accumFmt = desc.accumBufferFormat;
+      if (!accumFmt)
+	accumFmt = "rgb16_f";
 
       iTextureManager *texMgr = g3D->GetTextureManager ();
 
@@ -91,8 +98,8 @@ CS_PLUGIN_NAMESPACE_BEGIN(RMDeferred)
       {
         scfString errString;
 
-        csRef<iTextureHandle> colorBuffer = texMgr->CreateTexture (w, h, csimg2D, 
-          colorFmt, flags, &errString);
+        csRef<iTextureHandle> colorBuffer = texMgr->CreateTexture (width, height,
+          csimg2D, colorFmt, flags, &errString);
 
         if (!colorBuffer)
         {
@@ -108,6 +115,28 @@ CS_PLUGIN_NAMESPACE_BEGIN(RMDeferred)
         colorBufferSVNames.Push (stringSet->Request (svName.GetDataSafe ()));
       }
 
+      count = desc.accumBufferCount;
+      for(size_t i = 0; i < count; ++i)
+      {
+	scfString errString;
+
+	csRef<iTextureHandle> accumBuffer = texMgr->CreateTexture (width, height,
+	  csimg2D, accumFmt, flags, &errString);
+
+	if(!accumBuffer)
+	{
+	  csReport(registry, CS_REPORTER_SEVERITY_ERROR, messageID,
+	    "Could not create accumulation buffer %d! %s", (int)i, errString.GetCsString().GetDataSafe());
+	  return false;
+	}
+
+	csString svName;
+	svName.Format("tex accumulation %d", (int)i);
+
+	accumBuffers.Push(accumBuffer);
+	accumBufferSVNames.Push(stringSet->Request(svName.GetDataSafe()));
+      }
+
       if (desc.hasDepthBuffer)
       {
         const char *depthFmt[] = { "d24s8", "d32", "d16" };
@@ -116,7 +145,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(RMDeferred)
         // Iterate through the depth formats until we find a valid format.
         for (size_t i = 0; i < fmtCount; i++)
         {
-          depthBuffer = texMgr->CreateTexture (w, h, csimg2D, depthFmt[i], flags, NULL);
+          depthBuffer = texMgr->CreateTexture (width, height, csimg2D, depthFmt[i], flags, NULL);
 
           if (depthBuffer)
             break;
@@ -142,12 +171,11 @@ CS_PLUGIN_NAMESPACE_BEGIN(RMDeferred)
         return false;
       }
 
-      if (!g3D->ValidateRenderTargets ())
+      if (!AttachAccumulation())
       {
-        Detach ();
-        csReport(registry, CS_REPORTER_SEVERITY_ERROR, messageID, 
-            "GBuffer format is not support by the device!");
-        return false;
+	csReport(registry, CS_REPORTER_SEVERITY_ERROR, messageID,
+	    "Failed to attach Accumulation Buffers to the device!");
+	return false;
       }
 
       if (!Detach ())
@@ -164,45 +192,56 @@ CS_PLUGIN_NAMESPACE_BEGIN(RMDeferred)
      */
     bool Attach()
     {
-      if (IsAttached ())
-        return false;
-
       size_t count = GetColorBufferCount ();
       for (size_t i = 0; i < count; i++)
       {
         csRenderTargetAttachment attach = (csRenderTargetAttachment)((size_t)rtaColor0 + i);
 
         if (!graphics3D->SetRenderTarget (GetColorBuffer (i), false, 0, attach))
+	{
+	  CS_ASSERT(false);
           return false;
+	}
       }
 
       if (HasDepthBuffer ())
       {
         if (!graphics3D->SetRenderTarget (GetDepthBuffer (), false, 0, rtaDepth))
+	{
+	  CS_ASSERT(false);
           return false;
+	}
       }
 
-      isAttached = true;
-
-      return true;
+      return graphics3D->ValidateRenderTargets();
     }
 
-    /// Detaches the gbuffer as the output render targets.
+    /**
+     * Attaches the gbuffer as the output render targets.
+     */
+    bool AttachAccumulation()
+    {
+      size_t count = GetAccumulationBufferCount ();
+      for (size_t i = 0; i < count; i++)
+      {
+        csRenderTargetAttachment attach = (csRenderTargetAttachment)((size_t)rtaColor0 + i);
+
+        if (!graphics3D->SetRenderTarget (GetAccumulationBuffer (i), false, 0, attach))
+	{
+	  CS_ASSERT(false);
+          return false;
+	}
+      }
+
+      return graphics3D->ValidateRenderTargets();
+    }
+
+    /// Detaches the gbuffer as the output render targets. Only required if you didn't call FinishDraw.
     bool Detach()
     {
-      if (IsAttached ())
-      {
-        graphics3D->UnsetRenderTargets ();
-        isAttached = false;
-      }
+      graphics3D->UnsetRenderTargets ();
 
       return true;
-    }
-
-    /// Returns true if this gbuffer is attached.
-    bool IsAttached() const 
-    { 
-      return isAttached; 
     }
 
     /// Updates shader variables.
@@ -213,6 +252,13 @@ CS_PLUGIN_NAMESPACE_BEGIN(RMDeferred)
       {
         csShaderVariable *colorSV = ctx->GetVariableAdd (colorBufferSVNames[i]);
         colorSV->SetValue (GetColorBuffer (i));
+      }
+
+      count = GetAccumulationBufferCount ();
+      for (size_t i = 0; i < count; ++i)
+      {
+	csShaderVariable *accumSV = ctx->GetVariableAdd (accumBufferSVNames[i]);
+	accumSV->SetValue (GetAccumulationBuffer (i));
       }
 
       if (HasDepthBuffer ())
@@ -248,27 +294,39 @@ CS_PLUGIN_NAMESPACE_BEGIN(RMDeferred)
       return depthBuffer;
     }
 
-    /// Gets the width and height of the buffers.
-    bool GetDimensions (int &w, int &h)
+    /// Returns the number of color buffers in the gbuffer.
+    size_t GetAccumulationBufferCount() const
     {
-      if (GetColorBufferCount () > 0)
-        return GetColorBuffer (0)->GetRendererDimensions (w, h);
+      return accumBuffers.GetSize ();
+    }
 
-      return false;
+    /// Returns the ith color buffer.
+    iTextureHandle *GetAccumulationBuffer(size_t i)
+    {
+      return accumBuffers[i];
+    }
+
+
+    /// Gets the width and height of the buffers.
+    void GetDimensions (int &w, int &h)
+    {
+      w = width;
+      h = height;
     }
 
   private:
+    size_t width, height;
 
     csRefArray<iTextureHandle> colorBuffers;
+    csRefArray<iTextureHandle> accumBuffers;
     csRef<iTextureHandle> depthBuffer;
 
     // Stores the shader variable names.
     csArray<ShaderVarStringID> colorBufferSVNames;
+    csArray<ShaderVarStringID> accumBufferSVNames;
     ShaderVarStringID depthBufferSVName;
 
     iGraphics3D *graphics3D;
-
-    bool isAttached;
   };
 
 }
