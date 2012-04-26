@@ -122,7 +122,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(RMDeferred)
     int LocateLayer(const CS::RenderManager::MultipleRenderLayer &layers,
                     csStringID shaderType);
 
-    void ShowGBuffer(RenderTreeType &tree);
+    void ShowGBuffer(RenderTreeType &tree, GBuffer* buffer);
 
     iObjectRegistry *objRegistry;
 
@@ -139,8 +139,6 @@ CS_PLUGIN_NAMESPACE_BEGIN(RMDeferred)
 
     TargetManagerType targets;
     csSet<RenderTreeType::ContextNode*> contextsScannedForTargets;
-
-    csRef<iTextureHandle> accumBuffer;
 
     GBuffer gbuffer;
     GBuffer::Description gbufferDescription;

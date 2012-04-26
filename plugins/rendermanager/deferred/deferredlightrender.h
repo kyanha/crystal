@@ -306,10 +306,17 @@ CS_PLUGIN_NAMESPACE_BEGIN(RMDeferred)
       csRef<iMaterialWrapper> spotMaterial;
       csRef<iMaterialWrapper> directionalMaterial;
       csRef<iMaterialWrapper> ambientMaterial;
+      csRef<iMaterialWrapper> outputMaterial;
 
       /* Shader for drawing light volumes. */
       csRef<iShader> lightVolumeShader;
       csRef<csShaderVariable> lightVolumeColorSV;
+
+      /* String IDs for shader types and variable names */
+      csStringID gbufUse;
+      CS::ShaderVarStringID lightPos;
+      CS::ShaderVarStringID lightDir;
+      csShaderVariable* scale;
 
       /**
        * Initialize persistent data, must be called once before using the
@@ -327,8 +334,14 @@ CS_PLUGIN_NAMESPACE_BEGIN(RMDeferred)
         csRef<iShaderManager> shaderManager = csQueryRegistry<iShaderManager> (objRegistry);
         csRef<iStringSet> stringSet = csQueryRegistryTagInterface<iStringSet> (objRegistry, 
           "crystalspace.shared.stringset");
+        iShaderVarStringSet *svStringSet = shaderManager->GetSVNameStringset ();
 
         csConfigAccess cfg (objRegistry);
+
+        // populate string IDs
+        gbufUse = stringSet->Request ("gbuffer use");
+	lightPos = svStringSet->Request ("light position view");
+	lightDir = svStringSet->Request ("light direction view");
 
         // Builds the sphere.
         csEllipsoid ellipsoid(csVector3 (0.0f, 0.0f, 0.0f), csVector3 (1.0f, 1.0f, 1.0f));
@@ -356,7 +369,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(RMDeferred)
         }
 
         iShader *pointLightShader = shaderManager->GetShader ("deferred_point_light");
-        pointMaterial->GetMaterial ()->SetShader (stringSet->Request ("gbuffer use"), pointLightShader);
+        pointMaterial->GetMaterial ()->SetShader (gbufUse, pointLightShader);
 
         // Builds the cone.
         int coneDetail = cfg->GetInt ("RenderManager.Deferred.ConeDetail", 16);
@@ -382,7 +395,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(RMDeferred)
         }
 
         iShader *spotLightShader = shaderManager->GetShader ("deferred_spot_light");
-        spotMaterial->GetMaterial ()->SetShader (stringSet->Request ("gbuffer use"), spotLightShader);
+        spotMaterial->GetMaterial ()->SetShader (gbufUse, spotLightShader);
 
         // Builds the box.
         csBox3 box;
@@ -410,8 +423,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(RMDeferred)
         }
 
         iShader *directionalLightShader = shaderManager->GetShader ("deferred_directional_light");
-        directionalMaterial->GetMaterial ()->SetShader (stringSet->Request ("gbuffer use"), 
-          directionalLightShader);
+        directionalMaterial->GetMaterial ()->SetShader (gbufUse, directionalLightShader);
 
         // Builds the quad.
         quadMesh.meshtype = CS_MESHTYPE_TRIANGLEFAN;
@@ -433,7 +445,23 @@ CS_PLUGIN_NAMESPACE_BEGIN(RMDeferred)
         }
 
         iShader *ambientLightShader = shaderManager->GetShader ("deferred_ambient_light");
-        ambientMaterial->GetMaterial ()->SetShader (stringSet->Request ("gbuffer use"), ambientLightShader);
+        ambientMaterial->GetMaterial ()->SetShader (gbufUse, ambientLightShader);
+
+	// Creates the output material.
+	outputMaterial = engine->CreateMaterial (
+	  "crystalspace.rendermanager.deferred.lightrender.output",
+	  NULL);
+
+	if (!loader->LoadShader ("/shader/deferred/output.xml"))
+	{
+	  csReport (objRegistry, CS_REPORTER_SEVERITY_WARNING,
+	    messageID, "Could not load deffererd_output shader");
+	}
+
+	iShader *outputShader = shaderManager->GetShader ("deferred_output");
+	outputMaterial->GetMaterial()->SetShader(gbufUse, outputShader);
+        scale = outputShader->GetVariableAdd(
+	    svStringSet->Request("gbuffer scaleoffset"));
 
         // Loads the light volume shader.
         if (!loader->LoadShader ("/shader/deferred/dbg_light_volume.xml"))
@@ -443,8 +471,6 @@ CS_PLUGIN_NAMESPACE_BEGIN(RMDeferred)
         }
 
         lightVolumeShader = shaderManager->GetShader ("deferred_dbg_light_volume");
-
-        iShaderVarStringSet *svStringSet = shaderManager->GetSVNameStringset ();
         lightVolumeColorSV = lightVolumeShader->GetVariableAdd (svStringSet->Request("static color"));
       }
     };
@@ -472,7 +498,23 @@ CS_PLUGIN_NAMESPACE_BEGIN(RMDeferred)
      */
     void OutputAmbientLight()
     {
-      RenderAmbientLight ();
+      iMaterial *mat = persistentData.ambientMaterial->GetMaterial ();
+      iShader *shader = mat->GetShader (persistentData.gbufUse);
+
+      DrawFullscreenQuad (shader, CS_ZBUF_FILL);
+    }
+
+    /**
+     * Outputs the final results using the accumulation buffers and the gbuffer
+     */
+    void OutputResults(bool flipped)
+    {
+      iMaterial *mat = persistentData.outputMaterial->GetMaterial();
+      iShader *shader = mat->GetShader (persistentData.gbufUse);
+
+      persistentData.scale->SetValue(csVector4(0.5f, flipped ? -0.5f : 0.5f, 0.5f, 0.5f));
+
+      DrawFullscreenQuad (shader, CS_ZBUF_FILL);
     }
 
     /**
@@ -514,22 +556,33 @@ CS_PLUGIN_NAMESPACE_BEGIN(RMDeferred)
      */
     void operator()(iLight *light)
     {
+      iMeshWrapper* mesh = nullptr;
+      iMaterialWrapper* material = nullptr;
+
       switch (light->GetType ())
       {
       case CS_LIGHT_POINTLIGHT:
-        RenderPointLight (light);
+	mesh = persistentData.sphereMesh;
+	material = persistentData.pointMaterial;
         break;
       case CS_LIGHT_DIRECTIONAL:
-        RenderDirectionalLight (light);
+	mesh = persistentData.boxMesh;
+	material = persistentData.directionalMaterial;
         break;
       case CS_LIGHT_SPOTLIGHT:
-        RenderSpotLight (light);
+	mesh = persistentData.coneMesh;
+	material = persistentData.spotMaterial;
         break;
       default:
         CS_ASSERT(false);
       };
+
+      CS_ASSERT(mesh);
+      CS_ASSERT(material);
+
+      RenderLight(light, mesh->GetMeshObject(), material->GetMaterial());
     }
-   
+
   private:
 
     /**
@@ -539,7 +592,6 @@ CS_PLUGIN_NAMESPACE_BEGIN(RMDeferred)
     {
       const csReversibleTransform &world2camera = graphics3D->GetWorldToCamera ();
 
-      iShaderVarStringSet *svStringSet = shaderMgr->GetSVNameStringset ();
       iShaderVariableContext *lightSVContext = light->GetSVContext ();
       iMovable *movable = light->GetMovable ();
       csLightType type = light->GetType ();
@@ -551,7 +603,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(RMDeferred)
         lightPos = world2camera.This2Other (lightPos);
 
         csShaderVariable *lightPosSV = lightSVContext->GetVariableAdd (
-          svStringSet->Request ("light position view"));
+          persistentData.lightPos);
         lightPosSV->SetValue (lightPos);
       }
 
@@ -562,38 +614,9 @@ CS_PLUGIN_NAMESPACE_BEGIN(RMDeferred)
         lightDir = world2camera.GetT2O () * lightDir;
 
         csShaderVariable *lightDirSV = lightSVContext->GetVariableAdd (
-          svStringSet->Request ("light direction view"));
+          persistentData.lightDir);
         lightDirSV->SetValue (csVector3::Unit (lightDir));
       }
-    }
-
-    void RenderPointLight(iLight *light)
-    {
-      RenderLight (light,
-                   persistentData.sphereMesh->GetMeshObject (),
-                   persistentData.pointMaterial->GetMaterial ());
-    }
-
-    void RenderSpotLight(iLight *light)
-    {
-      RenderLight (light,
-                   persistentData.coneMesh->GetMeshObject (),
-                   persistentData.spotMaterial->GetMaterial ());
-    }
-
-    void RenderDirectionalLight(iLight *light)
-    {
-      RenderLight (light,
-                   persistentData.boxMesh->GetMeshObject (),
-                   persistentData.directionalMaterial->GetMaterial ());
-    }
-
-    void RenderAmbientLight()
-    {
-      iMaterial *mat = persistentData.ambientMaterial->GetMaterial ();
-      iShader *shader = mat->GetShader (stringSet->Request ("gbuffer use"));
-
-      DrawFullscreenQuad (shader, CS_ZBUF_FILL);
     }
 
     /**
@@ -650,7 +673,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(RMDeferred)
 
       // Update shader stack.
       csShaderVariableStack svStack = shaderMgr->GetShaderVariableStack ();
-      iShader *shader = mat->GetShader (stringSet->Request ("gbuffer use"));
+      iShader *shader = mat->GetShader (persistentData.gbufUse);
       iShaderVariableContext *lightSVContext = light->GetSVContext ();
 
       svStack.Clear ();
