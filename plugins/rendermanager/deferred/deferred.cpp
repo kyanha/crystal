@@ -192,11 +192,6 @@ bool RMDeferred::Initialize(iObjectRegistry *registry)
   lightManager = csQueryRegistry<iLightManager> (objRegistry);
   stringSet = csQueryRegistryTagInterface<iStringSet> (objRegistry, "crystalspace.shared.stringset");
 
-  treePersistent.Initialize (shaderManager);
-  portalPersistent.Initialize (shaderManager, graphics3D, treePersistent.debugPersist);
-  lightPersistent.Initialize (registry, treePersistent.debugPersist);
-  lightRenderPersistent.Initialize (registry);
-
   PostEffectsSupport::Initialize (registry, "RenderManager.Deferred");
 
   // Initialize the extra data in the persistent tree data.
@@ -293,6 +288,11 @@ bool RMDeferred::Initialize(iObjectRegistry *registry)
   {
     return false;
   }
+
+  treePersistent.Initialize (shaderManager);
+  portalPersistent.Initialize (shaderManager, graphics3D, treePersistent.debugPersist);
+  lightPersistent.Initialize (registry, treePersistent.debugPersist);
+  lightRenderPersistent.Initialize (registry);
 
   // Fix portal texture cache to only query textures that match the gbuffer dimensions.
   portalPersistent.fixedTexCacheWidth = gbufferDescription.width;
