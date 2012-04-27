@@ -2,6 +2,7 @@
 <!--
   Copyright (C) 2007-2008 by Frank Richter
 	    (C) 2007 by Jorrit Tyberghein
+	    (C) 2012 by Matthieu Kraus
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Library General Public
@@ -17,10 +18,11 @@
   License along with this library; if not, write to the Free
   Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 -->
-<shader compiler="shaderweaver" name="lighting_default_binalpha_deferred" lights="6">
+<shader compiler="shaderweaver" name="lighting_default_binalpha_deferred">
   <alias name="ambient" file="/shader-snippets/lighting/ambient-static.xml" />
-  <alias name="apply_alpha" file="/shader-snippets/surface/alpha-none.xml" />
-  <alias name="surface" file="/shader-snippets/surface/surface-alphakill.xml" />
+  <alias name="apply_alpha" file="/shader-snippets/surface/alpha-nochange.xml" />
+  <alias name="lighting" file="/shader-snippets/deferred/lighting.xml" />
+  <alias name="surface" file="/shader-snippets/surface/surface-modulate.xml" />
 
   <technique priority="300">
     <pass>
@@ -32,7 +34,7 @@
         <alphatest>disable</alphatest>
       </mixmode>
 
-      <snippet id="shared" file="/shader-snippets/deferred/fill_gbuffer-shared.xml" />
+      <snippet id="shared" file="/shader-snippets/deferred/lighting-defaut-shared.xml" />
     </pass>
   </technique>
 
@@ -46,7 +48,7 @@
         <alphatest>disable</alphatest>
       </mixmode>
 
-      <snippet id="shared" file="/shader-snippets/deferred/fill_gbuffer-shared.xml" />
+      <snippet id="shared" file="/shader-snippets/deferred/lighting-defaut-shared.xml" />
     </pass>
   </technique>
 </shader>

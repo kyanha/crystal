@@ -117,8 +117,6 @@ CS_PLUGIN_NAMESPACE_BEGIN(RMDeferred)
     void AddDeferredLayer(CS::RenderManager::MultipleRenderLayer &layers, int &addedLayer);
     void AddZOnlyLayer(CS::RenderManager::MultipleRenderLayer &layers, int &addedLayer);
 
-    int LocateDeferredLayer(const CS::RenderManager::MultipleRenderLayer &layers);
-    int LocateZOnlyLayer(const CS::RenderManager::MultipleRenderLayer &layers);
     int LocateLayer(const CS::RenderManager::MultipleRenderLayer &layers,
                     csStringID shaderType);
 
@@ -144,6 +142,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(RMDeferred)
     GBuffer::Description gbufferDescription;
 
     int deferredLayer;
+    int lightingLayer;
     int zonlyLayer;
     int maxPortalRecurse;
 

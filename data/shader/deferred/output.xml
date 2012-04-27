@@ -19,8 +19,10 @@
   Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 -->
 <shader compiler="shaderweaver" name="deferred_output">
-  <!-- once preserving the depth buffer works this should use use_gbuffer instead -->
-  <alias name="use_buffer" file="/shader-snippets/deferred/output_depth.xml" />
+  <alias name="ambient" file="/shader-snippets/lighting/ambient-static.xml" />
+  <alias name="apply_alpha" file="/shader-snippets/surface/alpha-premult.xml" />
+  <alias name="lighting" file="/shader-snippets/deferred/lighting.xml" />
+  <alias name="surface" file="/shader-snippets/surface/surface-modulate.xml" />
 
   <technique priority="300">
     <pass>
@@ -32,7 +34,7 @@
 
       <combiner plugin="crystalspace.graphics3d.shader.combiner.glsl" />
 
-      <snippet id="shared" file="/shader-snippets/lighting/lighting_default_deferred-shared.xml" />
+      <snippet id="shared" file="/shader-snippets/lighting/lighting_default-shared.xml" />
     </pass>
   </technique>
 
@@ -46,7 +48,7 @@
 
       <combiner plugin="crystalspace.graphics3d.shader.combiner.glcg" />
 
-      <snippet id="shared" file="/shader-snippets/lighting/lighting_default_deferred-shared.xml" />
+      <snippet id="shared" file="/shader-snippets/lighting/lighting_default-shared.xml" />
     </pass>
   </technique>
 </shader>

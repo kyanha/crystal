@@ -66,6 +66,7 @@ public:
   layerConfig(layerConfig),
   recurseCount(0), 
   deferredLayer(rmanager->deferredLayer),
+  lightingLayer(rmanager->lightingLayer),
   zonlyLayer(rmanager->zonlyLayer),
   maxPortalRecurse(rmanager->maxPortalRecurse)
   {}
@@ -77,6 +78,7 @@ public:
   layerConfig(layerConfig),
   recurseCount(other.recurseCount),
   deferredLayer(other.deferredLayer),
+  lightingLayer(other.lightingLayer),
   zonlyLayer(other.zonlyLayer),
   maxPortalRecurse(other.maxPortalRecurse)
   {}
@@ -137,7 +139,7 @@ public:
     }
 
     // Setup shaders and tickets
-    DeferredSetupShader (context, shaderManager, layerConfig, deferredLayer, zonlyLayer);
+    DeferredSetupShader (context, shaderManager, layerConfig, deferredLayer, lightingLayer, zonlyLayer);
 
     // Setup lighting (only needed for transparent objects)
     RMDeferred::LightSetupType::ShadowParamType shadowParam;
@@ -161,6 +163,7 @@ private:
 
   int recurseCount;
   int deferredLayer;
+  int lightingLayer;
   int zonlyLayer;
   int maxPortalRecurse;
 };
@@ -221,7 +224,7 @@ bool RMDeferred::Initialize(iObjectRegistry *registry)
     else
     {
       // Locates the deferred shading layer.
-      deferredLayer = LocateDeferredLayer (renderLayer);
+      deferredLayer = LocateLayer (renderLayer, stringSet->Request("gbuffer fill"));
       if (deferredLayer < 0)
       {
         csReport (objRegistry, CS_REPORTER_SEVERITY_WARNING,
@@ -232,8 +235,14 @@ bool RMDeferred::Initialize(iObjectRegistry *registry)
         AddDeferredLayer (renderLayer, deferredLayer);
       }
 
+      // locate the final lighting layer if there's any
+      lightingLayer = LocateLayer (renderLayer, stringSet->Request("gbuffer use"));
+      csReport (objRegistry, CS_REPORTER_SEVERITY_NOTIFY,
+        messageID, "Using deferred %s.",
+	(lightingLayer < 0) ? "shading" : "lighting");
+
       // Locates the zonly shading layer.
-      zonlyLayer = LocateZOnlyLayer (renderLayer);
+      zonlyLayer = LocateLayer (renderLayer, stringSet->Request("depthwrite"));
       if (zonlyLayer < 0)
       {
         csReport (objRegistry, CS_REPORTER_SEVERITY_WARNING,
@@ -266,14 +275,12 @@ bool RMDeferred::Initialize(iObjectRegistry *registry)
 
   // Create GBuffer
   const char *gbufferFmt = cfg->GetStr ("RenderManager.Deferred.GBuffer.BufferFormat", "rgba16_f");
-  const char *accumFmt = cfg->GetStr ("RenderManager.Deferred.AccumBufferFormat", "rgb16_f");
-  int bufferCount = cfg->GetInt ("RenderManager.Deferred.GBuffer.BufferCount", 4);
+  const char *accumFmt = cfg->GetStr ("RenderManager.Deferred.GBuffer.AccumBufferFormat", "rgb16_f");
+  int bufferCount = cfg->GetInt ("RenderManager.Deferred.GBuffer.BufferCount", 1);
   int accumCount = cfg->GetInt ("RenderManager.Deferred.GBuffer.AccumBufferCount", 2);
-  bool hasDepthBuffer = cfg->GetBool ("RenderManager.Deferred.GBuffer.DepthBuffer", true);
 
   gbufferDescription.colorBufferCount = bufferCount;
   gbufferDescription.accumBufferCount = accumCount;
-  gbufferDescription.hasDepthBuffer = hasDepthBuffer;
   gbufferDescription.width = graphics2D->GetWidth ();
   gbufferDescription.height = graphics2D->GetHeight ();
   gbufferDescription.colorBufferFormat = gbufferFmt;
@@ -380,6 +387,7 @@ bool RMDeferred::RenderView(iView *view, bool recursePortals)
                                                  stringSet,
                                                  lightRenderPersistent,
                                                  deferredLayer,
+						 lightingLayer,
                                                  zonlyLayer,
                                                  drawLightVolumes);
 
@@ -442,7 +450,8 @@ bool RMDeferred::HandleTarget (RenderTreeType& renderTree,
     return false;
   }
 
-  ShowGBuffer(renderTree, buffer);
+  if(showGBuffer)
+    ShowGBuffer(renderTree, buffer);
 
   ContextSetupType contextSetup (this, renderLayer, buffer);
   ContextSetupType::PortalSetupType::ContextSetupData portalData (startContext);
@@ -498,18 +507,6 @@ void RMDeferred::AddZOnlyLayer(CS::RenderManager::MultipleRenderLayer &layers, i
   renderLayer.AddLayers (baseLayer);
 
   addedLayer = renderLayer.GetLayerCount () - 1;
-}
-
-//----------------------------------------------------------------------
-int RMDeferred::LocateDeferredLayer(const CS::RenderManager::MultipleRenderLayer &layers)
-{
-  return LocateLayer (layers, stringSet->Request("gbuffer fill"));
-}
-
-//----------------------------------------------------------------------
-int RMDeferred::LocateZOnlyLayer(const CS::RenderManager::MultipleRenderLayer &layers)
-{
-  return LocateLayer (layers, stringSet->Request("depthwrite"));
 }
 
 //----------------------------------------------------------------------
