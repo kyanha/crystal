@@ -24,7 +24,7 @@
     <varying type="float3x4" name="instancingTransforms" />
   </block>
   <block location="glsl:inputs">
-    <varying type="float3x4" name="in_instancingTransforms" />
+    <varying type="float4x3" name="in_instancingTransforms" />
   </block>
   <block location="glsl:version">120</block>
   
@@ -35,10 +35,11 @@
       float4 (0, 0, 0, 1));
   </block>
   <block location="glsl:vertexMain">
-    instancingTransforms = mat4 (in_instancingTransforms[0],
-      in_instancingTransforms[1],
-      in_instancingTransforms[2],
-      vec4 (0.0, 0.0, 0.0, 1.0));
+    instancingTransforms = transpose (
+      mat4 (in_instancingTransforms[0],
+            in_instancingTransforms[1],
+            in_instancingTransforms[2],
+            vec4 (0.0, 0.0, 0.0, 1.0)));
   </block>
 
   <block location="cg:pass">
