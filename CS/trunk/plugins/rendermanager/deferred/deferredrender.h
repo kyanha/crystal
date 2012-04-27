@@ -300,6 +300,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(RMDeferred)
 	graphics3D->SetClipper (clipper, CS_CLIPPER_TOPLEVEL);
 
         int drawFlags = CSDRAW_3DGRAPHICS | context->drawFlags;
+	drawFlags |= CSDRAW_CLEARSCREEN;
 
         BeginFinishDrawScope bd (graphics3D, drawFlags);
 
