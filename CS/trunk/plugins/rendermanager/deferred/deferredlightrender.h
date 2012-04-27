@@ -305,7 +305,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(RMDeferred)
       csRef<iMaterialWrapper> pointMaterial;
       csRef<iMaterialWrapper> spotMaterial;
       csRef<iMaterialWrapper> directionalMaterial;
-      csRef<iMaterialWrapper> ambientMaterial;
+      csRef<iMaterialWrapper> depthMaterial;
       csRef<iMaterialWrapper> outputMaterial;
 
       /* Shader for drawing light volumes. */
@@ -342,6 +342,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(RMDeferred)
         gbufUse = stringSet->Request ("gbuffer use");
 	lightPos = svStringSet->Request ("light position view");
 	lightDir = svStringSet->Request ("light direction view");
+	scale = shaderManager->GetVariableAdd(svStringSet->Request("gbuffer scaleoffset"));
 
         // Builds the sphere.
         csEllipsoid ellipsoid(csVector3 (0.0f, 0.0f, 0.0f), csVector3 (1.0f, 1.0f, 1.0f));
@@ -434,18 +435,18 @@ CS_PLUGIN_NAMESPACE_BEGIN(RMDeferred)
         quadMesh.alphaType.alphaType = csAlphaMode::alphaNone;
 
         // Creates the ambient material.
-        ambientMaterial = engine->CreateMaterial (
-          "crystalspace.rendermanager.deferred.lightrender.ambient", 
+        depthMaterial = engine->CreateMaterial (
+          "crystalspace.rendermanager.deferred.lightrender.depth", 
           NULL);
 
-        if (!loader->LoadShader ("/shader/deferred/ambient_light.xml"))
+        if (!loader->LoadShader ("/shader/deferred/depth.xml"))
         {
           csReport (objRegistry, CS_REPORTER_SEVERITY_WARNING,
-            messageID, "Could not load deferred_ambient_light shader");
+            messageID, "Could not load deferred_depth shader");
         }
 
-        iShader *ambientLightShader = shaderManager->GetShader ("deferred_ambient_light");
-        ambientMaterial->GetMaterial ()->SetShader (gbufUse, ambientLightShader);
+        iShader *depthShader = shaderManager->GetShader ("deferred_depth");
+        depthMaterial->GetMaterial ()->SetShader (gbufUse, depthShader);
 
 	// Creates the output material.
 	outputMaterial = engine->CreateMaterial (
@@ -460,8 +461,6 @@ CS_PLUGIN_NAMESPACE_BEGIN(RMDeferred)
 
 	iShader *outputShader = shaderManager->GetShader ("deferred_output");
 	outputMaterial->GetMaterial()->SetShader(gbufUse, outputShader);
-        scale = outputShader->GetVariableAdd(
-	    svStringSet->Request("gbuffer scaleoffset"));
 
         // Loads the light volume shader.
         if (!loader->LoadShader ("/shader/deferred/dbg_light_volume.xml"))
@@ -494,11 +493,11 @@ CS_PLUGIN_NAMESPACE_BEGIN(RMDeferred)
     ~DeferredLightRenderer() {}
 
     /**
-     * Outputs the ambient light present in the gbuffer. Call once per-frame.
+     * Outputs the depth from the gbuffer.
      */
-    void OutputAmbientLight()
+    void OutputDepth()
     {
-      iMaterial *mat = persistentData.ambientMaterial->GetMaterial ();
+      iMaterial *mat = persistentData.depthMaterial->GetMaterial ();
       iShader *shader = mat->GetShader (persistentData.gbufUse);
 
       DrawFullscreenQuad (shader, CS_ZBUF_FILL);
@@ -507,12 +506,10 @@ CS_PLUGIN_NAMESPACE_BEGIN(RMDeferred)
     /**
      * Outputs the final results using the accumulation buffers and the gbuffer
      */
-    void OutputResults(bool flipped)
+    void OutputResults()
     {
       iMaterial *mat = persistentData.outputMaterial->GetMaterial();
       iShader *shader = mat->GetShader (persistentData.gbufUse);
-
-      persistentData.scale->SetValue(csVector4(0.5f, flipped ? -0.5f : 0.5f, 0.5f, 0.5f));
 
       DrawFullscreenQuad (shader, CS_ZBUF_FILL);
     }

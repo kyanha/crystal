@@ -1,5 +1,5 @@
 <!--
-  Copyright (C) 2008 by Frank Richter
+  Copyright (C) 2012 by Matthieu Kraus
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Library General Public
@@ -16,12 +16,17 @@
   Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 -->
 <snippet type="compound">
-  <technique priority="100">
-    <combiner name="cg" plugin="crystalspace.graphics3d.shader.combiner.glcg" />
-    <combiner name="glsl" plugin="crystalspace.graphics3d.shader.combiner.glsl" />
+  <technique priority="200">
+    <combiner plugin="crystalspace.graphics3d.shader.combiner.glcg" />
 
-    <snippet id="read_buffer" file="/shader-snippets/deferred/use_gbuffer.xml" />
+    <alias name="use_buffer" weak="yes" file="/shader-snippets/deferred/use_gbuffer.xml" />
 
-    <output snippet="read_buffer" name="depth" to="depth" />
+    <snippet id="position" file="/shader-snippets/position.xml" />
+    <snippet id="use_buffer" filealias="use_buffer" />
+
+    <connection from="position" to="use_buffer" />
+
+    <output snippet="use_buffer" name="depth" to="depth" />
   </technique>
 </snippet>
+

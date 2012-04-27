@@ -20,30 +20,12 @@
   <technique priority="200">
     <combiner plugin="crystalspace.graphics3d.shader.combiner.glcg" />
 
-    <!--
-	Weak aliases.
-	"Weak" means they do _not_ override aliases specified above this
-	snippet; instead, the weak alias applies only if an alias with the
-	given has not been specified yet.
-	The practical effect is that this allows to use aliased snippets,
-	but also provide "default" snippets and thus does not require users
-	of this snippets to provide all aliases.
-      -->
     <alias name="use_buffer" weak="yes" file="/shader-snippets/deferred/use_gbuffer.xml" />
 
-    <!--
-	Snippets - the building blocks of this shader.
-	Their order influence what happens if not all features of the shader
-	are supported; for earlier appearing snippets higher techniques
-	are preferred.
-    -->
     <snippet id="position" file="/shader-snippets/position.xml" />
     <snippet id="use_buffer" filealias="use_buffer" />
     <snippet id="lighting" filealias="lighting" />
 
-    <!-- "connections" describe what snippets take input from what other
-	  snippets (ie the "data flow" is modeled). The exact resolution of
-	  what output is linked to what input is done automatically. -->
     <connection from="position" to="use_buffer" />
     <connection from="use_buffer" to="lighting" />
 

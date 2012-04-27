@@ -204,7 +204,6 @@ CS_PLUGIN_NAMESPACE_BEGIN(RMDeferred)
 	}
       }
 
-      if (HasDepthBuffer ())
       {
         if (!graphics3D->SetRenderTarget (GetDepthBuffer (), false, 0, rtaDepth))
 	{
@@ -261,7 +260,6 @@ CS_PLUGIN_NAMESPACE_BEGIN(RMDeferred)
 	accumSV->SetValue (GetAccumulationBuffer (i));
       }
 
-      if (HasDepthBuffer ())
       {
         csShaderVariable *depthSV = ctx->GetVariableAdd (depthBufferSVName);
         depthSV->SetValue (GetDepthBuffer ());
@@ -280,12 +278,6 @@ CS_PLUGIN_NAMESPACE_BEGIN(RMDeferred)
     iTextureHandle *GetColorBuffer(size_t i)
     {
       return colorBuffers[i];
-    }
-
-    /// Returns true if a depth buffer is present.
-    bool HasDepthBuffer() const
-    {
-      return depthBuffer.IsValid ();
     }
 
     /// Returns the depth buffer.

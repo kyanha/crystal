@@ -43,75 +43,6 @@
       </block>
     </input>
 
-    <input name="texGBuffer1" type="tex2d" default="complex">
-      <block location="cg:pass">
-        <texture name="tex gbuffer 1" destination="fragmentIn.GBuffer1" />
-      </block>
-      <block location="glsl:pass">
-        <texture name="tex gbuffer 1" destination="in_texGBuffer1" />
-      </block>
-      
-      <block location="cg:fragmentIn">
-        <uniform type="tex2d" name="texGBuffer1" />
-      </block>
-      <block location="glsl:inputs">
-        <uniform type="tex2d" name="in_texGBuffer1" />
-      </block>
-      
-      <block location="cg:fragmentMain">
-        texGBuffer1 = fragmentIn.texGBuffer1;
-      </block>
-      <block location="glsl:fragmentMain">
-        #sampler_assign texGBuffer1 in_texGBuffer1
-      </block>
-    </input>
-
-    <input name="texGBuffer2" type="tex2d" default="complex">
-      <block location="cg:pass">
-        <texture name="tex gbuffer 2" destination="fragmentIn.GBuffer2" />
-      </block>
-      <block location="glsl:pass">
-        <texture name="tex gbuffer 2" destination="in_texGBuffer2" />
-      </block>
-      
-      <block location="cg:fragmentIn">
-        <uniform type="tex2d" name="texGBuffer2" />
-      </block>
-      <block location="glsl:inputs">
-        <uniform type="tex2d" name="in_texGBuffer2" />
-      </block>
-      
-      <block location="cg:fragmentMain">
-        texGBuffer2 = fragmentIn.texGBuffer2;
-      </block>
-      <block location="glsl:fragmentMain">
-        #sampler_assign texGBuffer2 in_texGBuffer2
-      </block>
-    </input>
-
-    <input name="texGBuffer3" type="tex2d" default="complex">
-      <block location="cg:pass">
-        <texture name="tex gbuffer 3" destination="fragmentIn.GBuffer3" />
-      </block>
-      <block location="glsl:pass">
-        <texture name="tex gbuffer 3" destination="in_texGBuffer3" />
-      </block>
-      
-      <block location="cg:fragmentIn">
-        <uniform type="tex2d" name="texGBuffer3" />
-      </block>
-      <block location="glsl:inputs">
-        <uniform type="tex2d" name="in_texGBuffer3" />
-      </block>
-      
-      <block location="cg:fragmentMain">
-        texGBuffer3 = fragmentIn.texGBuffer3;
-      </block>
-      <block location="glsl:fragmentMain">
-        #sampler_assign texGBuffer3 in_texGBuffer3
-      </block>
-    </input>
-
     <input name="texGBufferDepth" type="tex2d" default="complex">
       <block location="cg:pass">
         <texture name="tex gbuffer depth" destination="fragmentIn.GBufferDepth" />
@@ -192,21 +123,13 @@
     <input name="positionS" type="position4_screen" />
 
     <block location="cg:vertexMain">
-      diffuse   = float4(0.0);
       normal    = float3(0.0, 0.0, 1.0);
-      ambient   = float3(0.0);
-      specular  = float3(0.0);
-      glow      = float4(0.0);
       shininess = 0.0;
       position  = positionS;
     </block>
 
     <block location="glsl:vertexMain">
-      diffuse  = vec4(0.0);
       normal   = vec3(0.0, 0.0, 1.0);
-      ambient  = vec3(0.0);
-      specular = vec3(0.0);
-      glow     = vec4(0.0);
       shininess = 0.0;
       position = positionS;
     </block>
@@ -217,25 +140,13 @@
       texCoord_attr_perfragment = true;
 
       float4 gBuffer0     = tex2D (texGBuffer0,     texCoord);
-      float4 gBuffer1     = tex2D (texGBuffer1,     texCoord);
-      float4 gBuffer2     = tex2D (texGBuffer2,     texCoord);
-      float4 gBuffer3     = tex2D (texGBuffer3,     texCoord);
       depth               = tex2D (texGBufferDepth, texCoord).x;
       depth_attr_perfragment = true;
 
-      diffuse   = gBuffer0;
-      diffuse_attr_perfragment = true;
-      normal.xy = gBuffer1.xy * 2.0 - 1.0;
-      normal.z  = -sqrt (1.0 - saturate(dot (normal.xy, normal.xy)));
+      normal.xyz = gBuffer0.xyz * 2.0 - 1.0;
       normal_attr_perfragment = true;
-      shininess = gBuffer1.z;
+      shininess = gBuffer0.w;
       shininess_attr_perfragment = true;
-      ambient   = gBuffer2.rgb;
-      ambient_attr_perfragment = true;
-      specular  = float3(gBuffer1.a, gBuffer2.a, gBuffer3.a);
-      specular_attr_perfragment = true;
-      glow      = float4(gBuffer3.rgb, 0.0);
-      glow_attr_perfragment = true;
       position  = mul(ProjInv, float4(screenXY.x, -screenXY.y, 1.0 - 2.0 * depth, 1.0));
       position /= position.w;
       position_attr_perfragment = true;
@@ -247,42 +158,18 @@
       texCoord_attr_perfragment = true;
 
       vec4  gBuffer0     = texture2D (texGBuffer0,     texCoord);
-      vec4  gBuffer1     = texture2D (texGBuffer1,     texCoord);
-      vec4  gBuffer2     = texture2D (texGBuffer2,     texCoord);
-      vec4  gBuffer3     = texture2D (texGBuffer3,     texCoord);
       depth              = texture2D (texGBufferDepth, texCoord).x;
       depth_attr_perfragment = true;
 
-      diffuse   = vec4(gBuffer0);
-      diffuse_attr_perfragment = true;
-      normal.xy = gBuffer1.xy * 2.0 - 1.0;
-      normal.z  = -sqrt (1.0 - clamp(dot (normal.xy, normal.xy), 0.0, 1.0));
+      normal.xyz = gBuffer0.xyz * 2.0 - 1.0;
       normal_attr_perfragment = true;
-      shininess = gBuffer1.z;
+      shininess = gBuffer0.w;
       shininess_attr_perfragment = true;
-      ambient   = gBuffer2.rgb;
-      ambient_attr_perfragment = true;
-      specular  = vec3(gBuffer1.a, gBuffer2.a, gBuffer3.a);
-      specular_attr_perfragment = true;
-      glow      = vec4(gBuffer3.rgb, 0.0);
-      glow_attr_perfragment = true;
       position  = ProjInv * vec4(screenXY.x, -screenXY.y, 1.0 - 2.0 * depth, 1.0);
       position /= position.w;
       position_attr_perfragment = true;
     </block>
 
-    <output name="diffuse" type="rgba">
-      <attribute name="perfragment" type="bool" />
-    </output>
-    <output name="ambient" type="rgb">
-      <attribute name="perfragment" type="bool" />
-    </output>
-    <output name="specular" type="rgb">
-      <attribute name="perfragment" type="bool" />
-    </output>
-    <output name="glow" type="rgba">
-      <attribute name="perfragment" type="bool" />
-    </output>
     <output name="shininess" type="float">
       <attribute name="perfragment" type="bool" />
     </output>
