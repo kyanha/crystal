@@ -312,6 +312,9 @@ CS_PLUGIN_NAMESPACE_BEGIN(RMDeferred)
       csRef<iShader> lightVolumeShader;
       csRef<csShaderVariable> lightVolumeColorSV;
 
+      /* depth only shader */
+      csRef<iShader> zOnly;
+
       /* String IDs for shader types and variable names */
       csStringID gbufUse;
       CS::ShaderVarStringID lightPos;
@@ -343,6 +346,8 @@ CS_PLUGIN_NAMESPACE_BEGIN(RMDeferred)
 	lightPos = svStringSet->Request ("light position view");
 	lightDir = svStringSet->Request ("light direction view");
 	scale = shaderManager->GetVariableAdd(svStringSet->Request("gbuffer scaleoffset"));
+	zOnly = shaderManager->GetShader("z_only");
+	CS_ASSERT(zOnly);
 
         // Builds the sphere.
         csEllipsoid ellipsoid(csVector3 (0.0f, 0.0f, 0.0f), csVector3 (1.0f, 1.0f, 1.0f));
@@ -642,13 +647,8 @@ CS_PLUGIN_NAMESPACE_BEGIN(RMDeferred)
       iCamera *cam = rview->GetCamera ();
       csVector3 camPos = cam->GetTransform ().This2Other (csVector3 (0.0f, 0.0f, 1.0f));
 
-      DrawLightMesh (meshes, 
-                     num,
-                     CreateLightTransform (light), 
-                     shader, 
-                     svStack,
-                     CS_FX_ALPHA,
-                     IsPointInsideLight (camPos, light));
+      DrawLightMesh (meshes, num, CreateLightTransform (light), 
+                     shader, svStack, CS_FX_ALPHA);
     }
 
     /**
@@ -682,13 +682,28 @@ CS_PLUGIN_NAMESPACE_BEGIN(RMDeferred)
       iCamera *cam = rview->GetCamera ();
       csVector3 camPos = cam->GetTransform ().This2Other (csVector3 (0.0f, 0.0f, 1.0f));
       
-      DrawLightMesh (meshes, 
-                     num, 
-                     CreateLightTransform (light), 
-                     shader, 
-                     svStack,
-                     CS_FX_ADD,
-                     IsPointInsideLight (camPos, light));
+      bool insideLight = IsPointInsideLight (camPos, light);
+      csReversibleTransform trans = CreateLightTransform (light);
+
+      if(!insideLight)
+      {
+	// fill stencil buffer
+	graphics3D->SetShadowState(CS_SHADOW_VOLUME_BEGIN);
+
+	// mark passing front faces
+	graphics3D->SetShadowState(CS_SHADOW_VOLUME_FAIL1);
+        DrawLightMesh (meshes, num, trans, persistentData.zOnly, svStack, CS_FX_TRANSPARENT, true);
+
+	// use stencil test
+	graphics3D->SetShadowState(CS_SHADOW_VOLUME_USE);
+      }
+
+      DrawLightMesh (meshes, num, trans, shader, svStack, CS_FX_ADD);
+
+      if(!insideLight)
+      {
+	graphics3D->SetShadowState(CS_SHADOW_VOLUME_FINISH);
+      }
     }
 
     /**
@@ -700,19 +715,18 @@ CS_PLUGIN_NAMESPACE_BEGIN(RMDeferred)
                        iShader *shader,
                        csShaderVariableStack &svStack,
                        uint mixmode,
-                       bool insideLight)
+		       bool stencil = false)
     {
       CS_ASSERT (n > 0);
 
       const size_t ticket = shader->GetTicket (*meshes[0], svStack);
       const size_t numPasses = shader->GetNumberOfPasses (ticket);
 
-      CS::Graphics::MeshCullMode cullMode = CS::Graphics::cullNormal;
-      csZBufMode zMode = CS_ZBUF_TEST;
-      if (insideLight)
+      CS::Graphics::MeshCullMode cullMode = CS::Graphics::cullFlipped;
+      csZBufMode zMode = CS_ZBUF_INVERT;
+      if(stencil)
       {
-        cullMode = CS::Graphics::cullFlipped;
-	zMode = CS_ZBUF_INVERT;
+	zMode = CS_ZBUF_TEST;
       }
 
       for (size_t p = 0; p < numPasses; p++)
