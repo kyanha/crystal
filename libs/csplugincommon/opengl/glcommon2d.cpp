@@ -158,6 +158,14 @@ bool csGraphics2DGLCommon::Open ()
       {
 	      //ext.InitGL_version_1_3 ();
       }
+      if ((vMajor > 2) || ((vMajor == 2) && (vMinor >= 0)))
+      {
+              ext.InitGL_version_2_0 ();
+      }
+      if ((vMajor > 2) || ((vMajor == 2) && (vMinor >= 1)))
+      {
+              ext.InitGL_version_2_1 ();
+      }
     }
   }
 
