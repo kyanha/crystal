@@ -167,10 +167,6 @@ CS_PLUGIN_NAMESPACE_BEGIN(RMDeferred)
       CS_ASSERT(cam);
       CS_ASSERT(clipper);
 
-      // some warning to those who think they know what they're do
-      CS_ASSERT_MSG("CSDRAW_CLEARZBUFFER for deferred encountered",
-	!(context->drawFlags & CSDRAW_CLEARZBUFFER));
-
       // filter out zbuffer draw flags - they'll most certainly break the rendering
       context->drawFlags &= ~CSDRAW_CLEARZBUFFER;
 
@@ -200,7 +196,6 @@ CS_PLUGIN_NAMESPACE_BEGIN(RMDeferred)
         BeginFinishDrawScope bd(graphics3D, drawFlags);
 
 	// Visibility Culling
-	// @@@TODO: can't we merge this properly with the z-only pass somehow?
 	{
 	  // visculling only needs to be rendered once per sector.
 	  csSet<iSector*> sectors;
@@ -218,7 +213,8 @@ CS_PLUGIN_NAMESPACE_BEGIN(RMDeferred)
 	  }
 	}
 
-        // z only pass
+        // z only pass - should be disabled if occluvis is used
+	if(zonlyLayer >= 0)
         {
 	  // we want to fill the zbuffer, use pass 1 modes
           graphics3D->SetZMode (CS_ZBUF_MESH);

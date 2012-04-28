@@ -151,7 +151,40 @@ public:
 
     ForEachForwardMeshNode (context, lightSetup);
 
+    // Setup shaders and tickets
     SetupStandardTicket (context, shaderManager, lightSetup.GetPostLightingLayers ());
+
+    {
+      ThisType ctxRefl (*this, layerConfig);
+      ThisType ctxRefr (*this, layerConfig);
+      RMDeferred::AutoReflectRefractType fxRR (
+        rmanager->reflectRefractPersistent, ctxRefl, ctxRefr);
+        
+      RMDeferred::AutoFramebufferTexType fxFB (
+        rmanager->framebufferTexPersistent);
+      
+      // Set up a functor that combines the AutoFX functors
+      typedef CS::Meta::CompositeFunctorType2<
+        RMDeferred::AutoReflectRefractType,
+        RMDeferred::AutoFramebufferTexType> FXFunctor;
+      FXFunctor fxf (fxRR, fxFB);
+      
+      typedef TraverseUsedSVSets<RenderTreeType,
+        FXFunctor> SVTraverseType;
+      SVTraverseType svTraverser
+        (fxf, shaderManager->GetSVNameStringset ()->GetSize (),
+	 fxRR.svUserFlags | fxFB.svUserFlags);
+      // And do the iteration
+      ForEachMeshNode (context, svTraverser);
+    }
+  }
+
+  // Called by AutoReflectRefractType
+  void operator() (typename RenderTreeType::ContextNode& context)
+  {
+    typename PortalSetupType::ContextSetupData portalData (&context);
+
+    operator() (context, portalData);
   }
 
 private:
@@ -173,6 +206,7 @@ RMDeferred::RMDeferred(iBase *parent)
   : 
 scfImplementationType(this, parent),
 portalPersistent(CS::RenderManager::TextureCache::tcacheExactSizeMatch),
+doHDRExposure (false),
 targets (*this)
 {
   SetTreePersistent (treePersistent);
@@ -192,8 +226,6 @@ bool RMDeferred::Initialize(iObjectRegistry *registry)
   lightManager = csQueryRegistry<iLightManager> (objRegistry);
   stringSet = csQueryRegistryTagInterface<iStringSet> (objRegistry, "crystalspace.shared.stringset");
 
-  PostEffectsSupport::Initialize (registry, "RenderManager.Deferred");
-
   // Initialize the extra data in the persistent tree data.
   RenderTreeType::TreeTraitsType::Initialize (treePersistent, registry);
   
@@ -203,6 +235,7 @@ bool RMDeferred::Initialize(iObjectRegistry *registry)
   showGBuffer = false;
   drawLightVolumes = false;
 
+  // load render layers
   bool layersValid = false;
   const char *layersFile = cfg->GetStr ("RenderManager.Deferred.Layers", nullptr);
   if (layersFile)
@@ -238,15 +271,6 @@ bool RMDeferred::Initialize(iObjectRegistry *registry)
 
       // Locates the zonly shading layer.
       zonlyLayer = LocateLayer (renderLayer, stringSet->Request("depthwrite"));
-      if (zonlyLayer < 0)
-      {
-        csReport (objRegistry, CS_REPORTER_SEVERITY_WARNING,
-          messageID, "The render layers file %s does not contain a %s layer.",
-	  CS::Quote::Single (layersFile),
-	  CS::Quote::Single ("depthwrite"));
-
-        AddZOnlyLayer (renderLayer, zonlyLayer);
-      }
     }
   }
   
@@ -302,6 +326,28 @@ bool RMDeferred::Initialize(iObjectRegistry *registry)
   portalPersistent.texCache.SetFormat (accumFmt);
   portalPersistent.texCache.SetFlags (CS_TEXTURE_2D | CS_TEXTURE_NOMIPMAPS | CS_TEXTURE_CLAMP | CS_TEXTURE_NPOTS);
 
+  // initialize post-effects
+  PostEffectsSupport::Initialize (registry, "RenderManager.Deferred");
+
+  // initialize hdr
+  HDRSettings hdrSettings (cfg, "RenderManager.Deferred");
+  if (hdrSettings.IsEnabled())
+  {
+    doHDRExposure = true;
+    
+    hdr.Setup (registry, 
+      hdrSettings.GetQuality(), 
+      hdrSettings.GetColorRange());
+    postEffects.SetChainedOutput (hdr.GetHDRPostEffects());
+  
+    hdrExposure.Initialize (registry, hdr, hdrSettings);
+  }
+
+  // initialize reflect/refract
+  dbgFlagClipPlanes = treePersistent.debugPersist.RegisterDebugFlag ("draw.clipplanes.view");
+  reflectRefractPersistent.Initialize (registry, treePersistent.debugPersist, &postEffects);
+  framebufferTexPersistent.Initialize (registry, &postEffects);
+
   RMViscullCommon::Initialize (objRegistry, "RenderManager.Deferred");
   
   return true;
@@ -335,6 +381,8 @@ bool RMDeferred::RenderView(iView *view, bool recursePortals)
   contextsScannedForTargets.Empty ();
   portalPersistent.UpdateNewFrame ();
   lightPersistent.UpdateNewFrame ();
+  reflectRefractPersistent.UpdateNewFrame ();
+  framebufferTexPersistent.UpdateNewFrame ();
 
   iEngine *engine = view->GetEngine ();
   engine->UpdateNewFrame ();  
@@ -399,6 +447,8 @@ bool RMDeferred::RenderView(iView *view, bool recursePortals)
 
   postEffects.DrawPostEffects (renderTree);
 
+  if (doHDRExposure) hdrExposure.ApplyExposure (renderTree, view);
+
   DebugFrameRender (rview, renderTree);
 
   return true;
@@ -415,6 +465,7 @@ bool RMDeferred::PrecacheView(iView *view)
   return RenderView (view, false);
 
   postEffects.ClearIntermediates ();
+  hdr.GetHDRPostEffects().ClearIntermediates();
 }
 
 bool RMDeferred::HandleTarget (RenderTreeType& renderTree,

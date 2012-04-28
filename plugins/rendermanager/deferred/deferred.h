@@ -26,7 +26,10 @@
 #include "csplugincommon/rendermanager/rendertree.h"
 #include "csplugincommon/rendermanager/debugcommon.h"
 #include "csplugincommon/rendermanager/renderlayers.h"
+#include "csplugincommon/rendermanager/autofx_framebuffertex.h"
+#include "csplugincommon/rendermanager/autofx_reflrefr.h"
 #include "csplugincommon/rendermanager/posteffectssupport.h"
+#include "csplugincommon/rendermanager/hdrexposure.h"
 #include "csplugincommon/rendermanager/viscullcommon.h"
 
 #include "iutil/comp.h"
@@ -97,6 +100,12 @@ CS_PLUGIN_NAMESPACE_BEGIN(RMDeferred)
     typedef CS::RenderManager::DependentTargetManager<RenderTreeType, RMDeferred>
       TargetManagerType;
 
+    typedef CS::RenderManager::AutoFX::ReflectRefract<RenderTreeType, 
+      ContextSetupType> AutoReflectRefractType;
+
+    typedef CS::RenderManager::AutoFX::FramebufferTex<RenderTreeType>
+      AutoFramebufferTexType;
+
     //---- iDebugHelper Interface ----
     virtual bool DebugCommand(const char *cmd);
 
@@ -129,6 +138,13 @@ CS_PLUGIN_NAMESPACE_BEGIN(RMDeferred)
     LightSetupType::PersistentData lightPersistent;
     DeferredLightRenderer::PersistentData lightRenderPersistent;
 
+    AutoReflectRefractType::PersistentData reflectRefractPersistent;
+    AutoFramebufferTexType::PersistentData framebufferTexPersistent;
+
+    CS::RenderManager::HDRHelper hdr;
+    CS::RenderManager::HDR::Exposure::Configurable hdrExposure;
+    bool doHDRExposure;
+
     CS::RenderManager::MultipleRenderLayer renderLayer;
 
     csRef<iShaderManager> shaderManager;
@@ -148,6 +164,8 @@ CS_PLUGIN_NAMESPACE_BEGIN(RMDeferred)
 
     bool showGBuffer;
     bool drawLightVolumes;
+
+    uint dbgFlagClipPlanes;
   };
 }
 CS_PLUGIN_NAMESPACE_END(RMDeferred)
