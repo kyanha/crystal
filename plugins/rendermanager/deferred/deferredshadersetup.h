@@ -123,7 +123,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(RMDeferred)
         for (size_t k = 0; k < count; k++)
         {
           size_t layer = layers[k];
-	  if(layer < 0)
+	  if((int)layer < 0)
 	    continue;
 
           iShader *shader = nullptr;
