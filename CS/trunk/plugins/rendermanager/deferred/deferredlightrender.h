@@ -347,6 +347,15 @@ CS_PLUGIN_NAMESPACE_BEGIN(RMDeferred)
 	lightDir = svStringSet->Request ("light direction view");
 	scale = shaderManager->GetVariableAdd(svStringSet->Request("gbuffer scaleoffset"));
 	zOnly = shaderManager->GetShader("z_only");
+	if(!zOnly)
+	{
+	  if (!loader->LoadShader ("/shader/early_z/z_only.xml"))
+	  {
+	    csReport (objRegistry, CS_REPORTER_SEVERITY_WARNING,
+	      messageID, "Could not load z_only shader");
+	  }
+	  zOnly = shaderManager->GetShader("z_only");
+	}
 	CS_ASSERT(zOnly);
 
         // Builds the sphere.
