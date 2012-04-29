@@ -193,7 +193,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(RMDeferred)
         int drawFlags = CSDRAW_3DGRAPHICS | context->drawFlags;
         drawFlags |= CSDRAW_CLEARSCREEN | CSDRAW_CLEARZBUFFER;
 
-        BeginFinishDrawScope bd(graphics3D, drawFlags);
+        CS::RenderManager::BeginFinishDrawScope bd(graphics3D, drawFlags);
 
 	// Visibility Culling
 	{
@@ -263,7 +263,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(RMDeferred)
         int drawFlags = CSDRAW_3DGRAPHICS | context->drawFlags;
 	drawFlags |= CSDRAW_CLEARSCREEN;
 
-	BeginFinishDrawScope bd (graphics3D, drawFlags);
+	CS::RenderManager::BeginFinishDrawScope bd (graphics3D, drawFlags);
 
 	// use pass 1 zmodes for populating the zbuffer if needed
 	graphics3D->SetZMode (CS_ZBUF_MESH);
@@ -298,7 +298,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(RMDeferred)
         int drawFlags = CSDRAW_3DGRAPHICS | context->drawFlags;
 	drawFlags |= CSDRAW_CLEARSCREEN;
 
-        BeginFinishDrawScope bd (graphics3D, drawFlags);
+        CS::RenderManager::BeginFinishDrawScope bd (graphics3D, drawFlags);
 
 	// set tex scale for lookups as we may have flipped screen here
 	lightRenderPersistent.scale->SetValue(csVector4(
