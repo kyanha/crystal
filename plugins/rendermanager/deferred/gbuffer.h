@@ -46,7 +46,6 @@ CS_PLUGIN_NAMESPACE_BEGIN(RMDeferred)
 
       size_t colorBufferCount;
       size_t accumBufferCount;
-      bool hasDepthBuffer;
 
       // Set to NULL to use the default format.
       const char *colorBufferFormat;
@@ -137,29 +136,26 @@ CS_PLUGIN_NAMESPACE_BEGIN(RMDeferred)
 	accumBufferSVNames.Push(stringSet->Request(svName.GetDataSafe()));
       }
 
-      if (desc.hasDepthBuffer)
+      const char *depthFmt[] = { "d24s8", "d32", "d16" };
+      const size_t fmtCount = sizeof(depthFmt) / sizeof(const char *);
+
+      // Iterate through the depth formats until we find a valid format.
+      for (size_t i = 0; i < fmtCount; i++)
       {
-        const char *depthFmt[] = { "d24s8", "d32", "d16" };
-        const size_t fmtCount = sizeof(depthFmt) / sizeof(const char *);
+        depthBuffer = texMgr->CreateTexture (width, height, csimg2D, depthFmt[i], flags, NULL);
 
-        // Iterate through the depth formats until we find a valid format.
-        for (size_t i = 0; i < fmtCount; i++)
-        {
-          depthBuffer = texMgr->CreateTexture (width, height, csimg2D, depthFmt[i], flags, NULL);
-
-          if (depthBuffer)
-            break;
-        }
-
-        if (!depthBuffer)
-        {
-          csReport(registry, CS_REPORTER_SEVERITY_ERROR, messageID, 
-            "Could not create depth buffer!");
-          return false;
-        }
-
-        depthBufferSVName = stringSet->Request ("tex gbuffer depth");
+        if (depthBuffer)
+          break;
       }
+
+      if (!depthBuffer)
+      {
+        csReport(registry, CS_REPORTER_SEVERITY_ERROR, messageID, 
+          "Could not create depth buffer!");
+        return false;
+      }
+
+      depthBufferSVName = stringSet->Request ("tex gbuffer depth");
 
       graphics3D = g3D;
 

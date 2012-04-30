@@ -593,10 +593,7 @@ void RMDeferred::ShowGBuffer(RenderTreeType &tree, GBuffer* buffer)
     tree.AddDebugTexture (buffer->GetColorBuffer (i), aspect);
   }
 
-  if (buffer->GetDepthBuffer ())
-  {
-    tree.AddDebugTexture (buffer->GetDepthBuffer (), aspect);
-  }
+  tree.AddDebugTexture (buffer->GetDepthBuffer (), aspect);
 
   for (size_t i = 0; i < buffer->GetAccumulationBufferCount(); ++i)
   {
