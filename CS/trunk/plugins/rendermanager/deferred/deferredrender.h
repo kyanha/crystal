@@ -309,7 +309,24 @@ CS_PLUGIN_NAMESPACE_BEGIN(RMDeferred)
         // @@@NOTE: it does an implicit CLEARZBUFFER with clipping enabled
         //          on each BeginDraw that has CSDRAW_3DGRAPHCIS
 	graphics3D->SetZMode (CS_ZBUF_MESH);
-	lightRender.OutputDepth();
+	if(zonlyLayer >= 0)
+        {
+          meshRender.SetLayer (zonlyLayer);
+
+          for (size_t i = 0; i < ctxCount; i++)
+          {
+            typename RenderTree::ContextNode *ctx = contextStack[i];
+
+	    graphics3D->SetWorldToCamera (ctx->cameraTransform.GetInverse ());
+
+	    // for the depth buffer we want *all* meshes, not just deferred ones
+            ForEachMeshNode (*ctx, meshRender);
+          }
+        }
+	else
+	{
+	  lightRender.OutputDepth();
+	}
 
 	// we're in the output pass - use pass 2 zmodes
 	graphics3D->SetZMode (CS_ZBUF_MESH2);
