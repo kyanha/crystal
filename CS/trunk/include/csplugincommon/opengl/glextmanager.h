@@ -1,5 +1,5 @@
 /**
- * WARNING - This file is automagically generated
+ * WARNING - This file is automagically generated from scripts/glextgen/glextgen.py
  */
 
 /*
@@ -1726,22 +1726,6 @@ typedef GLvoid (csAPIENTRY* csGLSTENCILOPSEPARATE) (GLenum face, GLenum sfail, G
  * This is not a real OpenGL extension. The OpenGL canvases will 'initialize'
  * this extension when the appropriate GL version was detected. 
  * @{ */
-#ifndef GL_PIXEL_PACK_BUFFER
-#define GL_PIXEL_PACK_BUFFER                                         0x88EB
-#endif
-
-#ifndef GL_PIXEL_UNPACK_BUFFER
-#define GL_PIXEL_UNPACK_BUFFER                                       0x88EC
-#endif
-
-#ifndef GL_PIXEL_PACK_BUFFER_BINDING
-#define GL_PIXEL_PACK_BUFFER_BINDING                                 0x88ED
-#endif
-
-#ifndef GL_PIXEL_UNPACK_BUFFER_BINDING
-#define GL_PIXEL_UNPACK_BUFFER_BINDING                               0x88EF
-#endif
-
 #ifndef GL_FLOAT_MAT2x3
 #define GL_FLOAT_MAT2x3                                              0x8B65
 #endif
@@ -1764,6 +1748,22 @@ typedef GLvoid (csAPIENTRY* csGLSTENCILOPSEPARATE) (GLenum face, GLenum sfail, G
 
 #ifndef GL_FLOAT_MAT4x3
 #define GL_FLOAT_MAT4x3                                              0x8B6A
+#endif
+
+#ifndef GL_PIXEL_PACK_BUFFER
+#define GL_PIXEL_PACK_BUFFER                                         0x88EB
+#endif
+
+#ifndef GL_PIXEL_UNPACK_BUFFER
+#define GL_PIXEL_UNPACK_BUFFER                                       0x88EC
+#endif
+
+#ifndef GL_PIXEL_PACK_BUFFER_BINDING
+#define GL_PIXEL_PACK_BUFFER_BINDING                                 0x88ED
+#endif
+
+#ifndef GL_PIXEL_UNPACK_BUFFER_BINDING
+#define GL_PIXEL_UNPACK_BUFFER_BINDING                               0x88EF
 #endif
 
 #ifndef GL_SRGB
