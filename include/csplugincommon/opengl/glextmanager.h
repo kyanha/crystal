@@ -1742,6 +1742,30 @@ typedef GLvoid (csAPIENTRY* csGLSTENCILOPSEPARATE) (GLenum face, GLenum sfail, G
 #define GL_PIXEL_UNPACK_BUFFER_BINDING                               0x88EF
 #endif
 
+#ifndef GL_FLOAT_MAT2x3
+#define GL_FLOAT_MAT2x3                                              0x8B65
+#endif
+
+#ifndef GL_FLOAT_MAT2x4
+#define GL_FLOAT_MAT2x4                                              0x8B66
+#endif
+
+#ifndef GL_FLOAT_MAT3x2
+#define GL_FLOAT_MAT3x2                                              0x8B67
+#endif
+
+#ifndef GL_FLOAT_MAT3x4
+#define GL_FLOAT_MAT3x4                                              0x8B68
+#endif
+
+#ifndef GL_FLOAT_MAT4x2
+#define GL_FLOAT_MAT4x2                                              0x8B69
+#endif
+
+#ifndef GL_FLOAT_MAT4x3
+#define GL_FLOAT_MAT4x3                                              0x8B6A
+#endif
+
 #ifndef GL_SRGB
 #define GL_SRGB                                                      0x8C40
 #endif
