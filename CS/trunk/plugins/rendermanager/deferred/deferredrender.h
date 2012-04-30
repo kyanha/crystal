@@ -256,7 +256,6 @@ CS_PLUGIN_NAMESPACE_BEGIN(RMDeferred)
 
       // Fill the accumulation buffers
       gbuffer->AttachAccumulation(); // attach accumulation buffers
-      CS_ASSERT(graphics3D->ValidateRenderTargets ());
       {
 	graphics3D->SetClipper(clipper, CS_CLIPPER_TOPLEVEL);
 
