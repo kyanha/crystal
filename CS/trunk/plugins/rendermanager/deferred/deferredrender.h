@@ -167,6 +167,9 @@ CS_PLUGIN_NAMESPACE_BEGIN(RMDeferred)
       CS_ASSERT(cam);
       CS_ASSERT(clipper);
 
+      // ignore clipper for now - it just fails badly with differently sized targets
+      clipper = nullptr;
+
       // filter out zbuffer draw flags - they'll most certainly break the rendering
       context->drawFlags &= ~CSDRAW_CLEARZBUFFER;
 
