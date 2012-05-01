@@ -55,7 +55,8 @@ CS_PLUGIN_NAMESPACE_BEGIN(RMDeferred)
     struct ContextNodeExtraDataType 
       : public CS::RenderManager::RenderTreeLightingTraits::ContextNodeExtraDataType
     {
-      csRef<GBuffer> gbuffer;
+      CS::Math::Matrix4 gbufferFixup;
+      csVector4 texScale;
     };
     
     /// Any extra data per mesh in a single mesh 
