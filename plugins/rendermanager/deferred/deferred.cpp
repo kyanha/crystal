@@ -59,10 +59,9 @@ public:
   typedef StandardContextSetup<RenderTreeType, LayerConfigType> ThisType;
   typedef StandardPortalSetup<RenderTreeType, ThisType> PortalSetupType;
 
-  StandardContextSetup(RMDeferred *rmanager, const LayerConfigType &layerConfig, GBuffer* gbuffer)
+  StandardContextSetup(RMDeferred *rmanager, const LayerConfigType &layerConfig)
     : 
   rmanager(rmanager),
-  gbuffer(gbuffer), 
   layerConfig(layerConfig),
   recurseCount(0), 
   deferredLayer(rmanager->deferredLayer),
@@ -74,7 +73,6 @@ public:
   StandardContextSetup (const StandardContextSetup &other, const LayerConfigType &layerConfig)
     :
   rmanager(other.rmanager), 
-  gbuffer(other.gbuffer),
   layerConfig(layerConfig),
   recurseCount(other.recurseCount),
   deferredLayer(other.deferredLayer),
@@ -87,13 +85,10 @@ public:
     typename PortalSetupType::ContextSetupData &portalSetupData,
     bool recursePortals = true)
   {
-    // set custom gbuffer if there is one
-    context.gbuffer = gbuffer;
+    if (recurseCount > maxPortalRecurse) return;
 
     CS::RenderManager::RenderView* rview = context.renderView;
     iSector* sector = rview->GetThisSector ();
-
-    if (recurseCount > maxPortalRecurse) return;
     
     iShaderManager* shaderManager = rmanager->shaderManager;
 
@@ -105,6 +100,11 @@ public:
     // Do the culling
     iVisibilityCuller *culler = sector->GetVisibilityCuller ();
     Viscull<RenderTreeType> (context, rview, culler);
+
+    // setup gbuffer transform.
+    // @@@TODO: we should check all renderTargets here, not just rtaColor0
+    // @@@TODO: we shouldn't have to recalculate this for all contexts - it only changes if the attachment changes
+    SetupTarget(context.renderTargets[rtaColor0].texHandle, context.gbufferFixup, context.texScale);
 
     // Set up all portals
     if (recursePortals)
@@ -189,8 +189,47 @@ public:
 
 private:
 
+  void SetupTarget(iTextureHandle* target, CS::Math::Matrix4& m, csVector4& v)
+  {
+    // init to identity
+    m = CS::Math::Matrix4();
+    if (target)
+    {
+      int width, height;
+      rmanager->gbuffer.GetDimensions(width,height);
+      int targetW, targetH;
+      target->GetRendererDimensions (targetW, targetH);
+
+      if(width != targetW || height != targetH)
+      {
+	// calculate perspective fixup for gbuffer pass.
+	float scaleX = float(targetW)/float (width);
+	float scaleY = float(targetH)/float (height);
+	m = CS::Math::Matrix4 (
+	  scaleX, 0, 0, scaleX-1.0f,
+	  0, scaleY, 0, scaleY-1.0f,
+	  0, 0, 1, 0,
+	  0, 0, 0, 1);
+
+	// calculate texture scale xform for gbuffer reads
+        float scaleXTex = scaleX/2;
+        float scaleYTex = scaleY/2;
+        v = csVector4(scaleXTex, scaleYTex, scaleXTex, 1-scaleYTex);
+      }
+      else
+      {
+        // matching sizes and no flipped y.
+        v = csVector4(0.5,0.5,0.5,0.5);
+      }
+    }
+    else
+    {
+      // we're rendering to the screen, so we have flipped y during lookups.
+      v = csVector4(0.5,-0.5,0.5,0.5);
+    }
+  }
+
   RMDeferred *rmanager;
-  csRef<GBuffer> gbuffer;
 
   const LayerConfigType &layerConfig;
 
@@ -318,14 +357,6 @@ bool RMDeferred::Initialize(iObjectRegistry *registry)
   lightPersistent.Initialize (registry, treePersistent.debugPersist);
   lightRenderPersistent.Initialize (registry);
 
-  // Fix portal texture cache to only query textures that match the gbuffer dimensions.
-  portalPersistent.fixedTexCacheWidth = gbufferDescription.width;
-  portalPersistent.fixedTexCacheHeight = gbufferDescription.height;
-
-  // Make sure the texture cache creates matching texture buffers.
-  portalPersistent.texCache.SetFormat (accumFmt);
-  portalPersistent.texCache.SetFlags (CS_TEXTURE_2D | CS_TEXTURE_NOMIPMAPS | CS_TEXTURE_CLAMP | CS_TEXTURE_NPOTS);
-
   // initialize post-effects
   PostEffectsSupport::Initialize (registry, "RenderManager.Deferred");
 
@@ -400,15 +431,12 @@ bool RMDeferred::RenderView(iView *view, bool recursePortals)
   if (showGBuffer)
     ShowGBuffer (renderTree, &gbuffer);
 
-  CS::Math::Matrix4 perspectiveFixup;
-  postEffects.SetupView (view, perspectiveFixup);
-
   startContext->renderTargets[rtaColor0].texHandle = postEffects.GetScreenTarget ();
-  startContext->perspectiveFixup = perspectiveFixup;
+  postEffects.SetupView (view, startContext->perspectiveFixup);
 
   // Setup the main context
   {
-    ContextSetupType contextSetup (this, renderLayer, &gbuffer);
+    ContextSetupType contextSetup (this, renderLayer);
     ContextSetupType::PortalSetupType::ContextSetupData portalData (startContext);
 
     contextSetup (*startContext, portalData, recursePortals);
@@ -434,15 +462,13 @@ bool RMDeferred::RenderView(iView *view, bool recursePortals)
                                                  shaderManager,
                                                  stringSet,
                                                  lightRenderPersistent,
+						 gbuffer,
                                                  deferredLayer,
 						 lightingLayer,
                                                  zonlyLayer,
                                                  drawLightVolumes);
 
     ForEachContextReverse (renderTree, render);
-
-    // clear clipper
-    graphics3D->SetClipper (nullptr, CS_CLIPPER_TOPLEVEL);
   }
 
   postEffects.DrawPostEffects (renderTree);
@@ -468,6 +494,7 @@ bool RMDeferred::PrecacheView(iView *view)
   hdr.GetHDRPostEffects().ClearIntermediates();
 }
 
+//----------------------------------------------------------------------
 bool RMDeferred::HandleTarget (RenderTreeType& renderTree,
                                const TargetManagerType::TargetSettings& settings,
                                bool recursePortals, iGraphics3D* g3d)
@@ -488,23 +515,7 @@ bool RMDeferred::HandleTarget (RenderTreeType& renderTree,
   startContext->renderTargets[rtaColor0].subtexture = settings.targetSubTexture;
   startContext->drawFlags = settings.drawFlags;
 
-  settings.target->GetRendererDimensions(gbufferDescription.width, gbufferDescription.height);
-
-  csRef<GBuffer> buffer;
-  buffer.AttachNew(new GBuffer);
-
-  if (!buffer->Initialize (gbufferDescription, 
-                           g3d, 
-                           shaderManager->GetSVNameStringset (), 
-                           objRegistry))
-  {
-    return false;
-  }
-
-  if(showGBuffer)
-    ShowGBuffer(renderTree, buffer);
-
-  ContextSetupType contextSetup (this, renderLayer, buffer);
+  ContextSetupType contextSetup (this, renderLayer);
   ContextSetupType::PortalSetupType::ContextSetupData portalData (startContext);
 
   contextSetup (*startContext, portalData, recursePortals);
