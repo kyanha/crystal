@@ -203,8 +203,8 @@ private:
       if(width != targetW || height != targetH)
       {
 	// calculate perspective fixup for gbuffer pass.
-	float scaleX = float(targetW)/float (width);
-	float scaleY = float(targetH)/float (height);
+	float scaleX = csMin(float(targetW)/float (width),1.0f);
+	float scaleY = csMin(float(targetH)/float (height),1.0f);
 	m = CS::Math::Matrix4 (
 	  scaleX, 0, 0, scaleX-1.0f,
 	  0, scaleY, 0, scaleY-1.0f,
