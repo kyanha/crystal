@@ -167,9 +167,6 @@ CS_PLUGIN_NAMESPACE_BEGIN(RMDeferred)
       CS_ASSERT(cam);
       CS_ASSERT(clipper);
 
-      // ignore clipper for now - it just fails badly with differently sized targets
-      clipper = nullptr;
-
       // filter out zbuffer draw flags - they'll most certainly break the rendering
       context->drawFlags &= ~CSDRAW_CLEARZBUFFER;
 
@@ -251,6 +248,10 @@ CS_PLUGIN_NAMESPACE_BEGIN(RMDeferred)
 	    ForEachDeferredMeshNode (*ctx, meshRender);
 	  }
 	}
+
+
+	// clear clipper
+	graphics3D->SetClipper (nullptr, CS_CLIPPER_TOPLEVEL);
       }
 
       // Fill the accumulation buffers
@@ -285,6 +286,9 @@ CS_PLUGIN_NAMESPACE_BEGIN(RMDeferred)
           // other light types
           ForEachLight (*ctx, lightRender);
         }
+
+	// clear clipper
+	graphics3D->SetClipper (nullptr, CS_CLIPPER_TOPLEVEL);
       }
 
       // setup projection matrix for final pass
