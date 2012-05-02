@@ -224,9 +224,6 @@ CS_PLUGIN_NAMESPACE_BEGIN(RMDeferred)
 	    // for the depth buffer we want *all* meshes, not just deferred ones
             ForEachMeshNode (*ctx, meshRender);
           }
-
-	  // zbuffer is already filled, use pass 2 modes
-	  graphics3D->SetZMode (CS_ZBUF_MESH2);
         }
 
 	// deferred pass
@@ -337,9 +334,6 @@ CS_PLUGIN_NAMESPACE_BEGIN(RMDeferred)
 	{
 	  // for deferred shading the inaccurate gbuffer version is enough.
 	  lightRender.OutputDepth();
-
-	  // we have a depth buffer, use pass 2 modes
-	  graphics3D->SetZMode (CS_ZBUF_MESH2);
 	}
 	// early z pass - this one could be disabled if occluvis is used - but how would we know?
 	else if(zonlyLayer >= 0)
@@ -355,9 +349,6 @@ CS_PLUGIN_NAMESPACE_BEGIN(RMDeferred)
 	    // for the depth buffer we want *all* meshes, not just deferred ones
             ForEachMeshNode (*ctx, meshRender);
           }
-
-	  // we have a depth buffer, use pass 2 modes
-	  graphics3D->SetZMode (CS_ZBUF_MESH2);
         }
 
 	// deferred shading - output step
