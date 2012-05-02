@@ -160,12 +160,10 @@ CS_PLUGIN_NAMESPACE_BEGIN(RMDeferred)
       // obtain some variables we'll need
       CS::RenderManager::RenderView *rview = context->renderView;
       iCamera *cam = rview->GetCamera ();
-      iClipper2D *clipper = rview->GetClipper ();
 
       // seriously, we need those
       CS_ASSERT(rview);
       CS_ASSERT(cam);
-      CS_ASSERT(clipper);
 
       // filter out zbuffer draw flags - they'll most certainly break the rendering
       context->drawFlags &= ~CSDRAW_CLEARZBUFFER;
@@ -202,7 +200,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(RMDeferred)
       gbuffer.Attach ();
       {
 	// setup clipper
-	graphics3D->SetClipper (clipper, CS_CLIPPER_TOPLEVEL);
+	graphics3D->SetClipper (rview->GetClipper(), CS_CLIPPER_TOPLEVEL);
 
         int drawFlags = CSDRAW_3DGRAPHICS | context->drawFlags;
         drawFlags |= CSDRAW_CLEARSCREEN | CSDRAW_CLEARZBUFFER;
@@ -257,7 +255,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(RMDeferred)
       // Fill the accumulation buffers
       gbuffer.AttachAccumulation(); // attach accumulation buffers
       {
-	graphics3D->SetClipper(clipper, CS_CLIPPER_TOPLEVEL);
+	graphics3D->SetClipper(rview->GetClipper(), CS_CLIPPER_TOPLEVEL);
 
         int drawFlags = CSDRAW_3DGRAPHICS | context->drawFlags;
 	drawFlags |= CSDRAW_CLEARSCREEN;
@@ -304,7 +302,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(RMDeferred)
       }
       {
 	// setup clipper
-	graphics3D->SetClipper (clipper, CS_CLIPPER_TOPLEVEL);
+	graphics3D->SetClipper (rview->GetClipper(), CS_CLIPPER_TOPLEVEL);
 
         int drawFlags = CSDRAW_3DGRAPHICS | context->drawFlags;
 	drawFlags |= CSDRAW_CLEARSCREEN;
