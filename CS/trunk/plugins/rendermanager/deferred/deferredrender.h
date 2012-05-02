@@ -333,8 +333,16 @@ CS_PLUGIN_NAMESPACE_BEGIN(RMDeferred)
 	  }
 	}
 
+	if(lightingLayer < 0)
+	{
+	  // for deferred shading the inaccurate gbuffer version is enough.
+	  lightRender.OutputDepth();
+
+	  // we have a depth buffer, use pass 2 modes
+	  graphics3D->SetZMode (CS_ZBUF_MESH2);
+	}
 	// early z pass - this one could be disabled if occluvis is used - but how would we know?
-	if(zonlyLayer >= 0)
+	else if(zonlyLayer >= 0)
         {
           meshRender.SetLayer (zonlyLayer);
 
@@ -351,14 +359,6 @@ CS_PLUGIN_NAMESPACE_BEGIN(RMDeferred)
 	  // we have a depth buffer, use pass 2 modes
 	  graphics3D->SetZMode (CS_ZBUF_MESH2);
         }
-	else if(lightingLayer < 0)
-	{
-	  // for deferred shading the inaccurate gbuffer version is enough.
-	  lightRender.OutputDepth();
-
-	  // we have a depth buffer, use pass 2 modes
-	  graphics3D->SetZMode (CS_ZBUF_MESH2);
-	}
 
 	// deferred shading - output step
 	if(lightingLayer < 0)
