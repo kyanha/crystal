@@ -244,8 +244,7 @@ void csGraphics2D::SetClipRect (int xmin, int ymin, int xmax, int ymax)
   ClipY1 = ymin; ClipY2 = ymax;
   
   if (fontCache)
-    fontCache->SetClipRect (vpLeft+ClipX1, vpTop+ClipY1,
-      vpLeft+ClipX2, vpTop+ClipY2);
+    fontCache->SetClipRect (ClipX1, ClipY1, ClipX2, ClipY2);
 }
 
 void csGraphics2D::GetClipRect (int &xmin, int &ymin, int &xmax, int &ymax)
@@ -335,7 +334,7 @@ void csGraphics2D::Write (iFont *font, int x, int y, int fg, int bg,
 			  const wchar_t*text, uint flags) 
 { 
   if (!text || !*text) return;
-  fontCache->WriteString (font, x, vpTop+y, fg, bg, text, true, flags);
+  fontCache->WriteString (font, x, y, fg, bg, text, true, flags);
 }
 
 bool csGraphics2D::PerformExtensionV (char const* command, va_list args)
