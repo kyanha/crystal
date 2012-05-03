@@ -1522,6 +1522,12 @@ bool csGLGraphics3D::BeginDraw (int drawflags)
   for (i = numImageUnits; i-- > 0;)
     DeactivateTexture (i);
 
+  /* If render attachments are set, but no depth attachment is given
+   * (ie default depth is used), implicitly clear the depth buffer. */
+  if ((currentAttachments != 0)
+      && ((currentAttachments & (1 << rtaDepth)) == 0))
+    drawflags |= CSDRAW_CLEARZBUFFER;
+
   // if 2D graphics is not locked, lock it
   if ((drawflags & (CSDRAW_2DGRAPHICS | CSDRAW_3DGRAPHICS))
    != (current_drawflags & (CSDRAW_2DGRAPHICS | CSDRAW_3DGRAPHICS))
