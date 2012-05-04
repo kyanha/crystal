@@ -255,7 +255,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(RMDeferred)
 	graphics3D->SetClipper(rview->GetClipper(), CS_CLIPPER_TOPLEVEL);
 
         int drawFlags = CSDRAW_3DGRAPHICS | context->drawFlags;
-	drawFlags |= CSDRAW_CLEARSCREEN;
+	drawFlags |= CSDRAW_CLEARSCREEN | CSDRAW_CLEARZBUFFER;
 
 	CS::RenderManager::BeginFinishDrawScope bd (graphics3D, drawFlags);
 
@@ -302,7 +302,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(RMDeferred)
 	graphics3D->SetClipper (rview->GetClipper(), CS_CLIPPER_TOPLEVEL);
 
         int drawFlags = CSDRAW_3DGRAPHICS | context->drawFlags;
-	drawFlags |= CSDRAW_CLEARSCREEN;
+	drawFlags |= CSDRAW_CLEARSCREEN | CSDRAW_CLEARZBUFFER;
 
         CS::RenderManager::BeginFinishDrawScope bd (graphics3D, drawFlags);
 
