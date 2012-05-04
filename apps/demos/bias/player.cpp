@@ -38,7 +38,7 @@ Player::Player(iObjectRegistry* obj_reg) : Entity(obj_reg)
   collider_actor.InitializeColliders (view->GetCamera (), legs, body, shift);
   collider_actor.SetCamera (view->GetCamera (), true);
 
-  weapon->mesh = LoadMesh(object_reg, "crossbow", "/data/bias/models/crossbow/crossbow");
+  weapon->mesh = LoadMesh(object_reg, "crossbow", "/biasmodels/crossbow/crossbow");
   if (weapon->mesh)
   {
     weapon->attackAnimation = "shoot";
