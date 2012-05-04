@@ -165,9 +165,9 @@ void csCoverageTile::PerformOperations ()
       CS_ASSERT (op.y1 < NUM_TILEROW);
       CS_ASSERT (op.y2 >= 0);
       CS_ASSERT (op.y2 < NUM_TILEROW);
-      int x1, y1, x2, y2;
-      if (op.y1 < op.y2) { x1 = op.x1; y1 = op.y1; x2 = op.x2; y2 = op.y2; }
-      else { x1 = op.x2; y1 = op.y2; x2 = op.x1; y2 = op.y1; }
+      int x1, y1, y2;
+      if (op.y1 < op.y2) { x1 = op.x1; y1 = op.y1; y2 = op.y2; }
+      else { x1 = op.x2; y1 = op.y2; y2 = op.y1; }
       int dy = y2-y1;
       int x = x1;
       int y = y1;

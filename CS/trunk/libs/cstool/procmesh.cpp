@@ -74,11 +74,6 @@ void csMeshOnTexture::ScaleCamera (iMeshWrapper* mesh, int txtw, int txth)
 
   csVector3 cam_pos = mesh_center;
   cam_pos.z -= maxz;
-  for (i = 0 ; i < 8 ; i++)
-  {
-    csVector3 corner = mesh_box.GetCorner (i) - cam_pos;
-    csVector2 p = view->GetCamera()->Perspective (corner);
-  }
 
   view->GetCamera()->GetTransform ().Identity ();
   view->GetCamera()->GetTransform ().SetOrigin (cam_pos);

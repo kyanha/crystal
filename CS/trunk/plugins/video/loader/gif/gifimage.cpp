@@ -246,7 +246,6 @@ int ImageGifFile::decode_gif (uint8* iBuffer, size_t iSize, int* Prefix,
   GIFStream gptr (iBuffer,iSize);
   GIFPalette palette;
   uint8 ch;
-  int is_transparent = 0;
   uint8 transp_index = 0;
 
   if (strncmp( (char*)iBuffer, "GIF87a", 6) && strncmp( (char*)iBuffer, "GIF89a", 6))
@@ -280,8 +279,6 @@ int ImageGifFile::decode_gif (uint8* iBuffer, size_t iSize, int* Prefix,
 	ch = gptr.nextbyte();
 	if (*gptr & 0x1)
 	{
-	  // image is transparent
-	  is_transparent = 1;
 	  // get transparent color index - (ch==4), so the 3'th byte
 	  transp_index = gptr[3];
 	  csRGBcolor tcol = palette(transp_index);

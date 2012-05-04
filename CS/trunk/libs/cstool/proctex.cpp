@@ -86,8 +86,7 @@ public:
 bool csProcTexEventHandler::HandleEvent (iEvent& event)
 {
   csRef<iVirtualClock> vc (csQueryRegistry<iVirtualClock> (object_reg));
-  csTicks elapsed_time, current_time;
-  elapsed_time = vc->GetElapsedTicks ();
+  csTicks current_time;
   current_time = vc->GetCurrentTicks ();
   csSet<csPtrKey<csProcTexture> > keep_tex;
   (void) event; // unused except for this assert so silence the warning

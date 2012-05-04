@@ -373,7 +373,7 @@ namespace CS
         transformation.SetO2TTranslation(csVector3(transX, transY, transZ));
 
         // print out the matrix to be sure
-        csMatrix3 mat2 = transformation.GetO2T();
+        //csMatrix3 mat2 = transformation.GetO2T();
         //csPrintf("crystalspace.Triangulate3D: %f %f %f\n", mat2.Row1()[0], mat2.Row1()[1], mat2.Row1()[2]);
         //csPrintf("crystalspace.Triangulate3D: %f %f %f\n", mat2.Row2()[0], mat2.Row2()[1], mat2.Row2()[2]);
         //csPrintf("crystalspace.Triangulate3D: %f %f %f\n", mat2.Row3()[0], mat2.Row3()[1], mat2.Row3()[2]);

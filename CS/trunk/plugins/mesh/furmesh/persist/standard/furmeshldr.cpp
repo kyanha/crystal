@@ -110,8 +110,8 @@ csPtr<iBase> FurMeshFactoryLoader::Parse (iDocumentNode* node,
   {
     csRef<iDocumentNode> child = it->Next ();
     if (child->GetType () != CS_NODE_ELEMENT) continue;
-    const char* value = child->GetValue ();
-    csStringID id = xmltokens.Request (value);
+    //const char* value = child->GetValue ();
+    //csStringID id = xmltokens.Request (value);
 
 //     switch (id)
 //     {
