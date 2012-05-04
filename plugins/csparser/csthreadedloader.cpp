@@ -4061,6 +4061,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
             const char* fname = child->GetAttributeValue ("file");
             if (fname) filename = fname;
           }
+	  // @@@ TODO: use mode3d
           int mode3d = -1;
           csRef<iDocumentAttribute> at = child->GetAttribute ("mode3d");
           if (at)

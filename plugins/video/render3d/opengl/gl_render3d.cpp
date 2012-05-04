@@ -4332,6 +4332,7 @@ void csGLGraphics3D::DrawMeshBasic(const csCoreRenderMesh* mymesh,
   }
 
   // Based on the kind of clipping we need we set or clip mask.
+  // @@@ TODO: use clip values
   int clip_mask, clip_value;
   if (clipportal_floating)
   {
