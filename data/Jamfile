@@ -24,27 +24,45 @@ FileListEntriesData $(DEMO_DATA) : : data-demo ;
 FileListEntriesData $(RUNTIME_DATA) : : data-runtime ;
 
 maps =
+  colladatest
+  csceguiconftest
+  deferreddemo
+  island
   isomap
+  jane
+  oceantest
   parallaxtest
   particles
   partsys
+  projectortest
+  r3dsmtest
   r3dtest
+  space
+  scaletest
+  startme
   stenciltest
   terrain
-  terrainf ;
+  terraina
+  terrainf
+  terraini ;
 for map in $(maps)
 {
   local files =
-    [ Wildcard $(map) : *.lib *.jpg *.png *.map *.tga *.dds *.spr world ] ;
+    [ Wildcard $(map) : *.cslib *.lib *.dae *.layout *.xsd *.looknfeel *.jpg *.png *.map *.tga *.dds *.spr *.zip *.txt world ] ;
   local lmfiles =
     [ Wildcard $(map) lightmaps : *.png ] ;
+  local mffiles =
+    [ Wildcard $(map) factories : *.cslib *.meshfact ] ;
   InstallData $(files) : data maps $(map) ;
   InstallData $(lmfiles) : data maps $(map) lightmaps ;
+  InstallData $(mffiles) : data maps $(map) factories ;
 
   FileListEntriesData $(files) : $(map) : data-demo-maps ;
   FileListEntriesData $(lmfiles) : $(map) lightmaps : data-demo-maps ;
+  FileListEntriesData $(mffiles) : $(map) factories : data-demo-maps ;
 }
 
+SubInclude TOP data bias ;
 SubInclude TOP data castle ;
 SubInclude TOP data castle-staticlit ;
 SubInclude TOP data cegui ;
@@ -55,12 +73,16 @@ SubInclude TOP data cube ;
 SubInclude TOP data flarge ;
 SubInclude TOP data frankie ;
 SubInclude TOP data hairtest ;
-SubInclude TOP data sky ;
 SubInclude TOP data krystal ;
+SubInclude TOP data lodtest ;
 SubInclude TOP data posteffects ;
 SubInclude TOP data renderlayers ;
 SubInclude TOP data shader ;
 SubInclude TOP data shader-old ;
 SubInclude TOP data shader-snippets ;
+SubInclude TOP data sintel ;
+SubInclude TOP data sky ;
+SubInclude TOP data smoketest ;
 SubInclude TOP data varia ;
 SubInclude TOP data viewmesh ;
+SubInclude TOP data wxtest ;
