@@ -528,7 +528,6 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
     csRef<iTextureWrapper> texh = 0;
     csColor col;
 
-    bool shaders_mentioned = false;	// If true there were shaders.
     csArray<csStringID> shadertypes;
     csArray<iShader*> shaders;
     csRefArray<csShaderVariable> shadervars;
@@ -571,7 +570,6 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
         break;
       case XMLTOKEN_SHADER:
         {
-          shaders_mentioned = true;
           csRef<iShaderManager> shaderMgr = 
             csQueryRegistry<iShaderManager> (object_reg);
           if (!shaderMgr)

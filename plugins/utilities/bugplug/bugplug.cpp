@@ -2556,20 +2556,12 @@ void csBugPlug::Dump (int indent, const csPlane3& p)
 
 void csBugPlug::Dump (int indent, const csBox2& b)
 {
-  char ind[255];
-  int i;
-  for (i = 0 ; i < indent ; i++) ind[i] = ' ';
-  ind[i] = 0;
   Report (CS_REPORTER_SEVERITY_DEBUG, "%*s(%2.2f,%2.2f)-(%2.2f,%2.2f)", indent, "",
   	b.MinX (), b.MinY (), b.MaxX (), b.MaxY ());
 }
 
 void csBugPlug::Dump (int indent, const csBox3& b)
 {
-  char ind[255];
-  int i;
-  for (i = 0 ; i < indent ; i++) ind[i] = ' ';
-  ind[i] = 0;
   Report (CS_REPORTER_SEVERITY_DEBUG, "%*s(%2.2f,%2.2f,%2.2f)-(%2.2f,%2.2f,%2.2f)",
   	indent, "", b.MinX (), b.MinY (), b.MinZ (), b.MaxX (), b.MaxY (), b.MaxZ ());
 }

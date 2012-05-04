@@ -271,7 +271,7 @@ csPtr<iBase> csTerrainObjectLoader::Parse (iDocumentNode* node,
 {
   csRef<iMeshObject> mesh;
   csRef<iTerrainObjectState> state;
-  bool palette_set = false;
+  //bool palette_set = false;
   bool material_map_set = false;
 
   csRef<iDocumentNodeIterator> it = node->GetNodes ();
@@ -346,7 +346,7 @@ csPtr<iBase> csTerrainObjectLoader::Parse (iDocumentNode* node,
         }
 	CHECK_MESH (state);
         state->SetMaterialPalette (pal);
-	palette_set = true;
+	//palette_set = true;
         break;
       }
       case XMLTOKEN_MATERIALMAP:

@@ -674,7 +674,6 @@ void csGLFontCache::WriteString (iFont *font, int pen_x, int pen_y,
   float x2 = x1, y1 = 0, y2 = 0;
   int advance = 0;
   bool firstchar = true;
-  float oldH = 0.0f;
 
   TextJob* job = 0;
 
@@ -854,7 +853,6 @@ void csGLFontCache::WriteString (iFont *font, int pen_x, int pen_y,
     }
 
     x1 = x_left + cacheData->glyphMetrics.advance;
-    oldH = y2 - y1;
   }
 
   // "Trailing" background

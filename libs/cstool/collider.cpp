@@ -24,19 +24,18 @@
 #include "csgeom/quaternion.h"
 #include "csgeom/transfrm.h"
 #include "csgeom/trimesh.h"
+#include "cstool/collider.h"
 
-#include "cstool/collider.h"
-#include "iengine/collection.h"
-#include "cstool/collider.h"
 #include "iengine/camera.h"
+#include "iengine/collection.h"
 #include "iengine/engine.h"
 #include "iengine/mesh.h"
 #include "iengine/movable.h"
 #include "iengine/portal.h"
 #include "iengine/portalcontainer.h"
+#include "iengine/scenenode.h"
 #include "iengine/sector.h"
 #include "iengine/viscull.h"
-#include "iengine/scenenode.h"
 
 #include "imesh/objmodel.h"
 #include "imesh/object.h"
@@ -1208,9 +1207,9 @@ bool csColliderActor::AdjustForCollisions (
         (line[0].y > newpos.y + bottomSize.y + topSize.y && line[1].y > newpos.y + bottomSize.y + topSize.y))
       continue;
 
-    csVector3 unit = normal / norm;
-
+    //csVector3 unit = normal / norm;
     // printf("final check hit y %g %g %g", unit.y, line[0].y, line[1].y);
+
     hits++;
     break;
   }
@@ -1260,9 +1259,8 @@ bool csColliderActor::AdjustForCollisions (
           (line[0].y > newpos.y + bottomSize.y + topSize.y && line[1].y > newpos.y + bottomSize.y + topSize.y))
         continue;
 
-      csVector3 unit = normal / norm;
-
 #ifdef COLLDEBUG
+      csVector3 unit = normal / norm;
       printf("final check hit y %g %g %g", unit.y, line[0].y, line[1].y);
 #endif
       hits++;

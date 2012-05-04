@@ -479,12 +479,12 @@ void csGenericRenderStep::Perform (iRenderView* rview, iSector* sector,
   ShaderTicketHelper ticketHelper (stack, shadervars, shadervars.GetSize ()-1);
   const csReversibleTransform& camt = rview->GetCamera ()->GetTransform ();
 
-  csLightType light_type;
+  //csLightType light_type;
   float cutoff_distance = 0;
   csVector3 light_center;
   if (light)
   {
-    light_type = light->GetType ();
+    //light_type = light->GetType ();
     cutoff_distance = light->GetCutoffDistance ();
     light_center = light->GetMovable ()->GetFullPosition ();
   }

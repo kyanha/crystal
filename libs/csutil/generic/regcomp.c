@@ -1401,8 +1401,6 @@ calc_eclosure_iter (new_set, dfa, node, root)
      Since they must inherit the constraints.  */
   if (constraint && !dfa->nodes[dfa->edests[node].elems[0]].duplicated)
     {
-      int org_node, cur_node;
-      org_node = cur_node = node;
       err = duplicate_node_closure (dfa, node, node, node, constraint);
       if (BE (err != REG_NOERROR, 0))
 	return err;

@@ -83,8 +83,8 @@ csPtr<iBase> csSimpleFormerLoader::Parse (iDocumentNode* node,
         scfQueryInterface<iSimpleFormerState> (former);
 
   uint alphamapcount = 0;
-  bool material_map_set = false;
-  bool one_material_map_used = false;
+  //bool material_map_set = false;
+  //bool one_material_map_used = false;
 
   csRef<iDocumentNodeIterator> it = node->GetNodes ();
   while (it->HasNext ())
@@ -245,8 +245,8 @@ csPtr<iBase> csSimpleFormerLoader::Parse (iDocumentNode* node,
           return 0;
         }
 */
-        material_map_set = true;
-        one_material_map_used = true;
+        //material_map_set = true;
+        //one_material_map_used = true;
         const char* imagefile = child->GetAttributeValue ("image");
         const char *arrayfile = child->GetAttributeValue ("raw");
         int width = child->GetAttributeValueAsInt ("width");

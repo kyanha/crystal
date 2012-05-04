@@ -108,14 +108,15 @@ void SoundCyclicBuffer::GetDataPointersFromPosition(size_t *position_value,
 						    size_t *buffer2_length)
 {
   uint8 *read_ptr, *end_ptr;
-  size_t filled_length, copy_length, available_length;
+  size_t copy_length, available_length;
 
   if (*position_value < start_value)
     *position_value=start_value; /* Cannot read data we don't have.  
                                   * This likely means a source isn't keeping 
 				  * up */
 
-  filled_length=end_value-start_value;
+  //size_t filled_length;
+  //filled_length=end_value-start_value;
   end_ptr=(buffer_base+length);
   available_length=end_value - *position_value;
 

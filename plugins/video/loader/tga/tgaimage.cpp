@@ -234,7 +234,7 @@ bool ImageTgaFile::TgaLoader::get_map_entry (uint8*& iBuffer,
 					     bool alpha)
 {
   uint8 bytes[4];
-  uint l;
+  //uint l;
 
   /* Read appropriate number of bytes, break into rgb & put in map. */
   switch (Size)
@@ -247,7 +247,7 @@ bool ImageTgaFile::TgaLoader::get_map_entry (uint8*& iBuffer,
     case 16:				/* 5 bits each of red green and blue. */
     case 15:				/* Watch for byte order. */
       if (!GetBytes (iBuffer, bytes, 2)) return false;
-      l = ((unsigned int) bytes[1] << 8) + bytes[0];
+      //l = ((unsigned int) bytes[1] << 8) + bytes[0];
       Value->red = (bytes[1] & 0x7C) << 1;
       Value->red |= Value->red >> 5;
       Value->green = ((bytes[1] & 0x03) << 6) | ((bytes[0] & 0xE0) >> 2);
