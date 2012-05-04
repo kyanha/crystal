@@ -493,6 +493,12 @@ bool Demo::CreateRoom ()
 
   csPrintf ("Populating level with monsters...\n");
 
+  // Mount the data path of the models
+  bool suc = vfs->Mount("/biasmodels/", "$@data$/bias$/models.zip");
+  if (!suc)
+    return ReportError ("Error: could not mount VFS path %s",
+			CS::Quote::Single ("$@data$/bias$/models.zip"));
+
   // Create all monsters
   for (size_t i = 0; i < monsterList.GetSize(); i++)
   {
@@ -505,7 +511,7 @@ bool Demo::CreateRoom ()
   }
 
   // Pre-load the 'gibs' mesh
-  LoadMesh(GetObjectRegistry (), "gibs", "/data/bias/models/iceblocks/gibs");
+  LoadMesh(GetObjectRegistry (), "gibs", "/biasmodels/iceblocks/gibs");
 
   // Initialize the mouse position
   int FRAME_HEIGHT = g3d->GetDriver2D()->GetHeight();

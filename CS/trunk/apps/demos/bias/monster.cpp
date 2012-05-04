@@ -62,7 +62,7 @@ bool Monster::Initialize (const char* name, iSector* sector, csTransform& transf
   size_t dotpos = filename.find_first_of(".");
   filename = filename.substr(0, dotpos);
 
-  std::string path = "/data/bias/models/";
+  std::string path = "/biasmodels/";
   path += filename;
   path += "/";
   path += filename;
@@ -103,7 +103,7 @@ bool Monster::Initialize (const char* name, iSector* sector, csTransform& transf
   if (factoryName == "knight")
   {
     // Create the mesh
-    sword = LoadMesh (object_reg, "sword", "/data/bias/models/knight/factories/sword");
+    sword = LoadMesh (object_reg, "sword", "/biasmodels/knight/factories/sword");
     if (!sword)
     {
       eventQueue->RemoveListener (this);
@@ -275,7 +275,7 @@ void Monster::Explode()
     engine->WantToDie(sword);
 
   // Change the mesh.
-  mesh = LoadMesh(object_reg, "gibs", "/data/bias/models/iceblocks/gibs");
+  mesh = LoadMesh(object_reg, "gibs", "/biasmodels/iceblocks/gibs");
   if (!mesh) return;
   mesh->GetMovable()->SetPosition(sector, pos);
   mesh->GetMovable()->UpdateMove();
