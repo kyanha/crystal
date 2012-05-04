@@ -351,6 +351,8 @@ namespace CS
           LightFrustums* lightFrustumsPtr =
             lightFrustumsHash.GetElementPointer (
             viewSetup.rview->GetCamera());
+	  if (!lightFrustumsPtr)
+	    return;
 
           LightFrustums& lightFrustums = *lightFrustumsPtr;
 
