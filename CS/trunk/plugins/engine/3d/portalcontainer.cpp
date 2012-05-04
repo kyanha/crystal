@@ -770,6 +770,7 @@ void csPortalContainer::DrawOnePortal (
   // If we have fog or the portal is z-filled we need to keep the
   // camera plane because recursive rendering may cause it to change.
   csPlane3 keep_plane = camera_plane;;
+  // @@@ TODO: use keep_camera_z
   float keep_camera_z = 0;	// Also keep z-coordinate of vertex 0.
   if (is_this_fog || po->flags.Check (CS_PORTAL_ZFILL))
   {
