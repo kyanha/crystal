@@ -168,7 +168,7 @@
     </block>
 
     <block location="glsl:vertexMain">
-      mat4 complete_objectToWorld = instancingTransforms * objectToWorld;
+      mat4 complete_objectToWorld = objectToWorld * instancingTransforms;
       position_world = complete_objectToWorld * Hposition;
       vec4 wind_factor = vec4(0.0, 0.0, Hposition.x*sin((position_world.x*2.0+position_world.y)+standard_time*4.0)/20.0, 0.0);
       vec4 offset = instancingTransforms * vec4(0, 0, 0, 1);
@@ -181,9 +181,10 @@
 	 global variable for it. Set that */
       SetGlobalObjectToWorld (complete_objectToWorld);
       // instanced params are only available in VPs, forward to FP manually
-      o2w = mat3x4(complete_objectToWorld[0],
-	complete_objectToWorld[1], 
-	complete_objectToWorld[2]);
+      o2w = mat4x3(complete_objectToWorld[0].xyz,
+	complete_objectToWorld[1].xyz, 
+	complete_objectToWorld[2].xyz,
+        complete_objectToWorld[3].xyz);
     </block>
     
     <block location="cg:fragmentMain">
@@ -205,7 +206,10 @@
       /* The objectToWorld transform is needed in other places, so there is a 
 	 global variable for it. Set that */
       SetGlobalObjectToWorld (
-	mat4 (o2w[0], o2w[1], o2w[2], vec4 (0.0, 0.0, 0.0, 1.0)));
+	mat4 (vec4 (o2w[0], 0.0),
+             vec4 (o2w[1], 0.0),
+             vec4 (o2w[2], 0.0),
+             vec4 (o2w[3], 1.0)));
     </block>
     
     <output name="position" type="position4_screen" />
