@@ -675,12 +675,6 @@ csWaterMeshObjectFactory::csWaterMeshObjectFactory (
 {
   csWaterMeshObjectFactory::object_reg = object_reg;
 
-  csStringID base_mesh_id = GetBaseID (object_reg);
-  csRef<csTriangleMeshPointer> trimesh_base;
-  trimesh_base.AttachNew (new csTriangleMeshPointer (
-  verts.GetArray(), numVerts, tris.GetArray(), numTris));
-  SetTriangleData (base_mesh_id, trimesh_base);
-
   logparent = 0;
   water_type = pParent;
   initialized = false;
@@ -718,6 +712,14 @@ csWaterMeshObjectFactory::csWaterMeshObjectFactory (
 
   waterAlpha = 0.3f;
   murkChanged = true;
+
+/*
+  csStringID base_mesh_id = GetBaseID (object_reg);
+  csRef<csTriangleMeshPointer> trimesh_base;
+  trimesh_base.AttachNew (new csTriangleMeshPointer (
+  verts.GetArray(), numVerts, tris.GetArray(), numTris));
+  SetTriangleData (base_mesh_id, trimesh_base);
+*/
 }
 
 csWaterMeshObjectFactory::~csWaterMeshObjectFactory ()
