@@ -225,12 +225,12 @@ namespace RenderManager
 	{
 	  csPlane3 plane;
 	  lastPortal->ComputeCameraPlane(rview->GetCamera()->GetTransform(), plane);
-	  fogPlane = plane.norm;
+	  fogPlane = -plane.norm;
 	  fogPlane.w = plane.DD;
 	}
 	else
 	{
-	  fogPlane = csVector4(0.0,0.0,1.0,0.0);
+	  fogPlane = csVector4(0.0,0.0,-1.0,0.0);
 	}
 	context.svFogplane->SetValue (fogPlane);
 	
