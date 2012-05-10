@@ -6,10 +6,10 @@ bl_info = {
     "author": "The Crystal Space team",
     "version": (2, 1),
     "blender": (2, 5, 9),
-    "api": 36079,   # TODO
+    "api": 39685,
     "location": "The main panel is in 'Properties > Render'",
     "warning": "",
-    "wiki_url": "http://www.crystalspace3d.org/docs/online/manual/Blender.html",  # TODO
+    "wiki_url": "http://www.crystalspace3d.org/docs/online/manual/Blender.html",
     "tracker_url": "http://crystalspace3d.org/trac/CS/report",
     "category": "Import-Export"}
 
