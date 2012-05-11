@@ -107,22 +107,24 @@ def WriteCSGroup(self, func, depth=0, use_imposter=False, dontClose=False):
           matrix = matrix * m
         # Get a deep copy of this object, transformed to its world position
         obCpy = ob.GetTransformedCopy(matrix)
+      # Tessellate the copied object
+      obCpy.data.update_faces()
       meshData.append(obCpy)
       # Generate mapping buffers
-      mapVert, mapBuf, norBuf = ob.data.GetCSMappingBuffers()
+      mapVert, mapBuf, norBuf = obCpy.data.GetCSMappingBuffers()
       numCSVertices = len(mapVert)
-      if B2CS.properties.enableDoublesided and ob.data.show_double_sided:
+      if B2CS.properties.enableDoublesided and obCpy.data.show_double_sided:
         numCSVertices = 2*len(mapVert)
       # Generate submeshes
-      subMeshess.append(ob.data.GetSubMeshes(ob.name,mapBuf,indexV))
+      subMeshess.append(obCpy.data.GetSubMeshes(obCpy.name,mapBuf,indexV))
       mappingBuffers.append(mapBuf)
       mappingVertices.append(mapVert)
       mappingNormals.append(norBuf)
       indexV += numCSVertices
 
       warning = "(WARNING: double sided mesh implies duplication of its vertices)" \
-          if B2CS.properties.enableDoublesided and ob.data.show_double_sided else ""
-      print('number of CS vertices for mesh "%s" = %s  %s'%(ob.name,numCSVertices,warning))
+          if B2CS.properties.enableDoublesided and obCpy.data.show_double_sided else ""
+      print('number of CS vertices for mesh "%s" = %s  %s'%(obCpy.name,numCSVertices,warning))
 
   # Export the group of objects as a general mesh factory
   func(' '*depth + '<meshfact name=\"%s\">'%(self.uname))

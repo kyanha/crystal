@@ -139,8 +139,8 @@ class RenderBuffers:
       doubleSided = B2CS.properties.enableDoublesided and ob.data.show_double_sided
 
       # Get the active UV texture and vertex colors
-      tface = ob.data.uv_textures.active.data if ob.data.uv_textures.active else None
-      cface = ob.data.vertex_colors.active.data if ob.data.vertex_colors.active else None
+      tface = ob.data.all_uv_textures.active.data if ob.data.all_uv_textures.active else None
+      cface = ob.data.all_vertex_colors.active.data if ob.data.all_vertex_colors.active else None
 
       # Get object's scale
       if self.scales:

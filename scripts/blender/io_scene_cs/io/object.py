@@ -177,14 +177,16 @@ class Hierarchy:
               obCpy = ob.GetTransformedCopy(ob.relative_matrix)
             else:
               obCpy = ob.GetTransformedCopy()
+            # Tessellate the copied mesh object
+            obCpy.data.update_faces()
             meshData.append(obCpy)
             # Generate mapping buffers
-            mapVert, mapBuf, norBuf = ob.data.GetCSMappingBuffers()
+            mapVert, mapBuf, norBuf = obCpy.data.GetCSMappingBuffers()
             numCSVertices = len(mapVert)
-            if B2CS.properties.enableDoublesided and ob.data.show_double_sided:
+            if B2CS.properties.enableDoublesided and obCpy.data.show_double_sided:
               numCSVertices = 2*len(mapVert)
             # Generate submeshes
-            subMeshess.append(ob.data.GetSubMeshes(ob.name,mapBuf,indexV))
+            subMeshess.append(obCpy.data.GetSubMeshes(obCpy.name,mapBuf,indexV))
             mappingBuffers.append(mapBuf)
             mappingVertices.append(mapVert)
             mappingNormals.append(norBuf)
@@ -192,8 +194,8 @@ class Hierarchy:
               indexV += numCSVertices
 
             warning = "(WARNING: double sided mesh implies duplication of its vertices)" \
-                if B2CS.properties.enableDoublesided and ob.data.show_double_sided else ""
-            print('number of CS vertices for mesh "%s" = %s  %s'%(ob.name,numCSVertices,warning))
+                if B2CS.properties.enableDoublesided and obCpy.data.show_double_sided else ""
+            print('number of CS vertices for mesh "%s" = %s  %s'%(obCpy.name,numCSVertices,warning))
 
         total += numCSVertices + Gets(children, indexV)
       return total
@@ -378,7 +380,7 @@ def ObjectAsCS(self, func, depth=0, **kwargs):
     name = kwargs['name']+':'+name
 
   if self.type == 'MESH':
-    if len(self.data.vertices)!=0 and len(self.data.faces)!=0:
+    if len(self.data.vertices)!=0 and len(self.data.all_faces)!=0:
       func(' '*depth +'<meshref name="%s_object">'%(self.name))
       func(' '*depth +'  <factory>%s</factory>'%(self.name))
       if self.parent and self.parent_type == 'BONE':
@@ -463,7 +465,7 @@ def IsExportable(self):
       return False
 
     if not IsChildOfExportedFactory(self) and not self.data.portal \
-          and len(self.data.vertices)!=0 and len(self.data.faces)!=0:
+          and len(self.data.vertices)!=0 and len(self.data.all_faces)!=0:
       return True
     return False      
 
@@ -597,7 +599,7 @@ def GetMaterialDeps(self):
           if facedata.image and facedata.image.uname not in dependencies['T'].keys():
             dependencies['T'][facedata.image.uname] = facedata.image
             self.data.uv_texture = facedata.image.uname
-            material = self.data.GetMaterial(self.data.faces[index].material_index)
+            material = self.data.GetMaterial(self.data.all_faces[index].material_index)
             if material:
               material.uv_texture = facedata.image.uname
   return dependencies

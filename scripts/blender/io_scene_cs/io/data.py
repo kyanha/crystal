@@ -39,9 +39,9 @@ def GetSubMeshesRaw(self, name, indexV, indexGroups, mappingBuffer = []):
   # Starting index of the cs vertices composing this submesh
   firstIndex = indexV
   # Active UV texture
-  tface = self.uv_textures.active.data if self.uv_textures.active else None
+  tface = self.all_uv_textures.active.data if self.all_uv_textures.active else None
   # For each face composing this mesh
-  for index, face in enumerate(self.faces):
+  for index, face in enumerate(self.all_faces):
     im = tface[index].image if tface else None
     # Identify the submesh by the mesh name, material and texture
     triplet = (name, self.GetMaterial(face.material_index), im)
@@ -142,10 +142,10 @@ def GetCSMappingBuffers (self):
   """
 
   # Determine the UV texture: we only use the active UV texture or the first one
-  if self.uv_textures.active:
-    tface = self.uv_textures.active.data
-  elif len(self.uv_textures) != 0:
-    tface = self.uv_textures[0].data
+  if self.all_uv_textures.active:
+    tface = self.all_uv_textures.active.data
+  elif len(self.all_uv_textures) != 0:
+    tface = self.all_uv_textures[0].data
   else:
     print("WARNING: mesh",self.name,"has no UV texture")
     tface = None
@@ -160,7 +160,7 @@ def GetCSMappingBuffers (self):
     mapBuf.append([])
 
   # For all faces of the mesh
-  for indexF, face in enumerate(self.faces):
+  for indexF, face in enumerate(self.all_faces):
     faceNormal = face.normal
     faceVerts = set(face.vertices)
 
@@ -178,7 +178,7 @@ def GetCSMappingBuffers (self):
         forceSmooth = True
         smooth = True
       if not smooth and face.use_smooth and self.use_auto_smooth:
-        for indexf, f in enumerate(self.faces):
+        for indexf, f in enumerate(self.all_faces):
           if face!=f and f.use_smooth and len(faceVerts.intersection(set(f.vertices)))!=0:
             # All set-smoothed faces with angles less than the specified 
             # auto-smooth angle have 'smooth' normals, i.e. use vertex normals
@@ -212,7 +212,7 @@ def GetCSMappingBuffers (self):
                 # Not a smooth mesh
                 vertexFound = False
                 for mappedI, mappedV in enumerate(mapBuf[face.vertices[i]]):
-                  if faceNormal == self.faces[mappedV['face']].normal:
+                  if faceNormal == self.all_faces[mappedV['face']].normal:
                     # Blender vertex is defined in CS with the same face normal
                     # => add a reference to the corresponding CS vertex
                     vertexFound = True
@@ -235,7 +235,7 @@ def GetCSMappingBuffers (self):
           for mappedI, mappedV in enumerate(mapBuf[face.vertices[i]]):
             if (abs(uv[0] - tface[mappedV['face']].uv[mappedV['vertex']][0]) < epsilon) and \
                (abs(uv[1] - tface[mappedV['face']].uv[mappedV['vertex']][1]) < epsilon) and \
-               (smooth or (faceNormal == self.faces[mappedV['face']].normal)):
+               (smooth or (faceNormal == self.all_faces[mappedV['face']].normal)):
               # Blender vertex is defined in CS with the same (u,v) coordinates
               # and the same face normal
               # => add a reference to the corresponding CS vertex
