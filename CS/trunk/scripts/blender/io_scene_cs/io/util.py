@@ -94,3 +94,61 @@ def DecomposeMatrix (matrix):
   # transform quaternion to a 4x4 rotation matrix
   rot = quat.to_matrix().to_4x4()
   return loc, rot, scale
+
+
+# Utility methods ensuring compatibility with new API of Blender 2.63
+# Blender 2.62                 ->  Blender 2.63
+# bpy.types.Mesh.faces         ->  bpy.types.Mesh.tessfaces
+# bpy.types.Mesh.uv_textures   ->  bpy.types.Mesh.tessface_uv_textures
+# bpy.types.Mesh.vertex_colors ->  bpy.types.Mesh.tessface_vertex_colors
+
+# Tessellation
+def UpdateFaces (self):
+
+  ve = bpy.app.version
+
+  if (ve[0] > 2) or ((ve[0] == 2) and (ve[1] >= 63)):
+    self.update(calc_tessface=True)
+
+bpy.types.Mesh.update_faces = UpdateFaces
+
+# Faces
+def GetFaces(mesh):
+    
+  ve = bpy.app.version
+
+  if (ve[0] > 2) or ((ve[0] == 2) and (ve[1] >= 63)):
+    if len(mesh.tessfaces) > 0:
+      return mesh.tessfaces
+
+    return mesh.polygons
+
+  return mesh.faces
+
+bpy.types.Mesh.all_faces = property(GetFaces)
+
+# UV textures
+def GetUVTextures(mesh):
+    
+  ve = bpy.app.version
+
+  if (ve[0] > 2) or ((ve[0] == 2) and (ve[1] >= 63)):
+    if len(mesh.tessface_uv_textures) > 0:
+      return mesh.tessface_uv_textures
+
+  return mesh.uv_textures
+
+bpy.types.Mesh.all_uv_textures = property(GetUVTextures)
+
+# Vertex colors
+def GetVertexColors(mesh):
+    
+  ve = bpy.app.version
+
+  if (ve[0] > 2) or ((ve[0] == 2) and (ve[1] >= 63)):
+    if len(mesh.tessface_vertex_colors) > 0:
+      return mesh.tessface_vertex_colors
+
+  return mesh.vertex_colors
+
+bpy.types.Mesh.all_vertex_colors = property(GetVertexColors)
