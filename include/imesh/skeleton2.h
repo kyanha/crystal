@@ -210,6 +210,11 @@ struct iSkeletonFactory : public virtual iBase
    * \param rot The rotation quaternion of the bone
    * \param offset The position offset of the bone
    * \warning The transform of the parent bones must have already been set.
+   * This means that, if you are changing several bones in a row, you must be sure
+   * to set at first the transform of a parent bone before any of its children.
+   * Failing to do so will have the transform of the child bones corrupted by the
+   * previous transform of the parent bone. One good way to manage this is to use
+   * the method GetBoneOrderList() in order to iterate correctly on the bones.
    */
   virtual void SetTransformAbsSpace (BoneID bone, const csQuaternion& rot, 
     const csVector3& offset) = 0;
@@ -321,6 +326,12 @@ struct iSkeleton : public virtual iBase
    * \param rot The rotation quaternion of the bone
    * \param offset The position offset of the bone
    * \warning The transform of the parent bones must have already been set.
+   * This means that, if you are changing several bones in a row, you must be sure
+   * to set at first the transform of a parent bone before any of its children.
+   * Failing to do so will have the transform of the child bones corrupted by the
+   * previous transform of the parent bone. One good way to manage this is to use
+   * the method iSkeletonFactory::GetBoneOrderList() in order to iterate correctly
+   * on the bones.
    */
   virtual void SetTransformAbsSpace (BoneID bone, const csQuaternion& rot, 
     const csVector3& offset) = 0;
@@ -341,6 +352,12 @@ struct iSkeleton : public virtual iBase
    * \param rot The rotation quaternion of the bone
    * \param offset The position offset of the bone
    * \warning The transform of the parent bones must have already been set.
+   * This means that, if you are changing several bones in a row, you must be sure
+   * to set at first the transform of a parent bone before any of its children.
+   * Failing to do so will have the transform of the child bones corrupted by the
+   * previous transform of the parent bone. One good way to manage this is to use
+   * the method iSkeletonFactory::GetBoneOrderList() in order to iterate correctly
+   * on the bones.
    */
   virtual void SetTransformBindSpace (BoneID bone, const csQuaternion& rot, 
     const csVector3& offset) = 0;
