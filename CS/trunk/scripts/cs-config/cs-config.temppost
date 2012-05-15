@@ -14,6 +14,16 @@ for libname in lib${libcrystalspace}.so \
     elif test -z "$libdir" && test -r "${exec_prefix}/lib/$libname"; then
 	libdir="${exec_prefix}/lib"
 	lflags="-L${exec_prefix}/lib"
+    # Test default locations for cases where CS is installed using a
+    # package manager
+    elif test -z "$libdir"; then
+        for p in lib lib64 lib32 ; do
+            if test -r "/usr/${p}/$libname"; then
+                libdir="/usr/${p}"
+                lflags="-L$libdir"
+                break
+            fi
+        done
     else
 	my_IFS=$IFS; IFS=$PATH_SEPARATOR
 	for p in $_CRYSTAL_ACTUAL
