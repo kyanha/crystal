@@ -472,6 +472,35 @@ esac
 multilinklist=( )
 relaylist=( )
 
+function locate_lib() {
+    lib="$1"
+
+    # First try if the compiler can tell us the location
+    LFLAGS=
+    for d in ${searchpath[@]}; do
+        LFLAGS="$LFLAGS -L\"$d\""
+    done
+    compiler_location=$(${CC:-gcc} ${CFLAGS} ${LFLAGS} -print-file-name="lib$lib.so")
+    if [ -e "$compiler_location" ]; then
+        echo "$compiler_location"
+        exit
+    fi
+
+    # let's find its absolute filename by checking in each search path directory
+    for d in ${searchpath[@]}; do
+        if [ -e "$d/lib$lib.so" ]; then
+        
+            absname=$( readfinallink "$d/lib$lib.so" )
+            if [ $? != 0 ] || [ ! -f "$absname" ]; then
+                error broken symlink "$absname"
+            fi
+
+            echo "$absname"
+            exit
+        fi
+    done            
+}
+
 # process arguments
 i=1
 while (( i <= $# )); do
@@ -533,56 +562,34 @@ while (( i <= $# )); do
             done
         fi
 
-        if $found && $arch_ok; then
-        
-            # yes, so let's find its absolute filename by checking in each search path directory
-            spfound=false
-            for d in ${searchpath[@]}; do
-                if [ -e "$d/lib$lib.so" ]; then
+        if $found; then
+            # yes, so let's find its absolute filename
+            absname=$(locate_lib "$lib")
+            if [ -z "$absname" ]; then
+                error could not find "$lib" in search path
+            else
+                if $arch_ok; then
                 
-                    absname=$( readfinallink "$d/lib$lib.so" )
-                    if [ $? != 0 ] || [ ! -f "$absname" ]; then
-                        error broken symlink "$absname"
-                    fi
-                    
                     stubfile=$( relay "$absname" )
 
                     # now we have to compile the stub
                     if [ $? == 0 ]; then
                         stubobj=$( echo "$stubfile" | sed 's/\.c$/\.o/' )
-			# remove -include flags from CFLAGS, if any
-			CFLAGS=$( echo $CFLAGS | sed 's/-include .*\.h//g' )
+            # remove -include flags from CFLAGS, if any
+            CFLAGS=$( echo $CFLAGS | sed 's/-include .*\.h//g' )
                         # Do not let stub object partake in LTO optimizations
                         CFLAGS=$( echo $CFLAGS | sed 's/-flto//g' )
                         # ${CC:-gcc} ${CFLAGS} -fPIC -DPIC -c -o "$stubobj" "$stubfile" 2>/dev/tty
-			${CC:-gcc} ${CFLAGS} -fPIC -DPIC -c -o "$stubobj" "$stubfile"
-			# We may have to patch the GOT at runtime; instruct
-			# linker to not mark it as RELRO, which will cause it
-			# to be read-only after the loader performed relocation.
+            ${CC:-gcc} ${CFLAGS} -fPIC -DPIC -c -o "$stubobj" "$stubfile"
+            # We may have to patch the GOT at runtime; instruct
+            # linker to not mark it as RELRO, which will cause it
+            # to be read-only after the loader performed relocation.
                         echo -n "$stubobj -Wl,-z,norelro "
                     fi
 
                     echo -n "-l$lib "
-                    
-                    spfound=true
-                    break;
-                fi
-            done
-
-            if ! $spfound; then
-                error could not find "$lib" in search path
-            fi
-        elif $found && ! $arch_ok; then
-            # yes, so let's find its absolute filename by checking in each search path directory
-            spfound=false
-            for d in ${searchpath[@]}; do
-                if [ -e "$d/lib$lib.so" ]; then
-                
-                    absname=$( readfinallink "$d/lib$lib.so" )
-                    if [ $? != 0 ] || [ ! -f "$absname" ]; then
-                        error broken symlink "$absname"
-                    fi
-                    
+                            
+                else
                     # Create a stub C source that just contains dummy 
                     # libwhatever_... support functions
                     stubfile=$( fakerelay "$absname" )
@@ -590,24 +597,17 @@ while (( i <= $# )); do
                     # now we have to compile the stub
                     if [ $? == 0 ]; then
                         stubobj=$( echo "$stubfile" | sed 's/\.c$/\.o/' )
-			# remove -include flags from CFLAGS, if any
-			CFLAGS=$( echo $CFLAGS | sed 's/-include .*\.h//g' )
+	        # remove -include flags from CFLAGS, if any
+	        CFLAGS=$( echo $CFLAGS | sed 's/-include .*\.h//g' )
                         # ${CC:-gcc} ${CFLAGS} -fPIC -DPIC -c -o "$stubobj" "$stubfile" 2>/dev/tty
-			${CC:-gcc} ${CFLAGS} -fPIC -DPIC -c -o "$stubobj" "$stubfile"
+	        ${CC:-gcc} ${CFLAGS} -fPIC -DPIC -c -o "$stubobj" "$stubfile"
                         echo -n "$stubobj "
                     fi
 
                     if $no_replace; then
                         echo -n "-l$lib "
                     fi
-                    
-                    spfound=true
-                    break;
                 fi
-            done
-
-            if ! $spfound; then
-                error could not find "$lib" in search path
             fi
         else
             echo -n "$a "
