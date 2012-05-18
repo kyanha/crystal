@@ -154,6 +154,17 @@ public:
   }
 
   /**
+   * Looks to see if this collection contains the light factory. If so,
+   * it returns the light factory.
+   */
+  inline iLightFactory* FindLightFactory (const char *name)
+  {
+    CS::Threading::MutexScopedLock lock(collectionLock);
+    csRef<iLightFactory> mfw (CS::GetNamedChildObject<iLightFactory>(this, name));
+    return mfw;
+  }
+
+  /**
    * Looks to see if this collection contains the texture. If so,
    * it returns the texture.
    */

@@ -496,6 +496,160 @@ struct iLightIterator : public virtual iBase
 
 };
 
+/**
+ * A light factory. Factories can be used to create lights.
+ * <p>
+ *
+ * Main creators of instances implementing this interface:
+ * - iEngine::CreateLightFactory()
+ *
+ * Main ways to get pointers to this interface:
+ * - iEngine::FindLightFactory()
+ *
+ * Main users of this interface:
+ * - iEngine
+ */
+struct iLightFactory : public virtual iBase
+{
+  SCF_INTERFACE(iLightFactory,1,0,0);
+
+  /// Get the iObject for this light factory.
+  virtual iObject *QueryObject() = 0;
+
+  /**
+   * Set/Get the dynamic type of this light.
+   * Supported types:
+   * - #CS_LIGHT_DYNAMICTYPE_STATIC
+   * - #CS_LIGHT_DYNAMICTYPE_PSEUDO
+   * - #CS_LIGHT_DYNAMICTYPE_DYNAMIC
+   */
+  virtual void SetDynamicType (csLightDynamicType type) = 0;
+  virtual csLightDynamicType GetDynamicType () const = 0;
+
+  /// Get the diffuse color of this light.
+  virtual const csColor& GetColor () const = 0;
+  /// Set the diffuse color of this light.
+  virtual void SetColor (const csColor& col) = 0;
+
+  /// Get the specular color of this light.
+  virtual const csColor& GetSpecularColor () const = 0;
+  /// Set the specular color of this light.
+  virtual void SetSpecularColor (const csColor& col) = 0;
+  virtual bool IsSpecularColorUsed () const = 0;
+  
+  /// Get the light type of this light.
+  virtual csLightType GetType () const = 0;
+  /// Set the light type of this light.
+  virtual void SetType (csLightType type) = 0;
+
+  /**
+   * Return current attenuation mode.
+   * \sa csLightAttenuationMode
+   */
+  virtual csLightAttenuationMode GetAttenuationMode () const = 0;
+  /**
+   * Set attenuation mode.
+   * \sa csLightAttenuationMode
+   */
+  virtual void SetAttenuationMode (csLightAttenuationMode a) = 0;
+
+  /**
+   * Set attenuation constants
+   * \sa csLightAttenuationMode
+   */
+  virtual void SetAttenuationConstants (const csVector4& constants) = 0;
+  /**
+   * Get attenuation constants
+   * \sa csLightAttenuationMode
+   */
+  virtual const csVector4 &GetAttenuationConstants () const = 0;
+
+  /**
+   * Get the the maximum distance at which the light is guaranteed to shine. 
+   * Can be seen as the distance at which we turn the light off.
+   * Used for culling and selection of meshes to light, but not
+   * for the lighting itself.
+   */
+  virtual float GetCutoffDistance () const = 0;
+
+  /**
+   * Set the the maximum distance at which the light is guaranteed to shine. 
+   * Can be seen as the distance at which we turn the light off.
+   * Used for culling and selection of meshes to light, but not
+   * for the lighting itself.
+   */
+  virtual void SetCutoffDistance (float distance) = 0;
+
+  /**
+   * Get radial cutoff distance for directional lights.
+   * The directional light can be viewed as a cylinder with radius
+   * equal to DirectionalCutoffRadius and length CutoffDistance
+   */
+  virtual float GetDirectionalCutoffRadius () const = 0;
+
+  /**
+   * Set radial cutoff distance for directional lights.
+   * The directional light can be viewed as a cylinder with radius
+   * equal to DirectionalCutoffRadius and length CutoffDistance
+   */
+  virtual void SetDirectionalCutoffRadius (float radius) = 0;
+
+  /**
+   * Set spot light falloff angles. Set in cosine of the angle. 
+   */
+  virtual void SetSpotLightFalloff (float inner, float outer) = 0;
+
+  /**
+   * Get spot light falloff angles. Get in cosine of the angle.
+   */
+  virtual void GetSpotLightFalloff (float& inner, float& outer) const = 0;
+
+  /**
+   * Get flags for this light.
+   * Supported flags:
+   * - #CS_LIGHT_ACTIVEHALO
+   */
+  virtual csFlags& GetFlags () = 0;
+};
+
+/**
+ * A list of light factories.
+ *
+ * Main ways to get pointers to this interface:
+ *   - iEngine::GetLightFactories()
+ *
+ * Main users of this interface:
+ *   - iEngine
+ */
+struct iLightFactoryList : public virtual iBase
+{
+  SCF_INTERFACE(iLightFactoryList,1,0,0);
+
+  /// Return the number of light factories in this list.
+  virtual int GetCount () const = 0;
+
+  /// Return a light factory by index.
+  virtual iLightFactory *Get (int n) const = 0;
+
+  /// Add a light factory.
+  virtual int Add (iLightFactory *obj) = 0;
+
+  /// Remove a light factory.
+  virtual bool Remove (iLightFactory *obj) = 0;
+
+  /// Remove the nth light factory.
+  virtual bool Remove (int n) = 0;
+
+  /// Remove all light factory.
+  virtual void RemoveAll () = 0;
+
+  /// Find a light factory and return its index.
+  virtual int Find (iLightFactory *obj) const = 0;
+
+  /// Find a light factory by name.
+  virtual iLightFactory *FindByName (const char *Name) const = 0;
+};
+
 /** @} */
 
 #endif // __CS_IENGINE_LIGHT_H__
