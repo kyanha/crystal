@@ -359,9 +359,16 @@ public:
   
   //-- Light handling
 
+  virtual iLightFactory* CreateLightFactory (const char* name);
+  virtual iLightFactory* FindLightFactory (const char* name, iCollection* col = 0);
+  virtual iLightFactoryList* GetLightFactories ()
+  { return &lightFactories; }
+
   virtual csPtr<iLight> CreateLight (const char* name, const csVector3& pos,
   	float radius, const csColor& color,
 	csLightDynamicType dyntype = CS_LIGHT_DYNAMICTYPE_STATIC);
+  virtual csPtr<iLight> CreateLight (const char* name, const csVector3& pos,
+      iLightFactory* factory);
   virtual iLight* FindLight (const char *Name, bool RegionOnly = false)
     const;
   virtual iLight* FindLightID (const char* light_id) const;
@@ -874,6 +881,7 @@ public:
 
   /// Get the default shader (passed to the render loop upon creation)
   iShader* GetDefaultMaterialShader ();
+
 private:
 
   // -- PRIVATE MEMBERS
@@ -906,6 +914,12 @@ private:
    * you still need to add it to all sectors that you want it to be visible in.
    */
   csEngineMeshList meshes;
+
+  /**
+   * List of light factories. This vector contains objects of
+   * type csLightFactory*.
+   */
+  csLightFactoryList lightFactories;
 
   /**
    * The list of all camera position objects.

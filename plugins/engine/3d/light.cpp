@@ -242,14 +242,14 @@ void csLight::CalculateAttenuationVector ()
 
 void csLight::SetParent (iSceneNode* parent)
 {
-    if(!parent && GetParent())
-    {
-      for (size_t i = 0; i < sectors.GetSize (); ++i)
-        sectors[i]->GetLights ()->Remove (this);     
-      sectors.Empty();
-    }
+  if(!parent && GetParent())
+  {
+    for (size_t i = 0; i < sectors.GetSize (); ++i)
+      sectors[i]->GetLights ()->Remove (this);     
+    sectors.Empty();
+  }
 
-    csSceneNode::SetParent ((iSceneNode*)this, parent, &movable);
+  csSceneNode::SetParent ((iSceneNode*)this, parent, &movable);
 }
 
 void csLight::OnSetPosition ()
@@ -517,6 +517,174 @@ void csLight::UpdateBBox ()
 }
 
 //---------------------------------------------------------------------------
+
+csLightFactory::csLightFactory () :
+    scfImplementationType (this),
+    userSpecular (false), dynamicType (CS_LIGHT_DYNAMICTYPE_STATIC), 
+    type (CS_LIGHT_POINTLIGHT), cutoffDistance (1.0f),
+    directionalCutoffRadius (1.0f), userDirectionalCutoffRadius (false)
+{
+  csLightFactory::SetColor (csColor (1.0f, 1.0f, 1.0f));
+  csLightFactory::SetAttenuationMode (CS_ATTN_LINEAR);
+  csLightFactory::SetSpotLightFalloff (1, 0);
+
+  SetName ("__lf__");
+
+  CalculateAttenuationVector ();
+}
+
+csLightFactory::~csLightFactory ()
+{
+}
+  
+void csLightFactory::SelfDestruct ()
+{
+}
+
+void csLightFactory::CalculateAttenuationVector ()
+{
+  switch (attenuation)
+  {
+    case CS_ATTN_NONE:
+      attenuationConstants.Set (1, 0, 0, 0);
+      break;
+    case CS_ATTN_LINEAR:    
+      // @@@ FIXME: cutoff distance != radius, really
+      attenuationConstants.Set (1.0f/SMALL_EPSILON, 0, 0, 1.0f/cutoffDistance);
+      break;
+    case CS_ATTN_INVERSE:
+      attenuationConstants.Set (0, 1, 0, 0);
+      break;
+    case CS_ATTN_REALISTIC:
+      attenuationConstants.Set (0, 0, 1, 0);
+      break;
+    case CS_ATTN_CLQ:
+      /* Nothing to do */
+    default:
+      return;
+  }
+}
+
+void csLightFactory::SetColor (const csColor& col)
+{
+  color = col; 
+  if (!userSpecular)
+    specularColor = col;
+}
+
+
+void csLightFactory::SetAttenuationMode (csLightAttenuationMode a)
+{
+  attenuation = a;
+  CalculateAttenuationVector();
+}
+
+void csLightFactory::SetAttenuationConstants (const csVector4& attenv)
+{
+  attenuationConstants = attenv;
+}
+
+void csLightFactory::SetCutoffDistance (float radius)
+{
+  if (radius <= 0) return;
+  
+  cutoffDistance = radius;
+  if (!userDirectionalCutoffRadius)
+    directionalCutoffRadius = radius;
+
+  CalculateAttenuationVector();
+}
+
+//---------------------------------------------------------------------------
+
+//--------------------------------------------------------------------------
+// csLightFactoryList
+//--------------------------------------------------------------------------
+csLightFactoryList::csLightFactoryList ()
+  : scfImplementationType (this), list (64)
+{
+  listener.AttachNew (new NameChangeListener (this));
+}
+
+csLightFactoryList::~csLightFactoryList ()
+{
+  RemoveAll ();
+}
+
+void csLightFactoryList::NameChanged (iObject* object, const char* oldname,
+  	const char* newname)
+{
+  csRef<iLightFactory> lf = 
+    scfQueryInterface<iLightFactory> (object);
+  CS_ASSERT (lf != 0);
+  CS::Threading::ScopedWriteLock lock(lightFactLock);
+  if (oldname) factories_hash.Delete (oldname, lf);
+  if (newname) factories_hash.Put (newname, lf);
+}
+
+int csLightFactoryList::Add (iLightFactory *obj)
+{
+  const char* name = obj->QueryObject ()->GetName ();
+  CS::Threading::ScopedWriteLock lock(lightFactLock);
+  if (name)
+    factories_hash.Put (name, obj);
+  obj->QueryObject ()->AddNameChangeListener (listener);
+  return (int)list.Push (obj);
+}
+
+bool csLightFactoryList::Remove (iLightFactory *obj)
+{
+  const char* name = obj->QueryObject ()->GetName ();
+  CS::Threading::ScopedWriteLock lock(lightFactLock);
+  if (name)
+    factories_hash.Delete (name, obj);
+  obj->QueryObject ()->RemoveNameChangeListener (listener);
+  list.Delete (obj);
+  return true;
+}
+
+bool csLightFactoryList::Remove (int n)
+{
+  return Remove (Get (n));
+}
+
+void csLightFactoryList::RemoveAll ()
+{
+  CS::Threading::ScopedWriteLock lock(lightFactLock);
+  size_t i;
+  for (i = 0 ; i < list.GetSize () ; i++)
+  {
+    list[i]->QueryObject ()->RemoveNameChangeListener (listener);
+  }
+  factories_hash.DeleteAll ();
+  list.DeleteAll ();
+}
+
+int csLightFactoryList::GetCount () const 
+{
+  CS::Threading::ScopedReadLock lock(lightFactLock);
+  return (int)list.GetSize ();
+}
+
+iLightFactory* csLightFactoryList::Get (int n) const
+{
+  CS::Threading::ScopedReadLock lock(lightFactLock);
+  return list.Get (n);
+}
+
+int csLightFactoryList::Find (iLightFactory *obj) const
+{
+  CS::Threading::ScopedReadLock lock(lightFactLock);
+  return (int)list.Find (obj);
+}
+
+iLightFactory *csLightFactoryList::FindByName (
+  const char *Name) const
+{
+  CS::Threading::ScopedReadLock lock(lightFactLock);
+  if (!Name) return 0;
+  return factories_hash.Get (Name, 0);
+}
 
 // --- csLightList -----------------------------------------------------------
 csLightList::csLightList ()

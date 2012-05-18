@@ -49,6 +49,7 @@ struct iClipper2D;
 struct iCustomMatrixCamera;
 struct iDataBuffer;
 struct iLight;
+struct iLightFactory;
 struct iLightIterator;
 struct iLoaderContext;
 struct iMaterial;
@@ -449,6 +450,16 @@ struct iEngine : public virtual iBase
    * @{ */
 
   /**
+   * Create a light factory.
+   */
+  virtual iLightFactory* CreateLightFactory (const char* name) = 0;
+
+  /**
+   * Find a light factory by name.
+   */
+  virtual iLightFactory* FindLightFactory (const char* name, iCollection* col = 0) = 0;
+
+  /**
    * Create a static/pseudo-dynamic light.
    * Assign to a csRef.
    * \param name the engine name for this light (may be 0)
@@ -472,6 +483,12 @@ struct iEngine : public virtual iBase
   virtual csPtr<iLight> CreateLight (const char* name, const csVector3& pos,
   	float radius, const csColor& color,
 	csLightDynamicType dyntype = CS_LIGHT_DYNAMICTYPE_STATIC) = 0;
+
+  /**
+   * Create a light from a light factory.
+   */
+  virtual csPtr<iLight> CreateLight (const char* name, const csVector3& pos,
+      iLightFactory* factory) = 0;
 
   /** Find a static/pseudo-dynamic light by name.
    * \param Name the engine name of the desired light

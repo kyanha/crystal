@@ -33,6 +33,7 @@
 #include "csutil/scf_implementation.h"
 #include "csutil/scfarray.h"
 #include "csutil/weakref.h"
+#include "csutil/threading/rwmutex.h"
 #include "iutil/selfdestruct.h"
 #include "plugins/engine/3d/halo.h"
 #include "plugins/engine/3d/movable.h"
@@ -94,7 +95,7 @@ public:
 class csLight : 
   public scfImplementationExt4<csLight,
                                csObject,
-                               iLight,                               
+                               iLight,
                                scfFakeInterface<iShaderVariableContext>,
 			       iSceneNode,
 			       iSelfDestruct>,
@@ -154,11 +155,6 @@ protected:
   /// Get a unique ID for this light. Generate it if needed.
   const char* GenerateUniqueID ();
 
-  /**
-   * Calculate the cutoff from the attenuation vector.
-   */
-  void CalculateCutoffRadius ();
-
   /// Compute attenuation vector from current attenuation mode.
   void CalculateAttenuationVector ();
 
@@ -197,7 +193,7 @@ public:
    */
   virtual ~csLight ();
 
-  csLightDynamicType GetDynamicType () const { return dynamicType; }
+  virtual csLightDynamicType GetDynamicType () const { return dynamicType; }
 
   /// Get the ID of this light.
   const char* GetLightID () { return GenerateUniqueID (); }
@@ -582,6 +578,241 @@ public:
 
   virtual void PreGetValue (csShaderVariable *variable);
 };
+
+/**
+ * A light factory.
+ */
+class csLightFactory : 
+  public scfImplementationExt2<csLightFactory,
+                               csObject,
+                               iLightFactory,
+			       iSelfDestruct>
+{
+private:
+  /// Color.
+  csColor color;
+  /// Specular color
+  csColor specularColor;
+  /**
+   * Whether the user changed the specular color.
+   * This decides whether a call to SetColor() changes both the diffuse and
+   * specular color (userSpecular == false) or only diffuse 
+   * (userSpecular == true).
+   */
+  bool userSpecular;
+
+  /// The dynamic type of this light (one of CS_LIGHT_DYNAMICTYPE_...)
+  csLightDynamicType dynamicType;
+  /// Type of this light
+  csLightType type;
+
+  /// Attenuation type
+  csLightAttenuationMode attenuation;
+  /// Attenuation constants
+  csVector4 attenuationConstants;
+
+  /// The distance where the light have any effect at all
+  float cutoffDistance; 
+
+  /// Radial cutoff radius for directional lights
+  float directionalCutoffRadius;
+  // Analogue to userSpecular
+  bool userDirectionalCutoffRadius;
+
+  /// Falloff coefficients for spotlight.
+  float spotlightFalloffInner, spotlightFalloffOuter;
+  
+  /// Compute attenuation vector from current attenuation mode.
+  void CalculateAttenuationVector ();
+
+public:
+  /// Set of flags
+  csFlags flags;
+
+public:
+  csLightFactory ();
+  virtual ~csLightFactory ();
+
+  virtual void SetDynamicType (csLightDynamicType type) { dynamicType = type; }
+  virtual csLightDynamicType GetDynamicType () const { return dynamicType; }
+
+  virtual iObject* QueryObject () { return this; }
+
+  /**
+   * Get the light color.
+   */
+  const csColor& GetColor () const { return color; } 
+
+  /**
+   * Set the light color. Note that setting the color
+   * of a light may not always have an immediate visible effect.
+   * Static lights are precalculated into the lightmaps and those
+   * lightmaps are not automatically updated when calling this function
+   * as that is a time consuming process.
+   */
+  void SetColor (const csColor& col);
+
+  /// Get the specular color of this light.
+  const csColor& GetSpecularColor () const
+  { return specularColor; }
+  /// Set the specular color of this light.
+  void SetSpecularColor (const csColor& col) 
+  {
+    userSpecular = true; 
+    specularColor = col; 
+  }
+  virtual bool IsSpecularColorUsed () const { return userSpecular; }
+
+  /**
+   * Get the light's attenuation type
+   */
+  csLightAttenuationMode GetAttenuationMode () const
+  {
+    return attenuation;
+  }
+
+  /**
+   * Change the light's attenuation type
+   */
+  void SetAttenuationMode (csLightAttenuationMode a); 
+ 
+  /**
+  * Set attenuation constants
+  * \sa csLightAttenuationMode
+  */
+  void SetAttenuationConstants (const csVector4& constants);
+  /**
+  * Get attenuation constants
+  * \sa csLightAttenuationMode
+  */
+  const csVector4 &GetAttenuationConstants () const
+  { return attenuationConstants; }
+
+  /**
+  * Get the the maximum distance at which the light is guaranteed to shine.
+  * Can be seen as the distance at which we turn the light off.
+  * Used for culling and selection of meshes to light, but not
+  * for the lighting itself.
+  */
+  float GetCutoffDistance () const
+  { return cutoffDistance; }
+
+  /**
+  * Set the the maximum distance at which the light is guaranteed to shine. 
+  * Can be seen as the distance at which we turn the light off.
+  * Used for culling and selection of meshes to light, but not
+  * for the lighting itself.
+  */
+  void SetCutoffDistance (float distance);
+
+  /**
+  * Get radial cutoff distance for directional lights.
+  * The directional light can be viewed as a cylinder with radius
+  * equal to DirectionalCutoffRadius and length CutoffDistance
+  */
+  float GetDirectionalCutoffRadius () const
+  { return directionalCutoffRadius; }
+
+  /**
+  * Set radial cutoff distance for directional lights.
+  * The directional light can be viewed as a cylinder with radius
+  * equal to DirectionalCutoffRadius and length CutoffDistance
+  */
+  void SetDirectionalCutoffRadius (float radius)
+  {
+    directionalCutoffRadius = radius;
+    userDirectionalCutoffRadius = true;
+  }
+
+  /**
+  * Set spot light falloff angles. Set in cosine of the angle. 
+  */
+  void SetSpotLightFalloff (float inner, float outer)
+  {
+    spotlightFalloffInner = inner;
+    spotlightFalloffOuter = outer;
+  }
+
+  /**
+  * Get spot light falloff angles. Get in cosine of the angle.
+  */
+  void GetSpotLightFalloff (float& inner, float& outer) const
+  {
+    inner = spotlightFalloffInner;
+    outer = spotlightFalloffOuter;
+  }
+
+  /// Get the light type of this light.
+  csLightType GetType () const
+  { return type; }
+  /// Set the light type of this light.
+  void SetType (csLightType type)
+  {
+    this->type = type;
+  }
+
+  //------------------------ iLightFactory interface -----------------------------
+  
+  virtual csFlags& GetFlags ()
+  { return flags; }
+
+  virtual void SelfDestruct ();
+};
+
+/**
+ * A list of light factories.
+ */
+class csLightFactoryList : public scfImplementation1<csLightFactoryList,
+	iLightFactoryList>
+{
+private:
+  csRefArrayObject<iLightFactory, CS::Container::ArrayAllocDefault,
+    csArrayCapacityFixedGrow<64> > list;
+  csHash<iLightFactory*, csString> factories_hash;
+  mutable CS::Threading::ReadWriteMutex lightFactLock;
+
+  class NameChangeListener : public scfImplementation1<NameChangeListener,
+  	iObjectNameChangeListener>
+  {
+  private:
+    csWeakRef<csLightFactoryList> list;
+
+  public:
+    NameChangeListener (csLightFactoryList* list) : scfImplementationType (this),
+  	  list (list)
+    {
+    }
+    virtual ~NameChangeListener () { }
+
+    virtual void NameChanged (iObject* obj, const char* oldname,
+  	  const char* newname)
+    {
+      if (list)
+        list->NameChanged (obj, oldname, newname);
+    }
+  };
+  csRef<NameChangeListener> listener;
+
+
+public:
+
+  void NameChanged (iObject* object, const char* oldname,
+  	const char* newname);
+
+  /// constructor
+  csLightFactoryList ();
+  virtual ~csLightFactoryList ();
+
+  virtual int GetCount () const;
+  virtual iLightFactory *Get (int n) const;
+  virtual int Add (iLightFactory *obj);
+  virtual bool Remove (iLightFactory *obj);
+  virtual bool Remove (int n);
+  virtual void RemoveAll ();
+  virtual int Find (iLightFactory *obj) const;
+  virtual iLightFactory *FindByName (const char *Name) const;
+};
+
 
 }
 CS_PLUGIN_NAMESPACE_END(Engine)

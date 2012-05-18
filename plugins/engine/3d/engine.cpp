@@ -2639,6 +2639,33 @@ csPtr<iCustomMatrixCamera> csEngine::CreateCustomMatrixCamera (
   return csPtr<iCustomMatrixCamera> (cam);
 }
 
+iLightFactory* csEngine::FindLightFactory (const char* name,
+	iCollection* col)
+{
+  iCollection* collection;
+  bool global;
+  const char* n = SplitCollectionName (name, collection, global);
+  if (!n) return 0;
+
+  iLightFactory* fact;
+  if (collection)
+    fact = collection->FindLightFactory (n);
+  else if (!global && col)
+    fact = col->FindLightFactory (n);
+  else
+    fact = GetLightFactories ()->FindByName (n);
+  return fact;
+}
+
+iLightFactory* csEngine::CreateLightFactory (const char* name)
+{
+  csRef<csLightFactory> lf;
+  lf.AttachNew (new csLightFactory ());
+  if (name) lf->SetName (name);
+  lightFactories.Add (lf);
+  return lf;
+}
+
 csPtr<iLight> csEngine::CreateLight (
   const char *name,
   const csVector3 &pos,
@@ -2652,6 +2679,32 @@ csPtr<iLight> csEngine::CreateLight (
       color.red, color.green, color.blue,
       dyntype);
   if (name) light->SetName (name);
+
+  return csPtr<iLight> (light);
+}
+
+csPtr<iLight> csEngine::CreateLight (
+  const char *name,
+  const csVector3 &pos,
+  iLightFactory* factory)
+{
+  const csColor& color = factory->GetColor ();
+  csLight *light = new csLight (this,
+      pos.x, pos.y, pos.z,
+      factory->GetCutoffDistance (),
+      color.red, color.green, color.blue,
+      factory->GetDynamicType ());
+  if (name) light->SetName (name);
+  if (factory->IsSpecularColorUsed ())
+    light->SetSpecularColor (factory->GetSpecularColor ());
+  light->SetType (factory->GetType ());
+  light->SetAttenuationMode (factory->GetAttenuationMode ());
+  light->SetAttenuationConstants (factory->GetAttenuationConstants ());
+  light->SetDirectionalCutoffRadius (factory->GetDirectionalCutoffRadius ());
+  float inner, outer;
+  factory->GetSpotLightFalloff (inner, outer);
+  light->SetSpotLightFalloff (inner, outer);
+  light->GetFlags ().SetAll (factory->GetFlags ().Get ());
 
   return csPtr<iLight> (light);
 }
