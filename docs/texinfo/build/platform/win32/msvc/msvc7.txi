@@ -1,19 +1,20 @@
 @c -*-texinfo-*-
 @node MSVC7, MinGW, cs-winlibs, Platform Instructions
-@subsection Microsoft Visual C++ 8 or 9
+@subsection Microsoft Visual C++ 8, 9 or 10
 @cindex Windows, Building
 @cindex MSVC, Building
 
 @noindent
 Originally written by Philip Wyett @email{philswyett@@gmx.co.uk}.
 @noindent
-@emph{Last updated September 2009.}
+@emph{Last updated 18 May 2012.}
 
 In order to successfully compile the Crystal Space 3D Software Development Kit
-(@sc{sdk}), you will need a copy of @emph{Microsoft Visual C++ 8 (@sc{.net 2005})}
-or @emph{Microsoft Visual C++ 9 (@sc{.net 2008})}. The @emph{Express Editions} 
-are perfectly suitable to compile Crystal Space (although some extra steps are required
-for the Express Edition of @sc{msvc} 8 is, more below).
+(@sc{sdk}), you will need a copy of @emph{Microsoft Visual C++ 8 (@sc{.net 2005})},
+@emph{Microsoft Visual C++ 9 (@sc{.net 2008})}, or @emph{Microsoft Visual C++ 10
+(@sc{.net 2010})}. The @emph{Express Editions} are perfectly suitable to compile
+Crystal Space (although some extra steps are required for the Express Edition of
+@sc{msvc} 8, more below).
 
 @subsubheading Getting Extra Help
 
@@ -31,6 +32,9 @@ compile time you must follow the documented instructions of how to unload these
 projects from the Crystal Space build process.
 
 @subsubheading Windows @sc{sdk} - required for Microsoft Visual C++ 2005 Express Edition, Microsoft Visual Studio 2005
+
+The following does not apply if you are using a more recent version of Microsoft
+Visual C++.
 
 Microsoft Visual C++ 2005 Express Edition does not ship with a version of the
 Windows @sc{sdk}. Microsoft Visual Studio 2005 (non-Express) ships with version 5.0
@@ -197,6 +201,31 @@ produce @file{.exe} files.
 There is a @sc{howto} which explains how to create an @sc{msvc} project file
 for your own program which utilizes Crystal Space.
 @xref{HOWTO Creating External MSVC Application}.
+
+@subsubheading Regenerating the MSVC project files.
+
+The MSVC project files that are shipped with Crystal Space are generated from
+the @file{Jamfile} files that are used within the project.
+
+If you work inside Crystal Space and have modified one of the @file{Jamfile}
+files, you might want to regenerate the MSVC project files in order to get access
+to your changes.
+
+This is made using the @code{jam msvcgen} command that you have to run from the
+top-level directory of Crystal Space using @ref{MinGW, @sc{msys}}. For this, you
+therefore need to have installed @sc{msys} before.
+
+You also need to have a Perl interpretor installed on your system. This can be for
+example ``ActiveState Perl'' that you can install using its Perl Package Manager.
+
+Once the Perl interpretor is installed, you would need to re-run the
+@code{./configure} script in order for it to detect your Perl interpretor. If it
+fails to do so, you can force it using e.g.:
+
+@example
+./configure PERL='/c/Program Files/ActiveState/Perl/whatever'
+@end example
+
 
 @subsubheading Frequently Asked Questions (@sc{faq})
 @anchor{MSVC8 FAQ}

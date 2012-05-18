@@ -6,7 +6,7 @@
 
 @emph{Written by Eric Sunshine, @email{sunshine@@sunshineco.com}.  Copyright
 @copyright{} 1999, 2000, 2001, 2002, 2003, 2004 by Eric Sunshine.  Last updated
-18 September 2004.}
+18 may 2012.}
 
 Crystal Space was ported to MacOS/X by Eric Sunshine.  If you have questions or
 comments about this port, please contact Eric Sunshine at
@@ -36,6 +36,27 @@ Space, and jump directly to the section explaining how to run the applications
 * MacOS/X Building:: Building
 * MacOS/X Running Programs:: Using Crystal Space
 @end menu
+
+@subsubheading Warning about compilation issues with the default Xcode compiler
+
+The C++ compiler that is shipped by default with the recent Xcode releases does
+not support the C++ standard. This is unfortunately not a joke, and the Crystal
+Space engine won't build because of that, with compilation error messages about
+generic thunk code failed.
+
+In order to fix this, you should use another (real) compiler such as @sc{gcc} or
+Clang. After having installed one of those, you then need to specify them to the
+Crystal Space configuration system using e.g.:
+
+@example
+./configure CC=/usr/bin/gcc CXX=/usr/bin/g++
+@end example
+
+Or for Clang:
+
+@example
+./configure CC=/usr/bin/clang CXX=/usr/bin/clang++
+@end example
 
 @node MacOS/X Libraries, MacOS/X Resources, MacOS/X, MacOS/X
 @subsubsection Library Prerequisites
@@ -107,10 +128,10 @@ placed within the @file{CS/data} directory.  As with other Crystal Space
 resources, map files are actually compressed archives which are used directly
 by the engine, thus you should not unpack these archives.
 
-The most commonly used map file is @file{flarge} since it demonstrates many of
+The most commonly used map file is @file{castle} since it demonstrates many of
 the special features of the engine rather than focusing on merely one or two
 areas.  This map is typically distributed as part of the Crystal Space package
-and can be found in the @file{CS/data/flarge} directory.  You can download
+and can be found in the @file{CS/data/castle} directory.  You can download
 additional example map files from the @file{maps} subdirectory of each release
 of Crystal Space at the download site:
 
@@ -339,7 +360,7 @@ several of the example programs and map files.
 
 You need to have one or more @dfn{map} files in order to run WalkTest.  These
 are the files which contain the maps and rooms which you can explore with
-WalkTest.  The most commonly used example map file is @file{flarge}.
+WalkTest.  The most commonly used example map file is @file{castle}.
 
 You may need adjust the ambient lighting which the engine applies when it
 lights the maps.  This may be necessary if you find that the scenes appears too
@@ -364,24 +385,24 @@ To specify options when running programs, you must invoke the programs from the
 command-line, however the need to specify command-line options is rare, so this
 should not prove much of an inconvenience.
 
-To run WalkTest with a particular map (for instance, @file{flarge}), type:
+To run WalkTest with a particular map (for instance, @file{castle}), type:
 
 @example
-./walktest.app/Contents/MacOS/walktest flarge
+./walktest.app/Contents/MacOS/walktest castle
 @end example
 
-Once invoked, you will be able to explore the map file (@file{flarge}) by using
+Once invoked, you will be able to explore the map file (@file{castle}) by using
 the navigation controls (@pxref{Walktest Movement}).  To explore a different
-map, substitute its name in place of @samp{flarge}.
+map, substitute its name in place of @samp{castle}.
 
-If you would like to explore a map other than @samp{flarge} without having to
+If you would like to explore a map other than @samp{castle} without having to
 type it on the command-line, you can add the following setting to the MacOS/X
 defaults database.  This will allow you to explore different maps even when
 launching WalkTest from the Finder.  For example, to explore a map named
-@samp{castle}, set the following default value:
+@samp{partsys}, set the following default value:
 
 @example
-defaults write CrystalSpace.Walktest Walktest.Settings.WorldFile castle
+defaults write CrystalSpace.Walktest Walktest.Settings.WorldFile partsys
 @end example
 
 Other interesting applications, such as csDemo, also come with
@@ -397,7 +418,7 @@ instruct the applications to use @dfn{full-screen} mode with the @samp{--fs}
 command-line option.  For example:
 
 @example
-./walktest.app/Contents/MacOS/walktest --fs flarge
+./walktest.app/Contents/MacOS/walktest --fs castle
 @end example
 
 Alternately, if you prefer to launch programs from the Finder, you can install
