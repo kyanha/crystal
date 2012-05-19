@@ -19321,6 +19321,96 @@ sub ACQUIRE {
 }
 
 
+############# Class : cspace::iLightFactory ##############
+
+package cspace::iLightFactory;
+use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
+@ISA = qw( cspace::iBase cspace );
+%OWNER = ();
+%ITERATORS = ();
+*QueryObject = *cspacec::iLightFactory_QueryObject;
+*SetDynamicType = *cspacec::iLightFactory_SetDynamicType;
+*GetDynamicType = *cspacec::iLightFactory_GetDynamicType;
+*GetColor = *cspacec::iLightFactory_GetColor;
+*SetColor = *cspacec::iLightFactory_SetColor;
+*GetSpecularColor = *cspacec::iLightFactory_GetSpecularColor;
+*SetSpecularColor = *cspacec::iLightFactory_SetSpecularColor;
+*IsSpecularColorUsed = *cspacec::iLightFactory_IsSpecularColorUsed;
+*GetType = *cspacec::iLightFactory_GetType;
+*SetType = *cspacec::iLightFactory_SetType;
+*GetAttenuationMode = *cspacec::iLightFactory_GetAttenuationMode;
+*SetAttenuationMode = *cspacec::iLightFactory_SetAttenuationMode;
+*SetAttenuationConstants = *cspacec::iLightFactory_SetAttenuationConstants;
+*GetAttenuationConstants = *cspacec::iLightFactory_GetAttenuationConstants;
+*GetCutoffDistance = *cspacec::iLightFactory_GetCutoffDistance;
+*SetCutoffDistance = *cspacec::iLightFactory_SetCutoffDistance;
+*GetDirectionalCutoffRadius = *cspacec::iLightFactory_GetDirectionalCutoffRadius;
+*SetDirectionalCutoffRadius = *cspacec::iLightFactory_SetDirectionalCutoffRadius;
+*SetSpotLightFalloff = *cspacec::iLightFactory_SetSpotLightFalloff;
+*GetSpotLightFalloff = *cspacec::iLightFactory_GetSpotLightFalloff;
+*GetFlags = *cspacec::iLightFactory_GetFlags;
+sub DESTROY {
+    return unless $_[0]->isa('HASH');
+    my $self = tied(%{$_[0]});
+    return unless defined $self;
+    delete $ITERATORS{$self};
+    if (exists $OWNER{$self}) {
+        cspacec::delete_iLightFactory($self);
+        delete $OWNER{$self};
+    }
+}
+
+sub DISOWN {
+    my $self = shift;
+    my $ptr = tied(%$self);
+    delete $OWNER{$ptr};
+}
+
+sub ACQUIRE {
+    my $self = shift;
+    my $ptr = tied(%$self);
+    $OWNER{$ptr} = 1;
+}
+
+
+############# Class : cspace::iLightFactoryList ##############
+
+package cspace::iLightFactoryList;
+use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
+@ISA = qw( cspace::iBase cspace );
+%OWNER = ();
+%ITERATORS = ();
+*GetCount = *cspacec::iLightFactoryList_GetCount;
+*Get = *cspacec::iLightFactoryList_Get;
+*Add = *cspacec::iLightFactoryList_Add;
+*Remove = *cspacec::iLightFactoryList_Remove;
+*RemoveAll = *cspacec::iLightFactoryList_RemoveAll;
+*Find = *cspacec::iLightFactoryList_Find;
+*FindByName = *cspacec::iLightFactoryList_FindByName;
+sub DESTROY {
+    return unless $_[0]->isa('HASH');
+    my $self = tied(%{$_[0]});
+    return unless defined $self;
+    delete $ITERATORS{$self};
+    if (exists $OWNER{$self}) {
+        cspacec::delete_iLightFactoryList($self);
+        delete $OWNER{$self};
+    }
+}
+
+sub DISOWN {
+    my $self = shift;
+    my $ptr = tied(%$self);
+    delete $OWNER{$ptr};
+}
+
+sub ACQUIRE {
+    my $self = shift;
+    my $ptr = tied(%$self);
+    $OWNER{$ptr} = 1;
+}
+
+
 ############# Class : cspace::csFog ##############
 
 package cspace::csFog;
@@ -19817,6 +19907,8 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *GetTextureFormat = *cspacec::iEngine_GetTextureFormat;
 *GetTextureList = *cspacec::iEngine_GetTextureList;
 *FindTexture = *cspacec::iEngine_FindTexture;
+*CreateLightFactory = *cspacec::iEngine_CreateLightFactory;
+*FindLightFactory = *cspacec::iEngine_FindLightFactory;
 *CreateLight = *cspacec::iEngine_CreateLight;
 *FindLight = *cspacec::iEngine_FindLight;
 *FindLightID = *cspacec::iEngine_FindLightID;
@@ -21727,6 +21819,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *FindSector = *cspacec::iCollection_FindSector;
 *FindMeshObject = *cspacec::iCollection_FindMeshObject;
 *FindMeshFactory = *cspacec::iCollection_FindMeshFactory;
+*FindLightFactory = *cspacec::iCollection_FindLightFactory;
 *FindTexture = *cspacec::iCollection_FindTexture;
 *FindMaterial = *cspacec::iCollection_FindMaterial;
 *FindShader = *cspacec::iCollection_FindShader;
