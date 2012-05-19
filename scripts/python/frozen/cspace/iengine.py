@@ -199,6 +199,52 @@ iLightIterator_swigregister(iLightIterator)
 iLightIterator_scfGetVersion = _iengine.iLightIterator_scfGetVersion
 iLightIterator_scfGetName = _iengine.iLightIterator_scfGetName
 
+class iLightFactory(core.iBase):
+    thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    def __init__(self, *args, **kwargs): raise AttributeError, "No constructor defined"
+    __repr__ = _swig_repr
+    def QueryObject(*args): return _iengine.iLightFactory_QueryObject(*args)
+    def SetDynamicType(*args): return _iengine.iLightFactory_SetDynamicType(*args)
+    def GetDynamicType(*args): return _iengine.iLightFactory_GetDynamicType(*args)
+    def GetColor(*args): return _iengine.iLightFactory_GetColor(*args)
+    def SetColor(*args): return _iengine.iLightFactory_SetColor(*args)
+    def GetSpecularColor(*args): return _iengine.iLightFactory_GetSpecularColor(*args)
+    def SetSpecularColor(*args): return _iengine.iLightFactory_SetSpecularColor(*args)
+    def IsSpecularColorUsed(*args): return _iengine.iLightFactory_IsSpecularColorUsed(*args)
+    def GetType(*args): return _iengine.iLightFactory_GetType(*args)
+    def SetType(*args): return _iengine.iLightFactory_SetType(*args)
+    def GetAttenuationMode(*args): return _iengine.iLightFactory_GetAttenuationMode(*args)
+    def SetAttenuationMode(*args): return _iengine.iLightFactory_SetAttenuationMode(*args)
+    def SetAttenuationConstants(*args): return _iengine.iLightFactory_SetAttenuationConstants(*args)
+    def GetAttenuationConstants(*args): return _iengine.iLightFactory_GetAttenuationConstants(*args)
+    def GetCutoffDistance(*args): return _iengine.iLightFactory_GetCutoffDistance(*args)
+    def SetCutoffDistance(*args): return _iengine.iLightFactory_SetCutoffDistance(*args)
+    def GetDirectionalCutoffRadius(*args): return _iengine.iLightFactory_GetDirectionalCutoffRadius(*args)
+    def SetDirectionalCutoffRadius(*args): return _iengine.iLightFactory_SetDirectionalCutoffRadius(*args)
+    def SetSpotLightFalloff(*args): return _iengine.iLightFactory_SetSpotLightFalloff(*args)
+    def GetSpotLightFalloff(*args): return _iengine.iLightFactory_GetSpotLightFalloff(*args)
+    def GetFlags(*args): return _iengine.iLightFactory_GetFlags(*args)
+    __swig_destroy__ = _iengine.delete_iLightFactory
+    __del__ = lambda self : None;
+iLightFactory_swigregister = _iengine.iLightFactory_swigregister
+iLightFactory_swigregister(iLightFactory)
+
+class iLightFactoryList(core.iBase):
+    thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    def __init__(self, *args, **kwargs): raise AttributeError, "No constructor defined"
+    __repr__ = _swig_repr
+    def GetCount(*args): return _iengine.iLightFactoryList_GetCount(*args)
+    def Get(*args): return _iengine.iLightFactoryList_Get(*args)
+    def Add(*args): return _iengine.iLightFactoryList_Add(*args)
+    def Remove(*args): return _iengine.iLightFactoryList_Remove(*args)
+    def RemoveAll(*args): return _iengine.iLightFactoryList_RemoveAll(*args)
+    def Find(*args): return _iengine.iLightFactoryList_Find(*args)
+    def FindByName(*args): return _iengine.iLightFactoryList_FindByName(*args)
+    __swig_destroy__ = _iengine.delete_iLightFactoryList
+    __del__ = lambda self : None;
+iLightFactoryList_swigregister = _iengine.iLightFactoryList_swigregister
+iLightFactoryList_swigregister(iLightFactoryList)
+
 CS_FOG_MODE_NONE = _iengine.CS_FOG_MODE_NONE
 CS_FOG_MODE_LINEAR_CRYSTALSPACE = _iengine.CS_FOG_MODE_LINEAR_CRYSTALSPACE
 CS_FOG_MODE_CRYSTALSPACE = _iengine.CS_FOG_MODE_CRYSTALSPACE
@@ -457,6 +503,8 @@ class iEngine(core.iBase):
     def GetTextureFormat(*args): return _iengine.iEngine_GetTextureFormat(*args)
     def GetTextureList(*args): return _iengine.iEngine_GetTextureList(*args)
     def FindTexture(*args): return _iengine.iEngine_FindTexture(*args)
+    def CreateLightFactory(*args): return _iengine.iEngine_CreateLightFactory(*args)
+    def FindLightFactory(*args): return _iengine.iEngine_FindLightFactory(*args)
     def CreateLight(*args): return _iengine.iEngine_CreateLight(*args)
     def FindLight(*args): return _iengine.iEngine_FindLight(*args)
     def FindLightID(*args): return _iengine.iEngine_FindLightID(*args)
@@ -1504,6 +1552,7 @@ class iCollection(core.iBase):
     def FindSector(*args): return _iengine.iCollection_FindSector(*args)
     def FindMeshObject(*args): return _iengine.iCollection_FindMeshObject(*args)
     def FindMeshFactory(*args): return _iengine.iCollection_FindMeshFactory(*args)
+    def FindLightFactory(*args): return _iengine.iCollection_FindLightFactory(*args)
     def FindTexture(*args): return _iengine.iCollection_FindTexture(*args)
     def FindMaterial(*args): return _iengine.iCollection_FindMaterial(*args)
     def FindShader(*args): return _iengine.iCollection_FindShader(*args)
