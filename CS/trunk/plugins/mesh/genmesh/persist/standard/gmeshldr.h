@@ -173,6 +173,9 @@ private:
   csRef<iSyntaxService> synldr;
   csRef<iEngine> engine;
 
+  bool WriteSubMesh (iGeneralMeshSubMesh* factSubmesh,
+                     iGeneralMeshSubMesh* objSubmesh,
+                     iDocumentNode* paramsNode);
 public:
   /// Constructor.
   csGeneralMeshSaver (iBase*);
