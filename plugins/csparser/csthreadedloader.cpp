@@ -186,57 +186,209 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
   }
 
   bool csThreadedLoader::LoadLightFactory(iLoaderContext* ldr_context,
-    iLightFactory* stemp, iDocumentNode* node, iStreamSource* ssource)
+    iLightFactory* l, iDocumentNode* node, iStreamSource* ssource)
   {
-    csRef<iDocumentNodeIterator> prev_it;
-    csRef<iDocumentNodeIterator> it = node->GetNodes ();
-    while (true)
-    {
-      if (!it->HasNext ())
-      {
-        // Iterator has finished. Check if we still have to continue
-        // with the normal iterator first (non-defaults).
-        if (!prev_it) break;
-        it = prev_it;
-        prev_it = 0;
-        continue;
-      }
+    csVector3 attenvec (0, 0, 0);
+    float spotfalloffInner = 1, spotfalloffOuter = 0;
+    csLightType type = CS_LIGHT_POINTLIGHT;
+    csFlags lightFlags;
 
+    float distbright = 1;
+
+    float influenceRadius = 0;
+    bool influenceOverride = false;
+
+    csLightAttenuationMode attenuation = CS_ATTN_LINEAR;
+    float dist = 0;
+
+    csColor color;
+    csColor specular (0, 0, 0);
+    bool userSpecular = false;
+    csLightDynamicType dyn;
+
+    // This csObject will contain all key-value pairs as children
+    csObject Keys;
+
+    // New format.
+    color.red = color.green = color.blue = 1;
+    dyn = CS_LIGHT_DYNAMICTYPE_STATIC;
+
+    dist = 1;
+
+    csRef<iDocumentNodeIterator> it = node->GetNodes ();
+    while (it->HasNext ())
+    {
       csRef<iDocumentNode> child = it->Next ();
       if (child->GetType () != CS_NODE_ELEMENT) continue;
       const char* value = child->GetValue ();
       csStringID id = xmltokens.Request (value);
       switch (id)
       {
-      case XMLTOKEN_KEY:
+      case XMLTOKEN_RADIUS:
         {
-          if (!ParseKey (child, stemp->QueryObject()))
+          dist = child->GetContentsValueAsFloat ();
+          csRef<iDocumentAttribute> attr;
+          if (attr = child->GetAttribute ("brightness"))
           {
-            return false;
+            distbright = attr->GetValueAsFloat();
           }
         }
         break;
-      case XMLTOKEN_ADDON:
-        if (!LoadAddOn (ldr_context, child, stemp, false, ssource))
-        {
+      case XMLTOKEN_COLOR:
+        if (!SyntaxService->ParseColor (child, color))
           return false;
+        break;
+      case XMLTOKEN_SPECULAR:
+        if (!SyntaxService->ParseColor (child, specular))
+          return false;
+        userSpecular = true;
+        break;
+      case XMLTOKEN_DYNAMIC:
+        {
+          bool d;
+          if (!SyntaxService->ParseBool (child, d, true))
+            return false;
+          if (d)
+            dyn = CS_LIGHT_DYNAMICTYPE_PSEUDO;
+          else
+            dyn = CS_LIGHT_DYNAMICTYPE_STATIC;
         }
         break;
-      case XMLTOKEN_META:
-        if (!LoadAddOn (ldr_context, child, stemp, true, ssource))
-        {
+      case XMLTOKEN_KEY:
+        if (!ParseKey (child, &Keys))
           return false;
+        break;
+      case XMLTOKEN_ATTENUATION:
+        {
+          const char* att = child->GetContentsValue();
+          if (att)
+          {
+            if (!strcasecmp (att, "none"))
+              attenuation = CS_ATTN_NONE;
+            else if (!strcasecmp (att, "linear"))
+              attenuation = CS_ATTN_LINEAR;
+            else if (!strcasecmp (att, "inverse"))
+              attenuation = CS_ATTN_INVERSE;
+            else if (!strcasecmp (att, "realistic"))
+              attenuation = CS_ATTN_REALISTIC;
+            else if (!strcasecmp (att, "clq"))
+              attenuation = CS_ATTN_CLQ;
+            else
+            {
+              SyntaxService->ReportBadToken (child);
+              return false;
+            }
+          }
+          else
+          {
+            attenuation = CS_ATTN_CLQ;
+          }
+
+          attenvec.x = child->GetAttributeValueAsFloat ("c");
+          attenvec.y = child->GetAttributeValueAsFloat ("l");
+          attenvec.z = child->GetAttributeValueAsFloat ("q");
+        }
+        break;
+      case XMLTOKEN_INFLUENCERADIUS:
+        {
+          influenceRadius = child->GetContentsValueAsFloat();
+          influenceOverride = true;
+        }
+        break;
+      case XMLTOKEN_ATTENUATIONVECTOR:
+        {
+          //@@@ should be scrapped in favor of specification via
+          // "attenuation".
+          if (!SyntaxService->ParseVector (child, attenvec))
+            return false;
+          attenuation = CS_ATTN_CLQ;
+        }
+        break;
+      case XMLTOKEN_TYPE:
+        {
+          const char* t = child->GetContentsValue ();
+          if (t)
+          {
+            if (!strcasecmp (t, "point") || !strcasecmp (t, "pointlight"))
+              type = CS_LIGHT_POINTLIGHT;
+            else if (!strcasecmp (t, "directional"))
+              type = CS_LIGHT_DIRECTIONAL;
+            else if (!strcasecmp (t, "spot") || !strcasecmp (t, "spotlight"))
+              type = CS_LIGHT_SPOTLIGHT;
+            else
+            {
+              SyntaxService->ReportBadToken (child);
+              return false;
+            }
+          }
+        }
+        break;
+      case XMLTOKEN_DIRECTION:
+        SyntaxService->ReportError ("crystalspace.maploader.light", child,
+          "%s is no longer support for lights. Use %s!",
+	  CS::Quote::Single ("direction"), CS::Quote::Single ("move"));
+        return false;
+      case XMLTOKEN_SPOTLIGHTFALLOFF:
+        {
+          spotfalloffInner = child->GetAttributeValueAsFloat ("inner");
+          spotfalloffInner *= (PI/180);
+          spotfalloffInner = cosf(spotfalloffInner);
+          spotfalloffOuter = child->GetAttributeValueAsFloat ("outer");
+          spotfalloffOuter *= (PI/180);
+          spotfalloffOuter = cosf(spotfalloffOuter);
+        }
+        break;
+
+      case XMLTOKEN_NOSHADOWS:
+        {
+          bool flag;
+          if (!SyntaxService->ParseBool (child, flag, true))
+            return false;
+          lightFlags.SetBool (CS_LIGHT_NOSHADOWS, flag);
         }
         break;
       default:
-        {
-          SyntaxService->ReportBadToken (child);
-          return false;
-        }
+        SyntaxService->ReportBadToken (child);
+        return false;
       }
     }
 
-    ldr_context->AddToCollection(stemp->QueryObject());
+    // implicit radius
+    if (dist == 0)
+    {
+      if (color.red > color.green && color.red > color.blue) dist = color.red;
+      else if (color.green > color.blue) dist = color.green;
+      else dist = color.blue;
+    }
+
+    l->SetColor (color);
+    l->SetDynamicType (dyn);
+    ldr_context->AddToCollection(l->QueryObject ());
+    l->SetType (type);
+    l->GetFlags() = lightFlags;
+    l->SetSpotLightFalloff (spotfalloffInner, spotfalloffOuter);
+
+    if (userSpecular) l->SetSpecularColor (specular);
+
+    l->SetAttenuationMode (attenuation);
+    if (attenuation == CS_ATTN_CLQ)
+    {
+      if (attenvec.IsZero())
+      {
+        //@@TODO:
+      }
+      else
+      {
+        l->SetAttenuationConstants (csVector4 (attenvec, 0));
+      }
+    }
+
+    if (influenceOverride) l->SetCutoffDistance (influenceRadius);
+    else l->SetCutoffDistance (dist);
+
+    // Move the key-value pairs from 'Keys' to the light object
+    l->QueryObject ()->ObjAddChildren (&Keys);
+    Keys.ObjRemoveAll ();
 
     return true;
   }
@@ -1268,6 +1420,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
     }
 
     ldr_context->ParseAvailableMeshfacts(doc);
+    ldr_context->ParseAvailableLightfacts(doc);
 
     /// Wait for library parse to finish.
     threadman->Wait(threadReturns);
@@ -1326,12 +1479,16 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
           return false;
         break;
       case XMLTOKEN_SECTOR:
+      case XMLTOKEN_LIGHTFACT:
       case XMLTOKEN_MESHFACT:
         {
           // Parse deferred libraries first.
           if(!LoadDeferredLibs(defLibs, ldr_context, ssource, missingdata,
             threadReturns, libs, libIDs, do_verbose))
               return false;
+
+          if(!LoadLightfacts (thisContext, ssource))
+            return false;
 
           if(!LoadMeshfacts (thisContext, ssource, &proxyTextures, materialArray))
             return false;
@@ -1479,6 +1636,50 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
       }
 
       ldr_context->availMaterials.DeleteAll();
+    }
+
+    return true;
+  }
+
+  bool csThreadedLoader::LoadLightfacts (csLoaderContext* ldr_context,
+    iStreamSource* ssource)
+  {
+    if(!ldr_context->availLightfacts.IsEmpty())
+    {
+      csRefArray<iThreadReturn> threadReturns;
+      for(size_t i=0; i<ldr_context->availLightfacts.GetSize(); ++i)
+      {
+        csRef<iDocumentAttribute> attr_name = ldr_context->availLightfacts[i].node->GetAttribute ("name");
+        csRef<iDocumentAttribute> attr_file = ldr_context->availLightfacts[i].node->GetAttribute ("file");
+        if (attr_file && attr_file->GetValue ())
+        {
+          const char* name = attr_name->GetValue();
+          const char* filename = attr_file->GetValue ();
+          csRef<iDataBuffer> buffer = vfs->ReadFile (filename);
+          csRef<iDocument> doc;
+          if(!LoadStructuredDoc (filename, buffer, doc))
+            return false;
+
+          csRef<iDocumentNode> node = doc->GetRoot ()->GetNode ("lightfact");
+          if(!node.IsValid())
+            return false;
+
+          threadReturns.Push(FindOrLoadLightFactory(name, ldr_context,
+            node, ssource, ldr_context->availLightfacts[i].path));
+        }
+        else
+        {
+          threadReturns.Push(FindOrLoadLightFactory(0, ldr_context, ldr_context->availLightfacts[i].node,
+            ssource, ldr_context->availLightfacts[i].path));
+        }
+      }
+
+      if(!threadman->Wait(threadReturns))
+      {
+        return false;
+      }
+
+      ldr_context->availLightfacts.DeleteAll();
     }
 
     return true;
@@ -1772,6 +1973,13 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
         if(!mapLoad)
         {
           if(!LoadMeshfacts (thisContext, ssource, &proxyTextures, materialArray))
+            return false;
+        }
+        break;
+      case XMLTOKEN_LIGHTFACT:
+        if(!mapLoad)
+        {
+          if(!LoadLightfacts (thisContext, ssource))
             return false;
         }
         break;
@@ -2547,7 +2755,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
         break;
       case XMLTOKEN_LIGHT:
         {
-          iLight * light = ParseStatlight (ldr_context, child);
+          csRef<iLight> light = ParseStatlight (ldr_context, child);
           if (light)
           {
             light->QuerySceneNode ()->SetParent (mesh->QuerySceneNode ());
@@ -2946,20 +3154,20 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
           at = child->GetAttribute ("m");
           if (at)
           {
-      float lodm = child->GetAttributeValueAsFloat ("m");
-      float loda = child->GetAttributeValueAsFloat ("a");
-      lodctrl->SetLOD (lodm, loda);
-    }
-    else
-    {
-      float d0 = child->GetAttributeValueAsFloat ("d0");
-      float d1 = child->GetAttributeValueAsFloat ("d1");
-      float lodm = 1.0 / (d1-d0);
-      float loda = -lodm * d0;
-      lodctrl->SetLOD (lodm, loda);
-    }
-  }
-  break;
+      	    float lodm = child->GetAttributeValueAsFloat ("m");
+            float loda = child->GetAttributeValueAsFloat ("a");
+            lodctrl->SetLOD (lodm, loda);
+          }
+          else
+          {
+            float d0 = child->GetAttributeValueAsFloat ("d0");
+            float d1 = child->GetAttributeValueAsFloat ("d1");
+            float lodm = 1.0 / (d1-d0);
+            float loda = -lodm * d0;
+            lodctrl->SetLOD (lodm, loda);
+          }
+        }
+        break;
       case XMLTOKEN_FADE:
         {
           csRef<iDocumentAttribute> at = child->GetAttribute ("varf");
@@ -4606,6 +4814,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
     return tag.CompareNoCase ("world")
       || tag.CompareNoCase ("library")
       || tag.CompareNoCase ("texture")
+      || tag.CompareNoCase ("lightfact")
       || tag.CompareNoCase ("meshfact")
       || tag.CompareNoCase ("meshgen")
       || tag.CompareNoCase ("meshobj")

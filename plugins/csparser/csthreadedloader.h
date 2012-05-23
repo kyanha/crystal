@@ -806,9 +806,11 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
       csSafeCopyArray<ProxyTexture>* proxyTextures,
       csWeakRefArray<iMaterialWrapper> &materialArray);
 
+    bool LoadLightfacts (csLoaderContext* ldr_context, iStreamSource* ssource);
+
     bool LoadMeshfacts (csLoaderContext* ldr_context,
       iStreamSource* ssource, csSafeCopyArray<ProxyTexture>* proxyTextures,
-    csWeakRefArray<iMaterialWrapper> &materialArray);
+      csWeakRefArray<iMaterialWrapper> &materialArray);
 
     /**\name Mesh generator loading
      * @{ */
@@ -863,7 +865,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
       iMeshWrapper* parent, iStreamSource* ssource);
 
     /// Parse a static light definition and add the light to the engine
-    iLight* ParseStatlight (iLoaderContext* ldr_context, iDocumentNode* node);
+    csPtr<iLight> ParseStatlight (iLoaderContext* ldr_context, iDocumentNode* node);
 
     /// Find the named shared variable and verify its type if specified
     iSharedVariable *FindSharedVariable(const char *colvar,

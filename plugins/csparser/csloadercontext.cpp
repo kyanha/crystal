@@ -567,5 +567,22 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
       }
     }
   }
+
+  void csLoaderContext::ParseAvailableLightfacts(iDocumentNode* doc)
+  {
+    csRef<iDocumentNodeIterator> itr = doc->GetNodes("lightfact");
+    while(itr->HasNext())
+    {
+      csRef<iDocumentNode> lightfact = itr->Next();
+      if(lightfact->GetAttributeValue("name"))
+      {
+        NodeData dat;
+        dat.node = lightfact;
+        dat.path = vfs->GetCwd();
+        CS::Threading::MutexScopedLock lock(lightfactObjects);
+        availLightfacts.Push(dat);
+      }
+    }
+  }
 }
 CS_PLUGIN_NAMESPACE_END(csparser)
