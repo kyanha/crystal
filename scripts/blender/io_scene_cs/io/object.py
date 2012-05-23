@@ -381,8 +381,18 @@ def ObjectAsCS(self, func, depth=0, **kwargs):
 
   if self.type == 'MESH':
     if len(self.data.vertices)!=0 and len(self.data.all_faces)!=0:
-      func(' '*depth +'<meshref name="%s_object">'%(self.name))
-      func(' '*depth +'  <factory>%s</factory>'%(self.name))
+      # Temporary disable of meshref support because of incompatibility
+      # issues with lighter2 that needs to be genmesh aware in order to
+      # pack the lightmaps per submeshes
+      #func(' '*depth +'<meshref name="%s_object">'%(self.name))
+      #func(' '*depth +'  <factory>%s</factory>'%(self.name))
+
+      func(' '*depth +'<meshobj name="%s_object">'%(self.name))
+      func(' '*depth +'  <plugin>crystalspace.mesh.loader.genmesh</plugin>')
+      func(' '*depth +'  <params>')
+      func(' '*depth +'    <factory>%s</factory>'%(self.name))
+      func(' '*depth +'  </params>')
+
       if self.parent and self.parent_type == 'BONE':
         matrix = self.matrix_world
       else:
@@ -390,16 +400,30 @@ def ObjectAsCS(self, func, depth=0, **kwargs):
         if 'transform' in kwargs:
           matrix =  matrix * kwargs['transform']
       MatrixAsCS(matrix, func, depth+2)
-      func(' '*depth +'</meshref>')
+
+      #func(' '*depth +'</meshref>')
+      func(' '*depth +'</meshobj>')
 
   elif self.type == 'ARMATURE':
-    func(' '*depth +'<meshref name="%s_object">'%(name))
-    func(' '*depth +'  <factory>%s</factory>'%(name))
+    # Temporary disable of meshref support because of incompatibility
+    # issues with lighter2 that needs to be genmesh aware in order to
+    # pack the lightmaps per submeshes
+    #func(' '*depth +'<meshref name="%s_object">'%(name))
+    #func(' '*depth +'  <factory>%s</factory>'%(name))
+
+    func(' '*depth +'<meshobj name="%s_object">'%(self.name))
+    func(' '*depth +'  <plugin>crystalspace.mesh.loader.animesh</plugin>')
+    func(' '*depth +'  <params>')
+    func(' '*depth +'    <factory>%s</factory>'%(self.name))
+    func(' '*depth +'  </params>')
+
     matrix = self.relative_matrix
     if 'transform' in kwargs:
       matrix =  matrix * kwargs['transform']
     MatrixAsCS(matrix, func, depth+2)
-    func(' '*depth +'</meshref>')
+
+    #func(' '*depth +'</meshref>')
+    func(' '*depth +'</meshobj>')
 
   elif self.type == 'LAMP':
     func(' '*depth +'<light name="%s">'%(name))
