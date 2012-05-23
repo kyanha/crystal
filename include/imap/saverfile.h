@@ -40,7 +40,9 @@ enum
   /// Meshfact file
   CS_SAVER_FILE_MESHFACT = 2,
   /// Addon params file
-  CS_SAVER_FILE_PARAMS = 3
+  CS_SAVER_FILE_PARAMS = 3,
+  /// Lightfact file
+  CS_SAVER_FILE_LIGHTFACT = 4
 };
 //@}
 

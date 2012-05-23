@@ -564,6 +564,8 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
           if (attr = child->GetAttribute ("brightness"))
           {
             distbright = attr->GetValueAsFloat();
+            ReportWarning ("crystalspace.maploader",
+              "'brightness' attribute for lights is deprecated!");
           }
         }
         break;

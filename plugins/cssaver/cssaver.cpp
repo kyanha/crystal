@@ -625,6 +625,79 @@ bool csSaver::SaveTriMesh (iDocumentNode *parent, csStringID id,
   return true;
 }
 
+bool csSaver::SaveLightFactories(iLightFactoryList* factList, 
+                                iDocumentNode *parent)
+{
+  csStringID base_id = strings->Request ("base");
+  for (int i=0; i<factList->GetCount(); i++)
+  {
+    csRef<iLightFactory> lightfact = factList->Get(i);
+    if (collection && !collection->IsParentOf (lightfact->QueryObject ()))
+      continue;
+    
+    //Create the Tag for the MeshObj
+    csRef<iDocumentNode> factNode = CreateNode(parent, "lightfact");
+
+    //Add the factory name to the MeshObj tag
+    const char* name = lightfact->QueryObject()->GetName();
+    if (name && *name) 
+      factNode->SetAttribute("name", name);
+
+    CreateNode (factNode, "radius")->CreateNodeBefore (CS_NODE_TEXT)
+	->SetValueAsFloat (lightfact->GetCutoffDistance ());
+    synldr->WriteColor (CreateNode (factNode, "color"), lightfact->GetColor ());
+    if (lightfact->IsSpecularColorUsed ())
+      synldr->WriteColor (CreateNode (factNode, "specular"),
+	  lightfact->GetSpecularColor ());
+    synldr->WriteBool (factNode, "dynamic",
+      lightfact->GetDynamicType () != CS_LIGHT_DYNAMICTYPE_STATIC);
+
+    csLightAttenuationMode atten = lightfact->GetAttenuationMode ();
+    const char* attenName;
+    switch (atten)
+    {
+      case CS_ATTN_NONE: attenName = "none"; break;
+      case CS_ATTN_LINEAR: attenName = "linear"; break;
+      case CS_ATTN_INVERSE: attenName = "inverse"; break;
+      case CS_ATTN_REALISTIC: attenName = "realistic"; break;
+      case CS_ATTN_CLQ: attenName = "clq"; break;
+      default: attenName = "none"; break;
+    }
+    csRef<iDocumentNode> attenNode = CreateNode (factNode, "attenuation");
+    attenNode->CreateNodeBefore (CS_NODE_TEXT)->SetValue (attenName);
+    const csVector4& attenVec = lightfact->GetAttenuationConstants ();
+    attenNode->SetAttributeAsFloat ("c", attenVec.x);
+    attenNode->SetAttributeAsFloat ("l", attenVec.y);
+    attenNode->SetAttributeAsFloat ("q", attenVec.z);
+
+    csLightType type = lightfact->GetType ();
+    const char* typeName;
+    switch (type)
+    {
+      case CS_LIGHT_POINTLIGHT: typeName = "point"; break;
+      case CS_LIGHT_DIRECTIONAL: typeName = "directional"; break;
+      case CS_LIGHT_SPOTLIGHT: typeName = "spot"; break;
+      default: typeName = "point"; break;
+    }
+    CreateNode (factNode, "type")->CreateNodeBefore (CS_NODE_TEXT)
+	->SetValue (typeName);
+
+    float inner, outer;
+    lightfact->GetSpotLightFalloff (inner, outer);
+    csRef<iDocumentNode> spotlightNode = CreateNode (factNode, "spotlightfalloff");
+    spotlightNode->SetAttributeAsFloat ("inner", inner);
+    spotlightNode->SetAttributeAsFloat ("outer", outer);
+
+    csFlags& flags = lightfact->GetFlags ();
+    if (flags.Check (CS_LIGHT_NOSHADOWS))
+      synldr->WriteBool (factNode, "noshadows", true);
+
+    //Save some factory params...
+    if (!SaveKeys (factNode, lightfact->QueryObject ())) return false;
+  }
+  return true;
+}
+
 bool csSaver::SaveMeshFactories(iMeshFactoryList* factList, 
                                 iDocumentNode *parent,
 				iMeshFactoryWrapper* parentfact)
@@ -1566,6 +1639,7 @@ bool csSaver::SaveMapFile(csRef<iDocumentNode> &root)
   if (!SaveSettings(parent)) return false;
   if (!SaveCameraPositions (parent)) return false;
   if (!SaveAddons(parent)) return false;
+  if (!SaveLightFactories(engine->GetLightFactories(), parent)) return false;
   if (!SaveMeshFactories(engine->GetMeshFactories(), parent)) return false;
   if (!SaveSectors(parent)) return false;
   if (!SaveSequence(parent)) return false;
@@ -1627,7 +1701,8 @@ bool csSaver::SaveCollection(iCollection* col, int type, csRef<iDocumentNode>& r
   fileType = type;
   
   // @@@: Support saving meshfact and params files
-  if (fileType == CS_SAVER_FILE_MESHFACT || fileType == CS_SAVER_FILE_PARAMS)
+  if (fileType == CS_SAVER_FILE_MESHFACT || fileType == CS_SAVER_FILE_PARAMS
+      || fileType == CS_SAVER_FILE_LIGHTFACT)
     return false;
   
   const char* nodeName = 0;
@@ -1641,6 +1716,9 @@ bool csSaver::SaveCollection(iCollection* col, int type, csRef<iDocumentNode>& r
     break;
   case CS_SAVER_FILE_MESHFACT:
     nodeName = "meshfact";
+    break;
+  case CS_SAVER_FILE_LIGHTFACT:
+    nodeName = "lightfact";
     break;
   case CS_SAVER_FILE_PARAMS:
     nodeName = "params";
@@ -1665,6 +1743,7 @@ bool csSaver::SaveCollection(iCollection* col, int type, csRef<iDocumentNode>& r
   if (!SaveLibraryReferences(parent)) return false;
   if (!SaveCameraPositions (parent)) return false;
   if (!SaveAddons(parent)) return false;
+  if (!SaveLightFactories(engine->GetLightFactories(), parent)) return false;
   if (!SaveMeshFactories(engine->GetMeshFactories(), parent)) return false;
   
   if (fileType == CS_SAVER_FILE_WORLD)

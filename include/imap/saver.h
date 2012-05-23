@@ -59,8 +59,8 @@ struct iSaver : public virtual iBase
    * \param collection The collection to save
    * \param filename The VFS name of the file where to save the collection
    * \param filetype The type of CS file to be saved. It can be one of
-   * CS_SAVER_FILE_WORLD, CS_SAVER_FILE_LIBRARY, CS_SAVER_FILE_MESHFACT and
-   * CS_SAVER_FILE_PARAMS.
+   * CS_SAVER_FILE_WORLD, CS_SAVER_FILE_LIBRARY, CS_SAVER_FILE_MESHFACT,
+   * CS_SAVER_FILE_LIGHTFACT and CS_SAVER_FILE_PARAMS.
    */
   virtual bool SaveCollectionFile(iCollection* collection, const char* filename,
     int filetype) = 0;
@@ -70,8 +70,8 @@ struct iSaver : public virtual iBase
    * \param collection The collection to save
    * \param filename The VFS name of the file where to save the collection
    * \param filetype The type of CS file to be saved. It can be one of
-   * CS_SAVER_FILE_WORLD, CS_SAVER_FILE_LIBRARY, CS_SAVER_FILE_MESHFACT and
-   * CS_SAVER_FILE_PARAMS.
+   * CS_SAVER_FILE_WORLD, CS_SAVER_FILE_LIBRARY, CS_SAVER_FILE_MESHFACT,
+   * CS_SAVER_FILE_LIGHTFACT and CS_SAVER_FILE_PARAMS.
    */
   virtual csRef<iString> SaveCollection(iCollection* collection, int filetype) = 0;
   
@@ -79,8 +79,8 @@ struct iSaver : public virtual iBase
    * Save the collection to the given document node.
    * \param collection The collection to save
    * \param filetype The type of CS file to be saved. It can be one of
-   * CS_SAVER_FILE_WORLD, CS_SAVER_FILE_LIBRARY, CS_SAVER_FILE_MESHFACT and
-   * CS_SAVER_FILE_PARAMS.
+   * CS_SAVER_FILE_WORLD, CS_SAVER_FILE_LIBRARY, CS_SAVER_FILE_MESHFACT,
+   * CS_SAVER_FILE_LIGHTFACT and CS_SAVER_FILE_PARAMS.
    * \param root The document node where the description of the collection will be added
    */
   virtual bool SaveCollection(iCollection* collection, int filetype,
