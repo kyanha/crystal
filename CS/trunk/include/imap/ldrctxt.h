@@ -34,6 +34,7 @@ struct iMeshFactoryWrapper;
 struct iMeshWrapper;
 struct iSector;
 struct iTextureWrapper;
+struct iLightFactory;
 struct iLight;
 struct iShader;
 struct iObject;
@@ -53,7 +54,7 @@ struct iObject;
  */
 struct iLoaderContext : public virtual iBase
 {
-  SCF_INTERFACE(iLoaderContext, 4, 2, 0);
+  SCF_INTERFACE(iLoaderContext, 4, 2, 1);
   /// Find a sector.
   virtual iSector* FindSector (const char* name) = 0;
   
@@ -72,6 +73,10 @@ struct iLoaderContext : public virtual iBase
    */
   virtual iMaterialWrapper* FindNamedMaterial (const char* name,
   	const char *filename) = 0;
+
+  /// Find a light factory.
+  virtual iLightFactory* FindLightFactory (const char* name, bool notify = true) = 0;
+
   /// Find a mesh factory.
   virtual iMeshFactoryWrapper* FindMeshFactory (const char* name, bool notify = true) = 0;
   /// Find a mesh object.

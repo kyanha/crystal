@@ -114,6 +114,13 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
     return ret;
   }
 
+  csPtr<iLightFactory> csLoader::LoadLightFactory (const char* fname, iStreamSource* ssource)
+  {
+    csString cwd = vfs->GetCwd ();
+    csRef<iThreadReturn> itr = loader->LoadLightFactoryWait(cwd, fname, ssource);
+    return scfQueryInterfaceSafe<iLightFactory>(itr->GetResultRefPtr());
+  }
+
   csPtr<iMeshFactoryWrapper> csLoader::LoadMeshObjectFactory (const char* fname, iStreamSource* ssource)
   {
     csString cwd = vfs->GetCwd ();

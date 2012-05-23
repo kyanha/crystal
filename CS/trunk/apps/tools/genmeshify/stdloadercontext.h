@@ -46,6 +46,7 @@ namespace genmeshify
     virtual iMaterialWrapper* FindMaterial (const char* name, bool doLoad = true);
     virtual iMaterialWrapper* FindNamedMaterial (const char* name,
       const char *filename);
+    virtual iLightFactory* FindLightFactory (const char* name, bool notify = true);
     virtual iMeshFactoryWrapper* FindMeshFactory (const char* name, bool notify = true);
     virtual iMeshWrapper* FindMeshObject (const char* name);
     virtual iTextureWrapper* FindTexture (const char* name, bool doLoad = true);

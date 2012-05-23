@@ -185,6 +185,123 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
     return false;
   }
 
+  bool csThreadedLoader::LoadLightFactory(iLoaderContext* ldr_context,
+    iLightFactory* stemp, iDocumentNode* node, iStreamSource* ssource)
+  {
+    csRef<iDocumentNodeIterator> prev_it;
+    csRef<iDocumentNodeIterator> it = node->GetNodes ();
+    while (true)
+    {
+      if (!it->HasNext ())
+      {
+        // Iterator has finished. Check if we still have to continue
+        // with the normal iterator first (non-defaults).
+        if (!prev_it) break;
+        it = prev_it;
+        prev_it = 0;
+        continue;
+      }
+
+      csRef<iDocumentNode> child = it->Next ();
+      if (child->GetType () != CS_NODE_ELEMENT) continue;
+      const char* value = child->GetValue ();
+      csStringID id = xmltokens.Request (value);
+      switch (id)
+      {
+      case XMLTOKEN_KEY:
+        {
+          if (!ParseKey (child, stemp->QueryObject()))
+          {
+            return false;
+          }
+        }
+        break;
+      case XMLTOKEN_ADDON:
+        if (!LoadAddOn (ldr_context, child, stemp, false, ssource))
+        {
+          return false;
+        }
+        break;
+      case XMLTOKEN_META:
+        if (!LoadAddOn (ldr_context, child, stemp, true, ssource))
+        {
+          return false;
+        }
+        break;
+      default:
+        {
+          SyntaxService->ReportBadToken (child);
+          return false;
+        }
+      }
+    }
+
+    ldr_context->AddToCollection(stemp->QueryObject());
+
+    return true;
+  }
+
+  THREADED_CALLABLE_IMPL4(csThreadedLoader, LoadLightFactory, const char* cwd, const char* fname,
+    csRef<iStreamSource> ssource, bool do_verbose)
+  {
+    csVfsDirectoryChanger dirChange(vfs);
+    dirChange.ChangeToFull(cwd);
+
+    csRef<iLoaderContext> ldr_context = csPtr<iLoaderContext> (
+      new csLoaderContext (object_reg, Engine, this, 0, 0, KEEP_USED, do_verbose));
+
+    csRef<iFile> databuff (vfs->Open (fname, VFS_FILE_READ));
+
+    if (!databuff || !databuff->GetSize ())
+    {
+      ReportError (
+        "crystalspace.maploader.parse.meshfactory",
+        "Could not open light factory file %s on VFS!", CS::Quote::Single (fname));
+      return false;
+    }
+
+    csRef<iDocument> doc;
+    bool er = LoadStructuredDoc (fname, databuff, doc);
+    if (!er)
+    {
+      return false;
+    }
+
+    if (doc)
+    {
+      csRef<iDocumentNode> lightfactnode = doc->GetRoot ()->GetNode ("lightfact");
+      if (!lightfactnode)
+      {
+        ReportError (
+          "crystalspace.maploader.parse.map",
+          "File %s does not seem to contain a %s!",
+	  CS::Quote::Single (fname), CS::Quote::Single ("lightfact"));
+        return false;
+      }
+      csRef<iLightFactory> t = Engine->CreateLightFactory (
+        lightfactnode->GetAttributeValue ("name"));
+      if (LoadLightFactory (ldr_context, t, lightfactnode, ssource))
+      {
+        ldr_context->AddToCollection(t->QueryObject ());
+        AddLightFactToList(t);
+        ret->SetResult(csRef<iBase>(t));
+
+        if(sync)
+        {
+          Engine->SyncEngineListsWait(this);
+        }
+
+        return true;
+      }
+    }
+    else
+    {
+      ReportError ("crystalspace.maploader.parse.plugin",
+        "File does not appear to be a structured light factory (%s)!", fname);
+    }
+    return false;
+  }
+
   THREADED_CALLABLE_IMPL4(csThreadedLoader, LoadMeshObjectFactory, const char* cwd, const char* fname,
     csRef<iStreamSource> ssource, bool do_verbose)
   {
@@ -632,6 +749,27 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
         return res;
       }
 
+      // Light Factory
+      csRef<iDocumentNode> lightfactnode;
+      if(attempt == 1)
+      {
+        lightfactnode = node->GetNode ("lightfact");
+      }
+      if(attempt == 2)
+      {
+        if(csString("lightfact") == csString(node->GetValue()))
+          lightfactnode = node;
+      }
+      if (lightfactnode)
+      {
+        bool res = FindOrLoadLightFactoryTC(ret, false, 0, ldr_context, lightfactnode, ssource, 0);
+        if(sync && res)
+        {
+          Engine->SyncEngineListsWait(this);
+        }
+        return res;
+      }
+
       // Mesh Factory
       csRef<iDocumentNode> meshfactnode;
       if(attempt == 1)
@@ -959,6 +1097,51 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
     ReportError("crystalspace.maploader.parse",
       "File doesn't seem to be a world, library, meshfact, meshobj, meshref, portals, light or plugins file!");
     return false;
+  }
+
+  THREADED_CALLABLE_IMPL5(csThreadedLoader, FindOrLoadLightFactory, const char* name,
+    csRef<iLoaderContext> ldr_context, csRef<iDocumentNode> lightfactnode,
+    csRef<iStreamSource> ssource, const char* path)
+  {
+    csVfsDirectoryChanger dirChange(vfs);
+    if(path)
+    {
+      dirChange.ChangeTo(path);
+    }
+
+    const char* lightfactname = (name != 0) ? name : lightfactnode->GetAttributeValue("name");
+
+    csRef<iLightFactory> mfw = ldr_context->FindLightFactory(lightfactname, false);
+    if(mfw)
+    {
+      ldr_context->AddToCollection(mfw->QueryObject());
+      ret->SetResult(scfQueryInterface<iBase>(mfw));
+      return true;
+    }
+
+    if(!AddLoadingLightFact(lightfactname))
+    {
+      // Fixme.
+      while(!mfw)
+      {
+        mfw = ldr_context->FindLightFactory(lightfactname, false);
+      }
+
+      ldr_context->AddToCollection(mfw->QueryObject());
+      ret->SetResult(scfQueryInterface<iBase>(mfw));
+      return true;
+    }
+
+    mfw = Engine->CreateLightFactory(lightfactname);
+    if(!LoadLightFactory(ldr_context, mfw, lightfactnode, ssource))
+    {
+      return false;
+    }
+
+    AddLightFactToList(mfw);
+    RemoveLoadingLightFact(lightfactname);
+    ret->SetResult(scfQueryInterface<iBase>(mfw));
+    return true;
   }
 
   THREADED_CALLABLE_IMPL7(csThreadedLoader, FindOrLoadMeshFactory, const char* name,

@@ -122,6 +122,12 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
       itr.AttachNew(new csLoaderIterator<iSector, iSectorLoaderIterator>(&loaderSectors, &sectorsLock));
       return csPtr<iSectorLoaderIterator>(itr);
     }
+    virtual csPtr<iLightFactLoaderIterator> GetLoaderLightFactories()
+    {
+      csRef<iLightFactLoaderIterator> itr;
+      itr.AttachNew(new csLoaderIterator<iLightFactory, iLightFactLoaderIterator>(&loaderLightFactories, &lightfactsLock));
+      return csPtr<iLightFactLoaderIterator>(itr);
+    }
     virtual csPtr<iMeshFactLoaderIterator> GetLoaderMeshFactories()
     {
       csRef<iMeshFactLoaderIterator> itr;
@@ -188,6 +194,9 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
     THREADED_CALLABLE_DECL4(csThreadedLoader, LoadSoundWrapper, csLoaderReturn, const char*, cwd, const char*, name,
     const char*, fname, bool, do_verbose, THREADED, false, false)
 
+    THREADED_CALLABLE_DECL4(csThreadedLoader, LoadLightFactory, csLoaderReturn, const char*, cwd, const char*, fname,
+    csRef<iStreamSource>, ssource, bool, do_verbose, THREADED, false, false)
+
     THREADED_CALLABLE_DECL4(csThreadedLoader, LoadMeshObjectFactory, csLoaderReturn, const char*, cwd, const char*, fname,
     csRef<iStreamSource>, ssource, bool, do_verbose, THREADED, false, false)
 
@@ -231,6 +240,15 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
         CS::Threading::ScopedWriteLock lock(sectorsLock);
         loaderSectors.Push(obj);
         obj->DecRef(); // Compensate for CreateSector IncRef().
+      }
+      MarkSyncNeeded();
+    }
+
+    void AddLightFactToList(iLightFactory* obj)
+    {
+      {
+        CS::Threading::ScopedWriteLock lock(lightfactsLock);
+        loaderLightFactories.Push(obj);
       }
       MarkSyncNeeded();
     }
@@ -330,6 +348,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
     // Shared lists and locks.
     CS::Threading::ReadWriteMutex sectorsLock;
     CS::Threading::ReadWriteMutex meshfactsLock;
+    CS::Threading::ReadWriteMutex lightfactsLock;
     CS::Threading::ReadWriteMutex meshesLock;
     CS::Threading::ReadWriteMutex camposLock;
     CS::Threading::ReadWriteMutex texturesLock;
@@ -340,6 +359,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
     // Final objects.
     csRefArray<iSector> loaderSectors;
     csRefArray<iMeshFactoryWrapper> loaderMeshFactories;
+    csRefArray<iLightFactory> loaderLightFactories;
     csRefArray<iMeshWrapper> loaderMeshes;
     csRefArray<iCameraPosition> loaderCameraPositions;
     csRefArray<iTextureWrapper> loaderTextures;
@@ -435,6 +455,33 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
     {
       CS::Threading::RecursiveMutexScopedLock lock(loadingMaterialsLock);
       loadingMaterials.Delete(name);
+    }
+
+    // Loading lightfact objects.
+    csArray<csString> loadingLightFacts;
+    CS::Threading::RecursiveMutex loadingLightsFactsLock;
+
+    bool AddLoadingLightFact(const char* name)
+    {
+      CS::Threading::RecursiveMutexScopedLock lock(loadingLightsFactsLock);
+      if(!FindLoadingLightFact(name))
+      {
+        return true;
+        loadingLightFacts.Push(name);
+      }
+      return false;
+    }
+
+    bool FindLoadingLightFact(const char* name)
+    {
+      CS::Threading::RecursiveMutexScopedLock lock(loadingLightsFactsLock);
+      return loadingLightFacts.Find(name) != csArrayItemNotFound;
+    }
+
+    void RemoveLoadingLightFact(const char* name)
+    {
+      CS::Threading::RecursiveMutexScopedLock lock(loadingLightsFactsLock);
+      loadingLightFacts.Delete(name);
     }
 
     // Loading meshfact objects.
@@ -552,25 +599,35 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
     bool LoadProxyTextures(csSafeCopyArray<ProxyTexture> &proxyTextures,
       csWeakRefArray<iMaterialWrapper> &materialArray);
 
+    THREADED_CALLABLE_DECL5(csThreadedLoader, FindOrLoadLightFactory, csLoaderReturn,
+      const char*, name, csRef<iLoaderContext>, ldr_context, csRef<iDocumentNode>,
+      lightfactnode, csRef<iStreamSource>, ssource, const char*, path, THREADED, false, false);
+
     THREADED_CALLABLE_DECL7(csThreadedLoader, FindOrLoadMeshFactory, csLoaderReturn,
       const char*, name, csRef<iLoaderContext>, ldr_context, csRef<iDocumentNode>,
       meshfactnode, csRef<iMeshFactoryWrapper>, parent, csReversibleTransform*,
       transf, csRef<iStreamSource>, ssource, const char*, path, THREADED, false, false);
 
     /**
-    * Load a Mesh Object Factory from the map file.
-    * If the transformation pointer is given then this is for a hierarchical
-    * mesh object factory and the transformation will be filled in with
-    * the relative transform (from MOVE keyword).
-    * parent is not 0 if the factory is part of a hierarchical factory.
-    */
+     * Load a Light Factory from the map file.
+     */
+    bool LoadLightFactory (iLoaderContext* ldr_context, iLightFactory* lightFact,
+      iDocumentNode* node, iStreamSource* ssource);
+
+    /**
+     * Load a Mesh Object Factory from the map file.
+     * If the transformation pointer is given then this is for a hierarchical
+     * mesh object factory and the transformation will be filled in with
+     * the relative transform (from MOVE keyword).
+     * parent is not 0 if the factory is part of a hierarchical factory.
+     */
     bool LoadMeshObjectFactory(iLoaderContext* ldr_context, iMeshFactoryWrapper* meshFact,
       iMeshFactoryWrapper* parent, iDocumentNode* node, csReversibleTransform* transf,
       iStreamSource* ssource);
 
     /**
-    * Handle various common mesh object parameters.
-    */
+     * Handle various common mesh object parameters.
+     */
     bool HandleMeshParameter (iLoaderContext* ldr_context,
       iMeshWrapper* mesh, iMeshWrapper* parent, iDocumentNode* child,
       csStringID id, bool& handled, csString& priority,
@@ -579,10 +636,10 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
       bool recursive, iStreamSource* ssource);
 
     /**
-    * Load the mesh object from the map file.
-    * The parent is not 0 if this mesh is going to be part of a hierarchical
-    * mesh.
-    */
+     * Load the mesh object from the map file.
+     * The parent is not 0 if this mesh is going to be part of a hierarchical
+     * mesh.
+     */
     THREADED_CALLABLE_DECL8(csThreadedLoader, LoadMeshObject, csLoaderReturn,
       csRef<iLoaderContext>, ldr_context, csRef<iMeshWrapper>, mesh, csRef<iMeshWrapper>, parent,
       csRef<iDocumentNode>, node, csRef<iStreamSource>, ssource, csRef<iSector>, sector, csString,
@@ -596,10 +653,10 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
       ssource, THREADED, false, false);
 
     /**
-    * Load the mesh object from the map file.
-    * This version will parse FACTORY statement to directly create
-    * a mesh from a factory.
-    */
+     * Load the mesh object from the map file.
+     * This version will parse FACTORY statement to directly create
+     * a mesh from a factory.
+     */
     csRef<iMeshWrapper> LoadMeshObjectFromFactory (iLoaderContext* ldr_context,
       iDocumentNode* node, iStreamSource* ssource);
 
@@ -612,10 +669,10 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
       bool do_verbose = false);
 
     /**
-    * Load a library into given engine.
-    * A library is just a map file that contains just mesh factories,
-    * sounds and textures.
-    */
+     * Load a library into given engine.
+     * A library is just a map file that contains just mesh factories,
+     * sounds and textures.
+     */
     bool LoadLibrary(iLoaderContext* ldr_context, iDocumentNode* node,
       iStreamSource* ssource, iMissingLoaderData* missingdata, csRefArray<iThreadReturn>& threadReturns,
       csRefArray<iDocumentNode>& libs, csArray<csString>& libIDs, bool loadProxyTex = true, bool mapload = false,
@@ -631,13 +688,13 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
     csPtr<iImage> LoadImage (iDataBuffer* buf, const char* fname, int Format, bool do_verbose);
 
     /**
-    * Load a LOD control object.
-    */
+     * Load a LOD control object.
+     */
     bool LoadLodControl (iLODControl* lodctrl, iDocumentNode* node);
 
     /**
-    * Load a plugin in general.
-    */
+     * Load a plugin in general.
+     */
     bool LoadAddOn (iLoaderContext* ldr_context,
       iDocumentNode* node, iBase* context, bool is_meta,
       iStreamSource* ssource);
@@ -646,8 +703,8 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
       iDocumentNode* node);
 
     /**
-    * Load the trimesh object from the map file.
-    */
+     * Load the trimesh object from the map file.
+     */
     bool LoadTriMeshInSector (iLoaderContext* ldr_context,
       iMeshWrapper* mesh, iDocumentNode* node, iStreamSource* ssource);
 
@@ -670,10 +727,10 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
     iMapNode* ParseNode (iDocumentNode* node, iSector* sec);
 
     /**
-    * Parse a key/value pair.
-    * Takes "editoronly" attribute into account: KVPs should only be parsed 
-    * if they're not editor-only or when the engine is in "saveable" mode.
-    */
+     * Parse a key/value pair.
+     * Takes "editoronly" attribute into account: KVPs should only be parsed 
+     * if they're not editor-only or when the engine is in "saveable" mode.
+     */
     bool ParseKey (iDocumentNode* node, iObject* obj);
 
     /// Parse a texture definition and add the texture to the engine
@@ -701,45 +758,45 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
       ssource, csRef<iLoaderContext>, ldr_context, csRef<iBase>, context, HIGH, true, false);
 
     /**
-    * Try loading the file as a structured document.
-    * \return True if the documented loaded and appears to be a map file,
-    *   otherwise false.
-    */
+     * Try loading the file as a structured document.
+     * \return True if the documented loaded and appears to be a map file,
+     *   otherwise false.
+     */
     csPtr<iBase> LoadStructuredMap (iLoaderContext* ldr_context, iLoaderPlugin* plug,
       iFile* buf, iBase* context, const char* fname, iStreamSource* ssource);
 
     /**
-    * Try loading file as a structured document via iDocumentSystem.
-    * \return False on failure.
-    */
+     * Try loading file as a structured document via iDocumentSystem.
+     * \return False on failure.
+     */
     bool LoadStructuredDoc (const char* file, iFile* buf, csRef<iDocument>& doc);
 
     /**
-    * Try loading file as a structured document via iDocumentSystem.
-    * \return False on failure.
-    */
+     * Try loading file as a structured document via iDocumentSystem.
+     * \return False on failure.
+     */
     bool LoadStructuredDoc (const char* file, iDataBuffer* buf, csRef<iDocument>& doc);
 
     /**
-    * Load sounds from a SOUNDS(...) argument.
-    * This function is normally called automatically by the parser.
-    */
+     * Load sounds from a SOUNDS(...) argument.
+     * This function is normally called automatically by the parser.
+     */
     bool LoadSounds (iDocumentNode* node);
 
     /**
-    * Load all the plugin descriptions from the map file
-    * (the plugins are not actually loaded yet).
-    */
+     * Load all the plugin descriptions from the map file
+     * (the plugins are not actually loaded yet).
+     */
     bool LoadPlugins (iDocumentNode* node);
 
     /**
-    * Load a single plugin.
-    */
+     * Load a single plugin.
+     */
     void LoadPlugin (iDocumentNode* node);
 
     /**
-    * Load the settings section.
-    */
+     * Load the settings section.
+     */
     bool LoadSettings (iDocumentNode* node);
 
     bool LoadTextures (csLoaderContext* ldr_context,
@@ -767,8 +824,8 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
     /** @} */
 
     /**
-    * Handle the result of a mesh object plugin loader.
-    */
+     * Handle the result of a mesh object plugin loader.
+     */
     bool HandleMeshObjectPluginResult (iBase* mo, iDocumentNode* child,
       iMeshWrapper* mesh, bool keepZbuf, bool keepPrio);
 
@@ -792,10 +849,10 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
       bool ParseImposterSettings(iImposterFactory* mesh, iDocumentNode *node);
 
     /**
-    * Parse a portal definition. 'container_name' is the name of the portal
-    * container to use. If 0 then the name of the portal itself will be
-    * used instead.
-    */
+     * Parse a portal definition. 'container_name' is the name of the portal
+     * container to use. If 0 then the name of the portal itself will be
+     * used instead.
+     */
     bool ParsePortal (iLoaderContext* ldr_context,
       iDocumentNode* node, iSector* sourceSector, const char* container_name,
       iMeshWrapper*& container_mesh, iMeshWrapper* parent);
@@ -842,8 +899,8 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
       iEngineSequenceParameters* base_params);
 
     /**
-    * Add children to the collection.
-    */
+     * Add children to the collection.
+     */
     void AddChildrenToCollection (iLoaderContext* ldr_context,
       const iSceneNodeArray* children);
 

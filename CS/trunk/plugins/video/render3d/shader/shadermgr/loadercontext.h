@@ -47,6 +47,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(ShaderManager)
     iMaterialWrapper* FindMaterial (const char* name, bool doLoad = true) { return 0; }
     iMaterialWrapper* FindNamedMaterial (const char* name,
       const char *filename) { return 0; }
+    iLightFactory* FindLightFactory (const char* name, bool notify = true) { return 0; }
     iMeshFactoryWrapper* FindMeshFactory (const char* name, bool notify = true) { return 0; }
     iMeshWrapper* FindMeshObject (const char* name) { return 0; }
     iTextureWrapper* FindTexture (const char* name, bool doLoad = true);
