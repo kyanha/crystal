@@ -61,11 +61,13 @@ public:
     csArray<NodeData> availTextures;
     csArray<NodeData> availMaterials;
     csArray<NodeData> availMeshfacts;
+    csArray<NodeData> availLightfacts;
     CS::Threading::Mutex pluginObjects;
     CS::Threading::Mutex shaderObjects;
     CS::Threading::Mutex textureObjects;
     CS::Threading::Mutex materialObjects;
     CS::Threading::Mutex meshfactObjects;
+    CS::Threading::Mutex lightfactObjects;
 
     csLoaderContext(iObjectRegistry* object_reg, iEngine* Engine, csThreadedLoader* loader,
       iCollection* collection,iMissingLoaderData* missingdata, uint keepFlags, bool do_verbose);
@@ -104,6 +106,7 @@ public:
     void ParseAvailableMaterials(iDocumentNode* doc);
     void ParseAvailableAddons(iDocumentNode* doc);
     void ParseAvailableMeshfacts(iDocumentNode* doc);
+    void ParseAvailableLightfacts(iDocumentNode* doc);
   };
 }
 CS_PLUGIN_NAMESPACE_END(csparser)
