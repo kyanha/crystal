@@ -193,8 +193,6 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
     csLightType type = CS_LIGHT_POINTLIGHT;
     csFlags lightFlags;
 
-    float distbright = 1;
-
     float influenceRadius = 0;
     bool influenceOverride = false;
 
@@ -225,14 +223,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
       switch (id)
       {
       case XMLTOKEN_RADIUS:
-        {
-          dist = child->GetContentsValueAsFloat ();
-          csRef<iDocumentAttribute> attr;
-          if (attr = child->GetAttribute ("brightness"))
-          {
-            distbright = attr->GetValueAsFloat();
-          }
-        }
+        dist = child->GetContentsValueAsFloat ();
         break;
       case XMLTOKEN_COLOR:
         if (!SyntaxService->ParseColor (child, color))

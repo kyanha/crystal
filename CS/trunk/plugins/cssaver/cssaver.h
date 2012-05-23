@@ -80,6 +80,7 @@ public:
 
   bool SaveMeshFactories(iMeshFactoryList* factList, iDocumentNode *parent,
     iMeshFactoryWrapper* parentfact = 0);
+  bool SaveLightFactories(iLightFactoryList* factList, iDocumentNode *parent);
   bool SavePortal (iPortal *portal, iDocumentNode *parent);
   bool SaveSectorLights(iSector *s, iDocumentNode *parent);
   bool SaveSectorMeshes(iMeshList *meshList, iDocumentNode *parent);

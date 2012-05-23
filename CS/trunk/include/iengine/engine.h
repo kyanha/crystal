@@ -460,6 +460,11 @@ struct iEngine : public virtual iBase
   virtual iLightFactory* FindLightFactory (const char* name, iCollection* col = 0) = 0;
 
   /**
+   * Get the light factories.
+   */
+  virtual iLightFactoryList* GetLightFactories () = 0;
+
+  /**
    * Create a static/pseudo-dynamic light.
    * Assign to a csRef.
    * \param name the engine name for this light (may be 0)
