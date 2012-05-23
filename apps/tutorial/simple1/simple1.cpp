@@ -87,6 +87,12 @@ void Simple::Frame ()
   c->SetTransform (ot);
 
   rm->RenderView (view);
+
+  if (handle)
+  {
+    g3d->BeginDraw (CSDRAW_2DGRAPHICS);
+    g3d->DrawPixmap (handle, 0, 0, 64, 64, 0, 0, 64, 64);
+  }
 }
 
 bool Simple::OnKeyboard (iEvent& ev)
@@ -108,6 +114,25 @@ bool Simple::OnKeyboard (iEvent& ev)
         csQueryRegistry<iEventQueue> (GetObjectRegistry ());
       if (q.IsValid ()) q->GetEventOutlet ()->Broadcast(
       	csevQuit (GetObjectRegistry ()));
+    }
+    if (code == 't')
+    {
+      iTextureManager* txtmgr = g3d->GetTextureManager ();
+
+      handle = txtmgr->CreateTexture (64, 64, csimg2D, "rgba8", CS_TEXTURE_3D);
+      g3d->SetRenderTarget (handle);
+      g3d->BeginDraw (CSDRAW_2DGRAPHICS);
+      iGraphics2D* g2d = g3d->GetDriver2D ();
+
+      int color = g2d->FindRGB (255, 0, 0);
+      g2d->DrawBox (0, 0, 64, 64, color);
+
+      csRef<iFont> font = g2d->GetFontServer ()->LoadFont (CSFONT_COURIER);
+      int fg = g2d->FindRGB (255, 255, 255);
+      g2d->Write (font, 10, 10, fg, -1, "TESTING");
+
+      g3d->FinishDraw ();
+      g3d->SetRenderTarget (0);
     }
   }
 

@@ -77,6 +77,7 @@ public:
     {
       return FindMaterial(name);
     }
+    virtual iLightFactory* FindLightFactory(const char* name, bool notify = true);
     virtual iMeshFactoryWrapper* FindMeshFactory(const char* name, bool notify = true);
     virtual iMeshWrapper* FindMeshObject(const char* name);
     virtual iTextureWrapper* FindTexture(const char* name, bool doLoad = true);

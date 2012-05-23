@@ -65,6 +65,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
 
     virtual iSndSysWrapper* LoadSoundWrapper (const char *name, const char *fname);
 
+    virtual csPtr<iLightFactory> LoadLightFactory (const char* fname, iStreamSource* ssource);
     virtual csPtr<iMeshFactoryWrapper> LoadMeshObjectFactory (const char* fname, iStreamSource* ssource);
 
     virtual csPtr<iMeshWrapper> LoadMeshObject (const char* fname, iStreamSource* ssource);

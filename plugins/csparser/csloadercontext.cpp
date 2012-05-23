@@ -176,6 +176,44 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
     return mat;
   }
 
+  iLightFactory* csLoaderContext::FindLightFactory(const char* name, bool notify)
+  {
+    csRef<iLightFactory> fact;
+    {
+      CS::Threading::ScopedReadLock lock(loader->lightfactsLock);
+      for(size_t i=0; i<loader->loaderLightFactories.GetSize(); i++)
+      {
+        if(!strcmp(loader->loaderLightFactories[i]->QueryObject()->GetName(), name))
+        {
+          fact = loader->loaderLightFactories[i];
+          return fact;
+        }
+      }
+    }
+
+    if(!fact.IsValid() && missingdata)
+    {
+      fact = missingdata->MissingLightFactory(name);
+    }
+
+    if(!fact.IsValid())
+    {
+      fact = Engine->FindLightFactory(name, collection);
+    }
+
+    if(!fact.IsValid() && collection)
+    {
+      fact = Engine->FindLightFactory(name);
+    }
+
+    if(!fact.IsValid() && notify && do_verbose)
+    {
+      ReportNotify("Could not find light factory %s.", CS::Quote::Single (name));
+    }
+
+    return fact;
+  }
+
   iMeshFactoryWrapper* csLoaderContext::FindMeshFactory(const char* name, bool notify)
   {
     csRef<iMeshFactoryWrapper> fact;
