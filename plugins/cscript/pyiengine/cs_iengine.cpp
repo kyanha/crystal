@@ -13114,6 +13114,28 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_iEngine_GetLightFactories(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  iEngine *arg1 = (iEngine *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  iLightFactoryList *result = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"iEngine_GetLightFactories",1,1,&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_iEngine, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "iEngine_GetLightFactories" "', argument " "1"" of type '" "iEngine *""'"); 
+  }
+  arg1 = reinterpret_cast< iEngine * >(argp1);
+  result = (iLightFactoryList *)(arg1)->GetLightFactories();
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_iLightFactoryList, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_iEngine_CreateLight__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   iEngine *arg1 = (iEngine *) 0 ;
@@ -40092,6 +40114,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"iEngine_FindTexture", _wrap_iEngine_FindTexture, METH_VARARGS, NULL},
 	 { (char *)"iEngine_CreateLightFactory", _wrap_iEngine_CreateLightFactory, METH_VARARGS, NULL},
 	 { (char *)"iEngine_FindLightFactory", _wrap_iEngine_FindLightFactory, METH_VARARGS, NULL},
+	 { (char *)"iEngine_GetLightFactories", _wrap_iEngine_GetLightFactories, METH_VARARGS, NULL},
 	 { (char *)"iEngine_CreateLight", _wrap_iEngine_CreateLight, METH_VARARGS, NULL},
 	 { (char *)"iEngine_FindLight", _wrap_iEngine_FindLight, METH_VARARGS, NULL},
 	 { (char *)"iEngine_FindLightID", _wrap_iEngine_FindLightID, METH_VARARGS, NULL},

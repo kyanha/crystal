@@ -505,6 +505,7 @@ class iEngine(core.iBase):
     def FindTexture(*args): return _iengine.iEngine_FindTexture(*args)
     def CreateLightFactory(*args): return _iengine.iEngine_CreateLightFactory(*args)
     def FindLightFactory(*args): return _iengine.iEngine_FindLightFactory(*args)
+    def GetLightFactories(*args): return _iengine.iEngine_GetLightFactories(*args)
     def CreateLight(*args): return _iengine.iEngine_CreateLight(*args)
     def FindLight(*args): return _iengine.iEngine_FindLight(*args)
     def FindLightID(*args): return _iengine.iEngine_FindLightID(*args)
