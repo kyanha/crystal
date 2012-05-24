@@ -4803,6 +4803,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *MissingMaterial = *cspacec::iMissingLoaderData_MissingMaterial;
 *MissingTexture = *cspacec::iMissingLoaderData_MissingTexture;
 *MissingShader = *cspacec::iMissingLoaderData_MissingShader;
+*MissingLightFactory = *cspacec::iMissingLoaderData_MissingLightFactory;
 *MissingFactory = *cspacec::iMissingLoaderData_MissingFactory;
 *MissingMesh = *cspacec::iMissingLoaderData_MissingMesh;
 *MissingSector = *cspacec::iMissingLoaderData_MissingSector;
@@ -4939,6 +4940,39 @@ sub DESTROY {
     delete $ITERATORS{$self};
     if (exists $OWNER{$self}) {
         cspacec::delete_iSectorLoaderIterator($self);
+        delete $OWNER{$self};
+    }
+}
+
+sub DISOWN {
+    my $self = shift;
+    my $ptr = tied(%$self);
+    delete $OWNER{$ptr};
+}
+
+sub ACQUIRE {
+    my $self = shift;
+    my $ptr = tied(%$self);
+    $OWNER{$ptr} = 1;
+}
+
+
+############# Class : cspace::iLightFactLoaderIterator ##############
+
+package cspace::iLightFactLoaderIterator;
+use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
+@ISA = qw( cspace::iBase cspace );
+%OWNER = ();
+%ITERATORS = ();
+*Next = *cspacec::iLightFactLoaderIterator_Next;
+*HasNext = *cspacec::iLightFactLoaderIterator_HasNext;
+sub DESTROY {
+    return unless $_[0]->isa('HASH');
+    my $self = tied(%{$_[0]});
+    return unless defined $self;
+    delete $ITERATORS{$self};
+    if (exists $OWNER{$self}) {
+        cspacec::delete_iLightFactLoaderIterator($self);
         delete $OWNER{$self};
     }
 }
@@ -5162,6 +5196,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 %OWNER = ();
 %ITERATORS = ();
 *GetLoaderSectors = *cspacec::iThreadedLoader_GetLoaderSectors;
+*GetLoaderLightFactories = *cspacec::iThreadedLoader_GetLoaderLightFactories;
 *GetLoaderMeshFactories = *cspacec::iThreadedLoader_GetLoaderMeshFactories;
 *GetLoaderMeshes = *cspacec::iThreadedLoader_GetLoaderMeshes;
 *GetLoaderCameraPositions = *cspacec::iThreadedLoader_GetLoaderCameraPositions;
@@ -5178,6 +5213,8 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *LoadSoundStreamWait = *cspacec::iThreadedLoader_LoadSoundStreamWait;
 *LoadSoundWrapper = *cspacec::iThreadedLoader_LoadSoundWrapper;
 *LoadSoundWrapperWait = *cspacec::iThreadedLoader_LoadSoundWrapperWait;
+*LoadLightFactory = *cspacec::iThreadedLoader_LoadLightFactory;
+*LoadLightFactoryWait = *cspacec::iThreadedLoader_LoadLightFactoryWait;
 *LoadMeshObjectFactory = *cspacec::iThreadedLoader_LoadMeshObjectFactory;
 *LoadMeshObjectFactoryWait = *cspacec::iThreadedLoader_LoadMeshObjectFactoryWait;
 *LoadMeshObject = *cspacec::iThreadedLoader_LoadMeshObject;
@@ -5200,6 +5237,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *LoadNodeWait = *cspacec::iThreadedLoader_LoadNodeWait;
 *AddSectorToList = *cspacec::iThreadedLoader_AddSectorToList;
 *AddMeshFactToList = *cspacec::iThreadedLoader_AddMeshFactToList;
+*AddLightFactToList = *cspacec::iThreadedLoader_AddLightFactToList;
 *AddMeshToList = *cspacec::iThreadedLoader_AddMeshToList;
 *AddCamposToList = *cspacec::iThreadedLoader_AddCamposToList;
 *AddTextureToList = *cspacec::iThreadedLoader_AddTextureToList;
@@ -5243,6 +5281,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *LoadSoundStream = *cspacec::iLoader_LoadSoundStream;
 *LoadSoundWrapper = *cspacec::iLoader_LoadSoundWrapper;
 *LoadImage = *cspacec::iLoader_LoadImage;
+*LoadLightFactory = *cspacec::iLoader_LoadLightFactory;
 *LoadMeshObjectFactory = *cspacec::iLoader_LoadMeshObjectFactory;
 *LoadMeshObject = *cspacec::iLoader_LoadMeshObject;
 *LoadShader = *cspacec::iLoader_LoadShader;
@@ -19909,6 +19948,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *FindTexture = *cspacec::iEngine_FindTexture;
 *CreateLightFactory = *cspacec::iEngine_CreateLightFactory;
 *FindLightFactory = *cspacec::iEngine_FindLightFactory;
+*GetLightFactories = *cspacec::iEngine_GetLightFactories;
 *CreateLight = *cspacec::iEngine_CreateLight;
 *FindLight = *cspacec::iEngine_FindLight;
 *FindLightID = *cspacec::iEngine_FindLightID;

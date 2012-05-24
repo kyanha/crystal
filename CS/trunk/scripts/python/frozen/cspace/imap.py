@@ -78,6 +78,7 @@ class iMissingLoaderData(core.iBase):
     def MissingMaterial(*args): return _imap.iMissingLoaderData_MissingMaterial(*args)
     def MissingTexture(*args): return _imap.iMissingLoaderData_MissingTexture(*args)
     def MissingShader(*args): return _imap.iMissingLoaderData_MissingShader(*args)
+    def MissingLightFactory(*args): return _imap.iMissingLoaderData_MissingLightFactory(*args)
     def MissingFactory(*args): return _imap.iMissingLoaderData_MissingFactory(*args)
     def MissingMesh(*args): return _imap.iMissingLoaderData_MissingMesh(*args)
     def MissingSector(*args): return _imap.iMissingLoaderData_MissingSector(*args)
@@ -139,6 +140,17 @@ class iSectorLoaderIterator(core.iBase):
     __del__ = lambda self : None;
 iSectorLoaderIterator_swigregister = _imap.iSectorLoaderIterator_swigregister
 iSectorLoaderIterator_swigregister(iSectorLoaderIterator)
+
+class iLightFactLoaderIterator(core.iBase):
+    thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    def __init__(self, *args, **kwargs): raise AttributeError, "No constructor defined"
+    __repr__ = _swig_repr
+    def Next(*args): return _imap.iLightFactLoaderIterator_Next(*args)
+    def HasNext(*args): return _imap.iLightFactLoaderIterator_HasNext(*args)
+    __swig_destroy__ = _imap.delete_iLightFactLoaderIterator
+    __del__ = lambda self : None;
+iLightFactLoaderIterator_swigregister = _imap.iLightFactLoaderIterator_swigregister
+iLightFactLoaderIterator_swigregister(iLightFactLoaderIterator)
 
 class iMeshFactLoaderIterator(core.iBase):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
@@ -213,6 +225,7 @@ class iThreadedLoader(core.iBase):
     def __init__(self, *args, **kwargs): raise AttributeError, "No constructor defined"
     __repr__ = _swig_repr
     def GetLoaderSectors(*args): return _imap.iThreadedLoader_GetLoaderSectors(*args)
+    def GetLoaderLightFactories(*args): return _imap.iThreadedLoader_GetLoaderLightFactories(*args)
     def GetLoaderMeshFactories(*args): return _imap.iThreadedLoader_GetLoaderMeshFactories(*args)
     def GetLoaderMeshes(*args): return _imap.iThreadedLoader_GetLoaderMeshes(*args)
     def GetLoaderCameraPositions(*args): return _imap.iThreadedLoader_GetLoaderCameraPositions(*args)
@@ -229,6 +242,8 @@ class iThreadedLoader(core.iBase):
     def LoadSoundStreamWait(*args): return _imap.iThreadedLoader_LoadSoundStreamWait(*args)
     def LoadSoundWrapper(*args): return _imap.iThreadedLoader_LoadSoundWrapper(*args)
     def LoadSoundWrapperWait(*args): return _imap.iThreadedLoader_LoadSoundWrapperWait(*args)
+    def LoadLightFactory(*args): return _imap.iThreadedLoader_LoadLightFactory(*args)
+    def LoadLightFactoryWait(*args): return _imap.iThreadedLoader_LoadLightFactoryWait(*args)
     def LoadMeshObjectFactory(*args): return _imap.iThreadedLoader_LoadMeshObjectFactory(*args)
     def LoadMeshObjectFactoryWait(*args): return _imap.iThreadedLoader_LoadMeshObjectFactoryWait(*args)
     def LoadMeshObject(*args): return _imap.iThreadedLoader_LoadMeshObject(*args)
@@ -251,6 +266,7 @@ class iThreadedLoader(core.iBase):
     def LoadNodeWait(*args): return _imap.iThreadedLoader_LoadNodeWait(*args)
     def AddSectorToList(*args): return _imap.iThreadedLoader_AddSectorToList(*args)
     def AddMeshFactToList(*args): return _imap.iThreadedLoader_AddMeshFactToList(*args)
+    def AddLightFactToList(*args): return _imap.iThreadedLoader_AddLightFactToList(*args)
     def AddMeshToList(*args): return _imap.iThreadedLoader_AddMeshToList(*args)
     def AddCamposToList(*args): return _imap.iThreadedLoader_AddCamposToList(*args)
     def AddTextureToList(*args): return _imap.iThreadedLoader_AddTextureToList(*args)
@@ -272,6 +288,7 @@ class iLoader(core.iBase):
     def LoadSoundStream(*args): return _imap.iLoader_LoadSoundStream(*args)
     def LoadSoundWrapper(*args): return _imap.iLoader_LoadSoundWrapper(*args)
     def LoadImage(*args): return _imap.iLoader_LoadImage(*args)
+    def LoadLightFactory(*args): return _imap.iLoader_LoadLightFactory(*args)
     def LoadMeshObjectFactory(*args): return _imap.iLoader_LoadMeshObjectFactory(*args)
     def LoadMeshObject(*args): return _imap.iLoader_LoadMeshObject(*args)
     def LoadShader(*args): return _imap.iLoader_LoadShader(*args)
