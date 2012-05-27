@@ -1,0 +1,44 @@
+@c -*-texinfo-*-
+@node MacOS/X Problems, Platform Instructions, Building, 
+@subsection MacOS/X
+@cindex MacOS/X Problems
+
+@subheading Mac OS X Lion 10.7
+
+@subsubheading ‘generic thunk’ compiling error
+
+Newer XCode (versions 4.2 and later) come with the default compiler @code{llvm-gcc-4.2 (GCC) 4.2.1 (Based on Apple Inc. build 5658)} which has problems handling variable arguments lists in the presence of multiple-inheritance, resulting in a failure to compile CS by returning a ‘generic thunk’ error.
+One way of solving this is by installing a previous version of XCode (version 4.1 for instance) that installs @code{gcc (GCC) 4.2.1 (Apple Inc. build 5666) (dot 3)} which should compile CS without errors.
+The default compiler may be set by making the gcc / g++ / cc / c++ commands link to the compiler we want:
+
+@example
+which gcc -> /usr/bin/gcc
+ln -s -f /usr/bin/i686-apple-darwin11-gcc-4.2.1 /usr/bin/gcc
+@end example
+
+@subsubheading Undefined symbols for architecture i386: "_main"
+
+Gcc version 4.2.1 mentioned above can require a @code{main()} dummy function for plugins as is the case with Unix. For this a similar method to @code{CS_IMPLEMENT_PLATFORM_PLUGIN} from @code{CS/include/csutil/unix/csosdef.h} should be added to @code{CS/include/csutil/macosx/csosdef.h}.
+
+@example
+#define CS_IMPLEMENT_PLATFORM_PLUGIN \
+int main (int argc, char* argv[]) \
+@{ \
+  (void)argc; (void)argv; \
+  return 0; \
+@}
+@end example
+
+@subsubheading DLERROR: can't map unslidable segment
+
+This is likely to be caused by the fact that the generated @code{.csbundle} files are executables instead of bundles. To check for this run the @code{file} shell command on a @code{.csbundle} file:
+
+@example
+file vfs.csbundle -> vfs.csbundle: Mach-O executable i386
+@end example
+
+If this is the case double check if the ‘-bundle’ flag (@code{PLUGIN.LFLAGS}) is present for the mac jam configuration (@code{CS/mk/jam/macosx.jam}).
+
+@example
+file vfs.csbundle -> vfs.csbundle: Mach-O bundle i386
+@end example
