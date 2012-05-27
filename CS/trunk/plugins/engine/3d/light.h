@@ -589,6 +589,8 @@ class csLightFactory :
 			       iSelfDestruct>
 {
 private:
+  csEngine* engine;
+
   /// Color.
   csColor color;
   /// Specular color
@@ -630,7 +632,7 @@ public:
   csFlags flags;
 
 public:
-  csLightFactory ();
+  csLightFactory (csEngine* engine);
   virtual ~csLightFactory ();
 
   virtual void SetDynamicType (csLightDynamicType type) { dynamicType = type; }

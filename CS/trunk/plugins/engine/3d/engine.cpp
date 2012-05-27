@@ -2660,7 +2660,7 @@ iLightFactory* csEngine::FindLightFactory (const char* name,
 iLightFactory* csEngine::CreateLightFactory (const char* name)
 {
   csRef<csLightFactory> lf;
-  lf.AttachNew (new csLightFactory ());
+  lf.AttachNew (new csLightFactory (this));
   if (name) lf->SetName (name);
   lightFactories.Add (lf);
   return lf;

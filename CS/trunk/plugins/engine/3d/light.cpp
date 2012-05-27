@@ -518,8 +518,8 @@ void csLight::UpdateBBox ()
 
 //---------------------------------------------------------------------------
 
-csLightFactory::csLightFactory () :
-    scfImplementationType (this),
+csLightFactory::csLightFactory (csEngine* engine) :
+    scfImplementationType (this), engine (engine),
     userSpecular (false), dynamicType (CS_LIGHT_DYNAMICTYPE_STATIC), 
     type (CS_LIGHT_POINTLIGHT), cutoffDistance (1.0f),
     directionalCutoffRadius (1.0f), userDirectionalCutoffRadius (false)
@@ -539,6 +539,7 @@ csLightFactory::~csLightFactory ()
   
 void csLightFactory::SelfDestruct ()
 {
+  engine->GetLightFactories ()->Remove (this);
 }
 
 void csLightFactory::CalculateAttenuationVector ()
