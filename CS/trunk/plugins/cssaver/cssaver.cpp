@@ -625,9 +625,10 @@ bool csSaver::SaveTriMesh (iDocumentNode *parent, csStringID id,
   return true;
 }
 
-bool csSaver::SaveLightFactories(iLightFactoryList* factList, 
+bool csSaver::SaveLightFactories(iCollection* collection,
                                 iDocumentNode *parent)
 {
+  iLightFactoryList* factList = engine->GetLightFactories ();
   csStringID base_id = strings->Request ("base");
   for (int i=0; i<factList->GetCount(); i++)
   {
@@ -1639,7 +1640,7 @@ bool csSaver::SaveMapFile(csRef<iDocumentNode> &root)
   if (!SaveSettings(parent)) return false;
   if (!SaveCameraPositions (parent)) return false;
   if (!SaveAddons(parent)) return false;
-  if (!SaveLightFactories(engine->GetLightFactories(), parent)) return false;
+  if (!SaveLightFactories(collection, parent)) return false;
   if (!SaveMeshFactories(engine->GetMeshFactories(), parent)) return false;
   if (!SaveSectors(parent)) return false;
   if (!SaveSequence(parent)) return false;
@@ -1708,24 +1709,24 @@ bool csSaver::SaveCollection(iCollection* col, int type, csRef<iDocumentNode>& r
   const char* nodeName = 0;
   switch (fileType)
   {
-  case CS_SAVER_FILE_WORLD:
-    nodeName = "world";
-    break;
-  case CS_SAVER_FILE_LIBRARY:
-    nodeName = "library";
-    break;
-  case CS_SAVER_FILE_MESHFACT:
-    nodeName = "meshfact";
-    break;
-  case CS_SAVER_FILE_LIGHTFACT:
-    nodeName = "lightfact";
-    break;
-  case CS_SAVER_FILE_PARAMS:
-    nodeName = "params";
-    break;
-  default:
-    nodeName = "world";
-    break;
+    case CS_SAVER_FILE_WORLD:
+      nodeName = "world";
+      break;
+    case CS_SAVER_FILE_LIBRARY:
+      nodeName = "library";
+      break;
+    case CS_SAVER_FILE_MESHFACT:
+      nodeName = "meshfact";
+      break;
+    case CS_SAVER_FILE_LIGHTFACT:
+      nodeName = "lightfact";
+      break;
+    case CS_SAVER_FILE_PARAMS:
+      nodeName = "params";
+      break;
+    default:
+      nodeName = "world";
+      break;
   }
   
   csRef<iDocumentNode> parent = root->CreateNodeBefore(CS_NODE_ELEMENT, 0);
@@ -1743,7 +1744,7 @@ bool csSaver::SaveCollection(iCollection* col, int type, csRef<iDocumentNode>& r
   if (!SaveLibraryReferences(parent)) return false;
   if (!SaveCameraPositions (parent)) return false;
   if (!SaveAddons(parent)) return false;
-  if (!SaveLightFactories(engine->GetLightFactories(), parent)) return false;
+  if (!SaveLightFactories(collection, parent)) return false;
   if (!SaveMeshFactories(engine->GetMeshFactories(), parent)) return false;
   
   if (fileType == CS_SAVER_FILE_WORLD)
