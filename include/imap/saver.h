@@ -105,6 +105,14 @@ struct iSaver : public virtual iBase
    */
   virtual bool SaveCameraPosition (iCameraPosition *position, iDocumentNode *parent) = 0;
 
+  /**
+   * Save all light factories to a document node.
+   * \param collection if not 0 then all light factories in this collection will be
+   * saved. Otherwise all light factories are saved.
+   * \param parent The document node where the <lightfact> node will be placed.
+   */
+  virtual bool SaveLightFactories (iCollection* collection, iDocumentNode *parent) = 0;
+
   // TODO: Add more, as needed
   /** @} */
 };
