@@ -36600,6 +36600,46 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_iSaver_SaveLightFactories(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  iSaver *arg1 = (iSaver *) 0 ;
+  iCollection *arg2 = (iCollection *) 0 ;
+  iDocumentNode *arg3 = (iDocumentNode *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  void *argp3 = 0 ;
+  int res3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  bool result;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"iSaver_SaveLightFactories",3,3,&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_iSaver, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "iSaver_SaveLightFactories" "', argument " "1"" of type '" "iSaver *""'"); 
+  }
+  arg1 = reinterpret_cast< iSaver * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_iCollection, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "iSaver_SaveLightFactories" "', argument " "2"" of type '" "iCollection *""'"); 
+  }
+  arg2 = reinterpret_cast< iCollection * >(argp2);
+  res3 = SWIG_ConvertPtr(obj2, &argp3,SWIGTYPE_p_iDocumentNode, 0 |  0 );
+  if (!SWIG_IsOK(res3)) {
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "iSaver_SaveLightFactories" "', argument " "3"" of type '" "iDocumentNode *""'"); 
+  }
+  arg3 = reinterpret_cast< iDocumentNode * >(argp3);
+  result = (bool)(arg1)->SaveLightFactories(arg2,arg3);
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_delete_iSaver(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   iSaver *arg1 = (iSaver *) 0 ;
@@ -36786,6 +36826,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"iSaver_SaveCollection", _wrap_iSaver_SaveCollection, METH_VARARGS, NULL},
 	 { (char *)"iSaver_SavePortal", _wrap_iSaver_SavePortal, METH_VARARGS, NULL},
 	 { (char *)"iSaver_SaveCameraPosition", _wrap_iSaver_SaveCameraPosition, METH_VARARGS, NULL},
+	 { (char *)"iSaver_SaveLightFactories", _wrap_iSaver_SaveLightFactories, METH_VARARGS, NULL},
 	 { (char *)"delete_iSaver", _wrap_delete_iSaver, METH_VARARGS, NULL},
 	 { (char *)"iSaver_swigregister", iSaver_swigregister, METH_VARARGS, NULL},
 	 { NULL, NULL, 0, NULL }

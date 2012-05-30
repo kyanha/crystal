@@ -5400,6 +5400,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *SaveCollection = *cspacec::iSaver_SaveCollection;
 *SavePortal = *cspacec::iSaver_SavePortal;
 *SaveCameraPosition = *cspacec::iSaver_SaveCameraPosition;
+*SaveLightFactories = *cspacec::iSaver_SaveLightFactories;
 sub DESTROY {
     return unless $_[0]->isa('HASH');
     my $self = tied(%{$_[0]});

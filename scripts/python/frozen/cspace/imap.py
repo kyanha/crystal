@@ -347,6 +347,7 @@ class iSaver(core.iBase):
     def SaveCollection(*args): return _imap.iSaver_SaveCollection(*args)
     def SavePortal(*args): return _imap.iSaver_SavePortal(*args)
     def SaveCameraPosition(*args): return _imap.iSaver_SaveCameraPosition(*args)
+    def SaveLightFactories(*args): return _imap.iSaver_SaveLightFactories(*args)
     __swig_destroy__ = _imap.delete_iSaver
     __del__ = lambda self : None;
 iSaver_swigregister = _imap.iSaver_swigregister
