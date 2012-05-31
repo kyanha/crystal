@@ -11,10 +11,6 @@ from io_scene_cs.utilities import B2CS
 from io_scene_cs.utilities import StringProperty
 
 
-# Property defining an UV texture's name for a mesh ('None' if not defined)
-StringProperty(['Mesh'], attr="uv_texture", name="UV texture", default='None')
-
-
 def GetMaterial(self, index):
   if index < len(self.materials):
     return self.materials[index]
@@ -22,6 +18,13 @@ def GetMaterial(self, index):
 
 bpy.types.Mesh.GetMaterial = GetMaterial
 
+def GetFirstMaterial(self):
+  for i,mat in enumerate(self.materials):
+    if self.materials[i] != None:
+      return self.materials[i]
+  return None
+
+bpy.types.Mesh.GetFirstMaterial = GetFirstMaterial
 
 def GetSubMeshesRaw(self, name, indexV, indexGroups, mappingBuffer = []):
   """ Compute the CS submeshes of this Blender mesh by remapping

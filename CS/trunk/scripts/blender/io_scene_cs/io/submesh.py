@@ -55,10 +55,10 @@ class SubMesh:
 
     if self.material:
       func(' '*depth +'  <material>'+self.material.uname+'</material>')
-
-    if not animesh and self.image:
-      if not self.material or (self.material and not self.material.HasDiffuseTexture()):
-        func(' '*depth +'  <shadervar type="texture" name="tex diffuse">%s</shadervar>'%(self.image.uname))
+      if not self.material.HasDiffuseTexture() and self.material.uv_texture != 'None':
+        func(' '*depth +'  <shadervar type="texture" name="tex diffuse">%s</shadervar>'%(self.material.uv_texture))
+    elif self.image:
+      func(' '*depth +'  <material>'+self.image.uname+'</material>')
 
     if self.material:
       if self.material.priority != 'object':
@@ -72,6 +72,11 @@ class SubMesh:
   def AsCSTriangles(self, func, depth=0, animesh=False):
     if self.material:
       func(' '*depth +'<material>'+self.material.uname+'</material>')
+      if not self.material.HasDiffuseTexture() and self.material.uv_texture != 'None':
+        func(' '*depth +'<shadervar type="texture" name="tex diffuse">%s</shadervar>'%(self.material.uv_texture))
+    elif self.image:
+      func(' '*depth +'<material>'+self.image.uname+'</material>')
+
     text = ''
     for i, index in enumerate(self.indices):
       text += '%d ' % (index)
