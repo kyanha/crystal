@@ -46,9 +46,6 @@ def MaterialAsCS(self, func, depth=0, **kwargs):
         if getattr(slot, type, False):
           func(' '*depth +'  <shadervar type="texture" name="%s">%s</shadervar>'%(GetName(name, dic), slot.texture.image.uname))
 
-  if not self.HasDiffuseTexture() and self.uv_texture != 'None':
-    func(' '*depth +'  <shadervar type="texture" name="tex diffuse">%s</shadervar>'%(self.uv_texture))
-
   func(' '*depth +'  <shadervar type="vector4" name="specular">%f, %f, %f, 1</shadervar>'% tuple(self.specular_color))
   
   for step in ['depthwrite', 'ambient', 'diffuse']:
@@ -101,11 +98,16 @@ def ExportMaterials(func, depth, path, dependencies, use_imposter):
 
   # Export materials
   shaders = {}
-  if len(dependencies['M'].keys()) > 0:
+  if len(dependencies['M'].keys()) > 0 or len(dependencies['TM'].keys()) > 0:
     func(' '*depth +"<materials>")
     for name, mat in dependencies['M'].items():
       mat.AsCS(func, depth+2)
       shaders.update(mat.GetShaders())
+    # Export missing materials
+    for name, image in dependencies['TM'].items():
+      func(' '*depth +'  <material name="%s">'%(name))      
+      func(' '*depth +'    <shadervar type="texture" name="tex diffuse">%s</shadervar>'%(name))
+      func(' '*depth +'  </material>')      
     func(' '*depth +"</materials>")
 
   # Export shaders
