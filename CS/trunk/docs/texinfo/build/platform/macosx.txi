@@ -31,31 +31,30 @@ Space, and jump directly to the section explaining how to run the applications
 (@pxref{MacOS/X Running Programs}).
 
 @menu
+* MacOS/X Requirements:: Requirements
 * MacOS/X Libraries:: Library Prerequisites
 * MacOS/X Resources:: Resources
 * MacOS/X Building:: Building
 * MacOS/X Running Programs:: Using Crystal Space
 @end menu
 
-@subsubheading Warning about compilation issues with the default Xcode compiler
+@node MacOS/X Requirements, MacOS/X Building, MacOS/X
+@subsubsection Requirements
 
-The C++ compiler that is shipped by default with the recent Xcode releases does
-not support the C++ standard. This is unfortunately not a joke, and the Crystal
-Space engine won't build because of that, with compilation error messages about
-generic thunk code failed.
+@subsubheading XCode support
 
-In order to fix this, you should use another (real) compiler such as @sc{gcc} or
-Clang. After having installed one of those, you then need to specify them to the
-Crystal Space configuration system using e.g.:
+Recent XCode releases (4.2 and newer) ship with a default C++ compiler 
+(@code{llvm-gcc-4.2 (GCC) 4.2.1 (Based on Apple Inc. build 5658)}) that doesn’t 
+support virtual variadic functions. Because of this C++ will fail to build, with
+compilation error messages about @samp{generic thunk} code failed.
+
+In order to fix this, C++ compilers (like @code{gcc (GCC) 4.2.1 (Apple Inc. 
+build 5666) (dot 3)}) that come with previous versions of XCode (4.1 for 
+instance) have to be used. After having installed one of those, you then need to
+specify them to the Crystal Space configuration system using e.g.:
 
 @example
 ./configure CC=/usr/bin/gcc CXX=/usr/bin/g++
-@end example
-
-Or for Clang:
-
-@example
-./configure CC=/usr/bin/clang CXX=/usr/bin/clang++
 @end example
 
 @node MacOS/X Libraries, MacOS/X Resources, MacOS/X, MacOS/X
