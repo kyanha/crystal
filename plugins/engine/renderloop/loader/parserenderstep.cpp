@@ -29,7 +29,10 @@
 #include "imap/reader.h"
 #include "ivaria/reporter.h"
 
-#include "csplugincommon/renderstep/parserenderstep.h"
+#include "parserenderstep.h"
+
+CS_PLUGIN_NAMESPACE_BEGIN(RLLoader)
+{
 
 CS_LEAKGUARD_IMPLEMENT (csRenderStepParser);
 
@@ -147,3 +150,5 @@ bool csRenderStepParser::ParseRenderSteps (iRenderStepContainer* container,
   return true;
 }
 
+}
+CS_PLUGIN_NAMESPACE_END(RLLoader)

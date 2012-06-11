@@ -17,38 +17,22 @@
     Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 
-#ifndef __CS_BASESTEPTYPE_H__
-#define __CS_BASESTEPTYPE_H__
+#include "cssysdef.h"
 
-/**\file
- * Base class for render step types.
- */
+#include "basesteptype.h"
 
-#include "csextern.h"
-#include "csutil/scf_implementation.h"
-#include "iengine/rendersteps/irsfact.h"
-#include "iutil/comp.h"
-#include "iutil/objreg.h"
-
-/**\addtogroup plugincommon
- * @{ */
-/**
- * Base class for render step loaders.
- */
-class CS_CRYSTALSPACE_EXPORT csBaseRenderStepType : 
-  public scfImplementation2<csBaseRenderStepType, iRenderStepType, iComponent>
+csBaseRenderStepType:: csBaseRenderStepType (iBase *p)
+  : scfImplementationType (this, p)
 {
-protected:
-  iObjectRegistry* object_reg;
+}
 
-public:
+csBaseRenderStepType::~csBaseRenderStepType ()
+{
+}
 
-  csBaseRenderStepType (iBase *p);
-  virtual ~csBaseRenderStepType ();
+bool csBaseRenderStepType::Initialize(iObjectRegistry *object_reg)
+{
+  csBaseRenderStepType::object_reg = object_reg;
 
-  virtual bool Initialize(iObjectRegistry *object_reg);
-};  
-
-/** @} */
-
-#endif
+  return true;
+}

@@ -33,6 +33,9 @@
 
 #include "rlloader.h"
 
+CS_PLUGIN_NAMESPACE_BEGIN(RLLoader)
+{
+
 CS_LEAKGUARD_IMPLEMENT (csRenderLoopLoader);
 
 // Plugin stuff
@@ -200,4 +203,6 @@ error:
   return 0;
 }
 
+}
+CS_PLUGIN_NAMESPACE_END(RLLoader)
 

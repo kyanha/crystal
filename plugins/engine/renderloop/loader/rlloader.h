@@ -28,7 +28,10 @@
 #include "iutil/plugin.h"
 #include "imap/reader.h"
 
-#include "csplugincommon/renderstep/parserenderstep.h"
+#include "parserenderstep.h"
+
+CS_PLUGIN_NAMESPACE_BEGIN(RLLoader)
+{
 
 class csRenderLoopLoader :
   public scfImplementation2<csRenderLoopLoader, iComponent, iLoaderPlugin>
@@ -58,5 +61,7 @@ public:
   virtual bool IsThreadSafe() { return false; }
 };  
 
+}
+CS_PLUGIN_NAMESPACE_END(RLLoader)
 
 #endif

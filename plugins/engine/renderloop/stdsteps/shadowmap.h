@@ -31,9 +31,9 @@
 #include "iengine/rendersteps/ilightiter.h"
 #include "ivideo/shader/shader.h"
 
-#include "csplugincommon/renderstep/basesteptype.h"
-#include "csplugincommon/renderstep/basesteploader.h"
-#include "csplugincommon/renderstep/parserenderstep.h"
+#include "basesteptype.h"
+#include "basesteploader.h"
+#include "parserenderstep.h"
 #include <csutil/dirtyaccessarray.h>
 
 #include <iutil/eventh.h>

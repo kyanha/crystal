@@ -17,51 +17,55 @@
     Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 
-#ifndef __CS_BASESTEPLOADER_H__
-#define __CS_BASESTEPLOADER_H__
+#ifndef __CS_PARSERENDERSTEP_H__
+#define __CS_PARSERENDERSTEP_H__
 
 /**\file
  * Base class for render step loaders.
  */
 
 #include "csextern.h"
+#include "csutil/strhash.h"
+#include "csutil/weakref.h"
 #include "csutil/leakguard.h"
-#include "csutil/ref.h"
-#include "csutil/scf_implementation.h"
-#include "imap/reader.h"
+#include "iengine/rendersteps/icontainer.h"
+#include "iengine/rendersteps/irenderstep.h"
 #include "imap/services.h"
-#include "iutil/comp.h"
+#include "iutil/document.h"
 #include "iutil/objreg.h"
+#include "iutil/plugin.h"
 
-/**\addtogroup plugincommon
- * @{ */
-/**
- * Base class for render step loaders.
- */
-class CS_CRYSTALSPACE_EXPORT csBaseRenderStepLoader : 
-  public scfImplementation2<csBaseRenderStepLoader,
-                            iLoaderPlugin, 
-			    iComponent>
+CS_PLUGIN_NAMESPACE_BEGIN(RLLoader)
 {
-protected:
+
+/**
+ * Parser for render steps and render step lists.
+ */
+class csRenderStepParser
+{
+private:
   iObjectRegistry* object_reg;
   csRef<iSyntaxService> synldr;
+  csWeakRef<iPluginManager> plugmgr;
+
+  csStringHash tokens;
+  enum
+  {
+    XMLTOKEN_STEP
+  };
 
 public:
+  CS_LEAKGUARD_DECLARE (csRenderStepParser);
 
-  CS_LEAKGUARD_DECLARE (csBaseRenderStepLoader);
+  bool Initialize(iObjectRegistry *object_reg);
 
-  csBaseRenderStepLoader (iBase *p);
-  virtual ~csBaseRenderStepLoader ();
+  csPtr<iRenderStep> Parse (iObjectRegistry* object_reg,
+    iDocumentNode* node);
+  bool ParseRenderSteps (iRenderStepContainer* container, 
+    iDocumentNode* node);
+};
 
-  virtual bool Initialize(iObjectRegistry *object_reg);
-
-  virtual csPtr<iBase> Parse (iDocumentNode* node,
-  	iStreamSource* ssource, iLoaderContext* ldr_context,
-  	iBase* context) = 0;
-};  
-
-/** @} */
+}
+CS_PLUGIN_NAMESPACE_END(RLLoader)
 
 #endif
-
