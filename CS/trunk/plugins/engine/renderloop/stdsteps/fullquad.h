@@ -29,8 +29,8 @@
 #include "iengine/rendersteps/irenderstep.h"
 #include "ivideo/shader/shader.h"
 
-#include "csplugincommon/renderstep/basesteptype.h"
-#include "csplugincommon/renderstep/basesteploader.h"
+#include "basesteptype.h"
+#include "basesteploader.h"
 
 class csFullScreenQuadRSType :
   public scfImplementationExt0<csFullScreenQuadRSType, csBaseRenderStepType>

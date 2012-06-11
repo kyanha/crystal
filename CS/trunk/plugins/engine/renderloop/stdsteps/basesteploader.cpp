@@ -22,7 +22,7 @@
 #include "iutil/plugin.h"
 #include "ivaria/reporter.h"
 
-#include "csplugincommon/renderstep/basesteploader.h"
+#include "basesteploader.h"
 
 CS_LEAKGUARD_IMPLEMENT (csBaseRenderStepLoader);
 

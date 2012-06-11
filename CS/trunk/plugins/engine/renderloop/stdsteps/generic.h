@@ -37,8 +37,8 @@
 
 #include "cstool/rendermeshlist.h"
 
-#include "csplugincommon/renderstep/basesteptype.h"
-#include "csplugincommon/renderstep/basesteploader.h"
+#include "basesteptype.h"
+#include "basesteploader.h"
 
 class csGenericRSType :
   public scfImplementationExt0<csGenericRSType, csBaseRenderStepType>

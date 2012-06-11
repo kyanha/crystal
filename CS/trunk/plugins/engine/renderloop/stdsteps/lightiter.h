@@ -32,9 +32,9 @@
 #include "ivideo/shader/shader.h"
 
 #include "csplugincommon/rendermanager/lightsetup.h"
-#include "csplugincommon/renderstep/basesteptype.h"
-#include "csplugincommon/renderstep/basesteploader.h"
-#include "csplugincommon/renderstep/parserenderstep.h"
+#include "basesteptype.h"
+#include "basesteploader.h"
+#include "parserenderstep.h"
 
 class csLightIterRSType :
   public scfImplementationExt0<csLightIterRSType, csBaseRenderStepType>
