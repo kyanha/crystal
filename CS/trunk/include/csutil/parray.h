@@ -112,7 +112,7 @@ public:
   {
     CS_ASSERT (this->GetSize () > 0);
     T* ret = GetAndClear (this->GetSize () - 1); // see *1*
-    Truncate (this->GetSize () - 1);
+    this->Truncate (this->GetSize () - 1);
     return ret;
   }
 
