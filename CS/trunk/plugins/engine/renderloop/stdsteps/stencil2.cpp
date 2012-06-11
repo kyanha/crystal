@@ -55,7 +55,7 @@
 #define Z_PASS 0
 #define Z_FAIL 1
 
-#include "trimesh.h"
+#include "trimesh2.h"
 #include "stencil2.h"
 
 

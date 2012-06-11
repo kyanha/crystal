@@ -232,7 +232,7 @@ class csStencil2ShadowLoader :
   csRenderStepParser rsp;
   csStringHash tokens; 
 
-#define CS_TOKEN_ITEM_FILE "plugins/engine/renderloop/shadow/stencil2/stencil2.tok"
+#define CS_TOKEN_ITEM_FILE "plugins/engine/renderloop/stdsteps/stencil2.tok"
 #include "cstool/tokenlist.h"
 
 public:
