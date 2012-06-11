@@ -87,7 +87,6 @@ void AppWaterdemo2::Frame()
   {
     view->Draw ();
     g3d->FinishDraw();
-    g3d->Print(0);
   }
 }
 
@@ -123,10 +122,6 @@ bool AppWaterdemo2::OnInitialize(int argc, char* argv[])
 //  if (!csInitializer::SetupConfigManager(r,
 //      "/my/vfs/path/AppWaterdemo2.cfg", GetApplicationName()))
 //    return ReportError("Failed to initialize configuration manager!");
-
-#ifdef USE_CEL
-  celInitializer::SetupCelPluginDirs(r);
-#endif
 
   // RequestPlugins() will load all plugins we specify.  In addition it will
   // also check if there are plugins that need to be loaded from the
@@ -208,6 +203,8 @@ bool AppWaterdemo2::Application()
   view->GetCamera ()->SetSector (room);
   view->GetCamera ()->GetTransform ().SetOrigin (csVector3 (0, 3, 0));
   
+  printer.AttachNew (new FramePrinter (GetObjectRegistry ()));
+
   //****************** END OF INITIALIZATION STUFFS ***********************//
   // Start the default run/event loop.  This will return only when some code,
   // such as OnKeyboard(), has asked the run loop to terminate.
