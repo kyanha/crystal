@@ -194,7 +194,7 @@ namespace RenderManager
             || (mesh.preCopyNum != 0))
         {
           // Render the latest batch of meshes
-          RenderMeshes (context, node->meshes, lastShader, lastTicket, lastRenderedMesh, m);
+          this->RenderMeshes (context, node->meshes, lastShader, lastTicket, lastRenderedMesh, m);
           lastRenderedMesh = m;
 
           lastShader = shader;
@@ -208,7 +208,7 @@ namespace RenderManager
         }
       }
 
-      RenderMeshes (context, node->meshes, lastShader, lastTicket, lastRenderedMesh, node->meshes.GetSize ());
+      this->RenderMeshes (context, node->meshes, lastShader, lastTicket, lastRenderedMesh, node->meshes.GetSize ());
     }
   };
 
@@ -242,7 +242,7 @@ namespace RenderManager
 	  iShader* shader = context.shaderArray[mesh.contextLocalId+layerOffset];
         
 	  size_t ticket = context.ticketArray[mesh.contextLocalId+layerOffset];
-          RenderMeshes (context, node->meshes, shader, ticket, m, m+1);
+          this->RenderMeshes (context, node->meshes, shader, ticket, m, m+1);
 	}
       }
     }

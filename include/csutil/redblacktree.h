@@ -1155,7 +1155,7 @@ public:
   T* Put (const K& key, const T &value)
   {
     csRedBlackTreePayload<K, T>* payload = (csRedBlackTreePayload<K, T>*)
-      Insert (csRedBlackTreePayload<K, T>(key, value));
+      this->Insert (csRedBlackTreePayload<K, T>(key, value));
     return (payload != 0) ? &payload->GetValue() :  0;
   }
   /**
@@ -1194,7 +1194,7 @@ public:
    */
   const T& Get (const K& key, const T& fallback) const
   {
-    const csRedBlackTreePayload<K, T>* payload = Find (key);
+    const csRedBlackTreePayload<K, T>* payload = this->Find (key);
     if (payload == 0) return fallback;
     return payload->GetValue();
   }
