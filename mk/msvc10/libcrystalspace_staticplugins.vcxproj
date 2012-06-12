@@ -1226,8 +1226,6 @@ copy /y "$(TargetPath)" ..\..\out\debug10-x64\bin\
     <ClCompile Include="..\..\mk\msvc\libragdoll_staticreg.cpp" />
     <ClCompile Include="..\..\mk\msvc\librendloop_loader_staticreg.cpp" />
     <ClCompile Include="..\..\mk\msvc\librendstep_std_staticreg.cpp" />
-    <ClCompile Include="..\..\mk\msvc\librendstep_stencil2_staticreg.cpp" />
-    <ClCompile Include="..\..\mk\msvc\librendstep_stencil_staticreg.cpp" />
     <ClCompile Include="..\..\mk\msvc\libreporter_staticreg.cpp" />
     <ClCompile Include="..\..\mk\msvc\libretarget_staticreg.cpp" />
     <ClCompile Include="..\..\mk\msvc\librm_deferred_staticreg.cpp" />
@@ -1412,14 +1410,17 @@ copy /y "$(TargetPath)" ..\..\out\debug10-x64\bin\
     <ClCompile Include="..\..\plugins\engine\3d\sector.cpp" />
     <ClCompile Include="..\..\plugins\engine\3d\sharevar.cpp" />
     <ClCompile Include="..\..\plugins\engine\3d\texture.cpp" />
+    <ClCompile Include="..\..\plugins\engine\renderloop\loader\parserenderstep.cpp" />
     <ClCompile Include="..\..\plugins\engine\renderloop\loader\rlloader.cpp" />
-    <ClCompile Include="..\..\plugins\engine\renderloop\shadow\stencil\stencil.cpp" />
-    <ClCompile Include="..\..\plugins\engine\renderloop\shadow\stencil2\stencil2.cpp" />
+    <ClCompile Include="..\..\plugins\engine\renderloop\stdsteps\basesteploader.cpp" />
+    <ClCompile Include="..\..\plugins\engine\renderloop\stdsteps\basesteptype.cpp" />
     <ClCompile Include="..\..\plugins\engine\renderloop\stdsteps\fullquad.cpp" />
     <ClCompile Include="..\..\plugins\engine\renderloop\stdsteps\generic.cpp" />
     <ClCompile Include="..\..\plugins\engine\renderloop\stdsteps\lightiter.cpp" />
     <ClCompile Include="..\..\plugins\engine\renderloop\stdsteps\shadowmap.cpp" />
     <ClCompile Include="..\..\plugins\engine\renderloop\stdsteps\stdsteps.cpp" />
+    <ClCompile Include="..\..\plugins\engine\renderloop\stdsteps\stencil.cpp" />
+    <ClCompile Include="..\..\plugins\engine\renderloop\stdsteps\stencil2.cpp" />
     <ClCompile Include="..\..\plugins\engine\renderloop\stdsteps\target.cpp" />
     <ClCompile Include="..\..\plugins\engseq\engseq.cpp" />
     <ClCompile Include="..\..\plugins\filesys\vfs\vfs.cpp" />
@@ -1834,6 +1835,9 @@ copy /y "$(TargetPath)" ..\..\out\debug10-x64\bin\
     <ClCompile Include="..\..\plugins\collisions\opcode\Opcode.cpp">
       <ObjectFileName>$(IntermediateOutputPath)plugins_collisions_opcode_Opcode.cpp.obj</ObjectFileName>
     </ClCompile>
+    <ClCompile Include="..\..\plugins\engine\renderloop\stdsteps\parserenderstep.cpp">
+      <ObjectFileName>$(IntermediateOutputPath)plugins_engine_renderloop_stdsteps_parserenderstep.cpp.obj</ObjectFileName>
+    </ClCompile>
     <ClCompile Include="..\..\plugins\physics2\bullet\colliders2.cpp">
       <ObjectFileName>$(IntermediateOutputPath)plugins_physics2_bullet_colliders2.cpp.obj</ObjectFileName>
     </ClCompile>
@@ -2016,16 +2020,20 @@ copy /y "$(TargetPath)" ..\..\out\debug10-x64\bin\
     <ClInclude Include="..\..\plugins\engine\3d\sector.h" />
     <ClInclude Include="..\..\plugins\engine\3d\sharevar.h" />
     <ClInclude Include="..\..\plugins\engine\3d\texture.h" />
+    <ClInclude Include="..\..\plugins\engine\renderloop\loader\parserenderstep.h" />
     <ClInclude Include="..\..\plugins\engine\renderloop\loader\rlloader.h" />
-    <ClInclude Include="..\..\plugins\engine\renderloop\shadow\stencil\stencil.h" />
-    <ClInclude Include="..\..\plugins\engine\renderloop\shadow\stencil\trimesh.h" />
-    <ClInclude Include="..\..\plugins\engine\renderloop\shadow\stencil2\stencil2.h" />
+    <ClInclude Include="..\..\plugins\engine\renderloop\stdsteps\basesteploader.h" />
+    <ClInclude Include="..\..\plugins\engine\renderloop\stdsteps\basesteptype.h" />
     <ClInclude Include="..\..\plugins\engine\renderloop\stdsteps\fullquad.h" />
     <ClInclude Include="..\..\plugins\engine\renderloop\stdsteps\generic.h" />
     <ClInclude Include="..\..\plugins\engine\renderloop\stdsteps\lightiter.h" />
     <ClInclude Include="..\..\plugins\engine\renderloop\stdsteps\shadowmap.h" />
     <ClInclude Include="..\..\plugins\engine\renderloop\stdsteps\stdsteps.h" />
+    <ClInclude Include="..\..\plugins\engine\renderloop\stdsteps\stencil.h" />
+    <ClInclude Include="..\..\plugins\engine\renderloop\stdsteps\stencil2.h" />
     <ClInclude Include="..\..\plugins\engine\renderloop\stdsteps\target.h" />
+    <ClInclude Include="..\..\plugins\engine\renderloop\stdsteps\trimesh.h" />
+    <ClInclude Include="..\..\plugins\engine\renderloop\stdsteps\trimesh2.h" />
     <ClInclude Include="..\..\plugins\engseq\engseq.h" />
     <ClInclude Include="..\..\plugins\filesys\vfs\vfs.h" />
     <ClInclude Include="..\..\plugins\font\server\csfont\csfont.h" />
@@ -2445,7 +2453,7 @@ copy /y "$(TargetPath)" ..\..\out\debug10-x64\bin\
     <ClInclude Include="..\..\plugins\collisions\opcode\OPC_VolumeCollider.h" />
     <ClInclude Include="..\..\plugins\collisions\opcode\Opcode.h" />
     <ClInclude Include="..\..\plugins\collisions\opcode\Stdafx.h" />
-    <ClInclude Include="..\..\plugins\engine\renderloop\shadow\stencil2\trimesh.h" />
+    <ClInclude Include="..\..\plugins\engine\renderloop\stdsteps\parserenderstep.h" />
     <ClInclude Include="..\..\plugins\physics2\bullet\colliders2.h" />
     <ClInclude Include="..\..\plugins\physics2\bullet\collisionobject2.h" />
     <ClInclude Include="..\..\plugins\rendermanager\deferred\..\..\..\include\csplugincommon\rendermanager\autofx_framebuffertex.h" />
