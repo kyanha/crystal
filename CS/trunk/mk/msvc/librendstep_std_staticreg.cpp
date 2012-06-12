@@ -101,6 +101,42 @@ static char const metainfo_rendstep_std[] =
 "          <class>crystalspace.graphics3d.</class>"
 "        </requires>"
 "      </class>"
+"      <class>"
+"        <name>crystalspace.renderloop.step.shadow.stencil</name>"
+"        <implementation>csStencilShadowLoader</implementation>"
+"        <description>stencil shadow render loop step</description>"
+"        <requires>"
+"          <class>crystalspace.graphics3d.</class>"
+"      <class>crystalspace.graphics3d.shadermanager</class>"
+"        </requires>"
+"      </class>"
+"      <class>"
+"        <name>crystalspace.renderloop.step.shadow.stencil.type</name>"
+"        <implementation>csStencilShadowType</implementation>"
+"        <description>stencil shadow render loop step type</description>"
+"        <requires>"
+"          <class>crystalspace.graphics3d.</class>"
+"      <class>crystalspace.graphics3d.shadermanager</class>"
+"        </requires>"
+"      </class>"
+"      <class>"
+"        <name>crystalspace.renderloop.step.shadow.stencil2</name>"
+"        <implementation>csStencil2ShadowLoader</implementation>"
+"        <description>stencil shadow render loop step</description>"
+"        <requires>"
+"          <class>crystalspace.graphics3d.</class>"
+"      <class>crystalspace.graphics3d.shadermanager</class>"
+"        </requires>"
+"      </class>"
+"      <class>"
+"        <name>crystalspace.renderloop.step.shadow.stencil2.type</name>"
+"        <implementation>csStencil2ShadowType</implementation>"
+"        <description>stencil shadow render loop step type</description>"
+"        <requires>"
+"          <class>crystalspace.graphics3d.</class>"
+"      <class>crystalspace.graphics3d.shadermanager</class>"
+"        </requires>"
+"      </class>"
 "    </classes>"
 "  </scf>"
 "</plugin>"
@@ -145,6 +181,22 @@ static char const metainfo_rendstep_std[] =
   #define csFullScreenQuadRSType_FACTORY_REGISTER_DEFINED 
     SCF_DEFINE_FACTORY_FUNC_REGISTRATION(csFullScreenQuadRSType) 
   #endif
+  #ifndef csStencilShadowLoader_FACTORY_REGISTER_DEFINED 
+  #define csStencilShadowLoader_FACTORY_REGISTER_DEFINED 
+    SCF_DEFINE_FACTORY_FUNC_REGISTRATION(csStencilShadowLoader) 
+  #endif
+  #ifndef csStencilShadowType_FACTORY_REGISTER_DEFINED 
+  #define csStencilShadowType_FACTORY_REGISTER_DEFINED 
+    SCF_DEFINE_FACTORY_FUNC_REGISTRATION(csStencilShadowType) 
+  #endif
+  #ifndef csStencil2ShadowLoader_FACTORY_REGISTER_DEFINED 
+  #define csStencil2ShadowLoader_FACTORY_REGISTER_DEFINED 
+    SCF_DEFINE_FACTORY_FUNC_REGISTRATION(csStencil2ShadowLoader) 
+  #endif
+  #ifndef csStencil2ShadowType_FACTORY_REGISTER_DEFINED 
+  #define csStencil2ShadowType_FACTORY_REGISTER_DEFINED 
+    SCF_DEFINE_FACTORY_FUNC_REGISTRATION(csStencil2ShadowType) 
+  #endif
 
 class rendstep_std
 {
@@ -188,6 +240,22 @@ SCF_REGISTER_STATIC_LIBRARY(rendstep_std,metainfo_rendstep_std)
   #ifndef csFullScreenQuadRSType_FACTORY_REGISTERED 
   #define csFullScreenQuadRSType_FACTORY_REGISTERED 
     csFullScreenQuadRSType_StaticInit csFullScreenQuadRSType_static_init__; 
+  #endif
+  #ifndef csStencilShadowLoader_FACTORY_REGISTERED 
+  #define csStencilShadowLoader_FACTORY_REGISTERED 
+    csStencilShadowLoader_StaticInit csStencilShadowLoader_static_init__; 
+  #endif
+  #ifndef csStencilShadowType_FACTORY_REGISTERED 
+  #define csStencilShadowType_FACTORY_REGISTERED 
+    csStencilShadowType_StaticInit csStencilShadowType_static_init__; 
+  #endif
+  #ifndef csStencil2ShadowLoader_FACTORY_REGISTERED 
+  #define csStencil2ShadowLoader_FACTORY_REGISTERED 
+    csStencil2ShadowLoader_StaticInit csStencil2ShadowLoader_static_init__; 
+  #endif
+  #ifndef csStencil2ShadowType_FACTORY_REGISTERED 
+  #define csStencil2ShadowType_FACTORY_REGISTERED 
+    csStencil2ShadowType_StaticInit csStencil2ShadowType_static_init__; 
   #endif
 public:
  rendstep_std();
