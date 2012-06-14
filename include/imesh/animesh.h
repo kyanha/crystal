@@ -552,7 +552,7 @@ struct iAnimatedMeshFactory : public virtual iBase
  */
 struct iAnimatedMeshSubMeshFactory : public virtual iBase
 {
-  SCF_INTERFACE(CS::Mesh::iAnimatedMeshSubMeshFactory, 1, 2, 1);
+  SCF_INTERFACE(CS::Mesh::iAnimatedMeshSubMeshFactory, 1, 2, 2);
 
   /**
    * Get the index buffer for this submesh. Defines a triangle list.
@@ -613,6 +613,11 @@ struct iAnimatedMeshSubMeshFactory : public virtual iBase
    * Get the Z-buf drawing mode of this submesh.
    */
   virtual csZBufMode GetZBufMode () const = 0;
+
+  /**
+   * Get the shader variable context for this submesh.
+   */
+  virtual iShaderVariableContext* GetShaderVariableContext (size_t buffer) const = 0;
 };
 
 /**
@@ -751,7 +756,7 @@ struct iAnimatedMeshSubMesh : public virtual iBase
   virtual bool IsRendering () const = 0;
 
   /**
-   * Get a shader variable context for this submesh.
+   * Get the shader variable context for this submesh.
    */
   virtual iShaderVariableContext* GetShaderVariableContext (size_t buffer) const = 0;
 
