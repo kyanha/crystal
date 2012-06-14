@@ -336,6 +336,8 @@ def AsCSGenmeshLib(self, func, depth=0, **kwargs):
     func(" "*depth + "    <material>%s</material>"%(mat.uname))
   else:
     func(" "*depth + "    <material>%s</material>"%(self.uv_texture if self.uv_texture!=None else 'None'))
+  if not mat.HasDiffuseTexture() and mat.uv_texture != 'None':
+    func(' '*depth + '    <shadervar type="texture" name="tex diffuse">%s</shadervar>'%(mat.uv_texture))
 
   # Export mesh's render buffers
   for buf in GetRenderBuffers(**kwargs):
@@ -381,7 +383,11 @@ def ObjectAsCS(self, func, depth=0, **kwargs):
       #func(' '*depth +'  <factory>%s</factory>'%(self.name))
 
       func(' '*depth +'<meshobj name="%s_object">'%(self.name))
-      func(' '*depth +'  <plugin>crystalspace.mesh.loader.genmesh</plugin>')
+
+      if self.parent and self.parent.type == 'ARMATURE':
+        func(' '*depth +'  <plugin>crystalspace.mesh.loader.animesh</plugin>')
+      else:
+        func(' '*depth +'  <plugin>crystalspace.mesh.loader.genmesh</plugin>')
       func(' '*depth +'  <params>')
       func(' '*depth +'    <factory>%s</factory>'%(self.name))
       func(' '*depth +'  </params>')
