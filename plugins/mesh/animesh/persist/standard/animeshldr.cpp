@@ -232,6 +232,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(Animeshldr)
           csRef<iMaterialWrapper> material;
 	  csZBufMode zmode = (csZBufMode)~0;
 	  CS::Graphics::RenderPriority renderPriority;
+	  csRefArray<csShaderVariable> shadervars;
 
           csRef<iDocumentNodeIterator> it = child->GetNodes ();
           while (it->HasNext ())
@@ -264,6 +265,14 @@ CS_PLUGIN_NAMESPACE_BEGIN(Animeshldr)
                 }
               }
               break;
+	    case XMLTOKEN_SHADERVAR:
+	    {
+	      csRef<csShaderVariable> sv;
+	      sv.AttachNew (new csShaderVariable);
+	      if (!synldr->ParseShaderVar (ldr_context, child2, *sv)) return false;
+	      shadervars.Push (sv);
+	      break;
+	    }
 	    case XMLTOKEN_PRIORITY:
 	      renderPriority = engine->GetRenderPriority (child2->GetContentsValue ());
 	      break;
@@ -284,6 +293,9 @@ CS_PLUGIN_NAMESPACE_BEGIN(Animeshldr)
 	      smf->SetZBufMode (zmode);
 	    if (renderPriority.IsValid ())
 	      smf->SetRenderPriority (renderPriority);
+	    iShaderVariableContext* svc = smf->GetShaderVariableContext (0);
+	    for (size_t i = 0; i < shadervars.GetSize(); i++)
+	      svc->AddVariable (shadervars[i]);
           }
         }
         break;
