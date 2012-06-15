@@ -16698,6 +16698,37 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_iAnimatedMeshSubMeshFactory_GetShaderVariableContext(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  CS::Mesh::iAnimatedMeshSubMeshFactory *arg1 = (CS::Mesh::iAnimatedMeshSubMeshFactory *) 0 ;
+  size_t arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  size_t val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  iShaderVariableContext *result = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"iAnimatedMeshSubMeshFactory_GetShaderVariableContext",2,2,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_CS__Mesh__iAnimatedMeshSubMeshFactory, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "iAnimatedMeshSubMeshFactory_GetShaderVariableContext" "', argument " "1"" of type '" "CS::Mesh::iAnimatedMeshSubMeshFactory const *""'"); 
+  }
+  arg1 = reinterpret_cast< CS::Mesh::iAnimatedMeshSubMeshFactory * >(argp1);
+  ecode2 = SWIG_AsVal_size_t(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "iAnimatedMeshSubMeshFactory_GetShaderVariableContext" "', argument " "2"" of type '" "size_t""'");
+  } 
+  arg2 = static_cast< size_t >(val2);
+  result = (iShaderVariableContext *)((CS::Mesh::iAnimatedMeshSubMeshFactory const *)arg1)->GetShaderVariableContext(arg2);
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_iShaderVariableContext, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *iAnimatedMeshSubMeshFactory_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *obj;
   if (!PyArg_UnpackTuple(args,(char*)"swigregister", 1, 1,&obj)) return NULL;
@@ -47535,6 +47566,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"iAnimatedMeshSubMeshFactory_GetRenderPriority", _wrap_iAnimatedMeshSubMeshFactory_GetRenderPriority, METH_VARARGS, NULL},
 	 { (char *)"iAnimatedMeshSubMeshFactory_SetZBufMode", _wrap_iAnimatedMeshSubMeshFactory_SetZBufMode, METH_VARARGS, NULL},
 	 { (char *)"iAnimatedMeshSubMeshFactory_GetZBufMode", _wrap_iAnimatedMeshSubMeshFactory_GetZBufMode, METH_VARARGS, NULL},
+	 { (char *)"iAnimatedMeshSubMeshFactory_GetShaderVariableContext", _wrap_iAnimatedMeshSubMeshFactory_GetShaderVariableContext, METH_VARARGS, NULL},
 	 { (char *)"iAnimatedMeshSubMeshFactory_swigregister", iAnimatedMeshSubMeshFactory_swigregister, METH_VARARGS, NULL},
 	 { (char *)"iAnimatedMesh_SetSkeleton", _wrap_iAnimatedMesh_SetSkeleton, METH_VARARGS, NULL},
 	 { (char *)"iAnimatedMesh_GetSkeleton", _wrap_iAnimatedMesh_GetSkeleton, METH_VARARGS, NULL},
