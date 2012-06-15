@@ -16221,6 +16221,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *GetRenderPriority = *cspacec::iAnimatedMeshSubMeshFactory_GetRenderPriority;
 *SetZBufMode = *cspacec::iAnimatedMeshSubMeshFactory_SetZBufMode;
 *GetZBufMode = *cspacec::iAnimatedMeshSubMeshFactory_GetZBufMode;
+*GetShaderVariableContext = *cspacec::iAnimatedMeshSubMeshFactory_GetShaderVariableContext;
 sub DISOWN {
     my $self = shift;
     my $ptr = tied(%$self);

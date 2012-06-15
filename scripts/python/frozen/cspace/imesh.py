@@ -789,6 +789,7 @@ class iAnimatedMeshSubMeshFactory(core.iBase):
     def GetRenderPriority(*args): return _imesh.iAnimatedMeshSubMeshFactory_GetRenderPriority(*args)
     def SetZBufMode(*args): return _imesh.iAnimatedMeshSubMeshFactory_SetZBufMode(*args)
     def GetZBufMode(*args): return _imesh.iAnimatedMeshSubMeshFactory_GetZBufMode(*args)
+    def GetShaderVariableContext(*args): return _imesh.iAnimatedMeshSubMeshFactory_GetShaderVariableContext(*args)
 iAnimatedMeshSubMeshFactory_swigregister = _imesh.iAnimatedMeshSubMeshFactory_swigregister
 iAnimatedMeshSubMeshFactory_swigregister(iAnimatedMeshSubMeshFactory)
 
