@@ -506,7 +506,8 @@ AC_DEFUN([CS_CHECK_VTABLE_THUNKS],
 		[CS_CREATE_TUPLE([-fvtable-thunks])], [C++],
 		[CS_EMIT_BUILD_PROPERTY([COMPILER.C++FLAGS.MANDATORY],
 		    [$cs_cv_prog_cxx_vtable_thunks], [+])],
-		[], [$cs_cv_prog_cxx_enable_errors])
+		[], [$cs_cv_prog_cxx_enable_errors], [], [],
+		[no longer supported])
 	    ;;
     esac])
 
