@@ -143,7 +143,7 @@ public:
   csShaderVariable ();
   /// Construct with name.
   csShaderVariable (CS::ShaderVarStringID name);
-
+  /// Copy constructor.
   csShaderVariable (const csShaderVariable& other);
 
   virtual ~csShaderVariable ();  
