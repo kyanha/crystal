@@ -95,9 +95,6 @@ struct iVerbosityManager;
 /// Request null 3D renderer
 #define CS_REQUEST_NULL3D \
   CS_REQUEST_PLUGIN("crystalspace.graphics3d.null",iGraphics3D)
-/// Request software 3D renderer.
-#define CS_REQUEST_SOFTWARE3D \
-  CS_REQUEST_PLUGIN("crystalspace.graphics3d.software",iGraphics3D)
 /// Request OpenGL 3D renderer
 #define CS_REQUEST_OPENGL3D \
   CS_REQUEST_PLUGIN("crystalspace.graphics3d.opengl", iGraphics3D)
