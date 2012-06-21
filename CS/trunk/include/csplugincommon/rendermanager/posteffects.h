@@ -390,7 +390,7 @@ namespace RenderManager
       /// Render information for all layers
       csArray<LayerRenderInfo> layerRenderInfos;
 
-      void AllocatePingpongTextures (PostEffectManager& pfx);
+      bool AllocatePingpongTextures (PostEffectManager& pfx);
       void UpdateSVContexts (PostEffectManager& pfx);
     
       void SetupRenderInfo (PostEffectManager& pfx);
