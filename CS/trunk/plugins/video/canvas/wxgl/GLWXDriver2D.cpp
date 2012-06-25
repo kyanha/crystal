@@ -189,6 +189,7 @@ bool csGraphics2DWX::SetMouseCursor (csMouseCursorID shape)
 void csGraphics2DWX::SetParent(wxWindow* wx)
 {
   myParent = wx;
+  if (myParent && theCanvas) theCanvas->Reparent(myParent);
 }
 
 wxWindow* csGraphics2DWX::GetWindow()
