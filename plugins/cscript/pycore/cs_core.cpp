@@ -11061,6 +11061,50 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_iSCF_GetPluginMetadataNode(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  iSCF *arg1 = (iSCF *) 0 ;
+  char *arg2 = (char *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int res2 ;
+  char *buf2 = 0 ;
+  int alloc2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  SwigValueWrapper< csRef< iDocumentNode > > result;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"iSCF_GetPluginMetadataNode",2,2,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_iSCF, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "iSCF_GetPluginMetadataNode" "', argument " "1"" of type '" "iSCF *""'"); 
+  }
+  arg1 = reinterpret_cast< iSCF * >(argp1);
+  res2 = SWIG_AsCharPtrAndSize(obj1, &buf2, NULL, &alloc2);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "iSCF_GetPluginMetadataNode" "', argument " "2"" of type '" "char const *""'");
+  }
+  arg2 = reinterpret_cast< char * >(buf2);
+  result = (arg1)->GetPluginMetadataNode((char const *)arg2);
+  {
+    csRef<iDocumentNode> ref((csRef<iDocumentNode>&)result); /* explicit cast */
+    
+    if (!ref.IsValid())
+    {
+      Py_INCREF(Py_None);
+      return Py_None;
+    }
+    ref->IncRef();
+    resultobj = SWIG_NewPointerObj((void *)(iDocumentNode *)ref, SWIGTYPE_p_iDocumentNode, 1);
+  }
+  if (alloc2 == SWIG_NEWOBJ) delete[] buf2;
+  return resultobj;
+fail:
+  if (alloc2 == SWIG_NEWOBJ) delete[] buf2;
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_iSCF_UnloadUnusedModules(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   iSCF *arg1 = (iSCF *) 0 ;
@@ -61648,6 +61692,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"iSCF_GetClassDescription", _wrap_iSCF_GetClassDescription, METH_VARARGS, NULL},
 	 { (char *)"iSCF_GetClassDependencies", _wrap_iSCF_GetClassDependencies, METH_VARARGS, NULL},
 	 { (char *)"iSCF_GetPluginMetadata", _wrap_iSCF_GetPluginMetadata, METH_VARARGS, NULL},
+	 { (char *)"iSCF_GetPluginMetadataNode", _wrap_iSCF_GetPluginMetadataNode, METH_VARARGS, NULL},
 	 { (char *)"iSCF_UnloadUnusedModules", _wrap_iSCF_UnloadUnusedModules, METH_VARARGS, NULL},
 	 { (char *)"iSCF_RegisterClass", _wrap_iSCF_RegisterClass, METH_VARARGS, NULL},
 	 { (char *)"iSCF_RegisterFactoryFunc", _wrap_iSCF_RegisterFactoryFunc, METH_VARARGS, NULL},

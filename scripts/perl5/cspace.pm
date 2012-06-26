@@ -870,6 +870,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *GetClassDescription = *cspacec::iSCF_GetClassDescription;
 *GetClassDependencies = *cspacec::iSCF_GetClassDependencies;
 *GetPluginMetadata = *cspacec::iSCF_GetPluginMetadata;
+*GetPluginMetadataNode = *cspacec::iSCF_GetPluginMetadataNode;
 *UnloadUnusedModules = *cspacec::iSCF_UnloadUnusedModules;
 *RegisterClass = *cspacec::iSCF_RegisterClass;
 *RegisterFactoryFunc = *cspacec::iSCF_RegisterFactoryFunc;
