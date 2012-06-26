@@ -409,6 +409,7 @@ class iSCF(iBase):
     def GetClassDescription(*args): return _core.iSCF_GetClassDescription(*args)
     def GetClassDependencies(*args): return _core.iSCF_GetClassDependencies(*args)
     def GetPluginMetadata(*args): return _core.iSCF_GetPluginMetadata(*args)
+    def GetPluginMetadataNode(*args): return _core.iSCF_GetPluginMetadataNode(*args)
     def UnloadUnusedModules(*args): return _core.iSCF_UnloadUnusedModules(*args)
     def RegisterClass(*args): return _core.iSCF_RegisterClass(*args)
     def RegisterFactoryFunc(*args): return _core.iSCF_RegisterFactoryFunc(*args)
