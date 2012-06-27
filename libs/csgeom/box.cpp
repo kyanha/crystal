@@ -876,12 +876,16 @@ bool csBox3::ProjectBox (const csTransform& trans, float fov,
 
   min_z = 100000000.0;
   max_z = 0;
-  csBox3 cbox (trans * GetCorner (ol.vertices[0]));
+  csBox3 cbox;
+  if (num_array > 0)
+  {
+    cbox.StartBoundingBox (trans * GetCorner (ol.vertices[0]));
+  }
   int i;
   // We go to 8 so that we can calculate the correct min_z/max_z.
   // If we only go to num_array we will only calculate min_z/max_z
   // for the outine vertices.
-  for (i = 1; i < 8; i++)
+  for (i = 0; i < 8; i++)
   {
     csVector3 v = trans * GetCorner (ol.vertices[i]);
     if (i < num_array)
@@ -898,6 +902,13 @@ bool csBox3::ProjectBox (const csTransform& trans, float fov,
   }
 
   if (max_z < 0.01) return false;
+
+  if (num_array == 0)
+  {
+    // Camera is inside box, return full screen
+    sbox.Set (0, 0, screenWidth, screenHeight);
+    return true;
+  }
 
 // @@@ In theory we can optimize here again by calling CalculatePointSegment
 // again for the new box and the 0,0,0 point. By doing that we could
@@ -1081,12 +1092,16 @@ bool csBox3::ProjectBox (const csTransform& trans,
 
   min_z = 100000000.0;
   max_z = 0;
-  csBox3 cbox (trans * GetCorner (ol.vertices[0]));
+  csBox3 cbox;
+  if (num_array > 0)
+  {
+    cbox.StartBoundingBox (trans * GetCorner (ol.vertices[0]));
+  }
   int i;
   // We go to 8 so that we can calculate the correct min_z/max_z.
   // If we only go to num_array we will only calculate min_z/max_z
   // for the outine vertices.
-  for (i = 1; i < 8; i++)
+  for (i = 0; i < 8; i++)
   {
     csVector3 v = trans * GetCorner (ol.vertices[i]);
     if (i < num_array)
@@ -1103,6 +1118,13 @@ bool csBox3::ProjectBox (const csTransform& trans,
   }
 
   if (max_z < 0.01) return false;
+  
+  if (num_array == 0)
+  {
+    // Camera is inside box, return full screen
+    sbox.Set (0, 0, screenWidth, screenHeight);
+    return true;
+  }
 
 // @@@ In theory we can optimize here again by calling CalculatePointSegment
 // again for the new box and the 0,0,0 point. By doing that we could
