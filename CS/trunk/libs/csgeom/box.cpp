@@ -906,7 +906,7 @@ bool csBox3::ProjectBox (const csTransform& trans, float fov,
   if (num_array == 0)
   {
     // Camera is inside box, return full screen
-    sbox.Set (0, 0, screenWidth, screenHeight);
+    sbox.Set (sx-fov, sy-fov, sx+fov, sy+fov);
     return true;
   }
 
