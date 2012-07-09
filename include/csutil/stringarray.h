@@ -307,6 +307,21 @@ public:
     this->Push (currentString);
     return num + 1;
   }
+
+  /// Join all strings in the array into a single string, insert \a separator between them.
+  csString Join (const char* separator = "")
+  {
+    if (this->GetSize() == 0) return csString();
+
+    csString str (this->Get (0));
+    for (size_t i = 1; i < this->GetSize(); i++)
+    {
+      str.Append (separator);
+      str.Append (this->Get (i));
+    }
+
+    return str;
+  }
 };
 } // namespace Utility
 } // namespace CS
