@@ -1,6 +1,6 @@
 /*
   Copyright (C) 2003-2006 by Marten Svanfeldt
-		2005-2006 by Frank Richter
+		2005-2012 by Frank Richter
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Library General Public
@@ -38,19 +38,105 @@
 CS_PLUGIN_NAMESPACE_BEGIN(XMLShader)
 {
 
+class csXMLShaderTech;
+class csXMLShaderWrapper;
+
+class csXMLShaderPluginWrapper :
+  public scfImplementation1<csXMLShaderPluginWrapper,
+                            iShaderProgramPlugin>
+{
+  csXMLShaderTech* tech;
+  size_t variant;
+
+  bool FillCacheInfo (iDocumentNode *node,
+                      csXMLShaderTech::CachedPlugin& cacheInfoVP,
+                      csXMLShaderTech::CachedPlugin& cacheInfoFP);
+
+private:
+  friend class csXMLShaderWrapper;
+
+  csXMLShaderTech::CachedPlugin cacheInfoFP;
+  csXMLShaderTech::CachedPlugin cacheInfoVP;
+public:
+  CS_LEAKGUARD_DECLARE (csXMLShaderPluginWrapper);
+
+  csXMLShaderPluginWrapper (iDocumentNode *node, csXMLShaderTech* tech, size_t variant);
+
+  virtual csPtr<iShaderProgram> CreateProgram (const char* type);
+  virtual bool SupportType (const char* type);
+
+  virtual csPtr<iStringArray> QueryPrecacheTags (const char* type);
+  /**
+   * Warm the given cache with the program specified in \a node.
+   * \a outObj can return an object which exposes iShaderDestinationResolver.
+   */
+  virtual bool Precache (const char* type, const char* tag,
+    iBase* previous, iDocumentNode* node,
+    iHierarchicalCache* cacheTo, csRef<iBase>* outObj = 0);
+};
+
+template<typename Impl>
+class WrappedShaderDestinationResolver : public virtual iShaderDestinationResolver
+{
+public:
+  int ResolveTU (const char* binding)
+  {
+    int tu (-1);
+
+    csRef<iShaderDestinationResolver> resolveFP (
+      scfQueryInterfaceSafe<iShaderDestinationResolver> (static_cast<Impl*> (this)->GetFP()));
+
+    // Give FP precedence
+    if (resolveFP)
+      tu = resolveFP->ResolveTU (binding);
+
+    csRef<iShaderDestinationResolver> resolveVP (
+      scfQueryInterfaceSafe<iShaderDestinationResolver> (static_cast<Impl*> (this)->GetVP()));
+    // Fall back to VP for TU resolution
+    if ((tu < 0) && resolveVP)
+      tu = resolveVP->ResolveTU (binding);
+
+    return tu;
+  }
+
+  csVertexAttrib ResolveBufferDestination (const char* binding)
+  {
+    csRef<iShaderDestinationResolver> resolveVP (
+      scfQueryInterfaceSafe<iShaderDestinationResolver> (static_cast<Impl*> (this)->GetVP()));
+    if (resolveVP)
+      return resolveVP->ResolveBufferDestination (binding);
+    // FPs usually don't have buffer destinations, do they?
+    return CS_VATTRIB_INVALID;
+  }
+};
+
 class csXMLShaderWrapper :
-  public scfImplementation1<csXMLShaderWrapper,
-                            iShaderProgram>
+  public scfImplementation2<csXMLShaderWrapper,
+                            iShaderProgram,
+                            scfFakeInterface<iShaderDestinationResolver> >,
+  public WrappedShaderDestinationResolver<csXMLShaderWrapper>
 {
 private:
+  csRef<csXMLShaderPluginWrapper> loadingWrapper;
+
   // wrapped programs
   csRef<iShaderProgram> vp;
   csRef<iShaderProgram> fp;
 
+  iShaderProgram::CacheLoadResult LoadProgram (iHierarchicalCache *cache, iBase *previous,
+                                               const csXMLShaderTech::CachedPlugin& cacheInfo,
+                                               csRef<iString> *failReason,
+                                               csRef<iShaderProgram>& prog,
+                                               csString& tag);
 public:
   CS_LEAKGUARD_DECLARE (csXMLShaderWrapper);
 
-  csXMLShaderWrapper ();
+  static bool FillCachedPlugin (csXMLShaderTech* tech,
+                                iDocumentNode *node,
+                                csXMLShaderTech::CachedPlugin& cacheInfo,
+                                size_t variant);
+
+  csXMLShaderWrapper (csXMLShaderPluginWrapper* loadingWrapper);
   ~csXMLShaderWrapper ();
 
   virtual void Activate ();
@@ -78,21 +164,8 @@ public:
                            const csShaderVariableStack &stack);
 
   // wrapper specific functions: set vertex/fragment shaders
-  void SetVP (iShaderProgram* vp);
   iShaderProgram* GetVP() { return vp; }
-  void SetFP (iShaderProgram* fp);
   iShaderProgram* GetFP() { return fp; }
-
-  iShaderProgram::CacheLoadResult LoadVPFromCache (
-    csXMLShaderTech *tech,
-    iHierarchicalCache* cache, const CachedPlugin& cacheInfo,
-    csString& tag, int passNumber);
-  iShaderProgram::CacheLoadResult LoadFPFromCache (
-    csXMLShaderTech *tech,
-    iHierarchicalCache* cache, const CachedPlugin& cacheInfo,
-    csString& tag, int passNumber);
-
-  iBase* GetPrevious () const;
 };
 
 }
