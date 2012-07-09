@@ -253,7 +253,7 @@ bool csShaderGLCGCommon::GetProgramNode (iDocumentNode* passProgNode)
       {
 	case XMLTOKEN_PROGRAM:
 	  {
-        if (ParseProgramNode (child, programSource))
+        if (!ParseProgramNode (child, programSource))
           return false;
 	  }
 	  break;
