@@ -337,7 +337,10 @@ bool csXMLShaderTech::PrecachePass (iDocumentNode *node, ShaderPass* pass,
   CachedPlugins cachedPlugins;
 
   if (!GetProgramPlugins (node, cachedPlugins, variant))
+  {
+    SetFailReason ("Couldn't load shader plugin(s).");
     return false;
+  }
 
   if (!ParseModes (pass, node, hlp)) return false;
 
