@@ -1043,7 +1043,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(XMLShader)
 	    {
 	      compiler->Report (CS_REPORTER_SEVERITY_NOTIFY,
 	        "Shader %s<%zu/%zu>: Technique with priority %d fails. Reason: %s.",
-	        CS::Quote::Single (GetName()), vi, tech.priority,
+	        CS::Quote::Single (GetName()), t, vi, tech.priority,
 	        xmltech->GetFailReason());
 	    }
 	    result = false;
