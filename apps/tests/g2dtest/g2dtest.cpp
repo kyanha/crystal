@@ -650,7 +650,7 @@ void G2DTestSystemDriver::WriteCenteredWrapped (int mode, int dy, int &h,
   int maxLH = fH;
   char* line = csStrNew (text);
   char* p = line;
-  csString drawLine;
+  csString drawLine (" ");
 
   while (p && *p)
   {
