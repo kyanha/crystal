@@ -341,7 +341,7 @@ void OSXDriver2D::FadeToGammaTable(CGDirectDisplayID disp, GammaTable table)
 void OSXDriver2D::SaveGamma(CGDirectDisplayID disp, GammaTable &table)
 {
     CGDisplayErr err;
-    CGTableCount sampleCount;
+    uint32_t sampleCount;
     
     err = CGGetDisplayTransferByTable(disp, 256, table.r, table.g, 
                                         table.b, &sampleCount);
