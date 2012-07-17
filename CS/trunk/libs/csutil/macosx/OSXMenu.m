@@ -108,10 +108,10 @@ static void menu_add_item(NSMenu* menu, char const* key,
     id item;
 
     if (action != 0)
-      cmd = NSSelectorFromString([NSString stringWithCString:action]);
+      cmd = NSSelectorFromString([NSString stringWithUTF8String:action]);
 
-    item = [menu addItemWithTitle:[NSString stringWithCString:title] action:cmd
-      keyEquivalent:[NSString stringWithCString:shortcut]];
+    item = [menu addItemWithTitle:[NSString stringWithUTF8String:title] action:cmd
+      keyEquivalent:[NSString stringWithUTF8String:shortcut]];
     [item setKeyEquivalentModifierMask:NSCommandKeyMask];
 
     if (target != 0)
@@ -203,7 +203,7 @@ static NSMenu* build_menu(
     OSXConfigIterator iterator = OSXConfigFile_new_iterator(config, section);
     char const* k_title = STR_APPEND(section, "title");
     char const* title = OSXConfigFile_lookup(config, k_title, "");
-    m = [[NSMenu alloc] initWithTitle:[NSString stringWithCString:title]];
+    m = [[NSMenu alloc] initWithTitle:[NSString stringWithUTF8String:title]];
     while (OSXConfigFile_iterator_next(iterator))
       menu_add(m, OSXConfigFile_iterator_key(iterator),
 	OSXConfigFile_iterator_data(iterator), config, assistant);

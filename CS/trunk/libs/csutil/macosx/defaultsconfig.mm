@@ -130,7 +130,7 @@ bool csDefaultsConfig::KeyExists (NSString* Key) const
 
 bool csDefaultsConfig::KeyExists (const char* Key) const
 {
-  return KeyExists([NSString stringWithCString:Key]);
+  return KeyExists([NSString stringWithUTF8String:Key]);
 }
 
 // Check if we have permission to write to a key.  For MacOS/X 10.1 and earlier
@@ -159,7 +159,7 @@ bool csDefaultsConfig::SubsectionExists (const char* subsection) const
 
 int csDefaultsConfig::GetInt (const char* Key, int Def) const
 {
-  NSString* keystring = [NSString stringWithCString:Key];
+  NSString* keystring = [NSString stringWithUTF8String:Key];
   if (KeyExists(keystring))
     return [[[dict objectForKey:keystring] description] intValue];
   return Def;
@@ -167,7 +167,7 @@ int csDefaultsConfig::GetInt (const char* Key, int Def) const
 
 float csDefaultsConfig::GetFloat (const char* Key, float Def) const
 {
-  NSString* keystring = [NSString stringWithCString:Key];
+  NSString* keystring = [NSString stringWithUTF8String:Key];
   if (KeyExists(keystring))
     return [[[dict objectForKey:keystring] description] floatValue];
   return Def;
@@ -175,7 +175,7 @@ float csDefaultsConfig::GetFloat (const char* Key, float Def) const
 
 const char* csDefaultsConfig::GetStr (const char* Key, const char* Def) const
 {
-  NSString* keystring = [NSString stringWithCString:Key];
+  NSString* keystring = [NSString stringWithUTF8String:Key];
   if (KeyExists(keystring))
     return [[[dict objectForKey:keystring] description] UTF8String];
   return Def;
@@ -183,7 +183,7 @@ const char* csDefaultsConfig::GetStr (const char* Key, const char* Def) const
 
 bool csDefaultsConfig::GetBool (const char* Key, bool Def) const
 {
-  NSString* keystring = [NSString stringWithCString:Key];
+  NSString* keystring = [NSString stringWithUTF8String:Key];
   if (KeyExists(keystring))
   {
     char const* s = [[[dict objectForKey:keystring] description] UTF8String];
@@ -232,15 +232,15 @@ const char* csDefaultsConfig::GetComment (const char* Key) const
 
 void csDefaultsConfig::SetStr (const char* Key, const char* Val)
 {
-  NSString* keystr = [NSString stringWithCString:Key];
-  NSString* valstr = [NSString stringWithCString:Val];
+  NSString* keystr = [NSString stringWithUTF8String:Key];
+  NSString* valstr = [NSString stringWithUTF8String:Val];
   if (Writable(keystr))
     [dict setObject:valstr forKey:keystr];
 }
 
 void csDefaultsConfig::SetInt (const char* Key, int Value)
 {
-  NSString* keystr = [NSString stringWithCString:Key];
+  NSString* keystr = [NSString stringWithUTF8String:Key];
   NSNumber* val = [NSNumber numberWithInt:Value];
   if (Writable(keystr))
     [dict setObject:val forKey:keystr];
@@ -248,7 +248,7 @@ void csDefaultsConfig::SetInt (const char* Key, int Value)
 
 void csDefaultsConfig::SetFloat (const char* Key, float Value)
 {
-  NSString* keystr = [NSString stringWithCString:Key];
+  NSString* keystr = [NSString stringWithUTF8String:Key];
   NSNumber* val = [NSNumber numberWithFloat:Value];
   if (Writable(keystr))
     [dict setObject:val forKey:keystr];
@@ -256,7 +256,7 @@ void csDefaultsConfig::SetFloat (const char* Key, float Value)
 
 void csDefaultsConfig::SetBool (const char* Key, bool Value)
 {
-  NSString* keystr = [NSString stringWithCString:Key];
+  NSString* keystr = [NSString stringWithUTF8String:Key];
   NSString* valstr = (Value ? @"yes" : @"no");
   if (Writable(keystr))
     [dict setObject:valstr forKey:keystr];
@@ -285,7 +285,7 @@ bool csDefaultsConfig::SetComment (const char* Key, const char* Text)
 
 void csDefaultsConfig::DeleteKey (const char* Key)
 {
-  NSString* keystr = [NSString stringWithCString:Key];  
+  NSString* keystr = [NSString stringWithUTF8String:Key];
   [dict removeObjectForKey:keystr];
 }
 
@@ -306,7 +306,7 @@ csDefaultsIterator::csDefaultsIterator (
 { 
   // Retain our calling parameters.
   owner = Owner;
-  name = [[NSString stringWithCString:Subsection] retain];
+  name = [[NSString stringWithUTF8String:Subsection] retain];
 
   // Construct our 'section name'.
   if (Subsection!=0)
