@@ -426,12 +426,12 @@ bool csEvent::Print (int level)
     {
 
       IndentLevel(level);
-      csPrintf(" Value: %" CS_PRId64 "\n", object->intVal);
+      csPrintf(" Value: %" PRId64 "\n", object->intVal);
     }
     else if (object->type == csEventAttrUInt)
     {
       IndentLevel(level);
-      csPrintf(" Value: %" CS_PRIu64 "\n", object->intVal);
+      csPrintf(" Value: %" PRIu64 "\n", object->intVal);
     }
     else if (object->type == csEventAttrFloat)
     {

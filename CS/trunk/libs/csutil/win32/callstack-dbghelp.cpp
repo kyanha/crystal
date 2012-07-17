@@ -537,7 +537,7 @@ bool CallStackNameResolverDbgHelp::GetAddressSymbol (void* addr,
 
   const wchar_t* imgName =
       (module.ImageName[0] != 0) ? module.ImageName : L"<unknown>";
-  static const char formatWithSymbol[] = "[%p] (%ls)%s+0x%" CS_PRIx64;
+  static const char formatWithSymbol[] = "[%p] (%ls)%s+0x%" PRIx64;
   static const char formatWithoutSymbol[] = "[%p] (%ls)<unknown>";
   if (symbolInfo->Name[0] != 0)
   {
