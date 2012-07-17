@@ -1067,25 +1067,6 @@ int csThingStatic::AddPolygon (csVector3* vertices, int num)
   return idx;
 }
 
-int csThingStatic::AddPolygon (int num, ...)
-{
-  int idx = AddEmptyPolygon ();
-  csPolygon3DStatic* sp = static_polygons[idx];
-  sp->SetNumVertices (num);
-  va_list arg;
-  va_start (arg, num);
-  int i;
-  for (i = 0 ; i < num ; i++)
-  {
-    int v = va_arg (arg, int);
-    sp->SetVertex (i, v);
-  }
-  va_end (arg);
-  last_range.Set (idx);
-  sp->SetTextureSpace (sp->Vobj (0), sp->Vobj (1), 1);
-  return idx;
-}
-
 int csThingStatic::AddOutsideBox (const csVector3& bmin, const csVector3& bmax)
 {
   csBox3 box (bmin, bmax);
