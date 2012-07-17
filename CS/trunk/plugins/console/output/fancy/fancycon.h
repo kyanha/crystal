@@ -88,6 +88,7 @@ public:
 
   virtual bool Initialize (iObjectRegistry *);
   virtual bool HandleEvent (iEvent &Event);
+#ifndef CS_VIRTUAL_BASE_VARARG_BROKEN
   virtual void PutText (const char *iText, ...)
   {
     va_list arg;
@@ -95,6 +96,7 @@ public:
     PutTextV (iText, arg);
     va_end (arg);
   }
+#endif
   virtual void PutTextV (const char *iText, va_list args);
   virtual const char *GetLine (int iLine = -1) const
     { return base->GetLine(iLine); }
