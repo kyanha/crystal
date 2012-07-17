@@ -600,8 +600,8 @@ CS_PLUGIN_NAMESPACE_BEGIN(BodyMeshLdr)
 	case XMLTOKEN_CHILD:
 	{
 	  const char* name = child->GetAttributeValue ("name");
-	  id = skeleton->GetSkeletonFactory ()->FindBone (name);
-	  if (id == CS::Animation::InvalidBoneID)
+	  CS::Animation::BoneID bone_id = skeleton->GetSkeletonFactory ()->FindBone (name);
+	  if (bone_id == CS::Animation::InvalidBoneID)
 	  {
 	    synldr->ReportError (msgid, node, "Wrong child bone of chain: no bone with name %s in skeleton factory",
 				 name);
