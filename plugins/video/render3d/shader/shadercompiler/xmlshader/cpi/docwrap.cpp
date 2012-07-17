@@ -1034,10 +1034,7 @@ void csWrappedDocumentNode::Report (int severity, iDocumentNode* node,
     csQueryRegistry<iSyntaxService> (shared->objreg);
   if (synsrv.IsValid ())
   {
-    csString str;
-    str.FormatV (msg, args);
-    synsrv->Report (messageID, 
-      severity, node, "%s", str.GetData ());
+    synsrv->ReportV (messageID, severity, node, msg, args);
   }
   else
   {

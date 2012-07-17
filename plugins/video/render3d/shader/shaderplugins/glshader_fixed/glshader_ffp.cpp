@@ -70,11 +70,9 @@ void csGLShaderFFP::Report (int severity, iDocumentNode* node,
 {
   va_list args;
   va_start (args, msg);
-  csString s;
-  s.FormatV (msg, args);
+  synsrv->ReportV ("crystalspace.graphics3d.shader.fixed.fp", severity, node,
+    msg, args);
   va_end (args);
-  synsrv->Report ("crystalspace.graphics3d.shader.fixed.fp", severity, node, 
-    "%s", s.GetData());
 }
 
 void csGLShaderFFP::BuildTokenHash()

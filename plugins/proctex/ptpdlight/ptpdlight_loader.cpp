@@ -337,9 +337,7 @@ void ProctexPDLightLoader::Report (int severity, iDocumentNode* node,
 
   if (node && synserv)
   {
-    csString text;
-    text.FormatV (msg, arg);
-    synserv->Report (msgId, severity, node, "%s", (const char*)text);
+    synserv->ReportV (msgId, severity, node, msg, arg);
   }
   else
   {
