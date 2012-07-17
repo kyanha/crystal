@@ -116,7 +116,11 @@ protected:
   void ChooseDisplay();
 
   /// Original display mode
-  CFDictionaryRef originalMode;	
+#ifdef CS_OSX_10_6
+  CGDisplayModeRef originalMode;
+#else
+  CFDictionaryRef originalMode;
+#endif
   /// Original gamma values
   GammaTable originalGamma;
   /// In full-screen mode
