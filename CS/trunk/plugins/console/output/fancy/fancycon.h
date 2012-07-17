@@ -120,7 +120,9 @@ public:
   virtual int GetMaxLineWidth () { return base->GetMaxLineWidth(); }
   virtual void RegisterWatcher (iConsoleWatcher *p)
   { base->RegisterWatcher(p); }
+#ifndef CS_VIRTUAL_BASE_VARARG_BROKEN
   virtual bool PerformExtension (const char *command, ...);
+#endif
   virtual bool PerformExtensionV (const char *iCommand, va_list);
 
   CS_EVENTHANDLER_NAMES("crystalspace.console")

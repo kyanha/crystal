@@ -158,8 +158,10 @@ public:
   virtual void RegisterWatcher (iConsoleWatcher* iClient)
   { Client = iClient; }
 
+#ifndef CS_VIRTUAL_BASE_VARARG_BROKEN
   /// Implement simple extension commands.
   virtual bool PerformExtension (const char *iCommand, ...);
+#endif
 
   /// Implement simple extension commands.
   virtual bool PerformExtensionV (const char *iCommand, va_list);

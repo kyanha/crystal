@@ -28,6 +28,7 @@
 #include "csutil/event.h"
 #include "csutil/eventnames.h"
 #include "csutil/sysfunc.h"
+#include "csutil/vararg.h"
 #include "igraphic/image.h"
 #include "igraphic/imageio.h"
 #include "iutil/comp.h"
@@ -46,7 +47,7 @@
 
 #include "fancycon.h"
 
-
+using CS::va_call;
 
 
 SCF_IMPLEMENT_FACTORY(csFancyConsole)
@@ -117,7 +118,7 @@ bool csFancyConsole::Initialize (iObjectRegistry *object_reg)
   }
 
   int x, y, w, h;
-  base->PerformExtension("GetPos", &x, &y, &w, &h);
+  va_call(&iConsoleOutput::PerformExtensionV, base, "GetPos", &x, &y, &w, &h);
   outersize.Set (x, y, x + w, y + h);
 
   return true;
@@ -152,7 +153,7 @@ void csFancyConsole::PutTextV (const char *iText, va_list args)
   if (auto_update && system_ready && G3D->BeginDraw (CSDRAW_2DGRAPHICS))
   {
     int bgcolor;
-    base->PerformExtension("GetBackgroundColor", &bgcolor);
+    va_call(&iConsoleOutput::PerformExtensionV, base, "GetBackgroundColor", &bgcolor);
     G2D->Clear (bgcolor);
     csRect rect2;
     Draw2D (&rect2);
@@ -402,8 +403,8 @@ void csFancyConsole::DrawBorder (int x, int y, int width, int height,
 
 void csFancyConsole::SetPosition (int x, int y, int width, int height)
 {
-  base->PerformExtension("SetPos", x, y, width, height);
-  base->PerformExtension("GetPos", &x, &y, &width, &height);
+  va_call(&iConsoleOutput::PerformExtensionV, base, "SetPos", x, y, width, height);
+  va_call(&iConsoleOutput::PerformExtensionV, base, "GetPos", &x, &y, &width, &height);
   csRect size;
   size.Set (x, y, x + width, y + height);
   outersize.Set (size);
@@ -420,7 +421,7 @@ void csFancyConsole::SetPosition (int x, int y, int width, int height)
     size.ymin +=  bordersize.ymin - deco.p2ty - deco.ty;
     size.ymax += -bordersize.ymax + deco.p2by + deco.by;
     // call again with the final size
-    base->PerformExtension(
+    va_call(&iConsoleOutput::PerformExtensionV, base,
       "SetPos", size.xmin, size.ymin, size.Width(), size.Height());
   }
 }
@@ -550,6 +551,7 @@ void csFancyConsole::PrepPix (iConfigFile *ini, const char *sect,
   }
 }
 
+#ifndef CS_VIRTUAL_BASE_VARARG_BROKEN
 bool csFancyConsole::PerformExtension (const char *iCommand, ...)
 {
   va_list args;
@@ -558,6 +560,7 @@ bool csFancyConsole::PerformExtension (const char *iCommand, ...)
   va_end (args);
   return rc;
 }
+#endif
 
 bool csFancyConsole::PerformExtensionV (const char *iCommand, va_list args)
 {
