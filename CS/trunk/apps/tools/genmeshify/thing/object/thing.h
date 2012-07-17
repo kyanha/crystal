@@ -457,7 +457,6 @@ public:
   virtual int AddQuad (const csVector3& v1, const csVector3& v2,
   	const csVector3& v3, const csVector3& v4);
   virtual int AddPolygon (csVector3* vertices, int num);
-  virtual int AddPolygon (int num, ...);
   virtual int AddOutsideBox (const csVector3& bmin, const csVector3& bmax);
   virtual int AddInsideBox (const csVector3& bmin, const csVector3& bmax);
   virtual void SetPolygonName (const csPolygonRange& range,

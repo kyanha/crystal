@@ -275,18 +275,6 @@ struct iThingFactoryState : public virtual iBase
   virtual int AddPolygon (csVector3* vertices, int num) = 0;
 
   /**
-   * Add a general polygon using vertex indices.
-   * 
-   * By default the texture mapping is set so that the texture
-   * is aligned on the u-axis with the 'v1'-'v2' vector and the scale is set
-   * so that the texture tiles once for every unit (i.e. if you have the
-   * vertices v1 and v2 are 5 units separated from each other then the texture
-   * will repeat exactly five times between v1 and v2).
-   * \return the index of the created polygon.
-   */
-  virtual int AddPolygon (int num, ...) = 0;
-
-  /**
    * Add a box that can be seen from the outside. This will add six polygons.
    * 
    * By default the texture mapping is set so that the texture
