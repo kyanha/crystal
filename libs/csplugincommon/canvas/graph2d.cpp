@@ -342,6 +342,7 @@ bool csGraphics2D::PerformExtensionV (char const* command, va_list args)
   return false;
 }
 
+#ifndef CS_VIRTUAL_BASE_VARARG_BROKEN
 bool csGraphics2D::PerformExtension (char const* command, ...)
 {
   va_list args;
@@ -350,6 +351,7 @@ bool csGraphics2D::PerformExtension (char const* command, ...)
   va_end (args);
   return rc;
 }
+#endif
 
 void csGraphics2D::AlertV (int type, const char* title, const char* okMsg,
     const char* msg, va_list arg)

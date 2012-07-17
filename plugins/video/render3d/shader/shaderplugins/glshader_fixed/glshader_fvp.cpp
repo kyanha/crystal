@@ -25,7 +25,7 @@
 #include "csutil/objreg.h"
 #include "csutil/ref.h"
 #include "csutil/scf.h"
-
+#include "csutil/vararg.h"
 #include "imap/services.h"
 #include "iutil/document.h"
 #include "iutil/string.h"
@@ -1032,7 +1032,7 @@ bool csGLShaderFVP::Compile (iHierarchicalCache*, csRef<iString>* tag)
 
   //get a statecache
   csRef<iGraphics2D> g2d = csQueryRegistry<iGraphics2D> (objectReg);
-  g2d->PerformExtension ("getstatecache", &statecache);
+  CS::va_call(&iGraphics2D::PerformExtensionV, g2d, "getstatecache", &statecache);
 
   tag->AttachNew (new scfString ("default"));
   

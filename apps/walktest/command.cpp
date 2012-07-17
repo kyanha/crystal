@@ -30,6 +30,7 @@
 #include "command.h"
 #include "csutil/scanstr.h"
 #include "csutil/eventnames.h"
+#include "csutil/vararg.h"
 #include "walktest.h"
 #include "csqint.h"
 #include "ivideo/graph3d.h"
@@ -335,8 +336,8 @@ bool csCommandProcessor::perform (const char* cmd, const char* arg)
     Sys->Report (CS_REPORTER_SEVERITY_NOTIFY, "%s", CS_VERSION);
   else if (!csStrCaseCmp (cmd, "extension"))
   {
-    iGraphics2D* g2d = g3d->GetDriver2D ();
-    if (!g2d->PerformExtension (arg))
+    bool ok = CS::va_call(&iGraphics2D::PerformExtensionV, g3d->GetDriver2D(), arg);
+    if (!ok)
       Sys->Report (CS_REPORTER_SEVERITY_NOTIFY, "Extension %s not supported!", CS::Quote::Single (arg));
   }
   else if (!csStrCaseCmp (cmd, "db_maxpol"))
