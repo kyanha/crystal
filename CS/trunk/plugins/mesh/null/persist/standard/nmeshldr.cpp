@@ -60,6 +60,15 @@ SCF_IMPLEMENT_FACTORY (csNullMeshLoader)
 SCF_IMPLEMENT_FACTORY (csNullMeshSaver)
 
 
+static void ReportError (iSyntaxService* syn, const char* msgid,
+    iDocumentNode* errornode, const char* msg, ...)
+{
+  va_list args;
+  va_start(args, msg);
+  syn->ReportErrorV(msgid, errornode, msg, args);
+  va_end(args);
+}
+
 csNullFactoryLoader::csNullFactoryLoader (iBase* pParent) :
   scfImplementationType (this, pParent)
 {
@@ -223,7 +232,7 @@ csPtr<iBase> csNullFactoryLoader::Parse (iDocumentNode* node,
   	object_reg, "crystalspace.mesh.object.null", false);
   if (!type)
   {
-    synldr->ReportError (
+    ReportError (synldr,
 		"crystalspace.nullmeshfactoryloader.setup.objecttype",
 		node, "Could not load the null mesh object plugin!");
     return 0;
@@ -341,7 +350,7 @@ bool csNullMeshLoader::Initialize (iObjectRegistry* object_reg)
 
 #define CHECK_MESH(m) \
   if (!m) { \
-    synldr->ReportError ( \
+    ReportError (synldr, \
 	"crystalspace.nullmeshloader.parse.unknownfactory", \
 	child, "Specify the factory first!"); \
     return 0; \
@@ -382,7 +391,7 @@ csPtr<iBase> csNullMeshLoader::Parse (iDocumentNode* node,
 
     if(!fact)
     {
-      synldr->ReportError (
+      ReportError (synldr,
         "crystalspace.nullmeshloader.parse.unknownfactory",
         child, "Couldn't find factory %s!", CS::Quote::Single (factname));
       return 0;
@@ -392,7 +401,7 @@ csPtr<iBase> csNullMeshLoader::Parse (iDocumentNode* node,
           state = scfQueryInterface<iNullMeshState> (mesh);
 	  if (!state)
 	  {
-      	    synldr->ReportError (
+	    ReportError (synldr,
 		"crystalspace.nullmeshloader.parse.badfactory",
 		child, "Factory %s doesn't appear to be a null factory!",
 		CS::Quote::Single (factname));

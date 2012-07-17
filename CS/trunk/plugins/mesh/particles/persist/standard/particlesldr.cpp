@@ -32,7 +32,14 @@
 #include "iutil/object.h"
 #include "iutil/stringarray.h"
 
-
+static void ReportError (iSyntaxService* syn, const char* msgid,
+    iDocumentNode* errornode, const char* msg, ...)
+{
+  va_list args;
+  va_start(args, msg);
+  syn->ReportErrorV(msgid, errornode, msg, args);
+  va_end(args);
+}
 
 template<>
 class csHashComputer<iParticleEmitter*> : public csHashComputerIntegral<iParticleEmitter*> {};
@@ -93,7 +100,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(ParticlesLoader)
           r = CS_PARTICLE_ORIENT_SELF_FORWARD;
         else
         {
-          synldr->ReportError ("crystalspace.particleloader.parsebase", node,
+          ReportError (synldr, "crystalspace.particleloader.parsebase", node,
             "Unknown orientation mode (%s)!", orient);
           return false;
         }
@@ -114,7 +121,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(ParticlesLoader)
           m = CS_PARTICLE_ROTATE_VERTICES;
         else
         {
-          synldr->ReportError ("crystalspace.particleloader.parsebase", node,
+          ReportError (synldr, "crystalspace.particleloader.parsebase", node,
             "Unknown rotation mode (%s)!", rotation);
           return false;
         }
@@ -135,7 +142,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(ParticlesLoader)
           m = CS_PARTICLE_SORT_DOT;
         else
         {
-          synldr->ReportError ("crystalspace.particleloader.parsebase", node,
+          ReportError (synldr, "crystalspace.particleloader.parsebase", node,
             "Unknown sorting mode (%s)!", sortmode);
           return false;
         }
@@ -156,7 +163,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(ParticlesLoader)
           m = CS_PARTICLE_INTEGRATE_BOTH;
         else
         {
-          synldr->ReportError ("crystalspace.particleloader.parsebase", node,
+          ReportError (synldr, "crystalspace.particleloader.parsebase", node,
             "Unknown integration mode (%s)!", integ);
           return false;
         }
@@ -187,7 +194,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(ParticlesLoader)
           m = CS_PARTICLE_WORLD_MODE;
         else
         {
-          synldr->ReportError ("crystalspace.particleloader.parsebase", node,
+          ReportError (synldr, "crystalspace.particleloader.parsebase", node,
             "Unknown transform mode (%s)!", transm);
           return false;
         }
@@ -231,7 +238,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(ParticlesLoader)
 
         if (!emitter)
         {
-          synldr->ReportError ("crystalspace.particleloader.parsebase", node,
+          ReportError (synldr, "crystalspace.particleloader.parsebase", node,
             "Error loading emitter!");
           return false;
         }
@@ -244,7 +251,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(ParticlesLoader)
 
         if (!effector)
         {
-          synldr->ReportError ("crystalspace.particleloader.parsebase", node,
+          ReportError (synldr, "crystalspace.particleloader.parsebase", node,
             "Error loading effector!");
           return false;
         }
@@ -265,7 +272,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(ParticlesLoader)
     
     if (!emitterType)
     {
-      synldr->ReportError ("crystalspace.particleloader.parseemitter", node,
+      ReportError (synldr, "crystalspace.particleloader.parseemitter", node,
         "No emitter type specified!");
       return 0;
     }
@@ -276,7 +283,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(ParticlesLoader)
     
     if (!factory)
     {
-      synldr->ReportError ("crystalspace.particleloader.parseemitter", node,
+      ReportError (synldr, "crystalspace.particleloader.parseemitter", node,
         "Could not load particle emitter factory!");
       return 0;
     }
@@ -338,7 +345,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(ParticlesLoader)
         {
           if (!synldr->ParseVector (child, position))
           {
-            synldr->ReportError ("crystalspace.particleloader.parseemitter", 
+            ReportError (synldr, "crystalspace.particleloader.parseemitter",
               child, "Error parsing position!");
           }
         }
@@ -354,7 +361,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(ParticlesLoader)
             placement = CS_PARTICLE_BUILTIN_SURFACE;
           else
           {
-            synldr->ReportError ("crystalspace.particleloader.parseemitter", 
+            ReportError (synldr, "crystalspace.particleloader.parseemitter",
               child, "Unknown particle placement mode (%s)!", p);
             return 0;
           }
@@ -437,7 +444,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(ParticlesLoader)
     }
     else
     {
-      synldr->ReportError ("crystalspace.particleloader.parseemitter", node,
+      ReportError (synldr, "crystalspace.particleloader.parseemitter", node,
               "Unknown emitter type (%s)!", emitterType);
       return 0;
     }
@@ -480,7 +487,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(ParticlesLoader)
 	case XMLTOKEN_COLOR:
 	  if (!synldr->ParseColor (c, param.color))
 	  {
-	    synldr->ReportError ("crystalspace.particleloader.parseeffector", child,
+	    ReportError (synldr, "crystalspace.particleloader.parseeffector", child,
 		"Error parsing color!");
 	    return false;
 	  }
@@ -493,7 +500,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(ParticlesLoader)
 	case XMLTOKEN_ANGULARVELOCITY:
 	  if (!synldr->ParseVector (c, param.angularVelocity))
 	  {
-	    synldr->ReportError ("crystalspace.particleloader.parseeffector", child,
+	    ReportError (synldr, "crystalspace.particleloader.parseeffector", child,
 		"Error parsing angular velocity!");
 	    return false;
 	  }
@@ -502,7 +509,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(ParticlesLoader)
 	case XMLTOKEN_LINEARVELOCITY:
 	  if (!synldr->ParseVector (c, param.linearVelocity))
 	  {
-	    synldr->ReportError ("crystalspace.particleloader.parseeffector", child,
+	    ReportError (synldr, "crystalspace.particleloader.parseeffector", child,
 		"Error parsing linear velocity!");
 	    return false;
 	  }
@@ -511,7 +518,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(ParticlesLoader)
 	case XMLTOKEN_PARTICLESIZE:
 	  if (!synldr->ParseVector (c, param.particleSize))
 	  {
-	    synldr->ReportError ("crystalspace.particleloader.parseeffector", child,
+	    ReportError (synldr, "crystalspace.particleloader.parseeffector", child,
 		"Error parsing particle size!");
 	    return false;
 	  }
@@ -533,7 +540,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(ParticlesLoader)
 
     if (!effectorType)
     {
-      synldr->ReportError ("crystalspace.particleloader.parseeffector", node,
+      ReportError (synldr, "crystalspace.particleloader.parseeffector", node,
         "No effector type specified!");
       return 0;
     }
@@ -544,7 +551,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(ParticlesLoader)
 
     if (!factory)
     {
-      synldr->ReportError ("crystalspace.particleloader.parseeffector", node,
+      ReportError (synldr, "crystalspace.particleloader.parseeffector", node,
         "Could not load particle effector factory!");
       return 0;
     }
@@ -573,7 +580,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(ParticlesLoader)
             csVector3 acceleration;
             if (!synldr->ParseVector (child, acceleration))
             {
-              synldr->ReportError ("crystalspace.particleloader.parseeffector", child,
+              ReportError (synldr, "crystalspace.particleloader.parseeffector", child,
                 "Error parsing acceleration!");
             }
 
@@ -585,7 +592,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(ParticlesLoader)
             csVector3 force;
             if (!synldr->ParseVector (child, force))
             {
-              synldr->ReportError ("crystalspace.particleloader.parseeffector", child,
+              ReportError (synldr, "crystalspace.particleloader.parseeffector", child,
                 "Error parsing force!");
             }
             forceEffector->SetForce (force);
@@ -599,7 +606,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(ParticlesLoader)
             {
               if (!synldr->ParseVector (child, randomAcc))
               {
-                synldr->ReportError ("crystalspace.particleloader.parseeffector", child,
+                ReportError (synldr, "crystalspace.particleloader.parseeffector", child,
                   "Error parsing randomacceleration!");
               }
             }
@@ -684,7 +691,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(ParticlesLoader)
 
             if (!synldr->ParseColor (child, c))
             {
-              synldr->ReportError ("crystalspace.particleloader.parseeffector", child,
+              ReportError (synldr, "crystalspace.particleloader.parseeffector", child,
                 "Error parsing color!");
             }
 
@@ -738,7 +745,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(ParticlesLoader)
             }
             else
             {
-              synldr->ReportError ("crystalspace.particleloader.parseeffector", node,
+              ReportError (synldr, "crystalspace.particleloader.parseeffector", node,
                 "Unknown force field type (%s)!", type);
             }
           }
@@ -749,7 +756,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(ParticlesLoader)
 
             if (!synldr->ParseVector (child, v))
             {
-              synldr->ReportError ("crystalspace.particleloader.parseeffector", child,
+              ReportError (synldr, "crystalspace.particleloader.parseeffector", child,
                 "Error parsing vparam!");
             }
             vfEffector->SetVParameter (vparamID++, v);
@@ -801,7 +808,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(ParticlesLoader)
     }
     else
     {
-      synldr->ReportError ("crystalspace.particleloader.parseeffector", node,
+      ReportError (synldr, "crystalspace.particleloader.parseeffector", node,
         "Unknown effector type (%s)!", effectorType);
       return 0;
     }
@@ -824,7 +831,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(ParticlesLoader)
   	objectRegistry, "crystalspace.mesh.object.particles", false);
     if (!type)
     {
-      synldr->ReportError (
+      ReportError (synldr,
 		  "crystalspace.particleloader.parsefactory",
 		  node, "Could not load the particles mesh object plugin!");
       return 0;
@@ -848,7 +855,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(ParticlesLoader)
           bool deep = false;
           if (!synldr->ParseBool (child, deep, true))
           {
-            synldr->ReportError ("crystalspace.particleloader.parsefactory",
+            ReportError (synldr, "crystalspace.particleloader.parsefactory",
               node, "Could not parse factory!");
             return 0;
           }
@@ -860,7 +867,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(ParticlesLoader)
           iMaterialWrapper* mat = ldr_context->FindMaterial (matname);
           if (!mat)
           {
-            synldr->ReportError (
+            ReportError (synldr,
               "crystalspace.genmeshfactoryloader.parse.unknownmaterial",
               child, "Couldn't find material %s!", CS::Quote::Single (matname));
             return 0;
@@ -880,7 +887,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(ParticlesLoader)
         {
           if (!ParseBaseNode (particleFact, child, ldr_context, context))
           {
-            synldr->ReportError ("crystalspace.particleloader.parsefactory",
+            ReportError (synldr, "crystalspace.particleloader.parsefactory",
               node, "Could not parse factory!");
             return 0;
           }
@@ -915,7 +922,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(ParticlesLoader)
 
           if(!fact)
           {
-            synldr->ReportError ("crystalspace.particleloader.parsesystem",
+            ReportError (synldr, "crystalspace.particleloader.parsesystem",
               child, "Could not find factory %s!", CS::Quote::Single (factname));
             return 0;
           }
@@ -925,7 +932,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(ParticlesLoader)
 
           if (!particleSystem)
           {
-            synldr->ReportError ("crystalspace.particleloader.parsesystem",
+            ReportError (synldr, "crystalspace.particleloader.parsesystem",
               child, "Factory %s does not seem to be a particle system factory!", 
               CS::Quote::Single (factname));
 
@@ -940,7 +947,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(ParticlesLoader)
         {
           if (!particleSystem)
           {
-            synldr->ReportError ("crystalspace.particleloader.parsesystem",
+            ReportError (synldr, "crystalspace.particleloader.parsesystem",
               child, "Specify factory first!");
 
             return 0;
@@ -950,7 +957,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(ParticlesLoader)
           iMaterialWrapper* mat = ldr_context->FindMaterial (matname);
           if (!mat)
           {
-            synldr->ReportError (
+            ReportError (synldr,
               "crystalspace.genmeshfactoryloader.parse.unknownmaterial",
               child, "Couldn't find material %s!", CS::Quote::Single (matname));
             return 0;
@@ -962,7 +969,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(ParticlesLoader)
         {
           if (!particleSystem)
           {
-            synldr->ReportError ("crystalspace.particleloader.parsesystem",
+            ReportError (synldr, "crystalspace.particleloader.parsesystem",
               child, "Specify factory first!");
 
             return 0;
@@ -978,7 +985,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(ParticlesLoader)
         {
           if (!particleSystem)
           {
-            synldr->ReportError ("crystalspace.particleloader.parsesystem",
+            ReportError (synldr, "crystalspace.particleloader.parsesystem",
               child, "Specify factory first!");
 
             return 0;
@@ -991,7 +998,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(ParticlesLoader)
         {
           if (!particleSystem)
           {
-            synldr->ReportError ("crystalspace.particleloader.parsesystem",
+            ReportError (synldr, "crystalspace.particleloader.parsesystem",
               child, "Specify factory first!");
 
             return 0;
@@ -999,7 +1006,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(ParticlesLoader)
 
           if (!ParseBaseNode (particleSystem, child, ldr_context, context))
           {
-            synldr->ReportError ("crystalspace.particleloader.parsesystem",
+            ReportError (synldr, "crystalspace.particleloader.parsesystem",
               node, "Could not parse particle system!");
             return 0;
           }

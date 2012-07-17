@@ -64,6 +64,15 @@ SCF_IMPLEMENT_FACTORY (csHazeFactorySaver)
 SCF_IMPLEMENT_FACTORY (csHazeLoader)
 SCF_IMPLEMENT_FACTORY (csHazeSaver)
 
+static void ReportError (iSyntaxService* syn, const char* msgid,
+    iDocumentNode* errornode, const char* msg, ...)
+{
+  va_list args;
+  va_start(args, msg);
+  syn->ReportErrorV(msgid, errornode, msg, args);
+  va_end(args);
+}
+
 csHazeFactoryLoader::csHazeFactoryLoader (iBase* pParent) :
   scfImplementationType(this, pParent)
 {
@@ -178,7 +187,7 @@ csPtr<iBase> csHazeFactoryLoader::Parse (iDocumentNode* node,
           iMaterialWrapper* mat = ldr_context->FindMaterial (matname);
 	  if (!mat)
 	  {
-	    synldr->ReportError (
+	    ReportError (synldr,
 		"crystalspace.hazeloader.parse.badmaterial",
 		child, "Could not find material %s!", CS::Quote::Single (matname));
             return 0;
@@ -357,7 +366,7 @@ bool csHazeLoader::Initialize (iObjectRegistry* object_reg)
 
 #define CHECK_MESH(m) \
   if (!m) { \
-    synldr->ReportError ( \
+    ReportError (synldr, \
 	"crystalspace.hazeloader.parse.unknownfactory", \
 	child, "Specify the factory first!"); \
     return 0; \
@@ -388,7 +397,7 @@ csPtr<iBase> csHazeLoader::Parse (iDocumentNode* node,
 
     if(!fact)
     {
-      synldr->ReportError (
+      ReportError (synldr,
         "crystalspace.hazeloader.parse.badfactory",
         child, "Could not find factory %s!", CS::Quote::Single (factname));
       return 0;
@@ -398,7 +407,7 @@ csPtr<iBase> csHazeLoader::Parse (iDocumentNode* node,
           hazestate = scfQueryInterface<iHazeState> (mesh);
 	  if (!hazestate)
 	  {
-      	    synldr->ReportError (
+	    ReportError (synldr,
 		"crystalspace.hazeloader.parse.badfactory",
 		child, "Factory %s doesn't appear to be a haze factory!",
 		CS::Quote::Single (factname));
@@ -414,7 +423,7 @@ csPtr<iBase> csHazeLoader::Parse (iDocumentNode* node,
           iMaterialWrapper* mat = ldr_context->FindMaterial (matname);
 	  if (!mat)
 	  {
-	    synldr->ReportError (
+	    ReportError (synldr,
 		"crystalspace.hazeloader.parse.badmaterial",
 		child, "Could not find material %s!",
 		CS::Quote::Single (matname));

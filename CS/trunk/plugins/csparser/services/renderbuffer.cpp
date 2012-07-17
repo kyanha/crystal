@@ -207,7 +207,7 @@ csRef<iRenderBuffer> csTextSyntaxService::ParseRenderBuffer (iDocumentNode* node
     csRef<iDataBuffer> data = vfs->ReadFile (filename, false);
     if (!data.IsValid())
     {
-      ReportError (msgid, node, "could not read from %s",
+      NotifyError (msgid, node, "could not read from %s",
 		   CS::Quote::Single (filename));
       return 0;
     }
@@ -217,14 +217,14 @@ csRef<iRenderBuffer> csTextSyntaxService::ParseRenderBuffer (iDocumentNode* node
   const char* componentType = node->GetAttributeValue ("type");
   if (componentType == 0)
   {
-    ReportError (msgid, node, "no %s attribute",
+    NotifyError (msgid, node, "no %s attribute",
 		 CS::Quote::Single ("type"));
     return 0;
   }
   int componentNum = node->GetAttributeValueAsInt ("components");
   if (componentNum <= 0)
   {
-    ReportError (msgid, node, "bogus %s attribute: %d",
+    NotifyError (msgid, node, "bogus %s attribute: %d",
 		 CS::Quote::Single ("components"), componentNum);
     return 0;
   }
@@ -244,13 +244,13 @@ csRef<iRenderBuffer> csTextSyntaxService::ParseRenderBuffer (iDocumentNode* node
 
   if (indexBuf && (componentNum != 1))
   {
-    ReportError (msgid, node, "index buffers are required to have 1 component");
+    NotifyError (msgid, node, "index buffers are required to have 1 component");
     return 0;
   }
   
   if (indexBuf && normalized)
   {
-    ReportError (msgid, node, "index buffers are required to be unnormalized");
+    NotifyError (msgid, node, "index buffers are required to be unnormalized");
     return 0;
   }
   
@@ -360,13 +360,13 @@ csRef<iRenderBuffer> csTextSyntaxService::ParseRenderBuffer (iDocumentNode* node
   }
   else
   {
-    ReportError (msgid, node, "unknown value for %s: %s",
+    NotifyError (msgid, node, "unknown value for %s: %s",
 		 CS::Quote::Single ("type"), componentType);
     return 0;
   }
   if (err != 0)
   {
-    ReportError (msgid, node, "%s", err);
+    NotifyError (msgid, node, "%s", err);
     return 0;
   }
   return buffer;
@@ -383,7 +383,7 @@ bool csTextSyntaxService::ParseRenderBuffer (iDocumentNode* node, iRenderBuffer*
     csRef<iDataBuffer> data = vfs->ReadFile (filename, false);
     if (!data.IsValid())
     {
-      ReportError (msgid, node, "could not read from %s",
+      NotifyError (msgid, node, "could not read from %s",
 		   CS::Quote::Single (filename));
       return false;
     }
@@ -395,7 +395,7 @@ bool csTextSyntaxService::ParseRenderBuffer (iDocumentNode* node, iRenderBuffer*
   const char* componentType = node->GetAttributeValue ("type");
   if (componentType == 0)
   {
-    ReportError (msgid, node, "no %s attribute",
+    NotifyError (msgid, node, "no %s attribute",
 		 CS::Quote::Single ("type"));
     return false;
   }  
@@ -403,13 +403,13 @@ bool csTextSyntaxService::ParseRenderBuffer (iDocumentNode* node, iRenderBuffer*
   int componentNum = node->GetAttributeValueAsInt ("components");
   if (componentNum <= 0)
   {
-    ReportError (msgid, node, "bogus %s attribute: %d",
+    NotifyError (msgid, node, "bogus %s attribute: %d",
 		 CS::Quote::Single ("components"), componentNum);
     return false;
   }
   if (componentNum != buffer->GetComponentCount ())
   {
-    ReportError (msgid, node, "%s attribute %d does not match expected %d", 
+    NotifyError (msgid, node, "%s attribute %d does not match expected %d",
       CS::Quote::Single ("components"),
       componentNum, buffer->GetComponentCount ());
     return false;
@@ -430,12 +430,12 @@ bool csTextSyntaxService::ParseRenderBuffer (iDocumentNode* node, iRenderBuffer*
 
   if (indexBuf && (componentNum != 1))
   {
-    ReportError (msgid, node, "index buffers are required to have 1 component", componentNum);
+    NotifyError (msgid, node, "index buffers are required to have 1 component", componentNum);
     return false;
   }
   if (indexBuf != buffer->IsIndexBuffer ())
   {
-    ReportError (msgid, node, "wrong buffer type, expected %s buffer", 
+    NotifyError (msgid, node, "wrong buffer type, expected %s buffer",
       buffer->IsIndexBuffer () ? "index" : "normal");
     return false;
   }  
@@ -450,7 +450,7 @@ bool csTextSyntaxService::ParseRenderBuffer (iDocumentNode* node, iRenderBuffer*
     if (buffer->GetComponentType () !=
       (normalized ? CS_BUFCOMP_INT_NORM : CS_BUFCOMP_INT))
     {
-      ReportError (msgid, node, "component type %s does not match expected %s",
+      NotifyError (msgid, node, "component type %s does not match expected %s",
         componentType, "int");
       return false;
     }
@@ -460,7 +460,7 @@ bool csTextSyntaxService::ParseRenderBuffer (iDocumentNode* node, iRenderBuffer*
     {
       if (buf.GetSize () > buffer->GetElementCount ()*componentNum)
       {
-        ReportError (msgid, node, "too many elements: %d", buf.GetSize ());
+        NotifyError (msgid, node, "too many elements: %d", buf.GetSize ());
         return false;
       }
 
@@ -476,7 +476,7 @@ bool csTextSyntaxService::ParseRenderBuffer (iDocumentNode* node, iRenderBuffer*
     if (buffer->GetComponentType () !=
       (normalized ? CS_BUFCOMP_UNSIGNED_INT_NORM : CS_BUFCOMP_UNSIGNED_INT))
     {
-      ReportError (msgid, node, "component type %s does not match expected %s",
+      NotifyError (msgid, node, "component type %s does not match expected %s",
         componentType, "uint");
       return false;
     }
@@ -485,7 +485,7 @@ bool csTextSyntaxService::ParseRenderBuffer (iDocumentNode* node, iRenderBuffer*
     {
       if (buf.GetSize () > buffer->GetElementCount ()*componentNum)
       {
-        ReportError (msgid, node, "too many elements: %d", buf.GetSize ());
+        NotifyError (msgid, node, "too many elements: %d", buf.GetSize ());
         return false;
       }
 
@@ -501,7 +501,7 @@ bool csTextSyntaxService::ParseRenderBuffer (iDocumentNode* node, iRenderBuffer*
     if (buffer->GetComponentType () !=
       (normalized ? CS_BUFCOMP_BYTE_NORM : CS_BUFCOMP_BYTE))
     {
-      ReportError (msgid, node, "component type %s does not match expected %s",
+      NotifyError (msgid, node, "component type %s does not match expected %s",
         componentType, "byte");
       return false;
     }
@@ -510,7 +510,7 @@ bool csTextSyntaxService::ParseRenderBuffer (iDocumentNode* node, iRenderBuffer*
     {
       if (buf.GetSize () > buffer->GetElementCount ()*componentNum)
       {
-        ReportError (msgid, node, "too many elements: %d", buf.GetSize ());
+        NotifyError (msgid, node, "too many elements: %d", buf.GetSize ());
         return false;
       }
 
@@ -526,7 +526,7 @@ bool csTextSyntaxService::ParseRenderBuffer (iDocumentNode* node, iRenderBuffer*
     if (buffer->GetComponentType () !=
       (normalized ? CS_BUFCOMP_UNSIGNED_BYTE_NORM : CS_BUFCOMP_UNSIGNED_BYTE))
     {
-      ReportError (msgid, node, "component type %s does not match expected %s",
+      NotifyError (msgid, node, "component type %s does not match expected %s",
         componentType, "ubyte");
       return false;
     }
@@ -535,7 +535,7 @@ bool csTextSyntaxService::ParseRenderBuffer (iDocumentNode* node, iRenderBuffer*
     {
       if (buf.GetSize () > buffer->GetElementCount ()*componentNum)
       {
-        ReportError (msgid, node, "too many elements: %d", buf.GetSize ());
+        NotifyError (msgid, node, "too many elements: %d", buf.GetSize ());
         return false;
       }
 
@@ -551,7 +551,7 @@ bool csTextSyntaxService::ParseRenderBuffer (iDocumentNode* node, iRenderBuffer*
     if (buffer->GetComponentType () !=
       (normalized ? CS_BUFCOMP_SHORT_NORM : CS_BUFCOMP_SHORT))
     {
-      ReportError (msgid, node, "component type %s does not match expected %s",
+      NotifyError (msgid, node, "component type %s does not match expected %s",
         componentType, "short");
       return false;
     }
@@ -560,7 +560,7 @@ bool csTextSyntaxService::ParseRenderBuffer (iDocumentNode* node, iRenderBuffer*
     {
       if (buf.GetSize () > buffer->GetElementCount ()*componentNum)
       {
-        ReportError (msgid, node, "too many elements: %d", buf.GetSize ());
+        NotifyError (msgid, node, "too many elements: %d", buf.GetSize ());
         return false;
       }
 
@@ -576,7 +576,7 @@ bool csTextSyntaxService::ParseRenderBuffer (iDocumentNode* node, iRenderBuffer*
     if (buffer->GetComponentType () != 
       (normalized ? CS_BUFCOMP_UNSIGNED_SHORT_NORM : CS_BUFCOMP_UNSIGNED_SHORT))
     {
-      ReportError (msgid, node, "component type %s does not match expected %s",
+      NotifyError (msgid, node, "component type %s does not match expected %s",
         componentType, "ushort");
       return false;
     }
@@ -585,7 +585,7 @@ bool csTextSyntaxService::ParseRenderBuffer (iDocumentNode* node, iRenderBuffer*
     {
       if (buf.GetSize () > buffer->GetElementCount ()*componentNum)
       {
-        ReportError (msgid, node, "too many elements: %d", buf.GetSize ());
+        NotifyError (msgid, node, "too many elements: %d", buf.GetSize ());
         return false;
       }
 
@@ -600,7 +600,7 @@ bool csTextSyntaxService::ParseRenderBuffer (iDocumentNode* node, iRenderBuffer*
     
     if (buffer->GetComponentType () != CS_BUFCOMP_FLOAT)
     {
-      ReportError (msgid, node, "component type %s does not match expected %s",
+      NotifyError (msgid, node, "component type %s does not match expected %s",
         componentType, "float");
       return false;
     }
@@ -609,7 +609,7 @@ bool csTextSyntaxService::ParseRenderBuffer (iDocumentNode* node, iRenderBuffer*
     {
       if (buf.GetSize () > buffer->GetElementCount ()*componentNum)
       {
-        ReportError (msgid, node, "too many elements: %d", buf.GetSize ());
+        NotifyError (msgid, node, "too many elements: %d", buf.GetSize ());
         return false;
       }
 
@@ -624,7 +624,7 @@ bool csTextSyntaxService::ParseRenderBuffer (iDocumentNode* node, iRenderBuffer*
     
     if (buffer->GetComponentType () != CS_BUFCOMP_DOUBLE)
     {
-      ReportError (msgid, node, "component type %s does not match expected %s",
+      NotifyError (msgid, node, "component type %s does not match expected %s",
         componentType, "double");
       return false;
     }
@@ -633,7 +633,7 @@ bool csTextSyntaxService::ParseRenderBuffer (iDocumentNode* node, iRenderBuffer*
     {
       if (buf.GetSize () > buffer->GetElementCount ()*componentNum)
       {
-        ReportError (msgid, node, "too many elements: %d", buf.GetSize ());
+        NotifyError (msgid, node, "too many elements: %d", buf.GetSize ());
         return false;
       }
 
@@ -648,7 +648,7 @@ bool csTextSyntaxService::ParseRenderBuffer (iDocumentNode* node, iRenderBuffer*
     
     if (buffer->GetComponentType () != CS_BUFCOMP_HALF)
     {
-      ReportError (msgid, node, "component type %s does not match expected %s",
+      NotifyError (msgid, node, "component type %s does not match expected %s",
         componentType, "half");
       return false;
     }
@@ -657,7 +657,7 @@ bool csTextSyntaxService::ParseRenderBuffer (iDocumentNode* node, iRenderBuffer*
     {
       if (buf.GetSize () > buffer->GetElementCount ()*componentNum)
       {
-        ReportError (msgid, node, "too many elements: %d", buf.GetSize ());
+        NotifyError (msgid, node, "too many elements: %d", buf.GetSize ());
         return false;
       }
 
@@ -666,13 +666,13 @@ bool csTextSyntaxService::ParseRenderBuffer (iDocumentNode* node, iRenderBuffer*
   }
   else
   {
-    ReportError (msgid, node, "unknown value for %s: %s",
+    NotifyError (msgid, node, "unknown value for %s: %s",
 		 CS::Quote::Single ("type"), componentType);
     return 0;
   }
   if (err != 0)
   {
-    ReportError (msgid, node, "%s", err);
+    NotifyError (msgid, node, "%s", err);
     return 0;
   }
 
@@ -686,13 +686,13 @@ bool csTextSyntaxService::WriteRenderBuffer (iDocumentNode* node, iRenderBuffer*
 
   if (buffer == 0)
   {
-    ReportError (msgid, node, "no buffer specified");
+    NotifyError (msgid, node, "no buffer specified");
     return false;
   }
 
   if (buffer->GetMasterBuffer () != 0)
   {
-    ReportError (msgid, node, "cannot save child-buffer");
+    NotifyError (msgid, node, "cannot save child-buffer");
     return false;
   }
 
@@ -710,7 +710,7 @@ bool csTextSyntaxService::WriteRenderBuffer (iDocumentNode* node, iRenderBuffer*
       csRef<iVFS> vfs = csQueryRegistry<iVFS> (object_reg);
       if (!vfs->WriteFile (filename, saveData->GetData(), saveData->GetSize()))
       {
-        ReportError (msgid, node, "could not write to %s",
+        NotifyError (msgid, node, "could not write to %s",
 		     CS::Quote::Single (filename));
         return false;
       }

@@ -61,6 +61,15 @@ enum
 
 SCF_IMPLEMENT_FACTORY (csTerrainFactoryLoader)
 
+static void ReportError (iSyntaxService* syn, const char* msgid,
+    iDocumentNode* errornode, const char* msg, ...)
+{
+  va_list args;
+  va_start(args, msg);
+  syn->ReportErrorV(msgid, errornode, msg, args);
+  va_end(args);
+}
+
 csTerrainFactoryLoader::csTerrainFactoryLoader (iBase* parent) :
   scfImplementationType(this, parent)
 {
@@ -107,20 +116,20 @@ csPtr<iBase> csTerrainFactoryLoader::Parse (iDocumentNode* node,
           plugin_mgr, pluginname);
         if (!type)
         {
-          synldr->ReportError ("crystalspace.terrain.loader.factory",
+          ReportError (synldr, "crystalspace.terrain.loader.factory",
             node, "Could not load %s!", pluginname);
           return 0;
         }
         fact = type->NewFactory ();
         if (!fact)
         {
-          synldr->ReportError ("crystalspace.terrain.loader.factory",
+          ReportError (synldr, "crystalspace.terrain.loader.factory",
             node, "Could not create a factory from %s", pluginname);
         }
         state = scfQueryInterface<iTerrainFactoryState> (fact);
         if (!state)
         {
-          synldr->ReportError ("crystalspace.terrain.loader.factory",
+          ReportError (synldr, "crystalspace.terrain.loader.factory",
             node, "Could not query iTerrainFactoryState from %s", pluginname);
         }
         break;
@@ -132,7 +141,7 @@ csPtr<iBase> csTerrainFactoryLoader::Parse (iDocumentNode* node,
 	  (object_reg, name);
 	if (form == 0) 
 	{
-          synldr->ReportError ("crystalspace.terrain.factory.loader",
+          ReportError (synldr, "crystalspace.terrain.factory.loader",
             child, "Unable to find TerraFormer %s", name);
           return 0;
 	}
@@ -144,7 +153,7 @@ csPtr<iBase> csTerrainFactoryLoader::Parse (iDocumentNode* node,
         csBox3 box;
         if (!synldr->ParseBox (child, box)) 
 	{
-          synldr->ReportError ("crystalspace.terrain.factory.loader",
+          ReportError (synldr, "crystalspace.terrain.factory.loader",
             child, "Unable to parse sampleregion");
           return 0;
 	}
@@ -153,7 +162,7 @@ csPtr<iBase> csTerrainFactoryLoader::Parse (iDocumentNode* node,
         break;
       }
       default:
-        synldr->ReportError ("crystalspace.terrain.factory.loader",
+        ReportError (synldr, "crystalspace.terrain.factory.loader",
           child, "Unknown token!");
     }
   }
@@ -260,7 +269,7 @@ bool csTerrainObjectLoader::Initialize (iObjectRegistry* objreg)
 
 #define CHECK_MESH(m) \
   if (!m) { \
-    synldr->ReportError ( \
+    ReportError (synldr, \
 	"crystalspace.sprite3dloader.parse.unknownfactory", \
 	child, "Specify the factory first!"); \
     return 0; \
@@ -291,7 +300,7 @@ csPtr<iBase> csTerrainObjectLoader::Parse (iDocumentNode* node,
 
         if(!fact)
         {
-          synldr->ReportError ("crystalspace.terrain.object.loader",
+          ReportError (synldr, "crystalspace.terrain.object.loader",
             child, "Couldn't find factory %s!", CS::Quote::Single (factname));
           return 0;
         }
@@ -300,7 +309,7 @@ csPtr<iBase> csTerrainObjectLoader::Parse (iDocumentNode* node,
         state = scfQueryInterface<iTerrainObjectState> (mesh);
 	if (!state)
 	{
-      	  synldr->ReportError (
+	  ReportError (synldr,
 		"crystalspace.terrain.parse.badfactory",
 		child, "Factory %s doesn't appear to be a terrain factory!",
 		CS::Quote::Single (factname));
@@ -313,7 +322,7 @@ csPtr<iBase> csTerrainObjectLoader::Parse (iDocumentNode* node,
         csColor c;
         if (!synldr->ParseColor (child, c))
         {
-          synldr->ReportError ("crystalspace.terrain.object.loader",
+          ReportError (synldr, "crystalspace.terrain.object.loader",
             child, "Error reading color value!");
           return 0;
         }
@@ -327,7 +336,7 @@ csPtr<iBase> csTerrainObjectLoader::Parse (iDocumentNode* node,
         csRef<iMaterialWrapper> mat = ldr_context->FindMaterial (matname);
         if (!mat)
         {
-          synldr->ReportError ("crystalspace.terrain.object.loader",
+          ReportError (synldr, "crystalspace.terrain.object.loader",
             child, "Couldn't find material %s!", CS::Quote::Single (matname));
           return 0;
         }
@@ -340,7 +349,7 @@ csPtr<iBase> csTerrainObjectLoader::Parse (iDocumentNode* node,
         csArray<iMaterialWrapper*> pal;
         if (!ParseMaterialPalette (child, ldr_context, pal))
         {
-          synldr->ReportError ("crystalspace.terrain.object.loader",
+          ReportError (synldr, "crystalspace.terrain.object.loader",
             child, "Error parsing material palette!");
           return 0;
         }
@@ -351,14 +360,14 @@ csPtr<iBase> csTerrainObjectLoader::Parse (iDocumentNode* node,
       }
       case XMLTOKEN_MATERIALMAP:
       {
-        synldr->ReportError ("crystalspace.terrain.factory.loader",
+        ReportError (synldr, "crystalspace.terrain.factory.loader",
             child, "Materialmaps are now handled by the Formers!");
         return 0;
         break;
       }
       case XMLTOKEN_MATERIALALPHAMAP:
       {
-        synldr->ReportError ("crystalspace.terrain.factory.loader",
+        ReportError (synldr, "crystalspace.terrain.factory.loader",
             child, "Alphamaps are now handled by the Formers!");
         return 0;
         break;
@@ -368,14 +377,14 @@ csPtr<iBase> csTerrainObjectLoader::Parse (iDocumentNode* node,
 //@@@
         if (material_map_set)
 	{
-          synldr->ReportError ("crystalspace.terrain.factory.loader",
+          ReportError (synldr, "crystalspace.terrain.factory.loader",
               child, "<lodvalue> must be set before <materialmap>!");
           return 0;
 	}
 	const char* name = child->GetAttributeValue ("name");
 	if (name == 0)
 	{
-          synldr->ReportError ("crystalspace.terrain.factory.loader",
+          ReportError (synldr, "crystalspace.terrain.factory.loader",
               child, "<lodvalue> has no %s attribute",
 	      CS::Quote::Single ("name"));
           return 0;
@@ -404,7 +413,7 @@ csPtr<iBase> csTerrainObjectLoader::Parse (iDocumentNode* node,
 	}
 	break;
       default:
-        synldr->ReportError ("crystalspace.terrain.object.loader",
+        ReportError (synldr, "crystalspace.terrain.object.loader",
           child, "Unknown token");
     }
   }
@@ -430,7 +439,7 @@ bool csTerrainObjectLoader::ParseMaterialPalette (iDocumentNode *node,
         csRef<iMaterialWrapper> mat = ldr_context->FindMaterial (matname);
         if (!mat)
         {
-          synldr->ReportError (
+          ReportError (synldr,
             "crystalspace.terrain.object.loader.materialpalette",
             child, "Couldn't find material %s!", CS::Quote::Single (matname));
           return false;
@@ -439,7 +448,7 @@ bool csTerrainObjectLoader::ParseMaterialPalette (iDocumentNode *node,
         break;
       }
       default:
-        synldr->ReportError (
+        ReportError (synldr,
           "crystalspace.terrain.object.loader.materialpalette",
           child, "Unknown token in materials list!");
     }

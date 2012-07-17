@@ -33,6 +33,7 @@
 #include "csutil/scfstr.h"
 #include "csutil/scfstringarray.h"
 #include "csutil/threadmanager.h"
+#include "csutil/vararg.h"
 #include "csutil/xmltiny.h"
 
 #include "iengine/engine.h"
@@ -315,7 +316,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
         }
         break;
       case XMLTOKEN_DIRECTION:
-        SyntaxService->ReportError ("crystalspace.maploader.light", child,
+        SynReportError ("crystalspace.maploader.light", child,
           "%s is no longer support for lights. Use %s!",
 	  CS::Quote::Single ("direction"), CS::Quote::Single ("move"));
         return false;
@@ -665,7 +666,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
       csRef<iDocumentNode> world_node = doc->GetRoot ()->GetNode ("world");
       if (!world_node)
       {
-        SyntaxService->ReportError (
+        SynReportError (
           "crystalspace.maploader.parse.expectedworld",
           world_node, "Expected %s token!",
 	  CS::Quote::Single ("world"));
@@ -755,7 +756,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
       csRef<iDocumentNode> lib_node = doc->GetRoot ()->GetNode ("library");
       if (!lib_node)
       {
-        SyntaxService->ReportError (
+        SynReportError (
           "crystalspace.maploader.parse.expectedlib",
           lib_node, "Expected %s token!",
 	  CS::Quote::Single ("library"));
@@ -1836,7 +1837,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
   {
     if (!Engine)
     {
-      SyntaxService->ReportError (
+      SynReportError (
         "crystalspace.maploader.parse.noengine",
         node, "No engine present while in LoadLibrary!");
       return false;
@@ -2039,7 +2040,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
         {
           if (!stemp->GetMeshObjectFactory ())
           {
-            SyntaxService->ReportError (
+            SynReportError (
               "crystalspace.maploader.parse.meshfactory",
               child, "Please use %s before specifying LOD!",
 	      CS::Quote::Single ("params"));
@@ -2049,7 +2050,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
             stemp->GetMeshObjectFactory ()));
           if (!lodctrl)
           {
-            SyntaxService->ReportError (
+            SynReportError (
               "crystalspace.maploader.parse.meshfactory",
               child, "This mesh factory doesn't implement LOD control!");
             return false;
@@ -2084,7 +2085,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
         {
           if (!parent)
           {
-            SyntaxService->ReportError (
+            SynReportError (
               "crystalspace.maploader.load.meshfactory", child,
               "Factory must be part of a hierarchy for <lodlevel>!");
             return false;
@@ -2112,14 +2113,14 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
         {
           if (plug)
           {
-            SyntaxService->ReportError (
+            SynReportError (
               "crystalspace.maploader.load.plugin",
               child, "Don't specify the plugin if you use <nullmesh>!");
             return false;
           }
           if (stemp->GetMeshObjectFactory ())
           {
-            SyntaxService->ReportError (
+            SynReportError (
               "crystalspace.maploader.parse.meshfactory", child,
               "Please don't use <params> in combination with <nullmesh>!");
             return false;
@@ -2128,7 +2129,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
             object_reg, "crystalspace.mesh.object.null", false);
           if (!type)
           {
-            SyntaxService->ReportError (
+            SynReportError (
               "crystalspace.maploader.load.plugin",
               child, "Could not find the nullmesh plugin!");
             return false;
@@ -2149,7 +2150,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
       case XMLTOKEN_PARAMS:
         if (!plug)
         {
-          SyntaxService->ReportError (
+          SynReportError (
             "crystalspace.maploader.load.plugin",
             child, "Could not load plugin!");
           return false;
@@ -2172,7 +2173,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
               scfQueryInterface<iMeshObjectFactory> (mof));
             if (!mof2)
             {
-              SyntaxService->ReportError (
+              SynReportError (
                 "crystalspace.maploader.parse.meshfactory",
                 child,
                 "Returned object does not implement iMeshObjectFactory!");;
@@ -2186,7 +2187,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
       case XMLTOKEN_PARAMSFILE:
         if (!plug && !binplug)
         {
-          SyntaxService->ReportError (
+          SynReportError (
             "crystalspace.maploader.load.plugin",
             child, "Could not load plugin!");
           return false;
@@ -2197,7 +2198,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
             VFS_FILE_READ));
           if (!buf)
           {
-            SyntaxService->ReportError (
+            SynReportError (
               "crystalspace.maploader.parse.loadingfile",
               child, "Error opening file %s!", CS::Quote::Single (child->GetContentsValue ()));
             return false;
@@ -2228,7 +2229,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
               scfQueryInterface<iMeshObjectFactory> (mof));
             if (!mof2)
             {
-              SyntaxService->ReportError (
+              SynReportError (
                 "crystalspace.maploader.parse.meshfactory",
                 child,
                 "Returned object does not implement iMeshObjectFactory!");
@@ -2244,7 +2245,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
         {
           if (!stemp->GetMeshObjectFactory ())
           {
-            SyntaxService->ReportError (
+            SynReportError (
               "crystalspace.maploader.parse.meshfactory",
               child, "Please use %s before specifying %s!",
 	      CS::Quote::Single ("params"),
@@ -2255,7 +2256,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
             ->GetObjectModel ();
           if (!objmodel)
           {
-            SyntaxService->ReportError (
+            SynReportError (
               "crystalspace.maploader.parse.meshfactory", child,
               "This factory doesn't support setting of other %s!",
 	      CS::Quote::Single ("trimesh"));
@@ -2272,7 +2273,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
       case XMLTOKEN_CLOSED:
         if (!stemp->GetMeshObjectFactory ())
         {
-          SyntaxService->ReportError (
+          SynReportError (
             "crystalspace.maploader.parse.meshfactory",
             child, "Please use %s before specifying %s!",
 	    CS::Quote::Single ("params"),
@@ -2296,7 +2297,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
       case XMLTOKEN_CONVEX:
         if (!stemp->GetMeshObjectFactory ())
         {
-          SyntaxService->ReportError (
+          SynReportError (
             "crystalspace.maploader.parse.meshfactory",
             child, "Please use %s before specifying %s!",
 	    CS::Quote::Single ("params"),
@@ -2321,7 +2322,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
         {
           if (!stemp->GetMeshObjectFactory ())
           {
-            SyntaxService->ReportError (
+            SynReportError (
               "crystalspace.maploader.parse.meshfactory",
               child, "Please use %s before specifying %s!",
 	      CS::Quote::Single ("params"),
@@ -2334,7 +2335,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
           {
             if (!stemp->GetMeshObjectFactory ()->SetMaterialWrapper (mat))
             {
-              SyntaxService->ReportError (
+              SynReportError (
                 "crystalspace.maploader.parse.meshfactory",
                 child, "This factory doesn't support setting materials this way!");
               return false;
@@ -2342,7 +2343,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
           }
           else
           {
-            SyntaxService->ReportError (
+            SynReportError (
               "crystalspace.maploader.parse.unknownmaterial",
               child, "Material %s not found!", CS::Quote::Single (matname));
             return false;
@@ -2354,7 +2355,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
         {
           if (prev_it || plug || binplug)
           {
-            SyntaxService->ReportError (
+            SynReportError (
               "crystalspace.maploader.parse.meshfact",
               child, "Please specify only one plugin!");
             return false;
@@ -2364,7 +2365,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
           if (!loaded_plugins.FindPlugin (child->GetContentsValue (),
             plug, binplug, defaults))
           {
-            SyntaxService->ReportError (
+            SynReportError (
               "crystalspace.maploader.parse.meshfact",
               child, "Error loading plugin %s!",
               CS::Quote::Single (child->GetContentsValue ()));
@@ -2460,7 +2461,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
         {
           if (!transf)
           {
-            SyntaxService->ReportError (
+            SynReportError (
               "crystalspace.maploader.load.meshfactory",
               child,
               "%s is only useful for hierarchical transformations!",
@@ -2493,7 +2494,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
         {
           if (!stemp->GetMeshObjectFactory ())
           {
-            SyntaxService->ReportError (
+            SynReportError (
               "crystalspace.maploader.parse.meshfactory",
               child, "Please use %s before specifying %s!",
 	      CS::Quote::Single ("params"),
@@ -2502,7 +2503,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
           }
           if (!stemp->GetMeshObjectFactory ()->SupportsHardTransform ())
           {
-            SyntaxService->ReportError (
+            SynReportError (
               "crystalspace.maploader.parse.meshfactory",
               child, "This factory doesn't support %s!",
 	      CS::Quote::Single ("hardmove"));
@@ -2551,7 +2552,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
           CS::Graphics::RenderPriority pri = Engine->GetRenderPriority (priname);
           if (!pri.IsValid())
           {
-            SyntaxService->ReportError (
+            SynReportError (
               "crystalspace.maploader.parse.meshfactory",
               child, "Unknown render priority %s!", CS::Quote::Single (priname));
             return false;
@@ -2563,7 +2564,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
         {
           if (!stemp->GetMeshObjectFactory ())
           {
-            SyntaxService->ReportError (
+            SynReportError (
               "crystalspace.maploader.parse.meshfactory",
               child, "Please use %s before specifying %s!",
 	      CS::Quote::Single ("params"),
@@ -2622,7 +2623,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
           csRef<iImposterFactory> imposter = scfQueryInterface<iImposterFactory> (stemp);
           if (!imposter)
           {
-            SyntaxService->ReportError (
+            SynReportError (
               "crystalspace.maploader.parse.meshfactory",
               node, "This factory doesn't implement impostering!");
             {
@@ -2732,7 +2733,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
         {
           if(child->GetAttributeValue ("name") == 0)
           {
-            SyntaxService->ReportError (
+            SynReportError (
               "crystalspace.maploader.load.plugin",
               child, "Some meshobj has no name!");
             return false;
@@ -2762,7 +2763,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
         {
           if (plug)
           {
-            SyntaxService->ReportError (
+            SynReportError (
               "crystalspace.maploader.load.plugin",
               child, "Don't specify the plugin if you use <nullmesh>!");
             RemoveLoadingMeshObject(name, ret);
@@ -2770,7 +2771,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
           }
           if (mesh->GetMeshObject ())
           {
-            SyntaxService->ReportError (
+            SynReportError (
               "crystalspace.maploader.parse.mesh", child,
               "Please don't use <params> in combination with <nullmesh>!");
             RemoveLoadingMeshObject(name, ret);
@@ -2780,7 +2781,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
             object_reg, "crystalspace.mesh.object.null", false);
           if (!type)
           {
-            SyntaxService->ReportError (
+            SynReportError (
               "crystalspace.maploader.load.plugin",
               child, "Could not find the nullmesh plugin!");
             RemoveLoadingMeshObject(name, ret);
@@ -2806,7 +2807,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
       case XMLTOKEN_PARAMS:
         if (!plug)
         {
-          SyntaxService->ReportError (
+          SynReportError (
             "crystalspace.maploader.load.plugin",
             child, "Could not load plugin!");
           RemoveLoadingMeshObject(name, ret);
@@ -2829,7 +2830,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
           const char* fname = child->GetContentsValue ();
           if (!fname)
           {
-            SyntaxService->ReportError (
+            SynReportError (
               "crystalspace.maploader.parse.loadingfile",
               child, "Specify a VFS filename with %s!",
 	      CS::Quote::Single ("file"));
@@ -2839,7 +2840,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
           csRef<iFile> buf = vfs->Open (fname, VFS_FILE_READ);
           if (!buf)
           {
-            SyntaxService->ReportError (
+            SynReportError (
               "crystalspace.maploader.parse.loadingfile",
               child, "Error opening file %s!", CS::Quote::Single (fname));
             RemoveLoadingMeshObject(name, ret);
@@ -2849,7 +2850,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
           bool er = LoadStructuredDoc (fname, buf, doc);
           if (!er)
           {
-            SyntaxService->ReportError (
+            SynReportError (
               "crystalspace.maploader.parse.loadingfile",
               child, "%s is not an XML file!", CS::Quote::Single (fname));
             RemoveLoadingMeshObject(name, ret);
@@ -2860,7 +2861,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
           {
             if (!plug && !binplug)
             {
-              SyntaxService->ReportError (
+              SynReportError (
                 "crystalspace.maploader.load.plugin",
                 child, "Could not load plugin for mesh %s!",
                 CS::Quote::Single (mesh->QueryObject ()->GetName ()));
@@ -2921,7 +2922,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
             }
             break;
           }
-          SyntaxService->ReportError (
+          SynReportError (
             "crystalspace.maploader.load.plugin", child,
             "File %s doesn't contain <params>, <meshobj>, nor <meshfact>!",
             CS::Quote::Single (fname));
@@ -2932,7 +2933,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
       case XMLTOKEN_PARAMSFILE:
         if (!plug && !binplug)
         {
-          SyntaxService->ReportError (
+          SynReportError (
             "crystalspace.maploader.load.plugin",
             child, "Could not load plugin for mesh %s!",
             CS::Quote::Single (mesh->QueryObject ()->GetName ()));
@@ -2944,7 +2945,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
           const char* fname = child->GetContentsValue ();
           if (!fname)
           {
-            SyntaxService->ReportError (
+            SynReportError (
               "crystalspace.maploader.parse.loadingfile",
               child, "Specify a VFS filename with %s!",
 	      CS::Quote::Single ("paramsfile"));
@@ -2954,7 +2955,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
           csRef<iFile> buf (vfs->Open (fname, VFS_FILE_READ));
           if (!buf)
           {
-            SyntaxService->ReportError (
+            SynReportError (
               "crystalspace.maploader.parse.loadingfile",
               child, "Error opening file %s!", CS::Quote::Single (fname));
             RemoveLoadingMeshObject(name, ret);
@@ -2980,7 +2981,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
         {
           if (!mesh->GetMeshObject ())
           {
-            SyntaxService->ReportError (
+            SynReportError (
               "crystalspace.maploader.parse.mesh",
               child, "Please use %s before specifying %s!",
 	      CS::Quote::Single ("params"),
@@ -2991,7 +2992,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
           iObjectModel* objmodel = mesh->GetMeshObject ()->GetObjectModel ();
           if (!objmodel)
           {
-            SyntaxService->ReportError (
+            SynReportError (
               "crystalspace.maploader.parse.mesh", child,
               "This mesh doesn't support setting of other %s!",
 	      CS::Quote::Single ("trimesh"));
@@ -3011,7 +3012,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
         {
           if (prev_it || plug || binplug)
           {
-            SyntaxService->ReportError (
+            SynReportError (
               "crystalspace.maploader.parse.plugin",
               child, "Please specify only one plugin!");
             RemoveLoadingMeshObject(name, ret);
@@ -3021,7 +3022,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
           const char* plugname = child->GetContentsValue ();
           if (!plugname)
           {
-            SyntaxService->ReportError (
+            SynReportError (
               "crystalspace.maploader.parse.plugin",
               child, "Specify a plugin name with %s!",
 	      CS::Quote::Single ("plugin"));
@@ -3031,7 +3032,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
           iDocumentNode* defaults = 0;
           if (!loaded_plugins.FindPlugin (plugname, plug, binplug, defaults))
           {
-            SyntaxService->ReportError (
+            SynReportError (
               "crystalspace.maploader.parse.meshobj",
               child, "Error loading plugin %s!", CS::Quote::Single (plugname));
             RemoveLoadingMeshObject(name, ret);
@@ -3092,7 +3093,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
     const char* meshname = node->GetAttributeValue ("name");
     if (!meshname)
     {
-      SyntaxService->ReportError (
+      SynReportError (
         "crystalspace.maploader.load.meshobject",
         node, "%s requires a name in sector %s!",
 	CS::Quote::Single ("meshref"),
@@ -3335,7 +3336,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
             const char* fname = child->GetContentsValue ();
             if (!fname)
             {
-              SyntaxService->ReportError (
+              SynReportError (
                 "crystalspace.maploader.parse.loadingfile",
                 child, "Specify a VFS filename with %s!",
 		CS::Quote::Single ("paramsfile"));
@@ -3344,7 +3345,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
             csRef<iFile> buf (vfs->Open (fname, VFS_FILE_READ));
             if (!buf)
             {
-              SyntaxService->ReportError (
+              SynReportError (
                 "crystalspace.maploader.parse.loadingfile",
                 child, "Error opening file %s!", CS::Quote::Single (fname));
               return false;
@@ -3461,7 +3462,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
         csRef<iDocumentNode> paramsnode = doc->GetRoot ()->GetNode ("params");
         if (!paramsnode)
         {
-          SyntaxService->ReportError (
+          SynReportError (
             "crystalspace.maploader.load.plugin",
             doc->GetRoot (), "Could not find <params> in %s!", CS::Quote::Single (fname));
         }
@@ -3639,7 +3640,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
     csRef<iMeshObject> mo2 = scfQueryInterface<iMeshObject> (mo);
     if (!mo2)
     {
-      SyntaxService->ReportError (
+      SynReportError (
         "crystalspace.maploader.parse.mesh",
         child, "Returned object does not implement iMeshObject!");
       return false;
@@ -3750,7 +3751,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
 #define TEST_MISSING_MESH \
   if (!mesh) \
     { \
-    SyntaxService->ReportError ( \
+    SynReportError ( \
     "crystalspace.maploader.load.meshobject", \
     child, do_portal_container ? "Specify at least one portal first!" : \
     "First specify the parent factory with %s!", \
@@ -3785,7 +3786,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
             varname);
           if (!var)
           {
-            SyntaxService->ReportError (
+            SynReportError (
               "crystalspace.maploader.parse.meshobject",
               child, "Variable %s doesn't exist!", CS::Quote::Single (varname.GetData ()));
             return false;
@@ -3794,7 +3795,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
         }
         else
         {
-          SyntaxService->ReportError (
+          SynReportError (
             "crystalspace.maploader.parse.meshobject",
             child, "%s or %s should be specified!",
 	    CS::Quote::Single ("value"),
@@ -3819,7 +3820,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
             varname);
           if (!var)
           {
-            SyntaxService->ReportError (
+            SynReportError (
               "crystalspace.maploader.parse.meshobject",
               child, "Variable %s doesn't exist!", CS::Quote::Single (varname.GetData ()));
             return false;
@@ -3828,7 +3829,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
         }
         else
         {
-          SyntaxService->ReportError (
+          SynReportError (
             "crystalspace.maploader.parse.meshobject",
             child, "%s or %s should be specified!",
 	    CS::Quote::Single ("value"), CS::Quote::Single ("var"));
@@ -3849,14 +3850,14 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
         TEST_MISSING_MESH
           if (!parent)
           {
-            SyntaxService->ReportError (
+            SynReportError (
               "crystalspace.maploader.load.meshobject", child,
               "Mesh must be part of a hierarchical mesh for <lodlevel>!");
             return false;
           }
           if (!parent->GetStaticLOD ())
           {
-            SyntaxService->ReportError (
+            SynReportError (
               "crystalspace.maploader.load.meshobject", child,
               "Parent mesh must use <staticlod>!");
             return false;
@@ -3869,7 +3870,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
         TEST_MISSING_MESH
           if (!mesh->GetMeshObject ())
           {
-            SyntaxService->ReportError (
+            SynReportError (
               "crystalspace.maploader.parse.meshobject",
               child, "Mesh object is missing!");
             return false;
@@ -3878,7 +3879,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
             mesh->GetMeshObject ()));
           if (!lodctrl)
           {
-            SyntaxService->ReportError (
+            SynReportError (
               "crystalspace.maploader.parse.meshobject",
               child, "This mesh doesn't implement LOD control!");
             return false;
@@ -3893,7 +3894,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
         CS::Graphics::RenderPriority pri = Engine->GetRenderPriority (priority);
         if (!pri.IsValid())
         {
-          SyntaxService->ReportError (
+          SynReportError (
             "crystalspace.maploader.parse.meshobject",
             child, "Unknown render priority %s!", CS::Quote::Single ((const char*)priority));
           return false;
@@ -4170,14 +4171,14 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
       TEST_MISSING_MESH
         if (!mesh->GetMeshObject())
         {
-          SyntaxService->ReportError (
+          SynReportError (
             "crystalspace.maploader.load.meshobject",
             child, "Please specify the params of the meshobject first!");
           return false;
         }
         else if (!mesh->GetMeshObject ()->SupportsHardTransform ())
         {
-          SyntaxService->ReportError (
+          SynReportError (
             "crystalspace.maploader.parse.meshobject",
             child, "This mesh object doesn't support %s!",
 	    CS::Quote::Single ("hardmove"));
@@ -4289,7 +4290,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
         var.AttachNew (new csShaderVariable (stringSetSvName->Request (varname)));
         if (!SyntaxService->ParseShaderVar (ldr_context, child, *var))
         {
-          SyntaxService->ReportError (
+          SynReportError (
             "crystalspace.maploader.load.meshobject", child,
             "Error loading shader variable %s in mesh %s.", 
             CS::Quote::Single (varname), CS::Quote::Single (mesh->QueryObject()->GetName()));
@@ -4337,7 +4338,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
       case XMLTOKEN_FACTORY:
         if (mesh)
         {
-          SyntaxService->ReportError (
+          SynReportError (
             "crystalspace.maploader.load.meshobject",
             child, "There is already a factory for this mesh!");
           return 0;
@@ -4348,7 +4349,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
             child->GetContentsValue ());
           if (!t)
           {
-            SyntaxService->ReportError (
+            SynReportError (
               "crystalspace.maploader.load.meshobject",
               child, "Can't find factory %s!", CS::Quote::Single (child->GetContentsValue ()));
             return 0;
@@ -4372,7 +4373,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
 
     if (!mesh)
     {
-      SyntaxService->ReportError (
+      SynReportError (
         "crystalspace.maploader.load.meshobject",
         node, "There is no %s for this mesh!",
 	CS::Quote::Single ("factory"));
@@ -4461,7 +4462,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
               mode3d = CS_SND3D_ABSOLUTE;
             else
             {
-              SyntaxService->ReportError (
+              SynReportError (
                 "crystalspace.maploader.parse.sound", child,
                 "Use either %s, %s, or %s for mode3d attribute!",
 		CS::Quote::Single ("disable"),
@@ -4474,7 +4475,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
           // New sound system.
           if (!SndSysLoader || !SndSysManager)
           {
-            //SyntaxService->ReportError (
+            //SynReportError (
             //"crystalspace.maploader.parse.sound", child,
             //"New sound loader not loaded!");
             return true;
@@ -4700,14 +4701,14 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
 
     if (ids.GetSize () == 0)
     {
-      SyntaxService->ReportError (
+      SynReportError (
         "crystalspace.maploader.parse.trimesh",
         node, "No id's for this triangle mesh!");
       return false;
     }
     if (!trimesh)
     {
-      SyntaxService->ReportError (
+      SynReportError (
         "crystalspace.maploader.parse.sector.trimesh",
         node, "Please specify either <mesh/> or <box/>!");
       return false;
@@ -4923,6 +4924,24 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
     va_start (arg, description);
     SyntaxService->ReportV (id, CS_REPORTER_SEVERITY_WARNING, node,
       description, arg);
+    va_end (arg);
+  }
+
+  void csThreadedLoader::SynReport (const char* msgid, int severity,
+    iDocumentNode* errornode, const char* msg, ...)
+  {
+    va_list arg;
+    va_start (arg, msg);
+    SyntaxService->ReportV(msgid, severity, errornode, msg, arg);
+    va_end (arg);
+  }
+
+  void csThreadedLoader::SynReportError (const char* msgid,
+    iDocumentNode* errornode, const char* msg, ...)
+  {
+    va_list arg;
+    va_start (arg, msg);
+    SyntaxService->ReportErrorV(msgid, errornode, msg, arg);
     va_end (arg);
   }
 }

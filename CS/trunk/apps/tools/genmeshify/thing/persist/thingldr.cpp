@@ -66,6 +66,24 @@ enum
   XMLTOKEN_RENDERBUFFER
 };
 
+static void Report (iSyntaxService* syn, const char* msgid, int severity,
+  iDocumentNode* errornode, const char* msg, ...)
+{
+  va_list args;
+  va_start(args, msg);
+  syn->ReportV(msgid, severity, errornode, msg, args);
+  va_end(args);
+}
+
+static void ReportError (iSyntaxService* syn, const char* msgid,
+  iDocumentNode* errornode, const char* msg, ...)
+{
+  va_list args;
+  va_start(args, msg);
+  syn->ReportErrorV(msgid, errornode, msg, args);
+  va_end(args);
+}
+
 static csRef<iMeshObjectType> GetThing (iObjectRegistry* object_reg)
 {
   csRef<iMeshObjectType> thing_type;
@@ -219,7 +237,7 @@ bool csThingLoader::ParseTextureMapping (
         len.x = 0;
         break;
       case XMLTOKEN_PLANE:
-	synldr->ReportError ("crystalspace.thingldr.texture", child,
+	ReportError (synldr, "crystalspace.thingldr.texture", child,
                 "<plane> for <texmap> no longer supported! Use levtool -planes to convert map!");
         return false;
       case XMLTOKEN_UVSHIFT:
@@ -257,7 +275,7 @@ bool csThingLoader::ParseTextureMapping (
 	    case 1: idx2 = idx; uv2.x = x; uv2.y = y; break;
 	    case 2: idx3 = idx; uv3.x = x; uv3.y = y; break;
 	    default:
-              synldr->ReportError ("crystalspace.thingldr.texture", child,
+              ReportError (synldr, "crystalspace.thingldr.texture", child,
                 "Too many <uv> nodes inside <texmap>! Only 3 allowed");
 	      return false;
 	  }
@@ -274,14 +292,14 @@ bool csThingLoader::ParseTextureMapping (
   {
     if (!len.y)
     {
-      synldr->ReportError ("crystalspace.thingldr.texture", node,
+      ReportError (synldr, "crystalspace.thingldr.texture", node,
         "Bad texture specification for polygon %s", CS::Quote::Single (polyname));
       len.y = 1;
       return false;
     }
     if (!len.z)
     {
-      synldr->ReportError ("crystalspace.thingldr.texture", node,
+      ReportError (synldr, "crystalspace.thingldr.texture", node,
         "Bad texture specification for polygon %s", CS::Quote::Single (polyname));
       len.z = 1;
       return false;
@@ -291,7 +309,7 @@ bool csThingLoader::ParseTextureMapping (
   {
     if (!len.y)
     {
-      synldr->ReportError ("crystalspace.thingldr.texture", node,
+      ReportError (synldr, "crystalspace.thingldr.texture", node,
         "Bad texture specification for polygon %s", CS::Quote::Single (polyname));
       len.y = 1;
       return false;
@@ -363,7 +381,7 @@ bool csThingLoader::ParsePortal (
   }
   if (params.destSector->Length () == 0)
   {
-    synldr->ReportError ("crystalspace.thingldr.portal", node,
+    ReportError (synldr, "crystalspace.thingldr.portal", node,
       "Missing sector in portal!");
     return false;
   }
@@ -435,7 +453,7 @@ bool csThingLoader::ParsePoly3d (
         mat = ldr_context->FindMaterial (child->GetContentsValue ());
         if (mat == 0)
         {
-          synldr->ReportError ("crystalspace.thingldr.polygon", child,
+          ReportError (synldr, "crystalspace.thingldr.polygon", child,
             "Couldn't find material named %s!", CS::Quote::Single (child->GetContentsValue ()));
           return false;
         }
@@ -473,7 +491,7 @@ bool csThingLoader::ParsePoly3d (
 	{
 	  // If we don't have a mesh then we can't correctly define
 	  // portals.
-	  synldr->ReportError ("crystalspace.thingldr.polygon", child,
+	  ReportError (synldr, "crystalspace.thingldr.polygon", child,
 	    "Internal error! Mesh wrapper is missing for loading a portal!");
 	  return false;
 	}
@@ -521,13 +539,13 @@ bool csThingLoader::ParsePoly3d (
 	}
         break;
       case XMLTOKEN_ALPHA:
-	synldr->ReportError (
+	ReportError (synldr,
 	  "crystalspace.thingldr.polygon",
 	  child, "<alpha> for polygons is no longer supported! Use <mixmode> for the entire mesh instead!");
 	return false;
         break;
       case XMLTOKEN_MIXMODE:
-	synldr->ReportError (
+	ReportError (synldr,
 	  "crystalspace.thingldr.polygon",
 	  child, "<mixmode> for polygons is no longer supported! Use <mixmode> for the entire mesh instead!");
 	return false;
@@ -536,7 +554,7 @@ bool csThingLoader::ParsePoly3d (
 	  const char *name = child->GetAttributeValue("name");
 	  if ((name == 0) || (*name == 0))
 	  {
-	    synldr->ReportError ("crystalspace.thingldr.polygon",
+	    ReportError (synldr, "crystalspace.thingldr.polygon",
 	      child, "<renderbuffer>s must have names");
 	    return false;
 	  }
@@ -554,7 +572,7 @@ bool csThingLoader::ParsePoly3d (
 
   if (vertices_to_add.GetSize () < 3)
   {
-    synldr->ReportError ("crystalspace.thingldr.polygon", node,
+    ReportError (synldr, "crystalspace.thingldr.polygon", node,
       "Polygon %s contains just %d vertices!",
       CS::Quote::Single (thing_fact_state->GetPolygonName (CS_POLYINDEX_LAST)),
       thing_fact_state->GetPolygonVertexCount (CS_POLYINDEX_LAST));
@@ -594,19 +612,19 @@ bool csThingLoader::ParsePoly3d (
     int cnt = thing_fact_state->GetPolygonVertexCount (CS_POLYINDEX_LAST);
     if (tx_uv_i1 > cnt)
     {
-      synldr->ReportError ("crystalspace.thingldr.polygon", node,
+      ReportError (synldr, "crystalspace.thingldr.polygon", node,
 	  "Bad texture specification: vertex index 1 doesn't exist!");
       return false;
     }
     if (tx_uv_i2 > cnt)
     {
-      synldr->ReportError ("crystalspace.thingldr.polygon", node,
+      ReportError (synldr, "crystalspace.thingldr.polygon", node,
 	  "Bad texture specification: vertex index 2 doesn't exist!");
       return false;
     }
     if (tx_uv_i3 > cnt)
     {
-      synldr->ReportError ("crystalspace.thingldr.polygon", node,
+      ReportError (synldr, "crystalspace.thingldr.polygon", node,
 	  "Bad texture specification: vertex index 3 doesn't exist!");
       return false;
     }
@@ -628,13 +646,13 @@ bool csThingLoader::ParsePoly3d (
     {
       if ((tx1-tx_orig) < SMALL_EPSILON)
       {
-        synldr->ReportError ("crystalspace.thingldr.polygon", node,
+        ReportError (synldr, "crystalspace.thingldr.polygon", node,
           "Bad texture specification!");
 	return false;
       }
       else if ((tx2-tx_orig) < SMALL_EPSILON)
       {
-        synldr->ReportError ("crystalspace.thingldr.polygon", node,
+        ReportError (synldr, "crystalspace.thingldr.polygon", node,
           "Bad texture specification!");
 	return false;
       }
@@ -648,7 +666,7 @@ bool csThingLoader::ParsePoly3d (
     {
       if ((tx1-tx_orig) < SMALL_EPSILON)
       {
-        synldr->ReportError ("crystalspace.thingldr.polygon", node,
+        ReportError (synldr, "crystalspace.thingldr.polygon", node,
           "Bad texture specification!");
 	return false;
       }
@@ -852,7 +870,7 @@ bool csThingLoader::ParsePoly3d (
     const ParsedRB& rb = renderbuffers[i];
     if (rb.buf->GetElementCount() != vertices_to_add.GetSize ())
     {
-      synldr->ReportError ("crystalspace.thingldr.polygon", rb.node,
+      ReportError (synldr, "crystalspace.thingldr.polygon", rb.node,
 	"Render buffer element count does not match polygon vertex count: "
 	"%zu != %zu", rb.buf->GetElementCount(), 
 	vertices_to_add.GetSize ());
@@ -861,7 +879,7 @@ bool csThingLoader::ParsePoly3d (
     if (!thing_fact_state->AddPolygonRenderBuffer (CS_POLYINDEX_LAST, 
       rb.name, rb.buf))
     {
-      synldr->ReportError ("crystalspace.thingldr.polygon", rb.node,
+      ReportError (synldr, "crystalspace.thingldr.polygon", rb.node,
 	"Either a renderbuffer %s was already attached to the polygon "
 	"or the format does not match other buffers of the same name attached "
 	"to other polygons.", CS::Quote::Single (rb.name.GetData()));
@@ -881,26 +899,26 @@ bool csThingLoader::LoadThingPart (iThingEnvironment* te, iDocumentNode* node,
 {
 #define CHECK_TOPLEVEL(m) \
 if (!isParent) { \
-synldr->ReportError ("crystalspace.thingloader.parse", child, \
+ReportError (synldr, "crystalspace.thingloader.parse", child, \
 	"%s flag only for top-level thing!", CS::Quote::Single (m)); \
 return false; \
 }
 
 #define CHECK_OBJECTONLY(m) \
 if (info.load_factory) { \
-synldr->ReportError ("crystalspace.thingloader.parse", child, \
+ReportError (synldr, "crystalspace.thingloader.parse", child, \
 	"%s is not for factories!", CS::Quote::Single (m)); \
 return false; \
 } \
 if (!info.thing_state) { \
-synldr->ReportError ("crystalspace.thingloader.parse", child, \
+ReportError (synldr, "crystalspace.thingloader.parse", child, \
 	"Factory must be given before using %s!", CS::Quote::Single (m)); \
 return false; \
 }
 
 #define CHECK_DONTEXTENDFACTORY \
 if ((!info.load_factory) && info.global_factory) { \
-synldr->ReportError ("crystalspace.thingloader.parse", child, \
+ReportError (synldr, "crystalspace.thingloader.parse", child, \
 	"Can't change the object when using %s or %s!", \
 	CS::Quote::Single ("factory"),CS::Quote::Single ("clone")); \
 return false; \
@@ -928,7 +946,7 @@ if (!info.thing_fact_state) \
     switch (id)
     {
       case XMLTOKEN_VISTREE:
-	synldr->ReportError (
+	ReportError (synldr,
 	    "crystalspace.thingloader.parse.vistree",
 	    child, "%s no longer supported! Convert your level to Dynavis using %s!",
 	    CS::Quote::Single ("vistree"), CS::Quote::Single ("levtool"));
@@ -946,7 +964,7 @@ if (!info.thing_fact_state) \
         CHECK_TOPLEVEL("moveable");
 	CHECK_OBJECTONLY("moveable");
         info.thing_state->SetMovingOption (CS_THING_MOVE_OCCASIONAL);
-	synldr->Report ("crystalspace.thingloader.parse",
+	Report (synldr, "crystalspace.thingloader.parse",
 		CS_REPORTER_SEVERITY_WARNING, child,
 		"<moveable/> is deprecated and no longer needed!");
         break;
@@ -954,7 +972,7 @@ if (!info.thing_fact_state) \
         CHECK_TOPLEVEL("factory");
         if (info.load_factory)
 	{
-	  synldr->ReportError (
+	  ReportError (synldr,
 	    "crystalspace.thingloader.parse.factory",
 	    child, "Can't use %s when parsing a factory!",
 	    CS::Quote::Single ("factory"));
@@ -962,7 +980,7 @@ if (!info.thing_fact_state) \
 	}
         if (info.thing_fact_state)
 	{
-	  synldr->ReportError (
+	  ReportError (synldr,
 	    "crystalspace.thingloader.parse.factory",
 	    child, "%s already specified!",
 	    CS::Quote::Single ("factory"));
@@ -975,7 +993,7 @@ if (!info.thing_fact_state) \
 	  iMeshFactoryWrapper* fact = ldr_context->FindMeshFactory (factname);
           if (!fact)
           {
-	    synldr->ReportError (
+	    ReportError (synldr,
 	      "crystalspace.thingloader.parse.factory",
               child, "Couldn't find thing factory %s!", CS::Quote::Single (factname));
             return false;
@@ -985,7 +1003,7 @@ if (!info.thing_fact_state) \
 	  	fact->GetMeshObjectFactory ());
 	  if (!info.thing_fact_state)
 	  {
-	    synldr->ReportError (
+	    ReportError (synldr,
 	      "crystalspace.thingloader.parse.factory",
               child, "Factory %s is not a thing factory!", CS::Quote::Single (factname));
             return false;
@@ -998,7 +1016,7 @@ if (!info.thing_fact_state) \
         CHECK_TOPLEVEL("clone");
         if (info.load_factory)
 	{
-	  synldr->ReportError (
+	  ReportError (synldr,
 	    "crystalspace.thingloader.parse.factory",
 	    child, "Parsing a factory, so can't use %s!",
 	    CS::Quote::Single ("clone"));
@@ -1006,7 +1024,7 @@ if (!info.thing_fact_state) \
 	}
         if (info.thing_fact_state)
 	{
-	  synldr->ReportError (
+	  ReportError (synldr,
 	    "crystalspace.thingloader.parse.factory",
 	    child, "%s already specified, so can't use %s!",
 	    CS::Quote::Single ("factory"), CS::Quote::Single ("clone"));
@@ -1019,7 +1037,7 @@ if (!info.thing_fact_state) \
 	  iMeshWrapper* wrap = ldr_context->FindMeshObject (meshname);
           if (!wrap)
           {
-	    synldr->ReportError (
+	    ReportError (synldr,
 	      "crystalspace.thingloader.parse.clone",
               child, "Couldn't find thing %s!", CS::Quote::Single (meshname));
             return false;
@@ -1029,7 +1047,7 @@ if (!info.thing_fact_state) \
 	  	wrap->GetMeshObject ()));
 	  if (!other_thing_state)
 	  {
-	    synldr->ReportError (
+	    ReportError (synldr,
 	      "crystalspace.thingloader.parse.clone",
               child, "Object %s is not a thing!", CS::Quote::Single (meshname));
             return false;
@@ -1060,7 +1078,7 @@ if (!info.thing_fact_state) \
         }
         break;
       case XMLTOKEN_FOG:
-	synldr->ReportError (
+	ReportError (synldr,
 	      "crystalspace.thingloader.parse.fog",
       	      child, "FOG for things is currently not supported!\n\
 Nag to Jorrit about this feature if you want it.");
@@ -1113,7 +1131,7 @@ Nag to Jorrit about this feature if you want it.");
           info.default_material = ldr_context->FindMaterial (matname);
           if (info.default_material == 0)
           {
-	    synldr->ReportError (
+	    ReportError (synldr,
 	        "crystalspace.thingloader.parse.material",
                 child, "Couldn't find material named %s!", CS::Quote::Single (matname));
             return false;
@@ -1150,7 +1168,7 @@ Nag to Jorrit about this feature if you want it.");
 
   if (!info.thing_fact_state)
   {
-    synldr->ReportError ("crystalspace.thingloader.loadpart",
+    ReportError (synldr, "crystalspace.thingloader.loadpart",
 	node, "No Vertex or face in params node found.");
     return false;
   }
@@ -1169,7 +1187,7 @@ Nag to Jorrit about this feature if you want it.");
 csPtr<iBase> csThingLoader::Parse (iDocumentNode* node,
 			     iStreamSource*, iLoaderContext* ldr_context, iBase* context)
 {
-  synldr->Report ("crystalspace.thingloader.parse",
+  Report (synldr, "crystalspace.thingloader.parse",
 		CS_REPORTER_SEVERITY_WARNING,
 		node, "Thing objects are deprecated! Please use genmesh instead!");
   ThingLoadInfo info;
@@ -1194,7 +1212,7 @@ csPtr<iBase> csThingLoader::Parse (iDocumentNode* node,
   {
     if (info.thing_fact_state->GetPolygonCount () == 0)
     {
-      synldr->ReportError ("crystalspace.thingloader.loadpart",
+      ReportError (synldr, "crystalspace.thingloader.loadpart",
 	node, "No more polygons left after converting to portals! "
 	"This is not supported!");
       return 0;
@@ -1206,7 +1224,7 @@ csPtr<iBase> csThingLoader::Parse (iDocumentNode* node,
       iMaterialWrapper* old_mat = ldr_context->FindMaterial (rm.oldmat);
       if (!old_mat)
       {
-	synldr->ReportError (
+	ReportError (synldr,
 	        "crystalspace.thingloader.parse.material",
                 node, "Couldn't find material named %s!", CS::Quote::Single (rm.oldmat));
 	return 0;
@@ -1214,7 +1232,7 @@ csPtr<iBase> csThingLoader::Parse (iDocumentNode* node,
       iMaterialWrapper* new_mat = ldr_context->FindMaterial (rm.newmat);
       if (!new_mat)
       {
-	synldr->ReportError (
+	ReportError (synldr,
 	        "crystalspace.thingloader.parse.material",
                 node, "Couldn't find material named %s!", CS::Quote::Single (rm.newmat));
 	return 0;
@@ -1225,7 +1243,7 @@ csPtr<iBase> csThingLoader::Parse (iDocumentNode* node,
 
   if (baduv)
   {
-    synldr->Report ("crystalspace.thingloader.parse",
+    Report (synldr, "crystalspace.thingloader.parse",
 		CS_REPORTER_SEVERITY_WARNING,
 		node, "Bad UV coordinates for polygons in this thing!");
   }
@@ -1236,7 +1254,7 @@ csPtr<iBase> csThingLoader::Parse (iDocumentNode* node,
 csPtr<iBase> csThingFactoryLoader::Parse (iDocumentNode* node,
 			     iStreamSource*, iLoaderContext* ldr_context, iBase*)
 {
-  synldr->Report ("crystalspace.thingloader.parse",
+  Report (synldr, "crystalspace.thingloader.parse",
 		CS_REPORTER_SEVERITY_WARNING,
 		node, "Thing objects are deprecated! Please use genmesh instead!");
   ThingLoadInfo info;
@@ -1260,7 +1278,7 @@ csPtr<iBase> csThingFactoryLoader::Parse (iDocumentNode* node,
 
   if (baduv)
   {
-    synldr->Report ("crystalspace.thingloader.parse",
+    Report (synldr, "crystalspace.thingloader.parse",
     		CS_REPORTER_SEVERITY_WARNING,
 		node, "Bad UV coordinates for polygons in this thing!");
   }

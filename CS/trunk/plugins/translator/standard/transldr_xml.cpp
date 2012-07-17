@@ -19,6 +19,7 @@
 
 #include "cssysdef.h"
 #include "csutil/cfgacc.h"
+#include "csutil/vararg.h"
 #include "iutil/objreg.h"
 #include "iutil/plugin.h"
 #include "iutil/document.h"
@@ -82,7 +83,7 @@ bool csTranslatorLoaderXml::Process (iDocumentNode* node, const char* lang)
         const char* language = ch1->GetAttributeValue ("name");
         if (!language)
         {
-          synldr->ReportError (
+	  CS::va_callv(&iSyntaxService::ReportErrorV, synldr,
           	"crystalspace.translation.loader.xml",
           	node, "Translator: Missing %s attribute!",
 		CS::Quote::Single ("name"));

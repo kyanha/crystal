@@ -48,7 +48,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(BodyMeshLdr)
   {
     if (!bodyManager)
     {
-      synldr->ReportError (msgid, node, "Couldn't get any body mesh system");
+      ReportError (msgid, node, "Couldn't get any body mesh system");
       return (iBase*)nullptr;
     }
 
@@ -95,7 +95,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(BodyMeshLdr)
     const char* name = node->GetAttributeValue ("name");
     if (!name)
     {
-      synldr->ReportError (msgid, node, "No name set for skeleton");
+      ReportError (msgid, node, "No name set for skeleton");
       return false;
     }
 
@@ -103,7 +103,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(BodyMeshLdr)
     const char* factoryName = node->GetAttributeValue ("skeletonfact");
     if (!factoryName)
     {
-      synldr->ReportError (msgid, node, "No animesh factory specified");
+      ReportError (msgid, node, "No animesh factory specified");
       return false;
     }
 
@@ -111,7 +111,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(BodyMeshLdr)
       csQueryRegistry<CS::Animation::iSkeletonManager> (object_reg);
     if (!skeletonManager)
     {
-      synldr->ReportError (msgid, node, "No animesh skeleton manager");
+      ReportError (msgid, node, "No animesh skeleton manager");
       return false;
     }
 
@@ -119,7 +119,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(BodyMeshLdr)
       skeletonManager->FindSkeletonFactory (factoryName);
     if (!skeletonFactory)
     {
-      synldr->ReportError (msgid, node, "No animesh skeleton factory named %s",
+      ReportError (msgid, node, "No animesh skeleton factory named %s",
 			   factoryName);
       return false;
     }
@@ -163,14 +163,14 @@ CS_PLUGIN_NAMESPACE_BEGIN(BodyMeshLdr)
     const char* name = node->GetAttributeValue ("name");
     if (!name)
     {
-      synldr->ReportError (msgid, node, "No name set for bone");
+      ReportError (msgid, node, "No name set for bone");
       return false;
     }
 
     CS::Animation::BoneID id = skeleton->GetSkeletonFactory ()->FindBone (name);
     if (id == CS::Animation::InvalidBoneID)
     {
-      synldr->ReportError (msgid, node, "No bone with name %s in skeleton factory",
+      ReportError (msgid, node, "No bone with name %s in skeleton factory",
 			   name);
       return false;
     }
@@ -237,7 +237,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(BodyMeshLdr)
 	  csVector3 center;
 	  if (!synldr->ParseVector (child, center))
           {
-            synldr->ReportError (msgid, child, "Couldn't parse vector");
+            ReportError (msgid, child, "Couldn't parse vector");
             return false;
           }
 	  properties->SetCenter (center);
@@ -249,7 +249,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(BodyMeshLdr)
 	  csMatrix3 inertia;
 	  if (!synldr->ParseMatrix (child, inertia))
           {
-            synldr->ReportError (msgid, child, "Couldn't parse matrix");
+            ReportError (msgid, child, "Couldn't parse matrix");
             return false;
           }
 
@@ -283,7 +283,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(BodyMeshLdr)
 	  {
 	    if (!child->GetAttributeValue ("mesh"))
 	    {
-	      synldr->ReportError (msgid, child,
+	      ReportError (msgid, child,
 				   "No mesh specified for collidermesh");
 	      return false;
 	    }
@@ -301,7 +301,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(BodyMeshLdr)
 	      mesh = ldr_context->FindMeshObject (child->GetAttributeValue ("mesh"));
 	      if (!mesh)
 		{
-		  synldr->ReportError (msgid, child,
+		  ReportError (msgid, child,
 				       "Unable to find mesh or factory %s while loading collider",
 				       CS::Quote::Single (child->GetAttributeValue ("mesh")));
 		  return false;
@@ -326,7 +326,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(BodyMeshLdr)
 	    csVector3 v;
 	    if (!synldr->ParseVector (child, v))
 	    {
-	      synldr->ReportError (msgid, child, "Error processing box parameters");
+	      ReportError (msgid, child, "Error processing box parameters");
 	      return false;
 	    }
 
@@ -461,7 +461,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(BodyMeshLdr)
 	    csVector3 v;
 	    if (!synldr->ParseVector (child, v))
 	    {
-	      synldr->ReportError (msgid, child, "Couldn't parse vector");
+	      ReportError (msgid, child, "Couldn't parse vector");
 	      return false;
 	    }
 	    joint->SetBounce (v);
@@ -577,7 +577,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(BodyMeshLdr)
     CS::Animation::BoneID id = skeleton->GetSkeletonFactory ()->FindBone (root);
     if (id == CS::Animation::InvalidBoneID)
     {
-      synldr->ReportError (msgid, node, "Wrong root bone of chain: no bone with name %s in skeleton factory",
+      ReportError (msgid, node, "Wrong root bone of chain: no bone with name %s in skeleton factory",
 			   root);
       return false;
     }
@@ -603,7 +603,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(BodyMeshLdr)
 	  CS::Animation::BoneID bone_id = skeleton->GetSkeletonFactory ()->FindBone (name);
 	  if (bone_id == CS::Animation::InvalidBoneID)
 	  {
-	    synldr->ReportError (msgid, node, "Wrong child bone of chain: no bone with name %s in skeleton factory",
+	    ReportError (msgid, node, "Wrong child bone of chain: no bone with name %s in skeleton factory",
 				 name);
 	    return false;
 	  }
@@ -621,5 +621,13 @@ CS_PLUGIN_NAMESPACE_BEGIN(BodyMeshLdr)
     return true;
   }
 
+  void BodyMeshLoader::ReportError (const char* msgid,
+    iDocumentNode* errornode, const char* msg, ...)
+  {
+    va_list args;
+    va_start(args, msg);
+    synldr->ReportErrorV(msgid, errornode, msg, args);
+    va_end(args);
+  }
 }
 CS_PLUGIN_NAMESPACE_END(BodyMeshLdr)

@@ -48,6 +48,15 @@ using namespace CS::Plugins::SimpleFormerLoader;
 
 SCF_IMPLEMENT_FACTORY (csSimpleFormerLoader)
 
+static void ReportError (iSyntaxService* syn, const char* msgid,
+    iDocumentNode* errornode, const char* msg, ...)
+{
+  va_list args;
+  va_start(args, msg);
+  syn->ReportErrorV(msgid, errornode, msg, args);
+  va_end(args);
+}
+
 csSimpleFormerLoader::csSimpleFormerLoader (iBase* parent) :
   scfImplementationType(this, parent)
 {
@@ -75,7 +84,7 @@ csPtr<iBase> csSimpleFormerLoader::Parse (iDocumentNode* node,
   	"crystalspace.terraformer.simple");
   if (!former) 
   {
-    synldr->ReportError ("crystalspace.terraformer.simple.loader",
+    ReportError (synldr, "crystalspace.terraformer.simple.loader",
       node, "Could not loader crystalspace.terraformer.simple plugin");
     return 0;
   }
@@ -112,7 +121,7 @@ csPtr<iBase> csSimpleFormerLoader::Parse (iDocumentNode* node,
 	  csRef<iImage> map = loader->LoadImage (image, CS_IMGFMT_ANY);
 	  if (map == 0) 
 	  {
-	    synldr->ReportError ("crystalspace.terraformer.simple.loader",
+	    ReportError (synldr, "crystalspace.terraformer.simple.loader",
 	      child, "Error reading in image file %s for heightmap",
 	      CS::Quote::Single (image));
 	    return 0;
@@ -156,7 +165,7 @@ csPtr<iBase> csSimpleFormerLoader::Parse (iDocumentNode* node,
 	}
 	else
 	{
-	  synldr->ReportError ("crystalspace.terraformer.simple.loader",
+	  ReportError (synldr, "crystalspace.terraformer.simple.loader",
 	    child, "Unknown heightmap format %s", CS::Quote::Single (format));
 	  return 0;
 	}
@@ -175,7 +184,7 @@ csPtr<iBase> csSimpleFormerLoader::Parse (iDocumentNode* node,
         csRef<iImage> map = loader->LoadImage (image);
         if (map == 0) 
         {
-          synldr->ReportError ("crystalspace.terraformer.simple.loader",
+          ReportError (synldr, "crystalspace.terraformer.simple.loader",
             child, "Error reading in image file for intmap %s",
 	    CS::Quote::Single (image));
           return 0;
@@ -196,7 +205,7 @@ csPtr<iBase> csSimpleFormerLoader::Parse (iDocumentNode* node,
         csRef<iImage> map = loader->LoadImage (image);
         if (map == 0) 
         {
-          synldr->ReportError ("crystalspace.terraformer.simple.loader",
+          ReportError (synldr, "crystalspace.terraformer.simple.loader",
             child, "Error reading in image file for floatmap %s",
 	    CS::Quote::Single (image));
           return 0;
@@ -215,7 +224,7 @@ csPtr<iBase> csSimpleFormerLoader::Parse (iDocumentNode* node,
         csVector3 v;
         if (!synldr->ParseVector (child, v))
         {
-          synldr->ReportError ("crystalspace.terraformer.simple.loader",
+          ReportError (synldr, "crystalspace.terraformer.simple.loader",
             child, "Error parsing scale vector");
           return 0;
         }
@@ -227,7 +236,7 @@ csPtr<iBase> csSimpleFormerLoader::Parse (iDocumentNode* node,
         csVector3 v;
         if (!synldr->ParseVector (child, v))
         {
-          synldr->ReportError ("crystalspace.terraformer.simple.loader",
+          ReportError (synldr, "crystalspace.terraformer.simple.loader",
             child, "Error parsing scale vector");
           return 0;
         }
@@ -240,7 +249,7 @@ csPtr<iBase> csSimpleFormerLoader::Parse (iDocumentNode* node,
 /*
         if (!palette_set)
         {
-          synldr->ReportError ("crystalspace.terrain.factory.loader",
+          ReportError (synldr, "crystalspace.terrain.factory.loader",
               child, "First set a material palette before <materialmap>!");
           return 0;
         }
@@ -257,7 +266,7 @@ csPtr<iBase> csSimpleFormerLoader::Parse (iDocumentNode* node,
           csRef<iImage> map = loader->LoadImage(imagefile,CS_IMGFMT_PALETTED8);
           if (map == 0)
           {
-            synldr->ReportError ("crystalspace.terrain.factory.loader",
+            ReportError (synldr, "crystalspace.terrain.factory.loader",
               child, "Error reading in image file for heightmap %s",
               CS::Quote::Single (imagefile));
             return 0;
@@ -273,7 +282,7 @@ csPtr<iBase> csSimpleFormerLoader::Parse (iDocumentNode* node,
         else if (arrayfile != 0 && width != 0 && height != 0)
         {
 //@@@ fixme or remove
-        synldr->ReportError ("crystalspace.terrain.factory.loader",
+        ReportError (synldr, "crystalspace.terrain.factory.loader",
               child, "Using raw files is broken! Complain to Fossi.");
         return 0;
           csRef<iVFS> vfs = csQueryRegistry<iVFS> (objreg);
@@ -281,7 +290,7 @@ csPtr<iBase> csSimpleFormerLoader::Parse (iDocumentNode* node,
           if (file == 0)
           {
 
-            synldr->ReportError ("crystalspace.terrain.factory.loader",
+            ReportError (synldr, "crystalspace.terrain.factory.loader",
               child, "Error reading in raw file for heightmap %s",
               CS::Quote::Single (arrayfile));
             return 0;
@@ -298,7 +307,7 @@ csPtr<iBase> csSimpleFormerLoader::Parse (iDocumentNode* node,
         }
         else
         {
-          synldr->ReportError ("crystalpace.terrain.object.loader",
+          ReportError (synldr, "crystalpace.terrain.object.loader",
             child, "No image or raw file specified for material map");
           return 0;
         }
@@ -313,7 +322,7 @@ csPtr<iBase> csSimpleFormerLoader::Parse (iDocumentNode* node,
           csRef<iImage> map = loader->LoadImage(imagefile,CS_IMGFMT_PALETTED8);
           if (map == 0)
           {
-            synldr->ReportError ("crystalspace.terraformer.simple.loader",
+            ReportError (synldr, "crystalspace.terraformer.simple.loader",
               child, "Error reading in image file for heightmap %s",
               CS::Quote::Single (imagefile));
             return 0;
@@ -328,14 +337,14 @@ csPtr<iBase> csSimpleFormerLoader::Parse (iDocumentNode* node,
         }
         else
         {
-          synldr->ReportError ("crystalspace.terraformer.simple.loader",
+          ReportError (synldr, "crystalspace.terraformer.simple.loader",
             child, "No image file specified for materialraw  p");
           return 0;
         }
         break;
       }
       default:
-        synldr->ReportError ("crystalspace.terraformer.simple.loader",
+        ReportError (synldr, "crystalspace.terraformer.simple.loader",
           child, "Unknown token!");
     }
   }
@@ -419,14 +428,14 @@ public:
     int h = child->GetAttributeValueAsInt ("height");
     if (w <= 0)
     {
-      loader->synldr->ReportError (
+      ReportError (loader->synldr,
 	"crystalspace.terraformer.simple.loader",
 	child, "Bogus raw map width %d", w);
       return false;
     }
     if (h <= 0)
     {
-      loader->synldr->ReportError (
+      ReportError (loader->synldr,
 	"crystalspace.terraformer.simple.loader",
 	child, "Bogus raw map height %d", h);
       return false;
@@ -435,7 +444,7 @@ public:
     if (buf->GetSize() < (w * h * Tgetter::ItemSize()))
     {
       const char *filename = child->GetContentsValue ();
-      loader->synldr->ReportError (
+      ReportError (loader->synldr,
 	"crystalspace.terraformer.simple.loader",
 	child, "File %s is not a valid raw heightmap file: size mismatch",
 	    CS::Quote::Single (filename));
@@ -459,7 +468,7 @@ csRef<iDataBuffer> csSimpleFormerLoader::GetDataBuffer (iDocumentNode* child)
   csRef<iDataBuffer> buf = vfs->ReadFile (filename, false);
   if (buf == 0) 
   {
-    synldr->ReportError ("crystalspace.terraformer.simple.loader",
+    ReportError (synldr, "crystalspace.terraformer.simple.loader",
       child, "Error reading in file %s for heightmap", CS::Quote::Single (filename));
   }
 
@@ -481,7 +490,7 @@ bool csSimpleFormerLoader::LoadHeightmap32 (iDocumentNode* child,
   if (c1 != 'H' || c2 != 'M' || c3 != '3' || c4 != '2')
   {
     const char *filename = child->GetContentsValue ();
-    synldr->ReportError ("crystalspace.terraformer.simple.loader",
+    ReportError (synldr, "crystalspace.terraformer.simple.loader",
       child, "File %s is not a heightmap32 file", CS::Quote::Single (filename));
     return false;
   }
@@ -492,7 +501,7 @@ bool csSimpleFormerLoader::LoadHeightmap32 (iDocumentNode* child,
   if (buf->GetSize () != (4+4+4+ width*height*4))
   {
     const char *filename = child->GetContentsValue ();
-    synldr->ReportError ("crystalspace.terraformer.simple.loader",
+    ReportError (synldr, "crystalspace.terraformer.simple.loader",
       child, "File %s is not a valid heightmap32 file: size mismatch",
 	  CS::Quote::Single (filename));
     return false;

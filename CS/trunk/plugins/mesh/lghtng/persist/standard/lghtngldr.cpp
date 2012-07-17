@@ -64,6 +64,15 @@ SCF_IMPLEMENT_FACTORY (csLightningFactorySaver)
 SCF_IMPLEMENT_FACTORY (csLightningLoader)
 SCF_IMPLEMENT_FACTORY (csLightningSaver)
 
+static void ReportError (iSyntaxService* syn, const char* msgid,
+    iDocumentNode* errornode, const char* msg, ...)
+{
+  va_list args;
+  va_start(args, msg);
+  syn->ReportErrorV(msgid, errornode, msg, args);
+  va_end(args);
+}
+
 csLightningFactoryLoader::csLightningFactoryLoader (iBase* pParent) :
   scfImplementationType(this, pParent)
 {
@@ -123,7 +132,7 @@ csPtr<iBase> csLightningFactoryLoader::Parse (iDocumentNode* node,
           iMaterialWrapper* mat = ldr_context->FindMaterial (matname);
           if (!mat)
           {
-            synldr->ReportError (
+            ReportError (synldr,
                 "crystalspace.lightningloader.parse.badmaterial",
                 child, "Could not find material %s!",
 		CS::Quote::Single (matname));
@@ -341,7 +350,7 @@ csPtr<iBase> csLightningLoader::Parse (iDocumentNode* node,
 
           if(!fact)
           {
-            synldr->ReportError (
+            ReportError (synldr,
               "crystalspace.lightningloader.parse.badfactory",
               child, "Could not find factory %s!",
 	      CS::Quote::Single (factname));
@@ -352,7 +361,7 @@ csPtr<iBase> csLightningLoader::Parse (iDocumentNode* node,
           Lightningstate = scfQueryInterface<iLightningState> (mesh);
 	  if (!Lightningstate)
 	  {
-      	    synldr->ReportError (
+	    ReportError (synldr,
 		"crystalspace.lightningloader.parse.badfactory",
 		child, "Factory %s doesn't appear to be a lightning factory!",
 		CS::Quote::Single (factname));

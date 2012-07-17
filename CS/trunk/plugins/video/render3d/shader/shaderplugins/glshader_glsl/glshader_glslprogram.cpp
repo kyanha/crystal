@@ -23,6 +23,7 @@
 
 #include "csutil/scanstr.h"
 #include "csutil/scfstr.h"
+#include "csutil/vararg.h"
 
 #include "glshader_glsl.h"
 #include "glshader_glslshader.h"
@@ -364,8 +365,9 @@ CS_PLUGIN_NAMESPACE_BEGIN(GLShaderGLSL)
             const char* attrName = child->GetAttributeValue ("attrib");
             if (!attrName || !*attrName)
             {
-              synsrv->ReportError ("crystalspace.graphics3d.shader.glsl",
-                                   child,
+	      CS::va_callv(&iSyntaxService::ReportErrorV, synsrv,
+			           "crystalspace.graphics3d.shader.glsl",
+			           (iDocumentNode*)child,
                                    "invalid value for %s attribute",
                                    CS::Quote::Double ("attrib"));
               return false;

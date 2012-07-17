@@ -60,7 +60,7 @@ bool csTextSyntaxService::ParseShaderVar (iLoaderContext* ldr_context,
   const char *type = node->GetAttributeValue("type");
   if (!type)
   {
-    Report (
+    Notify (
       "crystalspace.syntax.shadervariable",
       CS_REPORTER_SEVERITY_WARNING,
       node,
@@ -119,7 +119,7 @@ bool csTextSyntaxService::ParseShaderVar (iLoaderContext* ldr_context,
             if(failedTextures->GetSize() != 0 &&
               !strcmp(failedTextures->Get(i), texname))
             {
-              Report (
+              Notify (
                 "crystalspace.syntax.shadervariable",
                 CS_REPORTER_SEVERITY_WARNING,
                 node,
@@ -139,7 +139,7 @@ bool csTextSyntaxService::ParseShaderVar (iLoaderContext* ldr_context,
         }
         else if(!tex)
         {
-          Report (
+          Notify (
             "crystalspace.syntax.shadervariable",
             CS_REPORTER_SEVERITY_WARNING,
             node,
@@ -154,7 +154,7 @@ bool csTextSyntaxService::ParseShaderVar (iLoaderContext* ldr_context,
 	const char* exprname = node->GetAttributeValue ("exprname");
 	if (!exprname)
 	{
-	  Report ("crystalspace.syntax.shadervariable.expression",
+	  Notify ("crystalspace.syntax.shadervariable.expression",
 		CS_REPORTER_SEVERITY_ERROR,
 		node, "%s attribute missing for shader expression!",
 		CS::Quote::Single ("exprname"));
@@ -168,7 +168,7 @@ bool csTextSyntaxService::ParseShaderVar (iLoaderContext* ldr_context,
 	    exprname);
 	  if (!acc)
 	  {
-	    Report ("crystalspace.syntax.shadervariable.expression",
+	    Notify ("crystalspace.syntax.shadervariable.expression",
 		  CS_REPORTER_SEVERITY_ERROR,
 		  node, "Can't find expression with name %s!", exprname);
 	    return false;
@@ -222,7 +222,7 @@ bool csTextSyntaxService::ParseShaderVar (iLoaderContext* ldr_context,
       }
       break;
     default:
-      Report (
+      Notify (
         "crystalspace.syntax.shadervariable",
         CS_REPORTER_SEVERITY_WARNING,
         node,
@@ -248,7 +248,7 @@ csRef<iShaderVariableAccessor> csTextSyntaxService::ParseShaderVarExpr (
 
   if (!exprNode)
   {
-    Report ("crystalspace.syntax.shadervariable.expression",
+    Notify ("crystalspace.syntax.shadervariable.expression",
       CS_REPORTER_SEVERITY_WARNING,
       node, "Can't find expression node");
     return 0;
@@ -257,7 +257,7 @@ csRef<iShaderVariableAccessor> csTextSyntaxService::ParseShaderVarExpr (
   csShaderExpression* expression = new csShaderExpression (object_reg);
   if (!expression->Parse (exprNode))
   {
-    Report ("crystalspace.syntax.shadervariable.expression",
+    Notify ("crystalspace.syntax.shadervariable.expression",
       CS_REPORTER_SEVERITY_WARNING,
       node, "Error parsing expression: %s", expression->GetError());
     delete expression;
@@ -356,7 +356,7 @@ csRef<iShader> csTextSyntaxService::ParseShaderRef (
   const char* shaderName = node->GetAttributeValue ("name");
   if (shaderName == 0)
   {
-    ReportError (msgid, node, "no %s attribute",
+    NotifyError (msgid, node, "no %s attribute",
 		 CS::Quote::Single ("name"));
     return 0;
   }
@@ -375,7 +375,7 @@ csRef<iShader> csTextSyntaxService::ParseShaderRef (
 
     if(!shaderFile)
     {
-      Report (msgid, CS_REPORTER_SEVERITY_WARNING, node,
+      Notify (msgid, CS_REPORTER_SEVERITY_WARNING, node,
 	"Unable to open shader file %s!", CS::Quote::Single (shaderFileName));
       return 0;
     }
@@ -388,7 +388,7 @@ csRef<iShader> csTextSyntaxService::ParseShaderRef (
     const char* err = shaderDoc->Parse (shaderFile, false);
     if (err != 0)
     {
-      Report (msgid, CS_REPORTER_SEVERITY_WARNING, node,
+      Notify (msgid, CS_REPORTER_SEVERITY_WARNING, node,
 	"Could not parse shader file %s: %s",
 	CS::Quote::Single (shaderFileName), err);
       return 0;
@@ -428,14 +428,14 @@ csRef<iShader> csTextSyntaxService::ParseShader (
     type = node->GetAttributeValue ("type");
   if (type == 0)
   {
-    ReportError (msgid, node,
+    NotifyError (msgid, node,
       "%s attribute is missing!", CS::Quote::Single ("compiler"));
     return 0;
   }
   csRef<iShaderCompiler> shcom = shaderMgr->GetCompiler (type);
   if (!shcom.IsValid()) 
   {
-    ReportError (msgid, node,
+    NotifyError (msgid, node,
       "Could not get shader compiler %s", CS::Quote::Single (type));
     return 0;
   }

@@ -65,6 +65,15 @@ SCF_IMPLEMENT_FACTORY (csSprite2DFactorySaver)
 SCF_IMPLEMENT_FACTORY (csSprite2DLoader)
 SCF_IMPLEMENT_FACTORY (csSprite2DSaver)
 
+static void ReportError (iSyntaxService* syn, const char* msgid,
+    iDocumentNode* errornode, const char* msg, ...)
+{
+  va_list args;
+  va_start(args, msg);
+  syn->ReportErrorV(msgid, errornode, msg, args);
+  va_end(args);
+}
+
 csSprite2DFactoryLoader::csSprite2DFactoryLoader (iBase* pParent) :
   scfImplementationType(this, pParent)
 {
@@ -168,7 +177,7 @@ csPtr<iBase> csSprite2DFactoryLoader::Parse (iDocumentNode* node,
           object_reg, "crystalspace.mesh.object.sprite.2d", false);
   if (!type)
   {
-    synldr->ReportError (
+    ReportError (synldr,
       "crystalspace.sprite2dfactoryloader.setup.objecttype",
       node, "Could not load the sprite.2d mesh object plugin!");
     return 0;
@@ -197,7 +206,7 @@ csPtr<iBase> csSprite2DFactoryLoader::Parse (iDocumentNode* node,
           iMaterialWrapper* mat = ldr_context->FindMaterial (matname);
           if (!mat)
           {
-            synldr->ReportError (
+            ReportError (synldr,
                 "crystalspace.sprite2dfactoryloader.parse.unknownmaterial",
                 child, "Couldn't find material named %s", CS::Quote::Single (matname));
             return 0;
@@ -389,7 +398,7 @@ bool csSprite2DLoader::Initialize (iObjectRegistry* object_reg)
 
 #define CHECK_MESH(m) \
   if (!m) { \
-    synldr->ReportError ( \
+    ReportError (synldr, \
         "crystalspace.sprite2dloader.parse.unknownfactory", \
         child, "Specify the factory first!"); \
     return 0; \
@@ -424,7 +433,7 @@ csPtr<iBase> csSprite2DLoader::Parse (iDocumentNode* node,
 
     if(!fact)
     {
-      synldr->ReportError (
+      ReportError (synldr,
         "crystalspace.sprite2dloader.parse.unknownfactory",
         child, "Couldn't find factory %s!", CS::Quote::Single (factname));
       return 0;
@@ -435,7 +444,7 @@ csPtr<iBase> csSprite2DLoader::Parse (iDocumentNode* node,
           spr2dLook = scfQueryInterface<iSprite2DState> (mesh);
           if (!spr2dLook)
           {
-            synldr->ReportError (
+            ReportError (synldr,
               "crystalspace.sprite2dloader.parse.badfactory",
               child, "Factory %s doesn't appear to be a spr2d factory!",
               CS::Quote::Single (factname));
@@ -450,7 +459,7 @@ csPtr<iBase> csSprite2DLoader::Parse (iDocumentNode* node,
           iMaterialWrapper* mat = ldr_context->FindMaterial (matname);
           if (!mat)
           {
-            synldr->ReportError (
+            ReportError (synldr,
               "crystalspace.sprite2dloader.parse.unknownmaterial",
               child, "Couldn't find material %s!", CS::Quote::Single (matname));
             return 0;
@@ -532,7 +541,7 @@ csPtr<iBase> csSprite2DLoader::Parse (iDocumentNode* node,
             spr2dLook->SetUVAnimation (animname, timing, loop);
           else
           {
-            synldr->ReportError (
+            ReportError (synldr,
               "crystalspace.sprite2dloader.parse.uvanim",
               child, "UVAnimation %s not found!", CS::Quote::Single (animname));
             return 0;

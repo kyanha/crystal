@@ -27,6 +27,7 @@
 #include "csutil/objreg.h"
 #include "csutil/stringquote.h"
 #include "csutil/xmltiny.h"
+#include "csutil/vararg.h"
 #include "cstool/rbuflock.h"
 #include "iengine/rview.h"
 #include "imap/loader.h"
@@ -44,6 +45,7 @@
 #include <stdarg.h>
 
 using namespace CS::RenderManager;
+using CS::va_callv;
 
 PostEffectManager::PostEffectManager ()
   : frameNum (0), chainedEffects (0), dbgIntermediateTextures (~0),
@@ -809,8 +811,8 @@ bool PostEffectLayersParser::ParseInputs (iDocumentNode* node,
     const char* layerInpID = child->GetAttributeValue ("layer");
     if (!layerInpID || !*layerInpID)
     {
-      synldr->ReportError (messageID, child, "Expected %s attribute",
-			   CS::Quote::Single ("layer"));
+      va_callv(&iSyntaxService::ReportErrorV, synldr, messageID,
+	(iDocumentNode*)child, "Expected %s attribute", CS::Quote::Single ("layer"));
       return false;
     }
     PostEffectManager::Layer* inpLayer = 0;
@@ -820,7 +822,8 @@ bool PostEffectLayersParser::ParseInputs (iDocumentNode* node,
       inpLayer = layers.Get (layerInpID, 0);
     if (inpLayer == 0)
     {
-      synldr->ReportError (messageID, child, "Invalid input layer");
+      va_callv(&iSyntaxService::ReportErrorV, synldr, messageID,
+	(iDocumentNode*)child, "Invalid input layer");
       return false;
     }
     
@@ -884,8 +887,8 @@ bool PostEffectLayersParser::ParseLayer (iDocumentNode* node,
   const char* shader = node->GetAttributeValue ("shader");
   if (!shader || (*shader == 0))
   {
-    synldr->ReportError (messageID, node, "Expected %s attribute",
-			 CS::Quote::Single ("shader"));
+    va_callv(&iSyntaxService::ReportErrorV, synldr, messageID, node,
+      "Expected %s attribute", CS::Quote::Single ("shader"));
     return false;
   }
   csRef<iShader> shaderObj = shaders.Get (shader, 0);

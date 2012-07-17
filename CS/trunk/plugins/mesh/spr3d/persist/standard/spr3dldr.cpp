@@ -80,6 +80,15 @@ SCF_IMPLEMENT_FACTORY (csSprite3DFactorySaver)
 SCF_IMPLEMENT_FACTORY (csSprite3DLoader)
 SCF_IMPLEMENT_FACTORY (csSprite3DSaver)
 
+static void ReportError (iSyntaxService* syn, const char* msgid,
+    iDocumentNode* errornode, const char* msg, ...)
+{
+  va_list args;
+  va_start(args, msg);
+  syn->ReportErrorV(msgid, errornode, msg, args);
+  va_end(args);
+}
+
 csSprite3DFactoryLoader::csSprite3DFactoryLoader (iBase* pParent) :
   scfImplementationType (this, pParent)
 {
@@ -127,7 +136,7 @@ csPtr<iBase> csSprite3DFactoryLoader::Parse (iDocumentNode* node,
   }
   if (!type)
   {
-    synldr->ReportError (
+    ReportError (synldr,
 		"crystalspace.sprite3dfactoryloader.setup.objecttype",
 		node, "Could not load the sprite.3d mesh object plugin!");
     return 0;
@@ -162,7 +171,7 @@ csPtr<iBase> csSprite3DFactoryLoader::Parse (iDocumentNode* node,
           iMaterialWrapper* mat = ldr_context->FindMaterial (matname);
           if (!mat)
           {
-            synldr->ReportError (
+            ReportError (synldr,
               "crystalspace.sprite3dfactoryloader.parse.unknownmaterial",
               child, "Couldn't find material named %s", CS::Quote::Single (matname));
             return 0;
@@ -172,7 +181,7 @@ csPtr<iBase> csSprite3DFactoryLoader::Parse (iDocumentNode* node,
         break;
 
       case XMLTOKEN_SKELETON:
-	synldr->ReportError (
+	ReportError (synldr,
 		  "crystalspace.sprite3dfactoryloader.parse.badskeletal",
 		  child, "Skeletal sprites are no longer supported! (use sprcal3d instead)");
         return 0;
@@ -200,7 +209,7 @@ csPtr<iBase> csSprite3DFactoryLoader::Parse (iDocumentNode* node,
                   iSpriteFrame* ff = spr3dLook->FindFrame (fn);
                   if (!ff)
                   {
-	            synldr->ReportError (
+	            ReportError (synldr,
 		      "crystalspace.sprite3dfactoryloader.parse.action",
 		      childchild,
 		      "Trying to add unknown frame %s to action %s!",
@@ -252,7 +261,7 @@ csPtr<iBase> csSprite3DFactoryLoader::Parse (iDocumentNode* node,
                   }
                   else if (i >= spr3dLook->GetVertexCount ())
                   {
-	            synldr->ReportError (
+	            ReportError (synldr,
 		            "crystalspace.sprite3dfactoryloader.parse.frame",
 		            childchild,
 			    "Trying to add too many vertices to frame %s!",
@@ -272,7 +281,7 @@ csPtr<iBase> csSprite3DFactoryLoader::Parse (iDocumentNode* node,
 	  }
           if (i < spr3dLook->GetVertexCount ())
           {
-	    synldr->ReportError (
+	    ReportError (synldr,
 		 "crystalspace.sprite3dfactoryloader.parse.frame.vertices",
 		 child, "Too few vertices in frame %s!", CS::Quote::Single (fr->GetName ()));
 	    return 0;
@@ -310,7 +319,7 @@ csPtr<iBase> csSprite3DFactoryLoader::Parse (iDocumentNode* node,
 	  if (attr) frame = attr->GetValueAsInt ();
 	  if (base == -1 && frame != -1)
 	  {
-	    synldr->ReportError (
+	    ReportError (synldr,
 		  "crystalspace.sprite3dfactoryloader.parse.badsmooth",
 		  child,
 		  "Please specify %s when specifying %s in %s!",
@@ -522,7 +531,7 @@ csPtr<iBase> csSprite3DLoader::Parse (iDocumentNode* node,
 
     if(!fact)
     {
-      synldr->ReportError (
+      ReportError (synldr,
         "crystalspace.sprite3dloader.parse.unknownfactory",
         child, "Couldn't find factory %s!", CS::Quote::Single (factname));
       return 0;
@@ -532,7 +541,7 @@ csPtr<iBase> csSprite3DLoader::Parse (iDocumentNode* node,
 	  spr3dLook = scfQueryInterface<iSprite3DState> (mesh);
 	  if (!spr3dLook)
 	  {
-      	    synldr->ReportError (
+	    ReportError (synldr,
 		"crystalspace.sprite3dloader.parse.badfactory",
 		child, "Factory %s doesn't appear to be a spr3d factory!",
 		CS::Quote::Single (factname));
@@ -543,7 +552,7 @@ csPtr<iBase> csSprite3DLoader::Parse (iDocumentNode* node,
       case XMLTOKEN_ACTION:
 	if (!spr3dLook)
 	{
-      	  synldr->ReportError (
+	  ReportError (synldr,
 		"crystalspace.sprite3dloader.parse.missingfactory",
 		child,
 		"No Factory! Please define %s before %s!",
@@ -555,7 +564,7 @@ csPtr<iBase> csSprite3DLoader::Parse (iDocumentNode* node,
 	  const char* action = child->GetContentsValue ();
 	  if (!spr3dLook->SetAction (action))
 	  {
-      	    synldr->ReportError (
+	    ReportError (synldr,
 		  "crystalspace.sprite3dloader.parse.action",
 		  child,
 		  "Action %s failed to start!", CS::Quote::Single (action));
@@ -566,7 +575,7 @@ csPtr<iBase> csSprite3DLoader::Parse (iDocumentNode* node,
       case XMLTOKEN_BASECOLOR:
 	if (!spr3dLook)
 	{
-      	  synldr->ReportError (
+	  ReportError (synldr,
 		"crystalspace.sprite3dloader.parse.missingfactory",
 		child,
 		"No Factory! Please define %s before %s!",
@@ -584,7 +593,7 @@ csPtr<iBase> csSprite3DLoader::Parse (iDocumentNode* node,
       case XMLTOKEN_LIGHTING:
 	if (!spr3dLook)
 	{
-      	  synldr->ReportError (
+	  ReportError (synldr,
 		"crystalspace.sprite3dloader.parse.missingfactory",
 		child,
 		"No Factory! Please define %s before %s!",
@@ -602,7 +611,7 @@ csPtr<iBase> csSprite3DLoader::Parse (iDocumentNode* node,
       case XMLTOKEN_MATERIAL:
 	if (!spr3dLook)
 	{
-      	  synldr->ReportError (
+	  ReportError (synldr,
 		"crystalspace.sprite3dloader.parse.missingfactory",
 		child,
 		"No Factory! Please define %s before %s!",
@@ -615,7 +624,7 @@ csPtr<iBase> csSprite3DLoader::Parse (iDocumentNode* node,
           iMaterialWrapper* mat = ldr_context->FindMaterial (matname);
 	  if (!mat)
 	  {
-      	    synldr->ReportError (
+	    ReportError (synldr,
 		"crystalspace.sprite3dloader.parse.unknownmaterial",
 		child, "Couldn't find material %s!", CS::Quote::Single (matname));
             return 0;
@@ -626,7 +635,7 @@ csPtr<iBase> csSprite3DLoader::Parse (iDocumentNode* node,
       case XMLTOKEN_MIXMODE:
 	if (!spr3dLook)
 	{
-      	  synldr->ReportError (
+	  ReportError (synldr,
 		"crystalspace.sprite3dloader.parse.missingfactory",
 		child,
 		"No Factory! Please define %s before %s!",
@@ -644,7 +653,7 @@ csPtr<iBase> csSprite3DLoader::Parse (iDocumentNode* node,
       case XMLTOKEN_TWEEN:
 	if (!spr3dLook)
 	{
-      	  synldr->ReportError (
+	  ReportError (synldr,
 		"crystalspace.sprite3dloader.parse.missingfactory",
 		child,
 		"No Factory! Please define %s before %s!",
