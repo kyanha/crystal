@@ -41,9 +41,10 @@ class csSndSysBasicEventRecorder :
     csSndSysBasicEventRecorder(iBase *piBase);
     virtual ~csSndSysBasicEventRecorder();
 
-
+#ifndef CS_VIRTUAL_BASE_VARARG_BROKEN
     /// Log an event with typical variable argument format.
     void RecordEvent(SndSysEventCategory, SndSysEventLevel, const char* Description, ...) CS_GNUC_PRINTF(4, 5);
+#endif
 
     /// Log an event with va_list argument passing - useful if you have a logging wrapper function.
     void RecordEventV(SndSysEventCategory, SndSysEventLevel, const char* Description, va_list) CS_GNUC_PRINTF(4, 0);
