@@ -67,11 +67,23 @@ struct iHUDManager : public virtual iBase
    */
   virtual void WriteShadow (int x, int y, int color, const char *str,...) const = 0;
   /**
+   * Display a 2D text with a shadow. Additional parameters can be defined,
+   * they will be formated into the text string by using the cs_snprintf()-style
+   * formatting directives.
+   */
+  virtual void WriteShadowV (int x, int y, int color, const char *str, va_list) const = 0;
+  /**
    * Display a 2D text. Additional parameters can be defined,
    * they will be formated into the text string by using the cs_snprintf()-style
    * formatting directives.
    */
   virtual void Write (int x, int y, int fg, int color, const char *str,...) const = 0;
+  /**
+   * Display a 2D text. Additional parameters can be defined,
+   * they will be formated into the text string by using the cs_snprintf()-style
+   * formatting directives.
+   */
+  virtual void WriteV (int x, int y, int fg, int color, const char *str, va_list) const = 0;
 
   /**
    * Set whether or not the HUD will be displayed. If not enabled, then this manager
