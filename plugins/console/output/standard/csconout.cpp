@@ -587,6 +587,7 @@ void csConsoleOutput::SetVisible (bool iShow)
   invalid.Set (size);
 }
 
+#ifndef CS_VIRTUAL_BASE_VARARG_BROKEN
 bool csConsoleOutput::PerformExtension (const char *iCommand, ...)
 {
   va_list args;
@@ -595,6 +596,7 @@ bool csConsoleOutput::PerformExtension (const char *iCommand, ...)
   va_end (args);
   return rc;
 }
+#endif
 
 bool csConsoleOutput::PerformExtensionV (const char *iCommand, va_list args)
 {
