@@ -31,6 +31,15 @@
 
 #include "vproc_program.h"
 
+static void ReportError (iSyntaxService* syn, const char* msgid,
+    iDocumentNode* errornode, const char* msg, ...)
+{
+  va_list args;
+  va_start(args, msg);
+  syn->ReportErrorV(msgid, errornode, msg, args);
+  va_end(args);
+}
+
 CS_PLUGIN_NAMESPACE_BEGIN(VProc_std)
 {
 
@@ -584,7 +593,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(VProc_std)
         mixmode = LIGHTMIXMODE_MUL;
       else
       {
-        synsrv->ReportError ("crystalspace.graphics3d.shader.vproc_std",
+        ReportError (synsrv, "crystalspace.graphics3d.shader.vproc_std",
           child, "Invalid light mix mode %s", CS::Quote::Single (str));
         return false;
       }
@@ -599,7 +608,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(VProc_std)
     const char* str = child->GetContentsValue();
     if (!str) 
     {
-      synsrv->ReportError ("crystalspace.graphics3d.shader.vproc_std",
+      ReportError (synsrv, "crystalspace.graphics3d.shader.vproc_std",
         child, "Expected buffer name");
       return false;
     }
@@ -688,7 +697,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(VProc_std)
             const char* buffer = child->GetAttributeValue ("buffer");
             if (!buffer)
             {
-              synsrv->ReportError ("crystalspace.graphics3d.shader.vproc_std",
+              ReportError (synsrv, "crystalspace.graphics3d.shader.vproc_std",
                 pnode, "%s attribute missing",
 		CS::Quote::Single ("buffer"));
               return false;
@@ -696,7 +705,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(VProc_std)
             csRenderBufferName bufferName = csRenderBuffer::GetBufferNameFromDescr (buffer);
             if (bufferName == CS_BUFFER_NONE)
             {
-              synsrv->ReportError ("crystalspace.graphics3d.shader.vproc_std",
+              ReportError (synsrv, "crystalspace.graphics3d.shader.vproc_std",
                 pnode, "buffer name %s invalid here", CS::Quote::Single (buffer));
               return false;
             }
@@ -721,7 +730,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(VProc_std)
             const char* buffer = child->GetAttributeValue ("buffer");
             if (!buffer)
             {
-              synsrv->ReportError ("crystalspace.graphics3d.shader.vproc_std",
+              ReportError (synsrv, "crystalspace.graphics3d.shader.vproc_std",
                 pnode, "%s attribute missing",
                 CS::Quote::Single ("buffer"));
               return false;
@@ -729,7 +738,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(VProc_std)
             csRenderBufferName bufferName = csRenderBuffer::GetBufferNameFromDescr (buffer);
             if (bufferName == CS_BUFFER_NONE)
             {
-              synsrv->ReportError ("crystalspace.graphics3d.shader.vproc_std",
+              ReportError (synsrv, "crystalspace.graphics3d.shader.vproc_std",
                 pnode, "buffer name %s invalid here", CS::Quote::Single (buffer));
               return false;
             }
@@ -743,7 +752,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(VProc_std)
             const char* buffer = child->GetAttributeValue ("buffer");
             if (!buffer)
             {
-              synsrv->ReportError ("crystalspace.graphics3d.shader.vproc_std",
+              ReportError (synsrv, "crystalspace.graphics3d.shader.vproc_std",
                 pnode, "%s attribute missing",
 		CS::Quote::Single ("buffer"));
               return false;
@@ -751,7 +760,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(VProc_std)
             csRenderBufferName bufferName = csRenderBuffer::GetBufferNameFromDescr (buffer);
             if (bufferName == CS_BUFFER_NONE)
             {
-              synsrv->ReportError ("crystalspace.graphics3d.shader.vproc_std",
+              ReportError (synsrv, "crystalspace.graphics3d.shader.vproc_std",
                 pnode, "buffer name %s invalid here", CS::Quote::Single (buffer));
               return false;
             }
@@ -765,7 +774,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(VProc_std)
             const char* buffer = child->GetAttributeValue ("buffer");
             if (!buffer)
             {
-              synsrv->ReportError ("crystalspace.graphics3d.shader.vproc_std",
+              ReportError (synsrv, "crystalspace.graphics3d.shader.vproc_std",
                 pnode, "%s attribute missing",
 		CS::Quote::Single ("buffer"));
               return false;
@@ -773,7 +782,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(VProc_std)
             csRenderBufferName bufferName = csRenderBuffer::GetBufferNameFromDescr (buffer);
             if (bufferName == CS_BUFFER_NONE)
             {
-              synsrv->ReportError ("crystalspace.graphics3d.shader.vproc_std",
+              ReportError (synsrv, "crystalspace.graphics3d.shader.vproc_std",
                 pnode, "buffer name %s invalid here", CS::Quote::Single (buffer));
               return false;
             }
@@ -787,7 +796,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(VProc_std)
             const char* buffer = child->GetAttributeValue ("buffer");
             if (!buffer)
             {
-              synsrv->ReportError ("crystalspace.graphics3d.shader.vproc_std",
+              ReportError (synsrv, "crystalspace.graphics3d.shader.vproc_std",
                 pnode, "%s attribute missing",
 		CS::Quote::Single ("buffer"));
               return false;
@@ -795,7 +804,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(VProc_std)
             csRenderBufferName bufferName = csRenderBuffer::GetBufferNameFromDescr (buffer);
             if (bufferName == CS_BUFFER_NONE)
             {
-              synsrv->ReportError ("crystalspace.graphics3d.shader.vproc_std",
+              ReportError (synsrv, "crystalspace.graphics3d.shader.vproc_std",
                 pnode, "buffer name %s invalid here", CS::Quote::Single (buffer));
               return false;
             }
@@ -822,7 +831,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(VProc_std)
     }
     else
     {
-      synsrv->ReportError ("crystalspace.graphics3d.shader.vproc_std",
+      ReportError (synsrv, "crystalspace.graphics3d.shader.vproc_std",
         pnode, "<vproc_std> node missing");
     }
 

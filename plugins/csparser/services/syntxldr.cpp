@@ -89,7 +89,7 @@ bool csTextSyntaxService::ParseBoolAttribute (iDocumentNode* node,
   {
     if (required)
     {
-      ReportError ("crystalspace.syntax.boolean", node,
+      NotifyError ("crystalspace.syntax.boolean", node,
         "Boolean attribute %s is missing!", CS::Quote::Single (attrname));
       return false;
     }
@@ -110,7 +110,7 @@ bool csTextSyntaxService::ParseBoolAttribute (iDocumentNode* node,
   if (!strcasecmp (v, "false")) { result = false; return true; }
   if (!strcasecmp (v, "on"))    { result = true; return true; }
   if (!strcasecmp (v, "off"))   { result = false; return true; }
-  ReportError ("crystalspace.syntax.boolean", node,
+  NotifyError ("crystalspace.syntax.boolean", node,
     "Bad boolean value %s for attribute %s!",
     CS::Quote::Single (v), CS::Quote::Single (attrname));
   return false;
@@ -129,7 +129,7 @@ bool csTextSyntaxService::ParseBool (iDocumentNode* node, bool& result,
   if (!strcasecmp (v, "false")) { result = false; return true; }
   if (!strcasecmp (v, "on"))    { result = true; return true; }
   if (!strcasecmp (v, "off"))   { result = false; return true; }
-  ReportError ("crystalspace.syntax.boolean", node,
+  NotifyError ("crystalspace.syntax.boolean", node,
     "Bad boolean value %s!", CS::Quote::Single (v));
   return false;
 }
@@ -381,7 +381,7 @@ bool csTextSyntaxService::ParseBox (iDocumentNode* node, csBox3 &v)
   csRef<iDocumentNode> minnode = node->GetNode ("min");
   if (!minnode)
   {
-    ReportError ("crystalspace.syntax.box", node,
+    NotifyError ("crystalspace.syntax.box", node,
       "Expected %s node!",CS::Quote::Single ("min"));
     return false;
   }
@@ -391,7 +391,7 @@ bool csTextSyntaxService::ParseBox (iDocumentNode* node, csBox3 &v)
   csRef<iDocumentNode> maxnode = node->GetNode ("max");
   if (!maxnode)
   {
-    ReportError ("crystalspace.syntax.box", node,
+    NotifyError ("crystalspace.syntax.box", node,
       "Expected %s node!", CS::Quote::Single ("max"));
     return false;
   }
@@ -427,7 +427,7 @@ bool csTextSyntaxService::ParseBox (iDocumentNode* node, csOBB &b)
     //Try to parse ourselves as a box node
     if (!ParseBox (node, (csBox3&)b))
     {
-      ReportError ("crystalspace.syntax.box", node, "Expected %s node!",
+      NotifyError ("crystalspace.syntax.box", node, "Expected %s node!",
 		   CS::Quote::Single ("box"));
       return false;
     }
@@ -581,7 +581,7 @@ bool csTextSyntaxService::ParseMixmode (iDocumentNode* node, uint &mixmode,
   {							\
     if (!warned)					\
     {							\
-      Report ("crystalspace.syntax.mixmode",		\
+      Notify ("crystalspace.syntax.mixmode",		\
         CS_REPORTER_SEVERITY_WARNING,			\
 	child,						\
 	"Multiple exclusive mixmodes specified! "	\
@@ -648,7 +648,7 @@ bool csTextSyntaxService::ParseMixmode (iDocumentNode* node, uint &mixmode,
             mixmode |= CS_MIXMODE_ALPHATEST_DISABLE;
           else
           {
-            Report ("crystalspace.syntax.mixmode",
+            Notify ("crystalspace.syntax.mixmode",
               CS_REPORTER_SEVERITY_WARNING,
 	      child, "Invalid alphatest mode %s", mode);
           }
@@ -665,13 +665,13 @@ bool csTextSyntaxService::ParseMixmode (iDocumentNode* node, uint &mixmode,
           uint srcFactor = 0, dstFactor = 0;
           if (!StringToBlendFactor (srcFactorStr, srcFactor))
           {
-            Report ("crystalspace.syntax.mixmode",
+            Notify ("crystalspace.syntax.mixmode",
               CS_REPORTER_SEVERITY_WARNING,
 	      child, "Invalid blend factor %s", srcFactorStr);
           }
           if (!StringToBlendFactor (dstFactorStr, dstFactor))
           {
-            Report ("crystalspace.syntax.mixmode",
+            Notify ("crystalspace.syntax.mixmode",
               CS_REPORTER_SEVERITY_WARNING,
 	      child, "Invalid blend factor %s", dstFactorStr);
           }
@@ -685,13 +685,13 @@ bool csTextSyntaxService::ParseMixmode (iDocumentNode* node, uint &mixmode,
 	    uint srcFactorA = 0, dstFactorA = 0;
 	    if (!StringToBlendFactor (srcAlphaFactorStr, srcFactorA))
 	    {
-	      Report ("crystalspace.syntax.mixmode",
+	      Notify ("crystalspace.syntax.mixmode",
 		CS_REPORTER_SEVERITY_WARNING,
 		child, "Invalid blend factor %s", srcAlphaFactorStr);
 	    }
 	    if (!StringToBlendFactor (dstAlphaFactorStr, dstFactorA))
 	    {
-	      Report ("crystalspace.syntax.mixmode",
+	      Notify ("crystalspace.syntax.mixmode",
 		CS_REPORTER_SEVERITY_WARNING,
 		child, "Invalid blend factor %s", dstAlphaFactorStr);
 	    }
@@ -931,7 +931,7 @@ bool csTextSyntaxService::ParseGradientShade (iDocumentNode* node,
 	{
 	  if (has_left)
 	  {
-	    Report (
+	    Notify (
 	      "crystalspace.syntax.gradient.shade",
 	      CS_REPORTER_SEVERITY_WARNING,
 	      child,
@@ -940,7 +940,7 @@ bool csTextSyntaxService::ParseGradientShade (iDocumentNode* node,
 	  }
 	  else if (has_right)
 	  {
-	    Report (
+	    Notify (
 	      "crystalspace.syntax.gradient.shade",
 	      CS_REPORTER_SEVERITY_WARNING,
 	      child,
@@ -949,7 +949,7 @@ bool csTextSyntaxService::ParseGradientShade (iDocumentNode* node,
 	  }
 	  else if (has_color)
 	  {
-	    Report (
+	    Notify (
 	      "crystalspace.syntax.gradient.shade",
 	      CS_REPORTER_SEVERITY_WARNING,
 	      child,
@@ -973,7 +973,7 @@ bool csTextSyntaxService::ParseGradientShade (iDocumentNode* node,
 	{
 	  if (has_color)
 	  {
-	    Report (
+	    Notify (
 	      "crystalspace.syntax.gradient.shade",
 	      CS_REPORTER_SEVERITY_WARNING,
 	      child,
@@ -994,7 +994,7 @@ bool csTextSyntaxService::ParseGradientShade (iDocumentNode* node,
 	{
 	  if (has_color)
 	  {
-	    Report (
+	    Notify (
 	      "crystalspace.syntax.gradient.shade",
 	      CS_REPORTER_SEVERITY_WARNING,
 	      child,
@@ -1023,7 +1023,7 @@ bool csTextSyntaxService::ParseGradientShade (iDocumentNode* node,
 
   if (!has_color && ((!has_left && has_right) || (has_left && !has_right)))
   {
-    Report (
+    Notify (
       "crystalspace.syntax.gradient.shade",
       CS_REPORTER_SEVERITY_WARNING,
       node,
@@ -1032,7 +1032,7 @@ bool csTextSyntaxService::ParseGradientShade (iDocumentNode* node,
   }
   if (!has_color && !has_left && !has_right)
   {
-    Report (
+    Notify (
       "crystalspace.syntax.gradient.shade",
       CS_REPORTER_SEVERITY_WARNING,
       node,
@@ -1040,7 +1040,7 @@ bool csTextSyntaxService::ParseGradientShade (iDocumentNode* node,
   }
   if (!has_position)
   {
-    Report (
+    Notify (
       "crystalspace.syntax.gradient.shade",
       CS_REPORTER_SEVERITY_WARNING,
       node,
@@ -1136,7 +1136,7 @@ bool csTextSyntaxService::ParseAlphaMode (iDocumentNode* node,
   {							\
     if (!warned)					\
     {							\
-      Report ("crystalspace.syntax.alphamode",		\
+      Notify ("crystalspace.syntax.alphamode",		\
         CS_REPORTER_SEVERITY_WARNING,			\
 	child,						\
 	"Multiple alphamodes specified! "		\
@@ -1209,7 +1209,7 @@ bool csTextSyntaxService::ParseAlphaMode (iDocumentNode* node,
 
   if (!modeSet)
   {
-    Report ("crystalspace.syntax.alphamode",		
+    Notify ("crystalspace.syntax.alphamode",
       CS_REPORTER_SEVERITY_WARNING,			
       node, "Empty alphamode specification.");		
     return false;
@@ -1320,7 +1320,7 @@ csPtr<iKeyValuePair> csTextSyntaxService::ParseKey (iDocumentNode* node)
   const char* name = node->GetAttributeValue ("name");
   if (!name)
   {
-    ReportError ("crystalspace.syntax.key",
+    NotifyError ("crystalspace.syntax.key",
     	         node, "Missing %s attribute for %s!",
 		 CS::Quote::Single ("name"), CS::Quote::Single ("key"));
     return 0;
@@ -1356,7 +1356,7 @@ bool csTextSyntaxService::WriteKey (iDocumentNode *node, iKeyValuePair *keyvalue
   return true;
 }
 
-void csTextSyntaxService::ReportError (const char* msgid,
+void csTextSyntaxService::NotifyError (const char* msgid,
 	iDocumentNode* errornode, const char* msg, ...)
 {
   va_list arg;
@@ -1365,12 +1365,33 @@ void csTextSyntaxService::ReportError (const char* msgid,
   va_end (arg);
 }
 
+void csTextSyntaxService::Notify (const char* msgid, int severity,
+	iDocumentNode* errornode, const char* msg, ...)
+{
+  va_list arg;
+  va_start (arg, msg);
+  ReportV (msgid, severity, errornode, msg, arg);
+  va_end (arg);
+}
+
+#ifndef CS_VIRTUAL_BASE_VARARG_BROKEN
+void csTextSyntaxService::ReportError (const char* msgid,
+	iDocumentNode* errornode, const char* msg, ...)
+{
+  va_list arg;
+  va_start (arg, msg);
+  ReportErrorV (msgid, errornode, msg, arg);
+  va_end (arg);
+}
+#endif
+
 void csTextSyntaxService::ReportErrorV (const char* msgid,
 	iDocumentNode* errornode, const char* msg, va_list args)
 {
-  ReportV (msgid, CS_REPORTER_SEVERITY_ERROR, errornode, msg, arg);
+  ReportV (msgid, CS_REPORTER_SEVERITY_ERROR, errornode, msg, args);
 }
 
+#ifndef CS_VIRTUAL_BASE_VARARG_BROKEN
 void csTextSyntaxService::Report (const char* msgid, int severity, 
 	iDocumentNode* errornode, const char* msg, ...)
 {
@@ -1379,6 +1400,7 @@ void csTextSyntaxService::Report (const char* msgid, int severity,
   ReportV (msgid, severity, errornode, msg, arg);
   va_end (arg);
 }
+#endif
 
 static const char* GetDescriptiveAttribute (iDocumentNode* n,
 					    const char*& attrName)
@@ -1449,7 +1471,7 @@ void csTextSyntaxService::ReportV (const char* msgid, int severity,
 
 void csTextSyntaxService::ReportBadToken (iDocumentNode* badtokennode)
 {
-  Report ("crystalspace.syntax.badtoken",
+  Notify ("crystalspace.syntax.badtoken",
         CS_REPORTER_SEVERITY_ERROR,
   	badtokennode, "Unexpected token %s!",
 	CS::Quote::Single (badtokennode->GetValue ()));

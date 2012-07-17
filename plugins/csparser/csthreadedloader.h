@@ -922,6 +922,11 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
     void ReportNotify2 (const char* id, const char* description, ...);
     void ReportWarning (const char* id, const char* description, ...);
     void ReportWarning (const char* id, iDocumentNode* node, const char* description, ...);
+
+    void SynReport (const char* msgid, int severity,
+      iDocumentNode* errornode, const char* msg, ...) CS_GNUC_PRINTF(5,6);
+    void SynReportError (const char* msgid, iDocumentNode* errornode,
+      const char* msg, ...) CS_GNUC_PRINTF(4,5);
   };
 
   class csMissingSectorCallback : 

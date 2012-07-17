@@ -39,6 +39,15 @@
 
 CS_LEAKGUARD_IMPLEMENT (csGLShaderFVP);
 
+static void ReportError (iSyntaxService* syn, const char* msgid,
+    iDocumentNode* errornode, const char* msg, ...)
+{
+  va_list args;
+  va_start(args, msg);
+  syn->ReportErrorV(msgid, errornode, msg, args);
+  va_end(args);
+}
+
 csGLShaderFVP::csGLShaderFVP (csGLShader_FIXED* shaderPlug) :
   csShaderProgram (shaderPlug->object_reg), colorMaterial(0), 
   separateSpecular(false)
@@ -596,7 +605,8 @@ bool csGLShaderFVP::ParseTexMatrixOp (iDocumentNode* node,
   const char* type = node->GetAttributeValue ("type");
   if (type == 0)
   {
-    synsrv->Report ("crystalspace.graphics3d.shader.glfixed",
+    CS::va_callv(&iSyntaxService::ReportV, synsrv,
+      "crystalspace.graphics3d.shader.glfixed",
       CS_REPORTER_SEVERITY_WARNING,
       node,
       "No %s attribute", CS::Quote::Single ("type"));
@@ -802,7 +812,7 @@ bool csGLShaderFVP::Load(iShaderDestinationResolver* resolve,
             int layer = ParseLayerParam (child, resolve);
 	    if (layer < 0)
 	    {
-	      synsrv->ReportError ("crystalspace.graphics3d.shader.fixed.vp",
+	      ReportError (synsrv, "crystalspace.graphics3d.shader.fixed.vp",
 		variablesnode, "%s attribute invalid",
 		CS::Quote::Single ("layer"));
 	      return false;
@@ -830,7 +840,7 @@ bool csGLShaderFVP::Load(iShaderDestinationResolver* resolve,
             int layer = ParseLayerParam (child, resolve);
 	    if (layer < 0)
 	    {
-	      synsrv->ReportError ("crystalspace.graphics3d.shader.fixed.vp",
+	      ReportError (synsrv, "crystalspace.graphics3d.shader.fixed.vp",
 		variablesnode, "%s attribute invalid",
 		CS::Quote::Single ("layer"));
 	      return false;
@@ -854,7 +864,7 @@ bool csGLShaderFVP::Load(iShaderDestinationResolver* resolve,
                   }
 		  else
 		  {
-		    synsrv->ReportError ("crystalspace.graphics3d.shader.fixed.vp",
+		    ReportError (synsrv, "crystalspace.graphics3d.shader.fixed.vp",
 		      variablesnode, "invalid mapping %s",
 		      CS::Quote::Single (str));
 		    return false;
@@ -885,7 +895,7 @@ bool csGLShaderFVP::Load(iShaderDestinationResolver* resolve,
               }
 	      else
 	      {
-		synsrv->ReportError ("crystalspace.graphics3d.shader.fixed.vp",
+		ReportError (synsrv, "crystalspace.graphics3d.shader.fixed.vp",
 		  variablesnode, "invalid type %s",
 		  CS::Quote::Single (str));
 		return false;
@@ -898,7 +908,7 @@ bool csGLShaderFVP::Load(iShaderDestinationResolver* resolve,
             int layer = ParseLayerParam (child, resolve);
 	    if (layer < 0)
 	    {
-	      synsrv->ReportError ("crystalspace.graphics3d.shader.fixed.vp",
+	      ReportError (synsrv, "crystalspace.graphics3d.shader.fixed.vp",
 		variablesnode, "%s attribute invalid",
 		CS::Quote::Single ("layer"));
 	      return false;
@@ -931,7 +941,7 @@ bool csGLShaderFVP::Load(iShaderDestinationResolver* resolve,
 		colorMaterial = GL_AMBIENT_AND_DIFFUSE;
 		break;
 	      default:
-		synsrv->ReportError ("crystalspace.graphics3d.shader.fixed.vp",
+		ReportError (synsrv, "crystalspace.graphics3d.shader.fixed.vp",
 		  child, "invalid colormaterial %s",
 		  CS::Quote::Single (child->GetContentsValue()));
 		colorMaterial = 0;
@@ -1002,7 +1012,7 @@ bool csGLShaderFVP::Load(iShaderDestinationResolver* resolve,
   }
   else
   {
-    synsrv->ReportError ("crystalspace.graphics3d.shader.fixed.vp",
+    ReportError (synsrv, "crystalspace.graphics3d.shader.fixed.vp",
       variablesnode, "<fixedvp> node missing");
   }
 

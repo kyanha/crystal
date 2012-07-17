@@ -19,7 +19,7 @@
 */
 
 #include "cssysdef.h"
-
+#include "csutil/vararg.h"
 #include "iengine/camera.h"
 #include "iengine/engine.h"
 #include "iengine/light.h"
@@ -106,18 +106,18 @@ csPtr<iBase> csTargetRSLoader::Parse (iDocumentNode* node,
 	  int width = child->GetAttributeValueAsInt ("width");
 	  if (width <= 0)
 	  {
-	    synldr->Report (
+	    CS::va_callv(&iSyntaxService::ReportV, synldr,
 	      "crystalspace.renderloop.step.rendertarget",
-	      CS_REPORTER_SEVERITY_WARNING, child,
+	      CS_REPORTER_SEVERITY_WARNING, (iDocumentNode*)child,
 	      "Bogus width %d", width);
 	    return 0;
 	  }
 	  int height = child->GetAttributeValueAsInt ("height");
 	  if (height <= 0)
 	  {
-	    synldr->Report (
+	    CS::va_callv(&iSyntaxService::ReportV, synldr,
 	      "crystalspace.renderloop.step.rendertarget",
-	      CS_REPORTER_SEVERITY_WARNING, child,
+	      CS_REPORTER_SEVERITY_WARNING, (iDocumentNode*)child,
 	      "Bogus height %d", height);
 	    return 0;
 	  }

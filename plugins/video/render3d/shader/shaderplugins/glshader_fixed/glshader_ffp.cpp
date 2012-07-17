@@ -181,7 +181,8 @@ bool csGLShaderFFP::Load (iShaderDestinationResolver*, iDocumentNode* node)
   }
   else
   {
-    synsrv->ReportError ("crystalspace.graphics3d.shader.fixed.fp",
+    CS::va_callv(&iSyntaxService::ReportErrorV, synsrv,
+      "crystalspace.graphics3d.shader.fixed.fp",
       node, "<fixedfp> node missing");
     return false;
   }

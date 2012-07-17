@@ -38,6 +38,7 @@
 #include "csutil/cscolor.h"
 #include "csutil/scfstr.h"
 #include "csutil/stringquote.h"
+#include "csutil/vararg.h"
 #include "iengine/collection.h"
 #include "iengine/engine.h"
 #include "iengine/material.h"
@@ -69,6 +70,15 @@ static void ReportError (iObjectRegistry* object_reg,
   va_list arg;
   va_start (arg, description);
   csReportV (object_reg, CS_REPORTER_SEVERITY_ERROR, id, description, arg);
+  va_end (arg);
+}
+
+static void SynReportError (iSyntaxService* syn,
+  const char* msgid, iDocumentNode* errornode, const char* msg, ...)
+{
+  va_list arg;
+  va_start (arg, msg);
+  syn->ReportErrorV(msgid, errornode, msg, arg);
   va_end (arg);
 }
 
@@ -713,7 +723,7 @@ csPtr<iBase> csCubemapTextureLoader::Parse (iDocumentNode* node,
           fname = child->GetContentsValue ();
           if (!fname)
           {
-	  SyntaxService->ReportError (
+	  SynReportError (SyntaxService,
 	       PLUGIN_TEXTURELOADER_CUBEMAP,
 	       child, "Expected VFS filename for %s!",
 	       CS::Quote::Single ("file"));
@@ -730,7 +740,7 @@ csPtr<iBase> csCubemapTextureLoader::Parse (iDocumentNode* node,
           fname = child->GetContentsValue ();
           if (!fname)
           {
-	  SyntaxService->ReportError (
+	    SynReportError (SyntaxService,
 	       PLUGIN_TEXTURELOADER_CUBEMAP,
 	       child, "Expected VFS filename for %s!",
 	       CS::Quote::Single ("file"));
@@ -745,7 +755,7 @@ csPtr<iBase> csCubemapTextureLoader::Parse (iDocumentNode* node,
         fname = child->GetContentsValue ();
 	if (!fname)
 	{
-	  SyntaxService->ReportError (
+	  SynReportError (SyntaxService,
 	       PLUGIN_TEXTURELOADER_CUBEMAP,
 	       child, "Expected VFS filename for %s!",
 	       CS::Quote::Single ("file"));
@@ -761,7 +771,7 @@ csPtr<iBase> csCubemapTextureLoader::Parse (iDocumentNode* node,
         fname = child->GetContentsValue ();
 	if (!fname)
 	{
-	  SyntaxService->ReportError (
+	  SynReportError (SyntaxService,
 	       PLUGIN_TEXTURELOADER_CUBEMAP,
 	       child, "Expected VFS filename for %s!",
 	       CS::Quote::Single ("file"));
@@ -777,7 +787,7 @@ csPtr<iBase> csCubemapTextureLoader::Parse (iDocumentNode* node,
         fname = child->GetContentsValue ();
 	if (!fname)
 	{
-	  SyntaxService->ReportError (
+	  SynReportError (SyntaxService,
 	       PLUGIN_TEXTURELOADER_CUBEMAP,
 	       child, "Expected VFS filename for %s!",
 	       CS::Quote::Single ("file"));
@@ -793,7 +803,7 @@ csPtr<iBase> csCubemapTextureLoader::Parse (iDocumentNode* node,
         fname = child->GetContentsValue ();
 	if (!fname)
 	{
-	  SyntaxService->ReportError (
+	  SynReportError (SyntaxService,
 	       PLUGIN_TEXTURELOADER_CUBEMAP,
 	       child, "Expected VFS filename for %s!",
 	       CS::Quote::Single ("file"));
@@ -887,7 +897,7 @@ csPtr<iBase> csTexture3DLoader::Parse (iDocumentNode* node,
         fname = child->GetContentsValue ();
 	if (!fname)
 	{
-	  SyntaxService->ReportError (
+	  SynReportError (SyntaxService,
 	    PLUGIN_TEXTURELOADER_TEX3D,
 	    child, "Expected VFS filename for %s!",
 	    "file");

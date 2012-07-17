@@ -51,6 +51,9 @@ private:
     XMLTOKEN_STEP
   };
 
+  void ReportError (const char* msgid, iDocumentNode* errornode,
+    const char* msg, ...) CS_GNUC_PRINTF(4,5);
+
 public:
   CS_LEAKGUARD_DECLARE (csRenderStepParser);
 

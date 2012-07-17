@@ -114,6 +114,8 @@ class csFullScreenQuadRSLoader :
     csFullScreenQuadRenderStep* step, 
     csFullScreenQuadRenderStep::DrawSettings& settings,
     bool firstPass);
+  void Report (const char* msgid, int severity,
+    iDocumentNode* errornode, const char* msg, ...) CS_GNUC_PRINTF(5,6);
 public:
   csFullScreenQuadRSLoader (iBase* p);
 
