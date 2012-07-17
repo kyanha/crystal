@@ -73,9 +73,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(SLCombiner)
       object_reg);
     if (synsrv.IsValid())
     {
-      csString msgStr;
-      msgStr.FormatV (msg, args);
-      synsrv->Report (GetMessageID(), severity, node, "%s", msgStr.GetData());
+      synsrv->ReportV (GetMessageID(), severity, node, msg, args);
     }
     else
     {

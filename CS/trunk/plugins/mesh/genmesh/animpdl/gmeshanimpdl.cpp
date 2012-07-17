@@ -303,12 +303,7 @@ void GenmeshAnimationPDLFactory::Report (iSyntaxService* synsrv,
 {
   va_list arg;
   va_start (arg, msg);
-
-  csString text;
-  text.FormatV (msg, arg);
-  synsrv->Report ("crystalspace.mesh.anim.pdlight", severity, node, "%s", 
-    (const char*)text);
-
+  synsrv->ReportV ("crystalspace.mesh.anim.pdlight", severity, node, msg, arg);
   va_end (arg);
 }
 

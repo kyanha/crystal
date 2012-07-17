@@ -4921,11 +4921,9 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
   {
     va_list arg;
     va_start (arg, description);
-    csString buf;
-    buf.FormatV (description, arg);
+    SyntaxService->ReportV (id, CS_REPORTER_SEVERITY_WARNING, node,
+      description, arg);
     va_end (arg);
-    SyntaxService->Report (id, CS_REPORTER_SEVERITY_WARNING, node, "%s", 
-      buf.GetData());
   }
 }
 CS_PLUGIN_NAMESPACE_END(csparser)

@@ -68,12 +68,9 @@ void WeaverCompiler::Report (int severity, iDocumentNode* node,
 {
   va_list args;
   va_start (args, msg);
-  csString str;
-  str.FormatV (msg, args);
+  synldr->ReportV ("crystalspace.graphics3d.shadercompiler.weaver",
+    severity, node, msg, args);
   va_end (args);
-  
-  synldr->Report ("crystalspace.graphics3d.shadercompiler.weaver",
-    severity, node, "%s", str.GetData());
 }
 
 csPtr<iDocumentNode> WeaverCompiler::LoadDocumentFromFile (

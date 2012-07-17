@@ -89,10 +89,8 @@ void csXMLShaderCompiler::Report (int severity, iDocumentNode* node,
 {
   va_list args;
   va_start (args, msg);
-  csString formattedMsg;
-  formattedMsg.FormatV (msg, args);
-  synldr->Report ("crystalspace.graphics3d.shadercompiler.xmlshader", 
-    severity, node, "%s", formattedMsg.GetData());
+  synldr->ReportV ("crystalspace.graphics3d.shadercompiler.xmlshader",
+    severity, node, msg, args);
   va_end (args);
 }
 

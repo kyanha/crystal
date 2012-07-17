@@ -151,9 +151,6 @@ void csAnimateProctexLoader::Report (int severity, iDocumentNode* node,
   va_list arg;
   va_start (arg, msg);
 
-  csString text;
-  text.FormatV (msg, arg);
-
   csRef<iSyntaxService> synserv;
 
   if (node)
@@ -161,13 +158,13 @@ void csAnimateProctexLoader::Report (int severity, iDocumentNode* node,
 
   if (node && synserv)
   {
-    synserv->Report ("crystalspace.proctex.loader.animimg",
-      severity, node, "%s", (const char*)text);
+    synserv->ReportV ("crystalspace.proctex.loader.animimg",
+      severity, node, msg, arg);
   }
   else
   {
-    csReport (object_reg, severity, "crystalspace.proctex.loader.animimg",
-      "%s", (const char*)text);
+    csReportV (object_reg, severity, "crystalspace.proctex.loader.animimg",
+      msg, arg);
   }
 
   va_end (arg);
