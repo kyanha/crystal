@@ -23,6 +23,7 @@
  * classes.
  */
 #undef CreateDirectory
+#undef CreateEvent
 #undef DeleteFile
 #undef GetClassName
 #undef LoadImage
