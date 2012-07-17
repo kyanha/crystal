@@ -28,6 +28,12 @@
 #include <sys/stat.h>
 #include <dirent.h>
 
+#include <AvailabilityMacros.h>
+#if defined(MAC_OS_X_VERSION_10_6) && \
+  MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_6
+#define CS_OSX_10_6
+#endif
+
 #if defined(CS_UNIVERSAL_BINARY)
 #undef CS_BIG_ENDIAN
 #undef CS_LITTLE_ENDIAN
