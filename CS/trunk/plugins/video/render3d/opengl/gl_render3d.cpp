@@ -3618,6 +3618,7 @@ bool csGLGraphics3D::PerformExtensionV (char const* command, va_list /*args*/)
   return false;
 }
 
+#ifndef CS_VIRTUAL_BASE_VARARG_BROKEN
 bool csGLGraphics3D::PerformExtension (char const* command, ...)
 {
   va_list args;
@@ -3626,6 +3627,7 @@ bool csGLGraphics3D::PerformExtension (char const* command, ...)
   va_end (args);
   return rc;
 }
+#endif
 
 void csGLGraphics3D::OQInitQueries(unsigned int* queries,int num_queries)
 {

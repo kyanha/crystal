@@ -1154,6 +1154,7 @@ struct iGraphics3D : public virtual iBase
    */
   virtual void SetWorldToCamera (const csReversibleTransform& w2c) = 0;
 
+#ifndef CS_VIRTUAL_BASE_VARARG_BROKEN
   /**
    * Perform a system specific exension.<p>
    * The command is a string; any arguments may follow.
@@ -1162,6 +1163,7 @@ struct iGraphics3D : public virtual iBase
    * than "a", "b" and so on...
    */
   virtual bool PerformExtension (char const* command, ...) = 0;
+#endif
 
   /**
    * Perform a system specific exension.<p>
