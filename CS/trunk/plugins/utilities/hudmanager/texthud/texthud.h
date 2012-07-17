@@ -64,7 +64,9 @@ public:
   virtual void SwitchKeysPage ();
 
   virtual void WriteShadow (int x, int y, int color, const char *str,...) const;
+  virtual void WriteShadowV (int x, int y, int color, const char *str, va_list) const;
   virtual void Write (int x, int y, int fg, int color, const char *str,...) const;
+  virtual void WriteV (int x, int y, int fg, int color, const char *str, va_list) const;
 
   virtual void SetEnabled (bool enabled);
   virtual bool GetEnabled () const;
@@ -104,6 +106,8 @@ private:
 
   // Declare this event handler as listening to the '2D' frame phase
   CS_EVENTHANDLER_PHASE_2D ("crystalspace.utilities.texthud");
+
+  void WriteStr (int x, int y, int fg, int color, const char *str) const;
 };
 
 }
