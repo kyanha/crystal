@@ -55,8 +55,6 @@ protected:
 #include "cstool/tokenlist.h"
   csRef<iShaderVarStringSet> strings;
 
-  void ReportV (const char* msgid, int severity, 
-	iDocumentNode* errornode, const char* msg, va_list arg);
   /**
    * Returns whether information relevant to world saving should be kept
    * (default behaviour is to discard such info).
@@ -141,9 +139,13 @@ public:
 
   virtual void ReportError (const char* msgid, iDocumentNode* errornode,
 	const char* msg, ...);
+  virtual void ReportErrorV (const char* msgid, iDocumentNode* errornode,
+	const char* msg, va_list args);
   virtual void ReportBadToken (iDocumentNode* badtokennode);
   virtual void Report (const char* msgid, int severity, 
 	iDocumentNode* errornode, const char* msg, ...);
+  virtual void ReportV (const char* msgid, int severity,
+	iDocumentNode* errornode, const char* msg, va_list args);
 };
 
 #include "csutil/deprecated_warn_on.h"
