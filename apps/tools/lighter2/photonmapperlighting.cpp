@@ -284,9 +284,8 @@ namespace lighter
       // How many photons does this light get (proportional to the fraction
       // of power this light contributes to the sector)?
       double powerScale = ((pow.red + pow.green + pow.blue)/3.0)/sectorLumenPower;
-      size_t photonsForCurLight = floor(powerScale*numPhotonsPerSector + 0.5);
-
-      size_t causticPhotonsForCurLight = 0;
+      int photonsForCurLight = floor(powerScale*numPhotonsPerSector + 0.5);
+      int causticPhotonsForCurLight = 0;
       
       if (enableCaustics)
       {
@@ -346,7 +345,7 @@ namespace lighter
 	  {
 
 		  #pragma omp parallel for
-		  for (size_t num = 0; num < photonsForCurLight; ++num)
+		  for (int num = 0; num < photonsForCurLight; ++num)
 		  {
 			// Get direction to emit the photon
 			csVector3 dir;
@@ -410,7 +409,7 @@ namespace lighter
           csSphere sphere = itr.Next();
           float radius = 0;
           radius = sphere.GetRadius();
-          size_t causticPhotonsForMesh = floor(causticPhotonsForCurLight*(radius*radius*radius/totalVolume) + 0.5);
+          int causticPhotonsForMesh = floor(causticPhotonsForCurLight*(radius*radius*radius/totalVolume) + 0.5);
 
           // Setting one time light properties
       
@@ -500,7 +499,7 @@ namespace lighter
 		  if(!stop)
 		  {
 			  #pragma omp parallel for
-			  for (size_t cnum = 0; cnum < causticPhotonsForMesh; ++cnum)
+			  for (int cnum = 0; cnum < causticPhotonsForMesh; ++cnum)
 			  {
 				// Get direction to emit the photon
 				csVector3 dir;
