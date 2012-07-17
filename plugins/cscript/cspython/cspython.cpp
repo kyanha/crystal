@@ -31,6 +31,7 @@
 #include "csutil/sysfunc.h"
 #include "csutil/syspath.h"
 #include "csutil/stringarray.h"
+#include "csutil/vararg.h"
 #include "iutil/cmdline.h"
 #include "iutil/eventq.h"
 #include "csutil/event.h"
@@ -42,6 +43,8 @@
 
 #include "cspython.h"
 #include "pytocs.h"
+
+using CS::va_callv;
 
 extern "C"
 {
@@ -352,7 +355,7 @@ csPython::Object* csPython::Query (iScriptObject *obj) const
   csRef<csPythonObject> priv = scfQueryInterface<csPythonObject> (obj);
   if (priv.IsValid())
     return static_cast<csPython::Object*> ((csPythonObject*)priv);
-  reporter->Report (CS_REPORTER_SEVERITY_ERROR,
+  va_callv(&iReporter::ReportV, reporter, CS_REPORTER_SEVERITY_ERROR,
    "crystalspace.script.python","This iScriptObject is not from Python");
   return 0;
 }
@@ -362,7 +365,7 @@ csPython::Value* csPython::Query (iScriptValue *val) const
   csRef<csPythonValue> priv = scfQueryInterface<csPythonValue> (val);
   if (priv.IsValid())
     return static_cast<csPython::Value*> ((csPythonValue*)priv);
-  reporter->Report (CS_REPORTER_SEVERITY_ERROR,
+  va_callv(&iReporter::ReportV, reporter, CS_REPORTER_SEVERITY_ERROR,
    "crystalspace.script.python","This iScriptValue is not from Python");
   return 0;
 }
