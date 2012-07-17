@@ -322,12 +322,16 @@ protected:
   // of csGraphics2D.
   virtual void AlertV (int type, const char* title, const char* okMsg,
     const char* msg, va_list args);
+#ifndef CS_VIRTUAL_BASE_VARARG_BROKEN
   virtual void Alert (int type, const char* title, const char* okMsg,
       const char* msg, ...);
+#endif
   virtual void AlertV (int type, const wchar_t* title, const wchar_t* okMsg,
     const wchar_t* msg, va_list args);
+#ifndef CS_VIRTUAL_BASE_VARARG_BROKEN
   virtual void Alert (int type, const wchar_t* title, const wchar_t* okMsg,
       const wchar_t* msg, ...);
+#endif
   /** @} */
 
   /**\name iNativeWindow implementation
