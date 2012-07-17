@@ -95,18 +95,26 @@
 #endif
 
 // Platforms which have the PRIx99 printf()-formatting directives should define
-// CS_HAVE_C_FORMAT_MACROS. For platforms which do not provide these macros, we
-// fake up the commonly used ones.
-#if CS_LONG_SIZE == 8
-  #define __CS_PRI64_PREFIX	"l"
-#else
-  #define __CS_PRI64_PREFIX	"ll"
-#endif
+// CS_HAVE_C_FORMAT_MACROS. Platforms which also have macros for 64-bit
+// data-types should further define CS_HAVE_C_FORMAT64_MACROS.  For platforms
+// which do not provide these macros, we fake up the commonly used ones.
+#if !defined(CS_HAVE_C_FORMAT64_MACROS)
+  #if CS_LONG_SIZE == 8
+    #define __CS_PRI64_PREFIX "l"
+  #else
+    #define __CS_PRI64_PREFIX "ll"
+  #endif
 
-#define CS_PRId64 __CS_PRI64_PREFIX "d"
-#define CS_PRIu64 __CS_PRI64_PREFIX "u"
-#define CS_PRIx64 __CS_PRI64_PREFIX "x"
-#define CS_PRIX64 __CS_PRI64_PREFIX "X"
+  #define CS_PRId64 __CS_PRI64_PREFIX "d"
+  #define CS_PRIu64 __CS_PRI64_PREFIX "u"
+  #define CS_PRIx64 __CS_PRI64_PREFIX "x"
+  #define CS_PRIX64 __CS_PRI64_PREFIX "X"
+#else
+  #define CS_PRId64 PRId64
+  #define CS_PRIu64 PRIu64
+  #define CS_PRIx64 PRIx64
+  #define CS_PRIX64 PRIX64
+#endif
 
 #if !defined(CS_HAVE_C_FORMAT_MACROS)
   #ifndef PRId8
