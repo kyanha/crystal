@@ -155,7 +155,7 @@ rule RelayLFlags
   local relay_lflags = $(1) ;
   local relay_libs = $(2) ;
   local minimal_libs = $(3) ;
-  if $(TARGET.OS) = "WIN32" || ! $(CMD.RELAYTOOL)
+  if $(TARGET.OS) != "UNIX" || ! $(CMD.RELAYTOOL)
   {
     return $(relay_lflags) ;
   }
@@ -182,7 +182,7 @@ rule RelayLFlags
 ##  RelayObjs target : relaylibs : identifier
 rule RelayObjs
 {
-  if $(TARGET.OS) = "WIN32" || ! $(CMD.RELAYTOOL)
+  if $(TARGET.OS) != "UNIX" || ! $(CMD.RELAYTOOL)
   {
     # Create fake libwhatever_is_present() symbols
     local stubfile = [ DoObjectGrist $(3).fake_stub.c ] ;
