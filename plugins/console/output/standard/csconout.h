@@ -59,6 +59,7 @@ public:
    * as soon as any other message will be sent to console.
    */
   virtual void PutTextV (const char *iText, va_list args);
+#ifndef CS_VIRTUAL_BASE_VARARG_BROKEN
   virtual void PutText (const char *iText, ...)
   {
     va_list arg;
@@ -66,6 +67,7 @@ public:
     PutTextV (iText, arg);
     va_end (arg);
   }
+#endif
 
   /// Return a line from the buffer (-1 = current line)
   virtual const char *GetLine (int iLine = -1) const;

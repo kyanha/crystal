@@ -28,7 +28,9 @@
 #include "iutil/eventq.h"
 #include "csutil/event.h"
 #include "csutil/eventnames.h"
+#include "csutil/vararg.h"
 
+using CS::va_callv;
 
 
 SCF_IMPLEMENT_FACTORY (csConsoleInput)
@@ -184,7 +186,7 @@ bool csConsoleInput::HandleEvent (iEvent &Event)
 	    InsertMode = !InsertMode;
 	    break;
 	  case CSKEY_ENTER:
-	    Console->PutText("\n");
+	    va_callv(&iConsoleOutput::PutTextV, Console, "\n");
 	    if (Callback)
 	      Callback->Execute (line);
 	    if (line.Length () > 0)
@@ -336,9 +338,9 @@ void csConsoleInput::SetPrompt (const char *iPrompt)
 void csConsoleInput::Refresh ()
 {
   if (!Console || !Console->GetVisible ()) return;
-  Console->PutText ("\r");
-  Console->PutText ("%s", Prompt);
-  Console->PutText ("%s", line.GetData ());
+  // "\r" specially impacts subsequent PutText() call, so keep it separate.
+  va_callv(&iConsoleOutput::PutTextV, Console, "\r");
+  va_callv(&iConsoleOutput::PutTextV, Console, "%s%s", Prompt, line.GetData());
   Console->SetCursorPos ((int)(PromptLen + strCursorPos));
   if (InsertMode)
     Console->SetCursorStyle (csConInsertCursor);
