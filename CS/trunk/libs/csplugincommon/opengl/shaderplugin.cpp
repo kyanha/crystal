@@ -21,6 +21,7 @@
 #include "csplugincommon/opengl/shaderplugin.h"
 #include "csutil/objreg.h"
 #include "csutil/stringarray.h"
+#include "csutil/vararg.h"
 
 #include "iutil/verbositymanager.h"
 #include "ivideo/graph2d.h"
@@ -76,8 +77,9 @@ namespace CS
       statecache = 0;
       if (r)
       {
-	r->GetDriver2D()->PerformExtension ("getstatecache", &statecache);
-	r->GetDriver2D()->PerformExtension ("getextmanager", &ext);
+	iGraphics2D* g2d = r->GetDriver2D();
+	va_call(&iGraphics2D::PerformExtensionV, g2d, "getstatecache", &statecache);
+	va_call(&iGraphics2D::PerformExtensionV, g2d, "getextmanager", &ext);
       }
       if ((ext == 0) || (statecache == 0))
 	return false;

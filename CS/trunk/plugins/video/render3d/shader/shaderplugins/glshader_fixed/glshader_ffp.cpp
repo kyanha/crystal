@@ -25,6 +25,7 @@
 #include "csutil/objreg.h"
 #include "csutil/ref.h"
 #include "csutil/scf.h"
+#include "csutil/vararg.h"
 #include "iutil/comp.h"
 #include "iutil/document.h"
 #include "iutil/plugin.h"
@@ -623,7 +624,7 @@ bool csGLShaderFFP::Compile (iHierarchicalCache*, csRef<iString>* tag)
 
   //get a statecache
   csRef<iGraphics2D> g2d = csQueryRegistry<iGraphics2D> (objectReg);
-  g2d->PerformExtension ("getstatecache", &statecache);
+  CS::va_call(&iGraphics2D::PerformExtensionV, g2d, "getstatecache", &statecache);
 
   if (texlayers.GetSize () > (size_t)maxlayers)
     return false;

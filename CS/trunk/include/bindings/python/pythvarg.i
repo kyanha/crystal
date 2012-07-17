@@ -48,21 +48,21 @@
     {
       // csGraphics2DDDraw8, csGraphics2DGLX
       int val = PyInt_AsLong(PyTuple_GetItem(args, 0));
-      bool ok = self->PerformExtension(command, val);
+      bool ok = CS::va_call(&iGraphics2D::PerformExtensionV, self, command, val);
       return PyInt_FromLong(long(ok));
     }
     else if (!strcasecmp(command, "hardware_accelerated"))
     {
       // csGraphics2DOpenGL, csGraphics2DGLX
       bool yes = false;
-      bool ok = self->PerformExtension(command, &yes);
+      bool ok = CS::va_call(&iGraphics2D::PerformExtensionV, self, command, &yes);
       PyObject * res = PyTuple_New(2);
       PyTuple_SetItem(res, 0, PyInt_FromLong(long(ok)));
       PyTuple_SetItem(res, 1, PyInt_FromLong(long(yes)));
       return res;
     }
     // pass through and hope the operation doesnt require parameters.
-    return PyInt_FromLong(self->PerformExtension(command));
+    return PyInt_FromLong(CS::va_call(&iGraphics2D::PerformExtensionV, self, command));
   }
 
   %pythoncode %{

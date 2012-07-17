@@ -23,6 +23,7 @@
 #include "csgfx/bakekeycolor.h"
 #include "csgfx/imagememory.h"
 #include "csgfx/packrgb.h"
+#include "csutil/vararg.h"
 #include "csplugincommon/opengl/glhelper.h"
 
 #include "gl_render3d.h"
@@ -147,7 +148,7 @@ void csGLRender2TextureFramebuf::BeginDraw (int drawflags)
   /* Note: the renderer relies on this function to setup
    * matrices etc. So be careful when changing stuff. */
 
-  G3D->GetDriver2D()->PerformExtension ("glflushtext");
+  CS::va_call(&iGraphics2D::PerformExtensionV, G3D->GetDriver2D(), "glflushtext");
   if (drawflags & CSDRAW_3DGRAPHICS)
   {
   }

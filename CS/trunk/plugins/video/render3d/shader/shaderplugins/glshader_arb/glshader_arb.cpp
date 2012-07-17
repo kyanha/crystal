@@ -24,6 +24,7 @@ Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 #include "csutil/objreg.h"
 #include "csutil/ref.h"
 #include "csutil/scf.h"
+#include "csutil/vararg.h"
 #include "iutil/comp.h"
 #include "iutil/plugin.h"
 #include "ivideo/graph2d.h"
@@ -109,7 +110,7 @@ bool csGLShader_ARB::Initialize(iObjectRegistry* reg)
   else
     return false;
 
-  r->GetDriver2D()->PerformExtension ("getextmanager", &ext);
+  CS::va_call(&iGraphics2D::PerformExtensionV, r->GetDriver2D(), "getextmanager", &ext);
   return true;
 }
 
