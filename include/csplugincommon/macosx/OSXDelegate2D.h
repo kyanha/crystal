@@ -9,6 +9,7 @@
 #ifndef __CS_OSXDELEGATE2D_H__
 #define __CS_OSXDELEGATE2D_H__
 
+#include "csutil/macosx/csosdefs.h"
 #include "csextern_osx.h"
 #include "ivideo/cursor.h"
 
@@ -24,6 +25,9 @@
 #import "OSXDriver2D.h"
 
 @interface OSXDelegate2D : NSObject
+#ifdef CS_OSX_10_6
+  <NSWindowDelegate>
+#endif
 {
   /// Keep track of mouse tracking state
   NSTrackingRectTag trackingMouseTag;
