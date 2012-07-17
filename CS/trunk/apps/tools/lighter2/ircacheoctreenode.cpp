@@ -140,7 +140,7 @@ namespace lighter
 
       // Compute distance to center of each child
       #pragma omp parallel for
-      for(size_t i=0; i<8; i++)
+      for(int i=0; i<8; i++)
       {
         float tmp[3], distSq;
         tmp[0] = child[i]->center[0] - samp->pos[0];
