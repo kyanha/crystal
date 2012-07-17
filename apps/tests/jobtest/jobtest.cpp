@@ -151,7 +151,7 @@ void PrintResult ()
     // For each number of threads
     for (unsigned int t = 0; t < MAX_WORKER_THREADS; ++t)
     {
-      csPrintf("%8" CS_PRId64, BenchResult[t][WU] / NUM_TIMES);
+      csPrintf("%8" PRId64, BenchResult[t][WU] / NUM_TIMES);
     }
 
     csPrintf("\n");

@@ -105,15 +105,10 @@
     #define __CS_PRI64_PREFIX "ll"
   #endif
 
-  #define CS_PRId64 __CS_PRI64_PREFIX "d"
-  #define CS_PRIu64 __CS_PRI64_PREFIX "u"
-  #define CS_PRIx64 __CS_PRI64_PREFIX "x"
-  #define CS_PRIX64 __CS_PRI64_PREFIX "X"
-#else
-  #define CS_PRId64 PRId64
-  #define CS_PRIu64 PRIu64
-  #define CS_PRIx64 PRIx64
-  #define CS_PRIX64 PRIX64
+  #define PRId64 __CS_PRI64_PREFIX "d"
+  #define PRIu64 __CS_PRI64_PREFIX "u"
+  #define PRIx64 __CS_PRI64_PREFIX "x"
+  #define PRIX64 __CS_PRI64_PREFIX "X"
 #endif
 
 #if !defined(CS_HAVE_C_FORMAT_MACROS)

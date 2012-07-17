@@ -93,7 +93,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(gl3d)
       }
 
       csString line;
-      line.Format ("%u,%" CS_PRIu64 ",%" CS_PRIu64 ",%" CS_PRIu64 ",%s\n",
+      line.Format ("%u,%" PRIu64 ",%" PRIu64 ",%" PRIu64 ",%s\n",
 		   event.frame, issueTime,
 		   startTime - issueTime, endTime - startTime, event.descr);
       outputFile->Write (line.GetData(), line.Length());

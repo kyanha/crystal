@@ -25,6 +25,6 @@ namespace CS
   void MeasureTime::PrintTime (const char* prefix, int64 time, 
     const char* suffix)
   {
-    csPrintf ("%s%" CS_PRId64 "%s", prefix, time, suffix);
+    csPrintf ("%s%" PRId64 "%s", prefix, time, suffix);
   }
 } // namespace CS
