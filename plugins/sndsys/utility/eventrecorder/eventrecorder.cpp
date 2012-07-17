@@ -172,6 +172,7 @@ int csSndSysBasicEventRecorder::ProcessEventQueue()
   return EventCount;
 }
 
+#ifndef CS_VIRTUAL_BASE_VARARG_BROKEN
 void csSndSysBasicEventRecorder::RecordEvent(SndSysEventCategory Category, SndSysEventLevel Level, const char* Description, ...)
 {
   if (!m_Active)
@@ -183,6 +184,7 @@ void csSndSysBasicEventRecorder::RecordEvent(SndSysEventCategory Category, SndSy
   va_end (arg);
 
 }
+#endif
 
 void csSndSysBasicEventRecorder::RecordEventV(SndSysEventCategory Category, SndSysEventLevel Level, const char* Description, va_list arg)
 {
