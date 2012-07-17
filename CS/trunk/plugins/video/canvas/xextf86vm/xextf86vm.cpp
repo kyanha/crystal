@@ -143,11 +143,23 @@ bool csXExtF86VM::SetFullScreen (bool yesno)
 
 static Bool GetModeInfo (Display *dpy, int scr, XF86VidModeModeInfo *info)
 {
-  XF86VidModeModeLine *l;
+  XF86VidModeModeLine l;
 
-  l = (XF86VidModeModeLine *) ((char *)info + sizeof(info->dotclock));
 
-  return XF86VidModeGetModeLine (dpy, scr, (int *)&info->dotclock, l);
+  if (!XF86VidModeGetModeLine (dpy, scr, (int *)&info->dotclock, &l)) return false;
+  info->hdisplay = l.hdisplay;
+  info->hsyncstart = l.hsyncstart;
+  info->hsyncend = l.hsyncend;
+  info->htotal = l.htotal;
+  info->hskew = l.hskew;
+  info->vdisplay = l.vdisplay;
+  info->vsyncstart = l.vsyncstart;
+  info->vsyncend = l.vsyncend;
+  info->vtotal = l.vtotal;
+  info->flags = l.flags;
+  info->privsize = l.privsize;
+  info->c_private = l.c_private;
+  return true;
 }
 
 void csXExtF86VM::ChangeVideoMode (int zoom)
