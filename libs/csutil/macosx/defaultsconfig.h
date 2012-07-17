@@ -38,6 +38,9 @@ private:
   NSUserDefaults* defaults;
   NSMutableDictionary* dict;
 
+  // Temporary storage to hold auto-freed [NSString UTF8String] result.
+  mutable csString strval;
+
   bool KeyExists (NSString* Key) const;
   bool Writable(NSString* Key) const;
 
@@ -96,6 +99,11 @@ class csDefaultsIterator : public scfImplementation1<csDefaultsIterator,
   NSEnumerator* keyenum;
   NSString* currentkey;
   NSString* nextkey;
+
+  // Temporary storage to hold auto-freed [NSString UTF8String] result.
+  mutable csString subsec;
+  mutable csString key;
+  mutable csString strval;
 public:
   csDefaultsIterator (csDefaultsConfig* Owner, const char* Subsection);
   virtual ~csDefaultsIterator();

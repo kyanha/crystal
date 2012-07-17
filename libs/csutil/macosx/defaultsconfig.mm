@@ -19,6 +19,7 @@
 #include "cssysdef.h"
 #include "csutil/util.h"
 #include "csutil/scfstringarray.h"
+#include "csutil/macosx/OSXAutoGC.h"
 #include "defaultsconfig.h"
 
 
@@ -48,6 +49,7 @@ csPtr<iConfigFile> csGetPlatformConfig (const char* key)
 csDefaultsConfig::csDefaultsConfig ()
   : scfImplementationType (this)
 {
+  csOSXAutoGC gc;
   // Domain information comes from the application's bundle identifier,
   // generally.  Grab a defaults object.
   defaults = [[NSUserDefaults standardUserDefaults] retain];
@@ -57,6 +59,7 @@ csDefaultsConfig::csDefaultsConfig ()
 
 csDefaultsConfig::~csDefaultsConfig()
 {
+  csOSXAutoGC gc;
   if (dict != nil)
     [dict release];
   if (domain != nil)
@@ -67,6 +70,7 @@ csDefaultsConfig::~csDefaultsConfig()
 
 bool csDefaultsConfig::Open (const char* Key)
 {
+  csOSXAutoGC gc;
   domain = [[NSString alloc] initWithCString:Key];
   dict = [[defaults persistentDomainForName:domain] mutableCopy];
   if (dict == nil)
@@ -98,6 +102,7 @@ bool csDefaultsConfig::Save ()
 {
   if (dict != nil)
   {
+    csOSXAutoGC gc;
     [defaults setPersistentDomain:dict forName:domain];
     [defaults synchronize];
   }
@@ -113,6 +118,7 @@ bool csDefaultsConfig::Save (const char*, iVFS*)
 
 void csDefaultsConfig::Clear ()
 {
+  csOSXAutoGC gc;
   [defaults removePersistentDomainForName:domain];
 }
 
@@ -125,11 +131,13 @@ csPtr<iConfigIterator> csDefaultsConfig::Enumerate (const char* Subsection)
 
 bool csDefaultsConfig::KeyExists (NSString* Key) const
 {
+  csOSXAutoGC gc;
   return ([dict objectForKey:Key] != nil);
 }
 
 bool csDefaultsConfig::KeyExists (const char* Key) const
 {
+  csOSXAutoGC gc;
   return KeyExists([NSString stringWithUTF8String:Key]);
 }
 
@@ -139,6 +147,7 @@ bool csDefaultsConfig::KeyExists (const char* Key) const
 // us.
 bool csDefaultsConfig::Writable (NSString* Key) const
 {
+  csOSXAutoGC gc;
   bool writable;
   if (![defaults respondsToSelector:@selector(objectIsForcedForKey:inDomain:)])
     writable = true;
@@ -152,6 +161,7 @@ bool csDefaultsConfig::Writable (NSString* Key) const
 // it exists.
 bool csDefaultsConfig::SubsectionExists (const char* subsection) const
 {
+  csOSXAutoGC gc;
   NSString* section = [NSString stringWithFormat:@"%@.%s", domain, subsection];
   NSDictionary* subdict = [defaults persistentDomainForName:section];
   return subdict != nil;
@@ -159,6 +169,7 @@ bool csDefaultsConfig::SubsectionExists (const char* subsection) const
 
 int csDefaultsConfig::GetInt (const char* Key, int Def) const
 {
+  csOSXAutoGC gc;
   NSString* keystring = [NSString stringWithUTF8String:Key];
   if (KeyExists(keystring))
     return [[[dict objectForKey:keystring] description] intValue];
@@ -167,6 +178,7 @@ int csDefaultsConfig::GetInt (const char* Key, int Def) const
 
 float csDefaultsConfig::GetFloat (const char* Key, float Def) const
 {
+  csOSXAutoGC gc;
   NSString* keystring = [NSString stringWithUTF8String:Key];
   if (KeyExists(keystring))
     return [[[dict objectForKey:keystring] description] floatValue];
@@ -175,14 +187,19 @@ float csDefaultsConfig::GetFloat (const char* Key, float Def) const
 
 const char* csDefaultsConfig::GetStr (const char* Key, const char* Def) const
 {
+  csOSXAutoGC gc;
   NSString* keystring = [NSString stringWithUTF8String:Key];
   if (KeyExists(keystring))
-    return [[[dict objectForKey:keystring] description] UTF8String];
+  {
+    strval = [[[dict objectForKey:keystring] description] UTF8String];
+    return strval;
+  }
   return Def;
 }
 
 bool csDefaultsConfig::GetBool (const char* Key, bool Def) const
 {
+  csOSXAutoGC gc;
   NSString* keystring = [NSString stringWithUTF8String:Key];
   if (KeyExists(keystring))
   {
@@ -232,6 +249,7 @@ const char* csDefaultsConfig::GetComment (const char* Key) const
 
 void csDefaultsConfig::SetStr (const char* Key, const char* Val)
 {
+  csOSXAutoGC gc;
   NSString* keystr = [NSString stringWithUTF8String:Key];
   NSString* valstr = [NSString stringWithUTF8String:Val];
   if (Writable(keystr))
@@ -240,6 +258,7 @@ void csDefaultsConfig::SetStr (const char* Key, const char* Val)
 
 void csDefaultsConfig::SetInt (const char* Key, int Value)
 {
+  csOSXAutoGC gc;
   NSString* keystr = [NSString stringWithUTF8String:Key];
   NSNumber* val = [NSNumber numberWithInt:Value];
   if (Writable(keystr))
@@ -248,6 +267,7 @@ void csDefaultsConfig::SetInt (const char* Key, int Value)
 
 void csDefaultsConfig::SetFloat (const char* Key, float Value)
 {
+  csOSXAutoGC gc;
   NSString* keystr = [NSString stringWithUTF8String:Key];
   NSNumber* val = [NSNumber numberWithFloat:Value];
   if (Writable(keystr))
@@ -256,6 +276,7 @@ void csDefaultsConfig::SetFloat (const char* Key, float Value)
 
 void csDefaultsConfig::SetBool (const char* Key, bool Value)
 {
+  csOSXAutoGC gc;
   NSString* keystr = [NSString stringWithUTF8String:Key];
   NSString* valstr = (Value ? @"yes" : @"no");
   if (Writable(keystr))
@@ -285,6 +306,7 @@ bool csDefaultsConfig::SetComment (const char* Key, const char* Text)
 
 void csDefaultsConfig::DeleteKey (const char* Key)
 {
+  csOSXAutoGC gc;
   NSString* keystr = [NSString stringWithUTF8String:Key];
   [dict removeObjectForKey:keystr];
 }
@@ -304,6 +326,7 @@ csDefaultsIterator::csDefaultsIterator (
   csDefaultsConfig* Owner, const char* Subsection)
   : scfImplementationType (this)
 { 
+  csOSXAutoGC gc;
   // Retain our calling parameters.
   owner = Owner;
   name = [[NSString stringWithUTF8String:Subsection] retain];
@@ -327,6 +350,7 @@ csDefaultsIterator::csDefaultsIterator (
 
 csDefaultsIterator::~csDefaultsIterator()
 {
+  csOSXAutoGC gc;
   delete config;
   [domain release];
   [name release];
@@ -342,11 +366,14 @@ iConfigFile* csDefaultsIterator::GetConfigFile () const
 
 const char* csDefaultsIterator::GetSubsection () const
 {
-  return [name UTF8String];
+  csOSXAutoGC gc;
+  subsec = [name UTF8String];
+  return subsec;
 }
 
 void csDefaultsIterator::Rewind ()
 {
+  csOSXAutoGC gc;
   if (keyenum != nil)
     [keyenum release];
   keyenum = nil;
@@ -357,6 +384,7 @@ void csDefaultsIterator::Rewind ()
 // Navigate though the reg key to the next value entry.
 bool csDefaultsIterator::Next()
 {
+  csOSXAutoGC gc;
   // Create the iterator if we haven't got one.
   if (keyenum == nil)
     keyenum = [[config->dict keyEnumerator] retain];
@@ -374,31 +402,39 @@ bool csDefaultsIterator::HasNext()
 
 const char* csDefaultsIterator::GetKey (bool Local) const
 {
-  return [currentkey UTF8String];
+  csOSXAutoGC gc;
+  key = [currentkey UTF8String];
+  return key;
 }
 
 int csDefaultsIterator::GetInt () const
 {
+  csOSXAutoGC gc;
   return config->GetInt([currentkey UTF8String], 0);
 }
 
 float csDefaultsIterator::GetFloat () const
 {
+  csOSXAutoGC gc;
   return config->GetFloat([currentkey UTF8String], 0.0f);
 }
 
 const char* csDefaultsIterator::GetStr () const
 {
-  return config->GetStr([currentkey UTF8String], 0);
+  csOSXAutoGC gc;
+  strval = config->GetStr([currentkey UTF8String], 0);
+  return strval;
 }
 
 bool csDefaultsIterator::GetBool () const
 {
+  csOSXAutoGC gc;
   return config->GetBool([currentkey UTF8String], false);
 }
 
 csPtr<iStringArray> csDefaultsIterator::GetTuple () const
 {
+  csOSXAutoGC gc;
   return config->GetTuple([currentkey UTF8String]);
 }
 
