@@ -170,6 +170,7 @@
 #include "csutil/tuple.h"
 #include "csutil/typetraits.h"
 #include "csutil/util.h"
+#include "csutil/vararg.h"
 #include "csutil/verbosity.h"
 #include "csutil/vfscache.h"
 #include "csutil/vfshiercache.h"
