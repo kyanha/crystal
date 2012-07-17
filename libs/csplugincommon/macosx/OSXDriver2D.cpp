@@ -54,6 +54,9 @@ OSXDriver2D::~OSXDriver2D()
 
     Close();	// Just in case it hasn't been called
 
+#ifdef CS_OSX_10_6
+    CGDisplayModeRelease(originalMode);
+#endif
     OSXDelegate2D_delete(delegate);
 }
 
@@ -85,7 +88,11 @@ bool OSXDriver2D::Initialize(iObjectRegistry *reg)
     ChooseDisplay();
 
     // Get and save original mode and gamma - released in Close()
+#ifdef CS_OSX_10_6
+    originalMode = CGDisplayCopyDisplayMode(display);
+#else
     originalMode = CGDisplayCurrentMode(display);
+#endif
     SaveGamma(display, originalGamma);
 
     return true;
@@ -237,7 +244,11 @@ bool OSXDriver2D::EnterFullscreenMode()
 void OSXDriver2D::ExitFullscreenMode()
 {
     FadeToRGB(display, 0.0, 0.0, 0.0);
+#ifdef CS_OSX_10_6
+    CGDisplaySetDisplayMode(display, originalMode, 0);
+#else
     CGDisplaySwitchToMode(display, originalMode);
+#endif
     CGDisplayRelease(display);
     FadeToGammaTable(display, originalGamma);
 }
