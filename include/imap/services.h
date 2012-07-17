@@ -106,6 +106,13 @@ struct iSyntaxService : public virtual iBase
 	const char* msg, ...) CS_GNUC_PRINTF(4,5) = 0;
 
   /**
+   * Report an error and also gives a path in the XML tree.
+   * \sa \ref FormatterNotes
+   */
+  virtual void ReportErrorV (const char* msgid, iDocumentNode* errornode,
+	const char* msg, va_list args) = 0;
+
+  /**
    * Report a bad token. This is a convenience function which will
    * eventually call ReportError().
    */
@@ -117,6 +124,13 @@ struct iSyntaxService : public virtual iBase
    */
   virtual void Report (const char* msgid, int severity, 
     iDocumentNode* errornode, const char* msg, ...) CS_GNUC_PRINTF(5,6) = 0;
+
+  /**
+   * Report something, also gives a path in the XML tree.
+   * \sa \ref FormatterNotes
+   */
+  virtual void ReportV (const char* msgid, int severity,
+	iDocumentNode* errornode, const char* msg, va_list args) = 0;
   /** @} */
   
   /**
