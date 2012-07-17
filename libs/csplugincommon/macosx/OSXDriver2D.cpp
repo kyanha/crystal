@@ -193,6 +193,87 @@ void OSXDriver2D::ShowMouse()
 }
 
 
+#ifdef CS_OSX_10_6
+
+static inline bool ieql(CFStringRef s, CFStringRef t)
+{ return CFStringCompare(s,t,kCFCompareCaseInsensitive) == kCFCompareEqualTo; }
+
+
+static size_t extract_bpp(CGDisplayModeRef mode)
+{
+    size_t depth = 0;
+    CFStringRef enc = CGDisplayModeCopyPixelEncoding(mode);
+    if (ieql(enc, CFSTR(IO32BitDirectPixels)))
+        depth = 32;
+    else if (ieql(enc, CFSTR(IO16BitDirectPixels)))
+        depth = 16;
+    else if (ieql(enc, CFSTR(IO8BitIndexedPixels)))
+        depth = 8;
+    CFRelease(enc);
+    return depth;
+}
+
+
+// Caller is responsible for releasing returned value.
+static CGDisplayModeRef find_best_mode(
+    CGDirectDisplayID display, size_t bpp, size_t width, size_t height)
+{
+    CGDisplayModeRef exact = 0;
+    CGDisplayModeRef fallback = 0;
+    CFArrayRef modes = CGDisplayCopyAllDisplayModes(display, 0);
+    for (CFIndex i = 0, iN = CFArrayGetCount(modes); i < iN; ++i)
+    {
+	CGDisplayModeRef mode = (CGDisplayModeRef)
+	    CFArrayGetValueAtIndex(modes, i);
+	if (CGDisplayModeGetWidth(mode) >= width &&
+	    CGDisplayModeGetHeight(mode) >= height) {
+	    size_t mode_bpp = extract_bpp(mode);
+	    if (mode_bpp == bpp)
+		exact = mode;
+	    else if (mode_bpp > bpp)
+		fallback = mode;
+	}
+    }
+    CGDisplayModeRef best;
+    if (exact != 0)
+	best = (CGDisplayModeRef)CFRetain(exact);
+    else if (fallback != 0)
+	best = (CGDisplayModeRef)CFRetain(fallback);
+    else
+	best = CGDisplayCopyDisplayMode(display);
+    CFRelease(modes);
+    return best;
+}
+
+
+// EnterFullscreenMode
+// Switch to fullscreen mode - returns true on success
+bool OSXDriver2D::EnterFullscreenMode()
+{
+    CGDisplayModeRef mode = find_best_mode(
+        display, canvas->Depth, canvas->fbWidth, canvas->fbHeight);
+    FadeToRGB(display, 0.0, 0.0, 0.0);
+    if (CGDisplayCapture(display) == CGDisplayNoErr)
+    {
+	if (CGDisplaySetDisplayMode(display, mode, 0) == CGDisplayNoErr)
+	{
+	    canvas->vpWidth = CGDisplayModeGetWidth(mode);
+	    canvas->vpHeight = CGDisplayModeGetHeight(mode);
+	    canvas->Depth = extract_bpp(mode);
+	    CFRelease(mode);
+	    FadeToGammaTable(display, originalGamma);
+	    return true;
+	}
+	CGDisplayRelease(display);
+    }
+    CFRelease(mode);
+    FadeToGammaTable(display, originalGamma);
+    return false;
+}
+
+
+#else /* CS_OSX_10_6 */
+
 // EnterFullscreenMode
 // Switch to fullscreen mode - returns true on success
 bool OSXDriver2D::EnterFullscreenMode()
@@ -237,6 +318,8 @@ bool OSXDriver2D::EnterFullscreenMode()
 
     return true;
 }
+
+#endif
 
 
 // ExitFullscreenMode
