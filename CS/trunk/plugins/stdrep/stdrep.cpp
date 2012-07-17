@@ -27,6 +27,7 @@ Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 #include "csutil/sysfunc.h"
 #include "csutil/threadmanager.h"
 #include "csutil/util.h"
+#include "csutil/vararg.h"
 
 #include "iutil/cfgmgr.h"
 #include "iutil/event.h"
@@ -45,7 +46,7 @@ Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
 #include "stdrep.h"
 
-
+using CS::va_callv;
 
 CS_PLUGIN_NAMESPACE_BEGIN(StdRep)
 {
@@ -329,8 +330,8 @@ THREADED_CALLABLE_IMPL4(csReporterListener, Report, iReporter*, int severity,
       msg.Format("%s:  %s\n", msgID, description);
     else
       msg.Format("%s\n", description);
-    nativewm->Alert (CS_ALERT_ERROR, "Fatal Error!", "Ok", "%s",
-      msg.GetData());
+    va_callv(&iNativeWindowManager::AlertV, (iNativeWindowManager*)nativewm,
+      CS_ALERT_ERROR, "Fatal Error!", "Ok", "%s", msg.GetData());
   }
 
   csStringArray lines;
