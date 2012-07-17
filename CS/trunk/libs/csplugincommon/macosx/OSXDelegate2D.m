@@ -449,6 +449,11 @@ DEL2D_FUNC(void, setMousePosition)(OSXDelegate2DHandle delegate, CGPoint point)
     windowPoint = [window convertBaseToScreen:windowPoint];
     screenPoint.x = windowPoint.x;
     screenPoint.y = [[window screen] frame].size.height - windowPoint.y + 1;
+#ifdef CS_OSX_10_6
+    CGAssociateMouseAndMouseCursorPosition(0);
+    CGWarpMouseCursorPosition(screenPoint);
+    CGAssociateMouseAndMouseCursorPosition(1);
+#else
     CGSetLocalEventsFilterDuringSupressionState(
 	kCGEventFilterMaskPermitAllEvents,
 	kCGEventSupressionStateSupressionInterval);
@@ -466,6 +471,7 @@ DEL2D_FUNC(void, setMousePosition)(OSXDelegate2DHandle delegate, CGPoint point)
 	    CGPostMouseEvent(screenPoint, YES, 2, NO, NO, nil);
 	    break;
     }
+#endif
 }
 
 #undef DEL2D_FUNC
