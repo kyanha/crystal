@@ -30,7 +30,6 @@
 #include "csutil/event.h"
 #include "csutil/common_handlers.h"
 #include "csutil/sysfunc.h"
-#include "csutil/vararg.h"
 #include "iengine/camera.h"
 #include "iengine/engine.h"
 #include "iengine/material.h"
@@ -403,8 +402,7 @@ bool csWaterDemo::Initialize ()
   view->SetRectangle (0, 0, g2d->GetWidth (), g2d->GetHeight ());
 
   bool hasAccel;
-  bool ok = CS::va_call(&iGraphics2D::PerformExtensionV, g2d, "hardware_accelerated", &hasAccel);
-  if (ok)
+  if (g2d->PerformExtension ("hardware_accelerated", &hasAccel))
   {
     csReport (object_reg, CS_REPORTER_SEVERITY_NOTIFY,
       "crystalspace.application.waterdemo",

@@ -24,7 +24,6 @@
 #include "gl_r2t_ext_fb_o.h"
 #include "profilescope.h"
 
-#include "csutil/vararg.h"
 #include "csplugincommon/opengl/glenum_identstrs.h"
 #include "csplugincommon/opengl/glhelper.h"
 
@@ -433,7 +432,7 @@ void csGLRender2TextureEXTfbo::BeginDraw (int drawflags)
   /* Note: the renderer relies on this function to setup
    * matrices etc. So be careful when changing stuff. */
 
-  CS::va_call(&iGraphics2D::PerformExtensionV, G3D->GetDriver2D(), "glflushtext");
+  G3D->GetDriver2D()->PerformExtension ("glflushtext");
   if (drawflags & CSDRAW_3DGRAPHICS)
   {
   }

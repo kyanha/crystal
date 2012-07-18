@@ -49,7 +49,6 @@
 #include "csutil/eventnames.h"
 #include "csutil/scfarray.h"
 #include "csutil/measuretime.h"
-#include "csutil/vararg.h"
 
 #include "gl_r2t_ext_fb_o.h"
 #include "gl_r2t_framebuf.h"
@@ -63,7 +62,6 @@ const int CS_CLIPPER_EMPTY = 0xf008412;
 #include "gl_stringlists.h"
 #include "instancing.h"
 
-using CS::va_call;
 
 
 CS_PLUGIN_NAMESPACE_BEGIN(gl3d)
@@ -846,8 +844,8 @@ bool csGLGraphics3D::Open ()
   
   object_reg->Register( G2D, "iGraphics2D");
 
-  va_call(&iGraphics2D::PerformExtensionV, G2D, "getstatecache", &statecache);
-  va_call(&iGraphics2D::PerformExtensionV, G2D, "getextmanager", &ext);
+  G2D->PerformExtension ("getstatecache", &statecache);
+  G2D->PerformExtension	("getextmanager", &ext);
 
   G2D->GetFramebufferDimensions (scrwidth, scrheight);
 
@@ -1383,7 +1381,7 @@ bool csGLGraphics3D::SetRenderTarget (iTextureHandle* handle, bool persistent,
   if ((newAttachments != 0) != (currentAttachments != 0))
   {
     int hasRenderTarget = (newAttachments != 0) ? 1 : 0;
-    va_call(&iGraphics2D::PerformExtensionV, G2D, "userendertarget", hasRenderTarget);
+    G2D->PerformExtension ("userendertarget", hasRenderTarget);
     viewwidth = G2D->GetWidth();
     viewheight = G2D->GetHeight();
     needViewportUpdate = true;
@@ -1413,7 +1411,7 @@ void csGLGraphics3D::UnsetRenderTargets()
 {
   r2tbackend->UnsetRenderTargets();
   
-  va_call(&iGraphics2D::PerformExtensionV, G2D, "userendertarget", 0);
+  G2D->PerformExtension ("userendertarget", 0);
   viewwidth = G2D->GetWidth();
   viewheight = G2D->GetHeight();
   needViewportUpdate = true;
@@ -1538,7 +1536,7 @@ bool csGLGraphics3D::BeginDraw (int drawflags)
     if (!G2D->BeginDraw ())
       return false;
     if (current_drawflags & CSDRAW_2DGRAPHICS)
-      va_call(&iGraphics2D::PerformExtensionV, G2D, "glflushtext");
+      G2D->PerformExtension ("glflushtext");
     GLRENDER3D_OUTPUT_STRING_MARKER(("after G2D->BeginDraw()"));
   }
   viewwidth = G2D->GetWidth();
@@ -2313,7 +2311,7 @@ void csGLGraphics3D::DrawPixmap (iTextureHandle *hTex,
     as possible. The 2D canvas methods call a routine to flush all text to
     the screen, do the same here.
    */
-  va_call(&iGraphics2D::PerformExtensionV, G2D, "glflushtext");
+  G2D->PerformExtension ("glflushtext");
 
   if (current_drawflags & CSDRAW_3DGRAPHICS)
     DeactivateBuffers (0, 0);
@@ -3312,7 +3310,7 @@ void csGLGraphics3D::DrawSimpleMeshes (const csSimpleRenderMesh* meshes,
   if (current_drawflags & CSDRAW_2DGRAPHICS)
   {
     // Try to be compatible with 2D drawing mode
-    va_call(&iGraphics2D::PerformExtensionV, G2D, "glflushtext");
+    G2D->PerformExtension ("glflushtext");
   }
 
   bool restoreProjection = false;
