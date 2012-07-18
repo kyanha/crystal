@@ -101,7 +101,6 @@ void csScriptObjectCommon::CallCommon (const char *name,
   ret.AttachNew (Call (name, args));
 }
 
-#ifndef CS_VIRTUAL_BASE_VARARG_BROKEN
 bool csScriptObjectCommon::Call (const char *name, const char *fmt, ...)
 {
   csRef<iScriptValue> retval;
@@ -132,7 +131,6 @@ bool csScriptObjectCommon::Call (const char *name, csRef<iString> &ret, const ch
 CS_SCRIPTOBJECTCOMMON_CALL(String)
 bool csScriptObjectCommon::Call (const char *name, csRef<iScriptObject> &ret, const char *fmt, ...)
 CS_SCRIPTOBJECTCOMMON_CALL(Object)
-#endif
 
 #define CS_SCRIPTOBJECTCOMMON_SET			\
 {							\
@@ -185,7 +183,6 @@ void csScriptCommon::CallCommon (const char *name,
   ret.AttachNew (Call (name, args));
 }
 
-#ifndef CS_VIRTUAL_BASE_VARARG_BROKEN
 bool csScriptCommon::Call (const char *name, const char *fmt, ...)
 {
   csRef<iScriptValue> retval;
@@ -216,9 +213,7 @@ bool csScriptCommon::Call (const char *name, csRef<iString> &ret, const char *fm
 CS_SCRIPTCOMMON_CALL(String)
 bool csScriptCommon::Call (const char *name, csRef<iScriptObject> &ret, const char *fmt, ...)
 CS_SCRIPTCOMMON_CALL(Object)
-#endif
 
-#ifndef CS_VIRTUAL_BASE_VARARG_BROKEN
 csRef<iScriptObject> csScriptCommon::NewObject (const char *type, const char *fmt, ...)
 {
   //if (strlen(fmt) % 2) return;
@@ -231,7 +226,6 @@ csRef<iScriptObject> csScriptCommon::NewObject (const char *type, const char *fm
 
   return New (type, args);
 }
-#endif
 
 #define CS_SCRIPTCOMMON_STORE			\
 {						\
