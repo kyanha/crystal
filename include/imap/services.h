@@ -98,14 +98,12 @@ struct iSyntaxService : public virtual iBase
   
   /**\name Parse reporting helpers
    * @{ */
-#ifndef CS_VIRTUAL_BASE_VARARG_BROKEN
   /**
    * Report an error and also gives a path in the XML tree.
    * \sa \ref FormatterNotes
    */
   virtual void ReportError (const char* msgid, iDocumentNode* errornode,
 	const char* msg, ...) CS_GNUC_PRINTF(4,5) = 0;
-#endif
 
   /**
    * Report an error and also gives a path in the XML tree.
@@ -120,14 +118,12 @@ struct iSyntaxService : public virtual iBase
    */
   virtual void ReportBadToken (iDocumentNode* badtokennode) = 0;
 
-#ifndef CS_VIRTUAL_BASE_VARARG_BROKEN
   /**
    * Report something, also gives a path in the XML tree.
    * \sa \ref FormatterNotes
    */
   virtual void Report (const char* msgid, int severity, 
     iDocumentNode* errornode, const char* msg, ...) CS_GNUC_PRINTF(5,6) = 0;
-#endif
 
   /**
    * Report something, also gives a path in the XML tree.

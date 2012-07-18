@@ -41,14 +41,6 @@
 
 #include "loader.h"
 
-static void ReportError (iSyntaxService* syn, const char* msgid,
-    iDocumentNode* errornode, const char* msg, ...)
-{
-  va_list args;
-  va_start(args, msg);
-  syn->ReportErrorV(msgid, errornode, msg, args);
-  va_end(args);
-}
 
 
 namespace cspluginPagingFormerLoader
@@ -83,7 +75,7 @@ csPtr<iBase> csPagingFormerLoader::Parse (iDocumentNode* node,
   	"crystalspace.terraformer.paging");
   if (!former) 
   {
-    ReportError (synldr, "crystalspace.terraformer.paging.loader",
+    synldr->ReportError ("crystalspace.terraformer.paging.loader",
       node, "Could not loader crystalspace.terraformer.paging plugin");
     return 0;
   }
@@ -136,7 +128,7 @@ csPtr<iBase> csPagingFormerLoader::Parse (iDocumentNode* node,
         csVector3 v;
         if (!synldr->ParseVector (child, v))
         {
-          ReportError (synldr, "crystalspace.terraformer.simple.loader",
+          synldr->ReportError ("crystalspace.terraformer.simple.loader",
             child, "Error parsing scale vector");
           return 0;
         }
@@ -148,7 +140,7 @@ csPtr<iBase> csPagingFormerLoader::Parse (iDocumentNode* node,
         csVector3 v;
         if (!synldr->ParseVector (child, v))
         {
-          ReportError (synldr, "crystalspace.terraformer.simple.loader",
+          synldr->ReportError ("crystalspace.terraformer.simple.loader",
             child, "Error parsing scale vector");
           return 0;
         }
@@ -162,7 +154,7 @@ csPtr<iBase> csPagingFormerLoader::Parse (iDocumentNode* node,
         csRef<iImage> map = loader->LoadImage (image);
         if (map == 0)
         {
-          ReportError (synldr, "crystalspace.terraformer.simple.loader",
+          synldr->ReportError ("crystalspace.terraformer.simple.loader",
             child, "Error reading in image file for intmap %s",
 	    CS::Quote::Single (image));
           return 0;
@@ -183,7 +175,7 @@ csPtr<iBase> csPagingFormerLoader::Parse (iDocumentNode* node,
         csRef<iImage> map = loader->LoadImage (image);
         if (map == 0)
         {
-          ReportError (synldr, "crystalspace.terraformer.simple.loader",
+          synldr->ReportError ("crystalspace.terraformer.simple.loader",
             child, "Error reading in image file for floatmap %s",
 	    CS::Quote::Single (image));
           return 0;
@@ -198,7 +190,7 @@ csPtr<iBase> csPagingFormerLoader::Parse (iDocumentNode* node,
         break;
       }
       default:
-        ReportError (synldr, "crystalspace.terraformer.simple.loader",
+        synldr->ReportError ("crystalspace.terraformer.simple.loader",
           child, "Unknown token!");
     }
   }

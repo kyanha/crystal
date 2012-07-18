@@ -20,7 +20,6 @@
 #include "cssysdef.h"
 #include "csutil/xmltiny.h"
 #include "csutil/stringquote.h"
-#include "csutil/vararg.h"
 #include "iutil/objreg.h"
 #include "iutil/document.h"
 #include "iutil/object.h"
@@ -83,8 +82,7 @@ csPtr<iBase> csPathLoader::Parse (iDocumentNode* node,
   csRef<iSector> sector = scfQueryInterface<iSector>(context);
   if (!sector)
   {
-    iSyntaxService* serv = synldr;
-    CS::va_callv(&iSyntaxService::ReportErrorV, serv,
+    synldr->ReportError (
 	"crystalspace.addons.pathloader", node,
 	"Path addons must be placed inside sectors!");
     return 0;

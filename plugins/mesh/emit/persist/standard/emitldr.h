@@ -113,10 +113,6 @@ public:
     iStreamSource*, iLoaderContext* ldr_context, iBase* context);
 
   virtual bool IsThreadSafe() { return true; }
-
-public:
-  void ReportError (const char* msgid, iDocumentNode* errornode,
-    const char* msg, ...) CS_GNUC_PRINTF(4,5);
 };
 
 /**

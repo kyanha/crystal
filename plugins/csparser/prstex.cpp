@@ -135,7 +135,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
           const char* fname = child->GetContentsValue ();
           if (!fname)
           {
-            SynReportError (
+            SyntaxService->ReportError (
               "crystalspace.maploader.parse.texture",
               child, "Expected VFS filename for %s!",
 	      CS::Quote::Single ("file"));
@@ -144,7 +144,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
           }
           if (imageSourceType == Color)
           {
-            SynReportError (
+            SyntaxService->ReportError (
               "crystalspace.maploader.parse.texture",
               child, "<file> is specified, but <color> was specified earlier");
           }
@@ -161,7 +161,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
           }
           if (imageSourceType == Filename)
           {
-            SynReportError (
+            SyntaxService->ReportError (
               "crystalspace.maploader.parse.texture",
               child, "<color> is specified, but <file> was specified earlier");
           }
@@ -212,7 +212,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
         type = child->GetContentsValue ();
         if (type.IsEmpty ())
         {
-          SynReportError (
+          SyntaxService->ReportError (
             "crystalspace.maploader.parse.texture",
             child, "Expected plugin ID for <type>!");
           RemoveLoadingTexture(txtname);
@@ -367,7 +367,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
       csRef<iThreadReturn> ret = csPtr<iThreadReturn>(new csLoaderReturn(threadman));
       if(!LoadImageTC (ret, false, vfs->GetCwd(), filename, Format, false))
       {
-        SynReport("crystalspace.maploader.parse.texture",
+        SyntaxService->Report("crystalspace.maploader.parse.texture",
           CS_REPORTER_SEVERITY_WARNING, node, "Could not load image %s!", filename.GetData());
       }
 
@@ -412,7 +412,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
 
     if ((!type.IsEmpty ()) && !plugin)
     {
-      SynReport (
+      SyntaxService->Report (
         "crystalspace.maploader.parse.texture",
         CS_REPORTER_SEVERITY_WARNING,
         node, "Could not get plugin %s, using default",
@@ -435,7 +435,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
 
     if (!tex)
     {
-      SynReport (
+      SyntaxService->Report (
         "crystalspace.maploader.parse.texture",
         CS_REPORTER_SEVERITY_WARNING,
         node, "Could not load texture %s, using checkerboard instead",
@@ -450,7 +450,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
         static bool noMissingWarned = false;
         if (!noMissingWarned)
         {
-          SynReport (
+          SyntaxService->Report (
             "crystalspace.maploader.parse.texture",
             CS_REPORTER_SEVERITY_ERROR,
             node, "Could not create default texture!");

@@ -54,7 +54,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(Skeleton2Ldr)
 
     if (!skelManager)
     {
-      ReportError (msgid, node, "Couldn't get any skeleton system");
+      synldr->ReportError (msgid, node, "Couldn't get any skeleton system");
       return 0;
     }
 
@@ -123,7 +123,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(Skeleton2Ldr)
       factory = skelManager->FindSkeletonFactory (ref);
       if (!factory)
       {
-	Report (msgid, CS_REPORTER_SEVERITY_WARNING, node,
+	synldr->Report (msgid, CS_REPORTER_SEVERITY_WARNING, node, 
 			"Could not find referenced skeleton %s.",
 			CS::Quote::Single (ref));
 	return false;
@@ -135,14 +135,14 @@ CS_PLUGIN_NAMESPACE_BEGIN(Skeleton2Ldr)
       const char* name = node->GetAttributeValue ("name");
       if (!name)
       {
-	ReportError (msgid, node, "No name set for skeleton");
+	synldr->ReportError (msgid, node, "No name set for skeleton");
 	return false;
       }
 
       factory = skelManager->CreateSkeletonFactory (name);
       if (!factory)
       {
-	ReportError (msgid, node,
+	synldr->ReportError (msgid, node, 
 			     "Could not create skeleton %s.",
 			     CS::Quote::Single (name));
 	return false;
@@ -174,7 +174,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(Skeleton2Ldr)
 
           if (!packet)
           {
-            ReportError (msgid, child, "Animation packet not found!");
+            synldr->ReportError (msgid, child, "Animation packet not found!");
             return false;
           }
           factory->SetAnimationPacket (packet);
@@ -221,7 +221,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(Skeleton2Ldr)
       case XMLTOKEN_BONE:
         if (!ParseBone (child, factory, boneId))
         {
-          ReportError (msgid, child, "Couldn't parse bone");
+          synldr->ReportError (msgid, child, "Couldn't parse bone");
           return false;
         }
         break;
@@ -230,7 +230,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(Skeleton2Ldr)
           csVector3 offs;
           if (!synldr->ParseVector (child, offs))
           {
-            ReportError (msgid, child, "Couldn't parse transform");
+            synldr->ReportError (msgid, child, "Couldn't parse transform");
             return false;
           }
 
@@ -266,7 +266,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(Skeleton2Ldr)
       const char* name = node->GetAttributeValue ("name");
       if (!name)
       {
-	ReportError (msgid, node, "No name set for animation packet");
+	synldr->ReportError (msgid, node, "No name set for animation packet");
 	return false;
       }
 
@@ -319,7 +319,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(Skeleton2Ldr)
 	packet = skelManager->FindAnimPacketFactory (ref);
 	if (!packet)
 	{
-	  Report (msgid, CS_REPORTER_SEVERITY_WARNING, node,
+	  synldr->Report (msgid, CS_REPORTER_SEVERITY_WARNING, node, 
 			  "Could not find referenced packet %s.",
 			  CS::Quote::Single (ref));
 	  return false;
@@ -331,14 +331,14 @@ CS_PLUGIN_NAMESPACE_BEGIN(Skeleton2Ldr)
 	const char* name = node->GetAttributeValue ("name");
 	if (!name)
 	{
-	  ReportError (msgid, node, "No name set for animation packet");
+	  synldr->ReportError (msgid, node, "No name set for animation packet");
 	  return false;
 	}
 
 	packet = skelManager->CreateAnimPacketFactory (name);
 	if (!packet)
 	{
-	  ReportError (msgid, node,
+	  synldr->ReportError (msgid, node, 
 			       "Could not create packet %s.",
 			       CS::Quote::Single (name));
 	  return false;
@@ -359,7 +359,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(Skeleton2Ldr)
         {
           if (!ParseAnimation (child, packet))
           {
-            ReportError (msgid, child, "Error loading animation.");
+            synldr->ReportError (msgid, child, "Error loading animation.");
             return false;
           }
         }
@@ -411,7 +411,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(Skeleton2Ldr)
       {
 	if (!node->GetAttribute ("packet"))
 	{
-	  ReportError (msgid, node, "No animation packet provided");
+	  synldr->ReportError (msgid, node, "No animation packet provided");
 	  return 0;
 	}
 
@@ -421,14 +421,14 @@ CS_PLUGIN_NAMESPACE_BEGIN(Skeleton2Ldr)
 
 	if (!refPacket)
 	{
-	  ReportError (msgid, node, "Animation packet %s not found",
+	  synldr->ReportError (msgid, node, "Animation packet %s not found",
 			       CS::Quote::Single (packetName));
 	  return 0;
 	}
 
 	if (refPacket == packet)
 	{
-	  ReportError (msgid, node,
+	  synldr->ReportError (msgid, node,
 			       "The referenced packet is not different from the current one");
 	  return 0;
 	}
@@ -483,7 +483,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(Skeleton2Ldr)
       }
       break;
     default:
-      ReportError (msgid, node, "Invalid node type %s", CS::Quote::Single (type));
+      synldr->ReportError (msgid, node, "Invalid node type %s", CS::Quote::Single (type));
       return 0;
     }
 
@@ -502,7 +502,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(Skeleton2Ldr)
       CS::Animation::iSkeletonAnimation* fact = packet->FindAnimation (ref);
       if (!fact)
       {      
-        ReportError (msgid, node, "Could not find referenced animation %s",
+        synldr->ReportError (msgid, node, "Could not find referenced animation %s",
 			     CS::Quote::Single (ref));
         return 0;
       }
@@ -513,14 +513,14 @@ CS_PLUGIN_NAMESPACE_BEGIN(Skeleton2Ldr)
     const char* name = node->GetAttributeValue ("name");
     if (!name)
     {
-      ReportError (msgid, node, "No name set for animation");
+      synldr->ReportError (msgid, node, "No name set for animation");
       return false;
     }
 
     CS::Animation::iSkeletonAnimation* fact = packet->CreateAnimation (name);
     if (!fact)
     {
-      ReportError (msgid, node,
+      synldr->ReportError (msgid, node, 
         "Could not create animation, another animation with same name already exist");
       return false;
     }
@@ -558,7 +558,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(Skeleton2Ldr)
                 csVector3 offs;
                 if (!synldr->ParseVector (child, offs))
                 {
-                  ReportError (msgid, child, "Couldn't parse transform");
+                  synldr->ReportError (msgid, child, "Couldn't parse transform");
                   return 0;
                 }
 
@@ -604,7 +604,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(Skeleton2Ldr)
     const char* animName = node->GetAttributeValue ("animation");
     if (!animName)
     {
-      ReportError (msgid, node, "No animation specified");
+      synldr->ReportError (msgid, node, "No animation specified");
       return 0;
     }
 
@@ -622,7 +622,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(Skeleton2Ldr)
       sourcePacket = skelManager->FindAnimPacketFactory (packetName);
       if (!sourcePacket)
       {
-	ReportError (msgid, node, "Animation packet %s not found",
+	synldr->ReportError (msgid, node, "Animation packet %s not found",
 			     CS::Quote::Single (packetName));
 	return 0;
       }
@@ -634,7 +634,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(Skeleton2Ldr)
     CS::Animation::iSkeletonAnimation* anim = sourcePacket->FindAnimation (animName);
     if (!anim)
     {
-      ReportError (msgid, node, "Animation %s not found",
+      synldr->ReportError (msgid, node, "Animation %s not found",
 			   CS::Quote::Single (animName));
       return 0;
     }
@@ -872,13 +872,13 @@ CS_PLUGIN_NAMESPACE_BEGIN(Skeleton2Ldr)
 
           if (fromState == CS::Animation::InvalidStateID)
           {
-            ReportError (msgid, child,
+            synldr->ReportError (msgid, child, 
               "Invalid from state %s", CS::Quote::Single (fromStateName));
           }
 
           if (toState == CS::Animation::InvalidStateID)
           {
-            ReportError (msgid, child,
+            synldr->ReportError (msgid, child, 
               "Invalid to state %s", CS::Quote::Single (toStateName));
           }
 
@@ -950,7 +950,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(Skeleton2Ldr)
 	    ParseAnimTreeNode (child, packet);
 
 	  if (childNode && factnode->GetChildNode ())
-	    Report (msgid, CS_REPORTER_SEVERITY_WARNING, node,
+	    synldr->Report (msgid, CS_REPORTER_SEVERITY_WARNING, node,
 			    "The Debug node can only handle one child node");
 
 	  else if (childNode)
@@ -966,7 +966,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(Skeleton2Ldr)
 	  else if (strcmp (type, "squares") == 0)
 	    debugMode = (CS::Animation::SkeletonDebugMode) (debugMode & CS::Animation::DEBUG_SQUARES);
 	  else
-	    Report (msgid, CS_REPORTER_SEVERITY_WARNING, node,
+	    synldr->Report (msgid, CS_REPORTER_SEVERITY_WARNING, node,
 			    "Unsupported debug mode %s", CS::Quote::Single (type));
 	}
 	break;
@@ -1014,7 +1014,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(Skeleton2Ldr)
 	    ParseAnimTreeNode (child, packet);
 
 	  if (childNode && factnode->GetChildNode ())
-	    Report (msgid, CS_REPORTER_SEVERITY_WARNING, node,
+	    synldr->Report (msgid, CS_REPORTER_SEVERITY_WARNING, node,
 			    "The IK node can only handle one child node");
 
 	  else if (childNode)
@@ -1147,7 +1147,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(Skeleton2Ldr)
     CS::Animation::iBodySkeleton* bodySkeleton = bodyManager->FindBodySkeleton (body);
     if (!bodySkeleton)
     {
-      ReportError (msgid, node, "Could not find body skeleton %s",
+      synldr->ReportError (msgid, node, "Could not find body skeleton %s",
 			   CS::Quote::Single (body));
       return false;
     }
@@ -1155,7 +1155,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(Skeleton2Ldr)
     CS::Animation::iBodyChain* bodyChain = bodySkeleton->FindBodyChain (chain);
     if (!bodyChain)
     {
-      ReportError (msgid, node, "Could not find body chain %s within skeleton %s",
+      synldr->ReportError (msgid, node, "Could not find body chain %s within skeleton %s",
 			   CS::Quote::Single (chain), CS::Quote::Single (body));
       return false;
     }
@@ -1164,7 +1164,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(Skeleton2Ldr)
     CS::Animation::BoneID boneID = bodySkeleton->GetSkeletonFactory ()->FindBone (bone);
     if (boneID == CS::Animation::InvalidBoneID)
     {
-      ReportError (msgid, node, "Could not find bone %s in skeleton %s",
+      synldr->ReportError (msgid, node, "Could not find bone %s in skeleton %s",
 			   CS::Quote::Single (bone), body);
       return 0;
     }
@@ -1227,7 +1227,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(Skeleton2Ldr)
       bodySkeleton = bodyManager->FindBodySkeleton (body);
       if (!bodySkeleton)
       {
-	ReportError (msgid, node, "Could not find body skeleton %s",
+	synldr->ReportError (msgid, node, "Could not find body skeleton %s",
 			     CS::Quote::Single (body));
 	return 0;
       }
@@ -1245,7 +1245,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(Skeleton2Ldr)
 	CS::Animation::iSkeletonFactory* skeleton = skelManager->FindSkeletonFactory (skel);
 	if (!skeleton)
 	{
-	  ReportError (msgid, node, "Could not find target skeleton %s",
+	  synldr->ReportError (msgid, node, "Could not find target skeleton %s",
 			       CS::Quote::Single (skel));
 	  return 0;
 	}
@@ -1253,7 +1253,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(Skeleton2Ldr)
 	boneID = skeleton->FindBone (bone);
 	if (boneID == CS::Animation::InvalidBoneID)
 	{
-	  ReportError (msgid, node, "Could not find bone %s in skeleton %s",
+	  synldr->ReportError (msgid, node, "Could not find bone %s in skeleton %s",
 			       CS::Quote::Single (bone), skel);
 	  return 0;
 	}
@@ -1266,7 +1266,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(Skeleton2Ldr)
 	boneID = skeleton->FindBone (bone);
 	if (boneID == CS::Animation::InvalidBoneID)
 	{
-	  ReportError (msgid, node, "Could not find bone %s in bodymesh's skeleton",
+	  synldr->ReportError (msgid, node, "Could not find bone %s in bodymesh's skeleton",
 			       CS::Quote::Single (bone));
 	  return 0;
 	}
@@ -1274,7 +1274,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(Skeleton2Ldr)
 
       else
       {
-	ReportError (msgid, node, "No skeleton factory of bodymesh provided while defining bone %s", bone);
+	synldr->ReportError (msgid, node, "No skeleton factory of bodymesh provided while defining bone %s", bone);
 	return 0;
       }
 
@@ -1314,7 +1314,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(Skeleton2Ldr)
 	    ParseAnimTreeNode (child, packet);
 
 	  if (childNode && factnode->GetChildNode ())
-	    Report (msgid, CS_REPORTER_SEVERITY_WARNING, node,
+	    synldr->Report (msgid, CS_REPORTER_SEVERITY_WARNING, node,
 			    "The LookAt node can only handle one child node");
 
 	  else if (childNode)
@@ -1360,7 +1360,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(Skeleton2Ldr)
       bodySkeleton = bodyManager->FindBodySkeleton (body);
       if (!bodySkeleton)
       {
-	ReportError (msgid, node, "Could not find body skeleton %s",
+	synldr->ReportError (msgid, node, "Could not find body skeleton %s",
 			     CS::Quote::Single (body));
 	return 0;
       }
@@ -1382,7 +1382,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(Skeleton2Ldr)
 	    ParseAnimTreeNode (child, packet);
 
 	  if (childNode && factnode->GetChildNode ())
-	    ReportError (msgid, node, "The Ragdoll node can only handle one child node");
+	    synldr->ReportError (msgid, node, "The Ragdoll node can only handle one child node");
 
 	  else if (childNode)
 	    factnode->SetChildNode (childNode);
@@ -1397,7 +1397,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(Skeleton2Ldr)
 	  CS::Animation::iBodySkeleton* bodySkeleton = bodyManager->FindBodySkeleton (body);
 	  if (!bodySkeleton)
 	  {
-	    ReportError (msgid, node, "Could not find body skeleton %s",
+	    synldr->ReportError (msgid, node, "Could not find body skeleton %s",
 				 CS::Quote::Single (body));
 	    return 0;
 	  }
@@ -1405,7 +1405,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(Skeleton2Ldr)
 	  CS::Animation::iBodyChain* bodyChain = bodySkeleton->FindBodyChain (name);
 	  if (!bodyChain)
 	  {
-	    ReportError (msgid, node, "Could not find body chain %s within skeleton %s",
+	    synldr->ReportError (msgid, node, "Could not find body chain %s within skeleton %s",
 				 CS::Quote::Single (name), CS::Quote::Single (body));
 	    return 0;
 	  }
@@ -1448,7 +1448,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(Skeleton2Ldr)
     CS::Animation::iSkeletonFactory* sourceSkeleton = skelManager->FindSkeletonFactory (skelSource);
     if (!sourceSkeleton)
     {
-      ReportError (msgid, node, "Could not find source skeleton %s",
+      synldr->ReportError (msgid, node, "Could not find source skeleton %s",
 			   CS::Quote::Single (skelSource));
       return 0;
     }
@@ -1458,7 +1458,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(Skeleton2Ldr)
     CS::Animation::iSkeletonFactory* targetSkeleton = skelManager->FindSkeletonFactory (skelTarget);
     if (!targetSkeleton)
     {
-      ReportError (msgid, node, "Could not find target skeleton %s",
+      synldr->ReportError (msgid, node, "Could not find target skeleton %s",
 			   CS::Quote::Single (skelTarget));
       return 0;
     }
@@ -1478,7 +1478,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(Skeleton2Ldr)
 	    ParseAnimTreeNode (child, packet);
 
 	  if (childNode && factnode->GetChildNode ())
-	    ReportError (msgid, node, "The Retarget node can only handle one child node");
+	    synldr->ReportError (msgid, node, "The Retarget node can only handle one child node");
 
 	  else if (childNode)
 	    factnode->SetChildNode (childNode);
@@ -1493,7 +1493,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(Skeleton2Ldr)
 	  CS::Animation::iBodySkeleton* bodySkeleton = bodyManager->FindBodySkeleton (body);
 	  if (!bodySkeleton)
 	  {
-	    ReportError (msgid, node, "Could not find body skeleton %s",
+	    synldr->ReportError (msgid, node, "Could not find body skeleton %s",
 				 CS::Quote::Single (body));
 	    return 0;
 	  }
@@ -1501,7 +1501,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(Skeleton2Ldr)
 	  CS::Animation::iBodyChain* bodyChain = bodySkeleton->FindBodyChain (name);
 	  if (!bodyChain)
 	  {
-	    ReportError (msgid, node, "Could not find body chain %s within skeleton %s",
+	    synldr->ReportError (msgid, node, "Could not find body chain %s within skeleton %s",
 				 CS::Quote::Single (name), CS::Quote::Single (body));
 	    return 0;
 	  }
@@ -1555,7 +1555,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(Skeleton2Ldr)
 	  CS::Animation::BoneID sourceID = sourceSkeleton->FindBone (source);
 	  if (sourceID == CS::Animation::InvalidBoneID)
 	  {
-	    ReportError (msgid, node, "Could not find bone %s in source skeleton",
+	    synldr->ReportError (msgid, node, "Could not find bone %s in source skeleton",
 				 CS::Quote::Single (source));
 	    return false;
 	  }
@@ -1564,7 +1564,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(Skeleton2Ldr)
 	  CS::Animation::BoneID targetID = targetSkeleton->FindBone (target);
 	  if (targetID == CS::Animation::InvalidBoneID)
 	  {
-	    ReportError (msgid, node, "Could not find bone %s in target skeleton",
+	    synldr->ReportError (msgid, node, "Could not find bone %s in target skeleton",
 				 CS::Quote::Single (target));
 	    return false;
 	  }
@@ -1618,7 +1618,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(Skeleton2Ldr)
 
 	  if (!child->GetAttribute ("nodespeed"))
 	  {
-	    ReportError (msgid, node, "No speed provided for child of node %s",
+	    synldr->ReportError (msgid, node, "No speed provided for child of node %s",
 				 CS::Quote::Single (name));
 	    return 0;
 	  }
@@ -1635,24 +1635,6 @@ CS_PLUGIN_NAMESPACE_BEGIN(Skeleton2Ldr)
     }
 
     return csPtr<CS::Animation::iSkeletonAnimNodeFactory> (factnode);
-  }
-
-  void SkeletonLoader::Report (const char* msgid, int severity,
-      iDocumentNode* errornode, const char* msg, ...)
-  {
-    va_list args;
-    va_start(args, msg);
-    synldr->ReportV(msgid, severity, errornode, msg, args);
-    va_end(args);
-  }
-
-  void SkeletonLoader::ReportError (const char* msgid,
-    iDocumentNode* errornode, const char* msg, ...)
-  {
-    va_list args;
-    va_start(args, msg);
-    synldr->ReportErrorV(msgid, errornode, msg, args);
-    va_end(args);
   }
 
   //-------------------------------------------------------------------------

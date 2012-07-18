@@ -67,15 +67,6 @@ SCF_IMPLEMENT_FACTORY (FurMeshLoader)
 SCF_IMPLEMENT_FACTORY (FurMeshFactorySaver)
 SCF_IMPLEMENT_FACTORY (FurMeshSaver)
 
-static void ReportError (iSyntaxService* syn, const char* msgid,
-    iDocumentNode* errornode, const char* msg, ...)
-{
-  va_list args;
-  va_start(args, msg);
-  syn->ReportErrorV(msgid, errornode, msg, args);
-  va_end(args);
-}
-
 //---------------------------------------------------------------------------
 
 FurMeshFactoryLoader::FurMeshFactoryLoader (iBase* pParent) : 
@@ -104,7 +95,7 @@ csPtr<iBase> FurMeshFactoryLoader::Parse (iDocumentNode* node,
   
   if (!type)
   {
-    ReportError (synldr,
+    synldr->ReportError (
       "crystalspace.furmeshfactoryloader.setup.objecttype",
       node, "Could not load the fur mesh object plugin!");
     return 0;
@@ -156,7 +147,7 @@ bool FurMeshLoader::Initialize (iObjectRegistry* object_reg)
 
 #define CHECK_MESH(m) \
   if (!m) { \
-  ReportError (synldr, \
+  synldr->ReportError ( \
   "crystalspace.furmeshloader.parse.unknownfactory", \
   child, "Specify the factory first!"); \
   return 0; \
@@ -200,7 +191,7 @@ csPtr<iBase> FurMeshLoader::Parse (iDocumentNode* node,
 
         if(!tex)
         {
-          ReportError (synldr,
+          synldr->ReportError (
             "crystalspace.furmeshloader.parse.unknownfactory",
             child, "Couldn't find texture %s!", CS::Quote::Single (densityMapName));
           return 0;
@@ -215,7 +206,7 @@ csPtr<iBase> FurMeshLoader::Parse (iDocumentNode* node,
         iTextureWrapper* tex = ldr_context->FindTexture(heightMapName);
         if(!tex)
         {
-          ReportError (synldr,
+          synldr->ReportError (
             "crystalspace.furmeshloader.parse.unknownfactory",
             child, "Couldn't find texture %s!", CS::Quote::Single (heightMapName));
           return 0;
@@ -314,7 +305,7 @@ csPtr<iBase> FurMeshLoader::Parse (iDocumentNode* node,
         iMeshFactoryWrapper* fact = ldr_context->FindMeshFactory (factname);
         if(!fact)
         {
-          ReportError (synldr,
+          synldr->ReportError (
             "crystalspace.furmeshloader.parse.unknownfactory",
             child, "Couldn't find factory %s!", CS::Quote::Single (factname));
           return 0;
@@ -326,7 +317,7 @@ csPtr<iBase> FurMeshLoader::Parse (iDocumentNode* node,
         meshstate = scfQueryInterface<CS::Mesh::iFurMeshState> (mesh);
         if (!meshstate)
         {
-          ReportError (synldr,
+          synldr->ReportError (
             "crystalspace.furmeshloader.parse.badfactory",
             child, "Factory %s doesn't appear to be a furmesh factory!",
             CS::Quote::Single (factname));

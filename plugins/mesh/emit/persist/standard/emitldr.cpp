@@ -203,7 +203,7 @@ csRef<iEmitGen3D> csEmitLoader::ParseEmit (iDocumentNode* node,
       case XMLTOKEN_WEIGHT:
 	if (weight == 0)
 	{
-	  ReportError("crystalspace.emitloader.parse",
+	  synldr->ReportError ("crystalspace.emitloader.parse",
 		child, "%s cannot be given in this context!",
 		CS::Quote::Single ("weight"));
 	  return 0;
@@ -225,7 +225,7 @@ csRef<iEmitGen3D> csEmitLoader::ParseEmit (iDocumentNode* node,
 	  csBox3 box;
 	  if (!synldr->ParseBox (child, box))
 	  {
-	    ReportError("crystalspace.emitloader.parse",
+	    synldr->ReportError ("crystalspace.emitloader.parse",
 		  child, "Error parsing box for %s!",
 		  CS::Quote::Single ("emitbox"));
 	    return 0;
@@ -276,7 +276,7 @@ csRef<iEmitGen3D> csEmitLoader::ParseEmit (iDocumentNode* node,
 	  csBox3 box;
 	  if (!synldr->ParseBox (child, box))
 	  {
-	    ReportError("crystalspace.emitloader.parse",
+	    synldr->ReportError ("crystalspace.emitloader.parse",
 		  child, "Error parsing box for %s!",
 		  CS::Quote::Single ("emitline"));
 	    return 0;
@@ -291,7 +291,7 @@ csRef<iEmitGen3D> csEmitLoader::ParseEmit (iDocumentNode* node,
 	  csBox3 box;
 	  if (!synldr->ParseBox (child, box))
 	  {
-	    ReportError("crystalspace.emitloader.parse",
+	    synldr->ReportError ("crystalspace.emitloader.parse",
 		  child, "Error parsing box for %s!",
 		  CS::Quote::Single ("emitcylinder"));
 	    return 0;
@@ -308,7 +308,7 @@ csRef<iEmitGen3D> csEmitLoader::ParseEmit (iDocumentNode* node,
 	  csBox3 box;
 	  if (!synldr->ParseBox (child, box))
 	  {
-	    ReportError("crystalspace.emitloader.parse",
+	    synldr->ReportError ("crystalspace.emitloader.parse",
 		  child, "Error parsing box for %s!",
 		  CS::Quote::Single ("emitcylindertangent"));
 	    return 0;
@@ -326,7 +326,7 @@ csRef<iEmitGen3D> csEmitLoader::ParseEmit (iDocumentNode* node,
 	  csRef<iDocumentNode> minnode = child->GetNode ("min");
 	  if (!minnode)
 	  {
-	    ReportError("crystalspace.emitloader.parse",
+	    synldr->ReportError ("crystalspace.emitloader.parse",
 		child, "%s is missing in %s!",
 		CS::Quote::Single ("min"), CS::Quote::Single ("emitspheretangent"));
 	    return 0;
@@ -375,7 +375,7 @@ csPtr<iBase> csEmitLoader::Parse (iDocumentNode* node,
 
     if(!fact)
     {
-      ReportError("crystalspace.emitloader.parse",
+      synldr->ReportError ("crystalspace.emitloader.parse",
         child, "Cannot find factory %s for emit!", CS::Quote::Single (factname));
         return 0;
     }
@@ -385,7 +385,7 @@ csPtr<iBase> csEmitLoader::Parse (iDocumentNode* node,
           emitstate = scfQueryInterface<iEmitState> (mesh);
 	  if (!emitstate)
 	  {
-	    ReportError(
+      	    synldr->ReportError (
 		"crystalspace.emitstate.parse.badfactory",
 		child, "Factory %s doesn't appear to be an emit factory!",
 		CS::Quote::Single (factname));
@@ -401,7 +401,7 @@ csPtr<iBase> csEmitLoader::Parse (iDocumentNode* node,
           iMaterialWrapper* mat = ldr_context->FindMaterial (matname);
 	  if (!mat)
 	  {
-	    ReportError("crystalspace.emitloader.parse",
+	    synldr->ReportError ("crystalspace.emitloader.parse",
 		child, "Cannot find material %s for emit!", CS::Quote::Single (matname));
             return 0;
 	  }
@@ -454,7 +454,7 @@ csPtr<iBase> csEmitLoader::Parse (iDocumentNode* node,
 	  csRef<iDocumentNode> alphanode = child->GetNode ("alpha");
 	  if (!alphanode)
 	  {
-	    ReportError("crystalspace.emitloader.parse",
+	    synldr->ReportError ("crystalspace.emitloader.parse",
 		child, "Missing %s in %s!",
 		CS::Quote::Single ("alpha"), CS::Quote::Single ("aging"));
             return 0;
@@ -463,7 +463,7 @@ csPtr<iBase> csEmitLoader::Parse (iDocumentNode* node,
 	  csRef<iDocumentNode> swirlnode = child->GetNode ("swirl");
 	  if (!swirlnode)
 	  {
-	    ReportError("crystalspace.emitloader.parse",
+	    synldr->ReportError ("crystalspace.emitloader.parse",
 		child, "Missing %s in %s!",
 		CS::Quote::Single ("swirl"), CS::Quote::Single ("aging"));
             return 0;
@@ -472,7 +472,7 @@ csPtr<iBase> csEmitLoader::Parse (iDocumentNode* node,
 	  csRef<iDocumentNode> scalenode = child->GetNode ("scale");
 	  if (!scalenode)
 	  {
-	    ReportError("crystalspace.emitloader.parse",
+	    synldr->ReportError ("crystalspace.emitloader.parse",
 		child, "Missing %s in %s!",
 		CS::Quote::Single ("scale"), CS::Quote::Single ("aging"));
             return 0;
@@ -481,7 +481,7 @@ csPtr<iBase> csEmitLoader::Parse (iDocumentNode* node,
 	  csRef<iDocumentNode> rotspeednode = child->GetNode ("rotspeed");
 	  if (!rotspeednode)
 	  {
-	    ReportError("crystalspace.emitloader.parse",
+	    synldr->ReportError ("crystalspace.emitloader.parse",
 		child, "Missing %s in %s!",
 		CS::Quote::Single ("rotspeed"), CS::Quote::Single ("aging"));
             return 0;
@@ -490,7 +490,7 @@ csPtr<iBase> csEmitLoader::Parse (iDocumentNode* node,
 	  csRef<iDocumentNode> timenode = child->GetNode ("time");
 	  if (!timenode)
 	  {
-	    ReportError("crystalspace.emitloader.parse",
+	    synldr->ReportError ("crystalspace.emitloader.parse",
 		child, "Missing %s in %s!",
 		CS::Quote::Single ("time"),CS::Quote::Single ("aging"));
             return 0;
@@ -557,15 +557,6 @@ csPtr<iBase> csEmitLoader::Parse (iDocumentNode* node,
   }
 
   return csPtr<iBase> (mesh);
-}
-
-void csEmitLoader::ReportError (const char* msgid, iDocumentNode* errornode,
-  const char* msg, ...)
-{
-  va_list args;
-  va_start(args, msg);
-  synldr->ReportErrorV(msgid, errornode, msg, args);
-  va_end(args);
 }
 
 //---------------------------------------------------------------------------

@@ -56,7 +56,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
           iMeshWrapper* mesh = ldr_context->FindMeshObject (meshname);
           if (!mesh)
           {
-            SynReportError (
+            SyntaxService->ReportError (
               "crystalspace.maploader.parse.meshgen",
               child, "Can't find mesh object %s for mesh generator!",
               CS::Quote::Single (meshname));
@@ -133,7 +133,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
           iMeshFactoryWrapper* fact = ldr_context->FindMeshFactory (factname);
           if (!fact)
           {
-            SynReportError (
+            SyntaxService->ReportError (
               "crystalspace.maploader.parse.meshgen",
               child, "Can't find mesh factory %s for mesh generator!",
               CS::Quote::Single (factname));
@@ -149,7 +149,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
             (object_reg, map_name);
           if (!map)
           {
-            SynReportError (
+            SyntaxService->ReportError (
               "crystalspace.maploader.parse.meshgen",
               child, "Can't find map position map terraformer %s!", CS::Quote::Single (map_name));
             return false;
@@ -180,7 +180,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
             (object_reg, map_name);
           if (!map_tf)
           {
-            SynReportError (
+            SyntaxService->ReportError (
               "crystalspace.maploader.parse.meshgen",
               child, "Can't find map density map terraformer %s!", CS::Quote::Single (map_name));
             return false;
@@ -219,7 +219,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
           const char* matname = child->GetAttributeValue ("material");
           if (!matname)
           {
-            SynReportError (
+            SyntaxService->ReportError (
               "crystalspace.maploader.parse.meshgen",
               child, "%s attribute is missing!",
 	      CS::Quote::Single ("material"));
@@ -228,7 +228,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
           iMaterialWrapper* mat = ldr_context->FindMaterial (matname);
           if (!mat)
           {
-            SynReportError (
+            SyntaxService->ReportError (
               "crystalspace.maploader.parse.meshgen",
               child, "Can't find material %s!", CS::Quote::Single (matname));
             return false;
@@ -320,7 +320,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
 	  float h = child->GetAttributeValueAsFloat ("h");
 	  if (w <= 0.0f || h <= 0.0f)
 	  {
-            SynReportError (
+            SyntaxService->ReportError (
               "crystalspace.maploader.parse.meshgen",
               child, "Bad values for 'w' and 'h' in 'scale'. Should be > 0!");
 	    return false;
