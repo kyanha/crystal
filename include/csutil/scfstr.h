@@ -185,14 +185,11 @@ public:
    */
   virtual void ReplaceAll (const char* search, const char* replacement);
 
-#ifndef CS_VIRTUAL_BASE_VARARG_BROKEN
   /**
    * Format.
    * \sa \ref FormatterNotes
    */
   virtual void Format (const char* format, ...) CS_GNUC_PRINTF (2, 3);
-#endif
-
   /**
    * Format.
    * \sa \ref FormatterNotes

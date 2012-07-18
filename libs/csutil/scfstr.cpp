@@ -171,7 +171,6 @@ size_t scfString::Find (const char* t, size_t p) const
 void scfString::ReplaceAll (const char* search, const char* replacement)
 { s.ReplaceAll(search, replacement); }
 
-#ifndef CS_VIRTUAL_BASE_VARARG_BROKEN
 void scfString::Format (const char* format, ...)
 {
   va_list args;
@@ -179,7 +178,6 @@ void scfString::Format (const char* format, ...)
   FormatV (format, args);
   va_end (args);
 }
-#endif
 
 void scfString::FormatV (const char* format, va_list args)
 { s.FormatV (format, args); }
