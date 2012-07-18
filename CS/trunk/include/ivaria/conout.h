@@ -207,10 +207,8 @@ struct iConsoleOutput : public virtual iBase
    */
   virtual void RegisterWatcher (iConsoleWatcher*) = 0;
 
-#ifndef CS_VIRTUAL_BASE_VARARG_BROKEN
   /// Implement simple extension commands.
   virtual bool PerformExtension (const char *command, ...) = 0;
-#endif
 
   /// Implement simple extension commands.
   virtual bool PerformExtensionV (const char *command, va_list) = 0;
