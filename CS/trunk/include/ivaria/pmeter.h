@@ -24,6 +24,7 @@
  */
 
 #include "csutil/scf_interface.h"
+#include <stdarg.h>
 
 /**
  * This is a general interface for a progress meter.
@@ -32,14 +33,20 @@
  */
 struct iProgressMeter : public virtual iBase
 {
-  SCF_INTERFACE(iProgressMeter, 2,0,0);
+  SCF_INTERFACE(iProgressMeter, 3, 0, 0);
   /**
    * Set the id and description of what we are currently monitoring.
    * An id can be something like "crystalspace.engine.lighting.calculation".
    * \sa \ref FormatterNotes
    */
-  virtual void SetProgressDescription (const char* id,
-        const char* description, ...) CS_GNUC_PRINTF (3, 4) = 0;
+  void SetProgressDescription (const char* id,
+        const char* description, ...) CS_GNUC_PRINTF (3, 4)
+  {
+    va_list args;
+    va_start(args, description);
+    SetProgressDescriptionV(id, description, args);
+    va_end(args);
+  }
 
   /**
    * Set the id and description of what we are currently monitoring.

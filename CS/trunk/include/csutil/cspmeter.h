@@ -84,8 +84,6 @@ public:
    * An id can be something like "crystalspace.engine.lighting.calculation".
    * \sa \ref FormatterNotes
    */
-  virtual void CS_GNUC_PRINTF (3, 4)
-      SetProgressDescription (const char*, const char*, ...) { }
   virtual void CS_GNUC_PRINTF (3, 0)
       SetProgressDescriptionV (const char*, const char*, va_list) { }
 
