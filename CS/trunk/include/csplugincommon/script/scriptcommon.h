@@ -52,7 +52,6 @@ public:
 
   virtual bool SetPointer (void*) { return false; }
 
-#ifndef CS_VIRTUAL_BASE_VARARG_BROKEN
   virtual bool Call (const char *name, const char *format, ...);
   virtual bool Call (const char *name, int &ret, const char *fmt, ...);
   virtual bool Call (const char *name, float &ret, const char *fmt, ...);
@@ -60,7 +59,6 @@ public:
   virtual bool Call (const char *name, csRef<iString>&, const char *fmt, ...);
   virtual bool Call (const char *name, csRef<iScriptObject>&,
     const char *fmt, ...);
-#endif
 
   virtual bool Set (const char *name, int data);
   virtual bool Set (const char *name, float data);
@@ -102,7 +100,6 @@ protected:
 public:
   virtual ~csScriptCommon() {}
 
-#ifndef CS_VIRTUAL_BASE_VARARG_BROKEN
   virtual csRef<iScriptObject> NewObject (const char *type,
     const char *ctorFormat, ...);
 
@@ -113,7 +110,6 @@ public:
   virtual bool Call (const char *name, csRef<iString>&, const char *fmt, ...);
   virtual bool Call (const char *name, csRef<iScriptObject> &ret,
     const char *fmt, ...);
-#endif
 
   virtual bool Store (const char *name, int data);
   virtual bool Store (const char *name, float data);
