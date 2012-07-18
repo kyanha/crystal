@@ -430,7 +430,7 @@ bool csTextSyntaxService::ParseRenderBuffer (iDocumentNode* node, iRenderBuffer*
 
   if (indexBuf && (componentNum != 1))
   {
-    ReportError (msgid, node, "index buffers are required to have 1 component", componentNum);
+    ReportError (msgid, node, "index buffers are required to have 1 component; encountered %d", componentNum);
     return false;
   }
   if (indexBuf != buffer->IsIndexBuffer ())
@@ -460,7 +460,7 @@ bool csTextSyntaxService::ParseRenderBuffer (iDocumentNode* node, iRenderBuffer*
     {
       if (buf.GetSize () > buffer->GetElementCount ()*componentNum)
       {
-        ReportError (msgid, node, "too many elements: %d", buf.GetSize ());
+        ReportError (msgid, node, "too many elements: %zu", buf.GetSize ());
         return false;
       }
 
@@ -485,7 +485,7 @@ bool csTextSyntaxService::ParseRenderBuffer (iDocumentNode* node, iRenderBuffer*
     {
       if (buf.GetSize () > buffer->GetElementCount ()*componentNum)
       {
-        ReportError (msgid, node, "too many elements: %d", buf.GetSize ());
+        ReportError (msgid, node, "too many elements: %zu", buf.GetSize ());
         return false;
       }
 
@@ -510,7 +510,7 @@ bool csTextSyntaxService::ParseRenderBuffer (iDocumentNode* node, iRenderBuffer*
     {
       if (buf.GetSize () > buffer->GetElementCount ()*componentNum)
       {
-        ReportError (msgid, node, "too many elements: %d", buf.GetSize ());
+        ReportError (msgid, node, "too many elements: %zu", buf.GetSize ());
         return false;
       }
 
@@ -535,7 +535,7 @@ bool csTextSyntaxService::ParseRenderBuffer (iDocumentNode* node, iRenderBuffer*
     {
       if (buf.GetSize () > buffer->GetElementCount ()*componentNum)
       {
-        ReportError (msgid, node, "too many elements: %d", buf.GetSize ());
+        ReportError (msgid, node, "too many elements: %zu", buf.GetSize ());
         return false;
       }
 
@@ -560,7 +560,7 @@ bool csTextSyntaxService::ParseRenderBuffer (iDocumentNode* node, iRenderBuffer*
     {
       if (buf.GetSize () > buffer->GetElementCount ()*componentNum)
       {
-        ReportError (msgid, node, "too many elements: %d", buf.GetSize ());
+        ReportError (msgid, node, "too many elements: %zu", buf.GetSize ());
         return false;
       }
 
@@ -585,7 +585,7 @@ bool csTextSyntaxService::ParseRenderBuffer (iDocumentNode* node, iRenderBuffer*
     {
       if (buf.GetSize () > buffer->GetElementCount ()*componentNum)
       {
-        ReportError (msgid, node, "too many elements: %d", buf.GetSize ());
+        ReportError (msgid, node, "too many elements: %zu", buf.GetSize ());
         return false;
       }
 
@@ -609,7 +609,7 @@ bool csTextSyntaxService::ParseRenderBuffer (iDocumentNode* node, iRenderBuffer*
     {
       if (buf.GetSize () > buffer->GetElementCount ()*componentNum)
       {
-        ReportError (msgid, node, "too many elements: %d", buf.GetSize ());
+        ReportError (msgid, node, "too many elements: %zu", buf.GetSize ());
         return false;
       }
 
@@ -633,7 +633,7 @@ bool csTextSyntaxService::ParseRenderBuffer (iDocumentNode* node, iRenderBuffer*
     {
       if (buf.GetSize () > buffer->GetElementCount ()*componentNum)
       {
-        ReportError (msgid, node, "too many elements: %d", buf.GetSize ());
+        ReportError (msgid, node, "too many elements: %zu", buf.GetSize ());
         return false;
       }
 
@@ -657,7 +657,7 @@ bool csTextSyntaxService::ParseRenderBuffer (iDocumentNode* node, iRenderBuffer*
     {
       if (buf.GetSize () > buffer->GetElementCount ()*componentNum)
       {
-        ReportError (msgid, node, "too many elements: %d", buf.GetSize ());
+        ReportError (msgid, node, "too many elements: %zu", buf.GetSize ());
         return false;
       }
 
