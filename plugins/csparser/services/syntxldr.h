@@ -137,13 +137,9 @@ public:
   virtual csRef<iShader> ParseShader (iLoaderContext* ldr_context,
       iDocumentNode* node);
 
-  virtual void ReportError (const char* msgid, iDocumentNode* errornode,
-	const char* msg, ...);
   virtual void ReportErrorV (const char* msgid, iDocumentNode* errornode,
 	const char* msg, va_list args);
   virtual void ReportBadToken (iDocumentNode* badtokennode);
-  virtual void Report (const char* msgid, int severity, 
-	iDocumentNode* errornode, const char* msg, ...);
   virtual void ReportV (const char* msgid, int severity,
 	iDocumentNode* errornode, const char* msg, va_list args);
 };
