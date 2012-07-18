@@ -342,15 +342,6 @@ bool csGraphics2D::PerformExtensionV (char const* command, va_list args)
   return false;
 }
 
-bool csGraphics2D::PerformExtension (char const* command, ...)
-{
-  va_list args;
-  va_start (args, command);
-  bool rc = PerformExtensionV(command, args);
-  va_end (args);
-  return rc;
-}
-
 void csGraphics2D::AlertV (int type, const char* title, const char* okMsg,
     const char* msg, va_list arg)
 {

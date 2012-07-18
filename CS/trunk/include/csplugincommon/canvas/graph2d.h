@@ -244,12 +244,6 @@ public:
    * Perform a system specific extension. Return false if extension
    * not supported.
    */
-  virtual bool PerformExtension (char const* command, ...);
-
-  /**
-   * Perform a system specific extension. Return false if extension
-   * not supported.
-   */
   virtual bool PerformExtensionV (char const* command, va_list);
 
   /// Enable/disable canvas resize (Over-ride in sub classes)

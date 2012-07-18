@@ -31,7 +31,7 @@
 #include "csutil/scf.h"
 #include "csgfx/rgbpixel.h"
 #include "ivideo/cursor.h"
-
+#include <stdarg.h>
 
 struct iImage;
 struct iFontServer;
@@ -95,7 +95,7 @@ struct csPixelCoord
  */
 struct iGraphics2D : public virtual iBase
 {
-  SCF_INTERFACE (iGraphics2D, 4, 0, 3);
+  SCF_INTERFACE (iGraphics2D, 5, 0, 0);
   
   /// Open the device.
   virtual bool Open () = 0;
@@ -218,7 +218,14 @@ struct iGraphics2D : public virtual iBase
    * commands, so please try to use descriptive command names rather
    * than "a", "b" and so on...
    */
-  virtual bool PerformExtension (char const* command, ...) = 0;
+  bool PerformExtension (char const* command, ...)
+  {
+    va_list args;
+    va_start(args, command);
+    bool x = PerformExtensionV(command, args);
+    va_end(args);
+    return x;
+  }
 
   /**
    * Perform a system specific exension.<p>
