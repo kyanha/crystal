@@ -105,7 +105,9 @@ bool csSndSysDriverCoreAudio::Initialize (iObjectRegistry* r)
 bool csSndSysDriverCoreAudio::Open (csSndSysRendererSoftware *renderer,
 				   csSndSysSoundFormat *requested_format)
 {
-  uint32 propertysize;
+  AudioObjectPropertyAddress propaddr =
+    { 0, 0, kAudioObjectPropertyElementMaster };
+  UInt32 propertysize;
   
   //target format that we get from Core Audio
   AudioStreamBasicDescription outStreamDesc;
@@ -121,42 +123,47 @@ bool csSndSysDriverCoreAudio::Open (csSndSysRendererSoftware *renderer,
 
   // Retrieve the output device ID - this is almost verbatim from the available
   // sample code
+  propaddr.mSelector = kAudioHardwarePropertyDefaultOutputDevice;
+  propaddr.mScope = kAudioObjectPropertyScopeGlobal;
   propertysize = sizeof(outputDeviceID);
-  status = AudioHardwareGetProperty(kAudioHardwarePropertyDefaultOutputDevice,
-				    (UInt32*)&propertysize, &outputDeviceID);
-  if (status) 
+
+  status = AudioObjectGetPropertyData(kAudioObjectSystemObject,
+    &propaddr, 0, 0, &propertysize, &outputDeviceID);
+  if (status != kAudioHardwareNoError)
   {
     Report(CS_REPORTER_SEVERITY_ERROR,
 	   "Failed to obtain default CoreAudio output device.  Return of %d.",
 	   (int)status);
     return false;
   }
-  if (outputDeviceID == kAudioDeviceUnknown) 
+  if (outputDeviceID == kAudioObjectUnknown)
   {
     Report(CS_REPORTER_SEVERITY_ERROR,
 	   "Failed to obtain default CoreAudio output device.  "
-	   "Resulting ID is kAudioDeviceUnknown.");
+	   "Resulting ID is kAudioObjectUnknown.");
     return false;
   }
 
   // Set buffer size - 1/10th of a second buffer of floats
+  propaddr.mSelector = kAudioDevicePropertyBufferFrameSize;
+  propaddr.mScope = kAudioDevicePropertyScopeOutput;
   propertysize = sizeof(convert_size);
   convert_size = requested_format->Freq / 10; //Number of sound *frames*
 	
-  status = AudioDeviceSetProperty(outputDeviceID, 0, 0, false,
-       		      kAudioDevicePropertyBufferFrameSize, propertysize, &convert_size);
-  if (status)
+  status = AudioObjectSetPropertyData(
+    outputDeviceID, &propaddr, 0, 0, propertysize, &convert_size);
+  if (status != kAudioHardwareNoError)
   {
     // Try to find a smaller buffer size which can successfully be used. This is due to the problem of
     // some hardware devices don't having the initially requested buffer size.
     // ToDo: obtain maximal buffer size from the device directly.
-    while(status && (convert_size > 0))
+    while (status != kAudioHardwareNoError && (convert_size > 0))
     {
       --convert_size;
-      status = AudioDeviceSetProperty(outputDeviceID, 0, 0, false,
-		  kAudioDevicePropertyBufferFrameSize, propertysize, &convert_size);
+      status = AudioObjectSetPropertyData(
+	outputDeviceID, &propaddr, 0, 0, propertysize, &convert_size);
     }
-    if( status )
+    if (status != kAudioHardwareNoError)
     {
       Report(CS_REPORTER_SEVERITY_ERROR, "Failed to set sound buffer");
       return false;
@@ -167,10 +174,12 @@ bool csSndSysDriverCoreAudio::Open (csSndSysRendererSoftware *renderer,
   convert_buffer = cs_malloc(convert_size * requested_format->Channels * requested_format->Bits/8);
   
   // Get stream information
+  propaddr.mSelector = kAudioDevicePropertyStreamFormat;
+  propaddr.mScope = kAudioDevicePropertyScopeOutput;
   propertysize = sizeof(outStreamDesc);
-  status = AudioDeviceGetProperty(outputDeviceID, 0, false,
-    kAudioDevicePropertyStreamFormat, (UInt32*)&propertysize, &outStreamDesc);
-  if (status != 0)
+  status = AudioObjectGetPropertyData(
+    outputDeviceID, &propaddr, 0, 0, &propertysize, &outStreamDesc);
+  if (status != kAudioHardwareNoError)
   {
     Report(CS_REPORTER_SEVERITY_ERROR,
 	   "Failed to retrieve output stream description from CoreAudio "
@@ -178,8 +187,11 @@ bool csSndSysDriverCoreAudio::Open (csSndSysRendererSoftware *renderer,
     return false;
   }
   //get another copy to create the input format spec
-  status = AudioDeviceGetProperty(outputDeviceID, 0, false,
-    kAudioDevicePropertyStreamFormat, (UInt32*)&propertysize, &inStreamDesc);
+  propaddr.mSelector = kAudioDevicePropertyStreamFormat;
+  propaddr.mScope = kAudioDevicePropertyScopeInput;
+  propertysize = sizeof(inStreamDesc);
+  status = AudioObjectGetPropertyData(
+    outputDeviceID, &propaddr, 0, 0, &propertysize, &inStreamDesc);
 	   
   // Set up source stream description for an AudioConverter to do its thang
  
