@@ -264,8 +264,7 @@ void csReporterListener::WriteLine (int severity, const char* msgID,
     consoleSuffix[severity]);
 
   if (dest_console[severity] && console)
-    va_callv(&iConsoleOutput::PutTextV, (iConsoleOutput*)console, "%s",
-      msg.GetData());
+    console->PutText ("%s", msg.GetData());
 
   if (dest_debug[severity] && !debug_filename.IsEmpty())
   {
