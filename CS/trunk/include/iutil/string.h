@@ -26,12 +26,12 @@
 /**\addtogroup util
  * @{ */
 #include "csutil/scf_interface.h"
-
+#include <stdarg.h>
 
 /// This is a SCF-compatible interface for csString.
 struct iString : public virtual iBase
 {
-  SCF_INTERFACE(iString, 2,1,0);
+  SCF_INTERFACE(iString, 3, 0, 0);
   /**
    * Advise the string that it should allocate enough space to hold up to
    * NewSize characters.
@@ -229,7 +229,13 @@ struct iString : public virtual iBase
    *   formatted string replaces previous string value.
    * \sa \ref FormatterNotes
    */
-  virtual void Format (const char* format, ...) CS_GNUC_PRINTF (2, 3) = 0;
+  void Format (const char* format, ...) CS_GNUC_PRINTF (2, 3)
+  {
+    va_list args;
+    va_start(args, format);
+    FormatV(format, args);
+    va_end(args);
+  }
 
   /**
    * Format this string using sprintf() formatting directives in a va_list.

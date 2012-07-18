@@ -171,14 +171,6 @@ size_t scfString::Find (const char* t, size_t p) const
 void scfString::ReplaceAll (const char* search, const char* replacement)
 { s.ReplaceAll(search, replacement); }
 
-void scfString::Format (const char* format, ...)
-{
-  va_list args;
-  va_start (args, format);
-  FormatV (format, args);
-  va_end (args);
-}
-
 void scfString::FormatV (const char* format, va_list args)
 { s.FormatV (format, args); }
 
