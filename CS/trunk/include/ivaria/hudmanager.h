@@ -31,6 +31,7 @@
 
 #include "cssysdef.h"
 #include "csutil/scf.h"
+#include <stdarg.h>
 
 struct iStringArray;
 
@@ -51,7 +52,7 @@ namespace Utility {
  */
 struct iHUDManager : public virtual iBase
 {
-  SCF_INTERFACE (CS::Utility::iHUDManager, 1, 0, 0);
+  SCF_INTERFACE (CS::Utility::iHUDManager, 2, 0, 0);
 
   /**
    * Switch to the next page describing the list of available keyboard keys. This is useful
@@ -65,7 +66,13 @@ struct iHUDManager : public virtual iBase
    * they will be formated into the text string by using the cs_snprintf()-style
    * formatting directives.
    */
-  virtual void WriteShadow (int x, int y, int color, const char *str,...) const = 0;
+  void WriteShadow (int x, int y, int color, const char *str,...) const
+  {
+    va_list args;
+    va_start(args, str);
+    WriteShadowV(x, y, color, str, args);
+    va_end(args);
+  }
   /**
    * Display a 2D text with a shadow. Additional parameters can be defined,
    * they will be formated into the text string by using the cs_snprintf()-style
@@ -77,7 +84,13 @@ struct iHUDManager : public virtual iBase
    * they will be formated into the text string by using the cs_snprintf()-style
    * formatting directives.
    */
-  virtual void Write (int x, int y, int fg, int color, const char *str,...) const = 0;
+  void Write (int x, int y, int fg, int color, const char *str,...) const
+  {
+    va_list args;
+    va_start(args, str);
+    Write(x, y, fg, color, str, args);
+    va_end(args);
+  }
   /**
    * Display a 2D text. Additional parameters can be defined,
    * they will be formated into the text string by using the cs_snprintf()-style
