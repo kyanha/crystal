@@ -72,8 +72,6 @@ public:
   virtual ~csReporter ();
   virtual bool Initialize (iObjectRegistry *object_reg);
 
-  virtual void Report (int severity, const char* msgId,
-  	const char* description, ...) CS_GNUC_PRINTF (4, 5);
   virtual void ReportV (int severity, const char* msgId,
   	const char* description, va_list) CS_GNUC_PRINTF (4, 0);
   virtual void Clear (int severity = -1);
