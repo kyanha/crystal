@@ -240,13 +240,11 @@ public:
   virtual int GetHeight () { return vpHeight; }
   int GetColorDepth () { return Depth; }
 
-#ifndef CS_VIRTUAL_BASE_VARARG_BROKEN
   /**
    * Perform a system specific extension. Return false if extension
    * not supported.
    */
   virtual bool PerformExtension (char const* command, ...);
-#endif
 
   /**
    * Perform a system specific extension. Return false if extension

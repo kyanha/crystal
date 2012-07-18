@@ -35,7 +35,6 @@
 #include "csutil/refarr.h"
 #include "csutil/sysfunc.h"
 #include "csutil/util.h"
-#include "csutil/vararg.h"
 #include "iutil/cfgmgr.h"
 #include "iutil/cmdline.h"
 #include "iutil/comp.h"
@@ -145,7 +144,6 @@ private:
     const char *format, ...);
 
   void ResizeContext ();
-  void Flush();
 
   void SetCustomCursor ();
   void SetNormalCursor ();
@@ -770,11 +768,6 @@ void G2DTestSystemDriver::ResizeContext ()
   myG2D->Print (0);
 }
 
-void G2DTestSystemDriver::Flush ()
-{
-  CS::va_call(&iGraphics2D::PerformExtensionV, myG2D, "flush");
-}
-
 void G2DTestSystemDriver::SetCustomCursor ()
 {
   if (cursorPlugin)
@@ -1150,7 +1143,7 @@ void G2DTestSystemDriver::DrawLinePerf ()
       x2 = csQint (x2 - x1); y2 = csQint (y2 - y1);
       pix_count += csQsqrt (x2 * x2 + y2 * y2);
     }
-    Flush();
+    myG2D->PerformExtension ("flush");
     delta_time = csGetTicks () - start_time;
   } while (delta_time < 500);
   pix_count = pix_count * (1000.0 / delta_time);
@@ -1203,7 +1196,7 @@ void G2DTestSystemDriver::DrawTextTest ()
       myG2D->Write (font, int(x), int(y), colors [rng.Get (4)], black, text);
       char_count += cc;
     }
-    Flush();
+    myG2D->PerformExtension ("flush");
     delta_time = csGetTicks () - start_time;
   } while (delta_time < 500);
   float perf = char_count * (1000.0f / delta_time);
@@ -1255,7 +1248,7 @@ void G2DTestSystemDriver::DrawTextTest2 ()
       myG2D->Write (font, int(x), int(y), colors [rng.Get (4)], -1, text);
       char_count += cc;
     }
-    Flush();
+    myG2D->PerformExtension ("flush");
     delta_time = csGetTicks () - start_time;
   } while (delta_time < 500);
   float perf = char_count * (1000.0f / delta_time);

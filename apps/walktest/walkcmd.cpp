@@ -33,7 +33,6 @@
 #include "csutil/scanstr.h"
 #include "csutil/stringconv.h"
 #include "csutil/util.h"
-#include "csutil/vararg.h"
 #include "iengine/camera.h"
 #include "iengine/light.h"
 #include "iengine/light.h"
@@ -1791,7 +1790,7 @@ bool CommandHandler (const char *cmd, const char *arg)
     }
   }
   else if (!csStrCaseCmp (cmd, "fullscreen"))
-    CS::va_call(&iGraphics2D::PerformExtensionV, Sys->myG2D, "fullscreen");
+    Sys->myG2D->PerformExtension("fullscreen");
   else if (!csStrCaseCmp(cmd, "split_view"))
   {
     Sys->views->SplitView ();

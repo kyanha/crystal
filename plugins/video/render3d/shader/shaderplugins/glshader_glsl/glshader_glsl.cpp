@@ -17,7 +17,7 @@
 */
 
 #include "cssysdef.h"
-#include "csutil/vararg.h"
+
 #include "csplugincommon/opengl/glextmanager.h"
 
 #include "glshader_glsl.h"
@@ -112,7 +112,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(GLShaderGLSL)
       f->QueryClassID ()) != 0)
       return false;
 
-    CS::va_call(&iGraphics2D::PerformExtensionV, graph->GetDriver2D(), "getextmanager", &ext);
+    graph->GetDriver2D()->PerformExtension ("getextmanager", &ext);
     return true;
   }
 }
