@@ -587,15 +587,6 @@ void csConsoleOutput::SetVisible (bool iShow)
   invalid.Set (size);
 }
 
-bool csConsoleOutput::PerformExtension (const char *iCommand, ...)
-{
-  va_list args;
-  va_start (args, iCommand);
-  bool rc = PerformExtensionV(iCommand, args);
-  va_end (args);
-  return rc;
-}
-
 bool csConsoleOutput::PerformExtensionV (const char *iCommand, va_list args)
 {
   bool rc = true;

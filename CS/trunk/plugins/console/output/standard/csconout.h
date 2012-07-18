@@ -59,13 +59,6 @@ public:
    * as soon as any other message will be sent to console.
    */
   virtual void PutTextV (const char *iText, va_list args);
-  virtual void PutText (const char *iText, ...)
-  {
-    va_list arg;
-    va_start (arg, iText);
-    PutTextV (iText, arg);
-    va_end (arg);
-  }
 
   /// Return a line from the buffer (-1 = current line)
   virtual const char *GetLine (int iLine = -1) const;
@@ -155,9 +148,6 @@ public:
    */
   virtual void RegisterWatcher (iConsoleWatcher* iClient)
   { Client = iClient; }
-
-  /// Implement simple extension commands.
-  virtual bool PerformExtension (const char *iCommand, ...);
 
   /// Implement simple extension commands.
   virtual bool PerformExtensionV (const char *iCommand, va_list);
