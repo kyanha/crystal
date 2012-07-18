@@ -1366,7 +1366,7 @@ void csTextSyntaxService::ReportError (const char* msgid,
 }
 
 void csTextSyntaxService::ReportErrorV (const char* msgid,
-	iDocumentNode* errornode, const char* msg, va_list args)
+	iDocumentNode* errornode, const char* msg, va_list arg)
 {
   ReportV (msgid, CS_REPORTER_SEVERITY_ERROR, errornode, msg, arg);
 }
