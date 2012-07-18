@@ -25,7 +25,6 @@
 #include "csutil/event.h"
 #include "csutil/eventnames.h"
 #include "csutil/stringquote.h"
-#include "csutil/vararg.h"
 #include "iutil/event.h"
 #include "iutil/eventq.h"
 #include "csgeom/frustum.h"
@@ -135,7 +134,7 @@ public:
     const csBox3& b = child->GetBBox ();
     csFrustVisObjectWrapper* obj = (csFrustVisObjectWrapper*)(
     	child->GetObject ());
-    CS::va_callv(&iString::FormatV, (iString*)str, "%s (%g,%g,%g)-(%g,%g,%g)",
+    str->Format ("%s (%g,%g,%g)-(%g,%g,%g)",
     	CS::Quote::Single (obj->mesh->QueryObject ()->GetName ()),
 	b.MinX (), b.MinY (), b.MinZ (),
 	b.MaxX (), b.MaxY (), b.MaxZ ());

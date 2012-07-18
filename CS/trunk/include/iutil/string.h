@@ -223,7 +223,6 @@ struct iString : public virtual iBase
    */
   virtual void ReplaceAll (const char* search, const char* replacement) = 0;
 
-#ifndef CS_VIRTUAL_BASE_VARARG_BROKEN
   /**
    * Format this string using sprintf()-style formatting directives.
    * \remarks Automatically allocates sufficient memory to hold result.  Newly
@@ -231,7 +230,6 @@ struct iString : public virtual iBase
    * \sa \ref FormatterNotes
    */
   virtual void Format (const char* format, ...) CS_GNUC_PRINTF (2, 3) = 0;
-#endif
 
   /**
    * Format this string using sprintf() formatting directives in a va_list.
