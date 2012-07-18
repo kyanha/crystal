@@ -363,7 +363,6 @@ void csGraphics2D::AlertV (int type, const char* title, const char* okMsg,
   fflush (stdout);
 }
 
-#ifndef CS_VIRTUAL_BASE_VARARG_BROKEN
 void csGraphics2D::Alert (int type, const char* title, const char* okMsg, 
 			  const char* msg, ...)
 {
@@ -372,9 +371,7 @@ void csGraphics2D::Alert (int type, const char* title, const char* okMsg,
   AlertV (type, title, okMsg, msg, arg);
   va_end (arg);
 }
-#endif
 
-#ifndef CS_VIRTUAL_BASE_VARARG_BROKEN
 void csGraphics2D::Alert (int type, const wchar_t* title, const wchar_t* okMsg, 
 			  const wchar_t* msg, ...)
 {
@@ -383,7 +380,6 @@ void csGraphics2D::Alert (int type, const wchar_t* title, const wchar_t* okMsg,
   AlertV (type, csString (title), csString (okMsg), csString (msg), arg);
   va_end (arg);
 }
-#endif
 
 void csGraphics2D::AlertV (int type, const wchar_t* title, const wchar_t* okMsg,
     const wchar_t* msg, va_list arg)
