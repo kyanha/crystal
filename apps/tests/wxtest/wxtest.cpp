@@ -106,7 +106,7 @@ END_EVENT_TABLE()
 Simple* simple = 0;
 
 Simple::Simple (iObjectRegistry* object_reg)
-  : wxFrame (0, -1, wxT ("Crystal Space WxWidget Canvas test"), 
+  : wxFrame (0, -1, wxT ("Crystal Space wxWidgets canvas test"), 
              wxDefaultPosition, wxSize (1000, 600))
 {
   Simple::object_reg = object_reg;
@@ -493,11 +493,10 @@ void Simple::OnSize (wxSizeEvent& event)
   if (!wxwindow->GetWindow ()) return;
 
   wxSize size = event.GetSize();
-  wxwindow->GetWindow ()->SetSize (size); // TODO: csGraphics2DGLCommon::Resize is called here...
+  wxwindow->GetWindow ()->SetSize (size);
 
   view->GetPerspectiveCamera ()->SetFOV ((float) (size.y) / (float) (size.x), 1.0f);
-  // TODO: ... but here the CanvasResize event has still not been catched by iGraphics3D
-  view->SetRectangle (0, 0, size.x, size.y);
+  view->SetRectangle (0, 0, size.x, size.y, false);
 }
 
 void Simple::OnClose (wxCloseEvent& event)
