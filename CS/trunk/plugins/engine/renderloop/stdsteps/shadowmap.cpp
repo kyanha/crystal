@@ -43,7 +43,7 @@
 #include "csutil/event.h"
 #include "csgfx/renderbuffer.h"
 #include <cstool/rendermeshlist.h>
-#include "csutil/vararg.h"
+
 #include <imesh/genmesh.h>
 #include <imesh/object.h>
 #include <iengine/movable.h>
@@ -110,8 +110,7 @@ csPtr<iBase> csShadowmapRSLoader::Parse (iDocumentNode* node,
   if (newstep->GetSettings().shader.IsEmpty() &&
     ((newstep->GetSettings().shadertype == csInvalidStringID)))
   {
-    CS::va_callv(&iSyntaxService::ReportV, synldr,
-      "di.renderloop.step.rendertotexture",
+    synldr->Report ("di.renderloop.step.rendertotexture",
       CS_REPORTER_SEVERITY_WARNING, node,
       "Neither a shader nor a shadertype was set");
   }

@@ -47,11 +47,6 @@ protected:
 #include "cstool/tokenlist.h"
 
   bool ParseRenderSteps (iRenderLoop* loop, iDocumentNode* node);
-  void Report (const char* msgid, int severity,
-    iDocumentNode* errornode, const char* msg, ...) CS_GNUC_PRINTF(5,6);
-  void ReportError (const char* msgid, iDocumentNode* errornode,
-    const char* msg, ...) CS_GNUC_PRINTF(4,5);
-
 public:
   CS_LEAKGUARD_DECLARE (csRenderLoopLoader);
 

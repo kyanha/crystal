@@ -83,7 +83,7 @@ csPtr<iBase> csFullScreenQuadRSLoader::Parse (iDocumentNode* node,
     (newstep->GetFirstSettings().material.IsEmpty() ||
     (newstep->GetFirstSettings().shadertype == csInvalidStringID)))
   {
-    Report ("crystalspace.renderloop.step.fullscreenquad",
+    synldr->Report ("crystalspace.renderloop.step.fullscreenquad",
       CS_REPORTER_SEVERITY_WARNING, node,
       "Neither a shader nor a material & shadertype was set for first pass");
   }
@@ -92,7 +92,7 @@ csPtr<iBase> csFullScreenQuadRSLoader::Parse (iDocumentNode* node,
     (newstep->GetOtherSettings().material.IsEmpty() ||
     (newstep->GetOtherSettings().shadertype == csInvalidStringID)))
   {
-    Report ("crystalspace.renderloop.step.fullscreenquad",
+    synldr->Report ("crystalspace.renderloop.step.fullscreenquad",
       CS_REPORTER_SEVERITY_WARNING, node,
       "Neither a shader nor a material & shadertype was set for other passes");
   }
@@ -150,7 +150,7 @@ bool csFullScreenQuadRSLoader::ParseStep (iLoaderContext* ldr_context,
 	{
 	  if (firstPass)
 	  {
-	    Report ("crystalspace.renderloop.step.fullscreenquad",
+	    synldr->Report ("crystalspace.renderloop.step.fullscreenquad",
 	      CS_REPORTER_SEVERITY_WARNING, child, 
 	      "Can't nest <firstpass> tokens");
 	    return false;
@@ -176,7 +176,7 @@ bool csFullScreenQuadRSLoader::ParseStep (iLoaderContext* ldr_context,
 	  }
 	  if (var->GetName() == csInvalidStringID)
 	  {
-	    Report ("crystalspace.renderloop.step.fullscreenquad",
+	    synldr->Report ("crystalspace.renderloop.step.fullscreenquad",
 	      CS_REPORTER_SEVERITY_WARNING, child,
 	      "<shadervar> without name");
 	    return false;
@@ -195,15 +195,6 @@ bool csFullScreenQuadRSLoader::ParseStep (iLoaderContext* ldr_context,
     }
   }
   return true;
-}
-
-void csFullScreenQuadRSLoader::Report (const char* msgid, int severity,
-  iDocumentNode* errornode, const char* msg, ...)
-{
-  va_list arg;
-  va_start (arg, msg);
-  synldr->ReportV(msgid, severity, errornode, msg, arg);
-  va_end (arg);
 }
 
 

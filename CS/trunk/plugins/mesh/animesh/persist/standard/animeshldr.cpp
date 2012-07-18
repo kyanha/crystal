@@ -32,20 +32,11 @@
 #include "iutil/plugin.h"
 #include "iutil/stringarray.h"
 #include "ivaria/reporter.h"
-#include "csutil/stringarray.h"
+#include <csutil/stringarray.h>
+
 #include "csutil/ref.h"
-#include "csutil/vararg.h"
 
 #include "animeshldr.h"
-
-static void ReportError (iSyntaxService* syn, const char* msgid,
-    iDocumentNode* errornode, const char* msg, ...)
-{
-  va_list args;
-  va_start(args, msg);
-  syn->ReportErrorV(msgid, errornode, msg, args);
-  va_end(args);
-}
 
 CS_PLUGIN_NAMESPACE_BEGIN(Animeshldr)
 {
@@ -71,7 +62,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(Animeshldr)
 
     if (!type)
     {
-      ReportError (synldr, msgidFactory, node,
+      synldr->ReportError (msgidFactory, node, 
         "Could not load the animesh object plugin!");
       return 0;
     }
@@ -83,7 +74,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(Animeshldr)
 
     if (!amfact)
     {
-      ReportError (synldr, msgidFactory, node,
+      synldr->ReportError (msgidFactory, node, 
         "Could not load the animesh object plugin!");
       return 0;
     }
@@ -103,7 +94,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(Animeshldr)
           iMaterialWrapper* mat = ldr_context->FindMaterial (matname);
           if (!mat)
           {
-            ReportError (synldr, msgidFactory, child, "Couldn't find material %s!",
+            synldr->ReportError (msgidFactory, child, "Couldn't find material %s!", 
               CS::Quote::Single (matname));
             return 0;
           }
@@ -123,7 +114,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(Animeshldr)
           csRef<iRenderBuffer> rb = synldr->ParseRenderBuffer (child);
           if (!rb)
           {
-            ReportError (synldr, msgidFactory, child, "Could not parse render buffer!");
+            synldr->ReportError (msgidFactory, child, "Could not parse render buffer!");
             return 0;
           }
           amfact->SetVertices (rb);
@@ -134,7 +125,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(Animeshldr)
           csRef<iRenderBuffer> rb = synldr->ParseRenderBuffer (child);
           if (!rb)
           {
-            ReportError (synldr, msgidFactory, child, "Could not parse render buffer!");
+            synldr->ReportError (msgidFactory, child, "Could not parse render buffer!");
             return 0;
           }
           amfact->SetTexCoords (rb);
@@ -145,7 +136,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(Animeshldr)
           csRef<iRenderBuffer> rb = synldr->ParseRenderBuffer (child);
           if (!rb)
           {
-            ReportError (synldr, msgidFactory, child, "Could not parse render buffer!");
+            synldr->ReportError (msgidFactory, child, "Could not parse render buffer!");
             return 0;
           }
           amfact->SetNormals (rb);
@@ -156,7 +147,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(Animeshldr)
           csRef<iRenderBuffer> rb = synldr->ParseRenderBuffer (child);
           if (!rb)
           {
-            ReportError (synldr, msgidFactory, child, "Could not parse render buffer!");
+            synldr->ReportError (msgidFactory, child, "Could not parse render buffer!");
             return 0;
           }
           amfact->SetTangents (rb);
@@ -167,7 +158,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(Animeshldr)
           csRef<iRenderBuffer> rb = synldr->ParseRenderBuffer (child);
           if (!rb)
           {
-            ReportError (synldr, msgidFactory, child, "Could not parse render buffer!");
+            synldr->ReportError (msgidFactory, child, "Could not parse render buffer!");
             return 0;
           }
           amfact->SetBinormals (rb);
@@ -185,7 +176,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(Animeshldr)
           csRef<iRenderBuffer> rb = synldr->ParseRenderBuffer (child);
           if (!rb)
           {
-            ReportError (synldr, msgidFactory, child, "Could not parse render buffer!");
+            synldr->ReportError (msgidFactory, child, "Could not parse render buffer!");
             return 0;
           }
           amfact->SetColors (rb);
@@ -216,7 +207,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(Animeshldr)
               {
                 if (currInfl > numVerts*realPerVertex)
                 {
-                  ReportError (synldr, msgidFactory, child,
+                  synldr->ReportError (msgidFactory, child, 
                     "Too many bone vertex influences %d, expected %d", currInfl, numVerts*realPerVertex);
                   return 0;
                 }
@@ -257,7 +248,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(Animeshldr)
                 indexBuffer = synldr->ParseRenderBuffer (child2);
                 if (!indexBuffer)
                 {
-                  ReportError (synldr, msgidFactory, child2, "Could not parse render buffer!");
+                  synldr->ReportError (msgidFactory, child2, "Could not parse render buffer!");
                   return 0;
                 }
               }
@@ -268,7 +259,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(Animeshldr)
                 material = ldr_context->FindMaterial (matname);
                 if (!material)
                 {
-                  ReportError (synldr, msgidFactory, child2, "Couldn't find material %s!",
+                  synldr->ReportError (msgidFactory, child2, "Couldn't find material %s!", 
                     CS::Quote::Single (matname));
                   return 0;
                 }
@@ -316,7 +307,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(Animeshldr)
 
             if (!skelMgr)
             {
-              ReportError (synldr, msgidFactory, child, "Could not find any loaded skeletons");
+              synldr->ReportError (msgidFactory, child, "Could not find any loaded skeletons");
               return 0;
             }
           }
@@ -325,7 +316,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(Animeshldr)
           CS::Animation::iSkeletonFactory* skelFact = skelMgr->FindSkeletonFactory (skelName);
           if (!skelFact)
           {
-            ReportError (synldr, msgidFactory, child, "Could not find skeleton %s",
+            synldr->ReportError (msgidFactory, child, "Could not find skeleton %s",
 				 CS::Quote::Single (skelName));
             return 0;
           }
@@ -339,7 +330,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(Animeshldr)
 	  const char* vertexIndices = child->GetAttributeValue ("vertices");
 	  if (vertexIndices == 0)
 	  {
-	    ReportError (synldr, msgidFactory, child,
+	    synldr->ReportError (msgidFactory, child, 
 				 "No vertex list defined while creating subset");
 	    return 0;
 	  }
@@ -363,7 +354,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(Animeshldr)
 	  CS::Animation::iSkeletonFactory* skelFact = amfact->GetSkeletonFactory ();
           if (!skelFact)
           {
-            ReportError (synldr, msgidFactory, child, "No skeleton defined while creating socket");
+            synldr->ReportError (msgidFactory, child, "No skeleton defined while creating socket");
             return 0;
           }
 
@@ -371,7 +362,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(Animeshldr)
 	  CS::Animation::BoneID bone = skelFact->FindBone (boneName);
           if (bone == CS::Animation::InvalidBoneID)
           {
-            ReportError (synldr, msgidFactory, child, "Could not find bone %s in skeleton",
+            synldr->ReportError (msgidFactory, child, "Could not find bone %s in skeleton",
 				 CS::Quote::Single (boneName));
             return 0;
           }
@@ -436,7 +427,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(Animeshldr)
 	  const char* subsetIndices = child2->GetAttributeValue ("ids");
 	  if (subsetIndices == 0)
 	  {
-	    ReportError (synldr, msgidFactory, child2,
+	    synldr->ReportError (msgidFactory, child2, 
 				 "No subset list defined while creating morph target");
 	    return false;
 	  }
@@ -452,7 +443,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(Animeshldr)
 	  offsetsBuffer = synldr->ParseRenderBuffer (child2);
 	  if (!offsetsBuffer)
 	  {
-	    ReportError (synldr, msgidFactory, child2, "Could not parse offsets buffer!");
+	    synldr->ReportError (msgidFactory, child2, "Could not parse offsets buffer!");
 	    return false;
 	  }
 	  morphTarget->SetVertexOffsets (offsetsBuffer);
@@ -474,7 +465,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(Animeshldr)
     CS::Animation::iSkeletonFactory* skeletonFact = amfact->GetSkeletonFactory ();
     if (!skeletonFact)
     {
-      ReportError (synldr, msgidFactory, child, "Factory does not have a skeleton while creating bounding boxes");
+      synldr->ReportError (msgidFactory, child, "Factory does not have a skeleton while creating bounding boxes");
       return 0;
     }
 
@@ -495,7 +486,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(Animeshldr)
 	  currBone = child2->GetAttributeValueAsInt("bone");
 	  if (currBone != CS::Animation::InvalidBoneID && currBone >= numBones)
 	  {
-	    ReportError (synldr, msgidFactory, child2,
+	    synldr->ReportError (msgidFactory, child2, 
 				 "Invalid bounding box index %d, expected maximum %d bones",
 				 (int) currBone, (int) numBones);
 	    return false;
@@ -565,7 +556,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(Animeshldr)
 
 	if (!saver)
 	{
-	  ReportError (synldr, msgidFactory, parent,
+	  synldr->ReportError (msgidFactory, parent, 
 			       "Could not load the skeleton saver plugin!");
 	  return 0;
 	}
@@ -876,7 +867,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(Animeshldr)
 
           if(!fact)
           {
-            ReportError (synldr, msgid, child,
+            synldr->ReportError (msgid, child, 
               "Couldn't find factory %s!", CS::Quote::Single (factname));
             return 0;
           }
@@ -885,7 +876,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(Animeshldr)
             scfQueryInterface<CS::Mesh::iAnimatedMeshFactory> (fact->GetMeshObjectFactory ());
           if (!amfact)
           {
-            ReportError (synldr, msgid, child,
+            synldr->ReportError (msgid, child, 
               "Factory %s doesn't appear to be an animesh factory!", CS::Quote::Single (factname));
             return 0;
           }
@@ -894,7 +885,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(Animeshldr)
           ammesh = scfQueryInterface<CS::Mesh::iAnimatedMesh> (mesh);
           if (!ammesh)
           {
-            ReportError (synldr, msgid, child,
+            synldr->ReportError (msgid, child, 
               "Factory %s doesn't appear to be an animesh factory!", CS::Quote::Single (factname));
             return 0;
           }
@@ -906,7 +897,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(Animeshldr)
           iMaterialWrapper* mat = ldr_context->FindMaterial (matname);
           if (!mat)
           {
-            ReportError (synldr, msgid, child, "Couldn't find material %s!",
+            synldr->ReportError (msgid, child, "Couldn't find material %s!", 
               CS::Quote::Single (matname));
             return 0;
           }
@@ -929,7 +920,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(Animeshldr)
 
             if (!skelMgr)
             {
-              ReportError (synldr, msgid, child, "Could not find any loaded skeletons");
+              synldr->ReportError (msgid, child, "Could not find any loaded skeletons");
               return 0;
             }
           }      
@@ -938,7 +929,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(Animeshldr)
           CS::Animation::iSkeletonFactory* skelFact = skelMgr->FindSkeletonFactory (skelName);
           if (!skelFact)
           {
-            ReportError (synldr, msgid, child, "Could not find skeleton %s",
+            synldr->ReportError (msgid, child, "Could not find skeleton %s",
 				 CS::Quote::Single (skelName));
             return 0;
           }
@@ -955,7 +946,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(Animeshldr)
 
             if (!skelMgr)
             {
-              ReportError (synldr, msgid, child, "Could not find any loaded skeletons");
+              synldr->ReportError (msgid, child, "Could not find any loaded skeletons");
               return 0;
             }
           }
@@ -963,7 +954,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(Animeshldr)
           CS::Animation::iSkeleton* skeleton = ammesh->GetSkeleton ();
           if (!skeleton)
           {
-            ReportError (synldr, msgid, child, "Mesh does not have a skeleton");
+            synldr->ReportError (msgid, child, "Mesh does not have a skeleton");
             return 0;
           }
 
@@ -971,7 +962,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(Animeshldr)
           CS::Animation::iSkeletonAnimPacketFactory* packetFact = skelMgr->FindAnimPacketFactory (packetName);
           if (!packetFact)
           {
-            ReportError (synldr, msgid, child, "Could not find animation packet %s",
+            synldr->ReportError (msgid, child, "Could not find animation packet %s",
 				 CS::Quote::Single (packetName));
             return 0;
           }
@@ -986,18 +977,17 @@ CS_PLUGIN_NAMESPACE_BEGIN(Animeshldr)
 
 	  if (name.Trim ().IsEmpty ())
           {
-	    CS::va_callv(&iSyntaxService::ReportV, synldr, msgid,
-	      CS_REPORTER_SEVERITY_WARNING, (iDocumentNode*)child,
-	      "No name specified for the morph target");
+            synldr->Report (msgid, CS_REPORTER_SEVERITY_WARNING, child,
+			    "No name specified for the morph target");
 	    break;
           }
 
 	  uint targetID = ammesh->GetAnimatedMeshFactory ()->FindMorphTarget (name);
 	  if (targetID == (uint) ~0)
           {
-	    CS::va_callv(&iSyntaxService::ReportV, synldr, msgid,
-	      CS_REPORTER_SEVERITY_WARNING, (iDocumentNode*)child,
-	      "Could not find morph target %s", CS::Quote::Single (name));
+            synldr->Report (msgid, CS_REPORTER_SEVERITY_WARNING, child,
+			    "Could not find morph target %s",
+			    CS::Quote::Single (name));
 	    break;
           }
 
@@ -1026,7 +1016,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(Animeshldr)
     CS::Animation::iSkeleton* skeleton = amesh->GetSkeleton ();
     if (!skeleton)
     {
-      ReportError (synldr, msgid, child, "Mesh does not have a skeleton while creating bounding boxes");
+      synldr->ReportError (msgid, child, "Mesh does not have a skeleton while creating bounding boxes");
       return false;
     }
 
@@ -1047,7 +1037,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(Animeshldr)
 	  currBone = child2->GetAttributeValueAsInt ("bone");
 	  if (currBone >= numBones)
 	  {
-	    ReportError (synldr, msgid, child2,
+	    synldr->ReportError (msgid, child2, 
 				 "Invalid bounding box index %d, expected maximum %d bones",
 				 (int) currBone, (int) numBones);
 	    return false;

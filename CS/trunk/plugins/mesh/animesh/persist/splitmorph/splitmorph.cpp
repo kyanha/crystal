@@ -27,7 +27,6 @@
 #include "cstool/animeshtools.h"
 #include "csutil/scf.h"
 #include "csutil/stringquote.h"
-#include "csutil/vararg.h"
 
 #include "splitmorph.h"
 
@@ -95,8 +94,7 @@ CS_PLUGIN_NAMESPACE_BEGIN (SplitMorph)
     // Check that the parameters are invalid
     if (file.IsEmpty ())
     {
-      CS::va_callv(&iSyntaxService::ReportErrorV, synldr,
-	msgidFactory, node, "No base file provided!");
+      synldr->ReportError (msgidFactory, node, "No base file provided!");
       return csPtr<iBase> (nullptr);
     }
 
@@ -114,8 +112,8 @@ CS_PLUGIN_NAMESPACE_BEGIN (SplitMorph)
       csRef<iVFS> vfs =  csQueryRegistry<iVFS> (registry);
       if (!vfs->Mount ("/tmp/splitmorph", realPath))
       {
-	CS::va_callv(&iSyntaxService::ReportErrorV, synldr, msgidFactory, node,
-          "Could not mount real path %s!", CS::Quote::Single (realPath));
+	synldr->ReportError (msgidFactory, node, "Could not mount real path %s!",
+			     CS::Quote::Single (realPath));
 	return csPtr<iBase> (nullptr);
       }
 

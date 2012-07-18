@@ -57,7 +57,7 @@ csPtr<iRenderStep> csRenderStepParser::Parse (
   {
     if (synldr)
     {
-      ReportError (
+      synldr->ReportError (
 	"crystalspace.renderloop.step.parser",
 	node,
 	"%s attribute missing",
@@ -78,7 +78,7 @@ csPtr<iRenderStep> csRenderStepParser::Parse (
   {
     if (synldr)
     {
-      ReportError (
+      synldr->ReportError (
 	"crystalspace.renderloop.step.parser",
 	node,
 	"Could not retrieve plugin %s",
@@ -98,7 +98,7 @@ csPtr<iRenderStep> csRenderStepParser::Parse (
   {
     if (synldr)
     {
-      ReportError (
+      synldr->ReportError (
 	"crystalspace.renderloop.step.parser",
 	node,
 	"Plugin didn't return render step!");
@@ -132,7 +132,7 @@ bool csRenderStepParser::ParseRenderSteps (iRenderStepContainer* container,
 	  {
 	    if (synldr)
 	    {
-	      ReportError (
+	      synldr->ReportError (
 		"crystalspace.renderloop.steps.parser",
 		node,
 		"Render step container refused to add step. (%zu)",
@@ -148,15 +148,6 @@ bool csRenderStepParser::ParseRenderSteps (iRenderStepContainer* container,
   }
 
   return true;
-}
-
-void csRenderStepParser::ReportError (const char* msgid,
-  iDocumentNode* errornode, const char* msg, ...)
-{
-  va_list arg;
-  va_start (arg, msg);
-  synldr->ReportErrorV(msgid, errornode, msg, arg);
-  va_end (arg);
 }
 
 }

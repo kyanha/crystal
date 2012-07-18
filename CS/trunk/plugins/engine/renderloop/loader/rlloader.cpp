@@ -75,7 +75,7 @@ bool csRenderLoopLoader::ParseRenderSteps (iRenderLoop* loop,
   if (!cont)
   {
     if (synldr)
-      ReportError (
+      synldr->ReportError (
 	      "crystalspace.renderloop.load",
               node, "Internal error: doesn't implement iRenderStepContainer!");
     return false;
@@ -91,7 +91,7 @@ csPtr<iBase> csRenderLoopLoader::Parse (iDocumentNode* node,
   if (!engine)
   {
     if (synldr)
-      ReportError (
+      synldr->ReportError (
 	      "crystalspace.renderloop.load",
               node, "Can't find engine!");
     return 0;
@@ -101,7 +101,7 @@ csPtr<iBase> csRenderLoopLoader::Parse (iDocumentNode* node,
   if (!loopmgr)
   {
     if (synldr)
-      ReportError (
+      synldr->ReportError (
 	      "crystalspace.renderloop.load",
               node, "Engine doesn't have a render loop manager!");
     return 0;
@@ -159,7 +159,7 @@ csPtr<iBase> csRenderLoopLoader::Parse (iDocumentNode* node,
     {
       if (synldr) 
       {
-	Report (
+	synldr->Report (
 	  "crystalspace.renderloop.loop.loader",
 	  CS_REPORTER_SEVERITY_WARNING,
 	  node,
@@ -173,7 +173,7 @@ csPtr<iBase> csRenderLoopLoader::Parse (iDocumentNode* node,
   {
     if (synldr) 
     {
-      Report (
+      synldr->Report (
 	"crystalspace.renderloop.loop.loader",
 	CS_REPORTER_SEVERITY_WARNING,
 	node,
@@ -186,7 +186,7 @@ csPtr<iBase> csRenderLoopLoader::Parse (iDocumentNode* node,
   {
     if (synldr) 
     {
-      Report (
+      synldr->Report (
 	"crystalspace.renderloop.loop.loader",
 	CS_REPORTER_SEVERITY_WARNING,
 	node,
@@ -201,24 +201,6 @@ csPtr<iBase> csRenderLoopLoader::Parse (iDocumentNode* node,
 error:
   delete[] loopName;
   return 0;
-}
-
-void csRenderLoopLoader::Report (const char* msgid, int severity,
-  iDocumentNode* errornode, const char* msg, ...)
-{
-  va_list arg;
-  va_start (arg, msg);
-  synldr->ReportV(msgid, severity, errornode, msg, arg);
-  va_end (arg);
-}
-
-void csRenderLoopLoader::ReportError (const char* msgid,
-  iDocumentNode* errornode, const char* msg, ...)
-{
-  va_list arg;
-  va_start (arg, msg);
-  synldr->ReportErrorV(msgid, errornode, msg, arg);
-  va_end (arg);
 }
 
 }

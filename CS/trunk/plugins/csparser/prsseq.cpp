@@ -89,7 +89,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
     }
     if (!parname)
     {
-      SynReportError (
+      SyntaxService->ReportError (
         "crystalspace.maploader.parse.sequence", opnode,
         "Missing attribute %s or %s in sequence %s!",
         CS::Quote::Single (partype),
@@ -102,7 +102,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
     {
       if (!base_params)
       {
-        SynReportError (
+        SyntaxService->ReportError (
           "crystalspace.maploader.parse.sequence", opnode,
           "No parameters defined in sequence %s!",
           CS::Quote::Single (seqname));
@@ -111,7 +111,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
       csRef<iParameterESM> par = base_params->CreateParameterESM (parname);
       if (par == 0)
       {
-        SynReportError (
+        SyntaxService->ReportError (
           "crystalspace.maploader.parse.sequence", opnode,
           "Parameter %s is not defined in sequence %s!",
           CS::Quote::Single (parname), CS::Quote::Single (seqname));
@@ -155,7 +155,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
         value = FindSequence (eseqmgr, parname);
         break;
       case PARTYPE_POLYGON:
-        SynReport (
+        SyntaxService->Report (
           "crystalspace.maploader.parse.sequence", CS_REPORTER_SEVERITY_WARNING,
           opnode, "The %s parameter is obsolete since thing objects have been removed.",
 	  CS::Quote::Single ("polygon"));
@@ -163,7 +163,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
       }
       if (!value)
       {
-        SynReportError (
+        SyntaxService->ReportError (
           "crystalspace.maploader.parse.sequence",
           opnode, "Couldn't find %s %s (sequence %s)!",
           partype, CS::Quote::Single (parname), CS::Quote::Single (seqname));
@@ -189,7 +189,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
 
       if (!params)
       {
-        SynReportError (
+        SyntaxService->ReportError (
           "crystalspace.maploader.parse.sequenceparams", child,
           "Sequence %s doesn't have parameters (%s %s)!",
           CS::Quote::Single (sequence->QueryObject ()->GetName ()),
@@ -201,7 +201,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
       const char* parname = child->GetAttributeValue ("name");
       if (!parname)
       {
-        SynReportError (
+        SyntaxService->ReportError (
           "crystalspace.maploader.parse.sequenceparams", child,
           "Missing %s attribute in %s %s!",
 	  CS::Quote::Single ("name"),
@@ -212,7 +212,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
       size_t idx = params->GetParameterIdx (parname);
       if (idx == csArrayItemNotFound)
       {
-        SynReportError (
+        SyntaxService->ReportError (
           "crystalspace.maploader.parse.sequenceparams", child,
           "Bad parameter %s for sequence %s (%s %s)!",
           CS::Quote::Single (parname),
@@ -231,7 +231,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
           const char* meshname = child->GetAttributeValue ("mesh");
           if (!meshname)
           {
-            SynReportError (
+            SyntaxService->ReportError (
               "crystalspace.maploader.parse.sequenceparams", child,
               "Missing %s attribute in %s %s!",
 	      CS::Quote::Single ("mesh"),
@@ -242,7 +242,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
           iMeshWrapper* mesh = ldr_context->FindMeshObject (meshname);
           if (!mesh)
           {
-            SynReportError (
+            SyntaxService->ReportError (
               "crystalspace.maploader.parse.sequenceparams", child,
               "Couldn't find mesh %s in %s %s!",
               CS::Quote::Single (meshname),
@@ -259,7 +259,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
           const char* lightname = child->GetAttributeValue ("light");
           if (!lightname)
           {
-            SynReportError (
+            SyntaxService->ReportError (
               "crystalspace.maploader.parse.sequenceparams", child,
               "Missing %s attribute in %s %s!",
 	      CS::Quote::Single ("light"),
@@ -270,7 +270,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
           iLight* light = ldr_context->FindLight (lightname);
           if (!light)
           {
-            SynReportError (
+            SyntaxService->ReportError (
               "crystalspace.maploader.parse.sequenceparams", child,
               "Couldn't find light %s in %s %s!",
               CS::Quote::Single (lightname),
@@ -287,7 +287,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
           const char* sectname = child->GetAttributeValue ("sector");
           if (!sectname)
           {
-            SynReportError (
+            SyntaxService->ReportError (
               "crystalspace.maploader.parse.sequenceparams", child,
               "Missing %s attribute in %s %s!",
 	      CS::Quote::Single ("sector"),
@@ -298,7 +298,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
           iSector* sector = ldr_context->FindSector (sectname);
           if (!sector)
           {
-            SynReportError (
+            SyntaxService->ReportError (
               "crystalspace.maploader.parse.sequenceparams", child,
               "Couldn't find sector %s in %s %s!",
               CS::Quote::Single (sectname),
@@ -315,7 +315,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
           const char* matname = child->GetAttributeValue ("material");
           if (!matname)
           {
-            SynReportError (
+            SyntaxService->ReportError (
               "crystalspace.maploader.parse.sequenceparams", child,
               "Missing %s attribute in %s %s!",
 	      CS::Quote::Single ("material"),
@@ -326,7 +326,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
           iMaterialWrapper* mat = ldr_context->FindMaterial (matname);
           if (!mat)
           {
-            SynReportError (
+            SyntaxService->ReportError (
               "crystalspace.maploader.parse.sequenceparams", child,
               "Couldn't find material %s in %s %s!",
               CS::Quote::Single (matname), parenttype, CS::Quote::Single (parentname));
@@ -338,7 +338,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
         }
         break;
       case XMLTOKEN_POLYGON:
-        SynReport (
+        SyntaxService->Report (
           "crystalspace.maploader.parse.sequence", CS_REPORTER_SEVERITY_WARNING,
           child, "The %s parameter is obsolete since thing objects have been removed.",
 	  CS::Quote::Single ("polygon"));
@@ -351,7 +351,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
     }
     if (params && found_params != params->GetParameterCount ())
     {
-      SynReportError (
+      SyntaxService->ReportError (
         "crystalspace.maploader.parse.sequenceparams", node,
         "Missing parameters for firing sequence in %s %s!",
         parenttype, CS::Quote::Single (parentname));
@@ -387,7 +387,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
           const char* meshname = child->GetAttributeValue ("mesh");
           if (!meshname)
           {
-            SynReportError (
+            SyntaxService->ReportError (
               "crystalspace.maploader.parse.trigger",
               child, "Couldn't find %s attribute in trigger %s!",
 	      CS::Quote::Single ("mesh"),
@@ -398,7 +398,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
           iMeshWrapper* mesh = ldr_context->FindMeshObject (meshname);
           if (!mesh)
           {
-            SynReportError (
+            SyntaxService->ReportError (
               "crystalspace.maploader.parse.trigger",
               child, "Couldn't find mesh %s in trigger %s!",
 	      CS::Quote::Single (meshname),
@@ -413,7 +413,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
           const char *lightname = child->GetAttributeValue ("light");
           if (!lightname)
           {
-            SynReportError (
+            SyntaxService->ReportError (
               "crystalspace.maploader.parse.trigger",
               child, "Couldn't find %s attribute in trigger %s!",
 	      CS::Quote::Single ("light"),
@@ -423,7 +423,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
           iLight* light = ldr_context->FindLight (lightname);
           if (!light)
           {
-            SynReportError (
+            SyntaxService->ReportError (
               "crystalspace.maploader.parse.trigger",
               child, "Couldn't find light %s in trigger %s!",
 	      CS::Quote::Single (lightname),
@@ -456,7 +456,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
           const char* sectname = child->GetAttributeValue ("sector");
           if (!sectname)
           {
-            SynReportError (
+            SyntaxService->ReportError (
               "crystalspace.maploader.parse.trigger",
               child, "Couldn't find %s attribute in trigger %s!",
 	      CS::Quote::Single ("sector"),
@@ -467,7 +467,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
           iSector* sector = ldr_context->FindSector (sectname);
           if (!sector)
           {
-            SynReportError (
+            SyntaxService->ReportError (
               "crystalspace.maploader.parse.trigger",
               child, "Couldn't find sector %s in trigger %s!",
 	      CS::Quote::Single (sectname),
@@ -508,7 +508,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
           const char* seqname = child->GetAttributeValue ("sequence");
           if (!seqname)
           {
-            SynReportError (
+            SyntaxService->ReportError (
               "crystalspace.maploader.parse.trigger",
               child, "Couldn't find %s attribute in trigger %s!",
 	      CS::Quote::Single ("sequence"),
@@ -519,7 +519,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
           iSequenceWrapper* sequence = FindSequence (eseqmgr, seqname);
           if (!sequence)
           {
-            SynReportError (
+            SyntaxService->ReportError (
               "crystalspace.maploader.parse.trigger",
               child, "Couldn't find sequence %s in trigger %s!",
               CS::Quote::Single (seqname), CS::Quote::Single (trigname));
@@ -559,7 +559,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
   {
     if (!eseqmgr)
     {
-      SynReportError (
+      SyntaxService->ReportError (
         "crystalspace.maploader.parse.sequence",
         node, "No sequence manager loaded!");
       return false;
@@ -593,7 +593,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
     iSequenceWrapper* sequence = CS_PLUGIN_NAMESPACE_NAME(csparser)::CreateSequence (eseqmgr, seqname);
     if (!sequence)
     {
-      SynReportError (
+      SyntaxService->ReportError (
         "crystalspace.maploader.parse.trigger",
         node, "Duplicate sequence %s!", CS::Quote::Single (seqname));
       return 0;
@@ -659,7 +659,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
           const char* seqname2 = child->GetAttributeValue ("sequence");
           if (!seqname2)
           {
-            SynReportError (
+            SyntaxService->ReportError (
               "crystalspace.maploader.parse.sequence",
               child, "Missing %s in sequence %s!",
 	      CS::Quote::Single ("sequence"),
@@ -669,7 +669,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
           iSequenceWrapper* sequence2 = FindSequence (eseqmgr, seqname2);
           if (!sequence2)
           {
-            SynReportError (
+            SyntaxService->ReportError (
               "crystalspace.maploader.parse.sequence",
               child, "Can't find sequence %s in sequence %s!",
               CS::Quote::Single (seqname2), CS::Quote::Single (seqname));
@@ -696,7 +696,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
           time = child->GetAttributeValueAsInt ("time");
           if (!time && !(min || max))
           {
-            SynReportError (
+            SyntaxService->ReportError (
               "crystalspace.maploader.parse.sequence", child,
               "Delay tag in sequence %s must specify time, or min and max!",
               CS::Quote::Single (seqname));
@@ -799,7 +799,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
                   tot_angle3 = child2->GetContentsValueAsFloat ();
                   break;
                 default:
-                  SynReportError (
+                  SyntaxService->ReportError (
                     "crystalspace.maploader.parse.sequence",
                     child2, "Maximum 3 rotations in sequence %s!",
                     CS::Quote::Single (seqname));
@@ -940,7 +940,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
           const char* varname;
           if ((varname = child->GetAttributeValue ("var")) == 0)
           {
-            SynReportError (
+            SyntaxService->ReportError (
               "crystalspace.maploader.parse.sequence", child,
               "Please specify a variable name (%s attribute)!",
 	      CS::Quote::Single ("var"));
@@ -949,7 +949,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
           var = FindSharedVariable (varname, iSharedVariable::SV_UNKNOWN);
           if (!var)
           {
-            SynReportError (
+            SyntaxService->ReportError (
               "crystalspace.maploader.parse.sequence", child,
               "Shared variable %s not found for %s!",
               CS::Quote::Single (varname),
@@ -969,7 +969,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
             float v = add_a->GetValueAsFloat ();
             if (var->GetType () != iSharedVariable::SV_FLOAT)
             {
-              SynReportError (
+              SyntaxService->ReportError (
                 "crystalspace.maploader.parse.sequence", child,
                 "Variable %s is not a float variable!",
                 CS::Quote::Single (varname));
@@ -985,7 +985,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
               iSharedVariable::SV_UNKNOWN);
             if (!srcvar)
             {
-              SynReportError (
+              SyntaxService->ReportError (
                 "crystalspace.maploader.parse.sequence", child,
                 "Shared variable %s not found for %s!",
                 CS::Quote::Single (value_var_name),
@@ -1002,7 +1002,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
               iSharedVariable::SV_UNKNOWN);
             if (!addvar)
             {
-              SynReportError (
+              SyntaxService->ReportError (
                 "crystalspace.maploader.parse.sequence", child,
                 "Shared variable %s not found for %s!",
                 CS::Quote::Single (add_var_name),
@@ -1011,7 +1011,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
             }
             if (addvar->GetType () != iSharedVariable::SV_FLOAT)
             {
-              SynReportError (
+              SyntaxService->ReportError (
                 "crystalspace.maploader.parse.sequence", child,
                 "Variable %s is not a float variable!",
                 CS::Quote::Single (varname));
@@ -1040,7 +1040,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
             sequence->AddOperationSetVariable (cur_time, var, c);
             break;
           }
-          SynReportError (
+          SyntaxService->ReportError (
             "crystalspace.maploader.parse.sequence", child,
             "Invalid operation on shared variable %s!",
             CS::Quote::Single (varname));
@@ -1061,7 +1061,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
             var = FindSharedVariable (colvar, iSharedVariable::SV_COLOR);
             if (!var)
             {
-              SynReportError (
+              SyntaxService->ReportError (
                 "crystalspace.maploader.parse.sequence", child,
                 "Shared variable %s not found or not a color!",
                 CS::Quote::Single (colvar));
@@ -1159,7 +1159,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
             iSequenceWrapper* trueseqwrap = FindSequence (eseqmgr, trueseqname);
             if (!trueseqwrap)
             {
-              SynReportError (
+              SyntaxService->ReportError (
                 "crystalspace.maploader.parse.sequence",
                 child, "Can't find sequence %s in sequence %s!",
                 CS::Quote::Single (trueseqname), CS::Quote::Single (seqname));
@@ -1174,7 +1174,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
             iSequenceWrapper* falseseqwrap = FindSequence (eseqmgr, falseseqname);
             if (!falseseqwrap)
             {
-              SynReportError (
+              SyntaxService->ReportError (
                 "crystalspace.maploader.parse.sequence",
                 child, "Can't find sequence %s in sequence %s!",
                 CS::Quote::Single (falseseqname), CS::Quote::Single (seqname));
@@ -1199,7 +1199,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
   {
     if (!eseqmgr)
     {
-      SynReportError (
+      SyntaxService->ReportError (
         "crystalspace.maploader.parse.sequence",
         node, "No sequence manager loaded!");
       return false;

@@ -65,11 +65,6 @@ protected:
   bool ParseGradientShade (iDocumentNode* node, csGradientShade& shade);
   bool WriteGradientShade (iDocumentNode* node, const csGradientShade& shade);
 
-  void Notify (const char* msgid, int severity,
-	iDocumentNode* errornode, const char* msg, ...);
-  void NotifyError (const char* msgid, iDocumentNode* errornode,
-	const char* msg, ...);
-
 public:
   csTextSyntaxService (iBase *parent);
   virtual ~csTextSyntaxService ();
@@ -142,17 +137,13 @@ public:
   virtual csRef<iShader> ParseShader (iLoaderContext* ldr_context,
       iDocumentNode* node);
 
-#ifndef CS_VIRTUAL_BASE_VARARG_BROKEN
   virtual void ReportError (const char* msgid, iDocumentNode* errornode,
 	const char* msg, ...);
-#endif
   virtual void ReportErrorV (const char* msgid, iDocumentNode* errornode,
 	const char* msg, va_list args);
   virtual void ReportBadToken (iDocumentNode* badtokennode);
-#ifndef CS_VIRTUAL_BASE_VARARG_BROKEN
   virtual void Report (const char* msgid, int severity, 
 	iDocumentNode* errornode, const char* msg, ...);
-#endif
   virtual void ReportV (const char* msgid, int severity,
 	iDocumentNode* errornode, const char* msg, va_list args);
 };

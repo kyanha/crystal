@@ -83,7 +83,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
       case XMLTOKEN_DEFAULT:
         if (trimesh)
         {
-          SynReportError (
+          SyntaxService->ReportError (
             "crystalspace.maploader.parse.trimesh", child,
             "Use either <default>, <box>, or <mesh>!");
           return false;
@@ -93,7 +93,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
       case XMLTOKEN_BOX:
         if (trimesh || use_default_mesh)
         {
-          SynReportError (
+          SyntaxService->ReportError (
             "crystalspace.maploader.parse.trimesh", child,
             "Use either <default>, <box>, or <mesh>!");
           return false;
@@ -104,7 +104,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
       case XMLTOKEN_MESH:
         if (trimesh || use_default_mesh)
         {
-          SynReportError (
+          SyntaxService->ReportError (
             "crystalspace.maploader.parse.trimesh", child,
             "Use either <default>, <box>, or <mesh>!");
           return false;
@@ -156,7 +156,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
     }
     if (ids.GetSize () == 0)
     {
-      SynReportError (
+      SyntaxService->ReportError (
         "crystalspace.maploader.parse.trimesh",
         node, "No id's for this triangle mesh!");
       return false;
@@ -549,7 +549,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
             child->GetContentsValue ());
           if (!lightFactory)
           {
-            SynReportError (
+            SyntaxService->ReportError (
               "crystalspace.maploader.load.light",
               child, "Can't find light factory %s!", CS::Quote::Single (child->GetContentsValue ()));
             return 0;
@@ -662,7 +662,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
               matnode->GetContentsValue ()) : 0;
             if (!halo.flare.mat_center)
             {
-              SynReportError (
+              SyntaxService->ReportError (
                 "crystalspace.maploader.parse.light",
                 child, "Can't find material for flare!");
               return 0;
@@ -672,7 +672,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
               matnode->GetContentsValue ()) : 0;
             if (!halo.flare.mat_spark1)
             {
-              SynReportError (
+              SyntaxService->ReportError (
                 "crystalspace.maploader.parse.light",
                 child, "Can't find material for flare!");
               return 0;
@@ -682,7 +682,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
               matnode->GetContentsValue ()) : 0;
             if (!halo.flare.mat_spark2)
             {
-              SynReportError (
+              SyntaxService->ReportError (
                 "crystalspace.maploader.parse.light",
                 child, "Can't find material for flare!");
               return 0;
@@ -692,7 +692,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
               matnode->GetContentsValue ()) : 0;
             if (!halo.flare.mat_spark3)
             {
-              SynReportError (
+              SyntaxService->ReportError (
                 "crystalspace.maploader.parse.light",
                 child, "Can't find material for flare!");
               return 0;
@@ -702,7 +702,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
               matnode->GetContentsValue ()) : 0;
             if (!halo.flare.mat_spark4)
             {
-              SynReportError (
+              SyntaxService->ReportError (
                 "crystalspace.maploader.parse.light",
                 child, "Can't find material for flare!");
               return 0;
@@ -712,7 +712,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
               matnode->GetContentsValue ()) : 0;
             if (!halo.flare.mat_spark5)
             {
-              SynReportError (
+              SyntaxService->ReportError (
                 "crystalspace.maploader.parse.light",
                 child, "Can't find material for flare!");
               return 0;
@@ -720,7 +720,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
           }
           else
           {
-            SynReportError (
+            SyntaxService->ReportError (
               "crystalspace.maploader.parse.light",
               child,
               "Unknown halo type %s. Use %s, %s or %s!",
@@ -823,7 +823,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
         }
         break;
       case XMLTOKEN_DIRECTION:
-        SynReportError ("crystalspace.maploader.light", child,
+        SyntaxService->ReportError ("crystalspace.maploader.light", child,
           "%s is no longer support for lights. Use %s!",
 	  CS::Quote::Single ("direction"), CS::Quote::Single ("move"));
         return 0;
@@ -846,7 +846,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
           var.AttachNew (new csShaderVariable (stringSetSvName->Request (varname)));
           if (!SyntaxService->ParseShaderVar (ldr_context, child, *var))
           {
-            SynReportError (
+            SyntaxService->ReportError (
               "crystalspace.maploader.load.meshobject", child,
               "Error loading shader variable %s in light %s.", 
               CS::Quote::Single (varname), CS::Quote::Single (lightname));
@@ -1049,7 +1049,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
       shaderNode = shaderDoc->GetRoot ()->GetNode ("shader");
       if (!shaderNode)
       {
-        SynReportError ("crystalspace.maploader", node,
+        SyntaxService->ReportError ("crystalspace.maploader", node,
           "Shader file %s is not a valid shader XML file!",
           CS::Quote::Single (filename.GetData ()));
         return false;
@@ -1062,7 +1062,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
       shaderNode = node->GetNode ("shader");
       if (!shaderNode)
       {
-        SynReportError ("crystalspace.maploader", node,
+        SyntaxService->ReportError ("crystalspace.maploader", node,
           "%s or %s node is missing!",
 	  CS::Quote::Single ("shader"),
 	  CS::Quote::Single ("file"));
@@ -1142,7 +1142,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
     }
     else
     {
-      SynReportError ("crystalspace.maploader",
+      SyntaxService->ReportError ("crystalspace.maploader",
         node, "Variable tag does not have %s attribute.",
 	CS::Quote::Single ("name"));
       return false;
@@ -1278,7 +1278,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
           }
           if (culplugname.IsEmpty ())
           {
-            SynReportError (
+            SyntaxService->ReportError (
               "crystalspace.maploader.parse.sector",
               child,
               "CULLERP expects the name of a visibility culling plugin!");
@@ -1300,7 +1300,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
           const char* meshname = child->GetAttributeValue ("name");
           if (!meshname)
           {
-            SynReportError (
+            SyntaxService->ReportError (
               "crystalspace.maploader.load.trimesh",
               child, "%s requires a name in sector %s!",
 	      CS::Quote::Single ("trimesh"),
@@ -1328,7 +1328,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
           const char* meshname = child->GetAttributeValue ("name");
           if (!meshname)
           {
-            SynReportError (
+            SyntaxService->ReportError (
               "crystalspace.maploader.load.meshobject",
               child, "%s requires a name in sector %s!",
 	      CS::Quote::Single ("meshobj"),
@@ -1346,7 +1346,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
           const char* meshname = child->GetAttributeValue ("name");
           if (!meshname)
           {
-            SynReportError (
+            SyntaxService->ReportError (
               "crystalspace.maploader.load.meshobject",
               child, "%s requires a name (sector %s)!",
 	      CS::Quote::Single ("meshlib"),
@@ -1356,7 +1356,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
           iMeshWrapper* mesh = Engine->GetMeshes ()->FindByName (meshname);
           if (!mesh)
           {
-            SynReportError (
+            SyntaxService->ReportError (
               "crystalspace.maploader.load.meshobject",
               child,
               "Could not find mesh object %s (sector %s) for MESHLIB!",
@@ -1492,7 +1492,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
           default_node->GetContentsValue ());
         if (!loop)
         {
-          SynReport ("crystalspace.maploader.parse.settings",
+          SyntaxService->Report ("crystalspace.maploader.parse.settings",
             CS_REPORTER_SEVERITY_ERROR,
             node, "No suitable renderloop found!");
           return 0;
@@ -1514,7 +1514,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
         iRenderLoop* loop = Engine->GetRenderLoopManager()->Retrieve (loopName);
         if (!loop)
         {
-          SynReport ("crystalspace.maploader.parse.settings",
+          SyntaxService->Report ("crystalspace.maploader.parse.settings",
             CS_REPORTER_SEVERITY_ERROR,
             node, "Render loop %s not found",
             CS::Quote::Single (loopName));
@@ -1524,7 +1524,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
       }
       else
       {
-        SynReport (
+        SyntaxService->Report (
           "crystalspace.maploader.parse.settings",
           CS_REPORTER_SEVERITY_ERROR,
           node, "Expected render loop name: %s",
@@ -1568,7 +1568,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
     bool rc = sector->SetVisibilityCullerPlugin (culplugname, culler_params);
     if (!rc)
     {
-      SynReportError (
+      SyntaxService->ReportError (
         "crystalspace.maploader.load.sector",
         culler_params, "Could not load visibility culler for sector %s!",
         CS::Quote::Single (sector->QueryObject()->GetName() ? sector->QueryObject()->GetName()
@@ -1596,13 +1596,13 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
       switch (id)
       {
       case XMLTOKEN_ADDON:
-        SynReportError (
+        SyntaxService->ReportError (
           "crystalspace.maploader.parse.node",
           child, "%s not yet supported in node!",
 	  CS::Quote::Single ("addon"));
         return 0;
       case XMLTOKEN_META:
-        SynReportError (
+        SyntaxService->ReportError (
           "crystalspace.maploader.parse.node",
           child, "%s not yet supported in node!",
 	  CS::Quote::Single ("meta"));

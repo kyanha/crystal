@@ -28,7 +28,6 @@
 #include "csutil/xmltiny.h"
 #include "csutil/cfgacc.h"
 #include "csutil/stringquote.h"
-#include "csutil/vararg.h"
 
 #include "csplugincommon/rendermanager/renderlayers.h"
 
@@ -128,8 +127,8 @@ namespace CS
 	          int v = child->GetContentsValueAsInt();
 	          if (v < 0)
 	          {
-	            va_callv(&iSyntaxService::ReportErrorV, synldr, messageID,
-		      (iDocumentNode*)child, "Invalid maximum light passes number");
+	            synldr->ReportError (messageID, 
+	              child, "Invalid maximum light passes number");
 	            return false;
 	          }
 	          maxLightPasses = v;
@@ -140,8 +139,8 @@ namespace CS
 	          int v = child->GetContentsValueAsInt();
 	          if (v < 0)
 	          {
-	            va_callv(&iSyntaxService::ReportErrorV, synldr, messageID,
-		      (iDocumentNode*)child, "Invalid maximum lights number");
+	            synldr->ReportError (messageID, 
+	              child, "Invalid maximum lights number");
 	            return false;
 	          }
 	          maxLights = v;

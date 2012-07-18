@@ -23,7 +23,6 @@
 #include "csutil/scanstr.h"
 #include "csutil/stringquote.h"
 #include "csutil/util.h"
-#include "csutil/vararg.h"
 #include "csutil/xmltiny.h"
 #include "csgfx/shaderexp.h"
 
@@ -33,8 +32,6 @@
 #include "ivaria/reporter.h"
 
 #include "csplugincommon/shader/shaderprogram.h"
-
-using CS::va_callv;
 
 void csShaderProgram::ProgramParam::SetValue (float val)
 {
@@ -82,8 +79,7 @@ bool csShaderProgram::ProgramParamParser::ParseProgramParam (
   const char* type = node->GetAttributeValue ("type");
   if (type == 0)
   {
-    va_callv(&iSyntaxService::ReportV, synsrv,
-      "crystalspace.graphics3d.shader.common",
+    synsrv->Report ("crystalspace.graphics3d.shader.common",
       CS_REPORTER_SEVERITY_WARNING,
       node,
       "No %s attribute",
@@ -101,8 +97,7 @@ bool csShaderProgram::ProgramParamParser::ParseProgramParam (
     const char* value = node->GetContentsValue();
     if (!value)
     {
-      va_callv(&iSyntaxService::ReportV, synsrv,
-	"crystalspace.graphics3d.shader.common",
+      synsrv->Report ("crystalspace.graphics3d.shader.common",
 	CS_REPORTER_SEVERITY_WARNING,
 	node,
 	"Node has no contents");
@@ -179,8 +174,7 @@ bool csShaderProgram::ProgramParamParser::ParseProgramParam (
   }
   else 
   {
-    va_callv(&iSyntaxService::ReportV, synsrv,
-      "crystalspace.graphics3d.shader.common",
+    synsrv->Report ("crystalspace.graphics3d.shader.common",
       CS_REPORTER_SEVERITY_WARNING,
       node,
       "Unknown type %s", CS::Quote::Single (type));
@@ -189,8 +183,7 @@ bool csShaderProgram::ProgramParamParser::ParseProgramParam (
 
   if (!(types & paramType))
   {
-    va_callv(&iSyntaxService::ReportV, synsrv,
-      "crystalspace.graphics3d.shader.common",
+    synsrv->Report ("crystalspace.graphics3d.shader.common",
       CS_REPORTER_SEVERITY_WARNING,
       node,
       "Type %s not supported by this parameter", CS::Quote::Single (type));
@@ -222,8 +215,7 @@ bool csShaderProgram::ProgramParamParser::ParseProgramParam (
 	const char* value = node->GetContentsValue();
 	if (!value)
 	{
-	  va_callv(&iSyntaxService::ReportV, synsrv,
-	    "crystalspace.graphics3d.shader.common",
+	  synsrv->Report ("crystalspace.graphics3d.shader.common",
 	    CS_REPORTER_SEVERITY_WARNING,
 	    node,
 	    "Node has no contents");
@@ -231,8 +223,7 @@ bool csShaderProgram::ProgramParamParser::ParseProgramParam (
 	}
 	if (csScanStr (value, "%f,%f", &x, &y) != 2)
 	{
-	  va_callv(&iSyntaxService::ReportV, synsrv,
-	    "crystalspace.graphics3d.shader.common",
+	  synsrv->Report ("crystalspace.graphics3d.shader.common",
 	    CS_REPORTER_SEVERITY_WARNING,
 	    node,
 	    "Couldn't parse vector2 %s", CS::Quote::Single (value));
@@ -247,8 +238,7 @@ bool csShaderProgram::ProgramParamParser::ParseProgramParam (
 	const char* value = node->GetContentsValue();
 	if (!value)
 	{
-	  va_callv(&iSyntaxService::ReportV, synsrv,
-	    "crystalspace.graphics3d.shader.common",
+	  synsrv->Report ("crystalspace.graphics3d.shader.common",
 	    CS_REPORTER_SEVERITY_WARNING,
 	    node,
 	    "Node has no contents");
@@ -256,8 +246,7 @@ bool csShaderProgram::ProgramParamParser::ParseProgramParam (
 	}
 	if (csScanStr (value, "%f,%f,%f", &x, &y, &z) != 3)
 	{
-	  va_callv(&iSyntaxService::ReportV, synsrv,
-	    "crystalspace.graphics3d.shader.common",
+	  synsrv->Report ("crystalspace.graphics3d.shader.common",
 	    CS_REPORTER_SEVERITY_WARNING,
 	    node,
 	    "Couldn't parse vector3 %s", CS::Quote::Single (value));
@@ -272,8 +261,7 @@ bool csShaderProgram::ProgramParamParser::ParseProgramParam (
 	const char* value = node->GetContentsValue();
 	if (!value)
 	{
-	  va_callv(&iSyntaxService::ReportV, synsrv,
-	    "crystalspace.graphics3d.shader.common",
+	  synsrv->Report ("crystalspace.graphics3d.shader.common",
 	    CS_REPORTER_SEVERITY_WARNING,
 	    node,
 	    "Node has no contents");
@@ -281,8 +269,7 @@ bool csShaderProgram::ProgramParamParser::ParseProgramParam (
 	}
 	if (csScanStr (value, "%f,%f,%f,%f", &x, &y, &z, &w) != 4)
 	{
-	  va_callv(&iSyntaxService::ReportV, synsrv,
-	    "crystalspace.graphics3d.shader.common",
+	  synsrv->Report ("crystalspace.graphics3d.shader.common",
 	    CS_REPORTER_SEVERITY_WARNING,
 	    node,
 	    "Couldn't parse vector4 %s", CS::Quote::Single (value));
@@ -340,8 +327,7 @@ bool csShaderProgram::ParseCommon (iDocumentNode* child)
       const char* destname = child->GetAttributeValue ("destination");
       if (!destname)
       {
-        va_callv(&iSyntaxService::ReportV, synsrv,
-	  "crystalspace.graphics3d.shader.common",
+        synsrv->Report ("crystalspace.graphics3d.shader.common",
           CS_REPORTER_SEVERITY_WARNING, child,
           "<variablemap> has no %s attribute",
           CS::Quote::Single ("destination"));
@@ -401,8 +387,7 @@ bool csShaderProgram::ParseProgramNode (iDocumentNode* child, ProgramSource& par
     csRef<iFile> file = vfs->Open (filename, VFS_FILE_READ);
     if (!file.IsValid())
     {
-      va_callv(&iSyntaxService::ReportV, synsrv,
-	"crystalspace.graphics3d.shader.common",
+      synsrv->Report ("crystalspace.graphics3d.shader.common",
         CS_REPORTER_SEVERITY_WARNING, child,
         "Could not open %s", CS::Quote::Single (filename));
       return false;

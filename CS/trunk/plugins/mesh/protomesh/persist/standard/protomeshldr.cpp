@@ -54,14 +54,6 @@ SCF_IMPLEMENT_FACTORY (csProtoFactorySaver)
 SCF_IMPLEMENT_FACTORY (csProtoMeshLoader)
 SCF_IMPLEMENT_FACTORY (csProtoMeshSaver)
 
-static void ReportError (iSyntaxService* syn, const char* msgid,
-    iDocumentNode* errornode, const char* msg, ...)
-{
-  va_list args;
-  va_start(args, msg);
-  syn->ReportErrorV(msgid, errornode, msg, args);
-  va_end(args);
-}
 
 csProtoFactoryLoader::csProtoFactoryLoader (iBase* pParent) :
   scfImplementationType (this, pParent)
@@ -97,7 +89,7 @@ csPtr<iBase> csProtoFactoryLoader::Parse (iDocumentNode* node,
   }
   if (!type)
   {
-    ReportError (synldr,
+    synldr->ReportError (
 		"crystalspace.protomeshfactoryloader.setup.objecttype",
 		node, "Could not load the general mesh object plugin!");
     return 0;
@@ -129,7 +121,7 @@ csPtr<iBase> csProtoFactoryLoader::Parse (iDocumentNode* node,
         {
 	  if (triidx >= 12)
 	  {
-	    ReportError (synldr,
+	    synldr->ReportError (
 		"crystalspace.protomeshfactoryloader.parsetriangle",
 		node, "Only twelve triangles allowed!");
 	    return 0;
@@ -144,7 +136,7 @@ csPtr<iBase> csProtoFactoryLoader::Parse (iDocumentNode* node,
         {
 	  if (idx >= 8)
 	  {
-	    ReportError (synldr,
+	    synldr->ReportError (
 		"crystalspace.protomeshfactoryloader.parsevertex",
 		node, "Only eight vertices allowed!");
 	    return 0;
@@ -170,14 +162,14 @@ csPtr<iBase> csProtoFactoryLoader::Parse (iDocumentNode* node,
   }
   if (idx != 8)
   {
-    ReportError (synldr,
+    synldr->ReportError (
 		"crystalspace.protomeshfactoryloader.parsevertex",
 		node, "Eight vertices are needed!");
     return 0;
   }
   if (triidx != 12)
   {
-    ReportError (synldr,
+    synldr->ReportError (
 		"crystalspace.protomeshfactoryloader.parsetriangle",
 		node, "Twelve triangles are needed!");
     return 0;
@@ -282,7 +274,7 @@ bool csProtoMeshLoader::Initialize (iObjectRegistry* object_reg)
 
 #define CHECK_MESH(m) \
   if (!m) { \
-    ReportError (synldr, \
+    synldr->ReportError ( \
 	"crystalspace.protomeshloader.parse.unknownfactory", \
 	child, "Specify the factory first!"); \
     return 0; \
@@ -320,7 +312,7 @@ csPtr<iBase> csProtoMeshLoader::Parse (iDocumentNode* node,
 
     if(!fact)
     {
-      ReportError (synldr,
+      synldr->ReportError (
         "crystalspace.protomeshloader.parse.unknownfactory",
         child, "Couldn't find factory %s!", CS::Quote::Single (factname));
       return 0;
@@ -331,7 +323,7 @@ csPtr<iBase> csProtoMeshLoader::Parse (iDocumentNode* node,
           meshstate = scfQueryInterface<iProtoMeshState> (mesh);
 	  if (!meshstate)
 	  {
-	    ReportError (synldr,
+      	    synldr->ReportError (
 		"crystalspace.protomeshloader.parse.badfactory",
 		child, "Factory %s doesn't appear to be a protomesh factory!",
 		CS::Quote::Single (factname));
@@ -345,7 +337,7 @@ csPtr<iBase> csProtoMeshLoader::Parse (iDocumentNode* node,
           iMaterialWrapper* mat = ldr_context->FindMaterial (matname);
 	  if (!mat)
 	  {
-	    ReportError (synldr,
+      	    synldr->ReportError (
 		"crystalspace.protomeshloader.parse.unknownmaterial",
 		child, "Couldn't find material %s!", CS::Quote::Single (matname));
             return 0;

@@ -93,10 +93,6 @@ CS_PLUGIN_NAMESPACE_BEGIN(Skeleton2Ldr)
 			   CS::Animation::iSkeletonFactory* sourceSkeleton,
 			   CS::Animation::iSkeletonFactory* targetSkeleton);
     bool ParseEffector (iDocumentNode* node, CS::Animation::iSkeletonIKNodeFactory* factory);
-    void Report (const char* msgid, int severity,
-      iDocumentNode* errornode, const char* msg, ...) CS_GNUC_PRINTF(5,6);
-    void ReportError (const char* msgid, iDocumentNode* errornode,
-      const char* msg, ...) CS_GNUC_PRINTF(4,5);
 
     iObjectRegistry* object_reg;
     csRef<iSyntaxService> synldr;

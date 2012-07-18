@@ -26,7 +26,6 @@
 #include "csutil/dirtyaccessarray.h"
 #include "csutil/scanstr.h"
 #include "csutil/sysfunc.h"
-#include "csutil/vararg.h"
 
 #include "iengine/engine.h"
 #include "iengine/material.h"
@@ -582,7 +581,7 @@ csPtr<iBase> csSkeletonFactoryLoader::Parse (iDocumentNode* node,
   	object_reg, "crystalspace.graveyard", false);
   if (!graveyard)
   {
-    CS::va_callv(&iSyntaxService::ReportErrorV, synldr,
+    synldr->ReportError (
     "crystalspace.skelfactoryloader.setup.objecttype",
     node, "Could not load the graveyard plugin!");
     return 0;

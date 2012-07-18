@@ -50,16 +50,6 @@ CS_LEAKGUARD_IMPLEMENT (csFuncTexLoader);
 
 SCF_IMPLEMENT_FACTORY(csFuncTexLoader)
 
-
-static void Report (iSyntaxService* syn, const char* msgid, int severity,
-  iDocumentNode* errornode, const char* msg, ...)
-{
-  va_list arg;
-  va_start (arg, msg);
-  syn->ReportV(msgid, severity, errornode, msg, arg);
-  va_end (arg);
-}
-
 //---------------------------------------------------------------------------
 
 csFuncTexLoader::csFuncTexLoader (iBase *p) :
@@ -139,7 +129,7 @@ csPtr<iBase> csFuncTexLoader::Parse (iDocumentNode* node,
       csRef<iDocumentNode> newNode = it->Next();
       if (newNode->GetType() != CS_NODE_COMMENT)
       {
-	Report (synldr, "crystalspace.texture.loader.func",
+	synldr->Report ("crystalspace.texture.loader.func",
 	  CS_REPORTER_SEVERITY_WARNING,
 	  exprNode,
 	  "Subsequent expressions are ignored");
@@ -149,7 +139,7 @@ csPtr<iBase> csFuncTexLoader::Parse (iDocumentNode* node,
   }
   else
   {
-    Report (synldr, "crystalspace.texture.loader.func",
+    synldr->Report ("crystalspace.texture.loader.func",
       CS_REPORTER_SEVERITY_WARNING,
       node,
       "No expression found");
@@ -238,7 +228,7 @@ csPtr<iBase> csFuncTexLoader::Parse (iDocumentNode* node,
 	}
       }
       else
-	Report (synldr, "crystalspace.texture.loader.func",
+	synldr->Report ("crystalspace.texture.loader.func",
 	  CS_REPORTER_SEVERITY_WARNING,
 	  exprNode,
 	  "Error parsing expression: %s", expr.GetError());

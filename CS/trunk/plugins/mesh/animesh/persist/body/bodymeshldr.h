@@ -62,8 +62,6 @@ CS_PLUGIN_NAMESPACE_BEGIN(BodyMeshLdr)
     bool ParseConstraint (iDocumentNode *node, bool &x, bool &y, bool &z,
 			  csVector3 &min, csVector3 &max);
     bool ParseChain (iDocumentNode* node, CS::Animation::iBodySkeleton* skeleton);
-    void ReportError (const char* msgid, iDocumentNode* errornode,
-	const char* msg, ...) CS_GNUC_PRINTF(4,5);
 
     iObjectRegistry* object_reg;
     csRef<iSyntaxService> synldr;
