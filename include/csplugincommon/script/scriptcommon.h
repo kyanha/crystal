@@ -52,14 +52,6 @@ public:
 
   virtual bool SetPointer (void*) { return false; }
 
-  virtual bool Call (const char *name, const char *format, ...);
-  virtual bool Call (const char *name, int &ret, const char *fmt, ...);
-  virtual bool Call (const char *name, float &ret, const char *fmt, ...);
-  virtual bool Call (const char *name, double &ret, const char *fmt, ...);
-  virtual bool Call (const char *name, csRef<iString>&, const char *fmt, ...);
-  virtual bool Call (const char *name, csRef<iScriptObject>&,
-    const char *fmt, ...);
-
   virtual bool Set (const char *name, int data);
   virtual bool Set (const char *name, float data);
   virtual bool Set (const char *name, double data);
@@ -99,17 +91,6 @@ protected:
 
 public:
   virtual ~csScriptCommon() {}
-
-  virtual csRef<iScriptObject> NewObject (const char *type,
-    const char *ctorFormat, ...);
-
-  virtual bool Call (const char *name, const char *format, ...);
-  virtual bool Call (const char *name, int &ret, const char *fmt, ...);
-  virtual bool Call (const char *name, float &ret, const char *fmt, ...);
-  virtual bool Call (const char *name, double &ret, const char *fmt, ...);
-  virtual bool Call (const char *name, csRef<iString>&, const char *fmt, ...);
-  virtual bool Call (const char *name, csRef<iScriptObject> &ret,
-    const char *fmt, ...);
 
   virtual bool Store (const char *name, int data);
   virtual bool Store (const char *name, float data);

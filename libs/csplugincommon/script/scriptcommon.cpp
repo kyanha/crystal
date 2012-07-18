@@ -101,37 +101,6 @@ void csScriptObjectCommon::CallCommon (const char *name,
   ret.AttachNew (Call (name, args));
 }
 
-bool csScriptObjectCommon::Call (const char *name, const char *fmt, ...)
-{
-  csRef<iScriptValue> retval;
-  va_list va;
-  va_start (va, fmt);
-  CallCommon (name, retval, va, fmt);
-  va_end (va);
-  return retval.IsValid ();
-}
-#define CS_SCRIPTOBJECTCOMMON_CALL(TYPE)				\
-{									\
-  csRef<iScriptValue> retval;						\
-  va_list va;								\
-  va_start (va, fmt);							\
-  CallCommon (name, retval, va, fmt);					\
-  va_end (va);								\
-  if (! (retval && (retval->GetTypes() & iScriptValue::t##TYPE))) return false;\
-  ret = retval->Get##TYPE ();						\
-  return true;								\
-}
-bool csScriptObjectCommon::Call (const char *name, int &ret, const char *fmt, ...)
-CS_SCRIPTOBJECTCOMMON_CALL(Int)
-bool csScriptObjectCommon::Call (const char *name, float &ret, const char *fmt, ...)
-CS_SCRIPTOBJECTCOMMON_CALL(Float)
-bool csScriptObjectCommon::Call (const char *name, double &ret, const char *fmt, ...)
-CS_SCRIPTOBJECTCOMMON_CALL(Double)
-bool csScriptObjectCommon::Call (const char *name, csRef<iString> &ret, const char *fmt, ...)
-CS_SCRIPTOBJECTCOMMON_CALL(String)
-bool csScriptObjectCommon::Call (const char *name, csRef<iScriptObject> &ret, const char *fmt, ...)
-CS_SCRIPTOBJECTCOMMON_CALL(Object)
-
 #define CS_SCRIPTOBJECTCOMMON_SET			\
 {							\
   csRef<iScriptValue> val (GetScript ()->RValue (data));\
@@ -181,50 +150,6 @@ void csScriptCommon::CallCommon (const char *name,
   csScriptCommonParseFormat(fmt, va, args, this);
 
   ret.AttachNew (Call (name, args));
-}
-
-bool csScriptCommon::Call (const char *name, const char *fmt, ...)
-{
-  csRef<iScriptValue> retval;
-  va_list va;
-  va_start (va, fmt);
-  CallCommon (name, retval, va, fmt);
-  va_end (va);
-  return retval.IsValid ();
-}
-#define CS_SCRIPTCOMMON_CALL(TYPE)					\
-{									\
-  csRef<iScriptValue> retval;						\
-  va_list va;								\
-  va_start (va, fmt);							\
-  CallCommon (name, retval, va, fmt);					\
-  va_end (va);								\
-  if (! (retval && (retval->GetTypes() & iScriptValue::t##TYPE))) return false;\
-  ret = retval->Get##TYPE ();						\
-  return true;								\
-}
-bool csScriptCommon::Call (const char *name, int &ret, const char *fmt, ...)
-CS_SCRIPTCOMMON_CALL(Int)
-bool csScriptCommon::Call (const char *name, float &ret, const char *fmt, ...)
-CS_SCRIPTCOMMON_CALL(Float)
-bool csScriptCommon::Call (const char *name, double &ret, const char *fmt, ...)
-CS_SCRIPTCOMMON_CALL(Double)
-bool csScriptCommon::Call (const char *name, csRef<iString> &ret, const char *fmt, ...)
-CS_SCRIPTCOMMON_CALL(String)
-bool csScriptCommon::Call (const char *name, csRef<iScriptObject> &ret, const char *fmt, ...)
-CS_SCRIPTCOMMON_CALL(Object)
-
-csRef<iScriptObject> csScriptCommon::NewObject (const char *type, const char *fmt, ...)
-{
-  //if (strlen(fmt) % 2) return;
-
-  va_list va;
-  va_start (va, fmt);
-  csRefArray<iScriptValue> args;
-  csScriptCommonParseFormat (fmt, va, args, this);
-  va_end (va);
-
-  return New (type, args);
 }
 
 #define CS_SCRIPTCOMMON_STORE			\

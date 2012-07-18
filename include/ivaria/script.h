@@ -101,7 +101,7 @@ struct iScriptValue : public virtual iBase
  */
 struct iScriptObject : public virtual iBase
 {
-  SCF_INTERFACE (iScriptObject, 2, 0, 0);
+  SCF_INTERFACE (iScriptObject, 3, 0, 0);
 
   /**
    * Returns a reference to the iScript to which this object belongs.
@@ -188,31 +188,10 @@ struct iScriptObject : public virtual iBase
   ////////////////////////////////////////
   //@@@ Lots more deprecated methods below
 
-  #define CS_DEPRECATED_METHOD_MSG_CALL CS_DEPRECATED_METHOD_MSG \
-    ("use Call(const char*, const csRefArray<iScriptValue>&) instead")
   #define CS_DEPRECATED_METHOD_MSG_SET(NEW_METHOD) CS_DEPRECATED_METHOD_MSG \
     ("use " NEW_METHOD "(const char*, iScriptValue*) instead")
   #define CS_DEPRECATED_METHOD_MSG_GET(NEW_METHOD) CS_DEPRECATED_METHOD_MSG \
     ("use " NEW_METHOD "(const char*) instead")
-
-  CS_DEPRECATED_METHOD_MSG_CALL
-  virtual bool Call (const char *name, const char *format, ...)
-    CS_GNUC_PRINTF(3, 4) = 0;
-  CS_DEPRECATED_METHOD_MSG_CALL
-  virtual bool Call (const char *name, int &ret, const char *fmt, ...)
-    CS_GNUC_PRINTF(4, 5) = 0;
-  CS_DEPRECATED_METHOD_MSG_CALL
-  virtual bool Call (const char *name, float &ret, const char *fmt, ...)
-    CS_GNUC_PRINTF(4, 5) = 0;
-  CS_DEPRECATED_METHOD_MSG_CALL
-  virtual bool Call (const char *name, double &ret, const char *fmt, ...)
-    CS_GNUC_PRINTF(4, 5) = 0;
-  CS_DEPRECATED_METHOD_MSG_CALL
-  virtual bool Call (const char *name, csRef<iString>&, const char *fmt, ...)
-    CS_GNUC_PRINTF(4, 5) = 0;
-  CS_DEPRECATED_METHOD_MSG_CALL
-  virtual bool Call (const char *name, csRef<iScriptObject>&,
-    const char *fmt, ...) CS_GNUC_PRINTF(4, 5) = 0;
 
   CS_DEPRECATED_METHOD_MSG_SET("Set")
   virtual bool Set (const char *name, int data) = 0;
@@ -248,7 +227,7 @@ struct iScriptObject : public virtual iBase
  */
 struct iScript : public virtual iBase
 {
-  SCF_INTERFACE (iScript, 2, 0, 0);
+  SCF_INTERFACE (iScript, 3, 0, 0);
 
   /**
    * Runs some script in the scripting language.
@@ -354,29 +333,6 @@ struct iScript : public virtual iBase
   /////////////////////////////////////////
   //@@@ Lots more deprecated methods below.
 
-  CS_DEPRECATED_METHOD_MSG("use New() instead")
-  virtual csRef<iScriptObject> NewObject (const char *type,
-    const char *ctorFormat, ...) CS_GNUC_PRINTF(3, 4) = 0;
-  
-  CS_DEPRECATED_METHOD_MSG_CALL
-  virtual bool Call (const char *name, const char *format, ...)
-    CS_GNUC_PRINTF(3, 4) = 0;
-  CS_DEPRECATED_METHOD_MSG_CALL
-  virtual bool Call (const char *name, int &ret, const char *fmt, ...)
-    CS_GNUC_PRINTF(4, 5) = 0;
-  CS_DEPRECATED_METHOD_MSG_CALL
-  virtual bool Call (const char *name, float &ret, const char *fmt, ...)
-    CS_GNUC_PRINTF(4, 5) = 0;
-  CS_DEPRECATED_METHOD_MSG_CALL
-  virtual bool Call (const char *name, double &ret, const char *fmt, ...)
-    CS_GNUC_PRINTF(4, 5) = 0;
-  CS_DEPRECATED_METHOD_MSG_CALL
-  virtual bool Call (const char *name, csRef<iString>&, const char *fmt, ...)
-    CS_GNUC_PRINTF(4, 5) = 0;
-  CS_DEPRECATED_METHOD_MSG_CALL
-  virtual bool Call (const char *name, csRef<iScriptObject> &ret,
-    const char *fmt, ...) CS_GNUC_PRINTF(4, 5) = 0;
-  
   CS_DEPRECATED_METHOD_MSG_SET("Store")
   virtual bool Store (const char *name, int data) = 0;
   CS_DEPRECATED_METHOD_MSG_SET("Store")
