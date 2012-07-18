@@ -27,6 +27,8 @@
 #include "csutil/sysfunc.h"
 #include "csutil/util.h"
 
+#include <stdarg.h>
+
 /**\file
  * Reporter interface.
  */
@@ -153,7 +155,7 @@ struct iReporterIterator : public virtual iBase
  */
 struct iReporter : public virtual iBase
 {
-  SCF_INTERFACE(iReporter, 2, 0, 0);
+  SCF_INTERFACE(iReporter, 3, 0, 0);
 
   /**
    * Report something. The given message ID should be formed like:
@@ -161,8 +163,14 @@ struct iReporter : public virtual iBase
    * 'crystalspace.sprite2dloader.parse.material'.
    * \sa \ref FormatterNotes
    */
-  virtual void Report (int severity, const char* msgId,
-  	const char* description, ...) CS_GNUC_PRINTF(4, 5) = 0;
+  void Report (int severity, const char* msgId,
+	const char* description, ...) CS_GNUC_PRINTF(4, 5)
+  {
+    va_list args;
+    va_start(args, description);
+    ReportV(severity, msgId, description, args);
+    va_end(args);
+  }
 
   /**
    * Report something. va_list version.

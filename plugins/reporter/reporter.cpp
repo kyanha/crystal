@@ -125,15 +125,6 @@ bool csReporter::Initialize (iObjectRegistry *object_reg)
   return true;
 }
 
-void csReporter::Report (int severity, const char* msgId,
-  	const char* description, ...)
-{
-  va_list arg;
-  va_start (arg, description);
-  ReportV (severity, msgId, description, arg);
-  va_end (arg);
-}
-
 void csReporter::ReportV (int severity, const char* msgId,
   	const char* description, va_list arg)
 {
