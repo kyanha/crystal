@@ -30,6 +30,8 @@
 #include "iutil/databuff.h"
 #include "ivideo/graph3d.h"
 
+#include <stdarg.h>
+
 class csBox3;
 class csColor;
 class csColor4;
@@ -94,7 +96,7 @@ namespace CS
  */
 struct iSyntaxService : public virtual iBase
 {
-  SCF_INTERFACE (iSyntaxService, 3, 0, 1);
+  SCF_INTERFACE (iSyntaxService, 4, 0, 0);
   
   /**\name Parse reporting helpers
    * @{ */
@@ -102,8 +104,14 @@ struct iSyntaxService : public virtual iBase
    * Report an error and also gives a path in the XML tree.
    * \sa \ref FormatterNotes
    */
-  virtual void ReportError (const char* msgid, iDocumentNode* errornode,
-	const char* msg, ...) CS_GNUC_PRINTF(4,5) = 0;
+  void ReportError (const char* msgid, iDocumentNode* errornode,
+	const char* msg, ...) CS_GNUC_PRINTF(4,5)
+  {
+    va_list args;
+    va_start(args, msg);
+    ReportErrorV(msgid, errornode, msg, args);
+    va_end(args);
+  }
 
   /**
    * Report an error and also gives a path in the XML tree.
@@ -122,8 +130,14 @@ struct iSyntaxService : public virtual iBase
    * Report something, also gives a path in the XML tree.
    * \sa \ref FormatterNotes
    */
-  virtual void Report (const char* msgid, int severity, 
-    iDocumentNode* errornode, const char* msg, ...) CS_GNUC_PRINTF(5,6) = 0;
+  void Report (const char* msgid, int severity,
+    iDocumentNode* errornode, const char* msg, ...) CS_GNUC_PRINTF(5,6)
+  {
+    va_list args;
+    va_start(args, msg);
+    ReportV(msgid, severity, errornode, msg, args);
+    va_end(args);
+  }
 
   /**
    * Report something, also gives a path in the XML tree.

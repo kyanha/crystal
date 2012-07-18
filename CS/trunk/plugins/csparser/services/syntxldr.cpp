@@ -1356,28 +1356,10 @@ bool csTextSyntaxService::WriteKey (iDocumentNode *node, iKeyValuePair *keyvalue
   return true;
 }
 
-void csTextSyntaxService::ReportError (const char* msgid,
-	iDocumentNode* errornode, const char* msg, ...)
-{
-  va_list arg;
-  va_start (arg, msg);
-  ReportErrorV (msgid, errornode, msg, arg);
-  va_end (arg);
-}
-
 void csTextSyntaxService::ReportErrorV (const char* msgid,
 	iDocumentNode* errornode, const char* msg, va_list arg)
 {
   ReportV (msgid, CS_REPORTER_SEVERITY_ERROR, errornode, msg, arg);
-}
-
-void csTextSyntaxService::Report (const char* msgid, int severity, 
-	iDocumentNode* errornode, const char* msg, ...)
-{
-  va_list arg;
-  va_start (arg, msg);
-  ReportV (msgid, severity, errornode, msg, arg);
-  va_end (arg);
 }
 
 static const char* GetDescriptiveAttribute (iDocumentNode* n,
