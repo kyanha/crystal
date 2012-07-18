@@ -33,8 +33,6 @@
 struct iProgressMeter : public virtual iBase
 {
   SCF_INTERFACE(iProgressMeter, 2,0,0);
-
-#ifndef CS_VIRTUAL_BASE_VARARG_BROKEN
   /**
    * Set the id and description of what we are currently monitoring.
    * An id can be something like "crystalspace.engine.lighting.calculation".
@@ -42,7 +40,6 @@ struct iProgressMeter : public virtual iBase
    */
   virtual void SetProgressDescription (const char* id,
         const char* description, ...) CS_GNUC_PRINTF (3, 4) = 0;
-#endif
 
   /**
    * Set the id and description of what we are currently monitoring.
