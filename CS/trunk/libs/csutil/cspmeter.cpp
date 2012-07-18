@@ -21,10 +21,7 @@
 #include "csutil/cspmeter.h"
 #include "csutil/csstring.h"
 #include "csutil/sysfunc.h"
-#include "csutil/vararg.h"
 #include "ivaria/conout.h"
-
-using CS::va_callv;
 
 csTextProgressMeter::csTextProgressMeter (iConsoleOutput* cons, int n)
   : scfImplementationType (this),
@@ -57,7 +54,7 @@ void csTextProgressMeter::Step(unsigned int n)
           buff.AppendFmt ("%d%%", i * tick_scale);
       }
       if (console)
-        va_callv(&iConsoleOutput::PutTextV, console, "%s", buff.GetData());
+        console->PutText ("%s", buff.GetData());
       else
       {
         doFlush = true;
@@ -68,7 +65,7 @@ void csTextProgressMeter::Step(unsigned int n)
     if (current == total)
     {
       if (console)
-        va_callv(&iConsoleOutput::PutTextV, console, "\n");
+        console->PutText ("\n");
       else
       {
         doFlush = true;
@@ -83,7 +80,7 @@ void csTextProgressMeter::Restart()
 {
   Reset();
   if (console)
-    va_callv(&iConsoleOutput::PutTextV, console, "0%%");
+    console->PutText ("0%%");
   else
     csPrintf ("0%%");
 }
@@ -92,7 +89,7 @@ void csTextProgressMeter::Abort ()
 {
   current = total;
   if (console)
-    va_callv(&iConsoleOutput::PutTextV, console, "\n");
+    console->PutText ("\n");
   else
     csPrintf ("\n");
 }
@@ -101,7 +98,7 @@ void csTextProgressMeter::Finalize ()
 {
   current = total;
   if (console)
-    va_callv(&iConsoleOutput::PutTextV, console, "\n");
+    console->PutText ("\n");
   else
     csPrintf ("\n");
 }

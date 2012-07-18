@@ -19,10 +19,7 @@
 
 #include "cssysdef.h"
 #include "csutil/csppulse.h"
-#include "csutil/vararg.h"
 #include "ivaria/conout.h"
-
-using CS::va_callv;
 
 static char const ANIMATION[] = "-\\|/";
 int const ANIMATION_COUNT = sizeof(ANIMATION) / sizeof(ANIMATION[0]) - 1;
@@ -39,7 +36,7 @@ void csProgressPulse::Erase()
 {
   if (drawn)
   {
-    va_callv(&iConsoleOutput::PutTextV, console, "\b \b");
+    console->PutText ("\b \b");
     drawn = false;
   }
 }
@@ -54,7 +51,7 @@ void csProgressPulse::Step()
 {
   char const* prefix = (drawn ? "\b" : "");
   drawn = true;
-  va_callv(&iConsoleOutput::PutTextV, console, "%s%c", prefix, ANIMATION[state]);
+  console->PutText("%s%c", prefix, ANIMATION[state]);
   if (++state >= ANIMATION_COUNT)
     state = 0;
 }

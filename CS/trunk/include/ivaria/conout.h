@@ -80,7 +80,6 @@ struct iConsoleOutput : public virtual iBase
 {
   SCF_INTERFACE (iConsoleOutput, 3, 0, 0);
  
-#ifndef CS_VIRTUAL_BASE_VARARG_BROKEN
   /**
    * Put some text to the console. Console acts like a simple
    * TTY and should interpret basical symbols like '@\n' and '@\b'.
@@ -96,7 +95,6 @@ struct iConsoleOutput : public virtual iBase
    * \sa \ref FormatterNotes
    */
   virtual void PutText (const char *text, ...) CS_GNUC_PRINTF (2, 3) = 0;
-#endif
 
   /**
    * Var_args version of PutText.
