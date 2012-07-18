@@ -61,10 +61,8 @@ struct iNativeWindowManager : public virtual iBase
    * \sa #CS_ALERT_ERROR
    * \sa \ref FormatterNotes
    */
-#ifndef CS_VIRTUAL_BASE_VARARG_BROKEN
   virtual void Alert (int type, const char* title, const char* okMsg,
   	const char* msg, ...) CS_GNUC_PRINTF (5, 6) = 0;
-#endif
   virtual void AlertV (int type, const char* title, const char* okMsg,
   	const char* msg, va_list arg) CS_GNUC_PRINTF (5, 0) = 0;
   //@}
@@ -75,10 +73,8 @@ struct iNativeWindowManager : public virtual iBase
    * \sa #CS_ALERT_ERROR
    * \sa \ref FormatterNotes
    */
-#ifndef CS_VIRTUAL_BASE_VARARG_BROKEN
   virtual void Alert (int type, const wchar_t* title, const wchar_t* okMsg,
   	const wchar_t* msg, ...) CS_GNUC_WPRINTF (5, 6) = 0;
-#endif
   virtual void AlertV (int type, const wchar_t* title, const wchar_t* okMsg,
   	const wchar_t* msg, va_list arg) CS_GNUC_WPRINTF (5, 0) = 0;
   //@}
