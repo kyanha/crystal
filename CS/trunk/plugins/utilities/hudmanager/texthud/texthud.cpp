@@ -159,10 +159,10 @@ bool TextHUDManager::HandleEvent (iEvent& event)
     if (keyDescriptions->GetSize () < maxKeys)
     {
       currentKeyPage = 0;
-      WriteShadowFmt (margin, y, fontColor, "Keys available:");
+      WriteShadow (margin, y, fontColor, "Keys available:");
     }
     else
-      WriteShadowFmt (margin, y, fontColor, "Keys available (%i/%i):",
+      WriteShadow (margin, y, fontColor, "Keys available (%i/%i):",
 		   currentKeyPage + 1, keyDescriptions->GetSize () / maxKeys + 1);
     y += lineSize;
 
@@ -171,14 +171,14 @@ bool TextHUDManager::HandleEvent (iEvent& event)
     {
       if (i / maxKeys == currentKeyPage)
       {
-	WriteShadowFmt (margin + 5, y, fontColor, keyDescriptions->Get (i));
+	WriteShadow (margin + 5, y, fontColor, keyDescriptions->Get (i));
 	y += lineSize;
       }
     }
 
     if (keyDescriptions->GetSize () > maxKeys)
     {
-      WriteShadowFmt (margin, y, fontColor, "F1: more keys");
+      WriteShadow (margin, y, fontColor, "F1: more keys");
       y += lineSize;
     }
   }
@@ -186,12 +186,12 @@ bool TextHUDManager::HandleEvent (iEvent& event)
   // Display the state descriptions
   int y = g2d->GetHeight () - margin - lineSize;
 
-  WriteShadowFmt (margin, y, fontColor, "FPS: %.2f", currentFPS);
+  WriteShadow (margin, y, fontColor, "FPS: %.2f", currentFPS);
   y -= lineSize;
 
   for (int i = stateDescriptions->GetSize () - 1; i >= 0; i--)
   {
-    WriteShadowFmt (margin, y, fontColor, stateDescriptions->Get (i));
+    WriteShadow (margin, y, fontColor, stateDescriptions->Get (i));
     y -= lineSize;
   }
 
@@ -211,15 +211,6 @@ void TextHUDManager::SwitchKeysPage ()
       (currentKeyPage + 1) % (keyDescriptions->GetSize () / maxKeys + 1);
 }
 
-void TextHUDManager::WriteShadowFmt (int x, int y, int color, const char *str, ...) const
-{
-  va_list arg;
-  va_start (arg, str);
-  WriteShadowV (x, y, color, str, arg);
-  va_end (arg);
-}
-
-#ifndef CS_VIRTUAL_BASE_VARARG_BROKEN
 void TextHUDManager::WriteShadow (int x, int y, int fg, const char *str,...) const
 {
   va_list arg;
@@ -227,7 +218,6 @@ void TextHUDManager::WriteShadow (int x, int y, int fg, const char *str,...) con
   WriteShadowV (x, y, fg, str, arg);
   va_end (arg);
 }
-#endif
 
 void TextHUDManager::WriteShadowV (int x, int y, int fg, const char *str, va_list arg) const
 {
@@ -237,7 +227,6 @@ void TextHUDManager::WriteShadowV (int x, int y, int fg, const char *str, va_lis
   WriteStr (x, y, fg, -1, buf.GetData ());
 }
 
-#ifndef CS_VIRTUAL_BASE_VARARG_BROKEN
 void TextHUDManager::Write (int x, int y, int fg, int bg, const char *str,...) const
 {
   va_list arg;
@@ -245,7 +234,6 @@ void TextHUDManager::Write (int x, int y, int fg, int bg, const char *str,...) c
   WriteV (x, y, fg, bg, str, arg);
   va_end (arg);
 }
-#endif
 
 void TextHUDManager::WriteV (int x, int y, int fg, int bg, const char *str, va_list arg) const
 {
