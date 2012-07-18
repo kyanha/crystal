@@ -424,13 +424,19 @@ size_t csStringBase::FindLast (const char *c, size_t pos) const
   return (size_t)-1;
 }
 
-size_t csStringBase::Find (const char* str, size_t pos) const
+size_t csStringBase::Find (const char* str, size_t pos, bool ignore_case) const
 {
   char const* p = GetData();
   if (pos > Size || p == 0)
     return (size_t)-1;
 
-  char const* tmp = strstr (p + pos, str);
+  char const* tmp;
+
+  if (ignore_case)
+    tmp = strcasestr(p + pos, str);
+  else
+    tmp = strstr (p + pos, str);
+
   if (!tmp) 
     return (size_t)-1;
 
