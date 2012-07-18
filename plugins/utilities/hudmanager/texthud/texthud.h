@@ -63,9 +63,7 @@ public:
   //-- CS::Utility::iHUDManager
   virtual void SwitchKeysPage ();
 
-  virtual void WriteShadow (int x, int y, int color, const char *str,...) const;
   virtual void WriteShadowV (int x, int y, int color, const char *str, va_list) const;
-  virtual void Write (int x, int y, int fg, int color, const char *str,...) const;
   virtual void WriteV (int x, int y, int fg, int color, const char *str, va_list) const;
 
   virtual void SetEnabled (bool enabled);

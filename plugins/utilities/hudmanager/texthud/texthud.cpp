@@ -211,28 +211,12 @@ void TextHUDManager::SwitchKeysPage ()
       (currentKeyPage + 1) % (keyDescriptions->GetSize () / maxKeys + 1);
 }
 
-void TextHUDManager::WriteShadow (int x, int y, int fg, const char *str,...) const
-{
-  va_list arg;
-  va_start (arg, str);
-  WriteShadowV (x, y, fg, str, arg);
-  va_end (arg);
-}
-
 void TextHUDManager::WriteShadowV (int x, int y, int fg, const char *str, va_list arg) const
 {
   csString buf;
   buf.FormatV (str, arg);
   WriteStr (x + 1, y - 1, 0, -1, buf.GetData ());
   WriteStr (x, y, fg, -1, buf.GetData ());
-}
-
-void TextHUDManager::Write (int x, int y, int fg, int bg, const char *str,...) const
-{
-  va_list arg;
-  va_start (arg,str);
-  WriteV (x, y, fg, bg, str, arg);
-  va_end (arg);
 }
 
 void TextHUDManager::WriteV (int x, int y, int fg, int bg, const char *str, va_list arg) const
