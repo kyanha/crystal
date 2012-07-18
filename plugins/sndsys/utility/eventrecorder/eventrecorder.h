@@ -42,9 +42,6 @@ class csSndSysBasicEventRecorder :
     virtual ~csSndSysBasicEventRecorder();
 
 
-    /// Log an event with typical variable argument format.
-    void RecordEvent(SndSysEventCategory, SndSysEventLevel, const char* Description, ...) CS_GNUC_PRINTF(4, 5);
-
     /// Log an event with va_list argument passing - useful if you have a logging wrapper function.
     void RecordEventV(SndSysEventCategory, SndSysEventLevel, const char* Description, va_list) CS_GNUC_PRINTF(4, 0);
 

@@ -172,18 +172,6 @@ int csSndSysBasicEventRecorder::ProcessEventQueue()
   return EventCount;
 }
 
-void csSndSysBasicEventRecorder::RecordEvent(SndSysEventCategory Category, SndSysEventLevel Level, const char* Description, ...)
-{
-  if (!m_Active)
-    return;
-
-  va_list arg;
-  va_start (arg, Description);
-  RecordEventV(Category, Level, Description, arg);
-  va_end (arg);
-
-}
-
 void csSndSysBasicEventRecorder::RecordEventV(SndSysEventCategory Category, SndSysEventLevel Level, const char* Description, va_list arg)
 {
   if (!m_Active)
