@@ -79,7 +79,6 @@ public:
   /// Get the tick scale.
   int GetTickScale () const { return tick_scale; }
 
-#ifndef CS_VIRTUAL_BASE_VARARG_BROKEN
   /**
    * Set the id and description of what we are currently monitoring.
    * An id can be something like "crystalspace.engine.lighting.calculation".
@@ -87,13 +86,6 @@ public:
    */
   virtual void CS_GNUC_PRINTF (3, 4)
       SetProgressDescription (const char*, const char*, ...) { }
-#endif
-
-  /**
-   * Set the id and description of what we are currently monitoring.
-   * An id can be something like "crystalspace.engine.lighting.calculation".
-   * \sa \ref FormatterNotes
-   */
   virtual void CS_GNUC_PRINTF (3, 0)
       SetProgressDescriptionV (const char*, const char*, va_list) { }
 

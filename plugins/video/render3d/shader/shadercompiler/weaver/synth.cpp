@@ -32,7 +32,6 @@
 #include "csutil/fifo.h"
 #include "csutil/scopeddelete.h"
 #include "csutil/threading/mutex.h"
-#include "csutil/vararg.h"
 #include "csutil/xmltiny.h"
 
 #include "combiner_default.h"
@@ -207,7 +206,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(ShaderWeaver)
       
       if (progress)
       {
-	CS::va_callv(&iProgressMeter::SetProgressDescriptionV, progress,
+	progress->SetProgressDescription (
 	  "crystalspace.graphics3d.shadercompiler.weaver.synth",
 	  "Generating %zu techniques", synthTechs.GetSize());
 	progress->SetTotal (int (synthTechs.GetSize()));
