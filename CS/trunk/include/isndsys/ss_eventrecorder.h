@@ -19,6 +19,8 @@ Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 #ifndef CS_SNDSYS_EVENTRECORDER_H
 #define CS_SNDSYS_EVENTRECORDER_H
 
+#include <stdarg.h>
+
 /**\file
  * Sound system: debugging tools
  */
@@ -61,10 +63,16 @@ typedef enum
  */
 struct iSndSysEventRecorder : public virtual iBase
 {
-  SCF_INTERFACE (iSndSysEventRecorder, 1, 0, 0);
+  SCF_INTERFACE (iSndSysEventRecorder, 2, 0, 0);
 
   /// Log an event with typical variable argument format.
-  virtual void RecordEvent(SndSysEventCategory, SndSysEventLevel, const char* Description, ...) CS_GNUC_PRINTF(4, 5) = 0;
+  void RecordEvent(SndSysEventCategory c, SndSysEventLevel l, const char* Description, ...) CS_GNUC_PRINTF(4, 5)
+  {
+    va_list args;
+    va_start(args, Description);
+    RecordEventV(c, l, Description, args);
+    va_end(args);
+  }
 
   /// Log an event with va_list argument passing - useful if you have a logging wrapper function.
   virtual void RecordEventV(SndSysEventCategory, SndSysEventLevel, const char* Description, va_list) CS_GNUC_PRINTF(4, 0) = 0;
