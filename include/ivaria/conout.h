@@ -25,6 +25,7 @@
  */
 
 #include "csutil/scf_interface.h"
+#include <stdarg.h>
 
 class csRect;
 struct iConsoleOutput;
@@ -78,7 +79,7 @@ struct iConsoleWatcher : public virtual iBase
  */
 struct iConsoleOutput : public virtual iBase
 {
-  SCF_INTERFACE (iConsoleOutput, 3, 0, 0);
+  SCF_INTERFACE (iConsoleOutput, 4, 0, 0);
  
   /**
    * Put some text to the console. Console acts like a simple
@@ -94,7 +95,13 @@ struct iConsoleOutput : public virtual iBase
    * instead of PutText(str).
    * \sa \ref FormatterNotes
    */
-  virtual void PutText (const char *text, ...) CS_GNUC_PRINTF (2, 3) = 0;
+  void PutText (const char *text, ...) CS_GNUC_PRINTF (2, 3)
+  {
+    va_list args;
+    va_start(args, text);
+    PutTextV(text, args);
+    va_end(args);
+  }
 
   /**
    * Var_args version of PutText.
@@ -206,7 +213,14 @@ struct iConsoleOutput : public virtual iBase
   virtual void RegisterWatcher (iConsoleWatcher*) = 0;
 
   /// Implement simple extension commands.
-  virtual bool PerformExtension (const char *command, ...) = 0;
+  bool PerformExtension (const char *command, ...)
+  {
+    va_list args;
+    va_start(args, command);
+    bool x = PerformExtensionV(command, args);
+    va_end(args);
+    return x;
+  }
 
   /// Implement simple extension commands.
   virtual bool PerformExtensionV (const char *command, va_list) = 0;

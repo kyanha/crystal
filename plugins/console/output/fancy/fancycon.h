@@ -88,13 +88,6 @@ public:
 
   virtual bool Initialize (iObjectRegistry *);
   virtual bool HandleEvent (iEvent &Event);
-  virtual void PutText (const char *iText, ...)
-  {
-    va_list arg;
-    va_start (arg, iText);
-    PutTextV (iText, arg);
-    va_end (arg);
-  }
   virtual void PutTextV (const char *iText, va_list args);
   virtual const char *GetLine (int iLine = -1) const
     { return base->GetLine(iLine); }
@@ -118,7 +111,6 @@ public:
   virtual int GetMaxLineWidth () { return base->GetMaxLineWidth(); }
   virtual void RegisterWatcher (iConsoleWatcher *p)
   { base->RegisterWatcher(p); }
-  virtual bool PerformExtension (const char *command, ...);
   virtual bool PerformExtensionV (const char *iCommand, va_list);
 
   CS_EVENTHANDLER_NAMES("crystalspace.console")
