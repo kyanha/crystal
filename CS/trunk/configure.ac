@@ -2597,23 +2597,6 @@ CS_CHECK_BUILTIN(__builtin_popcount)
 
 
 #------------------------------------------------------------------------------
-# Check if C++ compiler supports virtual vararg methods inherited from virtual
-# base classes.  Some compilers, such as llvm-g++ shipped with Xcode for OSX
-# Lion throw a "generic thunk code fails for method bar() which uses '...'"
-# error.
-#------------------------------------------------------------------------------
-CS_CHECK_BUILD([for virtual base class vararg support],
-    [cs_cv_cxx_virtual_base_vararg],
-    [AC_LANG_PROGRAM(
-        [[#include <stdarg.h>
-        struct A { virtual void f(bool, ...) = 0; };
-        struct B : public virtual A { virtual void f(bool, ...) {} };]],
-        [B b; b.f(true, 42);])],
-        [], [C++], [], [CS_HEADER_PROPERTY([CS_VIRTUAL_BASE_VARARG_BROKEN])])
-
-
-
-#------------------------------------------------------------------------------
 # Determine if plugin meta-information should be embedded directly into plugin
 # modules or if it should exist in stand-alone .csplugin files.
 #------------------------------------------------------------------------------
