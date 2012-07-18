@@ -521,9 +521,10 @@ public:
    * Find the first occurrence of \p search in this string starting at \p pos.
    * \param search String to locate.
    * \param pos Start position of search (default 0).
+   * \param ignore_case Causes the comparison to be case insensitive if true.
    * \return First position of \p search, or (size_t)-1 if not found.
    */
-  size_t Find (const char* search, size_t pos = 0) const;
+  size_t Find (const char* search, size_t pos = 0, bool ignore_case = false) const;
 
   /**
    * Find the first occurrence of \p search in this string starting at \p pos.
