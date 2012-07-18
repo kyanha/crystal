@@ -839,7 +839,7 @@ CS_PLUGIN_NAMESPACE_BEGIN (ColladaConvertor)
 
       /// @todo: Add normal information here.
       /* WRITE OUT VERTICES */
-      scfString formatter;
+      csString formatter;
 
       // positions
       currentCrystalVElement = currentCrystalParamsElement->CreateNodeBefore(CS_NODE_ELEMENT);
