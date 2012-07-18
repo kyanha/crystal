@@ -63,13 +63,9 @@ public:
   //-- CS::Utility::iHUDManager
   virtual void SwitchKeysPage ();
 
-#ifndef CS_VIRTUAL_BASE_VARARG_BROKEN
   virtual void WriteShadow (int x, int y, int color, const char *str,...) const;
-#endif
   virtual void WriteShadowV (int x, int y, int color, const char *str, va_list) const;
-#ifndef CS_VIRTUAL_BASE_VARARG_BROKEN
   virtual void Write (int x, int y, int fg, int color, const char *str,...) const;
-#endif
   virtual void WriteV (int x, int y, int fg, int color, const char *str, va_list) const;
 
   virtual void SetEnabled (bool enabled);
@@ -112,7 +108,6 @@ private:
   CS_EVENTHANDLER_PHASE_2D ("crystalspace.utilities.texthud");
 
   void WriteStr (int x, int y, int fg, int color, const char *str) const;
-  void WriteShadowFmt (int x, int y, int color, const char *str, ...) const;
 };
 
 }
