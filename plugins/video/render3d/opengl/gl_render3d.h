@@ -776,7 +776,6 @@ public:
   void RemoveHalo (csOpenGLHalo* halo);
   virtual float GetZBuffValue (int, int);
 
-  virtual bool PerformExtension (char const* command, ...);
   virtual bool PerformExtensionV (char const* command, va_list args);
 
   virtual void OQInitQueries(unsigned int* queries, int num_queries);

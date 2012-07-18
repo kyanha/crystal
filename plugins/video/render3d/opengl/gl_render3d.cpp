@@ -3616,15 +3616,6 @@ bool csGLGraphics3D::PerformExtensionV (char const* command, va_list /*args*/)
   return false;
 }
 
-bool csGLGraphics3D::PerformExtension (char const* command, ...)
-{
-  va_list args;
-  va_start (args, command);
-  bool rc = PerformExtensionV(command, args);
-  va_end (args);
-  return rc;
-}
-
 void csGLGraphics3D::OQInitQueries(unsigned int* queries,int num_queries)
 {
   if (num_queries != 0)
