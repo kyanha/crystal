@@ -155,7 +155,6 @@ struct iReporter : public virtual iBase
 {
   SCF_INTERFACE(iReporter, 2, 0, 0);
 
-#ifndef CS_VIRTUAL_BASE_VARARG_BROKEN
   /**
    * Report something. The given message ID should be formed like:
    * 'crystalspace.{source}.{type}.{detail}'. Example:
@@ -164,7 +163,6 @@ struct iReporter : public virtual iBase
    */
   virtual void Report (int severity, const char* msgId,
   	const char* description, ...) CS_GNUC_PRINTF(4, 5) = 0;
-#endif
 
   /**
    * Report something. va_list version.

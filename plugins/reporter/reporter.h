@@ -72,10 +72,8 @@ public:
   virtual ~csReporter ();
   virtual bool Initialize (iObjectRegistry *object_reg);
 
-#ifndef CS_VIRTUAL_BASE_VARARG_BROKEN
   virtual void Report (int severity, const char* msgId,
   	const char* description, ...) CS_GNUC_PRINTF (4, 5);
-#endif
   virtual void ReportV (int severity, const char* msgId,
   	const char* description, va_list) CS_GNUC_PRINTF (4, 0);
   virtual void Clear (int severity = -1);

@@ -125,7 +125,6 @@ bool csReporter::Initialize (iObjectRegistry *object_reg)
   return true;
 }
 
-#ifndef CS_VIRTUAL_BASE_VARARG_BROKEN
 void csReporter::Report (int severity, const char* msgId,
   	const char* description, ...)
 {
@@ -134,7 +133,6 @@ void csReporter::Report (int severity, const char* msgId,
   ReportV (severity, msgId, description, arg);
   va_end (arg);
 }
-#endif
 
 void csReporter::ReportV (int severity, const char* msgId,
   	const char* description, va_list arg)
