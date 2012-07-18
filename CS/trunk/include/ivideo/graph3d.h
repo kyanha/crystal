@@ -38,6 +38,8 @@
 
 #include "ivideo/rndbuf.h"
 
+#include <stdarg.h>
+
 struct iClipper2D;
 struct iGraphics2D;
 struct iHalo;
@@ -808,7 +810,7 @@ namespace CS
  */
 struct iGraphics3D : public virtual iBase
 {
-  SCF_INTERFACE(iGraphics3D, 4, 0, 3);
+  SCF_INTERFACE(iGraphics3D, 5, 0, 0);
   
   /// Open the 3D graphics display.
   virtual bool Open () = 0;
@@ -1161,7 +1163,14 @@ struct iGraphics3D : public virtual iBase
    * commands, so please try to use descriptive command names rather
    * than "a", "b" and so on...
    */
-  virtual bool PerformExtension (char const* command, ...) = 0;
+  bool PerformExtension (char const* command, ...)
+  {
+    va_list args;
+    va_start(args, command);
+    bool x = PerformExtensionV(command, args);
+    va_end(args);
+    return x;
+  }
 
   /**
    * Perform a system specific exension.<p>
