@@ -352,24 +352,6 @@ void csGraphics2D::AlertV (int type, const char* title, const char* okMsg,
   fflush (stdout);
 }
 
-void csGraphics2D::Alert (int type, const char* title, const char* okMsg, 
-			  const char* msg, ...)
-{
-  va_list arg;
-  va_start (arg, msg);
-  AlertV (type, title, okMsg, msg, arg);
-  va_end (arg);
-}
-
-void csGraphics2D::Alert (int type, const wchar_t* title, const wchar_t* okMsg, 
-			  const wchar_t* msg, ...)
-{
-  va_list arg;
-  va_start (arg, msg);
-  AlertV (type, csString (title), csString (okMsg), csString (msg), arg);
-  va_end (arg);
-}
-
 void csGraphics2D::AlertV (int type, const wchar_t* title, const wchar_t* okMsg,
     const wchar_t* msg, va_list arg)
 {
