@@ -1579,7 +1579,6 @@ class iScript(core.iBase):
     def New(*args): return _ivaria.iScript_New(*args)
     def Store(*args): return _ivaria.iScript_Store(*args)
     def Remove(*args): return _ivaria.iScript_Remove(*args)
-    def NewObject(*args): return _ivaria.iScript_NewObject(*args)
     def RetrieveFloat(*args): return _ivaria.iScript_RetrieveFloat(*args)
     def Retrieve(*args): return _ivaria.iScript_Retrieve(*args)
     def GetTruth(*args): return _ivaria.iScript_GetTruth(*args)

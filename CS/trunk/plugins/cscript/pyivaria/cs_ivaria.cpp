@@ -43289,77 +43289,6 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_iScript_NewObject__varargs__(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *varargs) {
-  PyObject *resultobj = 0;
-  iScript *arg1 = (iScript *) 0 ;
-  char *arg2 = (char *) 0 ;
-  char *arg3 = (char *) 0 ;
-  void *arg4 = 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  int res2 ;
-  char *buf2 = 0 ;
-  int alloc2 = 0 ;
-  int res3 ;
-  char *buf3 = 0 ;
-  int alloc3 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  PyObject * obj2 = 0 ;
-  SwigValueWrapper< csRef< iScriptObject > > result;
-  
-  if(!PyArg_UnpackTuple(args,(char *)"iScript_NewObject",3,3,&obj0,&obj1,&obj2)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_iScript, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "iScript_NewObject" "', argument " "1"" of type '" "iScript *""'"); 
-  }
-  arg1 = reinterpret_cast< iScript * >(argp1);
-  res2 = SWIG_AsCharPtrAndSize(obj1, &buf2, NULL, &alloc2);
-  if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "iScript_NewObject" "', argument " "2"" of type '" "char const *""'");
-  }
-  arg2 = reinterpret_cast< char * >(buf2);
-  res3 = SWIG_AsCharPtrAndSize(obj2, &buf3, NULL, &alloc3);
-  if (!SWIG_IsOK(res3)) {
-    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "iScript_NewObject" "', argument " "3"" of type '" "char const *""'");
-  }
-  arg3 = reinterpret_cast< char * >(buf3);
-  result = (arg1)->NewObject((char const *)arg2,(char const *)arg3,arg4);
-  {
-    csRef<iScriptObject> ref((csRef<iScriptObject>&)result); /* explicit cast */
-    
-    if (!ref.IsValid())
-    {
-      Py_INCREF(Py_None);
-      return Py_None;
-    }
-    ref->IncRef();
-    resultobj = SWIG_NewPointerObj((void *)(iScriptObject *)ref, SWIGTYPE_p_iScriptObject, 1);
-  }
-  if (alloc2 == SWIG_NEWOBJ) delete[] buf2;
-  if (alloc3 == SWIG_NEWOBJ) delete[] buf3;
-  return resultobj;
-fail:
-  if (alloc2 == SWIG_NEWOBJ) delete[] buf2;
-  if (alloc3 == SWIG_NEWOBJ) delete[] buf3;
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_iScript_NewObject(PyObject *self, PyObject *args) {
-  PyObject *resultobj;
-  PyObject *varargs;
-  PyObject *newargs;
-  
-  newargs = PyTuple_GetSlice(args,0,3);
-  varargs = PyTuple_GetSlice(args,3,PyTuple_Size(args)+1);
-  resultobj = _wrap_iScript_NewObject__varargs__(self,newargs,varargs);
-  Py_XDECREF(newargs);
-  Py_XDECREF(varargs);
-  return resultobj;
-}
-
-
 SWIGINTERN PyObject *_wrap_iScript_Retrieve__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   iScript *arg1 = (iScript *) 0 ;
@@ -46460,7 +46389,6 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"iScript_New", _wrap_iScript_New, METH_VARARGS, NULL},
 	 { (char *)"iScript_Store", _wrap_iScript_Store, METH_VARARGS, NULL},
 	 { (char *)"iScript_Remove", _wrap_iScript_Remove, METH_VARARGS, NULL},
-	 { (char *)"iScript_NewObject", _wrap_iScript_NewObject, METH_VARARGS, NULL},
 	 { (char *)"iScript_RetrieveFloat", _wrap_iScript_RetrieveFloat, METH_VARARGS, NULL},
 	 { (char *)"iScript_Retrieve", _wrap_iScript_Retrieve, METH_VARARGS, NULL},
 	 { (char *)"iScript_GetTruth", _wrap_iScript_GetTruth, METH_VARARGS, NULL},

@@ -9173,7 +9173,6 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *New = *cspacec::iScript_New;
 *Store = *cspacec::iScript_Store;
 *Remove = *cspacec::iScript_Remove;
-*NewObject = *cspacec::iScript_NewObject;
 *Retrieve = *cspacec::iScript_Retrieve;
 *GetTruth = *cspacec::iScript_GetTruth;
 *scfGetVersion = *cspacec::iScript_scfGetVersion;
