@@ -232,7 +232,7 @@ bool SndSysDriverDirectSound::CreateBuffer()
   // Create the event handle and setup playback notification
   //  This is an non-inheritable (NULL security context), manual reset (true)
   //  event starting in the nonsignaled state (false) with no name (NULL)
-  m_BufferFillNeededEvent = CreateEvent(NULL, true, false, NULL);
+  m_BufferFillNeededEvent = CreateEventW(NULL, true, false, NULL);
 
   if (!m_BufferFillNeededEvent)
   {
