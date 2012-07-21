@@ -90,6 +90,18 @@
 #endif
 */
 
+/*
+ * SWIG can not yet handle nested classes gracefully, and warns when it
+ * encounters them. Each SCF interface invokes SCF_INTERFACE() which results in
+ * a nested InterfaceTraits class, hence SWIG emits a significant number of
+ * such warnings. Since, in this case, these warnings are just noise (that is,
+ * they are fundamental to SCF and will not be removed), suppress the
+ * diagnostic. Additionally, several CS utility classes employ nested classes,
+ * and SWIG (annoyingly) warns about them as well, even if they have been
+ * %ignored.
+ */
+#pragma SWIG nowarn=325
+
 %include "csconfig.h"
 %include "cstypes.h"
 
