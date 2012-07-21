@@ -681,6 +681,7 @@ SET_HELPER(csStringID)
 %include "iutil/comp.h"
 %include "iutil/cache.h"
 %ignore CS::Deprecated::ASSIGN_FILETIME;
+%ignore csFileTime::operator struct tm;
 %include "iutil/vfs.h"
 %include "iutil/dbghelp.h"
 %include "iutil/object.h"
