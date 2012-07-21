@@ -551,13 +551,13 @@ csArrayCapacityLinear<csArrayThresholdVariable >;
 #%ignore csDirtyAccessArray::Length;
 %include "csutil/dirtyaccessarray.h"
 // Provide some useful default instantiations
-%template (Vector2Array) csArray<csVector2>;
+%template (Vector2Array) csArray<csVector2,csArrayElementHandler<csVector2>,CS::Memory::AllocatorMalloc,csArrayCapacityFixedGrow<16> >;
 %template (Vector2DirtyAccessArray) csDirtyAccessArray<csVector2>;
-%template (Vector3Array) csArray<csVector3>;
+%template (Vector3Array) csArray<csVector3,csArrayElementHandler<csVector3>,CS::Memory::AllocatorMalloc,csArrayCapacityFixedGrow<16> >;
 %template (Vector3DirtyAccessArray) csDirtyAccessArray<csVector3>;
-%template (Vector4Array) csArray<csVector4>;
+%template (Vector4Array) csArray<csVector4,csArrayElementHandler<csVector4>,CS::Memory::AllocatorMalloc,csArrayCapacityFixedGrow<16> >;
 %template (Vector4DirtyAccessArray) csDirtyAccessArray<csVector4>;
-%template (UIntArray) csArray<unsigned int>;
+%template (UIntArray) csArray<unsigned int,csArrayElementHandler<unsigned int>,CS::Memory::AllocatorMalloc,csArrayCapacityFixedGrow<16> >;
 %template (UIntDirtyAccessArray) csDirtyAccessArray<unsigned int>;
 
 %ignore scfInitialize;
