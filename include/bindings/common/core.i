@@ -586,6 +586,8 @@ void SetCoreSCFPointer(iSCF *scf_pointer)
 %ignore operator/ (const csColor &, float);
 %ignore operator+ (const csColor &, const csColor &);
 %ignore operator- (const csColor &, const csColor &);
+%ignore csColor::operator[];
+%ignore csColor4::operator[];
 %include "csutil/cscolor.h"
 
 %include "csutil/cmdhelp.h"
