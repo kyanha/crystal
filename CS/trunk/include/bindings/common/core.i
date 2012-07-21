@@ -770,6 +770,7 @@ template <class T, class K = unsigned int,
     CS::Container::HashElement<T, K> > > class csHash;
 
 %include "csutil/hash.h"
+%include "csutil/hashcomputer.h"
 %include "iutil/eventnames.h"
 %include "csutil/eventnames.h"
 %include "iutil/eventh.h"
