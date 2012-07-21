@@ -403,6 +403,11 @@ CS_COMPILER_IGNORE_NON_VIRTUAL_DTOR([C++],
     [CS_EMIT_BUILD_PROPERTY([COMPILER.C++FLAGS.WARNING.NO_NON_VIRTUAL_DTOR],
         [$cs_cv_prog_cxx_ignore_non_virtual_dtor])])
 
+CS_COMPILER_IGNORE_CONST_STRINGS([C++],
+    [cs_cv_prog_cxx_ignore_const_strings],
+    [CS_EMIT_BUILD_PROPERTY([COMPILER.C++FLAGS.WARNING.NO_CONST_STRINGS],
+        [$cs_cv_prog_cxx_ignore_const_strings])])
+
 
 
 #------------------------------------------------------------------------------
