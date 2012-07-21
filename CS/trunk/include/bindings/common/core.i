@@ -490,6 +490,7 @@ TYPEMAP_OUT_csWrapPtr
 %ignore csSafeCopyArrayMemoryAllocator;
 %ignore csSafeCopyArray;
 %ignore csArray::Capacity;
+%ignore csArray::ConstIterator;
 %ignore csArray::DefaultCompare;
 %ignore csArray::Delete;
 %ignore csArray::DeleteFast;
@@ -503,9 +504,10 @@ TYPEMAP_OUT_csWrapPtr
 %ignore csArray::InitRegion;
 %ignore csArray::InsertSorted;
 %ignore csArray::Iterator;
-%ignore csArray::ReverseIterator;
 %ignore csArray::Length;
 %ignore csArray::PushSmart;
+%ignore csArray::ReverseConstIterator;
+%ignore csArray::ReverseIterator;
 %ignore csArray::Section;
 %ignore csArray::SetCapacity;
 %ignore csArray::SetLength;
