@@ -1008,6 +1008,15 @@ csEventID _csevMouseMove (iObjectRegistry *,uint x);
 #undef csevJoystickEvent
 csEventID _csevJoystickEvent (iObjectRegistry *);
 
+%include "iutil/eventhandlers.h"
+%include "csutil/frameeventsignpost.h"
+%template(scfEventHandler) scfFakeInterface<iEventHandler>;
+%template(scfEventHandlerRegistery) scfImplementation1<csEventHandlerRegistry,iEventHandlerRegistry>;
+%template(scfFrameSignpost_Logic3D) scfImplementation2<FrameSignpost_Logic3D,iFrameEventSignpost,scfFakeInterface<iEventHandler> >;
+%template(scfFrameSignpost_3D2D) scfImplementation2<FrameSignpost_3D2D,iFrameEventSignpost,scfFakeInterface<iEventHandler> >;
+%template(scfFrameSignpost_2DConsole) scfImplementation2<FrameSignpost_2DConsole,iFrameEventSignpost,scfFakeInterface<iEventHandler> >;
+%template(scfFrameSignpost_ConsoleDebug) scfImplementation2<FrameSignpost_ConsoleDebug,iFrameEventSignpost,scfFakeInterface<iEventHandler> >;
+%template(scfFrameSignpost_DebugFrame) scfImplementation2<FrameSignpost_DebugFrame,iFrameEventSignpost,scfFakeInterface<iEventHandler> >;
 %include "csutil/eventhandlers.h"
 %include "csutil/common_handlers.h"
 
