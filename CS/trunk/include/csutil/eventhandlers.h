@@ -27,6 +27,7 @@
 #include "iutil/eventh.h"
 #include "csutil/csstring.h"
 #include "csutil/eventnames.h"
+#include "csutil/frameeventsignpost.h"
 #include "csutil/scf_implementation.h"
 #include "csutil/threading/rwmutex.h"
 #include "csutil/hash.h"
@@ -208,19 +209,6 @@ public:
 
 /* @} */
 
-
-
-struct iFrameEventSignpost : public iEventHandler 
-{
- public:
-  iFrameEventSignpost () { }
-  virtual ~iFrameEventSignpost () { }
-  CS_EVENTHANDLER_DEFAULT_INSTANCE_CONSTRAINTS
-  virtual bool HandleEvent (iEvent&) 
-  { 
-    return false;
-  }
-};
 
 
 class FrameSignpost_Logic3D
