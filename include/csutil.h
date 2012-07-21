@@ -82,6 +82,7 @@
 #include "csutil/floatrand.h"
 #include "csutil/formatter.h"
 #include "csutil/fpu80x86.h"
+#include "csutil/frameeventsignpost.h"
 #include "csutil/genericresourcecache.h"
 #include "csutil/graphalg.h"
 #include "csutil/hash.h"
