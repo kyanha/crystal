@@ -186,6 +186,7 @@
 #include "csgeom.h"
 #include "cstool/initapp.h"
 #include "csutil.h"
+#include "csutil/deprecated_warn_off.h"
 %}
 
 %include "bindings/common/allinterfaces.i"
