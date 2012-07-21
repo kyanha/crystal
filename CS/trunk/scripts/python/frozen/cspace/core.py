@@ -175,7 +175,7 @@ Vector2Array_swigregister(Vector2Array)
 cvar = _core.cvar
 csArrayItemNotFound = cvar.csArrayItemNotFound
 
-class Vector2DirtyAccessArray(object):
+class Vector2DirtyAccessArray(Vector2Array):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
     __repr__ = _swig_repr
     def __init__(self, *args): 
@@ -223,7 +223,7 @@ class Vector3Array(CustomAllocated):
 Vector3Array_swigregister = _core.Vector3Array_swigregister
 Vector3Array_swigregister(Vector3Array)
 
-class Vector3DirtyAccessArray(object):
+class Vector3DirtyAccessArray(Vector3Array):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
     __repr__ = _swig_repr
     def __init__(self, *args): 
@@ -271,7 +271,7 @@ class Vector4Array(CustomAllocated):
 Vector4Array_swigregister = _core.Vector4Array_swigregister
 Vector4Array_swigregister(Vector4Array)
 
-class Vector4DirtyAccessArray(object):
+class Vector4DirtyAccessArray(Vector4Array):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
     __repr__ = _swig_repr
     def __init__(self, *args): 
@@ -319,7 +319,7 @@ class UIntArray(CustomAllocated):
 UIntArray_swigregister = _core.UIntArray_swigregister
 UIntArray_swigregister(UIntArray)
 
-class UIntDirtyAccessArray(object):
+class UIntDirtyAccessArray(UIntArray):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
     __repr__ = _swig_repr
     def __init__(self, *args): 
@@ -1633,6 +1633,36 @@ iEventQueue_swigregister(iEventQueue)
 iEventQueue_scfGetVersion = _core.iEventQueue_scfGetVersion
 iEventQueue_scfGetName = _core.iEventQueue_scfGetName
 
+HashCombine = _core.HashCombine
+class HashFoldingFNV1(object):
+    thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+    FoldHash = staticmethod(_core.HashFoldingFNV1_FoldHash)
+    def __init__(self, *args): 
+        this = _core.new_HashFoldingFNV1(*args)
+        try: self.this.append(this)
+        except: self.this = this
+    __swig_destroy__ = _core.delete_HashFoldingFNV1
+    __del__ = lambda self : None;
+HashFoldingFNV1_swigregister = _core.HashFoldingFNV1_swigregister
+HashFoldingFNV1_swigregister(HashFoldingFNV1)
+csHashCompute = _core.csHashCompute
+HashFoldingFNV1_FoldHash = _core.HashFoldingFNV1_FoldHash
+
+class HashFoldingNone(object):
+    thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+    FoldHash = staticmethod(_core.HashFoldingNone_FoldHash)
+    def __init__(self, *args): 
+        this = _core.new_HashFoldingNone(*args)
+        try: self.this.append(this)
+        except: self.this = this
+    __swig_destroy__ = _core.delete_HashFoldingNone
+    __del__ = lambda self : None;
+HashFoldingNone_swigregister = _core.HashFoldingNone_swigregister
+HashFoldingNone_swigregister(HashFoldingNone)
+HashFoldingNone_FoldHash = _core.HashFoldingNone_FoldHash
+
 class iEventNameRegistry(iBase):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
     def __init__(self, *args, **kwargs): raise AttributeError, "No constructor defined"
@@ -2391,7 +2421,135 @@ csevMouseClick = _core.csevMouseClick
 csevMouseDoubleClick = _core.csevMouseDoubleClick
 csevMouseMove = _core.csevMouseMove
 csevJoystickEvent = _core.csevJoystickEvent
-class csEventHandlerRegistry(object):
+class iEventHandlerRegistry(iBase):
+    thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    def __init__(self, *args, **kwargs): raise AttributeError, "No constructor defined"
+    __repr__ = _swig_repr
+    def GetGenericID(*args): return _core.iEventHandlerRegistry_GetGenericID(*args)
+    def GetGenericPreBoundID(*args): return _core.iEventHandlerRegistry_GetGenericPreBoundID(*args)
+    def GetGenericPostBoundID(*args): return _core.iEventHandlerRegistry_GetGenericPostBoundID(*args)
+    def GetID(*args): return _core.iEventHandlerRegistry_GetID(*args)
+    def RegisterID(*args): return _core.iEventHandlerRegistry_RegisterID(*args)
+    def ReleaseID(*args): return _core.iEventHandlerRegistry_ReleaseID(*args)
+    def GetHandler(*args): return _core.iEventHandlerRegistry_GetHandler(*args)
+    def IsInstanceOf(*args): return _core.iEventHandlerRegistry_IsInstanceOf(*args)
+    def IsInstance(*args): return _core.iEventHandlerRegistry_IsInstance(*args)
+    def GetGeneric(*args): return _core.iEventHandlerRegistry_GetGeneric(*args)
+    def GetString(*args): return _core.iEventHandlerRegistry_GetString(*args)
+    __swig_destroy__ = _core.delete_iEventHandlerRegistry
+    __del__ = lambda self : None;
+iEventHandlerRegistry_swigregister = _core.iEventHandlerRegistry_swigregister
+iEventHandlerRegistry_swigregister(iEventHandlerRegistry)
+
+class iFrameEventSignpost(iEventHandler):
+    thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    def __init__(self, *args, **kwargs): raise AttributeError, "No constructor defined"
+    __repr__ = _swig_repr
+    __swig_destroy__ = _core.delete_iFrameEventSignpost
+    __del__ = lambda self : None;
+    def InstancePrec(*args): return _core.iFrameEventSignpost_InstancePrec(*args)
+    def InstanceSucc(*args): return _core.iFrameEventSignpost_InstanceSucc(*args)
+    def HandleEvent(*args): return _core.iFrameEventSignpost_HandleEvent(*args)
+iFrameEventSignpost_swigregister = _core.iFrameEventSignpost_swigregister
+iFrameEventSignpost_swigregister(iFrameEventSignpost)
+
+class scfEventHandler(object):
+    thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+    def __init__(self, *args): 
+        this = _core.new_scfEventHandler(*args)
+        try: self.this.append(this)
+        except: self.this = this
+    __swig_destroy__ = _core.delete_scfEventHandler
+    __del__ = lambda self : None;
+scfEventHandler_swigregister = _core.scfEventHandler_swigregister
+scfEventHandler_swigregister(scfEventHandler)
+
+class scfEventHandlerRegistery(iEventHandlerRegistry):
+    thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    def __init__(self, *args, **kwargs): raise AttributeError, "No constructor defined"
+    __repr__ = _swig_repr
+    def IncRef(*args): return _core.scfEventHandlerRegistery_IncRef(*args)
+    def DecRef(*args): return _core.scfEventHandlerRegistery_DecRef(*args)
+    def GetRefCount(*args): return _core.scfEventHandlerRegistery_GetRefCount(*args)
+    def QueryInterface(*args): return _core.scfEventHandlerRegistery_QueryInterface(*args)
+    def AddRefOwner(*args): return _core.scfEventHandlerRegistery_AddRefOwner(*args)
+    def RemoveRefOwner(*args): return _core.scfEventHandlerRegistery_RemoveRefOwner(*args)
+    def GetInterfaceMetadata(*args): return _core.scfEventHandlerRegistery_GetInterfaceMetadata(*args)
+scfEventHandlerRegistery_swigregister = _core.scfEventHandlerRegistery_swigregister
+scfEventHandlerRegistery_swigregister(scfEventHandlerRegistery)
+
+class scfFrameSignpost_Logic3D(iFrameEventSignpost,scfEventHandler):
+    thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    def __init__(self, *args, **kwargs): raise AttributeError, "No constructor defined"
+    __repr__ = _swig_repr
+    def IncRef(*args): return _core.scfFrameSignpost_Logic3D_IncRef(*args)
+    def DecRef(*args): return _core.scfFrameSignpost_Logic3D_DecRef(*args)
+    def GetRefCount(*args): return _core.scfFrameSignpost_Logic3D_GetRefCount(*args)
+    def QueryInterface(*args): return _core.scfFrameSignpost_Logic3D_QueryInterface(*args)
+    def AddRefOwner(*args): return _core.scfFrameSignpost_Logic3D_AddRefOwner(*args)
+    def RemoveRefOwner(*args): return _core.scfFrameSignpost_Logic3D_RemoveRefOwner(*args)
+    def GetInterfaceMetadata(*args): return _core.scfFrameSignpost_Logic3D_GetInterfaceMetadata(*args)
+scfFrameSignpost_Logic3D_swigregister = _core.scfFrameSignpost_Logic3D_swigregister
+scfFrameSignpost_Logic3D_swigregister(scfFrameSignpost_Logic3D)
+
+class scfFrameSignpost_3D2D(iFrameEventSignpost,scfEventHandler):
+    thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    def __init__(self, *args, **kwargs): raise AttributeError, "No constructor defined"
+    __repr__ = _swig_repr
+    def IncRef(*args): return _core.scfFrameSignpost_3D2D_IncRef(*args)
+    def DecRef(*args): return _core.scfFrameSignpost_3D2D_DecRef(*args)
+    def GetRefCount(*args): return _core.scfFrameSignpost_3D2D_GetRefCount(*args)
+    def QueryInterface(*args): return _core.scfFrameSignpost_3D2D_QueryInterface(*args)
+    def AddRefOwner(*args): return _core.scfFrameSignpost_3D2D_AddRefOwner(*args)
+    def RemoveRefOwner(*args): return _core.scfFrameSignpost_3D2D_RemoveRefOwner(*args)
+    def GetInterfaceMetadata(*args): return _core.scfFrameSignpost_3D2D_GetInterfaceMetadata(*args)
+scfFrameSignpost_3D2D_swigregister = _core.scfFrameSignpost_3D2D_swigregister
+scfFrameSignpost_3D2D_swigregister(scfFrameSignpost_3D2D)
+
+class scfFrameSignpost_2DConsole(iFrameEventSignpost,scfEventHandler):
+    thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    def __init__(self, *args, **kwargs): raise AttributeError, "No constructor defined"
+    __repr__ = _swig_repr
+    def IncRef(*args): return _core.scfFrameSignpost_2DConsole_IncRef(*args)
+    def DecRef(*args): return _core.scfFrameSignpost_2DConsole_DecRef(*args)
+    def GetRefCount(*args): return _core.scfFrameSignpost_2DConsole_GetRefCount(*args)
+    def QueryInterface(*args): return _core.scfFrameSignpost_2DConsole_QueryInterface(*args)
+    def AddRefOwner(*args): return _core.scfFrameSignpost_2DConsole_AddRefOwner(*args)
+    def RemoveRefOwner(*args): return _core.scfFrameSignpost_2DConsole_RemoveRefOwner(*args)
+    def GetInterfaceMetadata(*args): return _core.scfFrameSignpost_2DConsole_GetInterfaceMetadata(*args)
+scfFrameSignpost_2DConsole_swigregister = _core.scfFrameSignpost_2DConsole_swigregister
+scfFrameSignpost_2DConsole_swigregister(scfFrameSignpost_2DConsole)
+
+class scfFrameSignpost_ConsoleDebug(iFrameEventSignpost,scfEventHandler):
+    thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    def __init__(self, *args, **kwargs): raise AttributeError, "No constructor defined"
+    __repr__ = _swig_repr
+    def IncRef(*args): return _core.scfFrameSignpost_ConsoleDebug_IncRef(*args)
+    def DecRef(*args): return _core.scfFrameSignpost_ConsoleDebug_DecRef(*args)
+    def GetRefCount(*args): return _core.scfFrameSignpost_ConsoleDebug_GetRefCount(*args)
+    def QueryInterface(*args): return _core.scfFrameSignpost_ConsoleDebug_QueryInterface(*args)
+    def AddRefOwner(*args): return _core.scfFrameSignpost_ConsoleDebug_AddRefOwner(*args)
+    def RemoveRefOwner(*args): return _core.scfFrameSignpost_ConsoleDebug_RemoveRefOwner(*args)
+    def GetInterfaceMetadata(*args): return _core.scfFrameSignpost_ConsoleDebug_GetInterfaceMetadata(*args)
+scfFrameSignpost_ConsoleDebug_swigregister = _core.scfFrameSignpost_ConsoleDebug_swigregister
+scfFrameSignpost_ConsoleDebug_swigregister(scfFrameSignpost_ConsoleDebug)
+
+class scfFrameSignpost_DebugFrame(iFrameEventSignpost,scfEventHandler):
+    thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    def __init__(self, *args, **kwargs): raise AttributeError, "No constructor defined"
+    __repr__ = _swig_repr
+    def IncRef(*args): return _core.scfFrameSignpost_DebugFrame_IncRef(*args)
+    def DecRef(*args): return _core.scfFrameSignpost_DebugFrame_DecRef(*args)
+    def GetRefCount(*args): return _core.scfFrameSignpost_DebugFrame_GetRefCount(*args)
+    def QueryInterface(*args): return _core.scfFrameSignpost_DebugFrame_QueryInterface(*args)
+    def AddRefOwner(*args): return _core.scfFrameSignpost_DebugFrame_AddRefOwner(*args)
+    def RemoveRefOwner(*args): return _core.scfFrameSignpost_DebugFrame_RemoveRefOwner(*args)
+    def GetInterfaceMetadata(*args): return _core.scfFrameSignpost_DebugFrame_GetInterfaceMetadata(*args)
+scfFrameSignpost_DebugFrame_swigregister = _core.scfFrameSignpost_DebugFrame_swigregister
+scfFrameSignpost_DebugFrame_swigregister(scfFrameSignpost_DebugFrame)
+
+class csEventHandlerRegistry(scfEventHandlerRegistery):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
     __repr__ = _swig_repr
     def __init__(self, *args): 
@@ -2427,19 +2585,7 @@ csEventHandlerRegistry_GetGeneric = _core.csEventHandlerRegistry_GetGeneric
 csEventHandlerRegistry_GetString = _core.csEventHandlerRegistry_GetString
 csEventHandlerRegistry_GetRegistry = _core.csEventHandlerRegistry_GetRegistry
 
-class iFrameEventSignpost(iEventHandler):
-    thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
-    def __init__(self, *args, **kwargs): raise AttributeError, "No constructor defined"
-    __repr__ = _swig_repr
-    __swig_destroy__ = _core.delete_iFrameEventSignpost
-    __del__ = lambda self : None;
-    def InstancePrec(*args): return _core.iFrameEventSignpost_InstancePrec(*args)
-    def InstanceSucc(*args): return _core.iFrameEventSignpost_InstanceSucc(*args)
-    def HandleEvent(*args): return _core.iFrameEventSignpost_HandleEvent(*args)
-iFrameEventSignpost_swigregister = _core.iFrameEventSignpost_swigregister
-iFrameEventSignpost_swigregister(iFrameEventSignpost)
-
-class FrameSignpost_Logic3D(object):
+class FrameSignpost_Logic3D(scfFrameSignpost_Logic3D):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
     def __init__(self, *args, **kwargs): raise AttributeError, "No constructor defined"
     __repr__ = _swig_repr
@@ -2456,7 +2602,7 @@ FrameSignpost_Logic3D_swigregister(FrameSignpost_Logic3D)
 FrameSignpost_Logic3D_StaticHandlerName = _core.FrameSignpost_Logic3D_StaticHandlerName
 FrameSignpost_Logic3D_StaticID = _core.FrameSignpost_Logic3D_StaticID
 
-class FrameSignpost_3D2D(object):
+class FrameSignpost_3D2D(scfFrameSignpost_3D2D):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
     def __init__(self, *args, **kwargs): raise AttributeError, "No constructor defined"
     __repr__ = _swig_repr
@@ -2473,7 +2619,7 @@ FrameSignpost_3D2D_swigregister(FrameSignpost_3D2D)
 FrameSignpost_3D2D_StaticHandlerName = _core.FrameSignpost_3D2D_StaticHandlerName
 FrameSignpost_3D2D_StaticID = _core.FrameSignpost_3D2D_StaticID
 
-class FrameSignpost_2DConsole(object):
+class FrameSignpost_2DConsole(scfFrameSignpost_2DConsole):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
     def __init__(self, *args, **kwargs): raise AttributeError, "No constructor defined"
     __repr__ = _swig_repr
@@ -2490,7 +2636,7 @@ FrameSignpost_2DConsole_swigregister(FrameSignpost_2DConsole)
 FrameSignpost_2DConsole_StaticHandlerName = _core.FrameSignpost_2DConsole_StaticHandlerName
 FrameSignpost_2DConsole_StaticID = _core.FrameSignpost_2DConsole_StaticID
 
-class FrameSignpost_ConsoleDebug(object):
+class FrameSignpost_ConsoleDebug(scfFrameSignpost_ConsoleDebug):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
     def __init__(self, *args, **kwargs): raise AttributeError, "No constructor defined"
     __repr__ = _swig_repr
@@ -2507,7 +2653,7 @@ FrameSignpost_ConsoleDebug_swigregister(FrameSignpost_ConsoleDebug)
 FrameSignpost_ConsoleDebug_StaticHandlerName = _core.FrameSignpost_ConsoleDebug_StaticHandlerName
 FrameSignpost_ConsoleDebug_StaticID = _core.FrameSignpost_ConsoleDebug_StaticID
 
-class FrameSignpost_DebugFrame(object):
+class FrameSignpost_DebugFrame(scfFrameSignpost_DebugFrame):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
     def __init__(self, *args, **kwargs): raise AttributeError, "No constructor defined"
     __repr__ = _swig_repr
