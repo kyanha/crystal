@@ -62,7 +62,7 @@ class CS_CRYSTALSPACE_EXPORT FrameBegin3DDraw :
 
 /**
  * FramePrinter handles every csevFrame event in the FRAME (final) phase.
- * It calls g3d->FinishFraw() and g3d->Print(0).  The handler returns false, 
+ * It calls g3d->FinishDraw() and g3d->Print(0).  The handler returns false,
  * so it will not prevent any subsequent csevFrame handlers being called.
  * The class retrieves a reference to the g3d object from the object registry 
  * when the constructor is called.  The constructor also subscribes the new 
