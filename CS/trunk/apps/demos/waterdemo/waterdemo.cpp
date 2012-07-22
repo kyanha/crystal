@@ -184,7 +184,7 @@ void csWaterDemo::SetupFrame ()
   int glyphWidth, glyphHeight;
   font->GetMaxSize (glyphWidth, glyphHeight);
   int white = r3d->GetDriver2D ()->FindRGB (255, 255, 255);
-  r3d->GetDriver2D ()->Write (font, 
+  r3d->GetDriver2D ()->Write (font,
     1,
     r3d->GetDriver2D ()->GetHeight () - (glyphHeight == -1? 20 : (glyphHeight+1)),
     white, -1, "Press Space Bar to see a cool effect!");
@@ -222,7 +222,7 @@ bool csWaterDemo::HandleEvent (iEvent& ev)
     case CSKEY_ESC:
       {
         csRef<iEventQueue> q (csQueryRegistry<iEventQueue> (object_reg));
-        if (q) 
+        if (q)
 	  q->GetEventOutlet()->Broadcast (csevQuit (object_reg));
         return true;
       }
@@ -267,10 +267,10 @@ bool csWaterDemo::SimpleEventHandler (iEvent& ev)
 
 bool csWaterDemo::Initialize ()
 {
-  if (!csInitializer::SetupConfigManager (object_reg, 
+  if (!csInitializer::SetupConfigManager (object_reg,
     "/config/waterdemo.cfg"))
   {
-    csReport (object_reg, CS_REPORTER_SEVERITY_ERROR, 
+    csReport (object_reg, CS_REPORTER_SEVERITY_ERROR,
       "crystalspace.application.waterdemo",
       "Failed to initialize config!");
     return false;
@@ -380,7 +380,7 @@ bool csWaterDemo::Initialize ()
   }
 
   vfs->ChDir ("/tmp");
-  
+
   console = csQueryRegistry<iConsoleOutput> (object_reg);
 
   // Open the main system. This will open all the previously loaded plug-ins.
@@ -421,17 +421,17 @@ bool csWaterDemo::Initialize ()
   csRef<iPluginManager> plugin_mgr (
     csQueryRegistry<iPluginManager> (object_reg));
 
-  csRef<iStringSet> strings = 
-    csQueryRegistryTagInterface<iStringSet> 
+  csRef<iStringSet> strings =
+    csQueryRegistryTagInterface<iStringSet>
     (object_reg, "crystalspace.shared.stringset");
 
-  csRef<iShaderVarStringSet> stringsSvName = 
-    csQueryRegistryTagInterface<iShaderVarStringSet> 
+  csRef<iShaderVarStringSet> stringsSvName =
+    csQueryRegistryTagInterface<iShaderVarStringSet>
     (object_reg, "crystalspace.shader.variablenameset");
 
   //get a custom renderloop
   csRef<iRenderLoop> rl = engine->GetRenderLoopManager ()->Create ();
-  
+
   csRef<iRenderStepType> genType = csLoadPlugin<iRenderStepType> (
     plugin_mgr, "crystalspace.renderloop.step.generic.type");
 
@@ -467,10 +467,10 @@ bool csWaterDemo::Initialize ()
   shader = shcom->CompileShader (ldr_context,
       shaderDoc->GetRoot ()->GetNode ("shader"));
 
-  // setup the mesh 
+  // setup the mesh
   csRef<iMeshObjectType> gType = csLoadPluginCheck<iMeshObjectType> (
   	plugin_mgr, "crystalspace.mesh.object.genmesh");
-  
+
   if (!gType)
   {
     csReport (object_reg, CS_REPORTER_SEVERITY_ERROR,
@@ -479,7 +479,7 @@ bool csWaterDemo::Initialize ()
     return false;
   }
 
-  
+
   gFact = gType->NewFactory ();
   csRef<iMeshFactoryWrapper> fw = engine->CreateMeshFactory (gFact, "waterFactory");
   gFactState = scfQueryInterface<iGeneralFactoryState> (gFact);
@@ -494,7 +494,7 @@ bool csWaterDemo::Initialize ()
   gMeshW->GetMovable ()->SetTransform (m);
   gMeshW->GetMovable ()->SetPosition (csVector3(0,-5,0));
   gMeshW->GetMovable ()->UpdateMove ();
-  
+
   //setup a material
   csRef<iMaterial> mat = engine->CreateBaseMaterial (0);
 
@@ -529,11 +529,11 @@ bool csWaterDemo::Initialize ()
   csRef<csShaderVariable> attvar (csPtr<csShaderVariable> (
     new csShaderVariable (stringsSvName->Request ("tex diffuse"))));
   attvar->SetValue (tex);
-  mat->AddVariable (attvar);  
+  mat->AddVariable (attvar);
 
 
   gMesh->SetMaterialWrapper (matW);
-  
+
   Width = Height = 64;
 
   water = new float[Width*Height];
@@ -555,7 +555,7 @@ bool csWaterDemo::Initialize ()
   gFactState->SetTriangleCount (2*((Width-1)*(Height-1)));
 
   //setup ibuf
-  int x, z, cnt=0,idx;
+  int x, z, idx;
   csTriangle *ibuf=gFactState->GetTriangles ();
   for(x=0;x<(Height-1);x++)
   {
@@ -574,7 +574,6 @@ bool csWaterDemo::Initialize ()
 
   //setup our vbuf
   csVector3 *vbuf = gFactState->GetVertices ();
-  cnt=0;
   for(x=0;x<Height;x++)
   {
     for(z=0;z<Width;z++)
@@ -618,14 +617,14 @@ bool csWaterDemo::Initialize ()
 void csWaterDemo::updateWater (float time)
 {
   bool haveRan=false;
-  
+
   if (time>1000) time =0;
   lastSimTime += (time/1000.0f);
-  
+
 
   while (lastSimTime > nextSimTime)
   {
-  
+
     csVector3 *vbuf = gFactState->GetVertices ();
 
     C1 = (4 - ((8*WaveSpeed*WaveSpeed*TimeDelta*TimeDelta) / (GridSize*GridSize))) / (WaveLife*TimeDelta + 2);
@@ -646,14 +645,14 @@ void csWaterDemo::updateWater (float time)
       for (int x = 1; x < (Width-1); x++) {
         int ind = x*Width+z;
 
-        water[ind] = C1*water1[ind] + 
-                     C2*water2[ind] + 
+        water[ind] = C1*water1[ind] +
+                     C2*water2[ind] +
                      C4*(water1[ind+1] + water1[ind-1] + water1[ind+Width] + water1[ind-Width])+
                      C5*(water1[ind+1+Width] + water1[ind-1+Width] + water1[ind-Width+1] + water1[ind-Width-1]);
 
         vbuf[ind].y = water[ind];
       }
-    }  
+    }
     nextSimTime += 1/SIMPERSECOND;
     haveRan = true;
   }
@@ -675,7 +674,7 @@ void csWaterDemo::pushDownPoint (float x, float z, float depth)
 
   xn = csMax (xn,0);
   xu = csMin (xu,Height);
-  
+
   zn = csMax (zn,0);
   zu = csMin (zu,Width);
 
@@ -686,7 +685,7 @@ void csWaterDemo::pushDownPoint (float x, float z, float depth)
   dist = sqrtf((x-xn)*(x-xn)+(z-zu)*(z-zu));
   power = csMax (1-dist,0.f);
   water[xn*Width+zu] += depth*power;
-  
+
   dist = sqrtf((x-xu)*(x-xu)+(z-zn)*(z-zn));
   power = csMax (1-dist,0.f);
   water[xu*Width+zn] += depth*power;
