@@ -16,7 +16,7 @@
     Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
     Description: md32spr is a Quake III md3 model to CS XML converter.
-    Type md32spr for a short blurb of help. 
+    Type md32spr for a short blurb of help.
     It only accepts models within zip files (for now).
 */
 
@@ -182,7 +182,6 @@ MD32spr::~MD32spr()
 
 void MD32spr::Main()
 {
-  char *fileName, *dirName;
   csString mountName, weaponPath;
   size_t i = 0;
   bool head = false, torso = false, leg = false;
@@ -196,7 +195,7 @@ void MD32spr::Main()
      Currently we handle only .zip files. Because of the difficulty in
      accessing and reading directories consistently across platforms.
      We read in the name in the command line and do some error checking and
-     doctoring for our usage. Path name and file name splitting and creation 
+     doctoring for our usage. Path name and file name splitting and creation
      of a string which will srever us as the name of our temporary vfs file
      name are some of them.
    */
@@ -213,7 +212,7 @@ void MD32spr::Main()
       ("Currently we handle only zip files.");
     return;
   }
-  
+
   /*
      A command line option for weapon file. This should be given in the form of
      -weapon mp5, where mp5 is the prefix, as in mp5.md3, mp5.skin and
@@ -233,16 +232,17 @@ void MD32spr::Main()
     scaleFactor = CS::Utility::strtof(cmdline->GetOption("scale"));
   }
 
-  fileName = (char *) cs_malloc(sizeof(char) * name.Length() + 1);
-  dirName = (char *) cs_malloc(sizeof(char) * name.Length() + 1);
+  char *fileName = (char *) cs_malloc(sizeof(char) * name.Length() + 1);
+/*
+  char *dirName = (char *) cs_malloc(sizeof(char) * name.Length() + 1);
 
-  /*
-     splitpath(name.GetData(), dirName, name.Length(), fileName, name.Length());
-     char *dot = stristr(fileName, ".");
-     char *ptr = fileName;
-     while(ptr != dot)
-     baseName += (char)*ptr++;
-   */
+  splitpath(name.GetData(), dirName, name.Length(), fileName, name.Length());
+  char *dot = stristr(fileName, ".");
+  char *ptr = fileName;
+
+  while(ptr != dot)
+    baseName += (char)*ptr++;
+*/
   basename(name.GetData(), fileName);
 
   /* This doesn't seem to work if you have the name as /tmp/%s_data, but works when
@@ -254,7 +254,7 @@ void MD32spr::Main()
   /* Now we mount the .zip file for further processing */
   vfs->Mount(mountName, name.GetData());
   fileNames = vfs->FindFiles(mountName);
-  
+
   /* If the user didn't tell if this is a player model, then try to guess */
   if(!player) {
     md3Files = 0;
@@ -375,7 +375,7 @@ void MD32spr::Main()
     }
   }
 
-  if (weaponDir.Length() > 0) 
+  if (weaponDir.Length() > 0)
   {
     weaponPath.Format ("%s%s/", mountName.GetData(), weaponDir.GetData());
     vfs->ChDir(weaponPath);
@@ -421,7 +421,7 @@ bool MD3Model::ReadHeader(char **buf)
   /* The header is 108 bytes long... */
   header = (md3Header *) cs_malloc(sizeof(md3Header));
   memcpy(header, bufPtr, sizeof(md3Header));
-  //csPrintf("%c%c%c%c\n", header->ID[0], header->ID[1], 
+  //csPrintf("%c%c%c%c\n", header->ID[0], header->ID[1],
   // header->ID[2], header->ID[3]);
 
   if (header->ID[0] != 'I' || header->ID[1] != 'D'
@@ -443,7 +443,7 @@ bool MD32spr::ReadVfsDir()
   char *str;
   size_t i = 0;
 
-  for (i = 0; i < fileNames->GetSize (); i++) 
+  for (i = 0; i < fileNames->GetSize (); i++)
   {
     str = (char*)fileNames->Get(i);
 
@@ -496,7 +496,7 @@ bool MD3Model::LoadMD3()
   }
 
   /*
-   * We don't use the bones info right now. In the future if somebody 
+   * We don't use the bones info right now. In the future if somebody
    * plans to extend it. Then you got uncomment them here.
    *
    */
@@ -569,12 +569,12 @@ bool MD3Model::LoadSkin(char *skinFile)
     return false;
 
   bufPtr = **buf;
-  for (i = 0; i < (int) buf->GetSize(); i++) 
+  for (i = 0; i < (int) buf->GetSize(); i++)
   {
-    if (bufPtr[i] == '\n' || bufPtr[i] == '\r') 
+    if (bufPtr[i] == '\n' || bufPtr[i] == '\r')
     {
       for (j = 0; j < header->numMeshes; j++)
-	if (stristr(line, meshes[j].meshHeader->name)) 
+	if (stristr(line, meshes[j].meshHeader->name))
 	{
 	  size_t k = line.Length();
 	  char *name = new char[k + 1];
@@ -587,8 +587,8 @@ bool MD3Model::LoadSkin(char *skinFile)
 	  strcpy(fileName, (line.GetData() + k + 1));
 	}
       line.Clear();
-    } 
-    else 
+    }
+    else
     {
       line.Append(bufPtr[i]);
     }
@@ -634,7 +634,7 @@ bool MD32spr::LoadAnimation(char *animFile)
   lowerModel->numActions = lowerActions;
   /*
    * Post Processing:
-   * In some of the animation config files, the numbering leg animations of start frames continue 
+   * In some of the animation config files, the numbering leg animations of start frames continue
    * after torso animations. To correct this we sum the number of torso animations and negate them
    * from leg animations thus resetting the start frames of leg animations.
    */
@@ -712,7 +712,7 @@ void MD32spr::Write()
         csRef <iDocumentNode> parent =
           root->CreateNodeBefore(CS_NODE_ELEMENT, 0);
         parent->SetValue("library");
-	
+
         WriteGeneric(mdl, parent);
         csString outFile(vfspath);
         outFile += mdlName;
@@ -721,9 +721,9 @@ void MD32spr::Write()
     }
   }
 
-  if (player) 
+  if (player)
   {
-    if (headModel) 
+    if (headModel)
     {
       char *headName = new char[strlen(headModel->GetFileName()) + 1];
       csString tagFileName;
@@ -822,7 +822,7 @@ void MD32spr::Write()
 }
 
 void MD32spr::WriteXMLTags(md3Model * model,
-			const char *tagFileName) 
+			const char *tagFileName)
 {
   int i = 0, j = 0, k = 0;
   float *rotationMatrix, *translationVector;
@@ -837,7 +837,7 @@ void MD32spr::WriteXMLTags(md3Model * model,
       csString rotation;
       csString position;
       csString taginfo;
-      child = 
+      child =
 	root->CreateNodeBefore(CS_NODE_ELEMENT, 0);
       child->SetValue("key");
       child->SetAttribute("name", "md3tag");
@@ -860,7 +860,7 @@ void MD32spr::WriteXMLTags(md3Model * model,
       // Merge tag name, frame num, tag num, rotation matrix and position vector into one string.
       taginfo += model->tags[i * model->header->numTags + j].name;
       taginfo += ' ';
-      taginfo += i; 
+      taginfo += i;
       taginfo += ' ';
       taginfo += j;
       taginfo += ' ';
@@ -874,7 +874,7 @@ void MD32spr::WriteXMLTags(md3Model * model,
 }
 
 void MD32spr::WriteXMLTextures(md3Model * model,
-			csRef < iDocumentNode > &parent) 
+			csRef < iDocumentNode > &parent)
 {
 
   int i = 0, j = 0;
@@ -896,7 +896,7 @@ void MD32spr::WriteXMLTextures(md3Model * model,
 }
 
 void MD32spr::WriteXMLMaterials(md3Model * model,
-			csRef < iDocumentNode > &parent) 
+			csRef < iDocumentNode > &parent)
 {
   int i = 0, j = 0;
   for (i = 0; i < model->header->numMeshes; i++)
@@ -927,7 +927,7 @@ void MD32spr::WriteGeneric(md3Model * model,
 
   if (model->header->numMeshes > 0) {
     WriteXMLTextures(model, localParent);
-      
+
     localParent = parent->CreateNodeBefore(CS_NODE_ELEMENT, 0);
     localParent->SetValue("materials");
     WriteXMLMaterials(model, localParent);
@@ -978,8 +978,8 @@ void MD32spr::WriteGeneric(md3Model * model,
 	  texel->SetAttributeAsFloat("v", v);
 	}
       }
-      if((stristr(model->fileName.GetData(), "head") || 
-	 stristr(model->fileName.GetData(), "upper") || 
+      if((stristr(model->fileName.GetData(), "head") ||
+	 stristr(model->fileName.GetData(), "upper") ||
 	 stristr(model->fileName.GetData(), "lower")) && player) {
 	// Write all the actions.
 	for(j = 0; j < model->numActions; j++) {
@@ -989,7 +989,7 @@ void MD32spr::WriteGeneric(md3Model * model,
 	    action->SetValue("action");
 	    action->SetAttribute("name", "default");
 
-	    for (k = 0; k < model->meshes[i].meshHeader->numMeshFrames; k++) 
+	    for (k = 0; k < model->meshes[i].meshHeader->numMeshFrames; k++)
 	    {
 	      csString fNum;
 	      csRef < iDocumentNode > f =
@@ -1004,10 +1004,10 @@ void MD32spr::WriteGeneric(md3Model * model,
 	      child->CreateNodeBefore(CS_NODE_ELEMENT, 0);
 	    action->SetValue("action");
 	    action->SetAttribute("name", model->animInfo[j].actionName);
-	  
-	    for(k = model->animInfo[j].startFrame; 
-		k < (model->animInfo[j].startFrame + model->animInfo[j].numFrames); 
-		k++) 
+
+	    for(k = model->animInfo[j].startFrame;
+		k < (model->animInfo[j].startFrame + model->animInfo[j].numFrames);
+		k++)
 	    {
 	      csString fNum;
 	      csRef < iDocumentNode > f =
@@ -1016,7 +1016,7 @@ void MD32spr::WriteGeneric(md3Model * model,
 	      f->SetValue("f");
 	      f->SetAttribute("name", fNum);
 	      float delay = (1.0f/(float)model->animInfo[j].fps) * 1000;
-	      f->SetAttributeAsFloat("delay", delay);  
+	      f->SetAttributeAsFloat("delay", delay);
 	    }
 	  }
 	}
@@ -1026,7 +1026,7 @@ void MD32spr::WriteGeneric(md3Model * model,
 	action->SetValue("action");
 	action->SetAttribute("name", "default");
 
-	for (j = 0; j < model->meshes[i].meshHeader->numMeshFrames; j++) 
+	for (j = 0; j < model->meshes[i].meshHeader->numMeshFrames; j++)
 	{
 	  csString fNum;
 	  csRef < iDocumentNode > f =
@@ -1080,11 +1080,11 @@ void MD32spr::WriteTextures(const char *inPath, const char *outPath)
   size_t fileSize;
   csRef <iStringArray> files = vfs->FindFiles(inPath);
   char fileName[100];
-  for(i = 0; i < files->GetSize (); i++) 
+  for(i = 0; i < files->GetSize (); i++)
   {
     char *str = (char*)files->Get(i);
 
-    if(stristr(str,".jpg") || stristr(str, ".png") || stristr(str, ".bmp") || stristr(str, ".tga")) 
+    if(stristr(str,".jpg") || stristr(str, ".png") || stristr(str, ".bmp") || stristr(str, ".tga"))
     {
       filename(str, fileName);
       lowercase(fileName);
@@ -1098,7 +1098,7 @@ void MD32spr::WriteTextures(const char *inPath, const char *outPath)
     }
   }
 }
-      
+
 
 int main(int argc, char *argv[])
 {
@@ -1198,12 +1198,12 @@ char *basename(const char *path, char *base)
   splitpath(path, dir, strlen(path), file, strlen(path));
   point = stristr(file, ".");
   ptr = file;
-  if(point != 0) 
+  if(point != 0)
   {
     while (ptr++ != point)
       sz++;
-  } 
-  else 
+  }
+  else
   {
     sz = strlen(file);
   }
