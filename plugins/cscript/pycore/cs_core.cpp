@@ -2626,174 +2626,180 @@ SWIG_Python_MustGetPtr(PyObject *obj, swig_type_info *ty, int argnum, int flags)
 #define SWIGTYPE_p_csVertexStatus swig_types[103]
 #define SWIGTYPE_p_csWrapPtr swig_types[104]
 #define SWIGTYPE_p_double swig_types[105]
-#define SWIGTYPE_p_f_p_iBase__p_FrameSignpost_2DConsole swig_types[106]
-#define SWIGTYPE_p_f_p_iBase__p_FrameSignpost_3D2D swig_types[107]
-#define SWIGTYPE_p_f_p_iBase__p_FrameSignpost_ConsoleDebug swig_types[108]
-#define SWIGTYPE_p_f_p_iBase__p_FrameSignpost_DebugFrame swig_types[109]
-#define SWIGTYPE_p_f_p_iBase__p_FrameSignpost_Logic3D swig_types[110]
-#define SWIGTYPE_p_f_p_iBase__p__csPyEventHandler swig_types[111]
-#define SWIGTYPE_p_f_p_iBase__p_csConfigFile swig_types[112]
-#define SWIGTYPE_p_f_p_iBase__p_csEventHandlerRegistry swig_types[113]
-#define SWIGTYPE_p_f_p_iBase__p_csObject swig_types[114]
-#define SWIGTYPE_p_f_p_iBase__p_csPyEventPlug swig_types[115]
-#define SWIGTYPE_p_f_p_iBase__p_iBase swig_types[116]
-#define SWIGTYPE_p_f_p_iBase__p_iCacheManager swig_types[117]
-#define SWIGTYPE_p_f_p_iBase__p_iClipper2D swig_types[118]
-#define SWIGTYPE_p_f_p_iBase__p_iCommandLineParser swig_types[119]
-#define SWIGTYPE_p_f_p_iBase__p_iComponent swig_types[120]
-#define SWIGTYPE_p_f_p_iBase__p_iConfigFile swig_types[121]
-#define SWIGTYPE_p_f_p_iBase__p_iConfigIterator swig_types[122]
-#define SWIGTYPE_p_f_p_iBase__p_iConfigManager swig_types[123]
-#define SWIGTYPE_p_f_p_iBase__p_iDataBuffer swig_types[124]
-#define SWIGTYPE_p_f_p_iBase__p_iDebugHelper swig_types[125]
-#define SWIGTYPE_p_f_p_iBase__p_iDocument swig_types[126]
-#define SWIGTYPE_p_f_p_iBase__p_iDocumentAttribute swig_types[127]
-#define SWIGTYPE_p_f_p_iBase__p_iDocumentAttributeIterator swig_types[128]
-#define SWIGTYPE_p_f_p_iBase__p_iDocumentNode swig_types[129]
-#define SWIGTYPE_p_f_p_iBase__p_iDocumentNodeIterator swig_types[130]
-#define SWIGTYPE_p_f_p_iBase__p_iDocumentSystem swig_types[131]
-#define SWIGTYPE_p_f_p_iBase__p_iEvent swig_types[132]
-#define SWIGTYPE_p_f_p_iBase__p_iEventAttributeIterator swig_types[133]
-#define SWIGTYPE_p_f_p_iBase__p_iEventCord swig_types[134]
-#define SWIGTYPE_p_f_p_iBase__p_iEventHandler swig_types[135]
-#define SWIGTYPE_p_f_p_iBase__p_iEventHandlerRegistry swig_types[136]
-#define SWIGTYPE_p_f_p_iBase__p_iEventNameRegistry swig_types[137]
-#define SWIGTYPE_p_f_p_iBase__p_iEventOutlet swig_types[138]
-#define SWIGTYPE_p_f_p_iBase__p_iEventPlug swig_types[139]
-#define SWIGTYPE_p_f_p_iBase__p_iEventQueue swig_types[140]
-#define SWIGTYPE_p_f_p_iBase__p_iFactory swig_types[141]
-#define SWIGTYPE_p_f_p_iBase__p_iFile swig_types[142]
-#define SWIGTYPE_p_f_p_iBase__p_iFrameEventSignpost swig_types[143]
-#define SWIGTYPE_p_f_p_iBase__p_iJoystickDriver swig_types[144]
-#define SWIGTYPE_p_f_p_iBase__p_iKeyComposer swig_types[145]
-#define SWIGTYPE_p_f_p_iBase__p_iKeyboardDriver swig_types[146]
-#define SWIGTYPE_p_f_p_iBase__p_iMouseDriver swig_types[147]
-#define SWIGTYPE_p_f_p_iBase__p_iObject swig_types[148]
-#define SWIGTYPE_p_f_p_iBase__p_iObjectIterator swig_types[149]
-#define SWIGTYPE_p_f_p_iBase__p_iObjectNameChangeListener swig_types[150]
-#define SWIGTYPE_p_f_p_iBase__p_iObjectRegistry swig_types[151]
-#define SWIGTYPE_p_f_p_iBase__p_iObjectRegistryIterator swig_types[152]
-#define SWIGTYPE_p_f_p_iBase__p_iPath swig_types[153]
-#define SWIGTYPE_p_f_p_iBase__p_iPluginIterator swig_types[154]
-#define SWIGTYPE_p_f_p_iBase__p_iPluginManager swig_types[155]
-#define SWIGTYPE_p_f_p_iBase__p_iReporter swig_types[156]
-#define SWIGTYPE_p_f_p_iBase__p_iReporterIterator swig_types[157]
-#define SWIGTYPE_p_f_p_iBase__p_iReporterListener swig_types[158]
-#define SWIGTYPE_p_f_p_iBase__p_iSCF swig_types[159]
-#define SWIGTYPE_p_f_p_iBase__p_iString swig_types[160]
-#define SWIGTYPE_p_f_p_iBase__p_iStringArray swig_types[161]
-#define SWIGTYPE_p_f_p_iBase__p_iStringSet swig_types[162]
-#define SWIGTYPE_p_f_p_iBase__p_iStringSetBaseT_CS__StringSetTag__General_t swig_types[163]
-#define SWIGTYPE_p_f_p_iBase__p_iThreadManager swig_types[164]
-#define SWIGTYPE_p_f_p_iBase__p_iThreadReturn swig_types[165]
-#define SWIGTYPE_p_f_p_iBase__p_iTriangleMesh swig_types[166]
-#define SWIGTYPE_p_f_p_iBase__p_iVFS swig_types[167]
-#define SWIGTYPE_p_f_p_iBase__p_iVirtualClock swig_types[168]
-#define SWIGTYPE_p_f_p_iBase__p_scfImplementation1T__csPyEventHandler_iEventHandler_t swig_types[169]
-#define SWIGTYPE_p_f_p_iBase__p_scfImplementation1T_csConfigFile_iConfigFile_t swig_types[170]
-#define SWIGTYPE_p_f_p_iBase__p_scfImplementation1T_csEventHandlerRegistry_iEventHandlerRegistry_t swig_types[171]
-#define SWIGTYPE_p_f_p_iBase__p_scfImplementation1T_csObject_iObject_t swig_types[172]
-#define SWIGTYPE_p_f_p_iBase__p_scfImplementation1T_csPyEventPlug_iEventPlug_t swig_types[173]
-#define SWIGTYPE_p_f_p_iBase__p_scfImplementation2T_FrameSignpost_2DConsole_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_t swig_types[174]
-#define SWIGTYPE_p_f_p_iBase__p_scfImplementation2T_FrameSignpost_3D2D_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_t swig_types[175]
-#define SWIGTYPE_p_f_p_iBase__p_scfImplementation2T_FrameSignpost_ConsoleDebug_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_t swig_types[176]
-#define SWIGTYPE_p_f_p_iBase__p_scfImplementation2T_FrameSignpost_DebugFrame_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_t swig_types[177]
-#define SWIGTYPE_p_f_p_iBase__p_scfImplementation2T_FrameSignpost_Logic3D_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_t swig_types[178]
-#define SWIGTYPE_p_f_p_iBase__p_scfImplementationExt1T_csPath_csObject_iPath_t swig_types[179]
-#define SWIGTYPE_p_float swig_types[180]
-#define SWIGTYPE_p_iBase swig_types[181]
-#define SWIGTYPE_p_iCacheManager swig_types[182]
-#define SWIGTYPE_p_iClipper2D swig_types[183]
-#define SWIGTYPE_p_iCommandLineParser swig_types[184]
-#define SWIGTYPE_p_iComponent swig_types[185]
-#define SWIGTYPE_p_iConfigFile swig_types[186]
-#define SWIGTYPE_p_iConfigIterator swig_types[187]
-#define SWIGTYPE_p_iConfigManager swig_types[188]
-#define SWIGTYPE_p_iDataBuffer swig_types[189]
-#define SWIGTYPE_p_iDebugHelper swig_types[190]
-#define SWIGTYPE_p_iDocument swig_types[191]
-#define SWIGTYPE_p_iDocumentAttribute swig_types[192]
-#define SWIGTYPE_p_iDocumentAttributeIterator swig_types[193]
-#define SWIGTYPE_p_iDocumentNode swig_types[194]
-#define SWIGTYPE_p_iDocumentNodeIterator swig_types[195]
-#define SWIGTYPE_p_iDocumentSystem swig_types[196]
-#define SWIGTYPE_p_iEvent swig_types[197]
-#define SWIGTYPE_p_iEventAttributeIterator swig_types[198]
-#define SWIGTYPE_p_iEventCord swig_types[199]
-#define SWIGTYPE_p_iEventHandler swig_types[200]
-#define SWIGTYPE_p_iEventHandlerRegistry swig_types[201]
-#define SWIGTYPE_p_iEventNameRegistry swig_types[202]
-#define SWIGTYPE_p_iEventOutlet swig_types[203]
-#define SWIGTYPE_p_iEventPlug swig_types[204]
-#define SWIGTYPE_p_iEventQueue swig_types[205]
-#define SWIGTYPE_p_iFactory swig_types[206]
-#define SWIGTYPE_p_iFile swig_types[207]
-#define SWIGTYPE_p_iFrameEventSignpost swig_types[208]
-#define SWIGTYPE_p_iGraphics2D swig_types[209]
-#define SWIGTYPE_p_iGraphics3D swig_types[210]
-#define SWIGTYPE_p_iJob swig_types[211]
-#define SWIGTYPE_p_iJoystickDriver swig_types[212]
-#define SWIGTYPE_p_iKeyComposer swig_types[213]
-#define SWIGTYPE_p_iKeyboardDriver swig_types[214]
-#define SWIGTYPE_p_iMouseDriver swig_types[215]
-#define SWIGTYPE_p_iObject swig_types[216]
-#define SWIGTYPE_p_iObjectIterator swig_types[217]
-#define SWIGTYPE_p_iObjectNameChangeListener swig_types[218]
-#define SWIGTYPE_p_iObjectRegistry swig_types[219]
-#define SWIGTYPE_p_iObjectRegistryIterator swig_types[220]
-#define SWIGTYPE_p_iPath swig_types[221]
-#define SWIGTYPE_p_iPluginIterator swig_types[222]
-#define SWIGTYPE_p_iPluginManager swig_types[223]
-#define SWIGTYPE_p_iReporter swig_types[224]
-#define SWIGTYPE_p_iReporterIterator swig_types[225]
-#define SWIGTYPE_p_iReporterListener swig_types[226]
-#define SWIGTYPE_p_iSCF swig_types[227]
-#define SWIGTYPE_p_iString swig_types[228]
-#define SWIGTYPE_p_iStringArray swig_types[229]
-#define SWIGTYPE_p_iStringSet swig_types[230]
-#define SWIGTYPE_p_iStringSetBaseT_CS__StringSetTag__General_t swig_types[231]
-#define SWIGTYPE_p_iSystemOpenManager swig_types[232]
-#define SWIGTYPE_p_iThreadManager swig_types[233]
-#define SWIGTYPE_p_iThreadReturn swig_types[234]
-#define SWIGTYPE_p_iTriangleMesh swig_types[235]
-#define SWIGTYPE_p_iVFS swig_types[236]
-#define SWIGTYPE_p_iVerbosityManager swig_types[237]
-#define SWIGTYPE_p_iVirtualClock swig_types[238]
-#define SWIGTYPE_p_int swig_types[239]
-#define SWIGTYPE_p_int16_t swig_types[240]
-#define SWIGTYPE_p_int64_t swig_types[241]
-#define SWIGTYPE_p_int8_t swig_types[242]
-#define SWIGTYPE_p_intptr_t swig_types[243]
-#define SWIGTYPE_p_long_long swig_types[244]
-#define SWIGTYPE_p_p_char swig_types[245]
-#define SWIGTYPE_p_p_void swig_types[246]
-#define SWIGTYPE_p_scfFakeInterfaceT_iEventHandler_t swig_types[247]
-#define SWIGTYPE_p_scfImplementation1T__csPyEventHandler_iEventHandler_t swig_types[248]
-#define SWIGTYPE_p_scfImplementation1T_csConfigFile_iConfigFile_t swig_types[249]
-#define SWIGTYPE_p_scfImplementation1T_csEventHandlerRegistry_iEventHandlerRegistry_t swig_types[250]
-#define SWIGTYPE_p_scfImplementation1T_csObject_iObject_t swig_types[251]
-#define SWIGTYPE_p_scfImplementation1T_csPyEventPlug_iEventPlug_t swig_types[252]
-#define SWIGTYPE_p_scfImplementation2T_FrameSignpost_2DConsole_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_t swig_types[253]
-#define SWIGTYPE_p_scfImplementation2T_FrameSignpost_3D2D_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_t swig_types[254]
-#define SWIGTYPE_p_scfImplementation2T_FrameSignpost_ConsoleDebug_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_t swig_types[255]
-#define SWIGTYPE_p_scfImplementation2T_FrameSignpost_DebugFrame_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_t swig_types[256]
-#define SWIGTYPE_p_scfImplementation2T_FrameSignpost_Logic3D_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_t swig_types[257]
-#define SWIGTYPE_p_scfImplementationExt1T_csPath_csObject_iPath_t swig_types[258]
-#define SWIGTYPE_p_scfInterfaceMetadata swig_types[259]
-#define SWIGTYPE_p_scfInterfaceMetadataList swig_types[260]
-#define SWIGTYPE_p_size_t swig_types[261]
-#define SWIGTYPE_p_tm swig_types[262]
-#define SWIGTYPE_p_uint16_t swig_types[263]
-#define SWIGTYPE_p_uint32_t swig_types[264]
-#define SWIGTYPE_p_uint64_t swig_types[265]
-#define SWIGTYPE_p_uint8_t swig_types[266]
-#define SWIGTYPE_p_unsigned_int swig_types[267]
-#define SWIGTYPE_p_unsigned_long swig_types[268]
-#define SWIGTYPE_p_unsigned_long_long swig_types[269]
-#define SWIGTYPE_p_utf32_char swig_types[270]
-#define SWIGTYPE_p_void swig_types[271]
-static swig_type_info *swig_types[273];
-static swig_module_info swig_module = {swig_types, 272, 0, 0, 0, 0};
+#define SWIGTYPE_p_f_p_iBase__p_FrameBegin3DDraw swig_types[106]
+#define SWIGTYPE_p_f_p_iBase__p_FramePrinter swig_types[107]
+#define SWIGTYPE_p_f_p_iBase__p_FrameSignpost_2DConsole swig_types[108]
+#define SWIGTYPE_p_f_p_iBase__p_FrameSignpost_3D2D swig_types[109]
+#define SWIGTYPE_p_f_p_iBase__p_FrameSignpost_ConsoleDebug swig_types[110]
+#define SWIGTYPE_p_f_p_iBase__p_FrameSignpost_DebugFrame swig_types[111]
+#define SWIGTYPE_p_f_p_iBase__p_FrameSignpost_Logic3D swig_types[112]
+#define SWIGTYPE_p_f_p_iBase__p__csPyEventHandler swig_types[113]
+#define SWIGTYPE_p_f_p_iBase__p_csConfigFile swig_types[114]
+#define SWIGTYPE_p_f_p_iBase__p_csEventHandlerRegistry swig_types[115]
+#define SWIGTYPE_p_f_p_iBase__p_csObject swig_types[116]
+#define SWIGTYPE_p_f_p_iBase__p_csPyEventPlug swig_types[117]
+#define SWIGTYPE_p_f_p_iBase__p_iBase swig_types[118]
+#define SWIGTYPE_p_f_p_iBase__p_iCacheManager swig_types[119]
+#define SWIGTYPE_p_f_p_iBase__p_iClipper2D swig_types[120]
+#define SWIGTYPE_p_f_p_iBase__p_iCommandLineParser swig_types[121]
+#define SWIGTYPE_p_f_p_iBase__p_iComponent swig_types[122]
+#define SWIGTYPE_p_f_p_iBase__p_iConfigFile swig_types[123]
+#define SWIGTYPE_p_f_p_iBase__p_iConfigIterator swig_types[124]
+#define SWIGTYPE_p_f_p_iBase__p_iConfigManager swig_types[125]
+#define SWIGTYPE_p_f_p_iBase__p_iDataBuffer swig_types[126]
+#define SWIGTYPE_p_f_p_iBase__p_iDebugHelper swig_types[127]
+#define SWIGTYPE_p_f_p_iBase__p_iDocument swig_types[128]
+#define SWIGTYPE_p_f_p_iBase__p_iDocumentAttribute swig_types[129]
+#define SWIGTYPE_p_f_p_iBase__p_iDocumentAttributeIterator swig_types[130]
+#define SWIGTYPE_p_f_p_iBase__p_iDocumentNode swig_types[131]
+#define SWIGTYPE_p_f_p_iBase__p_iDocumentNodeIterator swig_types[132]
+#define SWIGTYPE_p_f_p_iBase__p_iDocumentSystem swig_types[133]
+#define SWIGTYPE_p_f_p_iBase__p_iEvent swig_types[134]
+#define SWIGTYPE_p_f_p_iBase__p_iEventAttributeIterator swig_types[135]
+#define SWIGTYPE_p_f_p_iBase__p_iEventCord swig_types[136]
+#define SWIGTYPE_p_f_p_iBase__p_iEventHandler swig_types[137]
+#define SWIGTYPE_p_f_p_iBase__p_iEventHandlerRegistry swig_types[138]
+#define SWIGTYPE_p_f_p_iBase__p_iEventNameRegistry swig_types[139]
+#define SWIGTYPE_p_f_p_iBase__p_iEventOutlet swig_types[140]
+#define SWIGTYPE_p_f_p_iBase__p_iEventPlug swig_types[141]
+#define SWIGTYPE_p_f_p_iBase__p_iEventQueue swig_types[142]
+#define SWIGTYPE_p_f_p_iBase__p_iFactory swig_types[143]
+#define SWIGTYPE_p_f_p_iBase__p_iFile swig_types[144]
+#define SWIGTYPE_p_f_p_iBase__p_iFrameEventSignpost swig_types[145]
+#define SWIGTYPE_p_f_p_iBase__p_iJoystickDriver swig_types[146]
+#define SWIGTYPE_p_f_p_iBase__p_iKeyComposer swig_types[147]
+#define SWIGTYPE_p_f_p_iBase__p_iKeyboardDriver swig_types[148]
+#define SWIGTYPE_p_f_p_iBase__p_iMouseDriver swig_types[149]
+#define SWIGTYPE_p_f_p_iBase__p_iObject swig_types[150]
+#define SWIGTYPE_p_f_p_iBase__p_iObjectIterator swig_types[151]
+#define SWIGTYPE_p_f_p_iBase__p_iObjectNameChangeListener swig_types[152]
+#define SWIGTYPE_p_f_p_iBase__p_iObjectRegistry swig_types[153]
+#define SWIGTYPE_p_f_p_iBase__p_iObjectRegistryIterator swig_types[154]
+#define SWIGTYPE_p_f_p_iBase__p_iPath swig_types[155]
+#define SWIGTYPE_p_f_p_iBase__p_iPluginIterator swig_types[156]
+#define SWIGTYPE_p_f_p_iBase__p_iPluginManager swig_types[157]
+#define SWIGTYPE_p_f_p_iBase__p_iReporter swig_types[158]
+#define SWIGTYPE_p_f_p_iBase__p_iReporterIterator swig_types[159]
+#define SWIGTYPE_p_f_p_iBase__p_iReporterListener swig_types[160]
+#define SWIGTYPE_p_f_p_iBase__p_iSCF swig_types[161]
+#define SWIGTYPE_p_f_p_iBase__p_iString swig_types[162]
+#define SWIGTYPE_p_f_p_iBase__p_iStringArray swig_types[163]
+#define SWIGTYPE_p_f_p_iBase__p_iStringSet swig_types[164]
+#define SWIGTYPE_p_f_p_iBase__p_iStringSetBaseT_CS__StringSetTag__General_t swig_types[165]
+#define SWIGTYPE_p_f_p_iBase__p_iThreadManager swig_types[166]
+#define SWIGTYPE_p_f_p_iBase__p_iThreadReturn swig_types[167]
+#define SWIGTYPE_p_f_p_iBase__p_iTriangleMesh swig_types[168]
+#define SWIGTYPE_p_f_p_iBase__p_iVFS swig_types[169]
+#define SWIGTYPE_p_f_p_iBase__p_iVirtualClock swig_types[170]
+#define SWIGTYPE_p_f_p_iBase__p_scfImplementation1T_FrameBegin3DDraw_iEventHandler_t swig_types[171]
+#define SWIGTYPE_p_f_p_iBase__p_scfImplementation1T_FramePrinter_iEventHandler_t swig_types[172]
+#define SWIGTYPE_p_f_p_iBase__p_scfImplementation1T__csPyEventHandler_iEventHandler_t swig_types[173]
+#define SWIGTYPE_p_f_p_iBase__p_scfImplementation1T_csConfigFile_iConfigFile_t swig_types[174]
+#define SWIGTYPE_p_f_p_iBase__p_scfImplementation1T_csEventHandlerRegistry_iEventHandlerRegistry_t swig_types[175]
+#define SWIGTYPE_p_f_p_iBase__p_scfImplementation1T_csObject_iObject_t swig_types[176]
+#define SWIGTYPE_p_f_p_iBase__p_scfImplementation1T_csPyEventPlug_iEventPlug_t swig_types[177]
+#define SWIGTYPE_p_f_p_iBase__p_scfImplementation2T_FrameSignpost_2DConsole_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_t swig_types[178]
+#define SWIGTYPE_p_f_p_iBase__p_scfImplementation2T_FrameSignpost_3D2D_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_t swig_types[179]
+#define SWIGTYPE_p_f_p_iBase__p_scfImplementation2T_FrameSignpost_ConsoleDebug_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_t swig_types[180]
+#define SWIGTYPE_p_f_p_iBase__p_scfImplementation2T_FrameSignpost_DebugFrame_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_t swig_types[181]
+#define SWIGTYPE_p_f_p_iBase__p_scfImplementation2T_FrameSignpost_Logic3D_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_t swig_types[182]
+#define SWIGTYPE_p_f_p_iBase__p_scfImplementationExt1T_csPath_csObject_iPath_t swig_types[183]
+#define SWIGTYPE_p_float swig_types[184]
+#define SWIGTYPE_p_iBase swig_types[185]
+#define SWIGTYPE_p_iCacheManager swig_types[186]
+#define SWIGTYPE_p_iClipper2D swig_types[187]
+#define SWIGTYPE_p_iCommandLineParser swig_types[188]
+#define SWIGTYPE_p_iComponent swig_types[189]
+#define SWIGTYPE_p_iConfigFile swig_types[190]
+#define SWIGTYPE_p_iConfigIterator swig_types[191]
+#define SWIGTYPE_p_iConfigManager swig_types[192]
+#define SWIGTYPE_p_iDataBuffer swig_types[193]
+#define SWIGTYPE_p_iDebugHelper swig_types[194]
+#define SWIGTYPE_p_iDocument swig_types[195]
+#define SWIGTYPE_p_iDocumentAttribute swig_types[196]
+#define SWIGTYPE_p_iDocumentAttributeIterator swig_types[197]
+#define SWIGTYPE_p_iDocumentNode swig_types[198]
+#define SWIGTYPE_p_iDocumentNodeIterator swig_types[199]
+#define SWIGTYPE_p_iDocumentSystem swig_types[200]
+#define SWIGTYPE_p_iEvent swig_types[201]
+#define SWIGTYPE_p_iEventAttributeIterator swig_types[202]
+#define SWIGTYPE_p_iEventCord swig_types[203]
+#define SWIGTYPE_p_iEventHandler swig_types[204]
+#define SWIGTYPE_p_iEventHandlerRegistry swig_types[205]
+#define SWIGTYPE_p_iEventNameRegistry swig_types[206]
+#define SWIGTYPE_p_iEventOutlet swig_types[207]
+#define SWIGTYPE_p_iEventPlug swig_types[208]
+#define SWIGTYPE_p_iEventQueue swig_types[209]
+#define SWIGTYPE_p_iFactory swig_types[210]
+#define SWIGTYPE_p_iFile swig_types[211]
+#define SWIGTYPE_p_iFrameEventSignpost swig_types[212]
+#define SWIGTYPE_p_iGraphics2D swig_types[213]
+#define SWIGTYPE_p_iGraphics3D swig_types[214]
+#define SWIGTYPE_p_iJob swig_types[215]
+#define SWIGTYPE_p_iJoystickDriver swig_types[216]
+#define SWIGTYPE_p_iKeyComposer swig_types[217]
+#define SWIGTYPE_p_iKeyboardDriver swig_types[218]
+#define SWIGTYPE_p_iMouseDriver swig_types[219]
+#define SWIGTYPE_p_iObject swig_types[220]
+#define SWIGTYPE_p_iObjectIterator swig_types[221]
+#define SWIGTYPE_p_iObjectNameChangeListener swig_types[222]
+#define SWIGTYPE_p_iObjectRegistry swig_types[223]
+#define SWIGTYPE_p_iObjectRegistryIterator swig_types[224]
+#define SWIGTYPE_p_iPath swig_types[225]
+#define SWIGTYPE_p_iPluginIterator swig_types[226]
+#define SWIGTYPE_p_iPluginManager swig_types[227]
+#define SWIGTYPE_p_iReporter swig_types[228]
+#define SWIGTYPE_p_iReporterIterator swig_types[229]
+#define SWIGTYPE_p_iReporterListener swig_types[230]
+#define SWIGTYPE_p_iSCF swig_types[231]
+#define SWIGTYPE_p_iString swig_types[232]
+#define SWIGTYPE_p_iStringArray swig_types[233]
+#define SWIGTYPE_p_iStringSet swig_types[234]
+#define SWIGTYPE_p_iStringSetBaseT_CS__StringSetTag__General_t swig_types[235]
+#define SWIGTYPE_p_iSystemOpenManager swig_types[236]
+#define SWIGTYPE_p_iThreadManager swig_types[237]
+#define SWIGTYPE_p_iThreadReturn swig_types[238]
+#define SWIGTYPE_p_iTriangleMesh swig_types[239]
+#define SWIGTYPE_p_iVFS swig_types[240]
+#define SWIGTYPE_p_iVerbosityManager swig_types[241]
+#define SWIGTYPE_p_iVirtualClock swig_types[242]
+#define SWIGTYPE_p_int swig_types[243]
+#define SWIGTYPE_p_int16_t swig_types[244]
+#define SWIGTYPE_p_int64_t swig_types[245]
+#define SWIGTYPE_p_int8_t swig_types[246]
+#define SWIGTYPE_p_intptr_t swig_types[247]
+#define SWIGTYPE_p_long_long swig_types[248]
+#define SWIGTYPE_p_p_char swig_types[249]
+#define SWIGTYPE_p_p_void swig_types[250]
+#define SWIGTYPE_p_scfFakeInterfaceT_iEventHandler_t swig_types[251]
+#define SWIGTYPE_p_scfImplementation1T_FrameBegin3DDraw_iEventHandler_t swig_types[252]
+#define SWIGTYPE_p_scfImplementation1T_FramePrinter_iEventHandler_t swig_types[253]
+#define SWIGTYPE_p_scfImplementation1T__csPyEventHandler_iEventHandler_t swig_types[254]
+#define SWIGTYPE_p_scfImplementation1T_csConfigFile_iConfigFile_t swig_types[255]
+#define SWIGTYPE_p_scfImplementation1T_csEventHandlerRegistry_iEventHandlerRegistry_t swig_types[256]
+#define SWIGTYPE_p_scfImplementation1T_csObject_iObject_t swig_types[257]
+#define SWIGTYPE_p_scfImplementation1T_csPyEventPlug_iEventPlug_t swig_types[258]
+#define SWIGTYPE_p_scfImplementation2T_FrameSignpost_2DConsole_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_t swig_types[259]
+#define SWIGTYPE_p_scfImplementation2T_FrameSignpost_3D2D_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_t swig_types[260]
+#define SWIGTYPE_p_scfImplementation2T_FrameSignpost_ConsoleDebug_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_t swig_types[261]
+#define SWIGTYPE_p_scfImplementation2T_FrameSignpost_DebugFrame_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_t swig_types[262]
+#define SWIGTYPE_p_scfImplementation2T_FrameSignpost_Logic3D_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_t swig_types[263]
+#define SWIGTYPE_p_scfImplementationExt1T_csPath_csObject_iPath_t swig_types[264]
+#define SWIGTYPE_p_scfInterfaceMetadata swig_types[265]
+#define SWIGTYPE_p_scfInterfaceMetadataList swig_types[266]
+#define SWIGTYPE_p_size_t swig_types[267]
+#define SWIGTYPE_p_tm swig_types[268]
+#define SWIGTYPE_p_uint16_t swig_types[269]
+#define SWIGTYPE_p_uint32_t swig_types[270]
+#define SWIGTYPE_p_uint64_t swig_types[271]
+#define SWIGTYPE_p_uint8_t swig_types[272]
+#define SWIGTYPE_p_unsigned_int swig_types[273]
+#define SWIGTYPE_p_unsigned_long swig_types[274]
+#define SWIGTYPE_p_unsigned_long_long swig_types[275]
+#define SWIGTYPE_p_utf32_char swig_types[276]
+#define SWIGTYPE_p_void swig_types[277]
+static swig_type_info *swig_types[279];
+static swig_module_info swig_module = {swig_types, 278, 0, 0, 0, 0};
 #define SWIG_TypeQuery(name) SWIG_TypeQueryModule(&swig_module, &swig_module, name)
 #define SWIG_MangledTypeQuery(name) SWIG_MangledTypeQueryModule(&swig_module, &swig_module, name)
 
@@ -61380,6 +61386,410 @@ SWIGINTERN PyObject *FrameSignpost_DebugFrame_swigregister(PyObject *SWIGUNUSEDP
   return SWIG_Py_Void();
 }
 
+SWIGINTERN PyObject *_wrap_scfFrameBegin3DDraw_IncRef(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  scfImplementation1< FrameBegin3DDraw,iEventHandler > *arg1 = (scfImplementation1< FrameBegin3DDraw,iEventHandler > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"scfFrameBegin3DDraw_IncRef",1,1,&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_scfImplementation1T_FrameBegin3DDraw_iEventHandler_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "scfFrameBegin3DDraw_IncRef" "', argument " "1"" of type '" "scfImplementation1< FrameBegin3DDraw,iEventHandler > *""'"); 
+  }
+  arg1 = reinterpret_cast< scfImplementation1< FrameBegin3DDraw,iEventHandler > * >(argp1);
+  (arg1)->IncRef();
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_scfFrameBegin3DDraw_DecRef(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  scfImplementation1< FrameBegin3DDraw,iEventHandler > *arg1 = (scfImplementation1< FrameBegin3DDraw,iEventHandler > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"scfFrameBegin3DDraw_DecRef",1,1,&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_scfImplementation1T_FrameBegin3DDraw_iEventHandler_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "scfFrameBegin3DDraw_DecRef" "', argument " "1"" of type '" "scfImplementation1< FrameBegin3DDraw,iEventHandler > *""'"); 
+  }
+  arg1 = reinterpret_cast< scfImplementation1< FrameBegin3DDraw,iEventHandler > * >(argp1);
+  (arg1)->DecRef();
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_scfFrameBegin3DDraw_GetRefCount(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  scfImplementation1< FrameBegin3DDraw,iEventHandler > *arg1 = (scfImplementation1< FrameBegin3DDraw,iEventHandler > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  int result;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"scfFrameBegin3DDraw_GetRefCount",1,1,&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_scfImplementation1T_FrameBegin3DDraw_iEventHandler_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "scfFrameBegin3DDraw_GetRefCount" "', argument " "1"" of type '" "scfImplementation1< FrameBegin3DDraw,iEventHandler > *""'"); 
+  }
+  arg1 = reinterpret_cast< scfImplementation1< FrameBegin3DDraw,iEventHandler > * >(argp1);
+  result = (int)(arg1)->GetRefCount();
+  resultobj = SWIG_From_int(static_cast< int >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_scfFrameBegin3DDraw_QueryInterface(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  scfImplementation1< FrameBegin3DDraw,iEventHandler > *arg1 = (scfImplementation1< FrameBegin3DDraw,iEventHandler > *) 0 ;
+  scfInterfaceID arg2 ;
+  int arg3 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  unsigned long val2 ;
+  int ecode2 = 0 ;
+  int val3 ;
+  int ecode3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  void *result = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"scfFrameBegin3DDraw_QueryInterface",3,3,&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_scfImplementation1T_FrameBegin3DDraw_iEventHandler_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "scfFrameBegin3DDraw_QueryInterface" "', argument " "1"" of type '" "scfImplementation1< FrameBegin3DDraw,iEventHandler > *""'"); 
+  }
+  arg1 = reinterpret_cast< scfImplementation1< FrameBegin3DDraw,iEventHandler > * >(argp1);
+  ecode2 = SWIG_AsVal_unsigned_SS_long(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "scfFrameBegin3DDraw_QueryInterface" "', argument " "2"" of type '" "scfInterfaceID""'");
+  } 
+  arg2 = static_cast< scfInterfaceID >(val2);
+  ecode3 = SWIG_AsVal_int(obj2, &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "scfFrameBegin3DDraw_QueryInterface" "', argument " "3"" of type '" "int""'");
+  } 
+  arg3 = static_cast< int >(val3);
+  result = (void *)(arg1)->QueryInterface(arg2,arg3);
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_void, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_scfFrameBegin3DDraw_AddRefOwner(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  scfImplementation1< FrameBegin3DDraw,iEventHandler > *arg1 = (scfImplementation1< FrameBegin3DDraw,iEventHandler > *) 0 ;
+  void **arg2 = (void **) 0 ;
+  CS::Threading::Mutex *arg3 = (CS::Threading::Mutex *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  void *argp3 = 0 ;
+  int res3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"scfFrameBegin3DDraw_AddRefOwner",3,3,&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_scfImplementation1T_FrameBegin3DDraw_iEventHandler_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "scfFrameBegin3DDraw_AddRefOwner" "', argument " "1"" of type '" "scfImplementation1< FrameBegin3DDraw,iEventHandler > *""'"); 
+  }
+  arg1 = reinterpret_cast< scfImplementation1< FrameBegin3DDraw,iEventHandler > * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_p_void, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "scfFrameBegin3DDraw_AddRefOwner" "', argument " "2"" of type '" "void **""'"); 
+  }
+  arg2 = reinterpret_cast< void ** >(argp2);
+  res3 = SWIG_ConvertPtr(obj2, &argp3,SWIGTYPE_p_CS__Threading__Mutex, 0 |  0 );
+  if (!SWIG_IsOK(res3)) {
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "scfFrameBegin3DDraw_AddRefOwner" "', argument " "3"" of type '" "CS::Threading::Mutex *""'"); 
+  }
+  arg3 = reinterpret_cast< CS::Threading::Mutex * >(argp3);
+  (arg1)->AddRefOwner(arg2,arg3);
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_scfFrameBegin3DDraw_RemoveRefOwner(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  scfImplementation1< FrameBegin3DDraw,iEventHandler > *arg1 = (scfImplementation1< FrameBegin3DDraw,iEventHandler > *) 0 ;
+  void **arg2 = (void **) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"scfFrameBegin3DDraw_RemoveRefOwner",2,2,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_scfImplementation1T_FrameBegin3DDraw_iEventHandler_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "scfFrameBegin3DDraw_RemoveRefOwner" "', argument " "1"" of type '" "scfImplementation1< FrameBegin3DDraw,iEventHandler > *""'"); 
+  }
+  arg1 = reinterpret_cast< scfImplementation1< FrameBegin3DDraw,iEventHandler > * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_p_void, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "scfFrameBegin3DDraw_RemoveRefOwner" "', argument " "2"" of type '" "void **""'"); 
+  }
+  arg2 = reinterpret_cast< void ** >(argp2);
+  (arg1)->RemoveRefOwner(arg2);
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_scfFrameBegin3DDraw_GetInterfaceMetadata(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  scfImplementation1< FrameBegin3DDraw,iEventHandler > *arg1 = (scfImplementation1< FrameBegin3DDraw,iEventHandler > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  scfInterfaceMetadataList *result = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"scfFrameBegin3DDraw_GetInterfaceMetadata",1,1,&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_scfImplementation1T_FrameBegin3DDraw_iEventHandler_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "scfFrameBegin3DDraw_GetInterfaceMetadata" "', argument " "1"" of type '" "scfImplementation1< FrameBegin3DDraw,iEventHandler > *""'"); 
+  }
+  arg1 = reinterpret_cast< scfImplementation1< FrameBegin3DDraw,iEventHandler > * >(argp1);
+  result = (scfInterfaceMetadataList *)(arg1)->GetInterfaceMetadata();
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_scfInterfaceMetadataList, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *scfFrameBegin3DDraw_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *obj;
+  if (!PyArg_UnpackTuple(args,(char*)"swigregister", 1, 1,&obj)) return NULL;
+  SWIG_TypeNewClientData(SWIGTYPE_p_scfImplementation1T_FrameBegin3DDraw_iEventHandler_t, SWIG_NewClientData(obj));
+  return SWIG_Py_Void();
+}
+
+SWIGINTERN PyObject *_wrap_scfFramePrinter_IncRef(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  scfImplementation1< FramePrinter,iEventHandler > *arg1 = (scfImplementation1< FramePrinter,iEventHandler > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"scfFramePrinter_IncRef",1,1,&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_scfImplementation1T_FramePrinter_iEventHandler_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "scfFramePrinter_IncRef" "', argument " "1"" of type '" "scfImplementation1< FramePrinter,iEventHandler > *""'"); 
+  }
+  arg1 = reinterpret_cast< scfImplementation1< FramePrinter,iEventHandler > * >(argp1);
+  (arg1)->IncRef();
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_scfFramePrinter_DecRef(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  scfImplementation1< FramePrinter,iEventHandler > *arg1 = (scfImplementation1< FramePrinter,iEventHandler > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"scfFramePrinter_DecRef",1,1,&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_scfImplementation1T_FramePrinter_iEventHandler_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "scfFramePrinter_DecRef" "', argument " "1"" of type '" "scfImplementation1< FramePrinter,iEventHandler > *""'"); 
+  }
+  arg1 = reinterpret_cast< scfImplementation1< FramePrinter,iEventHandler > * >(argp1);
+  (arg1)->DecRef();
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_scfFramePrinter_GetRefCount(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  scfImplementation1< FramePrinter,iEventHandler > *arg1 = (scfImplementation1< FramePrinter,iEventHandler > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  int result;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"scfFramePrinter_GetRefCount",1,1,&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_scfImplementation1T_FramePrinter_iEventHandler_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "scfFramePrinter_GetRefCount" "', argument " "1"" of type '" "scfImplementation1< FramePrinter,iEventHandler > *""'"); 
+  }
+  arg1 = reinterpret_cast< scfImplementation1< FramePrinter,iEventHandler > * >(argp1);
+  result = (int)(arg1)->GetRefCount();
+  resultobj = SWIG_From_int(static_cast< int >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_scfFramePrinter_QueryInterface(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  scfImplementation1< FramePrinter,iEventHandler > *arg1 = (scfImplementation1< FramePrinter,iEventHandler > *) 0 ;
+  scfInterfaceID arg2 ;
+  int arg3 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  unsigned long val2 ;
+  int ecode2 = 0 ;
+  int val3 ;
+  int ecode3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  void *result = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"scfFramePrinter_QueryInterface",3,3,&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_scfImplementation1T_FramePrinter_iEventHandler_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "scfFramePrinter_QueryInterface" "', argument " "1"" of type '" "scfImplementation1< FramePrinter,iEventHandler > *""'"); 
+  }
+  arg1 = reinterpret_cast< scfImplementation1< FramePrinter,iEventHandler > * >(argp1);
+  ecode2 = SWIG_AsVal_unsigned_SS_long(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "scfFramePrinter_QueryInterface" "', argument " "2"" of type '" "scfInterfaceID""'");
+  } 
+  arg2 = static_cast< scfInterfaceID >(val2);
+  ecode3 = SWIG_AsVal_int(obj2, &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "scfFramePrinter_QueryInterface" "', argument " "3"" of type '" "int""'");
+  } 
+  arg3 = static_cast< int >(val3);
+  result = (void *)(arg1)->QueryInterface(arg2,arg3);
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_void, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_scfFramePrinter_AddRefOwner(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  scfImplementation1< FramePrinter,iEventHandler > *arg1 = (scfImplementation1< FramePrinter,iEventHandler > *) 0 ;
+  void **arg2 = (void **) 0 ;
+  CS::Threading::Mutex *arg3 = (CS::Threading::Mutex *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  void *argp3 = 0 ;
+  int res3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"scfFramePrinter_AddRefOwner",3,3,&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_scfImplementation1T_FramePrinter_iEventHandler_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "scfFramePrinter_AddRefOwner" "', argument " "1"" of type '" "scfImplementation1< FramePrinter,iEventHandler > *""'"); 
+  }
+  arg1 = reinterpret_cast< scfImplementation1< FramePrinter,iEventHandler > * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_p_void, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "scfFramePrinter_AddRefOwner" "', argument " "2"" of type '" "void **""'"); 
+  }
+  arg2 = reinterpret_cast< void ** >(argp2);
+  res3 = SWIG_ConvertPtr(obj2, &argp3,SWIGTYPE_p_CS__Threading__Mutex, 0 |  0 );
+  if (!SWIG_IsOK(res3)) {
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "scfFramePrinter_AddRefOwner" "', argument " "3"" of type '" "CS::Threading::Mutex *""'"); 
+  }
+  arg3 = reinterpret_cast< CS::Threading::Mutex * >(argp3);
+  (arg1)->AddRefOwner(arg2,arg3);
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_scfFramePrinter_RemoveRefOwner(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  scfImplementation1< FramePrinter,iEventHandler > *arg1 = (scfImplementation1< FramePrinter,iEventHandler > *) 0 ;
+  void **arg2 = (void **) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"scfFramePrinter_RemoveRefOwner",2,2,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_scfImplementation1T_FramePrinter_iEventHandler_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "scfFramePrinter_RemoveRefOwner" "', argument " "1"" of type '" "scfImplementation1< FramePrinter,iEventHandler > *""'"); 
+  }
+  arg1 = reinterpret_cast< scfImplementation1< FramePrinter,iEventHandler > * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_p_void, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "scfFramePrinter_RemoveRefOwner" "', argument " "2"" of type '" "void **""'"); 
+  }
+  arg2 = reinterpret_cast< void ** >(argp2);
+  (arg1)->RemoveRefOwner(arg2);
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_scfFramePrinter_GetInterfaceMetadata(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  scfImplementation1< FramePrinter,iEventHandler > *arg1 = (scfImplementation1< FramePrinter,iEventHandler > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  scfInterfaceMetadataList *result = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"scfFramePrinter_GetInterfaceMetadata",1,1,&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_scfImplementation1T_FramePrinter_iEventHandler_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "scfFramePrinter_GetInterfaceMetadata" "', argument " "1"" of type '" "scfImplementation1< FramePrinter,iEventHandler > *""'"); 
+  }
+  arg1 = reinterpret_cast< scfImplementation1< FramePrinter,iEventHandler > * >(argp1);
+  result = (scfInterfaceMetadataList *)(arg1)->GetInterfaceMetadata();
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_scfInterfaceMetadataList, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *scfFramePrinter_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *obj;
+  if (!PyArg_UnpackTuple(args,(char*)"swigregister", 1, 1,&obj)) return NULL;
+  SWIG_TypeNewClientData(SWIGTYPE_p_scfImplementation1T_FramePrinter_iEventHandler_t, SWIG_NewClientData(obj));
+  return SWIG_Py_Void();
+}
+
 SWIGINTERN PyObject *_wrap_new_FrameBegin3DDraw(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   iObjectRegistry *arg1 = (iObjectRegistry *) 0 ;
@@ -64856,6 +65266,22 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"FrameSignpost_DebugFrame_GenericSucc", _wrap_FrameSignpost_DebugFrame_GenericSucc, METH_VARARGS, NULL},
 	 { (char *)"delete_FrameSignpost_DebugFrame", _wrap_delete_FrameSignpost_DebugFrame, METH_VARARGS, NULL},
 	 { (char *)"FrameSignpost_DebugFrame_swigregister", FrameSignpost_DebugFrame_swigregister, METH_VARARGS, NULL},
+	 { (char *)"scfFrameBegin3DDraw_IncRef", _wrap_scfFrameBegin3DDraw_IncRef, METH_VARARGS, NULL},
+	 { (char *)"scfFrameBegin3DDraw_DecRef", _wrap_scfFrameBegin3DDraw_DecRef, METH_VARARGS, NULL},
+	 { (char *)"scfFrameBegin3DDraw_GetRefCount", _wrap_scfFrameBegin3DDraw_GetRefCount, METH_VARARGS, NULL},
+	 { (char *)"scfFrameBegin3DDraw_QueryInterface", _wrap_scfFrameBegin3DDraw_QueryInterface, METH_VARARGS, NULL},
+	 { (char *)"scfFrameBegin3DDraw_AddRefOwner", _wrap_scfFrameBegin3DDraw_AddRefOwner, METH_VARARGS, NULL},
+	 { (char *)"scfFrameBegin3DDraw_RemoveRefOwner", _wrap_scfFrameBegin3DDraw_RemoveRefOwner, METH_VARARGS, NULL},
+	 { (char *)"scfFrameBegin3DDraw_GetInterfaceMetadata", _wrap_scfFrameBegin3DDraw_GetInterfaceMetadata, METH_VARARGS, NULL},
+	 { (char *)"scfFrameBegin3DDraw_swigregister", scfFrameBegin3DDraw_swigregister, METH_VARARGS, NULL},
+	 { (char *)"scfFramePrinter_IncRef", _wrap_scfFramePrinter_IncRef, METH_VARARGS, NULL},
+	 { (char *)"scfFramePrinter_DecRef", _wrap_scfFramePrinter_DecRef, METH_VARARGS, NULL},
+	 { (char *)"scfFramePrinter_GetRefCount", _wrap_scfFramePrinter_GetRefCount, METH_VARARGS, NULL},
+	 { (char *)"scfFramePrinter_QueryInterface", _wrap_scfFramePrinter_QueryInterface, METH_VARARGS, NULL},
+	 { (char *)"scfFramePrinter_AddRefOwner", _wrap_scfFramePrinter_AddRefOwner, METH_VARARGS, NULL},
+	 { (char *)"scfFramePrinter_RemoveRefOwner", _wrap_scfFramePrinter_RemoveRefOwner, METH_VARARGS, NULL},
+	 { (char *)"scfFramePrinter_GetInterfaceMetadata", _wrap_scfFramePrinter_GetInterfaceMetadata, METH_VARARGS, NULL},
+	 { (char *)"scfFramePrinter_swigregister", scfFramePrinter_swigregister, METH_VARARGS, NULL},
 	 { (char *)"new_FrameBegin3DDraw", _wrap_new_FrameBegin3DDraw, METH_VARARGS, NULL},
 	 { (char *)"delete_FrameBegin3DDraw", _wrap_delete_FrameBegin3DDraw, METH_VARARGS, NULL},
 	 { (char *)"FrameBegin3DDraw_HandleEvent", _wrap_FrameBegin3DDraw_HandleEvent, METH_VARARGS, NULL},
@@ -64953,6 +65379,9 @@ static void *_p_FrameSignpost_ConsoleDebugTo_p_scfImplementation2T_FrameSignpost
 static void *_p_FrameSignpost_2DConsoleTo_p_scfImplementation2T_FrameSignpost_2DConsole_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_t(void *x, int *SWIGUNUSEDPARM(newmemory)) {
     return (void *)((scfImplementation2< FrameSignpost_2DConsole,iFrameEventSignpost,scfFakeInterface< iEventHandler > > *)  ((FrameSignpost_2DConsole *) x));
 }
+static void *_p_FrameBegin3DDrawTo_p_scfImplementation1T_FrameBegin3DDraw_iEventHandler_t(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((scfImplementation1< FrameBegin3DDraw,iEventHandler > *)  ((FrameBegin3DDraw *) x));
+}
 static void *_p__csPyEventHandlerTo_p_scfImplementation1T__csPyEventHandler_iEventHandler_t(void *x, int *SWIGUNUSEDPARM(newmemory)) {
     return (void *)((scfImplementation1< _csPyEventHandler,iEventHandler > *)  ((_csPyEventHandler *) x));
 }
@@ -64976,6 +65405,9 @@ static void *_p_csStringTo_p_csStringBase(void *x, int *SWIGUNUSEDPARM(newmemory
 }
 static void *_p_FrameSignpost_Logic3DTo_p_scfImplementation2T_FrameSignpost_Logic3D_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_t(void *x, int *SWIGUNUSEDPARM(newmemory)) {
     return (void *)((scfImplementation2< FrameSignpost_Logic3D,iFrameEventSignpost,scfFakeInterface< iEventHandler > > *)  ((FrameSignpost_Logic3D *) x));
+}
+static void *_p_FramePrinterTo_p_scfImplementation1T_FramePrinter_iEventHandler_t(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((scfImplementation1< FramePrinter,iEventHandler > *)  ((FramePrinter *) x));
 }
 static void *_p_scfImplementation2T_FrameSignpost_3D2D_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_tTo_p_scfFakeInterfaceT_iEventHandler_t(void *x, int *SWIGUNUSEDPARM(newmemory)) {
     return (void *)((scfFakeInterface< iEventHandler > *)  ((scfImplementation2< FrameSignpost_3D2D,iFrameEventSignpost,scfFakeInterface< iEventHandler > > *) x));
@@ -65025,74 +65457,71 @@ static void *_p_scfImplementation1T_csConfigFile_iConfigFile_tTo_p_iConfigFile(v
 static void *_p_csConfigFileTo_p_iConfigFile(void *x, int *SWIGUNUSEDPARM(newmemory)) {
     return (void *)((iConfigFile *) (scfImplementation1< csConfigFile,iConfigFile > *) ((csConfigFile *) x));
 }
-static void *_p_f_p_iBase__p_scfImplementation2T_FrameSignpost_2DConsole_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_tTo_p_f_p_iBase__p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((iBase *(*)(iBase *)) (iEventHandler *)(iFrameEventSignpost *) ((scfImplementation2< FrameSignpost_2DConsole,iFrameEventSignpost,scfFakeInterface< iEventHandler > > *(*)(iBase *)) x));
+static void *_p_f_p_iBase__p_iDocumentNodeIteratorTo_p_f_p_iBase__p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((iBase *(*)(iBase *))  ((iDocumentNodeIterator *(*)(iBase *)) x));
 }
-static void *_p_f_p_iBase__p_iEventOutletTo_p_f_p_iBase__p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((iBase *(*)(iBase *))  ((iEventOutlet *(*)(iBase *)) x));
+static void *_p_f_p_iBase__p_iDocumentAttributeIteratorTo_p_f_p_iBase__p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((iBase *(*)(iBase *))  ((iDocumentAttributeIterator *(*)(iBase *)) x));
 }
-static void *_p_f_p_iBase__p_iPathTo_p_f_p_iBase__p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((iBase *(*)(iBase *))  ((iPath *(*)(iBase *)) x));
+static void *_p_f_p_iBase__p_iConfigIteratorTo_p_f_p_iBase__p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((iBase *(*)(iBase *))  ((iConfigIterator *(*)(iBase *)) x));
 }
-static void *_p_f_p_iBase__p_iKeyComposerTo_p_f_p_iBase__p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((iBase *(*)(iBase *))  ((iKeyComposer *(*)(iBase *)) x));
+static void *_p_f_p_iBase__p_iReporterIteratorTo_p_f_p_iBase__p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((iBase *(*)(iBase *))  ((iReporterIterator *(*)(iBase *)) x));
 }
-static void *_p_f_p_iBase__p_iStringSetBaseT_CS__StringSetTag__General_tTo_p_f_p_iBase__p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((iBase *(*)(iBase *))  ((iStringSetBase< CS::StringSetTag::General > *(*)(iBase *)) x));
+static void *_p_f_p_iBase__p_iObjectIteratorTo_p_f_p_iBase__p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((iBase *(*)(iBase *))  ((iObjectIterator *(*)(iBase *)) x));
 }
-static void *_p_f_p_iBase__p_iFactoryTo_p_f_p_iBase__p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((iBase *(*)(iBase *))  ((iFactory *(*)(iBase *)) x));
+static void *_p_f_p_iBase__p_iObjectRegistryIteratorTo_p_f_p_iBase__p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((iBase *(*)(iBase *))  ((iObjectRegistryIterator *(*)(iBase *)) x));
 }
-static void *_p_f_p_iBase__p_iStringArrayTo_p_f_p_iBase__p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((iBase *(*)(iBase *))  ((iStringArray *(*)(iBase *)) x));
+static void *_p_f_p_iBase__p_iEventAttributeIteratorTo_p_f_p_iBase__p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((iBase *(*)(iBase *))  ((iEventAttributeIterator *(*)(iBase *)) x));
 }
-static void *_p_f_p_iBase__p_iFrameEventSignpostTo_p_f_p_iBase__p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((iBase *(*)(iBase *)) (iEventHandler *) ((iFrameEventSignpost *(*)(iBase *)) x));
-}
-static void *_p_f_p_iBase__p_scfImplementation2T_FrameSignpost_3D2D_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_tTo_p_f_p_iBase__p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((iBase *(*)(iBase *)) (iEventHandler *)(iFrameEventSignpost *) ((scfImplementation2< FrameSignpost_3D2D,iFrameEventSignpost,scfFakeInterface< iEventHandler > > *(*)(iBase *)) x));
-}
-static void *_p_f_p_iBase__p_iEventNameRegistryTo_p_f_p_iBase__p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((iBase *(*)(iBase *))  ((iEventNameRegistry *(*)(iBase *)) x));
-}
-static void *_p_f_p_iBase__p_iObjectRegistryTo_p_f_p_iBase__p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((iBase *(*)(iBase *))  ((iObjectRegistry *(*)(iBase *)) x));
-}
-static void *_p_f_p_iBase__p_iVFSTo_p_f_p_iBase__p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((iBase *(*)(iBase *))  ((iVFS *(*)(iBase *)) x));
-}
-static void *_p_f_p_iBase__p_iEventHandlerRegistryTo_p_f_p_iBase__p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((iBase *(*)(iBase *))  ((iEventHandlerRegistry *(*)(iBase *)) x));
-}
-static void *_p_f_p_iBase__p_csEventHandlerRegistryTo_p_f_p_iBase__p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((iBase *(*)(iBase *)) (iEventHandlerRegistry *)(scfImplementation1< csEventHandlerRegistry,iEventHandlerRegistry > *) ((csEventHandlerRegistry *(*)(iBase *)) x));
-}
-static void *_p_f_p_iBase__p_iSCFTo_p_f_p_iBase__p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((iBase *(*)(iBase *))  ((iSCF *(*)(iBase *)) x));
-}
-static void *_p_f_p_iBase__p_iFileTo_p_f_p_iBase__p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((iBase *(*)(iBase *))  ((iFile *(*)(iBase *)) x));
-}
-static void *_p_f_p_iBase__p_iEventQueueTo_p_f_p_iBase__p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((iBase *(*)(iBase *))  ((iEventQueue *(*)(iBase *)) x));
+static void *_p_f_p_iBase__p_iPluginIteratorTo_p_f_p_iBase__p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((iBase *(*)(iBase *))  ((iPluginIterator *(*)(iBase *)) x));
 }
 static void *_p_f_p_iBase__p_iDocumentTo_p_f_p_iBase__p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
     return (void *)((iBase *(*)(iBase *))  ((iDocument *(*)(iBase *)) x));
 }
-static void *_p_f_p_iBase__p_iObjectNameChangeListenerTo_p_f_p_iBase__p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((iBase *(*)(iBase *))  ((iObjectNameChangeListener *(*)(iBase *)) x));
+static void *_p_f_p_iBase__p_iDocumentNodeTo_p_f_p_iBase__p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((iBase *(*)(iBase *))  ((iDocumentNode *(*)(iBase *)) x));
 }
-static void *_p_f_p_iBase__p_iReporterListenerTo_p_f_p_iBase__p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((iBase *(*)(iBase *))  ((iReporterListener *(*)(iBase *)) x));
+static void *_p_f_p_iBase__p_csEventHandlerRegistryTo_p_f_p_iBase__p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((iBase *(*)(iBase *)) (iEventHandlerRegistry *)(scfImplementation1< csEventHandlerRegistry,iEventHandlerRegistry > *) ((csEventHandlerRegistry *(*)(iBase *)) x));
 }
-static void *_p_f_p_iBase__p_iKeyboardDriverTo_p_f_p_iBase__p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((iBase *(*)(iBase *))  ((iKeyboardDriver *(*)(iBase *)) x));
+static void *_p_f_p_iBase__p_iEventHandlerRegistryTo_p_f_p_iBase__p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((iBase *(*)(iBase *))  ((iEventHandlerRegistry *(*)(iBase *)) x));
 }
-static void *_p_f_p_iBase__p_FrameSignpost_3D2DTo_p_f_p_iBase__p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((iBase *(*)(iBase *)) (iEventHandler *)(iFrameEventSignpost *)(scfImplementation2< FrameSignpost_3D2D,iFrameEventSignpost,scfFakeInterface< iEventHandler > > *) ((FrameSignpost_3D2D *(*)(iBase *)) x));
+static void *_p_f_p_iBase__p_iObjectRegistryTo_p_f_p_iBase__p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((iBase *(*)(iBase *))  ((iObjectRegistry *(*)(iBase *)) x));
 }
-static void *_p_f_p_iBase__p_iReporterTo_p_f_p_iBase__p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((iBase *(*)(iBase *))  ((iReporter *(*)(iBase *)) x));
+static void *_p_f_p_iBase__p_iEventNameRegistryTo_p_f_p_iBase__p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((iBase *(*)(iBase *))  ((iEventNameRegistry *(*)(iBase *)) x));
+}
+static void *_p_f_p_iBase__p_iEventCordTo_p_f_p_iBase__p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((iBase *(*)(iBase *))  ((iEventCord *(*)(iBase *)) x));
+}
+static void *_p_f_p_iBase__p_iStringSetTo_p_f_p_iBase__p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((iBase *(*)(iBase *)) (iStringSetBase< CS::StringSetTag::General > *) ((iStringSet *(*)(iBase *)) x));
+}
+static void *_p_f_p_iBase__p_iFactoryTo_p_f_p_iBase__p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((iBase *(*)(iBase *))  ((iFactory *(*)(iBase *)) x));
+}
+static void *_p_f_p_iBase__p_iEventTo_p_f_p_iBase__p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((iBase *(*)(iBase *))  ((iEvent *(*)(iBase *)) x));
+}
+static void *_p_f_p_iBase__p_iClipper2DTo_p_f_p_iBase__p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((iBase *(*)(iBase *))  ((iClipper2D *(*)(iBase *)) x));
+}
+static void *_p_f_p_iBase__p_csConfigFileTo_p_f_p_iBase__p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((iBase *(*)(iBase *)) (iConfigFile *)(scfImplementation1< csConfigFile,iConfigFile > *) ((csConfigFile *(*)(iBase *)) x));
+}
+static void *_p_f_p_iBase__p_iConfigFileTo_p_f_p_iBase__p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((iBase *(*)(iBase *))  ((iConfigFile *(*)(iBase *)) x));
+}
+static void *_p_f_p_iBase__p_iDebugHelperTo_p_f_p_iBase__p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((iBase *(*)(iBase *))  ((iDebugHelper *(*)(iBase *)) x));
 }
 static void *_p_f_p_iBase__p_iDocumentSystemTo_p_f_p_iBase__p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
     return (void *)((iBase *(*)(iBase *))  ((iDocumentSystem *(*)(iBase *)) x));
@@ -65100,218 +65529,230 @@ static void *_p_f_p_iBase__p_iDocumentSystemTo_p_f_p_iBase__p_iBase(void *x, int
 static void *_p_f_p_iBase__p_FrameSignpost_Logic3DTo_p_f_p_iBase__p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
     return (void *)((iBase *(*)(iBase *)) (iEventHandler *)(iFrameEventSignpost *)(scfImplementation2< FrameSignpost_Logic3D,iFrameEventSignpost,scfFakeInterface< iEventHandler > > *) ((FrameSignpost_Logic3D *(*)(iBase *)) x));
 }
-static void *_p_f_p_iBase__p_scfImplementation2T_FrameSignpost_Logic3D_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_tTo_p_f_p_iBase__p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((iBase *(*)(iBase *)) (iEventHandler *)(iFrameEventSignpost *) ((scfImplementation2< FrameSignpost_Logic3D,iFrameEventSignpost,scfFakeInterface< iEventHandler > > *(*)(iBase *)) x));
-}
-static void *_p_f_p_iBase__p_iPluginIteratorTo_p_f_p_iBase__p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((iBase *(*)(iBase *))  ((iPluginIterator *(*)(iBase *)) x));
-}
-static void *_p_f_p_iBase__p_iEventAttributeIteratorTo_p_f_p_iBase__p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((iBase *(*)(iBase *))  ((iEventAttributeIterator *(*)(iBase *)) x));
-}
-static void *_p_f_p_iBase__p_iObjectRegistryIteratorTo_p_f_p_iBase__p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((iBase *(*)(iBase *))  ((iObjectRegistryIterator *(*)(iBase *)) x));
-}
-static void *_p_f_p_iBase__p_iObjectIteratorTo_p_f_p_iBase__p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((iBase *(*)(iBase *))  ((iObjectIterator *(*)(iBase *)) x));
-}
-static void *_p_f_p_iBase__p_iReporterIteratorTo_p_f_p_iBase__p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((iBase *(*)(iBase *))  ((iReporterIterator *(*)(iBase *)) x));
-}
-static void *_p_f_p_iBase__p_iClipper2DTo_p_f_p_iBase__p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((iBase *(*)(iBase *))  ((iClipper2D *(*)(iBase *)) x));
-}
-static void *_p_f_p_iBase__p_iConfigIteratorTo_p_f_p_iBase__p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((iBase *(*)(iBase *))  ((iConfigIterator *(*)(iBase *)) x));
-}
-static void *_p_f_p_iBase__p_iDocumentAttributeIteratorTo_p_f_p_iBase__p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((iBase *(*)(iBase *))  ((iDocumentAttributeIterator *(*)(iBase *)) x));
-}
-static void *_p_f_p_iBase__p_iDocumentNodeIteratorTo_p_f_p_iBase__p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((iBase *(*)(iBase *))  ((iDocumentNodeIterator *(*)(iBase *)) x));
-}
-static void *_p_f_p_iBase__p_scfImplementation2T_FrameSignpost_ConsoleDebug_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_tTo_p_f_p_iBase__p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((iBase *(*)(iBase *)) (iEventHandler *)(iFrameEventSignpost *) ((scfImplementation2< FrameSignpost_ConsoleDebug,iFrameEventSignpost,scfFakeInterface< iEventHandler > > *(*)(iBase *)) x));
-}
-static void *_p_f_p_iBase__p_scfImplementation1T_csPyEventPlug_iEventPlug_tTo_p_f_p_iBase__p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((iBase *(*)(iBase *)) (iEventPlug *) ((scfImplementation1< csPyEventPlug,iEventPlug > *(*)(iBase *)) x));
-}
-static void *_p_f_p_iBase__p_iCommandLineParserTo_p_f_p_iBase__p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((iBase *(*)(iBase *))  ((iCommandLineParser *(*)(iBase *)) x));
-}
-static void *_p_f_p_iBase__p_iDataBufferTo_p_f_p_iBase__p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((iBase *(*)(iBase *))  ((iDataBuffer *(*)(iBase *)) x));
-}
-static void *_p_f_p_iBase__p_iEventHandlerTo_p_f_p_iBase__p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((iBase *(*)(iBase *))  ((iEventHandler *(*)(iBase *)) x));
-}
-static void *_p_f_p_iBase__p_scfImplementation2T_FrameSignpost_DebugFrame_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_tTo_p_f_p_iBase__p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((iBase *(*)(iBase *)) (iEventHandler *)(iFrameEventSignpost *) ((scfImplementation2< FrameSignpost_DebugFrame,iFrameEventSignpost,scfFakeInterface< iEventHandler > > *(*)(iBase *)) x));
-}
-static void *_p_f_p_iBase__p__csPyEventHandlerTo_p_f_p_iBase__p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((iBase *(*)(iBase *)) (iEventHandler *)(scfImplementation1< _csPyEventHandler,iEventHandler > *) ((_csPyEventHandler *(*)(iBase *)) x));
-}
-static void *_p_f_p_iBase__p_iComponentTo_p_f_p_iBase__p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((iBase *(*)(iBase *))  ((iComponent *(*)(iBase *)) x));
-}
-static void *_p_f_p_iBase__p_iThreadReturnTo_p_f_p_iBase__p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((iBase *(*)(iBase *))  ((iThreadReturn *(*)(iBase *)) x));
-}
-static void *_p_f_p_iBase__p_iEventTo_p_f_p_iBase__p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((iBase *(*)(iBase *))  ((iEvent *(*)(iBase *)) x));
-}
-static void *_p_f_p_iBase__p_iMouseDriverTo_p_f_p_iBase__p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((iBase *(*)(iBase *))  ((iMouseDriver *(*)(iBase *)) x));
-}
-static void *_p_f_p_iBase__p_iJoystickDriverTo_p_f_p_iBase__p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((iBase *(*)(iBase *))  ((iJoystickDriver *(*)(iBase *)) x));
-}
-static void *_p_f_p_iBase__p_iConfigFileTo_p_f_p_iBase__p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((iBase *(*)(iBase *))  ((iConfigFile *(*)(iBase *)) x));
-}
-static void *_p_f_p_iBase__p_csConfigFileTo_p_f_p_iBase__p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((iBase *(*)(iBase *)) (iConfigFile *)(scfImplementation1< csConfigFile,iConfigFile > *) ((csConfigFile *(*)(iBase *)) x));
-}
-static void *_p_f_p_iBase__p_scfImplementation1T_csEventHandlerRegistry_iEventHandlerRegistry_tTo_p_f_p_iBase__p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((iBase *(*)(iBase *)) (iEventHandlerRegistry *) ((scfImplementation1< csEventHandlerRegistry,iEventHandlerRegistry > *(*)(iBase *)) x));
-}
-static void *_p_f_p_iBase__p_FrameSignpost_ConsoleDebugTo_p_f_p_iBase__p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((iBase *(*)(iBase *)) (iEventHandler *)(iFrameEventSignpost *)(scfImplementation2< FrameSignpost_ConsoleDebug,iFrameEventSignpost,scfFakeInterface< iEventHandler > > *) ((FrameSignpost_ConsoleDebug *(*)(iBase *)) x));
-}
-static void *_p_f_p_iBase__p_FrameSignpost_DebugFrameTo_p_f_p_iBase__p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((iBase *(*)(iBase *)) (iEventHandler *)(iFrameEventSignpost *)(scfImplementation2< FrameSignpost_DebugFrame,iFrameEventSignpost,scfFakeInterface< iEventHandler > > *) ((FrameSignpost_DebugFrame *(*)(iBase *)) x));
-}
-static void *_p_f_p_iBase__p_iEventPlugTo_p_f_p_iBase__p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((iBase *(*)(iBase *))  ((iEventPlug *(*)(iBase *)) x));
-}
-static void *_p_f_p_iBase__p_csObjectTo_p_f_p_iBase__p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((iBase *(*)(iBase *)) (iObject *)(scfImplementation1< csObject,iObject > *) ((csObject *(*)(iBase *)) x));
-}
-static void *_p_f_p_iBase__p_iObjectTo_p_f_p_iBase__p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((iBase *(*)(iBase *))  ((iObject *(*)(iBase *)) x));
-}
-static void *_p_f_p_iBase__p_iDocumentAttributeTo_p_f_p_iBase__p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((iBase *(*)(iBase *))  ((iDocumentAttribute *(*)(iBase *)) x));
-}
-static void *_p_f_p_iBase__p_scfImplementation1T_csConfigFile_iConfigFile_tTo_p_f_p_iBase__p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((iBase *(*)(iBase *)) (iConfigFile *) ((scfImplementation1< csConfigFile,iConfigFile > *(*)(iBase *)) x));
-}
-static void *_p_f_p_iBase__p_csPyEventPlugTo_p_f_p_iBase__p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((iBase *(*)(iBase *)) (iEventPlug *)(scfImplementation1< csPyEventPlug,iEventPlug > *) ((csPyEventPlug *(*)(iBase *)) x));
-}
-static void *_p_f_p_iBase__p_iDocumentNodeTo_p_f_p_iBase__p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((iBase *(*)(iBase *))  ((iDocumentNode *(*)(iBase *)) x));
-}
-static void *_p_f_p_iBase__p_iStringTo_p_f_p_iBase__p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((iBase *(*)(iBase *))  ((iString *(*)(iBase *)) x));
-}
-static void *_p_f_p_iBase__p_scfImplementation1T_csObject_iObject_tTo_p_f_p_iBase__p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((iBase *(*)(iBase *)) (iObject *) ((scfImplementation1< csObject,iObject > *(*)(iBase *)) x));
+static void *_p_f_p_iBase__p_iKeyComposerTo_p_f_p_iBase__p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((iBase *(*)(iBase *))  ((iKeyComposer *(*)(iBase *)) x));
 }
 static void *_p_f_p_iBase__p_FrameSignpost_2DConsoleTo_p_f_p_iBase__p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
     return (void *)((iBase *(*)(iBase *)) (iEventHandler *)(iFrameEventSignpost *)(scfImplementation2< FrameSignpost_2DConsole,iFrameEventSignpost,scfFakeInterface< iEventHandler > > *) ((FrameSignpost_2DConsole *(*)(iBase *)) x));
 }
-static void *_p_f_p_iBase__p_iStringSetTo_p_f_p_iBase__p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((iBase *(*)(iBase *)) (iStringSetBase< CS::StringSetTag::General > *) ((iStringSet *(*)(iBase *)) x));
+static void *_p_f_p_iBase__p_iSCFTo_p_f_p_iBase__p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((iBase *(*)(iBase *))  ((iSCF *(*)(iBase *)) x));
+}
+static void *_p_f_p_iBase__p_iThreadReturnTo_p_f_p_iBase__p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((iBase *(*)(iBase *))  ((iThreadReturn *(*)(iBase *)) x));
+}
+static void *_p_f_p_iBase__p_scfImplementation2T_FrameSignpost_ConsoleDebug_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_tTo_p_f_p_iBase__p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((iBase *(*)(iBase *)) (iEventHandler *)(iFrameEventSignpost *) ((scfImplementation2< FrameSignpost_ConsoleDebug,iFrameEventSignpost,scfFakeInterface< iEventHandler > > *(*)(iBase *)) x));
+}
+static void *_p_f_p_iBase__p_FrameSignpost_3D2DTo_p_f_p_iBase__p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((iBase *(*)(iBase *)) (iEventHandler *)(iFrameEventSignpost *)(scfImplementation2< FrameSignpost_3D2D,iFrameEventSignpost,scfFakeInterface< iEventHandler > > *) ((FrameSignpost_3D2D *(*)(iBase *)) x));
+}
+static void *_p_f_p_iBase__p_iStringSetBaseT_CS__StringSetTag__General_tTo_p_f_p_iBase__p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((iBase *(*)(iBase *))  ((iStringSetBase< CS::StringSetTag::General > *(*)(iBase *)) x));
+}
+static void *_p_f_p_iBase__p_scfImplementation1T_csObject_iObject_tTo_p_f_p_iBase__p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((iBase *(*)(iBase *)) (iObject *) ((scfImplementation1< csObject,iObject > *(*)(iBase *)) x));
+}
+static void *_p_f_p_iBase__p_scfImplementation1T_csEventHandlerRegistry_iEventHandlerRegistry_tTo_p_f_p_iBase__p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((iBase *(*)(iBase *)) (iEventHandlerRegistry *) ((scfImplementation1< csEventHandlerRegistry,iEventHandlerRegistry > *(*)(iBase *)) x));
+}
+static void *_p_f_p_iBase__p_iEventOutletTo_p_f_p_iBase__p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((iBase *(*)(iBase *))  ((iEventOutlet *(*)(iBase *)) x));
+}
+static void *_p_f_p_iBase__p_iPathTo_p_f_p_iBase__p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((iBase *(*)(iBase *))  ((iPath *(*)(iBase *)) x));
 }
 static void *_p_f_p_iBase__p_iVirtualClockTo_p_f_p_iBase__p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
     return (void *)((iBase *(*)(iBase *))  ((iVirtualClock *(*)(iBase *)) x));
 }
-static void *_p_f_p_iBase__p_scfImplementation1T__csPyEventHandler_iEventHandler_tTo_p_f_p_iBase__p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((iBase *(*)(iBase *)) (iEventHandler *) ((scfImplementation1< _csPyEventHandler,iEventHandler > *(*)(iBase *)) x));
+static void *_p_f_p_iBase__p_iReporterTo_p_f_p_iBase__p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((iBase *(*)(iBase *))  ((iReporter *(*)(iBase *)) x));
 }
-static void *_p_f_p_iBase__p_iDebugHelperTo_p_f_p_iBase__p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((iBase *(*)(iBase *))  ((iDebugHelper *(*)(iBase *)) x));
+static void *_p_f_p_iBase__p_iObjectTo_p_f_p_iBase__p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((iBase *(*)(iBase *))  ((iObject *(*)(iBase *)) x));
 }
-static void *_p_f_p_iBase__p_iTriangleMeshTo_p_f_p_iBase__p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((iBase *(*)(iBase *))  ((iTriangleMesh *(*)(iBase *)) x));
+static void *_p_f_p_iBase__p_csObjectTo_p_f_p_iBase__p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((iBase *(*)(iBase *)) (iObject *)(scfImplementation1< csObject,iObject > *) ((csObject *(*)(iBase *)) x));
 }
-static void *_p_f_p_iBase__p_iEventCordTo_p_f_p_iBase__p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((iBase *(*)(iBase *))  ((iEventCord *(*)(iBase *)) x));
+static void *_p_f_p_iBase__p_iEventQueueTo_p_f_p_iBase__p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((iBase *(*)(iBase *))  ((iEventQueue *(*)(iBase *)) x));
 }
-static void *_p_f_p_iBase__p_iPluginManagerTo_p_f_p_iBase__p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((iBase *(*)(iBase *))  ((iPluginManager *(*)(iBase *)) x));
+static void *_p_f_p_iBase__p_iStringTo_p_f_p_iBase__p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((iBase *(*)(iBase *))  ((iString *(*)(iBase *)) x));
 }
-static void *_p_f_p_iBase__p_iThreadManagerTo_p_f_p_iBase__p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((iBase *(*)(iBase *))  ((iThreadManager *(*)(iBase *)) x));
+static void *_p_f_p_iBase__p_scfImplementation2T_FrameSignpost_Logic3D_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_tTo_p_f_p_iBase__p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((iBase *(*)(iBase *)) (iEventHandler *)(iFrameEventSignpost *) ((scfImplementation2< FrameSignpost_Logic3D,iFrameEventSignpost,scfFakeInterface< iEventHandler > > *(*)(iBase *)) x));
 }
-static void *_p_f_p_iBase__p_iCacheManagerTo_p_f_p_iBase__p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((iBase *(*)(iBase *))  ((iCacheManager *(*)(iBase *)) x));
+static void *_p_f_p_iBase__p_iComponentTo_p_f_p_iBase__p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((iBase *(*)(iBase *))  ((iComponent *(*)(iBase *)) x));
+}
+static void *_p_f_p_iBase__p_iCommandLineParserTo_p_f_p_iBase__p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((iBase *(*)(iBase *))  ((iCommandLineParser *(*)(iBase *)) x));
+}
+static void *_p_f_p_iBase__p_FrameBegin3DDrawTo_p_f_p_iBase__p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((iBase *(*)(iBase *)) (iEventHandler *)(scfImplementation1< FrameBegin3DDraw,iEventHandler > *) ((FrameBegin3DDraw *(*)(iBase *)) x));
+}
+static void *_p_f_p_iBase__p_iJoystickDriverTo_p_f_p_iBase__p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((iBase *(*)(iBase *))  ((iJoystickDriver *(*)(iBase *)) x));
+}
+static void *_p_f_p_iBase__p_iMouseDriverTo_p_f_p_iBase__p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((iBase *(*)(iBase *))  ((iMouseDriver *(*)(iBase *)) x));
 }
 static void *_p_f_p_iBase__p_scfImplementationExt1T_csPath_csObject_iPath_tTo_p_f_p_iBase__p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
     return (void *)((iBase *(*)(iBase *)) (iObject *)(scfImplementation1< csObject,iObject > *)(csObject *) ((scfImplementationExt1< csPath,csObject,iPath > *(*)(iBase *)) x));
 }
+static void *_p_f_p_iBase__p_FramePrinterTo_p_f_p_iBase__p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((iBase *(*)(iBase *)) (iEventHandler *)(scfImplementation1< FramePrinter,iEventHandler > *) ((FramePrinter *(*)(iBase *)) x));
+}
+static void *_p_f_p_iBase__p_iVFSTo_p_f_p_iBase__p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((iBase *(*)(iBase *))  ((iVFS *(*)(iBase *)) x));
+}
+static void *_p_f_p_iBase__p_iStringArrayTo_p_f_p_iBase__p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((iBase *(*)(iBase *))  ((iStringArray *(*)(iBase *)) x));
+}
+static void *_p_f_p_iBase__p_scfImplementation1T_FrameBegin3DDraw_iEventHandler_tTo_p_f_p_iBase__p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((iBase *(*)(iBase *)) (iEventHandler *) ((scfImplementation1< FrameBegin3DDraw,iEventHandler > *(*)(iBase *)) x));
+}
+static void *_p_f_p_iBase__p_iEventHandlerTo_p_f_p_iBase__p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((iBase *(*)(iBase *))  ((iEventHandler *(*)(iBase *)) x));
+}
+static void *_p_f_p_iBase__p__csPyEventHandlerTo_p_f_p_iBase__p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((iBase *(*)(iBase *)) (iEventHandler *)(scfImplementation1< _csPyEventHandler,iEventHandler > *) ((_csPyEventHandler *(*)(iBase *)) x));
+}
+static void *_p_f_p_iBase__p_iEventPlugTo_p_f_p_iBase__p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((iBase *(*)(iBase *))  ((iEventPlug *(*)(iBase *)) x));
+}
+static void *_p_f_p_iBase__p_csPyEventPlugTo_p_f_p_iBase__p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((iBase *(*)(iBase *)) (iEventPlug *)(scfImplementation1< csPyEventPlug,iEventPlug > *) ((csPyEventPlug *(*)(iBase *)) x));
+}
+static void *_p_f_p_iBase__p_scfImplementation2T_FrameSignpost_2DConsole_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_tTo_p_f_p_iBase__p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((iBase *(*)(iBase *)) (iEventHandler *)(iFrameEventSignpost *) ((scfImplementation2< FrameSignpost_2DConsole,iFrameEventSignpost,scfFakeInterface< iEventHandler > > *(*)(iBase *)) x));
+}
+static void *_p_f_p_iBase__p_FrameSignpost_DebugFrameTo_p_f_p_iBase__p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((iBase *(*)(iBase *)) (iEventHandler *)(iFrameEventSignpost *)(scfImplementation2< FrameSignpost_DebugFrame,iFrameEventSignpost,scfFakeInterface< iEventHandler > > *) ((FrameSignpost_DebugFrame *(*)(iBase *)) x));
+}
 static void *_p_f_p_iBase__p_iConfigManagerTo_p_f_p_iBase__p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
     return (void *)((iBase *(*)(iBase *)) (iConfigFile *) ((iConfigManager *(*)(iBase *)) x));
 }
-static void *_p_scfImplementation2T_FrameSignpost_2DConsole_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_tTo_p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((iBase *) (iEventHandler *)(iFrameEventSignpost *) ((scfImplementation2< FrameSignpost_2DConsole,iFrameEventSignpost,scfFakeInterface< iEventHandler > > *) x));
+static void *_p_f_p_iBase__p_iCacheManagerTo_p_f_p_iBase__p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((iBase *(*)(iBase *))  ((iCacheManager *(*)(iBase *)) x));
 }
-static void *_p_iEventOutletTo_p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((iBase *)  ((iEventOutlet *) x));
+static void *_p_f_p_iBase__p_iThreadManagerTo_p_f_p_iBase__p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((iBase *(*)(iBase *))  ((iThreadManager *(*)(iBase *)) x));
 }
-static void *_p_iPathTo_p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((iBase *)  ((iPath *) x));
+static void *_p_f_p_iBase__p_iPluginManagerTo_p_f_p_iBase__p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((iBase *(*)(iBase *))  ((iPluginManager *(*)(iBase *)) x));
 }
-static void *_p_iKeyComposerTo_p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((iBase *)  ((iKeyComposer *) x));
+static void *_p_f_p_iBase__p_iTriangleMeshTo_p_f_p_iBase__p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((iBase *(*)(iBase *))  ((iTriangleMesh *(*)(iBase *)) x));
 }
-static void *_p_iStringSetBaseT_CS__StringSetTag__General_tTo_p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((iBase *)  ((iStringSetBase< CS::StringSetTag::General > *) x));
+static void *_p_f_p_iBase__p_scfImplementation1T__csPyEventHandler_iEventHandler_tTo_p_f_p_iBase__p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((iBase *(*)(iBase *)) (iEventHandler *) ((scfImplementation1< _csPyEventHandler,iEventHandler > *(*)(iBase *)) x));
 }
-static void *_p_iFactoryTo_p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((iBase *)  ((iFactory *) x));
+static void *_p_f_p_iBase__p_iFrameEventSignpostTo_p_f_p_iBase__p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((iBase *(*)(iBase *)) (iEventHandler *) ((iFrameEventSignpost *(*)(iBase *)) x));
 }
-static void *_p_iStringArrayTo_p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((iBase *)  ((iStringArray *) x));
+static void *_p_f_p_iBase__p_scfImplementation1T_csConfigFile_iConfigFile_tTo_p_f_p_iBase__p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((iBase *(*)(iBase *)) (iConfigFile *) ((scfImplementation1< csConfigFile,iConfigFile > *(*)(iBase *)) x));
 }
-static void *_p_iFrameEventSignpostTo_p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((iBase *) (iEventHandler *) ((iFrameEventSignpost *) x));
+static void *_p_f_p_iBase__p_iDataBufferTo_p_f_p_iBase__p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((iBase *(*)(iBase *))  ((iDataBuffer *(*)(iBase *)) x));
 }
-static void *_p_scfImplementation2T_FrameSignpost_3D2D_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_tTo_p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((iBase *) (iEventHandler *)(iFrameEventSignpost *) ((scfImplementation2< FrameSignpost_3D2D,iFrameEventSignpost,scfFakeInterface< iEventHandler > > *) x));
+static void *_p_f_p_iBase__p_iKeyboardDriverTo_p_f_p_iBase__p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((iBase *(*)(iBase *))  ((iKeyboardDriver *(*)(iBase *)) x));
 }
-static void *_p_iEventNameRegistryTo_p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((iBase *)  ((iEventNameRegistry *) x));
+static void *_p_f_p_iBase__p_scfImplementation1T_FramePrinter_iEventHandler_tTo_p_f_p_iBase__p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((iBase *(*)(iBase *)) (iEventHandler *) ((scfImplementation1< FramePrinter,iEventHandler > *(*)(iBase *)) x));
 }
-static void *_p_iObjectRegistryTo_p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((iBase *)  ((iObjectRegistry *) x));
+static void *_p_f_p_iBase__p_FrameSignpost_ConsoleDebugTo_p_f_p_iBase__p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((iBase *(*)(iBase *)) (iEventHandler *)(iFrameEventSignpost *)(scfImplementation2< FrameSignpost_ConsoleDebug,iFrameEventSignpost,scfFakeInterface< iEventHandler > > *) ((FrameSignpost_ConsoleDebug *(*)(iBase *)) x));
 }
-static void *_p_iVFSTo_p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((iBase *)  ((iVFS *) x));
+static void *_p_f_p_iBase__p_scfImplementation2T_FrameSignpost_3D2D_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_tTo_p_f_p_iBase__p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((iBase *(*)(iBase *)) (iEventHandler *)(iFrameEventSignpost *) ((scfImplementation2< FrameSignpost_3D2D,iFrameEventSignpost,scfFakeInterface< iEventHandler > > *(*)(iBase *)) x));
 }
-static void *_p_iEventHandlerRegistryTo_p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((iBase *)  ((iEventHandlerRegistry *) x));
+static void *_p_f_p_iBase__p_iReporterListenerTo_p_f_p_iBase__p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((iBase *(*)(iBase *))  ((iReporterListener *(*)(iBase *)) x));
 }
-static void *_p_csEventHandlerRegistryTo_p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((iBase *) (iEventHandlerRegistry *)(scfImplementation1< csEventHandlerRegistry,iEventHandlerRegistry > *) ((csEventHandlerRegistry *) x));
+static void *_p_f_p_iBase__p_iObjectNameChangeListenerTo_p_f_p_iBase__p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((iBase *(*)(iBase *))  ((iObjectNameChangeListener *(*)(iBase *)) x));
 }
-static void *_p_iSCFTo_p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((iBase *)  ((iSCF *) x));
+static void *_p_f_p_iBase__p_scfImplementation1T_csPyEventPlug_iEventPlug_tTo_p_f_p_iBase__p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((iBase *(*)(iBase *)) (iEventPlug *) ((scfImplementation1< csPyEventPlug,iEventPlug > *(*)(iBase *)) x));
 }
-static void *_p_iFileTo_p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((iBase *)  ((iFile *) x));
+static void *_p_f_p_iBase__p_iFileTo_p_f_p_iBase__p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((iBase *(*)(iBase *))  ((iFile *(*)(iBase *)) x));
 }
-static void *_p_iEventQueueTo_p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((iBase *)  ((iEventQueue *) x));
+static void *_p_f_p_iBase__p_iDocumentAttributeTo_p_f_p_iBase__p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((iBase *(*)(iBase *))  ((iDocumentAttribute *(*)(iBase *)) x));
+}
+static void *_p_f_p_iBase__p_scfImplementation2T_FrameSignpost_DebugFrame_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_tTo_p_f_p_iBase__p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((iBase *(*)(iBase *)) (iEventHandler *)(iFrameEventSignpost *) ((scfImplementation2< FrameSignpost_DebugFrame,iFrameEventSignpost,scfFakeInterface< iEventHandler > > *(*)(iBase *)) x));
+}
+static void *_p_iDocumentNodeIteratorTo_p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((iBase *)  ((iDocumentNodeIterator *) x));
+}
+static void *_p_iDocumentAttributeIteratorTo_p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((iBase *)  ((iDocumentAttributeIterator *) x));
+}
+static void *_p_iConfigIteratorTo_p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((iBase *)  ((iConfigIterator *) x));
+}
+static void *_p_iReporterIteratorTo_p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((iBase *)  ((iReporterIterator *) x));
+}
+static void *_p_iObjectIteratorTo_p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((iBase *)  ((iObjectIterator *) x));
+}
+static void *_p_iObjectRegistryIteratorTo_p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((iBase *)  ((iObjectRegistryIterator *) x));
+}
+static void *_p_iEventAttributeIteratorTo_p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((iBase *)  ((iEventAttributeIterator *) x));
+}
+static void *_p_iPluginIteratorTo_p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((iBase *)  ((iPluginIterator *) x));
 }
 static void *_p_iDocumentTo_p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
     return (void *)((iBase *)  ((iDocument *) x));
 }
-static void *_p_iObjectNameChangeListenerTo_p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((iBase *)  ((iObjectNameChangeListener *) x));
+static void *_p_iDocumentNodeTo_p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((iBase *)  ((iDocumentNode *) x));
 }
-static void *_p_iReporterListenerTo_p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((iBase *)  ((iReporterListener *) x));
+static void *_p_csEventHandlerRegistryTo_p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((iBase *) (iEventHandlerRegistry *)(scfImplementation1< csEventHandlerRegistry,iEventHandlerRegistry > *) ((csEventHandlerRegistry *) x));
 }
-static void *_p_iKeyboardDriverTo_p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((iBase *)  ((iKeyboardDriver *) x));
+static void *_p_iEventHandlerRegistryTo_p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((iBase *)  ((iEventHandlerRegistry *) x));
 }
-static void *_p_FrameSignpost_3D2DTo_p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((iBase *) (iEventHandler *)(iFrameEventSignpost *)(scfImplementation2< FrameSignpost_3D2D,iFrameEventSignpost,scfFakeInterface< iEventHandler > > *) ((FrameSignpost_3D2D *) x));
+static void *_p_iObjectRegistryTo_p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((iBase *)  ((iObjectRegistry *) x));
 }
-static void *_p_iReporterTo_p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((iBase *)  ((iReporter *) x));
+static void *_p_iEventNameRegistryTo_p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((iBase *)  ((iEventNameRegistry *) x));
+}
+static void *_p_iEventCordTo_p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((iBase *)  ((iEventCord *) x));
+}
+static void *_p_iStringSetTo_p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((iBase *) (iStringSetBase< CS::StringSetTag::General > *) ((iStringSet *) x));
+}
+static void *_p_iFactoryTo_p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((iBase *)  ((iFactory *) x));
+}
+static void *_p_iEventTo_p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((iBase *)  ((iEvent *) x));
+}
+static void *_p_iClipper2DTo_p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((iBase *)  ((iClipper2D *) x));
+}
+static void *_p_csConfigFileTo_p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((iBase *) (iConfigFile *)(scfImplementation1< csConfigFile,iConfigFile > *) ((csConfigFile *) x));
+}
+static void *_p_iConfigFileTo_p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((iBase *)  ((iConfigFile *) x));
+}
+static void *_p_iDebugHelperTo_p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((iBase *)  ((iDebugHelper *) x));
 }
 static void *_p_iDocumentSystemTo_p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
     return (void *)((iBase *)  ((iDocumentSystem *) x));
@@ -65319,149 +65760,164 @@ static void *_p_iDocumentSystemTo_p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory
 static void *_p_FrameSignpost_Logic3DTo_p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
     return (void *)((iBase *) (iEventHandler *)(iFrameEventSignpost *)(scfImplementation2< FrameSignpost_Logic3D,iFrameEventSignpost,scfFakeInterface< iEventHandler > > *) ((FrameSignpost_Logic3D *) x));
 }
-static void *_p_scfImplementation2T_FrameSignpost_Logic3D_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_tTo_p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((iBase *) (iEventHandler *)(iFrameEventSignpost *) ((scfImplementation2< FrameSignpost_Logic3D,iFrameEventSignpost,scfFakeInterface< iEventHandler > > *) x));
-}
-static void *_p_iPluginIteratorTo_p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((iBase *)  ((iPluginIterator *) x));
-}
-static void *_p_iEventAttributeIteratorTo_p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((iBase *)  ((iEventAttributeIterator *) x));
-}
-static void *_p_iObjectRegistryIteratorTo_p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((iBase *)  ((iObjectRegistryIterator *) x));
-}
-static void *_p_iObjectIteratorTo_p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((iBase *)  ((iObjectIterator *) x));
-}
-static void *_p_iReporterIteratorTo_p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((iBase *)  ((iReporterIterator *) x));
-}
-static void *_p_iClipper2DTo_p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((iBase *)  ((iClipper2D *) x));
-}
-static void *_p_iConfigIteratorTo_p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((iBase *)  ((iConfigIterator *) x));
-}
-static void *_p_iDocumentAttributeIteratorTo_p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((iBase *)  ((iDocumentAttributeIterator *) x));
-}
-static void *_p_iDocumentNodeIteratorTo_p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((iBase *)  ((iDocumentNodeIterator *) x));
-}
-static void *_p_scfImplementation2T_FrameSignpost_ConsoleDebug_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_tTo_p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((iBase *) (iEventHandler *)(iFrameEventSignpost *) ((scfImplementation2< FrameSignpost_ConsoleDebug,iFrameEventSignpost,scfFakeInterface< iEventHandler > > *) x));
-}
-static void *_p_scfImplementation1T_csPyEventPlug_iEventPlug_tTo_p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((iBase *) (iEventPlug *) ((scfImplementation1< csPyEventPlug,iEventPlug > *) x));
-}
-static void *_p_iCommandLineParserTo_p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((iBase *)  ((iCommandLineParser *) x));
-}
-static void *_p_iDataBufferTo_p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((iBase *)  ((iDataBuffer *) x));
-}
-static void *_p_iEventHandlerTo_p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((iBase *)  ((iEventHandler *) x));
-}
-static void *_p_scfImplementation2T_FrameSignpost_DebugFrame_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_tTo_p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((iBase *) (iEventHandler *)(iFrameEventSignpost *) ((scfImplementation2< FrameSignpost_DebugFrame,iFrameEventSignpost,scfFakeInterface< iEventHandler > > *) x));
-}
-static void *_p__csPyEventHandlerTo_p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((iBase *) (iEventHandler *)(scfImplementation1< _csPyEventHandler,iEventHandler > *) ((_csPyEventHandler *) x));
-}
-static void *_p_iComponentTo_p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((iBase *)  ((iComponent *) x));
-}
-static void *_p_iThreadReturnTo_p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((iBase *)  ((iThreadReturn *) x));
-}
-static void *_p_iEventTo_p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((iBase *)  ((iEvent *) x));
-}
-static void *_p_iMouseDriverTo_p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((iBase *)  ((iMouseDriver *) x));
-}
-static void *_p_iJoystickDriverTo_p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((iBase *)  ((iJoystickDriver *) x));
-}
-static void *_p_iConfigFileTo_p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((iBase *)  ((iConfigFile *) x));
-}
-static void *_p_csConfigFileTo_p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((iBase *) (iConfigFile *)(scfImplementation1< csConfigFile,iConfigFile > *) ((csConfigFile *) x));
-}
-static void *_p_scfImplementation1T_csEventHandlerRegistry_iEventHandlerRegistry_tTo_p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((iBase *) (iEventHandlerRegistry *) ((scfImplementation1< csEventHandlerRegistry,iEventHandlerRegistry > *) x));
-}
-static void *_p_FrameSignpost_ConsoleDebugTo_p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((iBase *) (iEventHandler *)(iFrameEventSignpost *)(scfImplementation2< FrameSignpost_ConsoleDebug,iFrameEventSignpost,scfFakeInterface< iEventHandler > > *) ((FrameSignpost_ConsoleDebug *) x));
-}
-static void *_p_FrameSignpost_DebugFrameTo_p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((iBase *) (iEventHandler *)(iFrameEventSignpost *)(scfImplementation2< FrameSignpost_DebugFrame,iFrameEventSignpost,scfFakeInterface< iEventHandler > > *) ((FrameSignpost_DebugFrame *) x));
-}
-static void *_p_iEventPlugTo_p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((iBase *)  ((iEventPlug *) x));
-}
-static void *_p_csObjectTo_p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((iBase *) (iObject *)(scfImplementation1< csObject,iObject > *) ((csObject *) x));
-}
-static void *_p_iObjectTo_p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((iBase *)  ((iObject *) x));
-}
-static void *_p_iDocumentAttributeTo_p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((iBase *)  ((iDocumentAttribute *) x));
-}
-static void *_p_scfImplementation1T_csConfigFile_iConfigFile_tTo_p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((iBase *) (iConfigFile *) ((scfImplementation1< csConfigFile,iConfigFile > *) x));
-}
-static void *_p_csPyEventPlugTo_p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((iBase *) (iEventPlug *)(scfImplementation1< csPyEventPlug,iEventPlug > *) ((csPyEventPlug *) x));
-}
-static void *_p_iDocumentNodeTo_p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((iBase *)  ((iDocumentNode *) x));
-}
-static void *_p_iStringTo_p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((iBase *)  ((iString *) x));
-}
-static void *_p_scfImplementation1T_csObject_iObject_tTo_p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((iBase *) (iObject *) ((scfImplementation1< csObject,iObject > *) x));
+static void *_p_iKeyComposerTo_p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((iBase *)  ((iKeyComposer *) x));
 }
 static void *_p_FrameSignpost_2DConsoleTo_p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
     return (void *)((iBase *) (iEventHandler *)(iFrameEventSignpost *)(scfImplementation2< FrameSignpost_2DConsole,iFrameEventSignpost,scfFakeInterface< iEventHandler > > *) ((FrameSignpost_2DConsole *) x));
 }
-static void *_p_iStringSetTo_p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((iBase *) (iStringSetBase< CS::StringSetTag::General > *) ((iStringSet *) x));
+static void *_p_iSCFTo_p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((iBase *)  ((iSCF *) x));
+}
+static void *_p_iThreadReturnTo_p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((iBase *)  ((iThreadReturn *) x));
+}
+static void *_p_scfImplementation2T_FrameSignpost_ConsoleDebug_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_tTo_p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((iBase *) (iEventHandler *)(iFrameEventSignpost *) ((scfImplementation2< FrameSignpost_ConsoleDebug,iFrameEventSignpost,scfFakeInterface< iEventHandler > > *) x));
+}
+static void *_p_FrameSignpost_3D2DTo_p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((iBase *) (iEventHandler *)(iFrameEventSignpost *)(scfImplementation2< FrameSignpost_3D2D,iFrameEventSignpost,scfFakeInterface< iEventHandler > > *) ((FrameSignpost_3D2D *) x));
+}
+static void *_p_iStringSetBaseT_CS__StringSetTag__General_tTo_p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((iBase *)  ((iStringSetBase< CS::StringSetTag::General > *) x));
+}
+static void *_p_scfImplementation1T_csObject_iObject_tTo_p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((iBase *) (iObject *) ((scfImplementation1< csObject,iObject > *) x));
+}
+static void *_p_scfImplementation1T_csEventHandlerRegistry_iEventHandlerRegistry_tTo_p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((iBase *) (iEventHandlerRegistry *) ((scfImplementation1< csEventHandlerRegistry,iEventHandlerRegistry > *) x));
+}
+static void *_p_iEventOutletTo_p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((iBase *)  ((iEventOutlet *) x));
+}
+static void *_p_iPathTo_p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((iBase *)  ((iPath *) x));
 }
 static void *_p_iVirtualClockTo_p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
     return (void *)((iBase *)  ((iVirtualClock *) x));
 }
-static void *_p_scfImplementation1T__csPyEventHandler_iEventHandler_tTo_p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((iBase *) (iEventHandler *) ((scfImplementation1< _csPyEventHandler,iEventHandler > *) x));
+static void *_p_iReporterTo_p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((iBase *)  ((iReporter *) x));
 }
-static void *_p_iDebugHelperTo_p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((iBase *)  ((iDebugHelper *) x));
+static void *_p_iObjectTo_p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((iBase *)  ((iObject *) x));
 }
-static void *_p_iTriangleMeshTo_p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((iBase *)  ((iTriangleMesh *) x));
+static void *_p_csObjectTo_p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((iBase *) (iObject *)(scfImplementation1< csObject,iObject > *) ((csObject *) x));
 }
-static void *_p_iEventCordTo_p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((iBase *)  ((iEventCord *) x));
+static void *_p_iEventQueueTo_p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((iBase *)  ((iEventQueue *) x));
 }
-static void *_p_iPluginManagerTo_p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((iBase *)  ((iPluginManager *) x));
+static void *_p_iStringTo_p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((iBase *)  ((iString *) x));
 }
-static void *_p_iThreadManagerTo_p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((iBase *)  ((iThreadManager *) x));
+static void *_p_scfImplementation2T_FrameSignpost_Logic3D_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_tTo_p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((iBase *) (iEventHandler *)(iFrameEventSignpost *) ((scfImplementation2< FrameSignpost_Logic3D,iFrameEventSignpost,scfFakeInterface< iEventHandler > > *) x));
 }
-static void *_p_iCacheManagerTo_p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((iBase *)  ((iCacheManager *) x));
+static void *_p_iComponentTo_p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((iBase *)  ((iComponent *) x));
+}
+static void *_p_iCommandLineParserTo_p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((iBase *)  ((iCommandLineParser *) x));
+}
+static void *_p_FrameBegin3DDrawTo_p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((iBase *) (iEventHandler *)(scfImplementation1< FrameBegin3DDraw,iEventHandler > *) ((FrameBegin3DDraw *) x));
+}
+static void *_p_iJoystickDriverTo_p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((iBase *)  ((iJoystickDriver *) x));
+}
+static void *_p_iMouseDriverTo_p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((iBase *)  ((iMouseDriver *) x));
 }
 static void *_p_scfImplementationExt1T_csPath_csObject_iPath_tTo_p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
     return (void *)((iBase *) (iObject *)(scfImplementation1< csObject,iObject > *)(csObject *) ((scfImplementationExt1< csPath,csObject,iPath > *) x));
 }
+static void *_p_FramePrinterTo_p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((iBase *) (iEventHandler *)(scfImplementation1< FramePrinter,iEventHandler > *) ((FramePrinter *) x));
+}
+static void *_p_iVFSTo_p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((iBase *)  ((iVFS *) x));
+}
+static void *_p_iStringArrayTo_p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((iBase *)  ((iStringArray *) x));
+}
+static void *_p_scfImplementation1T_FrameBegin3DDraw_iEventHandler_tTo_p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((iBase *) (iEventHandler *) ((scfImplementation1< FrameBegin3DDraw,iEventHandler > *) x));
+}
+static void *_p_iEventHandlerTo_p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((iBase *)  ((iEventHandler *) x));
+}
+static void *_p__csPyEventHandlerTo_p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((iBase *) (iEventHandler *)(scfImplementation1< _csPyEventHandler,iEventHandler > *) ((_csPyEventHandler *) x));
+}
+static void *_p_iEventPlugTo_p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((iBase *)  ((iEventPlug *) x));
+}
+static void *_p_csPyEventPlugTo_p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((iBase *) (iEventPlug *)(scfImplementation1< csPyEventPlug,iEventPlug > *) ((csPyEventPlug *) x));
+}
+static void *_p_scfImplementation2T_FrameSignpost_2DConsole_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_tTo_p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((iBase *) (iEventHandler *)(iFrameEventSignpost *) ((scfImplementation2< FrameSignpost_2DConsole,iFrameEventSignpost,scfFakeInterface< iEventHandler > > *) x));
+}
+static void *_p_FrameSignpost_DebugFrameTo_p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((iBase *) (iEventHandler *)(iFrameEventSignpost *)(scfImplementation2< FrameSignpost_DebugFrame,iFrameEventSignpost,scfFakeInterface< iEventHandler > > *) ((FrameSignpost_DebugFrame *) x));
+}
 static void *_p_iConfigManagerTo_p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
     return (void *)((iBase *) (iConfigFile *) ((iConfigManager *) x));
+}
+static void *_p_iCacheManagerTo_p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((iBase *)  ((iCacheManager *) x));
+}
+static void *_p_iThreadManagerTo_p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((iBase *)  ((iThreadManager *) x));
+}
+static void *_p_iPluginManagerTo_p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((iBase *)  ((iPluginManager *) x));
+}
+static void *_p_iTriangleMeshTo_p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((iBase *)  ((iTriangleMesh *) x));
+}
+static void *_p_scfImplementation1T__csPyEventHandler_iEventHandler_tTo_p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((iBase *) (iEventHandler *) ((scfImplementation1< _csPyEventHandler,iEventHandler > *) x));
+}
+static void *_p_iFrameEventSignpostTo_p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((iBase *) (iEventHandler *) ((iFrameEventSignpost *) x));
+}
+static void *_p_scfImplementation1T_csConfigFile_iConfigFile_tTo_p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((iBase *) (iConfigFile *) ((scfImplementation1< csConfigFile,iConfigFile > *) x));
+}
+static void *_p_iDataBufferTo_p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((iBase *)  ((iDataBuffer *) x));
+}
+static void *_p_iKeyboardDriverTo_p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((iBase *)  ((iKeyboardDriver *) x));
+}
+static void *_p_scfImplementation1T_FramePrinter_iEventHandler_tTo_p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((iBase *) (iEventHandler *) ((scfImplementation1< FramePrinter,iEventHandler > *) x));
+}
+static void *_p_FrameSignpost_ConsoleDebugTo_p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((iBase *) (iEventHandler *)(iFrameEventSignpost *)(scfImplementation2< FrameSignpost_ConsoleDebug,iFrameEventSignpost,scfFakeInterface< iEventHandler > > *) ((FrameSignpost_ConsoleDebug *) x));
+}
+static void *_p_scfImplementation2T_FrameSignpost_3D2D_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_tTo_p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((iBase *) (iEventHandler *)(iFrameEventSignpost *) ((scfImplementation2< FrameSignpost_3D2D,iFrameEventSignpost,scfFakeInterface< iEventHandler > > *) x));
+}
+static void *_p_iReporterListenerTo_p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((iBase *)  ((iReporterListener *) x));
+}
+static void *_p_iObjectNameChangeListenerTo_p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((iBase *)  ((iObjectNameChangeListener *) x));
+}
+static void *_p_scfImplementation1T_csPyEventPlug_iEventPlug_tTo_p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((iBase *) (iEventPlug *) ((scfImplementation1< csPyEventPlug,iEventPlug > *) x));
+}
+static void *_p_iFileTo_p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((iBase *)  ((iFile *) x));
+}
+static void *_p_iDocumentAttributeTo_p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((iBase *)  ((iDocumentAttribute *) x));
+}
+static void *_p_scfImplementation2T_FrameSignpost_DebugFrame_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_tTo_p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((iBase *) (iEventHandler *)(iFrameEventSignpost *) ((scfImplementation2< FrameSignpost_DebugFrame,iFrameEventSignpost,scfFakeInterface< iEventHandler > > *) x));
 }
 static void *_p_csObjectTo_p_scfImplementation1T_csObject_iObject_t(void *x, int *SWIGUNUSEDPARM(newmemory)) {
     return (void *)((scfImplementation1< csObject,iObject > *)  ((csObject *) x));
@@ -65469,32 +65925,44 @@ static void *_p_csObjectTo_p_scfImplementation1T_csObject_iObject_t(void *x, int
 static void *_p_scfImplementationExt1T_csPath_csObject_iPath_tTo_p_scfImplementation1T_csObject_iObject_t(void *x, int *SWIGUNUSEDPARM(newmemory)) {
     return (void *)((scfImplementation1< csObject,iObject > *) (csObject *) ((scfImplementationExt1< csPath,csObject,iPath > *) x));
 }
-static void *_p_scfImplementation2T_FrameSignpost_3D2D_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_tTo_p_iEventHandler(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((iEventHandler *) (iFrameEventSignpost *) ((scfImplementation2< FrameSignpost_3D2D,iFrameEventSignpost,scfFakeInterface< iEventHandler > > *) x));
-}
-static void *_p_scfImplementation2T_FrameSignpost_DebugFrame_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_tTo_p_iEventHandler(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((iEventHandler *) (iFrameEventSignpost *) ((scfImplementation2< FrameSignpost_DebugFrame,iFrameEventSignpost,scfFakeInterface< iEventHandler > > *) x));
-}
-static void *_p_FrameSignpost_3D2DTo_p_iEventHandler(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((iEventHandler *) (iFrameEventSignpost *)(scfImplementation2< FrameSignpost_3D2D,iFrameEventSignpost,scfFakeInterface< iEventHandler > > *) ((FrameSignpost_3D2D *) x));
-}
-static void *_p_scfImplementation1T__csPyEventHandler_iEventHandler_tTo_p_iEventHandler(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((iEventHandler *)  ((scfImplementation1< _csPyEventHandler,iEventHandler > *) x));
-}
-static void *_p_scfImplementation2T_FrameSignpost_Logic3D_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_tTo_p_iEventHandler(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((iEventHandler *) (iFrameEventSignpost *) ((scfImplementation2< FrameSignpost_Logic3D,iFrameEventSignpost,scfFakeInterface< iEventHandler > > *) x));
+static void *_p_FrameSignpost_DebugFrameTo_p_iEventHandler(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((iEventHandler *) (iFrameEventSignpost *)(scfImplementation2< FrameSignpost_DebugFrame,iFrameEventSignpost,scfFakeInterface< iEventHandler > > *) ((FrameSignpost_DebugFrame *) x));
 }
 static void *_p_scfImplementation2T_FrameSignpost_2DConsole_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_tTo_p_iEventHandler(void *x, int *SWIGUNUSEDPARM(newmemory)) {
     return (void *)((iEventHandler *) (iFrameEventSignpost *) ((scfImplementation2< FrameSignpost_2DConsole,iFrameEventSignpost,scfFakeInterface< iEventHandler > > *) x));
 }
+static void *_p_scfImplementation1T_FramePrinter_iEventHandler_tTo_p_iEventHandler(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((iEventHandler *)  ((scfImplementation1< FramePrinter,iEventHandler > *) x));
+}
+static void *_p_iFrameEventSignpostTo_p_iEventHandler(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((iEventHandler *)  ((iFrameEventSignpost *) x));
+}
+static void *_p_FramePrinterTo_p_iEventHandler(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((iEventHandler *) (scfImplementation1< FramePrinter,iEventHandler > *) ((FramePrinter *) x));
+}
+static void *_p_scfImplementation2T_FrameSignpost_DebugFrame_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_tTo_p_iEventHandler(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((iEventHandler *) (iFrameEventSignpost *) ((scfImplementation2< FrameSignpost_DebugFrame,iFrameEventSignpost,scfFakeInterface< iEventHandler > > *) x));
+}
+static void *_p_FrameSignpost_ConsoleDebugTo_p_iEventHandler(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((iEventHandler *) (iFrameEventSignpost *)(scfImplementation2< FrameSignpost_ConsoleDebug,iFrameEventSignpost,scfFakeInterface< iEventHandler > > *) ((FrameSignpost_ConsoleDebug *) x));
+}
+static void *_p_scfImplementation1T__csPyEventHandler_iEventHandler_tTo_p_iEventHandler(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((iEventHandler *)  ((scfImplementation1< _csPyEventHandler,iEventHandler > *) x));
+}
 static void *_p_FrameSignpost_Logic3DTo_p_iEventHandler(void *x, int *SWIGUNUSEDPARM(newmemory)) {
     return (void *)((iEventHandler *) (iFrameEventSignpost *)(scfImplementation2< FrameSignpost_Logic3D,iFrameEventSignpost,scfFakeInterface< iEventHandler > > *) ((FrameSignpost_Logic3D *) x));
+}
+static void *_p_FrameBegin3DDrawTo_p_iEventHandler(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((iEventHandler *) (scfImplementation1< FrameBegin3DDraw,iEventHandler > *) ((FrameBegin3DDraw *) x));
+}
+static void *_p_scfImplementation2T_FrameSignpost_Logic3D_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_tTo_p_iEventHandler(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((iEventHandler *) (iFrameEventSignpost *) ((scfImplementation2< FrameSignpost_Logic3D,iFrameEventSignpost,scfFakeInterface< iEventHandler > > *) x));
 }
 static void *_p_FrameSignpost_2DConsoleTo_p_iEventHandler(void *x, int *SWIGUNUSEDPARM(newmemory)) {
     return (void *)((iEventHandler *) (iFrameEventSignpost *)(scfImplementation2< FrameSignpost_2DConsole,iFrameEventSignpost,scfFakeInterface< iEventHandler > > *) ((FrameSignpost_2DConsole *) x));
 }
-static void *_p_FrameSignpost_ConsoleDebugTo_p_iEventHandler(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((iEventHandler *) (iFrameEventSignpost *)(scfImplementation2< FrameSignpost_ConsoleDebug,iFrameEventSignpost,scfFakeInterface< iEventHandler > > *) ((FrameSignpost_ConsoleDebug *) x));
+static void *_p_scfImplementation1T_FrameBegin3DDraw_iEventHandler_tTo_p_iEventHandler(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((iEventHandler *)  ((scfImplementation1< FrameBegin3DDraw,iEventHandler > *) x));
 }
 static void *_p__csPyEventHandlerTo_p_iEventHandler(void *x, int *SWIGUNUSEDPARM(newmemory)) {
     return (void *)((iEventHandler *) (scfImplementation1< _csPyEventHandler,iEventHandler > *) ((_csPyEventHandler *) x));
@@ -65502,11 +65970,11 @@ static void *_p__csPyEventHandlerTo_p_iEventHandler(void *x, int *SWIGUNUSEDPARM
 static void *_p_scfImplementation2T_FrameSignpost_ConsoleDebug_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_tTo_p_iEventHandler(void *x, int *SWIGUNUSEDPARM(newmemory)) {
     return (void *)((iEventHandler *) (iFrameEventSignpost *) ((scfImplementation2< FrameSignpost_ConsoleDebug,iFrameEventSignpost,scfFakeInterface< iEventHandler > > *) x));
 }
-static void *_p_FrameSignpost_DebugFrameTo_p_iEventHandler(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((iEventHandler *) (iFrameEventSignpost *)(scfImplementation2< FrameSignpost_DebugFrame,iFrameEventSignpost,scfFakeInterface< iEventHandler > > *) ((FrameSignpost_DebugFrame *) x));
+static void *_p_scfImplementation2T_FrameSignpost_3D2D_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_tTo_p_iEventHandler(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((iEventHandler *) (iFrameEventSignpost *) ((scfImplementation2< FrameSignpost_3D2D,iFrameEventSignpost,scfFakeInterface< iEventHandler > > *) x));
 }
-static void *_p_iFrameEventSignpostTo_p_iEventHandler(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((iEventHandler *)  ((iFrameEventSignpost *) x));
+static void *_p_FrameSignpost_3D2DTo_p_iEventHandler(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((iEventHandler *) (iFrameEventSignpost *)(scfImplementation2< FrameSignpost_3D2D,iFrameEventSignpost,scfFakeInterface< iEventHandler > > *) ((FrameSignpost_3D2D *) x));
 }
 static void *_p_csArrayCapacityVariableGrowTo_p_csArrayCapacityLinearT_csArrayThresholdVariable_t(void *x, int *SWIGUNUSEDPARM(newmemory)) {
     return (void *)((csArrayCapacityLinear< csArrayThresholdVariable > *)  ((csArrayCapacityVariableGrow *) x));
@@ -65711,20 +66179,21 @@ static swig_type_info _swigt__p_csVertexStatus = {"_p_csVertexStatus", "csVertex
 static swig_type_info _swigt__p_csWrapPtr = {"_p_csWrapPtr", "csWrapPtr *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_double = {"_p_double", "double *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_f_p_iBase__p_iBase = {"_p_f_p_iBase__p_iBase", "iBase *(*)(iBase *)|scfFactoryFunc", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_f_p_iBase__p_scfImplementation1T_FramePrinter_iEventHandler_t = {"_p_f_p_iBase__p_scfImplementation1T_FramePrinter_iEventHandler_t", 0, 0, 0, 0, 0};
+static swig_type_info _swigt__p_f_p_iBase__p_iDocumentNodeIterator = {"_p_f_p_iBase__p_iDocumentNodeIterator", 0, 0, 0, 0, 0};
+static swig_type_info _swigt__p_f_p_iBase__p_iDocumentAttributeIterator = {"_p_f_p_iBase__p_iDocumentAttributeIterator", 0, 0, 0, 0, 0};
 static swig_type_info _swigt__p_f_p_iBase__p_iConfigIterator = {"_p_f_p_iBase__p_iConfigIterator", 0, 0, 0, 0, 0};
 static swig_type_info _swigt__p_f_p_iBase__p_iReporterIterator = {"_p_f_p_iBase__p_iReporterIterator", 0, 0, 0, 0, 0};
 static swig_type_info _swigt__p_f_p_iBase__p_iObjectIterator = {"_p_f_p_iBase__p_iObjectIterator", 0, 0, 0, 0, 0};
 static swig_type_info _swigt__p_f_p_iBase__p_iObjectRegistryIterator = {"_p_f_p_iBase__p_iObjectRegistryIterator", 0, 0, 0, 0, 0};
 static swig_type_info _swigt__p_f_p_iBase__p_iEventAttributeIterator = {"_p_f_p_iBase__p_iEventAttributeIterator", 0, 0, 0, 0, 0};
 static swig_type_info _swigt__p_f_p_iBase__p_iPluginIterator = {"_p_f_p_iBase__p_iPluginIterator", 0, 0, 0, 0, 0};
-static swig_type_info _swigt__p_f_p_iBase__p_iDocumentAttributeIterator = {"_p_f_p_iBase__p_iDocumentAttributeIterator", 0, 0, 0, 0, 0};
-static swig_type_info _swigt__p_f_p_iBase__p_iDocumentNodeIterator = {"_p_f_p_iBase__p_iDocumentNodeIterator", 0, 0, 0, 0, 0};
 static swig_type_info _swigt__p_f_p_iBase__p_iDocument = {"_p_f_p_iBase__p_iDocument", 0, 0, 0, 0, 0};
 static swig_type_info _swigt__p_f_p_iBase__p_iDocumentNode = {"_p_f_p_iBase__p_iDocumentNode", 0, 0, 0, 0, 0};
-static swig_type_info _swigt__p_f_p_iBase__p_iEventNameRegistry = {"_p_f_p_iBase__p_iEventNameRegistry", 0, 0, 0, 0, 0};
-static swig_type_info _swigt__p_f_p_iBase__p_iObjectRegistry = {"_p_f_p_iBase__p_iObjectRegistry", 0, 0, 0, 0, 0};
 static swig_type_info _swigt__p_f_p_iBase__p_iEventHandlerRegistry = {"_p_f_p_iBase__p_iEventHandlerRegistry", 0, 0, 0, 0, 0};
+static swig_type_info _swigt__p_f_p_iBase__p_iObjectRegistry = {"_p_f_p_iBase__p_iObjectRegistry", 0, 0, 0, 0, 0};
 static swig_type_info _swigt__p_f_p_iBase__p_csEventHandlerRegistry = {"_p_f_p_iBase__p_csEventHandlerRegistry", 0, 0, 0, 0, 0};
+static swig_type_info _swigt__p_f_p_iBase__p_iEventNameRegistry = {"_p_f_p_iBase__p_iEventNameRegistry", 0, 0, 0, 0, 0};
 static swig_type_info _swigt__p_f_p_iBase__p_iEventCord = {"_p_f_p_iBase__p_iEventCord", 0, 0, 0, 0, 0};
 static swig_type_info _swigt__p_f_p_iBase__p_iStringSet = {"_p_f_p_iBase__p_iStringSet", 0, 0, 0, 0, 0};
 static swig_type_info _swigt__p_f_p_iBase__p_iFactory = {"_p_f_p_iBase__p_iFactory", 0, 0, 0, 0, 0};
@@ -65745,8 +66214,8 @@ static swig_type_info _swigt__p_f_p_iBase__p_iVirtualClock = {"_p_f_p_iBase__p_i
 static swig_type_info _swigt__p_f_p_iBase__p_iPath = {"_p_f_p_iBase__p_iPath", 0, 0, 0, 0, 0};
 static swig_type_info _swigt__p_f_p_iBase__p_iStringSetBaseT_CS__StringSetTag__General_t = {"_p_f_p_iBase__p_iStringSetBaseT_CS__StringSetTag__General_t", 0, 0, 0, 0, 0};
 static swig_type_info _swigt__p_f_p_iBase__p_iReporter = {"_p_f_p_iBase__p_iReporter", 0, 0, 0, 0, 0};
-static swig_type_info _swigt__p_f_p_iBase__p_csObject = {"_p_f_p_iBase__p_csObject", 0, 0, 0, 0, 0};
 static swig_type_info _swigt__p_f_p_iBase__p_iObject = {"_p_f_p_iBase__p_iObject", 0, 0, 0, 0, 0};
+static swig_type_info _swigt__p_f_p_iBase__p_csObject = {"_p_f_p_iBase__p_csObject", 0, 0, 0, 0, 0};
 static swig_type_info _swigt__p_f_p_iBase__p_iSCF = {"_p_f_p_iBase__p_iSCF", 0, 0, 0, 0, 0};
 static swig_type_info _swigt__p_f_p_iBase__p_iEventQueue = {"_p_f_p_iBase__p_iEventQueue", 0, 0, 0, 0, 0};
 static swig_type_info _swigt__p_f_p_iBase__p_iEvent = {"_p_f_p_iBase__p_iEvent", 0, 0, 0, 0, 0};
@@ -65754,34 +66223,37 @@ static swig_type_info _swigt__p_f_p_iBase__p_scfImplementation1T_csObject_iObjec
 static swig_type_info _swigt__p_f_p_iBase__p_iString = {"_p_f_p_iBase__p_iString", 0, 0, 0, 0, 0};
 static swig_type_info _swigt__p_f_p_iBase__p_iComponent = {"_p_f_p_iBase__p_iComponent", 0, 0, 0, 0, 0};
 static swig_type_info _swigt__p_f_p_iBase__p_iCommandLineParser = {"_p_f_p_iBase__p_iCommandLineParser", 0, 0, 0, 0, 0};
-static swig_type_info _swigt__p_f_p_iBase__p_iMouseDriver = {"_p_f_p_iBase__p_iMouseDriver", 0, 0, 0, 0, 0};
+static swig_type_info _swigt__p_f_p_iBase__p_FrameBegin3DDraw = {"_p_f_p_iBase__p_FrameBegin3DDraw", 0, 0, 0, 0, 0};
 static swig_type_info _swigt__p_f_p_iBase__p_iJoystickDriver = {"_p_f_p_iBase__p_iJoystickDriver", 0, 0, 0, 0, 0};
+static swig_type_info _swigt__p_f_p_iBase__p_iMouseDriver = {"_p_f_p_iBase__p_iMouseDriver", 0, 0, 0, 0, 0};
+static swig_type_info _swigt__p_f_p_iBase__p_FramePrinter = {"_p_f_p_iBase__p_FramePrinter", 0, 0, 0, 0, 0};
 static swig_type_info _swigt__p_f_p_iBase__p_iStringArray = {"_p_f_p_iBase__p_iStringArray", 0, 0, 0, 0, 0};
+static swig_type_info _swigt__p_f_p_iBase__p_scfImplementation1T_csEventHandlerRegistry_iEventHandlerRegistry_t = {"_p_f_p_iBase__p_scfImplementation1T_csEventHandlerRegistry_iEventHandlerRegistry_t", 0, 0, 0, 0, 0};
 static swig_type_info _swigt__p_f_p_iBase__p_iEventHandler = {"_p_f_p_iBase__p_iEventHandler", 0, 0, 0, 0, 0};
 static swig_type_info _swigt__p_f_p_iBase__p__csPyEventHandler = {"_p_f_p_iBase__p__csPyEventHandler", 0, 0, 0, 0, 0};
-static swig_type_info _swigt__p_f_p_iBase__p_scfImplementation1T_csEventHandlerRegistry_iEventHandlerRegistry_t = {"_p_f_p_iBase__p_scfImplementation1T_csEventHandlerRegistry_iEventHandlerRegistry_t", 0, 0, 0, 0, 0};
 static swig_type_info _swigt__p_f_p_iBase__p_iEventPlug = {"_p_f_p_iBase__p_iEventPlug", 0, 0, 0, 0, 0};
 static swig_type_info _swigt__p_f_p_iBase__p_csPyEventPlug = {"_p_f_p_iBase__p_csPyEventPlug", 0, 0, 0, 0, 0};
 static swig_type_info _swigt__p_f_p_iBase__p_iVFS = {"_p_f_p_iBase__p_iVFS", 0, 0, 0, 0, 0};
 static swig_type_info _swigt__p_f_p_iBase__p_FrameSignpost_DebugFrame = {"_p_f_p_iBase__p_FrameSignpost_DebugFrame", 0, 0, 0, 0, 0};
+static swig_type_info _swigt__p_f_p_iBase__p_scfImplementation2T_FrameSignpost_DebugFrame_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_t = {"_p_f_p_iBase__p_scfImplementation2T_FrameSignpost_DebugFrame_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_t", 0, 0, 0, 0, 0};
+static swig_type_info _swigt__p_f_p_iBase__p_scfImplementation2T_FrameSignpost_ConsoleDebug_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_t = {"_p_f_p_iBase__p_scfImplementation2T_FrameSignpost_ConsoleDebug_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_t", 0, 0, 0, 0, 0};
 static swig_type_info _swigt__p_f_p_iBase__p_scfImplementation2T_FrameSignpost_Logic3D_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_t = {"_p_f_p_iBase__p_scfImplementation2T_FrameSignpost_Logic3D_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_t", 0, 0, 0, 0, 0};
 static swig_type_info _swigt__p_f_p_iBase__p_scfImplementation2T_FrameSignpost_2DConsole_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_t = {"_p_f_p_iBase__p_scfImplementation2T_FrameSignpost_2DConsole_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_t", 0, 0, 0, 0, 0};
 static swig_type_info _swigt__p_f_p_iBase__p_scfImplementation2T_FrameSignpost_3D2D_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_t = {"_p_f_p_iBase__p_scfImplementation2T_FrameSignpost_3D2D_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_t", 0, 0, 0, 0, 0};
-static swig_type_info _swigt__p_f_p_iBase__p_scfImplementation2T_FrameSignpost_ConsoleDebug_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_t = {"_p_f_p_iBase__p_scfImplementation2T_FrameSignpost_ConsoleDebug_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_t", 0, 0, 0, 0, 0};
-static swig_type_info _swigt__p_f_p_iBase__p_scfImplementation2T_FrameSignpost_DebugFrame_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_t = {"_p_f_p_iBase__p_scfImplementation2T_FrameSignpost_DebugFrame_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_t", 0, 0, 0, 0, 0};
-static swig_type_info _swigt__p_f_p_iBase__p_iPluginManager = {"_p_f_p_iBase__p_iPluginManager", 0, 0, 0, 0, 0};
-static swig_type_info _swigt__p_f_p_iBase__p_iThreadManager = {"_p_f_p_iBase__p_iThreadManager", 0, 0, 0, 0, 0};
-static swig_type_info _swigt__p_f_p_iBase__p_iCacheManager = {"_p_f_p_iBase__p_iCacheManager", 0, 0, 0, 0, 0};
 static swig_type_info _swigt__p_f_p_iBase__p_iConfigManager = {"_p_f_p_iBase__p_iConfigManager", 0, 0, 0, 0, 0};
+static swig_type_info _swigt__p_f_p_iBase__p_iCacheManager = {"_p_f_p_iBase__p_iCacheManager", 0, 0, 0, 0, 0};
+static swig_type_info _swigt__p_f_p_iBase__p_iThreadManager = {"_p_f_p_iBase__p_iThreadManager", 0, 0, 0, 0, 0};
+static swig_type_info _swigt__p_f_p_iBase__p_iPluginManager = {"_p_f_p_iBase__p_iPluginManager", 0, 0, 0, 0, 0};
 static swig_type_info _swigt__p_f_p_iBase__p_iTriangleMesh = {"_p_f_p_iBase__p_iTriangleMesh", 0, 0, 0, 0, 0};
+static swig_type_info _swigt__p_f_p_iBase__p_scfImplementation1T_FrameBegin3DDraw_iEventHandler_t = {"_p_f_p_iBase__p_scfImplementation1T_FrameBegin3DDraw_iEventHandler_t", 0, 0, 0, 0, 0};
 static swig_type_info _swigt__p_f_p_iBase__p_iFrameEventSignpost = {"_p_f_p_iBase__p_iFrameEventSignpost", 0, 0, 0, 0, 0};
 static swig_type_info _swigt__p_f_p_iBase__p_iDataBuffer = {"_p_f_p_iBase__p_iDataBuffer", 0, 0, 0, 0, 0};
 static swig_type_info _swigt__p_f_p_iBase__p_iKeyboardDriver = {"_p_f_p_iBase__p_iKeyboardDriver", 0, 0, 0, 0, 0};
 static swig_type_info _swigt__p_f_p_iBase__p_FrameSignpost_ConsoleDebug = {"_p_f_p_iBase__p_FrameSignpost_ConsoleDebug", 0, 0, 0, 0, 0};
 static swig_type_info _swigt__p_f_p_iBase__p_scfImplementation1T__csPyEventHandler_iEventHandler_t = {"_p_f_p_iBase__p_scfImplementation1T__csPyEventHandler_iEventHandler_t", 0, 0, 0, 0, 0};
-static swig_type_info _swigt__p_f_p_iBase__p_scfImplementation1T_csPyEventPlug_iEventPlug_t = {"_p_f_p_iBase__p_scfImplementation1T_csPyEventPlug_iEventPlug_t", 0, 0, 0, 0, 0};
-static swig_type_info _swigt__p_f_p_iBase__p_iReporterListener = {"_p_f_p_iBase__p_iReporterListener", 0, 0, 0, 0, 0};
 static swig_type_info _swigt__p_f_p_iBase__p_iObjectNameChangeListener = {"_p_f_p_iBase__p_iObjectNameChangeListener", 0, 0, 0, 0, 0};
+static swig_type_info _swigt__p_f_p_iBase__p_iReporterListener = {"_p_f_p_iBase__p_iReporterListener", 0, 0, 0, 0, 0};
+static swig_type_info _swigt__p_f_p_iBase__p_scfImplementation1T_csPyEventPlug_iEventPlug_t = {"_p_f_p_iBase__p_scfImplementation1T_csPyEventPlug_iEventPlug_t", 0, 0, 0, 0, 0};
 static swig_type_info _swigt__p_f_p_iBase__p_iFile = {"_p_f_p_iBase__p_iFile", 0, 0, 0, 0, 0};
 static swig_type_info _swigt__p_f_p_iBase__p_iDocumentAttribute = {"_p_f_p_iBase__p_iDocumentAttribute", 0, 0, 0, 0, 0};
 static swig_type_info _swigt__p_float = {"_p_float", "float *", 0, 0, (void*)0, 0};
@@ -65852,6 +66324,8 @@ static swig_type_info _swigt__p_long_long = {"_p_long_long", "longlong *|long lo
 static swig_type_info _swigt__p_p_char = {"_p_p_char", "char **", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_p_void = {"_p_p_void", "void **", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_scfFakeInterfaceT_iEventHandler_t = {"_p_scfFakeInterfaceT_iEventHandler_t", "scfFakeInterface< iEventHandler > *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_scfImplementation1T_FrameBegin3DDraw_iEventHandler_t = {"_p_scfImplementation1T_FrameBegin3DDraw_iEventHandler_t", "scfImplementation1< FrameBegin3DDraw,iEventHandler > *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_scfImplementation1T_FramePrinter_iEventHandler_t = {"_p_scfImplementation1T_FramePrinter_iEventHandler_t", "scfImplementation1< FramePrinter,iEventHandler > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_scfImplementation1T__csPyEventHandler_iEventHandler_t = {"_p_scfImplementation1T__csPyEventHandler_iEventHandler_t", "scfImplementation1< _csPyEventHandler,iEventHandler > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_scfImplementation1T_csConfigFile_iConfigFile_t = {"_p_scfImplementation1T_csConfigFile_iConfigFile_t", "scfImplementation1< csConfigFile,iConfigFile > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_scfImplementation1T_csEventHandlerRegistry_iEventHandlerRegistry_t = {"_p_scfImplementation1T_csEventHandlerRegistry_iEventHandlerRegistry_t", "scfImplementation1< csEventHandlerRegistry,iEventHandlerRegistry > *", 0, 0, (void*)0, 0};
@@ -65984,6 +66458,8 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_csVertexStatus,
   &_swigt__p_csWrapPtr,
   &_swigt__p_double,
+  &_swigt__p_f_p_iBase__p_FrameBegin3DDraw,
+  &_swigt__p_f_p_iBase__p_FramePrinter,
   &_swigt__p_f_p_iBase__p_FrameSignpost_2DConsole,
   &_swigt__p_f_p_iBase__p_FrameSignpost_3D2D,
   &_swigt__p_f_p_iBase__p_FrameSignpost_ConsoleDebug,
@@ -66047,6 +66523,8 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_f_p_iBase__p_iTriangleMesh,
   &_swigt__p_f_p_iBase__p_iVFS,
   &_swigt__p_f_p_iBase__p_iVirtualClock,
+  &_swigt__p_f_p_iBase__p_scfImplementation1T_FrameBegin3DDraw_iEventHandler_t,
+  &_swigt__p_f_p_iBase__p_scfImplementation1T_FramePrinter_iEventHandler_t,
   &_swigt__p_f_p_iBase__p_scfImplementation1T__csPyEventHandler_iEventHandler_t,
   &_swigt__p_f_p_iBase__p_scfImplementation1T_csConfigFile_iConfigFile_t,
   &_swigt__p_f_p_iBase__p_scfImplementation1T_csEventHandlerRegistry_iEventHandlerRegistry_t,
@@ -66126,6 +66604,8 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_p_char,
   &_swigt__p_p_void,
   &_swigt__p_scfFakeInterfaceT_iEventHandler_t,
+  &_swigt__p_scfImplementation1T_FrameBegin3DDraw_iEventHandler_t,
+  &_swigt__p_scfImplementation1T_FramePrinter_iEventHandler_t,
   &_swigt__p_scfImplementation1T__csPyEventHandler_iEventHandler_t,
   &_swigt__p_scfImplementation1T_csConfigFile_iConfigFile_t,
   &_swigt__p_scfImplementation1T_csEventHandlerRegistry_iEventHandlerRegistry_t,
@@ -66258,20 +66738,21 @@ static swig_cast_info _swigc__p_csVector4[] = {  {&_swigt__p_csVector4, 0, 0, 0}
 static swig_cast_info _swigc__p_csVertexStatus[] = {  {&_swigt__p_csVertexStatus, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_csWrapPtr[] = {  {&_swigt__p_csWrapPtr, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_double[] = {  {&_swigt__p_double, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_f_p_iBase__p_scfImplementation1T_FramePrinter_iEventHandler_t[] = {{&_swigt__p_f_p_iBase__p_scfImplementation1T_FramePrinter_iEventHandler_t, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_f_p_iBase__p_iDocumentNodeIterator[] = {{&_swigt__p_f_p_iBase__p_iDocumentNodeIterator, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_f_p_iBase__p_iDocumentAttributeIterator[] = {{&_swigt__p_f_p_iBase__p_iDocumentAttributeIterator, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_f_p_iBase__p_iConfigIterator[] = {{&_swigt__p_f_p_iBase__p_iConfigIterator, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_f_p_iBase__p_iReporterIterator[] = {{&_swigt__p_f_p_iBase__p_iReporterIterator, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_f_p_iBase__p_iObjectIterator[] = {{&_swigt__p_f_p_iBase__p_iObjectIterator, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_f_p_iBase__p_iObjectRegistryIterator[] = {{&_swigt__p_f_p_iBase__p_iObjectRegistryIterator, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_f_p_iBase__p_iEventAttributeIterator[] = {{&_swigt__p_f_p_iBase__p_iEventAttributeIterator, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_f_p_iBase__p_iPluginIterator[] = {{&_swigt__p_f_p_iBase__p_iPluginIterator, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_f_p_iBase__p_iDocumentAttributeIterator[] = {{&_swigt__p_f_p_iBase__p_iDocumentAttributeIterator, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_f_p_iBase__p_iDocumentNodeIterator[] = {{&_swigt__p_f_p_iBase__p_iDocumentNodeIterator, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_f_p_iBase__p_iDocument[] = {{&_swigt__p_f_p_iBase__p_iDocument, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_f_p_iBase__p_iDocumentNode[] = {{&_swigt__p_f_p_iBase__p_iDocumentNode, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_f_p_iBase__p_iEventNameRegistry[] = {{&_swigt__p_f_p_iBase__p_iEventNameRegistry, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_f_p_iBase__p_iObjectRegistry[] = {{&_swigt__p_f_p_iBase__p_iObjectRegistry, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_f_p_iBase__p_iEventHandlerRegistry[] = {{&_swigt__p_f_p_iBase__p_iEventHandlerRegistry, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_f_p_iBase__p_iObjectRegistry[] = {{&_swigt__p_f_p_iBase__p_iObjectRegistry, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_f_p_iBase__p_csEventHandlerRegistry[] = {{&_swigt__p_f_p_iBase__p_csEventHandlerRegistry, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_f_p_iBase__p_iEventNameRegistry[] = {{&_swigt__p_f_p_iBase__p_iEventNameRegistry, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_f_p_iBase__p_iEventCord[] = {{&_swigt__p_f_p_iBase__p_iEventCord, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_f_p_iBase__p_iStringSet[] = {{&_swigt__p_f_p_iBase__p_iStringSet, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_f_p_iBase__p_iFactory[] = {{&_swigt__p_f_p_iBase__p_iFactory, 0, 0, 0},{0, 0, 0, 0}};
@@ -66292,8 +66773,8 @@ static swig_cast_info _swigc__p_f_p_iBase__p_iVirtualClock[] = {{&_swigt__p_f_p_
 static swig_cast_info _swigc__p_f_p_iBase__p_iPath[] = {{&_swigt__p_f_p_iBase__p_iPath, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_f_p_iBase__p_iStringSetBaseT_CS__StringSetTag__General_t[] = {{&_swigt__p_f_p_iBase__p_iStringSetBaseT_CS__StringSetTag__General_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_f_p_iBase__p_iReporter[] = {{&_swigt__p_f_p_iBase__p_iReporter, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_f_p_iBase__p_csObject[] = {{&_swigt__p_f_p_iBase__p_csObject, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_f_p_iBase__p_iObject[] = {{&_swigt__p_f_p_iBase__p_iObject, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_f_p_iBase__p_csObject[] = {{&_swigt__p_f_p_iBase__p_csObject, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_f_p_iBase__p_iSCF[] = {{&_swigt__p_f_p_iBase__p_iSCF, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_f_p_iBase__p_iEventQueue[] = {{&_swigt__p_f_p_iBase__p_iEventQueue, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_f_p_iBase__p_iEvent[] = {{&_swigt__p_f_p_iBase__p_iEvent, 0, 0, 0},{0, 0, 0, 0}};
@@ -66301,40 +66782,43 @@ static swig_cast_info _swigc__p_f_p_iBase__p_scfImplementation1T_csObject_iObjec
 static swig_cast_info _swigc__p_f_p_iBase__p_iString[] = {{&_swigt__p_f_p_iBase__p_iString, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_f_p_iBase__p_iComponent[] = {{&_swigt__p_f_p_iBase__p_iComponent, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_f_p_iBase__p_iCommandLineParser[] = {{&_swigt__p_f_p_iBase__p_iCommandLineParser, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_f_p_iBase__p_iMouseDriver[] = {{&_swigt__p_f_p_iBase__p_iMouseDriver, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_f_p_iBase__p_FrameBegin3DDraw[] = {{&_swigt__p_f_p_iBase__p_FrameBegin3DDraw, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_f_p_iBase__p_iJoystickDriver[] = {{&_swigt__p_f_p_iBase__p_iJoystickDriver, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_f_p_iBase__p_iMouseDriver[] = {{&_swigt__p_f_p_iBase__p_iMouseDriver, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_f_p_iBase__p_FramePrinter[] = {{&_swigt__p_f_p_iBase__p_FramePrinter, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_f_p_iBase__p_iStringArray[] = {{&_swigt__p_f_p_iBase__p_iStringArray, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_f_p_iBase__p_scfImplementation1T_csEventHandlerRegistry_iEventHandlerRegistry_t[] = {{&_swigt__p_f_p_iBase__p_scfImplementation1T_csEventHandlerRegistry_iEventHandlerRegistry_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_f_p_iBase__p_iEventHandler[] = {{&_swigt__p_f_p_iBase__p_iEventHandler, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_f_p_iBase__p__csPyEventHandler[] = {{&_swigt__p_f_p_iBase__p__csPyEventHandler, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_f_p_iBase__p_scfImplementation1T_csEventHandlerRegistry_iEventHandlerRegistry_t[] = {{&_swigt__p_f_p_iBase__p_scfImplementation1T_csEventHandlerRegistry_iEventHandlerRegistry_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_f_p_iBase__p_iEventPlug[] = {{&_swigt__p_f_p_iBase__p_iEventPlug, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_f_p_iBase__p_csPyEventPlug[] = {{&_swigt__p_f_p_iBase__p_csPyEventPlug, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_f_p_iBase__p_iVFS[] = {{&_swigt__p_f_p_iBase__p_iVFS, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_f_p_iBase__p_FrameSignpost_DebugFrame[] = {{&_swigt__p_f_p_iBase__p_FrameSignpost_DebugFrame, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_f_p_iBase__p_scfImplementation2T_FrameSignpost_DebugFrame_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_t[] = {{&_swigt__p_f_p_iBase__p_scfImplementation2T_FrameSignpost_DebugFrame_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_t, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_f_p_iBase__p_scfImplementation2T_FrameSignpost_ConsoleDebug_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_t[] = {{&_swigt__p_f_p_iBase__p_scfImplementation2T_FrameSignpost_ConsoleDebug_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_f_p_iBase__p_scfImplementation2T_FrameSignpost_Logic3D_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_t[] = {{&_swigt__p_f_p_iBase__p_scfImplementation2T_FrameSignpost_Logic3D_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_f_p_iBase__p_scfImplementation2T_FrameSignpost_2DConsole_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_t[] = {{&_swigt__p_f_p_iBase__p_scfImplementation2T_FrameSignpost_2DConsole_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_f_p_iBase__p_scfImplementation2T_FrameSignpost_3D2D_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_t[] = {{&_swigt__p_f_p_iBase__p_scfImplementation2T_FrameSignpost_3D2D_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_t, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_f_p_iBase__p_scfImplementation2T_FrameSignpost_ConsoleDebug_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_t[] = {{&_swigt__p_f_p_iBase__p_scfImplementation2T_FrameSignpost_ConsoleDebug_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_t, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_f_p_iBase__p_scfImplementation2T_FrameSignpost_DebugFrame_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_t[] = {{&_swigt__p_f_p_iBase__p_scfImplementation2T_FrameSignpost_DebugFrame_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_t, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_f_p_iBase__p_iPluginManager[] = {{&_swigt__p_f_p_iBase__p_iPluginManager, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_f_p_iBase__p_iThreadManager[] = {{&_swigt__p_f_p_iBase__p_iThreadManager, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_f_p_iBase__p_iCacheManager[] = {{&_swigt__p_f_p_iBase__p_iCacheManager, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_f_p_iBase__p_iConfigManager[] = {{&_swigt__p_f_p_iBase__p_iConfigManager, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_f_p_iBase__p_iCacheManager[] = {{&_swigt__p_f_p_iBase__p_iCacheManager, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_f_p_iBase__p_iThreadManager[] = {{&_swigt__p_f_p_iBase__p_iThreadManager, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_f_p_iBase__p_iPluginManager[] = {{&_swigt__p_f_p_iBase__p_iPluginManager, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_f_p_iBase__p_iTriangleMesh[] = {{&_swigt__p_f_p_iBase__p_iTriangleMesh, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_f_p_iBase__p_scfImplementation1T_FrameBegin3DDraw_iEventHandler_t[] = {{&_swigt__p_f_p_iBase__p_scfImplementation1T_FrameBegin3DDraw_iEventHandler_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_f_p_iBase__p_iFrameEventSignpost[] = {{&_swigt__p_f_p_iBase__p_iFrameEventSignpost, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_f_p_iBase__p_iDataBuffer[] = {{&_swigt__p_f_p_iBase__p_iDataBuffer, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_f_p_iBase__p_iKeyboardDriver[] = {{&_swigt__p_f_p_iBase__p_iKeyboardDriver, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_f_p_iBase__p_FrameSignpost_ConsoleDebug[] = {{&_swigt__p_f_p_iBase__p_FrameSignpost_ConsoleDebug, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_f_p_iBase__p_scfImplementation1T__csPyEventHandler_iEventHandler_t[] = {{&_swigt__p_f_p_iBase__p_scfImplementation1T__csPyEventHandler_iEventHandler_t, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_f_p_iBase__p_scfImplementation1T_csPyEventPlug_iEventPlug_t[] = {{&_swigt__p_f_p_iBase__p_scfImplementation1T_csPyEventPlug_iEventPlug_t, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_f_p_iBase__p_iReporterListener[] = {{&_swigt__p_f_p_iBase__p_iReporterListener, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_f_p_iBase__p_iObjectNameChangeListener[] = {{&_swigt__p_f_p_iBase__p_iObjectNameChangeListener, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_f_p_iBase__p_iReporterListener[] = {{&_swigt__p_f_p_iBase__p_iReporterListener, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_f_p_iBase__p_scfImplementation1T_csPyEventPlug_iEventPlug_t[] = {{&_swigt__p_f_p_iBase__p_scfImplementation1T_csPyEventPlug_iEventPlug_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_f_p_iBase__p_iFile[] = {{&_swigt__p_f_p_iBase__p_iFile, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_f_p_iBase__p_iDocumentAttribute[] = {{&_swigt__p_f_p_iBase__p_iDocumentAttribute, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_f_p_iBase__p_iBase[] = {  {&_swigt__p_f_p_iBase__p_iConfigIterator, _p_f_p_iBase__p_iConfigIteratorTo_p_f_p_iBase__p_iBase, 0, 0},  {&_swigt__p_f_p_iBase__p_iReporterIterator, _p_f_p_iBase__p_iReporterIteratorTo_p_f_p_iBase__p_iBase, 0, 0},  {&_swigt__p_f_p_iBase__p_iObjectIterator, _p_f_p_iBase__p_iObjectIteratorTo_p_f_p_iBase__p_iBase, 0, 0},  {&_swigt__p_f_p_iBase__p_iObjectRegistryIterator, _p_f_p_iBase__p_iObjectRegistryIteratorTo_p_f_p_iBase__p_iBase, 0, 0},  {&_swigt__p_f_p_iBase__p_iEventAttributeIterator, _p_f_p_iBase__p_iEventAttributeIteratorTo_p_f_p_iBase__p_iBase, 0, 0},  {&_swigt__p_f_p_iBase__p_iPluginIterator, _p_f_p_iBase__p_iPluginIteratorTo_p_f_p_iBase__p_iBase, 0, 0},  {&_swigt__p_f_p_iBase__p_iDocumentAttributeIterator, _p_f_p_iBase__p_iDocumentAttributeIteratorTo_p_f_p_iBase__p_iBase, 0, 0},  {&_swigt__p_f_p_iBase__p_iDocumentNodeIterator, _p_f_p_iBase__p_iDocumentNodeIteratorTo_p_f_p_iBase__p_iBase, 0, 0},  {&_swigt__p_f_p_iBase__p_iDocument, _p_f_p_iBase__p_iDocumentTo_p_f_p_iBase__p_iBase, 0, 0},  {&_swigt__p_f_p_iBase__p_iDocumentNode, _p_f_p_iBase__p_iDocumentNodeTo_p_f_p_iBase__p_iBase, 0, 0},  {&_swigt__p_f_p_iBase__p_iEventNameRegistry, _p_f_p_iBase__p_iEventNameRegistryTo_p_f_p_iBase__p_iBase, 0, 0},  {&_swigt__p_f_p_iBase__p_iObjectRegistry, _p_f_p_iBase__p_iObjectRegistryTo_p_f_p_iBase__p_iBase, 0, 0},  {&_swigt__p_f_p_iBase__p_iEventHandlerRegistry, _p_f_p_iBase__p_iEventHandlerRegistryTo_p_f_p_iBase__p_iBase, 0, 0},  {&_swigt__p_f_p_iBase__p_csEventHandlerRegistry, _p_f_p_iBase__p_csEventHandlerRegistryTo_p_f_p_iBase__p_iBase, 0, 0},  {&_swigt__p_f_p_iBase__p_iEventCord, _p_f_p_iBase__p_iEventCordTo_p_f_p_iBase__p_iBase, 0, 0},  {&_swigt__p_f_p_iBase__p_iStringSet, _p_f_p_iBase__p_iStringSetTo_p_f_p_iBase__p_iBase, 0, 0},  {&_swigt__p_f_p_iBase__p_iFactory, _p_f_p_iBase__p_iFactoryTo_p_f_p_iBase__p_iBase, 0, 0},  {&_swigt__p_f_p_iBase__p_iClipper2D, _p_f_p_iBase__p_iClipper2DTo_p_f_p_iBase__p_iBase, 0, 0},  {&_swigt__p_f_p_iBase__p_csConfigFile, _p_f_p_iBase__p_csConfigFileTo_p_f_p_iBase__p_iBase, 0, 0},  {&_swigt__p_f_p_iBase__p_iConfigFile, _p_f_p_iBase__p_iConfigFileTo_p_f_p_iBase__p_iBase, 0, 0},  {&_swigt__p_f_p_iBase__p_iDebugHelper, _p_f_p_iBase__p_iDebugHelperTo_p_f_p_iBase__p_iBase, 0, 0},  {&_swigt__p_f_p_iBase__p_iDocumentSystem, _p_f_p_iBase__p_iDocumentSystemTo_p_f_p_iBase__p_iBase, 0, 0},  {&_swigt__p_f_p_iBase__p_scfImplementationExt1T_csPath_csObject_iPath_t, _p_f_p_iBase__p_scfImplementationExt1T_csPath_csObject_iPath_tTo_p_f_p_iBase__p_iBase, 0, 0},  {&_swigt__p_f_p_iBase__p_scfImplementation1T_csConfigFile_iConfigFile_t, _p_f_p_iBase__p_scfImplementation1T_csConfigFile_iConfigFile_tTo_p_f_p_iBase__p_iBase, 0, 0},  {&_swigt__p_f_p_iBase__p_FrameSignpost_Logic3D, _p_f_p_iBase__p_FrameSignpost_Logic3DTo_p_f_p_iBase__p_iBase, 0, 0},  {&_swigt__p_f_p_iBase__p_iKeyComposer, _p_f_p_iBase__p_iKeyComposerTo_p_f_p_iBase__p_iBase, 0, 0},  {&_swigt__p_f_p_iBase__p_FrameSignpost_2DConsole, _p_f_p_iBase__p_FrameSignpost_2DConsoleTo_p_f_p_iBase__p_iBase, 0, 0},  {&_swigt__p_f_p_iBase__p_iThreadReturn, _p_f_p_iBase__p_iThreadReturnTo_p_f_p_iBase__p_iBase, 0, 0},  {&_swigt__p_f_p_iBase__p_FrameSignpost_3D2D, _p_f_p_iBase__p_FrameSignpost_3D2DTo_p_f_p_iBase__p_iBase, 0, 0},  {&_swigt__p_f_p_iBase__p_iEventOutlet, _p_f_p_iBase__p_iEventOutletTo_p_f_p_iBase__p_iBase, 0, 0},  {&_swigt__p_f_p_iBase__p_iVirtualClock, _p_f_p_iBase__p_iVirtualClockTo_p_f_p_iBase__p_iBase, 0, 0},  {&_swigt__p_f_p_iBase__p_iPath, _p_f_p_iBase__p_iPathTo_p_f_p_iBase__p_iBase, 0, 0},  {&_swigt__p_f_p_iBase__p_iStringSetBaseT_CS__StringSetTag__General_t, _p_f_p_iBase__p_iStringSetBaseT_CS__StringSetTag__General_tTo_p_f_p_iBase__p_iBase, 0, 0},  {&_swigt__p_f_p_iBase__p_iReporter, _p_f_p_iBase__p_iReporterTo_p_f_p_iBase__p_iBase, 0, 0},  {&_swigt__p_f_p_iBase__p_csObject, _p_f_p_iBase__p_csObjectTo_p_f_p_iBase__p_iBase, 0, 0},  {&_swigt__p_f_p_iBase__p_iObject, _p_f_p_iBase__p_iObjectTo_p_f_p_iBase__p_iBase, 0, 0},  {&_swigt__p_f_p_iBase__p_iSCF, _p_f_p_iBase__p_iSCFTo_p_f_p_iBase__p_iBase, 0, 0},  {&_swigt__p_f_p_iBase__p_iEventQueue, _p_f_p_iBase__p_iEventQueueTo_p_f_p_iBase__p_iBase, 0, 0},  {&_swigt__p_f_p_iBase__p_iEvent, _p_f_p_iBase__p_iEventTo_p_f_p_iBase__p_iBase, 0, 0},  {&_swigt__p_f_p_iBase__p_scfImplementation1T_csObject_iObject_t, _p_f_p_iBase__p_scfImplementation1T_csObject_iObject_tTo_p_f_p_iBase__p_iBase, 0, 0},  {&_swigt__p_f_p_iBase__p_iString, _p_f_p_iBase__p_iStringTo_p_f_p_iBase__p_iBase, 0, 0},  {&_swigt__p_f_p_iBase__p_iComponent, _p_f_p_iBase__p_iComponentTo_p_f_p_iBase__p_iBase, 0, 0},  {&_swigt__p_f_p_iBase__p_iCommandLineParser, _p_f_p_iBase__p_iCommandLineParserTo_p_f_p_iBase__p_iBase, 0, 0},  {&_swigt__p_f_p_iBase__p_iMouseDriver, _p_f_p_iBase__p_iMouseDriverTo_p_f_p_iBase__p_iBase, 0, 0},  {&_swigt__p_f_p_iBase__p_iJoystickDriver, _p_f_p_iBase__p_iJoystickDriverTo_p_f_p_iBase__p_iBase, 0, 0},  {&_swigt__p_f_p_iBase__p_iStringArray, _p_f_p_iBase__p_iStringArrayTo_p_f_p_iBase__p_iBase, 0, 0},  {&_swigt__p_f_p_iBase__p_iEventHandler, _p_f_p_iBase__p_iEventHandlerTo_p_f_p_iBase__p_iBase, 0, 0},  {&_swigt__p_f_p_iBase__p__csPyEventHandler, _p_f_p_iBase__p__csPyEventHandlerTo_p_f_p_iBase__p_iBase, 0, 0},  {&_swigt__p_f_p_iBase__p_scfImplementation1T_csEventHandlerRegistry_iEventHandlerRegistry_t, _p_f_p_iBase__p_scfImplementation1T_csEventHandlerRegistry_iEventHandlerRegistry_tTo_p_f_p_iBase__p_iBase, 0, 0},  {&_swigt__p_f_p_iBase__p_iEventPlug, _p_f_p_iBase__p_iEventPlugTo_p_f_p_iBase__p_iBase, 0, 0},  {&_swigt__p_f_p_iBase__p_csPyEventPlug, _p_f_p_iBase__p_csPyEventPlugTo_p_f_p_iBase__p_iBase, 0, 0},  {&_swigt__p_f_p_iBase__p_iVFS, _p_f_p_iBase__p_iVFSTo_p_f_p_iBase__p_iBase, 0, 0},  {&_swigt__p_f_p_iBase__p_FrameSignpost_DebugFrame, _p_f_p_iBase__p_FrameSignpost_DebugFrameTo_p_f_p_iBase__p_iBase, 0, 0},  {&_swigt__p_f_p_iBase__p_scfImplementation2T_FrameSignpost_Logic3D_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_t, _p_f_p_iBase__p_scfImplementation2T_FrameSignpost_Logic3D_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_tTo_p_f_p_iBase__p_iBase, 0, 0},  {&_swigt__p_f_p_iBase__p_scfImplementation2T_FrameSignpost_2DConsole_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_t, _p_f_p_iBase__p_scfImplementation2T_FrameSignpost_2DConsole_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_tTo_p_f_p_iBase__p_iBase, 0, 0},  {&_swigt__p_f_p_iBase__p_scfImplementation2T_FrameSignpost_3D2D_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_t, _p_f_p_iBase__p_scfImplementation2T_FrameSignpost_3D2D_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_tTo_p_f_p_iBase__p_iBase, 0, 0},  {&_swigt__p_f_p_iBase__p_scfImplementation2T_FrameSignpost_ConsoleDebug_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_t, _p_f_p_iBase__p_scfImplementation2T_FrameSignpost_ConsoleDebug_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_tTo_p_f_p_iBase__p_iBase, 0, 0},  {&_swigt__p_f_p_iBase__p_scfImplementation2T_FrameSignpost_DebugFrame_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_t, _p_f_p_iBase__p_scfImplementation2T_FrameSignpost_DebugFrame_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_tTo_p_f_p_iBase__p_iBase, 0, 0},  {&_swigt__p_f_p_iBase__p_iPluginManager, _p_f_p_iBase__p_iPluginManagerTo_p_f_p_iBase__p_iBase, 0, 0},  {&_swigt__p_f_p_iBase__p_iThreadManager, _p_f_p_iBase__p_iThreadManagerTo_p_f_p_iBase__p_iBase, 0, 0},  {&_swigt__p_f_p_iBase__p_iCacheManager, _p_f_p_iBase__p_iCacheManagerTo_p_f_p_iBase__p_iBase, 0, 0},  {&_swigt__p_f_p_iBase__p_iConfigManager, _p_f_p_iBase__p_iConfigManagerTo_p_f_p_iBase__p_iBase, 0, 0},  {&_swigt__p_f_p_iBase__p_iTriangleMesh, _p_f_p_iBase__p_iTriangleMeshTo_p_f_p_iBase__p_iBase, 0, 0},  {&_swigt__p_f_p_iBase__p_iFrameEventSignpost, _p_f_p_iBase__p_iFrameEventSignpostTo_p_f_p_iBase__p_iBase, 0, 0},  {&_swigt__p_f_p_iBase__p_iDataBuffer, _p_f_p_iBase__p_iDataBufferTo_p_f_p_iBase__p_iBase, 0, 0},  {&_swigt__p_f_p_iBase__p_iKeyboardDriver, _p_f_p_iBase__p_iKeyboardDriverTo_p_f_p_iBase__p_iBase, 0, 0},  {&_swigt__p_f_p_iBase__p_FrameSignpost_ConsoleDebug, _p_f_p_iBase__p_FrameSignpost_ConsoleDebugTo_p_f_p_iBase__p_iBase, 0, 0},  {&_swigt__p_f_p_iBase__p_scfImplementation1T__csPyEventHandler_iEventHandler_t, _p_f_p_iBase__p_scfImplementation1T__csPyEventHandler_iEventHandler_tTo_p_f_p_iBase__p_iBase, 0, 0},  {&_swigt__p_f_p_iBase__p_scfImplementation1T_csPyEventPlug_iEventPlug_t, _p_f_p_iBase__p_scfImplementation1T_csPyEventPlug_iEventPlug_tTo_p_f_p_iBase__p_iBase, 0, 0},  {&_swigt__p_f_p_iBase__p_iReporterListener, _p_f_p_iBase__p_iReporterListenerTo_p_f_p_iBase__p_iBase, 0, 0},  {&_swigt__p_f_p_iBase__p_iObjectNameChangeListener, _p_f_p_iBase__p_iObjectNameChangeListenerTo_p_f_p_iBase__p_iBase, 0, 0},  {&_swigt__p_f_p_iBase__p_iBase, 0, 0, 0},  {&_swigt__p_f_p_iBase__p_iFile, _p_f_p_iBase__p_iFileTo_p_f_p_iBase__p_iBase, 0, 0},  {&_swigt__p_f_p_iBase__p_iDocumentAttribute, _p_f_p_iBase__p_iDocumentAttributeTo_p_f_p_iBase__p_iBase, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_f_p_iBase__p_iBase[] = {  {&_swigt__p_f_p_iBase__p_scfImplementation1T_FramePrinter_iEventHandler_t, _p_f_p_iBase__p_scfImplementation1T_FramePrinter_iEventHandler_tTo_p_f_p_iBase__p_iBase, 0, 0},  {&_swigt__p_f_p_iBase__p_iDocumentNodeIterator, _p_f_p_iBase__p_iDocumentNodeIteratorTo_p_f_p_iBase__p_iBase, 0, 0},  {&_swigt__p_f_p_iBase__p_iDocumentAttributeIterator, _p_f_p_iBase__p_iDocumentAttributeIteratorTo_p_f_p_iBase__p_iBase, 0, 0},  {&_swigt__p_f_p_iBase__p_iConfigIterator, _p_f_p_iBase__p_iConfigIteratorTo_p_f_p_iBase__p_iBase, 0, 0},  {&_swigt__p_f_p_iBase__p_iReporterIterator, _p_f_p_iBase__p_iReporterIteratorTo_p_f_p_iBase__p_iBase, 0, 0},  {&_swigt__p_f_p_iBase__p_iObjectIterator, _p_f_p_iBase__p_iObjectIteratorTo_p_f_p_iBase__p_iBase, 0, 0},  {&_swigt__p_f_p_iBase__p_iObjectRegistryIterator, _p_f_p_iBase__p_iObjectRegistryIteratorTo_p_f_p_iBase__p_iBase, 0, 0},  {&_swigt__p_f_p_iBase__p_iEventAttributeIterator, _p_f_p_iBase__p_iEventAttributeIteratorTo_p_f_p_iBase__p_iBase, 0, 0},  {&_swigt__p_f_p_iBase__p_iPluginIterator, _p_f_p_iBase__p_iPluginIteratorTo_p_f_p_iBase__p_iBase, 0, 0},  {&_swigt__p_f_p_iBase__p_iDocument, _p_f_p_iBase__p_iDocumentTo_p_f_p_iBase__p_iBase, 0, 0},  {&_swigt__p_f_p_iBase__p_iDocumentNode, _p_f_p_iBase__p_iDocumentNodeTo_p_f_p_iBase__p_iBase, 0, 0},  {&_swigt__p_f_p_iBase__p_iEventHandlerRegistry, _p_f_p_iBase__p_iEventHandlerRegistryTo_p_f_p_iBase__p_iBase, 0, 0},  {&_swigt__p_f_p_iBase__p_iObjectRegistry, _p_f_p_iBase__p_iObjectRegistryTo_p_f_p_iBase__p_iBase, 0, 0},  {&_swigt__p_f_p_iBase__p_csEventHandlerRegistry, _p_f_p_iBase__p_csEventHandlerRegistryTo_p_f_p_iBase__p_iBase, 0, 0},  {&_swigt__p_f_p_iBase__p_iEventNameRegistry, _p_f_p_iBase__p_iEventNameRegistryTo_p_f_p_iBase__p_iBase, 0, 0},  {&_swigt__p_f_p_iBase__p_iEventCord, _p_f_p_iBase__p_iEventCordTo_p_f_p_iBase__p_iBase, 0, 0},  {&_swigt__p_f_p_iBase__p_iStringSet, _p_f_p_iBase__p_iStringSetTo_p_f_p_iBase__p_iBase, 0, 0},  {&_swigt__p_f_p_iBase__p_iFactory, _p_f_p_iBase__p_iFactoryTo_p_f_p_iBase__p_iBase, 0, 0},  {&_swigt__p_f_p_iBase__p_iClipper2D, _p_f_p_iBase__p_iClipper2DTo_p_f_p_iBase__p_iBase, 0, 0},  {&_swigt__p_f_p_iBase__p_csConfigFile, _p_f_p_iBase__p_csConfigFileTo_p_f_p_iBase__p_iBase, 0, 0},  {&_swigt__p_f_p_iBase__p_iConfigFile, _p_f_p_iBase__p_iConfigFileTo_p_f_p_iBase__p_iBase, 0, 0},  {&_swigt__p_f_p_iBase__p_iDebugHelper, _p_f_p_iBase__p_iDebugHelperTo_p_f_p_iBase__p_iBase, 0, 0},  {&_swigt__p_f_p_iBase__p_iDocumentSystem, _p_f_p_iBase__p_iDocumentSystemTo_p_f_p_iBase__p_iBase, 0, 0},  {&_swigt__p_f_p_iBase__p_scfImplementationExt1T_csPath_csObject_iPath_t, _p_f_p_iBase__p_scfImplementationExt1T_csPath_csObject_iPath_tTo_p_f_p_iBase__p_iBase, 0, 0},  {&_swigt__p_f_p_iBase__p_scfImplementation1T_csConfigFile_iConfigFile_t, _p_f_p_iBase__p_scfImplementation1T_csConfigFile_iConfigFile_tTo_p_f_p_iBase__p_iBase, 0, 0},  {&_swigt__p_f_p_iBase__p_FrameSignpost_Logic3D, _p_f_p_iBase__p_FrameSignpost_Logic3DTo_p_f_p_iBase__p_iBase, 0, 0},  {&_swigt__p_f_p_iBase__p_iKeyComposer, _p_f_p_iBase__p_iKeyComposerTo_p_f_p_iBase__p_iBase, 0, 0},  {&_swigt__p_f_p_iBase__p_FrameSignpost_2DConsole, _p_f_p_iBase__p_FrameSignpost_2DConsoleTo_p_f_p_iBase__p_iBase, 0, 0},  {&_swigt__p_f_p_iBase__p_iThreadReturn, _p_f_p_iBase__p_iThreadReturnTo_p_f_p_iBase__p_iBase, 0, 0},  {&_swigt__p_f_p_iBase__p_FrameSignpost_3D2D, _p_f_p_iBase__p_FrameSignpost_3D2DTo_p_f_p_iBase__p_iBase, 0, 0},  {&_swigt__p_f_p_iBase__p_iEventOutlet, _p_f_p_iBase__p_iEventOutletTo_p_f_p_iBase__p_iBase, 0, 0},  {&_swigt__p_f_p_iBase__p_iVirtualClock, _p_f_p_iBase__p_iVirtualClockTo_p_f_p_iBase__p_iBase, 0, 0},  {&_swigt__p_f_p_iBase__p_iPath, _p_f_p_iBase__p_iPathTo_p_f_p_iBase__p_iBase, 0, 0},  {&_swigt__p_f_p_iBase__p_iStringSetBaseT_CS__StringSetTag__General_t, _p_f_p_iBase__p_iStringSetBaseT_CS__StringSetTag__General_tTo_p_f_p_iBase__p_iBase, 0, 0},  {&_swigt__p_f_p_iBase__p_iReporter, _p_f_p_iBase__p_iReporterTo_p_f_p_iBase__p_iBase, 0, 0},  {&_swigt__p_f_p_iBase__p_iObject, _p_f_p_iBase__p_iObjectTo_p_f_p_iBase__p_iBase, 0, 0},  {&_swigt__p_f_p_iBase__p_csObject, _p_f_p_iBase__p_csObjectTo_p_f_p_iBase__p_iBase, 0, 0},  {&_swigt__p_f_p_iBase__p_iSCF, _p_f_p_iBase__p_iSCFTo_p_f_p_iBase__p_iBase, 0, 0},  {&_swigt__p_f_p_iBase__p_iEventQueue, _p_f_p_iBase__p_iEventQueueTo_p_f_p_iBase__p_iBase, 0, 0},  {&_swigt__p_f_p_iBase__p_iEvent, _p_f_p_iBase__p_iEventTo_p_f_p_iBase__p_iBase, 0, 0},  {&_swigt__p_f_p_iBase__p_scfImplementation1T_csObject_iObject_t, _p_f_p_iBase__p_scfImplementation1T_csObject_iObject_tTo_p_f_p_iBase__p_iBase, 0, 0},  {&_swigt__p_f_p_iBase__p_iString, _p_f_p_iBase__p_iStringTo_p_f_p_iBase__p_iBase, 0, 0},  {&_swigt__p_f_p_iBase__p_iComponent, _p_f_p_iBase__p_iComponentTo_p_f_p_iBase__p_iBase, 0, 0},  {&_swigt__p_f_p_iBase__p_iCommandLineParser, _p_f_p_iBase__p_iCommandLineParserTo_p_f_p_iBase__p_iBase, 0, 0},  {&_swigt__p_f_p_iBase__p_FrameBegin3DDraw, _p_f_p_iBase__p_FrameBegin3DDrawTo_p_f_p_iBase__p_iBase, 0, 0},  {&_swigt__p_f_p_iBase__p_iJoystickDriver, _p_f_p_iBase__p_iJoystickDriverTo_p_f_p_iBase__p_iBase, 0, 0},  {&_swigt__p_f_p_iBase__p_iMouseDriver, _p_f_p_iBase__p_iMouseDriverTo_p_f_p_iBase__p_iBase, 0, 0},  {&_swigt__p_f_p_iBase__p_FramePrinter, _p_f_p_iBase__p_FramePrinterTo_p_f_p_iBase__p_iBase, 0, 0},  {&_swigt__p_f_p_iBase__p_iStringArray, _p_f_p_iBase__p_iStringArrayTo_p_f_p_iBase__p_iBase, 0, 0},  {&_swigt__p_f_p_iBase__p_scfImplementation1T_csEventHandlerRegistry_iEventHandlerRegistry_t, _p_f_p_iBase__p_scfImplementation1T_csEventHandlerRegistry_iEventHandlerRegistry_tTo_p_f_p_iBase__p_iBase, 0, 0},  {&_swigt__p_f_p_iBase__p_iEventHandler, _p_f_p_iBase__p_iEventHandlerTo_p_f_p_iBase__p_iBase, 0, 0},  {&_swigt__p_f_p_iBase__p__csPyEventHandler, _p_f_p_iBase__p__csPyEventHandlerTo_p_f_p_iBase__p_iBase, 0, 0},  {&_swigt__p_f_p_iBase__p_iEventPlug, _p_f_p_iBase__p_iEventPlugTo_p_f_p_iBase__p_iBase, 0, 0},  {&_swigt__p_f_p_iBase__p_csPyEventPlug, _p_f_p_iBase__p_csPyEventPlugTo_p_f_p_iBase__p_iBase, 0, 0},  {&_swigt__p_f_p_iBase__p_iVFS, _p_f_p_iBase__p_iVFSTo_p_f_p_iBase__p_iBase, 0, 0},  {&_swigt__p_f_p_iBase__p_FrameSignpost_DebugFrame, _p_f_p_iBase__p_FrameSignpost_DebugFrameTo_p_f_p_iBase__p_iBase, 0, 0},  {&_swigt__p_f_p_iBase__p_scfImplementation2T_FrameSignpost_DebugFrame_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_t, _p_f_p_iBase__p_scfImplementation2T_FrameSignpost_DebugFrame_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_tTo_p_f_p_iBase__p_iBase, 0, 0},  {&_swigt__p_f_p_iBase__p_scfImplementation2T_FrameSignpost_ConsoleDebug_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_t, _p_f_p_iBase__p_scfImplementation2T_FrameSignpost_ConsoleDebug_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_tTo_p_f_p_iBase__p_iBase, 0, 0},  {&_swigt__p_f_p_iBase__p_scfImplementation2T_FrameSignpost_Logic3D_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_t, _p_f_p_iBase__p_scfImplementation2T_FrameSignpost_Logic3D_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_tTo_p_f_p_iBase__p_iBase, 0, 0},  {&_swigt__p_f_p_iBase__p_scfImplementation2T_FrameSignpost_2DConsole_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_t, _p_f_p_iBase__p_scfImplementation2T_FrameSignpost_2DConsole_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_tTo_p_f_p_iBase__p_iBase, 0, 0},  {&_swigt__p_f_p_iBase__p_scfImplementation2T_FrameSignpost_3D2D_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_t, _p_f_p_iBase__p_scfImplementation2T_FrameSignpost_3D2D_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_tTo_p_f_p_iBase__p_iBase, 0, 0},  {&_swigt__p_f_p_iBase__p_iConfigManager, _p_f_p_iBase__p_iConfigManagerTo_p_f_p_iBase__p_iBase, 0, 0},  {&_swigt__p_f_p_iBase__p_iCacheManager, _p_f_p_iBase__p_iCacheManagerTo_p_f_p_iBase__p_iBase, 0, 0},  {&_swigt__p_f_p_iBase__p_iThreadManager, _p_f_p_iBase__p_iThreadManagerTo_p_f_p_iBase__p_iBase, 0, 0},  {&_swigt__p_f_p_iBase__p_iPluginManager, _p_f_p_iBase__p_iPluginManagerTo_p_f_p_iBase__p_iBase, 0, 0},  {&_swigt__p_f_p_iBase__p_iTriangleMesh, _p_f_p_iBase__p_iTriangleMeshTo_p_f_p_iBase__p_iBase, 0, 0},  {&_swigt__p_f_p_iBase__p_scfImplementation1T_FrameBegin3DDraw_iEventHandler_t, _p_f_p_iBase__p_scfImplementation1T_FrameBegin3DDraw_iEventHandler_tTo_p_f_p_iBase__p_iBase, 0, 0},  {&_swigt__p_f_p_iBase__p_iFrameEventSignpost, _p_f_p_iBase__p_iFrameEventSignpostTo_p_f_p_iBase__p_iBase, 0, 0},  {&_swigt__p_f_p_iBase__p_iDataBuffer, _p_f_p_iBase__p_iDataBufferTo_p_f_p_iBase__p_iBase, 0, 0},  {&_swigt__p_f_p_iBase__p_iKeyboardDriver, _p_f_p_iBase__p_iKeyboardDriverTo_p_f_p_iBase__p_iBase, 0, 0},  {&_swigt__p_f_p_iBase__p_FrameSignpost_ConsoleDebug, _p_f_p_iBase__p_FrameSignpost_ConsoleDebugTo_p_f_p_iBase__p_iBase, 0, 0},  {&_swigt__p_f_p_iBase__p_scfImplementation1T__csPyEventHandler_iEventHandler_t, _p_f_p_iBase__p_scfImplementation1T__csPyEventHandler_iEventHandler_tTo_p_f_p_iBase__p_iBase, 0, 0},  {&_swigt__p_f_p_iBase__p_iObjectNameChangeListener, _p_f_p_iBase__p_iObjectNameChangeListenerTo_p_f_p_iBase__p_iBase, 0, 0},  {&_swigt__p_f_p_iBase__p_iReporterListener, _p_f_p_iBase__p_iReporterListenerTo_p_f_p_iBase__p_iBase, 0, 0},  {&_swigt__p_f_p_iBase__p_scfImplementation1T_csPyEventPlug_iEventPlug_t, _p_f_p_iBase__p_scfImplementation1T_csPyEventPlug_iEventPlug_tTo_p_f_p_iBase__p_iBase, 0, 0},  {&_swigt__p_f_p_iBase__p_iBase, 0, 0, 0},  {&_swigt__p_f_p_iBase__p_iFile, _p_f_p_iBase__p_iFileTo_p_f_p_iBase__p_iBase, 0, 0},  {&_swigt__p_f_p_iBase__p_iDocumentAttribute, _p_f_p_iBase__p_iDocumentAttributeTo_p_f_p_iBase__p_iBase, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_float[] = {  {&_swigt__p_float, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_iString[] = {{&_swigt__p_iString, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_iBase[] = {  {&_swigt__p_iConfigIterator, _p_iConfigIteratorTo_p_iBase, 0, 0},  {&_swigt__p_iReporterIterator, _p_iReporterIteratorTo_p_iBase, 0, 0},  {&_swigt__p_iObjectIterator, _p_iObjectIteratorTo_p_iBase, 0, 0},  {&_swigt__p_iObjectRegistryIterator, _p_iObjectRegistryIteratorTo_p_iBase, 0, 0},  {&_swigt__p_iEventAttributeIterator, _p_iEventAttributeIteratorTo_p_iBase, 0, 0},  {&_swigt__p_iPluginIterator, _p_iPluginIteratorTo_p_iBase, 0, 0},  {&_swigt__p_iDocumentAttributeIterator, _p_iDocumentAttributeIteratorTo_p_iBase, 0, 0},  {&_swigt__p_iDocumentNodeIterator, _p_iDocumentNodeIteratorTo_p_iBase, 0, 0},  {&_swigt__p_iDocument, _p_iDocumentTo_p_iBase, 0, 0},  {&_swigt__p_iDocumentNode, _p_iDocumentNodeTo_p_iBase, 0, 0},  {&_swigt__p_csEventHandlerRegistry, _p_csEventHandlerRegistryTo_p_iBase, 0, 0},  {&_swigt__p_iEventHandlerRegistry, _p_iEventHandlerRegistryTo_p_iBase, 0, 0},  {&_swigt__p_iObjectRegistry, _p_iObjectRegistryTo_p_iBase, 0, 0},  {&_swigt__p_iEventNameRegistry, _p_iEventNameRegistryTo_p_iBase, 0, 0},  {&_swigt__p_iEventCord, _p_iEventCordTo_p_iBase, 0, 0},  {&_swigt__p_iStringSet, _p_iStringSetTo_p_iBase, 0, 0},  {&_swigt__p_scfImplementationExt1T_csPath_csObject_iPath_t, _p_scfImplementationExt1T_csPath_csObject_iPath_tTo_p_iBase, 0, 0},  {&_swigt__p_iFactory, _p_iFactoryTo_p_iBase, 0, 0},  {&_swigt__p_iClipper2D, _p_iClipper2DTo_p_iBase, 0, 0},  {&_swigt__p_scfImplementation2T_FrameSignpost_ConsoleDebug_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_t, _p_scfImplementation2T_FrameSignpost_ConsoleDebug_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_tTo_p_iBase, 0, 0},  {&_swigt__p_csConfigFile, _p_csConfigFileTo_p_iBase, 0, 0},  {&_swigt__p_iConfigFile, _p_iConfigFileTo_p_iBase, 0, 0},  {&_swigt__p_iDebugHelper, _p_iDebugHelperTo_p_iBase, 0, 0},  {&_swigt__p_iDocumentSystem, _p_iDocumentSystemTo_p_iBase, 0, 0},  {&_swigt__p_FrameSignpost_Logic3D, _p_FrameSignpost_Logic3DTo_p_iBase, 0, 0},  {&_swigt__p_scfImplementation2T_FrameSignpost_Logic3D_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_t, _p_scfImplementation2T_FrameSignpost_Logic3D_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_tTo_p_iBase, 0, 0},  {&_swigt__p_iKeyComposer, _p_iKeyComposerTo_p_iBase, 0, 0},  {&_swigt__p_FrameSignpost_2DConsole, _p_FrameSignpost_2DConsoleTo_p_iBase, 0, 0},  {&_swigt__p_iThreadReturn, _p_iThreadReturnTo_p_iBase, 0, 0},  {&_swigt__p_FrameSignpost_3D2D, _p_FrameSignpost_3D2DTo_p_iBase, 0, 0},  {&_swigt__p_iEventOutlet, _p_iEventOutletTo_p_iBase, 0, 0},  {&_swigt__p_scfImplementation1T_csConfigFile_iConfigFile_t, _p_scfImplementation1T_csConfigFile_iConfigFile_tTo_p_iBase, 0, 0},  {&_swigt__p_iVirtualClock, _p_iVirtualClockTo_p_iBase, 0, 0},  {&_swigt__p_iPath, _p_iPathTo_p_iBase, 0, 0},  {&_swigt__p_iReporter, _p_iReporterTo_p_iBase, 0, 0},  {&_swigt__p_scfImplementation1T__csPyEventHandler_iEventHandler_t, _p_scfImplementation1T__csPyEventHandler_iEventHandler_tTo_p_iBase, 0, 0},  {&_swigt__p_csObject, _p_csObjectTo_p_iBase, 0, 0},  {&_swigt__p_iObject, _p_iObjectTo_p_iBase, 0, 0},  {&_swigt__p_iSCF, _p_iSCFTo_p_iBase, 0, 0},  {&_swigt__p_iEventQueue, _p_iEventQueueTo_p_iBase, 0, 0},  {&_swigt__p_iEvent, _p_iEventTo_p_iBase, 0, 0},  {&_swigt__p_iString, _p_iStringTo_p_iBase, 0, 0},  {&_swigt__p_scfImplementation2T_FrameSignpost_3D2D_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_t, _p_scfImplementation2T_FrameSignpost_3D2D_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_tTo_p_iBase, 0, 0},  {&_swigt__p_scfImplementation1T_csEventHandlerRegistry_iEventHandlerRegistry_t, _p_scfImplementation1T_csEventHandlerRegistry_iEventHandlerRegistry_tTo_p_iBase, 0, 0},  {&_swigt__p_scfImplementation1T_csPyEventPlug_iEventPlug_t, _p_scfImplementation1T_csPyEventPlug_iEventPlug_tTo_p_iBase, 0, 0},  {&_swigt__p_iComponent, _p_iComponentTo_p_iBase, 0, 0},  {&_swigt__p_iCommandLineParser, _p_iCommandLineParserTo_p_iBase, 0, 0},  {&_swigt__p_iMouseDriver, _p_iMouseDriverTo_p_iBase, 0, 0},  {&_swigt__p_iJoystickDriver, _p_iJoystickDriverTo_p_iBase, 0, 0},  {&_swigt__p_iStringArray, _p_iStringArrayTo_p_iBase, 0, 0},  {&_swigt__p_iEventHandler, _p_iEventHandlerTo_p_iBase, 0, 0},  {&_swigt__p__csPyEventHandler, _p__csPyEventHandlerTo_p_iBase, 0, 0},  {&_swigt__p_scfImplementation2T_FrameSignpost_2DConsole_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_t, _p_scfImplementation2T_FrameSignpost_2DConsole_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_tTo_p_iBase, 0, 0},  {&_swigt__p_iEventPlug, _p_iEventPlugTo_p_iBase, 0, 0},  {&_swigt__p_csPyEventPlug, _p_csPyEventPlugTo_p_iBase, 0, 0},  {&_swigt__p_iVFS, _p_iVFSTo_p_iBase, 0, 0},  {&_swigt__p_FrameSignpost_DebugFrame, _p_FrameSignpost_DebugFrameTo_p_iBase, 0, 0},  {&_swigt__p_iPluginManager, _p_iPluginManagerTo_p_iBase, 0, 0},  {&_swigt__p_iThreadManager, _p_iThreadManagerTo_p_iBase, 0, 0},  {&_swigt__p_iCacheManager, _p_iCacheManagerTo_p_iBase, 0, 0},  {&_swigt__p_iConfigManager, _p_iConfigManagerTo_p_iBase, 0, 0},  {&_swigt__p_iTriangleMesh, _p_iTriangleMeshTo_p_iBase, 0, 0},  {&_swigt__p_iFrameEventSignpost, _p_iFrameEventSignpostTo_p_iBase, 0, 0},  {&_swigt__p_scfImplementation2T_FrameSignpost_DebugFrame_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_t, _p_scfImplementation2T_FrameSignpost_DebugFrame_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_tTo_p_iBase, 0, 0},  {&_swigt__p_iDataBuffer, _p_iDataBufferTo_p_iBase, 0, 0},  {&_swigt__p_iKeyboardDriver, _p_iKeyboardDriverTo_p_iBase, 0, 0},  {&_swigt__p_iStringSetBaseT_CS__StringSetTag__General_t, _p_iStringSetBaseT_CS__StringSetTag__General_tTo_p_iBase, 0, 0},  {&_swigt__p_scfImplementation1T_csObject_iObject_t, _p_scfImplementation1T_csObject_iObject_tTo_p_iBase, 0, 0},  {&_swigt__p_FrameSignpost_ConsoleDebug, _p_FrameSignpost_ConsoleDebugTo_p_iBase, 0, 0},  {&_swigt__p_iReporterListener, _p_iReporterListenerTo_p_iBase, 0, 0},  {&_swigt__p_iObjectNameChangeListener, _p_iObjectNameChangeListenerTo_p_iBase, 0, 0},  {&_swigt__p_iBase, 0, 0, 0},  {&_swigt__p_iFile, _p_iFileTo_p_iBase, 0, 0},  {&_swigt__p_iDocumentAttribute, _p_iDocumentAttributeTo_p_iBase, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_iBase[] = {  {&_swigt__p_iDocumentNodeIterator, _p_iDocumentNodeIteratorTo_p_iBase, 0, 0},  {&_swigt__p_iDocumentAttributeIterator, _p_iDocumentAttributeIteratorTo_p_iBase, 0, 0},  {&_swigt__p_iConfigIterator, _p_iConfigIteratorTo_p_iBase, 0, 0},  {&_swigt__p_iReporterIterator, _p_iReporterIteratorTo_p_iBase, 0, 0},  {&_swigt__p_iObjectIterator, _p_iObjectIteratorTo_p_iBase, 0, 0},  {&_swigt__p_iObjectRegistryIterator, _p_iObjectRegistryIteratorTo_p_iBase, 0, 0},  {&_swigt__p_iEventAttributeIterator, _p_iEventAttributeIteratorTo_p_iBase, 0, 0},  {&_swigt__p_iPluginIterator, _p_iPluginIteratorTo_p_iBase, 0, 0},  {&_swigt__p_iDocument, _p_iDocumentTo_p_iBase, 0, 0},  {&_swigt__p_iDocumentNode, _p_iDocumentNodeTo_p_iBase, 0, 0},  {&_swigt__p_csEventHandlerRegistry, _p_csEventHandlerRegistryTo_p_iBase, 0, 0},  {&_swigt__p_iEventHandlerRegistry, _p_iEventHandlerRegistryTo_p_iBase, 0, 0},  {&_swigt__p_iObjectRegistry, _p_iObjectRegistryTo_p_iBase, 0, 0},  {&_swigt__p_iEventNameRegistry, _p_iEventNameRegistryTo_p_iBase, 0, 0},  {&_swigt__p_iEventCord, _p_iEventCordTo_p_iBase, 0, 0},  {&_swigt__p_iStringSet, _p_iStringSetTo_p_iBase, 0, 0},  {&_swigt__p_scfImplementationExt1T_csPath_csObject_iPath_t, _p_scfImplementationExt1T_csPath_csObject_iPath_tTo_p_iBase, 0, 0},  {&_swigt__p_iFactory, _p_iFactoryTo_p_iBase, 0, 0},  {&_swigt__p_iClipper2D, _p_iClipper2DTo_p_iBase, 0, 0},  {&_swigt__p_scfImplementation2T_FrameSignpost_ConsoleDebug_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_t, _p_scfImplementation2T_FrameSignpost_ConsoleDebug_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_tTo_p_iBase, 0, 0},  {&_swigt__p_csConfigFile, _p_csConfigFileTo_p_iBase, 0, 0},  {&_swigt__p_iConfigFile, _p_iConfigFileTo_p_iBase, 0, 0},  {&_swigt__p_iDebugHelper, _p_iDebugHelperTo_p_iBase, 0, 0},  {&_swigt__p_iDocumentSystem, _p_iDocumentSystemTo_p_iBase, 0, 0},  {&_swigt__p_FrameSignpost_Logic3D, _p_FrameSignpost_Logic3DTo_p_iBase, 0, 0},  {&_swigt__p_scfImplementation2T_FrameSignpost_Logic3D_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_t, _p_scfImplementation2T_FrameSignpost_Logic3D_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_tTo_p_iBase, 0, 0},  {&_swigt__p_iKeyComposer, _p_iKeyComposerTo_p_iBase, 0, 0},  {&_swigt__p_FrameSignpost_2DConsole, _p_FrameSignpost_2DConsoleTo_p_iBase, 0, 0},  {&_swigt__p_iThreadReturn, _p_iThreadReturnTo_p_iBase, 0, 0},  {&_swigt__p_FrameSignpost_3D2D, _p_FrameSignpost_3D2DTo_p_iBase, 0, 0},  {&_swigt__p_iEventOutlet, _p_iEventOutletTo_p_iBase, 0, 0},  {&_swigt__p_scfImplementation1T_csConfigFile_iConfigFile_t, _p_scfImplementation1T_csConfigFile_iConfigFile_tTo_p_iBase, 0, 0},  {&_swigt__p_iVirtualClock, _p_iVirtualClockTo_p_iBase, 0, 0},  {&_swigt__p_iPath, _p_iPathTo_p_iBase, 0, 0},  {&_swigt__p_iReporter, _p_iReporterTo_p_iBase, 0, 0},  {&_swigt__p_scfImplementation1T__csPyEventHandler_iEventHandler_t, _p_scfImplementation1T__csPyEventHandler_iEventHandler_tTo_p_iBase, 0, 0},  {&_swigt__p_iObject, _p_iObjectTo_p_iBase, 0, 0},  {&_swigt__p_csObject, _p_csObjectTo_p_iBase, 0, 0},  {&_swigt__p_iSCF, _p_iSCFTo_p_iBase, 0, 0},  {&_swigt__p_iEventQueue, _p_iEventQueueTo_p_iBase, 0, 0},  {&_swigt__p_iEvent, _p_iEventTo_p_iBase, 0, 0},  {&_swigt__p_iString, _p_iStringTo_p_iBase, 0, 0},  {&_swigt__p_scfImplementation2T_FrameSignpost_3D2D_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_t, _p_scfImplementation2T_FrameSignpost_3D2D_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_tTo_p_iBase, 0, 0},  {&_swigt__p_scfImplementation1T_csEventHandlerRegistry_iEventHandlerRegistry_t, _p_scfImplementation1T_csEventHandlerRegistry_iEventHandlerRegistry_tTo_p_iBase, 0, 0},  {&_swigt__p_scfImplementation1T_csPyEventPlug_iEventPlug_t, _p_scfImplementation1T_csPyEventPlug_iEventPlug_tTo_p_iBase, 0, 0},  {&_swigt__p_iComponent, _p_iComponentTo_p_iBase, 0, 0},  {&_swigt__p_iCommandLineParser, _p_iCommandLineParserTo_p_iBase, 0, 0},  {&_swigt__p_FrameBegin3DDraw, _p_FrameBegin3DDrawTo_p_iBase, 0, 0},  {&_swigt__p_iJoystickDriver, _p_iJoystickDriverTo_p_iBase, 0, 0},  {&_swigt__p_iMouseDriver, _p_iMouseDriverTo_p_iBase, 0, 0},  {&_swigt__p_FramePrinter, _p_FramePrinterTo_p_iBase, 0, 0},  {&_swigt__p_iStringArray, _p_iStringArrayTo_p_iBase, 0, 0},  {&_swigt__p_iEventHandler, _p_iEventHandlerTo_p_iBase, 0, 0},  {&_swigt__p__csPyEventHandler, _p__csPyEventHandlerTo_p_iBase, 0, 0},  {&_swigt__p_scfImplementation2T_FrameSignpost_2DConsole_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_t, _p_scfImplementation2T_FrameSignpost_2DConsole_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_tTo_p_iBase, 0, 0},  {&_swigt__p_iEventPlug, _p_iEventPlugTo_p_iBase, 0, 0},  {&_swigt__p_csPyEventPlug, _p_csPyEventPlugTo_p_iBase, 0, 0},  {&_swigt__p_iVFS, _p_iVFSTo_p_iBase, 0, 0},  {&_swigt__p_FrameSignpost_DebugFrame, _p_FrameSignpost_DebugFrameTo_p_iBase, 0, 0},  {&_swigt__p_scfImplementation1T_FramePrinter_iEventHandler_t, _p_scfImplementation1T_FramePrinter_iEventHandler_tTo_p_iBase, 0, 0},  {&_swigt__p_iCacheManager, _p_iCacheManagerTo_p_iBase, 0, 0},  {&_swigt__p_iThreadManager, _p_iThreadManagerTo_p_iBase, 0, 0},  {&_swigt__p_iPluginManager, _p_iPluginManagerTo_p_iBase, 0, 0},  {&_swigt__p_iConfigManager, _p_iConfigManagerTo_p_iBase, 0, 0},  {&_swigt__p_iTriangleMesh, _p_iTriangleMeshTo_p_iBase, 0, 0},  {&_swigt__p_iFrameEventSignpost, _p_iFrameEventSignpostTo_p_iBase, 0, 0},  {&_swigt__p_scfImplementation2T_FrameSignpost_DebugFrame_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_t, _p_scfImplementation2T_FrameSignpost_DebugFrame_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_tTo_p_iBase, 0, 0},  {&_swigt__p_iDataBuffer, _p_iDataBufferTo_p_iBase, 0, 0},  {&_swigt__p_iKeyboardDriver, _p_iKeyboardDriverTo_p_iBase, 0, 0},  {&_swigt__p_iStringSetBaseT_CS__StringSetTag__General_t, _p_iStringSetBaseT_CS__StringSetTag__General_tTo_p_iBase, 0, 0},  {&_swigt__p_scfImplementation1T_csObject_iObject_t, _p_scfImplementation1T_csObject_iObject_tTo_p_iBase, 0, 0},  {&_swigt__p_FrameSignpost_ConsoleDebug, _p_FrameSignpost_ConsoleDebugTo_p_iBase, 0, 0},  {&_swigt__p_scfImplementation1T_FrameBegin3DDraw_iEventHandler_t, _p_scfImplementation1T_FrameBegin3DDraw_iEventHandler_tTo_p_iBase, 0, 0},  {&_swigt__p_iObjectNameChangeListener, _p_iObjectNameChangeListenerTo_p_iBase, 0, 0},  {&_swigt__p_iReporterListener, _p_iReporterListenerTo_p_iBase, 0, 0},  {&_swigt__p_iBase, 0, 0, 0},  {&_swigt__p_iFile, _p_iFileTo_p_iBase, 0, 0},  {&_swigt__p_iDocumentAttribute, _p_iDocumentAttributeTo_p_iBase, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_iCacheManager[] = {  {&_swigt__p_iCacheManager, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_iClipper2D[] = {  {&_swigt__p_iClipper2D, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_iCommandLineParser[] = {  {&_swigt__p_iCommandLineParser, 0, 0, 0},{0, 0, 0, 0}};
@@ -66353,7 +66837,7 @@ static swig_cast_info _swigc__p_iDocumentSystem[] = {  {&_swigt__p_iDocumentSyst
 static swig_cast_info _swigc__p_iEvent[] = {  {&_swigt__p_iEvent, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_iEventAttributeIterator[] = {  {&_swigt__p_iEventAttributeIterator, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_iEventCord[] = {  {&_swigt__p_iEventCord, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_iEventHandler[] = {  {&_swigt__p_FrameSignpost_DebugFrame, _p_FrameSignpost_DebugFrameTo_p_iEventHandler, 0, 0},  {&_swigt__p_iFrameEventSignpost, _p_iFrameEventSignpostTo_p_iEventHandler, 0, 0},  {&_swigt__p_scfImplementation2T_FrameSignpost_DebugFrame_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_t, _p_scfImplementation2T_FrameSignpost_DebugFrame_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_tTo_p_iEventHandler, 0, 0},  {&_swigt__p_scfImplementation2T_FrameSignpost_ConsoleDebug_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_t, _p_scfImplementation2T_FrameSignpost_ConsoleDebug_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_tTo_p_iEventHandler, 0, 0},  {&_swigt__p_FrameSignpost_ConsoleDebug, _p_FrameSignpost_ConsoleDebugTo_p_iEventHandler, 0, 0},  {&_swigt__p_scfImplementation1T__csPyEventHandler_iEventHandler_t, _p_scfImplementation1T__csPyEventHandler_iEventHandler_tTo_p_iEventHandler, 0, 0},  {&_swigt__p_FrameSignpost_Logic3D, _p_FrameSignpost_Logic3DTo_p_iEventHandler, 0, 0},  {&_swigt__p_scfImplementation2T_FrameSignpost_Logic3D_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_t, _p_scfImplementation2T_FrameSignpost_Logic3D_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_tTo_p_iEventHandler, 0, 0},  {&_swigt__p_scfImplementation2T_FrameSignpost_3D2D_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_t, _p_scfImplementation2T_FrameSignpost_3D2D_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_tTo_p_iEventHandler, 0, 0},  {&_swigt__p_FrameSignpost_2DConsole, _p_FrameSignpost_2DConsoleTo_p_iEventHandler, 0, 0},  {&_swigt__p__csPyEventHandler, _p__csPyEventHandlerTo_p_iEventHandler, 0, 0},  {&_swigt__p_iEventHandler, 0, 0, 0},  {&_swigt__p_FrameSignpost_3D2D, _p_FrameSignpost_3D2DTo_p_iEventHandler, 0, 0},  {&_swigt__p_scfImplementation2T_FrameSignpost_2DConsole_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_t, _p_scfImplementation2T_FrameSignpost_2DConsole_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_tTo_p_iEventHandler, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_iEventHandler[] = {  {&_swigt__p_FrameSignpost_DebugFrame, _p_FrameSignpost_DebugFrameTo_p_iEventHandler, 0, 0},  {&_swigt__p_iFrameEventSignpost, _p_iFrameEventSignpostTo_p_iEventHandler, 0, 0},  {&_swigt__p_scfImplementation2T_FrameSignpost_DebugFrame_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_t, _p_scfImplementation2T_FrameSignpost_DebugFrame_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_tTo_p_iEventHandler, 0, 0},  {&_swigt__p_FramePrinter, _p_FramePrinterTo_p_iEventHandler, 0, 0},  {&_swigt__p_scfImplementation2T_FrameSignpost_ConsoleDebug_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_t, _p_scfImplementation2T_FrameSignpost_ConsoleDebug_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_tTo_p_iEventHandler, 0, 0},  {&_swigt__p_FrameSignpost_ConsoleDebug, _p_FrameSignpost_ConsoleDebugTo_p_iEventHandler, 0, 0},  {&_swigt__p_scfImplementation1T__csPyEventHandler_iEventHandler_t, _p_scfImplementation1T__csPyEventHandler_iEventHandler_tTo_p_iEventHandler, 0, 0},  {&_swigt__p_FrameSignpost_Logic3D, _p_FrameSignpost_Logic3DTo_p_iEventHandler, 0, 0},  {&_swigt__p_scfImplementation2T_FrameSignpost_Logic3D_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_t, _p_scfImplementation2T_FrameSignpost_Logic3D_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_tTo_p_iEventHandler, 0, 0},  {&_swigt__p_FrameBegin3DDraw, _p_FrameBegin3DDrawTo_p_iEventHandler, 0, 0},  {&_swigt__p_scfImplementation2T_FrameSignpost_3D2D_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_t, _p_scfImplementation2T_FrameSignpost_3D2D_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_tTo_p_iEventHandler, 0, 0},  {&_swigt__p_FrameSignpost_2DConsole, _p_FrameSignpost_2DConsoleTo_p_iEventHandler, 0, 0},  {&_swigt__p_iEventHandler, 0, 0, 0},  {&_swigt__p__csPyEventHandler, _p__csPyEventHandlerTo_p_iEventHandler, 0, 0},  {&_swigt__p_scfImplementation1T_FrameBegin3DDraw_iEventHandler_t, _p_scfImplementation1T_FrameBegin3DDraw_iEventHandler_tTo_p_iEventHandler, 0, 0},  {&_swigt__p_FrameSignpost_3D2D, _p_FrameSignpost_3D2DTo_p_iEventHandler, 0, 0},  {&_swigt__p_scfImplementation1T_FramePrinter_iEventHandler_t, _p_scfImplementation1T_FramePrinter_iEventHandler_tTo_p_iEventHandler, 0, 0},  {&_swigt__p_scfImplementation2T_FrameSignpost_2DConsole_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_t, _p_scfImplementation2T_FrameSignpost_2DConsole_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_tTo_p_iEventHandler, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_iEventHandlerRegistry[] = {  {&_swigt__p_iEventHandlerRegistry, 0, 0, 0},  {&_swigt__p_csEventHandlerRegistry, _p_csEventHandlerRegistryTo_p_iEventHandlerRegistry, 0, 0},  {&_swigt__p_scfImplementation1T_csEventHandlerRegistry_iEventHandlerRegistry_t, _p_scfImplementation1T_csEventHandlerRegistry_iEventHandlerRegistry_tTo_p_iEventHandlerRegistry, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_iEventNameRegistry[] = {  {&_swigt__p_iEventNameRegistry, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_iEventOutlet[] = {  {&_swigt__p_iEventOutlet, 0, 0, 0},{0, 0, 0, 0}};
@@ -66400,6 +66884,8 @@ static swig_cast_info _swigc__p_long_long[] = {  {&_swigt__p_long_long, 0, 0, 0}
 static swig_cast_info _swigc__p_p_char[] = {  {&_swigt__p_p_char, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_p_void[] = {  {&_swigt__p_p_void, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_scfFakeInterfaceT_iEventHandler_t[] = {  {&_swigt__p_FrameSignpost_3D2D, _p_FrameSignpost_3D2DTo_p_scfFakeInterfaceT_iEventHandler_t, 0, 0},  {&_swigt__p_scfImplementation2T_FrameSignpost_2DConsole_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_t, _p_scfImplementation2T_FrameSignpost_2DConsole_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_tTo_p_scfFakeInterfaceT_iEventHandler_t, 0, 0},  {&_swigt__p_scfImplementation2T_FrameSignpost_DebugFrame_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_t, _p_scfImplementation2T_FrameSignpost_DebugFrame_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_tTo_p_scfFakeInterfaceT_iEventHandler_t, 0, 0},  {&_swigt__p_FrameSignpost_2DConsole, _p_FrameSignpost_2DConsoleTo_p_scfFakeInterfaceT_iEventHandler_t, 0, 0},  {&_swigt__p_scfImplementation2T_FrameSignpost_3D2D_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_t, _p_scfImplementation2T_FrameSignpost_3D2D_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_tTo_p_scfFakeInterfaceT_iEventHandler_t, 0, 0},  {&_swigt__p_scfImplementation2T_FrameSignpost_Logic3D_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_t, _p_scfImplementation2T_FrameSignpost_Logic3D_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_tTo_p_scfFakeInterfaceT_iEventHandler_t, 0, 0},  {&_swigt__p_FrameSignpost_Logic3D, _p_FrameSignpost_Logic3DTo_p_scfFakeInterfaceT_iEventHandler_t, 0, 0},  {&_swigt__p_FrameSignpost_ConsoleDebug, _p_FrameSignpost_ConsoleDebugTo_p_scfFakeInterfaceT_iEventHandler_t, 0, 0},  {&_swigt__p_FrameSignpost_DebugFrame, _p_FrameSignpost_DebugFrameTo_p_scfFakeInterfaceT_iEventHandler_t, 0, 0},  {&_swigt__p_scfFakeInterfaceT_iEventHandler_t, 0, 0, 0},  {&_swigt__p_scfImplementation2T_FrameSignpost_ConsoleDebug_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_t, _p_scfImplementation2T_FrameSignpost_ConsoleDebug_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_tTo_p_scfFakeInterfaceT_iEventHandler_t, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_scfImplementation1T_FrameBegin3DDraw_iEventHandler_t[] = {  {&_swigt__p_FrameBegin3DDraw, _p_FrameBegin3DDrawTo_p_scfImplementation1T_FrameBegin3DDraw_iEventHandler_t, 0, 0},  {&_swigt__p_scfImplementation1T_FrameBegin3DDraw_iEventHandler_t, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_scfImplementation1T_FramePrinter_iEventHandler_t[] = {  {&_swigt__p_scfImplementation1T_FramePrinter_iEventHandler_t, 0, 0, 0},  {&_swigt__p_FramePrinter, _p_FramePrinterTo_p_scfImplementation1T_FramePrinter_iEventHandler_t, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_scfImplementation1T__csPyEventHandler_iEventHandler_t[] = {  {&_swigt__p__csPyEventHandler, _p__csPyEventHandlerTo_p_scfImplementation1T__csPyEventHandler_iEventHandler_t, 0, 0},  {&_swigt__p_scfImplementation1T__csPyEventHandler_iEventHandler_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_scfImplementation1T_csConfigFile_iConfigFile_t[] = {  {&_swigt__p_scfImplementation1T_csConfigFile_iConfigFile_t, 0, 0, 0},  {&_swigt__p_csConfigFile, _p_csConfigFileTo_p_scfImplementation1T_csConfigFile_iConfigFile_t, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_scfImplementation1T_csEventHandlerRegistry_iEventHandlerRegistry_t[] = {  {&_swigt__p_csEventHandlerRegistry, _p_csEventHandlerRegistryTo_p_scfImplementation1T_csEventHandlerRegistry_iEventHandlerRegistry_t, 0, 0},  {&_swigt__p_scfImplementation1T_csEventHandlerRegistry_iEventHandlerRegistry_t, 0, 0, 0},{0, 0, 0, 0}};
@@ -66532,6 +67018,8 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_csVertexStatus,
   _swigc__p_csWrapPtr,
   _swigc__p_double,
+  _swigc__p_f_p_iBase__p_FrameBegin3DDraw,
+  _swigc__p_f_p_iBase__p_FramePrinter,
   _swigc__p_f_p_iBase__p_FrameSignpost_2DConsole,
   _swigc__p_f_p_iBase__p_FrameSignpost_3D2D,
   _swigc__p_f_p_iBase__p_FrameSignpost_ConsoleDebug,
@@ -66595,6 +67083,8 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_f_p_iBase__p_iTriangleMesh,
   _swigc__p_f_p_iBase__p_iVFS,
   _swigc__p_f_p_iBase__p_iVirtualClock,
+  _swigc__p_f_p_iBase__p_scfImplementation1T_FrameBegin3DDraw_iEventHandler_t,
+  _swigc__p_f_p_iBase__p_scfImplementation1T_FramePrinter_iEventHandler_t,
   _swigc__p_f_p_iBase__p_scfImplementation1T__csPyEventHandler_iEventHandler_t,
   _swigc__p_f_p_iBase__p_scfImplementation1T_csConfigFile_iConfigFile_t,
   _swigc__p_f_p_iBase__p_scfImplementation1T_csEventHandlerRegistry_iEventHandlerRegistry_t,
@@ -66674,6 +67164,8 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_p_char,
   _swigc__p_p_void,
   _swigc__p_scfFakeInterfaceT_iEventHandler_t,
+  _swigc__p_scfImplementation1T_FrameBegin3DDraw_iEventHandler_t,
+  _swigc__p_scfImplementation1T_FramePrinter_iEventHandler_t,
   _swigc__p_scfImplementation1T__csPyEventHandler_iEventHandler_t,
   _swigc__p_scfImplementation1T_csConfigFile_iConfigFile_t,
   _swigc__p_scfImplementation1T_csEventHandlerRegistry_iEventHandlerRegistry_t,

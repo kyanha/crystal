@@ -2539,197 +2539,201 @@ SWIG_Python_MustGetPtr(PyObject *obj, swig_type_info *ty, int argnum, int flags)
 #define SWIGTYPE_p_ContainedType swig_types[16]
 #define SWIGTYPE_p_ElementHandlerType swig_types[17]
 #define SWIGTYPE_p_FileFormatDescription swig_types[18]
-#define SWIGTYPE_p_FrameSignpost_2DConsole swig_types[19]
-#define SWIGTYPE_p_FrameSignpost_3D2D swig_types[20]
-#define SWIGTYPE_p_FrameSignpost_ConsoleDebug swig_types[21]
-#define SWIGTYPE_p_FrameSignpost_DebugFrame swig_types[22]
-#define SWIGTYPE_p_FrameSignpost_Logic3D swig_types[23]
-#define SWIGTYPE_p_HashType swig_types[24]
-#define SWIGTYPE_p_KeyType swig_types[25]
-#define SWIGTYPE_p_TagType swig_types[26]
-#define SWIGTYPE_p_ThisType swig_types[27]
-#define SWIGTYPE_p_ValueType swig_types[28]
-#define SWIGTYPE_p_WeakReferencedKeepAlive swig_types[29]
-#define SWIGTYPE_p__1_basetype swig_types[30]
-#define SWIGTYPE_p__csKeyCharType swig_types[31]
-#define SWIGTYPE_p__csKeyEventType swig_types[32]
-#define SWIGTYPE_p__csKeyModifierNumType swig_types[33]
-#define SWIGTYPE_p__csKeyModifierType swig_types[34]
-#define SWIGTYPE_p__csKeyModifiers swig_types[35]
-#define SWIGTYPE_p__csMouseCursorID swig_types[36]
-#define SWIGTYPE_p__csMouseEventType swig_types[37]
-#define SWIGTYPE_p_bool swig_types[38]
-#define SWIGTYPE_p_char swig_types[39]
-#define SWIGTYPE_p_csAlphaMode swig_types[40]
-#define SWIGTYPE_p_csArrayCapacityFixedGrowT_16_t swig_types[41]
-#define SWIGTYPE_p_csArrayCapacityVariableGrow swig_types[42]
-#define SWIGTYPE_p_csArrayT_csImageIOFileFormatDescription_const_p_csArrayElementHandlerT_csImageIOFileFormatDescription_const_p_t_CS__Memory__AllocatorMalloc_csArrayCapacityFixedGrowT_16_t_t swig_types[43]
-#define SWIGTYPE_p_csArrayT_csPluginRequest_csArrayElementHandlerT_csPluginRequest_t_CS__Memory__AllocatorMalloc_csArrayCapacityFixedGrowT_16_t_t swig_types[44]
-#define SWIGTYPE_p_csArrayT_csRefT_iShader_t_csArrayElementHandlerT_csRefT_iShader_t_t_CS__Memory__AllocatorMalloc_csArrayCapacityFixedGrowT_16_t_t swig_types[45]
-#define SWIGTYPE_p_csArrayT_csVector2_csArrayElementHandlerT_csVector2_t_CS__Memory__AllocatorMalloc_csArrayCapacityFixedGrowT_16_t_t swig_types[46]
-#define SWIGTYPE_p_csArrayT_csVector3_csArrayElementHandlerT_csVector3_t_CS__Memory__AllocatorMalloc_csArrayCapacityFixedGrowT_16_t_t swig_types[47]
-#define SWIGTYPE_p_csArrayT_csVector4_csArrayElementHandlerT_csVector4_t_CS__Memory__AllocatorMalloc_csArrayCapacityFixedGrowT_16_t_t swig_types[48]
-#define SWIGTYPE_p_csArrayT_unsigned_int_csArrayElementHandlerT_unsigned_int_t_CS__Memory__AllocatorMalloc_csArrayCapacityFixedGrowT_16_t_t swig_types[49]
-#define SWIGTYPE_p_csBitArray swig_types[50]
-#define SWIGTYPE_p_csBitmapMetrics swig_types[51]
-#define SWIGTYPE_p_csBox3 swig_types[52]
-#define SWIGTYPE_p_csConfigFile swig_types[53]
-#define SWIGTYPE_p_csDirtyAccessArrayT_csVector2_csArrayElementHandlerT_csVector2_t_CS__Memory__AllocatorMalloc_csArrayCapacityFixedGrowT_16_t_t swig_types[54]
-#define SWIGTYPE_p_csDirtyAccessArrayT_csVector3_csArrayElementHandlerT_csVector3_t_CS__Memory__AllocatorMalloc_csArrayCapacityFixedGrowT_16_t_t swig_types[55]
-#define SWIGTYPE_p_csDirtyAccessArrayT_csVector4_csArrayElementHandlerT_csVector4_t_CS__Memory__AllocatorMalloc_csArrayCapacityFixedGrowT_16_t_t swig_types[56]
-#define SWIGTYPE_p_csDirtyAccessArrayT_unsigned_int_csArrayElementHandlerT_unsigned_int_t_CS__Memory__AllocatorMalloc_csArrayCapacityFixedGrowT_16_t_t swig_types[57]
-#define SWIGTYPE_p_csEventHandlerRegistry swig_types[58]
-#define SWIGTYPE_p_csFlags swig_types[59]
-#define SWIGTYPE_p_csGlyphMetrics swig_types[60]
-#define SWIGTYPE_p_csGraphics3DCaps swig_types[61]
-#define SWIGTYPE_p_csHashT_csRefT_iShader_t_CS__StringIDT_CS__StringSetTag__General_t_CS__Memory__AllocatorMalloc_csArrayElementHandlerT_CS__Container__HashElementT_csRefT_iShader_t_CS__StringIDT_CS__StringSetTag__General_t_t_t_t swig_types[62]
-#define SWIGTYPE_p_csImageBase swig_types[63]
-#define SWIGTYPE_p_csImageMemory swig_types[64]
-#define SWIGTYPE_p_csObject swig_types[65]
-#define SWIGTYPE_p_csPixelCoord swig_types[66]
-#define SWIGTYPE_p_csPlane3 swig_types[67]
-#define SWIGTYPE_p_csPtrT_iShaderPriorityList_t swig_types[68]
-#define SWIGTYPE_p_csRGBcolor swig_types[69]
-#define SWIGTYPE_p_csRect swig_types[70]
-#define SWIGTYPE_p_csRefArrayT_csShaderVariable_t swig_types[71]
-#define SWIGTYPE_p_csRefArrayT_iObject_t swig_types[72]
-#define SWIGTYPE_p_csRefArrayT_iShader_t swig_types[73]
-#define SWIGTYPE_p_csRefT_csRenderBufferHolder_t swig_types[74]
-#define SWIGTYPE_p_csRefT_iShaderVariableContext_t swig_types[75]
-#define SWIGTYPE_p_csRefT_iShader_t swig_types[76]
-#define SWIGTYPE_p_csRenderBufferHolder swig_types[77]
-#define SWIGTYPE_p_csRenderBufferName swig_types[78]
-#define SWIGTYPE_p_csRenderTargetAttachment swig_types[79]
-#define SWIGTYPE_p_csReversibleTransform swig_types[80]
-#define SWIGTYPE_p_csSetT_CS__StringIDT_CS__StringSetTag__General_t_CS__Memory__AllocatorMalloc_t swig_types[81]
-#define SWIGTYPE_p_csShaderMetadata swig_types[82]
-#define SWIGTYPE_p_csShaderTagPresence swig_types[83]
-#define SWIGTYPE_p_csShaderVariable swig_types[84]
-#define SWIGTYPE_p_csShaderVariableStack swig_types[85]
-#define SWIGTYPE_p_csSimpleRenderMesh swig_types[86]
-#define SWIGTYPE_p_csTransform swig_types[87]
-#define SWIGTYPE_p_csVector2 swig_types[88]
-#define SWIGTYPE_p_csVector3 swig_types[89]
-#define SWIGTYPE_p_csVector4 swig_types[90]
-#define SWIGTYPE_p_csVertexAttrib swig_types[91]
-#define SWIGTYPE_p_float swig_types[92]
-#define SWIGTYPE_p_iAnimatedImage swig_types[93]
-#define SWIGTYPE_p_iArrayChangeAllT_csShaderVariable_p_t swig_types[94]
-#define SWIGTYPE_p_iArrayChangeElementsT_csShaderVariable_p_t swig_types[95]
-#define SWIGTYPE_p_iArrayReadOnlyT_csShaderVariable_p_t swig_types[96]
-#define SWIGTYPE_p_iBase swig_types[97]
-#define SWIGTYPE_p_iCacheManager swig_types[98]
-#define SWIGTYPE_p_iClipper2D swig_types[99]
-#define SWIGTYPE_p_iCommandLineParser swig_types[100]
-#define SWIGTYPE_p_iComponent swig_types[101]
-#define SWIGTYPE_p_iConfigFile swig_types[102]
-#define SWIGTYPE_p_iConfigIterator swig_types[103]
-#define SWIGTYPE_p_iConfigManager swig_types[104]
-#define SWIGTYPE_p_iDataBuffer swig_types[105]
-#define SWIGTYPE_p_iDebugHelper swig_types[106]
-#define SWIGTYPE_p_iDocument swig_types[107]
-#define SWIGTYPE_p_iDocumentAttribute swig_types[108]
-#define SWIGTYPE_p_iDocumentAttributeIterator swig_types[109]
-#define SWIGTYPE_p_iDocumentNode swig_types[110]
-#define SWIGTYPE_p_iDocumentNodeIterator swig_types[111]
-#define SWIGTYPE_p_iDocumentSystem swig_types[112]
-#define SWIGTYPE_p_iEvent swig_types[113]
-#define SWIGTYPE_p_iEventAttributeIterator swig_types[114]
-#define SWIGTYPE_p_iEventCord swig_types[115]
-#define SWIGTYPE_p_iEventHandler swig_types[116]
-#define SWIGTYPE_p_iEventHandlerRegistry swig_types[117]
-#define SWIGTYPE_p_iEventNameRegistry swig_types[118]
-#define SWIGTYPE_p_iEventOutlet swig_types[119]
-#define SWIGTYPE_p_iEventPlug swig_types[120]
-#define SWIGTYPE_p_iEventQueue swig_types[121]
-#define SWIGTYPE_p_iFactory swig_types[122]
-#define SWIGTYPE_p_iFile swig_types[123]
-#define SWIGTYPE_p_iFont swig_types[124]
-#define SWIGTYPE_p_iFontDeleteNotify swig_types[125]
-#define SWIGTYPE_p_iFontServer swig_types[126]
-#define SWIGTYPE_p_iFrameEventSignpost swig_types[127]
-#define SWIGTYPE_p_iGeneralFactoryState swig_types[128]
-#define SWIGTYPE_p_iGraphics2D swig_types[129]
-#define SWIGTYPE_p_iGraphics3D swig_types[130]
-#define SWIGTYPE_p_iHalo swig_types[131]
-#define SWIGTYPE_p_iHierarchicalCache swig_types[132]
-#define SWIGTYPE_p_iImage swig_types[133]
-#define SWIGTYPE_p_iImageIO swig_types[134]
-#define SWIGTYPE_p_iJoystickDriver swig_types[135]
-#define SWIGTYPE_p_iKeyComposer swig_types[136]
-#define SWIGTYPE_p_iKeyboardDriver swig_types[137]
-#define SWIGTYPE_p_iLoaderContext swig_types[138]
-#define SWIGTYPE_p_iMaterial swig_types[139]
-#define SWIGTYPE_p_iMaterialWrapper swig_types[140]
-#define SWIGTYPE_p_iMouseDriver swig_types[141]
-#define SWIGTYPE_p_iNativeWindow swig_types[142]
-#define SWIGTYPE_p_iNativeWindowManager swig_types[143]
-#define SWIGTYPE_p_iObject swig_types[144]
-#define SWIGTYPE_p_iObjectIterator swig_types[145]
-#define SWIGTYPE_p_iObjectNameChangeListener swig_types[146]
-#define SWIGTYPE_p_iObjectRegistry swig_types[147]
-#define SWIGTYPE_p_iObjectRegistryIterator swig_types[148]
-#define SWIGTYPE_p_iPath swig_types[149]
-#define SWIGTYPE_p_iPluginIterator swig_types[150]
-#define SWIGTYPE_p_iPluginManager swig_types[151]
-#define SWIGTYPE_p_iPortalContainer swig_types[152]
-#define SWIGTYPE_p_iProcTexture swig_types[153]
-#define SWIGTYPE_p_iReporter swig_types[154]
-#define SWIGTYPE_p_iReporterIterator swig_types[155]
-#define SWIGTYPE_p_iReporterListener swig_types[156]
-#define SWIGTYPE_p_iSCF swig_types[157]
-#define SWIGTYPE_p_iShader swig_types[158]
-#define SWIGTYPE_p_iShaderCompiler swig_types[159]
-#define SWIGTYPE_p_iShaderManager swig_types[160]
-#define SWIGTYPE_p_iShaderPriorityList swig_types[161]
-#define SWIGTYPE_p_iShaderVarStringSet swig_types[162]
-#define SWIGTYPE_p_iShaderVariableAccessor swig_types[163]
-#define SWIGTYPE_p_iShaderVariableContext swig_types[164]
-#define SWIGTYPE_p_iString swig_types[165]
-#define SWIGTYPE_p_iStringArray swig_types[166]
-#define SWIGTYPE_p_iStringSet swig_types[167]
-#define SWIGTYPE_p_iStringSetBaseT_CS__StringSetTag__General_t swig_types[168]
-#define SWIGTYPE_p_iStringSetBaseT_CS__StringSetTag__ShaderVar_t swig_types[169]
-#define SWIGTYPE_p_iTextureHandle swig_types[170]
-#define SWIGTYPE_p_iTextureManager swig_types[171]
-#define SWIGTYPE_p_iThreadManager swig_types[172]
-#define SWIGTYPE_p_iThreadReturn swig_types[173]
-#define SWIGTYPE_p_iTriangleMesh swig_types[174]
-#define SWIGTYPE_p_iVFS swig_types[175]
-#define SWIGTYPE_p_iVirtualClock swig_types[176]
-#define SWIGTYPE_p_int swig_types[177]
-#define SWIGTYPE_p_int16_t swig_types[178]
-#define SWIGTYPE_p_int64_t swig_types[179]
-#define SWIGTYPE_p_int8_t swig_types[180]
-#define SWIGTYPE_p_long_long swig_types[181]
-#define SWIGTYPE_p_p_csShaderVariable swig_types[182]
-#define SWIGTYPE_p_p_iRenderBuffer swig_types[183]
-#define SWIGTYPE_p_p_iTextureHandle swig_types[184]
-#define SWIGTYPE_p_p_p_csShaderVariable swig_types[185]
-#define SWIGTYPE_p_scfImplementation1T_csConfigFile_iConfigFile_t swig_types[186]
-#define SWIGTYPE_p_scfImplementation1T_csEventHandlerRegistry_iEventHandlerRegistry_t swig_types[187]
-#define SWIGTYPE_p_scfImplementation1T_csImageBase_iImage_t swig_types[188]
-#define SWIGTYPE_p_scfImplementation1T_csObject_iObject_t swig_types[189]
-#define SWIGTYPE_p_scfImplementation2T_FrameSignpost_2DConsole_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_t swig_types[190]
-#define SWIGTYPE_p_scfImplementation2T_FrameSignpost_3D2D_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_t swig_types[191]
-#define SWIGTYPE_p_scfImplementation2T_FrameSignpost_ConsoleDebug_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_t swig_types[192]
-#define SWIGTYPE_p_scfImplementation2T_FrameSignpost_DebugFrame_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_t swig_types[193]
-#define SWIGTYPE_p_scfImplementation2T_FrameSignpost_Logic3D_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_t swig_types[194]
-#define SWIGTYPE_p_scfImplementationExt0T_csImageMemory_csImageBase_t swig_types[195]
-#define SWIGTYPE_p_scfImplementationExt1T_csPath_csObject_iPath_t swig_types[196]
-#define SWIGTYPE_p_size_t swig_types[197]
-#define SWIGTYPE_p_uint16_t swig_types[198]
-#define SWIGTYPE_p_uint32_t swig_types[199]
-#define SWIGTYPE_p_uint64_t swig_types[200]
-#define SWIGTYPE_p_uint8_t swig_types[201]
-#define SWIGTYPE_p_unsigned_char swig_types[202]
-#define SWIGTYPE_p_unsigned_int swig_types[203]
-#define SWIGTYPE_p_unsigned_long swig_types[204]
-#define SWIGTYPE_p_unsigned_long_long swig_types[205]
-#define SWIGTYPE_p_void swig_types[206]
-#define SWIGTYPE_p_wchar_t swig_types[207]
-static swig_type_info *swig_types[209];
-static swig_module_info swig_module = {swig_types, 208, 0, 0, 0, 0};
+#define SWIGTYPE_p_FrameBegin3DDraw swig_types[19]
+#define SWIGTYPE_p_FramePrinter swig_types[20]
+#define SWIGTYPE_p_FrameSignpost_2DConsole swig_types[21]
+#define SWIGTYPE_p_FrameSignpost_3D2D swig_types[22]
+#define SWIGTYPE_p_FrameSignpost_ConsoleDebug swig_types[23]
+#define SWIGTYPE_p_FrameSignpost_DebugFrame swig_types[24]
+#define SWIGTYPE_p_FrameSignpost_Logic3D swig_types[25]
+#define SWIGTYPE_p_HashType swig_types[26]
+#define SWIGTYPE_p_KeyType swig_types[27]
+#define SWIGTYPE_p_TagType swig_types[28]
+#define SWIGTYPE_p_ThisType swig_types[29]
+#define SWIGTYPE_p_ValueType swig_types[30]
+#define SWIGTYPE_p_WeakReferencedKeepAlive swig_types[31]
+#define SWIGTYPE_p__1_basetype swig_types[32]
+#define SWIGTYPE_p__csKeyCharType swig_types[33]
+#define SWIGTYPE_p__csKeyEventType swig_types[34]
+#define SWIGTYPE_p__csKeyModifierNumType swig_types[35]
+#define SWIGTYPE_p__csKeyModifierType swig_types[36]
+#define SWIGTYPE_p__csKeyModifiers swig_types[37]
+#define SWIGTYPE_p__csMouseCursorID swig_types[38]
+#define SWIGTYPE_p__csMouseEventType swig_types[39]
+#define SWIGTYPE_p_bool swig_types[40]
+#define SWIGTYPE_p_char swig_types[41]
+#define SWIGTYPE_p_csAlphaMode swig_types[42]
+#define SWIGTYPE_p_csArrayCapacityFixedGrowT_16_t swig_types[43]
+#define SWIGTYPE_p_csArrayCapacityVariableGrow swig_types[44]
+#define SWIGTYPE_p_csArrayT_csImageIOFileFormatDescription_const_p_csArrayElementHandlerT_csImageIOFileFormatDescription_const_p_t_CS__Memory__AllocatorMalloc_csArrayCapacityFixedGrowT_16_t_t swig_types[45]
+#define SWIGTYPE_p_csArrayT_csPluginRequest_csArrayElementHandlerT_csPluginRequest_t_CS__Memory__AllocatorMalloc_csArrayCapacityFixedGrowT_16_t_t swig_types[46]
+#define SWIGTYPE_p_csArrayT_csRefT_iShader_t_csArrayElementHandlerT_csRefT_iShader_t_t_CS__Memory__AllocatorMalloc_csArrayCapacityFixedGrowT_16_t_t swig_types[47]
+#define SWIGTYPE_p_csArrayT_csVector2_csArrayElementHandlerT_csVector2_t_CS__Memory__AllocatorMalloc_csArrayCapacityFixedGrowT_16_t_t swig_types[48]
+#define SWIGTYPE_p_csArrayT_csVector3_csArrayElementHandlerT_csVector3_t_CS__Memory__AllocatorMalloc_csArrayCapacityFixedGrowT_16_t_t swig_types[49]
+#define SWIGTYPE_p_csArrayT_csVector4_csArrayElementHandlerT_csVector4_t_CS__Memory__AllocatorMalloc_csArrayCapacityFixedGrowT_16_t_t swig_types[50]
+#define SWIGTYPE_p_csArrayT_unsigned_int_csArrayElementHandlerT_unsigned_int_t_CS__Memory__AllocatorMalloc_csArrayCapacityFixedGrowT_16_t_t swig_types[51]
+#define SWIGTYPE_p_csBitArray swig_types[52]
+#define SWIGTYPE_p_csBitmapMetrics swig_types[53]
+#define SWIGTYPE_p_csBox3 swig_types[54]
+#define SWIGTYPE_p_csConfigFile swig_types[55]
+#define SWIGTYPE_p_csDirtyAccessArrayT_csVector2_csArrayElementHandlerT_csVector2_t_CS__Memory__AllocatorMalloc_csArrayCapacityFixedGrowT_16_t_t swig_types[56]
+#define SWIGTYPE_p_csDirtyAccessArrayT_csVector3_csArrayElementHandlerT_csVector3_t_CS__Memory__AllocatorMalloc_csArrayCapacityFixedGrowT_16_t_t swig_types[57]
+#define SWIGTYPE_p_csDirtyAccessArrayT_csVector4_csArrayElementHandlerT_csVector4_t_CS__Memory__AllocatorMalloc_csArrayCapacityFixedGrowT_16_t_t swig_types[58]
+#define SWIGTYPE_p_csDirtyAccessArrayT_unsigned_int_csArrayElementHandlerT_unsigned_int_t_CS__Memory__AllocatorMalloc_csArrayCapacityFixedGrowT_16_t_t swig_types[59]
+#define SWIGTYPE_p_csEventHandlerRegistry swig_types[60]
+#define SWIGTYPE_p_csFlags swig_types[61]
+#define SWIGTYPE_p_csGlyphMetrics swig_types[62]
+#define SWIGTYPE_p_csGraphics3DCaps swig_types[63]
+#define SWIGTYPE_p_csHashT_csRefT_iShader_t_CS__StringIDT_CS__StringSetTag__General_t_CS__Memory__AllocatorMalloc_csArrayElementHandlerT_CS__Container__HashElementT_csRefT_iShader_t_CS__StringIDT_CS__StringSetTag__General_t_t_t_t swig_types[64]
+#define SWIGTYPE_p_csImageBase swig_types[65]
+#define SWIGTYPE_p_csImageMemory swig_types[66]
+#define SWIGTYPE_p_csObject swig_types[67]
+#define SWIGTYPE_p_csPixelCoord swig_types[68]
+#define SWIGTYPE_p_csPlane3 swig_types[69]
+#define SWIGTYPE_p_csPtrT_iShaderPriorityList_t swig_types[70]
+#define SWIGTYPE_p_csRGBcolor swig_types[71]
+#define SWIGTYPE_p_csRect swig_types[72]
+#define SWIGTYPE_p_csRefArrayT_csShaderVariable_t swig_types[73]
+#define SWIGTYPE_p_csRefArrayT_iObject_t swig_types[74]
+#define SWIGTYPE_p_csRefArrayT_iShader_t swig_types[75]
+#define SWIGTYPE_p_csRefT_csRenderBufferHolder_t swig_types[76]
+#define SWIGTYPE_p_csRefT_iShaderVariableContext_t swig_types[77]
+#define SWIGTYPE_p_csRefT_iShader_t swig_types[78]
+#define SWIGTYPE_p_csRenderBufferHolder swig_types[79]
+#define SWIGTYPE_p_csRenderBufferName swig_types[80]
+#define SWIGTYPE_p_csRenderTargetAttachment swig_types[81]
+#define SWIGTYPE_p_csReversibleTransform swig_types[82]
+#define SWIGTYPE_p_csSetT_CS__StringIDT_CS__StringSetTag__General_t_CS__Memory__AllocatorMalloc_t swig_types[83]
+#define SWIGTYPE_p_csShaderMetadata swig_types[84]
+#define SWIGTYPE_p_csShaderTagPresence swig_types[85]
+#define SWIGTYPE_p_csShaderVariable swig_types[86]
+#define SWIGTYPE_p_csShaderVariableStack swig_types[87]
+#define SWIGTYPE_p_csSimpleRenderMesh swig_types[88]
+#define SWIGTYPE_p_csTransform swig_types[89]
+#define SWIGTYPE_p_csVector2 swig_types[90]
+#define SWIGTYPE_p_csVector3 swig_types[91]
+#define SWIGTYPE_p_csVector4 swig_types[92]
+#define SWIGTYPE_p_csVertexAttrib swig_types[93]
+#define SWIGTYPE_p_float swig_types[94]
+#define SWIGTYPE_p_iAnimatedImage swig_types[95]
+#define SWIGTYPE_p_iArrayChangeAllT_csShaderVariable_p_t swig_types[96]
+#define SWIGTYPE_p_iArrayChangeElementsT_csShaderVariable_p_t swig_types[97]
+#define SWIGTYPE_p_iArrayReadOnlyT_csShaderVariable_p_t swig_types[98]
+#define SWIGTYPE_p_iBase swig_types[99]
+#define SWIGTYPE_p_iCacheManager swig_types[100]
+#define SWIGTYPE_p_iClipper2D swig_types[101]
+#define SWIGTYPE_p_iCommandLineParser swig_types[102]
+#define SWIGTYPE_p_iComponent swig_types[103]
+#define SWIGTYPE_p_iConfigFile swig_types[104]
+#define SWIGTYPE_p_iConfigIterator swig_types[105]
+#define SWIGTYPE_p_iConfigManager swig_types[106]
+#define SWIGTYPE_p_iDataBuffer swig_types[107]
+#define SWIGTYPE_p_iDebugHelper swig_types[108]
+#define SWIGTYPE_p_iDocument swig_types[109]
+#define SWIGTYPE_p_iDocumentAttribute swig_types[110]
+#define SWIGTYPE_p_iDocumentAttributeIterator swig_types[111]
+#define SWIGTYPE_p_iDocumentNode swig_types[112]
+#define SWIGTYPE_p_iDocumentNodeIterator swig_types[113]
+#define SWIGTYPE_p_iDocumentSystem swig_types[114]
+#define SWIGTYPE_p_iEvent swig_types[115]
+#define SWIGTYPE_p_iEventAttributeIterator swig_types[116]
+#define SWIGTYPE_p_iEventCord swig_types[117]
+#define SWIGTYPE_p_iEventHandler swig_types[118]
+#define SWIGTYPE_p_iEventHandlerRegistry swig_types[119]
+#define SWIGTYPE_p_iEventNameRegistry swig_types[120]
+#define SWIGTYPE_p_iEventOutlet swig_types[121]
+#define SWIGTYPE_p_iEventPlug swig_types[122]
+#define SWIGTYPE_p_iEventQueue swig_types[123]
+#define SWIGTYPE_p_iFactory swig_types[124]
+#define SWIGTYPE_p_iFile swig_types[125]
+#define SWIGTYPE_p_iFont swig_types[126]
+#define SWIGTYPE_p_iFontDeleteNotify swig_types[127]
+#define SWIGTYPE_p_iFontServer swig_types[128]
+#define SWIGTYPE_p_iFrameEventSignpost swig_types[129]
+#define SWIGTYPE_p_iGeneralFactoryState swig_types[130]
+#define SWIGTYPE_p_iGraphics2D swig_types[131]
+#define SWIGTYPE_p_iGraphics3D swig_types[132]
+#define SWIGTYPE_p_iHalo swig_types[133]
+#define SWIGTYPE_p_iHierarchicalCache swig_types[134]
+#define SWIGTYPE_p_iImage swig_types[135]
+#define SWIGTYPE_p_iImageIO swig_types[136]
+#define SWIGTYPE_p_iJoystickDriver swig_types[137]
+#define SWIGTYPE_p_iKeyComposer swig_types[138]
+#define SWIGTYPE_p_iKeyboardDriver swig_types[139]
+#define SWIGTYPE_p_iLoaderContext swig_types[140]
+#define SWIGTYPE_p_iMaterial swig_types[141]
+#define SWIGTYPE_p_iMaterialWrapper swig_types[142]
+#define SWIGTYPE_p_iMouseDriver swig_types[143]
+#define SWIGTYPE_p_iNativeWindow swig_types[144]
+#define SWIGTYPE_p_iNativeWindowManager swig_types[145]
+#define SWIGTYPE_p_iObject swig_types[146]
+#define SWIGTYPE_p_iObjectIterator swig_types[147]
+#define SWIGTYPE_p_iObjectNameChangeListener swig_types[148]
+#define SWIGTYPE_p_iObjectRegistry swig_types[149]
+#define SWIGTYPE_p_iObjectRegistryIterator swig_types[150]
+#define SWIGTYPE_p_iPath swig_types[151]
+#define SWIGTYPE_p_iPluginIterator swig_types[152]
+#define SWIGTYPE_p_iPluginManager swig_types[153]
+#define SWIGTYPE_p_iPortalContainer swig_types[154]
+#define SWIGTYPE_p_iProcTexture swig_types[155]
+#define SWIGTYPE_p_iReporter swig_types[156]
+#define SWIGTYPE_p_iReporterIterator swig_types[157]
+#define SWIGTYPE_p_iReporterListener swig_types[158]
+#define SWIGTYPE_p_iSCF swig_types[159]
+#define SWIGTYPE_p_iShader swig_types[160]
+#define SWIGTYPE_p_iShaderCompiler swig_types[161]
+#define SWIGTYPE_p_iShaderManager swig_types[162]
+#define SWIGTYPE_p_iShaderPriorityList swig_types[163]
+#define SWIGTYPE_p_iShaderVarStringSet swig_types[164]
+#define SWIGTYPE_p_iShaderVariableAccessor swig_types[165]
+#define SWIGTYPE_p_iShaderVariableContext swig_types[166]
+#define SWIGTYPE_p_iString swig_types[167]
+#define SWIGTYPE_p_iStringArray swig_types[168]
+#define SWIGTYPE_p_iStringSet swig_types[169]
+#define SWIGTYPE_p_iStringSetBaseT_CS__StringSetTag__General_t swig_types[170]
+#define SWIGTYPE_p_iStringSetBaseT_CS__StringSetTag__ShaderVar_t swig_types[171]
+#define SWIGTYPE_p_iTextureHandle swig_types[172]
+#define SWIGTYPE_p_iTextureManager swig_types[173]
+#define SWIGTYPE_p_iThreadManager swig_types[174]
+#define SWIGTYPE_p_iThreadReturn swig_types[175]
+#define SWIGTYPE_p_iTriangleMesh swig_types[176]
+#define SWIGTYPE_p_iVFS swig_types[177]
+#define SWIGTYPE_p_iVirtualClock swig_types[178]
+#define SWIGTYPE_p_int swig_types[179]
+#define SWIGTYPE_p_int16_t swig_types[180]
+#define SWIGTYPE_p_int64_t swig_types[181]
+#define SWIGTYPE_p_int8_t swig_types[182]
+#define SWIGTYPE_p_long_long swig_types[183]
+#define SWIGTYPE_p_p_csShaderVariable swig_types[184]
+#define SWIGTYPE_p_p_iRenderBuffer swig_types[185]
+#define SWIGTYPE_p_p_iTextureHandle swig_types[186]
+#define SWIGTYPE_p_p_p_csShaderVariable swig_types[187]
+#define SWIGTYPE_p_scfImplementation1T_FrameBegin3DDraw_iEventHandler_t swig_types[188]
+#define SWIGTYPE_p_scfImplementation1T_FramePrinter_iEventHandler_t swig_types[189]
+#define SWIGTYPE_p_scfImplementation1T_csConfigFile_iConfigFile_t swig_types[190]
+#define SWIGTYPE_p_scfImplementation1T_csEventHandlerRegistry_iEventHandlerRegistry_t swig_types[191]
+#define SWIGTYPE_p_scfImplementation1T_csImageBase_iImage_t swig_types[192]
+#define SWIGTYPE_p_scfImplementation1T_csObject_iObject_t swig_types[193]
+#define SWIGTYPE_p_scfImplementation2T_FrameSignpost_2DConsole_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_t swig_types[194]
+#define SWIGTYPE_p_scfImplementation2T_FrameSignpost_3D2D_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_t swig_types[195]
+#define SWIGTYPE_p_scfImplementation2T_FrameSignpost_ConsoleDebug_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_t swig_types[196]
+#define SWIGTYPE_p_scfImplementation2T_FrameSignpost_DebugFrame_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_t swig_types[197]
+#define SWIGTYPE_p_scfImplementation2T_FrameSignpost_Logic3D_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_t swig_types[198]
+#define SWIGTYPE_p_scfImplementationExt0T_csImageMemory_csImageBase_t swig_types[199]
+#define SWIGTYPE_p_scfImplementationExt1T_csPath_csObject_iPath_t swig_types[200]
+#define SWIGTYPE_p_size_t swig_types[201]
+#define SWIGTYPE_p_uint16_t swig_types[202]
+#define SWIGTYPE_p_uint32_t swig_types[203]
+#define SWIGTYPE_p_uint64_t swig_types[204]
+#define SWIGTYPE_p_uint8_t swig_types[205]
+#define SWIGTYPE_p_unsigned_char swig_types[206]
+#define SWIGTYPE_p_unsigned_int swig_types[207]
+#define SWIGTYPE_p_unsigned_long swig_types[208]
+#define SWIGTYPE_p_unsigned_long_long swig_types[209]
+#define SWIGTYPE_p_void swig_types[210]
+#define SWIGTYPE_p_wchar_t swig_types[211]
+static swig_type_info *swig_types[213];
+static swig_module_info swig_module = {swig_types, 212, 0, 0, 0, 0};
 #define SWIG_TypeQuery(name) SWIG_TypeQueryModule(&swig_module, &swig_module, name)
 #define SWIG_MangledTypeQuery(name) SWIG_MangledTypeQueryModule(&swig_module, &swig_module, name)
 
@@ -26229,6 +26233,9 @@ static void *_p_iCommandLineParserTo_p_iBase(void *x, int *SWIGUNUSEDPARM(newmem
 static void *_p_iShaderVariableContextTo_p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
     return (void *)((iBase *)  ((iShaderVariableContext *) x));
 }
+static void *_p_FrameBegin3DDrawTo_p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((iBase *) (iEventHandler *)(scfImplementation1< FrameBegin3DDraw,iEventHandler > *) ((FrameBegin3DDraw *) x));
+}
 static void *_p_iJoystickDriverTo_p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
     return (void *)((iBase *)  ((iJoystickDriver *) x));
 }
@@ -26238,6 +26245,9 @@ static void *_p_iMouseDriverTo_p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) 
 static void *_p_scfImplementationExt1T_csPath_csObject_iPath_tTo_p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
     return (void *)((iBase *) (iObject *)(scfImplementation1< csObject,iObject > *)(csObject *) ((scfImplementationExt1< csPath,csObject,iPath > *) x));
 }
+static void *_p_FramePrinterTo_p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((iBase *) (iEventHandler *)(scfImplementation1< FramePrinter,iEventHandler > *) ((FramePrinter *) x));
+}
 static void *_p_iVFSTo_p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
     return (void *)((iBase *)  ((iVFS *) x));
 }
@@ -26246,6 +26256,9 @@ static void *_p_iStringArrayTo_p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) 
 }
 static void *_p_iMaterialTo_p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
     return (void *)((iBase *) (iShaderVariableContext *) ((iMaterial *) x));
+}
+static void *_p_scfImplementation1T_FrameBegin3DDraw_iEventHandler_tTo_p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((iBase *) (iEventHandler *) ((scfImplementation1< FrameBegin3DDraw,iEventHandler > *) x));
 }
 static void *_p_iEventHandlerTo_p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
     return (void *)((iBase *)  ((iEventHandler *) x));
@@ -26327,6 +26340,9 @@ static void *_p_scfImplementation1T_csImageBase_iImage_tTo_p_iBase(void *x, int 
 }
 static void *_p_iKeyboardDriverTo_p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
     return (void *)((iBase *)  ((iKeyboardDriver *) x));
+}
+static void *_p_scfImplementation1T_FramePrinter_iEventHandler_tTo_p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((iBase *) (iEventHandler *) ((scfImplementation1< FramePrinter,iEventHandler > *) x));
 }
 static void *_p_FrameSignpost_ConsoleDebugTo_p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
     return (void *)((iBase *) (iEventHandler *)(iFrameEventSignpost *)(scfImplementation2< FrameSignpost_ConsoleDebug,iFrameEventSignpost,scfFakeInterface< iEventHandler > > *) ((FrameSignpost_ConsoleDebug *) x));
@@ -26496,8 +26512,10 @@ static swig_type_info _swigt__p_scfImplementation2T_FrameSignpost_3D2D_iFrameEve
 static swig_type_info _swigt__p_scfImplementation1T_csEventHandlerRegistry_iEventHandlerRegistry_t = {"_p_scfImplementation1T_csEventHandlerRegistry_iEventHandlerRegistry_t", 0, 0, 0, 0, 0};
 static swig_type_info _swigt__p_iComponent = {"_p_iComponent", 0, 0, 0, 0, 0};
 static swig_type_info _swigt__p_iCommandLineParser = {"_p_iCommandLineParser", 0, 0, 0, 0, 0};
+static swig_type_info _swigt__p_FrameBegin3DDraw = {"_p_FrameBegin3DDraw", 0, 0, 0, 0, 0};
 static swig_type_info _swigt__p_iJoystickDriver = {"_p_iJoystickDriver", 0, 0, 0, 0, 0};
 static swig_type_info _swigt__p_iMouseDriver = {"_p_iMouseDriver", 0, 0, 0, 0, 0};
+static swig_type_info _swigt__p_FramePrinter = {"_p_FramePrinter", 0, 0, 0, 0, 0};
 static swig_type_info _swigt__p_iStringArray = {"_p_iStringArray", 0, 0, 0, 0, 0};
 static swig_type_info _swigt__p_iEventHandler = {"_p_iEventHandler", 0, 0, 0, 0, 0};
 static swig_type_info _swigt__p_csImageMemory = {"_p_csImageMemory", 0, 0, 0, 0, 0};
@@ -26506,6 +26524,7 @@ static swig_type_info _swigt__p_scfImplementation2T_FrameSignpost_2DConsole_iFra
 static swig_type_info _swigt__p_iEventPlug = {"_p_iEventPlug", 0, 0, 0, 0, 0};
 static swig_type_info _swigt__p_iVFS = {"_p_iVFS", 0, 0, 0, 0, 0};
 static swig_type_info _swigt__p_FrameSignpost_DebugFrame = {"_p_FrameSignpost_DebugFrame", 0, 0, 0, 0, 0};
+static swig_type_info _swigt__p_scfImplementation1T_FramePrinter_iEventHandler_t = {"_p_scfImplementation1T_FramePrinter_iEventHandler_t", 0, 0, 0, 0, 0};
 static swig_type_info _swigt__p_iConfigManager = {"_p_iConfigManager", 0, 0, 0, 0, 0};
 static swig_type_info _swigt__p_iCacheManager = {"_p_iCacheManager", 0, 0, 0, 0, 0};
 static swig_type_info _swigt__p_iThreadManager = {"_p_iThreadManager", 0, 0, 0, 0, 0};
@@ -26520,6 +26539,7 @@ static swig_type_info _swigt__p_iKeyboardDriver = {"_p_iKeyboardDriver", 0, 0, 0
 static swig_type_info _swigt__p_scfImplementation1T_csObject_iObject_t = {"_p_scfImplementation1T_csObject_iObject_t", 0, 0, 0, 0, 0};
 static swig_type_info _swigt__p_FrameSignpost_ConsoleDebug = {"_p_FrameSignpost_ConsoleDebug", 0, 0, 0, 0, 0};
 static swig_type_info _swigt__p_scfImplementationExt0T_csImageMemory_csImageBase_t = {"_p_scfImplementationExt0T_csImageMemory_csImageBase_t", 0, 0, 0, 0, 0};
+static swig_type_info _swigt__p_scfImplementation1T_FrameBegin3DDraw_iEventHandler_t = {"_p_scfImplementation1T_FrameBegin3DDraw_iEventHandler_t", 0, 0, 0, 0, 0};
 static swig_type_info _swigt__p_iReporterListener = {"_p_iReporterListener", 0, 0, 0, 0, 0};
 static swig_type_info _swigt__p_iObjectNameChangeListener = {"_p_iObjectNameChangeListener", 0, 0, 0, 0, 0};
 static swig_type_info _swigt__p_iFile = {"_p_iFile", 0, 0, 0, 0, 0};
@@ -26593,6 +26613,8 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_ContainedType,
   &_swigt__p_ElementHandlerType,
   &_swigt__p_FileFormatDescription,
+  &_swigt__p_FrameBegin3DDraw,
+  &_swigt__p_FramePrinter,
   &_swigt__p_FrameSignpost_2DConsole,
   &_swigt__p_FrameSignpost_3D2D,
   &_swigt__p_FrameSignpost_ConsoleDebug,
@@ -26760,6 +26782,8 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_p_iRenderBuffer,
   &_swigt__p_p_iTextureHandle,
   &_swigt__p_p_p_csShaderVariable,
+  &_swigt__p_scfImplementation1T_FrameBegin3DDraw_iEventHandler_t,
+  &_swigt__p_scfImplementation1T_FramePrinter_iEventHandler_t,
   &_swigt__p_scfImplementation1T_csConfigFile_iConfigFile_t,
   &_swigt__p_scfImplementation1T_csEventHandlerRegistry_iEventHandlerRegistry_t,
   &_swigt__p_scfImplementation1T_csImageBase_iImage_t,
@@ -26915,8 +26939,10 @@ static swig_cast_info _swigc__p_scfImplementation2T_FrameSignpost_3D2D_iFrameEve
 static swig_cast_info _swigc__p_scfImplementation1T_csEventHandlerRegistry_iEventHandlerRegistry_t[] = {{&_swigt__p_scfImplementation1T_csEventHandlerRegistry_iEventHandlerRegistry_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_iComponent[] = {{&_swigt__p_iComponent, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_iCommandLineParser[] = {{&_swigt__p_iCommandLineParser, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_FrameBegin3DDraw[] = {{&_swigt__p_FrameBegin3DDraw, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_iJoystickDriver[] = {{&_swigt__p_iJoystickDriver, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_iMouseDriver[] = {{&_swigt__p_iMouseDriver, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_FramePrinter[] = {{&_swigt__p_FramePrinter, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_iStringArray[] = {{&_swigt__p_iStringArray, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_iEventHandler[] = {{&_swigt__p_iEventHandler, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_csImageMemory[] = {{&_swigt__p_csImageMemory, 0, 0, 0},{0, 0, 0, 0}};
@@ -26925,6 +26951,7 @@ static swig_cast_info _swigc__p_scfImplementation2T_FrameSignpost_2DConsole_iFra
 static swig_cast_info _swigc__p_iEventPlug[] = {{&_swigt__p_iEventPlug, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_iVFS[] = {{&_swigt__p_iVFS, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_FrameSignpost_DebugFrame[] = {{&_swigt__p_FrameSignpost_DebugFrame, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_scfImplementation1T_FramePrinter_iEventHandler_t[] = {{&_swigt__p_scfImplementation1T_FramePrinter_iEventHandler_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_iConfigManager[] = {{&_swigt__p_iConfigManager, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_iCacheManager[] = {{&_swigt__p_iCacheManager, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_iThreadManager[] = {{&_swigt__p_iThreadManager, 0, 0, 0},{0, 0, 0, 0}};
@@ -26939,11 +26966,12 @@ static swig_cast_info _swigc__p_iKeyboardDriver[] = {{&_swigt__p_iKeyboardDriver
 static swig_cast_info _swigc__p_scfImplementation1T_csObject_iObject_t[] = {{&_swigt__p_scfImplementation1T_csObject_iObject_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_FrameSignpost_ConsoleDebug[] = {{&_swigt__p_FrameSignpost_ConsoleDebug, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_scfImplementationExt0T_csImageMemory_csImageBase_t[] = {{&_swigt__p_scfImplementationExt0T_csImageMemory_csImageBase_t, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_scfImplementation1T_FrameBegin3DDraw_iEventHandler_t[] = {{&_swigt__p_scfImplementation1T_FrameBegin3DDraw_iEventHandler_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_iReporterListener[] = {{&_swigt__p_iReporterListener, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_iObjectNameChangeListener[] = {{&_swigt__p_iObjectNameChangeListener, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_iFile[] = {{&_swigt__p_iFile, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_iDocumentAttribute[] = {{&_swigt__p_iDocumentAttribute, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_iBase[] = {  {&_swigt__p_csImageBase, _p_csImageBaseTo_p_iBase, 0, 0},  {&_swigt__p_iDocumentNodeIterator, _p_iDocumentNodeIteratorTo_p_iBase, 0, 0},  {&_swigt__p_iDocumentAttributeIterator, _p_iDocumentAttributeIteratorTo_p_iBase, 0, 0},  {&_swigt__p_iConfigIterator, _p_iConfigIteratorTo_p_iBase, 0, 0},  {&_swigt__p_iReporterIterator, _p_iReporterIteratorTo_p_iBase, 0, 0},  {&_swigt__p_iObjectIterator, _p_iObjectIteratorTo_p_iBase, 0, 0},  {&_swigt__p_iObjectRegistryIterator, _p_iObjectRegistryIteratorTo_p_iBase, 0, 0},  {&_swigt__p_iEventAttributeIterator, _p_iEventAttributeIteratorTo_p_iBase, 0, 0},  {&_swigt__p_iPluginIterator, _p_iPluginIteratorTo_p_iBase, 0, 0},  {&_swigt__p_iDocument, _p_iDocumentTo_p_iBase, 0, 0},  {&_swigt__p_iImageIO, _p_iImageIOTo_p_iBase, 0, 0},  {&_swigt__p_iDocumentNode, _p_iDocumentNodeTo_p_iBase, 0, 0},  {&_swigt__p_csEventHandlerRegistry, _p_csEventHandlerRegistryTo_p_iBase, 0, 0},  {&_swigt__p_iEventHandlerRegistry, _p_iEventHandlerRegistryTo_p_iBase, 0, 0},  {&_swigt__p_iObjectRegistry, _p_iObjectRegistryTo_p_iBase, 0, 0},  {&_swigt__p_iEventNameRegistry, _p_iEventNameRegistryTo_p_iBase, 0, 0},  {&_swigt__p_iEventCord, _p_iEventCordTo_p_iBase, 0, 0},  {&_swigt__p_iStringSet, _p_iStringSetTo_p_iBase, 0, 0},  {&_swigt__p_iShaderVarStringSet, _p_iShaderVarStringSetTo_p_iBase, 0, 0},  {&_swigt__p_scfImplementationExt1T_csPath_csObject_iPath_t, _p_scfImplementationExt1T_csPath_csObject_iPath_tTo_p_iBase, 0, 0},  {&_swigt__p_iFontServer, _p_iFontServerTo_p_iBase, 0, 0},  {&_swigt__p_iFactory, _p_iFactoryTo_p_iBase, 0, 0},  {&_swigt__p_iClipper2D, _p_iClipper2DTo_p_iBase, 0, 0},  {&_swigt__p_scfImplementation2T_FrameSignpost_ConsoleDebug_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_t, _p_scfImplementation2T_FrameSignpost_ConsoleDebug_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_tTo_p_iBase, 0, 0},  {&_swigt__p_iArrayReadOnlyT_csShaderVariable_p_t, _p_iArrayReadOnlyT_csShaderVariable_p_tTo_p_iBase, 0, 0},  {&_swigt__p_iArrayChangeElementsT_csShaderVariable_p_t, _p_iArrayChangeElementsT_csShaderVariable_p_tTo_p_iBase, 0, 0},  {&_swigt__p_iArrayChangeAllT_csShaderVariable_p_t, _p_iArrayChangeAllT_csShaderVariable_p_tTo_p_iBase, 0, 0},  {&_swigt__p_iStringSetBaseT_CS__StringSetTag__ShaderVar_t, _p_iStringSetBaseT_CS__StringSetTag__ShaderVar_tTo_p_iBase, 0, 0},  {&_swigt__p_csConfigFile, _p_csConfigFileTo_p_iBase, 0, 0},  {&_swigt__p_iConfigFile, _p_iConfigFileTo_p_iBase, 0, 0},  {&_swigt__p_iDebugHelper, _p_iDebugHelperTo_p_iBase, 0, 0},  {&_swigt__p_iDocumentSystem, _p_iDocumentSystemTo_p_iBase, 0, 0},  {&_swigt__p_iGraphics2D, _p_iGraphics2DTo_p_iBase, 0, 0},  {&_swigt__p_iFontDeleteNotify, _p_iFontDeleteNotifyTo_p_iBase, 0, 0},  {&_swigt__p_FrameSignpost_Logic3D, _p_FrameSignpost_Logic3DTo_p_iBase, 0, 0},  {&_swigt__p_scfImplementation2T_FrameSignpost_Logic3D_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_t, _p_scfImplementation2T_FrameSignpost_Logic3D_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_tTo_p_iBase, 0, 0},  {&_swigt__p_iKeyComposer, _p_iKeyComposerTo_p_iBase, 0, 0},  {&_swigt__p_FrameSignpost_2DConsole, _p_FrameSignpost_2DConsoleTo_p_iBase, 0, 0},  {&_swigt__p_iThreadReturn, _p_iThreadReturnTo_p_iBase, 0, 0},  {&_swigt__p_FrameSignpost_3D2D, _p_FrameSignpost_3D2DTo_p_iBase, 0, 0},  {&_swigt__p_iEventOutlet, _p_iEventOutletTo_p_iBase, 0, 0},  {&_swigt__p_scfImplementation1T_csConfigFile_iConfigFile_t, _p_scfImplementation1T_csConfigFile_iConfigFile_tTo_p_iBase, 0, 0},  {&_swigt__p_iVirtualClock, _p_iVirtualClockTo_p_iBase, 0, 0},  {&_swigt__p_iPath, _p_iPathTo_p_iBase, 0, 0},  {&_swigt__p_iReporter, _p_iReporterTo_p_iBase, 0, 0},  {&_swigt__p_scfImplementation1T_csImageBase_iImage_t, _p_scfImplementation1T_csImageBase_iImage_tTo_p_iBase, 0, 0},  {&_swigt__p_iShaderPriorityList, _p_iShaderPriorityListTo_p_iBase, 0, 0},  {&_swigt__p_iObject, _p_iObjectTo_p_iBase, 0, 0},  {&_swigt__p_csObject, _p_csObjectTo_p_iBase, 0, 0},  {&_swigt__p_iSCF, _p_iSCFTo_p_iBase, 0, 0},  {&_swigt__p_iTextureHandle, _p_iTextureHandleTo_p_iBase, 0, 0},  {&_swigt__p_iShader, _p_iShaderTo_p_iBase, 0, 0},  {&_swigt__p_iEventQueue, _p_iEventQueueTo_p_iBase, 0, 0},  {&_swigt__p_iNativeWindow, _p_iNativeWindowTo_p_iBase, 0, 0},  {&_swigt__p_iEvent, _p_iEventTo_p_iBase, 0, 0},  {&_swigt__p_iString, _p_iStringTo_p_iBase, 0, 0},  {&_swigt__p_scfImplementation2T_FrameSignpost_3D2D_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_t, _p_scfImplementation2T_FrameSignpost_3D2D_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_tTo_p_iBase, 0, 0},  {&_swigt__p_scfImplementation1T_csEventHandlerRegistry_iEventHandlerRegistry_t, _p_scfImplementation1T_csEventHandlerRegistry_iEventHandlerRegistry_tTo_p_iBase, 0, 0},  {&_swigt__p_iComponent, _p_iComponentTo_p_iBase, 0, 0},  {&_swigt__p_iShaderVariableContext, _p_iShaderVariableContextTo_p_iBase, 0, 0},  {&_swigt__p_iCommandLineParser, _p_iCommandLineParserTo_p_iBase, 0, 0},  {&_swigt__p_iJoystickDriver, _p_iJoystickDriverTo_p_iBase, 0, 0},  {&_swigt__p_iMouseDriver, _p_iMouseDriverTo_p_iBase, 0, 0},  {&_swigt__p_iStringArray, _p_iStringArrayTo_p_iBase, 0, 0},  {&_swigt__p_iMaterial, _p_iMaterialTo_p_iBase, 0, 0},  {&_swigt__p_iEventHandler, _p_iEventHandlerTo_p_iBase, 0, 0},  {&_swigt__p_csImageMemory, _p_csImageMemoryTo_p_iBase, 0, 0},  {&_swigt__p_iProcTexture, _p_iProcTextureTo_p_iBase, 0, 0},  {&_swigt__p_scfImplementation2T_FrameSignpost_2DConsole_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_t, _p_scfImplementation2T_FrameSignpost_2DConsole_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_tTo_p_iBase, 0, 0},  {&_swigt__p_iEventPlug, _p_iEventPlugTo_p_iBase, 0, 0},  {&_swigt__p_iGraphics3D, _p_iGraphics3DTo_p_iBase, 0, 0},  {&_swigt__p_iVFS, _p_iVFSTo_p_iBase, 0, 0},  {&_swigt__p_FrameSignpost_DebugFrame, _p_FrameSignpost_DebugFrameTo_p_iBase, 0, 0},  {&_swigt__p_iFont, _p_iFontTo_p_iBase, 0, 0},  {&_swigt__p_iShaderVariableAccessor, _p_iShaderVariableAccessorTo_p_iBase, 0, 0},  {&_swigt__p_iShaderManager, _p_iShaderManagerTo_p_iBase, 0, 0},  {&_swigt__p_iConfigManager, _p_iConfigManagerTo_p_iBase, 0, 0},  {&_swigt__p_iCacheManager, _p_iCacheManagerTo_p_iBase, 0, 0},  {&_swigt__p_iThreadManager, _p_iThreadManagerTo_p_iBase, 0, 0},  {&_swigt__p_iPluginManager, _p_iPluginManagerTo_p_iBase, 0, 0},  {&_swigt__p_iTriangleMesh, _p_iTriangleMeshTo_p_iBase, 0, 0},  {&_swigt__p_iNativeWindowManager, _p_iNativeWindowManagerTo_p_iBase, 0, 0},  {&_swigt__p_iTextureManager, _p_iTextureManagerTo_p_iBase, 0, 0},  {&_swigt__p_iAnimatedImage, _p_iAnimatedImageTo_p_iBase, 0, 0},  {&_swigt__p_iFrameEventSignpost, _p_iFrameEventSignpostTo_p_iBase, 0, 0},  {&_swigt__p_scfImplementation2T_FrameSignpost_DebugFrame_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_t, _p_scfImplementation2T_FrameSignpost_DebugFrame_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_tTo_p_iBase, 0, 0},  {&_swigt__p_iDataBuffer, _p_iDataBufferTo_p_iBase, 0, 0},  {&_swigt__p_iShaderCompiler, _p_iShaderCompilerTo_p_iBase, 0, 0},  {&_swigt__p_iStringSetBaseT_CS__StringSetTag__General_t, _p_iStringSetBaseT_CS__StringSetTag__General_tTo_p_iBase, 0, 0},  {&_swigt__p_iKeyboardDriver, _p_iKeyboardDriverTo_p_iBase, 0, 0},  {&_swigt__p_scfImplementation1T_csObject_iObject_t, _p_scfImplementation1T_csObject_iObject_tTo_p_iBase, 0, 0},  {&_swigt__p_FrameSignpost_ConsoleDebug, _p_FrameSignpost_ConsoleDebugTo_p_iBase, 0, 0},  {&_swigt__p_scfImplementationExt0T_csImageMemory_csImageBase_t, _p_scfImplementationExt0T_csImageMemory_csImageBase_tTo_p_iBase, 0, 0},  {&_swigt__p_iReporterListener, _p_iReporterListenerTo_p_iBase, 0, 0},  {&_swigt__p_iObjectNameChangeListener, _p_iObjectNameChangeListenerTo_p_iBase, 0, 0},  {&_swigt__p_iBase, 0, 0, 0},  {&_swigt__p_iFile, _p_iFileTo_p_iBase, 0, 0},  {&_swigt__p_iHalo, _p_iHaloTo_p_iBase, 0, 0},  {&_swigt__p_iDocumentAttribute, _p_iDocumentAttributeTo_p_iBase, 0, 0},  {&_swigt__p_iImage, _p_iImageTo_p_iBase, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_iBase[] = {  {&_swigt__p_csImageBase, _p_csImageBaseTo_p_iBase, 0, 0},  {&_swigt__p_iDocumentNodeIterator, _p_iDocumentNodeIteratorTo_p_iBase, 0, 0},  {&_swigt__p_iDocumentAttributeIterator, _p_iDocumentAttributeIteratorTo_p_iBase, 0, 0},  {&_swigt__p_iConfigIterator, _p_iConfigIteratorTo_p_iBase, 0, 0},  {&_swigt__p_iReporterIterator, _p_iReporterIteratorTo_p_iBase, 0, 0},  {&_swigt__p_iObjectIterator, _p_iObjectIteratorTo_p_iBase, 0, 0},  {&_swigt__p_iObjectRegistryIterator, _p_iObjectRegistryIteratorTo_p_iBase, 0, 0},  {&_swigt__p_iEventAttributeIterator, _p_iEventAttributeIteratorTo_p_iBase, 0, 0},  {&_swigt__p_iPluginIterator, _p_iPluginIteratorTo_p_iBase, 0, 0},  {&_swigt__p_iDocument, _p_iDocumentTo_p_iBase, 0, 0},  {&_swigt__p_iImageIO, _p_iImageIOTo_p_iBase, 0, 0},  {&_swigt__p_iDocumentNode, _p_iDocumentNodeTo_p_iBase, 0, 0},  {&_swigt__p_csEventHandlerRegistry, _p_csEventHandlerRegistryTo_p_iBase, 0, 0},  {&_swigt__p_iEventHandlerRegistry, _p_iEventHandlerRegistryTo_p_iBase, 0, 0},  {&_swigt__p_iObjectRegistry, _p_iObjectRegistryTo_p_iBase, 0, 0},  {&_swigt__p_iEventNameRegistry, _p_iEventNameRegistryTo_p_iBase, 0, 0},  {&_swigt__p_iEventCord, _p_iEventCordTo_p_iBase, 0, 0},  {&_swigt__p_iStringSet, _p_iStringSetTo_p_iBase, 0, 0},  {&_swigt__p_iShaderVarStringSet, _p_iShaderVarStringSetTo_p_iBase, 0, 0},  {&_swigt__p_scfImplementationExt1T_csPath_csObject_iPath_t, _p_scfImplementationExt1T_csPath_csObject_iPath_tTo_p_iBase, 0, 0},  {&_swigt__p_iFontServer, _p_iFontServerTo_p_iBase, 0, 0},  {&_swigt__p_iFactory, _p_iFactoryTo_p_iBase, 0, 0},  {&_swigt__p_iClipper2D, _p_iClipper2DTo_p_iBase, 0, 0},  {&_swigt__p_scfImplementation2T_FrameSignpost_ConsoleDebug_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_t, _p_scfImplementation2T_FrameSignpost_ConsoleDebug_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_tTo_p_iBase, 0, 0},  {&_swigt__p_iArrayReadOnlyT_csShaderVariable_p_t, _p_iArrayReadOnlyT_csShaderVariable_p_tTo_p_iBase, 0, 0},  {&_swigt__p_iArrayChangeElementsT_csShaderVariable_p_t, _p_iArrayChangeElementsT_csShaderVariable_p_tTo_p_iBase, 0, 0},  {&_swigt__p_iArrayChangeAllT_csShaderVariable_p_t, _p_iArrayChangeAllT_csShaderVariable_p_tTo_p_iBase, 0, 0},  {&_swigt__p_iStringSetBaseT_CS__StringSetTag__ShaderVar_t, _p_iStringSetBaseT_CS__StringSetTag__ShaderVar_tTo_p_iBase, 0, 0},  {&_swigt__p_csConfigFile, _p_csConfigFileTo_p_iBase, 0, 0},  {&_swigt__p_iConfigFile, _p_iConfigFileTo_p_iBase, 0, 0},  {&_swigt__p_iDebugHelper, _p_iDebugHelperTo_p_iBase, 0, 0},  {&_swigt__p_iDocumentSystem, _p_iDocumentSystemTo_p_iBase, 0, 0},  {&_swigt__p_iGraphics2D, _p_iGraphics2DTo_p_iBase, 0, 0},  {&_swigt__p_iFontDeleteNotify, _p_iFontDeleteNotifyTo_p_iBase, 0, 0},  {&_swigt__p_FrameSignpost_Logic3D, _p_FrameSignpost_Logic3DTo_p_iBase, 0, 0},  {&_swigt__p_scfImplementation2T_FrameSignpost_Logic3D_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_t, _p_scfImplementation2T_FrameSignpost_Logic3D_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_tTo_p_iBase, 0, 0},  {&_swigt__p_iKeyComposer, _p_iKeyComposerTo_p_iBase, 0, 0},  {&_swigt__p_FrameSignpost_2DConsole, _p_FrameSignpost_2DConsoleTo_p_iBase, 0, 0},  {&_swigt__p_iThreadReturn, _p_iThreadReturnTo_p_iBase, 0, 0},  {&_swigt__p_FrameSignpost_3D2D, _p_FrameSignpost_3D2DTo_p_iBase, 0, 0},  {&_swigt__p_iEventOutlet, _p_iEventOutletTo_p_iBase, 0, 0},  {&_swigt__p_scfImplementation1T_csConfigFile_iConfigFile_t, _p_scfImplementation1T_csConfigFile_iConfigFile_tTo_p_iBase, 0, 0},  {&_swigt__p_iVirtualClock, _p_iVirtualClockTo_p_iBase, 0, 0},  {&_swigt__p_iPath, _p_iPathTo_p_iBase, 0, 0},  {&_swigt__p_iReporter, _p_iReporterTo_p_iBase, 0, 0},  {&_swigt__p_scfImplementation1T_csImageBase_iImage_t, _p_scfImplementation1T_csImageBase_iImage_tTo_p_iBase, 0, 0},  {&_swigt__p_iShaderPriorityList, _p_iShaderPriorityListTo_p_iBase, 0, 0},  {&_swigt__p_iObject, _p_iObjectTo_p_iBase, 0, 0},  {&_swigt__p_csObject, _p_csObjectTo_p_iBase, 0, 0},  {&_swigt__p_iSCF, _p_iSCFTo_p_iBase, 0, 0},  {&_swigt__p_iTextureHandle, _p_iTextureHandleTo_p_iBase, 0, 0},  {&_swigt__p_iShader, _p_iShaderTo_p_iBase, 0, 0},  {&_swigt__p_iEventQueue, _p_iEventQueueTo_p_iBase, 0, 0},  {&_swigt__p_iNativeWindow, _p_iNativeWindowTo_p_iBase, 0, 0},  {&_swigt__p_iEvent, _p_iEventTo_p_iBase, 0, 0},  {&_swigt__p_iString, _p_iStringTo_p_iBase, 0, 0},  {&_swigt__p_scfImplementation2T_FrameSignpost_3D2D_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_t, _p_scfImplementation2T_FrameSignpost_3D2D_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_tTo_p_iBase, 0, 0},  {&_swigt__p_scfImplementation1T_csEventHandlerRegistry_iEventHandlerRegistry_t, _p_scfImplementation1T_csEventHandlerRegistry_iEventHandlerRegistry_tTo_p_iBase, 0, 0},  {&_swigt__p_iComponent, _p_iComponentTo_p_iBase, 0, 0},  {&_swigt__p_iShaderVariableContext, _p_iShaderVariableContextTo_p_iBase, 0, 0},  {&_swigt__p_iCommandLineParser, _p_iCommandLineParserTo_p_iBase, 0, 0},  {&_swigt__p_FrameBegin3DDraw, _p_FrameBegin3DDrawTo_p_iBase, 0, 0},  {&_swigt__p_iJoystickDriver, _p_iJoystickDriverTo_p_iBase, 0, 0},  {&_swigt__p_iMouseDriver, _p_iMouseDriverTo_p_iBase, 0, 0},  {&_swigt__p_FramePrinter, _p_FramePrinterTo_p_iBase, 0, 0},  {&_swigt__p_iStringArray, _p_iStringArrayTo_p_iBase, 0, 0},  {&_swigt__p_iMaterial, _p_iMaterialTo_p_iBase, 0, 0},  {&_swigt__p_iEventHandler, _p_iEventHandlerTo_p_iBase, 0, 0},  {&_swigt__p_csImageMemory, _p_csImageMemoryTo_p_iBase, 0, 0},  {&_swigt__p_iProcTexture, _p_iProcTextureTo_p_iBase, 0, 0},  {&_swigt__p_scfImplementation2T_FrameSignpost_2DConsole_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_t, _p_scfImplementation2T_FrameSignpost_2DConsole_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_tTo_p_iBase, 0, 0},  {&_swigt__p_iEventPlug, _p_iEventPlugTo_p_iBase, 0, 0},  {&_swigt__p_iGraphics3D, _p_iGraphics3DTo_p_iBase, 0, 0},  {&_swigt__p_iVFS, _p_iVFSTo_p_iBase, 0, 0},  {&_swigt__p_FrameSignpost_DebugFrame, _p_FrameSignpost_DebugFrameTo_p_iBase, 0, 0},  {&_swigt__p_iFont, _p_iFontTo_p_iBase, 0, 0},  {&_swigt__p_iShaderVariableAccessor, _p_iShaderVariableAccessorTo_p_iBase, 0, 0},  {&_swigt__p_scfImplementation1T_FramePrinter_iEventHandler_t, _p_scfImplementation1T_FramePrinter_iEventHandler_tTo_p_iBase, 0, 0},  {&_swigt__p_iShaderManager, _p_iShaderManagerTo_p_iBase, 0, 0},  {&_swigt__p_iConfigManager, _p_iConfigManagerTo_p_iBase, 0, 0},  {&_swigt__p_iCacheManager, _p_iCacheManagerTo_p_iBase, 0, 0},  {&_swigt__p_iThreadManager, _p_iThreadManagerTo_p_iBase, 0, 0},  {&_swigt__p_iPluginManager, _p_iPluginManagerTo_p_iBase, 0, 0},  {&_swigt__p_iTriangleMesh, _p_iTriangleMeshTo_p_iBase, 0, 0},  {&_swigt__p_iNativeWindowManager, _p_iNativeWindowManagerTo_p_iBase, 0, 0},  {&_swigt__p_iTextureManager, _p_iTextureManagerTo_p_iBase, 0, 0},  {&_swigt__p_iAnimatedImage, _p_iAnimatedImageTo_p_iBase, 0, 0},  {&_swigt__p_iFrameEventSignpost, _p_iFrameEventSignpostTo_p_iBase, 0, 0},  {&_swigt__p_scfImplementation2T_FrameSignpost_DebugFrame_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_t, _p_scfImplementation2T_FrameSignpost_DebugFrame_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_tTo_p_iBase, 0, 0},  {&_swigt__p_iDataBuffer, _p_iDataBufferTo_p_iBase, 0, 0},  {&_swigt__p_iShaderCompiler, _p_iShaderCompilerTo_p_iBase, 0, 0},  {&_swigt__p_iStringSetBaseT_CS__StringSetTag__General_t, _p_iStringSetBaseT_CS__StringSetTag__General_tTo_p_iBase, 0, 0},  {&_swigt__p_iKeyboardDriver, _p_iKeyboardDriverTo_p_iBase, 0, 0},  {&_swigt__p_scfImplementation1T_csObject_iObject_t, _p_scfImplementation1T_csObject_iObject_tTo_p_iBase, 0, 0},  {&_swigt__p_FrameSignpost_ConsoleDebug, _p_FrameSignpost_ConsoleDebugTo_p_iBase, 0, 0},  {&_swigt__p_scfImplementationExt0T_csImageMemory_csImageBase_t, _p_scfImplementationExt0T_csImageMemory_csImageBase_tTo_p_iBase, 0, 0},  {&_swigt__p_scfImplementation1T_FrameBegin3DDraw_iEventHandler_t, _p_scfImplementation1T_FrameBegin3DDraw_iEventHandler_tTo_p_iBase, 0, 0},  {&_swigt__p_iReporterListener, _p_iReporterListenerTo_p_iBase, 0, 0},  {&_swigt__p_iObjectNameChangeListener, _p_iObjectNameChangeListenerTo_p_iBase, 0, 0},  {&_swigt__p_iBase, 0, 0, 0},  {&_swigt__p_iFile, _p_iFileTo_p_iBase, 0, 0},  {&_swigt__p_iHalo, _p_iHaloTo_p_iBase, 0, 0},  {&_swigt__p_iDocumentAttribute, _p_iDocumentAttributeTo_p_iBase, 0, 0},  {&_swigt__p_iImage, _p_iImageTo_p_iBase, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_iClipper2D[] = {  {&_swigt__p_iClipper2D, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_iDocumentNode[] = {  {&_swigt__p_iDocumentNode, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_iFont[] = {  {&_swigt__p_iFont, 0, 0, 0},{0, 0, 0, 0}};
@@ -27013,6 +27041,8 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_ContainedType,
   _swigc__p_ElementHandlerType,
   _swigc__p_FileFormatDescription,
+  _swigc__p_FrameBegin3DDraw,
+  _swigc__p_FramePrinter,
   _swigc__p_FrameSignpost_2DConsole,
   _swigc__p_FrameSignpost_3D2D,
   _swigc__p_FrameSignpost_ConsoleDebug,
@@ -27180,6 +27210,8 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_p_iRenderBuffer,
   _swigc__p_p_iTextureHandle,
   _swigc__p_p_p_csShaderVariable,
+  _swigc__p_scfImplementation1T_FrameBegin3DDraw_iEventHandler_t,
+  _swigc__p_scfImplementation1T_FramePrinter_iEventHandler_t,
   _swigc__p_scfImplementation1T_csConfigFile_iConfigFile_t,
   _swigc__p_scfImplementation1T_csEventHandlerRegistry_iEventHandlerRegistry_t,
   _swigc__p_scfImplementation1T_csImageBase_iImage_t,
