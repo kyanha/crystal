@@ -5015,11 +5015,63 @@ sub ACQUIRE {
 }
 
 
+############# Class : cspace::scfFrameBegin3DDraw ##############
+
+package cspace::scfFrameBegin3DDraw;
+use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
+@ISA = qw( cspace::iEventHandler cspace );
+%OWNER = ();
+*IncRef = *cspacec::scfFrameBegin3DDraw_IncRef;
+*DecRef = *cspacec::scfFrameBegin3DDraw_DecRef;
+*GetRefCount = *cspacec::scfFrameBegin3DDraw_GetRefCount;
+*QueryInterface = *cspacec::scfFrameBegin3DDraw_QueryInterface;
+*AddRefOwner = *cspacec::scfFrameBegin3DDraw_AddRefOwner;
+*RemoveRefOwner = *cspacec::scfFrameBegin3DDraw_RemoveRefOwner;
+*GetInterfaceMetadata = *cspacec::scfFrameBegin3DDraw_GetInterfaceMetadata;
+sub DISOWN {
+    my $self = shift;
+    my $ptr = tied(%$self);
+    delete $OWNER{$ptr};
+}
+
+sub ACQUIRE {
+    my $self = shift;
+    my $ptr = tied(%$self);
+    $OWNER{$ptr} = 1;
+}
+
+
+############# Class : cspace::scfFramePrinter ##############
+
+package cspace::scfFramePrinter;
+use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
+@ISA = qw( cspace::iEventHandler cspace );
+%OWNER = ();
+*IncRef = *cspacec::scfFramePrinter_IncRef;
+*DecRef = *cspacec::scfFramePrinter_DecRef;
+*GetRefCount = *cspacec::scfFramePrinter_GetRefCount;
+*QueryInterface = *cspacec::scfFramePrinter_QueryInterface;
+*AddRefOwner = *cspacec::scfFramePrinter_AddRefOwner;
+*RemoveRefOwner = *cspacec::scfFramePrinter_RemoveRefOwner;
+*GetInterfaceMetadata = *cspacec::scfFramePrinter_GetInterfaceMetadata;
+sub DISOWN {
+    my $self = shift;
+    my $ptr = tied(%$self);
+    delete $OWNER{$ptr};
+}
+
+sub ACQUIRE {
+    my $self = shift;
+    my $ptr = tied(%$self);
+    $OWNER{$ptr} = 1;
+}
+
+
 ############# Class : cspace::FrameBegin3DDraw ##############
 
 package cspace::FrameBegin3DDraw;
 use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
-@ISA = qw( cspace );
+@ISA = qw( cspace::scfFrameBegin3DDraw cspace );
 %OWNER = ();
 %ITERATORS = ();
 sub new {
@@ -5065,7 +5117,7 @@ sub ACQUIRE {
 
 package cspace::FramePrinter;
 use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
-@ISA = qw( cspace );
+@ISA = qw( cspace::scfFramePrinter cspace );
 %OWNER = ();
 %ITERATORS = ();
 sub new {

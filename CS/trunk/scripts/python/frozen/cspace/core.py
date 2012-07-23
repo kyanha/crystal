@@ -2670,7 +2670,35 @@ FrameSignpost_DebugFrame_swigregister(FrameSignpost_DebugFrame)
 FrameSignpost_DebugFrame_StaticHandlerName = _core.FrameSignpost_DebugFrame_StaticHandlerName
 FrameSignpost_DebugFrame_StaticID = _core.FrameSignpost_DebugFrame_StaticID
 
-class FrameBegin3DDraw(object):
+class scfFrameBegin3DDraw(iEventHandler):
+    thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    def __init__(self, *args, **kwargs): raise AttributeError, "No constructor defined"
+    __repr__ = _swig_repr
+    def IncRef(*args): return _core.scfFrameBegin3DDraw_IncRef(*args)
+    def DecRef(*args): return _core.scfFrameBegin3DDraw_DecRef(*args)
+    def GetRefCount(*args): return _core.scfFrameBegin3DDraw_GetRefCount(*args)
+    def QueryInterface(*args): return _core.scfFrameBegin3DDraw_QueryInterface(*args)
+    def AddRefOwner(*args): return _core.scfFrameBegin3DDraw_AddRefOwner(*args)
+    def RemoveRefOwner(*args): return _core.scfFrameBegin3DDraw_RemoveRefOwner(*args)
+    def GetInterfaceMetadata(*args): return _core.scfFrameBegin3DDraw_GetInterfaceMetadata(*args)
+scfFrameBegin3DDraw_swigregister = _core.scfFrameBegin3DDraw_swigregister
+scfFrameBegin3DDraw_swigregister(scfFrameBegin3DDraw)
+
+class scfFramePrinter(iEventHandler):
+    thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    def __init__(self, *args, **kwargs): raise AttributeError, "No constructor defined"
+    __repr__ = _swig_repr
+    def IncRef(*args): return _core.scfFramePrinter_IncRef(*args)
+    def DecRef(*args): return _core.scfFramePrinter_DecRef(*args)
+    def GetRefCount(*args): return _core.scfFramePrinter_GetRefCount(*args)
+    def QueryInterface(*args): return _core.scfFramePrinter_QueryInterface(*args)
+    def AddRefOwner(*args): return _core.scfFramePrinter_AddRefOwner(*args)
+    def RemoveRefOwner(*args): return _core.scfFramePrinter_RemoveRefOwner(*args)
+    def GetInterfaceMetadata(*args): return _core.scfFramePrinter_GetInterfaceMetadata(*args)
+scfFramePrinter_swigregister = _core.scfFramePrinter_swigregister
+scfFramePrinter_swigregister(scfFramePrinter)
+
+class FrameBegin3DDraw(scfFrameBegin3DDraw):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
     __repr__ = _swig_repr
     def __init__(self, *args): 
@@ -2693,7 +2721,7 @@ FrameBegin3DDraw_swigregister(FrameBegin3DDraw)
 FrameBegin3DDraw_StaticHandlerName = _core.FrameBegin3DDraw_StaticHandlerName
 FrameBegin3DDraw_StaticID = _core.FrameBegin3DDraw_StaticID
 
-class FramePrinter(object):
+class FramePrinter(scfFramePrinter):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
     __repr__ = _swig_repr
     def __init__(self, *args): 
