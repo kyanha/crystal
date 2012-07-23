@@ -1018,6 +1018,8 @@ csEventID _csevJoystickEvent (iObjectRegistry *);
 %template(scfFrameSignpost_ConsoleDebug) scfImplementation2<FrameSignpost_ConsoleDebug,iFrameEventSignpost,scfFakeInterface<iEventHandler> >;
 %template(scfFrameSignpost_DebugFrame) scfImplementation2<FrameSignpost_DebugFrame,iFrameEventSignpost,scfFakeInterface<iEventHandler> >;
 %include "csutil/eventhandlers.h"
+%template(scfFrameBegin3DDraw) scfImplementation1<FrameBegin3DDraw,iEventHandler>;
+%template(scfFramePrinter) scfImplementation1<FramePrinter,iEventHandler>;
 %include "csutil/common_handlers.h"
 
 // csutil/cscolor.h
