@@ -433,7 +433,7 @@ size_t csStringBase::Find (const char* str, size_t pos, bool ignore_case) const
   char const* tmp;
 
   if (ignore_case)
-    tmp = csStrCaseCmp(p + pos, str);
+    {} //tmp = strcasestr(p + pos, str);
   else
     tmp = strstr (p + pos, str);
 
