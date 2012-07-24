@@ -321,13 +321,13 @@ static bool CreateCallStackThreaded (int skip, bool fast,
      * it from another thread while the real current one is suspended. */
     if (contextHelper.hThread == 0)
     {
-      contextHelper.evStartWork = CreateEvent (0, false, false, 0);
+      contextHelper.evStartWork = CreateEventW (0, false, false, 0);
       if (contextHelper.evStartWork == 0)
       {
         ReleaseMutex (contextHelper.mutex);
         return 0;
       }
-      contextHelper.evFinishedWork = CreateEvent (0, false, false, 0);
+      contextHelper.evFinishedWork = CreateEventW (0, false, false, 0);
       if (contextHelper.evFinishedWork == 0)
       {
         ReleaseMutex (contextHelper.mutex);
