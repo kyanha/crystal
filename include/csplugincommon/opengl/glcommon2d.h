@@ -39,6 +39,7 @@
 #include "glextmanager.h"
 #include "glss.h"
 #include "driverdb.h"
+#include "glcanvascommon.h"
 
 class OpenGLTextureCache;
 class GLFontCache;
@@ -57,82 +58,18 @@ class GLFontCache;
  * instead of percolating via people copying code over. 
  */
 class CS_CSPLUGINCOMMON_GL_EXPORT csGraphics2DGLCommon : 
-  public scfImplementationExt2<csGraphics2DGLCommon, 
+  public scfImplementationExt1<csGraphics2DGLCommon,
 	  csGraphics2D, 
-	  iEventPlug,
-	  iOpenGLDriverDatabase>
+	  iOpenGLDriverDatabase>,
+  public virtual CS::PluginCommon::GL::CanvasCommonBase
 {
-public:
-  enum GLPixelFormatValue
-  {
-    glpfvColorBits = 0,
-    glpfvAlphaBits,
-    glpfvDepthBits,
-    glpfvStencilBits,
-    glpfvAccumColorBits,
-    glpfvAccumAlphaBits,
-    glpfvMultiSamples,
-
-    glpfvValueCount
-  };
-  typedef int GLPixelFormat[glpfvValueCount];
 protected:
   friend class csGLScreenShot;
   friend class csGLFontCache;
-  
-  class CS_CSPLUGINCOMMON_GL_EXPORT csGLPixelFormatPicker
-  {
-    csGraphics2DGLCommon* parent;
-
-    /*
-    size_t nextValueIndices[glpfvValueCount];
-    csArray<int> values[glpfvValueCount];
-    
-
-    char* order;
-    size_t orderPos;
-    size_t orderNum;*/
-
-    // Hold properties for a single pixelformat property
-    struct PixelFormatPropertySet
-    {
-      GLPixelFormatValue valueType;
-      size_t nextIndex;
-      size_t firstIndex;
-      csArray<int> possibleValues;
-    };
-
-    /* Pixel format properties, however this is _not_ indexed by 
-    GLPixelFormatValue but sorted by order */
-    PixelFormatPropertySet pixelFormats[glpfvValueCount];
-
-    // Remapping table from real GLPixelFormatValue to index in table above
-    size_t pixelFormatIndexTable[glpfvValueCount]; 
-
-    GLPixelFormat currentValues;
-    bool currentValid;
-
-    void ReadStartValues ();
-    void ReadPickerValues ();
-    void ReadPickerValue (const char* valuesStr, csArray<int>& values);
-    void SetInitialIndices ();
-    void SetupIndexTable (const char* orderStr);
-    bool PickNextFormat ();
-  public:
-    csGLPixelFormatPicker (csGraphics2DGLCommon* parent);
-    ~csGLPixelFormatPicker ();
-
-    void Reset();
-    bool GetNextFormat (GLPixelFormat& format);
-  };
-  friend class csGLPixelFormatPicker;
 
   /// Cache for GL states
   csGLStateCache* statecache;
   csGLStateCacheContext *statecontext;
-
-  /// Canvas is completely opened
-  bool openComplete;
 
   bool hasRenderTarget;
 
@@ -154,14 +91,9 @@ protected:
   //int multiSamples;
   /// Whether to favor quality or speed.
   bool multiFavorQuality;
-  /// Depth buffer resolution
-  //int depthBits;
-  GLPixelFormat currentFormat;
   /// Driver database
   csGLDriverDatabase driverdb;
   bool useCombineTE;
-
-  void GetPixelFormatString (const GLPixelFormat& format, csString& str);
 
   /// Open default driver database.
   void OpenDriverDB (const char* phase = 0);
@@ -171,8 +103,6 @@ protected:
    * Returns \c false if the line should not be drawn.
    */
   bool DrawLineNearClip (csVector3 & v1, csVector3 & v2);
-
-  void Report (int severity, const char* msg, ...);
 public:
   virtual const char* GetRendererString (const char* str);
   virtual const char* GetVersionString (const char* ver);
@@ -180,9 +110,6 @@ public:
   virtual const char* GetHWRenderer();
   virtual const char* GetHWGLVersion();
   virtual const char* GetHWVendor();
-
-  /// The event plug object
-  csRef<iEventOutlet> EventOutlet;
 
   /**
    * Constructor does little, most initialization stuff happens in
@@ -278,14 +205,6 @@ public:
   virtual bool DebugCommand (const char* cmd);
   
   void SetViewport (int left, int top, int width, int height);
-
-  /**\name iEventPlug implementation
-   * @{ */
-  virtual unsigned GetPotentiallyConflictingEvents ()
-  { return CSEVTYPE_Keyboard | CSEVTYPE_Mouse; }
-  virtual unsigned QueryEventPriority (unsigned /*iType*/)
-  { return 150; }
-  /** @} */
 
   /**\name iGLDriverDatabase implementation
    * @{ */
