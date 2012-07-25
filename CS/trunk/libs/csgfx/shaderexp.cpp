@@ -257,7 +257,7 @@ public:
           if (!r2.var.indices) return 1;
           size_t n1 (*r1.var.indices);
           size_t n2 (*r2.var.indices);
-          if (n1 != n2) return n2 - n1;
+          if (n1 != n2) return (n2 > n1) ? 1 : -1;
           return memcmp (r1.var.indices+1, r2.var.indices+1, n1*sizeof(size_t));
         }
         return 0;
