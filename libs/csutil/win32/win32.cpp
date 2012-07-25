@@ -137,7 +137,7 @@ public:
 
   virtual void UseOwnMessageLoop(bool ownmsgloop);
   virtual bool HasOwnMessageLoop();
-  virtual HWND CreateCSWindow (iGraphics2D* canvas,
+  virtual HWND CreateCSWindow (iGraphicsCanvas* canvas,
     DWORD exStyle, DWORD style, int x,
     int y, int w, int h);
 
@@ -717,7 +717,7 @@ int Win32Assistant::GetCmdShow () const
 struct CreateInfo
 {
   Win32Assistant* assistant;
-  iGraphics2D* canvas;
+  iGraphicsCanvas* canvas;
 };
 
 void Win32Assistant::HandleWheelMessage (HWND hWnd, bool isHWheel, WPARAM wParam, LPARAM lParam)
@@ -922,11 +922,11 @@ LRESULT CALLBACK Win32Assistant::WindowProc (HWND hWnd, UINT message,
     {
       if (assistant != 0)
       {
-	iGraphics2D* canvas;
+	iGraphicsCanvas* canvas;
 	if (IsWindowUnicode (hWnd))
-	  canvas = (iGraphics2D*)GetWindowLongPtrW (hWnd, sizeof (LONG_PTR));
+	  canvas = (iGraphicsCanvas*)GetWindowLongPtrW (hWnd, sizeof (LONG_PTR));
 	else
-	  canvas = (iGraphics2D*)GetWindowLongPtrA (hWnd, sizeof (LONG_PTR));
+	  canvas = (iGraphicsCanvas*)GetWindowLongPtrA (hWnd, sizeof (LONG_PTR));
 
 	if ( (wParam == SIZE_MAXIMIZED) || (wParam == SIZE_RESTORED) )
 	{
@@ -945,11 +945,11 @@ LRESULT CALLBACK Win32Assistant::WindowProc (HWND hWnd, UINT message,
     {
       if (assistant != 0)
       {
-	iGraphics2D* canvas;
+	iGraphicsCanvas* canvas;
 	if (IsWindowUnicode (hWnd))
-	  canvas = (iGraphics2D*)GetWindowLongPtrW (hWnd, sizeof (LONG_PTR));
+	  canvas = (iGraphicsCanvas*)GetWindowLongPtrW (hWnd, sizeof (LONG_PTR));
 	else
-	  canvas = (iGraphics2D*)GetWindowLongPtrA (hWnd, sizeof (LONG_PTR));
+	  canvas = (iGraphicsCanvas*)GetWindowLongPtrA (hWnd, sizeof (LONG_PTR));
 
 	if (wParam)
 	{
@@ -1162,7 +1162,7 @@ bool Win32Assistant::HasOwnMessageLoop()
   return use_own_message_loop;
 }
 
-HWND Win32Assistant::CreateCSWindow (iGraphics2D* canvas,
+HWND Win32Assistant::CreateCSWindow (iGraphicsCanvas* canvas,
 				     DWORD exStyle, DWORD style, 
 				     int x, int y, int w, int h)
 {

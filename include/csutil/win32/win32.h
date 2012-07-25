@@ -29,7 +29,7 @@
 
 #include "csutil/scf.h"
 
-struct iGraphics2D;
+struct iGraphicsCanvas;
 
 /**
  * This interface describes actions specific to the Windows platform.
@@ -44,7 +44,7 @@ struct iGraphics2D;
  */
 struct iWin32Assistant : public virtual iBase
 {
-  SCF_INTERFACE(iWin32Assistant, 2, 1, 0);
+  SCF_INTERFACE(iWin32Assistant, 2, 2, 0);
 
   /// Returns the HINSTANCE of the program
   virtual HINSTANCE GetInstance () const = 0;
@@ -86,7 +86,7 @@ struct iWin32Assistant : public virtual iBase
    * This window can subsequently be subclassed if more functionality
    * is needed.
    */
-  virtual HWND CreateCSWindow (iGraphics2D* canvas,
+  virtual HWND CreateCSWindow (iGraphicsCanvas* canvas,
     DWORD exStyle, DWORD style, int x,
     int y, int w, int h) = 0;
 };
