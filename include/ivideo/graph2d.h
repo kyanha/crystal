@@ -30,6 +30,7 @@
  
 #include "csutil/scf.h"
 #include "csgfx/rgbpixel.h"
+#include "ivideo/canvas.h"
 #include "ivideo/cursor.h"
 #include <stdarg.h>
 
@@ -93,7 +94,7 @@ struct csPixelCoord
  * Main users of this interface:
  * - 3D renderers (iGraphics3D implementations)
  */
-struct iGraphics2D : public virtual iBase
+struct iGraphics2D : public virtual iGraphicsCanvas
 {
   SCF_INTERFACE (iGraphics2D, 5, 0, 0);
   
@@ -103,14 +104,11 @@ struct iGraphics2D : public virtual iBase
   /// Close the device.
   virtual void Close () = 0;
 
-  /// Return the width of the framebuffer.
+  /// Return the width of the viewport.
   virtual int GetWidth () = 0;
 
-  /// Return the height of the framebuffer.
+  /// Return the height of the viewport.
   virtual int GetHeight () = 0;
-  
-  /// Return color depth of the framebuffer.
-  virtual int GetColorDepth () = 0;
 
   /**
    * Find an RGB (0..255) color. The actual color bytes are returned.
@@ -146,13 +144,6 @@ struct iGraphics2D : public virtual iBase
 
   /// This routine should be called when you finished drawing.
   virtual void FinishDraw () = 0;
-
-  /**
-   * Flip video pages (or dump backbuffer into framebuffer). The area
-   * parameter is only a hint to the canvas driver. Changes outside the
-   * rectangle may or may not be printed as well.
-   */
-  virtual void Print (csRect const* pArea) = 0;
 
   /// Clear backbuffer.
   virtual void Clear (int color) = 0;
@@ -202,9 +193,6 @@ struct iGraphics2D : public virtual iBase
     const char *str, uint flags = 0) = 0;
 
 
-  /// Enable/disable canvas resizing
-  virtual void AllowResize (bool iAllow) = 0;
-
   /// Resize the canvas
   virtual bool Resize (int w, int h) = 0;
 
@@ -238,73 +226,6 @@ struct iGraphics2D : public virtual iBase
   virtual csPtr<iImage> ScreenShot () = 0;
 
   /**
-   * Get the native window corresponding with this canvas.
-   * If this is an off-screen canvas then this will return 0.
-   */
-  virtual iNativeWindow* GetNativeWindow () = 0;
-
-  /// Returns 'true' if the program is being run full-screen.
-  virtual bool GetFullScreen () = 0;
-
-  /**
-   * Change the fullscreen state of the canvas.
-   */
-  virtual void SetFullScreen (bool b) = 0;
-
-  /// Set mouse position (relative to top-left of CS window).
-  virtual bool SetMousePosition (int x, int y) = 0;
-
-  /**
-   * Set mouse cursor to one of predefined shape classes
-   * (see csmcXXX enum above). If a specific mouse cursor shape
-   * is not supported, return 'false'; otherwise return 'true'.
-   * If system supports it the cursor should be set to its nearest
-   * system equivalent depending on iShape argument and the routine
-   * should return "true".
-   */
-  virtual bool SetMouseCursor (csMouseCursorID iShape) = 0;
-
-  /**
-   * Set mouse cursor using an image.  If the operation is unsupported, 
-   * \c false is returned, otherwise \c true.
-   *
-   * \remarks
-   * If setting a custom mouse is not supported no mouse cursor "emulation"
-   * is done in the canvas.  You can use the custom cursor plugin (see
-   * iCursor) for automatic mouse cursor emulation in case the canvas
-   * doesn't support it, or do it yourself (after everything was drawn,
-   * draw the desired mouse cursor image at the current mouse cursor
-   * position).
-   *
-   * On some platforms there are only monochrome pointers available.  In this
-   * all black colors in the image will become the value of \a bg and all 
-   * non-black colors will become \a fg. This behaviour can be disabled
-   * by setting the <tt>Video.SystemMouseCursor</tt> configuration key to
-   * \c rgbaonly.
-   */
-  virtual bool SetMouseCursor (iImage *image, const csRGBcolor* keycolor = 0, 
-                               int hotspot_x = 0, int hotspot_y = 0,
-                               csRGBcolor fg = csRGBcolor(255,255,255),
-                               csRGBcolor bg = csRGBcolor(0,0,0)) = 0;
-
-  /**
-   * Set gamma value (if supported by canvas). By default this is 1.
-   * Smaller values are darker. If the canvas doesn't support gamma
-   * then this function will return false.
-   */
-  virtual bool SetGamma (float gamma) = 0;
-
-  /**
-   * Get gamma value.
-   */
-  virtual float GetGamma () const = 0;
-
-  /**
-   * Get the name of the canvas
-   */
-  virtual const char* GetName () const = 0;
-
-  /**
    * Write a text string into the back buffer. A value of -1 for \p bg
    * color will not draw the background.
    * \remarks For transparent backgrounds, it is recommended to obtain a color
@@ -324,9 +245,6 @@ struct iGraphics2D : public virtual iBase
   virtual void SetViewport (int left, int top, int width, int height) = 0;
   /// Get the currently set viewport.
   virtual void GetViewport (int& left, int& top, int& width, int& height) = 0;
-  
-  /// Get the dimensions of the framebuffer.
-  virtual void GetFramebufferDimensions (int& width, int& height) = 0;
   
   /// Get a string containing the hardware renderer.
   virtual const char* GetHWRenderer () = 0;

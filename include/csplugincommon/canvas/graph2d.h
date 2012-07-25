@@ -304,6 +304,11 @@ public:
   const char* GetHWVendor ()
   { return 0; }
 
+  // iGraphicsCanvas methods
+  bool CanvasOpen () { return false; }
+  void CanvasClose () {}
+  bool CanvasResize (int w, int h) { return false; }
+
   CS_EVENTHANDLER_NAMES("crystalspace.graphics2d.common")
   CS_EVENTHANDLER_NIL_CONSTRAINTS
 
