@@ -287,7 +287,7 @@ bool GeneralTab::ReloadButton (const CEGUI::EventArgs& e)
     viewmesh->LoadLibrary(viewmesh->reloadLibraryFilenames[i], false);
   }
 
-  viewmesh->LoadSprite(viewmesh->reloadFilename, viewmesh->reloadFilePath);
+  viewmesh->LoadSprite(viewmesh->reloadFilename, viewmesh->reloadFilePath, 0);
 
   return true;
 }

@@ -55,6 +55,7 @@ class ViewMesh : public CS::Utility::DemoApplication
   csRef<iSaver> saver;
   csRef<iCEGUI> cegui;
   csRef<iThreadReturn> loading;
+  csString loadingFactoryName;
 
   LightMode lightMode;
   void SetLightMode (LightMode lightMode);
@@ -83,7 +84,7 @@ class ViewMesh : public CS::Utility::DemoApplication
   bool CreateGui ();
   void LoadLibrary(const char* file, bool record = true);
   void LoadTexture(const char* file, const char* name);
-  void LoadSprite (const char* file, const char* path = 0);
+  void LoadSprite (const char* file, const char* path, const char* factoryName);
   void SaveSprite (const char* file, bool binary);
   void AttachMesh (const char* file);
   void ScaleSprite (float newScale);

@@ -70,7 +70,7 @@ void ViewMesh::Frame()
   DemoApplication::Frame ();
 
   if (loading)
-    LoadSprite(reloadFilename, reloadFilePath);
+    LoadSprite(reloadFilename, reloadFilePath, loadingFactoryName);
 
   cegui->Render();
 }
@@ -162,6 +162,8 @@ void ViewMesh::PrintHelp ()
     ("L", "Load a library file (for textures/materials)", csVariant (""));
   commandLineHelper.AddCommandLineOption
     ("scale", "Scale the Object", csVariant (1.0f));
+  commandLineHelper.AddCommandLineOption
+    ("factory", "Specify a factory (useful when loading a library)", csVariant (""));
 
   // Printing help
   commandLineHelper.PrintApplicationHelp
@@ -191,8 +193,9 @@ void ViewMesh::HandleCommandLine ()
   csString meshfilename = cmdline->GetName (0);
   const char* texturefilename = cmdline->GetName (1);
   const char* texturename = cmdline->GetName (2);
-  const char* scaleTxt = cmdline->GetOption ("Scale");
+  const char* scaleTxt = cmdline->GetOption ("scale");
   const char* realPath = cmdline->GetOption ("R");
+  const char* factoryName = cmdline->GetOption ("factory");
 
   csString vfsDir = cmdline->GetOption ("C");
 
@@ -248,7 +251,7 @@ void ViewMesh::HandleCommandLine ()
 
   if (meshfilename)
   {
-    LoadSprite (meshfilename);
+    LoadSprite (meshfilename, 0, factoryName);
   }
 
   if (scaleTxt != 0)
@@ -428,7 +431,7 @@ bool ViewMesh::CreateGui()
   return true;
 }
 
-void ViewMesh::LoadSprite (const char* filename, const char* path)
+void ViewMesh::LoadSprite (const char* filename, const char* path, const char* factoryName)
 {
   reloadFilename = filename;
   if (path)
@@ -454,6 +457,7 @@ void ViewMesh::LoadSprite (const char* filename, const char* path)
     fflush (stdout);
 
     loading = tloader->LoadFile (vfs->GetCwd(), filename, collection);
+    loadingFactoryName = factoryName;
   }
 
   if (!loading->IsFinished())
@@ -494,9 +498,20 @@ void ViewMesh::LoadSprite (const char* filename, const char* path)
       iMeshFactoryWrapper* f = factories->Get (i);
       if (collection->IsParentOf (f->QueryObject ()))
       {
-        factwrap = f;
-        break;
+	if (!factoryName || !*factoryName || strcmp (factoryName, f->QueryObject ()->GetName ()) == 0)
+	{
+          factwrap = f;
+          break;
+	}
       }
+    }
+    if (!factwrap)
+    {
+      if (factoryName && *factoryName)
+    	ReportError("Could not find factory '%s' in the library!", factoryName);
+      else
+    	ReportError("Could not find a factory in the library!");
+      loading.Invalidate ();
     }
   }
   else
@@ -900,7 +915,7 @@ bool ViewMesh::StdDlgOkButton (const CEGUI::EventArgs& e)
   }
   else if (purpose == "Load")
   {
-    LoadSprite(file.c_str());
+    LoadSprite(file.c_str(), 0, 0);
   }
   else if (purpose == "LoadLib")
   {
