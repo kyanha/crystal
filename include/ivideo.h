@@ -22,6 +22,7 @@
  * subdirectory of the top Crystal Space include directory.
  */
 #include "cssysdef.h"
+#include "ivideo/canvas.h"
 #include "ivideo/cursor.h"
 #include "ivideo/custcursor.h"
 #include "ivideo/fontserv.h"

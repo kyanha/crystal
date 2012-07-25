@@ -2733,8 +2733,8 @@ SWIG_Python_MustGetPtr(PyObject *obj, swig_type_info *ty, int argnum, int flags)
 #define SWIGTYPE_p_iFactory swig_types[210]
 #define SWIGTYPE_p_iFile swig_types[211]
 #define SWIGTYPE_p_iFrameEventSignpost swig_types[212]
-#define SWIGTYPE_p_iGraphics2D swig_types[213]
-#define SWIGTYPE_p_iGraphics3D swig_types[214]
+#define SWIGTYPE_p_iGraphics3D swig_types[213]
+#define SWIGTYPE_p_iGraphicsCanvas swig_types[214]
 #define SWIGTYPE_p_iJob swig_types[215]
 #define SWIGTYPE_p_iJoystickDriver swig_types[216]
 #define SWIGTYPE_p_iKeyComposer swig_types[217]
@@ -39725,7 +39725,7 @@ fail:
 SWIGINTERN PyObject *_wrap_csevCanvasOp__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   csRef< iEventNameRegistry > *arg1 = 0 ;
-  iGraphics2D *arg2 = (iGraphics2D *) 0 ;
+  iGraphicsCanvas *arg2 = (iGraphicsCanvas *) 0 ;
   csString *arg3 = 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
@@ -39747,11 +39747,11 @@ SWIGINTERN PyObject *_wrap_csevCanvasOp__SWIG_0(PyObject *SWIGUNUSEDPARM(self), 
     SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "csevCanvasOp" "', argument " "1"" of type '" "csRef< iEventNameRegistry > &""'"); 
   }
   arg1 = reinterpret_cast< csRef< iEventNameRegistry > * >(argp1);
-  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_iGraphics2D, 0 |  0 );
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_iGraphicsCanvas, 0 |  0 );
   if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "csevCanvasOp" "', argument " "2"" of type '" "iGraphics2D const *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "csevCanvasOp" "', argument " "2"" of type '" "iGraphicsCanvas const *""'"); 
   }
-  arg2 = reinterpret_cast< iGraphics2D * >(argp2);
+  arg2 = reinterpret_cast< iGraphicsCanvas * >(argp2);
   res3 = SWIG_ConvertPtr(obj2, &argp3, SWIGTYPE_p_csString,  0  | 0);
   if (!SWIG_IsOK(res3)) {
     SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "csevCanvasOp" "', argument " "3"" of type '" "csString const &""'"); 
@@ -39760,7 +39760,7 @@ SWIGINTERN PyObject *_wrap_csevCanvasOp__SWIG_0(PyObject *SWIGUNUSEDPARM(self), 
     SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "csevCanvasOp" "', argument " "3"" of type '" "csString const &""'"); 
   }
   arg3 = reinterpret_cast< csString * >(argp3);
-  result = csevCanvasOp(*arg1,(iGraphics2D const *)arg2,(csString const &)*arg3);
+  result = csevCanvasOp(*arg1,(iGraphicsCanvas const *)arg2,(csString const &)*arg3);
   {
     csEventID stringid = result;
     resultobj = PyLong_FromUnsignedLong((unsigned long)stringid);
@@ -39774,7 +39774,7 @@ fail:
 SWIGINTERN PyObject *_wrap_csevCanvasOp__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   iObjectRegistry *arg1 = (iObjectRegistry *) 0 ;
-  iGraphics2D *arg2 = (iGraphics2D *) 0 ;
+  iGraphicsCanvas *arg2 = (iGraphicsCanvas *) 0 ;
   csString *arg3 = 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
@@ -39793,11 +39793,11 @@ SWIGINTERN PyObject *_wrap_csevCanvasOp__SWIG_1(PyObject *SWIGUNUSEDPARM(self), 
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "csevCanvasOp" "', argument " "1"" of type '" "iObjectRegistry *""'"); 
   }
   arg1 = reinterpret_cast< iObjectRegistry * >(argp1);
-  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_iGraphics2D, 0 |  0 );
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_iGraphicsCanvas, 0 |  0 );
   if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "csevCanvasOp" "', argument " "2"" of type '" "iGraphics2D const *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "csevCanvasOp" "', argument " "2"" of type '" "iGraphicsCanvas const *""'"); 
   }
-  arg2 = reinterpret_cast< iGraphics2D * >(argp2);
+  arg2 = reinterpret_cast< iGraphicsCanvas * >(argp2);
   res3 = SWIG_ConvertPtr(obj2, &argp3, SWIGTYPE_p_csString,  0  | 0);
   if (!SWIG_IsOK(res3)) {
     SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "csevCanvasOp" "', argument " "3"" of type '" "csString const &""'"); 
@@ -39806,7 +39806,7 @@ SWIGINTERN PyObject *_wrap_csevCanvasOp__SWIG_1(PyObject *SWIGUNUSEDPARM(self), 
     SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "csevCanvasOp" "', argument " "3"" of type '" "csString const &""'"); 
   }
   arg3 = reinterpret_cast< csString * >(argp3);
-  result = csevCanvasOp(arg1,(iGraphics2D const *)arg2,(csString const &)*arg3);
+  result = csevCanvasOp(arg1,(iGraphicsCanvas const *)arg2,(csString const &)*arg3);
   {
     csEventID stringid = result;
     resultobj = PyLong_FromUnsignedLong((unsigned long)stringid);
@@ -39834,7 +39834,7 @@ SWIGINTERN PyObject *_wrap_csevCanvasOp(PyObject *self, PyObject *args) {
     _v = SWIG_CheckState(res);
     if (_v) {
       void *vptr = 0;
-      int res = SWIG_ConvertPtr(argv[1], &vptr, SWIGTYPE_p_iGraphics2D, 0);
+      int res = SWIG_ConvertPtr(argv[1], &vptr, SWIGTYPE_p_iGraphicsCanvas, 0);
       _v = SWIG_CheckState(res);
       if (_v) {
         int res = SWIG_ConvertPtr(argv[2], 0, SWIGTYPE_p_csString, 0);
@@ -39852,7 +39852,7 @@ SWIGINTERN PyObject *_wrap_csevCanvasOp(PyObject *self, PyObject *args) {
     _v = SWIG_CheckState(res);
     if (_v) {
       void *vptr = 0;
-      int res = SWIG_ConvertPtr(argv[1], &vptr, SWIGTYPE_p_iGraphics2D, 0);
+      int res = SWIG_ConvertPtr(argv[1], &vptr, SWIGTYPE_p_iGraphicsCanvas, 0);
       _v = SWIG_CheckState(res);
       if (_v) {
         int res = SWIG_ConvertPtr(argv[2], 0, SWIGTYPE_p_csString, 0);
@@ -39867,8 +39867,8 @@ SWIGINTERN PyObject *_wrap_csevCanvasOp(PyObject *self, PyObject *args) {
 fail:
   SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number of arguments for overloaded function 'csevCanvasOp'.\n"
     "  Possible C/C++ prototypes are:\n"
-    "    csevCanvasOp(csRef< iEventNameRegistry > &,iGraphics2D const *,csString const &)\n"
-    "    csevCanvasOp(iObjectRegistry *,iGraphics2D const *,csString const &)\n");
+    "    csevCanvasOp(csRef< iEventNameRegistry > &,iGraphicsCanvas const *,csString const &)\n"
+    "    csevCanvasOp(iObjectRegistry *,iGraphicsCanvas const *,csString const &)\n");
   return NULL;
 }
 
@@ -56290,7 +56290,7 @@ fail:
 SWIGINTERN PyObject *_wrap_csevCanvasClose(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   iObjectRegistry *arg1 = (iObjectRegistry *) 0 ;
-  iGraphics2D *arg2 = (iGraphics2D *) 0 ;
+  iGraphicsCanvas *arg2 = (iGraphicsCanvas *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   void *argp2 = 0 ;
@@ -56305,11 +56305,11 @@ SWIGINTERN PyObject *_wrap_csevCanvasClose(PyObject *SWIGUNUSEDPARM(self), PyObj
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "csevCanvasClose" "', argument " "1"" of type '" "iObjectRegistry *""'"); 
   }
   arg1 = reinterpret_cast< iObjectRegistry * >(argp1);
-  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_iGraphics2D, 0 |  0 );
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_iGraphicsCanvas, 0 |  0 );
   if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "csevCanvasClose" "', argument " "2"" of type '" "iGraphics2D *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "csevCanvasClose" "', argument " "2"" of type '" "iGraphicsCanvas *""'"); 
   }
-  arg2 = reinterpret_cast< iGraphics2D * >(argp2);
+  arg2 = reinterpret_cast< iGraphicsCanvas * >(argp2);
   result = csevCanvasClose(arg1,arg2);
   {
     csEventID stringid = result;
@@ -56324,7 +56324,7 @@ fail:
 SWIGINTERN PyObject *_wrap_csevCanvasExposed(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   iObjectRegistry *arg1 = (iObjectRegistry *) 0 ;
-  iGraphics2D *arg2 = (iGraphics2D *) 0 ;
+  iGraphicsCanvas *arg2 = (iGraphicsCanvas *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   void *argp2 = 0 ;
@@ -56339,11 +56339,11 @@ SWIGINTERN PyObject *_wrap_csevCanvasExposed(PyObject *SWIGUNUSEDPARM(self), PyO
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "csevCanvasExposed" "', argument " "1"" of type '" "iObjectRegistry *""'"); 
   }
   arg1 = reinterpret_cast< iObjectRegistry * >(argp1);
-  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_iGraphics2D, 0 |  0 );
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_iGraphicsCanvas, 0 |  0 );
   if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "csevCanvasExposed" "', argument " "2"" of type '" "iGraphics2D *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "csevCanvasExposed" "', argument " "2"" of type '" "iGraphicsCanvas *""'"); 
   }
-  arg2 = reinterpret_cast< iGraphics2D * >(argp2);
+  arg2 = reinterpret_cast< iGraphicsCanvas * >(argp2);
   result = csevCanvasExposed(arg1,arg2);
   {
     csEventID stringid = result;
@@ -56358,7 +56358,7 @@ fail:
 SWIGINTERN PyObject *_wrap_csevCanvasHidden(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   iObjectRegistry *arg1 = (iObjectRegistry *) 0 ;
-  iGraphics2D *arg2 = (iGraphics2D *) 0 ;
+  iGraphicsCanvas *arg2 = (iGraphicsCanvas *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   void *argp2 = 0 ;
@@ -56373,11 +56373,11 @@ SWIGINTERN PyObject *_wrap_csevCanvasHidden(PyObject *SWIGUNUSEDPARM(self), PyOb
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "csevCanvasHidden" "', argument " "1"" of type '" "iObjectRegistry *""'"); 
   }
   arg1 = reinterpret_cast< iObjectRegistry * >(argp1);
-  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_iGraphics2D, 0 |  0 );
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_iGraphicsCanvas, 0 |  0 );
   if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "csevCanvasHidden" "', argument " "2"" of type '" "iGraphics2D *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "csevCanvasHidden" "', argument " "2"" of type '" "iGraphicsCanvas *""'"); 
   }
-  arg2 = reinterpret_cast< iGraphics2D * >(argp2);
+  arg2 = reinterpret_cast< iGraphicsCanvas * >(argp2);
   result = csevCanvasHidden(arg1,arg2);
   {
     csEventID stringid = result;
@@ -56392,7 +56392,7 @@ fail:
 SWIGINTERN PyObject *_wrap_csevCanvasResize(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   iObjectRegistry *arg1 = (iObjectRegistry *) 0 ;
-  iGraphics2D *arg2 = (iGraphics2D *) 0 ;
+  iGraphicsCanvas *arg2 = (iGraphicsCanvas *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   void *argp2 = 0 ;
@@ -56407,11 +56407,11 @@ SWIGINTERN PyObject *_wrap_csevCanvasResize(PyObject *SWIGUNUSEDPARM(self), PyOb
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "csevCanvasResize" "', argument " "1"" of type '" "iObjectRegistry *""'"); 
   }
   arg1 = reinterpret_cast< iObjectRegistry * >(argp1);
-  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_iGraphics2D, 0 |  0 );
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_iGraphicsCanvas, 0 |  0 );
   if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "csevCanvasResize" "', argument " "2"" of type '" "iGraphics2D *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "csevCanvasResize" "', argument " "2"" of type '" "iGraphicsCanvas *""'"); 
   }
-  arg2 = reinterpret_cast< iGraphics2D * >(argp2);
+  arg2 = reinterpret_cast< iGraphicsCanvas * >(argp2);
   result = csevCanvasResize(arg1,arg2);
   {
     csEventID stringid = result;
@@ -66286,8 +66286,8 @@ static swig_type_info _swigt__p_iEventQueue = {"_p_iEventQueue", "iEventQueue *"
 static swig_type_info _swigt__p_iFactory = {"_p_iFactory", "iFactory *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_iFile = {"_p_iFile", "iFile *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_iFrameEventSignpost = {"_p_iFrameEventSignpost", "iFrameEventSignpost *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_iGraphics2D = {"_p_iGraphics2D", "iGraphics2D *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_iGraphics3D = {"_p_iGraphics3D", "iGraphics3D *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_iGraphicsCanvas = {"_p_iGraphicsCanvas", "iGraphicsCanvas *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_iJob = {"_p_iJob", "iJob *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_iJoystickDriver = {"_p_iJoystickDriver", "iJoystickDriver *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_iKeyComposer = {"_p_iKeyComposer", "iKeyComposer *", 0, 0, (void*)0, 0};
@@ -66565,8 +66565,8 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_iFactory,
   &_swigt__p_iFile,
   &_swigt__p_iFrameEventSignpost,
-  &_swigt__p_iGraphics2D,
   &_swigt__p_iGraphics3D,
+  &_swigt__p_iGraphicsCanvas,
   &_swigt__p_iJob,
   &_swigt__p_iJoystickDriver,
   &_swigt__p_iKeyComposer,
@@ -66846,8 +66846,8 @@ static swig_cast_info _swigc__p_iEventQueue[] = {  {&_swigt__p_iEventQueue, 0, 0
 static swig_cast_info _swigc__p_iFactory[] = {  {&_swigt__p_iFactory, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_iFile[] = {  {&_swigt__p_iFile, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_iFrameEventSignpost[] = {  {&_swigt__p_FrameSignpost_3D2D, _p_FrameSignpost_3D2DTo_p_iFrameEventSignpost, 0, 0},  {&_swigt__p_scfImplementation2T_FrameSignpost_2DConsole_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_t, _p_scfImplementation2T_FrameSignpost_2DConsole_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_tTo_p_iFrameEventSignpost, 0, 0},  {&_swigt__p_scfImplementation2T_FrameSignpost_DebugFrame_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_t, _p_scfImplementation2T_FrameSignpost_DebugFrame_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_tTo_p_iFrameEventSignpost, 0, 0},  {&_swigt__p_FrameSignpost_2DConsole, _p_FrameSignpost_2DConsoleTo_p_iFrameEventSignpost, 0, 0},  {&_swigt__p_scfImplementation2T_FrameSignpost_3D2D_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_t, _p_scfImplementation2T_FrameSignpost_3D2D_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_tTo_p_iFrameEventSignpost, 0, 0},  {&_swigt__p_scfImplementation2T_FrameSignpost_Logic3D_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_t, _p_scfImplementation2T_FrameSignpost_Logic3D_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_tTo_p_iFrameEventSignpost, 0, 0},  {&_swigt__p_FrameSignpost_Logic3D, _p_FrameSignpost_Logic3DTo_p_iFrameEventSignpost, 0, 0},  {&_swigt__p_FrameSignpost_ConsoleDebug, _p_FrameSignpost_ConsoleDebugTo_p_iFrameEventSignpost, 0, 0},  {&_swigt__p_FrameSignpost_DebugFrame, _p_FrameSignpost_DebugFrameTo_p_iFrameEventSignpost, 0, 0},  {&_swigt__p_iFrameEventSignpost, 0, 0, 0},  {&_swigt__p_scfImplementation2T_FrameSignpost_ConsoleDebug_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_t, _p_scfImplementation2T_FrameSignpost_ConsoleDebug_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_tTo_p_iFrameEventSignpost, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_iGraphics2D[] = {  {&_swigt__p_iGraphics2D, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_iGraphics3D[] = {  {&_swigt__p_iGraphics3D, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_iGraphicsCanvas[] = {  {&_swigt__p_iGraphicsCanvas, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_iJob[] = {  {&_swigt__p_iJob, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_iJoystickDriver[] = {  {&_swigt__p_iJoystickDriver, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_iKeyComposer[] = {  {&_swigt__p_iKeyComposer, 0, 0, 0},{0, 0, 0, 0}};
@@ -67125,8 +67125,8 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_iFactory,
   _swigc__p_iFile,
   _swigc__p_iFrameEventSignpost,
-  _swigc__p_iGraphics2D,
   _swigc__p_iGraphics3D,
+  _swigc__p_iGraphicsCanvas,
   _swigc__p_iJob,
   _swigc__p_iJoystickDriver,
   _swigc__p_iKeyComposer,
