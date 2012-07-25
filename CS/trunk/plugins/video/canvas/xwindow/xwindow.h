@@ -52,8 +52,8 @@ class csXWindow : public scfImplementation3<csXWindow, iXWindow,
   /// The name registry
   csRef<iEventNameRegistry> name_reg;
   /// The Canvas
-  iGraphics2D *Canvas;
   /// The event outlet
+  iGraphicsCanvas *Canvas;
   csRef<iEventOutlet> EventOutlet;
   /// The XFree86-VidModeExtension
   csRef<iXExtF86VM> xf86vm;
@@ -156,7 +156,7 @@ public:
    *  @param image the iImage to set as the icon of this window.
    */  
   virtual void SetIcon (iImage *image);
-  virtual void SetCanvas (iGraphics2D *canvas);
+  virtual void SetCanvas (iGraphicsCanvas *canvas);
 
   virtual XEvent GetStoredEvent()
   { return storedEvent; }
