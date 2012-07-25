@@ -95,7 +95,10 @@ public:
   }
 
   virtual void SetTitle (const char* title)
-  { xwin->SetTitle (title); }
+  {
+    csGraphics2DGLCommon::SetTitle (title);
+    xwin->SetTitle (title);
+  }
   
   /** Sets the icon of this window with the provided one.
    *
