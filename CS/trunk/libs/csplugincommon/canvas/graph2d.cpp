@@ -43,7 +43,7 @@ namespace CS
 {
   namespace PluginCommon
   {
-    Graphics2DCommon::Graphics2DCommon () : fontCache (0)
+    Graphics2DCommon::Graphics2DCommon () : fontCache (0), viewportIsFullScreen (true)
     {
       is_open = false;
       object_reg = 0;
@@ -61,6 +61,16 @@ namespace CS
           CS::RemoveWeakListener (q, weakEventHandler);
       }
       Close ();
+    }
+
+    void Graphics2DCommon::HandleResize ()
+    {
+      if (viewportIsFullScreen)
+      {
+          int fbWidth, fbHeight;
+          GetCanvas()->GetFramebufferDimensions (fbWidth, fbHeight);
+          SetViewport (0, 0, fbWidth, fbHeight);
+      }
     }
 
     bool Graphics2DCommon::Initialize (iObjectRegistry* r)
@@ -87,12 +97,14 @@ namespace CS
       }
     #endif
 
+      evCanvasResize = csevCanvasResize (object_reg, GetCanvas());
       csRef<iEventQueue> q (csQueryRegistry<iEventQueue> (object_reg));
       if (q != 0)
       {
-        csEventID events[3] = { csevSystemOpen (object_reg),
-                    csevSystemClose (object_reg),
-                    CS_EVENTLIST_END };
+        csEventID events[4] = { csevSystemOpen (object_reg),
+                                csevSystemClose (object_reg),
+                                evCanvasResize,
+                                CS_EVENTLIST_END };
         CS::RegisterWeakListener (q, this, events, weakEventHandler);
       }
       return true;
@@ -108,6 +120,11 @@ namespace CS
       else if (Event.Name == csevSystemClose (object_reg))
       {
         Close ();
+        return true;
+      }
+      else if (Event.Name == evCanvasResize)
+      {
+        HandleResize ();
         return true;
       }
       else
@@ -315,6 +332,11 @@ namespace CS
     {
       vpLeft = left; vpTop = top; vpWidth = width; vpHeight = height;
       fontCache->SetViewportOfs (left, top);
+
+      int fbWidth, fbHeight;
+      GetCanvas()->GetFramebufferDimensions (fbWidth, fbHeight);
+      viewportIsFullScreen = (vpLeft == 0) && (vpTop == 0)
+        && (vpWidth == fbWidth) && (vpHeight == fbHeight);
     }
   } // namespace PluginCommon
 } // namespace CS
@@ -336,7 +358,7 @@ bool csGraphics2D::Initialize (iObjectRegistry* r)
 {
   CS_ASSERT (r != 0);
   config.AddConfig (r, "/config/video.cfg");
-  CS::PluginCommon::CanvasCommonBase::ReadConfig (r, config);
+  CS::PluginCommon::CanvasCommonBase::Initialize (r);
 
   return Graphics2DCommon::Initialize (r);
 }

@@ -24,7 +24,10 @@
 
 #include "iutil/cfgfile.h"
 #include "iutil/cmdline.h"
+#include "iutil/eventq.h"
 #include "iutil/objreg.h"
+#include "csutil/cfgacc.h"
+#include "csutil/eventnames.h"
 #include "csutil/sysfunc.h"
 
 namespace CS
@@ -33,7 +36,7 @@ namespace CS
   {
 
     CanvasCommonBase::CanvasCommonBase () :
-      hwMouse (hwmcOff), fitToWorkingArea (false)
+      objectReg (nullptr), hwMouse (hwmcOff), fitToWorkingArea (false)
     {
       static uint g2d_count = 0;
 
@@ -56,9 +59,12 @@ namespace CS
       CanvasClose ();
     }
 
-    void CanvasCommonBase::ReadConfig (iObjectRegistry* object_reg, iConfigFile* config)
+    void CanvasCommonBase::Initialize (iObjectRegistry* object_reg)
     {
+      this->objectReg = object_reg;
+
       // Get the system parameters
+      csConfigAccess config (objectReg);
       fbWidth = config->GetInt ("Video.ScreenWidth", fbWidth);
       fbHeight = config->GetInt ("Video.ScreenHeight", fbHeight);
       Depth = config->GetInt ("Video.ScreenDepth", Depth);
@@ -90,6 +96,10 @@ namespace CS
       {
         hwMouse = cmdline->GetBoolOption ("sysmouse") ? hwmcOn : hwmcOff;
       }
+
+      csRef<iEventQueue> q (csQueryRegistry<iEventQueue> (object_reg));
+      if (q != 0)
+        EventOutlet = q->CreateEventOutlet (this);
     }
 
     void CanvasCommonBase::ChangeDepth (int d)
@@ -106,7 +116,6 @@ namespace CS
     bool CanvasCommonBase::CanvasOpen ()
     {
       if (canvas_open) return true;
-      canvas_open = true;
 
       if (!FullScreen && fitToWorkingArea)
       {
@@ -121,6 +130,7 @@ namespace CS
         }
       }
 
+      canvas_open = true;
       return true;
     }
 
@@ -194,6 +204,11 @@ namespace CS
 
       fbWidth = w;
       fbHeight = h;
+
+      if (EventOutlet)
+        /* CanvasCommonBase::Open() causes a resize due to fitting to the working area;
+        * don't emit a resize event in that case */
+        EventOutlet->Broadcast (csevCanvasResize(objectReg, this), (intptr_t)this);
       return true;
     }
 

@@ -36,7 +36,7 @@
  * \addtogroup plugincommon
  * @{ */
 
-struct iConfigFile;
+struct iEventOutlet;
 struct iObjectRegistry;
 
 namespace CS
@@ -60,9 +60,12 @@ namespace CS
       public virtual iGraphicsCanvas,
       public iNativeWindow,
       public iNativeWindowManager,
-      public iPluginConfig
+      public iPluginConfig,
+      public iEventPlug
     {
     public:
+      /// The object registry.
+      iObjectRegistry* objectReg;
       /// Open/Close state.
       bool canvas_open;
 
@@ -113,7 +116,7 @@ namespace CS
       csString name;
 
       /// Read configuration
-      virtual void ReadConfig (iObjectRegistry* object_reg, iConfigFile* config);
+      void Initialize (iObjectRegistry* object_reg);
 
       /**
        * Helper function for FitSizeToWorkingArea(): obtain workspace dimensions.
@@ -140,6 +143,8 @@ namespace CS
       virtual float GetGamma () const { return 1.0; }
 
     public:
+      /// The event plug object
+      csRef<iEventOutlet> EventOutlet;
 
       int GetColorDepth () { return Depth; }
 
@@ -236,6 +241,14 @@ namespace CS
       virtual bool GetOptionDescription (int idx, csOptionDescription*);
       virtual bool SetOption (int id, csVariant* value);
       virtual bool GetOption (int id, csVariant* value);
+      /** @} */
+
+      /**\name iEventPlug implementation
+      * @{ */
+      virtual unsigned GetPotentiallyConflictingEvents ()
+      { return CSEVTYPE_Keyboard | CSEVTYPE_Mouse; }
+      virtual unsigned QueryEventPriority (unsigned /*iType*/)
+      { return 150; }
       /** @} */
 
     };

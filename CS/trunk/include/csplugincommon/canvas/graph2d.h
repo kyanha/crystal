@@ -72,6 +72,8 @@ namespace CS
 
       /// Open/Close state.
       bool is_open;
+      /// Resize event for the canvas we're associated with
+      csEventID evCanvasResize;
 
       /// The object registry.
       iObjectRegistry* object_reg;
@@ -84,6 +86,7 @@ namespace CS
       csFontCache* fontCache;
 
       int vpLeft, vpTop, vpWidth, vpHeight;
+      bool viewportIsFullScreen;
 
       /**
       * The counter that is incremented inside BeginDraw and decremented in
@@ -94,6 +97,9 @@ namespace CS
       csRef<iEventHandler> weakEventHandler;
 
       virtual iGraphicsCanvas* GetCanvas() = 0;
+
+      /// Handle a resize event from the canvas.
+      void HandleResize ();
     public:
       /// Create csGraphics2D object
       Graphics2DCommon ();
