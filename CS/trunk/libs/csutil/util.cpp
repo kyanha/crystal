@@ -119,6 +119,7 @@ int csStrCaseCmp(char const* s1, char const* s2)
 {
   return strcasecmp(s1, s2);
 }
+
 int csStrNCaseCmp(char const* s1, char const* s2, size_t n)
 {
   return strncasecmp(s1, s2, n);

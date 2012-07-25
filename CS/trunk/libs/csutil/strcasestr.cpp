@@ -1,55 +1,73 @@
-/*****************************************************************************
- * strcasestr.c: GNU strcasestr() replacement
- *****************************************************************************
- * Copyright (C) 2002-2011 VLC authors and VideoLAN
- *
- * This program is free software; you can redistribute it and/or modify it
- * under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation; either version 2.1 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public License
- * along with this program; if not, write to the Free Software Foundation,
- * Inc., 51 Franklin Street, Fifth Floor, Boston MA 02110-1301, USA.
- *****************************************************************************/
+/*
+    Copyright (C) 2012 by Stefano Angeleri.
+
+    This library is free software; you can redistribute it and/or
+    modify it under the terms of the GNU Library General Public
+    License as published by the Free Software Foundation; either
+    version 2 of the License, or (at your option) any later version.
+
+    This library is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+    Library General Public License for more details.
+
+    You should have received a copy of the GNU Library General Public
+    License along with this library; if not, write to the Free
+    Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+*/
 
 #include "cssysdef.h"
 #include <string.h>
 #include <ctype.h>
-#include <assert.h>
 #include "csutil/util.h"
 
 namespace CS
 {
 
-const char *StrCaseStr (const char *psz_big, const char *psz_little)
+const char* StrCaseStr(char const* str1, char const* str2)
 {
-    const char *p_pos = psz_big;
+    char const* str1Pos = str1;
 
-    if( !*psz_little ) return p_pos;
-
-    while( *p_pos )
+    // If the string to be matched is empty match the start of the string
+    // (similarly to strcasestr behaviour).
+    if(!*str2)
     {
-        if( toupper( (unsigned char)*p_pos ) == toupper( (unsigned char)*psz_little ) )
-        {
-            const char *cur1 = p_pos + 1;
-            const char *cur2 = psz_little + 1;
-            while( *cur1 && *cur2
-             && toupper( (unsigned char)*cur1 ) == toupper( (unsigned char)*cur2 ) )
-            {
-                cur1++;
-                cur2++;
-            }
-            if( !*cur2 ) return p_pos;
-        }
-        p_pos++;
+        return str1;
     }
-    return NULL;
+
+    while(*str1Pos)
+    {
+      // Check if the first character of the compared string is at the current
+      // position.
+      if(tolower((unsigned char)*str1Pos) == tolower((unsigned char)*str2))
+      {
+        // In this case we start checking each character one by one with the
+        // hope to match all.
+        char const* str1MatchPos = str1Pos + 1;
+        char const* str2MatchPos = str2 + 1;
+
+        while(*str1MatchPos &&
+              tolower((unsigned char)*str1MatchPos) == tolower((unsigned char)*str2MatchPos))
+        {
+          // Proceed to the next character.
+          str1MatchPos++;
+          str2MatchPos++;
+
+          // If the second string has ended it means we found the point
+          // we were looking for, so return it.
+          if(!*str2MatchPos)
+          {
+            return str1Pos;
+          }
+        }
+      }
+
+      // The string didn't match so proceed to the next character of the
+      // string we are searching into and try again.
+      str1Pos++;
+    }
+
+    return nullptr;
 }
 
 } // namespace CS
