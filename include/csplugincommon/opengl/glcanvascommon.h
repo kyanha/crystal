@@ -52,8 +52,7 @@ namespace CS
        */
       class CS_CSPLUGINCOMMON_GL_EXPORT CanvasCommonBase :
         public virtual PluginCommon::CanvasCommonBase,
-        public virtual iOpenGLCanvas,
-        public iEventPlug
+        public virtual iOpenGLCanvas
       {
       public:
         enum GLPixelFormatValue
@@ -117,22 +116,12 @@ namespace CS
         };
         friend class csGLPixelFormatPicker;
 
-        /// The object registry.
-        iObjectRegistry* objectReg;
-        /// Canvas is completely opened
-        bool openComplete;
-
         GLPixelFormat currentFormat;
 
         void GetPixelFormatString (const GLPixelFormat& format, csString& str);
 
-        void Initialize (iObjectRegistry* object_reg);
-
         void Report (int severity, const char* msg, ...);
       public:
-        /// The event plug object
-        csRef<iEventOutlet> EventOutlet;
-
         /**
          * Constructor does little, most initialization stuff happens in
          * Initialize().
@@ -155,14 +144,6 @@ namespace CS
         virtual void CanvasClose ();
 
         bool CanvasResize (int width, int height);
-
-        /**\name iEventPlug implementation
-        * @{ */
-        virtual unsigned GetPotentiallyConflictingEvents ()
-        { return CSEVTYPE_Keyboard | CSEVTYPE_Mouse; }
-        virtual unsigned QueryEventPriority (unsigned /*iType*/)
-        { return 150; }
-        /** @} */
 
         /**\name iOpenGLCanvas implementation
         * @{ */

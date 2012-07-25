@@ -26,7 +26,6 @@
 #include "ivaria/reporter.h"
 
 #include "csutil/cfgacc.h"
-#include "csutil/eventnames.h"
 
 namespace CS
 {
@@ -34,8 +33,7 @@ namespace CS
   {
     namespace GL
     {
-      CanvasCommonBase::CanvasCommonBase () :
-        objectReg (nullptr), openComplete (false)
+      CanvasCommonBase::CanvasCommonBase ()
       {
         memset (currentFormat, 0, sizeof (currentFormat));
       }
@@ -43,14 +41,6 @@ namespace CS
       CanvasCommonBase::~CanvasCommonBase ()
       {
         CanvasClose ();
-      }
-
-      void CanvasCommonBase::Initialize (iObjectRegistry* object_reg)
-      {
-        this->objectReg = object_reg;
-        csRef<iEventQueue> q (csQueryRegistry<iEventQueue> (object_reg));
-        if (q != 0)
-          EventOutlet = q->CreateEventOutlet (this);
       }
 
       bool CanvasCommonBase::CanvasOpen ()
@@ -75,7 +65,6 @@ namespace CS
             "WARNING! Crystal Space performs better in 24 or 32 bit display mode!");
         }
 
-        openComplete = true;
         return true;
       }
 
@@ -83,7 +72,6 @@ namespace CS
       {
         if (!canvas_open) return;
         PluginCommon::CanvasCommonBase::CanvasClose ();
-        openComplete = false;
       }
 
       void CanvasCommonBase::GetPixelFormatString (const GLPixelFormat& format,
@@ -114,10 +102,6 @@ namespace CS
         if (!PluginCommon::CanvasCommonBase::CanvasResize (width, height))
           return false;
 
-        if (openComplete && EventOutlet)
-          /* CanvasCommonBase::Open() causes a resize due to fitting to the working area;
-          * don't emit a resize event in that case */
-          EventOutlet->Broadcast (csevCanvasResize(objectReg, this), (intptr_t)this);
         return true;
       }
 
