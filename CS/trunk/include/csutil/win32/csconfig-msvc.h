@@ -83,6 +83,7 @@
 
 // MSVC int64 format specifiers, to be used with native formatting functions
 #if defined(CS_COMPILER_MSVC)
+#define CS_HAVE_C_FORMAT64_MACROS
 #define PRId64 "I64d"
 #define PRIx64 "I64x"
 #define PRIu64 "I64u"
