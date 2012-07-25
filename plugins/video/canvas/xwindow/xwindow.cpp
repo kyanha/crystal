@@ -416,7 +416,7 @@ void csXWindow::SetVideoMode (bool full, bool up, bool down)
       {
         wm_width = w;
         wm_height = h;
-        if (Canvas->Resize (wm_width, wm_height))
+        if (Canvas->CanvasResize (wm_width, wm_height))
           XResizeWindow (dpy, ctx_win, wm_width, wm_height);
       }
     }
@@ -594,11 +594,10 @@ void csXWindow::Resize (int w, int h)
   AllowResize (allow_resize); // updates size in window hints
 }
 
-void csXWindow::SetCanvas (iGraphics2D *canvas)
+void csXWindow::SetCanvas (iGraphicsCanvas *canvas)
 {
   Canvas = canvas;
-  wm_width = Canvas->GetWidth ();
-  wm_height = Canvas->GetHeight ();
+  Canvas->GetFramebufferDimensions (wm_width, wm_height);
 }
 
 static Bool CheckKeyPress (Display* /*dpy*/, XEvent *event, XPointer arg)
@@ -969,7 +968,7 @@ bool csXWindow::HandleEvent (iEvent &Event)
 
   if (resize)
   {
-    if (Canvas->Resize (wm_width, wm_height))
+    if (Canvas->CanvasResize (wm_width, wm_height))
       XResizeWindow (dpy, ctx_win, wm_width, wm_height);
   }
   return false;
