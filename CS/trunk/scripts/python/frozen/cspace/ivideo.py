@@ -82,7 +82,7 @@ class csPixelCoord(object):
 csPixelCoord_swigregister = _ivideo.csPixelCoord_swigregister
 csPixelCoord_swigregister(csPixelCoord)
 
-class iGraphics2D(core.iBase):
+class iGraphics2D(object):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
     def __init__(self, *args, **kwargs): raise AttributeError, "No constructor defined"
     __repr__ = _swig_repr
@@ -90,7 +90,6 @@ class iGraphics2D(core.iBase):
     def Close(*args): return _ivideo.iGraphics2D_Close(*args)
     def GetWidth(*args): return _ivideo.iGraphics2D_GetWidth(*args)
     def GetHeight(*args): return _ivideo.iGraphics2D_GetHeight(*args)
-    def GetColorDepth(*args): return _ivideo.iGraphics2D_GetColorDepth(*args)
     def FindRGB(*args): return _ivideo.iGraphics2D_FindRGB(*args)
     def GetRGB(*args): return _ivideo.iGraphics2D_GetRGB(*args)
     def GetRGBA(*args): return _ivideo.iGraphics2D_GetRGBA(*args)
@@ -98,7 +97,6 @@ class iGraphics2D(core.iBase):
     def GetClipRect(*args): return _ivideo.iGraphics2D_GetClipRect(*args)
     def BeginDraw(*args): return _ivideo.iGraphics2D_BeginDraw(*args)
     def FinishDraw(*args): return _ivideo.iGraphics2D_FinishDraw(*args)
-    def Print(*args): return _ivideo.iGraphics2D_Print(*args)
     def Clear(*args): return _ivideo.iGraphics2D_Clear(*args)
     def ClearAll(*args): return _ivideo.iGraphics2D_ClearAll(*args)
     def DrawLine(*args): return _ivideo.iGraphics2D_DrawLine(*args)
@@ -108,23 +106,13 @@ class iGraphics2D(core.iBase):
     def DrawPixels(*args): return _ivideo.iGraphics2D_DrawPixels(*args)
     def Blit(*args): return _ivideo.iGraphics2D_Blit(*args)
     def GetPixel(*args): return _ivideo.iGraphics2D_GetPixel(*args)
-    def AllowResize(*args): return _ivideo.iGraphics2D_AllowResize(*args)
     def Resize(*args): return _ivideo.iGraphics2D_Resize(*args)
     def GetFontServer(*args): return _ivideo.iGraphics2D_GetFontServer(*args)
     def PerformExtension(*args): return _ivideo.iGraphics2D_PerformExtension(*args)
     def ScreenShot(*args): return _ivideo.iGraphics2D_ScreenShot(*args)
-    def GetNativeWindow(*args): return _ivideo.iGraphics2D_GetNativeWindow(*args)
-    def GetFullScreen(*args): return _ivideo.iGraphics2D_GetFullScreen(*args)
-    def SetFullScreen(*args): return _ivideo.iGraphics2D_SetFullScreen(*args)
-    def SetMousePosition(*args): return _ivideo.iGraphics2D_SetMousePosition(*args)
-    def SetMouseCursor(*args): return _ivideo.iGraphics2D_SetMouseCursor(*args)
-    def SetGamma(*args): return _ivideo.iGraphics2D_SetGamma(*args)
-    def GetGamma(*args): return _ivideo.iGraphics2D_GetGamma(*args)
-    def GetName(*args): return _ivideo.iGraphics2D_GetName(*args)
     def Write(*args): return _ivideo.iGraphics2D_Write(*args)
     def SetViewport(*args): return _ivideo.iGraphics2D_SetViewport(*args)
     def GetViewport(*args): return _ivideo.iGraphics2D_GetViewport(*args)
-    def GetFramebufferDimensions(*args): return _ivideo.iGraphics2D_GetFramebufferDimensions(*args)
     def GetHWRenderer(*args): return _ivideo.iGraphics2D_GetHWRenderer(*args)
     def GetHWGLVersion(*args): return _ivideo.iGraphics2D_GetHWGLVersion(*args)
     def GetHWVendor(*args): return _ivideo.iGraphics2D_GetHWVendor(*args)

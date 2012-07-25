@@ -22,11 +22,13 @@
  * subdirectory of the top Crystal Space include directory.
  */
 #include "cssysdef.h"
+#include "csplugincommon/canvas/canvascommon.h"
 #include "csplugincommon/canvas/cursorconvert.h"
 #include "csplugincommon/canvas/fontcache.h"
 #include "csplugincommon/canvas/graph2d.h"
 #include "csplugincommon/imageloader/commonimagefile.h"
 #include "csplugincommon/imageloader/optionsparser.h"
+#include "csplugincommon/iopengl/canvas.h"
 #include "csplugincommon/iopengl/driverdb.h"
 #include "csplugincommon/iopengl/openglinterface.h"
 #include "csplugincommon/render3d/normalizationcube.h"
