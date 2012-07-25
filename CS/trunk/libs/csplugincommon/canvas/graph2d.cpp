@@ -40,25 +40,11 @@
 #include "ivaria/reporter.h"
 
 csGraphics2D::csGraphics2D (iBase* parent) : 
-  scfImplementationType (this, parent), fontCache (0), hwMouse (hwmcOff),
-  fitToWorkingArea (false)
+  scfImplementationType (this, parent), fontCache (0)
 {
-  static uint g2d_count = 0;
-
-  fbWidth = 640;
-  fbHeight = 480;
-  Depth = 16;
-  DisplayNumber = 0;
-  FullScreen = false;
   is_open = false;
-  win_title = "Crystal Space Application";
   object_reg = 0;
-  AllowResizing = false;
-  refreshRate = 0;
-  vsync = false;
   weakEventHandler = 0;
-
-  name.Format ("graph2d.%x", g2d_count++);
 
   fontCache = 0;
 }
@@ -81,37 +67,9 @@ bool csGraphics2D::Initialize (iObjectRegistry* r)
   plugin_mgr = csQueryRegistry<iPluginManager> (object_reg);
   // Get the system parameters
   config.AddConfig (object_reg, "/config/video.cfg");
-  vpWidth = fbWidth = config->GetInt ("Video.ScreenWidth", fbWidth);
-  vpHeight = fbHeight = config->GetInt ("Video.ScreenHeight", fbHeight);
-  Depth = config->GetInt ("Video.ScreenDepth", Depth);
-  FullScreen = config->GetBool ("Video.FullScreen", FullScreen);
-  fitToWorkingArea = config->GetBool ("Video.FitToWorkingArea", fitToWorkingArea);
-  DisplayNumber = config->GetInt ("Video.DisplayNumber", DisplayNumber);
-  refreshRate = config->GetInt ("Video.DisplayFrequency", 0);
-  vsync = config->GetBool ("Video.VSync", false);
-  
-  const char* hwMouseFlag = config->GetStr ("Video.SystemMouseCursor", "yes");
-  if ((strcasecmp (hwMouseFlag, "yes") == 0)
-      || (strcasecmp (hwMouseFlag, "true") == 0)
-      || (strcasecmp (hwMouseFlag, "on") == 0)
-      || (strcmp (hwMouseFlag, "1") == 0))
-  {
-    hwMouse = hwmcOn;
-  }
-  else if (strcasecmp (hwMouseFlag, "rgbaonly") == 0)
-  {
-    hwMouse = hwmcRGBAOnly;
-  }
-  else
-  {
-    hwMouse = hwmcOff;
-  }
-  csRef<iCommandLineParser> cmdline (
-    csQueryRegistry<iCommandLineParser> (object_reg));
-  if (cmdline->GetOption ("sysmouse") || cmdline->GetOption ("nosysmouse"))
-  {
-    hwMouse = cmdline->GetBoolOption ("sysmouse") ? hwmcOn : hwmcOff;
-  }
+  ReadConfig (object_reg, config);
+  vpWidth = fbWidth;
+  vpHeight = fbHeight;
 
   // Get the font server: A missing font server is NOT an error
   if (!FontServer)
@@ -140,17 +98,6 @@ bool csGraphics2D::Initialize (iObjectRegistry* r)
   return true;
 }
 
-void csGraphics2D::ChangeDepth (int d)
-{
-  if (Depth == d) return;
-  Depth = d;
-}
-
-const char* csGraphics2D::GetName() const
-{
-  return name;
-}
-
 bool csGraphics2D::HandleEvent (iEvent& Event)
 {
   if (Event.Name == csevSystemOpen (object_reg))
@@ -174,24 +121,14 @@ bool csGraphics2D::Open ()
   if (is_open) return true;
   is_open = true;
 
+  if (!CanvasOpen()) return false;
+
   vpLeft = 0;
   vpTop = 0;
   
   FrameBufferLocked = 0;
 
   SetClipRect (0, 0, fbWidth, fbHeight);
-  
-  if (!FullScreen && fitToWorkingArea)
-  {
-    int newWidth (vpWidth), newHeight (vpHeight);
-    if (FitSizeToWorkingArea (newWidth, newHeight))
-    {
-      bool oldResize (AllowResizing);
-      AllowResizing = true;
-      Resize (newWidth, newHeight);
-      AllowResizing = oldResize;
-    }
-  }
 
   return true;
 }
@@ -200,6 +137,7 @@ void csGraphics2D::Close ()
 {
   if (!is_open) return;
   is_open = false;
+  CanvasClose();
   delete fontCache;
   fontCache = 0;
 }
@@ -342,85 +280,30 @@ bool csGraphics2D::PerformExtensionV (char const* command, va_list args)
   return false;
 }
 
-void csGraphics2D::AlertV (int type, const char* title, const char* okMsg,
-    const char* msg, va_list arg)
-{
-  (void)type; (void)title; (void)okMsg;
-  csPrintf ("ALERT: ");
-  csPrintfV (msg, arg);
-  csPrintf ("\n");
-  fflush (stdout);
-}
-
-void csGraphics2D::AlertV (int type, const wchar_t* title, const wchar_t* okMsg,
-    const wchar_t* msg, va_list arg)
-{
-  AlertV (type, csString (title), csString (okMsg), csString (msg), arg);
-}
-
-iNativeWindow* csGraphics2D::GetNativeWindow ()
-{
-  return static_cast<iNativeWindow*> (this);
-}
-
-void csGraphics2D::SetTitle (const char* title)
-{
-  win_title = title;
-}
-
-void csGraphics2D::SetIcon (iImage *image)
-{
-    
-}
-
 bool csGraphics2D::Resize (int w, int h)
 {
+  int old_width (fbWidth), old_height (fbHeight);
+  if (!CanvasResize (w, h))
+    return false;
+
   if (!is_open)
   {
     // Still in Initialization phase, configuring size of canvas
-    vpWidth = fbWidth = w;
-    vpHeight = fbHeight = h;
+    vpWidth = fbWidth;
+    vpHeight = fbHeight;
     return true;
   }
 
-  if (!AllowResizing)
-    return false;
-
-  if (fbWidth != w || fbHeight != h)
+  if (old_width != w || old_height != h)
   {
     if ((vpLeft == 0) && (vpTop == 0)
-        && (vpWidth == fbWidth) && (vpHeight == fbHeight))
+        && (vpWidth == old_width) && (vpHeight == old_height))
     {
       vpWidth = w;
       vpHeight = h;
     }
-    fbWidth = w;
-    fbHeight = h;
   }
   return true;
-}
-
-void csGraphics2D::SetFullScreen (bool b)
-{
-  if (FullScreen == b) return;
-  FullScreen = b;
-}
-
-bool csGraphics2D::SetMousePosition (int x, int y)
-{
-  (void)x; (void)y;
-  return false;
-}
-
-bool csGraphics2D::SetMouseCursor (csMouseCursorID iShape)
-{
-  return (iShape == csmcArrow);
-}
-
-bool csGraphics2D::SetMouseCursor (iImage *, const csRGBcolor*, int, int, 
-                                   csRGBcolor, csRGBcolor)
-{
-  return false;
 }
 
 void csGraphics2D::SetViewport (int left, int top, int width, int height)
@@ -433,107 +316,3 @@ bool csGraphics2D::DebugCommand (const char* /*cmd*/)
 {
   return false;
 }
-
-bool csGraphics2D::GetWindowDecoration (WindowDecoration decoration)
-{
-  // Decorations that are commonly on
-  switch (decoration)
-  {
-  case decoCaption:
-    return !FullScreen;
-  default:
-    break;
-  }
-
-  // Everything else: assume off
-  return false;
-}
-
-bool csGraphics2D::GetWorkspaceDimensions (int& width, int& height)
-{
-  return false;
-}
-
-bool csGraphics2D::AddWindowFrameDimensions (int& width, int& height)
-{
-  return false;
-}
-
-bool csGraphics2D::FitSizeToWorkingArea (int& desiredWidth,
-                                         int& desiredHeight)
-{
-  int wswidth, wsheight;
-  if (!GetWorkspaceDimensions (wswidth, wsheight))
-    return false;
-  int framedWidth (desiredWidth), framedHeight (desiredHeight);
-  if (!AddWindowFrameDimensions (framedWidth, framedHeight))
-    return false;
-  if (framedWidth > wswidth)
-  {
-    desiredWidth -= (framedWidth - wswidth);
-  }
-  if (framedHeight > wsheight)
-  {
-    desiredHeight -= (framedHeight - wsheight);
-  }
-  return true;
-}
-
-//---------------------------------------------------------------------------
-
-#define NUM_OPTIONS 3
-
-static const csOptionDescription config_options [NUM_OPTIONS] =
-{
-  csOptionDescription( 0, "depth", "Display depth", CSVAR_LONG ),
-  csOptionDescription( 1, "fs", "Fullscreen if available", CSVAR_BOOL ),
-  csOptionDescription( 2, "mode", "Window size or resolution", CSVAR_STRING )
-};
-
-bool csGraphics2D::SetOption (int id, csVariant* value)
-{
-  if (value->GetType () != config_options[id].type)
-    return false;
-  switch (id)
-  {
-    case 0: ChangeDepth (value->GetLong ()); break;
-    case 1: SetFullScreen (value->GetBool ()); break;
-    case 2:
-    {
-      const char* buf = value->GetString ();
-      int wres, hres;
-      if (sscanf (buf, "%dx%d", &wres, &hres) == 2)
-        Resize (wres, hres);
-      break;
-    }
-    default: return false;
-  }
-  return true;
-}
-
-bool csGraphics2D::GetOption (int id, csVariant* value)
-{
-  switch (id)
-  {
-    case 0: value->SetLong (Depth); break;
-    case 1: value->SetBool (FullScreen); break;
-    case 2:
-    {
-      csString buf;
-      buf.Format ("%dx%d", GetWidth (), GetHeight ());
-      value->SetString (buf);
-      break;
-    }
-    default: return false;
-  }
-  return true;
-}
-
-bool csGraphics2D::GetOptionDescription (int idx, csOptionDescription* option)
-{
-  if (idx < 0 || idx >= NUM_OPTIONS)
-    return false;
-  *option = config_options[idx];
-  return true;
-}
-

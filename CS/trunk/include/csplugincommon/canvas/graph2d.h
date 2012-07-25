@@ -26,6 +26,8 @@
 
 #include "csextern.h"
 
+#include "canvascommon.h"
+
 #include "csutil/cfgacc.h"
 #include "csutil/scf.h"
 #include "csutil/scf_implementation.h"
@@ -61,8 +63,14 @@ class csFontCache;
  */
 class CS_CRYSTALSPACE_EXPORT csGraphics2D : 
   public scfImplementation7<csGraphics2D, 
-    iGraphics2D, iComponent, iNativeWindow, iNativeWindowManager,
-    iPluginConfig, iDebugHelper, iEventHandler>
+    iGraphics2D,
+    iComponent,
+    scfFakeInterface<iNativeWindow>,
+    scfFakeInterface<iNativeWindowManager>,
+    scfFakeInterface<iPluginConfig>,
+    iDebugHelper,
+    iEventHandler>,
+  public virtual CS::PluginCommon::CanvasCommonBase
 {
 public:
   /// The configuration file.
@@ -84,69 +92,15 @@ public:
   /// The font cache
   csFontCache* fontCache;
 
-  /// Pointer to a title.
-  csString win_title;
-
-  /// The width, height and depth of visual.
-  int fbWidth, fbHeight, Depth;
-
   int vpLeft, vpTop, vpWidth, vpHeight;
 
-  /**
-   * Display number.  If 0, use primary display; else if greater than 0, use
-   * that display number.  If that display number is not present, use primary
-   * display.
-   */
-  int DisplayNumber;
-  /// True if visual is full-screen.
-  bool FullScreen;
-  /// Whether to allow resizing.
-  bool AllowResizing;
   /**
    * The counter that is incremented inside BeginDraw and decremented in
    * FinishDraw().
    */
   int FrameBufferLocked;
-  /**
-   * Change the depth of the canvas.
-   */
-  virtual void ChangeDepth (int d);
-  /**
-   * Get the name of this canvas
-   */
-  virtual const char *GetName() const;
-
-  /// Hardware mouse cursor setting
-  enum HWMouseMode
-  {
-    /// Never use hardware cursor
-    hwmcOff,
-    /// Always use hardware cursor, if possible
-    hwmcOn,
-    /// Only use hardware cursor if true RGBA cursor is available
-    hwmcRGBAOnly
-  };
-  HWMouseMode hwMouse;
 protected:
-  /// Screen refresh rate
-  int refreshRate;
-  /// Activate Vsync
-  bool vsync;
-  /// Reduce window size to fit into workspace, if necessary
-  bool fitToWorkingArea;
-
-  csString name;
   csRef<iEventHandler> weakEventHandler;
-
-  /**
-   * Helper function for FitSizeToWorkingArea(): obtain workspace dimensions.
-   */
-  virtual bool GetWorkspaceDimensions (int& width, int& height);
-  /**
-   * Helper function for FitSizeToWorkingArea(): compute window dimensions
-   * with the window frame included.
-   */
-  virtual bool AddWindowFrameDimensions (int& width, int& height);
 public:
   /// Create csGraphics2D object
   csGraphics2D (iBase*);
@@ -164,6 +118,9 @@ public:
   /// (*) Close graphics system
   virtual void Close ();
 
+  virtual int GetWidth () { return vpWidth; }
+  virtual int GetHeight () { return vpHeight; }
+
   /// Set clipping rectangle
   virtual void SetClipRect (int xmin, int ymin, int xmax, int ymax);
   /// Query clipping rectangle
@@ -176,9 +133,6 @@ public:
   virtual bool BeginDraw ();
   /// This routine should be called when you finished drawing
   virtual void FinishDraw ();
-
-  /// (*) Flip video pages (or dump backbuffer into framebuffer).
-  virtual void Print (csRect const* /*area*/ = 0) { }
 
   /// Clear backbuffer
   virtual void Clear (int color);
@@ -217,9 +171,6 @@ public:
     const wchar_t* text, uint flags = 0);  
   //@}
 
-  virtual bool SetGamma (float /*gamma*/) { return false; }
-  virtual float GetGamma () const { return 1.0; }
-
 private:
     /// helper function for ClipLine()
   bool CLIPt (float denom, float num, float& tE, float& tL);
@@ -236,66 +187,17 @@ public:
   virtual iFontServer *GetFontServer ()
   { return FontServer; }
 
-  virtual int GetWidth () { return vpWidth; }
-  virtual int GetHeight () { return vpHeight; }
-  int GetColorDepth () { return Depth; }
-
   /**
    * Perform a system specific extension. Return false if extension
    * not supported.
    */
   virtual bool PerformExtensionV (char const* command, va_list);
 
-  /// Enable/disable canvas resize (Over-ride in sub classes)
-  virtual void AllowResize (bool /*iAllow*/) { };
+  bool Resize (int w, int h);
 
-  /// Resize the canvas
-  virtual bool Resize (int w, int h);
-
-  /// Return the Native Window interface for this canvas (if it has one)
-  virtual iNativeWindow* GetNativeWindow ();
-
-  /// Returns 'true' if the program is being run full-screen.
-  virtual bool GetFullScreen ()
-  { return FullScreen; }
-
-  /**
-   * Change the fullscreen state of the canvas.
-   */
-  virtual void SetFullScreen (bool b);
-
-  /// Set mouse cursor position; return success status
-  virtual bool SetMousePosition (int x, int y);
-
-  /**
-   * Set mouse cursor to one of predefined shape classes
-   * (see csmcXXX enum above). If a specific mouse cursor shape
-   * is not supported, return 'false'; otherwise return 'true'.
-   * If system supports it and iBitmap != 0, shape should be
-   * set to the bitmap passed as second argument; otherwise cursor
-   * should be set to its nearest system equivalent depending on
-   * iShape argument.
-   */
-  virtual bool SetMouseCursor (csMouseCursorID iShape);
-
-  /**
-   * Set mouse cursor using an image.  If the operation is unsupported, 
-   * return 'false' otherwise return 'true'.
-   * On some platforms there is only monochrome pointers available.  In this
-   * all black colors in the image will become the value of 'bg' and all 
-   * non-black colors will become 'fg'
-   */
-  virtual bool SetMouseCursor (iImage *image, const csRGBcolor* keycolor = 0, 
-                               int hotspot_x = 0, int hotspot_y = 0,
-                               csRGBcolor fg = csRGBcolor(255,255,255),
-                               csRGBcolor bg = csRGBcolor(0,0,0));
-  
   void SetViewport (int left, int top, int width, int height);
   void GetViewport (int& left, int& top, int& width, int& height)
   { left = vpLeft; top = vpTop; width = vpWidth; height = vpHeight; }
-  
-  void GetFramebufferDimensions (int& width, int& height)
-  { width = fbWidth; height = fbHeight; }
   
   const char* GetHWRenderer ()
   { return 0; }
@@ -304,59 +206,10 @@ public:
   const char* GetHWVendor ()
   { return 0; }
 
-  // iGraphicsCanvas methods
-  bool CanvasOpen () { return false; }
-  void CanvasClose () {}
-  bool CanvasResize (int w, int h) { return false; }
-
   CS_EVENTHANDLER_NAMES("crystalspace.graphics2d.common")
   CS_EVENTHANDLER_NIL_CONSTRAINTS
 
 protected:
-  /**\name iNativeWindowManager implementation
-   * @{ */
-  // Virtual Alert function so it can be overridden by subclasses
-  // of csGraphics2D.
-  virtual void AlertV (int type, const char* title, const char* okMsg,
-    const char* msg, va_list args);
-  virtual void AlertV (int type, const wchar_t* title, const wchar_t* okMsg,
-    const wchar_t* msg, va_list args);
-  /** @} */
-
-  /**\name iNativeWindow implementation
-   * @{ */
-  // Virtual SetTitle function so it can be overridden by subclasses
-  // of csGraphics2D.
-  virtual void SetTitle (const char* title);
-  virtual void SetTitle (const wchar_t* title)
-  { SetTitle (csString (title)); }
-
-  /** Sets the icon of this window with the provided one.
-   *  
-   *  @note Virtual SetIcon function so it can be overridden by subclasses of csGraphics2D.
-   *  @param image the iImage to set as the icon of this window.
-   */  
-  virtual void SetIcon (iImage *image);
-
-  virtual bool IsWindowTransparencyAvailable() { return false; }
-  virtual bool SetWindowTransparent (bool transparent) { return false; }
-  virtual bool GetWindowTransparent () { return false; }
-
-  virtual bool SetWindowDecoration (WindowDecoration decoration, bool flag)
-  { return false; }
-  virtual bool GetWindowDecoration (WindowDecoration decoration);
-
-  virtual bool FitSizeToWorkingArea (int& desiredWidth,
-                                     int& desiredHeight);
-  /** @} */
-
-  /**\name iPluginConfig implementation
-   * @{ */
-  virtual bool GetOptionDescription (int idx, csOptionDescription*);
-  virtual bool SetOption (int id, csVariant* value);
-  virtual bool GetOption (int id, csVariant* value);
-  /** @} */
-
   /**\name iDebugHelper implementation
    * @{ */
   virtual bool DebugCommand (const char* cmd);
