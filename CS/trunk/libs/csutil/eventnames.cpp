@@ -152,10 +152,10 @@ csRef<iEventNameRegistry> csEventNameRegistry::GetRegistry (
    Let's keep the inclusion graph as simple as possible, shall we?
 */
 csEventID csevCanvasOp (csRef<iEventNameRegistry> &name_reg, 
-			const iGraphics2D* g2d, const csString &y)
+			const iGraphicsCanvas* canvas, const csString &y)
 {
   csString name ("crystalspace.canvas.");
-  name.Append (g2d->GetName());
+  name.Append (canvas->GetName());
   name.Append (".");
   name.Append (y);
   return name_reg->GetID (name);

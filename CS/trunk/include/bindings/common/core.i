@@ -946,19 +946,19 @@ csEventID _csevQuit (iObjectRegistry *);
 /* Canvas */
 #define _csevCanvasClose(reg, g2d) csevCanvasClose(reg, g2d)
 #undef csevCanvasClose
-csEventID csevCanvasClose(iObjectRegistry*, iGraphics2D*);
+csEventID csevCanvasClose(iObjectRegistry*, iGraphicsCanvas*);
 #define _csevCanvasExposed(reg, g2d) csevCanvasExposed(reg, g2d)
 #undef csevCanvasExposed
-csEventID csevCanvasExposed(iObjectRegistry*, iGraphics2D*);
+csEventID csevCanvasExposed(iObjectRegistry*, iGraphicsCanvas*);
 #define _csevCanvasExposed(reg, g2d) csevCanvasExposed(reg, g2d)
 #undef csevCanvasExposed
-csEventID csevCanvasExposed(iObjectRegistry*, iGraphics2D*);
+csEventID csevCanvasExposed(iObjectRegistry*, iGraphicsCanvas*);
 #define _csevCanvasHidden(reg, g2d) csevCanvasHidden(reg, g2d)
 #undef csevCanvasHidden
-csEventID csevCanvasHidden(iObjectRegistry*, iGraphics2D*);
+csEventID csevCanvasHidden(iObjectRegistry*, iGraphicsCanvas*);
 #define _csevCanvasResize(reg, g2d) csevCanvasResize(reg, g2d)
 #undef csevCanvasResize
-csEventID csevCanvasResize(iObjectRegistry*, iGraphics2D*);
+csEventID csevCanvasResize(iObjectRegistry*, iGraphicsCanvas*);
 #define _csevFocusChanged(reg) csevFocusChanged(reg)
 #undef csevFocusChanged
 csEventID csevFocusChanged(iObjectRegistry*);

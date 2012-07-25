@@ -415,17 +415,17 @@ static inline csEventID csevJoystickOp (
 #define csevSystemClose(reg)	      \
   (csEventNameRegistry::GetID((reg), "crystalspace.application.close"))
 
-struct iGraphics2D;
+struct iGraphicsCanvas;
 
 CS_CRYSTALSPACE_EXPORT
 csEventID csevCanvasOp (csRef<iEventNameRegistry>& reg, 
-					const iGraphics2D* g2d, 
+					const iGraphicsCanvas* canvas,
 					const csString &y);
 static inline csEventID csevCanvasOp (
-  iObjectRegistry *object_reg, const iGraphics2D* g2d, const csString &y)
+  iObjectRegistry *object_reg, const iGraphicsCanvas* canvas, const csString &y)
 {
   csRef<iEventNameRegistry> name_reg = csEventNameRegistry::GetRegistry (object_reg);
-  return csevCanvasOp(name_reg, g2d, y);
+  return csevCanvasOp(name_reg, canvas, y);
 }
 
 
@@ -436,8 +436,8 @@ static inline csEventID csevCanvasOp (
  * Info: (iGraphics2D *) The context that has been resized
  * </pre>
  */
-#define csevCanvasResize(reg, g2d)      \
-  csevCanvasOp((reg), (g2d), "resize")
+#define csevCanvasResize(reg, canvas)      \
+  csevCanvasOp((reg), (canvas), "resize")
 
 /**
  * This event is sent when a graphics context x is being destroyed
