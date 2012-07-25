@@ -18,15 +18,16 @@
  * Inc., 51 Franklin Street, Fifth Floor, Boston MA 02110-1301, USA.
  *****************************************************************************/
 
-#ifdef HAVE_CONFIG_H
-# include <config.h>
-#endif
-
+#include "cssysdef.h"
 #include <string.h>
 #include <ctype.h>
 #include <assert.h>
+#include "csutil/util.h"
 
-const char *strcasestr (const char *psz_big, const char *psz_little)
+namespace CS
+{
+
+const char *StrCaseStr (const char *psz_big, const char *psz_little)
 {
     const char *p_pos = psz_big;
 
@@ -50,3 +51,5 @@ const char *strcasestr (const char *psz_big, const char *psz_little)
     }
     return NULL;
 }
+
+} // namespace CS
