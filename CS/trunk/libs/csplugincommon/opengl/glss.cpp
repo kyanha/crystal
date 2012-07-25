@@ -24,7 +24,7 @@
 #include "csplugincommon/opengl/glcommon2d.h"
 #include "csplugincommon/opengl/glss.h"
 
-csGLScreenShot::csGLScreenShot (csGraphics2DGLCommon* G2D) :
+csGLScreenShot::csGLScreenShot (CS::PluginCommon::GL::Graphics2DCommon* G2D) :
   scfImplementationType(this)
 {
   poolNext = 0;

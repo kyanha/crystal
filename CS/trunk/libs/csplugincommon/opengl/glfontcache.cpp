@@ -52,7 +52,7 @@ const GLenum fontFilterMode = /*GL_LINEAR*/GL_NEAREST;
 
 //---------------------------------------------------------------------------
 
-csGLFontCache::csGLFontCache (csGraphics2DGLCommon* G2D) : 
+csGLFontCache::csGLFontCache (CS::PluginCommon::GL::Graphics2DCommon* G2D) : 
   cacheDataAlloc (512), verts2d (256), texcoords (256)
 {
   csGLFontCache::G2D = G2D;
@@ -101,12 +101,13 @@ void csGLFontCache::Setup()
   glGetIntegerv (GL_MAX_TEXTURE_SIZE, &maxtex);
 
   G2D->ext.InitGL_ARB_fragment_program();
-  afpText = G2D->config->GetBool (
+  csConfigAccess config (G2D->object_reg);
+  afpText = config->GetBool (
     "Video.OpenGL.FontCache.UseAFP", false) 
     && G2D->ext.CS_GL_ARB_fragment_program;
-  multiTexText = G2D->config->GetBool (
+  multiTexText = config->GetBool (
     "Video.OpenGL.FontCache.UseMultiTexturing", true) && G2D->useCombineTE;
-  intensityBlendText = G2D->config->GetBool (
+  intensityBlendText = config->GetBool (
     "Video.OpenGL.FontCache.UseIntensityBlend", true);
 
   csRef<iVerbosityManager> verbosemgr (
@@ -179,13 +180,13 @@ void csGLFontCache::Setup()
     }
   }
 
-  texSize = G2D->config->GetInt ("Video.OpenGL.FontCache.TextureSize", 256);
+  texSize = config->GetInt ("Video.OpenGL.FontCache.TextureSize", 256);
   texSize = csMax (texSize, 64);
   texSize = csMin (texSize, (int)maxtex);
-  maxTxts = G2D->config->GetInt ("Video.OpenGL.FontCache.MaxTextureNum", 16);
+  maxTxts = config->GetInt ("Video.OpenGL.FontCache.MaxTextureNum", 16);
   maxTxts = csMax (maxTxts, size_t (1));
   maxTxts = csMin (maxTxts, sizeof(size_t) * 8);
-  maxFloats = G2D->config->GetInt ("Video.OpenGL.FontCache.VertexCache", 128);
+  maxFloats = config->GetInt ("Video.OpenGL.FontCache.VertexCache", 128);
   maxFloats = ((maxFloats + 3) / 4) * 4;
   maxFloats = csMax (maxFloats, size_t (4));
 

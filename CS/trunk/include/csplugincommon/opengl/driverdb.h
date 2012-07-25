@@ -32,7 +32,17 @@
 struct iConfigDocument;
 struct iConfigFile;
 struct iDocumentNode;
-class csGraphics2DGLCommon;
+
+namespace CS
+{
+  namespace PluginCommon
+  {
+    namespace GL
+    {
+      class Graphics2DCommon;
+    }
+  }
+}
 
 /**\addtogroup plugincommon
  * @{ */
@@ -48,7 +58,7 @@ class CS_CSPLUGINCOMMON_GL_EXPORT csGLDriverDatabase
 protected:
   friend class csDriverDBReader;
   
-  csGraphics2DGLCommon* ogl2d;
+  CS::PluginCommon::GL::Graphics2DCommon* ogl2d;
   csRefArray<iConfigFile> addedConfigs;
   const char* rulePhase;
 
@@ -76,7 +86,7 @@ public:
   csGLDriverDatabase ();
   ~csGLDriverDatabase ();
 
-  void Open (csGraphics2DGLCommon* ogl2d, iDocumentNode* dbRoot, 
+  void Open (CS::PluginCommon::GL::Graphics2DCommon* ogl2d, iDocumentNode* dbRoot,
     const char* phase, int configPriority);
   void Close ();
 };

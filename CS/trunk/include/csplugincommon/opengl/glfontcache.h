@@ -33,7 +33,16 @@
 
 class csGLStateCache;
 
-class csGraphics2DGLCommon;
+namespace CS
+{
+  namespace PluginCommon
+  {
+    namespace GL
+    {
+      class Graphics2DCommon;
+    }
+  }
+}
 
 /**\addtogroup plugincommon
  * @{ */
@@ -51,7 +60,7 @@ class CS_CSPLUGINCOMMON_GL_EXPORT csGLFontCache : public csFontCache
     csBitmapMetrics bmetrics;
   };
 
-  csGraphics2DGLCommon* G2D;
+  CS::PluginCommon::GL::Graphics2DCommon* G2D;
   csGLStateCache* statecache;
 
   int texSize;
@@ -144,7 +153,7 @@ protected:
     const csBitmapMetrics& bmetrics, const csRect& texRect, 
     iDataBuffer* bitmapDataBuf, iDataBuffer* alphaDataBuf);
 public:
-  csGLFontCache (csGraphics2DGLCommon* G2D);
+  csGLFontCache (CS::PluginCommon::GL::Graphics2DCommon* G2D);
   virtual ~csGLFontCache ();
 
   /// Read configuration etc.

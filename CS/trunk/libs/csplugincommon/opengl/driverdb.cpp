@@ -596,7 +596,7 @@ csGLDriverDatabase::~csGLDriverDatabase ()
 {
 }
 
-void csGLDriverDatabase::Open (csGraphics2DGLCommon* ogl2d, 
+void csGLDriverDatabase::Open (CS::PluginCommon::GL::Graphics2DCommon* ogl2d, 
 			       iDocumentNode* dbRoot, const char* phase, 
 			       int configPriority)
 {
