@@ -26,9 +26,9 @@
 #include <ctype.h>
 #include <assert.h>
 
-char *strcasestr (const char *psz_big, const char *psz_little)
+const char *strcasestr (const char *psz_big, const char *psz_little)
 {
-    char *p_pos = (char *)psz_big;
+    const char *p_pos = psz_big;
 
     if( !*psz_little ) return p_pos;
 
@@ -36,8 +36,8 @@ char *strcasestr (const char *psz_big, const char *psz_little)
     {
         if( toupper( (unsigned char)*p_pos ) == toupper( (unsigned char)*psz_little ) )
         {
-            char *cur1 = p_pos + 1;
-            char *cur2 = (char *)psz_little + 1;
+            const char *cur1 = p_pos + 1;
+            const char *cur2 = psz_little + 1;
             while( *cur1 && *cur2
              && toupper( (unsigned char)*cur1 ) == toupper( (unsigned char)*cur2 ) )
             {
