@@ -335,7 +335,7 @@ bool csGraphics2D::DebugCommand (const char* /*cmd*/)
 bool csGraphics2D::Initialize (iObjectRegistry* r)
 {
   CS_ASSERT (r != 0);
-  config.AddConfig (object_reg, "/config/video.cfg");
+  config.AddConfig (r, "/config/video.cfg");
   CS::PluginCommon::CanvasCommonBase::ReadConfig (r, config);
 
   return Graphics2DCommon::Initialize (r);

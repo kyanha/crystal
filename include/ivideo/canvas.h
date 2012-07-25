@@ -52,7 +52,7 @@ class csRect;
  */
 struct iGraphicsCanvas : public virtual iBase
 {
-  SCF_INTERFACE (iGraphicsCanvas, 1, 0, 0);
+  SCF_INTERFACE (iGraphicsCanvas, 1, 0, 1);
   
   /// Open the canvas.
   virtual bool CanvasOpen () = 0;

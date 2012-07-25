@@ -31,6 +31,7 @@
 #endif
 
 #include "iutil/event.h"
+#include "csplugincommon/iopengl/canvas.h"
 #include "csutil/scf.h"
 #include "csplugincommon/canvas/canvascommon.h"
 #include "driverdb.h"
@@ -51,6 +52,7 @@ namespace CS
        */
       class CS_CSPLUGINCOMMON_GL_EXPORT CanvasCommonBase :
         public virtual PluginCommon::CanvasCommonBase,
+        public virtual iOpenGLCanvas,
         public iEventPlug
       {
       public:
@@ -160,6 +162,11 @@ namespace CS
         { return CSEVTYPE_Keyboard | CSEVTYPE_Mouse; }
         virtual unsigned QueryEventPriority (unsigned /*iType*/)
         { return 150; }
+        /** @} */
+
+        /**\name iOpenGLCanvas implementation
+        * @{ */
+        int GetMultiSamples() { return currentFormat[glpfvMultiSamples]; }
         /** @} */
       };
     } // namespace GL

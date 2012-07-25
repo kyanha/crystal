@@ -28,7 +28,16 @@
 #include "csutil/scf_implementation.h"
 #include "csgfx/imagebase.h"
 
-class csGraphics2DGLCommon;
+namespace CS
+{
+  namespace PluginCommon
+   {
+    namespace GL
+    {
+      class Graphics2DCommon;
+    }
+  }
+}
 
 /**\addtogroup plugincommon
  * @{ */
@@ -39,7 +48,7 @@ class csGraphics2DGLCommon;
 class CS_CSPLUGINCOMMON_GL_EXPORT csGLScreenShot :
   public scfImplementationExt1<csGLScreenShot, csImageBase, iDataBuffer>
 {
-  csGraphics2DGLCommon* G2D;
+  CS::PluginCommon::GL::Graphics2DCommon* G2D;
   int Format;
   csRGBpixel* Data;
   size_t dataSize;
@@ -48,7 +57,7 @@ class CS_CSPLUGINCOMMON_GL_EXPORT csGLScreenShot :
 public:
   csGLScreenShot* poolNext;
 
-  csGLScreenShot (csGraphics2DGLCommon*);
+  csGLScreenShot (CS::PluginCommon::GL::Graphics2DCommon*);
   virtual ~csGLScreenShot ();
 
   virtual const void *GetImageData ()
