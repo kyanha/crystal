@@ -350,6 +350,12 @@ def AsCSGenmeshLib(self, func, depth=0, **kwargs):
     for sub in subMeshes:
       sub.AsCS(func, depth+4, False)
 
+  if 'meshData' in kwargs:
+    meshData = kwargs['meshData']
+    # We know there is only one mesh in the data.
+    if meshData[0].data.use_auto_smooth:
+      func(" "*depth + "    <autonormals/>")
+
   func(' '*depth + '  </params>')
 
   # Don't close 'meshfact' flag if another mesh object is defined as 
