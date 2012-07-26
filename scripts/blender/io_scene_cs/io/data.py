@@ -112,13 +112,15 @@ def GetSubMeshesRaw(self, name, indexV, indexGroups, mappingBuffer = []):
 bpy.types.Mesh.GetSubMeshesRaw = GetSubMeshesRaw
 
 
-def GetSubMeshes(self, name = '', mappingBuffer = [], numVertices = 0):
+def GetSubMeshes(self, name = '', mappingBuffer = None, numVertices = 0):
   """ Create the CS submeshes of this Blender mesh
       param name: name of the mesh
       param mappingBuffer: mapping buffer defining a CS vertex for each
             face vertex of the Blender mesh
       param numVertices: number of CS vertices previously defined      
   """
+  if mappingBuffer is None:
+      mappingBuffer = []
   indexV = numVertices
   indexGroups = {}
   indexV, indexGroups = self.GetSubMeshesRaw(name, indexV, indexGroups, mappingBuffer)
