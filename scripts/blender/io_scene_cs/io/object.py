@@ -247,9 +247,7 @@ class Hierarchy:
     """
 
     # Recover submeshes from kwargs
-    subMeshess = []
-    if 'subMeshess' in kwargs:
-      subMeshess = kwargs['subMeshess']
+    subMeshess = kwargs.get('subMeshess', [])
 
     # Export the animesh factory
     func(" "*depth + "  <params>")
@@ -328,8 +326,7 @@ def AsCSGenmeshLib(self, func, depth=0, **kwargs):
   func(' '*depth + '  <params>')
 
   # Recover submeshes from kwargs
-  if 'subMeshes' in kwargs:
-    subMeshes = kwargs['subMeshes']
+  subMeshes = kwargs.get('subMeshes', [])
 
   # Take the first found material as default object material
   if mat != None:
@@ -360,7 +357,7 @@ def AsCSGenmeshLib(self, func, depth=0, **kwargs):
 
   # Don't close 'meshfact' flag if another mesh object is defined as 
   # an imbricated genmesh factory of this factory
-  if not ('dontClose' in kwargs and kwargs['dontClose']):
+  if not kwargs.get('dontClose', False):
     func(' '*depth + '</meshfact>')
 
 bpy.types.Object.AsCSGenmeshLib = AsCSGenmeshLib
