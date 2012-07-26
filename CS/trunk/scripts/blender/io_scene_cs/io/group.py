@@ -135,6 +135,7 @@ def WriteCSGroup(self, func, depth=0, use_imposter=False, dontClose=False):
     func(' '*depth + '  <instances>')
 
     # Export first object of the group as a basic general mesh
+    # @@@ The following line of code doesn't do anything. Bug?
     m, ob in self.allObjects()[0]
 
     func(' '*depth + '    <meshfact name=\"%s-instance\">'%(self.uname))
