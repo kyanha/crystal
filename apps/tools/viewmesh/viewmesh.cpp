@@ -194,26 +194,28 @@ void ViewMesh::HandleCommandLine ()
   const char* texturefilename = cmdline->GetName (1);
   const char* texturename = cmdline->GetName (2);
   const char* scaleTxt = cmdline->GetOption ("scale");
-  const char* realPath = cmdline->GetOption ("R");
+  csString realPath = cmdline->GetOption ("R");
   const char* factoryName = cmdline->GetOption ("factory");
 
   csString vfsDir = cmdline->GetOption ("C");
 
-  if (realPath)
+  if (!realPath.IsEmpty ())
   {
     const char* tempPath = "/tmp/viewmesh";
 
-    if (!vfs->Exists (realPath))
-      ReportError ("Could not find the real path to be mounted %s\n",
-		   CS::Quote::Single (realPath));
+    // For some reason vfs Mount likes to have $/ instead of / for paths.
+    realPath.ReplaceAll ("/", "$/");
 
+    if (!vfs->Mount (tempPath, realPath))
+    {
+      ReportError ("Cannot mount real path %s\n",
+		   CS::Quote::Single (realPath.GetData ()));
+    }
     else
     {
-      vfs->Mount (tempPath, realPath);
       vfs->ChDir (tempPath);
-
       if (vfsDir.IsEmpty ())
-	vfsDir = tempPath;
+        vfsDir = tempPath;
     }
   }
 
