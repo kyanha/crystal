@@ -30,9 +30,7 @@ bpy.types.Image.IsBinAlpha = TextureIsBinAlpha
 def TextureAsCS(self, func, depth=0, **kwargs):
   """ Write an xml description of this texture 
   """
-  path = 'textures/'
-  if 'path' in kwargs:
-    path = kwargs['path']
+  path = kwargs.get('path', 'textures/')
 
   func(' '*depth +'<texture name="%s">'%(self.uname))
   func(' '*depth +'  <file>'+path+'%s</file>'%(self.ufilename))

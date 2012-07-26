@@ -106,23 +106,15 @@ class ColorBuffer(RenderBuffer):
 
 class RenderBuffers:
   def __init__(self, **kwargs):
-    self.meshData = []
-    if 'meshData' in kwargs:
-      self.meshData = kwargs['meshData']
+    self.meshData = kwargs.get('meshData', [])
     self.mappingBuffers = []
     if 'mappingBuffers' in kwargs:
       self.mappingBuffers = kwargs['mappingBuffers']
     else:
       print("ERROR: mapping buffers are not defined to build the render buffers")
-    self.mappingVertices = []
-    if 'mappingVertices' in kwargs:
-      self.mappingVertices = kwargs['mappingVertices']
-    self.mappingNormals = []
-    if 'mappingNormals' in kwargs:
-      self.mappingNormals = kwargs['mappingNormals']
-    self.scales = []
-    if 'scales' in kwargs:
-      self.scales = kwargs['scales']
+    self.mappingVertices = kwargs.get('mappingVertices', [])
+    self.mappingNormals = kwargs.get('mappingNormals', [])
+    self.scales = kwargs.get('scales', [])
 
     self.positionBuffer = PositionBuffer(None, **kwargs)
     self.normalBuffer = NormalBuffer(None, **kwargs)

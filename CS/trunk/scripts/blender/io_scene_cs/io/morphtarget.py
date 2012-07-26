@@ -59,17 +59,13 @@ def GetMorphTargets(numVertices, **kwargs):
   """
 
   # Recover buffers from kwargs
-  meshData = []
-  if 'meshData' in kwargs:
-    meshData = kwargs['meshData']
+  meshData = kwargs.get('meshData', [])
   mappingVertices = []
   if 'mappingVertices' in kwargs:
     mappingVertices = kwargs['mappingVertices']
   else:
     print("ERROR: GetMorphTargets - mapping buffers are not defined")
-  scales = []
-  if 'scales' in kwargs:
-    scales = kwargs['scales']
+  scales = kwargs.get('scales', [])
 
   # Generate an offset buffer for each morph target defined 
   # on the mesh object

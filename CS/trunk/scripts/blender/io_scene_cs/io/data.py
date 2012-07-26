@@ -431,12 +431,8 @@ def GetBoneInfluences (self, **kwargs):
       param kwargs: mapping buffers of this armature
   """
   # Recover mapping buffers from kwargs
-  meshData = []
-  if 'meshData' in kwargs:
-    meshData = kwargs['meshData']
-  mappingBuffers = []
-  if 'mappingVertices' in kwargs:
-    mappingVertices = kwargs['mappingVertices']
+  meshData = kwargs.get('meshData', [])
+  mappingVertices = kwargs.get('mappingVertices', [])
 
   # Get bone influences per vertex (max 4)
   boneNames = GetBoneNames(self.bones)
