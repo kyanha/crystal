@@ -91,7 +91,7 @@ iDecal * csDecalManager::CreateDecal (iDecalTemplate * decalTemplate,
   csRef<iMeshWrapperIterator> meshIter = engine->GetNearbyMeshes (sector, pos, 
     radius, true);
   if (!meshIter->HasNext ())
-      return 0;
+    return 0;
 
   // calculate a valid orientation for the decal
   csVector3 n = normal.Unit ();
@@ -131,9 +131,16 @@ iDecal * csDecalManager::CreateDecal (iDecalTemplate * decalTemplate,
     csVector3 relPos = 
       mesh->GetMovable ()->GetFullTransform ().Other2This (pos);
 
-    decal->BeginMesh (mesh);
-    mesh->GetMeshObject ()->BuildDecal (&relPos, radius, (iDecalBuilder*)decal);
-    decal->EndMesh ();
+    if (!decal->BeginMesh (mesh))
+    {
+      csReport (objectReg, CS_REPORTER_SEVERITY_NOTIFY, 
+        "crystalspace.decal", "Could not attach decal on mesh!");
+    }
+    else
+    {
+      mesh->GetMeshObject ()->BuildDecal (&relPos, radius, (iDecalBuilder*)decal);
+      decal->EndMesh ();
+    }
   }
 
   return decal;
@@ -183,9 +190,16 @@ iDecal * csDecalManager::CreateDecal (iDecalTemplate * decalTemplate,
   csVector3 relPos = 
     mesh->GetMovable ()->GetFullTransform ().Other2This (pos);
 
-  decal->BeginMesh (mesh);
-  mesh->GetMeshObject ()->BuildDecal (&relPos, radius, (iDecalBuilder*)decal);
-  decal->EndMesh ();
+  if (!decal->BeginMesh (mesh))
+  {
+    csReport (objectReg, CS_REPORTER_SEVERITY_NOTIFY, 
+        "crystalspace.decal", "Could not attach decal on mesh!");
+  }
+  else
+  {
+    mesh->GetMeshObject ()->BuildDecal (&relPos, radius, (iDecalBuilder*)decal);
+    decal->EndMesh ();
+  }
 
   return decal;
 }
