@@ -705,21 +705,21 @@ CS::Graphics::RenderMesh* csMeshWrapper::GetExtraRenderMesh (size_t idx) const
 
 csZBufMode csMeshWrapper::GetExtraRenderMeshZBufMode (size_t idx) const
 {
-    return extraRenderMeshes[idx]->z_buf_mode;
+  return extraRenderMeshes[idx]->z_buf_mode;
 }
 
 void csMeshWrapper::RemoveExtraRenderMesh (csRenderMesh* renderMesh)
 {
-    size_t len = extraRenderMeshes.GetSize ();
-    for (size_t a=0; a<len; ++a)
-    {
-        if (extraRenderMeshes[a] != renderMesh)
-            continue;
+  size_t len = extraRenderMeshes.GetSize ();
+  for (size_t a=0; a<len; ++a)
+  {
+    if (extraRenderMeshes[a] != renderMesh)
+      continue;
 
-        extraRenderMeshes.DeleteIndexFast (a);
+    extraRenderMeshes.DeleteIndexFast (a);
 
-        return;
-    }
+    return;
+  }
 }
 
 void csMeshWrapper::RemoveExtraRenderMesh (size_t index)

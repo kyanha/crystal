@@ -66,6 +66,7 @@ struct iLight;
 struct iView;
 struct iSndSysWrapper;
 struct iSndSysRenderer;
+struct iDecalManager;
 struct iKeyboardDriver;
 struct iVirtualClock;
 struct iGraphics3D;
@@ -137,6 +138,7 @@ public:
   csRef<iKeyboardDriver> kbd;
   csRef<iVirtualClock> vc;
   csWeakRef<iThreadManager> tm;
+  csRef<iDecalManager> decalMgr;
 
   csRef<iEventNameRegistry> name_reg;
   csEventID CommandLineHelp;

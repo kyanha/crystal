@@ -30,12 +30,15 @@
 
 void WalkTestDecalTester::TestDecal (WalkTest* Sys)
 {
-  csRef<iDecalManager> decalMgr = csLoadPluginCheck<iDecalManager> (
-  	Sys->object_reg, "crystalspace.decal.manager");
-  if (!decalMgr)
+  if (!Sys->decalMgr)
   {
-    Sys->Report(CS_REPORTER_SEVERITY_NOTIFY, "Couldn't find decal manager");
-    return;
+    Sys->decalMgr = csLoadPluginCheck<iDecalManager> (
+  	Sys->object_reg, "crystalspace.decal.manager");
+    if (!Sys->decalMgr)
+    {
+      Sys->Report(CS_REPORTER_SEVERITY_NOTIFY, "Couldn't find decal manager");
+      return;
+    }
   }
 
   iMaterialWrapper * material = 
@@ -64,7 +67,7 @@ void WalkTestDecalTester::TestDecal (WalkTest* Sys)
 
   // create a template for our new decal
   csRef<iDecalTemplate> decalTemplate = 
-      decalMgr->CreateDecalTemplate(material);
+      Sys->decalMgr->CreateDecalTemplate(material);
   decalTemplate->SetTimeToLive(5.0f);
   
   csVector3 start = Sys->views->GetCamera()->GetTransform().GetOrigin();
@@ -111,7 +114,7 @@ void WalkTestDecalTester::TestDecal (WalkTest* Sys)
 	csVector3(0,1,0));
 
   // create the decal
-  decalMgr->CreateDecal (decalTemplate, result.final_sector,
+  Sys->decalMgr->CreateDecal (decalTemplate, result.final_sector,
 	  result.isect, up, normal, 1.0f, 0.5f);
 }
 
