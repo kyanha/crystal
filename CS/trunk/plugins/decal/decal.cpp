@@ -103,17 +103,17 @@ void csDecal::Initialize (iDecalTemplate * decalTemplate,
   ClearRenderMeshes ();
 }
 
-void csDecal::BeginMesh(iMeshWrapper * mesh)
+bool csDecal::BeginMesh(iMeshWrapper * mesh)
 {
   currMesh = 0;
   
   // check if InitializePosition has been called with decent parameters
   if (width <= 0.01f || height <= 0.01f)
-    return;
+    return false;
 
   // check if we hit our maximum allowed triangles
   if (indexCount >= CS_DECAL_MAX_TRIS_PER_DECAL * 3)
-    return;
+    return false;
 
   firstIndex = indexCount;
   const csReversibleTransform& trans =
@@ -157,6 +157,7 @@ void csDecal::BeginMesh(iMeshWrapper * mesh)
 
   // we didn't encounter any errors, so validate the current mesh
   currMesh = mesh;
+  return true;
 }
 
 void CutPolyToPlane (csPoly3D& poly, const csPlane3& split_plane, csArray<size_t>* indices)

@@ -123,7 +123,7 @@ public:
     const csVector3 & normal, const csVector3 & pos, const csVector3& up, 
     const csVector3 & right, float width, float height);
   
-  void BeginMesh (iMeshWrapper * mesh);
+  bool BeginMesh (iMeshWrapper * mesh);
   virtual void AddStaticPoly (const csPoly3D & p, csArray<size_t>* indices = 0);
   void EndMesh ();
 

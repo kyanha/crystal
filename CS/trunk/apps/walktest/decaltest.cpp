@@ -33,7 +33,10 @@ void WalkTestDecalTester::TestDecal (WalkTest* Sys)
   csRef<iDecalManager> decalMgr = csLoadPluginCheck<iDecalManager> (
   	Sys->object_reg, "crystalspace.decal.manager");
   if (!decalMgr)
+  {
+    Sys->Report(CS_REPORTER_SEVERITY_NOTIFY, "Couldn't find decal manager");
     return;
+  }
 
   iMaterialWrapper * material = 
     Sys->Engine->GetMaterialList()->FindByName("decal");
@@ -73,7 +76,10 @@ void WalkTestDecalTester::TestDecal (WalkTest* Sys)
 
   csSectorHitBeamResult result = Sys->views->GetCamera()->GetSector()->HitBeamPortals(start, end);
   if (!result.mesh)
-      return;
+  {
+    Sys->Report(CS_REPORTER_SEVERITY_NOTIFY, "No mesh to put the decal on. Not doing anything.");
+    return;
+  }
       
 /*
   // figure out the starting point
@@ -105,7 +111,7 @@ void WalkTestDecalTester::TestDecal (WalkTest* Sys)
 	csVector3(0,1,0));
 
   // create the decal
-  decalMgr->CreateDecal(decalTemplate, result.final_sector,
+  decalMgr->CreateDecal (decalTemplate, result.final_sector,
 	  result.isect, up, normal, 1.0f, 0.5f);
 }
 
