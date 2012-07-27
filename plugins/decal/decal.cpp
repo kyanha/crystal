@@ -260,7 +260,7 @@ void csDecal::AddStaticPoly (const csPoly3D & p, csArray<size_t>* indices)
   // only support triangles and up
   if (vertCount < 3)
     return;
-    
+
   // ensure the polygon isn't facing away from the decal's normal too much
   csVector3 polyNorm = poly.ComputeNormal ();
   float polyNormThresholdValue = -polyNorm * localNormal;
@@ -429,6 +429,7 @@ void csDecal::EndMesh ()
   pRenderMesh->geometryInstance = (void *)bufferHolder;
   //variableContext.AttachNew(new csShaderVariableContext);
   //pRenderMesh->variablecontext = variableContext;
+printf ("Added extra render mesh to %p\n", (iMeshWrapper*)currMesh); fflush (stdout);
   currMesh->AddExtraRenderMesh(pRenderMesh);
   pRenderMesh->renderPrio = decalTemplate->GetRenderPriority ();
 
