@@ -333,7 +333,7 @@ def AsCSGenmeshLib(self, func, depth=0, **kwargs):
     func(" "*depth + "    <material>%s</material>"%(mat.uname))
   else:
     func(" "*depth + "    <material>%s</material>"%(self.uv_texture if self.uv_texture!=None else 'None'))
-  if not mat.HasDiffuseTexture() and mat.uv_texture != 'None':
+  if mat != None and not mat.HasDiffuseTexture() and mat.uv_texture != 'None':
     func(' '*depth + '    <shadervar type="texture" name="tex diffuse">%s</shadervar>'%(mat.uv_texture))
 
   # Export mesh's render buffers
