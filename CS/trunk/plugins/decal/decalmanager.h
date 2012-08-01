@@ -47,10 +47,13 @@ class csDecalManager : public scfImplementation3<csDecalManager,
 private:
   iObjectRegistry* objectReg;
   csRef<iEngine> engine;
+  csArray<csDecal*> staticDecals;
   csArray<csDecal*> decals;
   csRef<iEventHandler> weakEventHandler;
   csRef<iVirtualClock> vc;
   csBlockAllocator<csRenderMesh> renderMeshAllocator;
+
+  csDecal* FindPreviousDecal (csArray<csDecal*>& decalArray, iDecal* oldDecal);
 
 public:
   csDecalManager (iBase* parent);
