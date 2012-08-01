@@ -429,7 +429,6 @@ void csDecal::EndMesh ()
   pRenderMesh->geometryInstance = (void *)bufferHolder;
   //variableContext.AttachNew(new csShaderVariableContext);
   //pRenderMesh->variablecontext = variableContext;
-printf ("Added extra render mesh to %p\n", (iMeshWrapper*)currMesh); fflush (stdout);
   currMesh->AddExtraRenderMesh(pRenderMesh);
   pRenderMesh->renderPrio = decalTemplate->GetRenderPriority ();
 

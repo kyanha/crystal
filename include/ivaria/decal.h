@@ -62,7 +62,7 @@ struct iDecalTemplate : public virtual iBase
 
   /**
    * Retrieves the time the decal will have to live in seconds before it is 
-   * killed.
+   * killed. If the time is negative then the decal will be a 'static' decal.
    *  \return The time to live in seconds.
    */
   virtual float GetTimeToLive () const = 0;
@@ -199,7 +199,7 @@ struct iDecalTemplate : public virtual iBase
       
   /**
    * Sets the time the decal will have to live in seconds before it is 
-   * killed.
+   * killed. If the time is negative then the decal will be a 'static' decal.
    *  \param timeToLive	The time to live in seconds.
    */
   virtual void SetTimeToLive (float timeToLive) = 0;

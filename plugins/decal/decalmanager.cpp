@@ -54,6 +54,12 @@ csDecalManager::~csDecalManager ()
     --a;
     delete decals[a];
   }
+  a = staticDecals.GetSize ();
+  while (a)
+  {
+    --a;
+    delete staticDecals[a];
+  }
 
   if (objectReg)
   {
@@ -73,6 +79,29 @@ bool csDecalManager::Initialize (iObjectRegistry * objectReg)
   if (q)
     CS::RegisterWeakListener (q, this, Frame, weakEventHandler);
   return true;
+}
+
+csDecal* csDecalManager::FindPreviousDecal (csArray<csDecal*>& decalArray,
+    iDecal* oldDecal)
+{
+  // find a reference to the previous decal or create a new one
+  csDecal * decal = 0;
+  if (oldDecal)
+  {
+    const size_t len = decalArray.GetSize ();
+    for (size_t a = 0; a < len; ++a)
+    {
+      if (decalArray[a] != oldDecal)
+	continue;
+
+      decal = decalArray[a];
+      decalArray.DeleteIndexFast (a);
+      break;
+    }
+  }
+  if (!decal)
+    decal = new csDecal (objectReg, this);
+  return decal;
 }
 
 iDecal * csDecalManager::CreateDecal (iDecalTemplate * decalTemplate, 
@@ -99,27 +128,13 @@ iDecal * csDecalManager::CreateDecal (iDecalTemplate * decalTemplate,
   csVector3 right = n % u;
   csVector3 correctUp = right % n;
 
-  // find a reference to the previous decal or create a new one
-  csDecal * decal = 0;
-  if (oldDecal)
-  {
-    const size_t len = decals.GetSize ();
-    for (size_t a = 0; a < len; ++a)
-    {
-      if (decals[a] != oldDecal)
-	    continue;
-
-      decal = decals[a];
-      decals.DeleteIndexFast (a);
-      break;
-    }
-  }
-  if (!decal)
-    decal = new csDecal (objectReg, this);
+  csArray<csDecal*>& decalArray = decalTemplate->GetTimeToLive () < 0.0
+    ? staticDecals : decals;
+  csDecal* decal = FindPreviousDecal (decalArray, oldDecal);
 
   // initialize the decal
   decal->Initialize (decalTemplate, n, pos, correctUp, right, width, height);
-  decals.Push (decal);
+  decalArray.Push (decal);
 
   // fill the decal with the geometry of the meshes
   while (meshIter->HasNext ())
@@ -164,27 +179,13 @@ iDecal * csDecalManager::CreateDecal (iDecalTemplate * decalTemplate,
   csVector3 right = n % u;
   csVector3 correctUp = right % n;
 
-  // find a reference to the previous decal or create a new one
-  csDecal * decal = 0;
-  if (oldDecal)
-  {
-    const size_t len = decals.GetSize ();
-    for (size_t a = 0; a < len; ++a)
-    {
-      if (decals[a] != oldDecal)
-	    continue;
-
-      decal = decals[a];
-      decals.DeleteIndexFast (a);
-      break;
-    }
-  }
-  if (!decal)
-    decal = new csDecal (objectReg, this);
+  csArray<csDecal*>& decalArray = decalTemplate->GetTimeToLive () < 0.0
+    ? staticDecals : decals;
+  csDecal* decal = FindPreviousDecal (decalArray, oldDecal);
 
   // initialize the decal
   decal->Initialize (decalTemplate, n, pos, correctUp, right, width, height);
-  decals.Push (decal);
+  decalArray.Push (decal);
 
   // fill the decal with the geometry of the mesh
   csVector3 relPos = 
@@ -221,25 +222,31 @@ csRef<iDecalTemplate> csDecalManager::CreateDecalTemplate (
 void csDecalManager::DeleteDecal (const iDecal * decal)
 {
   // we must ensure that this decal is actually active
-  const size_t len = decals.GetSize ();
-  for (size_t a = 0; a < len; ++a)
-  {
-    if (decals[a] != decal)
-      continue;
-
-    delete decals[a];
-    decals.DeleteIndexFast (a);
-    return;
-  }
+  for (size_t a = 0; a < decals.GetSize (); ++a)
+    if (decals[a] == decal)
+    {
+      delete decals[a];
+      decals.DeleteIndexFast (a);
+      return;
+    }
+  for (size_t a = 0; a < staticDecals.GetSize (); ++a)
+    if (staticDecals[a] == decal)
+    {
+      delete staticDecals[a];
+      staticDecals.DeleteIndexFast (a);
+      return;
+    }
 }
 
 size_t csDecalManager::GetDecalCount () const
 {
-  return decals.GetSize ();
+  return decals.GetSize () + staticDecals.GetSize ();
 }
 
 iDecal * csDecalManager::GetDecal (size_t idx) const
 {
+  if (idx >= decals.GetSize ())
+    return staticDecals[idx-decals.GetSize ()];
   return decals[idx];
 }
 
@@ -251,6 +258,8 @@ bool csDecalManager::HandleEvent (iEvent & ev)
   csTicks elapsed = vc->GetElapsedTicks ();
   size_t a=0;
 
+  // We only age decals. The staticDecals array contains decals
+  // that never decay.
   while (a < decals.GetSize ())
   {
     if (!decals[a]->Age (elapsed))
@@ -282,8 +291,14 @@ bool csDecalManager::EnsureEngineReference ()
 void csDecalManager::RemoveDecalFromList (csDecal * decal)
 {
   size_t idx = decals.Find (decal);
-  if (idx == csArrayItemNotFound)
+  if (idx != csArrayItemNotFound)
+  {
+    decals.DeleteIndexFast (idx);
     return;
-
-  decals.DeleteIndexFast (idx);
+  }
+  idx = staticDecals.Find (decal);
+  if (idx != csArrayItemNotFound)
+  {
+    staticDecals.DeleteIndexFast (idx);
+  }
 }
