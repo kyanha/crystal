@@ -83,6 +83,14 @@ CS_PLUGIN_NAMESPACE_BEGIN(Engine)
       if (theArea < bucketArea)
       {
 	size_t areaIndex = FindBox (bucket, theArea);
+
+	// @@@ The line below was put there to prevent a crash because
+	// occasionally it can happen that 'box' is null which causes a crash
+	// when trying to dereference is. This can happen when running walktest terrain
+	// and then walking forward. Someone who understands what this code does should
+	// add a real fix for this.
+	if (!bucket.freeAreas[areaIndex].box) return false;
+
 	freeArea = *(bucket.freeAreas[areaIndex].box);
 	area.first = b;
 	area.second = areaIndex;
