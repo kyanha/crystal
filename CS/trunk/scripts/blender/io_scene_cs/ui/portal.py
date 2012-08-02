@@ -1,17 +1,46 @@
 import bpy
 
 from io_scene_cs.utilities import rnaType, rnaOperator, B2CS, BoolProperty, StringProperty
-from . import data, settings
+
+from io_scene_cs.utilities import HasSetProperty, RemoveSetPropertySet 
+
+from io_scene_cs.utilities import RemovePanels, RestorePanels 
 
 
-@rnaType
-class MESH_PT_csPortal(bpy.types.Panel):
+class csPortalPanel():
   bl_space_type = "PROPERTIES"
   bl_region_type = "WINDOW"
   bl_context = "data"
   b2cs_context = "data"
-  bl_label = "Crystal Space Portal"
+  bl_label = ""
   REMOVED = []
+
+  @classmethod
+  def poll(cls, context):
+    ob = bpy.context.active_object
+    r = (ob and ob.type == 'MESH' and ob.data)
+    if r:
+      csPortalPanel.REMOVED = RemovePanels("data", ["DATA_PT_uv_texture", "DATA_PT_vertex_colors", "DATA_PT_vertex_groups"])
+    else:
+      RestorePanels(csPortalPanel.REMOVED)
+      csPortalPanel.REMOVED = []
+    return r
+
+
+@rnaOperator
+class MESH_OT_csPortal_RemoveProperty(bpy.types.Operator):
+  bl_idname = "csPortal_RemoveProperty"
+  bl_label = ""
+
+  def invoke(self, context, event):
+    ob = bpy.context.active_object.data
+    RemoveSetPropertySet(ob, self.properties.prop)
+    return('FINISHED',)
+        
+
+@rnaType
+class MESH_PT_csPortal(csPortalPanel, bpy.types.Panel):
+  bl_label = "Crystal Space Portal"
 
   def draw(self, context):    
     ob = context.active_object

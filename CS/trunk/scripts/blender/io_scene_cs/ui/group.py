@@ -2,23 +2,50 @@ import bpy
 
 from io_scene_cs.utilities import rnaType, rnaOperator, B2CS, BoolProperty
 
-@rnaType
-class OBJECT_PT_B2CS_groups(bpy.types.Panel):
-  bl_space_type = 'PROPERTIES'
-  bl_region_type = 'WINDOW'
+from io_scene_cs.utilities import HasSetProperty, RemoveSetPropertySet 
+
+from io_scene_cs.utilities import RemovePanels, RestorePanels 
+
+    
+class csGroupPanel():
+  bl_space_type = "PROPERTIES"
+  bl_region_type = "WINDOW"
   bl_context = "object"
   b2cs_context = "object"
+  bl_label = ""
+  REMOVED = []
+
+  @classmethod
+  def poll(cls, context): 
+    ob = bpy.context.active_object
+    r = (ob and ob.type == 'MESH') or (ob and ob.type == 'EMPTY')
+    if r:
+      csGroupPanel.REMOVED = RemovePanels("object", ["OBJECT_PT_relations", "OBJECT_PT_transform"])
+    else:
+      RestorePanels(csGroupPanel.REMOVED)
+      csGroupPanel.REMOVED = []
+    return r
+
+
+@rnaOperator
+class OBJECT_OT_csGroup_RemoveProperty(bpy.types.Operator):
+  bl_idname = "csGroup_RemoveProperty"
+  bl_label = ""
+
+  def invoke(self, context, event):
+    ob = bpy.context.active_object
+    RemoveSetPropertySet(ob, self.properties.prop)
+    return('FINISHED',)
+
+
+@rnaType
+class OBJECT_PT_B2CS_groups(csGroupPanel, bpy.types.Panel):
   bl_label = "Crystal Space Mesh Groups"
   
-  @classmethod
-  def poll(cls, context):
-    ob = bpy.context.active_object
-    return ob
-
   def draw(self, context):
     layout = self.layout
 
-    ob = context.object
+    ob = bpy.context.active_object
     
     row = layout.row(align=True)
     row.operator("object.group_link", text="Add to Group")

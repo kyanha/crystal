@@ -28,7 +28,6 @@ class csObjectPanel():
     return r
 
 
-
 @rnaOperator
 class OBJECT_OT_csObject_RemoveProperty(bpy.types.Operator):
   bl_idname = "csObject_RemoveProperty"
