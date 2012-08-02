@@ -72,9 +72,36 @@ class MESH_PT_csFactory(csFactoryPanel, bpy.types.Panel):
       row = layout.row()
       row.prop(ob, "use_imposter")
     
+      row = layout.row()
+      row.prop(ob, "no_shadow_receive")
+
+      row = layout.row()
+      row.prop(ob, "no_shadow_cast")
+
+      row = layout.row()
+      row.prop(ob, "limited_shadow_cast")
+
 
 BoolProperty(['Mesh'], 
      attr="use_imposter", 
      name="imposter", 
      description="Whether or not this mesh should use an imposter", 
+     default=False)
+
+BoolProperty(['Mesh'], 
+     attr="no_shadow_receive", 
+     name="No shadow receive", 
+     description="Prevent a mesh from receiving any shadow", 
+     default=False)
+
+BoolProperty(['Mesh'], 
+     attr="no_shadow_cast", 
+     name="No shadow cast", 
+     description="Prevent a mesh from casting shadows in shadow casting mode", 
+     default=False)
+
+BoolProperty(['Mesh'], 
+     attr="limited_shadow_cast", 
+     name="Limited shadow cast", 
+     description="Enables a mesh to cast shadows in limited shadow casting mode", 
      default=False)
