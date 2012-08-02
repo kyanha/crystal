@@ -146,6 +146,12 @@ def WriteCSGroup(self, func, depth=0, use_imposter=False, dontClose=False):
       func(' '*depth + '      <priority>%s</priority>'%(mat.priority))
     if mat != None and mat.zbuf_mode != 'zuse':
       func(' '*depth + '      <%s/>'%(mat.zbuf_mode))
+    if ob.data and ob.data.no_shadow_receive:
+      func(' '*depth + '      <noshadowreceive />')
+    if ob.data and ob.data.no_shadow_cast:
+      func(' '*depth + '      <noshadowcast />')
+    if ob.data and ob.data.limited_shadow_cast:
+      func(' '*depth + '      <limitedshadowcast />')
     func(' '*depth + '      <params>')
 
     # Export render buffers
@@ -208,6 +214,12 @@ def WriteCSGroup(self, func, depth=0, use_imposter=False, dontClose=False):
         func(' '*depth + '  <priority>%s</priority>'%(mat.priority))
       if mat != None and mat.zbuf_mode != 'zuse':
         func(' '*depth + '  <%s/>'%(mat.zbuf_mode))
+      if ob.data and ob.data.no_shadowreceive:
+        func(' '*depth + '  <noshadowreceive />')
+      if ob.data and ob.data.no_shadow_cast:
+        func(' '*depth + '  <noshadowcast />')
+      if ob.data and ob.data.limited_shadow_cast:
+        func(' '*depth + '  <limitedshadowcast />')
     func(' '*depth + '  <params>')
     
     def SubmeshesLackMaterial(subMeshess):

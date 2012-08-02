@@ -92,6 +92,23 @@ class Hierarchy:
       func(' '*depth + '  <priority>%s</priority>'%(mat.priority))
     if mat != None and mat.zbuf_mode != 'zuse':
       func(' '*depth + '  <%s/>'%(mat.zbuf_mode))
+
+    # Shadow properties
+    noshadowreceive = noshadowcast = limitedshadowcast = False
+    for child in self.object.children:
+      if child.type == 'MESH' and child.parent_type != 'BONE':
+        if child.data.no_shadow_receive:
+          noshadowreceive = True
+        if child.data.no_shadow_cast:
+          noshadowcast = True
+        if child.data.limited_shadow_cast:
+          limitedshadowcast = True
+    if noshadowreceive:
+      func(' '*depth + '  <noshadowreceive />')
+    if noshadowcast:
+      func(' '*depth + '  <noshadowcast />')
+    if limitedshadowcast:
+      func(' '*depth + '  <limitedshadowcast />')
       
 
   def AsCSLib(self, path='', animesh=False, **kwargs):
@@ -323,6 +340,12 @@ def AsCSGenmeshLib(self, func, depth=0, **kwargs):
     func(' '*depth + '  <priority>%s</priority>'%(mat.priority))
   if mat != None and mat.zbuf_mode != 'zuse':
     func(' '*depth + '  <%s/>'%(mat.zbuf_mode))
+  if self.data.no_shadow_receive:
+    func(' '*depth + '  <noshadowreceive />')
+  if self.data.no_shadow_cast:
+    func(' '*depth + '  <noshadowcast />')
+  if self.data.limited_shadow_cast:
+    func(' '*depth + '  <limitedshadowcast />')
   func(' '*depth + '  <params>')
 
   # Recover submeshes from kwargs
@@ -434,6 +457,8 @@ def ObjectAsCS(self, func, depth=0, **kwargs):
     func(' '*depth +'  <color red="%f" green="%f" blue="%f" />'% tuple(self.data.color))
     func(' '*depth +'  <radius brightness="%f">%f</radius>'%(self.data.energy, self.data.distance))
     func(' '*depth +'  <attenuation>linear</attenuation>')
+    if self.data.no_shadows:
+      func(' '*depth +'  <noshadows />')
     func(' '*depth +'</light>')
 
   elif self.type == 'EMPTY':
