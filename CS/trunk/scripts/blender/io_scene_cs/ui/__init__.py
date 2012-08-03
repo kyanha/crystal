@@ -1,9 +1,8 @@
-__all__ = ["data", "group", "inheritedprops", "object", "settings", "image", "material", "portal", "lamp"]
+__all__ = ["data", "group", "object", "settings", "image", "material", "portal", "lamp"]
 
 
 from . import data
 from . import group
-from . import inheritedprops
 from . import object
 from . import settings
 from . import image

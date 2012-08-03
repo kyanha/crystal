@@ -59,5 +59,5 @@ class MESH_PT_csLamp(csLampPanel,bpy.types.Panel):
 BoolProperty(['Lamp'], 
      attr="no_shadows", 
      name="No shadows", 
-     description="Prevent a lamp from casting shadows", 
+     description="Whether or not this lamp can cast shadows", 
      default=False)
