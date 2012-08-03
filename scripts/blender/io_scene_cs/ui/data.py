@@ -91,7 +91,7 @@ BoolProperty(['Mesh'],
 BoolProperty(['Mesh'], 
      attr="no_shadow_cast", 
      name="No shadow cast", 
-     description="Whether or not this mesh can cast shadows on other objects",
+     description="Whether or not this mesh can cast shadows on other objects while in normal shadow casting mode",
      default=False)
 
 BoolProperty(['Mesh'], 
