@@ -599,10 +599,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(Particles)
 			       CS_LIGHT_DYNAMICTYPE_DYNAMIC);
 
       // Put the light in the scene
-      for (int i = 0; i < meshSectors->GetCount (); i++)
-	light->GetMovable ()->GetSectors ()->Add (meshSectors->Get (i));
       light->GetMovable ()->GetSceneNode ()->SetParent (meshMovable->GetSceneNode ());
-
       lights.Push (light);
     }
 
