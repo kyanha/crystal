@@ -531,7 +531,7 @@ bool MocapViewer::CreateScene ()
   csRandomGen globalRandomGenerator (globalSeed);
   int seedCount = 0;
   for (int i = 0; i < SEED_COUNT; i++)
-    seeds[i] = globalRandomGenerator.Get (~0);
+    seeds[i] = globalRandomGenerator.Get (942438977);
 
   // ------------------------------
   // Switching of the bone animation channels
