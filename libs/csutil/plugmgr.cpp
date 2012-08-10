@@ -254,6 +254,9 @@ csPtr<iComponent> csPluginManager::LoadPluginInstance (const char *classID,
         // The plugin should have been loaded now.
 	CS::Threading::RecursiveMutexScopedLock lock (mutex);
 	csPlugin* pl = FindPluginByClassID (classID);
+        if (!pl)
+          return 0; // plugin probably failed to load on other thread
+
 	csRef<iComponent> comp;
 	pl->Plugin.Get (comp);
         if (comp)
