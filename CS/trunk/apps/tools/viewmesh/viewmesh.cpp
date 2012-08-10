@@ -304,11 +304,6 @@ bool ViewMesh::OnInitialize(int argc, char* argv [])
   if (!engine) return ReportError("Failed to locate 3D engine!");
   engine->SetSaveableFlag(true);
 
-  if (!csInitializer::RequestPlugins(GetObjectRegistry(),
-    CS_REQUEST_LEVELSAVER,
-    CS_REQUEST_END))
-    return ReportError("Failed to initialize plugins!");
-
   return true;
 }
 
@@ -325,7 +320,7 @@ bool ViewMesh::Application()
   tloader = csQueryRegistry<iThreadedLoader> (GetObjectRegistry());
   if (!tloader) return ReportError("Failed to locate threaded Loader!");
 
-  saver = csQueryRegistry<iSaver> (GetObjectRegistry());
+  saver = csQueryRegistryOrLoad<iSaver> (GetObjectRegistry(), "crystalspace.level.saver");
   if (!saver) return ReportError("Failed to locate Saver!");
 
   cegui = csQueryRegistry<iCEGUI> (GetObjectRegistry());
