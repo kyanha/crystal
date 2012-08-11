@@ -91,5 +91,4 @@ SCF_USE_STATIC_PLUGIN(glshader_glsl)
 SCF_USE_STATIC_PLUGIN(glwin32)
 SCF_USE_STATIC_PLUGIN(glshader_cg)
 SCF_USE_STATIC_PLUGIN(csbmpimg)
-SCF_USE_STATIC_PLUGIN(rendstep_stencil)
 
