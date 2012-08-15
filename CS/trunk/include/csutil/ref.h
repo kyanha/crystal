@@ -94,7 +94,7 @@ public:
   csPtr (T* p) : obj (p) { CSREF_TRACK_ASSIGN(obj, this); }
 
   template <class T2>
-  explicit csPtr (csRef<T2> const& r) : obj((T2*)r) 
+  csPtr (csRef<T2> const& r) : obj((T2*)r)
   { 
     CSREF_TRACK_INCREF (obj, this);
   }
