@@ -682,13 +682,13 @@ void csPython::Test()
 {
   printf("-- INIT TESTS --\n\n");
   printf("- store cspace.foo\n");
-  if (Store("cspace.foo",csRef<iScriptValue>(RValue(10))))
+  if (Store("cspace.foo",RValue(10)))
     printf("- OK\n");
   else
     printf("- FAIL\n");
 
   printf("- store cspace.bar\n");
-  if (Store("cspace.bar",csRef<iScriptValue>(RValue(10))))
+  if (Store("cspace.bar",RValue(10)))
     printf("- OK\n");
   else
     printf("- FAIL\n");
@@ -714,13 +714,13 @@ void csPython::Test()
     printf("- FAIL\n");
 
   printf("- store cspace.foo2\n");
-  if (Store("cspace.foo2",csRef<iScriptValue>(RValue(10))))
+  if (Store("cspace.foo2",RValue(10)))
     printf("- OK\n");
   else
     printf("- FAIL\n");
 
   printf("- store i\n");
-  if (Store("i",csRef<iScriptValue>(RValue(10))))
+  if (Store("i",RValue(10)))
     printf("- OK\n");
   else
     printf("- FAIL\n");
@@ -809,7 +809,7 @@ void csPython::Test()
 
   printf("-- INIT BUG TESTS --\n\n");
   printf("- store cspacex.foo2\n");
-  if (Store("cspacex.foo2",csRef<iScriptValue>(RValue(10))))
+  if (Store("cspacex.foo2",RValue(10)))
     printf("- FAIL:FAIL\n");
   else
     printf("- FAIL:OK\n");

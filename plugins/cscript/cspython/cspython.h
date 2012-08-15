@@ -172,7 +172,7 @@ public:
   virtual bool LoadModuleNative(const char *path, const char *name);
 
   virtual bool Store (const char *name, iScriptValue *value);
-  virtual bool Store (const char *name, csPtr<iScriptValue> value) // not from iScript
+  virtual bool Store (const char *name, const csPtr<iScriptValue>& value) // not from iScript
   {
     return Store(name,(iScriptValue*)csRef<iScriptValue>(value));
   }

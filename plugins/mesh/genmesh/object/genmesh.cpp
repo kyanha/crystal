@@ -1860,9 +1860,7 @@ csPtr<iMeshObjectFactory> csGenmeshMeshObjectType::NewFactory ()
   csRef<csGenmeshMeshObjectFactory> cm;
   cm.AttachNew (new csGenmeshMeshObjectFactory (this,
     object_reg));
-  csRef<iMeshObjectFactory> ifact (
-    scfQueryInterface<iMeshObjectFactory> (cm));
-  return csPtr<iMeshObjectFactory> (ifact);
+  return csPtr<iMeshObjectFactory> (cm);
 }
 
 bool csGenmeshMeshObjectType::Initialize (iObjectRegistry* object_reg)
