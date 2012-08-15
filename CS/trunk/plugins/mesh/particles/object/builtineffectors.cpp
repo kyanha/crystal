@@ -593,10 +593,17 @@ CS_PLUGIN_NAMESPACE_BEGIN(Particles)
     // Create the lights for the new particles
     while (lights.GetSize () < particleBuffer.particleCount)
     {
-      csRef<iLight> light = allocatedLights.GetSize () ? allocatedLights.Pop ()
-	: engine->CreateLight (0, csVector3 (0.0f),
-			       cutoffDistance, csColor4 (0.0f),
-			       CS_LIGHT_DYNAMICTYPE_DYNAMIC);
+      csRef<iLight> light;
+      if (allocatedLights.GetSize ())
+      {
+        light = allocatedLights.Pop ();
+      }
+      else
+      {
+        light = engine->CreateLight (0, csVector3 (0.0f),
+                                     cutoffDistance, csColor4 (0.0f),
+                                     CS_LIGHT_DYNAMICTYPE_DYNAMIC);
+      }
 
       // Put the light in the scene
       light->GetMovable ()->GetSceneNode ()->SetParent (meshMovable->GetSceneNode ());
