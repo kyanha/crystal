@@ -31,43 +31,7 @@ class MATERIAL_PT_B2CS__context_material(csMaterialPanel, bpy.types.Panel):
         layout = self.layout
 
         mat = context.material
-        ob = context.object
-        slot = context.material_slot
-        space = context.space_data
 
-        if ob:
-            row = layout.row()
-
-            row.template_list(ob, "material_slots", ob, "active_material_index", rows=2)
-
-            col = row.column(align=True)
-            col.operator("object.material_slot_add", icon='ZOOMIN', text="")
-            col.operator("object.material_slot_remove", icon='ZOOMOUT', text="")
-
-            col.menu("MATERIAL_MT_specials", icon='DOWNARROW_HLT', text="")
-
-            if ob.mode == 'EDIT':
-                row = layout.row(align=True)
-                row.operator("object.material_slot_assign", text="Assign")
-                row.operator("object.material_slot_select", text="Select")
-                row.operator("object.material_slot_deselect", text="Deselect")
-
-        split = layout.split(percentage=0.65)
-
-        if ob:
-            split.template_ID(ob, "active_material", new="material.new")
-            row = split.row()
-            if mat:
-                row.prop(mat, "use_nodes", icon="NODETREE", text="")
-
-            if slot:
-                row.prop(slot, "link", text="")
-            else:
-                row.label()
-        elif mat:
-            split.template_ID(space, "pin_id")
-            split.separator()
-         
         if mat:   
           layout.separator()    
           row = layout.row()
