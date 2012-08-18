@@ -96,10 +96,7 @@ void csReporter::ActualReport (const csRefArray<iReporterListener>& listeners,
   for (i = 0 ; i < listeners.GetSize () ; i++)
   {
     iReporterListener* listener = listeners[i];
-    csRef<iThreadReturn> rc = listener->Report (this, severity, msgId, buf);
-    rc->Wait ();
-    // We don't actually use the returned pointer. We just use it as a boolean.
-    if (rc->WasSuccessful ())
+    if (listener->ReportWait (this, severity, msgId, buf)->WasSuccessful ())
     {
       add_msg = false;
       break;
