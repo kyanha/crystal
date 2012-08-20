@@ -615,10 +615,6 @@ CS_PLUGIN_NAMESPACE_BEGIN(RMDeferred)
      */
     void operator()(iLight* light)
     {
-      // @@@TODO: remove this once we mark static lit meshes via stencil buffer
-      if(light->GetDynamicType() != CS_LIGHT_DYNAMICTYPE_DYNAMIC)
-	return;
-
       csRenderMesh* mesh = nullptr;
       iShader* shader = nullptr;
 
