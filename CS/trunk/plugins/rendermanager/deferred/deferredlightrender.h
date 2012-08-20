@@ -222,7 +222,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(RMDeferred)
       csRef<csShaderVariable> shadowSpread;
       bool doShadows;
 
-      PersistentData() : scfImplementationType(this)
+      PersistentData() : scfImplementation1<PersistentData, iLightCallback>(this)
       {
       }
 
