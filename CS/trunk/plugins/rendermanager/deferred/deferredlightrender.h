@@ -144,7 +144,8 @@ CS_PLUGIN_NAMESPACE_BEGIN(RMDeferred)
      * frames. Render managers must store an instance of this class and 
      * provide it to the helper upon instantiation.
      */
-    struct PersistentData
+    struct PersistentData : public scfImplementation1<PersistentData,
+						      iLightCallback>
     {
       // typedefs
       struct ClipVolume
@@ -159,11 +160,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(RMDeferred)
 	}
       };
 
-      typedef csHash
-      <
-	ClipVolume, csWeakRef<iLight>, CS::Memory::AllocatorMalloc,
-	csArraySafeCopyElementHandler<CS::Container::HashElement<ClipVolume, csWeakRef<iLight> > >
-      > ClipVolumeHash;
+      typedef csHash<ClipVolume, iLight*> ClipVolumeHash;
 
       // object registry
       iObjectRegistry* objReg;
@@ -224,6 +221,10 @@ CS_PLUGIN_NAMESPACE_BEGIN(RMDeferred)
       typename ShadowHandler::PersistentData* shadowPersist;
       csRef<csShaderVariable> shadowSpread;
       bool doShadows;
+
+      PersistentData() : scfImplementationType(this)
+      {
+      }
 
       // loads a shader and issues a warning if it fails
       iShader* LoadShader(const char* path, const char* name = nullptr)
@@ -358,7 +359,9 @@ CS_PLUGIN_NAMESPACE_BEGIN(RMDeferred)
 	  }
 	  else
 	  {
+	    // new record
 	    cached.init = true;
+	    light->SetLightCallback(this);
 	  }
 
 	  // no cached result - update
@@ -408,20 +411,6 @@ CS_PLUGIN_NAMESPACE_BEGIN(RMDeferred)
 
       void UpdateNewFrame()
       {
-	typename ClipVolumeHash::GlobalIterator clipIt = clipVolumes.GetIterator();
-	while(clipIt.HasNext())
-	{
-	  csWeakRef<iLight> light;
-	  clipIt.NextNoAdvance(light);
-
-	  // free data if light is gone
-	  if(!light.IsValid())
-	  {
-	    clipVolumes.DeleteElement(clipIt);
-	    continue;
-	  }
-	  clipIt.Advance();
-	}
       }
 
       /**
@@ -537,6 +526,17 @@ CS_PLUGIN_NAMESPACE_BEGIN(RMDeferred)
 
 	return true;
       }
+
+      // iLightCallback
+      void OnColorChange(iLight* light, const csColor& newcolor) { }
+      void OnPositionChange(iLight* light, const csVector3& newpos) { }
+      void OnSectorChange(iLight* light, iSector* newsector) { }
+      void OnRadiusChange(iLight* light, float newradius) { }
+      void OnDestroy(iLight* light)
+      {
+        clipVolumes.DeleteAll(light);
+      }
+      void OnAttenuationChange(iLight* light, int newatt) { }
     };
 
     DeferredLightRenderer(iGraphics3D* g3d, 
