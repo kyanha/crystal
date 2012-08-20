@@ -455,7 +455,7 @@ def ObjectAsCS(self, func, depth=0, **kwargs):
     # Flip Y and Z axis.
     func(' '*depth +'  <center x="%f" z="%f" y="%f" />'% tuple(self.relative_matrix.to_translation()))
     func(' '*depth +'  <color red="%f" green="%f" blue="%f" />'% tuple(self.data.color))
-    func(' '*depth +'  <radius brightness="%f">%f</radius>'%(self.data.energy, self.data.distance))
+    func(' '*depth +'  <radius>%f</radius>'%(self.data.distance))
     func(' '*depth +'  <attenuation>linear</attenuation>')
     if self.data.no_shadows:
       func(' '*depth +'  <noshadows />')
