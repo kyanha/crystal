@@ -29,6 +29,7 @@
 #include "csutil/stringquote.h"
 #include "csutil/xmltiny.h"
 #include "iengine/engine.h"
+#include "iengine/scenenode.h"
 #include "iengine/halo.h"
 #include "iengine/imposter.h"
 #include "iengine/movable.h"
@@ -534,6 +535,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
     bool flagsGiven = false;
     bool spotlightGiven = false;
 
+    csRefArray<iDocumentNode> triMeshes;
     csRef<iDocumentNodeIterator> it = node->GetNodes ();
     while (it->HasNext ())
     {
@@ -865,6 +867,12 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
           lightFlags.SetBool (CS_LIGHT_NOSHADOWS, flag);
         }
         break;
+      case XMLTOKEN_TRIMESH:
+	{
+	  // delay parsing trimeshes until the light is created
+	  triMeshes.Push(child);
+	}
+	break;
       default:
         SyntaxService->ReportBadToken (child);
         return 0;
@@ -879,11 +887,42 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
       else dist = color.blue;
     }
 
+    // create light
     csRef<iLight> l;
     if (lightFactory)
       l = Engine->CreateLight (lightname, pos, lightFactory);
     else
       l = Engine->CreateLight (lightname, pos, dist, color, dyn);
+
+    // get object model and parse trimeshes
+    if (!triMeshes.IsEmpty())
+    {
+      iObjectModel* objectModel = l->QuerySceneNode()->GetObjectModel();
+
+      // check whether the light supports object model
+      if (!objectModel)
+      {
+	// it doesn't - report error and destroy light
+        SyntaxService->ReportError (
+          "crystalspace.maploader.parse.light", node,
+          "This light doesn't support setting of %s!",
+	  CS::Quote::Single ("trimesh"));
+
+	Engine->RemoveLight(l);
+	return 0;
+      }
+
+      for (size_t i = 0; i < triMeshes.GetSize(); ++i)
+      {
+	if (!ParseTriMesh (triMeshes[i], objectModel))
+	{
+	  // error already reported
+	  Engine->RemoveLight(l);
+	  return 0;
+	}
+      }
+    }
+
     ldr_context->AddToCollection(l->QueryObject ());
     if (!lightFactory || typeGiven)
       l->SetType (type);

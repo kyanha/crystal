@@ -53,40 +53,6 @@ struct iSector;
 CS_PLUGIN_NAMESPACE_BEGIN(Engine)
 {
 
-class csLightObjectModel : public scfImplementationExt0<csLightObjectModel,
-                                                        csObjectModel>
-{
-public:
-  csBox3 box;
-  float radius;
-
-  csLightObjectModel ()
-    : scfImplementationType (this)
-  {
-  }
-  virtual ~csLightObjectModel ()
-  {
-  }
-
-  virtual const csBox3& GetObjectBoundingBox ()
-  {
-    return box;
-  }
-  virtual void SetObjectBoundingBox (const csBox3& bbox)
-  {
-    box = bbox;
-  }
-  virtual void GetRadius (float& rad, csVector3& cent)
-  {
-    rad = radius;
-    cent.Set (0, 0, 0);	// @@@ FIXME!
-  }
-  virtual iTerraFormer* GetTerraFormerColldet () { return 0; }
-  virtual iTerrainSystem* GetTerrainColldet () { return 0; }
-};
-
-
-
 /**
  * Superclass of all positional lights.
  * A light subclassing from this has a color, a position
@@ -108,6 +74,36 @@ private:
 protected:
   /// Movable for the light
   mutable csMovable movable;
+
+  /// Object model for the light
+  class csLightObjectModel : public csObjectModel
+  {
+  private:
+    csLight* parent;
+
+  public:
+    csLightObjectModel(csLight* parent) : parent(parent)
+    {
+    }
+
+    virtual void SetObjectBoundingBox(const csBox3&)
+    {
+      // doesn't make sense - ignore it
+    }
+
+    virtual const csBox3& GetObjectBoundingBox()
+    {
+      return parent->GetLocalBBox();
+    }
+
+    virtual void GetRadius (float& radius, csVector3& center)
+    {
+      radius = csMax(parent->GetCutoffDistance(), parent->GetDirectionalCutoffRadius());
+      center = csVector3(0);
+    }
+  };
+
+  csLightObjectModel objectModel;
 
   /// Color.
   csColor color;
@@ -350,24 +346,12 @@ public:
   * The directional light can be viewed as a cylinder with radius
   * equal to DirectionalCutoffRadius and length CutoffDistance
   */
-  void SetDirectionalCutoffRadius (float radius)
-  {
-    directionalCutoffRadius = radius;
-    userDirectionalCutoffRadius = true;
-    lightnr++;
-  }
+  void SetDirectionalCutoffRadius (float radius);
 
   /**
   * Set spot light falloff angles. Set in cosine of the angle. 
   */
-  void SetSpotLightFalloff (float inner, float outer)
-  {
-    spotlightFalloffInner = inner;
-    spotlightFalloffOuter = outer;
-    lightnr++;
-    GetPropertySV (csLightShaderVarCache::lightInnerFalloff)->SetValue (inner);
-    GetPropertySV (csLightShaderVarCache::lightOuterFalloff)->SetValue (outer);
-  }
+  void SetSpotLightFalloff (float inner, float outer);
 
   /**
   * Get spot light falloff angles. Get in cosine of the angle.
@@ -449,6 +433,11 @@ public:
   virtual iMovable* GetMovable () const
   {
     return &movable;
+  }
+
+  virtual iObjectModel* GetObjectModel ()
+  {
+    return &objectModel;
   }
 
   virtual void SetParent (iSceneNode* parent);

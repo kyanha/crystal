@@ -310,6 +310,7 @@ public:
   /**\name iSceneNode implementation
    * @{ */
   virtual iMovable* GetMovable () const { return 0; }
+  virtual iObjectModel* GetObjectModel () { return 0; }
   virtual void SetParent (iSceneNode* /*parent*/) { }
   virtual iSceneNode* GetParent () const { return 0; }
   virtual const csRefArray<iSceneNode>& GetChildren () const

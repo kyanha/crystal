@@ -427,9 +427,11 @@ void csReversibleTransform::RotateOther (const csVector3 &v, float angle)
         u.x * omcaux + ca,
         u.y * omcaux - uzsa,
         u.z * omcaux + uysa,
+
         u.x * omcauy + uzsa,
         u.y * omcauy + ca,
         u.z * omcauy - uxsa,
+
         u.x * omcauz - uysa,
         u.y * omcauz + uxsa,
         u.z * omcauz + ca) * GetT2O ());
@@ -454,9 +456,11 @@ void csReversibleTransform::RotateThis (const csVector3 &v, float angle)
         u.x * omcaux + ca,
         u.y * omcaux - uzsa,
         u.z * omcaux + uysa,
+
         u.x * omcauy + uzsa,
         u.y * omcauy + ca,
         u.z * omcauy - uxsa,
+
         u.x * omcauz - uysa,
         u.y * omcauz + uxsa,
         u.z * omcauz + ca));
@@ -464,34 +468,33 @@ void csReversibleTransform::RotateThis (const csVector3 &v, float angle)
 
 bool csReversibleTransform::LookAtGeneric (
   const csVector3 &v,
-  const csVector3 &upNeg,
-  csVector3& w1,
-  csVector3& w2,
-  csVector3& w3)
+  const csVector3 &gUp,
+  csVector3& left,
+  csVector3& up,
+  csVector3& forward)
 {
-  csVector3 up = -upNeg;
-  w3 = v;
+  forward = v;
 
   float sqr;
-  sqr = v * v;
+  sqr = forward * forward;
   if (sqr > SMALL_EPSILON)
   {
-    w3 *= csQisqrt (sqr);
-    w1 = w3 % up;
-    sqr = w1 * w1;
+    forward *= csQisqrt (sqr);
+    left = gUp % forward;
+    sqr = left * left;
     if (sqr < SMALL_EPSILON)
     {
-      w1 = w3 % csVector3 (0, 0, -1);
-      sqr = w1 * w1;
+      left = forward % csVector3 (0, 0, -1);
+      sqr = left * left;
       if (sqr < SMALL_EPSILON)
       {
-        w1 = w3 % csVector3 (0, -1, 0);
-        sqr = w1 * w1;
+        left = forward % csVector3 (0, -1, 0);
+        sqr = left * left;
       }
     }
 
-    w1 *= csQisqrt (sqr);
-    w2 = w3 % w1;
+    left *= csQisqrt (sqr);
+    up = forward % left;
     return true;
   }
   return false;
@@ -499,9 +502,9 @@ bool csReversibleTransform::LookAtGeneric (
 
 bool csReversibleTransform::LookAt (
   const csVector3 &v,
-  const csVector3 &upNeg)
+  const csVector3 &up)
 {
-  if (!LookAtZUpY (v, upNeg))
+  if (!LookAtZUpY (v, up))
   {
     SetT2O (csMatrix3 ());
     return false;
@@ -511,139 +514,103 @@ bool csReversibleTransform::LookAt (
 
 bool csReversibleTransform::LookAtZUpY (
   const csVector3 &v,
-  const csVector3 &upNeg)
+  const csVector3 &up)
 {
-  csMatrix3 m;  /* initialized to be the identity matrix */
-  csVector3 w1, w2, w3;
-  if (!LookAtGeneric (v, upNeg, w1, w2, w3))
+  csVector3 ex, ey, ez;
+  if (!LookAtGeneric (v, up, ex, ey, ez))
     return false;
 
-  m.m11 = w1.x;
-  m.m12 = w2.x;
-  m.m13 = w3.x;
-  m.m21 = w1.y;
-  m.m22 = w2.y;
-  m.m23 = w3.y;
-  m.m31 = w1.z;
-  m.m32 = w2.z;
-  m.m33 = w3.z;
+  SetT2O(csMatrix3(
+    ex.x, ey.x, ez.x,
+    ex.y, ey.y, ez.y,
+    ex.z, ey.z, ez.z
+  ));
 
-  SetT2O (m);
   return true;
 }
 
 bool csReversibleTransform::LookAtZUpX (
   const csVector3 &v,
-  const csVector3 &upNeg)
+  const csVector3 &up)
 {
-  csMatrix3 m;  /* initialized to be the identity matrix */
-  csVector3 w1, w2, w3;
-  if (!LookAtGeneric (v, upNeg, w2, w1, w3))
+  csVector3 ex, ey, ez;
+  if (!LookAtGeneric (v, up, ey, ex, ez))
     return false;
 
-  m.m11 = w1.x;
-  m.m12 = w2.x;
-  m.m13 = w3.x;
-  m.m21 = w1.y;
-  m.m22 = w2.y;
-  m.m23 = w3.y;
-  m.m31 = w1.z;
-  m.m32 = w2.z;
-  m.m33 = w3.z;
+  SetT2O(csMatrix3(
+    ex.x, ey.x, ez.x,
+    ex.y, ey.y, ez.y,
+    ex.z, ey.z, ez.z
+  ));
 
-  SetT2O (m);
   return true;
 }
 
 bool csReversibleTransform::LookAtXUpZ (
   const csVector3 &v,
-  const csVector3 &upNeg)
+  const csVector3 &up)
 {
-  csMatrix3 m;  /* initialized to be the identity matrix */
-  csVector3 w1, w2, w3;
-  if (!LookAtGeneric (v, upNeg, w2, w3, w1))
+  csVector3 ex, ey, ez;
+  if (!LookAtGeneric (v, up, ez, ex, ey))
     return false;
 
-  m.m11 = w1.x;
-  m.m12 = w2.x;
-  m.m13 = w3.x;
-  m.m21 = w1.y;
-  m.m22 = w2.y;
-  m.m23 = w3.y;
-  m.m31 = w1.z;
-  m.m32 = w2.z;
-  m.m33 = w3.z;
+  SetT2O(csMatrix3(
+    ex.x, ey.x, ez.x,
+    ex.y, ey.y, ez.y,
+    ex.z, ey.z, ez.z
+  ));
 
-  SetT2O (m);
   return true;
 }
 
 bool csReversibleTransform::LookAtXUpY (
   const csVector3 &v,
-  const csVector3 &upNeg)
+  const csVector3 &up)
 {
-  csMatrix3 m;  /* initialized to be the identity matrix */
-  csVector3 w1, w2, w3;
-  if (!LookAtGeneric (v, upNeg, w3, w2, w1))
+  csVector3 ex, ey, ez;
+  if (!LookAtGeneric (v, up, ez, ey, ex))
     return false;
 
-  m.m11 = w1.x;
-  m.m12 = w2.x;
-  m.m13 = w3.x;
-  m.m21 = w1.y;
-  m.m22 = w2.y;
-  m.m23 = w3.y;
-  m.m31 = w1.z;
-  m.m32 = w2.z;
-  m.m33 = w3.z;
+  SetT2O(csMatrix3(
+    ex.x, ey.x, ez.x,
+    ex.y, ey.y, ez.y,
+    ex.z, ey.z, ez.z
+  ));
 
-  SetT2O (m);
   return true;
 }
 
 bool csReversibleTransform::LookAtYUpX (
   const csVector3 &v,
-  const csVector3 &upNeg)
+  const csVector3 &up)
 {
-  csMatrix3 m;  /* initialized to be the identity matrix */
-  csVector3 w1, w2, w3;
-  if (!LookAtGeneric (v, upNeg, w3, w1, w2))
+  csVector3 ex, ey, ez;
+  if (!LookAtGeneric (v, up, ey, ez, ex))
     return false;
 
-  m.m11 = w1.x;
-  m.m12 = w2.x;
-  m.m13 = w3.x;
-  m.m21 = w1.y;
-  m.m22 = w2.y;
-  m.m23 = w3.y;
-  m.m31 = w1.z;
-  m.m32 = w2.z;
-  m.m33 = w3.z;
+  SetT2O(csMatrix3(
+    ex.x, ey.x, ez.x,
+    ex.y, ey.y, ez.y,
+    ex.z, ey.z, ez.z
+  ));
 
-  SetT2O (m);
   return true;
 }
 
 bool csReversibleTransform::LookAtYUpZ (
   const csVector3 &v,
-  const csVector3 &upNeg)
+  const csVector3 &up)
 {
-  csMatrix3 m;  /* initialized to be the identity matrix */
-  csVector3 w1, w2, w3;
-  if (!LookAtGeneric (v, upNeg, w2, w1, w3))
+  csVector3 ex, ey, ez;
+  if (!LookAtGeneric (v, up, ex, ez, ey))
     return false;
 
-  m.m11 = w1.x;
-  m.m12 = w2.x;
-  m.m13 = w3.x;
-  m.m21 = w1.y;
-  m.m22 = w2.y;
-  m.m23 = w3.y;
-  m.m31 = w1.z;
-  m.m32 = w2.z;
-  m.m33 = w3.z;
+  SetT2O(csMatrix3(
+    ex.x, ey.x, ez.x,
+    ex.y, ey.y, ez.y,
+    ex.z, ey.z, ez.z
+  ));
 
-  SetT2O (m);
   return true;
 }
 

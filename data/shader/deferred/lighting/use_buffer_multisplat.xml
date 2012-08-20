@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?> 
 <!--
-  Copyright (C) 2007 by Frank Richter
-	    (C) 2007 by Jorrit Tyberghein
-            (C) 2010 by Joe Forte
+  Copyright (C) 2012 by Matthieu Kraus
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Library General Public
@@ -18,14 +16,15 @@
   License along with this library; if not, write to the Free
   Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 -->
-<shader compiler="shaderweaver" name="fill_gbuffer">
-  <shadervars>
-    <shadervar name="specular" type="vector4">1,1,1,1</shadervar>
-  </shadervars>
-
+<shader compiler="shaderweaver" name="deferred_use_multisplat">
   <alias name="ambient" file="/shader-snippets/lighting/ambient-static.xml" />
-  <alias name="apply_alpha" file="/shader-snippets/surface/alpha-premult.xml" />
-  <alias name="fill_buffer" file="/shader-snippets/deferred/fill_gbuffer.xml" />
+  <alias name="texcoord" file="/shader-snippets/terrain/texcoord-splat.xml" />
+  <!-- Terrain doesn't provide lightmap TCs, uses default TCs for that -->
+  <alias name="lightmaptc" file="/shader-snippets/texcoord-default.xml" />
+  <alias name="apply_alpha" file="/shader-snippets/surface/alpha-nochange.xml" />
+  <alias name="lighting" file="/shader-snippets/deferred/lighting/lighting.xml" />
+  <alias name="normalmap" file="/shader-snippets/deferred/lighting/use_buffer.xml" />
+  <alias name="surface" file="/shader-snippets/surface/surface-alphasplat.xml" />
 
   <technique priority="300">
     <pass>
@@ -37,7 +36,7 @@
         <alphatest>disable</alphatest>
       </mixmode>
 
-      <snippet id="shared" file="/shader-snippets/deferred/fill_gbuffer-shared.xml" />
+      <snippet id="shared" file="/shader-snippets/lighting/lighting_default-shared.xml" />
     </pass>
   </technique>
 
@@ -51,7 +50,8 @@
         <alphatest>disable</alphatest>
       </mixmode>
 
-      <snippet id="shared" file="/shader-snippets/deferred/fill_gbuffer-shared.xml" />
+      <snippet id="shared" file="/shader-snippets/lighting/lighting_default-shared.xml" />
     </pass>
   </technique>
 </shader>
+

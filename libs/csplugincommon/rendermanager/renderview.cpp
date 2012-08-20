@@ -58,9 +58,13 @@ RenderView::RenderView (iCamera *c, iClipper2D *v, iGraphics3D *ig3d) :
   scfPooledImplementationType (this),
   ctxt (nullptr),
   engine(0),
-  g3d(ig3d),
-  g2d(g3d->GetDriver2D ())
+  g3d(ig3d)
 {
+  if(g3d)
+  {
+    g2d = g3d->GetDriver2D();
+  }
+
   InitialiseFromCamera (c);
 
   ctxt->iview = v;

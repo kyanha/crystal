@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?> 
 <!--
-  Copyright (C) 2007 by Frank Richter
-	    (C) 2007 by Jorrit Tyberghein
-            (C) 2010 by Joe Forte
+  Copyright (C) 2012 by Matthieu Kraus
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Library General Public
@@ -18,17 +16,24 @@
   License along with this library; if not, write to the Free
   Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 -->
-<shader compiler="shaderweaver" name="deferred_spot_light">
-  <alias name="use_buffer" file="/shader-snippets/deferred/use_gbuffer.xml" />
-  <alias name="lighting" file="/shader-snippets/deferred/spot.xml" />
+<shader compiler="shaderweaver" name="deferred_use_binalpha">
+  <alias name="ambient" file="/shader-snippets/lighting/ambient-static.xml" />
+  <alias name="apply_alpha" file="/shader-snippets/surface/alpha-nochange.xml" />
+  <alias name="lighting" file="/shader-snippets/deferred/lighting/lighting.xml" />
+  <alias name="normalmap" file="/shader-snippets/deferred/lighting/use_buffer.xml" />
+  <alias name="surface" file="/shader-snippets/surface/surface-modulate.xml" />
 
   <technique priority="300">
     <pass>
       <combiner plugin="crystalspace.graphics3d.shader.combiner.glsl" />
 
-      <mixmode><add /></mixmode>
+      <!-- Makes sure no blending occures. -->
+      <mixmode>
+        <blendop src="one" dst="zero" />
+        <alphatest>disable</alphatest>
+      </mixmode>
 
-      <snippet id="shared" file="/shader-snippets/deferred/accumulation-shared.xml" />
+      <snippet id="shared" file="/shader-snippets/lighting/lighting_default-shared.xml" />
     </pass>
   </technique>
 
@@ -36,9 +41,13 @@
     <pass>
       <combiner plugin="crystalspace.graphics3d.shader.combiner.glcg" />
 
-      <mixmode><add /></mixmode>
+      <!-- Makes sure no blending occures. -->
+      <mixmode>
+        <blendop src="one" dst="zero" />
+        <alphatest>disable</alphatest>
+      </mixmode>
 
-      <snippet id="shared" file="/shader-snippets/deferred/accumulation-shared.xml" />
+      <snippet id="shared" file="/shader-snippets/lighting/lighting_default-shared.xml" />
     </pass>
   </technique>
 </shader>

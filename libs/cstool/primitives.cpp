@@ -434,6 +434,12 @@ void Primitives::GenerateCone (float l, float r, uint sides,
       csDirtyAccessArray<csTriangle>& mesh_triangles,
       TextureMapper* mapper)
 {
+  // clear old data
+  mesh_vertices.DeleteAll ();
+  mesh_texels.DeleteAll ();
+  mesh_normals.DeleteAll ();
+  mesh_triangles.DeleteAll ();
+
   /* Generates a cone aligned along the positive y-axis with the base 
    * centered on the origin. */
 
