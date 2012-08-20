@@ -167,6 +167,12 @@ CS_PLUGIN_NAMESPACE_BEGIN(RMDeferred)
         return false;
       }
 
+      if (!Detach ())
+      {
+        csReport(registry, CS_REPORTER_SEVERITY_WARNING, messageID, 
+            "Failed to detach GBuffer!");
+      }
+
       if (!AttachAccumulation())
       {
 	csReport(registry, CS_REPORTER_SEVERITY_ERROR, messageID,
@@ -177,7 +183,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(RMDeferred)
       if (!Detach ())
       {
         csReport(registry, CS_REPORTER_SEVERITY_WARNING, messageID, 
-            "Failed to detach GBuffer!");
+            "Failed to detach Accumulation Buffers!");
       }
 
       return true;
@@ -195,7 +201,6 @@ CS_PLUGIN_NAMESPACE_BEGIN(RMDeferred)
 
         if (!graphics3D->SetRenderTarget (GetColorBuffer (i), false, 0, attach))
 	{
-	  CS_ASSERT(false);
           return false;
 	}
       }
@@ -203,7 +208,6 @@ CS_PLUGIN_NAMESPACE_BEGIN(RMDeferred)
       {
         if (!graphics3D->SetRenderTarget (GetDepthBuffer (), false, 0, rtaDepth))
 	{
-	  CS_ASSERT(false);
           return false;
 	}
       }
@@ -223,7 +227,6 @@ CS_PLUGIN_NAMESPACE_BEGIN(RMDeferred)
 
         if (!graphics3D->SetRenderTarget (GetAccumulationBuffer (i), false, 0, attach))
 	{
-	  CS_ASSERT(false);
           return false;
 	}
       }
@@ -303,7 +306,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(RMDeferred)
     }
 
   private:
-    size_t width, height;
+    int width, height;
 
     csRefArray<iTextureHandle> colorBuffers;
     csRefArray<iTextureHandle> accumBuffers;

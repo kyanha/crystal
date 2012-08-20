@@ -46,8 +46,9 @@ CS_PLUGIN_NAMESPACE_BEGIN(RMDeferred)
      * @{ */
     /// Any extra data that should be defined for each mesh node
     struct MeshNodeExtraDataType
+      : public CS::RenderManager::RenderTreeStandardTraits::MeshNodeExtraDataType
+	
     {
-      CS::Graphics::RenderPriority priority;
       bool useForwardRendering;
     };
 
@@ -57,15 +58,22 @@ CS_PLUGIN_NAMESPACE_BEGIN(RMDeferred)
     {
       CS::Math::Matrix4 gbufferFixup;
       csVector4 texScale;
+      bool doDeferred;
+      bool useClipper;
+
+      ContextNodeExtraDataType() : doDeferred(false) {}
     };
     
     /// Any extra data per mesh in a single mesh 
     struct MeshExtraDataType
+      : public CS::RenderManager::RenderTreeStandardTraits::MeshExtraDataType,
+	public CS::RenderManager::ShadowPSSMExtraMeshData
     {
     };
 
     /// Any extra data that needs to persist between frames
     struct PersistentDataExtraDataType
+      : public CS::RenderManager::RenderTreeStandardTraits::PersistentDataExtraDataType
     {
       csBitArray forwardPriorities;
     };

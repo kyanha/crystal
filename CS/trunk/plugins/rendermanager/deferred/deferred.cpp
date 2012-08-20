@@ -52,12 +52,15 @@ CS_PLUGIN_NAMESPACE_BEGIN(RMDeferred)
 SCF_IMPLEMENT_FACTORY(RMDeferred);
 
 //----------------------------------------------------------------------
+
 template<typename RenderTreeType, typename LayerConfigType>
 class StandardContextSetup
 {
 public:
   typedef StandardContextSetup<RenderTreeType, LayerConfigType> ThisType;
   typedef StandardPortalSetup<RenderTreeType, ThisType> PortalSetupType;
+  typedef typename RMDeferred::LightSetupType LightSetupType;
+  typedef typename LightSetupType::ShadowHandlerType ShadowType;
 
   StandardContextSetup(RMDeferred *rmanager, const LayerConfigType &layerConfig)
     : 
@@ -94,6 +97,7 @@ public:
 
     // @@@ This is somewhat "boilerplate" sector/rview setup.
     sector->PrepareDraw (rview);
+
     // Make sure the clip-planes are ok
     CS::RenderViewClipper::SetupClipPlanes (rview->GetRenderContext ());
 
@@ -101,10 +105,12 @@ public:
     iVisibilityCuller *culler = sector->GetVisibilityCuller ();
     Viscull<RenderTreeType> (context, rview, culler);
 
+    // enable deferred rendering for this context
+    context.doDeferred = true;
+
     // setup gbuffer transform.
-    // @@@TODO: we should check all renderTargets here, not just rtaColor0
-    // @@@TODO: we shouldn't have to recalculate this for all contexts - it only changes if the attachment changes
-    SetupTarget(context.renderTargets[rtaColor0].texHandle, context.gbufferFixup, context.texScale);
+    // @@@TODO: we shouldn't have to recalculate this for all contexts - it only changes if the attachment/rview changes
+    context.useClipper = SetupTarget(context.renderTargets, context.gbufferFixup, context.texScale);
 
     // Set up all portals
     if (recursePortals)
@@ -141,18 +147,33 @@ public:
     // Setup shaders and tickets
     DeferredSetupShader (context, shaderManager, layerConfig, deferredLayer, lightingLayer, zonlyLayer);
 
-    // Setup lighting (only needed for transparent objects)
-    RMDeferred::LightSetupType::ShadowParamType shadowParam;
-    RMDeferred::LightSetupType lightSetup (rmanager->lightPersistent, 
-                                           rmanager->lightManager,
-                                           context.svArrays, 
-                                           layerConfig, 
-                                           shadowParam);
+    // Setup shadows and lighting
+    {
+      typename ShadowType::ShadowParameters shadowParam (rmanager->lightPersistent.shadowPersist, context.owner, rview);
 
-    ForEachForwardMeshNode (context, lightSetup);
+      if(rmanager->doShadows)
+      {
+	// setup shadows for all lights
+	ForEachLight (context, shadowParam);
 
-    // Setup shaders and tickets
-    SetupStandardTicket (context, shaderManager, lightSetup.GetPostLightingLayers ());
+	// setup shadows for all meshes
+	ForEachMeshNode (context, shadowParam);
+
+	// finish shadow setup
+	shadowParam();
+      }
+
+      LightSetupType lightSetup (rmanager->lightPersistent, 
+				 rmanager->lightManager,
+				 context.svArrays, 
+				 layerConfig, 
+				 shadowParam);
+
+      ForEachForwardMeshNode (context, lightSetup);
+
+      // Setup shaders and tickets
+      SetupStandardTicket (context, shaderManager, lightSetup.GetPostLightingLayers ());
+    }
 
     {
       ThisType ctxRefl (*this, layerConfig);
@@ -189,11 +210,23 @@ public:
 
 private:
 
-  void SetupTarget(iTextureHandle* target, CS::Math::Matrix4& m, csVector4& v)
+  bool SetupTarget(typename RenderTreeType::ContextNode::TargetTexture* targets, CS::Math::Matrix4& m, csVector4& v)
   {
+    // find a target if there is any
+    // MRTs are required to be of equal size, so one is enough
+    iTextureHandle* target = nullptr;
+    for(int i = 0; i < rtaNumAttachments; ++i)
+    {
+      if(targets[i].texHandle)
+      {
+	target = targets[i].texHandle;
+	break;
+      }
+    }
+
     // init to identity
     m = CS::Math::Matrix4();
-    if (target)
+    if(target)
     {
       int width, height;
       rmanager->gbuffer.GetDimensions(width,height);
@@ -202,19 +235,35 @@ private:
 
       if(width != targetW || height != targetH)
       {
+	// disable clipping for deferred passes if we have to scale down
+	// @@@FIXME: it'd be better to scale the clipper instead
+	bool useClipper = !(targetW > width || targetH > height);
+
+	// we have to scale down if target is bigger than gbuffer
+	if(!useClipper)
+	{
+	  targetW = csMin(targetW, width);
+	  targetH = csMin(targetH, height);
+	}
+
 	// calculate perspective fixup for gbuffer pass.
-	float scaleX = csMin(float(targetW)/float (width),1.0f);
-	float scaleY = csMin(float(targetH)/float (height),1.0f);
+	float scaleX = float(targetW)/float(width);
+	float scaleY = float(targetH)/float(height);
+	float shiftX = scaleX - 1.0f;
+	float shiftY = scaleY - 1.0f;
+
 	m = CS::Math::Matrix4 (
-	  scaleX, 0, 0, scaleX-1.0f,
-	  0, scaleY, 0, scaleY-1.0f,
+	  scaleX, 0, 0, shiftX,
+	  0, scaleY, 0, shiftY,
 	  0, 0, 1, 0,
 	  0, 0, 0, 1);
 
 	// calculate texture scale xform for gbuffer reads
-        float scaleXTex = scaleX/2;
-        float scaleYTex = scaleY/2;
-        v = csVector4(scaleXTex, scaleYTex, scaleXTex, 1-scaleYTex);
+        float scaleXTex = 0.5f*scaleX;
+        float scaleYTex = 0.5f*scaleY;
+        v = csVector4(scaleXTex, scaleYTex, scaleXTex, 1.0f-scaleYTex);
+
+	return useClipper;
       }
       else
       {
@@ -227,6 +276,7 @@ private:
       // we're rendering to the screen, so we have flipped y during lookups.
       v = csVector4(0.5,-0.5,0.5,0.5);
     }
+    return true;
   }
 
   RMDeferred *rmanager;
@@ -234,9 +284,9 @@ private:
   const LayerConfigType &layerConfig;
 
   int recurseCount;
-  int deferredLayer;
-  int lightingLayer;
-  int zonlyLayer;
+  size_t deferredLayer;
+  size_t lightingLayer;
+  size_t zonlyLayer;
   int maxPortalRecurse;
 };
 
@@ -244,7 +294,6 @@ private:
 RMDeferred::RMDeferred(iBase *parent) 
   : 
 scfImplementationType(this, parent),
-portalPersistent(CS::RenderManager::TextureCache::tcacheExactSizeMatch),
 doHDRExposure (false),
 targets (*this)
 {
@@ -271,10 +320,18 @@ bool RMDeferred::Initialize(iObjectRegistry *registry)
   // Read Config settings.
   csConfigAccess cfg (objRegistry);
   maxPortalRecurse = cfg->GetInt ("RenderManager.Deferred.MaxPortalRecurse", 30);
+  doShadows = cfg->GetBool ("RenderManager.Deferred.Shadows.Enabled", true);
   showGBuffer = false;
   drawLightVolumes = false;
 
+  // get shader type IDs
+  csStringID depthWriteID = stringSet->Request ("depthwrite");
+  csStringID deferredFullID = stringSet->Request ("deferred full");
+  csStringID deferredFillID = stringSet->Request ("deferred fill");
+  csStringID deferredUseID = stringSet->Request ("deferred use");
+
   // load render layers
+  bool deferredFull = true;
   bool layersValid = false;
   const char *layersFile = cfg->GetStr ("RenderManager.Deferred.Layers", nullptr);
   if (layersFile)
@@ -284,32 +341,51 @@ bool RMDeferred::Initialize(iObjectRegistry *registry)
 
     layersValid = CS::RenderManager::AddLayersFromFile (objRegistry, layersFile, renderLayer);
     
-    if (!layersValid) 
+    if (layersValid) 
     {
-      renderLayer.Clear();
+      // Locates the deferred shading layer.
+      deferredLayer = LocateLayer (renderLayer, deferredFullID);
+
+      // check whether we have a full deferred layer
+      if (deferredLayer != (size_t)-1)
+      {
+	// we have one - use full deffered shading
+	lightingLayer = (size_t)-1;
+      }
+      else
+      {
+	// no full deferred layer, locate deferred lighting layers
+        deferredLayer = LocateLayer (renderLayer, deferredFillID);
+	lightingLayer = LocateLayer (renderLayer, deferredUseID);
+
+	// check whether we got both
+	if (deferredLayer != (size_t)-1 && lightingLayer != (size_t)-1)
+	{
+	  // we'll use deferred lighting
+	  deferredFull = false;
+	}
+	else
+	{
+	  // couldn't locate any deferred layer - warn and use default full shading
+	  csReport (objRegistry, CS_REPORTER_SEVERITY_WARNING,
+	    messageID, "The render layers file %s contains neither a %s nor both %s and %s layers. Using default %s layer.",
+	    CS::Quote::Single (layersFile),
+	    CS::Quote::Single ("deferred full"),
+	    CS::Quote::Single ("deferred fill"),
+	    CS::Quote::Single ("deferred use"),
+	    CS::Quote::Single ("deferred full"));
+
+	  deferredLayer = AddLayer (renderLayer, deferredFullID, "gbuffer_fill_full", "/shader/deferred/full/fill.xml");
+	  lightingLayer = (size_t)-1;
+	}
+      }
+
+      // Locates the zonly shading layer.
+      zonlyLayer = LocateLayer (renderLayer, depthWriteID);
     }
     else
     {
-      // Locates the deferred shading layer.
-      deferredLayer = LocateLayer (renderLayer, stringSet->Request("gbuffer fill"));
-      if (deferredLayer < 0)
-      {
-        csReport (objRegistry, CS_REPORTER_SEVERITY_WARNING,
-          messageID, "The render layers file %s does not contain a %s layer.",
-	  CS::Quote::Single (layersFile),
-	  CS::Quote::Single ("gbuffer fill"));
-
-        AddDeferredLayer (renderLayer, deferredLayer);
-      }
-
-      // locate the final lighting layer if there's any
-      lightingLayer = LocateLayer (renderLayer, stringSet->Request("gbuffer use"));
-      csReport (objRegistry, CS_REPORTER_SEVERITY_NOTIFY,
-        messageID, "Using deferred %s.",
-	(lightingLayer < 0) ? "shading" : "lighting");
-
-      // Locates the zonly shading layer.
-      zonlyLayer = LocateLayer (renderLayer, stringSet->Request("depthwrite"));
+      renderLayer.Clear ();
     }
   }
   
@@ -319,8 +395,9 @@ bool RMDeferred::Initialize(iObjectRegistry *registry)
     csReport (objRegistry, CS_REPORTER_SEVERITY_NOTIFY, messageID,
       "Using default render layers");
 
-    AddZOnlyLayer (renderLayer, zonlyLayer);
-    AddDeferredLayer (renderLayer, deferredLayer);
+    zonlyLayer = AddLayer (renderLayer, depthWriteID, "z_only", "/shader/early_z/z_only.xml");
+    deferredLayer = AddLayer (renderLayer, deferredFullID, "gbuffer_fill_full", "/shader/deferred/full/fill.xml");
+    lightingLayer = (size_t)-1;
 
     if (!loader->LoadShader ("/shader/lighting/lighting_default.xml"))
     {
@@ -331,11 +408,15 @@ bool RMDeferred::Initialize(iObjectRegistry *registry)
     CS::RenderManager::AddDefaultBaseLayers (objRegistry, renderLayer);
   }
 
+  csReport (objRegistry, CS_REPORTER_SEVERITY_NOTIFY, messageID,
+    "Using deferred %s.", deferredFull ? "shading" : "lighting");
+
   // Create GBuffer
+  // @@@TODO: not really flexible without touching lighting shaders which aren't as flexible atm
   const char *gbufferFmt = cfg->GetStr ("RenderManager.Deferred.GBuffer.BufferFormat", "rgba16_f");
-  const char *accumFmt = cfg->GetStr ("RenderManager.Deferred.GBuffer.AccumBufferFormat", "rgb16_f");
-  int bufferCount = cfg->GetInt ("RenderManager.Deferred.GBuffer.BufferCount", 1);
-  int accumCount = cfg->GetInt ("RenderManager.Deferred.GBuffer.AccumBufferCount", 2);
+  const char *accumFmt = cfg->GetStr ("RenderManager.Deferred.GBuffer.AccumBufferFormat", deferredFull ? "rgba16_f" : "rgb16_f");
+  int bufferCount = cfg->GetInt ("RenderManager.Deferred.GBuffer.BufferCount", deferredFull ? 5 : 1);
+  int accumCount = cfg->GetInt ("RenderManager.Deferred.GBuffer.AccumBufferCount", deferredFull ? 1 : 2);
 
   gbufferDescription.colorBufferCount = bufferCount;
   gbufferDescription.accumBufferCount = accumCount;
@@ -354,8 +435,12 @@ bool RMDeferred::Initialize(iObjectRegistry *registry)
 
   treePersistent.Initialize (shaderManager);
   portalPersistent.Initialize (shaderManager, graphics3D, treePersistent.debugPersist);
+  lightPersistent.shadowPersist.SetConfigPrefix ("RenderManager.Deferred");
   lightPersistent.Initialize (registry, treePersistent.debugPersist);
-  lightRenderPersistent.Initialize (registry);
+  if(!lightRenderPersistent.Initialize (registry, lightPersistent.shadowPersist, doShadows, deferredFull))
+  {
+    return false;
+  }
 
   // initialize post-effects
   PostEffectsSupport::Initialize (registry, "RenderManager.Deferred");
@@ -412,11 +497,12 @@ bool RMDeferred::RenderView(iView *view, bool recursePortals)
   contextsScannedForTargets.Empty ();
   portalPersistent.UpdateNewFrame ();
   lightPersistent.UpdateNewFrame ();
+  lightRenderPersistent.UpdateNewFrame ();
   reflectRefractPersistent.UpdateNewFrame ();
   framebufferTexPersistent.UpdateNewFrame ();
 
   iEngine *engine = view->GetEngine ();
-  engine->UpdateNewFrame ();  
+  engine->UpdateNewFrame ();
   engine->FireStartFrame (rview);
 
   iSector *startSector = rview->GetThisSector ();
@@ -458,15 +544,9 @@ bool RMDeferred::RenderView(iView *view, bool recursePortals)
 
   // Render all contexts.
   {
-    DeferredTreeRenderer<RenderTreeType> render (graphics3D,
-                                                 shaderManager,
-                                                 stringSet,
-                                                 lightRenderPersistent,
-						 gbuffer,
-                                                 deferredLayer,
-						 lightingLayer,
-                                                 zonlyLayer,
-                                                 drawLightVolumes);
+    DeferredTreeRenderer<RenderTreeType, ShadowType>
+    render(graphics3D, shaderManager, lightRenderPersistent, gbuffer,
+	   deferredLayer, lightingLayer, zonlyLayer, drawLightVolumes);
 
     ForEachContextReverse (renderTree, render);
   }
@@ -526,53 +606,30 @@ bool RMDeferred::HandleTarget (RenderTreeType& renderTree,
 }
 
 //----------------------------------------------------------------------
-void RMDeferred::AddDeferredLayer(CS::RenderManager::MultipleRenderLayer &layers, int &addedLayer)
+size_t RMDeferred::AddLayer(CS::RenderManager::MultipleRenderLayer& layers, csStringID type, const char* name, const char* file)
 {
   const char *messageID = "crystalspace.rendermanager.deferred";
 
   csRef<iLoader> loader = csQueryRegistry<iLoader> (objRegistry);
 
-  if (!loader->LoadShader ("/shader/deferred/fill_gbuffer.xml"))
+  if (!loader->LoadShader (file))
   {
     csReport (objRegistry, CS_REPORTER_SEVERITY_WARNING,
-      messageID, "Could not load fill_gbuffer shader");
+      messageID, "Could not load %s shader", name);
   }
 
-  iShader *shader = shaderManager->GetShader ("fill_gbuffer");
+  iShader *shader = shaderManager->GetShader (name);
 
   SingleRenderLayer baseLayer (shader, 0, 0);
-  baseLayer.AddShaderType (stringSet->Request("gbuffer fill"));
+  baseLayer.AddShaderType (type);
 
-  renderLayer.AddLayers (baseLayer);
+  layers.AddLayers (baseLayer);
 
-  addedLayer = renderLayer.GetLayerCount () - 1;
+  return layers.GetLayerCount () - 1;
 }
 
 //----------------------------------------------------------------------
-void RMDeferred::AddZOnlyLayer(CS::RenderManager::MultipleRenderLayer &layers, int &addedLayer)
-{
-  const char *messageID = "crystalspace.rendermanager.deferred";
-
-  csRef<iLoader> loader = csQueryRegistry<iLoader> (objRegistry);
-
-  if (!loader->LoadShader ("/shader/early_z/z_only.xml"))
-  {
-    csReport (objRegistry, CS_REPORTER_SEVERITY_WARNING,
-      messageID, "Could not load z_only shader");
-  }
-
-  iShader *shader = shaderManager->GetShader ("z_only");
-
-  SingleRenderLayer baseLayer (shader, 0, 0);
-  baseLayer.AddShaderType (stringSet->Request("depthwrite"));
-
-  renderLayer.AddLayers (baseLayer);
-
-  addedLayer = renderLayer.GetLayerCount () - 1;
-}
-
-//----------------------------------------------------------------------
-int RMDeferred::LocateLayer(const CS::RenderManager::MultipleRenderLayer &layers,
+size_t RMDeferred::LocateLayer(const CS::RenderManager::MultipleRenderLayer &layers,
                             csStringID shaderType)
 {
   size_t count = renderLayer.GetLayerCount ();
@@ -589,7 +646,7 @@ int RMDeferred::LocateLayer(const CS::RenderManager::MultipleRenderLayer &layers
     }
   }
 
-  return -1;
+  return (size_t)-1;
 }
 
 //----------------------------------------------------------------------
@@ -626,7 +683,7 @@ bool RMDeferred::DebugCommand(const char *cmd)
     return true;
   }
 
-  return false;
+  return RMDebugCommonBase::DebugCommand(cmd);
 }
 
 }

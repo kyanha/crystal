@@ -36,9 +36,9 @@ CS_PLUGIN_NAMESPACE_BEGIN(RMDeferred)
   public:
     DeferredShaderSetup(CS::RenderManager::ShaderArrayType &shaderArray, 
                         const LayerConfigType &layerConfig,
-                        int deferredLayer,
-			int lightingLayer,
-                        int zonlyLayer)
+                        size_t deferredLayer,
+			size_t lightingLayer,
+                        size_t zonlyLayer)
       : 
     shaderArray(shaderArray), 
     layerConfig(layerConfig), 
@@ -72,7 +72,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(RMDeferred)
         // Setup the deferred layer(s).
         size_t layerOffset = deferredLayer * totalMeshes;
         shaderArray[mesh.contextLocalId + layerOffset] = nullptr;
-	if(lightingLayer >= 0)
+	if(lightingLayer != (size_t)-1)
 	{
 	  layerOffset = lightingLayer * totalMeshes;
 	  shaderArray[mesh.contextLocalId + layerOffset] = nullptr;
@@ -82,7 +82,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(RMDeferred)
         const size_t layerCount = layerConfig.GetLayerCount ();
         for (size_t layer = 0; layer < layerCount; layer++)
         {
-          if ((int)layer == deferredLayer || (int)layer == lightingLayer)
+          if (layer == deferredLayer || layer == lightingLayer)
             continue;
 
           iShader *shader = nullptr;
@@ -123,7 +123,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(RMDeferred)
         for (size_t k = 0; k < count; k++)
         {
           size_t layer = layers[k];
-	  if((int)layer < 0)
+	  if(layer == (size_t)-1)
 	    continue;
 
           iShader *shader = nullptr;
@@ -146,7 +146,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(RMDeferred)
         const size_t layerCount = layerConfig.GetLayerCount ();
         for (size_t layer = 0; layer < layerCount; layer++)
         {
-          if ((int)layer == deferredLayer || (int)layer == lightingLayer || (int)layer == zonlyLayer)
+          if (layer == deferredLayer || layer == lightingLayer || layer == zonlyLayer)
             continue;
 
           size_t layerOffset = layer * totalMeshes;
@@ -158,9 +158,9 @@ CS_PLUGIN_NAMESPACE_BEGIN(RMDeferred)
   private:
     CS::RenderManager::ShaderArrayType &shaderArray;
     const LayerConfigType &layerConfig;
-    int deferredLayer;
-    int lightingLayer;
-    int zonlyLayer;
+    size_t deferredLayer;
+    size_t lightingLayer;
+    size_t zonlyLayer;
   };
 
   /**
@@ -170,9 +170,9 @@ CS_PLUGIN_NAMESPACE_BEGIN(RMDeferred)
   void DeferredSetupShader(ContextNodeType &context, 
                            iShaderManager *shaderManager,
                            const LayerConfigType &layerConfig,
-                           int deferredLayer,
-			   int lightingLayer,
-                           int zonlyLayer)
+                           size_t deferredLayer,
+			   size_t lightingLayer,
+                           size_t zonlyLayer)
   {
     context.shaderArray.SetSize (context.totalRenderMeshes * layerConfig.GetLayerCount ());
 

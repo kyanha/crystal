@@ -195,6 +195,12 @@ bool DemoApplication::CreateRoom ()
 				   "background", "background_factory", &bgBox);
   background->SetRenderPriority (engine->GetRenderPriority ("sky"));
 
+  // Do not use shadow casting for the background otherwise it will
+  // push the far plane farther and that will reduce needlessly the quality
+  // of the shadow map.
+  background->GetFlags ().Set (CS_ENTITY_NOSHADOWCAST, CS_ENTITY_NOSHADOWCAST);
+  background->GetFlags ().Set (CS_ENTITY_NOSHADOWRECEIVE, CS_ENTITY_NOSHADOWRECEIVE);
+
   csRef<iMaterialWrapper> bgMaterial =
     CS::Material::MaterialBuilder::CreateColorMaterial
     (GetObjectRegistry (), "background", csColor (0.398f));

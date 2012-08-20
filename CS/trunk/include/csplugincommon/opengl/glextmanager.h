@@ -1634,12 +1634,11 @@ typedef GLvoid (csAPIENTRY* csGLGETQUERYOBJECTUIV) (GLuint id, GLenum pname, GLu
  * this extension when the appropriate GL version was detected. 
  * @{ */
 typedef GLvoid (csAPIENTRY* csGLDELETESHADER) (GLuint obj);
-typedef GLuint (csAPIENTRY* csGLGETHANDLE) (GLenum pname);
 typedef GLvoid (csAPIENTRY* csGLDETACHSHADER) (GLuint containerObj, GLuint attachedObj);
 typedef GLuint (csAPIENTRY* csGLCREATESHADER) (GLenum shaderType);
 typedef GLvoid (csAPIENTRY* csGLSHADERSOURCE) (GLuint shaderObj, GLsizei count, const GLchar** string, const GLint* length);
 typedef GLvoid (csAPIENTRY* csGLCOMPILESHADER) (GLuint shaderObj);
-typedef GLuint (csAPIENTRY* csGLCREATEPROGRAMOBJECT) ();
+typedef GLuint (csAPIENTRY* csGLCREATEPROGRAM) ();
 typedef GLvoid (csAPIENTRY* csGLATTACHSHADER) (GLuint containerObj, GLuint Obj);
 typedef GLvoid (csAPIENTRY* csGLLINKPROGRAM) (GLuint programObj);
 typedef GLvoid (csAPIENTRY* csGLUSEPROGRAM) (GLuint programObj);
@@ -1664,10 +1663,11 @@ typedef GLvoid (csAPIENTRY* csGLUNIFORM4IV) (GLint location, GLsizei count, GLin
 typedef GLvoid (csAPIENTRY* csGLUNIFORMMATRIX2FV) (GLint location, GLsizei count, GLboolean transpose, GLfloat* value);
 typedef GLvoid (csAPIENTRY* csGLUNIFORMMATRIX3FV) (GLint location, GLsizei count, GLboolean transpose, GLfloat* value);
 typedef GLvoid (csAPIENTRY* csGLUNIFORMMATRIX4FV) (GLint location, GLsizei count, GLboolean transpose, GLfloat* value);
-typedef GLvoid (csAPIENTRY* csGLGETOBJECTPARAMETERFV) (GLuint obj, GLenum pname, GLfloat* params);
-typedef GLvoid (csAPIENTRY* csGLGETOBJECTPARAMETERIV) (GLuint obj, GLenum pname, GLint* params);
-typedef GLvoid (csAPIENTRY* csGLGETINFOLOG) (GLuint obj, GLsizei maxLength, GLsizei* length, GLchar* infoLog);
-typedef GLvoid (csAPIENTRY* csGLGETATTACHEDOBJECTS) (GLuint containerObj, GLsizei maxCount, GLsizei* count, GLuint* obj);
+typedef GLvoid (csAPIENTRY* csGLGETSHADERIV) (GLuint shader, GLenum pname, GLint* params);
+typedef GLvoid (csAPIENTRY* csGLGETPROGRAMIV) (GLuint program, GLenum pname, GLint* params);
+typedef GLvoid (csAPIENTRY* csGLGETSHADERINFOLOG) (GLuint obj, GLsizei maxLength, GLsizei* length, GLchar* infoLog);
+typedef GLvoid (csAPIENTRY* csGLGETPROGRAMINFOLOG) (GLuint obj, GLsizei maxLength, GLsizei* length, GLchar* infoLog);
+typedef GLvoid (csAPIENTRY* csGLGETATTACHEDSHADERS) (GLuint program, GLsizei maxCount, GLsizei* count, GLuint* shaders);
 typedef GLint (csAPIENTRY* csGLGETUNIFORMLOCATION) (GLuint programObj, const GLchar* name);
 typedef GLvoid (csAPIENTRY* csGLGETACTIVEUNIFORM) (GLuint programObj, GLuint index, GLsizei maxLength, GLsizei* length, GLint* size, GLenum* type, GLchar* name);
 typedef GLint (csAPIENTRY* csGLGETUNIFORMFV) (GLuint programObj, GLint location, GLfloat* params);
@@ -12536,11 +12536,6 @@ public:
   csGLDELETESHADER glDeleteShader;
   #endif
 
-  #ifndef GLGETHANDLE_DECL
-  #define GLGETHANDLE_DECL
-  csGLGETHANDLE glGetHandle;
-  #endif
-
   #ifndef GLDETACHSHADER_DECL
   #define GLDETACHSHADER_DECL
   csGLDETACHSHADER glDetachShader;
@@ -12561,9 +12556,9 @@ public:
   csGLCOMPILESHADER glCompileShader;
   #endif
 
-  #ifndef GLCREATEPROGRAMOBJECT_DECL
-  #define GLCREATEPROGRAMOBJECT_DECL
-  csGLCREATEPROGRAMOBJECT glCreateProgramObject;
+  #ifndef GLCREATEPROGRAM_DECL
+  #define GLCREATEPROGRAM_DECL
+  csGLCREATEPROGRAM glCreateProgram;
   #endif
 
   #ifndef GLATTACHSHADER_DECL
@@ -12686,24 +12681,29 @@ public:
   csGLUNIFORMMATRIX4FV glUniformMatrix4fv;
   #endif
 
-  #ifndef GLGETOBJECTPARAMETERFV_DECL
-  #define GLGETOBJECTPARAMETERFV_DECL
-  csGLGETOBJECTPARAMETERFV glGetObjectParameterfv;
+  #ifndef GLGETSHADERIV_DECL
+  #define GLGETSHADERIV_DECL
+  csGLGETSHADERIV glGetShaderiv;
   #endif
 
-  #ifndef GLGETOBJECTPARAMETERIV_DECL
-  #define GLGETOBJECTPARAMETERIV_DECL
-  csGLGETOBJECTPARAMETERIV glGetObjectParameteriv;
+  #ifndef GLGETPROGRAMIV_DECL
+  #define GLGETPROGRAMIV_DECL
+  csGLGETPROGRAMIV glGetProgramiv;
   #endif
 
-  #ifndef GLGETINFOLOG_DECL
-  #define GLGETINFOLOG_DECL
-  csGLGETINFOLOG glGetInfoLog;
+  #ifndef GLGETSHADERINFOLOG_DECL
+  #define GLGETSHADERINFOLOG_DECL
+  csGLGETSHADERINFOLOG glGetShaderInfoLog;
   #endif
 
-  #ifndef GLGETATTACHEDOBJECTS_DECL
-  #define GLGETATTACHEDOBJECTS_DECL
-  csGLGETATTACHEDOBJECTS glGetAttachedObjects;
+  #ifndef GLGETPROGRAMINFOLOG_DECL
+  #define GLGETPROGRAMINFOLOG_DECL
+  csGLGETPROGRAMINFOLOG glGetProgramInfoLog;
+  #endif
+
+  #ifndef GLGETATTACHEDSHADERS_DECL
+  #define GLGETATTACHEDSHADERS_DECL
+  csGLGETATTACHEDSHADERS glGetAttachedShaders;
   #endif
 
   #ifndef GLGETUNIFORMLOCATION_DECL
@@ -19135,12 +19135,11 @@ public:
     if (init)	// Don't check the functions if ext isn't reported anyway
     {
       EXTMGR_FUNC_INIT(glDeleteShader, GLDELETESHADER);
-      EXTMGR_FUNC_INIT(glGetHandle, GLGETHANDLE);
       EXTMGR_FUNC_INIT(glDetachShader, GLDETACHSHADER);
       EXTMGR_FUNC_INIT(glCreateShader, GLCREATESHADER);
       EXTMGR_FUNC_INIT(glShaderSource, GLSHADERSOURCE);
       EXTMGR_FUNC_INIT(glCompileShader, GLCOMPILESHADER);
-      EXTMGR_FUNC_INIT(glCreateProgramObject, GLCREATEPROGRAMOBJECT);
+      EXTMGR_FUNC_INIT(glCreateProgram, GLCREATEPROGRAM);
       EXTMGR_FUNC_INIT(glAttachShader, GLATTACHSHADER);
       EXTMGR_FUNC_INIT(glLinkProgram, GLLINKPROGRAM);
       EXTMGR_FUNC_INIT(glUseProgram, GLUSEPROGRAM);
@@ -19165,10 +19164,11 @@ public:
       EXTMGR_FUNC_INIT(glUniformMatrix2fv, GLUNIFORMMATRIX2FV);
       EXTMGR_FUNC_INIT(glUniformMatrix3fv, GLUNIFORMMATRIX3FV);
       EXTMGR_FUNC_INIT(glUniformMatrix4fv, GLUNIFORMMATRIX4FV);
-      EXTMGR_FUNC_INIT(glGetObjectParameterfv, GLGETOBJECTPARAMETERFV);
-      EXTMGR_FUNC_INIT(glGetObjectParameteriv, GLGETOBJECTPARAMETERIV);
-      EXTMGR_FUNC_INIT(glGetInfoLog, GLGETINFOLOG);
-      EXTMGR_FUNC_INIT(glGetAttachedObjects, GLGETATTACHEDOBJECTS);
+      EXTMGR_FUNC_INIT(glGetShaderiv, GLGETSHADERIV);
+      EXTMGR_FUNC_INIT(glGetProgramiv, GLGETPROGRAMIV);
+      EXTMGR_FUNC_INIT(glGetShaderInfoLog, GLGETSHADERINFOLOG);
+      EXTMGR_FUNC_INIT(glGetProgramInfoLog, GLGETPROGRAMINFOLOG);
+      EXTMGR_FUNC_INIT(glGetAttachedShaders, GLGETATTACHEDSHADERS);
       EXTMGR_FUNC_INIT(glGetUniformLocation, GLGETUNIFORMLOCATION);
       EXTMGR_FUNC_INIT(glGetActiveUniform, GLGETACTIVEUNIFORM);
       EXTMGR_FUNC_INIT(glGetUniformfv, GLGETUNIFORMFV);

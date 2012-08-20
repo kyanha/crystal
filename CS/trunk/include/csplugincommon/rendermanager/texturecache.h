@@ -155,10 +155,20 @@ namespace RenderManager
         CS::Utility::ResourceCache::PurgeConditionAfterTime<uint> (10000)) : g3d (0), 
       backend (reuse, purge),
       imgtype (imgtype),
-      format (format), textureFlags (textureFlags), texClass (texClass), 
+      format (format),
+      textureFlags (textureFlags & ~(CS_TEXTURE_NPOTS | CS_TEXTURE_SCALE_DOWN | CS_TEXTURE_SCALE_UP)),
+      texClass (texClass), 
       options (options) 
     {
       backend.agedPurgeInterval = 5000;
+
+      if (options & tcachePowerOfTwo)
+	options &= ~tcacheExactSizeMatch;
+
+      if (options & tcachePowerOfTwo)
+	this->textureFlags |= CS_TEXTURE_SCALE_UP;
+      else
+	this->textureFlags |= CS_TEXTURE_NPOTS;
     }
     
     /// Set iGraphics3D to use
@@ -204,14 +214,6 @@ namespace RenderManager
         return *tex;
       }
 
-      if (options & tcachePowerOfTwo)
-      {
-        width = csFindNearestPowerOf2 (width);
-        height = csFindNearestPowerOf2 (height);
-      }
-      real_w = width;
-      real_h = height;
-      
       CS_ASSERT_MSG("SetG3D () not called", g3d);
       csRef<iTextureHandle> newTex (
         g3d->GetTextureManager()->CreateTexture (
@@ -219,7 +221,8 @@ namespace RenderManager
       newTex->SetTextureClass (texClass);
 
       backend.AddActive (newTex);
-      
+
+      newTex->GetRendererDimensions (real_w, real_h);
       return newTex;
     }
 
@@ -255,6 +258,13 @@ namespace RenderManager
      */
     void SetFlags (int flags)
     {
+      flags &= ~(CS_TEXTURE_NPOTS | CS_TEXTURE_SCALE_DOWN | CS_TEXTURE_SCALE_UP);
+
+      if (options & tcachePowerOfTwo)
+	flags |= CS_TEXTURE_SCALE_UP;
+      else
+	flags |= CS_TEXTURE_NPOTS;
+
       textureFlags = flags;
       Clear();
     }

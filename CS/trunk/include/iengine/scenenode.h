@@ -32,6 +32,7 @@
 #include "iutil/array.h"
 
 struct iMovable;
+struct iObjectModel;
 struct iLight;
 struct iMeshWrapper;
 struct iCamera;
@@ -80,6 +81,12 @@ struct iSceneNode : public virtual iBase
    * the transform is defined relative to the parent node.
    */
   virtual iMovable* GetMovable () const = 0;
+
+  /**
+   * Get the object model for this scene node. May return 0 if there's no
+   * object model for this node.
+   */
+  virtual iObjectModel* GetObjectModel () = 0;
 
   /**
    * Get the corresponding mesh. Returns 0 if this is not a node for a mesh.

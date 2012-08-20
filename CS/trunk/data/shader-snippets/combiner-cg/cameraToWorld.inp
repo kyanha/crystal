@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?> 
 <!--
-  Copyright (C) 2007 by Frank Richter
-	    (C) 2007 by Jorrit Tyberghein
+  Copyright (C) 2012 by Matthieu Kraus
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Library General Public
@@ -17,12 +16,27 @@
   License along with this library; if not, write to the Free
   Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 -->
-<input name="ModelView" type="float4x4" default="complex">
-  <block location="vertexMain">
-    ModelView = gl_ModelViewMatrix;
+<input name="cameraToWorld" type="float4x4" default="complex">
+  <block location="vertexIn">
+    <uniform type="float4x4" name="cameraToWorld" />
+  </block>
+
+  <block location="fragmentIn">
+    <uniform type="float4x4" name="cameraToWorld" />
   </block>
   
+  <block location="vertexMain">
+    cameraToWorld = vertexIn.cameraToWorld;
+  </block>
+
   <block location="fragmentMain">
-    ModelView = gl_ModelViewMatrix;
+    cameraToWorld = fragmentIn.cameraToWorld;
+  </block>
+
+  <block location="variablemap">
+    <variablemap variable="world2camera transform inverse" 
+      destination="vertexIn.cameraToWorld" />
+    <variablemap variable="world2camera transform inverse" 
+      destination="fragmentIn.cameraToWorld" />
   </block>
 </input>

@@ -44,7 +44,7 @@ csLight::csLight (csEngine* engine,
   float d,
   float red, float green, float blue,
   csLightDynamicType dyntype) :
-    scfImplementationType (this), light_id (0),
+    scfImplementationType (this), light_id (0), objectModel(this),
     userSpecular (false), halo (0), dynamicType (dyntype), 
     type (CS_LIGHT_POINTLIGHT), cutoffDistance (d),
     directionalCutoffRadius (d), userDirectionalCutoffRadius (false),
@@ -437,6 +437,54 @@ void csLight::SetCutoffDistance (float radius)
   CalculateAttenuationVector();
 }
 
+void csLight::SetDirectionalCutoffRadius (float radius)
+{
+  directionalCutoffRadius = radius;
+  userDirectionalCutoffRadius = true;
+  lightnr++;
+
+  // Update the AABB
+  {
+    const csBox3 oldBox = worldBoundingBox;
+    UpdateBBox ();
+    
+    iSectorList* list = movable.csMovable::GetSectors ();
+    if (list)
+    {
+      for (int i = 0; i < list->GetCount (); ++i)
+      {
+        csSector* sect = static_cast<csSector*> (list->Get (i));
+        sect->UpdateLightBounds (this, oldBox);
+      }      
+    }
+  }
+}
+
+void csLight::SetSpotLightFalloff (float inner, float outer)
+{
+  spotlightFalloffInner = inner;
+  spotlightFalloffOuter = outer;
+  lightnr++;
+  GetPropertySV (csLightShaderVarCache::lightInnerFalloff)->SetValue (inner);
+  GetPropertySV (csLightShaderVarCache::lightOuterFalloff)->SetValue (outer);
+
+  // Update the AABB
+  {
+    const csBox3 oldBox = worldBoundingBox;
+    UpdateBBox ();
+    
+    iSectorList* list = movable.csMovable::GetSectors ();
+    if (list)
+    {
+      for (int i = 0; i < list->GetCount (); ++i)
+      {
+        csSector* sect = static_cast<csSector*> (list->Get (i));
+        sect->UpdateLightBounds (this, oldBox);
+      }      
+    }
+  }
+}
+
 iCrossHalo *csLight::CreateCrossHalo (float intensity, float cross)
 {
   csCrossHalo *halo = new csCrossHalo (intensity, cross);
@@ -497,14 +545,21 @@ void csLight::UpdateBBox ()
 {
   switch (type)
   {
-  case CS_LIGHT_DIRECTIONAL:
-      //@@TODO: Implement
   case CS_LIGHT_SPOTLIGHT:
-    // @@@ This could be tighter if the falloff is taken into account.
-    lightBoundingBox.Set (
-      csVector3 (-cutoffDistance, -cutoffDistance, 0),
-      csVector3 (cutoffDistance, cutoffDistance, cutoffDistance));
-    break;
+    {
+      float base = (cutoffDistance / spotlightFalloffOuter) * sqrt(1 - spotlightFalloffOuter * spotlightFalloffOuter);
+      lightBoundingBox.Set (
+	csVector3 (-base, -base, 0),
+	csVector3 (base, base, cutoffDistance));
+      break;
+    }
+  case CS_LIGHT_DIRECTIONAL:
+    {
+      lightBoundingBox.Set (
+	csVector3 (-directionalCutoffRadius, -directionalCutoffRadius, 0),
+	csVector3 (directionalCutoffRadius, directionalCutoffRadius, cutoffDistance));
+      break;
+    }
   case CS_LIGHT_POINTLIGHT:
     {
       lightBoundingBox.SetSize (csVector3 (cutoffDistance*2));

@@ -517,15 +517,13 @@ void CameraManager::UpdatePositionParameters (const csVector3& newPosition)
 void CameraManager::ApplyPositionParameters ()
 {
   // Apply the distance, yaw, and pitch values to the camera
-  csVector3 position;
   csVector3 target = cameraModePan ? panCameraTarget : GetCameraTarget ();
 
-  position.x = target.x
-    - cameraDistance * (float) cos (cameraPitch) * (float) sin (cameraYaw);
-  position.y = target.y
-    - cameraDistance * (float) sin (cameraPitch);
-  position.z = target.z
-    - cameraDistance * (float) cos (cameraPitch) * (float) cos (cameraYaw);
+  csVector3 position = target - cameraDistance * csVector3 (
+      cos (cameraPitch) * sin(cameraYaw),
+      sin (cameraPitch),
+      cos (cameraPitch) * cos (cameraYaw)
+    );
 
   camera->GetTransform ().SetOrigin (position);
   camera->GetTransform ().LookAt

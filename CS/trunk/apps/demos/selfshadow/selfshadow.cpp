@@ -218,9 +218,9 @@ bool SelfShadowDemo::Application ()
     ("/config/engine.cfg", vfs, iConfigManager::ConfigPriorityPlugin);
 
   csRef<iRenderManager> rm = csLoadPlugin<iRenderManager> 
-    (GetObjectRegistry(), "crystalspace.rendermanager.osm");
+    (GetObjectRegistry(), "crystalspace.rendermanager.deferred");
   if (!rm)
-    return ReportError("Failed to load OSM Render Manager!");
+    return ReportError("Failed to load Deferred Render Manager!");
 
   // Load debuger for changing various settings
   rm_dbg = scfQueryInterface<iDebugHelper>(rm);

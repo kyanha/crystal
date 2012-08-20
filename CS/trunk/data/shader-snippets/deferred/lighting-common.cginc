@@ -1,5 +1,7 @@
+<?xml version="1.0" encoding="utf-8" ?>
 <!--
   Copyright (C) 2008 by Frank Richter
+                2012 by Matthieu Kraus
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Library General Public

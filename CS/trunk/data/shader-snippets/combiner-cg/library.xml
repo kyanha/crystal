@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?> 
 <!--
-  Copyright (C) 2007 by Frank Richter
+  Copyright (C) 2012 by Matthieu Kraus
+	    (C) 2007 by Frank Richter
 	    (C) 2007 by Jorrit Tyberghein
 
   This library is free software; you can redistribute it and/or
@@ -26,69 +27,67 @@
        named "output". Type is the "from" resp. "to" one. -->
 
   <coercion from="rgb" to="rgba" cost="1">
-    <block location="fragmentMain">
-      output = float4 (input, 1);
-    </block>
-
-    <block location="vertexMain">
+    <block location="vertexMain;fragmentMain">
       output = float4 (input, 1);
     </block>
   </coercion>
 
   <coercion from="rgba" to="rgb" cost="0">
-    <block location="fragmentMain">
-      output = input.rgb;
-    </block>
-    
-    <block location="vertexMain">
+    <block location="vertexMain;fragmentMain">
       output = input.rgb;
     </block>
   </coercion>
   
   <coercion from="float" to="rgb" cost="0">
-    <block location="fragmentMain">
-      output = float3 (input);
-    </block>
-
-    <block location="vertexMain">
+    <block location="vertexMain;fragmentMain">
       output = float3 (input);
     </block>
   </coercion>
   
   <coercion from="float" to="rgba" cost="0">
-    <block location="fragmentMain">
+    <block location="vertexMain;fragmentMain">
       output = float4 (input);
     </block>
 
-    <block location="vertexMain">
-      output = float4 (input);
-    </block>
   </coercion>
   
   <!------------------------------------------------------------------------->
   
-  <coercion from="position4_world" to="position4_screen" cost="4">
-    <!-- Slightly dirty: float4x4 is no weaver type, so gets written out 
-	 verbatim -->
-    <input name="ModelViewProj" type="float4x4" default="complex"
-	private="yes">
-      <block location="vertexIn">
-	<uniform type="float4x4" name="ModelViewProj" binding="state.matrix.mvp" />
-      </block>
-      
-      <block location="vertexMain">
-	ModelViewProj = vertexIn.ModelViewProj;
-      </block>
-    </input>
-    
+  <coercion from="position4_object" to="position4_screen" cost="4">
+    <input file="/shader-snippets/combiner-cg/ModelViewProj.inp" private="yes" />
+
     <block location="vertexMain">
       output = mul (ModelViewProj, input);
     </block>
+    
+    <block location="fragmentMain">
+    #if FRAGMENT_PROGRAM_LEVEL >= 0x200
+      output = mul (ModelViewProj, input);
+    #else
+      /* PS1.x can't do matrix mul ...
+         Leave 'output' deliberately undefined to catch (undesired) uses of it */
+    #endif
+    </block>
+  </coercion>
+
+  <coercion from="position4_screen" to="position4_object" cost="4">
+    <input file="/shader-snippets/combiner-cg/ModelViewProjInv.inp" private="yes" />
+
+    <block location="vertexMain">
+      output = mul (ModelViewProjInv, input);
+    </block>
+    
+    <block location="fragmentMain">
+    #if FRAGMENT_PROGRAM_LEVEL >= 0x200
+      output = mul (ModelViewProjInv, input);
+    #else
+      /* PS1.x can't do matrix mul ...
+         Leave 'output' deliberately undefined to catch (undesired) uses of it */
+    #endif
+    </block>
   </coercion>
   
-  <coercion from="position4_world" to="position4_camera" cost="4">
-    <!-- Slightly dirty: float4x4 is no weaver type, so gets written out 
-	 verbatim -->
+  <coercion from="position4_object" to="position4_camera" cost="4">
     <input file="/shader-snippets/combiner-cg/ModelView.inp" private="yes" />
     
     <block location="vertexMain">
@@ -104,7 +103,107 @@
     #endif
     </block>
   </coercion>
+
+  <coercion from="position4_camera" to="position4_object" cost="4">
+    <input file="/shader-snippets/combiner-cg/ModelViewInv.inp" private="yes" />
+    
+    <block location="vertexMain">
+      output = mul (ModelViewInv, input);
+    </block>
+    
+    <block location="fragmentMain">
+    #if FRAGMENT_PROGRAM_LEVEL >= 0x200
+      output = mul (ModelViewInv, input);
+    #else
+      /* PS1.x can't do matrix mul ...
+         Leave 'output' deliberately undefined to catch (undesired) uses of it */
+    #endif
+    </block>
+  </coercion>
+
+  <coercion from="position4_camera" to="position4_screen" cost="4">
+    <input file="/shader-snippets/combiner-cg/Proj.inp" private="yes" />
+    
+    <block location="vertexMain">
+      output = mul (Proj, input);
+    </block>
+    
+    <block location="fragmentMain">
+    #if FRAGMENT_PROGRAM_LEVEL >= 0x200
+      output = mul (Proj, input);
+    #else
+      /* PS1.x can't do matrix mul ...
+         Leave 'output' deliberately undefined to catch (undesired) uses of it */
+    #endif
+    </block>
+  </coercion>
+
+  <coercion from="position4_screen" to="position4_camera" cost="4">
+    <input file="/shader-snippets/combiner-cg/ProjInv.inp" private="yes" />
+    
+    <block location="vertexMain">
+      output = mul (ProjInv, input);
+    </block>
+    
+    <block location="fragmentMain">
+    #if FRAGMENT_PROGRAM_LEVEL >= 0x200
+      output = mul (ProjInv, input);
+    #else
+      /* PS1.x can't do matrix mul ...
+         Leave 'output' deliberately undefined to catch (undesired) uses of it */
+    #endif
+    </block>
+  </coercion>
+
+  <coercion from="position4_object" to="position4_world" cost="4">
+    <block location="vertexMain">
+      output = mul (objectToWorld, input);
+    </block>
+    
+    <block location="fragmentMain">
+    #if FRAGMENT_PROGRAM_LEVEL >= 0x200
+      output = mul (objectToWorld, input);
+    #else
+      /* PS1.x can't do matrix mul ...
+         Leave 'output' deliberately undefined to catch (undesired) uses of it */
+    #endif
+    </block>
+  </coercion>
+
+  <coercion from="position4_world" to="position4_camera" cost="4">
+    <input file="/shader-snippets/combiner-cg/worldToCamera.inp" private="yes" />
+
+    <block location="vertexMain">
+      output = mul (worldToCamera, input);
+    </block>
+    
+    <block location="fragmentMain">
+    #if FRAGMENT_PROGRAM_LEVEL >= 0x200
+      output = mul (worldToCamera, input);
+    #else
+      /* PS1.x can't do matrix mul ...
+         Leave 'output' deliberately undefined to catch (undesired) uses of it */
+    #endif
+    </block>
+  </coercion>
   
+  <coercion from="position4_camera" to="position4_world" cost="4">
+    <input file="/shader-snippets/combiner-cg/cameraToWorld.inp" private="yes" />
+
+    <block location="vertexMain">
+      output = mul (cameraToWorld, input);
+    </block>
+    
+    <block location="fragmentMain">
+    #if FRAGMENT_PROGRAM_LEVEL >= 0x200
+      output = mul (cameraToWorld, input);
+    #else
+      /* PS1.x can't do matrix mul ...
+         Leave 'output' deliberately undefined to catch (undesired) uses of it */
+    #endif
+    </block>
+  </coercion>
+
   <!------------------------------------------------------------------------->
   
   <coercion from="direction_object" to="direction_tangent" cost="3">
@@ -133,61 +232,7 @@
     #endif
     </block>
   </coercion>
-  
-  <coercion from="direction_object" to="direction_world" cost="3">
-    <block location="vertexMain">
-      output =  mul (objectToWorld, float4 (input, 0)).xyz;
-    </block>
-    
-    <block location="fragmentMain">
-    #if FRAGMENT_PROGRAM_LEVEL >= 0x200
-      output =  mul (objectToWorld, float4 (input, 0)).xyz;
-    #else
-      /* PS1.x can't do matrix mul ...
-         Leave 'output' deliberately undefined to catch (undesired) uses of it */
-    #endif
-    </block>
-  </coercion>
-  
-  <coercion from="direction_world" to="direction_camera" cost="3">
-    <!-- Slightly dirty: float4x4 is no weaver type, so gets written out 
-	 verbatim -->
-    <input file="/shader-snippets/combiner-cg/ModelView.inp" private="yes" />
-    
-    <block location="vertexMain">
-      output = mul (ModelView, float4 (input, 0)).xyz;
-    </block>
-    
-    <block location="fragmentMain">
-    #if FRAGMENT_PROGRAM_LEVEL >= 0x200
-      output = mul (ModelView, float4 (input, 0)).xyz;
-    #else
-      /* PS1.x can't do matrix mul ...
-         Leave 'output' deliberately undefined to catch (undesired) uses of it */
-    #endif
-    </block>
-  </coercion>
-  
-  <coercion from="direction_camera" to="direction_world" cost="3">
-    <!-- Slightly dirty: float4x4 is no weaver type, so gets written out 
-	 verbatim -->
-    <input name="ModelViewIT" type="float4x4" default="complex"
-	private="yes">
-      <block location="vertexIn">
-	<uniform type="float4x4" name="ModelViewIT" 
-	  binding="state.matrix.modelview.invtrans" />
-      </block>
-      
-      <block location="vertexMain">
-	ModelViewIT = vertexIn.ModelViewIT;
-      </block>
-    </input>
-    
-    <block location="vertexMain">
-      output = mul (ModelViewIT, float4 (input, 0)).xyz;
-    </block>
-  </coercion>
-  
+
   <coercion from="direction_tangent" to="direction_object" cost="3">
     <input file="/shader-snippets/combiner-cg/Normal.inp" private="yes" />
     <input file="/shader-snippets/combiner-cg/Tangent.inp" private="yes" />
@@ -219,9 +264,41 @@
     </block>
   </coercion>
   
+  <coercion from="direction_object" to="direction_screen" cost="3">
+    <input file="/shader-snippets/combiner-cg/ModelViewProj.inp" private="yes" />
+
+    <block location="vertexMain">
+      output = mul (ModelViewProj, float4 (input, 0)).xyz;
+    </block>
+    
+    <block location="fragmentMain">
+    #if FRAGMENT_PROGRAM_LEVEL >= 0x200
+      output = mul (ModelViewProj, float4 (input, 0)).xyz;
+    #else
+      /* PS1.x can't do matrix mul ...
+         Leave 'output' deliberately undefined to catch (undesired) uses of it */
+    #endif
+    </block>
+  </coercion>
+
+  <coercion from="direction_screen" to="direction_object" cost="3">
+    <input file="/shader-snippets/combiner-cg/ModelViewProjInv.inp" private="yes" />
+
+    <block location="vertexMain">
+      output = mul (ModelViewProjInv, float4 (input, 0)).xyz;
+    </block>
+    
+    <block location="fragmentMain">
+    #if FRAGMENT_PROGRAM_LEVEL >= 0x200
+      output = mul (ModelViewProjInv, float4 (input, 0)).xyz;
+    #else
+      /* PS1.x can't do matrix mul ...
+         Leave 'output' deliberately undefined to catch (undesired) uses of it */
+    #endif
+    </block>
+  </coercion>
+  
   <coercion from="direction_object" to="direction_camera" cost="3">
-    <!-- Slightly dirty: float4x4 is no weaver type, so gets written out 
-	 verbatim -->
     <input file="/shader-snippets/combiner-cg/ModelView.inp" private="yes" />
     
     <block location="vertexMain">
@@ -231,6 +308,106 @@
     <block location="fragmentMain">
     #if FRAGMENT_PROGRAM_LEVEL >= 0x200
       output = mul (ModelView, float4 (input, 0)).xyz;
+    #else
+      /* PS1.x can't do matrix mul ...
+         Leave 'output' deliberately undefined to catch (undesired) uses of it */
+    #endif
+    </block>
+  </coercion>
+
+  <coercion from="direction_camera" to="direction_object" cost="3">
+    <input file="/shader-snippets/combiner-cg/ModelViewInv.inp" private="yes" />
+    
+    <block location="vertexMain">
+      output = mul (ModelViewInv, float4 (input, 0)).xyz;
+    </block>
+    
+    <block location="fragmentMain">
+    #if FRAGMENT_PROGRAM_LEVEL >= 0x200
+      output = mul (ModelViewInv, float4 (input, 0)).xyz;
+    #else
+      /* PS1.x can't do matrix mul ...
+         Leave 'output' deliberately undefined to catch (undesired) uses of it */
+    #endif
+    </block>
+  </coercion>
+
+  <coercion from="direction_camera" to="direction_screen" cost="3">
+    <input file="/shader-snippets/combiner-cg/Proj.inp" private="yes" />
+    
+    <block location="vertexMain">
+      output = mul (Proj, float4 (input, 0)).xyz;
+    </block>
+    
+    <block location="fragmentMain">
+    #if FRAGMENT_PROGRAM_LEVEL >= 0x200
+      output = mul (Proj, float4 (input, 0)).xyz;
+    #else
+      /* PS1.x can't do matrix mul ...
+         Leave 'output' deliberately undefined to catch (undesired) uses of it */
+    #endif
+    </block>
+  </coercion>
+
+  <coercion from="direction_screen" to="direction_camera" cost="3">
+    <input file="/shader-snippets/combiner-cg/ProjInv.inp" private="yes" />
+    
+    <block location="vertexMain">
+      output = mul (ProjInv, float4 (input, 0)).xyz;
+    </block>
+    
+    <block location="fragmentMain">
+    #if FRAGMENT_PROGRAM_LEVEL >= 0x200
+      output = mul (ProjInv, float4 (input, 0)).xyz;
+    #else
+      /* PS1.x can't do matrix mul ...
+         Leave 'output' deliberately undefined to catch (undesired) uses of it */
+    #endif
+    </block>
+  </coercion>
+
+  <coercion from="direction_object" to="direction_world" cost="3">
+    <block location="vertexMain">
+      output = mul (objectToWorld, float4 (input, 0)).xyz;
+    </block>
+    
+    <block location="fragmentMain">
+    #if FRAGMENT_PROGRAM_LEVEL >= 0x200
+      output = mul (objectToWorld, float4 (input, 0)).xyz;
+    #else
+      /* PS1.x can't do matrix mul ...
+         Leave 'output' deliberately undefined to catch (undesired) uses of it */
+    #endif
+    </block>
+  </coercion>
+
+  <coercion from="direction_world" to="direction_camera" cost="3">
+    <input file="/shader-snippets/combiner-cg/worldToCamera.inp" private="yes" />
+
+    <block location="vertexMain">
+      output = mul (worldToCamera, float4 (input, 0)).xyz;
+    </block>
+    
+    <block location="fragmentMain">
+    #if FRAGMENT_PROGRAM_LEVEL >= 0x200
+      output = mul (worldToCamera, float4 (input, 0)).xyz;
+    #else
+      /* PS1.x can't do matrix mul ...
+         Leave 'output' deliberately undefined to catch (undesired) uses of it */
+    #endif
+    </block>
+  </coercion>
+  
+  <coercion from="direction_camera" to="direction_world" cost="3">
+    <input file="/shader-snippets/combiner-cg/cameraToWorld.inp" private="yes" />
+
+    <block location="vertexMain">
+      output = mul (cameraToWorld, float4 (input, 0)).xyz;
+    </block>
+    
+    <block location="fragmentMain">
+    #if FRAGMENT_PROGRAM_LEVEL >= 0x200
+      output = mul (cameraToWorld, float4 (input, 0)).xyz;
     #else
       /* PS1.x can't do matrix mul ...
          Leave 'output' deliberately undefined to catch (undesired) uses of it */
@@ -266,7 +443,7 @@
     #endif
     </block>
   </coercion>
-  
+
   <coercion from="normal_tangent" to="normal_object" cost="3">
     <input file="/shader-snippets/combiner-cg/Normal.inp" private="yes" />
     <input file="/shader-snippets/combiner-cg/Tangent.inp" private="yes" />
@@ -278,9 +455,9 @@
       obj2tang[1] = Bitangent;
       obj2tang[2] = Normal;
       /* NOTE: This assumes the Normal/Tangent/Bitangent are orthonormal.
-         Only then we the transposed matrix is conveniently equal to the
-	 inverse. Lastly, multiplying with the matrix on theright is the same
-	 as multiplying with the transpose on the left. */
+      Only then we the transposed matrix is conveniently equal to the
+      inverse. Lastly, multiplying with the matrix on theright is the same
+      as multiplying with the transpose on the left. */
       output = mul (input, obj2tang);
     </block>
     
@@ -298,57 +475,33 @@
     </block>
   </coercion>
   
-  <coercion from="normal_object" to="normal_world" cost="3">
+  <coercion from="normal_object" to="normal_screen" cost="3">
+    <input file="/shader-snippets/combiner-cg/ModelViewProj.inp" private="yes" />
+
     <block location="vertexMain">
-      output =  mul (objectToWorld, float4 (input, 0)).xyz;
+      output = mul (ModelViewProj, float4 (input, 0)).xyz;
     </block>
     
     <block location="fragmentMain">
     #if FRAGMENT_PROGRAM_LEVEL >= 0x200
-      output =  mul (objectToWorld, float4 (input, 0)).xyz;
+      output = mul (ModelViewProj, float4 (input, 0)).xyz;
     #else
       /* PS1.x can't do matrix mul ...
          Leave 'output' deliberately undefined to catch (undesired) uses of it */
     #endif
     </block>
   </coercion>
-  
-  <coercion from="normal_world" to="normal_camera" cost="3">
-    <!-- Slightly dirty: float4x4 is no weaver type, so gets written out 
-	 verbatim -->
-    <input name="worldToCamera" type="float4x4" default="complex" 
-	private="yes">
-      <block location="vertexIn">
-	<uniform type="float4x4" name="worldToCamera" />
-      </block>
-      
-      <block location="fragmentIn">
-	<uniform type="float4x4" name="worldToCamera" />
-      </block>
-      
-      <block location="vertexMain">
-	worldToCamera = vertexIn.worldToCamera;
-      </block>
 
-      <block location="fragmentMain">
-	worldToCamera = fragmentIn.worldToCamera;
-      </block>
+  <coercion from="normal_screen" to="normal_object" cost="3">
+    <input file="/shader-snippets/combiner-cg/ModelViewProjInv.inp" private="yes" />
 
-      <block location="variablemap">
-	<variablemap variable="world2camera transform" 
-	  destination="vertexIn.world2camera" />
-	<variablemap variable="world2camera transform" 
-	  destination="fragmentIn.world2camera" />
-      </block>
-    </input>
-    
     <block location="vertexMain">
-      output =  mul (worldToCamera, float4 (input, 0)).xyz;
+      output = mul (ModelViewProjInv, float4 (input, 0)).xyz;
     </block>
     
     <block location="fragmentMain">
     #if FRAGMENT_PROGRAM_LEVEL >= 0x200
-      output =  mul (worldToCamera, float4 (input, 0)).xyz;
+      output = mul (ModelViewProjInv, float4 (input, 0)).xyz;
     #else
       /* PS1.x can't do matrix mul ...
          Leave 'output' deliberately undefined to catch (undesired) uses of it */
@@ -357,8 +510,6 @@
   </coercion>
   
   <coercion from="normal_object" to="normal_camera" cost="3">
-    <!-- Slightly dirty: float4x4 is no weaver type, so gets written out 
-	 verbatim -->
     <input file="/shader-snippets/combiner-cg/ModelView.inp" private="yes" />
     
     <block location="vertexMain">
@@ -374,25 +525,117 @@
     #endif
     </block>
   </coercion>
+
+  <coercion from="normal_camera" to="normal_object" cost="3">
+    <input file="/shader-snippets/combiner-cg/ModelViewInv.inp" private="yes" />
+    
+    <block location="vertexMain">
+      output = mul (ModelViewInv, float4 (input, 0)).xyz;
+    </block>
+    
+    <block location="fragmentMain">
+    #if FRAGMENT_PROGRAM_LEVEL >= 0x200
+      output = mul (ModelViewInv, float4 (input, 0)).xyz;
+    #else
+      /* PS1.x can't do matrix mul ...
+         Leave 'output' deliberately undefined to catch (undesired) uses of it */
+    #endif
+    </block>
+  </coercion>
+
+  <coercion from="normal_camera" to="normal_screen" cost="3">
+    <input file="/shader-snippets/combiner-cg/Proj.inp" private="yes" />
+    
+    <block location="vertexMain">
+      output = mul (Proj, float4 (input, 0)).xyz;
+    </block>
+    
+    <block location="fragmentMain">
+    #if FRAGMENT_PROGRAM_LEVEL >= 0x200
+      output = mul (Proj, float4 (input, 0)).xyz;
+    #else
+      /* PS1.x can't do matrix mul ...
+         Leave 'output' deliberately undefined to catch (undesired) uses of it */
+    #endif
+    </block>
+  </coercion>
+
+  <coercion from="normal_screen" to="normal_camera" cost="3">
+    <input file="/shader-snippets/combiner-cg/ProjInv.inp" private="yes" />
+    
+    <block location="vertexMain">
+      output = mul (ProjInv, float4 (input, 0)).xyz;
+    </block>
+    
+    <block location="fragmentMain">
+    #if FRAGMENT_PROGRAM_LEVEL >= 0x200
+      output = mul (ProjInv, float4 (input, 0)).xyz;
+    #else
+      /* PS1.x can't do matrix mul ...
+         Leave 'output' deliberately undefined to catch (undesired) uses of it */
+    #endif
+    </block>
+  </coercion>
+
+  <coercion from="normal_object" to="normal_world" cost="3">
+    <block location="vertexMain">
+      output = mul (objectToWorld, float4 (input, 0)).xyz;
+    </block>
+    
+    <block location="fragmentMain">
+    #if FRAGMENT_PROGRAM_LEVEL >= 0x200
+      output = mul (objectToWorld, float4 (input, 0)).xyz;
+    #else
+      /* PS1.x can't do matrix mul ...
+         Leave 'output' deliberately undefined to catch (undesired) uses of it */
+    #endif
+    </block>
+  </coercion>
+
+  <coercion from="normal_world" to="normal_camera" cost="3">
+    <input file="/shader-snippets/combiner-cg/worldToCamera.inp" private="yes" />
+
+    <block location="vertexMain">
+      output = mul (worldToCamera, float4 (input, 0)).xyz;
+    </block>
+    
+    <block location="fragmentMain">
+    #if FRAGMENT_PROGRAM_LEVEL >= 0x200
+      output = mul (worldToCamera, float4 (input, 0)).xyz;
+    #else
+      /* PS1.x can't do matrix mul ...
+         Leave 'output' deliberately undefined to catch (undesired) uses of it */
+    #endif
+    </block>
+  </coercion>
+  
+  <coercion from="normal_camera" to="normal_world" cost="3">
+    <input file="/shader-snippets/combiner-cg/cameraToWorld.inp" private="yes" />
+
+    <block location="vertexMain">
+      output = mul (cameraToWorld, float4 (input, 0)).xyz;
+    </block>
+    
+    <block location="fragmentMain">
+    #if FRAGMENT_PROGRAM_LEVEL >= 0x200
+      output = mul (cameraToWorld, float4 (input, 0)).xyz;
+    #else
+      /* PS1.x can't do matrix mul ...
+         Leave 'output' deliberately undefined to catch (undesired) uses of it */
+    #endif
+    </block>
+  </coercion>
   
   <!------------------------------------------------------------------------->
   
   <coerciontemplate name="normalize" cost="3">
-    <block location="vertexMain">
-      output = normalize (input);
-    </block>
-    
-    <block location="fragmentMain">
+    <block location="vertexMain;fragmentMain">
       output = normalize (input);
     </block>
   </coerciontemplate>
   
   <coerciontemplate name="passthrough" cost="0">
-    <block location="vertexMain">
-      output = input;
-    </block>
-    
-    <block location="fragmentMain">
+    <block location="vertexMain;fragmentMain">
       output = input;
     </block>
   </coerciontemplate>

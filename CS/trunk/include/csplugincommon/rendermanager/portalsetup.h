@@ -552,6 +552,8 @@ namespace RenderManager
 		renderTree.CreateContext (newRenderView);
       portalCtx->renderTargets[rtaColor0].texHandle = tex;
 
+      portalCtx->drawFlags |= CSDRAW_CLEARSCREEN;
+
       // Setup the new context
       ContextSetupData newSetup (portalCtx);
       contextFunction (*portalCtx, newSetup);

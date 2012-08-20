@@ -1415,6 +1415,8 @@ void csGLGraphics3D::UnsetRenderTargets()
   viewwidth = G2D->GetWidth();
   viewheight = G2D->GetHeight();
   needViewportUpdate = true;
+
+  currentAttachments = 0;
 }
 
 void csGLGraphics3D::CopyFromRenderTargets (size_t num,
@@ -1669,7 +1671,6 @@ void csGLGraphics3D::FinishDraw ()
     RecordProfileEvent ("Unset render targets");
     r2tbackend->FinishDraw ((current_drawflags & CSDRAW_READBACK) != 0);
     UnsetRenderTargets();
-    currentAttachments = 0;
   }
   
   current_drawflags = 0;
@@ -2019,7 +2020,6 @@ void csGLGraphics3D::DrawMesh (const csCoreRenderMesh* mymesh,
   if (needMatrix)
   {
     float matrix[16];
-    //makeGLMatrixInverted (o2w, matrix);
     makeGLMatrix (o2w, matrix);
     statecache->SetMatrixMode (GL_MODELVIEW);
     glPushMatrix ();
@@ -4227,7 +4227,6 @@ void csGLGraphics3D::DrawMeshBasic(const csCoreRenderMesh* mymesh,
   if (needMatrix)
   {
     float matrix[16];
-    //makeGLMatrixInverted (o2w, matrix);
     makeGLMatrix (o2w, matrix);
     statecache->SetMatrixMode (GL_MODELVIEW);
     glPushMatrix ();

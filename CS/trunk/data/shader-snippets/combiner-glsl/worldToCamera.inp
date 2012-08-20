@@ -16,20 +16,21 @@
   License along with this library; if not, write to the Free
   Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 -->
-<snippet type="compound">
-  <technique priority="200">
-    <combiner plugin="crystalspace.graphics3d.shader.combiner.glcg" />
+<input name="worldToCamera" type="float4x4" default="complex">
+  <block location="inputs">
+    <uniform type="float4x4" name="in_worldToCamera" />
+  </block>
+  
+  <block location="vertexMain">
+    worldToCamera = in_worldToCamera;
+  </block>
 
-    <alias name="use_buffer" weak="yes" file="/shader-snippets/deferred/use_gbuffer.xml" />
+  <block location="fragmentMain">
+    worldToCamera = in_worldToCamera;
+  </block>
 
-    <snippet id="position" file="/shader-snippets/position.xml" />
-    <snippet id="use_buffer" filealias="use_buffer" />
-    <snippet id="lighting" filealias="lighting" />
-
-    <connection from="position" to="use_buffer" />
-    <connection from="use_buffer" to="lighting" />
-
-    <output snippet="lighting" name="diffuseColor" to="color0" />
-    <output snippet="lighting" name="specularColor" to="color1" />
-  </technique>
-</snippet>
+  <block location="variablemap">
+    <variablemap variable="world2camera transform" 
+      destination="in_worldToCamera" />
+  </block>
+</input>
