@@ -67,7 +67,9 @@ class B2CS_OT_export_run(bpy.types.Operator):
       options += "-verbose=-scf "
     if B2CS.properties.silent:
       options += "-silent "
-      
+    if B2CS.properties.bugplug:
+      options += "-plugin=bugplug "
+     
     #import commands  
     #output = commands.getstatusoutput(WalkTestPath() + options + path)
     #print(output)
@@ -107,6 +109,7 @@ class RENDER_PT_csSettingsPanel(csSettingsPanel, bpy.types.Panel):
         row.prop(B2CS.properties, "console")
         row.prop(B2CS.properties, "verbose")
         row.prop(B2CS.properties, "silent")
+        row.prop(B2CS.properties, "bugplug")
       else:
         row.label(text="'walktest' isn't available!")
       
@@ -139,6 +142,11 @@ B2CS.BoolProperty( attr="silent",
         name="Silent",
         description="Enable the '-silent' flag of 'walktest'", 
         default=True)
+
+B2CS.BoolProperty( attr="bugplug",
+        name="Bugplug",
+        description="Enable bugplug in 'walktest'",
+        default=False)
 
 B2CS.BoolProperty( attr="library",
         name="Export as a CS library",
