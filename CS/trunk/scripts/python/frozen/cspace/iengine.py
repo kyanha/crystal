@@ -942,6 +942,7 @@ class iSceneNode(core.iBase):
     def __init__(self, *args, **kwargs): raise AttributeError, "No constructor defined"
     __repr__ = _swig_repr
     def GetMovable(*args): return _iengine.iSceneNode_GetMovable(*args)
+    def GetObjectModel(*args): return _iengine.iSceneNode_GetObjectModel(*args)
     def QueryMesh(*args): return _iengine.iSceneNode_QueryMesh(*args)
     def QueryLight(*args): return _iengine.iSceneNode_QueryLight(*args)
     def QueryCamera(*args): return _iengine.iSceneNode_QueryCamera(*args)

@@ -27454,6 +27454,28 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_iSceneNode_GetObjectModel(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  iSceneNode *arg1 = (iSceneNode *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  iObjectModel *result = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"iSceneNode_GetObjectModel",1,1,&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_iSceneNode, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "iSceneNode_GetObjectModel" "', argument " "1"" of type '" "iSceneNode *""'"); 
+  }
+  arg1 = reinterpret_cast< iSceneNode * >(argp1);
+  result = (iObjectModel *)(arg1)->GetObjectModel();
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_iObjectModel, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_iSceneNode_QueryMesh(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   iSceneNode *arg1 = (iSceneNode *) 0 ;
@@ -40420,6 +40442,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"delete_iSceneNodeArray", _wrap_delete_iSceneNodeArray, METH_VARARGS, NULL},
 	 { (char *)"iSceneNodeArray_swigregister", iSceneNodeArray_swigregister, METH_VARARGS, NULL},
 	 { (char *)"iSceneNode_GetMovable", _wrap_iSceneNode_GetMovable, METH_VARARGS, NULL},
+	 { (char *)"iSceneNode_GetObjectModel", _wrap_iSceneNode_GetObjectModel, METH_VARARGS, NULL},
 	 { (char *)"iSceneNode_QueryMesh", _wrap_iSceneNode_QueryMesh, METH_VARARGS, NULL},
 	 { (char *)"iSceneNode_QueryLight", _wrap_iSceneNode_QueryLight, METH_VARARGS, NULL},
 	 { (char *)"iSceneNode_QueryCamera", _wrap_iSceneNode_QueryCamera, METH_VARARGS, NULL},

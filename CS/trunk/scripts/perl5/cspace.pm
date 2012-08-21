@@ -21071,6 +21071,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 %OWNER = ();
 %ITERATORS = ();
 *GetMovable = *cspacec::iSceneNode_GetMovable;
+*GetObjectModel = *cspacec::iSceneNode_GetObjectModel;
 *QueryMesh = *cspacec::iSceneNode_QueryMesh;
 *QueryLight = *cspacec::iSceneNode_QueryLight;
 *QueryCamera = *cspacec::iSceneNode_QueryCamera;

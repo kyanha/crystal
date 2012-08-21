@@ -403,9 +403,9 @@ required.
 <h4 class="subsubheading"> Lighting Considerations </h4>
 
 <p>When designing a map you also have to think about where to place lights.
-If you plan to use stencil-based lighting or hardware-based vertex lighting
-then you must be very careful to not exagerate the number of lights.
-Runtime performance with those two techniques depends on the number of lights
+If you plan to use dynamic lighting you must be very careful to not exagerate
+the number of lights.
+Runtime performance of this technique depends on the number of lights
 and their influence radius. For this reason you are probably better off using
 lightmapped lighting in case you have a big map with a lot of lights.
 </p>
@@ -413,6 +413,35 @@ lightmapped lighting in case you have a big map with a lot of lights.
 multiple lights (there is a slight memory cost associated with having many
 pseudo-dynamic lightmaps). A higher number of lights simply means that
 recalculating lighting will take longer.
+</p>
+<p>You can also use pseudo-dynamic lights (lightmapped lights that may change color)
+which however introduces a new runtime cost with having multiple lights.
+That is each pseudo-dynamic light has it's own influence map that is used
+to calculate the lightmap given the light's current color at runtime.
+While there's not much computational cost associated with this unless you
+change the light often it increases the memory overhead, so keeping the
+number of pseudo-dynamic lights low is important.
+</p>
+<p>You may also use dynamic shadowing, however if you plan to do so you should
+consider which kind of light to place.
+Generally the most suited light type for dynamic shadows is the directional
+light as it offers the best performance and accuracy (and is also very suited
+for very important lights like a &quot;sun&quot;). If you cannot use directional light
+you should consider a spot light which has similar performance, but has lower
+accuracy. Point lights are something you should try to avoid with dynamic
+shadows as those are turned into 6 spot lights for shadowing purposes and
+therefore pose the biggest runtime cost.
+</p>
+<p>If you plan to use deferred rendering you can also use light clipping volumes
+which allows you to specify an arbitrary mesh (which should be reasonably simple)
+that allows you to specify the influence of a light in more detail.
+For example you can use a simple box to prevent the light from &quot;bleeding&quot; throughh
+walls instead of using shadowing for that purpose.
+</p>
+<p>For best performance you should combine all of the above techniques.
+For example you may use few dynamic lights with shadowing for very important
+ones such as the sun/moon or a flash light/torch while using lightmapping for
+the rest.
 </p>
 <hr size="1">
 <table cellpadding="1" cellspacing="1" border="0">
