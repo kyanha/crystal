@@ -341,7 +341,7 @@ namespace RenderManager
 	{
 	  recurseCount++;
 	  PortalSetupType portalSetup(portalPersist, *this);
-	  //portalSetup(context, portalSetupData);
+	  portalSetup(context, portalSetupData);
 	  recurseCount--;
 	}
 
