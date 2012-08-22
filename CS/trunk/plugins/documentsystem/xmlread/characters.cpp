@@ -28,8 +28,8 @@ CS_PLUGIN_NAMESPACE_BEGIN(XMLRead)
  * subsequent character for a name, so that's the info recorded here.
  */
 
-#define NAME_FIRST        0x01
-#define NAME_SUBSEQ       0x02
+#define NAME_FIRST        0x01u
+#define NAME_SUBSEQ       0x02u
 
 // Shortcuts
 #define F   (NAME_SUBSEQ | NAME_FIRST)
