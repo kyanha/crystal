@@ -90,6 +90,20 @@ public:
    */
   bool Render (iMeshWrapper* mesh, iTextureHandle* handle,
       bool persistent = false, int color = -1);
+
+  /**
+   * Prepare rendering on a texture. This should be called first and is useful
+   * if you want to filter out multiple meshes at the same time. It sets up the
+   * internal view and clears the filter.
+   */
+  void PrepareRender (iTextureHandle* handle);
+
+  /**
+   * Do the actual rendering. To use this you must first call PrepareRender() and
+   * then set up filter for one or more meshes (using view->GetMeshFilter().AddFilterMesh()).
+   * Finally the sector of the camera in the view must be set correctly.
+   */
+  bool DoRender (iTextureHandle* handle, bool persistent = false, int color = -1);
 };
 
 #endif // __CS_PROCMESH_H__
