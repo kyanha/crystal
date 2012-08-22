@@ -107,17 +107,17 @@ void csMeshOnTexture::UpdateView (int w, int h)
   }
 }
 
-bool csMeshOnTexture::Render (iMeshWrapper* mesh, iTextureHandle* handle,
-    bool persistent, int color)
+void csMeshOnTexture::PrepareRender (iTextureHandle* handle)
 {
   int w, h;
   handle->GetRendererDimensions (w, h);
   UpdateView (w, h);
-
   view->GetMeshFilter().Clear();
-  view->GetMeshFilter().AddFilterMesh(mesh, true);
-  view->GetCamera()->SetSector(mesh->GetMovable()->GetSectors()->Get(0));
+}
 
+bool csMeshOnTexture::DoRender (iTextureHandle* handle,
+    bool persistent, int color)
+{
   csRef<iRenderManagerTargets> rmTargets = scfQueryInterface<iRenderManagerTargets>(engine->GetRenderManager());
   rmTargets->RegisterRenderTarget(handle, 
                                   view, 
@@ -132,5 +132,16 @@ bool csMeshOnTexture::Render (iMeshWrapper* mesh, iTextureHandle* handle,
   rmTargets->MarkAsUsed(handle);
 
   return true;
+}
+
+bool csMeshOnTexture::Render (iMeshWrapper* mesh, iTextureHandle* handle,
+    bool persistent, int color)
+{
+  PrepareRender (handle);
+
+  view->GetMeshFilter().AddFilterMesh(mesh, true);
+  view->GetCamera()->SetSector(mesh->GetMovable()->GetSectors()->Get(0));
+
+  return DoRender (handle, persistent, color);
 }
 
