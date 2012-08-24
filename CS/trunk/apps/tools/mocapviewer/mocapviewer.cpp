@@ -404,8 +404,6 @@ bool MocapViewer::CreateScene ()
 
   // Read the command line options
   // Read the file name
-  csRef<iCommandLineParser> clp =
-    csQueryRegistry<iCommandLineParser> (GetObjectRegistry ());
   csString mocapFilename = clp->GetName (0);
   if (mocapFilename == "")
   {

@@ -820,8 +820,6 @@ bool HairTest::OnInitialize (int argc, char* argv[])
   if (!saver) return ReportError("Failed to locate Saver!");
 
   // Check if physical effects are enabled
-  csRef<iCommandLineParser> clp =
-    csQueryRegistry<iCommandLineParser> (GetObjectRegistry ());
   physicsEnabled = true;
 
   while (physicsEnabled)

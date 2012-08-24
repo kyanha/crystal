@@ -253,8 +253,6 @@ bool AvatarTest::OnInitialize (int argc, char* argv[])
     return ReportError ("Failed to set up event handler!");
 
   // Check if physical effects are enabled
-  csRef<iCommandLineParser> clp =
-    csQueryRegistry<iCommandLineParser> (GetObjectRegistry ());
   physicsEnabled = clp->GetBoolOption ("physics", true);
 
   while (physicsEnabled)

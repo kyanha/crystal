@@ -780,7 +780,6 @@ bool Simple::OnInitialize (int argc, char* argv[])
     return ReportError ("Failed to set up event handler!");
 
   // Checking for choosen dynamic system
-  csRef<iCommandLineParser> clp = csQueryRegistry<iCommandLineParser> (GetObjectRegistry ());
   phys_engine_name = clp->GetOption ("phys_engine");
   
   phys_engine_name = "Bullet";
