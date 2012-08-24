@@ -789,7 +789,6 @@ bool Simple::OnInitialize (int argc, char* argv[])
     csQueryRegistry<iPluginManager> (GetObjectRegistry ());
 
   // Checking for choosen dynamic system
-  csRef<iCommandLineParser> clp = csQueryRegistry<iCommandLineParser> (GetObjectRegistry ());
   phys_engine_name = clp->GetOption ("phys_engine");
 
   bool odeTried = false;

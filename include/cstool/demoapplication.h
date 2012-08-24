@@ -55,6 +55,7 @@
 #include "iutil/virtclk.h"
 #include "iutil/visualdebug.h"
 #include "ivideo/graph2d.h"
+#include "ivideo/natwin.h"
 #include "ivaria/cameramanager.h"
 #include "ivaria/hudmanager.h"
 #include "ivaria/view.h"
@@ -160,6 +161,8 @@ class CS_CRYSTALSPACE_EXPORT DemoApplication : public csApplicationFramework,
   csRef<iGraphics3D> g3d;
   /// Reference to the 2D graphics
   csRef<iGraphics2D> g2d;
+  /// Reference to the native window
+  csRef<iNativeWindow> natwin;
   /// Reference to the keyboard driver
   csRef<iKeyboardDriver> kbd;
   /// Reference to the virtual clock
@@ -172,6 +175,8 @@ class CS_CRYSTALSPACE_EXPORT DemoApplication : public csApplicationFramework,
   csRef<iVFS> vfs;
   /// Reference to the mouse driver
   csRef<iMouseDriver> mouse;
+  /// Reference to the command line parser
+  csRef<iCommandLineParser> clp;
 
   /// Previous position of the mouse cursor during the last frame. It can be used to
   /// know the distance travelled by comparing it to "mouse->GetLastX/Y".
