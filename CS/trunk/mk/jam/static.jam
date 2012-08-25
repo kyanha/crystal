@@ -172,7 +172,13 @@ rule BuildStaticGlueFile
     sources = [ DoObjectGrist _cs_static_glue_$(target_type).cpp ] ;
     tag = "_static_use" ;
   }
+
   local object = [ CompileObject $(sources) ] ;
+  if $($(target)_TYPE) = library
+  {
+    # ...so -fPIC gets specified, if required
+    C++FLAGS on $(object) += $(LIBRARY.CFLAGS) ;
+  }
 
   MakeLocate $(sources) : $(LOCATE_TARGET) ;
   SEARCH on $(sources) = $(LOCATE_TARGET) ;
