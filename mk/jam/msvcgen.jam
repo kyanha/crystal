@@ -1298,6 +1298,8 @@ rule LinkStaticPlugins
   plugins = $(2) ;
   optplugins = $(3) ;
   package = $(4) ;
+  options = $(5) ;
+  CheckOptions shared noshared : $(options) : $(<) ;
   
   if $(package)
   {
@@ -1388,13 +1390,25 @@ rule LinkStaticPlugins
     
     GeneratePluginLibraryGlueLib $(libglue) : $(plugin_lib_name) : $(tag) ;
     
-    Library $(plugin_lib_name) : : noinstall notest independent nohelp shared ;
+    local libglue appglue glue_shared ;
+    if ( $(package) && ! [ IsElem noshared : $(options) ] )
+      || ( ! $(package) && [ IsElem shared : $(options) ] )
+    {
+      # Build a shared lib containing the static plugins.
+      # This is done to be more LGPL-friendly.
+      glue_shared = shared ;
+    }
+    Library $(plugin_lib_name) : : noinstall notest independent nohelp $(glue_shared) ;
     MsvcAddFileToProject $($(plugin_lib_name)_PRJ_RESPFILE) : 
       $(libglue:R=$(outdir)) : $($(target)_PRJ_RESPDIR) ;
     MsvcAddFileToProject $($(plugin_lib_name)_PRJ_RESPFILE) : 
       $(staticuse_out:R=$(outdir)) : $($(target)_PRJ_RESPDIR) ;
     LibDepends $(plugin_lib_name) : $(target_link_with) ;
     LFlags $(plugin_lib_name) : $(target_lflags) ;
+    if $(glue_shared)
+    {
+      MsvcDefine $(plugin_lib_name) : CS_GLUE_IS_SHARED ;
+    }
     Depends msvcgen : $(libglue) ;
     
     # prepare source files
