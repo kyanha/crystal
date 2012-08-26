@@ -212,7 +212,10 @@ namespace RenderManager
     return projBox;
   }
 
-  CS::Math::Matrix4 CreateCropMatrix(float left, float right, float bottom, float top, float nearZ, float farZ, csVector4* unscale = nullptr)
+  inline CS::Math::Matrix4 CreateCropMatrix(float left, float right,
+											float bottom, float top,
+											float nearZ, float farZ,
+											csVector4* unscale = nullptr)
   {
     // calculate crop scale
     float cropScaleX = 2.0f/(right - left);
@@ -246,7 +249,9 @@ namespace RenderManager
     return crop;
   }
 
-  CS::Math::Matrix4 CreateFrustumMatrix(float left, float right, float bottom, float top, float nearZ, float farZ)
+  inline CS::Math::Matrix4 CreateFrustumMatrix(float left, float right,
+											   float bottom, float top,
+											   float nearZ, float farZ)
   {
     // convenience variable
     float two_near = 2.0f*nearZ;
