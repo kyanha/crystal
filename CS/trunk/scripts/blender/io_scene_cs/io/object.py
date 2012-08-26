@@ -11,6 +11,7 @@ from io_scene_cs.utilities import B2CS
 
 class Hierarchy:
   OBJECTS = {}
+  exportedFactories = []
   def __init__(self, anObject, anEmpty):
     self.object = anObject
     self.empty = anEmpty
@@ -33,8 +34,8 @@ class Hierarchy:
     return "hier" + str(self.id)
 
   def AsCSRef(self, func, depth=0, dirName='factories/'):
-    if self.object.parent_type != 'BONE':
-      func(' '*depth +'<library>%s%s</library>'%(dirName,self.object.name))
+    if self.object.parent_type != 'BONE' and self.object.data.name not in Hierarchy.exportedFactories:
+      func(' '*depth +'<library>%s%s</library>'%(dirName,self.object.data.name))
 
   def GetDependencies(self):
     dependencies = EmptyDependencies()
@@ -124,8 +125,11 @@ class Hierarchy:
         fi.write(data+'\n')
       return write
 
+    if self.object.data.name in Hierarchy.exportedFactories:
+      print('Skipping "%s" factory export, already done' % (self.object.data.name))
+      return
     # Export mesh
-    fa = open(Join(path, 'factories/', self.object.name), 'w')
+    fa = open(Join(path, 'factories/', self.object.data.name), 'w')
     self.WriteCSLibHeader(Write(fa), animesh)
     objectDeps = self.object.GetDependencies()
     use_imposter = not animesh and self.object.data.use_imposter
@@ -134,6 +138,7 @@ class Hierarchy:
       self.WriteCSAnimeshHeader(Write(fa), 2)
     self.WriteCSMeshBuffers(Write(fa), 2, path, animesh, dontClose=False)
     fa.close()
+    Hierarchy.exportedFactories.append(self.object.data.name)
 
     # Export skeleton and animations
     if self.object.type == 'ARMATURE' and self.object.data.bones:
@@ -331,7 +336,7 @@ def AsCSGenmeshLib(self, func, depth=0, **kwargs):
   """
 
   # Write genmesh header
-  func(' '*depth + '<meshfact name=\"%s\">'%(self.name))
+  func(' '*depth + '<meshfact name=\"%s\">'%(self.data.name))
   func(' '*depth + '  <plugin>crystalspace.mesh.loader.factory.genmesh</plugin>')
   if self.data.use_imposter:
     func(' '*depth + '  <imposter range="100.0" tolerance="0.4" camera_tolerance="0.4" shader="lighting_imposter"/>')
@@ -415,7 +420,7 @@ def ObjectAsCS(self, func, depth=0, **kwargs):
       else:
         func(' '*depth +'  <plugin>crystalspace.mesh.loader.genmesh</plugin>')
       func(' '*depth +'  <params>')
-      func(' '*depth +'    <factory>%s</factory>'%(self.name))
+      func(' '*depth +'    <factory>%s</factory>'%(self.data.name))
       func(' '*depth +'  </params>')
 
       if self.parent and self.parent_type == 'BONE':

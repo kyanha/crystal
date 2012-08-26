@@ -118,6 +118,8 @@ def ExportWorld(path):
   Write(f)('</world>')
   f.close()
 
+  Hierarchy.exportedFactories = []
+
   print("\nEXPORTING complete ==================================================")
 
 
