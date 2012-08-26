@@ -469,6 +469,10 @@ def ObjectAsCS(self, func, depth=0, **kwargs):
         for ob in self.dupli_group.objects:
           if not ob.parent:
             ob.AsCS(func, depth, transform=self.relative_matrix, name=self.uname)
+    else:
+      func(' '*depth +'<node name="%s">'%(name))
+      func(' '*depth +'  <position x="%f" z="%f" y="%f" />'% tuple(self.relative_matrix.to_translation()))
+      func(' '*depth +'</node>')
 
     #Handle children: translate to top level.
     for obj in self.children:
@@ -520,7 +524,7 @@ def IsExportable(self):
       return True
     return False      
 
-  # The export of Empty objects depends of their componants
+  # The export of Empty objects depends of their components
   if self.type == 'EMPTY':
     # Groups of objects are exported if the group itself and 
     # all its composing elements are visible
@@ -540,9 +544,9 @@ def IsExportable(self):
             if not gr.dupli_group.CheckVisibility():
               return False
     else:
-      # Empty objects which are not groups are not exported
-      # (notice that each of their componants can be individually exported)
-      return False
+      # Empty objects which are not groups are exported as map nodes
+      # (notice that each of their components can be individually exported)
+      return True
 
   # All other types of objects are always exportable (if they are visible)
   return True
