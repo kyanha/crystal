@@ -7,8 +7,11 @@
   static void csStaticVarCleanup_local (void (*p)())
   { csStaticVarCleanup_csutil (p); }
   CS_DEFINE_STATIC_VARIABLE_REGISTRATION (csStaticVarCleanup_local);
+  #define BIND_EXPORT CS_EXPORT_SYM
+#else
+  #define BIND_EXPORT
 #endif
-struct CS_EXPORT_SYM _Bind_lighter2_static_plugins
+struct BIND_EXPORT _Bind_lighter2_static_plugins
 {
   _Bind_lighter2_static_plugins ();
 };
