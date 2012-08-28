@@ -565,7 +565,6 @@ void csGraphics2DOpenGL::Close (void)
 
 void csGraphics2DOpenGL::Print (csRect const* /*area*/)
 {
-  glFlush();
   SwapBuffers(hDC);
 }
 
