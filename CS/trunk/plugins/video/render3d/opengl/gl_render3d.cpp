@@ -3235,7 +3235,7 @@ void csGLGraphics3D::SetClipper (iClipper2D* clipper, int cliptype)
     else
     {
       GLint vp[4];
-      glGetIntegerv (GL_VIEWPORT, vp);
+      G2D->GetViewport (vp[0], vp[1], vp[2], vp[3]);
       glScissor (vp[0] + scissorRect.xmin, vp[1] + scissorRect.ymin, scissorRect.Width(),
 	scissorRect.Height());
     }
