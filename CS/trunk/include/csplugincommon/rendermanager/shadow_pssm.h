@@ -1258,6 +1258,7 @@ namespace RenderManager
 	      break;
 
 	    default:
+	      mapSize = persist.shadowMapResD;
 	      // unknown light-type, bail out - this MUSTN'T happen
 	      CS_ASSERT(false);
 	      break;
