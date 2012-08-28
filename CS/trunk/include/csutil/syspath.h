@@ -364,14 +364,32 @@ CS_CRYSTALSPACE_EXPORT int CreateDirectory (const char* path);
 CS_CRYSTALSPACE_EXPORT int Stat (const char* path, struct stat* buf);
 
 /**
- * Checks if the path rappresents a regular file.
+ * Checks if the path represents a regular file.
  * \param path Name of the path to check.
- * \returns true if the path rappresents a regular file, false otherwise
+ * \returns true if the path represents a regular file, false otherwise
  *          (including error).
  */
 CS_CRYSTALSPACE_EXPORT bool IsRegularFile (const char* path);
+/**
+ * Checks if the file attributes represent a regular file.
+ * \param file_stat Attributes of file to check.
+ * \returns true if the attributes are for a regular file, false otherwise.
+ */
+CS_CRYSTALSPACE_EXPORT bool IsRegularFile (struct stat* file_stat);
 
-
+/**
+ * Checks if the path represents a directory.
+ * \param path Name of the path to check.
+ * \returns true if the path represents a directory, false otherwise
+ *          (including error).
+ */
+CS_CRYSTALSPACE_EXPORT bool IsDirectory (const char* path);
+/**
+ * Checks if the file attributes represent a directory.
+ * \param file_stat Attributes of file to check.
+ * \returns true if the attributes are for a directory, false otherwise.
+ */
+CS_CRYSTALSPACE_EXPORT bool IsDirectory (struct stat* file_stat);
 }
 }
 

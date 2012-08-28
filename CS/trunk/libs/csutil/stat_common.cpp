@@ -1,6 +1,6 @@
 /*
     Copyright (C) 2012 by Stefano Angeleri
-              (C) 2011 by Frank Richter
+              (C) 2012 by Frank Richter
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Library General Public
@@ -18,9 +18,6 @@
 */
 
 
-#include <sys/types.h>
-#include <sys/stat.h>
-
 #include "cssysdef.h"
 #include "csutil/syspath.h"
 
@@ -28,26 +25,25 @@ namespace CS
 {
   namespace Platform
   {
-    bool IsRegularFile (struct stat* file_stat)
+    bool IsRegularFile (const char* path)
     {
-      return file_stat->st_mode & S_IFREG;
-    }
-      
-    bool IsDirectory (struct stat* file_stat)
-    {
-      return file_stat->st_mode & S_IFDIR;
-    }
-      
-    int Stat (const char* path, struct stat* buf)
-    {
-      int olderrno (errno);
-      int result (0);
-      if (stat (path, buf) < 0)
+      struct stat buf;
+      if (Stat (path, &buf) == 0)
       {
-        result = errno;
+        return IsRegularFile (&buf);
       }
-      errno = olderrno;
-      return result;
+      return false;
     }
+      
+    bool IsDirectory (const char* path)
+    {
+      struct stat buf;
+      if (Stat (path, &buf) == 0)
+      {
+        return IsDirectory (&buf);
+      }
+      return false;
+    }
+      
   } // namespace Platform
 } // namespace CS
