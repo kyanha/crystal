@@ -1828,7 +1828,6 @@ bool csGLGraphics3D::ActivateTexture (iTextureHandle *txthandle, int unit)
   if (ext->CS_GL_ARB_multitexture)
   {
     statecache->SetCurrentImageUnit (unit);
-    statecache->ActivateImageUnit ();
   }
   else if (unit != 0) return false;
 
@@ -1946,7 +1945,6 @@ void csGLGraphics3D::SetTextureComparisonModes (int* units,
       if (ext->CS_GL_ARB_multitexture)
       {
 	statecache->SetCurrentImageUnit (unit);
-	statecache->ActivateImageUnit ();
       }
       else if (unit != 0) continue;
       
@@ -1963,7 +1961,6 @@ void csGLGraphics3D::SetTextureComparisonModes (int* units,
       if (ext->CS_GL_ARB_multitexture)
       {
 	statecache->SetCurrentImageUnit (unit);
-	statecache->ActivateImageUnit ();
       }
       else if (unit != 0) continue;
       
@@ -3459,7 +3456,6 @@ void csGLGraphics3D::DrawSimpleMeshes (const csSimpleRenderMesh* meshes,
       if (ext->CS_GL_ARB_multitexture)
       {
 	statecache->SetCurrentImageUnit (0);
-	statecache->ActivateImageUnit ();
 	statecache->SetCurrentTCUnit (0);
 	statecache->ActivateTCUnit (csGLStateCache::activateTexCoord);
       }
