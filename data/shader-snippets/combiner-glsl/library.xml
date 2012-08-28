@@ -20,13 +20,17 @@
 -->
 <combinerlibrary>
 
-  <!-- Note on costs: try to set the number of asm instructions as the cost 
-       for a coercion. -->
+  <!-- Note on costs: an estimate of the cost of the coercion - as
+                      rough guide sum the number of those operations
+                      with the given weight:
+                       - cast, swizzle, assigment: 0
+                       - vector op (dot, normalize, ...): 1
+                       - matrix op: matrix size (3 for mat3, 4 for mat4) -->
        
   <!-- Each coercion implicitly has an input named "vale" and and output 
        named "result". Type is the "from" resp. "to" one. -->
 
-  <coercion from="rgb" to="rgba" cost="1">
+  <coercion from="rgb" to="rgba" cost="0">
     <block location="vertexMain;fragmentMain">
       result = vec4(value, 1.0);
     </block>
@@ -144,49 +148,49 @@
     </block>
   </coercion>
   
-  <coercion from="direction_object" to="direction_screen" cost="3">
+  <coercion from="direction_object" to="direction_screen" cost="4">
     <block location="vertexMain;fragmentMain">
       result = (gl_ModelViewProjectionMatrix * vec4 (value, 0.0)).xyz;
     </block>
   </coercion>
   
-  <coercion from="direction_screen" to="direction_object" cost="3">
+  <coercion from="direction_screen" to="direction_object" cost="4">
     <block location="vertexMain;fragmentMain">
       result = (gl_ModelViewProjectionMatrixInverse * vec4 (value, 0.0)).xyz;
     </block>
   </coercion>
 
-  <coercion from="direction_object" to="direction_camera" cost="3">
+  <coercion from="direction_object" to="direction_camera" cost="4">
     <block location="vertexMain;fragmentMain">
       result = (gl_ModelViewMatrix * vec4 (value, 0.0)).xyz;
     </block>
   </coercion>
 
-  <coercion from="direction_camera" to="direction_object" cost="3">
+  <coercion from="direction_camera" to="direction_object" cost="4">
     <block location="vertexMain;fragmentMain">
       result = (gl_ModelViewMatrixInverse * vec4 (value, 0.0)).xyz;
     </block>
   </coercion>
 
-  <coercion from="direction_camera" to="direction_screen" cost="3">
+  <coercion from="direction_camera" to="direction_screen" cost="4">
     <block location="vertexMain;fragmentMain">
       result = (gl_ProjectionMatrix * vec4 (value, 0.0)).xyz;
     </block>
   </coercion>
 
-  <coercion from="direction_screen" to="direction_camera" cost="3">
+  <coercion from="direction_screen" to="direction_camera" cost="4">
     <block location="vertexMain;fragmentMain">
       result = (gl_ProjectionMatrixInverse * vec4 (value, 0.0)).xyz;
     </block>
   </coercion>
 
-  <coercion from="direction_object" to="direction_world" cost="3">
+  <coercion from="direction_object" to="direction_world" cost="4">
     <block location="vertexMain;fragmentMain">
       result = (objectToWorld * vec4 (value, 0.0)).xyz;
     </block>
   </coercion>
 
-  <coercion from="direction_world" to="direction_camera" cost="3">
+  <coercion from="direction_world" to="direction_camera" cost="4">
     <input file="/shader-snippets/combiner-glsl/worldToCamera.inp" private="yes" />
     
     <block location="vertexMain;fragmentMain">
@@ -194,7 +198,7 @@
     </block>
   </coercion>
 
-  <coercion from="direction_camera" to="direction_world" cost="3">
+  <coercion from="direction_camera" to="direction_world" cost="4">
     <input file="/shader-snippets/combiner-glsl/cameraToWorld.inp" private="yes" />
 
     <block location="vertexMain;fragmentMain">
@@ -236,49 +240,59 @@
     </block>
   </coercion>
   
-  <coercion from="normal_object" to="normal_screen" cost="3">
+  <coercion from="normal_object" to="normal_screen" cost="5">
     <block location="vertexMain;fragmentMain">
       result = (gl_ModelViewProjectionMatrix * vec4 (value, 0.0)).xyz;
+      // object to world may have denormalized it
+      result = normalize (result);
     </block>
   </coercion>
   
-  <coercion from="normal_screen" to="normal_object" cost="3">
+  <coercion from="normal_screen" to="normal_object" cost="5">
     <block location="vertexMain;fragmentMain">
       result = (gl_ModelViewProjectionMatrixInverse * vec4 (value, 0.0)).xyz;
+      // object to world may have denormalized it
+      result = normalize (result);
     </block>
   </coercion>
 
-  <coercion from="normal_object" to="normal_camera" cost="3">
+  <coercion from="normal_object" to="normal_camera" cost="5">
     <block location="vertexMain;fragmentMain">
       result = (gl_ModelViewMatrix * vec4 (value, 0.0)).xyz;
+      // object to world may have denormalized it
+      result = normalize (result);
     </block>
   </coercion>
 
-  <coercion from="normal_camera" to="normal_object" cost="3">
+  <coercion from="normal_camera" to="normal_object" cost="5">
     <block location="vertexMain;fragmentMain">
       result = (gl_ModelViewMatrixInverse * vec4 (value, 0.0)).xyz;
+      // object to world may have denormalized it
+      result = normalize (result);
     </block>
   </coercion>
 
-  <coercion from="normal_camera" to="normal_screen" cost="3">
+  <coercion from="normal_camera" to="normal_screen" cost="4">
     <block location="vertexMain;fragmentMain">
       result = (gl_ProjectionMatrix * vec4 (value, 0.0)).xyz;
     </block>
   </coercion>
 
-  <coercion from="normal_screen" to="normal_camera" cost="3">
+  <coercion from="normal_screen" to="normal_camera" cost="4">
     <block location="vertexMain;fragmentMain">
       result = (gl_ProjectionMatrixInverse * vec4 (value, 0.0)).xyz;
     </block>
   </coercion>
 
-  <coercion from="normal_object" to="normal_world" cost="3">
+  <coercion from="normal_object" to="normal_world" cost="5">
     <block location="vertexMain;fragmentMain">
       result = (objectToWorld * vec4 (value, 0.0)).xyz;
+      // object to world may have denormalized it
+      result = normalize (result);
     </block>
   </coercion>
 
-  <coercion from="normal_world" to="normal_camera" cost="3">
+  <coercion from="normal_world" to="normal_camera" cost="4">
     <input file="/shader-snippets/combiner-glsl/worldToCamera.inp" private="yes" />
     
     <block location="vertexMain;fragmentMain">
@@ -286,7 +300,7 @@
     </block>
   </coercion>
 
-  <coercion from="normal_camera" to="normal_world" cost="3">
+  <coercion from="normal_camera" to="normal_world" cost="4">
     <input file="/shader-snippets/combiner-glsl/cameraToWorld.inp" private="yes" />
 
     <block location="vertexMain;fragmentMain">
@@ -296,7 +310,7 @@
   
   <!------------------------------------------------------------------------->
   
-  <coerciontemplate name="normalize" cost="3">
+  <coerciontemplate name="normalize" cost="1">
     <block location="vertexMain;fragmentMain">
       result = normalize (value);
     </block>
