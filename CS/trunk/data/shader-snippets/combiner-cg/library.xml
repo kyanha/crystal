@@ -475,16 +475,20 @@
     </block>
   </coercion>
   
-  <coercion from="normal_object" to="normal_screen" cost="3">
+  <coercion from="normal_object" to="normal_screen" cost="4">
     <input file="/shader-snippets/combiner-cg/ModelViewProj.inp" private="yes" />
 
     <block location="vertexMain">
       output = mul (ModelViewProj, float4 (input, 0)).xyz;
+      // object to world transform may have denormalized it
+      output = normalize (output);
     </block>
     
     <block location="fragmentMain">
     #if FRAGMENT_PROGRAM_LEVEL >= 0x200
       output = mul (ModelViewProj, float4 (input, 0)).xyz;
+      // object to world transform may have denormalized it
+      output = normalize (output);
     #else
       /* PS1.x can't do matrix mul ...
          Leave 'output' deliberately undefined to catch (undesired) uses of it */
@@ -492,16 +496,20 @@
     </block>
   </coercion>
 
-  <coercion from="normal_screen" to="normal_object" cost="3">
+  <coercion from="normal_screen" to="normal_object" cost="4">
     <input file="/shader-snippets/combiner-cg/ModelViewProjInv.inp" private="yes" />
 
     <block location="vertexMain">
       output = mul (ModelViewProjInv, float4 (input, 0)).xyz;
+      // object to world transform may have denormalized it
+      output = normalize (output);
     </block>
     
     <block location="fragmentMain">
     #if FRAGMENT_PROGRAM_LEVEL >= 0x200
       output = mul (ModelViewProjInv, float4 (input, 0)).xyz;
+      // object to world transform may have denormalized it
+      output = normalize (output);
     #else
       /* PS1.x can't do matrix mul ...
          Leave 'output' deliberately undefined to catch (undesired) uses of it */
@@ -509,16 +517,20 @@
     </block>
   </coercion>
   
-  <coercion from="normal_object" to="normal_camera" cost="3">
+  <coercion from="normal_object" to="normal_camera" cost="4">
     <input file="/shader-snippets/combiner-cg/ModelView.inp" private="yes" />
     
     <block location="vertexMain">
       output = mul (ModelView, float4 (input, 0)).xyz;
+      // object to world transform may have denormalized it
+      output = normalize (output);
     </block>
     
     <block location="fragmentMain">
     #if FRAGMENT_PROGRAM_LEVEL >= 0x200
       output = mul (ModelView, float4 (input, 0)).xyz;
+      // object to world transform may have denormalized it
+      output = normalize (output);
     #else
       /* PS1.x can't do matrix mul ...
          Leave 'output' deliberately undefined to catch (undesired) uses of it */
@@ -526,16 +538,20 @@
     </block>
   </coercion>
 
-  <coercion from="normal_camera" to="normal_object" cost="3">
+  <coercion from="normal_camera" to="normal_object" cost="4">
     <input file="/shader-snippets/combiner-cg/ModelViewInv.inp" private="yes" />
     
     <block location="vertexMain">
       output = mul (ModelViewInv, float4 (input, 0)).xyz;
+      // object to world transform may have denormalized it
+      output = normalize (output);
     </block>
     
     <block location="fragmentMain">
     #if FRAGMENT_PROGRAM_LEVEL >= 0x200
       output = mul (ModelViewInv, float4 (input, 0)).xyz;
+      // object to world transform may have denormalized it
+      output = normalize (output);
     #else
       /* PS1.x can't do matrix mul ...
          Leave 'output' deliberately undefined to catch (undesired) uses of it */
@@ -577,14 +593,18 @@
     </block>
   </coercion>
 
-  <coercion from="normal_object" to="normal_world" cost="3">
+  <coercion from="normal_object" to="normal_world" cost="4">
     <block location="vertexMain">
       output = mul (objectToWorld, float4 (input, 0)).xyz;
+      // object to world transform may have denormalized it
+      output = normalize (output);
     </block>
     
     <block location="fragmentMain">
     #if FRAGMENT_PROGRAM_LEVEL >= 0x200
       output = mul (objectToWorld, float4 (input, 0)).xyz;
+      // object to world transform may have denormalized it
+      output = normalize (output);
     #else
       /* PS1.x can't do matrix mul ...
          Leave 'output' deliberately undefined to catch (undesired) uses of it */
