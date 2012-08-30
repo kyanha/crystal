@@ -338,12 +338,6 @@ CS_PLUGIN_NAMESPACE_BEGIN(RMDeferred)
 	// set tex scale for lookups.
 	lightRenderPersistent.scale->SetValue(context->texScale);
 
-	// early z pass - could be disabled if occluvis is used - but how would we know?
-	if(!useDeferredShading && zonlyLayer != (size_t)-1)
-        {
-	  RenderLayer<false>(zonlyLayer, ctxCount);
-        }
-
 	// deferred shading - output step
 	if(useDeferredShading)
 	{
