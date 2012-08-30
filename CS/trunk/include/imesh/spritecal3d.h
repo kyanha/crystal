@@ -96,7 +96,7 @@ struct CalAnimationCallback;
  */
 struct iSpriteCal3DFactoryState : public virtual iBase
 {
-  SCF_INTERFACE (iSpriteCal3DFactoryState, 2, 0, 0);
+  SCF_INTERFACE (iSpriteCal3DFactoryState, 2, 1, 0);
 
   /// Initialize internal Cal3d data structures.
   virtual bool Create(const char *name) = 0;
