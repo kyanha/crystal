@@ -286,6 +286,7 @@ public:
   void SetBasePath(const char *path);
   void RescaleFactory(float factor);
   void AbsoluteRescaleFactory(float factor);
+  float GetScaleFactor() { return currentScalingFactor; }
   void CalculateAllBoneBoundingBoxes();
 
   bool LoadCoreSkeleton(iVFS *vfs,const char *filename,
