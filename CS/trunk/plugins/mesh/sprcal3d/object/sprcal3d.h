@@ -286,6 +286,10 @@ public:
   void SetBasePath(const char *path);
   void RescaleFactory(float factor);
   void AbsoluteRescaleFactory(float factor);
+
+  /** Gets the current scaling factor of this mesh.
+   * \return The factor this mesh is currently resized.
+   */
   float GetScaleFactor() { return currentScalingFactor; }
   void CalculateAllBoneBoundingBoxes();
 
