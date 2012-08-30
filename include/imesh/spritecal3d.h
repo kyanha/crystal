@@ -340,6 +340,11 @@ struct iSpriteCal3DFactoryState : public virtual iBase
    */
   virtual void AbsoluteRescaleFactory(float factor) = 0;
 
+  /**
+   * Gets the current scaling factor of this mesh.
+   * \return The factor this mesh is currently resized.
+   */
+  virtual float GetScaleFactor() = 0;
 };
 
 /**
