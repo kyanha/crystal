@@ -290,7 +290,7 @@ public:
   //-- Render priority functions
 
   virtual void RegisterRenderPriority (const char* name, uint priority,
-  	csRenderPrioritySorting rendsort = CS_RENDPRI_SORT_NONE,
+  	csRenderPrioritySorting rendsort = CS_RENDPRI_SORT_FRONT2BACK,
         CS::RenderPriorityGrouping grouping = CS::rpgByLayer);
   virtual void RegisterDefaultRenderPriorities ();
   virtual CS::Graphics::RenderPriority GetRenderPriority (const char* name) const;
