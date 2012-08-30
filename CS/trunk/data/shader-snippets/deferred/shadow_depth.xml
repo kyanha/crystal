@@ -217,7 +217,7 @@
     <![CDATA[
       // go over all shadow maps and find the one applicapble to us
       int slice;
-      for(slice = 0; slice < min(shadowSpread,MAX_CSM); ++slice)
+      for(slice = 0; slice < shadowSpread && slice < MAX_CSM; ++slice)
       {
         // check whether we are in this slice
         if(positionV.z >= shadowMapClip[slice].x && positionV.z <= shadowMapClip[slice].y)
@@ -227,7 +227,7 @@
       }
 
       // check whether we fit somewhere
-      if(slice == min(shadowSpread,MAX_CSM))
+      if(slice == shadowSpread || slice == MAX_CSM)
       {
         // this should NOT happen
         discard;
