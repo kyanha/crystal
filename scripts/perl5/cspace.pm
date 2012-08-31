@@ -17351,6 +17351,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *RegisterAnimCallback = *cspacec::iSpriteCal3DFactoryState_RegisterAnimCallback;
 *RemoveAnimCallback = *cspacec::iSpriteCal3DFactoryState_RemoveAnimCallback;
 *AbsoluteRescaleFactory = *cspacec::iSpriteCal3DFactoryState_AbsoluteRescaleFactory;
+*GetScaleFactor = *cspacec::iSpriteCal3DFactoryState_GetScaleFactor;
 sub DESTROY {
     return unless $_[0]->isa('HASH');
     my $self = tied(%{$_[0]});
