@@ -74,10 +74,10 @@ namespace RenderManager
     float boxNearPS, boxFarPS;
 
     // transform far plane to projection space
-    csBox2 farPS(Vector4To2(proj * box.GetCorner(CS_BOX_CORNER_XYZ), &boxFarPS));
-    farPS.AddBoundingVertexSmart(Vector4To2(proj * box.GetCorner(CS_BOX_CORNER_xYZ)));
-    farPS.AddBoundingVertexSmart(Vector4To2(proj * box.GetCorner(CS_BOX_CORNER_xyZ)));
-    farPS.AddBoundingVertexSmart(Vector4To2(proj * box.GetCorner(CS_BOX_CORNER_XyZ)));
+    csBox2 farPS(Vector4To2(proj * csVector4(box.GetCorner(CS_BOX_CORNER_XYZ)), &boxFarPS));
+    farPS.AddBoundingVertexSmart(Vector4To2(proj * csVector4(box.GetCorner(CS_BOX_CORNER_xYZ))));
+    farPS.AddBoundingVertexSmart(Vector4To2(proj * csVector4(box.GetCorner(CS_BOX_CORNER_xyZ))));
+    farPS.AddBoundingVertexSmart(Vector4To2(proj * csVector4(box.GetCorner(CS_BOX_CORNER_XyZ))));
 
     // clip to actual frustum
     csBox2 farNDC(csBox2(-1,-1,1,1) * farPS);
@@ -89,10 +89,10 @@ namespace RenderManager
     }
 
     // transform near plane to projection space
-    csBox2 nearPS(Vector4To2(proj * box.GetCorner(CS_BOX_CORNER_XYz), &boxNearPS));
-    nearPS.AddBoundingVertexSmart(Vector4To2(proj * box.GetCorner(CS_BOX_CORNER_xYz)));
-    nearPS.AddBoundingVertexSmart(Vector4To2(proj * box.GetCorner(CS_BOX_CORNER_xyz)));
-    nearPS.AddBoundingVertexSmart(Vector4To2(proj * box.GetCorner(CS_BOX_CORNER_Xyz)));
+    csBox2 nearPS(Vector4To2(proj * csVector4(box.GetCorner(CS_BOX_CORNER_XYz)), &boxNearPS));
+    nearPS.AddBoundingVertexSmart(Vector4To2(proj * csVector4(box.GetCorner(CS_BOX_CORNER_xYz))));
+    nearPS.AddBoundingVertexSmart(Vector4To2(proj * csVector4(box.GetCorner(CS_BOX_CORNER_xyz))));
+    nearPS.AddBoundingVertexSmart(Vector4To2(proj * csVector4(box.GetCorner(CS_BOX_CORNER_Xyz))));
 
     // clip to actual frustum
     csBox2 nearNDC(csBox2(-1,-1,1,1) * nearPS);
@@ -206,7 +206,7 @@ namespace RenderManager
     for(int i = 0; i < 8; ++i)
     {
       // add projected corner to our new bbox
-      projBox.AddBoundingVertexSmart(Vector4To3(projInv * box.GetCorner(i)));
+      projBox.AddBoundingVertexSmart(Vector4To3(projInv * csVector4(box.GetCorner(i))));
     }
 
     return projBox;
