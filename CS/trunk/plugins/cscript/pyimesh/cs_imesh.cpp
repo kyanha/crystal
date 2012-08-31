@@ -26352,6 +26352,28 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_iSpriteCal3DFactoryState_GetScaleFactor(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  iSpriteCal3DFactoryState *arg1 = (iSpriteCal3DFactoryState *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  float result;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"iSpriteCal3DFactoryState_GetScaleFactor",1,1,&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_iSpriteCal3DFactoryState, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "iSpriteCal3DFactoryState_GetScaleFactor" "', argument " "1"" of type '" "iSpriteCal3DFactoryState *""'"); 
+  }
+  arg1 = reinterpret_cast< iSpriteCal3DFactoryState * >(argp1);
+  result = (float)(arg1)->GetScaleFactor();
+  resultobj = SWIG_From_float(static_cast< float >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_delete_iSpriteCal3DFactoryState(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   iSpriteCal3DFactoryState *arg1 = (iSpriteCal3DFactoryState *) 0 ;
@@ -47846,6 +47868,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"iSpriteCal3DFactoryState_RegisterAnimCallback", _wrap_iSpriteCal3DFactoryState_RegisterAnimCallback, METH_VARARGS, NULL},
 	 { (char *)"iSpriteCal3DFactoryState_RemoveAnimCallback", _wrap_iSpriteCal3DFactoryState_RemoveAnimCallback, METH_VARARGS, NULL},
 	 { (char *)"iSpriteCal3DFactoryState_AbsoluteRescaleFactory", _wrap_iSpriteCal3DFactoryState_AbsoluteRescaleFactory, METH_VARARGS, NULL},
+	 { (char *)"iSpriteCal3DFactoryState_GetScaleFactor", _wrap_iSpriteCal3DFactoryState_GetScaleFactor, METH_VARARGS, NULL},
 	 { (char *)"delete_iSpriteCal3DFactoryState", _wrap_delete_iSpriteCal3DFactoryState, METH_VARARGS, NULL},
 	 { (char *)"iSpriteCal3DFactoryState_swigregister", iSpriteCal3DFactoryState_swigregister, METH_VARARGS, NULL},
 	 { (char *)"iAnimTimeUpdateHandler_UpdatePosition", _wrap_iAnimTimeUpdateHandler_UpdatePosition, METH_VARARGS, NULL},

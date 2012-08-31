@@ -1189,6 +1189,7 @@ class iSpriteCal3DFactoryState(core.iBase):
     def RegisterAnimCallback(*args): return _imesh.iSpriteCal3DFactoryState_RegisterAnimCallback(*args)
     def RemoveAnimCallback(*args): return _imesh.iSpriteCal3DFactoryState_RemoveAnimCallback(*args)
     def AbsoluteRescaleFactory(*args): return _imesh.iSpriteCal3DFactoryState_AbsoluteRescaleFactory(*args)
+    def GetScaleFactor(*args): return _imesh.iSpriteCal3DFactoryState_GetScaleFactor(*args)
     __swig_destroy__ = _imesh.delete_iSpriteCal3DFactoryState
     __del__ = lambda self : None;
 iSpriteCal3DFactoryState_swigregister = _imesh.iSpriteCal3DFactoryState_swigregister
