@@ -57,12 +57,12 @@ namespace CS
   {
     bool IsRegularFile (struct stat* file_stat)
     {
-      return file_stat->st_mode & _S_IFREG;
+      return (file_stat->st_mode & _S_IFREG) != 0;
     }
 
     bool IsDirectory (struct stat* file_stat)
     {
-      return file_stat->st_mode & _S_IFDIR;
+      return (file_stat->st_mode & _S_IFDIR) != 0;
     }
 
     int Stat (const char* path, struct stat* buf)
