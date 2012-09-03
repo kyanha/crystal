@@ -516,7 +516,7 @@ csEngine::csEngine (iBase *iParent) :
   sectors (this), textures (new csTextureList (this)), 
   materials (new csMaterialList), sharedVariables (new csSharedVariableList),
   defaultRenderLoopTried (false), renderLoopManager (0),
-  topLevelClipper (0), resize (false),
+  topLevelClipper (0),
   worldSaveable (false), defaultKeepImage (false), maxAspectRatio (0),
   nextframePending (0), currentFrameNumber (0), 
   currentRenderContext (0), weakEventHandler(0),
@@ -681,7 +681,7 @@ bool csEngine::HandleEvent (iEvent &Event)
     if (Event.Name == CanvasResize)
     {
       //if (((iGraphics2D *)csCommandEventHelper::GetInfo(&Event)) == G2D)
-      resize = true;
+      Resize ();
       return false;
     }
     else if (Event.Name == CanvasClose)
@@ -1163,13 +1163,6 @@ void csEngine::StartDraw (iCamera *c, iClipper2D* /*view*/,
 {
   rview.SetEngine (this);
   rview.SetOriginalCamera (c);
-
-  // This flag is set in HandleEvent on a CanvasResize event
-  if (resize)
-  {
-    resize = false;
-    Resize ();
-  }
 
   topLevelClipper = &rview;
 
