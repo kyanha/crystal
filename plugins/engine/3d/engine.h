@@ -1004,9 +1004,6 @@ private:
    */
   CS::RenderManager::RenderView* topLevelClipper;
     
-  /// Flag set when window requires resizing.
-  bool resize;
-
   /// 'Saveable' flag
   bool worldSaveable;
   

@@ -190,6 +190,14 @@ void csView::Draw (iMeshWrapper* mesh)
 void csView::UpdateClipper ()
 {
   if (AutoResize) UpdateView ();
+  else
+  {
+    if (OldWidth != G3D->GetWidth () || OldHeight != G3D->GetHeight ())
+    {
+      viewWidth = OldWidth = G3D->GetWidth ();
+      viewHeight = OldHeight = G3D->GetHeight ();
+    }
+  }
 
   if (!Clipper)
   {
