@@ -60,6 +60,8 @@ CS_PLUGIN_NAMESPACE_BEGIN(ShaderManager)
     bool CurrentCollectionOnly() const { return false; }
     uint GetKeepFlags() const { return 0; }
     void AddToCollection(iObject* obj) { return; }
+    bool LoadComment (iObject* obj, iDocumentNode* commentNode,
+		  bool replace = false) { return false; }
     bool GetVerbose() { return false; }
   };
 

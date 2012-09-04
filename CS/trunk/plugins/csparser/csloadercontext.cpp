@@ -20,6 +20,7 @@
 #include "cssysdef.h"
 
 #include "csutil/stringquote.h"
+#include "cstool/objectcomment.h"
 
 #include "iengine/engine.h"
 #include "iengine/material.h"
@@ -463,12 +464,19 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
     return result;
   }
 
-  void csLoaderContext::AddToCollection(iObject* obj)
+  void csLoaderContext::AddToCollection (iObject* obj)
   {
-    if(collection)
+    if (collection)
     {
       collection->Add(obj);
     }
+  }
+
+  bool csLoaderContext::LoadComment (iObject* object, iDocumentNode* node,
+		  bool replace)
+  {
+    if (!Engine) return false;
+    return CS::Persistence::LoadComment (Engine, object, node, replace);
   }
 
   void csLoaderContext::ReportNotify (const char* description, ...)

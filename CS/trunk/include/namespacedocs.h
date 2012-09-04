@@ -72,6 +72,12 @@ namespace CS
   {}
 
   /**
+   * Loading and saving helper classes.
+   */
+  namespace Persistence
+  {}
+
+  /**
    * General tools for the edition of Crystal Space objects.
    */
   namespace Editor
