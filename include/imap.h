@@ -25,6 +25,7 @@
 #include "imap/ldrctxt.h"
 #include "imap/loader.h"
 #include "imap/modelload.h"
+#include "imap/objectcomment.h"
 #include "imap/reader.h"
 #include "imap/renderbufferpersistence.h"
 #include "imap/saver.h"
