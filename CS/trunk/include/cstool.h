@@ -49,6 +49,7 @@
 #include "cstool/mocapparser.h"
 #include "cstool/normalcalc.h"
 #include "cstool/numberedfilenamehelper.h"
+#include "cstool/objectcomment.h"
 #include "cstool/objmodel.h"
 #include "cstool/pen.h"
 #include "cstool/primitives.h"
