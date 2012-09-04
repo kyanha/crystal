@@ -93,7 +93,9 @@ public:
     virtual iCollection* GetCollection() const { return collection; }
     virtual bool CurrentCollectionOnly() const { return false; }
     virtual uint GetKeepFlags() const { return keepFlags; }
-    virtual void AddToCollection(iObject* obj);
+    virtual void AddToCollection (iObject* obj);
+    virtual bool LoadComment (iObject* obj, iDocumentNode* commentNode,
+		    bool replace = false);
     virtual bool GetVerbose() { return do_verbose; }
 
     void ReportNotify (const char* description, ...);

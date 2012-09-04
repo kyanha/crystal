@@ -25,6 +25,7 @@
 #include "csgfx/imagememory.h"
 #include "csqint.h"
 #include "cstool/vfsdirchange.h"
+#include "cstool/objectcomment.h"
 #include "csutil/cfgacc.h"
 #include "csutil/databuf.h"
 #include "csutil/scf.h"
@@ -2797,6 +2798,11 @@ public:
   virtual uint GetKeepFlags() const { return keepFlags; }
   virtual bool CurrentCollectionOnly() const { return searchCollectionOnly; }
   virtual void AddToCollection(iObject* obj);
+  virtual bool LoadComment (iObject* obj, iDocumentNode* commentNode,
+		  bool replace = false)
+  {
+    return CS::Persistence::LoadComment (Engine, obj, commentNode, replace);
+  }
   bool GetVerbose() { return false; }
 };
 
