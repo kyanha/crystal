@@ -860,6 +860,7 @@ struct IntersectSegment_Front2BackData
   int polygon_idx;
   csFrustumVis::VistestObjectsArray* vector;	// If not-null we need all objects.
   bool accurate;
+  bool bf;
 };
 
 static bool IntersectSegmentSloppy_Front2Back (csKDTree* treenode,
@@ -988,7 +989,8 @@ static bool IntersectSegment_Front2Back (csKDTree* treenode,
 	    int pidx = -1;
 	    if (data->accurate)
 	      rc = visobj_wrap->mesh->GetMeshObject ()->HitBeamObject (
-	    	  obj_start, obj_end, obj_isect, &r, &pidx);
+	    	  obj_start, obj_end, obj_isect, &r, &pidx, 0,
+		  data->bf);
 	    else
 	      rc = visobj_wrap->mesh->GetMeshObject ()->HitBeamOutline (
 	    	  obj_start, obj_end, obj_isect, &r);
@@ -1021,7 +1023,8 @@ static bool IntersectSegment_Front2Back (csKDTree* treenode,
 
 bool csFrustumVis::IntersectSegment (const csVector3& start,
     const csVector3& end, csVector3& isect, float* pr,
-    iMeshWrapper** p_mesh, int* poly_idx, bool accurate)
+    iMeshWrapper** p_mesh, int* poly_idx, bool accurate,
+    bool bf)
 {
   UpdateObjects ();
   current_vistest_nr++;
@@ -1034,6 +1037,7 @@ bool csFrustumVis::IntersectSegment (const csVector3& start,
   data.polygon_idx = -1;
   data.vector = 0;
   data.accurate = accurate;
+  data.bf = bf;
   data.isect = 0;
   kdtree->Front2Back (start, IntersectSegment_Front2Back, (void*)&data, 0);
 
@@ -1046,7 +1050,8 @@ bool csFrustumVis::IntersectSegment (const csVector3& start,
 }
 
 csPtr<iVisibilityObjectIterator> csFrustumVis::IntersectSegment (
-    const csVector3& start, const csVector3& end, bool accurate)
+    const csVector3& start, const csVector3& end, bool accurate,
+    bool bf)
 {
   UpdateObjects ();
   current_vistest_nr++;
@@ -1058,6 +1063,7 @@ csPtr<iVisibilityObjectIterator> csFrustumVis::IntersectSegment (
   data.polygon_idx = -1;
   data.vector = new VistestObjectsArray ();
   data.accurate = accurate;
+  data.bf = bf;
   kdtree->Front2Back (start, IntersectSegment_Front2Back, (void*)&data, 0);
 
   csFrustVisObjIt* vobjit = new csFrustVisObjIt (data.vector, 0);

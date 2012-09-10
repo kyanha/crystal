@@ -506,9 +506,9 @@ public:
   virtual csHitBeamResult HitBeamOutline (const csVector3& start,
   	const csVector3& end);
   virtual csHitBeamResult HitBeamObject (const csVector3& start,
-  	const csVector3& end, bool do_material = false);
+  	const csVector3& end, bool do_material = false, bool bf = false);
   virtual csHitBeamResult HitBeam (const csVector3& start,
-  	const csVector3& end, bool do_material = false);
+  	const csVector3& end, bool do_material = false, bool bf = false);
 
   /**
    * Calculate the squared distance between the camera and the object.

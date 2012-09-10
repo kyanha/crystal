@@ -1227,7 +1227,7 @@ bool csSpriteCal3DMeshObject::HitBeamOutline (const csVector3& start,
 
 bool csSpriteCal3DMeshObject::HitBeamObject (const csVector3& start,
     const csVector3& end, csVector3& isect, float* pr, int* polygon_idx,
-    iMaterialWrapper** material)
+    iMaterialWrapper** material, bool bf)
 {
   if (material) *material = 0;
   //Checks all of the cal3d bounding boxes of each bone to see if they hit
@@ -1347,8 +1347,14 @@ bool csSpriteCal3DMeshObject::HitBeamObject (const csVector3& start,
               tri[f] = vertices[(size_t)(vertexOffs + vIdx)];
             }
 
-            if (csIntersect3::SegmentTriangle (seg,
-              tri[0], tri[1], tri[2], tsect))
+	    bool hit;
+	    if (bf)
+              hit = csIntersect3::SegmentTriangleBF (seg,
+              	tri[0], tri[1], tri[2], tsect);
+	    else
+              hit = csIntersect3::SegmentTriangle (seg,
+              	tri[0], tri[1], tri[2], tsect);
+	    if (hit)
             {
               temp = csSquaredDist::PointPoint (start, tsect);
               if (temp < dist)

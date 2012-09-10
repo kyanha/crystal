@@ -397,7 +397,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(Particles)
 
     virtual bool HitBeamObject (const csVector3& start, const csVector3& end,
       csVector3& isect, float* pr, int* polygon_idx = 0,
-      iMaterialWrapper** material = 0) 
+      iMaterialWrapper** material = 0, bool bf = false) 
     {
       return false;
     }

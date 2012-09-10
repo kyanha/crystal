@@ -454,7 +454,8 @@ iMeshWrapper* csPortal::HitBeamPortals (
   const csVector3 &end,
   csVector3 &isect,
   int* polygon_idx,
-  iSector** final_sector)
+  iSector** final_sector,
+  bool bf)
 {
   if (!CompleteSector (0)) return 0;
   if (sector->GetRecLevel () >= max_sector_visit)
@@ -468,7 +469,7 @@ iMeshWrapper* csPortal::HitBeamPortals (
 
     csVector3 new_start = warp_wor.Other2This (start);
     csVector3 new_end = warp_wor.Other2This (end);
-    csSectorHitBeamResult hbresult = sector->HitBeamPortals (new_start, new_end);
+    csSectorHitBeamResult hbresult = sector->HitBeamPortals (new_start, new_end, bf);
     if (final_sector) *final_sector = hbresult.final_sector;
     if (hbresult.mesh)
     {
@@ -479,7 +480,7 @@ iMeshWrapper* csPortal::HitBeamPortals (
   }
   else
   {    
-    csSectorHitBeamResult hbresult = sector->HitBeamPortals (start, end);
+    csSectorHitBeamResult hbresult = sector->HitBeamPortals (start, end, bf);
     if (final_sector) *final_sector = hbresult.final_sector;
     if (hbresult.mesh)
     {

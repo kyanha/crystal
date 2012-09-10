@@ -1515,7 +1515,7 @@ bool csSprite3DMeshObject::HitBeamOutline (const csVector3& start,
 
 bool csSprite3DMeshObject::HitBeamObject (const csVector3& start,
 	const csVector3& end, csVector3& isect, float* pr, int* polygon_idx,
-	iMaterialWrapper** material)
+	iMaterialWrapper** material, bool bf)
 {
   if (material)
   {
@@ -1535,8 +1535,14 @@ bool csSprite3DMeshObject::HitBeamObject (const csVector3& start,
   for (i = 0 ; i < factory->GetTriangleCount () ; i++)
   {
     csTriangle& tr = tris[i];
-    if (csIntersect3::SegmentTriangle (seg, verts[tr.a], verts[tr.b],
-    	verts[tr.c], tsect))
+    bool hit;
+    if (bf)
+      hit = csIntersect3::SegmentTriangleBF (seg, verts[tr.a], verts[tr.b],
+    	verts[tr.c], tsect);
+    else
+      hit = csIntersect3::SegmentTriangle (seg, verts[tr.a], verts[tr.b],
+    	verts[tr.c], tsect);
+    if (hit)
     {
       temp = csSquaredDist::PointPoint (start, tsect);
       if (temp < dist)

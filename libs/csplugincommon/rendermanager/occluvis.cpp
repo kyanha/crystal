@@ -1195,7 +1195,8 @@ namespace CS
               if (data->accurate)
               {
                 rc = mesh->GetMeshObject ()->HitBeamObject (
-                     obj_start, obj_end, obj_isect, &r, &pidx);
+                     obj_start, obj_end, obj_isect, &r, &pidx,
+		     0, data->bf);
               }
               else
               {
@@ -1237,7 +1238,8 @@ namespace CS
     };
 
     csPtr<iVisibilityObjectIterator> csOccluvis::IntersectSegment (
-        const csVector3& start, const csVector3& end, bool accurate)
+        const csVector3& start, const csVector3& end, bool accurate,
+	bool bf)
     {
       IntersectSegmentFront2BackData data;
       data.seg.Set (start, end);
@@ -1247,6 +1249,7 @@ namespace CS
       data.polygon_idx = -1;
       data.vector = new VistestObjectsArray ();
       data.accurate = accurate;
+      data.bf = bf;
 
       const csVector3 dir = end-start;
       LeafNodeIntersectSegment leaf;
@@ -1264,7 +1267,7 @@ namespace CS
     bool csOccluvis::IntersectSegment (const csVector3& start,
         const csVector3& end, csVector3& isect, float* pr,
         iMeshWrapper** p_mesh, int* poly_idx,
-        bool accurate)
+        bool accurate, bool bf)
     {
       IntersectSegmentFront2BackData data;
       data.seg.Set (start, end);
@@ -1275,6 +1278,7 @@ namespace CS
       data.polygon_idx = -1;
       data.vector = 0;
       data.accurate = accurate;
+      data.bf = bf;
       data.isect = 0;
 
       const csVector3 dir = end-start;

@@ -452,11 +452,13 @@ struct iSector : public virtual iBase
    * containing the 'start' point. 'isect' will be the intersection point
    * if a polygon is returned. This function returns -1 if no polygon
    * was hit or the polygon index otherwise.
+   * If 'bf' is set to true then backface culling will be used on the
+   * set of triangles.
    * \sa csSectorHitBeamResult HitBeam() iMeshWrapper::HitBeam()
    * CS::Physics::Bullet::iDynamicSystem::HitBeam()
    */
   virtual csSectorHitBeamResult HitBeamPortals (const csVector3& start,
-  	const csVector3& end) = 0;
+  	const csVector3& end, bool bf = false) = 0;
 
   /**
    * Follow a beam from start to end and return the first object
@@ -464,11 +466,14 @@ struct iSector : public virtual iBase
    * filled with the indices of the polygon that was hit.
    * If polygon_idx is null then the polygon will not be filled in.
    * This function doesn't support portals.
+   * If 'bf' is set to true then backface culling will be used on the
+   * set of triangles. Note that in this case 'accurate' must be set to true
+   * as well.
    * \sa csSectorHitBeamResult HitBeamPortals() iMeshWrapper::HitBeam()
    * CS::Physics::Bullet::iDynamicSystem::HitBeam()
    */
   virtual csSectorHitBeamResult HitBeam (const csVector3& start,
-  	const csVector3& end, bool accurate = false) = 0;
+  	const csVector3& end, bool accurate = false, bool bf = false) = 0;
 
   /**
    * Follow a segment starting at this sector. If the segment intersects

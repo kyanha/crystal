@@ -298,10 +298,10 @@ public:
   virtual iVisibilityCuller* GetVisibilityCuller ();
 
   virtual csSectorHitBeamResult HitBeamPortals (const csVector3& start,
-  	const csVector3& end);
+  	const csVector3& end, bool bf = false);
 
   virtual csSectorHitBeamResult HitBeam (const csVector3& start,
-  	const csVector3& end, bool accurate = false);
+  	const csVector3& end, bool accurate = false, bool bf = false);
 
   virtual iSector* FollowSegment (csReversibleTransform& t,
     csVector3& new_position, bool& mirror, bool only_portals = false,
@@ -434,7 +434,7 @@ private:
   int IntersectSegment (const csVector3& start,
 	const csVector3& end, csVector3& isect,
 	float* pr = 0, bool only_portals = false,
-	iMeshWrapper** p_mesh = 0);
+	iMeshWrapper** p_mesh = 0, bool bf = false);
 
   void FireNewMesh (iMeshWrapper* mesh);
   void FireRemoveMesh (iMeshWrapper* mesh);

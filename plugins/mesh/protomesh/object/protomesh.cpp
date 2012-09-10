@@ -221,8 +221,10 @@ bool csProtoMeshObject::HitBeamOutline (const csVector3& start,
 }
 
 bool csProtoMeshObject::HitBeamObject (const csVector3& start,
-                                       const csVector3& end, csVector3& isect, float *pr, int* polygon_idx,
-                                       iMaterialWrapper** material)
+                                       const csVector3& end, csVector3& isect,
+				       float *pr, int* polygon_idx,
+                                       iMaterialWrapper** material,
+				       bool bf)
 {
   if (material) *material = csProtoMeshObject::material;
   if (polygon_idx) *polygon_idx = -1;
@@ -241,8 +243,14 @@ bool csProtoMeshObject::HitBeamObject (const csVector3& start,
   csTriangle *tr = factory->GetTriangles();
   for (i = 0 ; i < max ; i++)
   {
-    if (csIntersect3::SegmentTriangle (seg, vrt[tr[i].a], vrt[tr[i].b],
-      vrt[tr[i].c], tmp))
+    bool hit;
+    if (bf)
+      hit = csIntersect3::SegmentTriangleBF (seg, vrt[tr[i].a], vrt[tr[i].b],
+      	vrt[tr[i].c], tmp);
+    else
+      hit = csIntersect3::SegmentTriangle (seg, vrt[tr[i].a], vrt[tr[i].b],
+      vrt[tr[i].c], tmp);
+    if (hit)
     {
       temp = csSquaredDist::PointPoint (start, tmp);
       if (temp < dist)

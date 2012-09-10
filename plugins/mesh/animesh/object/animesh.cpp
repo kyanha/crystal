@@ -1448,9 +1448,10 @@ CS_PLUGIN_NAMESPACE_BEGIN(Animesh)
     return false;
   }
 
-  bool AnimeshObject::HitBeamObject (const csVector3& start, const csVector3& end,
+  bool AnimeshObject::HitBeamObject (
+    const csVector3& start, const csVector3& end,
     csVector3& isect, float* pr, int* polygon_idx,
-    iMaterialWrapper** material)
+    iMaterialWrapper** material, bool bf)
   {
     // Do a first pre-test against all bone bounding boxes
     if (!HitBeamBBoxes (start, end))
@@ -1482,9 +1483,16 @@ CS_PLUGIN_NAMESPACE_BEGIN(Animesh)
 	while (triangles.HasNext())
 	{
 	  CS::TriangleT<uint> t (triangles.Next());
-	  if (csIntersect3::SegmentTriangle (segment, 
+	  bool hit;
+	  if (bf)
+	    hit = csIntersect3::SegmentTriangleBF (segment, 
 					     vrt[t.a], vrt[t.b], vrt[t.c], 
-					     tmp))
+					     tmp);
+	  else
+	    hit = csIntersect3::SegmentTriangle (segment, 
+					     vrt[t.a], vrt[t.b], vrt[t.c], 
+					     tmp);
+	  if (hit)
 	  {
 	    temp = csSquaredDist::PointPoint (start, tmp);
 	    if (temp < dist)
