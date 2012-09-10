@@ -400,7 +400,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(Animesh)
       const csVector3& end, csVector3& isect, float* pr);
     virtual bool HitBeamObject (const csVector3& start, const csVector3& end,
       csVector3& isect, float* pr, int* polygon_idx,
-      iMaterialWrapper** material);
+      iMaterialWrapper** material, bool bf);
 
     virtual void SetMeshWrapper (iMeshWrapper* logparent);
     virtual iMeshWrapper* GetMeshWrapper () const;

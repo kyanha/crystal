@@ -354,10 +354,11 @@ struct iMeshWrapper : public virtual iBase
    * This version can also return the material that was hit (this will
    * only happen if 'do_material' is true). This is not
    * supported by all meshes so this can return 0 even if there was a hit.
+   * If 'bf' is set then this function will do backface culling.
    * \sa csHitBeamResult
    */
   virtual csHitBeamResult HitBeamObject (const csVector3& start,
-  	const csVector3& end, bool do_material = false) = 0;
+  	const csVector3& end, bool do_material = false, bool bf = false) = 0;
 
   /**
    * Check if this object is hit by this world space vector.
@@ -365,11 +366,13 @@ struct iMeshWrapper : public virtual iBase
    * This version can also return the material that was hit (this will
    * only happen if 'do_material' is true). This is not
    * supported by all meshes so this can return 0 even if there was a hit.
+   * If 'bf' is set then this function will do backface culling. Note! This
+   * will only happen if do_material is set to true.
    * \sa csHitBeamResult iSector::HitBeam() iSector::HitBeamPortals()
    * CS::Physics::Bullet::iDynamicSystem::HitBeam()
    */
   virtual csHitBeamResult HitBeam (const csVector3& start,
-  	const csVector3& end, bool do_material = false) = 0;
+  	const csVector3& end, bool do_material = false, bool bf = false) = 0;
 
   /**
    * Set a callback which is called just before the object is drawn.

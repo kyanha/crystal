@@ -70,6 +70,7 @@ namespace CS
       int polygon_idx;
       VistestObjectsArray* vector;	// If not-null we need all objects.
       bool accurate;
+      bool bf;
     };
 
     struct QueryData : public csRefCount
@@ -403,12 +404,13 @@ namespace CS
         const csVector3& start, const csVector3& end);
 
       virtual csPtr<iVisibilityObjectIterator> IntersectSegment (
-        const csVector3& start, const csVector3& end, bool accurate = false);
+        const csVector3& start, const csVector3& end, bool accurate = false,
+	bool bf = false);
 
       virtual bool IntersectSegment (const csVector3& start,
         const csVector3& end, csVector3& isect, float* pr = 0,
         iMeshWrapper** p_mesh = 0, int* poly_idx = 0,
-        bool accurate = true);
+        bool accurate = true, bool bf = false);
 
       /**
        * Prepare culling for the next frame.

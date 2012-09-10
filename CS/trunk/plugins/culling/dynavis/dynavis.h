@@ -344,11 +344,12 @@ public:
   virtual csPtr<iVisibilityObjectIterator> IntersectSegmentSloppy (
     const csVector3& start, const csVector3& end);
   virtual csPtr<iVisibilityObjectIterator> IntersectSegment (
-    const csVector3& start, const csVector3& end, bool accurate = false);
+    const csVector3& start, const csVector3& end, bool accurate = false,
+    bool bf = false);
   virtual bool IntersectSegment (const csVector3& start,
     const csVector3& end, csVector3& isect, float* pr = 0,
     iMeshWrapper** p_mesh = 0, int* poly_idx = 0,
-    bool accurate = true);
+    bool accurate = true, bool bf = false);
   virtual const char* ParseCullerParameters (iDocumentNode*) { return 0; }
   virtual void RenderViscull (iRenderView* rview, iShaderVariableContext* shaders) {}
   virtual void BeginPrecacheCulling () { VisTest ((iRenderView*)0, 0); }

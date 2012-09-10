@@ -219,12 +219,13 @@ struct iMeshObject : public virtual iBase
    *   where 0 means \a start and 1 means \a end.
    * \param polygon_idx Index of the polygon hit on the mesh (or -1 if not
    *   supported).
+   * \param bf if this is true then backface culling is used on the triangles.
    * \param material If not 0 then the hit material will be put here. Or 0
    *   in case this mesh object doesn't support material selection.
    */
   virtual bool HitBeamObject (const csVector3& start, const csVector3& end,
   	csVector3& isect, float* pr, int* polygon_idx = 0,
-	iMaterialWrapper** material = 0) = 0;
+	iMaterialWrapper** material = 0, bool bf = false) = 0;
 
   /**
    * Set a reference to the mesh wrapper holding the mesh objects.

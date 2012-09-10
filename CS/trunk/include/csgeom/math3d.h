@@ -264,6 +264,11 @@ private:
   static bool BoxPlaneInternal (const csVector3& normal,
 	const csVector3& vert, const csVector3& boxhalfsize);
 
+  static bool TestInTriangle (const csSegment3 &seg,
+  	const csPlane3& plane,
+  	const csVector3 &tr1, const csVector3 &tr2, const csVector3 &tr3,
+  	const csVector3 &isect);
+
 public:
   /**
    * Intersect a plane with a 3D polygon and return
@@ -288,11 +293,20 @@ public:
 
   /**
    * Intersect a 3D segment with a triangle.
-   * \return true if there
-   * is an intersection. In that case the intersection point will
-   * be in 'isect'.
+   * \return true if there is an intersection. In that case the intersection
+   * point will be in 'isect'.
    */
   static bool SegmentTriangle (const csSegment3& seg,
+  	const csVector3& tr1,
+  	const csVector3& tr2, const csVector3& tr3,
+	csVector3& isect);
+
+  /**
+   * Intersect a 3D segment with a triangle and also do backface culling.
+   * \return true if there is an intersection. In that case the intersection
+   * point will be in 'isect'.
+   */
+  static bool SegmentTriangleBF (const csSegment3& seg,
   	const csVector3& tr1,
   	const csVector3& tr2, const csVector3& tr3,
 	csVector3& isect);

@@ -1859,7 +1859,7 @@ bool csThing::HitBeamOutline (const csVector3&,
 
 bool csThing::HitBeamObject (const csVector3&,
   const csVector3&, csVector3&, float*, int*,
-  iMaterialWrapper**)
+  iMaterialWrapper**, bool)
 {
   return false;
 }

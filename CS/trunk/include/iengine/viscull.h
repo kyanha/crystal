@@ -196,9 +196,12 @@ struct iVisibilityCuller : public virtual iBase
    * Intersect a segment with all objects in the visibility culler and
    * return them all in an iterator.
    * If accurate is true then a more accurate (and slower) method is used.
+   * If bf is true then backface culling is used. This only works if 'accurate'
+   * is set to true.
    */
   virtual csPtr<iVisibilityObjectIterator> IntersectSegment (
-    const csVector3& start, const csVector3& end, bool accurate = false) = 0;
+    const csVector3& start, const csVector3& end, bool accurate = false,
+    bool bf = false) = 0;
 
   /**
    * Intersect a beam using this culler and return the intersection
@@ -208,11 +211,13 @@ struct iVisibilityCuller : public virtual iBase
    * that field will always be -1.
    * If accurate is false then a less accurate (and faster) method is used.
    * In that case the polygon index will never be filled.
+   * If bf is true then backface culling is used. This only works if 'accurate'
+   * is set to true.
    */
   virtual bool IntersectSegment (const csVector3& start,
     const csVector3& end, csVector3& isect, float* pr = 0,
     iMeshWrapper** p_mesh = 0, int* poly_idx = 0,
-    bool accurate = true) = 0;
+    bool accurate = true, bool bf = false) = 0;
 
   /**
    * Parse a document node with additional parameters for this culler.

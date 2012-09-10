@@ -554,7 +554,7 @@ bool csGenmeshMeshObject::HitBeamOutline (const csVector3& start,
 
 bool csGenmeshMeshObject::HitBeamObject (const csVector3& start,
   const csVector3& end, csVector3& isect, float *pr, int* polygon_idx,
-  iMaterialWrapper** material)
+  iMaterialWrapper** material, bool bf)
 {
   if (polygon_idx) *polygon_idx = -1;
   // This is the slow version. Use for an accurate hit on the object.
@@ -580,10 +580,13 @@ bool csGenmeshMeshObject::HitBeamObject (const csVector3& start,
       CS_MESHTYPE_TRIANGLES);
     while (triangles.HasNext())
     {
-      CS::TriangleT<uint> t (triangles.Next());
-      if (csIntersect3::SegmentTriangle (seg, 
-	vrt[t.a], vrt[t.b], vrt[t.c], 
-	tmp))
+      CS::TriangleT<uint> t = triangles.Next();
+      bool hit;
+      if (bf)
+        hit = csIntersect3::SegmentTriangleBF (seg, vrt[t.a], vrt[t.b], vrt[t.c], tmp);
+      else
+        hit = csIntersect3::SegmentTriangle (seg, vrt[t.a], vrt[t.b], vrt[t.c], tmp);
+      if (hit)
       {
 	temp = csSquaredDist::PointPoint (start, tmp);
 	if (temp < dist)

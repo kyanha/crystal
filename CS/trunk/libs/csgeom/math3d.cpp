@@ -366,18 +366,14 @@ bool csIntersect3::PlanePolygon (
   return true;
 }
 
-bool csIntersect3::SegmentTriangle (
+bool csIntersect3::TestInTriangle (
   const csSegment3 &seg,
+  const csPlane3& plane,
   const csVector3 &tr1,
   const csVector3 &tr2,
   const csVector3 &tr3,
-  csVector3 &isect)
+  const csVector3 &isect)
 {
-  csPlane3 plane (tr1, tr2, tr3);
-  float dist;
-  if (!SegmentPlane (seg.Start (), seg.End (), plane, isect, dist))
-    return false;
-
   // 'isect' is the intersection of the segment and the
   // plane. Now we have to see if this intersection is
   // in the triangle.
@@ -414,6 +410,37 @@ bool csIntersect3::SegmentTriangle (
   // We already compared 'test1' and 'test2' above.
   if (test3 != 0 && (test3 == -test1 || test3 == -test2)) return false;
   return true;
+}
+
+bool csIntersect3::SegmentTriangleBF (
+  const csSegment3 &seg,
+  const csVector3 &tr1,
+  const csVector3 &tr2,
+  const csVector3 &tr3,
+  csVector3 &isect)
+{
+  csPlane3 plane (tr1, tr2, tr3);
+  float dist;
+  if (!SegmentPlane (seg.Start (), seg.End (), plane, isect, dist))
+    return false;
+  if (plane.Classify (seg.Start ()) < 0.0f)
+    return false;
+  return TestInTriangle (seg, plane, tr1, tr2, tr3, isect);
+}
+
+bool csIntersect3::SegmentTriangle (
+  const csSegment3 &seg,
+  const csVector3 &tr1,
+  const csVector3 &tr2,
+  const csVector3 &tr3,
+  csVector3 &isect)
+{
+  csPlane3 plane (tr1, tr2, tr3);
+  float dist;
+  if (!SegmentPlane (seg.Start (), seg.End (), plane, isect, dist))
+    return false;
+
+  return TestInTriangle (seg, plane, tr1, tr2, tr3, isect);
 }
 
 bool csIntersect3::SegmentPolygon (

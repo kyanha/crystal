@@ -612,7 +612,7 @@ public:
       csVector3& intersect, float* pr);
   virtual bool HitBeamObject (const csVector3& start, const csVector3& end,
       csVector3& intersect, float* pr, int* = 0,
-      iMaterialWrapper** = 0);
+      iMaterialWrapper** = 0, bool bf = false);
 
   virtual bool SetColor (const csColor& /*col*/)
   {

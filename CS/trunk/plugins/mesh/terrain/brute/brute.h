@@ -407,7 +407,7 @@ public:
     csVector3& isect, float* pr);
   virtual bool HitBeamObject (const csVector3& start, const csVector3& end,
     csVector3& isect, float* pr, int* polygon_idx = 0,
-    iMaterialWrapper** material = 0);
+    iMaterialWrapper** material = 0, bool bf = false);
 
   virtual void BuildDecal(const csVector3* pos, float decalRadius,
           iDecalBuilder* decalBuilder);

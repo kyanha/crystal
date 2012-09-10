@@ -950,12 +950,12 @@ csHitBeamResult csMeshWrapper::HitBeamOutline (
 csHitBeamResult csMeshWrapper::HitBeamObject (
   const csVector3 &start,
   const csVector3 &end,
-  bool do_material)
+  bool do_material, bool bf)
 {
   csHitBeamResult rc;
   rc.material = 0;
   rc.hit = meshobj->HitBeamObject (start, end, rc.isect, &rc.r,
-  	&rc.polygon_idx, do_material ? &rc.material : 0);
+  	&rc.polygon_idx, do_material ? &rc.material : 0, bf);
   return rc;
 }
 
@@ -963,7 +963,7 @@ csHitBeamResult csMeshWrapper::HitBeamObject (
 csHitBeamResult csMeshWrapper::HitBeam (
   const csVector3 &start,
   const csVector3 &end,
-  bool do_material)
+  bool do_material, bool bf)
 {
   csHitBeamResult rc;
 
@@ -986,7 +986,7 @@ csHitBeamResult csMeshWrapper::HitBeam (
   {
     if (do_material)
     {
-      rc.hit = meshobj->HitBeamObject (startObj, endObj, rc.isect, &rc.r, 0, &rc.material);
+      rc.hit = meshobj->HitBeamObject (startObj, endObj, rc.isect, &rc.r, 0, &rc.material, bf);
     }
     else
     {
