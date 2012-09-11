@@ -20,6 +20,7 @@
 #ifndef SNDSYS_SOFTWARE_DRIVER_DIRECTSOUND_H
 #define SNDSYS_SOFTWARE_DRIVER_DIRECTSOUND_H
 
+#define DIRECTSOUND_VERSION 0x0800
 
 #include "csutil/cfgacc.h"
 #include "csutil/threading/thread.h"
