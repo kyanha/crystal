@@ -23287,6 +23287,79 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_csIntersect3_SegmentTriangleBF(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  csSegment3 *arg1 = 0 ;
+  csVector3 *arg2 = 0 ;
+  csVector3 *arg3 = 0 ;
+  csVector3 *arg4 = 0 ;
+  csVector3 *arg5 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  void *argp3 = 0 ;
+  int res3 = 0 ;
+  void *argp4 = 0 ;
+  int res4 = 0 ;
+  void *argp5 = 0 ;
+  int res5 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  PyObject * obj3 = 0 ;
+  PyObject * obj4 = 0 ;
+  bool result;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"csIntersect3_SegmentTriangleBF",5,5,&obj0,&obj1,&obj2,&obj3,&obj4)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1, SWIGTYPE_p_csSegment3,  0  | 0);
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "csIntersect3_SegmentTriangleBF" "', argument " "1"" of type '" "csSegment3 const &""'"); 
+  }
+  if (!argp1) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "csIntersect3_SegmentTriangleBF" "', argument " "1"" of type '" "csSegment3 const &""'"); 
+  }
+  arg1 = reinterpret_cast< csSegment3 * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_csVector3,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "csIntersect3_SegmentTriangleBF" "', argument " "2"" of type '" "csVector3 const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "csIntersect3_SegmentTriangleBF" "', argument " "2"" of type '" "csVector3 const &""'"); 
+  }
+  arg2 = reinterpret_cast< csVector3 * >(argp2);
+  res3 = SWIG_ConvertPtr(obj2, &argp3, SWIGTYPE_p_csVector3,  0  | 0);
+  if (!SWIG_IsOK(res3)) {
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "csIntersect3_SegmentTriangleBF" "', argument " "3"" of type '" "csVector3 const &""'"); 
+  }
+  if (!argp3) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "csIntersect3_SegmentTriangleBF" "', argument " "3"" of type '" "csVector3 const &""'"); 
+  }
+  arg3 = reinterpret_cast< csVector3 * >(argp3);
+  res4 = SWIG_ConvertPtr(obj3, &argp4, SWIGTYPE_p_csVector3,  0  | 0);
+  if (!SWIG_IsOK(res4)) {
+    SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "csIntersect3_SegmentTriangleBF" "', argument " "4"" of type '" "csVector3 const &""'"); 
+  }
+  if (!argp4) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "csIntersect3_SegmentTriangleBF" "', argument " "4"" of type '" "csVector3 const &""'"); 
+  }
+  arg4 = reinterpret_cast< csVector3 * >(argp4);
+  res5 = SWIG_ConvertPtr(obj4, &argp5, SWIGTYPE_p_csVector3,  0 );
+  if (!SWIG_IsOK(res5)) {
+    SWIG_exception_fail(SWIG_ArgError(res5), "in method '" "csIntersect3_SegmentTriangleBF" "', argument " "5"" of type '" "csVector3 &""'"); 
+  }
+  if (!argp5) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "csIntersect3_SegmentTriangleBF" "', argument " "5"" of type '" "csVector3 &""'"); 
+  }
+  arg5 = reinterpret_cast< csVector3 * >(argp5);
+  result = (bool)csIntersect3::SegmentTriangleBF((csSegment3 const &)*arg1,(csVector3 const &)*arg2,(csVector3 const &)*arg3,(csVector3 const &)*arg4,*arg5);
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_csIntersect3_SegmentPolygon(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   csSegment3 *arg1 = 0 ;
@@ -50134,6 +50207,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"csIntersect3_PlanePolygon", _wrap_csIntersect3_PlanePolygon, METH_VARARGS, NULL},
 	 { (char *)"csIntersect3_SegmentFrustum", _wrap_csIntersect3_SegmentFrustum, METH_VARARGS, NULL},
 	 { (char *)"csIntersect3_SegmentTriangle", _wrap_csIntersect3_SegmentTriangle, METH_VARARGS, NULL},
+	 { (char *)"csIntersect3_SegmentTriangleBF", _wrap_csIntersect3_SegmentTriangleBF, METH_VARARGS, NULL},
 	 { (char *)"csIntersect3_SegmentPolygon", _wrap_csIntersect3_SegmentPolygon, METH_VARARGS, NULL},
 	 { (char *)"csIntersect3_SegmentPlanes", _wrap_csIntersect3_SegmentPlanes, METH_VARARGS, NULL},
 	 { (char *)"csIntersect3_SegmentPlane", _wrap_csIntersect3_SegmentPlane, METH_VARARGS, NULL},

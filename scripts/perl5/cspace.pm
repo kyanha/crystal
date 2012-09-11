@@ -13615,6 +13615,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *PlanePolygon = *cspacec::csIntersect3_PlanePolygon;
 *SegmentFrustum = *cspacec::csIntersect3_SegmentFrustum;
 *SegmentTriangle = *cspacec::csIntersect3_SegmentTriangle;
+*SegmentTriangleBF = *cspacec::csIntersect3_SegmentTriangleBF;
 *SegmentPolygon = *cspacec::csIntersect3_SegmentPolygon;
 *SegmentPlanes = *cspacec::csIntersect3_SegmentPlanes;
 *SegmentPlane = *cspacec::csIntersect3_SegmentPlane;
