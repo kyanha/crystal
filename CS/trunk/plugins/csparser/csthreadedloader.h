@@ -44,6 +44,7 @@
 
 #include "ldrplug.h"
 #include "proxyimage.h"
+#include "shadersets.h"
 
 class csReversibleTransform;
 struct iCollection;
@@ -65,6 +66,7 @@ struct iVFS;
 CS_PLUGIN_NAMESPACE_BEGIN(csparser)
 {
   class csLoaderContext;
+  class ShaderSets;
 
   template<class T, class Interface>
   class csLoaderIterator : public scfImplementation1<csLoaderIterator<T, Interface>,
@@ -717,6 +719,11 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
     bool ParseShaderList (csLoaderContext* ldr_context);
     bool ParseShader (iLoaderContext* ldr_context, iDocumentNode* node,
       iShaderManager* shaderMgr);
+    /**
+     * Helper function: extract the node with the actual shader data from
+     * a &lt;shader&gt; node
+     */
+    csPtr<iDocumentNode> GetShaderDataNode (iDocumentNode* node, csString& shaderFile);
 
     /// Parse a list of shared variables and add them each to the engine
     bool ParseVariableList (iLoaderContext* ldr_context, iDocumentNode* node);
@@ -908,6 +915,9 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
 
     // List of loaded plugins
     csLoadedPluginVector loaded_plugins;
+    /// Shader sets manager
+    friend class ShaderSets;
+    ShaderSets shaderSets;
 
     // Tokens
     csStringHash xmltokens;

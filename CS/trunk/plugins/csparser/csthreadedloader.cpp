@@ -84,7 +84,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
   SCF_IMPLEMENT_FACTORY(csThreadedLoader)
 
   csThreadedLoader::csThreadedLoader(iBase *p)
-  : scfImplementationType (this, p), loaderFlags (CS_LOADER_NONE), listSync(false)
+  : scfImplementationType (this, p), loaderFlags (CS_LOADER_NONE), listSync(false), shaderSets (this)
   {
   }
 
@@ -153,6 +153,10 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
       ReportError("crystalspace.level.threadedloader", "Failed to find iGraphics3D!");
       return false;
     }
+
+    // Read shader sets
+    // TODO: Don't hardcode path
+    shaderSets.ParseShaderSets ("/config/shadersets-default.xml");
 
     // Optional
     eseqmgr = csQueryRegistryOrLoad<iEngineSequenceManager> (object_reg,

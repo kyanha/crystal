@@ -1055,10 +1055,28 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
     shader->Load (child);
     }*/
 
-    csRef<iDocumentNode> shaderNode;
-    csRef<iDocumentNode> fileChild = node->GetNode ("file");
+    csString filename;
+    csRef<iDocumentNode> shaderNode (GetShaderDataNode (node, filename));
+    if (!shaderNode) return false;
 
     csVfsDirectoryChanger dirChanger (vfs);
+
+    if (!filename.IsEmpty())
+      dirChanger.ChangeTo (filename);
+
+    csRef<iShader> shader = SyntaxService->ParseShader (ldr_context, shaderNode);
+    if (shader.IsValid())
+    {
+      ldr_context->AddToCollection(shader->QueryObject ());
+    }
+    return shader.IsValid();
+  }
+
+  csPtr<iDocumentNode> csThreadedLoader::GetShaderDataNode (iDocumentNode* node,
+                                                            csString& shaderFileName)
+  {
+    csRef<iDocumentNode> shaderNode;
+    csRef<iDocumentNode> fileChild = node->GetNode ("file");
 
     if (fileChild)
     {
@@ -1069,7 +1087,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
       {
         ReportWarning ("crystalspace.maploader",
           "Unable to open shader file %s!", CS::Quote::Single (filename.GetData()));
-        return false;
+        return csPtr<iDocumentNode> (nullptr);
       }
 
       csRef<iDocumentSystem> docsys =
@@ -1083,7 +1101,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
         ReportWarning ("crystalspace.maploader",
           "Could not parse shader file %s: %s",
           CS::Quote::Single (filename.GetData()), err);
-        return false;
+        return csPtr<iDocumentNode> (nullptr);
       }
       shaderNode = shaderDoc->GetRoot ()->GetNode ("shader");
       if (!shaderNode)
@@ -1091,10 +1109,10 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
         SyntaxService->ReportError ("crystalspace.maploader", node,
           "Shader file %s is not a valid shader XML file!",
           CS::Quote::Single (filename.GetData ()));
-        return false;
+        return csPtr<iDocumentNode> (nullptr);
       }
 
-      dirChanger.ChangeTo (filename);
+      shaderFileName = filename;
     }
     else
     {
@@ -1103,18 +1121,13 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
       {
         SyntaxService->ReportError ("crystalspace.maploader", node,
           "%s or %s node is missing!",
-	  CS::Quote::Single ("shader"),
-	  CS::Quote::Single ("file"));
-        return false;
+      CS::Quote::Single ("shader"),
+      CS::Quote::Single ("file"));
+        return csPtr<iDocumentNode> (nullptr);
       }
     }
 
-    csRef<iShader> shader = SyntaxService->ParseShader (ldr_context, shaderNode);
-    if (shader.IsValid())
-    {
-      ldr_context->AddToCollection(shader->QueryObject ());
-    }
-    return shader.IsValid();
+    return shaderNode;
   }
 
   bool csThreadedLoader::ParseVariableList (iLoaderContext* ldr_context,
