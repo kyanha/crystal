@@ -8911,7 +8911,62 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_iSector_HitBeamPortals(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_iSector_HitBeamPortals__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  iSector *arg1 = (iSector *) 0 ;
+  csVector3 *arg2 = 0 ;
+  csVector3 *arg3 = 0 ;
+  bool arg4 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  void *argp3 = 0 ;
+  int res3 = 0 ;
+  bool val4 ;
+  int ecode4 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  PyObject * obj3 = 0 ;
+  csSectorHitBeamResult result;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"iSector_HitBeamPortals",4,4,&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_iSector, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "iSector_HitBeamPortals" "', argument " "1"" of type '" "iSector *""'"); 
+  }
+  arg1 = reinterpret_cast< iSector * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_csVector3,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "iSector_HitBeamPortals" "', argument " "2"" of type '" "csVector3 const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "iSector_HitBeamPortals" "', argument " "2"" of type '" "csVector3 const &""'"); 
+  }
+  arg2 = reinterpret_cast< csVector3 * >(argp2);
+  res3 = SWIG_ConvertPtr(obj2, &argp3, SWIGTYPE_p_csVector3,  0  | 0);
+  if (!SWIG_IsOK(res3)) {
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "iSector_HitBeamPortals" "', argument " "3"" of type '" "csVector3 const &""'"); 
+  }
+  if (!argp3) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "iSector_HitBeamPortals" "', argument " "3"" of type '" "csVector3 const &""'"); 
+  }
+  arg3 = reinterpret_cast< csVector3 * >(argp3);
+  ecode4 = SWIG_AsVal_bool(obj3, &val4);
+  if (!SWIG_IsOK(ecode4)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "iSector_HitBeamPortals" "', argument " "4"" of type '" "bool""'");
+  } 
+  arg4 = static_cast< bool >(val4);
+  result = (arg1)->HitBeamPortals((csVector3 const &)*arg2,(csVector3 const &)*arg3,arg4);
+  resultobj = SWIG_NewPointerObj((new csSectorHitBeamResult(static_cast< const csSectorHitBeamResult& >(result))), SWIGTYPE_p_csSectorHitBeamResult, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_iSector_HitBeamPortals__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   iSector *arg1 = (iSector *) 0 ;
   csVector3 *arg2 = 0 ;
@@ -8957,7 +9012,131 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_iSector_HitBeamPortals(PyObject *self, PyObject *args) {
+  int argc;
+  PyObject *argv[5];
+  int ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = (int)PyObject_Length(args);
+  for (ii = 0; (ii < argc) && (ii < 4); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 3) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_iSector, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      int res = SWIG_ConvertPtr(argv[1], 0, SWIGTYPE_p_csVector3, 0);
+      _v = SWIG_CheckState(res);
+      if (_v) {
+        int res = SWIG_ConvertPtr(argv[2], 0, SWIGTYPE_p_csVector3, 0);
+        _v = SWIG_CheckState(res);
+        if (_v) {
+          return _wrap_iSector_HitBeamPortals__SWIG_1(self, args);
+        }
+      }
+    }
+  }
+  if (argc == 4) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_iSector, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      int res = SWIG_ConvertPtr(argv[1], 0, SWIGTYPE_p_csVector3, 0);
+      _v = SWIG_CheckState(res);
+      if (_v) {
+        int res = SWIG_ConvertPtr(argv[2], 0, SWIGTYPE_p_csVector3, 0);
+        _v = SWIG_CheckState(res);
+        if (_v) {
+          {
+            int res = SWIG_AsVal_bool(argv[3], NULL);
+            _v = SWIG_CheckState(res);
+          }
+          if (_v) {
+            return _wrap_iSector_HitBeamPortals__SWIG_0(self, args);
+          }
+        }
+      }
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number of arguments for overloaded function 'iSector_HitBeamPortals'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    HitBeamPortals(iSector *,csVector3 const &,csVector3 const &,bool)\n"
+    "    HitBeamPortals(iSector *,csVector3 const &,csVector3 const &)\n");
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_iSector_HitBeam__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  iSector *arg1 = (iSector *) 0 ;
+  csVector3 *arg2 = 0 ;
+  csVector3 *arg3 = 0 ;
+  bool arg4 ;
+  bool arg5 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  void *argp3 = 0 ;
+  int res3 = 0 ;
+  bool val4 ;
+  int ecode4 = 0 ;
+  bool val5 ;
+  int ecode5 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  PyObject * obj3 = 0 ;
+  PyObject * obj4 = 0 ;
+  csSectorHitBeamResult result;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"iSector_HitBeam",5,5,&obj0,&obj1,&obj2,&obj3,&obj4)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_iSector, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "iSector_HitBeam" "', argument " "1"" of type '" "iSector *""'"); 
+  }
+  arg1 = reinterpret_cast< iSector * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_csVector3,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "iSector_HitBeam" "', argument " "2"" of type '" "csVector3 const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "iSector_HitBeam" "', argument " "2"" of type '" "csVector3 const &""'"); 
+  }
+  arg2 = reinterpret_cast< csVector3 * >(argp2);
+  res3 = SWIG_ConvertPtr(obj2, &argp3, SWIGTYPE_p_csVector3,  0  | 0);
+  if (!SWIG_IsOK(res3)) {
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "iSector_HitBeam" "', argument " "3"" of type '" "csVector3 const &""'"); 
+  }
+  if (!argp3) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "iSector_HitBeam" "', argument " "3"" of type '" "csVector3 const &""'"); 
+  }
+  arg3 = reinterpret_cast< csVector3 * >(argp3);
+  ecode4 = SWIG_AsVal_bool(obj3, &val4);
+  if (!SWIG_IsOK(ecode4)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "iSector_HitBeam" "', argument " "4"" of type '" "bool""'");
+  } 
+  arg4 = static_cast< bool >(val4);
+  ecode5 = SWIG_AsVal_bool(obj4, &val5);
+  if (!SWIG_IsOK(ecode5)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode5), "in method '" "iSector_HitBeam" "', argument " "5"" of type '" "bool""'");
+  } 
+  arg5 = static_cast< bool >(val5);
+  result = (arg1)->HitBeam((csVector3 const &)*arg2,(csVector3 const &)*arg3,arg4,arg5);
+  resultobj = SWIG_NewPointerObj((new csSectorHitBeamResult(static_cast< const csSectorHitBeamResult& >(result))), SWIGTYPE_p_csSectorHitBeamResult, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_iSector_HitBeam__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   iSector *arg1 = (iSector *) 0 ;
   csVector3 *arg2 = 0 ;
@@ -9012,7 +9191,7 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_iSector_HitBeam__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_iSector_HitBeam__SWIG_2(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   iSector *arg1 = (iSector *) 0 ;
   csVector3 *arg2 = 0 ;
@@ -9060,12 +9239,12 @@ fail:
 
 SWIGINTERN PyObject *_wrap_iSector_HitBeam(PyObject *self, PyObject *args) {
   int argc;
-  PyObject *argv[5];
+  PyObject *argv[6];
   int ii;
   
   if (!PyTuple_Check(args)) SWIG_fail;
   argc = (int)PyObject_Length(args);
-  for (ii = 0; (ii < argc) && (ii < 4); ii++) {
+  for (ii = 0; (ii < argc) && (ii < 5); ii++) {
     argv[ii] = PyTuple_GET_ITEM(args,ii);
   }
   if (argc == 3) {
@@ -9080,7 +9259,7 @@ SWIGINTERN PyObject *_wrap_iSector_HitBeam(PyObject *self, PyObject *args) {
         int res = SWIG_ConvertPtr(argv[2], 0, SWIGTYPE_p_csVector3, 0);
         _v = SWIG_CheckState(res);
         if (_v) {
-          return _wrap_iSector_HitBeam__SWIG_1(self, args);
+          return _wrap_iSector_HitBeam__SWIG_2(self, args);
         }
       }
     }
@@ -9102,7 +9281,36 @@ SWIGINTERN PyObject *_wrap_iSector_HitBeam(PyObject *self, PyObject *args) {
             _v = SWIG_CheckState(res);
           }
           if (_v) {
-            return _wrap_iSector_HitBeam__SWIG_0(self, args);
+            return _wrap_iSector_HitBeam__SWIG_1(self, args);
+          }
+        }
+      }
+    }
+  }
+  if (argc == 5) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_iSector, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      int res = SWIG_ConvertPtr(argv[1], 0, SWIGTYPE_p_csVector3, 0);
+      _v = SWIG_CheckState(res);
+      if (_v) {
+        int res = SWIG_ConvertPtr(argv[2], 0, SWIGTYPE_p_csVector3, 0);
+        _v = SWIG_CheckState(res);
+        if (_v) {
+          {
+            int res = SWIG_AsVal_bool(argv[3], NULL);
+            _v = SWIG_CheckState(res);
+          }
+          if (_v) {
+            {
+              int res = SWIG_AsVal_bool(argv[4], NULL);
+              _v = SWIG_CheckState(res);
+            }
+            if (_v) {
+              return _wrap_iSector_HitBeam__SWIG_0(self, args);
+            }
           }
         }
       }
@@ -9112,6 +9320,7 @@ SWIGINTERN PyObject *_wrap_iSector_HitBeam(PyObject *self, PyObject *args) {
 fail:
   SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number of arguments for overloaded function 'iSector_HitBeam'.\n"
     "  Possible C/C++ prototypes are:\n"
+    "    HitBeam(iSector *,csVector3 const &,csVector3 const &,bool,bool)\n"
     "    HitBeam(iSector *,csVector3 const &,csVector3 const &,bool)\n"
     "    HitBeam(iSector *,csVector3 const &,csVector3 const &)\n");
   return NULL;
@@ -28668,6 +28877,7 @@ SWIGINTERN PyObject *_wrap_iMeshWrapper_HitBeamObject(PyObject *SWIGUNUSEDPARM(s
   csVector3 *arg2 = 0 ;
   csVector3 *arg3 = 0 ;
   bool arg4 = (bool) false ;
+  bool arg5 = (bool) false ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   void *argp2 = 0 ;
@@ -28676,13 +28886,16 @@ SWIGINTERN PyObject *_wrap_iMeshWrapper_HitBeamObject(PyObject *SWIGUNUSEDPARM(s
   int res3 = 0 ;
   bool val4 ;
   int ecode4 = 0 ;
+  bool val5 ;
+  int ecode5 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   PyObject * obj2 = 0 ;
   PyObject * obj3 = 0 ;
+  PyObject * obj4 = 0 ;
   csHitBeamResult result;
   
-  if(!PyArg_UnpackTuple(args,(char *)"iMeshWrapper_HitBeamObject",3,4,&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
+  if(!PyArg_UnpackTuple(args,(char *)"iMeshWrapper_HitBeamObject",3,5,&obj0,&obj1,&obj2,&obj3,&obj4)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_iMeshWrapper, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "iMeshWrapper_HitBeamObject" "', argument " "1"" of type '" "iMeshWrapper *""'"); 
@@ -28711,7 +28924,14 @@ SWIGINTERN PyObject *_wrap_iMeshWrapper_HitBeamObject(PyObject *SWIGUNUSEDPARM(s
     } 
     arg4 = static_cast< bool >(val4);
   }
-  result = (arg1)->HitBeamObject((csVector3 const &)*arg2,(csVector3 const &)*arg3,arg4);
+  if (obj4) {
+    ecode5 = SWIG_AsVal_bool(obj4, &val5);
+    if (!SWIG_IsOK(ecode5)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode5), "in method '" "iMeshWrapper_HitBeamObject" "', argument " "5"" of type '" "bool""'");
+    } 
+    arg5 = static_cast< bool >(val5);
+  }
+  result = (arg1)->HitBeamObject((csVector3 const &)*arg2,(csVector3 const &)*arg3,arg4,arg5);
   resultobj = SWIG_NewPointerObj((new csHitBeamResult(static_cast< const csHitBeamResult& >(result))), SWIGTYPE_p_csHitBeamResult, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
@@ -28720,6 +28940,70 @@ fail:
 
 
 SWIGINTERN PyObject *_wrap_iMeshWrapper_HitBeam__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  iMeshWrapper *arg1 = (iMeshWrapper *) 0 ;
+  csVector3 *arg2 = 0 ;
+  csVector3 *arg3 = 0 ;
+  bool arg4 ;
+  bool arg5 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  void *argp3 = 0 ;
+  int res3 = 0 ;
+  bool val4 ;
+  int ecode4 = 0 ;
+  bool val5 ;
+  int ecode5 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  PyObject * obj3 = 0 ;
+  PyObject * obj4 = 0 ;
+  csHitBeamResult result;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"iMeshWrapper_HitBeam",5,5,&obj0,&obj1,&obj2,&obj3,&obj4)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_iMeshWrapper, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "iMeshWrapper_HitBeam" "', argument " "1"" of type '" "iMeshWrapper *""'"); 
+  }
+  arg1 = reinterpret_cast< iMeshWrapper * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_csVector3,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "iMeshWrapper_HitBeam" "', argument " "2"" of type '" "csVector3 const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "iMeshWrapper_HitBeam" "', argument " "2"" of type '" "csVector3 const &""'"); 
+  }
+  arg2 = reinterpret_cast< csVector3 * >(argp2);
+  res3 = SWIG_ConvertPtr(obj2, &argp3, SWIGTYPE_p_csVector3,  0  | 0);
+  if (!SWIG_IsOK(res3)) {
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "iMeshWrapper_HitBeam" "', argument " "3"" of type '" "csVector3 const &""'"); 
+  }
+  if (!argp3) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "iMeshWrapper_HitBeam" "', argument " "3"" of type '" "csVector3 const &""'"); 
+  }
+  arg3 = reinterpret_cast< csVector3 * >(argp3);
+  ecode4 = SWIG_AsVal_bool(obj3, &val4);
+  if (!SWIG_IsOK(ecode4)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "iMeshWrapper_HitBeam" "', argument " "4"" of type '" "bool""'");
+  } 
+  arg4 = static_cast< bool >(val4);
+  ecode5 = SWIG_AsVal_bool(obj4, &val5);
+  if (!SWIG_IsOK(ecode5)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode5), "in method '" "iMeshWrapper_HitBeam" "', argument " "5"" of type '" "bool""'");
+  } 
+  arg5 = static_cast< bool >(val5);
+  result = (arg1)->HitBeam((csVector3 const &)*arg2,(csVector3 const &)*arg3,arg4,arg5);
+  resultobj = SWIG_NewPointerObj((new csHitBeamResult(static_cast< const csHitBeamResult& >(result))), SWIGTYPE_p_csHitBeamResult, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_iMeshWrapper_HitBeam__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   iMeshWrapper *arg1 = (iMeshWrapper *) 0 ;
   csVector3 *arg2 = 0 ;
@@ -28774,7 +29058,7 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_iMeshWrapper_HitBeam__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_iMeshWrapper_HitBeam__SWIG_2(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   iMeshWrapper *arg1 = (iMeshWrapper *) 0 ;
   csVector3 *arg2 = 0 ;
@@ -28822,12 +29106,12 @@ fail:
 
 SWIGINTERN PyObject *_wrap_iMeshWrapper_HitBeam(PyObject *self, PyObject *args) {
   int argc;
-  PyObject *argv[5];
+  PyObject *argv[6];
   int ii;
   
   if (!PyTuple_Check(args)) SWIG_fail;
   argc = (int)PyObject_Length(args);
-  for (ii = 0; (ii < argc) && (ii < 4); ii++) {
+  for (ii = 0; (ii < argc) && (ii < 5); ii++) {
     argv[ii] = PyTuple_GET_ITEM(args,ii);
   }
   if (argc == 3) {
@@ -28842,7 +29126,7 @@ SWIGINTERN PyObject *_wrap_iMeshWrapper_HitBeam(PyObject *self, PyObject *args) 
         int res = SWIG_ConvertPtr(argv[2], 0, SWIGTYPE_p_csVector3, 0);
         _v = SWIG_CheckState(res);
         if (_v) {
-          return _wrap_iMeshWrapper_HitBeam__SWIG_1(self, args);
+          return _wrap_iMeshWrapper_HitBeam__SWIG_2(self, args);
         }
       }
     }
@@ -28864,7 +29148,36 @@ SWIGINTERN PyObject *_wrap_iMeshWrapper_HitBeam(PyObject *self, PyObject *args) 
             _v = SWIG_CheckState(res);
           }
           if (_v) {
-            return _wrap_iMeshWrapper_HitBeam__SWIG_0(self, args);
+            return _wrap_iMeshWrapper_HitBeam__SWIG_1(self, args);
+          }
+        }
+      }
+    }
+  }
+  if (argc == 5) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_iMeshWrapper, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      int res = SWIG_ConvertPtr(argv[1], 0, SWIGTYPE_p_csVector3, 0);
+      _v = SWIG_CheckState(res);
+      if (_v) {
+        int res = SWIG_ConvertPtr(argv[2], 0, SWIGTYPE_p_csVector3, 0);
+        _v = SWIG_CheckState(res);
+        if (_v) {
+          {
+            int res = SWIG_AsVal_bool(argv[3], NULL);
+            _v = SWIG_CheckState(res);
+          }
+          if (_v) {
+            {
+              int res = SWIG_AsVal_bool(argv[4], NULL);
+              _v = SWIG_CheckState(res);
+            }
+            if (_v) {
+              return _wrap_iMeshWrapper_HitBeam__SWIG_0(self, args);
+            }
           }
         }
       }
@@ -28874,6 +29187,7 @@ SWIGINTERN PyObject *_wrap_iMeshWrapper_HitBeam(PyObject *self, PyObject *args) 
 fail:
   SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number of arguments for overloaded function 'iMeshWrapper_HitBeam'.\n"
     "  Possible C/C++ prototypes are:\n"
+    "    HitBeam(iMeshWrapper *,csVector3 const &,csVector3 const &,bool,bool)\n"
     "    HitBeam(iMeshWrapper *,csVector3 const &,csVector3 const &,bool)\n"
     "    HitBeam(iMeshWrapper *,csVector3 const &,csVector3 const &)\n");
   return NULL;
@@ -34812,6 +35126,7 @@ SWIGINTERN PyObject *_wrap_iVisibilityCuller_IntersectSegment__SWIG_0(PyObject *
   csVector3 *arg2 = 0 ;
   csVector3 *arg3 = 0 ;
   bool arg4 = (bool) false ;
+  bool arg5 = (bool) false ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   void *argp2 = 0 ;
@@ -34820,13 +35135,16 @@ SWIGINTERN PyObject *_wrap_iVisibilityCuller_IntersectSegment__SWIG_0(PyObject *
   int res3 = 0 ;
   bool val4 ;
   int ecode4 = 0 ;
+  bool val5 ;
+  int ecode5 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   PyObject * obj2 = 0 ;
   PyObject * obj3 = 0 ;
+  PyObject * obj4 = 0 ;
   SwigValueWrapper< csPtr< iVisibilityObjectIterator > > result;
   
-  if(!PyArg_UnpackTuple(args,(char *)"iVisibilityCuller_IntersectSegment",3,4,&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
+  if(!PyArg_UnpackTuple(args,(char *)"iVisibilityCuller_IntersectSegment",3,5,&obj0,&obj1,&obj2,&obj3,&obj4)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_iVisibilityCuller, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "iVisibilityCuller_IntersectSegment" "', argument " "1"" of type '" "iVisibilityCuller *""'"); 
@@ -34855,7 +35173,14 @@ SWIGINTERN PyObject *_wrap_iVisibilityCuller_IntersectSegment__SWIG_0(PyObject *
     } 
     arg4 = static_cast< bool >(val4);
   }
-  result = (arg1)->IntersectSegment((csVector3 const &)*arg2,(csVector3 const &)*arg3,arg4);
+  if (obj4) {
+    ecode5 = SWIG_AsVal_bool(obj4, &val5);
+    if (!SWIG_IsOK(ecode5)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode5), "in method '" "iVisibilityCuller_IntersectSegment" "', argument " "5"" of type '" "bool""'");
+    } 
+    arg5 = static_cast< bool >(val5);
+  }
+  result = (arg1)->IntersectSegment((csVector3 const &)*arg2,(csVector3 const &)*arg3,arg4,arg5);
   resultobj = SWIG_NewPointerObj((new csPtr< iVisibilityObjectIterator >(static_cast< const csPtr< iVisibilityObjectIterator >& >(result))), SWIGTYPE_p_csPtrT_iVisibilityObjectIterator_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
@@ -34873,6 +35198,7 @@ SWIGINTERN PyObject *_wrap_iVisibilityCuller_IntersectSegment__SWIG_1(PyObject *
   iMeshWrapper **arg6 = (iMeshWrapper **) 0 ;
   int *arg7 = (int *) 0 ;
   bool arg8 = (bool) true ;
+  bool arg9 = (bool) false ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   void *argp2 = 0 ;
@@ -34889,6 +35215,8 @@ SWIGINTERN PyObject *_wrap_iVisibilityCuller_IntersectSegment__SWIG_1(PyObject *
   int res7 = 0 ;
   bool val8 ;
   int ecode8 = 0 ;
+  bool val9 ;
+  int ecode9 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   PyObject * obj2 = 0 ;
@@ -34896,10 +35224,11 @@ SWIGINTERN PyObject *_wrap_iVisibilityCuller_IntersectSegment__SWIG_1(PyObject *
   PyObject * obj4 = 0 ;
   PyObject * obj5 = 0 ;
   PyObject * obj6 = 0 ;
+  PyObject * obj7 = 0 ;
   bool result;
   
   arg5 = &temp5;
-  if(!PyArg_UnpackTuple(args,(char *)"iVisibilityCuller_IntersectSegment",4,7,&obj0,&obj1,&obj2,&obj3,&obj4,&obj5,&obj6)) SWIG_fail;
+  if(!PyArg_UnpackTuple(args,(char *)"iVisibilityCuller_IntersectSegment",4,8,&obj0,&obj1,&obj2,&obj3,&obj4,&obj5,&obj6,&obj7)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_iVisibilityCuller, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "iVisibilityCuller_IntersectSegment" "', argument " "1"" of type '" "iVisibilityCuller *""'"); 
@@ -34950,7 +35279,14 @@ SWIGINTERN PyObject *_wrap_iVisibilityCuller_IntersectSegment__SWIG_1(PyObject *
     } 
     arg8 = static_cast< bool >(val8);
   }
-  result = (bool)(arg1)->IntersectSegment((csVector3 const &)*arg2,(csVector3 const &)*arg3,*arg4,arg5,arg6,arg7,arg8);
+  if (obj7) {
+    ecode9 = SWIG_AsVal_bool(obj7, &val9);
+    if (!SWIG_IsOK(ecode9)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode9), "in method '" "iVisibilityCuller_IntersectSegment" "', argument " "9"" of type '" "bool""'");
+    } 
+    arg9 = static_cast< bool >(val9);
+  }
+  result = (bool)(arg1)->IntersectSegment((csVector3 const &)*arg2,(csVector3 const &)*arg3,*arg4,arg5,arg6,arg7,arg8,arg9);
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   if (SWIG_IsTmpObj(res5)) {
     resultobj = SWIG_Python_AppendOutput(resultobj, SWIG_From_float((*arg5)));
@@ -34966,15 +35302,15 @@ fail:
 
 SWIGINTERN PyObject *_wrap_iVisibilityCuller_IntersectSegment(PyObject *self, PyObject *args) {
   int argc;
-  PyObject *argv[8];
+  PyObject *argv[9];
   int ii;
   
   if (!PyTuple_Check(args)) SWIG_fail;
   argc = (int)PyObject_Length(args);
-  for (ii = 0; (ii < argc) && (ii < 7); ii++) {
+  for (ii = 0; (ii < argc) && (ii < 8); ii++) {
     argv[ii] = PyTuple_GET_ITEM(args,ii);
   }
-  if ((argc >= 3) && (argc <= 4)) {
+  if ((argc >= 3) && (argc <= 5)) {
     int _v;
     void *vptr = 0;
     int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_iVisibilityCuller, 0);
@@ -34994,13 +35330,22 @@ SWIGINTERN PyObject *_wrap_iVisibilityCuller_IntersectSegment(PyObject *self, Py
             _v = SWIG_CheckState(res);
           }
           if (_v) {
-            return _wrap_iVisibilityCuller_IntersectSegment__SWIG_0(self, args);
+            if (argc <= 4) {
+              return _wrap_iVisibilityCuller_IntersectSegment__SWIG_0(self, args);
+            }
+            {
+              int res = SWIG_AsVal_bool(argv[4], NULL);
+              _v = SWIG_CheckState(res);
+            }
+            if (_v) {
+              return _wrap_iVisibilityCuller_IntersectSegment__SWIG_0(self, args);
+            }
           }
         }
       }
     }
   }
-  if ((argc >= 4) && (argc <= 7)) {
+  if ((argc >= 4) && (argc <= 8)) {
     int _v;
     void *vptr = 0;
     int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_iVisibilityCuller, 0);
@@ -35038,7 +35383,16 @@ SWIGINTERN PyObject *_wrap_iVisibilityCuller_IntersectSegment(PyObject *self, Py
                   _v = SWIG_CheckState(res);
                 }
                 if (_v) {
-                  return _wrap_iVisibilityCuller_IntersectSegment__SWIG_1(self, args);
+                  if (argc <= 7) {
+                    return _wrap_iVisibilityCuller_IntersectSegment__SWIG_1(self, args);
+                  }
+                  {
+                    int res = SWIG_AsVal_bool(argv[7], NULL);
+                    _v = SWIG_CheckState(res);
+                  }
+                  if (_v) {
+                    return _wrap_iVisibilityCuller_IntersectSegment__SWIG_1(self, args);
+                  }
                 }
               }
             }
@@ -35051,8 +35405,8 @@ SWIGINTERN PyObject *_wrap_iVisibilityCuller_IntersectSegment(PyObject *self, Py
 fail:
   SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number of arguments for overloaded function 'iVisibilityCuller_IntersectSegment'.\n"
     "  Possible C/C++ prototypes are:\n"
-    "    IntersectSegment(iVisibilityCuller *,csVector3 const &,csVector3 const &,bool)\n"
-    "    IntersectSegment(iVisibilityCuller *,csVector3 const &,csVector3 const &,csVector3 &,float *,iMeshWrapper **,int *,bool)\n");
+    "    IntersectSegment(iVisibilityCuller *,csVector3 const &,csVector3 const &,bool,bool)\n"
+    "    IntersectSegment(iVisibilityCuller *,csVector3 const &,csVector3 const &,csVector3 &,float *,iMeshWrapper **,int *,bool,bool)\n");
   return NULL;
 }
 
@@ -36755,6 +37109,104 @@ SWIGINTERN PyObject *_wrap_iPortal_HitBeamPortals__SWIG_0(PyObject *SWIGUNUSEDPA
   csVector3 *arg5 = 0 ;
   int *arg6 = (int *) 0 ;
   iSector **arg7 = (iSector **) 0 ;
+  bool arg8 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  void *argp3 = 0 ;
+  int res3 = 0 ;
+  void *argp4 = 0 ;
+  int res4 = 0 ;
+  void *argp5 = 0 ;
+  int res5 = 0 ;
+  int temp6 ;
+  int res6 = SWIG_TMPOBJ ;
+  void *argp7 = 0 ;
+  int res7 = 0 ;
+  bool val8 ;
+  int ecode8 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  PyObject * obj3 = 0 ;
+  PyObject * obj4 = 0 ;
+  PyObject * obj5 = 0 ;
+  PyObject * obj6 = 0 ;
+  iMeshWrapper *result = 0 ;
+  
+  arg6 = &temp6;
+  if(!PyArg_UnpackTuple(args,(char *)"iPortal_HitBeamPortals",7,7,&obj0,&obj1,&obj2,&obj3,&obj4,&obj5,&obj6)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_iPortal, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "iPortal_HitBeamPortals" "', argument " "1"" of type '" "iPortal *""'"); 
+  }
+  arg1 = reinterpret_cast< iPortal * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_csReversibleTransform,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "iPortal_HitBeamPortals" "', argument " "2"" of type '" "csReversibleTransform const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "iPortal_HitBeamPortals" "', argument " "2"" of type '" "csReversibleTransform const &""'"); 
+  }
+  arg2 = reinterpret_cast< csReversibleTransform * >(argp2);
+  res3 = SWIG_ConvertPtr(obj2, &argp3, SWIGTYPE_p_csVector3,  0  | 0);
+  if (!SWIG_IsOK(res3)) {
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "iPortal_HitBeamPortals" "', argument " "3"" of type '" "csVector3 const &""'"); 
+  }
+  if (!argp3) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "iPortal_HitBeamPortals" "', argument " "3"" of type '" "csVector3 const &""'"); 
+  }
+  arg3 = reinterpret_cast< csVector3 * >(argp3);
+  res4 = SWIG_ConvertPtr(obj3, &argp4, SWIGTYPE_p_csVector3,  0  | 0);
+  if (!SWIG_IsOK(res4)) {
+    SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "iPortal_HitBeamPortals" "', argument " "4"" of type '" "csVector3 const &""'"); 
+  }
+  if (!argp4) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "iPortal_HitBeamPortals" "', argument " "4"" of type '" "csVector3 const &""'"); 
+  }
+  arg4 = reinterpret_cast< csVector3 * >(argp4);
+  res5 = SWIG_ConvertPtr(obj4, &argp5, SWIGTYPE_p_csVector3,  0 );
+  if (!SWIG_IsOK(res5)) {
+    SWIG_exception_fail(SWIG_ArgError(res5), "in method '" "iPortal_HitBeamPortals" "', argument " "5"" of type '" "csVector3 &""'"); 
+  }
+  if (!argp5) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "iPortal_HitBeamPortals" "', argument " "5"" of type '" "csVector3 &""'"); 
+  }
+  arg5 = reinterpret_cast< csVector3 * >(argp5);
+  res7 = SWIG_ConvertPtr(obj5, &argp7,SWIGTYPE_p_p_iSector, 0 |  0 );
+  if (!SWIG_IsOK(res7)) {
+    SWIG_exception_fail(SWIG_ArgError(res7), "in method '" "iPortal_HitBeamPortals" "', argument " "7"" of type '" "iSector **""'"); 
+  }
+  arg7 = reinterpret_cast< iSector ** >(argp7);
+  ecode8 = SWIG_AsVal_bool(obj6, &val8);
+  if (!SWIG_IsOK(ecode8)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode8), "in method '" "iPortal_HitBeamPortals" "', argument " "8"" of type '" "bool""'");
+  } 
+  arg8 = static_cast< bool >(val8);
+  result = (iMeshWrapper *)(arg1)->HitBeamPortals((csReversibleTransform const &)*arg2,(csVector3 const &)*arg3,(csVector3 const &)*arg4,*arg5,arg6,arg7,arg8);
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_iMeshWrapper, 0 |  0 );
+  if (SWIG_IsTmpObj(res6)) {
+    resultobj = SWIG_Python_AppendOutput(resultobj, SWIG_From_int((*arg6)));
+  } else {
+    int new_flags = SWIG_IsNewObj(res6) ? (SWIG_POINTER_OWN |  0 ) :  0 ;
+    resultobj = SWIG_Python_AppendOutput(resultobj, SWIG_NewPointerObj((void*)(arg6), SWIGTYPE_p_int, new_flags));
+  }
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_iPortal_HitBeamPortals__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  iPortal *arg1 = (iPortal *) 0 ;
+  csReversibleTransform *arg2 = 0 ;
+  csVector3 *arg3 = 0 ;
+  csVector3 *arg4 = 0 ;
+  csVector3 *arg5 = 0 ;
+  int *arg6 = (int *) 0 ;
+  iSector **arg7 = (iSector **) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   void *argp2 = 0 ;
@@ -36835,7 +37287,7 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_iPortal_HitBeamPortals__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_iPortal_HitBeamPortals__SWIG_2(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   iPortal *arg1 = (iPortal *) 0 ;
   csReversibleTransform *arg2 = 0 ;
@@ -36917,12 +37369,12 @@ fail:
 
 SWIGINTERN PyObject *_wrap_iPortal_HitBeamPortals(PyObject *self, PyObject *args) {
   int argc;
-  PyObject *argv[7];
+  PyObject *argv[8];
   int ii;
   
   if (!PyTuple_Check(args)) SWIG_fail;
   argc = (int)PyObject_Length(args);
-  for (ii = 0; (ii < argc) && (ii < 6); ii++) {
+  for (ii = 0; (ii < argc) && (ii < 7); ii++) {
     argv[ii] = PyTuple_GET_ITEM(args,ii);
   }
   if (argc == 5) {
@@ -36944,7 +37396,7 @@ SWIGINTERN PyObject *_wrap_iPortal_HitBeamPortals(PyObject *self, PyObject *args
             int res = SWIG_ConvertPtr(argv[4], &vptr, SWIGTYPE_p_csVector3, 0);
             _v = SWIG_CheckState(res);
             if (_v) {
-              return _wrap_iPortal_HitBeamPortals__SWIG_1(self, args);
+              return _wrap_iPortal_HitBeamPortals__SWIG_2(self, args);
             }
           }
         }
@@ -36974,7 +37426,44 @@ SWIGINTERN PyObject *_wrap_iPortal_HitBeamPortals(PyObject *self, PyObject *args
               int res = SWIG_ConvertPtr(argv[5], &vptr, SWIGTYPE_p_p_iSector, 0);
               _v = SWIG_CheckState(res);
               if (_v) {
-                return _wrap_iPortal_HitBeamPortals__SWIG_0(self, args);
+                return _wrap_iPortal_HitBeamPortals__SWIG_1(self, args);
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  if (argc == 7) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_iPortal, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      int res = SWIG_ConvertPtr(argv[1], 0, SWIGTYPE_p_csReversibleTransform, 0);
+      _v = SWIG_CheckState(res);
+      if (_v) {
+        int res = SWIG_ConvertPtr(argv[2], 0, SWIGTYPE_p_csVector3, 0);
+        _v = SWIG_CheckState(res);
+        if (_v) {
+          int res = SWIG_ConvertPtr(argv[3], 0, SWIGTYPE_p_csVector3, 0);
+          _v = SWIG_CheckState(res);
+          if (_v) {
+            void *vptr = 0;
+            int res = SWIG_ConvertPtr(argv[4], &vptr, SWIGTYPE_p_csVector3, 0);
+            _v = SWIG_CheckState(res);
+            if (_v) {
+              void *vptr = 0;
+              int res = SWIG_ConvertPtr(argv[5], &vptr, SWIGTYPE_p_p_iSector, 0);
+              _v = SWIG_CheckState(res);
+              if (_v) {
+                {
+                  int res = SWIG_AsVal_bool(argv[6], NULL);
+                  _v = SWIG_CheckState(res);
+                }
+                if (_v) {
+                  return _wrap_iPortal_HitBeamPortals__SWIG_0(self, args);
+                }
               }
             }
           }
@@ -36986,6 +37475,7 @@ SWIGINTERN PyObject *_wrap_iPortal_HitBeamPortals(PyObject *self, PyObject *args
 fail:
   SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number of arguments for overloaded function 'iPortal_HitBeamPortals'.\n"
     "  Possible C/C++ prototypes are:\n"
+    "    HitBeamPortals(iPortal *,csReversibleTransform const &,csVector3 const &,csVector3 const &,csVector3 &,int *,iSector **,bool)\n"
     "    HitBeamPortals(iPortal *,csReversibleTransform const &,csVector3 const &,csVector3 const &,csVector3 &,int *,iSector **)\n"
     "    HitBeamPortals(iPortal *,csReversibleTransform const &,csVector3 const &,csVector3 const &,csVector3 &,int *)\n");
   return NULL;

@@ -805,6 +805,7 @@ class csIntersect3(object):
     PlanePolygon = staticmethod(_csgeom.csIntersect3_PlanePolygon)
     SegmentFrustum = staticmethod(_csgeom.csIntersect3_SegmentFrustum)
     SegmentTriangle = staticmethod(_csgeom.csIntersect3_SegmentTriangle)
+    SegmentTriangleBF = staticmethod(_csgeom.csIntersect3_SegmentTriangleBF)
     SegmentPolygon = staticmethod(_csgeom.csIntersect3_SegmentPolygon)
     SegmentPlanes = staticmethod(_csgeom.csIntersect3_SegmentPlanes)
     SegmentPlane = staticmethod(_csgeom.csIntersect3_SegmentPlane)
@@ -840,6 +841,7 @@ csIntersect3_swigregister(csIntersect3)
 csIntersect3_PlanePolygon = _csgeom.csIntersect3_PlanePolygon
 csIntersect3_SegmentFrustum = _csgeom.csIntersect3_SegmentFrustum
 csIntersect3_SegmentTriangle = _csgeom.csIntersect3_SegmentTriangle
+csIntersect3_SegmentTriangleBF = _csgeom.csIntersect3_SegmentTriangleBF
 csIntersect3_SegmentPolygon = _csgeom.csIntersect3_SegmentPolygon
 csIntersect3_SegmentPlanes = _csgeom.csIntersect3_SegmentPlanes
 csIntersect3_SegmentPlane = _csgeom.csIntersect3_SegmentPlane
