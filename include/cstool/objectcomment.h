@@ -39,7 +39,7 @@ namespace Persistence
 /**
  * Default implementation of iObjectComment.
  */
-class CS_CRYSTALSPACE_EXPORT ObjectComment : public scfImplementationExt1<
+class ObjectComment : public scfImplementationExt1<
 					     ObjectComment,csObject,iObjectComment>
 {
 private:
