@@ -147,11 +147,18 @@ CS_PLUGIN_NAMESPACE_BEGIN(ShaderWeaver)
 	return annotateString.GetData();
       }
       
+      /// Structure to track what default inputs to emit.
+      struct EmittedInput;
+      typedef csArray<EmittedInput> EmittedInputArray;
+      void EmitInputs (const Snippet::Technique::CombinerPlugin& comb,
+        const EmittedInputArray& emitInputs);
+
       bool FindOutput (const TechniqueGraph& graph,
 	const char* desiredType,
 	CS::PluginCommon::ShaderWeaver::iCombiner* combiner,
 	const Snippet::Technique*& outTechnique,
 	Snippet::Technique::Output& theOutput);
+
       bool FindExplicitOutput (const TechniqueGraph& graph,
 	const char* outputName, const char* desiredType,
 	CS::PluginCommon::ShaderWeaver::iCombiner* combiner,
@@ -311,15 +318,6 @@ CS_PLUGIN_NAMESPACE_BEGIN(ShaderWeaver)
 	  return array.GetSize(); 
 	}
       };
-    };
-
-    /// Structure to track what default inputs to emit.
-    struct EmittedInput
-    {
-      const SynthesizeNodeTree::Node* node;
-      const Snippet::Technique::Input* input;
-      csArray<csString> conditions;
-      csString tag;
     };
   public:
     WeaverCompiler* compiler;
