@@ -359,6 +359,14 @@ CS_PLUGIN_NAMESPACE_BEGIN(ShaderWeaver)
     }
   }
   
+  struct Synthesizer::SynthesizeTechnique::EmittedInput
+  {
+    const SynthesizeNodeTree::Node* node;
+    const Snippet::Technique::Input* input;
+    csArray<csString> conditions;
+    csString tag;
+  };
+
   Synthesizer::SynthesizeTechnique::Result Synthesizer::SynthesizeTechnique::operator() (
     ShaderVarNodesHelper& shaderVarNodes, iDocumentNode* errorNode,
     const Snippet* snippet, const TechniqueGraph& techGraph)
@@ -742,63 +750,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(ShaderWeaver)
           graph.AddConnection (newConnections[c]);
       }
 
-      for (size_t i = 0; i < emitInputs.GetSize(); i++)
-      {
-        const EmittedInput& emitted = emitInputs[i];
-        const Snippet::Technique::Input& inp = *emitted.input;
-
-        const char* snippetAnnotate = GetAnnotation ("input %s tag %s",
-          CS::Quote::Double (inp.name.GetData()),
-	  CS::Quote::Double (emitted.tag.GetData()));
-	defaultCombiner->BeginSnippet (snippetAnnotate);
-	combiner->BeginSnippet (snippetAnnotate);
-	for (size_t b = 0; b < inp.complexBlocks.GetSize(); b++)
-	{
-	  const Snippet::Technique::Block& block = 
-	    inp.complexBlocks[b];
-	  csRef<WeaverCommon::iCombiner> theCombiner (GetCombiner (
-	    combiner, *comb, block.combinerName, emitted.node->tech));
-          if (theCombiner.IsValid())
-          {
-            csRef<iDocumentNode> node;
-            if (emitted.conditions.GetSize() > 0)
-            {
-              /* Synthesize <?if?>/<?endif?> nodes around block 
-                 contents */
-              csString conditionStr;
-              conditionStr.AppendFmt ("(%s)", emitted.conditions[0].GetData());
-              for (size_t c = 1; c < emitted.conditions.GetSize(); c++)
-                conditionStr.AppendFmt (" || (%s)", 
-                  emitted.conditions[c].GetData());
-              node = EncloseInCondition (block.node, conditionStr);
-            }
-            else
-              node = block.node;
-            if (!theCombiner->WriteBlock (block.location, node)
-                && (theCombiner != defaultCombiner))
-            {
-              /* HACK: Fall back to default combiner; done to be able to
-               * use locations of the default combiner, but filtered by
-               * the actual combiner being used (e.g. "cg:pass" or
-               * "glsl:pass"). */
-              defaultCombiner->WriteBlock (block.location, node);
-            }
-          }
-        }
-		  
-        csString inpOutputName;
-	inpOutputName.Format ("_in_%s_", inp.name.GetData());
-	combiner->AddGlobal (inpOutputName, inp.type,
-          GetAnnotation ("Unique name for default input %s tag %s",
-	    CS::Quote::Double (inp.name.GetData()), 
-	    CS::Quote::Double (emitted.tag.GetData())));
-		  
-	combiner->AddOutput (inp.name, inp.type);
-	combiner->OutputRename (inp.name, inpOutputName);
-
-	combiner->EndSnippet ();
-	defaultCombiner->EndSnippet ();
-      }
+      EmitInputs (*comb, emitInputs);
     }
     synthTree.Collapse (graph);
     {
@@ -968,6 +920,68 @@ CS_PLUGIN_NAMESPACE_BEGIN(ShaderWeaver)
     
     return synthResult;
   }
+
+  void Synthesizer::SynthesizeTechnique::EmitInputs (const Snippet::Technique::CombinerPlugin& comb,
+                                                     const EmittedInputArray& emitInputs)
+  {
+    for (size_t i = 0; i < emitInputs.GetSize(); i++)
+    {
+      const EmittedInput& emitted = emitInputs[i];
+      const Snippet::Technique::Input& inp = *emitted.input;
+
+      const char* snippetAnnotate = GetAnnotation ("input %s tag %s",
+        CS::Quote::Double (inp.name.GetData()),
+	CS::Quote::Double (emitted.tag.GetData()));
+      defaultCombiner->BeginSnippet (snippetAnnotate);
+      combiner->BeginSnippet (snippetAnnotate);
+      for (size_t b = 0; b < inp.complexBlocks.GetSize(); b++)
+      {
+	const Snippet::Technique::Block& block = 
+	  inp.complexBlocks[b];
+	csRef<WeaverCommon::iCombiner> theCombiner (GetCombiner (
+	  combiner, comb, block.combinerName, emitted.node->tech));
+        if (theCombiner.IsValid())
+        {
+          csRef<iDocumentNode> node;
+          if (emitted.conditions.GetSize() > 0)
+          {
+            /* Synthesize <?if?>/<?endif?> nodes around block 
+                contents */
+            csString conditionStr;
+            conditionStr.AppendFmt ("(%s)", emitted.conditions[0].GetData());
+            for (size_t c = 1; c < emitted.conditions.GetSize(); c++)
+              conditionStr.AppendFmt (" || (%s)", 
+                emitted.conditions[c].GetData());
+            node = EncloseInCondition (block.node, conditionStr);
+          }
+          else
+            node = block.node;
+          if (!theCombiner->WriteBlock (block.location, node)
+              && (theCombiner != defaultCombiner))
+          {
+            /* HACK: Fall back to default combiner; done to be able to
+              * use locations of the default combiner, but filtered by
+              * the actual combiner being used (e.g. "cg:pass" or
+              * "glsl:pass"). */
+            defaultCombiner->WriteBlock (block.location, node);
+          }
+        }
+      }
+		  
+      csString inpOutputName;
+      inpOutputName.Format ("_in_%s_", inp.name.GetData());
+      combiner->AddGlobal (inpOutputName, inp.type,
+        GetAnnotation ("Unique name for default input %s tag %s",
+	  CS::Quote::Double (inp.name.GetData()), 
+	  CS::Quote::Double (emitted.tag.GetData())));
+		  
+      combiner->AddOutput (inp.name, inp.type);
+      combiner->OutputRename (inp.name, inpOutputName);
+
+      combiner->EndSnippet ();
+      defaultCombiner->EndSnippet ();
+    }
+}
   
   bool Synthesizer::SynthesizeTechnique::FindOutput (const TechniqueGraph& graph,
     const char* desiredType, WeaverCommon::iCombiner* combiner,
