@@ -625,7 +625,7 @@ public:
    * \remarks The comparison is case-sensitive.
    */
   bool Compare (const char* iStr) const
-  { return (strcmp (GetDataSafe(), iStr) == 0); }
+  { return (strcmp (GetDataSafe(), iStr ? iStr : "") == 0); }
 
   /**
    * Check if another string is equal to this one.
