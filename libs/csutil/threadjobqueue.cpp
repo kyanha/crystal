@@ -88,7 +88,11 @@ namespace Threading
     while (true)
     {
       // Find a thread (on random) to add it to
-      size_t targetThread = rgen.Get ((uint32)numWorkerThreads);
+      size_t targetThread;
+      {
+        MutexScopedLock l (rgenLock);
+        targetThread = rgen.Get ((uint32)numWorkerThreads);
+      }
 
       // Lock, add and notify
       ThreadState* ts = allThreadState[targetThread];
