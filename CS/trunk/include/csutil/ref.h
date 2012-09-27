@@ -236,7 +236,7 @@ public:
    * \remarks
    * This function calls the object's IncRef() method. Because of this you
    * should not assign a reference created with the new operator to a csRef
-   * object driectly. The following code will produce a memory leak:
+   * object directly. The following code will produce a memory leak:
    * \code
    * csRef<iEvent> event = new csEvent;
    * \endcode
