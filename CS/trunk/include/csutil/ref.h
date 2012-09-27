@@ -27,6 +27,7 @@
 #include "csextern.h"
 
 #include "csutil/customallocated.h"
+#include "csutil/threading/atomicops.h"
 
 #define CS_VOIDED_PTR ((intptr_t)-1)
 
@@ -79,6 +80,12 @@ template <class T> class csRef;
  * \b Important: There is only one valid way to use the result of a function 
  * which returns a csPtr<>: assign it to a csRef<>.
  *
+ * \par Thread safety:
+ *   It is \b not safe to use a csPtr<> instance concurrent in multiple
+ *   threads. If you need to work with an object in multiple threads,
+ *   first assign it to a csRef<> on the originating thread (and only there)
+ *   and pass around the csRef<> (or a copy).
+ *
  * \remarks An extended explanation on smart pointers - how they work and what
  *   type to use in what scenario - is contained in the User's manual, 
  *   section "Correctly Using Smart Pointers".
@@ -126,6 +133,35 @@ public:
  * reference-counted object.  This template requires only that the object type
  * T implement the methods IncRef() and DecRef().  No other requirements are
  * placed upon T.
+ *
+ * \par Thread safety:
+ * A csRef<> will always have a consistent state, even when assigned another
+ * csRef<>s or pointers from multiple threads concurrently.
+ *
+ * <b>Caveat:</b> However, when assigning a value to a csRef<>
+ * from multiple threads, no statement on \em what value &ldquo;wins&rdquo;
+ * can be given. You will have to use other synchronization measures if you
+ * require a guarantee on the value a csRef<> used in such way ends up with.
+ *
+ * The following code gives an example for correct, concurrent initialization
+ * of a shared csRef<>:
+ * \code
+ * csRef<Foo> my_ref (shared_ref);
+ * if (!my_ref)
+ * {
+ *   // This statements is safe as it only deals with &ldquo;local&rdquo;
+ *   // data:
+ *   my_ref.AttachNew (new Foo);
+ *   // The next statement can be executed concurrently
+ *   shared_ref = my_ref;
+ *   // shared_ref may, or may _not_, have the value of my_ref.
+ * }
+ * // ...work with my_ref
+ * \endcode
+ * ...but be aware that you can only rely on \c my_ref being a valid reference;
+ * it doesn't have to be the same as \c shared_ref. If you need such
+ * guarantees you have to use &ldquo;stronger&rdquo; synchronization (e.g.
+ * protect the check+assignment with a mutex).
  *
  * \remarks An extended explanation on smart pointers - how they work and what
  *   type to use in what scenario - is contained in the User's manual, 
@@ -217,17 +253,26 @@ public:
    */
   csRef& operator = (const csPtr<T>& newobj)
   {
-    T* oldobj = obj;
-    // First assign and then DecRef() of old object!
-    obj = newobj.obj;
 #   ifdef CS_TEST_VOIDPTRUSAGE
     CS_ASSERT_MSG ("csPtr<> was already assigned to a csRef<>",
       newobj.obj != (T*)CS_VOIDED_PTR);
 #   endif
+    T* oldobj = (T*)CS::Threading::AtomicOperations::Read ((void**)&obj);
+    // First assign and then DecRef() of old object!
+    if (CS::Threading::AtomicOperations::CompareAndSet ((void**)&obj,
+      newobj.obj, oldobj) == oldobj)
+    {
+      CSREF_TRACK_DECREF (oldobj, this);
+    }
+    else
+    {
+      /* Assign was not successful. But to pretend we have taken ownership,
+       * DecRef() new object */
+      CSREF_TRACK_DECREF (newobj.obj, this);
+    }
     // The following line is outside the ifdef to make sure
     // we have binary compatibility.
     ((csPtr<T>&)newobj).obj = (T*)CS_VOIDED_PTR;
-    CSREF_TRACK_DECREF (oldobj, this);
     return *this;
   }
 
@@ -245,16 +290,19 @@ public:
    */
   csRef& operator = (T* newobj)
   {
-    if (obj != newobj)
+    T* oldobj = (T*)CS::Threading::AtomicOperations::Read ((void**)&obj);
+    if (oldobj != newobj)
     {
-      T* oldobj = obj;
       // It is very important to first assign the new value to
       // 'obj' BEFORE calling DecRef() on the old object. Otherwise
       // it is easy to get in infinite loops with objects being
       // destructed forever (when ref=0 is used for example).
-      obj = newobj;
-      CSREF_TRACK_INCREF (newobj, this);
-      CSREF_TRACK_DECREF (oldobj, this);
+      if (CS::Threading::AtomicOperations::CompareAndSet ((void**)&obj,
+        newobj, oldobj) == oldobj)
+      {
+        CSREF_TRACK_INCREF (newobj, this);
+        CSREF_TRACK_DECREF (oldobj, this);
+      }
     }
     return *this;
   }
