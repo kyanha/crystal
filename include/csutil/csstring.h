@@ -1023,9 +1023,9 @@ protected:
       csStringBase::SetCapacityInternal(NewSize, soft);
     else
     {
-      NewSize++; // Plus one for implicit null byte.
-      if (NewSize <= LEN)
+      if (NewSize < LEN)
       {
+        NewSize++; // Plus one for implicit null byte.
 	// minibuff may still be wholly uninitialized, so ensure a null terminator
 	if (miniused == 0) minibuff[0] = 0;
 	miniused = NewSize;
@@ -1033,14 +1033,8 @@ protected:
       else
       {
 	CS_ASSERT(MaxSize == 0);
-	if (soft)
-	  NewSize = ComputeNewSize (NewSize);
-	Data = new char[NewSize];
-	MaxSize = NewSize;
-	if (Size == 0)
-	  Data[0] = '\0';
-	else
-	  memcpy(Data, minibuff, Size + 1);
+        csStringBase::SetCapacityInternal(NewSize, soft);
+	memcpy(Data, minibuff, Size + 1);
       }
     }
   }
