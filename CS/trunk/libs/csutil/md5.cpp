@@ -348,13 +348,13 @@ void MD5::Append (const uint8* input, size_t length)
   
   if (length <= u32_max)
   {
-    AppendInternal (input, length);
+    AppendInternal (input, uint32 (length));
     return;
   }
   
   while (length > 0)
   {
-    uint32 chunk = csMin (length, size_t (u32_max));
+    uint32 chunk = uint32 (csMin (length, size_t (u32_max)));
     AppendInternal (input, chunk);
     input += chunk;
     length -= chunk;
