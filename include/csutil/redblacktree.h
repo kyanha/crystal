@@ -1165,7 +1165,7 @@ public:
    */
   bool Delete (const K& key)
   {
-    csRedBlackTreePayload<K, T>* payload = FindInternal (key);
+    csRedBlackTreePayload<K, T>* payload = this->FindInternal (key);
     if (payload == 0) return false;
     return supahclass::DeleteExact (payload);
   }
@@ -1176,13 +1176,13 @@ public:
    */
   const T* GetElementPointer (const K& key) const
   {
-    const csRedBlackTreePayload<K, T>* payload = Find (key);
+    const csRedBlackTreePayload<K, T>* payload = this->Find (key);
     if (payload == 0) return 0;
     return &payload->GetValue();
   }
   T* GetElementPointer (const K& key)
   {
-    csRedBlackTreePayload<K, T>* payload = FindInternal (key);
+    csRedBlackTreePayload<K, T>* payload = this->FindInternal (key);
     if (payload == 0) return 0;
     return &payload->GetValue();
   }
@@ -1200,7 +1200,7 @@ public:
   }
   T& Get (const K& key, T& fallback)
   {
-    csRedBlackTreePayload<K, T>* payload = FindInternal (key);
+    csRedBlackTreePayload<K, T>* payload = this->FindInternal (key);
     if (payload == 0) return fallback;
     return payload->GetValue();
   }
