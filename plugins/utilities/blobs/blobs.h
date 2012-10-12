@@ -365,6 +365,7 @@ public:
 
 struct csGeomObject
 {
+  virtual ~csGeomObject ()  { }
   virtual void Draw (csBlobManager* mgr, int px, int py) = 0;
   virtual void ChangeColor (int color) = 0;
   virtual void ChangeText (const char* text) = 0;
