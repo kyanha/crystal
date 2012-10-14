@@ -2458,8 +2458,7 @@ void csBugPlug::Dump (iSector* sector)
   {
     iMeshWrapper* mesh = sector->GetMeshes ()->Get (i);
     const char* n = mesh->QueryObject ()->GetName ();
-    Report (CS_REPORTER_SEVERITY_DEBUG, "        Mesh %s (%08p)",
-    	CS::Quote::Single (n ? n : "?"), mesh);
+    Dump (8, mesh);
   }
 }
 
@@ -2468,6 +2467,18 @@ void csBugPlug::Dump (int indent, iMeshWrapper* mesh)
   const char* mn = mesh->QueryObject ()->GetName ();
   Report (CS_REPORTER_SEVERITY_DEBUG, "%*s    Mesh wrapper %s (%08p)", 
     indent, "", CS::Quote::Single (mn ? mn : "?"), mesh);
+
+  const csFlags& flags = mesh->GetFlags ();
+  csString strFlags;
+  if (flags.Check (CS_ENTITY_DETAIL)) strFlags += "DETAIL ";
+  if (flags.Check (CS_ENTITY_CAMERA)) strFlags += "CAMERA ";
+  if (flags.Check (CS_ENTITY_INVISIBLEMESH)) strFlags += "INVISIBLEMESH ";
+  if (flags.Check (CS_ENTITY_NOHITBEAM)) strFlags += "NOHITBEAM ";
+  if (flags.Check (CS_ENTITY_NOSHADOWS)) strFlags += "NOSHADOWS ";
+  if (flags.Check (CS_ENTITY_NOLIGHTING)) strFlags += "NOLIGHTING ";
+  if (flags.Check (CS_ENTITY_NOCLIP)) strFlags += "NOCLIP ";
+  Report (CS_REPORTER_SEVERITY_DEBUG, "%*s        Flags: %s", indent, "", strFlags.GetData ());
+
   iMeshObject* obj = mesh->GetMeshObject ();
   if (!obj)
   {
