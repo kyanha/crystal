@@ -727,9 +727,10 @@ void csGraphics2DOpenGL::AllowResize (bool iAllow)
   }
 }
 
-bool csGraphics2DOpenGL::Resize (int width, int height)
+bool csGraphics2DOpenGL::CanvasResize (int width, int height)
 {
-  if (!csGraphics2DGLCommon::Resize (width, height)) return false;
+  if (!CS::PluginCommon::GL::CanvasCommonBase::CanvasResize (width, height))
+    return false;
 
   if (is_open && !FullScreen)
   {
