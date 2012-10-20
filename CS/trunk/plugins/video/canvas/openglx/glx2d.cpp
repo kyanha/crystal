@@ -543,9 +543,9 @@ void csGraphics2DGLX::AllowResize (bool iAllow)
   xwin->AllowResize (iAllow);
 }
 
-bool csGraphics2DGLX::Resize (int w, int h)
+bool csGraphics2DGLX::CanvasResize (int w, int h)
 {
-  if (!csGraphics2DGLCommon::Resize (w, h)) return false;
+  if (!csGraphics2DGLCommon::CanvasResize (w, h)) return false;
   xwin->Resize (w, h);
   return true;
 }
