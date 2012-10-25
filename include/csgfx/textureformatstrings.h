@@ -276,7 +276,7 @@ namespace CS
      * Convert this structured format to canonical format.
      * \sa \ref tfs_g_canonical
      */
-    csString GetCanonical ();
+    csString GetCanonical () const;
 
     bool operator== (const StructuredTextureFormat& other) const
     {
@@ -315,7 +315,7 @@ namespace CS
     }
 
     /// Returns whether the contained format is a valid texture format.
-    bool IsValid () { return cd.format != Invalid; }
+    bool IsValid () const { return cd.format != Invalid; }
 
     /**
      * Returns the number of components in this format. Returns 0 for
