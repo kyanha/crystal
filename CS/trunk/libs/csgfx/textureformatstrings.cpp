@@ -106,7 +106,7 @@ void StructuredTextureFormat::FixSizes ()
   }
 }
 
-csString StructuredTextureFormat::GetCanonical ()
+csString StructuredTextureFormat::GetCanonical () const
 {
   if (cd.format == Invalid) return csString ();
   if ((cd.format &  ~SpecialStrExtern) == Special) return GetSpecial();
