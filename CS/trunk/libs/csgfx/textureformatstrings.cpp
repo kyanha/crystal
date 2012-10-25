@@ -172,7 +172,7 @@ StructuredTextureFormat TextureFormatStrings::ConvertStructured (const char* in)
   do
   {
     char cmp = *in++;
-    if (strchr ("rgbalds", cmp) == 0) return StructuredTextureFormat ();
+    if (strchr ("rgbaldsx", cmp) == 0) return StructuredTextureFormat ();
 
     int s = 0;
     while (isdigit (*in))
