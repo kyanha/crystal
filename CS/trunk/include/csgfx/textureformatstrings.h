@@ -165,13 +165,60 @@ namespace CS
     void FreeSpecialStr ();
   public:
     /// Construct an invalid texture format.
-    StructuredTextureFormat ();
+    StructuredTextureFormat ()
+    {
+      cd.coded_components = CONST_UINT64 (0);
+      cd.format = Invalid;
+    }
+    /// Construct a texture format with the given format but no components.
+    StructuredTextureFormat (TextureFormat fmt)
+    {
+      cd.coded_components = CONST_UINT64 (0);
+      cd.format = fmt;
+    }
+    //@{
     /// Construct a texture format with the given components and sizes.
     StructuredTextureFormat (char cmp1, int size1,
-      char cmp2 = 0, int size2 = 0,
-      char cmp3 = 0, int size3 = 0,
-      char cmp4 = 0, int size4 = 0,
-      TextureFormat fmt = Integer);
+      TextureFormat fmt = Integer)
+    {
+      cd.coded_components = CONST_UINT64 (0);
+      cd.format = fmt;
+      if (cmp1 != 0) AddComponent (cmp1, size1);
+    }
+    StructuredTextureFormat (char cmp1, int size1,
+      char cmp2, int size2,
+      TextureFormat fmt = Integer)
+    {
+      cd.coded_components = CONST_UINT64 (0);
+      cd.format = fmt;
+      if (cmp1 != 0) AddComponent (cmp1, size1);
+      if (cmp2 != 0) AddComponent (cmp2, size2);
+    }
+    StructuredTextureFormat (char cmp1, int size1,
+      char cmp2, int size2,
+      char cmp3, int size3,
+      TextureFormat fmt = Integer)
+    {
+      cd.coded_components = CONST_UINT64 (0);
+      cd.format = fmt;
+      if (cmp1 != 0) AddComponent (cmp1, size1);
+      if (cmp2 != 0) AddComponent (cmp2, size2);
+      if (cmp3 != 0) AddComponent (cmp3, size3);
+    }
+    StructuredTextureFormat (char cmp1, int size1,
+      char cmp2, int size2,
+      char cmp3, int size3,
+      char cmp4, int size4,
+      TextureFormat fmt = Integer)
+    {
+      cd.coded_components = CONST_UINT64 (0);
+      cd.format = fmt;
+      if (cmp1 != 0) AddComponent (cmp1, size1);
+      if (cmp2 != 0) AddComponent (cmp2, size2);
+      if (cmp3 != 0) AddComponent (cmp3, size3);
+      if (cmp4 != 0) AddComponent (cmp4, size4);
+    }
+    //@}
     /// Copy constructor
     StructuredTextureFormat (const StructuredTextureFormat& other);
     /// Destruct texture format
@@ -190,7 +237,15 @@ namespace CS
      * \remarks No effect for special formats.
      * \return Whether the component could be added or not.
      */
-    bool AddComponent (char cmp, int size);
+    bool AddComponent (char cmp, int size)
+    {
+      if (GetFormat() == Special) return false;
+      uint64 shifted = cd.coded_components << 16;
+      if ((shifted >> 16) != cd.coded_components)
+        return false;
+      cd.coded_components = shifted + (CONST_UINT64 (256) * cmp) + size;
+      return true;
+    }
 
     /**
      * Set the format.
@@ -211,6 +266,11 @@ namespace CS
      * are filled with the given size.
      */
     void FixSizes (int size);
+    /**
+     * Fixes unset sizes (i.e. 0 sizes) by filling them with the next following
+     * given size.
+     */
+    void FixSizes ();
 
     /**
      * Convert this structured format to canonical format.
@@ -287,7 +347,7 @@ namespace CS
     }
 
     /**
-     * Get size of the nth component. 
+     * Get size of the <em>n</em>th component. 
      * \remarks If there is no such component 0 is returned. However, this 
      *   return value does \em not imply that a component doesn not exist,
      *   as 0-sized components can be added by AddComponent(). Only the
