@@ -31,36 +31,6 @@ csString TextureFormatStrings::ConvertCanonical (const char* in)
 
 //--------------------------------------------------------------------------------
 
-StructuredTextureFormat::StructuredTextureFormat ()
-{
-  cd.coded_components = CONST_UINT64 (0);
-  cd.format = Invalid;
-}
-    
-StructuredTextureFormat::StructuredTextureFormat (
-  char cmp1, int size1,
-  char cmp2, int size2,
-  char cmp3, int size3,
-  char cmp4, int size4,
-  TextureFormat fmt)
-{
-  cd.coded_components = CONST_UINT64 (0);
-  cd.format = fmt;
-  if (cmp1 != 0) 
-  {
-    AddComponent (cmp1, size1);
-    if (cmp2 != 0)
-    {
-      AddComponent (cmp2, size2);
-      if (cmp3 != 0)
-      {
-        AddComponent (cmp3, size3);
-        if (cmp4 != 0) AddComponent (cmp4, size4);
-      }
-    }
-  }
-}
-
 StructuredTextureFormat::StructuredTextureFormat (const StructuredTextureFormat& other)
 {
   cd.format = Invalid;
@@ -102,16 +72,6 @@ void StructuredTextureFormat::SetSpecial (const char* special)
   }
 }
 
-bool StructuredTextureFormat::AddComponent (char cmp, int size)
-{
-  if (GetFormat() == Special) return false;
-  uint64 shifted = cd.coded_components << 16;
-  if ((shifted >> 16) != cd.coded_components)
-    return false;
-  cd.coded_components = shifted + (CONST_UINT64 (256) * cmp) + size;
-  return true;
-}
-
 void StructuredTextureFormat::FixSizes (int size)
 {
   if (GetFormat() == Special) return;
@@ -124,6 +84,26 @@ void StructuredTextureFormat::FixSizes (int size)
   if (p3 != 0 && (p3 & 255) == 0) p3 += size;
   if (p4 != 0 && (p4 & 255) == 0) p4 += size;
   cd.coded_components = (uint64 (p1) << 48) + (uint64 (p2) << 32) + (p3 << 16) + p4;
+}
+
+void StructuredTextureFormat::FixSizes ()
+{
+  if (GetFormat() == Special) return;
+  int lastComp (GetComponentCount()-1);
+  if (lastComp < 0) return;
+  int c (lastComp);
+  int rightSize (GetComponentSize (c));
+  while (c-- > 0)
+  {
+    int size (GetComponentSize (c));
+    if (size == 0)
+    {
+      cd.coded_components &= ~(CONST_UINT64(255) << (16 * (lastComp - c)));
+      cd.coded_components |= (uint64(rightSize) << (16 * (lastComp - c)));
+    }
+    else
+      rightSize = size;
+  }
 }
 
 csString StructuredTextureFormat::GetCanonical ()
@@ -206,6 +186,7 @@ StructuredTextureFormat TextureFormatStrings::ConvertStructured (const char* in)
   }
   while (*in && *in != '_');
 
+  // Parse format specifier
   StructuredTextureFormat::TextureFormat format = 
     StructuredTextureFormat::Integer;
   if (*in == '_')
@@ -220,6 +201,8 @@ StructuredTextureFormat TextureFormatStrings::ConvertStructured (const char* in)
       return StructuredTextureFormat ();
   }
   out.SetFormat (format);
+  out.FixSizes ();
+  // Next is "legacy" behaviour. But makes stuff like "r8gb" work
   out.FixSizes (lastsize);
   return out;
 }
