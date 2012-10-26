@@ -162,9 +162,10 @@ CS_PLUGIN_NAMESPACE_BEGIN(AssimpLoader)
       ImportAnimeshSkeleton
 	(&animeshData, node, CS::Animation::InvalidBoneID, aiMatrix4x4 ());
 
-      printf ("Skeleton: %i bones:\n%s\n",
-	      (int) animeshData.factory->GetSkeletonFactory()->GetTopBoneID (),
-	      animeshData.factory->GetSkeletonFactory()->Description().GetData());
+      if (doVerbose)
+	printf ("Skeleton: %i bones:\n%s\n",
+		(int) animeshData.factory->GetSkeletonFactory()->GetTopBoneID (),
+		animeshData.factory->GetSkeletonFactory()->Description().GetData());
       
       if (animeshData.factory->GetVertexCount () > 0)
       {
@@ -583,7 +584,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(AssimpLoader)
 	// Temporary debug: set a debug node as the root of the animation tree
 	csRef<CS::Animation::iSkeletonDebugNodeManager> debugNodeManager =
 	  csQueryRegistryOrLoad<CS::Animation::iSkeletonDebugNodeManager>
-	  (object_reg, "crystalspace.mesh.animesh.animnode.debug");
+	  (objectRegistry, "crystalspace.mesh.animesh.animnode.debug");
 	if (!debugNodeManager)
 	{
 	  ReportWarning ("Failed to locate debug node plugin!");

@@ -34,9 +34,24 @@ CS_PLUGIN_NAMESPACE_BEGIN(AssimpLoader)
    */
   bool AssimpProgressHandler::Update (float percentage)
   {
-    printf (".");
+    //printf (".");
     // TODO: let the user abort the loading
     return true;
+  }
+
+  /**
+   * Logging
+   */
+
+  void Logger::write (const char* message)
+  {
+    // Remove the Assimp formatting of the message before reporting it
+    csString txt = message;
+    txt.RTrim ();
+    size_t index = txt.FindFirst (':');
+    csReport (objectRegistry, severity,
+	      "crystalspace.mesh.loader.factory.assimp",
+	      "%s", txt.Slice (index + 2, txt.Length () - 1).GetData ());
   }
 
   /**
@@ -46,7 +61,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(AssimpLoader)
   {
     va_list arg;
     va_start (arg, description);
-    csReportV (object_reg, CS_REPORTER_SEVERITY_ERROR,
+    csReportV (objectRegistry, CS_REPORTER_SEVERITY_ERROR,
 	       "crystalspace.mesh.loader.factory.assimp",
 	       description, arg);
     va_end (arg);
@@ -56,7 +71,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(AssimpLoader)
   {
     va_list arg;
     va_start (arg, description);
-    csReportV (object_reg, CS_REPORTER_SEVERITY_WARNING,
+    csReportV (objectRegistry, CS_REPORTER_SEVERITY_WARNING,
 	       "crystalspace.mesh.loader.factory.assimp",
 	       description, arg);
     va_end (arg);

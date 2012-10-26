@@ -175,12 +175,17 @@ CS_PLUGIN_NAMESPACE_BEGIN(AssimpLoader)
   class csIOSystem : public Assimp::IOSystem
   {
   public:
-    csIOSystem (iVFS* vfs, const char* filename)
+    csIOSystem (iVFS* vfs, csString* file)
       : vfs (vfs), changer (vfs)
     {
-      csString file = filename;
-      if (filename && file.FindFirst ('/') != (size_t) -1)
-	changer.ChangeTo (filename);
+      // Check for a root path to move to
+      if (!file) return;
+
+      size_t index = file->FindLast ('/');
+      if (index == (size_t) -1) return;
+
+      changer.ChangeToFull (file->Slice (0, index));
+      *file = file->Slice (index + 1);
     }
 
     ~csIOSystem () {}
@@ -195,10 +200,8 @@ CS_PLUGIN_NAMESPACE_BEGIN(AssimpLoader)
 
     Assimp::IOStream* Open (const char *pFile, const char *pMode="rb")
     {
-      printf ("Opening file [%s]...", pFile); 
-      csRef<iFile> file = vfs->Open (pFile,
-				     *pMode == 'w' ? VFS_FILE_WRITE : VFS_FILE_READ);
-      printf (file ? "Success\n" : "Failed!\n");
+      csRef<iFile> file = vfs->Open
+	(pFile, *pMode == 'w' ? VFS_FILE_WRITE : VFS_FILE_READ);
       return new csIOStream (file);
     }
 
@@ -208,6 +211,34 @@ CS_PLUGIN_NAMESPACE_BEGIN(AssimpLoader)
   private:
     csRef<iVFS> vfs;
     csVfsDirectoryChanger changer;
+  };
+
+  /**
+   * Progress reporting
+   */
+
+  struct AssimpProgressHandler : public Assimp::ProgressHandler
+  {
+    //-- Assimp::ProgressHandler
+    bool Update (float percentage);  
+  };
+
+  /**
+   * Logging
+   */
+
+  class Logger : public Assimp::LogStream
+  {
+  public:
+    Logger (iObjectRegistry* objectRegistry, int severity)
+      : objectRegistry (objectRegistry), severity (severity) {}
+
+    //-- Assimp::LogStream
+    void write (const char* message);
+
+  private:
+    iObjectRegistry* objectRegistry;
+    int severity;
   };
 
 }
