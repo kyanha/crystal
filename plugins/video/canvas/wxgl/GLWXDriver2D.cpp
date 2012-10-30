@@ -832,14 +832,16 @@ void csGLCanvas::EmitKeyEvent(wxKeyEvent& event, bool down)
   utf32_char cskey_raw = 0, cskey_cooked = 0, cskey_cooked_new = 0;
   wxCodeToCSCode (event.GetKeyCode(), cskey_raw, cskey_cooked);
 
-#if wxUSE_UNICODE
-  cskey_cooked_new = event.GetUnicodeKey();
-#else
   // Argh! Seems there is no way to get the character code for non-ASCII keys
   // in non-Unicode builds... not even a character in the local charset...
   if (event.GetKeyCode() <= 127)
   {
     cskey_cooked_new = event.GetKeyCode();
+  }
+#if wxUSE_UNICODE
+  else
+  {
+    cskey_cooked_new = event.GetUnicodeKey();
   }
 #endif
   // @@@ This is not very nice. But WX sends keycodes for alpha characters
