@@ -33,14 +33,27 @@
 #include "imesh/skeleton2.h"
 #include "iutil/comp.h"
 
-#include "assimp/assimp.hpp"      // C++ importer interface
-#include "assimp/aiScene.h"       // Output data structure
-#include "assimp/aiPostProcess.h" // Post processing flags
-#include "assimp/DefaultLogger.hpp"
+// The header files to be included are not the same between Assimp 2.0 and
+// above versions
+#if (CS_ASSIMP_VERSION == 2)
+#include "assimp/assimp.hpp"
+#include "assimp/aiScene.h"
+#include "assimp/aiPostProcess.h"
+#include "assimp/DefaultLogger.h"
 #include "assimp/IOStream.h"
 #include "assimp/IOSystem.h"
-#include "assimp/Logger.hpp"
+#include "assimp/Logger.h"
 #include "assimp/ProgressHandler.h"
+#else
+#include "assimp/scene.h"
+#include "assimp/postprocess.h"
+#include "assimp/DefaultLogger.hpp"
+#include "assimp/Importer.hpp"
+#include "assimp/IOStream.hpp"
+#include "assimp/IOSystem.hpp"
+#include "assimp/Logger.hpp"
+#include "assimp/ProgressHandler.hpp"
+#endif
 
 #include "common.h"
 
@@ -145,7 +158,7 @@ class AssimpLoader :
 {
 public:
 
-  AssimpLoader (iBase*);
+  AssimpLoader (iBase* parent);
   virtual ~AssimpLoader ();
 
   //-- iComponent
