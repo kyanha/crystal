@@ -99,10 +99,7 @@ class G2DTestSystemDriver
   // some handy colors
   int white, yellow, green, red, blue, black, gray, dsteel;
   // Last pressed key
-  int lastkey, lastkey2, lastkey3, lastkey4, lastkey5, lastkey6, lastkey7, 
-    lastkey8, lastkey9;
-  // Switch backbuffer while waiting for a key
-  bool SwitchBB;
+  int lastkey;
   // Current font
   csRef<iFont> font;
   csRef<iFont> fontLarge;
@@ -135,15 +132,20 @@ private:
   csPtr<iFont> GetFont (const char *fontID, int size = 10);
   void SetFont (iFont* font);
 
+  void HandleOpen ();
+
   void EnterState (appState newstate, int arg = 0);
   void LeaveState ();
+
+  /// Pop the current state off the stack and push the following state
+  void StateAdvance ();
+  /// Draw the frame for a given state
+  void StateFrame (appState state);
 
   int MakeColor (int r, int g, int b, int a = 255);
   void WriteCentered (int mode, int dy, int fg, int bg, const char *format, ...);
   void WriteCenteredWrapped (int mode, int dy, int &h, int fg, int bg, 
     const char *format, ...);
-
-  void ResizeContext ();
 
   void SetCustomCursor ();
   void SetNormalCursor ();
@@ -178,7 +180,6 @@ G2DTestSystemDriver::G2DTestSystemDriver (int argc, char* argv[])
 {
   state_sptr = 0;
   EnterState (stInit);
-  SwitchBB = false;
 
   object_reg = csInitializer::CreateEnvironment (argc, argv);
 
@@ -228,6 +229,46 @@ G2DTestSystemDriver::~G2DTestSystemDriver ()
   csInitializer::DestroyApplication (object_reg);
 }
 
+void G2DTestSystemDriver::HandleOpen ()
+{
+  white = MakeColor (255, 255, 255);
+  yellow = MakeColor (255, 255, 0);
+  green = MakeColor (0, 255, 0);
+  red = MakeColor (255, 0, 0);
+  blue = MakeColor (0, 0, 255);
+  gray = MakeColor (128, 128, 128);
+  dsteel = MakeColor (80, 100, 112);
+  black = MakeColor (0, 0, 0);
+
+  fontLarge = GetFont (CSFONT_LARGE);
+  fontItalic = GetFont (CSFONT_ITALIC);
+  fontCourier = GetFont (CSFONT_COURIER);
+  fontSmall = GetFont (CSFONT_SMALL);
+  {
+    csRef<iVFS> vfs = csQueryRegistry<iVFS> (object_reg);
+    csRef<iImageIO> iio = 
+      csQueryRegistry<iImageIO> (object_reg);
+    if (vfs.IsValid () && iio.IsValid ())
+    {
+      csRef<iFile> testFile = vfs->Open ("/lib/g2dtest/up.png", 
+	VFS_FILE_READ);
+      if (testFile.IsValid ())
+      {
+	csRef<iDataBuffer> fileData = testFile->GetAllData ();
+	blitTestImage = iio->Load (fileData, CS_IMGFMT_TRUECOLOR 
+	  | CS_IMGFMT_ALPHA);
+      }
+      testFile = vfs->Open ("/lib/std/cslogo2.png", VFS_FILE_READ);
+      if (testFile.IsValid ())
+      {
+	csRef<iDataBuffer> fileData = testFile->GetAllData ();
+	alphaBlitImage = iio->Load (fileData, CS_IMGFMT_TRUECOLOR |
+	  CS_IMGFMT_ALPHA);
+      }
+    }
+  }
+}
+
 void G2DTestSystemDriver::EnterState (appState newstate, int arg)
 {
   state [state_sptr++] = newstate;
@@ -236,29 +277,11 @@ void G2DTestSystemDriver::EnterState (appState newstate, int arg)
     case stPause:
       timer = csGetTicks () + arg;
       break;
-    case stTestLinePerf:
-      lastkey2 = 0;
-      break;
-    case stTestTextDraw:
-      lastkey3 = 0;
-      break;
-    case stTestTextDraw2:
-      lastkey4 = 0;
-      break;
-    case stPixelClipTest:
-      lastkey5 = 0;
-      break;
-    case stLineClipTest:
-      lastkey6 = 0;
-      break;
-    case stBoxClipTest:
-      lastkey7 = 0;
-      break;
-    case stFontClipTest:
-      lastkey8 = 0;
-      break;
     case stCustomCursor:
-      lastkey9 = 0;
+      SetCustomCursor ();
+      break;
+    case stCustomIcon:
+      SetCustomIcon ();
       break;
     case stWaitKey:
       lastkey = 0;
@@ -270,7 +293,172 @@ void G2DTestSystemDriver::EnterState (appState newstate, int arg)
 
 void G2DTestSystemDriver::LeaveState ()
 {
+  appState curstate = state [state_sptr-1];
+  switch (curstate)
+  {
+    case stCustomCursor:
+      SetNormalCursor ();
+      break;
+    default:
+      break;
+  }
   state_sptr--;
+}
+
+void G2DTestSystemDriver::StateAdvance ()
+{
+  appState curstate = state [state_sptr - 1];
+  LeaveState ();
+  switch (curstate)
+  {
+    case stInit:
+      EnterState (stStartup);
+      EnterState (stPause, 5000);
+      break;
+    case stStartup:
+      EnterState (stContextInfo);
+      EnterState (stWaitKey);
+      break;
+    case stContextInfo:
+      EnterState (stWindowFixed);
+      EnterState (stWaitKey);
+      break;
+    case stWindowFixed:
+      EnterState (stWindowResize);
+      EnterState (stWaitKey);
+      break;
+    case stWindowResize:
+      EnterState (stCustomCursor);
+      EnterState (stWaitKey);
+      break;
+    case stCustomCursor:
+      EnterState (stCustomIcon);
+      EnterState (stWaitKey);
+      break;
+    case stCustomIcon:
+      EnterState (stAlphaTest);
+      EnterState (stWaitKey);
+      break;
+    case stAlphaTest:
+      EnterState (stTestUnicode1);
+      EnterState (stWaitKey);
+      break;
+    case stTestUnicode1:
+      EnterState (stTestUnicode2);
+      EnterState (stWaitKey);
+      break;
+    case stTestUnicode2:
+      EnterState (stTestFreetype);
+      EnterState (stWaitKey);
+      break;
+    case stTestFreetype:
+      EnterState (stTestLineDraw);
+      EnterState (stWaitKey);
+      break;
+    case stTestLineDraw:
+      EnterState (stTestLinePerf);
+      EnterState (stWaitKey);
+      break;
+    case stTestLinePerf:
+      EnterState (stTestTextDraw);
+      EnterState (stWaitKey);
+      break;
+    case stTestTextDraw:
+      EnterState (stTestTextDraw2);
+      EnterState (stWaitKey);
+      break;
+    case stTestTextDraw2:
+      EnterState (stPixelClipTest);
+      EnterState (stWaitKey);
+      break;
+    case stPixelClipTest:
+      EnterState (stLineClipTest);
+      EnterState (stWaitKey);
+      break;
+    case stLineClipTest:
+      EnterState (stBoxClipTest);
+      EnterState (stWaitKey);
+      break;
+    case stBoxClipTest:
+      EnterState (stFontClipTest);
+      break;
+    case stFontClipTest:
+      EnterState (stBlitTest);
+      EnterState (stWaitKey);
+      break;
+    case stBlitTest:
+      break;
+  }
+}
+
+void G2DTestSystemDriver::StateFrame (appState state)
+{
+  if (!myG3D->BeginDraw (CSDRAW_2DGRAPHICS))
+    return;
+
+  myG2D->Clear (black);
+  switch (state)
+  {
+    case stStartup:
+      DrawStartupScreen ();
+      break;
+    case stContextInfo:
+      DrawContextInfoScreen ();
+      break;
+    case stWindowFixed:
+      DrawWindowScreen ();
+      break;
+    case stWindowResize:
+      DrawWindowResizeScreen ();
+      break;
+    case stCustomCursor:
+      DrawCustomCursorScreen ();
+      break;
+    case stCustomIcon:
+      DrawCustomIconScreen ();
+      break;
+    case stAlphaTest:
+      DrawAlphaTestScreen ();
+      break;
+    case stTestUnicode1:
+      DrawUnicodeTest1 ();
+      break;
+    case stTestUnicode2:
+      DrawUnicodeTest2 ();
+      break;
+    case stTestFreetype:
+      DrawFreetypeTest ();
+      break;
+    case stTestLineDraw:
+      DrawLineTest ();
+      break;
+    case stTestLinePerf:
+      DrawLinePerf ();
+      break;
+    case stTestTextDraw:
+      DrawTextTest ();
+      break;
+    case stTestTextDraw2:
+      DrawTextTest2 ();
+      break;
+    case stPixelClipTest:
+      PixelClipTest ();
+      break;
+    case stLineClipTest:
+      LineClipTest ();
+      break;
+    case stBoxClipTest:
+      BoxClipTest ();
+      break;
+    case stFontClipTest:
+      FontClipTest ();
+      break;
+    case stBlitTest:
+      BlitTest ();
+      break;
+    default:
+      break;
+  }
 }
 
 void G2DTestSystemDriver::SetupFrame ()
@@ -284,213 +472,34 @@ void G2DTestSystemDriver::SetupFrame ()
   appState curstate = state [state_sptr - 1];
   switch (curstate)
   {
-    case stInit:
-    case stStartup:
-    case stContextInfo:
-    case stWindowFixed:
-    case stWindowResize:
-    case stCustomCursor:
-    case stCustomIcon:
-    case stAlphaTest:
-    case stTestUnicode1:
-    case stTestUnicode2:
-    case stTestFreetype:
-    case stTestLineDraw:
-    case stTestLinePerf:
-    case stTestTextDraw:
-    case stTestTextDraw2:
-    case stPixelClipTest:
-    case stLineClipTest:
-    case stBoxClipTest:
-    case stFontClipTest:
-    case stBlitTest:
-    {
-      if (!myG3D->BeginDraw (CSDRAW_2DGRAPHICS))
-        break;
-
-      myG2D->Clear (black);
-      LeaveState ();
-      switch (curstate)
+    case stPause:
+      StateFrame (state [state_sptr - 2]);
+      if (int (csGetTicks () - timer) > 0)
       {
-        case stInit:
-	  fontLarge = GetFont (CSFONT_LARGE);
-	  fontItalic = GetFont (CSFONT_ITALIC);
-	  fontCourier = GetFont (CSFONT_COURIER);
-	  fontSmall = GetFont (CSFONT_SMALL);
-	  {
-	    csRef<iVFS> vfs = csQueryRegistry<iVFS> (object_reg);
-	    csRef<iImageIO> iio = 
-	      csQueryRegistry<iImageIO> (object_reg);
-	    if (vfs.IsValid () && iio.IsValid ())
-	    {
-	      csRef<iFile> testFile = vfs->Open ("/lib/g2dtest/up.png", 
-		VFS_FILE_READ);
-	      if (testFile.IsValid ())
-	      {
-		csRef<iDataBuffer> fileData = testFile->GetAllData ();
-		blitTestImage = iio->Load (fileData, CS_IMGFMT_TRUECOLOR 
-		  | CS_IMGFMT_ALPHA);
-	      }
-	      testFile = vfs->Open ("/lib/std/cslogo2.png", VFS_FILE_READ);
-	      if (testFile.IsValid ())
-	      {
-		csRef<iDataBuffer> fileData = testFile->GetAllData ();
-		alphaBlitImage = iio->Load (fileData, CS_IMGFMT_TRUECOLOR |
-		  CS_IMGFMT_ALPHA);
-	      }
-	    }
-	  }
-	  EnterState (stStartup);
-	  break;
-        case stStartup:
-          DrawStartupScreen ();
-	  EnterState (stContextInfo);
-          EnterState (stPause, 5000);
-          break;
-        case stContextInfo:
-          DrawContextInfoScreen ();
-          EnterState (stWindowFixed);
-          EnterState (stWaitKey);
-          break;
-        case stWindowFixed:
-          DrawWindowScreen ();
-          EnterState (stWindowResize);
-          EnterState (stWaitKey);
-          break;
-        case stWindowResize:
-          DrawWindowResizeScreen ();
-          EnterState (stCustomCursor);
-          EnterState (stWaitKey);
-          break;
-	case stCustomCursor:
-          DrawCustomCursorScreen ();
-	  SetCustomCursor ();
-	  if (lastkey9)
-            EnterState (stCustomIcon);
-	  else
-            EnterState (stCustomCursor);
-          break;
-	case stCustomIcon:
-          SetNormalCursor ();
-	  SetCustomIcon ();
-          DrawCustomIconScreen ();
-	  EnterState (stAlphaTest);
-          EnterState (stWaitKey);
-          break;
-	case stAlphaTest:
-          DrawAlphaTestScreen ();
-          EnterState (stTestUnicode1);
-          EnterState (stWaitKey);
-          break;
-	case stTestUnicode1:
-	  DrawUnicodeTest1 ();
-          EnterState (stTestUnicode2);
-          EnterState (stWaitKey);
-          break;
-	case stTestUnicode2:
-	  DrawUnicodeTest2 ();
-          EnterState (stTestFreetype);
-          EnterState (stWaitKey);
-          break;
-	case stTestFreetype:
-	  DrawFreetypeTest ();
-          EnterState (stTestLineDraw);
-          EnterState (stWaitKey);
-          break;
-        case stTestLineDraw:
-          DrawLineTest ();
-          EnterState (stTestLinePerf);
-          EnterState (stWaitKey);
-          break;
-        case stTestLinePerf:
-          DrawLinePerf ();
-          if (lastkey2)
-            EnterState (stTestTextDraw);
-          else
-            EnterState (stTestLinePerf);
-          break;
-        case stTestTextDraw:
-          DrawTextTest ();
-          if (lastkey3)
-            EnterState (stTestTextDraw2);
-          else
-            EnterState (stTestTextDraw);
-          break;
-        case stTestTextDraw2:
-          DrawTextTest2 ();
-          if (lastkey4)
-            EnterState (stPixelClipTest);
-          else
-            EnterState (stTestTextDraw2);
-          break;
-        case stPixelClipTest:
-          PixelClipTest ();
-          if (lastkey5)
-          {
-            myG2D->SetClipRect(0,0,myG2D->GetWidth(), myG2D->GetHeight());
-            EnterState (stLineClipTest);
-          }
-          else
-            EnterState (stPixelClipTest);
-          break;
-        case stLineClipTest:
-          LineClipTest ();
-          if (lastkey6)
-          {
-            myG2D->SetClipRect(0,0,myG2D->GetWidth(), myG2D->GetHeight());
-            EnterState (stBoxClipTest);
-          }
-          else
-            EnterState (stLineClipTest);
-          break;
-        case stBoxClipTest:
-          BoxClipTest ();
-          if (lastkey7)
-          {
-            myG2D->SetClipRect(0,0,myG2D->GetWidth(), myG2D->GetHeight());
-	    EnterState (stFontClipTest);
-          }
-          else
-            EnterState (stBoxClipTest);
-          break;
-        case stFontClipTest:
-          FontClipTest ();
-          if (lastkey8)
-	    EnterState (stBlitTest);
-          else
-            EnterState (stFontClipTest);
-          break;
-	case stBlitTest:
-	  BlitTest ();
-          EnterState (stWaitKey);
-          break;
-        default:
-          break;
+        LeaveState ();
+      }
+      else
+      {
+        StateFrame (state [state_sptr - 2]);
+        csSleep (1);
       }
       break;
-    }
-    case stPause:
-      if (int (csGetTicks () - timer) > 0)
-        LeaveState ();
-      else
-        csSleep (1);
-      break;
     case stWaitKey:
+      StateFrame (state [state_sptr - 2]);
       if (lastkey)
       {
         LeaveState ();
-        SwitchBB = false;
       }
       else
       {
-        if (SwitchBB)
-        {
-          myG2D->Print (0);
-          csSleep (200);
-        }
-        else
-          csSleep (1);
+        csSleep (1);
       }
+      break;
+    case stInit:
+      StateFrame (stInit); // does nothing, but clears screen
+      /* fall through */
+    default:
+      StateAdvance ();
       break;
   }
 }
@@ -499,18 +508,7 @@ bool G2DTestSystemDriver::HandleEvent (iEvent &Event)
 {
   if (myG2D && (Event.Name == SystemOpen))
   {
-    white = MakeColor (255, 255, 255);
-    yellow = MakeColor (255, 255, 0);
-    green = MakeColor (0, 255, 0);
-    red = MakeColor (255, 0, 0);
-    blue = MakeColor (0, 0, 255);
-    gray = MakeColor (128, 128, 128);
-    dsteel = MakeColor (80, 100, 112);
-    black = MakeColor (0, 0, 0);
-  }
-  else if (myG2D && (Event.Name == CanvasResize))
-  {
-    ResizeContext ();
+    HandleOpen ();
   }
   else if (Event.Name == KeyboardDown)
   {
@@ -519,30 +517,6 @@ bool G2DTestSystemDriver::HandleEvent (iEvent &Event)
 	  {
 	    case stWaitKey:
 	      lastkey = csKeyEventHelper::GetCookedCode (&Event);
-	      break;
-	    case stTestLinePerf:
-	      lastkey2 = csKeyEventHelper::GetCookedCode (&Event);
-	      break;
-	    case stTestTextDraw:
-	      lastkey3 = csKeyEventHelper::GetCookedCode (&Event);
-	      break;
-	    case stTestTextDraw2:
-	      lastkey4 = csKeyEventHelper::GetCookedCode (&Event);
-	      break;
-	    case stPixelClipTest:
-	      lastkey5 = csKeyEventHelper::GetCookedCode (&Event);
-	      break;
-	    case stLineClipTest:
-	      lastkey6 = csKeyEventHelper::GetCookedCode (&Event);
-	      break;
-	    case stBoxClipTest:
-	      lastkey7 = csKeyEventHelper::GetCookedCode (&Event);
-	      break;
-	    case stFontClipTest:
-	      lastkey8 = csKeyEventHelper::GetCookedCode (&Event);
-	      break;
-	    case stCustomCursor:
-	      lastkey9 = csKeyEventHelper::GetCookedCode (&Event);
 	      break;
 	    default:
 	      break;
@@ -744,18 +718,6 @@ void G2DTestSystemDriver::DrawWindowResizeScreen ()
   WriteCentered (0, 16*3, white, -1, "canvas driver does not support resize) or see");
   WriteCentered (0, 16*4, white, -1, "the current window size in top-right corner.");
 
-  SetFont (fontCourier);
-  WriteCentered (2, 0, green, -1, "press any key to continue");
-}
-
-void G2DTestSystemDriver::ResizeContext ()
-{
-  if (!myG2D->BeginDraw ())
-    return;
-
-  myG2D->Clear (black);
-  DrawWindowResizeScreen ();
-
   csString text;
   text.Format ("Canvas [%d x %d]", myG2D->GetWidth (), myG2D->GetHeight ());
   SetFont (fontLarge);
@@ -764,8 +726,8 @@ void G2DTestSystemDriver::ResizeContext ()
   int x = myG2D->GetWidth () - fw;
   myG2D->Write (font, x, 0, red, -1, text);
 
-  myG2D->FinishDraw ();
-  myG2D->Print (0);
+  SetFont (fontCourier);
+  WriteCentered (2, 0, green, -1, "press any key to continue");
 }
 
 void G2DTestSystemDriver::SetCustomCursor ()
