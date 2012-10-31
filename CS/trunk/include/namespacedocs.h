@@ -255,6 +255,12 @@ namespace CS
    */
   namespace Utility
   {}
+
+  /**
+   * Classes/helpers for wxWidgets integration
+   */
+  namespace WX
+  {}
 }
 
 #endif
