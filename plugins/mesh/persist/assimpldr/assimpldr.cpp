@@ -48,13 +48,26 @@
 
 #include "assimpldr.h"
 
+// The name of those values is different from Assimp 2.0 and above versions
+#if (ASSIMP_VERSION == 2)
+#define LOGGER_ERROR Assimp::Logger::ERR
+#define LOGGER_WARNING Assimp::Logger::WARN
+#define LOGGER_NOTIFY Assimp::Logger::INFO
+#define LOGGER_DEBUG Assimp::Logger::DEBUGGING
+#else
+#define LOGGER_ERROR Assimp::Logger::Err
+#define LOGGER_WARNING Assimp::Logger::Warn
+#define LOGGER_NOTIFY Assimp::Logger::Info
+#define LOGGER_DEBUG Assimp::Logger::Debugging
+#endif
+
 CS_PLUGIN_NAMESPACE_BEGIN(AssimpLoader)
 {
 
   SCF_IMPLEMENT_FACTORY (AssimpLoader);
 
-  AssimpLoader::AssimpLoader (iBase* pParent) :
-    scfImplementationType (this, pParent)
+  AssimpLoader::AssimpLoader (iBase* parent) :
+    scfImplementationType (this, parent)
   {
     importFlags =
       aiProcess_CalcTangentSpace // needed only for advanced shaders
@@ -257,16 +270,16 @@ CS_PLUGIN_NAMESPACE_BEGIN(AssimpLoader)
     // Register the log streams
     Assimp::DefaultLogger::create ("", Assimp::Logger::VERBOSE);
     Assimp::DefaultLogger::get ()->attachStream
-      (new Logger (objectRegistry, CS_REPORTER_SEVERITY_ERROR), Assimp::Logger::Err);
+      (new Logger (objectRegistry, CS_REPORTER_SEVERITY_ERROR), LOGGER_ERROR);
     Assimp::DefaultLogger::get ()->attachStream
-      (new Logger (objectRegistry, CS_REPORTER_SEVERITY_WARNING), Assimp::Logger::Warn);
+      (new Logger (objectRegistry, CS_REPORTER_SEVERITY_WARNING), LOGGER_WARNING);
     if (doVerbose)
     {
       Assimp::DefaultLogger::get ()->attachStream
-	(new Logger (objectRegistry, CS_REPORTER_SEVERITY_NOTIFY), Assimp::Logger::Info);
+	(new Logger (objectRegistry, CS_REPORTER_SEVERITY_NOTIFY), LOGGER_NOTIFY);
 #ifdef CS_DEBUG
       Assimp::DefaultLogger::get ()->attachStream
-	(new Logger (objectRegistry, CS_REPORTER_SEVERITY_DEBUG), Assimp::Logger::Debugging);
+	(new Logger (objectRegistry, CS_REPORTER_SEVERITY_DEBUG), LOGGER_DEBUG);
 #endif
     }
   }
