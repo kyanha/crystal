@@ -65655,7 +65655,9 @@ alsa|audio|$_cs_sum_ok|unix"
 
 
 #------------------------------------------------------------------------------
-# Check for Open Asset Import Library (Assimp)
+# Check for Open Asset Import Library (Assimp). Also check whether this is the
+# version 2.0 or 3.0/above that is being used, the header files to be included
+# not being the same.
 #------------------------------------------------------------------------------
 
 # Check whether --with-assimp was given.
@@ -66093,13 +66095,13 @@ $as_echo_n "checking for libassimp... " >&6; }
 if ${cs_cv_libassimp+:} false; then :
   $as_echo_n "(cached) " >&6
 else
-  ac_ext=c
-ac_cpp='$CPP $CPPFLAGS'
-ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
-ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
-ac_compiler_gnu=$ac_cv_c_compiler_gnu
+  ac_ext=cpp
+ac_cpp='$CXXCPP $CPPFLAGS'
+ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
 
-    cs_cflags_save="$CFLAGS"
+    cs_cflags_save="$CXXFLAGS"
     cs_lflags_save="$LDFLAGS"
     cs_libs_save="$LIBS"
     cs_build_ok=no
@@ -66157,13 +66159,12 @@ fi
     cs_lflags_test=`echo $cs_lflags_test | sed 'y%#% %'`
     cs_libs_test=`echo $cs_libs_test | sed 'y%#% %'`
 
-	CFLAGS="$cs_cflags_save $cs_cflags_test "
+	CXXFLAGS="$cs_cflags_save $cs_cflags_test "
 	LDFLAGS="$cs_lflags_test  $cs_lflags_save"
 	LIBS="$cs_libs_test  $cs_libs_save"
 	cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
-#include <assimp/assimp.h>
-	      #include <assimp/aiScene.h>
+
 int
 main ()
 {
@@ -66172,7 +66173,7 @@ main ()
   return 0;
 }
 _ACEOF
-if ac_fn_c_try_link "$LINENO"; then :
+if ac_fn_cxx_try_link "$LINENO"; then :
   cs_build_ok=yes
 fi
 rm -f core conftest.err conftest.$ac_objext \
@@ -66183,7 +66184,7 @@ fi
     done
 
 
-    CFLAGS=$cs_cflags_save
+    CXXFLAGS=$cs_cflags_save
     LDFLAGS=$cs_lflags_save
     LIBS=$cs_libs_save
     ac_ext=c
@@ -66210,13 +66211,13 @@ $as_echo "$cs_cv_libassimp" >&6; }
 else
   { $as_echo "$as_me:${as_lineno-$LINENO}: checking for libassimp" >&5
 $as_echo_n "checking for libassimp... " >&6; }
-	    ac_ext=c
-ac_cpp='$CPP $CPPFLAGS'
-ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
-ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
-ac_compiler_gnu=$ac_cv_c_compiler_gnu
+	    ac_ext=cpp
+ac_cpp='$CXXCPP $CPPFLAGS'
+ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
 
-    cs_cflags_save="$CFLAGS"
+    cs_cflags_save="$CXXFLAGS"
     cs_lflags_save="$LDFLAGS"
     cs_libs_save="$LIBS"
     cs_build_ok=no
@@ -66274,13 +66275,12 @@ fi
     cs_lflags_test=`echo $cs_lflags_test | sed 'y%#% %'`
     cs_libs_test=`echo $cs_libs_test | sed 'y%#% %'`
 
-	CFLAGS="$cs_cflags_save $cs_cflags_test "
+	CXXFLAGS="$cs_cflags_save $cs_cflags_test "
 	LDFLAGS="$cs_lflags_test  $cs_lflags_save"
 	LIBS="$cs_libs_test  $cs_libs_save"
 	cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
-#include <assimp/assimp.h>
-	      #include <assimp/aiScene.h>
+
 int
 main ()
 {
@@ -66289,7 +66289,7 @@ main ()
   return 0;
 }
 _ACEOF
-if ac_fn_c_try_link "$LINENO"; then :
+if ac_fn_cxx_try_link "$LINENO"; then :
   cs_build_ok=yes
 fi
 rm -f core conftest.err conftest.$ac_objext \
@@ -66300,7 +66300,7 @@ fi
     done
 
 
-    CFLAGS=$cs_cflags_save
+    CXXFLAGS=$cs_cflags_save
     LDFLAGS=$cs_lflags_save
     LIBS=$cs_libs_save
     ac_ext=c
@@ -66345,6 +66345,515 @@ fi
 
     cs_cv_with_assimp="$with_assimp"
     if test "$cs_cv_libassimp" = yes; then :
+  if test "" != yes; then :
+  { $as_echo "$as_me:${as_lineno-$LINENO}: checking for Assimp v3" >&5
+$as_echo_n "checking for Assimp v3... " >&6; }
+if ${cs_cv_assimp3+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  ac_ext=cpp
+ac_cpp='$CXXCPP $CPPFLAGS'
+ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
+
+    cs_cflags_save="$CXXFLAGS"
+    cs_lflags_save="$LDFLAGS"
+    cs_libs_save="$LIBS"
+    cs_build_ok=no
+
+
+    for cs_build_item in `echo @@@ | sed 'y% %#%'`
+    do
+
+    set filler `echo "$cs_build_item" | awk 'BEGIN { FS="@" }
+	{ for (i=1; i <= NF; ++i)
+	    { if ($i == "") print "filler"; else print $i } }'`
+    shift
+    if test $# -eq 0; then :
+  cs_dummy=''
+else
+  if test "$1" = filler; then :
+  cs_dummy=''
+else
+  cs_dummy=$1
+fi
+	shift
+fi
+if test $# -eq 0; then :
+  cs_cflags_test=''
+else
+  if test "$1" = filler; then :
+  cs_cflags_test=''
+else
+  cs_cflags_test=$1
+fi
+	shift
+fi
+if test $# -eq 0; then :
+  cs_lflags_test=''
+else
+  if test "$1" = filler; then :
+  cs_lflags_test=''
+else
+  cs_lflags_test=$1
+fi
+	shift
+fi
+if test $# -eq 0; then :
+  cs_libs_test=''
+else
+  if test "$1" = filler; then :
+  cs_libs_test=''
+else
+  cs_libs_test=$1
+fi
+	shift
+fi
+
+    cs_cflags_test=`echo $cs_cflags_test | sed 'y%#% %'`
+    cs_lflags_test=`echo $cs_lflags_test | sed 'y%#% %'`
+    cs_libs_test=`echo $cs_libs_test | sed 'y%#% %'`
+
+	CXXFLAGS="$cs_cflags_save $cs_cflags_test $cs_cv_libassimp_cflags"
+	LDFLAGS="$cs_lflags_test $cs_cv_libassimp_lflags $cs_lflags_save"
+	LIBS="$cs_libs_test $cs_cv_libassimp_libs $cs_libs_save"
+	cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+#include <assimp/Logger.hpp>
+int
+main ()
+{
+
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_cxx_try_link "$LINENO"; then :
+  cs_build_ok=yes
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+	if test $cs_build_ok = yes; then :
+  break
+fi
+    done
+
+
+    CXXFLAGS=$cs_cflags_save
+    LDFLAGS=$cs_lflags_save
+    LIBS=$cs_libs_save
+    ac_ext=c
+ac_cpp='$CPP $CPPFLAGS'
+ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ac_compiler_gnu=$ac_cv_c_compiler_gnu
+
+
+    if test $cs_build_ok = yes; then :
+  cs_build_cflags=`echo x$cs_cflags_test $cs_cv_libassimp_cflags | sed 's/^x//;s/   */ /g;s/^ //;s/ $//'`
+	cs_build_lflags=`echo x$cs_lflags_test $cs_cv_libassimp_lflags | sed 's/^x//;s/   */ /g;s/^ //;s/ $//'`
+	cs_build_libs=`echo x$cs_libs_test $cs_cv_libassimp_libs | sed 's/^x//;s/   */ /g;s/^ //;s/ $//'`
+	cs_cv_assimp3=yes
+		cs_cv_assimp3_cflags=$cs_build_cflags
+		cs_cv_assimp3_lflags=$cs_build_lflags
+		cs_cv_assimp3_libs=$cs_build_libs
+else
+  cs_cv_assimp3=no
+fi
+fi
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $cs_cv_assimp3" >&5
+$as_echo "$cs_cv_assimp3" >&6; }
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: checking for Assimp v3" >&5
+$as_echo_n "checking for Assimp v3... " >&6; }
+	    ac_ext=cpp
+ac_cpp='$CXXCPP $CPPFLAGS'
+ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
+
+    cs_cflags_save="$CXXFLAGS"
+    cs_lflags_save="$LDFLAGS"
+    cs_libs_save="$LIBS"
+    cs_build_ok=no
+
+
+    for cs_build_item in `echo @@@ | sed 'y% %#%'`
+    do
+
+    set filler `echo "$cs_build_item" | awk 'BEGIN { FS="@" }
+	{ for (i=1; i <= NF; ++i)
+	    { if ($i == "") print "filler"; else print $i } }'`
+    shift
+    if test $# -eq 0; then :
+  cs_dummy=''
+else
+  if test "$1" = filler; then :
+  cs_dummy=''
+else
+  cs_dummy=$1
+fi
+	shift
+fi
+if test $# -eq 0; then :
+  cs_cflags_test=''
+else
+  if test "$1" = filler; then :
+  cs_cflags_test=''
+else
+  cs_cflags_test=$1
+fi
+	shift
+fi
+if test $# -eq 0; then :
+  cs_lflags_test=''
+else
+  if test "$1" = filler; then :
+  cs_lflags_test=''
+else
+  cs_lflags_test=$1
+fi
+	shift
+fi
+if test $# -eq 0; then :
+  cs_libs_test=''
+else
+  if test "$1" = filler; then :
+  cs_libs_test=''
+else
+  cs_libs_test=$1
+fi
+	shift
+fi
+
+    cs_cflags_test=`echo $cs_cflags_test | sed 'y%#% %'`
+    cs_lflags_test=`echo $cs_lflags_test | sed 'y%#% %'`
+    cs_libs_test=`echo $cs_libs_test | sed 'y%#% %'`
+
+	CXXFLAGS="$cs_cflags_save $cs_cflags_test $cs_cv_libassimp_cflags"
+	LDFLAGS="$cs_lflags_test $cs_cv_libassimp_lflags $cs_lflags_save"
+	LIBS="$cs_libs_test $cs_cv_libassimp_libs $cs_libs_save"
+	cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+#include <assimp/Logger.hpp>
+int
+main ()
+{
+
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_cxx_try_link "$LINENO"; then :
+  cs_build_ok=yes
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+	if test $cs_build_ok = yes; then :
+  break
+fi
+    done
+
+
+    CXXFLAGS=$cs_cflags_save
+    LDFLAGS=$cs_lflags_save
+    LIBS=$cs_libs_save
+    ac_ext=c
+ac_cpp='$CPP $CPPFLAGS'
+ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ac_compiler_gnu=$ac_cv_c_compiler_gnu
+
+
+    if test $cs_build_ok = yes; then :
+  cs_build_cflags=`echo x$cs_cflags_test $cs_cv_libassimp_cflags | sed 's/^x//;s/   */ /g;s/^ //;s/ $//'`
+	cs_build_lflags=`echo x$cs_lflags_test $cs_cv_libassimp_lflags | sed 's/^x//;s/   */ /g;s/^ //;s/ $//'`
+	cs_build_libs=`echo x$cs_libs_test $cs_cv_libassimp_libs | sed 's/^x//;s/   */ /g;s/^ //;s/ $//'`
+	cs_cv_assimp3=yes
+		cs_cv_assimp3_cflags=$cs_build_cflags
+		cs_cv_assimp3_lflags=$cs_build_lflags
+		cs_cv_assimp3_libs=$cs_build_libs
+else
+  cs_cv_assimp3=no
+fi
+	    { $as_echo "$as_me:${as_lineno-$LINENO}: result: $cs_cv_assimp3" >&5
+$as_echo "$cs_cv_assimp3" >&6; }
+fi
+    if test $cs_cv_assimp3 = yes; then :
+  cs_header_text="${cs_header_text}#define CS_ASSIMP_VERSION 3
+"
+else
+  cs_cv_assimp3_cflags=''
+	cs_cv_assimp3_lflags=''
+	cs_cv_assimp3_libs=''
+	if test "" != yes; then :
+  { $as_echo "$as_me:${as_lineno-$LINENO}: checking for Assimp v2" >&5
+$as_echo_n "checking for Assimp v2... " >&6; }
+if ${cs_cv_assimp2+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  ac_ext=cpp
+ac_cpp='$CXXCPP $CPPFLAGS'
+ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
+
+    cs_cflags_save="$CXXFLAGS"
+    cs_lflags_save="$LDFLAGS"
+    cs_libs_save="$LIBS"
+    cs_build_ok=no
+
+
+    for cs_build_item in `echo @@@ | sed 'y% %#%'`
+    do
+
+    set filler `echo "$cs_build_item" | awk 'BEGIN { FS="@" }
+	{ for (i=1; i <= NF; ++i)
+	    { if ($i == "") print "filler"; else print $i } }'`
+    shift
+    if test $# -eq 0; then :
+  cs_dummy=''
+else
+  if test "$1" = filler; then :
+  cs_dummy=''
+else
+  cs_dummy=$1
+fi
+	shift
+fi
+if test $# -eq 0; then :
+  cs_cflags_test=''
+else
+  if test "$1" = filler; then :
+  cs_cflags_test=''
+else
+  cs_cflags_test=$1
+fi
+	shift
+fi
+if test $# -eq 0; then :
+  cs_lflags_test=''
+else
+  if test "$1" = filler; then :
+  cs_lflags_test=''
+else
+  cs_lflags_test=$1
+fi
+	shift
+fi
+if test $# -eq 0; then :
+  cs_libs_test=''
+else
+  if test "$1" = filler; then :
+  cs_libs_test=''
+else
+  cs_libs_test=$1
+fi
+	shift
+fi
+
+    cs_cflags_test=`echo $cs_cflags_test | sed 'y%#% %'`
+    cs_lflags_test=`echo $cs_lflags_test | sed 'y%#% %'`
+    cs_libs_test=`echo $cs_libs_test | sed 'y%#% %'`
+
+	CXXFLAGS="$cs_cflags_save $cs_cflags_test $cs_cv_libassimp_cflags"
+	LDFLAGS="$cs_lflags_test $cs_cv_libassimp_lflags $cs_lflags_save"
+	LIBS="$cs_libs_test $cs_cv_libassimp_libs $cs_libs_save"
+	cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+#include <assimp/ProgressHandler.h>
+int
+main ()
+{
+
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_cxx_try_link "$LINENO"; then :
+  cs_build_ok=yes
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+	if test $cs_build_ok = yes; then :
+  break
+fi
+    done
+
+
+    CXXFLAGS=$cs_cflags_save
+    LDFLAGS=$cs_lflags_save
+    LIBS=$cs_libs_save
+    ac_ext=c
+ac_cpp='$CPP $CPPFLAGS'
+ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ac_compiler_gnu=$ac_cv_c_compiler_gnu
+
+
+    if test $cs_build_ok = yes; then :
+  cs_build_cflags=`echo x$cs_cflags_test $cs_cv_libassimp_cflags | sed 's/^x//;s/   */ /g;s/^ //;s/ $//'`
+	cs_build_lflags=`echo x$cs_lflags_test $cs_cv_libassimp_lflags | sed 's/^x//;s/   */ /g;s/^ //;s/ $//'`
+	cs_build_libs=`echo x$cs_libs_test $cs_cv_libassimp_libs | sed 's/^x//;s/   */ /g;s/^ //;s/ $//'`
+	cs_cv_assimp2=yes
+		cs_cv_assimp2_cflags=$cs_build_cflags
+		cs_cv_assimp2_lflags=$cs_build_lflags
+		cs_cv_assimp2_libs=$cs_build_libs
+else
+  cs_cv_assimp2=no
+fi
+fi
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $cs_cv_assimp2" >&5
+$as_echo "$cs_cv_assimp2" >&6; }
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: checking for Assimp v2" >&5
+$as_echo_n "checking for Assimp v2... " >&6; }
+	    ac_ext=cpp
+ac_cpp='$CXXCPP $CPPFLAGS'
+ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
+
+    cs_cflags_save="$CXXFLAGS"
+    cs_lflags_save="$LDFLAGS"
+    cs_libs_save="$LIBS"
+    cs_build_ok=no
+
+
+    for cs_build_item in `echo @@@ | sed 'y% %#%'`
+    do
+
+    set filler `echo "$cs_build_item" | awk 'BEGIN { FS="@" }
+	{ for (i=1; i <= NF; ++i)
+	    { if ($i == "") print "filler"; else print $i } }'`
+    shift
+    if test $# -eq 0; then :
+  cs_dummy=''
+else
+  if test "$1" = filler; then :
+  cs_dummy=''
+else
+  cs_dummy=$1
+fi
+	shift
+fi
+if test $# -eq 0; then :
+  cs_cflags_test=''
+else
+  if test "$1" = filler; then :
+  cs_cflags_test=''
+else
+  cs_cflags_test=$1
+fi
+	shift
+fi
+if test $# -eq 0; then :
+  cs_lflags_test=''
+else
+  if test "$1" = filler; then :
+  cs_lflags_test=''
+else
+  cs_lflags_test=$1
+fi
+	shift
+fi
+if test $# -eq 0; then :
+  cs_libs_test=''
+else
+  if test "$1" = filler; then :
+  cs_libs_test=''
+else
+  cs_libs_test=$1
+fi
+	shift
+fi
+
+    cs_cflags_test=`echo $cs_cflags_test | sed 'y%#% %'`
+    cs_lflags_test=`echo $cs_lflags_test | sed 'y%#% %'`
+    cs_libs_test=`echo $cs_libs_test | sed 'y%#% %'`
+
+	CXXFLAGS="$cs_cflags_save $cs_cflags_test $cs_cv_libassimp_cflags"
+	LDFLAGS="$cs_lflags_test $cs_cv_libassimp_lflags $cs_lflags_save"
+	LIBS="$cs_libs_test $cs_cv_libassimp_libs $cs_libs_save"
+	cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+#include <assimp/ProgressHandler.h>
+int
+main ()
+{
+
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_cxx_try_link "$LINENO"; then :
+  cs_build_ok=yes
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+	if test $cs_build_ok = yes; then :
+  break
+fi
+    done
+
+
+    CXXFLAGS=$cs_cflags_save
+    LDFLAGS=$cs_lflags_save
+    LIBS=$cs_libs_save
+    ac_ext=c
+ac_cpp='$CPP $CPPFLAGS'
+ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ac_compiler_gnu=$ac_cv_c_compiler_gnu
+
+
+    if test $cs_build_ok = yes; then :
+  cs_build_cflags=`echo x$cs_cflags_test $cs_cv_libassimp_cflags | sed 's/^x//;s/   */ /g;s/^ //;s/ $//'`
+	cs_build_lflags=`echo x$cs_lflags_test $cs_cv_libassimp_lflags | sed 's/^x//;s/   */ /g;s/^ //;s/ $//'`
+	cs_build_libs=`echo x$cs_libs_test $cs_cv_libassimp_libs | sed 's/^x//;s/   */ /g;s/^ //;s/ $//'`
+	cs_cv_assimp2=yes
+		cs_cv_assimp2_cflags=$cs_build_cflags
+		cs_cv_assimp2_lflags=$cs_build_lflags
+		cs_cv_assimp2_libs=$cs_build_libs
+else
+  cs_cv_assimp2=no
+fi
+	    { $as_echo "$as_me:${as_lineno-$LINENO}: result: $cs_cv_assimp2" >&5
+$as_echo "$cs_cv_assimp2" >&6; }
+fi
+    if test $cs_cv_assimp2 = yes; then :
+  cs_header_text="${cs_header_text}#define CS_ASSIMP_VERSION 2
+"
+else
+  cs_cv_assimp2_cflags=''
+	cs_cv_assimp2_lflags=''
+	cs_cv_assimp2_libs=''
+	unset cs_cv_libassimp
+fi
+fi
+
+fi
+
+unset cs_cv_assimp2
+unset cs_cv_assimp2_cflags
+unset cs_cv_assimp2_lflags
+unset cs_cv_assimp2_libs
+unset cs_cv_assimp3
+unset cs_cv_assimp3_cflags
+unset cs_cv_assimp3_lflags
+unset cs_cv_assimp3_libs
+
+
+    if test -n "$cs_cv_libassimp" && test "no" != "$cs_cv_libassimp"; then :
+  _cs_sum_ok=yes
+else
+  _cs_sum_ok=no
+fi
+    _cs_summary="$_cs_summary
+assimp|models|$_cs_sum_ok|*"
+
+if test "$cs_cv_libassimp" = yes; then :
   if test "$cs_cv_libassimp" = yes; then :
   cs_build_prop_val="yes"
     cs_build_prop_val=`echo x$cs_build_prop_val | sed 's/^x//;s/   */ /g;s/^ //;s/ $//'`
@@ -66366,15 +66875,6 @@ fi
 fi
 fi
 fi
-    if test -n "$cs_cv_libassimp" && test "no" != "$cs_cv_libassimp"; then :
-  _cs_sum_ok=yes
-else
-  _cs_sum_ok=no
-fi
-    _cs_summary="$_cs_summary
-assimp|models|$_cs_sum_ok|*"
-
-
 
 
 #------------------------------------------------------------------------------
