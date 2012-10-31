@@ -114,6 +114,9 @@ Simple::Simple (iObjectRegistry* object_reg)
 
 Simple::~Simple ()
 {
+  /* Event handles may look at 'simple' even after the app is destroyed,
+   * so invalidate the pointer */
+  simple = nullptr;
 }
 
 void Simple::SetupFrame ()
