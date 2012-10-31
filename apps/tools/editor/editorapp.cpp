@@ -34,6 +34,8 @@
 #include <wx/wx.h>
 #include "csutil/custom_new_enable.h"
 
+#include "cstool/wxappargconvert.h"
+
 CS_IMPLEMENT_APPLICATION
 
 #if defined(CS_PLATFORM_WIN32)
@@ -74,18 +76,8 @@ bool EditorApp::OnInit (void)
 {
   wxInitAllImageHandlers ();
 
-#if defined(wxUSE_UNICODE) && wxUSE_UNICODE
-  char** csargv;
-  csargv = (char**)cs_malloc(sizeof(char*) * argc);
-  for(int i = 0; i < argc; i++) 
-  {
-    csargv[i] = strdup (wxString(argv[i]).mb_str().data());
-  }
-  object_reg = csInitializer::CreateEnvironment (argc, csargv);
-  //cs_free(csargv);
-#else
-  object_reg = csInitializer::CreateEnvironment (argc, argv);
-#endif
+  CS::WX::AppArgConvert args (argc, argv);
+  object_reg = csInitializer::CreateEnvironment (args.csArgc(), args.csArgv());
 
   // Load the iEditor plugin
   csRef<iPluginManager> plugmgr = 
