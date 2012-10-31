@@ -1953,16 +1953,45 @@ CS_NOTABLE([alsa], [audio], [unix], [$cs_cv_libasound],
 
 
 #------------------------------------------------------------------------------
-# Check for Open Asset Import Library (Assimp)
+# Check for Open Asset Import Library (Assimp). Also check whether this is the
+# version 2.0 or 3.0/above that is being used, the header files to be included
+# not being the same.
 #------------------------------------------------------------------------------
-CS_NOTABLE([assimp], [models], [], [$cs_cv_libassimp],
-    [CS_CHECK_LIB_WITH([assimp],
-	[AC_LANG_PROGRAM(
-	    [[#include <assimp/assimp.h>
-	      #include <assimp/aiScene.h>]],
+CS_CHECK_LIB_WITH([assimp],
+    [AC_LANG_PROGRAM(
+	[[]],
+	[])],
+    [], [C++],
+    [CS_CHECK_BUILD([for Assimp v3], [cs_cv_assimp3],
+        [AC_LANG_PROGRAM(
+	    [[#include <assimp/Logger.hpp>]],
 	    [])],
-	[], [], [CS_EMIT_BUILD_RESULT([cs_cv_libassimp], [ASSIMP])])])
+	[], [C++],
+	[CS_HEADER_PROPERTY([CS_ASSIMP_VERSION], [3])],
+	[CS_CHECK_BUILD([for Assimp v2], [cs_cv_assimp2],
+            [AC_LANG_PROGRAM(
+                [[#include <assimp/ProgressHandler.h>]],
+	        [])],
+	    [], [C++],
+	    [CS_HEADER_PROPERTY([CS_ASSIMP_VERSION], [2])],
+	    [unset cs_cv_libassimp], [],
+            [$cs_cv_libassimp_cflags], [$cs_cv_libassimp_lflags], [$cs_cv_libassimp_libs], [], [])],
+        [],
+        [$cs_cv_libassimp_cflags], [$cs_cv_libassimp_lflags], [$cs_cv_libassimp_libs], [], [])]
+    [], [], [], [])
 
+unset cs_cv_assimp2
+unset cs_cv_assimp2_cflags
+unset cs_cv_assimp2_lflags
+unset cs_cv_assimp2_libs
+unset cs_cv_assimp3
+unset cs_cv_assimp3_cflags
+unset cs_cv_assimp3_lflags
+unset cs_cv_assimp3_libs
+
+CS_NOTABLE([assimp], [models], [], [$cs_cv_libassimp])
+AS_IF([test "$cs_cv_libassimp" = yes],
+    CS_EMIT_BUILD_RESULT([cs_cv_libassimp], [ASSIMP]))
 
 
 #------------------------------------------------------------------------------
