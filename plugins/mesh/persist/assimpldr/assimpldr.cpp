@@ -49,7 +49,7 @@
 #include "assimpldr.h"
 
 // The name of those values is different from Assimp 2.0 and above versions
-#if (ASSIMP_VERSION == 2)
+#if (CS_ASSIMP_VERSION == 2)
 #define LOGGER_ERROR Assimp::Logger::ERR
 #define LOGGER_WARNING Assimp::Logger::WARN
 #define LOGGER_NOTIFY Assimp::Logger::INFO
