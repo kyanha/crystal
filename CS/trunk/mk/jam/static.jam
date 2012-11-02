@@ -408,16 +408,18 @@ rule StaticPluginLibrary
   {
     targets = [ Filter $(targets) : $(rejects) ] ;
   }
-  local objects ;
+  local objects needlibs ;
   for t in $(targets)
   {
     objects += $(STATICPLUGINS.OBJECTS.$(t)) ;
     local staticreginfoobject = [ BuildStaticRegFile $(t) : $(name) ] ;
     objects += $(staticreginfoobject) ;
+    needlibs += $($(t).NEEDLIBS) ;
   }
-  
+
   # Set up library
   Library $(name) : $(objects) : noinstall notest independent nohelp ;
+  LinkWith $(name) : $(needlibs) ;
   SEARCH on $(name) += $(LOCATE_TARGET) ;
   MsvcDefine $(name) : $(STATICPLUGINS.MSVC_DEFINES) ;
   CFlags $(name) : [ FDefines CS_STATIC_LINKED ] ;
