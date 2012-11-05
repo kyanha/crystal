@@ -39,6 +39,11 @@ rule LinkWith
   for i in $(rawlibs)
   {
     libs += [ ConstructLibraryLinkTarget $(i) : $($(i)_SHARED) ] ;
+    # Also propagate LFlags from static libs
+    if ( "$($(i)_SHARED)" = "" )
+    {
+      libs = [ MergeRemovingDups $(libs) : $($(i).LFLAGS) ] ;
+    }
   }
 
   Depends $($(<)_TARGET) : $(rawlibs) ;
@@ -49,11 +54,6 @@ rule LinkWith
   for l in $(rawlibs)
   {
     LFlags $(<) : $($($(l).EXTERNALLIBS).LFLAGS) ;
-    # Also propagate LFlags from static libs
-    if ( "$($(l)_SHARED)" = "" )
-    {
-      LFlags $(<) : $($(l).LFLAGS.EXTERNAL) ;
-    }
   }
 }
 
