@@ -194,6 +194,11 @@ rule SystemLinkSharedLibrary
   Clean $(barename)clean : $(target) ;
 }
 
+actions together piecemeal Archive bind EXTRAOBJECTS
+{
+  $(AR) $(<) $(>) $(EXTRAOBJECTS)
+}
+
 actions LinkApplication bind NEEDLIBS bind EXTRAOBJECTS
 {
   $(CMD.LINK) -o $(<) $(>) $(EXTRAOBJECTS) $(NEEDLIBS) $(LINKLIBS)
