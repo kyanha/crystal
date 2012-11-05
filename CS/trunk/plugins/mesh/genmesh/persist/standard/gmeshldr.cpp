@@ -875,11 +875,15 @@ csPtr<iBase> csGeneralFactoryLoader::Parse (iDocumentNode* node,
 
   if (shadervars.GetSize () && state->GetSubMeshCount ())
   {
+    // Apply the shader variables only on the first submesh of the genmesh.
+    // This is in order to align to the behavior of materials that are also
+    // set only on the first submesh of the genmesh.
     iGeneralMeshSubMesh* submesh = state->GetSubMesh (0);
     csRef<iShaderVariableContext> svc = 
       scfQueryInterface<iShaderVariableContext> (submesh);
-    for (size_t i = 0; i < shadervars.GetSize(); i++)
-      svc->AddVariable (shadervars[i]);
+    for (size_t i = 0; i < shadervars.GetSize (); i++)
+      if (!svc->GetVariable (shadervars[i]->GetName ()))
+	svc->AddVariable (shadervars[i]);
   }
 
   return csPtr<iBase> (fact);
