@@ -140,9 +140,9 @@ void CameraManager::Frame ()
   if (!camera || cameraMode == CS::Utility::CAMERA_NO_MOVE) return;
 
   // Compute the speed of the camera
-  float elapsedTime = ((float) vc->GetElapsedTicks ()) / 1000.0f;
-  float motionDelta = elapsedTime * motionSpeed;
-  float rotationDelta = elapsedTime * rotationSpeed;
+  csMicroTicks elapsedTime = vc->GetElapsedMicroTicks ();
+  float motionDelta = elapsedTime * motionSpeed * 0.000001f;
+  float rotationDelta = elapsedTime * rotationSpeed * 0.000001f;
 
   if (kbd->GetKeyState (CSKEY_CTRL))
   {
