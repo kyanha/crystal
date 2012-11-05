@@ -3665,17 +3665,6 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
     return true;
   }
 
-  // Return true if the matrix does not scale.
-  static bool TestOrthoMatrix (csMatrix3& m)
-  {
-    // Test if the matrix does not scale. Scaling meshes is illegal
-    // in CS (must be done through hardmove).
-    csVector3 v = m * csVector3 (1, 1, 1);
-    float norm = v.Norm ();
-    float desired_norm = 1.7320508f;
-    return ABS (norm-desired_norm) < 0.01f;
-  }
-
   template<typename T>
   static void ClearList (CS::Threading::ReadWriteMutex& mutex, T& list)
   {
@@ -4221,12 +4210,6 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
           csMatrix3 m;
           if (!SyntaxService->ParseMatrix (matrix_node, m))
             return false;
-          if (!TestOrthoMatrix (m))
-          {
-            ReportWarning (
-              "crystalspace.maploader.load.mesh",
-              child, "Scaling of mesh objects is not allowed in CS!");
-          }
           mesh->GetMovable ()->SetTransform (m);
         }
         csRef<iDocumentNode> vector_node = child->GetNode ("v");
@@ -4666,12 +4649,6 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
             csMatrix3 m;
             if (!SyntaxService->ParseMatrix (matrix_node, m))
               return false;
-            if (!TestOrthoMatrix (m))
-            {
-              ReportWarning (
-                "crystalspace.maploader.load.mesh",
-                child, "Scaling of mesh objects is not allowed in CS!");
-            }
             mesh->GetMovable ()->SetTransform (m);
           }
           csRef<iDocumentNode> vector_node = child->GetNode ("v");
