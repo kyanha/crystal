@@ -49,6 +49,11 @@ rule LinkWith
   for l in $(rawlibs)
   {
     LFlags $(<) : $($($(l).EXTERNALLIBS).LFLAGS) ;
+    # Also propagate LFlags from static libs
+    if ( "$($(l)_SHARED)" = "" )
+    {
+      LFlags $(<) : $($(l).LFLAGS.EXTERNAL) ;
+    }
   }
 }
 
