@@ -82,11 +82,11 @@ rule LFlags
 
   NotFile $(flags) ;
   NEEDLIBS on $($(target)_TARGET) =
-    [ RemoveDupFlags [ on $($(target)_TARGET) GetVar NEEDLIBS ] $(flags) ] ;
-  $(target).LFLAGS = [ RemoveDupFlags $($(target).LFLAGS) $(flags) ] ;
+    [ MergeRemovingDups [ on $($(target)_TARGET) GetVar NEEDLIBS ] : $(flags) ] ;
+  $(target).LFLAGS = [ MergeRemovingDups $($(target).LFLAGS) : $(flags) ] ;
   if ! [ IsElem noexternal : $(3) ]
   {
-    $(target).LFLAGS.EXTERNAL = [ RemoveDupFlags $($(target).LFLAGS.EXTERNAL) $(flags) ] ;
+    $(target).LFLAGS.EXTERNAL = [ MergeRemovingDups $($(target).LFLAGS.EXTERNAL) : $(flags) ] ;
   }
 
   UnitTestLFlags $(target) : $(flags) : $(options) ;
