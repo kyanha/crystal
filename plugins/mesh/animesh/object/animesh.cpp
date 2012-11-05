@@ -1123,7 +1123,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(Animesh)
     if (morphTargetWeights.GetSize() > target)
       return morphTargetWeights[target];
     else
-      return 0.0;
+      return 0.0f;
   }
 
   void AnimeshObject::ClearMorphTargetWeights ()
@@ -1287,7 +1287,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(Animesh)
     return 0;
   }
 
-  void AnimeshObject::NextFrame (csTicks current_time, const csVector3& pos,
+  void AnimeshObject::NextFrame (csTicks currentTime, const csVector3& pos,
     uint currentFrame)
   {
     if (!skeleton) return;
@@ -1295,7 +1295,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(Animesh)
     if (!animationInitialized)
     {
       animationInitialized = true;
-      lastUpdate = current_time;
+      lastUpdate = currentTime;
       accumulatedFrames = MAXIMUM_UPDATE_FRAMES;
 
       // Check if we need to start automatically the animation
@@ -1313,14 +1313,14 @@ CS_PLUGIN_NAMESPACE_BEGIN(Animesh)
 
     // Check if we waited long enough since the last update
     accumulatedFrames++;
-    csTicks accumulatedTime = current_time - lastUpdate;
+    csTicks accumulatedTime = currentTime - lastUpdate;
     if (accumulatedTime < MAXIMUM_UPDATE_DELAY
 	&& accumulatedFrames < MAXIMUM_UPDATE_FRAMES)
       return;
 
     // Update the skeleton
     skeleton->UpdateSkeleton (((float) accumulatedTime) / 1000.0f);
-    lastUpdate = current_time;
+    lastUpdate = currentTime;
     accumulatedFrames = 0;
 
     // TODO: don't update everything if the pose hasn't changed
@@ -1562,7 +1562,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(Animesh)
     return mixMode;
   }
 
-  void AnimeshObject::PositionChild (iMeshObject* child, csTicks current_time)
+  void AnimeshObject::PositionChild (iMeshObject* child, csTicks currentTime)
   {
     // TODO
   }

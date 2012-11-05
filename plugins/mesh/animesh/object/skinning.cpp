@@ -46,7 +46,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(Animesh)
     const size_t morphTargetCount = morphTargetWeights.GetSize();
     size_t activeMorphCount = 0;
     for (size_t i = 0; i < morphTargetCount; i++)
-      if (morphTargetWeights[i] > SMALL_EPSILON)
+      if (fabs (morphTargetWeights[i]) > SMALL_EPSILON)
 	activeMorphCount++;
 
     if (!activeMorphCount)
@@ -74,7 +74,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(Animesh)
     CS_ASSERT (factory->GetSubsetCount ());
     for (size_t mti = 0; mti < morphTargetCount; mti++)
     {
-      if (morphTargetWeights[mti] > SMALL_EPSILON)
+      if (fabs (morphTargetWeights[mti]) > SMALL_EPSILON)
       {
 	MorphTarget* target = factory->subsetMorphTargets[mti];
 	csVertexListWalker<float, csVector3> offsets (target->GetVertexOffsets ());
@@ -139,7 +139,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(Animesh)
 
       for (size_t j = 0; j < 4; ++j, ++influence) // @@SOLVE 4
       {
-        if (influence->influenceWeight > 0.0f)
+        if (influence->influenceWeight > SMALL_EPSILON)
         {
           numInfluences++;
 
@@ -151,14 +151,14 @@ CS_PLUGIN_NAMESPACE_BEGIN(Animesh)
           {
             pivot = inflQuat.real;
           }
-          else if (inflQuat.real.Dot (pivot) < 0.0f)
+          else if (inflQuat.real.Dot (pivot) < -SMALL_EPSILON)
           {
             inflQuat *= -1.0f;
           }
 
           dq += inflQuat * influence->influenceWeight;
         }
-      }   
+      }
 
       if (numInfluences == 0)
       {
@@ -170,13 +170,13 @@ CS_PLUGIN_NAMESPACE_BEGIN(Animesh)
         if (SkinN)
         {
           dstNormals[i] = *srcNormals;
-        }        
+        }
 
         if (SkinTB)
         {
           dstTangents[i] = *srcTangents;
           dstBinormals[i] = *srcBinormals;
-        }        
+        }
       }
       else
       {
@@ -196,7 +196,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(Animesh)
         {
           dstTangents[i] = dq.Transform (*srcTangents);
           dstBinormals[i] = dq.Transform (*srcBinormals);
-        }       
+        }
       }
 
       ++srcVerts;
