@@ -127,14 +127,24 @@ rule ExternalLibs
 ##      inheritcflags: The mentioned object files will inherit compiler flags
 ##      assigned to target's normal object files (in addition to any flags
 ##      already set manually).
+##      afterlibs: The mentioned object files are put on the command
+##      line _after_ the (current) linked libraries.
 rule ExtraObjects
 {
-  CheckOptions inheritcflags : $(3) : $(<) ;
+  CheckOptions inheritcflags afterlibs : $(3) : $(<) ;
   if [ IsElem inheritcflags : $(3) ]
   {
     $(<)_OBJECTS += $(>) ;
   }
-  EXTRAOBJECTS on $($(<)_TARGET) += $(>) ;
+  if [ IsElem afterlibs : $(3) ]
+  {
+    $(<).LFLAGS += $(>) ;
+    NEEDLIBS on $($(<)_TARGET) += $(>) ;
+  }
+  else
+  {
+    EXTRAOBJECTS on $($(<)_TARGET) += $(>) ;
+  }
   Depends $($(<)_TARGET) : $(>) ;
   Clean $(<)clean : $(>) ;
   Clean clean : $(>) ;
