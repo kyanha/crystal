@@ -128,16 +128,13 @@ bool TextHUDManager::HandleEvent (iEvent& event)
   if (!g3d->BeginDraw (CSDRAW_2DGRAPHICS))
     return false;
 
-  // Get the elasped time
-  csTicks elapsed_time = vc->GetElapsedTicks ();
-
   // Update the Frame Per Second data
   frameCount++;
-  frameTime += elapsed_time;
+  frameTime += vc->GetElapsedMicroTicks ();
 
-  if (frameTime > 500)
+  if (frameTime > 500000)
   {
-    currentFPS = ((float) (frameCount * 1000)) / (float) frameTime;
+    currentFPS = ((float) (frameCount * 1000000)) / (float) frameTime;
     frameCount = 0;
     frameTime = 0;
   }
