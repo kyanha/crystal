@@ -85,12 +85,8 @@ void SndTest::Frame ()
   sprite->GetMovable ()->GetTransform ().SetOrigin (sndpos);
   sprite->GetMovable ()->UpdateMove ();
 
-  // Tell 3D driver we're going to display 3D things.
-  if (!g3d->BeginDraw (CSDRAW_3DGRAPHICS))
-    return;
-
-  // Tell the camera to render into the frame buffer.
-  view->Draw ();
+  // Render the 3D view
+  engine->GetRenderManager ()->RenderView (view);
 }
 
 bool SndTest::OnKeyboard(iEvent& ev)

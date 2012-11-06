@@ -31,6 +31,7 @@
 #include "iutil/plugin.h"
 #include "iutil/virtclk.h"
 #include "iengine/campos.h"
+#include "iengine/rendermanager.h"
 #include "iengine/sector.h"
 #include "iengine/scenenode.h"
 #include "iengine/mesh.h"
@@ -416,15 +417,11 @@ void CS3DPanel::MoveCamera ()
 void CS3DPanel::ProcessFrame ()
 {
   MoveCamera ();
-  
-  // Tell 3D driver we're going to display 3D things.
-  if (!g3d->BeginDraw (CSDRAW_CLEARSCREEN | CSDRAW_3DGRAPHICS))
-    return;
   csRef<iGraphics2D> g2d = g3d->GetDriver2D ();
 
-  // Tell the camera to render into the frame buffer.
-  view->Draw ();
-  
+  // Render the 3D view
+  engine->GetRenderManager ()->RenderView (view);
+
   // draw helpers here
   csArray<csSimpleRenderMesh>* helperm = editor->GetHelperMeshes ();
   if (helperm && editor->GetTransformStatus () != iEditor::NOTHING)

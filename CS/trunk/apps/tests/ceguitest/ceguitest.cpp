@@ -90,13 +90,9 @@ void CEGUITest::Frame()
   csMatrix3 rot = csXRotMatrix3 (rotX) * csYRotMatrix3 (rotY);
   csOrthoTransform ot (rot, c->GetTransform().GetOrigin ());
   c->SetTransform (ot);
-  // Tell 3D driver we're going to display 3D things.
-  if (!g3d->BeginDraw (CSDRAW_3DGRAPHICS))
-    return;
 
-  
-  // Tell the camera to render into the frame buffer.
-  view->Draw ();
+  // Render the 3D view
+  engine->GetRenderManager ()->RenderView (view);
   
   /* CEGUI rendering is done by the CEGUI plugin itself since
      we called SetAutoRender (true). */

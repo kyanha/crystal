@@ -35,11 +35,8 @@ void AppMazing::Frame()
   csTicks elapsed_time = vc->GetElapsedTicks ();
   game.Handle (elapsed_time);
 
-  // Tell 3D driver we're going to display 3D things.
-  if (!g3d->BeginDraw (CSDRAW_3DGRAPHICS))
-    return;
-
-  view->Draw ();
+  // Render the 3D view
+  engine->GetRenderManager ()->RenderView (view);
 }
 
 bool AppMazing::OnKeyboard(iEvent& ev)
