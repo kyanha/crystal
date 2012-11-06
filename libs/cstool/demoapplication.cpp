@@ -259,14 +259,10 @@ void DemoApplication::Frame ()
     mouseInitialized = true;
   }
 
-  // Tell the 3D driver we're going to display 3D things.
-  if (!g3d->BeginDraw (CSDRAW_3DGRAPHICS))
-    return;
+  // Render the 3D view
+  engine->GetRenderManager ()->RenderView (view);
 
-  // Tell the camera to render into the frame buffer.
-  view->Draw ();
-
-  // Display of visual debugging informations
+  // Display of the 2D visual debugging informations
   visualDebugger->Display (view);
 }
 
