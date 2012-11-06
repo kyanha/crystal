@@ -45,6 +45,7 @@
 #include "csutil/stringarray.h"
 
 #include "iengine/camera.h"
+#include "iengine/rendermanager.h"
 #include "iengine/scenenode.h"
 #include "iengine/sector.h"
 #include "iengine/movable.h"
