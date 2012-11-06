@@ -91,13 +91,9 @@ void SmokeTest::Frame()
   csMatrix3 rot = csXRotMatrix3 (rotX) * csYRotMatrix3 (rotY);
   csOrthoTransform ot (rot, c->GetTransform().GetOrigin ());
   c->SetTransform (ot);
-  // Tell 3D driver we're going to display 3D things.
-  if (!g3d->BeginDraw (CSDRAW_3DGRAPHICS))
-    return;
 
-  
-  // Tell the camera to render into the frame buffer.
-  view->Draw ();
+  // Render the 3D view
+  engine->GetRenderManager ()->RenderView (view);
 
   cegui->Render ();
 
@@ -264,13 +260,8 @@ void SmokeTest::ScreenShot(const std::string& fileName)
 {
   csRef<iImageIO> iio = csQueryRegistry<iImageIO> (object_reg);
 
-  if (!g3d->BeginDraw (CSDRAW_3DGRAPHICS))
-     return;
-
   // Manually draw to bypass CEGUI.
-  view->Draw ();
-  g3d->FinishDraw ();
-  g3d->Print (0);
+  engine->GetRenderManager ()->RenderView (view);
 
   csRef<iImage> shot = g3d->GetDriver2D()->ScreenShot();
   csRef<iDataBuffer> data = iio->Save (shot, "image/png");

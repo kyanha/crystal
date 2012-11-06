@@ -60,12 +60,8 @@ void PathTut::SetupFrame ()
 
   Animate (elapsed_time);
 
-  // Tell 3D driver we're going to display 3D things.
-  if (!g3d->BeginDraw (CSDRAW_3DGRAPHICS))
-    return;
-
-  // Tell the camera to render into the frame buffer.
-  view->Draw ();
+  // Render the 3D view
+  engine->GetRenderManager ()->RenderView (view);
 }
 
 bool PathTut::HandleEvent (iEvent& ev)

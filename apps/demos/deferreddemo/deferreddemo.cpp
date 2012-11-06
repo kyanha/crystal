@@ -514,7 +514,7 @@ void DeferredDemo::Frame ()
   else
     engine->SetRenderManager (rm_default);
 
-  view->Draw ();
+  engine->GetRenderManager ()->RenderView (view);
 
   cegui->Render ();
 
