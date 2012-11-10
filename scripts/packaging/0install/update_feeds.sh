@@ -27,7 +27,7 @@ _update_feed()
   download_dir=$3
   
   archive=$feedprefix-$CSVER
-  archive_url=http://crystalspace3d.org/downloads/binary/$FEEDVER/${download_dir}$archive.tar.lzma
+  archive_url=http://crystalspace3d.org/downloads/binary/$FEEDVER/${download_dir}$archive.tar.xz
   feedname=$feedprefix-$FEEDVER
   feedpath=$csdir/scripts/0install/$feedname.xml
   
@@ -36,7 +36,7 @@ _update_feed()
     0publish	\
       --add-version=$CSVER	\
       --archive-url=$archive_url	\
-      --archive-file=$archive.tar.lzma	\
+      --archive-file=$archive.tar.xz	\
       --archive-extract=$archive	\
       --set-arch=$arch	\
       --set-stability=testing	\
@@ -47,7 +47,7 @@ _update_feed()
     0publish	\
       --set-version=$CSVER	\
       --archive-url=$archive_url	\
-      --archive-file=$archive.tar.lzma	\
+      --archive-file=$archive.tar.xz	\
       --archive-extract=$archive	\
       --set-arch=$arch	\
       --set-stability=testing	\

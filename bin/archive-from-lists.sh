@@ -3,8 +3,8 @@
 OLD_PWD=$PWD
 MY_PATH=$PWD/$0
 
-ARCHIVER="tar --use-compress-program=lzma -cvf"
-ARCHIVE_EXT=.tar.lzma
+ARCHIVER="tar --use-compress-program=xz -cvf"
+ARCHIVE_EXT=.tar.xz
 
 ARCHIVE_NAME=$1
 shift
