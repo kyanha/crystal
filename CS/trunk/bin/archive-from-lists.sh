@@ -1,7 +1,8 @@
 #!/bin/sh
 
 OLD_PWD=$PWD
-MY_PATH=$PWD/$0
+MY_DIR=$(cd $PWD; cd `dirname $0`; pwd)
+MY_PATH=$MY_DIR/`basename $0`
 
 ARCHIVER="tar --use-compress-program=xz -cvf"
 ARCHIVE_EXT=.tar.xz
