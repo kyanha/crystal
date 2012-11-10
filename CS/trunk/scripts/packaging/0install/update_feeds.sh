@@ -101,7 +101,7 @@ fixup_feed()
   # 0publish doesn't have a command for that, so inject manually
   cat $feedpath | sed -e "s@\(<implementation[^>]*arch=\"$arch\"[^>]*version=\"$CSVER\">\)@\1\n\
       <requires interface=\"http://crystalspace3d.org/0install/$feedname.xml\">\n\
-	    <environment insert=\"\" mode=\"prepend\" name=\"CRYSTAL_1_4\"/>\n\
+	    <environment insert=\"\" mode=\"prepend\" name=\"CRYSTAL_${csver_major}_${csver_minor}\"/>\n\
       </requires>@g" > $feedpath.tmp
   mv $feedpath.tmp $feedpath
 }
