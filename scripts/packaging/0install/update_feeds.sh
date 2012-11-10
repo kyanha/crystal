@@ -1,13 +1,25 @@
 #!/bin/sh
 
-csdir=`dirname $0`/../..
+csdir=`cat Jamfile | grep "^TOP ?=" | sed -e 's/.*"\(.*\)".*/\1/'`
 csbindir=$csdir/bin
+
+fetch_rcsrev()
+{
+  if svn info $csdir 2> /dev/null ; then
+    # Use rcsrev script info source dir is svn working copy
+    csver_svnrev=`$csbindir/rcsrev print`
+  else
+    # Otherwise, csver.h extraction
+    csver_svnrev=`cat $csdir/include/csver.h | grep "^#define *CS_VERSION_RCSREV" | sed -e "s/[^0-9]*//"`
+  fi
+  echo $csver_svnrev
+}
 
 csver_major=`cat $csdir/include/csver.h | grep "^#define *CS_VERSION_NUM_MAJOR" | sed -e "s/[^0-9]*//"`
 csver_minor=`cat $csdir/include/csver.h | grep "^#define *CS_VERSION_NUM_MINOR" | sed -e "s/[^0-9]*//"`
-csver_build=`cat $csdir/include/csver.h | grep "^#define *CS_VERSION_NUM_BUILD" | sed -e "s/[^0-9]*//"`
-csver_svnrev=`svn info $csdir | grep "^Last Changed Rev: " | sed -e "s/^[^0-9]*//"`
-CSVER=$csver_major.$csver_minor.$csver_build.$csver_svnrev
+csver_rel=`cat $csdir/include/csver.h | grep "^#define *CS_VERSION_NUM_RELEASE" | sed -e "s/[^0-9]*//"`
+csver_svnrev=`fetch_rcsrev`
+CSVER=$csver_major.$csver_minor.$csver_rel.$csver_svnrev
 FEEDVER=$csver_major.$csver_minor
 
 create_archive()
@@ -20,6 +32,12 @@ create_archive()
   $csbindir/archive-from-lists.sh $archive $lists
 }
 
+_feedpath()
+{
+  filename=$1
+  echo $csdir/scripts/packaging/0install/$filename
+}
+
 _update_feed()
 {
   feedprefix=$1
@@ -29,7 +47,7 @@ _update_feed()
   archive=$feedprefix-$CSVER
   archive_url=http://crystalspace3d.org/downloads/binary/$FEEDVER/${download_dir}$archive.tar.xz
   feedname=$feedprefix-$FEEDVER
-  feedpath=$csdir/scripts/0install/$feedname.xml
+  feedpath=`_feedpath $feedname.xml`
   
   if [ -e $feedpath ] ; then
     0publish -u $feedpath
@@ -77,7 +95,7 @@ fixup_feed()
 {
   feedprefix=$1
   feedname=$feedprefix-$FEEDVER
-  feedpath=$csdir/scripts/0install/$feedname.xml
+  feedpath=`_feedpath $feedname.xml`
   
   # The *-sdk* feeds use a self-dependency to set the CRYSTAL_1_4 env var
   # 0publish doesn't have a command for that, so inject manually
