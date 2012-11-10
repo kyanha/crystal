@@ -208,7 +208,8 @@ AS_IF([test $enable_static_baselibs = yes],
     CS_CHECK_BUILD_FLAGS([for -static-libstdc++],
         [cs_cv_prog_link_static_libstdcxx], [CS_CREATE_TUPLE([-static-libstdc++])],
         [C++], [],
-        [cs_cv_prog_link_static_libstdcxx=$libstdcxx])
+        [cs_cv_prog_link_static_libstdcxx=$libstdcxx],
+        [], [], [], [unrecognized])
     CS_EMIT_BUILD_PROPERTY([COMPILER.LFLAGS], [$cs_cv_prog_link_static_libstdcxx], [+])])
 
 
