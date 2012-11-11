@@ -232,7 +232,7 @@ rule LinkStaticPlugins
   options = $(5) ;
   CheckOptions shared noshared : $(options) : $(<) ;
   
-  local target_link_with target_lflags lflags_target relayobjs ;
+  local target_link_with target_lflags target_relay_lflags lflags_target relayobjs ;
   if ( $(BUILD_SHARED_LIBS) = "yes" ) && ( $(TRUE_STATIC_PLUGINS) != "yes" )
   {
     local plugin_lib_name ;
@@ -265,7 +265,7 @@ rule LinkStaticPlugins
       include $($(package).STATICDEPS) ;
       HAVE_STATICDEPS.$(package) = yes ;
     }
-    local lflags p ;
+    local lflags relay_lflags p ;
     # Collect optional plugins
     for p in $(optplugins)
     {
@@ -291,7 +291,7 @@ rule LinkStaticPlugins
       {
         CFlags $(target) : $(STATICPLUGIN.$(p).RELAYCFLAGS.$(relaydep)) ;
 	local staticplugin_relayflags = [ InferFlagTuples $(STATICPLUGIN.$(p).RELAYLFLAGS.$(relaydep)) ] ;
-        lflags = [ MergeRemovingDups $(lflags) : 
+        relay_lflags = [ MergeRemovingDups $(relay_lflags) : 
           [ RelayLFlags $(COMPILER.LFLAGS) $(staticplugin_relayflags) :
             $(STATICPLUGIN.$(p).RELAYLIBS.$(relaydep)) ] ] ;
 	# @@@ If we can get the .a file name for the static plugin lib
@@ -301,11 +301,12 @@ rule LinkStaticPlugins
       }
     }
     target_lflags = $(lflags) ;
+    target_relay_lflags = $(relay_lflags) ;
   }
   else
   {
     # Local static plugins
-    local lflags libs p ;
+    local lflags relay_lflags libs p ;
     libs = $(STATICPLUGINS.LIBRARY) ;
     # Collect optional plugins
     for p in $(optplugins)
@@ -331,7 +332,7 @@ rule LinkStaticPlugins
 	  $($(STATICPLUGINS.LIBRARY)_TARGET)
 	] ;
 	local staticplugin_relayflags = [ InferFlagTuples $($(relaydep).LFLAGS) ] ;
-	lflags = [ MergeRemovingDups $(lflags) : 
+	relay_lflags = [ MergeRemovingDups $(relay_lflags) : 
 	  [ RelayLFlags $(COMPILER.LFLAGS) $(staticplugin_relayflags) :
 	    $($(p).RELAYLIBS.$(relaydep)) : $(libpath) ] ] ;
 	relayobjs += [ RelayObjs $(target) :
@@ -340,6 +341,7 @@ rule LinkStaticPlugins
     }
     target_link_with = [ RemoveDupFlags $(libs) ] ;
     target_lflags = [ RemoveDups $(lflags) ] ;
+    target_relay_lflags = $(relay_lflags) ;
   }
   
   # construct initialization sourcefile
@@ -362,7 +364,7 @@ rule LinkStaticPlugins
       $(relayobjs) : 
       noinstall notest independent nohelp $(glue_shared) ;
     LibDepends $(lflags_target) : $(target_link_with) ;
-    LFlags $(lflags_target) : $(target_lflags) ;
+    LFlags $(lflags_target) : $(target_lflags) $(target_relay_lflags) ;
     if $(glue_shared)
     {
       CFlags $(lflags_target) : [ FDefines CS_GLUE_IS_SHARED ] ;
@@ -380,7 +382,7 @@ rule LinkStaticPlugins
   else
   {
     LinkWith $(target) : $(target_link_with) ;
-    LFlags $(target) : $(target_lflags) ;
+    LFlags $(target) : $(target_lflags) $(target_relay_lflags) ;
     ExtraObjects $(target) : $(staticobject) : inheritcflags ;
     ExtraObjects $(target) : $(relayobjs) : inheritcflags afterlibs ;
   }
