@@ -116,6 +116,25 @@ class csGLCanvas: public wxGLCanvas
 {
 private:
   csGraphics2DWX* g2d;
+
+  /**\name Keyboard input state handling
+   * @{ */
+  /// Last keycode received through a EVT_KEY_DOWN event
+  int lastKeyCode;
+  /// CS key codes associated with a keyboard event
+  struct KeyEventCodes
+  {
+    utf32_char raw, cooked;
+
+    KeyEventCodes (utf32_char raw, utf32_char cooked)
+      : raw (raw), cooked (cooked) {}
+  };
+  /**
+   * Mapping of WX KeyCode to CS key codes; used to obtain right codes
+   * for "key up" events
+   */
+  csHash<KeyEventCodes, int> keyCodeToCS;
+  /** @} */
 public:
   csGLCanvas(csGraphics2DWX* g2d, wxWindow *parent, wxWindowID id = wxID_ANY,
              const wxPoint& pos = wxDefaultPosition,
@@ -132,6 +151,7 @@ public:
   void OnEraseBackground(wxEraseEvent& event);
   void OnKeyDown(wxKeyEvent& event);
   void OnKeyUp(wxKeyEvent& event);
+  void OnKeyChar(wxKeyEvent& event);
   void OnMouseEvent(wxMouseEvent& event);
   void OnEnterWindow(wxMouseEvent& event);
   void OnLeaveWindow(wxMouseEvent& event);
