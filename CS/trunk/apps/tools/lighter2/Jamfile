@@ -104,6 +104,8 @@ if $(GL.AVAILABLE) = "yes"
   if $(CG.AVAILABLE) = "yes" { LIGHTER2.PLUGINLIST += glshader_cg ; }
 }
 
-LinkStaticPlugins lighter2_static : $(LIGHTER2.PLUGINLIST) ;
+LinkStaticPlugins lighter2_static : $(LIGHTER2.PLUGINLIST) : : : :
+  # Trigger update of generated code when the plugins list changes
+  $(SUBDIR)/Jamfile ;
 SubVariant ;
 }

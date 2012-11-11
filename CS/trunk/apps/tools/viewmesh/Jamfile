@@ -150,6 +150,8 @@ if $(CEGUI.AVAILABLE) = "yes"
     if $(CG.AVAILABLE) = "yes" { VIEWMESH.PLUGINLIST += glshader_cg ; }
   }
 
-  LinkStaticPlugins viewmesh_static : $(VIEWMESH.PLUGINLIST) ;
+  LinkStaticPlugins viewmesh_static : $(VIEWMESH.PLUGINLIST) : : : :
+    # Trigger update of generated code when the plugins list changes
+    $(SUBDIR)/Jamfile ;
   SubVariant ;
 }
