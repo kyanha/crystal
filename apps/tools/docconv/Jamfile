@@ -34,7 +34,9 @@ if $(ZLIB.AVAILABLE) = "yes"
   DOCCONV.PLUGINLIST += vfs ;
 }
 
-LinkStaticPlugins docconv_static : $(DOCCONV.PLUGINLIST) ;
+LinkStaticPlugins docconv_static : $(DOCCONV.PLUGINLIST) : : : :
+  # Trigger update of generated code when the plugins list changes
+  $(SUBDIR)/Jamfile ;
 FileListEntryApplications docconv_static : app-tool-static ;
 SubVariant ;
 }

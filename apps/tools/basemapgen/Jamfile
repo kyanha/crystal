@@ -51,7 +51,9 @@ if $(PNG.AVAILABLE) = "yes"
   BASEMAPGEN.PLUGINLIST += cspngimg ;
 }
 
-LinkStaticPlugins basemapgen_static : $(BASEMAPGEN.PLUGINLIST) ;
+LinkStaticPlugins basemapgen_static : $(BASEMAPGEN.PLUGINLIST) : : : :
+  # Trigger update of generated code when the plugins list changes
+  $(SUBDIR)/Jamfile ;
 FileListEntryApplications basemapgen_static : app-tool-static ;
 SubVariant ;
 }
