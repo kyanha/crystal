@@ -112,17 +112,8 @@ AC_DEFUN([CS_CHECK_COMMON_TOOLS_BASIC],
 #	CS_EMIT_BUILD_PROPERTY()'s default emitter is employed.
 #------------------------------------------------------------------------------
 AC_DEFUN([CS_CHECK_COMMON_TOOLS_DOC_TEXINFO],
-    [CS_CHECK_PROGS([TEXI2DVI], [texi2dvi])
-    CS_EMIT_BUILD_PROPERTY([CMD.TEXI2DVI], [$TEXI2DVI], [], [], [$1])
-
-    CS_CHECK_PROGS([TEXI2PDF], [texi2pdf])
+    [CS_CHECK_PROGS([TEXI2PDF], [texi2pdf])
     CS_EMIT_BUILD_PROPERTY([CMD.TEXI2PDF], [$TEXI2PDF], [], [], [$1])
-
-    CS_CHECK_PROGS([DVIPS], [dvips])
-    CS_EMIT_BUILD_PROPERTY([CMD.DVIPS], [$DVIPS], [], [], [$1])
-
-    CS_CHECK_PROGS([DVIPDF], [dvipdf])
-    CS_EMIT_BUILD_PROPERTY([CMD.DVIPDF], [$DVIPDF], [], [], [$1])
 
     CS_CHECK_PROGS([MAKEINFO], [makeinfo])
     CS_EMIT_BUILD_PROPERTY([CMD.MAKEINFO], [$MAKEINFO], [], [], [$1])])
