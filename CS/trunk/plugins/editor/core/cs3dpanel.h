@@ -24,6 +24,7 @@
 #include "ieditor/editor.h"
 
 #include "csutil/scf_implementation.h"
+#include "csutil/scopedpointer.h"
 #include "iutil/comp.h"
 #include "iutil/event.h"
 #include "iutil/eventh.h"
@@ -67,10 +68,8 @@ public:
   virtual void OnObjectRemoved (iObjectList* list, iEditorObject* obj);
   virtual void OnObjectsCleared (iObjectList* list);
   
-  /// Called by wxTimer Pump every X seconds
-  void PushFrame ();
-
   void OnSize (wxSizeEvent& event);
+  void OnIdle (wxIdleEvent& event);
   
   void OnDrop (wxCoord x, wxCoord y, iEditorObject* obj);
   
@@ -120,15 +119,14 @@ private:
   class Pump : public wxTimer
   {
   public:
-    Pump (CS3DPanel* p) : panel (p) {}
-    
     virtual void Notify ()
-    { panel->PushFrame (); }
-  private:
-    CS3DPanel* panel;
+    {
+      // Ensure idle events are regularly generated
+      wxWakeUpIdle ();
+    }
   };
 
-  Pump* pump;
+  CS::Utility::ScopedPointer<Pump> pump;
 
   class Panel : public wxPanel
   {
@@ -139,6 +137,8 @@ private:
     
       virtual void OnSize (wxSizeEvent& ev)
       { panel->OnSize (ev); }
+      virtual void OnIdle (wxIdleEvent& ev)
+      { panel->OnIdle (ev); }
     private:
       CS3DPanel* panel;
       

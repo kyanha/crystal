@@ -57,6 +57,7 @@ SCF_IMPLEMENT_FACTORY (CS3DPanel);
 
 BEGIN_EVENT_TABLE(CS3DPanel::Panel, wxPanel)
   EVT_SIZE(CS3DPanel::Panel::OnSize)
+  EVT_IDLE(CS3DPanel::Panel::OnIdle)
 END_EVENT_TABLE()
 
 
@@ -156,7 +157,7 @@ bool CS3DPanel::Initialize (iObjectRegistry* obj_reg)
   the timer triggers the next frame.
   */
   
-  pump = new Pump(this);
+  pump.Reset (new Pump());
   pump->Start (20);
   
   return true;
@@ -165,7 +166,6 @@ bool CS3DPanel::Initialize (iObjectRegistry* obj_reg)
 CS3DPanel::~CS3DPanel()
 {
   q->RemoveListener (this);
-  delete pump;
 }
 
 wxWindow* CS3DPanel::GetWindow ()
@@ -510,13 +510,6 @@ void CS3DPanel::FinishFrame ()
   g3d->Print (0);
 }
 
-void CS3DPanel::PushFrame ()
-{
-  vc->Advance();
-  q->Process();
-  wxYield();
-}
-
 void CS3DPanel::OnSize (wxSizeEvent& event)
 {
   if (!g3d.IsValid () || !g3d->GetDriver2D () || !view.IsValid ())
@@ -540,6 +533,12 @@ void CS3DPanel::OnSize (wxSizeEvent& event)
   view->SetRectangle (0, 0, size.x, size.y);
 
   event.Skip();
+}
+
+void CS3DPanel::OnIdle (wxIdleEvent& event)
+{
+  vc->Advance();
+  q->Process();
 }
 
 void CS3DPanel::OnDrop (wxCoord x, wxCoord y, iEditorObject* obj)
