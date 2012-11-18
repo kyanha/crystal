@@ -52,6 +52,8 @@ public:
   virtual void ClearAll (int)
   { }
 
+  void AllowResize (bool) {}
+
   /// Same but exposed through iGraphics2D interface
   virtual void DrawPixel (int , int , int )
   { }

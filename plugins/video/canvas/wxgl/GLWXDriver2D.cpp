@@ -643,7 +643,7 @@ csGLCanvas::csGLCanvas(csGraphics2DWX* g, wxWindow *parent,
     p = p->GetParent();
   }
   if (visible) SetCurrent();
-  g2d->Resize(w, h);
+  g2d->ResizeNotify (w, h);
 }
 
 

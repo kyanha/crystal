@@ -54,6 +54,8 @@ public:
   
   bool Open();
 
+  void AllowResize (bool) {}
+
   bool PerformExtensionV (char const* command, va_list args);
   virtual void *GetProcAddress (const char *funcname)
   {

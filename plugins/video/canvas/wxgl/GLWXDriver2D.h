@@ -110,6 +110,8 @@ public:
 #endif
   
   void *GetProcAddress (const char *funcname);
+
+  using CS::PluginCommon::CanvasCommonBase::ResizeNotify;
 };
 
 class csGLCanvas: public wxGLCanvas

@@ -52,7 +52,7 @@ class csRect;
  */
 struct iGraphicsCanvas : public virtual iBase
 {
-  SCF_INTERFACE (iGraphicsCanvas, 1, 0, 1);
+  SCF_INTERFACE (iGraphicsCanvas, 1, 0, 2);
   
   /// Open the canvas.
   virtual bool CanvasOpen () = 0;
@@ -145,6 +145,16 @@ struct iGraphicsCanvas : public virtual iBase
 
   /// Get the dimensions of the framebuffer.
   virtual void GetFramebufferDimensions (int& width, int& height) = 0;
+
+  /**
+   * Resize the canvas.
+   * Ignores the "allow resizing" flag, so is useful when to programmatically
+   * resize the canvas while still preventing the user to resize it.
+   * \remarks May nevertheless return \c false if the resizing fails for other reasons.
+   */
+  virtual bool ForceCanvasResize (int w, int h) = 0;
+  /// Returns whether resizing is enabled for the canvas
+  virtual bool CanResize() = 0;
 };
 
 /** @} */

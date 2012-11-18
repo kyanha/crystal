@@ -27,6 +27,8 @@
 #include "iutil/eventq.h"
 #include "iutil/objreg.h"
 #include "csutil/cfgacc.h"
+#include "csutil/csevent.h"
+#include "csutil/event.h"
 #include "csutil/eventnames.h"
 #include "csutil/sysfunc.h"
 
@@ -102,6 +104,32 @@ namespace CS
         EventOutlet = q->CreateEventOutlet (this);
     }
 
+    void CanvasCommonBase::ResizeNotify (int newWidth, int newHeight)
+    {
+      int oldWidth (fbWidth), oldHeight (fbHeight);
+      fbWidth = newWidth;
+      fbHeight = newHeight;
+      BroadcastResize (oldWidth, oldHeight);
+    }
+
+    void CanvasCommonBase::BroadcastResize (int oldWidth, int oldHeight)
+    {
+      if (EventOutlet)
+      {
+        csRef<iEvent> resizeEvent (
+          csPtr<iEvent> (
+            csCommandEventHelper::NewEvent (csGetTicks (),
+                                            csevCanvasResize(objectReg, this),
+                                            true,
+                                            (intptr_t)this)));
+        resizeEvent->Add ("resizeOldWidth", oldWidth);
+        resizeEvent->Add ("resizeOldHeight", oldHeight);
+        /* CanvasCommonBase::Open() causes a resize due to fitting to the working area;
+         * don't emit a resize event in that case */
+        EventOutlet->Post (resizeEvent);
+      }
+    }
+
     void CanvasCommonBase::ChangeDepth (int d)
     {
       if (Depth == d) return;
@@ -123,10 +151,7 @@ namespace CS
         GetFramebufferDimensions (newWidth, newHeight);
         if (FitSizeToWorkingArea (newWidth, newHeight))
         {
-          bool oldResize (AllowResizing);
-          AllowResizing = true;
-          CanvasResize (newWidth, newHeight);
-          AllowResizing = oldResize;
+          ForceCanvasResize (newWidth, newHeight);
         }
       }
 
@@ -191,24 +216,21 @@ namespace CS
 
     bool CanvasCommonBase::CanvasResize (int w, int h)
     {
-      if (!canvas_open)
-      {
-        // Still in Initialization phase, configuring size of canvas
-        fbWidth = w;
-        fbHeight = h;
-        return true;
-      }
-
-      if (!AllowResizing)
+      // If still in Initialization phase, allow configuring size of canvas
+      if (canvas_open && !AllowResizing)
         return false;
 
+      return ForceCanvasResize (w, h);
+    }
+
+    bool CanvasCommonBase::ForceCanvasResize (int w, int h)
+    {
+      int oldWidth (fbWidth), oldHeight (fbHeight);
       fbWidth = w;
       fbHeight = h;
 
-      if (EventOutlet)
-        /* CanvasCommonBase::Open() causes a resize due to fitting to the working area;
-        * don't emit a resize event in that case */
-        EventOutlet->Broadcast (csevCanvasResize(objectReg, this), (intptr_t)this);
+      if (canvas_open)
+        BroadcastResize (oldWidth, oldHeight);
       return true;
     }
 

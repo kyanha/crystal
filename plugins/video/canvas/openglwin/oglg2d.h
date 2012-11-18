@@ -89,7 +89,7 @@ public:
 
   virtual void AllowResize (bool iAllow);
 
-  virtual bool CanvasResize (int width, int height);
+  virtual bool ForceCanvasResize (int width, int height);
 
   virtual void SetFullScreen (bool b);
 

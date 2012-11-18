@@ -727,9 +727,9 @@ void csGraphics2DOpenGL::AllowResize (bool iAllow)
   }
 }
 
-bool csGraphics2DOpenGL::CanvasResize (int width, int height)
+bool csGraphics2DOpenGL::ForceCanvasResize (int width, int height)
 {
-  if (!CS::PluginCommon::GL::CanvasCommonBase::CanvasResize (width, height))
+  if (!CS::PluginCommon::GL::CanvasCommonBase::ForceCanvasResize (width, height))
     return false;
 
   if (is_open && !FullScreen)
@@ -822,7 +822,7 @@ LRESULT CALLBACK csGraphics2DOpenGL::WindowProc (HWND hWnd, UINT message,
         {
 	  RECT R;
 	  GetClientRect (hWnd, &R);
-	  This->Resize (R.right - R.left, R.bottom - R.top);
+	  This->ResizeNotify (R.right - R.left, R.bottom - R.top);
         }
       }
       break;
