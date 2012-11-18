@@ -877,25 +877,12 @@ namespace CS
 
       bool Graphics2DCommon::Resize (int width, int height)
       {
-        int old_width, old_height;
-        GetCanvas()->GetFramebufferDimensions (old_width, old_height);
-        int old_vpwidth (vpWidth), old_vpheight (vpHeight);
-
         if (is_open)
           ((csGLFontCache*)fontCache)->FlushText ();
 
         if (!CS::PluginCommon::Graphics2DCommon::Resize (width, height))
           return false;
 
-        if (old_width != width || old_height != height)
-        {
-          if ((vpLeft == 0) && (vpTop == 0)
-              && (old_vpwidth == old_width) && (old_vpheight == old_height))
-          {
-            SetClipRect (0, 0, vpWidth, vpHeight);
-            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-          }
-        }
         return true;
       }
     } // namespace GL

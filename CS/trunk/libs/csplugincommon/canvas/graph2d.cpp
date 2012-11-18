@@ -63,13 +63,14 @@ namespace CS
       Close ();
     }
 
-    void Graphics2DCommon::HandleResize ()
+    void Graphics2DCommon::HandleResize (iEvent& Event)
     {
       if (viewportIsFullScreen)
       {
           int fbWidth, fbHeight;
           GetCanvas()->GetFramebufferDimensions (fbWidth, fbHeight);
           SetViewport (0, 0, fbWidth, fbHeight);
+          SetClipRect (0, 0, fbWidth, fbHeight);
       }
     }
 
@@ -124,7 +125,7 @@ namespace CS
       }
       else if (Event.Name == evCanvasResize)
       {
-        HandleResize ();
+        HandleResize (Event);
         return true;
       }
       else

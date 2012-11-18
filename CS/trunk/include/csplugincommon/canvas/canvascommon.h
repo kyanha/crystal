@@ -119,6 +119,16 @@ namespace CS
       void Initialize (iObjectRegistry* object_reg);
 
       /**
+       * Handle externally triggered canvas resize.
+       * Should be called when e.g. the window belonging to a canvas was resized.
+       */
+      void ResizeNotify (int newWidth, int newHeight);
+      /**
+       * Send notification after a canvas resize
+       */
+      void BroadcastResize (int oldWidth, int oldHeight);
+
+      /**
        * Helper function for FitSizeToWorkingArea(): obtain workspace dimensions.
        */
       virtual bool GetWorkspaceDimensions (int& width, int& height);
@@ -148,11 +158,9 @@ namespace CS
 
       int GetColorDepth () { return Depth; }
 
-      /// Enable/disable canvas resize (Over-ride in sub classes)
-      virtual void AllowResize (bool /*iAllow*/) { };
-
       /// Resize the canvas
       virtual bool CanvasResize (int w, int h);
+      bool ForceCanvasResize (int w, int h);
 
       /// Return the Native Window interface for this canvas (if it has one)
       virtual iNativeWindow* GetNativeWindow ();
@@ -194,6 +202,9 @@ namespace CS
 
       void GetFramebufferDimensions (int& width, int& height)
       { width = fbWidth; height = fbHeight; }
+
+      bool CanResize ()
+      { return AllowResizing; }
     protected:
       /**\name iNativeWindowManager implementation
       * @{ */

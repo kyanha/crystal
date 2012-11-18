@@ -99,7 +99,7 @@ namespace CS
       virtual iGraphicsCanvas* GetCanvas() = 0;
 
       /// Handle a resize event from the canvas.
-      void HandleResize ();
+      void HandleResize (iEvent& Event);
     public:
       /// Create csGraphics2D object
       Graphics2DCommon ();
