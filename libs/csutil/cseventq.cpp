@@ -456,12 +456,11 @@ iEventOutlet* csEventQueue::GetEventOutlet()
 
 iEventCord* csEventQueue::GetEventCord (const csEventID &name)
 {
-  csEventCord *cord = EventCords.Get (name, 0);
+  csRef<csEventCord> cord = EventCords.Get (name, 0);
   if (!cord)
   {
-    cord = new csEventCord (name);
+    cord.AttachNew (new csEventCord (name, true));
     EventCords.PutUnique(name, cord);
-    cord->DecRef ();
   }
   return cord;
 }

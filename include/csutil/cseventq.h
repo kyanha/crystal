@@ -93,7 +93,7 @@ private:
   // Array of allocated event outlets.
   csArray<csEventOutlet*> EventOutlets;
   // Array of allocated event cords.
-  csHash<csEventCord *, csEventID> EventCords;
+  csHash<csRef<csEventCord>, csEventID> EventCords;
   // Pool of event objects
   csPoolEvent* EventPool;
   /// Registered event handler (used for proper cleanup in RemoveAllListeners())
