@@ -258,11 +258,17 @@ struct csIEEEfloat
     if(exponent == 0)
     {
       unsigned long index;
-      CS::Utility::BitOps::ScanBitReverse (mantissa, index);
-
-      exponent -= (index - 9);
-      mantissa <<= (index - 8);
-      mantissa &= 0x007FFFFF;
+      if (CS::Utility::BitOps::ScanBitReverse (mantissa, index))
+      {
+        exponent -= (index - 9);
+        mantissa <<= (index - 8);
+        mantissa &= 0x007FFFFF;
+      }
+      else
+      {
+        // 0 mantissa -> force float to be 0
+        return (sign != 0) ? -0.0f : 0.0f;
+      }
     }
 
     // Convert the exponent...
