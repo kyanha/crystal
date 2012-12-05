@@ -48,6 +48,7 @@
 #include "csgfx/shadervarnameparser.h"
 #include "csgfx/textureformatstrings.h"
 #include "csgfx/trianglestream.h"
+#include "csgfx/universalimageconv.h"
 #include "csgfx/vertexlight.h"
 #include "csgfx/vertexlistwalker.h"
 #include "csgfx/xorpat.h"
