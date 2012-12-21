@@ -152,8 +152,10 @@ namespace lighter
       // Check for override.
       size_t maxSwapConfig = configMgr->GetInt ("lighter2.swapcachesize", int (maxSwapSize));
       if ((maxSwapConfig >= 0) && (maxSwapConfig <= SIZE_MAX / (1024 * 1024)))
-        maxSwapSize = maxSwapConfig * 1024 * 1024;
-      swapManager = new SwapManager (maxSwapSize);
+        maxSwapSize = maxSwapConfig;
+      // maxSwapSize is in megabytes, make sure the byte count fits as well
+      maxSwapSize = csMin (maxSwapSize, SIZE_MAX / (1024 * 1024));
+      swapManager = new SwapManager (maxSwapSize * 1024 * 1024);
     }
 
     rayDebug.SetFilterExpression (globalConfig.GetDebugProperties().rayDebugRE);
