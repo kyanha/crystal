@@ -234,7 +234,7 @@ namespace lighter
       const RadMaterial* mat = hit.primitive->GetMaterial ();
       if (mat == 0) continue;
       if (!mat->filterImage.IsValid()) continue;
-      ScopedSwapLock<MaterialImage<csColor> > (*(mat->filterImage));
+      ScopedSwapLock<MaterialImage<csColor> > lock (*(mat->filterImage));
       c *= mat->filterImage->GetInterpolated (uv);
     }
     return c;
