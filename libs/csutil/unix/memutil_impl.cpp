@@ -31,7 +31,12 @@ static size_t query_sysinfo()
 #if defined(CS_HAVE_SYSINFO) && defined(CS_HAVE_STRUCT_SYSINFO_TOTALRAM)
   struct sysinfo x;
   if (sysinfo(&x) == 0)
-    n = x.totalram / 1024;
+  {
+    uintmax_t total (x.totalram);
+    total *= x.mem_unit;
+    total = csMin (total, uintmax_t (SIZE_MAX) * 1024);
+    n = total / 1024;
+  }
 #endif
   return n;
 }
