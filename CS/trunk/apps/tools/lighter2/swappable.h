@@ -20,6 +20,7 @@
 #define __SWAPPABLE_H__
 
 #include "lighter.h"
+#include "csutil/invasivelist.h"
 #include "csutil/threading/mutex.h"
 #include "csutil/threading/atomicops.h"
 
@@ -66,17 +67,19 @@ namespace lighter
     /// Notify of a size change of an object
     void UpdateSize (iSwappable* obj);
 
-    /// Free memory, around \a desiredAmount bytes
-    void FreeMemory (size_t desiredAmount);
+    /// Free up memory, so about \a targetSize bytes are cached
+    void FreeMemory (size_t targetSize);
     
     /// Get sizes of swapmanager-managed data
     void GetSizes (uint64& swappedIn, uint64& swappedOut, uint64& maxSize);
   private:
+    struct SwapEntry;
+    typedef CS::Container::InvasiveList<SwapEntry> SwapEntryList;
     // One in-memory entry
-    struct SwapEntry
+    struct SwapEntry : public SwapEntryList::Element
     {
       SwapEntry ()
-        : obj (0), swapStatus (swappedIn), lastUnlockTime (0), 
+        : obj (0), swapStatus (swappedIn),
         lastSize ((size_t)~0)
       {
       }
@@ -86,13 +89,14 @@ namespace lighter
       {
         swappedOut = 0,
         swappedOutEmpty = 1,
-        swappedIn = 2,
-        swapping = 3
+        swappedIn = 2
       };
 
       int32 swapStatus;
-      size_t lastUnlockTime;
       size_t lastSize;
+      
+      // Mutex held while an entry is being swapped in or out
+      CS::Threading::Mutex swapMutex;
     };
     csBlockAllocator<SwapEntry> entryAlloc;
 
@@ -105,30 +109,17 @@ namespace lighter
     // Given an object, get a temporary filename for the cache
     csString GetFileName (iSwappable* obj);
 
-    // Compare two LM entries
-    static int SwapEntryAgeCompare (SwapEntry* const & e1, 
-                                    SwapEntry* const& e2)
-    {
-      if (e1->lastUnlockTime < e2->lastUnlockTime)
-        return -1;
-      else if (e2->lastUnlockTime < e1->lastUnlockTime)
-        return 1;
-      else
-        return 0;
-    }
-    
-    //All current LM cache entries
+    // All current swap cache entries
     typedef csHash<SwapEntry*, csPtrKey<iSwappable> > SwapCacheType;
     SwapCacheType swapCache;
 
-    //Currently unlocked LM cache entires (potential to be swapped out)
-    typedef csSet<csPtrKey<SwapEntry> > UnlockedEntriesType;
-    UnlockedEntriesType unlockedCacheEntries;
+    //Currently unlocked swap cache entires (potential to be swapped out)
+    SwapEntryList unlockedCacheEntriesLRU;
 
     //Statistics for house-keeping
-    size_t maxCacheSize, currentCacheSize;
+    size_t maxCacheSize;
+    volatile size_t currentCacheSize;
     uint64 swappedOutSize;
-    size_t currentUnlockTime;
 
     CS::Threading::Mutex swapMutex;
 
@@ -189,17 +180,17 @@ namespace lighter
     void Lock () const
     {
       CS::Threading::ScopedLock<CS::Threading::Mutex> swapLock (lockMutex);
-      if (lockCount == 0)
+      if (!IsLocked())
         globalLighter->swapManager->Lock (
           const_cast<iSwappable*> ((iSwappable*)this));
-      lockCount++;
+      CS::Threading::AtomicOperations::Increment (&lockCount);
     }
     void Unlock () const
     {
       CS::Threading::ScopedLock<CS::Threading::Mutex> swapLock (lockMutex);
-      CS_ASSERT(lockCount > 0);
-      lockCount--;
-      if (lockCount == 0)
+      CS_ASSERT(CS::Threading::AtomicOperations::Read (&lockCount));
+      CS::Threading::AtomicOperations::Decrement (&lockCount);
+      if (!IsLocked())
         globalLighter->swapManager->Unlock (
           const_cast<iSwappable*> ((iSwappable*)this));
     }

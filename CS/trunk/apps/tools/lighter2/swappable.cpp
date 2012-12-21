@@ -28,7 +28,7 @@
 namespace lighter
 {
   SwapManager::SwapManager (size_t maxSize) : entryAlloc (1000),   
-    currentCacheSize (0), swappedOutSize (0), currentUnlockTime (1)
+    currentCacheSize (0), swappedOutSize (0)
   {
     size_t maxVirtSize = CS::Platform::GetMaxVirtualSize();
     size_t maxVirtBytes;
@@ -70,9 +70,8 @@ namespace lighter
     CS_ASSERT(swapCache.Get (obj, 0) == 0);
     SwapEntry* e = entryAlloc.Alloc();
     e->obj = obj;
-    e->lastUnlockTime = currentUnlockTime++;
     swapCache.Put (obj, e);
-    unlockedCacheEntries.Add (e);
+    unlockedCacheEntriesLRU.PushBack (e);
   }
 
   void SwapManager::UnregisterSwappable (iSwappable* obj)
@@ -90,7 +89,7 @@ namespace lighter
       abort();
     }
 
-    unlockedCacheEntries.Delete (e);
+    unlockedCacheEntriesLRU.Delete (e);
     if (e->lastSize != (size_t)~0)
       currentCacheSize -= e->lastSize;
 
@@ -107,15 +106,12 @@ namespace lighter
       CS::Threading::MutexScopedLock lock (swapMutex);
       e = swapCache.Get (obj, 0);
       CS_ASSERT(e != 0);
-      unlockedCacheEntries.Delete (e);
+      unlockedCacheEntriesLRU.Delete (e);
 
       AccountEntrySize (e);
     }
 
-    if (currentCacheSize > maxCacheSize)
-    {
-      FreeMemory ((currentCacheSize - maxCacheSize) * 2);
-    }
+    FreeMemory (maxCacheSize);
 
     if (!SwapIn (e))
     { 
@@ -131,8 +127,7 @@ namespace lighter
 
     SwapEntry* e = swapCache.Get (obj, 0);
     CS_ASSERT(e != 0);
-    unlockedCacheEntries.Add (e);
-    e->lastUnlockTime = currentUnlockTime++;
+    unlockedCacheEntriesLRU.PushBack (e);
   }
 
   void SwapManager::UpdateSize (iSwappable* obj)
@@ -154,12 +149,10 @@ namespace lighter
 
   bool SwapManager::SwapOut (SwapEntry* e)
   {
+    CS::Threading::MutexScopedLock lockEntry (e->swapMutex);
+    
     // If nothing to swap out, nothing to do    
-    int32 oldStatus = 
-      CS::Threading::AtomicOperations::CompareAndSet (
-      &e->swapStatus, SwapEntry::swapping, SwapEntry::swappedIn);
-
-    if (oldStatus != SwapEntry::swappedIn)
+    if (e->swapStatus != SwapEntry::swappedIn)
       return true;
 
     csString tmpFileName = GetFileName (e->obj);
@@ -232,11 +225,10 @@ namespace lighter
     }
     else
       e->swapStatus = SwapEntry::swappedOutEmpty;
-
-    // Mark it as swapped out too..
+    
+    // Update cache sizes.
     {
       CS::Threading::MutexScopedLock lock (swapMutex);
-      unlockedCacheEntries.Delete (e);    
       currentCacheSize -= e->lastSize;
       swappedOutSize += e->lastSize;
     }
@@ -246,19 +238,14 @@ namespace lighter
 
   bool SwapManager::SwapIn (SwapEntry* e)
   {
-    // MT Note: Not supported trying to both swap out and in an entry at same time
-    // Double in or double out is however supported.
+    CS::Threading::MutexScopedLock lockEntry (e->swapMutex);
 
-    // Set it to swapped in atomic
-    int32 oldStatus = 
-      CS::Threading::AtomicOperations::Set (&e->swapStatus, SwapEntry::swappedIn);
-    
-    if (oldStatus == SwapEntry::swappedIn ||
-      oldStatus == SwapEntry::swapping) 
+    if (e->swapStatus == SwapEntry::swappedIn)
       return true;
-
-    if (oldStatus == SwapEntry::swappedOutEmpty)
+    
+    if (e->swapStatus == SwapEntry::swappedOutEmpty)
     {
+      e->swapStatus = SwapEntry::swappedIn;
       e->obj->SwapIn (0, 0);      
       return true;
     }
@@ -340,30 +327,17 @@ namespace lighter
     return true;
   }
 
-  void SwapManager::FreeMemory (size_t desiredAmount)
+  void SwapManager::FreeMemory (size_t targetSize)
   {
-    // Walk through the unlocked set of entries, swap them out until we have enough free memory
-    csArray<SwapEntry*> sortedList;
-
+    while (targetSize < currentCacheSize)
     {
-      CS::Threading::MutexScopedLock lock (swapMutex);
-
-      UnlockedEntriesType::GlobalIterator git = unlockedCacheEntries.GetIterator ();
-      while (git.HasNext ())
+      SwapEntry* e;
       {
-        SwapEntry* e = git.Next ();
-        AccountEntrySize (e);
-        sortedList.InsertSorted (e, SwapEntryAgeCompare);
+        CS::Threading::MutexScopedLock lock (swapMutex);
+        if (unlockedCacheEntriesLRU.IsEmpty()) return;
+        e = static_cast<SwapEntry*> (unlockedCacheEntriesLRU.PopFront());
       }
-    }
-
-    size_t targetSize = csMax ((long)currentCacheSize - (long)desiredAmount, 0L);
-    
-    csArray<SwapEntry*>::Iterator sit = sortedList.GetIterator ();
-    while ((targetSize < currentCacheSize) && sit.HasNext ())
-    {
-      SwapEntry* e = sit.Next ();      
-
+      
       if (!SwapOut (e))
       { 
         csPrintfErr ("Error swapping out data for %p\n", e->obj);
