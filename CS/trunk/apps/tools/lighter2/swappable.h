@@ -53,6 +53,10 @@ namespace lighter
   public:
     CS::Memory::Heap swapHeap;
 
+    /**
+     * Construct swap manager.
+     * \param maxSize Maximum cache size, in bytes.
+     */
     SwapManager (size_t maxSize);
     ~SwapManager ();
   
