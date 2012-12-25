@@ -468,6 +468,10 @@ namespace lighter
         srcSubmesh->sourceSubmesh->GetMaterial() : srcSubmesh->material;
       iGeneralMeshSubMesh* new_submesh = genFact->AddSubMesh (indices, material,
         allocatedSubmeshes[i].name);
+      new_submesh->SetZMode (srcSubmesh->sourceSubmesh->GetZMode());
+      new_submesh->SetRenderPriority (srcSubmesh->sourceSubmesh->GetRenderPriority());
+      new_submesh->SetMixmode (srcSubmesh->sourceSubmesh->GetMixmode());
+      new_submesh->SetBack2Front (srcSubmesh->sourceSubmesh->GetBack2Front());
 
       csRef<iShaderVariableContext> src_svc =
         scfQueryInterface<iShaderVariableContext> (srcSubmesh->sourceSubmesh);
