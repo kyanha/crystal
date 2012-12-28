@@ -43,7 +43,6 @@ actions DoSplitDebugInfo
 DEBUGINFOTOOLS.DUMP_SYMS.WIN32 ?= "$(TOP)/bin/dump_syms.exe" ;
 DEBUGINFOTOOLS.DUMP_SYMS ?= $(DEBUGINFOTOOLS.DUMP_SYMS.$(TARGET.OS)) ;
 DEBUGINFOTOOLS.SYMBOLSTORE ?= "$(TOP)/bin/symbolstore.py" ;
-CABARC ?= cabarc ;
 
 if $(DEBUGINFOTOOLS.SYMBOLSTORE) && $(DEBUGINFOTOOLS.DUMP_SYMS)
 {
@@ -136,7 +135,7 @@ if $(DEBUGINFOTOOLS.SYMBOLSTORE) && $(DEBUGINFOTOOLS.DUMP_SYMS)
     actions CabCompressAndRemove
     {
       cd $(SUBDIR)
-      cabarc N $(<) $(>)
+      makecab //D CompressionType=LZX //D CompressionMemory=21 $(>) $(<) 
       if test $? -eq 0 ; then rm $(>) ; fi
       cd -
     }
