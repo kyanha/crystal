@@ -1,6 +1,7 @@
+
 import bpy
 
-from io_scene_cs.utilities import rnaType, rnaOperator, B2CS, EnumProperty, SHADERS
+from io_scene_cs.utilities import rnaType, rnaOperator, B2CS, EnumProperty, StringProperty, FloatProperty, SHADERS
 
 from io_scene_cs.utilities import RemovePanels, RestorePanels 
 
@@ -44,6 +45,12 @@ class MATERIAL_PT_B2CS__context_material(csMaterialPanel, bpy.types.Panel):
           row.prop(mat, "priority")
           row = layout.row()
           row.prop(mat, "zbuf_mode")
+          row = layout.row()
+          row.prop(mat, "water_fog_color")
+          row = layout.row()
+          row.prop(mat, "water_perturb_scale")
+          row = layout.row()
+          row.prop(mat, "water_fog_density")
 
        
         
@@ -74,3 +81,19 @@ EnumProperty(['Material'], attr="zbuf_mode", name="Z-buffer mode",
             ('ztest','Z-Test',"Test only"),
             ('zuse','Z-Use',"Test, write if successful")],
      default='zuse')
+
+StringProperty(['Material'], attr="water_fog_color",
+        name="Water Fog Color",
+        description="Fog color inside the water surface", 
+        default='0,0.1,0.15,1')
+
+FloatProperty(['Material'], attr="water_fog_density",
+        name="Water Fog Density",
+        description="Fog density inside the water surface", 
+        default=3.0)
+
+StringProperty(['Material'], attr="water_perturb_scale",
+        name="Water Perturb Scale",
+        description="Fog perturb scale", 
+        default='0.9,0.9,0,0')
+

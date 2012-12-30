@@ -48,10 +48,21 @@ def MaterialAsCS(self, func, depth=0, **kwargs):
 
   func(' '*depth +'  <shadervar type="vector4" name="specular">%f, %f, %f, 1</shadervar>'% tuple(self.specular_color))
   
+  haswater = False
+
   for step in ['depthwrite', 'ambient', 'diffuse']:
     if getattr(self, step+'_step') != 'DEFAULT':
       name = GetShaderName(getattr(self, step+'_step'))
+      if name == 'reflect_water_plane':
+        haswater = True
+        if step == 'ambient':
+          step = 'base'     # Hacky@@@
       func(' '*depth +'  <shader type="%s">%s</shader>'%(step, name))   
+
+  if haswater:
+    func(' '*depth +'  <shadervar type="vector4" name="water fog color">%s</shadervar>'%(self.water_fog_color,))
+    func(' '*depth +'  <shadervar type="vector4" name="water perturb scale">%s</shadervar>'%(self.water_perturb_scale,))
+    func(' '*depth +'  <shadervar type="float" name="water fog density">%s</shadervar>'%(self.water_fog_density,))
 
   func(' '*depth +'</material>')
 
