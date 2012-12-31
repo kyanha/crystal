@@ -375,7 +375,8 @@ bool csMeshWrapper::SomeParentHasStaticLOD () const
     parent_mesh = parent_node->QueryMesh ();
   }
 
-  if (((csMeshWrapper*)parent_mesh)->static_lod) return true;
+  csMeshWrapper* pm = static_cast<csMeshWrapper*> (parent_mesh);
+  if (pm->static_lod && !pm->static_lod->IsNewStyle ()) return true;
   return ((csMeshWrapper*)parent_mesh)->SomeParentHasStaticLOD ();
 }
 
@@ -516,7 +517,8 @@ void csMeshWrapper::SetRenderPriority (CS::Graphics::RenderPriority rp)
 }
 
 csRenderMesh** csMeshWrapper::GetRenderMeshes (int& n, iRenderView* rview, 
-					       uint32 frustum_mask)
+					       uint32 frustum_mask,
+					       iMeshObject* loddedobject)
 {
   if (DoInstancing())
   {
@@ -601,8 +603,11 @@ csRenderMesh** csMeshWrapper::GetRenderMeshes (int& n, iRenderView* rview,
   }
 
   csTicks lt = engine->GetLastAnimationTime ();
-  meshobj->NextFrame (lt, movable.GetPosition (), 
-    rview->GetCurrentFrameNumber ());
+
+  iMeshObject* obj = meshobj;
+  if (loddedobject) obj = loddedobject;
+
+  obj->NextFrame (lt, movable.GetPosition (), rview->GetCurrentFrameNumber ());
 
   csMeshWrapper *meshwrap = this;
   last_anim_time = lt;
@@ -620,7 +625,7 @@ csRenderMesh** csMeshWrapper::GetRenderMeshes (int& n, iRenderView* rview,
     parent = parent->GetParent ();
   }
 
-  CS::Graphics::RenderMesh** rmeshes = meshobj->GetRenderMeshes (n, rview, &movable,
+  CS::Graphics::RenderMesh** rmeshes = obj->GetRenderMeshes (n, rview, &movable,
   	old_ctxt != 0 ? 0 : frustum_mask);
   if (DoInstancing())
   {

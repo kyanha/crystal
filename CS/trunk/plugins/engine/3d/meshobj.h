@@ -437,8 +437,8 @@ public:
   /// Return true if there is a parent mesh that has static lod.
   bool SomeParentHasStaticLOD () const;
 
-  virtual CS::Graphics::RenderMesh** GetRenderMeshes (int& num, iRenderView* rview,
-  	uint32 frustum_mask);
+  CS::Graphics::RenderMesh** GetRenderMeshes (int& num, iRenderView* rview,
+  	uint32 frustum_mask, iMeshObject* loddedobject);
   /**
    * Adds a render mesh to the list of extra render meshes.
    * This list is used for special cases (like decals) where additional
