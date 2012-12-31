@@ -446,31 +446,40 @@ public:
     else
       cmesh->UnsetLODFade ();
 
+    iMeshObject* loddedobject = 0;
+
     if (static_lod)
     {
       float lod = static_lod->GetLODValue (distance);
-      csArray<iMeshWrapper*>* meshes1;
-      csArray<iMeshWrapper*>* meshes2;
-      float lodFade;
-      bool hasFade = static_lod->GetMeshesForLODFaded (lod,
-	meshes1, meshes2, lodFade);
-      size_t i;
-      if (meshes1 != 0)
+      if (static_lod->IsNewStyle ())
       {
-	for (i = 0 ; i < meshes1->GetSize () ; i++)
-	  MarkMeshAndChildrenVisible ((*meshes1)[i], frustum_mask,
-	    hasFade, fade*lodFade);
+	loddedobject = static_lod->GetMeshObjectForLOD (lod);
       }
-      if (meshes2 != 0)
+      else
       {
-	for (i = 0 ; i < meshes2->GetSize () ; i++)
-	  MarkMeshAndChildrenVisible ((*meshes2)[i], frustum_mask,
-	    hasFade, fade*(1.0f-lodFade));
+        csArray<iMeshWrapper*>* meshes1;
+        csArray<iMeshWrapper*>* meshes2;
+        float lodFade;
+        bool hasFade = static_lod->GetMeshesForLODFaded (lod,
+	  meshes1, meshes2, lodFade);
+        size_t i;
+        if (meshes1 != 0)
+        {
+	  for (i = 0 ; i < meshes1->GetSize () ; i++)
+	    MarkMeshAndChildrenVisible ((*meshes1)[i], frustum_mask,
+	      hasFade, fade*lodFade);
+        }
+        if (meshes2 != 0)
+        {
+	  for (i = 0 ; i < meshes2->GetSize () ; i++)
+	    MarkMeshAndChildrenVisible ((*meshes2)[i], frustum_mask,
+	      hasFade, fade*(1.0f-lodFade));
+        }
       }
     }
 
     int num;
-    csRenderMesh** meshes = cmesh->GetRenderMeshes (num, rview, frustum_mask);
+    csRenderMesh** meshes = cmesh->GetRenderMeshes (num, rview, frustum_mask, loddedobject);
     CS_ASSERT(!((num != 0) && (meshes == 0)));
 #ifdef CS_DEBUG
     for (int i = 0 ; i < num ; i++)
@@ -645,33 +654,42 @@ void csSector::ObjectVisible (csMeshWrapper* cmesh, iRenderView* rview,
   else
     cmesh->UnsetLODFade ();
 
+  iMeshObject* loddedobject = 0;
+
   if (static_lod)
   {
     float lod = static_lod->GetLODValue (distance);
-    csArray<iMeshWrapper*>* meshes1;
-    csArray<iMeshWrapper*>* meshes2;
-    float lodFade;
-    bool hasFade = static_lod->GetMeshesForLODFaded (lod,
-      meshes1, meshes2, lodFade);
-    size_t i;
-    if (meshes1 != 0)
+    if (static_lod->IsNewStyle ())
     {
-      for (i = 0 ; i < meshes1->GetSize () ; i++)
-	MarkMeshAndChildrenVisible ((*meshes1)[i], rview, frustum_mask,
-	  hasFade, fade*lodFade);
+      loddedobject = static_lod->GetMeshObjectForLOD (lod);
     }
-    if (meshes2 != 0)
+    else
     {
-      for (i = 0 ; i < meshes2->GetSize () ; i++)
-	MarkMeshAndChildrenVisible ((*meshes2)[i], rview, frustum_mask,
-	  hasFade, fade*(1.0f-lodFade));
+      csArray<iMeshWrapper*>* meshes1;
+      csArray<iMeshWrapper*>* meshes2;
+      float lodFade;
+      bool hasFade = static_lod->GetMeshesForLODFaded (lod,
+	meshes1, meshes2, lodFade);
+      size_t i;
+      if (meshes1 != 0)
+      {
+	for (i = 0 ; i < meshes1->GetSize () ; i++)
+	  MarkMeshAndChildrenVisible ((*meshes1)[i], rview, frustum_mask,
+	    hasFade, fade*lodFade);
+      }
+      if (meshes2 != 0)
+      {
+	for (i = 0 ; i < meshes2->GetSize () ; i++)
+	  MarkMeshAndChildrenVisible ((*meshes2)[i], rview, frustum_mask,
+	    hasFade, fade*(1.0f-lodFade));
+      }
     }
   }
 
   csSectorVisibleRenderMeshes visMesh;
   visMesh.imesh = cmesh;
   int num;
-  csRenderMesh** meshes = cmesh->GetRenderMeshes (num, rview, frustum_mask);
+  csRenderMesh** meshes = cmesh->GetRenderMeshes (num, rview, frustum_mask, loddedobject);
   CS_ASSERT(!((num != 0) && (meshes == 0)));
 #ifdef CS_DEBUG
   for (int i = 0 ; i < num ; i++)
@@ -703,7 +721,7 @@ csSectorVisibleRenderMeshes* csSector::GetVisibleRenderMeshes (int& num,
   bool mm = cmesh->DoMinMaxRange ();
   if (!static_lod && !mm)
   {
-    csRenderMesh** meshes = cmesh->GetRenderMeshes (num, rview, frustum_mask);
+    csRenderMesh** meshes = cmesh->GetRenderMeshes (num, rview, frustum_mask, 0);
     CS_ASSERT(!((num != 0) && (meshes == 0)));
   #ifdef CS_DEBUG
     for (int i = 0 ; i < num ; i++)

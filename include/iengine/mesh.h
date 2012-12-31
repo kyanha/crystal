@@ -262,7 +262,7 @@ struct csScreenBoxResult
  */
 struct iMeshWrapper : public virtual iBase
 {
-  SCF_INTERFACE(iMeshWrapper, 5, 0, 0);
+  SCF_INTERFACE(iMeshWrapper, 6, 0, 0);
 
   /**
    * Get the iObject for this mesh object. This can be used to get the
@@ -611,12 +611,6 @@ struct iMeshWrapper : public virtual iBase
    * Get the shader variable context of the mesh object.
    */
   virtual iShaderVariableContext* GetSVContext() = 0;
-
-  /**
-   * Get the render mesh list for this mesh wrapper and given view
-   */
-  virtual csRenderMesh** GetRenderMeshes (int& num, iRenderView* rview,
-    uint32 frustum_mask) = 0;
 
   /**
    * Adds a render mesh to the list of extra render meshes.
