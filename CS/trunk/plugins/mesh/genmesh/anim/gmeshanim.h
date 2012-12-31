@@ -358,7 +358,7 @@ class csGenmeshAnimationControlFactory :
     iGenMeshAnimationControlFactory>
 {
 private:
-  csGenmeshAnimationControlType* type;
+  csRef<csGenmeshAnimationControlType> type;
   iObjectRegistry* object_reg;
 
   csStringArray autorun_scripts;
