@@ -94,6 +94,9 @@ class RENDER_PT_csSettingsPanel(csSettingsPanel, bpy.types.Panel):
     row = layout.row()
     row.prop(B2CS.properties, "library")
     row = layout.row()
+    if not B2CS.properties.library:
+      row.prop(B2CS.properties, "sharedMaterial")
+    row = layout.row()
     row.prop(B2CS.properties, "enableDoublesided")
     row = layout.row()
     row.prop(B2CS.properties, "exportPath")
@@ -157,3 +160,8 @@ B2CS.BoolProperty( attr="enableDoublesided",
         name="Enable double sided meshes",
         description="Global enabling of the 'Double Sided' option for all meshes",
         default=False)
+
+B2CS.BoolProperty( attr="sharedMaterial",
+        name="Shared materials and textures",
+        description="Define all textures and materials in the world file",
+        default=True)

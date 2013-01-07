@@ -111,6 +111,16 @@ def ExportWorld(path):
     # Set a default camera if none is defined
     bpy.context.scene.CameraAsCS(Write(f), 2)
 
+  # Export shared materials and textures in world file
+  if B2CS.properties.sharedMaterial:
+    use_imposter = False
+    for scene in bpy.data.scenes:
+      for ob in scene.objects:
+        if ob.HasImposter():
+          use_imposter = True
+          break
+    ExportMaterials(Write(f), 2, deps, use_imposter)
+
   # Export scenes as CS sectors in the 'world' file
   for scene in bpy.data.scenes:
     scene.AsCS(Write(f), 2)
@@ -149,7 +159,7 @@ def ExportLibrary(path):
       if ob.HasImposter():
         use_imposter = True
         break
-  ExportMaterials(Write(f), 2, path, deps, use_imposter)
+  ExportMaterials(Write(f), 2, deps, use_imposter)
 
   # Export the objects composing the Blender world
   for typ in deps:

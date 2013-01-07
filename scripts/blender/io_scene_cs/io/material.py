@@ -93,7 +93,7 @@ bpy.types.Material.GetDependencies = MaterialDependencies
 
 #===== static method ExportMaterials ==============================
 
-def ExportMaterials(func, depth, path, dependencies, use_imposter):
+def ExportMaterials(func, depth, dependencies, use_imposter):
   """ Write an xml description of the materials/textures/shaders
       param dependencies: list of textures ('T' key) and 
             materials ('M' key)

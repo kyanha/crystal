@@ -183,8 +183,8 @@ def CameraAsCS (self, func, depth, camera=None):
     # Flip Y and Z axis.
     func(' '*depth +'  <position x="%f" z="%f" y="%f" />'%tuple(camera.location))
     loc, rot, scale = DecomposeMatrix(camera.matrix_world)
-    func(' '*depth +' <up x="%f" z="%f" y="%f" />'%tuple(rot * mathutils.Vector((0.0, 1.0, 0.0))))
-    func(' '*depth +' <forward x="%f" z="%f" y="%f" />'%tuple(rot * mathutils.Vector((0.0, 0.0, -1.0))))
+    func(' '*depth +'  <up x="%f" z="%f" y="%f" />'%tuple(rot * mathutils.Vector((0.0, 1.0, 0.0))))
+    func(' '*depth +'  <forward x="%f" z="%f" y="%f" />'%tuple(rot * mathutils.Vector((0.0, 0.0, -1.0))))
     func(' '*depth +'</start>')
 
 bpy.types.Scene.CameraAsCS = CameraAsCS

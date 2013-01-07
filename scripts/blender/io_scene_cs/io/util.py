@@ -25,10 +25,21 @@ def Join(*args):
   
 UNIQUE_NAMES = {'None': '', }
 def GetUniqueName(obj):
-  library = obj.library.filepath if obj.library else None
-  if str(library) not in UNIQUE_NAMES:
-    UNIQUE_NAMES[str(library)] = str(len(UNIQUE_NAMES))+'-'
-  return bpy.path.clean_name(UNIQUE_NAMES[str(library)] + obj.name)
+  # Images can be packed in Blender files or saved in external locations;
+  # consequently we use the unique filename as unique name for images:
+  # two images sharing the same name and path are considered identical
+  if type(obj) == bpy.types.Image:
+    uname = obj.ufilename
+  # Other types of objects: two objects sharing the same name in
+  # a same Blender file are considered identical
+  else:
+    library = obj.library.filepath if obj.library else None
+    if str(library) not in UNIQUE_NAMES:
+      UNIQUE_NAMES[str(library)] = str(len(UNIQUE_NAMES))+'-'
+    uname = UNIQUE_NAMES[str(library)] + obj.name
+  # All characters of the unique name besides A-Z/a-z, 0-9
+  # are replaced with “_”
+  return bpy.path.clean_name(uname)
 
 UNIQUE_FILENAMES = {}
 def GetUniqueFileName(obj):

@@ -131,9 +131,10 @@ class Hierarchy:
     # Export mesh
     fa = open(Join(path, 'factories/', self.object.data.name), 'w')
     self.WriteCSLibHeader(Write(fa), animesh)
-    objectDeps = self.object.GetDependencies()
-    use_imposter = not animesh and self.object.data.use_imposter
-    ExportMaterials(Write(fa), 2, path, objectDeps, use_imposter)
+    if not B2CS.properties.sharedMaterial:
+      objectDeps = self.object.GetDependencies()
+      use_imposter = not animesh and self.object.data.use_imposter
+      ExportMaterials(Write(fa), 2, objectDeps, use_imposter)
     if animesh:
       self.WriteCSAnimeshHeader(Write(fa), 2)
     self.WriteCSMeshBuffers(Write(fa), 2, path, animesh, dontClose=False)
