@@ -2144,23 +2144,6 @@ csPtr<iObjectIterator> csEngine::GetVisibleObjects (
   return 0;
 }
 
-static void HandleStaticLOD (csMeshWrapper* cmesh, const csVector3& pos,
-	csArray<iMeshWrapper*>& list)
-{
-  csStaticLODMesh* static_lod = cmesh->GetStaticLODMesh ();
-  if (!static_lod) return;
-  // We also need to add the child here that is at the right LOD
-  // distance from the start of the segment.
-  float distance = csQsqrt (cmesh->GetSquaredDistance (pos));
-  float lod = static_lod->GetLODValue (distance);
-  csArray<iMeshWrapper*>& meshes = static_lod->GetMeshesForLOD (lod);
-  size_t i;
-  // @@@ We assume here that there will be no portals as children.
-  // This is perhaps a bad assumption.
-  for (i = 0 ; i < meshes.GetSize () ; i++)
-    list.Push (meshes[i]);
-}
-
 void csEngine::GetNearbyMeshList (iSector* sector,
     const csVector3& start, const csVector3& end,
     csArray<iMeshWrapper*>& list,
@@ -2178,8 +2161,6 @@ void csEngine::GetNearbyMeshList (iSector* sector,
     if (imw)
     {
       list.Push (imw); 
-      csMeshWrapper* cmesh = (csMeshWrapper*)imw;
-      HandleStaticLOD (cmesh, start, list);
 
       if (crossPortals && imw->GetPortalContainer ())
       {
@@ -2244,8 +2225,6 @@ void csEngine::GetNearbyMeshList (iSector* sector,
     if (imw)
     {
       list.Push (imw); 
-      csMeshWrapper* cmesh = (csMeshWrapper*)imw;
-      HandleStaticLOD (cmesh, pos, list);
 
       if (crossPortals && imw->GetPortalContainer ())
       {
@@ -2281,8 +2260,6 @@ void csEngine::GetNearbyMeshList (iSector* sector,
     if (imw)
     {
       list.Push (imw); 
-      csMeshWrapper* cmesh = (csMeshWrapper*)imw;
-      HandleStaticLOD (cmesh, pos, list);
       if (crossPortals && imw->GetPortalContainer ())
       {
         iPortalContainer* portals = imw->GetPortalContainer ();

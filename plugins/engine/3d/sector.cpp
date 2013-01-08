@@ -177,7 +177,6 @@ void csSector::UnlinkObjects ()
 void csSector::RegisterEntireMeshToCuller (iMeshWrapper* mesh)
 {
   csMeshWrapper* cmesh = (csMeshWrapper*)mesh;
-  if (cmesh->SomeParentHasStaticLOD ()) return;
 
   csRef<iVisibilityObject> vo = 
         scfQueryInterface<iVisibilityObject> (mesh);
@@ -196,9 +195,6 @@ void csSector::RegisterEntireMeshToCuller (iMeshWrapper* mesh)
 
 void csSector::RegisterMeshToCuller (iMeshWrapper* mesh)
 {
-  csMeshWrapper* cmesh = (csMeshWrapper*)mesh;
-  if (cmesh->SomeParentHasStaticLOD ()) return;
-
   csRef<iVisibilityObject> vo = 
         scfQueryInterface<iVisibilityObject> (mesh);
   culler->RegisterVisObject (vo);
@@ -408,6 +404,7 @@ public:
     csSectorVisibleMeshCallback::sector = sector;
   }
 
+#if 0
   void MarkMeshAndChildrenVisible (iMeshWrapper* mesh, uint32 frustum_mask,
                                    bool doFade = false, float fade = 1.0f)
   {
@@ -423,9 +420,9 @@ public:
         MarkMeshAndChildrenVisible (child, frustum_mask, doFade, fade);
     }
   }
+#endif
 
-  void ObjectVisible (csMeshWrapper* cmesh, uint32 frustum_mask,
-                      bool doFade = false, float fade = 1.0f)
+  void ObjectVisible (csMeshWrapper* cmesh, uint32 frustum_mask)
   {
     csStaticLODMesh* static_lod = cmesh->GetStaticLODMesh ();
     bool mm = cmesh->DoMinMaxRange ();
@@ -441,21 +438,20 @@ public:
         return;
     }
 
+#if 0
     if (doFade)
       cmesh->SetLODFade (fade);
     else
       cmesh->UnsetLODFade ();
+#endif
 
     iMeshObject* loddedobject = 0;
 
     if (static_lod)
     {
       float lod = static_lod->GetLODValue (distance);
-      if (static_lod->IsNewStyle ())
-      {
-	loddedobject = static_lod->GetMeshObjectForLOD (lod);
-      }
-      else
+      loddedobject = static_lod->GetMeshObjectForLOD (lod);
+#if 0
       {
         csArray<iMeshWrapper*>* meshes1;
         csArray<iMeshWrapper*>* meshes2;
@@ -476,6 +472,7 @@ public:
 	      hasFade, fade*(1.0f-lodFade));
         }
       }
+#endif
     }
 
     int num;
@@ -613,6 +610,7 @@ csRenderMeshList *csSector::GetVisibleMeshes (iRenderView *rview)
   return holder.meshList;
 }
 
+#if 0
 void csSector::MarkMeshAndChildrenVisible (iMeshWrapper* mesh,
 					   iRenderView* rview,
 					   uint32 frustum_mask,
@@ -630,10 +628,10 @@ void csSector::MarkMeshAndChildrenVisible (iMeshWrapper* mesh,
       MarkMeshAndChildrenVisible (child, rview, frustum_mask, doFade, fade);
   }
 }
+#endif
 
 void csSector::ObjectVisible (csMeshWrapper* cmesh, iRenderView* rview,
-			      uint32 frustum_mask,
-			      bool doFade = false, float fade = 1.0f)
+			      uint32 frustum_mask)
 {
   csStaticLODMesh* static_lod = cmesh->GetStaticLODMesh ();
   bool mm = cmesh->DoMinMaxRange ();
@@ -649,21 +647,20 @@ void csSector::ObjectVisible (csMeshWrapper* cmesh, iRenderView* rview,
       return;
   }
 
+#if 0
   if (doFade)
     cmesh->SetLODFade (fade);
   else
     cmesh->UnsetLODFade ();
+#endif
 
   iMeshObject* loddedobject = 0;
 
   if (static_lod)
   {
     float lod = static_lod->GetLODValue (distance);
-    if (static_lod->IsNewStyle ())
-    {
-      loddedobject = static_lod->GetMeshObjectForLOD (lod);
-    }
-    else
+    loddedobject = static_lod->GetMeshObjectForLOD (lod);
+#if 0
     {
       csArray<iMeshWrapper*>* meshes1;
       csArray<iMeshWrapper*>* meshes2;
@@ -684,6 +681,7 @@ void csSector::ObjectVisible (csMeshWrapper* cmesh, iRenderView* rview,
 	    hasFade, fade*(1.0f-lodFade));
       }
     }
+#endif
   }
 
   csSectorVisibleRenderMeshes visMesh;

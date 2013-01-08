@@ -262,7 +262,7 @@ struct csScreenBoxResult
  */
 struct iMeshWrapper : public virtual iBase
 {
-  SCF_INTERFACE(iMeshWrapper, 6, 0, 0);
+  SCF_INTERFACE(iMeshWrapper, 7, 0, 0);
 
   /**
    * Get the iObject for this mesh object. This can be used to get the
@@ -594,18 +594,6 @@ struct iMeshWrapper : public virtual iBase
    * can control the static LOD of this object.
    */
   virtual iLODControl* GetStaticLOD () = 0;
-
-  /**
-   * Set a given child mesh at a specific lod level. Note that a mesh
-   * can be at several lod levels at once.
-   */
-  virtual void AddMeshToStaticLOD (int lod, iMeshWrapper* mesh) = 0;
-
-  /**
-   * Remove a child mesh from all lod levels. The mesh is not removed
-   * from the list of child meshes however.
-   */
-  virtual void RemoveMeshFromStaticLOD (iMeshWrapper* mesh) = 0;
 
   /**
    * Get the shader variable context of the mesh object.

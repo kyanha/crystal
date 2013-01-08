@@ -2085,17 +2085,8 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
         }
         break;
       case XMLTOKEN_LODLEVEL:
-        {
-          if (!parent)
-          {
-            SyntaxService->ReportError (
-              "crystalspace.maploader.load.meshfactory", child,
-              "Factory must be part of a hierarchy for <lodlevel>!");
-            return false;
-          }
-          parent->AddFactoryToStaticLOD (child->GetContentsValueAsInt (),
-            stemp);
-        }
+	SyntaxService->ReportError ("crystalspace.maploader.load.meshfactory", child,
+	    "The old-style LOD using <lodlevel> and a nullmesh as a parent is no longer supported. Use a factory hierarchy with the highest detail as the parent instead.");
         break;
       case XMLTOKEN_STATICLOD:
         {
@@ -3838,24 +3829,8 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
       }
       break;
     case XMLTOKEN_LODLEVEL:
-      {
-        TEST_MISSING_MESH
-          if (!parent)
-          {
-            SyntaxService->ReportError (
-              "crystalspace.maploader.load.meshobject", child,
-              "Mesh must be part of a hierarchical mesh for <lodlevel>!");
-            return false;
-          }
-          if (!parent->GetStaticLOD ())
-          {
-            SyntaxService->ReportError (
-              "crystalspace.maploader.load.meshobject", child,
-              "Parent mesh must use <staticlod>!");
-            return false;
-          }
-          parent->AddMeshToStaticLOD (child->GetContentsValueAsInt (), mesh);
-      }
+      SyntaxService->ReportError ("crystalspace.maploader.load.meshobject", child,
+	    "The old-style LOD using <lodlevel> and a nullmesh as a parent is no longer supported. Use a factory hierarchy with the highest detail as the parent instead.");
       break;
     case XMLTOKEN_LOD:
       {
