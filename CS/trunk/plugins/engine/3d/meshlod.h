@@ -59,8 +59,6 @@ class csStaticLODMesh : public scfImplementation1<csStaticLODMesh,
                                                   iLODControl>
 {
 private:
-  /// All static lod levels. Old-style static lod.
-  csArray<csArray<iMeshWrapper*> > meshes_for_lod;
   /// Static lod's. New-style version.
   csRefArray<iMeshObject> objects_for_lod;
 
@@ -103,16 +101,6 @@ public:
     return lod_m * distance + lod_a;
   }
 
-  /// Get the mesh array for the numerical lod (old-style).
-  csArray<iMeshWrapper*>& GetMeshesForLOD (int lod)
-  {
-    if (lod >= (int)meshes_for_lod.GetSize ())
-    {
-      meshes_for_lod.SetSize (lod+1);
-    }
-    return meshes_for_lod[lod];
-  }
-
   /**
    * Add a new-style static lod mesh object.
    */
@@ -136,16 +124,6 @@ public:
     return objects_for_lod[lod];
   }
 
-  /// Get the mesh array for a lod between 0 and 1 (old-style).
-  csArray<iMeshWrapper*>& GetMeshesForLOD (float lod)
-  {
-    int l = (int)meshes_for_lod.GetSize ();
-    int idx = int (lod * l);
-    if (idx < 0) idx = 0;
-    else if (idx >= l) idx = l-1;
-    return meshes_for_lod[idx];
-  }
-
   /**
    * Get the mesh array for a lod between 0 and 1 (new-style).
    * Returns 0 for highest detail level (0) as that is not kept in this structure.
@@ -159,42 +137,6 @@ public:
     if (idx == 0) return 0;
     idx--;
     return objects_for_lod[idx];
-  }
-
-  // Old-style.
-  bool GetMeshesForLODFaded (float lod, csArray<iMeshWrapper*>*& meshes1,
-    csArray<iMeshWrapper*>*& meshes2, float& fade)
-  {
-    int l = (int)meshes_for_lod.GetSize ();
-    if (lod_f > EPSILON)
-    {
-      float idxF = lod * l;
-      idxF = csClamp (idxF, l-1+lod_f, -lod_f);
-      int idx = csClamp (int (idxF), l-1, 0);
-      if ((idx > 0) && ((idxF - idx) < lod_f))
-      {
-	// Fade in from prev LOD level
-	meshes1 = &(meshes_for_lod[idx]);
-	meshes2 = &(meshes_for_lod[idx-1]);
-	fade = (idxF - idx) / (lod_f * 2.0f) + 0.5f;
-	return true;
-      }
-      else if ((idx < l-1) && (((idx + 1) - idxF) < lod_f))
-      {
-	// Fade out to next LOD level
-	meshes1 = &(meshes_for_lod[idx+1]);
-	meshes2 = &(meshes_for_lod[idx]);
-	fade = 0.5f - (((idx + 1) - idxF) / (lod_f * 2.0f));
-	return true;
-      }
-    }
-    int idx = int (lod * l);
-    if (idx < 0) idx = 0;
-    else if (idx >= l) idx = l-1;
-    meshes1 = &(meshes_for_lod[idx]);
-    meshes2 = 0;
-    fade = 1;
-    return false;
   }
 
   // New-style. Returns 0 meshes for highest detail version.
@@ -233,19 +175,10 @@ public:
     return false;
   }
 
-  /// Return true if new-style static lod is used.
-  bool IsNewStyle () const
-  {
-    return objects_for_lod.GetSize () > 0;
-  }
-
   /// Get number of lod levels we have.
   int GetLODCount ()
   {
-    if (IsNewStyle ())
-      return (int)objects_for_lod.GetSize ()+1;
-    else
-      return (int)meshes_for_lod.GetSize ();
+    return (int)objects_for_lod.GetSize ()+1;
   }
 };
 

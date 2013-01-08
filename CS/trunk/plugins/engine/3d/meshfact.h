@@ -148,7 +148,6 @@ class csMeshFactoryWrapper :
 private:
   /// Mesh object factory corresponding with this csMeshFactoryWrapper.
   csRef<iMeshObjectFactory> meshFact;
-  bool nullmesh;	// True if this factory is a nullmesh. Often used for old-style static lod.
 
   /// Optional parent of this object (can be 0).
   iMeshFactoryWrapper* parent;

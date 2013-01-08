@@ -363,23 +363,6 @@ void csMeshWrapper::UpdateMove ()
 {
 }
 
-bool csMeshWrapper::SomeParentHasStaticLOD () const
-{
-  if (!movable.GetParent ()) return false;
-  iSceneNode* parent_node = movable.GetParent ()->GetSceneNode ();
-  iMeshWrapper* parent_mesh = parent_node->QueryMesh ();
-  while (!parent_mesh)
-  {
-    parent_node = parent_node->GetParent ();
-    if (!parent_node) return false;
-    parent_mesh = parent_node->QueryMesh ();
-  }
-
-  csMeshWrapper* pm = static_cast<csMeshWrapper*> (parent_mesh);
-  if (pm->static_lod && !pm->static_lod->IsNewStyle ()) return true;
-  return ((csMeshWrapper*)parent_mesh)->SomeParentHasStaticLOD ();
-}
-
 void csMeshWrapper::MoveToSector (iSector *s)
 {
   // Only move if the meshwrapper is valid.
@@ -879,24 +862,6 @@ void csMeshWrapper::DestroyStaticLOD ()
 iLODControl* csMeshWrapper::GetStaticLOD ()
 {
   return (iLODControl*)static_lod;
-}
-
-void csMeshWrapper::RemoveMeshFromStaticLOD (iMeshWrapper* mesh)
-{
-  if (!static_lod) return;	// No static lod, nothing to do here.
-  int lod;
-  for (lod = 0 ; lod < static_lod->GetLODCount () ; lod++)
-  {
-    csArray<iMeshWrapper*>& meshes_for_lod = static_lod->GetMeshesForLOD (lod);
-    meshes_for_lod.Delete (mesh);
-  }
-}
-
-void csMeshWrapper::AddMeshToStaticLOD (int lod, iMeshWrapper* mesh)
-{
-  if (!static_lod) return;	// No static lod, nothing to do here.
-  csArray<iMeshWrapper*>& meshes_for_lod = static_lod->GetMeshesForLOD (lod);
-  meshes_for_lod.Push (mesh);
 }
 
 //---------------------------------------------------------------------------

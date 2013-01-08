@@ -431,11 +431,7 @@ public:
   virtual iLODControl* CreateStaticLOD ();
   virtual void DestroyStaticLOD ();
   virtual iLODControl* GetStaticLOD ();
-  virtual void RemoveMeshFromStaticLOD (iMeshWrapper* mesh);
-  virtual void AddMeshToStaticLOD (int lod, iMeshWrapper* mesh);
   csStaticLODMesh* GetStaticLODMesh () const { return static_lod; }
-  /// Return true if there is a parent mesh that has static lod.
-  bool SomeParentHasStaticLOD () const;
 
   CS::Graphics::RenderMesh** GetRenderMeshes (int& num, iRenderView* rview,
   	uint32 frustum_mask, iMeshObject* loddedobject);

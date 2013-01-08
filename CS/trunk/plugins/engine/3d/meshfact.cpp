@@ -29,7 +29,6 @@
 #include "iengine/rview.h"
 #include "ivideo/graph3d.h"
 #include "ivideo/rendermesh.h"
-#include "imesh/nullmesh.h"
 
 
 CS_LEAKGUARD_IMPLEMENT (csMeshFactoryWrapper);
@@ -46,9 +45,6 @@ csMeshFactoryWrapper::csMeshFactoryWrapper (csEngine* engine,
   imposter_renderReal(false)
 {
   children.SetMeshFactory (this);
-
-  csRef<iNullFactoryState> s = scfQueryInterface<iNullFactoryState> (meshFact);
-  nullmesh = s.IsValid ();
 
   render_priority = engine->GetObjectRenderPriority ();
 
@@ -133,16 +129,12 @@ void csMeshFactoryWrapper::SetRenderPriority (CS::Graphics::RenderPriority rp)
 void csMeshFactoryWrapper::SetMeshObjectFactory (iMeshObjectFactory *meshFact)
 {
   csMeshFactoryWrapper::meshFact = meshFact;
-  csRef<iNullFactoryState> s = scfQueryInterface<iNullFactoryState> (meshFact);
-  nullmesh = s.IsValid ();
 }
 
 void csMeshFactoryWrapper::SetInstanceFactory (iMeshFactoryWrapper* meshfact)
 {
   instanceFactory = meshfact;
   meshFact = instanceFactory->GetMeshObjectFactory();
-  csRef<iNullFactoryState> s = scfQueryInterface<iNullFactoryState> (meshFact);
-  nullmesh = s.IsValid ();
 }
 
 csPtr<iMeshWrapper> csMeshFactoryWrapper::CreateMeshWrapper ()
@@ -178,40 +170,15 @@ csPtr<iMeshWrapper> csMeshFactoryWrapper::CreateMeshWrapper ()
   int i;
   for (i = 0; i < children.GetCount (); i++)
   {
-    iMeshFactoryWrapper *childfact = children.Get (i);
-
-    if (static_lod && !nullmesh)
+    if (static_lod)
     {
       // New-style static LOD. There is no nullmesh but there are children.
       // In this case we don't add the children to the mesh object.
+      iMeshFactoryWrapper *childfact = children.Get (i);
       csStaticLODMesh* slmesh = cmesh->GetStaticLODMesh ();
       csRef<iMeshObject> obj = childfact->GetMeshObjectFactory ()->NewInstance ();
       obj->SetMeshWrapper (mesh);
       slmesh->AddMeshObjectForLOD (obj);
-    }
-    else
-    {
-      csRef<iMeshWrapper> child = childfact->CreateMeshWrapper ();
-      child->QuerySceneNode ()->SetParent (mesh->QuerySceneNode ());
-      child->GetMovable ()->SetTransform (childfact->GetTransform ());
-      child->GetMovable ()->UpdateMove ();
-
-      if (static_lod)
-      {
-        // We have static lod so we need to put the child in the right
-        // lod level.
-        int l;
-        for (l = 0 ; l < static_lod->GetLODCount () ; l++)
-        {
-          csArray<iMeshFactoryWrapper*>& facts_for_lod =
-      	    static_lod->GetMeshesForLOD (l);
-	  for (size_t j = 0 ; j < facts_for_lod.GetSize () ; j++)
-	  {
-	    if (facts_for_lod[j] == childfact)
-	      mesh->AddMeshToStaticLOD (l, child);
-	  }
-        }
-      }
     }
   }
 

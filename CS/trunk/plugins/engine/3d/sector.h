@@ -539,11 +539,8 @@ private:
   // These are used by GetVisibleRenderMeshes
   csSectorVisibleRenderMeshes oneVisibleMesh[2];
   csDirtyAccessArray<csSectorVisibleRenderMeshes> renderMeshesScratch;
-  void MarkMeshAndChildrenVisible (iMeshWrapper* mesh, 
-    iRenderView* rview, uint32 frustum_mask,
-    bool doFade = false, float fade = 1.0f);
   void ObjectVisible (CS_PLUGIN_NAMESPACE_NAME(Engine)::csMeshWrapper* cmesh,
-    iRenderView* rview, uint32 frustum_mask, bool doFade, float fade);
+    iRenderView* rview, uint32 frustum_mask);
 
   /**
    * Visibilty number for last VisTest call
