@@ -139,42 +139,6 @@ public:
     return objects_for_lod[idx];
   }
 
-  // New-style. Returns 0 meshes for highest detail version.
-  bool GetMeshObjectForLODFaded (float lod, iMeshObject*& mesh1,
-    iMeshObject*& mesh2, float& fade)
-  {
-    int l = (int)objects_for_lod.GetSize () + 1;	// One-more because highest detail is in wrapper.
-    if (lod_f > EPSILON)
-    {
-      float idxF = lod * l;
-      idxF = csClamp (idxF, l-1+lod_f, -lod_f);
-      int idx = csClamp (int (idxF), l-1, 0);
-      if ((idx > 0) && ((idxF - idx) < lod_f))
-      {
-	// Fade in from prev LOD level
-	mesh1 = GetMeshObjectForLOD (idx);
-	mesh2 = GetMeshObjectForLOD (idx-1);
-	fade = (idxF - idx) / (lod_f * 2.0f) + 0.5f;
-	return true;
-      }
-      else if ((idx < l-1) && (((idx + 1) - idxF) < lod_f))
-      {
-	// Fade out to next LOD level
-	mesh1 = GetMeshObjectForLOD (idx+1);
-	mesh2 = GetMeshObjectForLOD (idx);
-	fade = 0.5f - (((idx + 1) - idxF) / (lod_f * 2.0f));
-	return true;
-      }
-    }
-    int idx = int (lod * l);
-    if (idx < 0) idx = 0;
-    else if (idx >= l) idx = l-1;
-    mesh1 = GetMeshObjectForLOD (idx);
-    mesh2 = 0;
-    fade = 1;
-    return false;
-  }
-
   /// Get number of lod levels we have.
   int GetLODCount ()
   {
