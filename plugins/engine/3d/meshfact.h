@@ -277,8 +277,6 @@ public:
   iLODControl* GetStaticLOD ();
   void SetStaticLOD (float m, float a);
   void GetStaticLOD (float& m, float& a) const;
-  void RemoveFactoryFromStaticLOD (iMeshFactoryWrapper* mesh);
-  void AddFactoryToStaticLOD (int lod, iMeshFactoryWrapper* mesh);
 
   // Flags that are used for children.
   void SetZBufMode (csZBufMode mode) { zbufMode = mode; }
