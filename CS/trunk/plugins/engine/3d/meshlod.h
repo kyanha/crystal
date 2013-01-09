@@ -155,9 +155,6 @@ class csStaticLODFactoryMesh : public scfImplementation1<csStaticLODFactoryMesh,
                                                          iLODControl>
 {
 private:
-  /// All static lod levels.
-  csArray<csArray<iMeshFactoryWrapper*> > meshes_for_lod;
-
   /// Function for lod.
   float lod_m, lod_a, lod_f;
   /// Or using variables.
@@ -188,22 +185,6 @@ public:
   void SetLODFade (iSharedVariable* varf);
   void GetLODFade (iSharedVariable*& varf) const
   { varf = lod_varf; }
-
-  /// Get the mesh array for the numerical lod.
-  csArray<iMeshFactoryWrapper*>& GetMeshesForLOD (int lod)
-  {
-    if (lod >= (int)meshes_for_lod.GetSize ())
-    {
-      meshes_for_lod.SetSize (lod+1);
-    }
-    return meshes_for_lod[lod];
-  }
-
-  /// Get number of lod levels we have.
-  int GetLODCount ()
-  {
-    return (int)meshes_for_lod.GetSize ();
-  }
 };
 
 #endif // __CS_MESHLOD_H__

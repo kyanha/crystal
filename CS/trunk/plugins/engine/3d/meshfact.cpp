@@ -225,28 +225,6 @@ void csMeshFactoryWrapper::GetStaticLOD (float& m, float& a) const
   }
 }
 
-void csMeshFactoryWrapper::RemoveFactoryFromStaticLOD (
-	iMeshFactoryWrapper* fact)
-{
-  if (!static_lod) return;	// No static lod, nothing to do here.
-  int lod;
-  for (lod = 0 ; lod < static_lod->GetLODCount () ; lod++)
-  {
-    csArray<iMeshFactoryWrapper*>& meshes_for_lod =
-    	static_lod->GetMeshesForLOD (lod);
-    meshes_for_lod.Delete (fact);
-  }
-}
-
-void csMeshFactoryWrapper::AddFactoryToStaticLOD (int lod,
-	iMeshFactoryWrapper* fact)
-{
-  if (!static_lod) return;	// No static lod, nothing to do here.
-  csArray<iMeshFactoryWrapper*>& meshes_for_lod =
-  	static_lod->GetMeshesForLOD (lod);
-  meshes_for_lod.Push (fact);
-}
-
 void csMeshFactoryWrapper::AddImposter(iMeshWrapper* mesh, iRenderView* rview)
 {
   // Create a new imposter mesh.
@@ -449,6 +427,5 @@ void csMeshFactoryFactoryList::FreeFactory (iMeshFactoryWrapper* item)
 {
   CS_ASSERT (meshfact != 0);
   item->SetParentContainer (0);
-  meshfact->RemoveFactoryFromStaticLOD (item);
   csMeshFactoryList::FreeFactory (item);
 }

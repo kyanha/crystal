@@ -681,7 +681,8 @@ struct iMeshWrapper : public virtual iBase
  */
 struct iMeshFactoryWrapper : public virtual iBase
 {
-  SCF_INTERFACE(iMeshFactoryWrapper, 3, 0, 1);
+  SCF_INTERFACE(iMeshFactoryWrapper, 4, 0, 1);
+
   /// Get the iObject for this mesh factory.
   virtual iObject *QueryObject () = 0;
   /// Get the iMeshObjectFactory.
@@ -784,18 +785,6 @@ struct iMeshFactoryWrapper : public virtual iBase
    * Get the LOD function parameters for this factory.
    */
   virtual void GetStaticLOD (float& m, float& a) const = 0;
-
-  /**
-   * Set a given child factory at a specific lod level. Note that a factory
-   * can be at several lod levels at once.
-   */
-  virtual void AddFactoryToStaticLOD (int lod, iMeshFactoryWrapper* fact) = 0;
-
-  /**
-   * Remove a child factory from all lod levels. The factory is not removed
-   * from the list of factories however.
-   */
-  virtual void RemoveFactoryFromStaticLOD (iMeshFactoryWrapper* fact) = 0;
 
   /**
    * Set the Z-buf drawing mode to use for this factory. All objects created
