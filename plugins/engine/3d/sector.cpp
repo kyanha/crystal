@@ -404,24 +404,6 @@ public:
     csSectorVisibleMeshCallback::sector = sector;
   }
 
-#if 0
-  void MarkMeshAndChildrenVisible (iMeshWrapper* mesh, uint32 frustum_mask,
-                                   bool doFade = false, float fade = 1.0f)
-  {
-    csMeshWrapper* cmesh = (csMeshWrapper*)mesh;
-    ObjectVisible (cmesh, frustum_mask, doFade, fade);
-    size_t i;
-    const csRefArray<iSceneNode>& children = cmesh->GetChildren ();
-    for (i = 0 ; i < children.GetSize () ; i++)
-    {
-      iMeshWrapper* child = children[i]->QueryMesh ();
-      // @@@ Traverse too in case there are lights/cameras?
-      if (child)
-        MarkMeshAndChildrenVisible (child, frustum_mask, doFade, fade);
-    }
-  }
-#endif
-
   void ObjectVisible (csMeshWrapper* cmesh, uint32 frustum_mask)
   {
     csStaticLODMesh* static_lod = cmesh->GetStaticLODMesh ();
@@ -438,41 +420,12 @@ public:
         return;
     }
 
-#if 0
-    if (doFade)
-      cmesh->SetLODFade (fade);
-    else
-      cmesh->UnsetLODFade ();
-#endif
-
     iMeshObject* loddedobject = 0;
 
     if (static_lod)
     {
       float lod = static_lod->GetLODValue (distance);
       loddedobject = static_lod->GetMeshObjectForLOD (lod);
-#if 0
-      {
-        csArray<iMeshWrapper*>* meshes1;
-        csArray<iMeshWrapper*>* meshes2;
-        float lodFade;
-        bool hasFade = static_lod->GetMeshesForLODFaded (lod,
-	  meshes1, meshes2, lodFade);
-        size_t i;
-        if (meshes1 != 0)
-        {
-	  for (i = 0 ; i < meshes1->GetSize () ; i++)
-	    MarkMeshAndChildrenVisible ((*meshes1)[i], frustum_mask,
-	      hasFade, fade*lodFade);
-        }
-        if (meshes2 != 0)
-        {
-	  for (i = 0 ; i < meshes2->GetSize () ; i++)
-	    MarkMeshAndChildrenVisible ((*meshes2)[i], frustum_mask,
-	      hasFade, fade*(1.0f-lodFade));
-        }
-      }
-#endif
     }
 
     int num;
@@ -610,26 +563,6 @@ csRenderMeshList *csSector::GetVisibleMeshes (iRenderView *rview)
   return holder.meshList;
 }
 
-#if 0
-void csSector::MarkMeshAndChildrenVisible (iMeshWrapper* mesh,
-					   iRenderView* rview,
-					   uint32 frustum_mask,
-					   bool doFade, float fade)
-{
-  csMeshWrapper* cmesh = (csMeshWrapper*)mesh;
-  ObjectVisible (cmesh, rview, frustum_mask, doFade, fade);
-  size_t i;
-  const csRefArray<iSceneNode>& children = cmesh->GetChildren ();
-  for (i = 0 ; i < children.GetSize () ; i++)
-  {
-    iMeshWrapper* child = children[i]->QueryMesh ();
-    // @@@ Traverse too in case there are lights/cameras?
-    if (child)
-      MarkMeshAndChildrenVisible (child, rview, frustum_mask, doFade, fade);
-  }
-}
-#endif
-
 void csSector::ObjectVisible (csMeshWrapper* cmesh, iRenderView* rview,
 			      uint32 frustum_mask)
 {
@@ -647,41 +580,12 @@ void csSector::ObjectVisible (csMeshWrapper* cmesh, iRenderView* rview,
       return;
   }
 
-#if 0
-  if (doFade)
-    cmesh->SetLODFade (fade);
-  else
-    cmesh->UnsetLODFade ();
-#endif
-
   iMeshObject* loddedobject = 0;
 
   if (static_lod)
   {
     float lod = static_lod->GetLODValue (distance);
     loddedobject = static_lod->GetMeshObjectForLOD (lod);
-#if 0
-    {
-      csArray<iMeshWrapper*>* meshes1;
-      csArray<iMeshWrapper*>* meshes2;
-      float lodFade;
-      bool hasFade = static_lod->GetMeshesForLODFaded (lod,
-	meshes1, meshes2, lodFade);
-      size_t i;
-      if (meshes1 != 0)
-      {
-	for (i = 0 ; i < meshes1->GetSize () ; i++)
-	  MarkMeshAndChildrenVisible ((*meshes1)[i], rview, frustum_mask,
-	    hasFade, fade*lodFade);
-      }
-      if (meshes2 != 0)
-      {
-	for (i = 0 ; i < meshes2->GetSize () ; i++)
-	  MarkMeshAndChildrenVisible ((*meshes2)[i], rview, frustum_mask,
-	    hasFade, fade*(1.0f-lodFade));
-      }
-    }
-#endif
   }
 
   csSectorVisibleRenderMeshes visMesh;
