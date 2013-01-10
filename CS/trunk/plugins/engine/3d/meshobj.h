@@ -209,6 +209,7 @@ private:
 
   /// Optional reference to the parent csMeshFactoryWrapper.
   iMeshFactoryWrapper* factory;
+  csRef<iImposterFactory> imposterFactory;
 
   /// Z-buf mode to use for drawing this object.
   csZBufMode zbufMode;

@@ -126,6 +126,7 @@ void csMeshWrapper::SetFactory (iMeshFactoryWrapper* factory)
   }
 
   csMeshWrapper::factory = factory;
+  imposterFactory = scfQueryInterface<iImposterFactory> (factory);
   SetParentContext (factory ? factory->GetSVContext() : 0);
 }
 
@@ -345,8 +346,7 @@ csMeshWrapper::~csMeshWrapper ()
 {
   if (using_imposter)
   {
-    iImposterFactory* factwrap = dynamic_cast<iImposterFactory*> (factory);
-    factwrap->RemoveImposter (this);
+    imposterFactory->RemoveImposter (this);
   }
 
   // Copy the array because we are going to unlink the children.
@@ -517,30 +517,26 @@ csRenderMesh** csMeshWrapper::GetRenderMeshes (int& n, iRenderView* rview,
     }
   }
 
-  if (factory && drawing_imposter != rview->GetCamera())
+  if (imposterFactory && drawing_imposter != rview->GetCamera())
   {
-    csRef<iImposterFactory> factwrap = scfQueryInterface<iImposterFactory> (factory);
-    if (factwrap)
+    if (UseImposter (rview))
     {
-      if (UseImposter (rview))
+      if (!using_imposter)
       {
-        if (!using_imposter)
-        {
-          factwrap->AddImposter (this, rview);
-          using_imposter = true;
-        }
+        imposterFactory->AddImposter (this, rview);
+        using_imposter = true;
+      }
 
-        if(factwrap->RenderingImposter (this))
-        {
-          n = 0;
-          return 0;
-        }
-      }
-      else if (using_imposter)
+      if(imposterFactory->RenderingImposter (this))
       {
-        factwrap->RemoveImposter (this);
-        using_imposter = false;
+        n = 0;
+        return 0;
       }
+    }
+    else if (using_imposter)
+    {
+      imposterFactory->RemoveImposter (this);
+      using_imposter = false;
     }
   }
 
