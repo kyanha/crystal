@@ -153,6 +153,12 @@ def WriteCSGroup(self, func, depth=0, use_imposter=False, dontClose=False):
       func(' '*depth + '      <noshadowcast />')
     if ob.data and ob.data.limited_shadow_cast:
       func(' '*depth + '      <limitedshadowcast />')
+    if ob.data.lighter2_vertexlight:
+      func(' '*depth + '      <key name="lighter2" editoronly="yes" vertexlight="yes" />')
+    if ob.data.lighter2_selfshadow:
+      func(' '*depth + '      <key name="lighter2" editoronly="yes" noselfshadow="yes" />')
+    if ob.data.lighter2_lmscale > 0.0:
+      func(' '*depth + '      <key name="lighter2" editoronly="yes" lmscale="%f" />'%(ob.data.lighter2_lmscale))
     func(' '*depth + '      <params>')
 
     # Export render buffers
@@ -221,6 +227,12 @@ def WriteCSGroup(self, func, depth=0, use_imposter=False, dontClose=False):
         func(' '*depth + '  <noshadowcast />')
       if ob.data and ob.data.limited_shadow_cast:
         func(' '*depth + '  <limitedshadowcast />')
+      if ob.data.lighter2_vertexlight:
+        func(' '*depth + '  <key name="lighter2" editoronly="yes" vertexlight="yes" />')
+      if ob.data.lighter2_selfshadow:
+        func(' '*depth + '  <key name="lighter2" editoronly="yes" noselfshadow="yes" />')
+      if ob.data.lighter2_lmscale > 0.0:
+        func(' '*depth + '  <key name="lighter2" editoronly="yes" lmscale="%f" />'%(ob.data.lighter2_lmscale))
     func(' '*depth + '  <params>')
     
     def SubmeshesLackMaterial(subMeshess):

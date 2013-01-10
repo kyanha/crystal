@@ -352,6 +352,12 @@ def AsCSGenmeshLib(self, func, depth=0, **kwargs):
     func(' '*depth + '  <noshadowcast />')
   if self.data.limited_shadow_cast:
     func(' '*depth + '  <limitedshadowcast />')
+  if self.data.lighter2_vertexlight:
+    func(' '*depth + '  <key name="lighter2" editoronly="yes" vertexlight="yes" />')
+  if not self.data.lighter2_selfshadow:
+    func(' '*depth + '  <key name="lighter2" editoronly="yes" noselfshadow="yes" />')
+  if self.data.lighter2_lmscale > 0.0:
+    func(' '*depth + '  <key name="lighter2" editoronly="yes" lmscale="%f" />'%(self.data.lighter2_lmscale))
   func(' '*depth + '  <params>')
 
   # Recover submeshes from kwargs

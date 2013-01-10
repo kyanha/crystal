@@ -1,6 +1,7 @@
 import bpy
 
 from io_scene_cs.utilities import rnaType, rnaOperator, B2CS, BoolProperty
+from io_scene_cs.utilities import FloatProperty
 
 from io_scene_cs.utilities import HasSetProperty, RemoveSetPropertySet 
 
@@ -63,17 +64,36 @@ class MESH_PT_csFactory(csFactoryPanel, bpy.types.Panel):
     
     if ob.type == 'MESH':
       ob = bpy.context.active_object.data
-      row = layout.row()
+
+      split = layout.split()
+      col1 = split.column(align=True)
+      box1 = col1.box()
+
+      row = box1.row()
       row.prop(ob, "use_imposter")
     
-      row = layout.row()
+      row = box1.row()
       row.prop(ob, "no_shadow_receive")
 
-      row = layout.row()
+      row = box1.row()
       row.prop(ob, "no_shadow_cast")
 
-      row = layout.row()
+      row = box1.row()
       row.prop(ob, "limited_shadow_cast")
+
+      col2 = split.column(align=True)
+      box2 = col2.box()
+
+      box2.label(text="Lighter2")
+
+      row = box2.row()
+      row.prop(ob, "lighter2_vertexlight")
+
+      row = box2.row()
+      row.prop(ob, "lighter2_selfshadow")
+
+      row = box2.row()
+      row.prop(ob, "lighter2_lmscale")
 
 
 BoolProperty(['Mesh'], 
@@ -99,3 +119,22 @@ BoolProperty(['Mesh'],
      name="Limited shadow cast", 
      description="Whether or not this mesh can cast shadows on other objects while in limited shadow casting mode",
      default=False)
+
+BoolProperty(['Mesh'], 
+     attr="lighter2_vertexlight", 
+     name="Vertex lighting", 
+     description="Enable vertex lighting for this mesh in case lighter2 is used",
+     default=False)
+
+BoolProperty(['Mesh'], 
+     attr="lighter2_selfshadow", 
+     name="Self shadowing", 
+     description="Enable self shadowing in case lighter2 is used",
+     default=True)
+
+FloatProperty(['Mesh'], 
+     attr="lighter2_lmscale", 
+     name="LM Scale", 
+     description="Lightmap scale for lighter2 (higher means more detail)",
+     default=0.0)
+
