@@ -24,12 +24,13 @@
 #include "csutil/scf_implementation.h"
 #include "csgeom/vector2.h"
 #include "csutil/cscolor.h"
+#include "csutil/csobject.h"
 
 // Controls the default value of hasClipping
 #define CS_DECAL_CLIP_DECAL
 
-class csDecalTemplate : public scfImplementation1<csDecalTemplate,
-  iDecalTemplate>
+class csDecalTemplate : public scfImplementationExt1<csDecalTemplate,
+  csObject, iDecalTemplate>
 {
 private:
   float timeToLive;
@@ -57,6 +58,8 @@ public:
   csDecalTemplate ();
   csDecalTemplate (iBase* parent);
   virtual ~csDecalTemplate ();
+
+  virtual iObject* QueryObject () { return this; }
 
   virtual float GetTimeToLive () const;
   virtual iMaterialWrapper* GetMaterialWrapper ();

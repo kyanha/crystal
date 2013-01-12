@@ -60,6 +60,8 @@ struct iDecalTemplate : public virtual iBase
 {
   SCF_INTERFACE(iDecalTemplate, 2, 0, 0);
 
+  virtual iObject* QueryObject () = 0;
+
   /**
    * Retrieves the time the decal will have to live in seconds before it is 
    * killed. If the time is negative then the decal will be a 'static' decal.
