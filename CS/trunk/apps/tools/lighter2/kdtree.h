@@ -32,6 +32,7 @@ namespace lighter
 {
   class Primitive;
   class Object;
+  class Portal;
 
   enum
   {
@@ -216,9 +217,10 @@ namespace lighter
     KDTreeBuilder ();
 
     /*
-    Take an object iterator and build a kd-tree from that
+    Take an object iterator an portal iterator and build a kd-tree from that
     */
     KDTree* BuildTree (csHash<csRef<Object>, csString>::GlobalIterator& objects,
+      csRefArray<Portal>::Iterator& portals,
       Statistics::Progress& progress);
 
   private:
@@ -423,7 +425,10 @@ namespace lighter
     size_t numPrimitives;
 
     //Private functions
-    bool SetupEndpoints (csHash<csRef<Object>, csString>::GlobalIterator& objects);
+    bool SetupEndpoints (csHash<csRef<Object>, csString>::GlobalIterator& objects,
+      csRefArray<Portal>::Iterator& portals);
+    void FillEndPoints (PrimBox* &box, PrimBox* &next, csArray<Primitive>& primArray);
+
     bool BuildKDNodeRecursive (EndPointList* epList, KDNode* node, 
       csBox3 aabb, size_t numPrim, size_t treeDepth);
     KDTree* SetupRealTree (KDNode* rootNode);

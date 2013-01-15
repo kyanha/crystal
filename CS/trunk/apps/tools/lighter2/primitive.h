@@ -24,12 +24,13 @@
 #include "common.h"
 #include "swappable.h"
 #include "vertexdata.h"
+#include "material.h"
 
 namespace lighter
 {
   class Object;
+  class Portal;
   struct ElementProxy;
-  struct RadMaterial;
 
   class Primitive;
   
@@ -137,19 +138,21 @@ namespace lighter
       : PrimitiveBase (&dataHolder), uFormVector (0), vFormVector (0), 
         /*illuminationColor (0,0,0), reflectanceColor (1.0f,1.0f,1.0f), */
         minCoord (0), minUV (0,0), maxUV (0,0), /*originalPrim (0), */
-        radObject (0), groupID (groupID)
+        radObject (0), portal(0), groupID (groupID)
     {
     }
+
     inline Primitive (const Primitive& other) 
       : PrimitiveBase (other), elementClassification (other.elementClassification), 
         uFormVector (other.uFormVector), vFormVector (other.uFormVector), 
         minCoord (other.minCoord), minUV (other.minUV), maxUV (other.maxUV), 
-        radObject (other.radObject), groupID (other.groupID),
+        radObject (other.radObject), portal(other.portal), groupID (other.groupID),
         globalLightmapID (other.globalLightmapID),
         lambdaCoeffTV (other.lambdaCoeffTV), myCoeffTV (other.myCoeffTV),
         material (0)
     {
     }
+
     inline ~Primitive () { }
 
     /**
@@ -256,6 +259,12 @@ namespace lighter
     inline const Object* GetObject () const { return radObject; }
     inline Object* GetObject () { return radObject; }
     inline void SetObject (Object *obj) { radObject = obj; }
+
+    inline const Portal* GetPortal () const { return portal; }
+    inline Portal* GetPortal () { return portal; }
+    inline void SetPortal (Portal *port) { portal = port; }
+
+    inline bool isFromPortal() const { return (portal != 0); }
     
     inline uint GetGroupID () const { return groupID; }
 
@@ -288,6 +297,9 @@ protected:
 
     /// Original object
     Object* radObject;
+
+    /// If this primitive is from Portal
+    Portal* portal;
     
     /// Primitive group ID (a primitive group was lightmapped together)
     uint groupID;

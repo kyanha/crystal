@@ -68,7 +68,7 @@ namespace lighter
     bool EstimateIrradiance(
       const float pos[3],
       const float norm[3],
-      float* &power);
+      float (&power)[3]);
 
     size_t GetSampleCount();
 
@@ -83,6 +83,8 @@ namespace lighter
     size_t initialSize;     ///< Initial allocated sample array size
     size_t storedSamples;   ///< Number of samples stored in the internal array
     size_t maxSamples;      ///< Actual allocated size of sample array
+
+    CS::Threading::Mutex writeMutex;  //< Mutex for the store operations
   };
 };
 

@@ -102,6 +102,9 @@ public:
     csHash<T,K>::DeleteAll ();
     reverse.DeleteAll ();
   }
+  
+  /// Delete all the elements. (Idiomatic alias for DeleteAll().)
+  void Empty() { DeleteAll(); }
 
   /**
    * Get a pointer to the first key matching the given value, 

@@ -128,6 +128,8 @@ namespace lighter
     // Indirect Light calculations and settings
     struct INDIProperties
     {
+      // Set the number of photons interactively
+      bool interactiveConfiguration;
       // Number of photons to emit
       int numPhotons;
       // Number of photons for Caustic 

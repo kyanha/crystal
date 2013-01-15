@@ -173,6 +173,8 @@ namespace lighter
   {
     coneK = 1.0;
     storedPhotons = 0;
+    halfStoredPhotons = 0;
+
     prevScale = 1;
     initialSize = maxPhotons = maxPhot;
 
@@ -303,7 +305,7 @@ namespace lighter
           PhotonDir( pdir, p );
           if ( (pdir[0]*norm[0]+pdir[1]*norm[1]+pdir[2]*norm[2]) < 0.0f )
           {
-            float w = ConeWeight(sqrtf(np.distSq[i]), sqrtf(np.distSq[0]), coneK);
+            float w = ConeWeight(sqrtf(np.distSq[i]), maxDist, coneK);
             irrad[0] += p->power[0]*w;
             irrad[1] += p->power[1]*w;
             irrad[2] += p->power[2]*w;
@@ -428,6 +430,8 @@ namespace lighter
                            const float pos[3],
                            const float dir[3] )
   {
+    CS::Threading::MutexScopedLock lock(writeMutex);
+
     // Check for storage and attempt to expand if needed
     if (storedPhotons>=maxPhotons && !Expand())
       return;
@@ -546,7 +550,7 @@ namespace lighter
       free(pa1);
     }
 
-    halfStoredPhotons = storedPhotons/2-1;
+    if (storedPhotons!=0) halfStoredPhotons = storedPhotons/2-1;
     globalStats.photonmapping.KDTreeDepth =
       (int)floor(log10f(storedPhotons)/log10f(2.0));
   }
@@ -606,7 +610,6 @@ namespace lighter
                                      Statistics::ProgressState &prog)
   {
     prog.Advance();
-
     //--------------------
     // compute new median
     //--------------------

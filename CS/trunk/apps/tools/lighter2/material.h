@@ -101,7 +101,7 @@ namespace lighter
     { return ((T*)~0) - (GetWidth() * GetHeight()); }
   };
 
-  struct RadMaterial
+  struct RadMaterial : public csRefCount
   {
     
     // The original texture image
@@ -111,18 +111,20 @@ namespace lighter
     bool isTexImageValid;
     bool produceCaustic;
 	   
-    RadMaterial() {refractiveIndex = 1; isTexImageValid=false; produceCaustic= false;}
+    RadMaterial():refractiveIndex(1),isTexImageValid(false),produceCaustic(false) {}
+
     bool IsTransparent () const { return filterImage.IsValid(); }
     void ComputeFilterImage (iImage* img);
     void SetTextureImage (iImage * img);
     void SetRefractiveIndex(float refrIndex) {refractiveIndex = refrIndex;}
     bool IsTextureValid() const {return isTexImageValid;}
     float GetRefractiveIndex(){return refractiveIndex;}
+
     //Returns the color at uv coordinates in original texture
     csColor GetTextureValue(csVector2 uv) const;
-
+    mutable CS::Threading::Mutex lockMutex;
   };
-  typedef csHash<RadMaterial, csString> MaterialHash;
+  typedef csHash<csRef<RadMaterial>, csString> MaterialHash;
 } // namespace lighter
 
 #endif // __MATERIAL_H__

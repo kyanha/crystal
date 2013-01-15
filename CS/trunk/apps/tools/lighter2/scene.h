@@ -24,6 +24,8 @@
 #include "light.h"
 #include "material.h"
 
+#include "lightcalculator.h"
+
 namespace lighter
 {
   class KDTree;
@@ -31,6 +33,7 @@ namespace lighter
   class Sector;
   class PhotonMap;
   class IrradianceCache;
+  class SectorGroup;
 
   class Portal : public csRefCount
   {
@@ -38,20 +41,86 @@ namespace lighter
     Portal ()
     {}
 
+    void computePrimitives()
+    {
+      const size_t verticesCount = vertexData.positions.GetSize();
+
+      // First compute the center of the polygon
+      csVector3 center = vertexData.positions[0];
+      for (size_t i=1; i<verticesCount;i++)
+      {
+        center += vertexData.positions[i];
+      }
+
+      center *= 1/verticesCount;
+      vertexData.positions.Push(center);
+
+      for (size_t i=0; i<verticesCount;i++)
+      {
+        Primitive prim(vertexData,0);
+
+        Primitive::TriangleType t;
+        t.a = i;
+        t.b = verticesCount;
+        t.c = (i+1)%verticesCount;
+
+        prim.SetTriangle(t);
+        prim.ComputePlane();
+        prim.SetPortal(this);
+        portalPrimitives.Push(prim);
+      }
+      
+    }
+
     Sector* sourceSector;
     Sector* destSector;
+
     csReversibleTransform wrapTransform;
+    PrimitiveArray portalPrimitives;
+    ObjectVertexData vertexData;
     Vector3DArray worldVertices;
     csPlane3 portalPlane;
   };
   typedef csRefArray<Portal> PortalRefArray;
+
+
+
+  class SectorProcessor : ThreadedCallable<SectorProcessor>,
+                     public scfImplementation0<SectorProcessor>
+  {
+  public:
+    SectorProcessor(iObjectRegistry *objReg);
+
+    iObjectRegistry* GetObjectRegistry() const
+    { return objReg; }
+
+    THREADED_CALLABLE_DECL2(SectorProcessor,BuildKDTree,csThreadReturn,
+      csRef<Sector>,sector,Statistics::Progress*, progress,THREADED,false,true);
+
+    THREADED_CALLABLE_DECL2(SectorProcessor,BuildPhotonMaps,csThreadReturn,
+      csRef<Sector>,sector,Statistics::Progress*, progress,THREADED,false,true);
+
+    THREADED_CALLABLE_DECL2(SectorProcessor,BalancePhotonMaps,csThreadReturn,
+      csRef<Sector>,sector,Statistics::Progress*, progress,THREADED,false,true)
+
+    THREADED_CALLABLE_DECL7(SectorProcessor,ComputeObjectGroupLighting,csThreadReturn,
+      csArray<csRef<Object> >*,objectsBatch, bool, enableRaytracer, bool, enablePhotonMapper,int,pass,
+      Statistics::Progress*, progress,size_t, totalPrimitives, float, progressFactor,THREADED,false,true);
+
+    THREADED_CALLABLE_DECL1(SectorProcessor,SaveLightmaps,csThreadReturn,
+      csRef<SectorGroup>,sectorGroup,THREADED,false,true);
+
+  private :
+    iObjectRegistry* objReg;
+  };
 
   // Representation of sector in our local setup
   class Sector : public csRefCount
   {
   public:
     Sector (Scene* scene)
-      : kdTree (0), scene (scene), photonMap(NULL), causticPhotonMap(NULL), irradianceCache(NULL)
+        : kdTree (0), scene (scene), sectorGroup(0), photonMap(NULL), causticPhotonMap(NULL), irradianceCache(NULL),
+        numPhotonsToEmit(globalConfig.GetIndirectProperties().numPhotons)
     {}
 
     ~Sector ();
@@ -71,6 +140,12 @@ namespace lighter
     void InitPhotonMap();
 
     void InitCausticPhotonMap();
+
+    void InitPhotonNumber();
+
+    // Release the photonmapping data this mean photonmap,
+    // caustic map and irradiance cache
+    void FreePhotonMappingData();
 
     void AddPhoton(const csColor power, const csVector3 pos,
       const csVector3 dir );
@@ -95,6 +170,9 @@ namespace lighter
     void AddToIRCache(const csVector3 point, const csVector3 normal,
                       const csColor irrad, const float mean);
 
+    // Return 2.0 * numThread group of object to be lighted
+    csArray<csArray<csRef<Object> > *> getObjectBatches(size_t& primitivesCount);
+
     // Hash of all mesh names and materials
 
     //csHash <csString,csRef<RadMaterial>> materialHash;
@@ -118,7 +196,15 @@ namespace lighter
 
     Scene* scene;
 
+    SectorGroup* sectorGroup;
+
+    int numPhotonsToEmit;
+
   protected:
+
+    // Compute the number of photons require for an average accuracy
+    size_t getLightPhotonsNumber(Light* light, csBox3& sectorBBox);
+
     // Photon map for indirect lighting
     PhotonMap *photonMap;
 
@@ -130,6 +216,34 @@ namespace lighter
     IrradianceCache *irradianceCache;
   };
   typedef csHash<csRef<Sector>, csString> SectorHash;
+
+  class SectorGroup : public csRefCount
+  {
+    public :
+      SectorGroup(Sector* sector, SectorProcessor* processor);
+      
+      void addSector(csRef<Sector> sector);
+
+      void Process(bool enableRaytracer, bool enablePhotonMapper,
+        Statistics::Progress& progress);
+
+      void SaveLightmaps();
+
+      int computeNeededPhotonNumber();
+
+      csRefArray<iThreadReturn> lightComputations;
+
+    private :
+
+      inline void BuildKDTreeAndPhotonMaps(bool buildPhotonMaps,Statistics::Progress& progress);
+
+      inline void ComputeLighting(bool enableRaytracer, bool enablePhotonMapper,Statistics::Progress& progress);
+
+      SectorHash sectors;
+      csRef<SectorProcessor> sectorProcessor;
+  };
+
+  typedef csArray< csRef<SectorGroup> > SectorGroupRefArray;
 
   class Scene
   {
@@ -174,6 +288,10 @@ namespace lighter
 
     inline const SectorHash& GetSectors () const { return sectors; }
 
+    inline SectorGroupRefArray& GetSectorGroups () { return sectorGroups; }
+
+    inline const SectorGroupRefArray& GetSectorGroups () const { return sectorGroups; }
+
     const LightmapPtrDelArray& GetLightmaps () const 
     { return lightmaps; }
 
@@ -191,7 +309,7 @@ namespace lighter
     const RadMaterial* GetRadMaterial (iMaterialWrapper* matWrap) const
     {
       if (matWrap == 0) return 0;
-      return radMaterials.GetElementPointer (
+      return *radMaterials.GetElementPointer (
         matWrap->QueryObject()->GetName());
     }
 
@@ -243,6 +361,7 @@ namespace lighter
     
     // All sectors
     SectorHash sectors;
+    SectorGroupRefArray sectorGroups;
     typedef csHash<Sector*, csPtrKey<iSector> > SectorOrigSectorHash;
     SectorOrigSectorHash originalSectorHash;
 
