@@ -98,118 +98,118 @@ namespace lighter
         globalConfig.GetTerrainProperties().maxLightmapV);
 
       {
-	uint primSamplesX = cell->GetGridWidth();
-	uint primSamplesY = cell->GetGridHeight();
-	size_t numCellVerts = primSamplesX * primSamplesY;
-	uint indexOffs = (uint)primVertexData.positions.GetSize();
-	primVertexData.positions.SetCapacity (indexOffs + numCellVerts);
-	primVertexData.uvs.SetCapacity (primVertexData.uvs.GetSize()
-	  + numCellVerts);
-	// @@@ FIXME: normals needed?
-	primVertexData.normals.SetCapacity (primVertexData.normals.GetSize()
-	  + numCellVerts);
+        uint primSamplesX = cell->GetGridWidth();
+        uint primSamplesY = cell->GetGridHeight();
+        size_t numCellVerts = primSamplesX * primSamplesY;
+        uint indexOffs = (uint)primVertexData.positions.GetSize();
+        primVertexData.positions.SetCapacity (indexOffs + numCellVerts);
+        primVertexData.uvs.SetCapacity (primVertexData.uvs.GetSize()
+          + numCellVerts);
+        // @@@ FIXME: normals needed?
+        primVertexData.normals.SetCapacity (primVertexData.normals.GetSize()
+          + numCellVerts);
 
-	float invSamplesX = 1.0f/(primSamplesX-1);
-	float invSamplesY = 1.0f/(primSamplesY-1);
+        float invSamplesX = 1.0f/(primSamplesX-1);
+        float invSamplesY = 1.0f/(primSamplesY-1);
 
-	float posScaleX = cellSize.x * invSamplesX;
-	float posScaleY = cellSize.z * invSamplesY;
+        float posScaleX = cellSize.x * invSamplesX;
+        float posScaleY = cellSize.z * invSamplesY;
 
-	for (uint y = 0; y < primSamplesY; y++)
-	{
-	  for (uint x = 0; x < primSamplesX; x++)
-	  {
-	    // Bit of a hack to avoid terrain self-shadowing acne
-	    float height = FLT_MAX;
-	    for (int dx = -1; dx < 2; dx++)
-	    {
-	      if (int (x) + dx < 0) continue;
-	      if (x + dx >= primSamplesX) continue;
-	      for (int dy = -1; dy < 2; dy++)
-	      {
-		if (int (y) + dy < 0) continue;
-		if (y + dy >= primSamplesX) continue;
-		csVector2 p (x * posScaleX, y * posScaleY);
-		
-		height = csMin (height, cell->GetHeight (x+dx, y+dy) - 0.01f);
-	      }
-	    }
-	  
-	    csVector2 p (x * posScaleX, y * posScaleY);
+        for (uint y = 0; y < primSamplesY; y++)
+        {
+          for (uint x = 0; x < primSamplesX; x++)
+          {
+            // Bit of a hack to avoid terrain self-shadowing acne
+            float height = FLT_MAX;
+            for (int dx = -1; dx < 2; dx++)
+            {
+              if (int (x) + dx < 0) continue;
+              if (x + dx >= primSamplesX) continue;
+              for (int dy = -1; dy < 2; dy++)
+              {
+                if (int (y) + dy < 0) continue;
+                if (y + dy >= primSamplesX) continue;
+                csVector2 p (x * posScaleX, y * posScaleY);
 
-	    //float height = cell->GetHeight (x, y) - EPSILON;
-	    csVector3 norm (cell->GetNormal (x, y));
-	    csVector2 uv (p.x * invSamplesX, p.y * invSamplesY);
+                height = csMin (height, cell->GetHeight (x+dx, y+dy) - 0.01f);
+              }
+            }
+    
+            csVector2 p (x * posScaleX, y * posScaleY);
 
-	    primVertexData.positions.Push (csVector3 (
-	      p.x + cellPos.x, height, cellSize.z - p.y + cellPos.y));
-	    primVertexData.uvs.Push (uv);
-	    primVertexData.normals.Push (norm);
-	  }
-	}
+            //float height = cell->GetHeight (x, y) - EPSILON;
+            csVector3 norm (cell->GetNormal (x, y));
+            csVector2 uv (p.x * invSamplesX, p.y * invSamplesY);
 
-	size_t numIndices = (primSamplesX - 1) * (primSamplesY - 1) * 2;
-	PrimitiveArray& cellPrimitives = allPrimitives.GetExtend (
-	  allPrimitives.GetSize());
-	cellPrimitives.SetCapacity (numIndices);
-	for (uint y = 0; y < primSamplesY-1; y++)
-	{
-	  for (uint x = 0; x < primSamplesX-1; x++)
-	  {
-	    Primitive prim1 (primVertexData, 0);
-	    prim1.GetTriangle().a = indexOffs + (y*primSamplesX) + x;
-	    prim1.GetTriangle().b = indexOffs + (y*primSamplesX) + x + 1;
-	    prim1.GetTriangle().c = indexOffs + ((y+1)*primSamplesX) + x;
-	    prim1.ComputePlane ();
+            primVertexData.positions.Push (csVector3 (
+               p.x + cellPos.x, height, cellSize.z - p.y + cellPos.y));
+            primVertexData.uvs.Push (uv);
+            primVertexData.normals.Push (norm);
+	        }
+        }
 
-	    Primitive prim2 (primVertexData, 0);
-	    prim2.GetTriangle().a = indexOffs + ((y+1)*primSamplesX) + x;
-	    prim2.GetTriangle().b = indexOffs + (y*primSamplesX) + x + 1;
-	    prim2.GetTriangle().c = indexOffs + ((y+1)*primSamplesX) + x + 1;
-	    prim2.ComputePlane ();
+        size_t numIndices = (primSamplesX - 1) * (primSamplesY - 1) * 2;
+        PrimitiveArray& cellPrimitives = allPrimitives.GetExtend (
+	        allPrimitives.GetSize());
+        cellPrimitives.SetCapacity (numIndices);
+        for (uint y = 0; y < primSamplesY-1; y++)
+        {
+	        for (uint x = 0; x < primSamplesX-1; x++)
+	        {
+	          Primitive prim1 (primVertexData, 0);
+	          prim1.GetTriangle().a = indexOffs + (y*primSamplesX) + x;
+	          prim1.GetTriangle().b = indexOffs + (y*primSamplesX) + x + 1;
+	          prim1.GetTriangle().c = indexOffs + ((y+1)*primSamplesX) + x;
+	          prim1.ComputePlane ();
 
-	    cellPrimitives.Push (prim1);
-	    cellPrimitives.Push (prim2);
-	  }
-	}
+	          Primitive prim2 (primVertexData, 0);
+	          prim2.GetTriangle().a = indexOffs + ((y+1)*primSamplesX) + x;
+	          prim2.GetTriangle().b = indexOffs + (y*primSamplesX) + x + 1;
+	          prim2.GetTriangle().c = indexOffs + ((y+1)*primSamplesX) + x + 1;
+	          prim2.ComputePlane ();
+
+	          cellPrimitives.Push (prim1);
+	          cellPrimitives.Push (prim2);
+	        }
+        }
       }
 
       {
-	float invSamplesX = 1.0f/(lmSamplesX);
-	float invSamplesY = 1.0f/(lmSamplesY);
+        float invSamplesX = 1.0f/(lmSamplesX);
+        float invSamplesY = 1.0f/(lmSamplesY);
 
-	float pScaleX = cellSize.x * invSamplesX;
-	float pScaleY = cellSize.z * invSamplesY;
+        float pScaleX = cellSize.x * invSamplesX;
+        float pScaleY = cellSize.z * invSamplesY;
 
-	for (uint y = 0; y < lmSamplesY; y++)
-	{
-	  for (uint x = 0; x < lmSamplesX; x++)
-	  {
-	    csVector2 p ((x + 0.5f) * pScaleX, (y + 0.5f) * pScaleY);
+        for (uint y = 0; y < lmSamplesY; y++)
+        {
+	        for (uint x = 0; x < lmSamplesX; x++)
+	        {
+	          csVector2 p ((x + 0.5f) * pScaleX, (y + 0.5f) * pScaleY);
 
-	    float height = cell->GetHeight (p);
-	    csVector3 norm (cell->GetNormal (p));
+	          float height = cell->GetHeight (p);
+	          csVector3 norm (cell->GetNormal (p));
 
-	    vertexData.positions.Push (csVector3 (
-	      p.x + cellPos.x, height, 
-	      cellSize.z - p.y + cellPos.y));
-	    vertexData.normals.Push (norm);
-	    if (factory->hasTangents)
-	    {
-	      csVector3 tang (cell->GetTangent (p));
-	      csVector3 bitang (cell->GetBinormal (p));
-	      size_t v = vertexData.positions.GetSize()-1;
-	      vertexData.customData.SetSize ((v+1)*vertexData.customDataTotalComp);
-	      *((csVector3*)vertexData.GetCustomData (v, vdataTangents)) = tang;
-	      *((csVector3*)vertexData.GetCustomData (v, vdataBitangents)) = bitang;
-	    }
-	  }
-	}
+	          vertexData.positions.Push (csVector3 (
+	            p.x + cellPos.x, height, 
+	            cellSize.z - p.y + cellPos.y));
+	          vertexData.normals.Push (norm);
+	          if (factory->hasTangents)
+	          {
+	            csVector3 tang (cell->GetTangent (p));
+	            csVector3 bitang (cell->GetBinormal (p));
+	            size_t v = vertexData.positions.GetSize()-1;
+	            vertexData.customData.SetSize ((v+1)*vertexData.customDataTotalComp);
+	            *((csVector3*)vertexData.GetCustomData (v, vdataTangents)) = tang;
+	            *((csVector3*)vertexData.GetCustomData (v, vdataBitangents)) = bitang;
+	          }
+	        }
+        }
 
-	LMDimensions lmDim;
-	lmDim.w = lmSamplesX;
-	lmDim.h = lmSamplesY;
-	lmDims.Push (lmDim);
+        LMDimensions lmDim;
+        lmDim.w = lmSamplesX;
+        lmDim.h = lmSamplesY;
+        lmDims.Push (lmDim);
       }
 
       cell->SetLoadState (iTerrainCell::NotLoaded);
@@ -276,7 +276,7 @@ namespace lighter
       {
         Primitive& prim = allPrimitives[i];
         prim.SetObject (this);
-	prim.SetGlobalLightmapID (lmID);
+        prim.SetGlobalLightmapID (lmID);
         prim.Prepare ();
       }
     }
@@ -301,22 +301,22 @@ namespace lighter
       csColor* myColor = litColors[i].GetArray();
       for (size_t l = 0; l < lmDims.GetSize(); l++)
       {
-	const LMDimensions& lmDim = lmDims[l];
-	uint lmID = lightmapIDs[l];
+        const LMDimensions& lmDim = lmDims[l];
+        uint lmID = lightmapIDs[l];
 
-	Lightmap* normalLM = scene->GetLightmap (
-	  lmID, i, (Light*)0);
+        Lightmap* normalLM = scene->GetLightmap (
+	        lmID, i, (Light*)0);
 
-	ScopedSwapLock<Lightmap> lightLock (*normalLM);
+        ScopedSwapLock<Lightmap> lightLock (*normalLM);
 
-	csColor* lmColor = normalLM->GetData();
-	for (int y = 0; y < lmDim.h; y++)
-	{
-	  for (int x = 0; x < lmDim.w; x++)
-	  {
-	    *lmColor++ = *myColor++;
-	  }
-	}
+        csColor* lmColor = normalLM->GetData();
+        for (int y = 0; y < lmDim.h; y++)
+        {
+            for (int x = 0; x < lmDim.w; x++)
+            {
+              *lmColor++ = *myColor++;
+            }
+        }
       }
       LitColorsPDHash::GlobalIterator pdIter (litColorsPD[i].GetIterator ());
       while (pdIter.HasNext ())

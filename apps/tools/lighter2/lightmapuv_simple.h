@@ -22,11 +22,36 @@
 #include "primitive.h"
 #include "lightmapuv.h"
 
+#include "maxrect.h"
+
 // Uncomment to dump subrectangles used during PrepareLighting()
-//#define DUMP_SUBRECTANGLES
+// #define DUMP_SUBRECTANGLES
 
 namespace lighter
 {
+
+  class ArraysOneUV
+  {
+  public:
+    class ArrayType
+    {
+      int u, v;
+    public:
+      ArrayType (int u, int v) : u (u), v (v) {}
+
+      size_t GetSize () const { return 1; }
+      csVector2 GetUVSize (size_t n) const 
+      { 
+        return csVector2 (u, v);
+      }
+    };
+    ArrayType pseudoArray;
+    ArraysOneUV (int u, int v) : pseudoArray (u, v) {}
+
+    size_t GetSize() const { return 1; }
+    ArrayType Get (size_t index) const 
+    { return pseudoArray; }
+  };
 
   class SimpleUVObjectLayouter;
 
@@ -51,6 +76,7 @@ namespace lighter
 
     bool prepared;
     LightmapPtrDelArray& globalLightmaps;
+    csArray<csVector2> groupMinuvs;
 
     /**
      * Vertex equality criterium, for determination of nieghbouring primitives.
@@ -105,6 +131,40 @@ namespace lighter
     void ScaleLightmapUVs (FactoryPrimitiveArray& prims, 
       Vector2Array& lightmapUVs, float lmscale);
 
+  public:
+    struct SectorAndPDBits
+    {
+      SectorAndPDBits():sector(0){};
+
+      SectorAndPDBits(Sector* sector, csBitArray& pdBits)
+        :sector(sector),pdBits(pdBits)
+      {}
+
+      Sector* sector;
+      csBitArray pdBits;
+    };
+  protected:
+    struct LayoutTransform
+    {
+      explicit LayoutTransform(csRect initialRect) :rect(initialRect) {}
+
+      ~LayoutTransform()
+      {
+        int a = 20;
+      }
+
+      uint lmID;
+      csRect rect;
+    };
+
+    /* Allocate the layout in the globallightmaps
+     *
+     */
+    void AllocLayoutArray(csArray<LayoutTransform*>& layouts);
+
+    void QueuePDGroupLayout(LayoutTransform* layout, 
+      Sector* sector, const csBitArray& pdBits);
+
     /* PD lighting queueing
      *
      * In order to more efficiently lay out PD-lit primitives they're
@@ -125,15 +185,20 @@ namespace lighter
       csArray<csVector2> uvsizes;
     };
     typedef csArray<QueuedPDPrimitives> QueuedPDPArray;
-  public:
-    struct SectorAndPDBits
-    {
-      Sector* sector;
-      csBitArray pdBits;
-    };
-  protected:
+
     typedef csHash<QueuedPDPArray, SectorAndPDBits> PDQueuesHash;
     PDQueuesHash pdQueues;
+
+    //Layout transform affected by pd-light
+    typedef csHash<csArray<LayoutTransform*>, SectorAndPDBits > 
+      LayoutTransformHash;
+
+    LayoutTransformHash pdLayoutTransforms;
+
+    csArray<LayoutTransform*> globalLayoutTransforms;
+
+    static int SortLayoutTransform (LayoutTransform* const & l1,
+      LayoutTransform* const & l2);
 
     /// Pair of a PD-lit primitive queues array and the affecting PD lights.
     struct PDLQueue
@@ -143,6 +208,14 @@ namespace lighter
       QueuedPDPArray* queue;
     };
     static int SortPDLQueues (const PDLQueue& p1, const PDLQueue& p2);
+
+    // Allocate space in globallightmaps for non affected by
+    // pd lights primitives
+    void PrepareLightingPDL(csArray<PDLQueue>& queuesPDL,
+      Statistics::Progress& prepareProgress); 
+
+    void PrepareLightingNoPDL(csArray<PDLQueue>& queuesNoPDL,
+      Statistics::Progress& progressNonPDL); 
 
     /// Mixins for AllocAllPrims
     class ArraysQPDPA
@@ -186,7 +259,7 @@ namespace lighter
         };
         csArray<Queue> queues;
         /// Rectangle allocators
-        CS::SubRectanglesCompact* alloc;
+        MaxRectanglesCompact* alloc;
       };
       /// The queues and each allocator
       csArray<Map> maps;
@@ -201,12 +274,12 @@ namespace lighter
       AllocLQ (LayoutedQueue& queue) : queue (queue) {}
 
       size_t GetSize() const { return queue.maps.GetSize(); }
-      CS::SubRectanglesCompact& Get (size_t n) { return *queue.maps[n].alloc; }
-      CS::SubRectanglesCompact& New (size_t& index) 
+      MaxRectanglesCompact& Get (size_t n) { return *queue.maps[n].alloc; }
+      MaxRectanglesCompact& New (size_t& index) 
       { 
         csRect area (0, 0, globalConfig.GetLMProperties ().maxLightmapU,
           globalConfig.GetLMProperties ().maxLightmapV);
-        CS::SubRectanglesCompact* alloc = new CS::SubRectanglesCompact (area);
+        MaxRectanglesCompact* alloc = new MaxRectanglesCompact (area);
         index = queue.maps.GetSize();
         queue.maps.GetExtend (index).alloc = alloc;
         /*alloc.SetGrowPO2 (true);*/
@@ -234,7 +307,7 @@ namespace lighter
     };
     class ArraysLQ
     {
-      csArray<CS::SubRectanglesCompact*> allocs;
+      csArray<MaxRectanglesCompact*> allocs;
     public:
       struct AllocOrigin
       {
@@ -245,9 +318,9 @@ namespace lighter
 
       class ArrayType
       {
-        CS::SubRectanglesCompact* alloc;
+        MaxRectanglesCompact* alloc;
       public:
-        ArrayType (CS::SubRectanglesCompact* alloc) : alloc (alloc) {}
+        ArrayType (MaxRectanglesCompact* alloc) : alloc (alloc) {}
 
         size_t GetSize () const { return 1; }
         csVector2 GetUVSize (size_t n) const 
@@ -264,7 +337,7 @@ namespace lighter
           org.lq = q;
           for (size_t a = 0; a < queues[q].maps.GetSize(); a++)
           {
-            CS::SubRectanglesCompact* allocP = queues[q].maps[a].alloc;
+            MaxRectanglesCompact* allocP = queues[q].maps[a].alloc;
             allocs.Push (allocP);
             org.alloc = a;
             origins.Push (org);
@@ -278,7 +351,7 @@ namespace lighter
     };
     class ArraysOneLQ
     {
-      csArray<CS::SubRectanglesCompact*> allocs;
+      csArray<MaxRectanglesCompact*> allocs;
     public:
       typedef ArraysLQ::ArrayType ArrayType;
 
@@ -286,7 +359,7 @@ namespace lighter
       {
         for (size_t a = 0; a < queue.maps.GetSize(); a++)
         {
-          CS::SubRectanglesCompact* allocP = queue.maps[a].alloc;
+          MaxRectanglesCompact* allocP = queue.maps[a].alloc;
           allocs.Push (allocP);
         }
       }
@@ -306,8 +379,16 @@ namespace lighter
     virtual size_t LayoutUVOnPrimitives (PrimitiveArray &prims, 
       size_t groupNum, Sector* sector, const csBitArray& pdBits);
 
+    virtual size_t LayoutUVOnGroup (PrimitiveArray &prims,
+      size_t groupNum, Sector* sector, const csBitArray& pdBits);
+
     virtual void FinalLightmapLayout (PrimitiveArray &prims, size_t layoutID,
-      size_t groupNum, ObjectVertexData& vertexData, uint& lmID);
+      size_t groupNum, ObjectVertexData& vertexData, bool unwrappedByObject, uint& lmID);
+
+    virtual float getFilledRatio(size_t groupNum)
+    {
+      return surfaceGroup[groupNum].filledRatio;
+    }
   protected:
     friend class SimpleUVFactoryLayouter;
     csRef<SimpleUVFactoryLayouter> parent;
@@ -325,6 +406,20 @@ namespace lighter
     };
     csHash<PDLayoutedGroup, size_t> pdLayouts;
     csArray<csArray<csVector2> > uvsizes;
+
+    csArray<SimpleUVFactoryLayouter::LayoutTransform*> layoutTransforms;
+
+    struct SurfaceAndRatio
+    {
+      SurfaceAndRatio():filledRatio(0){}
+
+      // Lightmap surface for group
+      csRect rect;
+      // Lightmap filled ratio
+      float filledRatio;
+    };
+    csArray<SurfaceAndRatio> surfaceGroup;
+
     /**
      * Minimum UVs for each *layout* (since a group can appear multiple times
      * on lightmaps)

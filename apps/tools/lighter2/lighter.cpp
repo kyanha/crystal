@@ -51,7 +51,7 @@ namespace lighter
       progLightmapLayout ("Lightmap layout", 5),
       progSaveFactories ("Saving mesh factories", 7),
 
-      // Generate empty light maps, KD-tree & photon maps (10)
+      // Generate empty light maps, KD-tree & photon maps (5)
       progInitializeMain ("Initialize objects", 10),
         progInitialize (0, 3, &progInitializeMain),
         progInitializeLightmaps ("Lightmaps", 3, &progInitializeMain),
@@ -61,12 +61,9 @@ namespace lighter
         progSaveMeshesMain ("Saving mesh objects", 3, &progInitializeMain),
           progSaveMeshes (0, 99, &progSaveMeshesMain),
           progSaveFinish (0, 1, &progSaveMeshesMain),
-        progBuildKDTree ("Building KD-Tree", 10, &progInitializeMain),
-        progPhotonEmission ("Emitting Photons", 7, &progInitializeMain),
-        progPhotonBalancing ("Balancing Photons", 3, &progInitializeMain),
 
-      // Fill the lightmaps (50)
-      progCalcLighting ("Calculating Lighting Components", 50),
+      // Fill the lightmaps (55)
+      progCalcLighting ("Calculating Lighting Components", 55),
 
       // Postprocess lightmaps (10)
       progPostproc ("Postprocessing lightmaps", 10),
@@ -167,8 +164,9 @@ namespace lighter
     }
     else*/
     {
-      jobManager.AttachNew (new CS::Threading::ThreadedJobQueue (
-        globalConfig.GetLighterProperties ().numThreads));
+      /*jobManager.AttachNew (new CS::Threading::ThreadedJobQueue (
+        globalConfig.GetLighterProperties ().numThreads*/
+
     }
 
     // Initialize the TUI
@@ -249,6 +247,10 @@ namespace lighter
     if (!docSystem) 
       docSystem.AttachNew (new csTinyDocumentSystem);
 
+    // Get the thread manager
+    threadManager = csQueryRegistry<iThreadManager>(objectRegistry);
+    threadManager->GetThreadCount();
+
     progStartup.SetProgress (1);
     return true;
   }
@@ -327,18 +329,10 @@ namespace lighter
     /* TODO: the global lightmaps' subrect allocators are not needed any
 	     more, discard contents. */
 
-    // Build the KD-trees
-    BuildKDTrees ();
+    ProcessSectorGroups(enableRaytracer,enablePhotonMapper);
 
-    // Build & Balance Photon Maps if needed
-    if(enablePhotonMapper)
-    {
-      BuildPhotonMaps();
-      BalancePhotonMaps();
-    }
-   
-    // Compute all lighting components (fill lightmaps)
-    ComputeLighting(enableRaytracer, enablePhotonMapper);
+    // Wait for the end of the calculation
+    threadManager->Wait(sectorGroupProcess);
 
     // Postprocessing of ligthmaps
     PostprocessLightmaps ();
@@ -361,6 +355,16 @@ namespace lighter
     globalTUI.FinishDraw ();
 
     return true;  
+  }
+
+  bool Lighter::Notify (const char* msg, ...)
+  {
+    va_list arg;
+    va_start (arg, msg);
+    csReportV(objectRegistry, CS_REPORTER_SEVERITY_NOTIFY, 
+      "crystalspace.application.lighter2", msg, arg);
+    va_end (arg);
+    return false;
   }
 
   bool Lighter::Report (const char* msg, ...)
@@ -427,84 +431,6 @@ namespace lighter
     progLightmapLayout.SetProgress (1);
   }
 
-  void Lighter::BuildPhotonMaps()
-  {
-    // Indicate 0% progress
-    progPhotonEmission.SetProgress(0);
-
-    // Compute step size for progress updates
-    const float progressStep = 1.0f / scene->GetSectors ().GetSize();
-
-    // Create global illumination object
-    PhotonmapperLighting lighting;
-
-    // Retrieve sector iterator
-    SectorHash::GlobalIterator sectIt = 
-      scene->GetSectors ().GetIterator ();
-
-    // Iterator over all sectors
-    size_t sectorIdx = 0;
-    while (sectIt.HasNext ())
-    {
-      // Retrieve next sector
-      csRef<Sector> sect = sectIt.Next ();
-      
-      // Setup to report progress
-      Statistics::Progress* progPhoton =
-        progPhotonEmission.CreateProgress(progressStep);
-
-      // Emit photons in this sector
-      lighting.EmitPhotons(sect, *progPhoton);
-
-      // Cleanup
-      delete progPhoton;
-
-      sectorIdx++;
-    }
-
-    // Indicate 100% progress
-    progPhotonEmission.SetProgress(1);
-  }
-
-  void Lighter::BalancePhotonMaps()
-  {
-    // Indicate 0% progress
-    progPhotonBalancing.SetProgress(0);
-
-    // Compute step size for progress updates
-    const float progressStep = 1.0f / scene->GetSectors ().GetSize();
-
-    // Create global illumination object
-    PhotonmapperLighting lighting;
-
-    // Retrieve sector iterator
-    SectorHash::GlobalIterator sectIt = 
-      scene->GetSectors ().GetIterator ();
-
-    // Iterator over all sectors
-    size_t sectorIdx = 0;
-    while (sectIt.HasNext ())
-    {
-      // Retrieve next sector
-      csRef<Sector> sect = sectIt.Next ();
-      
-      // Setup to report progress
-      Statistics::Progress* progPhoton =
-        progPhotonBalancing.CreateProgress(progressStep);
-
-      // Balance this sector's photon map
-      lighting.BalancePhotons(sect, *progPhoton);
-
-      // Cleanup
-      delete progPhoton;
-
-      sectorIdx++;
-    }
-
-    // Indicate 100% progress
-    progPhotonBalancing.SetProgress(1);
-  }
-
   void Lighter::InitializeObjects ()
   {
     progInitialize.SetProgress (0);
@@ -551,6 +477,20 @@ namespace lighter
     }
   }
 
+  void Lighter::ProcessSectorGroups(bool enableRayTracer, bool enablePhotonMapping)
+  {
+    SectorGroupRefArray groups = scene->GetSectorGroups();
+    SectorGroupRefArray::Iterator groupIt = groups.GetIterator();
+
+    progCalcLighting.SetProgress(0);
+
+    while (groupIt.HasNext())
+    {
+      csRef<SectorGroup> group = groupIt.Next();
+      group->Process(enableRayTracer, enablePhotonMapping,progCalcLighting);
+    }
+  }
+    
   void Lighter::PrepareLighting ()
   {
     uvLayout->PrepareLighting (progPrepareLightingUVL);
@@ -571,93 +511,6 @@ namespace lighter
     }
     
     progPrepareLightingSector.SetProgress (1);
-  }
-
-  void Lighter::BuildKDTrees ()
-  {
-    progBuildKDTree.SetProgress (0);
-    const float progressStep = 1.0f / scene->GetSectors ().GetSize();
-    SectorHash::GlobalIterator sectIt = 
-      scene->GetSectors ().GetIterator ();
-    while (sectIt.HasNext ())
-    {
-      csRef<Sector> sect = sectIt.Next ();
-
-      Statistics::Progress* progSector = 
-        progBuildKDTree.CreateProgress (progressStep);
-      sect->BuildKDTree (*progSector);
-      delete progSector;
-    }
-    progBuildKDTree.SetProgress (1);
-  }
-
-  void Lighter::ComputeLighting (bool enableRaytracer, bool enablePhotonMapper)
-  {
-    // Set task progress to 0%
-    progCalcLighting.SetProgress (0);
-
-    int numPasses = 
-      globalConfig.GetLighterProperties().directionalLMs ? 4 : 1;
-
-    const csVector3 bases[4] =
-    {
-      csVector3 (0, 0, 1),
-      csVector3 (/* -1/sqrt(6) */ -0.408248f, /* 1/sqrt(2) */ 0.707107f, /* 1/sqrt(3) */ 0.577350f),
-      csVector3 (/* sqrt(2/3) */ 0.816497f, 0, /* 1/sqrt(3) */ 0.577350f),
-      csVector3 (/* -1/sqrt(6) */ -0.408248f, /* -1/sqrt(2) */ -0.707107f, /* 1/sqrt(3) */ 0.577350f)
-    };
-
-    // What portion of main task does each sub-task complete
-    float sectorProgress = 
-      1.0f / (numPasses * scene->GetSectors ().GetSize());
-
-    // Loop through lighting calculation for directional dependencies
-    for (int p = 0; p < numPasses; p++)
-    {
-      // Construct a light calculator
-      LightCalculator lighting (bases[p], p);
-
-      // Add components to the light calculator
-      RaytracerLighting *raytracerComponent = NULL;
-      PhotonmapperLighting *photonmapperComponent = NULL;
-
-      if(enableRaytracer)
-      {
-        raytracerComponent = new RaytracerLighting (bases[p], p);
-        lighting.addComponent(raytracerComponent, 1.0f, 0.0f);
-      }
-
-      if(enablePhotonMapper)
-      {
-        photonmapperComponent = new PhotonmapperLighting();
-        lighting.addComponent(photonmapperComponent, 1.0f, 0.0f);
-      }
-
-      // Iterate overl all scene sectors
-      SectorHash::GlobalIterator sectIt = 
-        scene->GetSectors ().GetIterator ();
-      while (sectIt.HasNext ())
-      {
-        // Get the next sector
-        csRef<Sector> sect = sectIt.Next ();
-
-        // Create a sub-task progress
-        Statistics::Progress* lightProg = 
-          progCalcLighting.CreateProgress (sectorProgress);
-
-        // Compute the lighting
-        lighting.ComputeSectorStaticLighting (sect, *lightProg);
-
-        // Clean up
-        delete lightProg;
-      }
-
-      if(raytracerComponent != NULL) delete raytracerComponent;
-      if(photonmapperComponent != NULL) delete photonmapperComponent;
-    }
-
-    // Set task progress to 100%
-    progCalcLighting.SetProgress (1);
   }
 
   void Lighter::PostprocessLightmaps ()
@@ -708,6 +561,7 @@ namespace lighter
     progPostprocLM.SetProgress (0);
     csArray<LightmapPtrDelArray*> allLightmaps (scene->GetAllLightmaps());
     float lightmapStep = 1.0f / allLightmaps.GetSize();
+    
     for (size_t li = 0; li < allLightmaps.GetSize (); ++li)
     {
       LightmapPtrDelArray& lightmaps = *allLightmaps[li];
@@ -731,10 +585,11 @@ namespace lighter
           u = updateFreq;
         }
       }
+
       progLM->SetProgress (1);
       delete progLM;
     }
-    progPostprocLM.SetProgress (1);    
+    progPostprocLM.SetProgress (1);
   }
 
   void Lighter::LoadConfiguration ()
@@ -881,8 +736,22 @@ namespace lighter
     {
       csPrintf ("Photon Mapping Options:\n");
       csPrintf (" --numphotons=<number>\n");
-      csPrintf ("  Sets the number of photons to emit in each sector (you should change this).\n");
-      csPrintf ("   Default: %d\n\n", globalConfig.GetIndirectProperties ().numPhotons);
+      csPrintf ("  Sets the number of photons to emit in each sector.\n");
+      csPrintf ("   Default: An approximated value will be computed for each sector\n\n");
+
+      csPrintf (" --[no]interactive\n");
+      csPrintf ("  When numphotons is not set up permit to choose between the computed\n");
+      csPrintf ("  number and a user value\n");
+      csPrintf ("   Default: %s\n\n",(globalConfig.GetIndirectProperties ().interactiveConfiguration?"True":"False"));
+
+      csPrintf (" --[no]caustics\n");
+      csPrintf ("  Enable the computation of caustics\n");
+      csPrintf ("   Default: %s\n\n", (globalConfig.GetIndirectProperties ().caustics?"True":"False"));
+
+      csPrintf (" --numcausticsphotons=<number>\n");
+      csPrintf ("  Sets the number of photons to emit in each sector to generate\n");
+      csPrintf ("  caustics.\n");
+      csPrintf ("   Default: %d\n\n", globalConfig.GetIndirectProperties ().numCausticPhotons);
 
       csPrintf (" --maxdensitysamples=<number>\n");
       csPrintf ("  Sets the maximum number of photons to sample when estimating\n"

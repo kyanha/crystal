@@ -90,15 +90,16 @@ namespace lighter
           newPrims, usedVertices, noModify);
         if (lightmaplayout)
         {
-	  for (size_t n = 0; n < newPrims.GetSize(); n++)
-	  {
-	    layoutedPrimitives.Push (LayoutedPrimitives (newPrims[n],
-	      lightmaplayout, n));
+	        for (size_t n = 0; n < newPrims.GetSize(); n++)
+	        {
+	          layoutedPrimitives.Push (LayoutedPrimitives (newPrims[n],
+	            lightmaplayout, n));
   
-	    AddSubmeshRemap (i, layoutedPrimitives.GetSize () - 1);
-	  }
-	}
+	          AddSubmeshRemap (i, layoutedPrimitives.GetSize () - 1);
+	        }
+	      }
       }
+
       unlayoutedPrimitives.DeleteAll();
     }
     FinishSubmeshRemap ();
@@ -135,7 +136,7 @@ namespace lighter
         if (vNoSelfShadow != 0)
         {
           noSelfShadow = (strcmp (vNoSelfShadow, "yes") == 0);
-	}
+	      }
 
         const char* vLMScale = kvp->GetValue ("lmscale");
         if (vLMScale)
@@ -282,40 +283,52 @@ namespace lighter
       pdBits.SetSize (allPDLights.GetSize());
       for (size_t i = 0; i < allPDLights.GetSize(); i++)
       {
-	if (bsphere.TestIntersect (allPDLights[i]->GetBoundingSphere()))
-	  pdBits.SetBit (i);
+        if (bsphere.TestIntersect (allPDLights[i]->GetBoundingSphere()))
+          pdBits.SetBit (i);
       }
 
-      unsigned int i = 0;
       this->allPrimitives.SetCapacity (factory->layoutedPrimitives.GetSize ());
       for(size_t j = 0; j < factory->layoutedPrimitives.GetSize (); ++j)
       {
-	FactoryPrimitiveArray& factPrims = factory->layoutedPrimitives[j].primitives;
-	PrimitiveArray& allPrimitives =
-	  this->allPrimitives.GetExtend (j);
+        FactoryPrimitiveArray& factPrims = factory->layoutedPrimitives[j].primitives;
+        PrimitiveArray& allPrimitives =
+        this->allPrimitives.GetExtend (j);
 
-	allPrimitives.SetCapacity (allPrimitives.GetSize() + factPrims.GetSize());
-	for (i = 0; i < factPrims.GetSize(); i++)
-	{
-	  Primitive newPrim (vertexData, (uint)j);
+        allPrimitives.SetCapacity (allPrimitives.GetSize() + factPrims.GetSize());
+        for (unsigned int i = 0; i < factPrims.GetSize(); i++)
+        {
+          Primitive newPrim (vertexData, (uint)j);
 	  
-	  Primitive& prim = allPrimitives[allPrimitives.Push (newPrim)];
-	  //prim.SetOriginalPrimitive (&factPrims[i]);
-	  prim.SetTriangle (factPrims[i].GetTriangle ()); 
-	  prim.ComputePlane ();
-	}
+          Primitive& prim = allPrimitives[allPrimitives.Push (newPrim)];
+          //prim.SetOriginalPrimitive (&factPrims[i]);
+          prim.SetTriangle (factPrims[i].GetTriangle ()); 
+          prim.ComputePlane ();
+        }
 
-	if (!lightPerVertex)
-	{
-	  // FIXME: probably separate out to allow for better progress display
-	  LightmapUVObjectLayouter* layout = 
-	    factory->layoutedPrimitives[j].factory;
-	  const size_t group = factory->layoutedPrimitives[j].group;
-	  size_t layoutID = layout->LayoutUVOnPrimitives (allPrimitives, 
-	    group, sector, pdBits);
-	  if (layoutID == (size_t)~0) return false;
-	  lmLayouts.Push (LMLayoutingInfo (layout, layoutID, group));
-	}
+	      if (!lightPerVertex)
+	      {
+	        // FIXME: probably separate out to allow for better progress display
+	        LightmapUVObjectLayouter* layout = 
+	          factory->layoutedPrimitives[j].factory;
+	        const size_t group = factory->layoutedPrimitives[j].group;
+          size_t layoutID;
+          bool objectUnwrap = false;
+
+          if (layout->getFilledRatio(group) > 0.85f)
+          {
+            layoutID = layout->LayoutUVOnGroup(allPrimitives, 
+              group, sector, pdBits);
+            objectUnwrap = true;
+          }
+          else
+          {
+	          layoutID = layout->LayoutUVOnPrimitives (allPrimitives, 
+	            group, sector, pdBits);
+	          if (layoutID == (size_t)~0) return false;
+          }
+          lmLayouts.Push (LMLayoutingInfo (layout, layoutID,
+            group, objectUnwrap));
+	      }
 
       }
     }
@@ -335,8 +348,8 @@ namespace lighter
       if (!lightPerVertex)
       {
         lmLayouts[j].layouter->FinalLightmapLayout (allPrimitives, 
-          lmLayouts[j].layoutID, lmLayouts[j].group, vertexData, 
-          lightmapIDs.GetExtend (j));
+          lmLayouts[j].layoutID, lmLayouts[j].group, vertexData,
+          lmLayouts[j].unwrapByObject, lightmapIDs.GetExtend (j));
       }
 
       for (size_t i = 0; i < allPrimitives.GetSize(); i++)
@@ -408,7 +421,7 @@ namespace lighter
         {
           objFlags.SetBool (OBJECT_FLAG_NOSELFSHADOW,
             strcmp (vNoSelfShadow, "yes") == 0);
-	}
+        }
 
         if (!factory->lightPerVertex && !objFlags.Check (OBJECT_FLAG_NOLIGHT))
         {
@@ -469,19 +482,19 @@ namespace lighter
         csRef<iDocumentNodeIterator> nodes = node->GetNodes();
         while (nodes->HasNext())
         {
-	  csRef<iDocumentNode> child = nodes->Next();
-	  if ((child->GetType() == CS_NODE_ELEMENT)
-	    && (strcmp (child->GetValue(), "staticlit") == 0))
-	  {
-	    hasStaticLit = true;
-	    break;
-	  }
+          csRef<iDocumentNode> child = nodes->Next();
+          if ((child->GetType() == CS_NODE_ELEMENT)
+	          && (strcmp (child->GetValue(), "staticlit") == 0))
+          {
+	          hasStaticLit = true;
+	          break;
+          }
         }
         if (!hasStaticLit)
         {
-	  csRef<iDocumentNode> newNode = node->CreateNodeBefore (
-	    CS_NODE_ELEMENT, 0);
-	  newNode->SetValue ("staticlit");
+          csRef<iDocumentNode> newNode = node->CreateNodeBefore (
+	          CS_NODE_ELEMENT, 0);
+          newNode->SetValue ("staticlit");
         }
       }
     }
@@ -643,17 +656,17 @@ namespace lighter
       csSet<csPtrKey<Light> > lightsSeen;
       
       LightInfluencesHash::GlobalIterator inflIt = 
-	lightInfluences->GetIterator();
+        lightInfluences->GetIterator();
       
       while (inflIt.HasNext())
       {
-	GroupAndLight key (0, 0);
-	inflIt.Next (key);
-	if ((key.groupID == groupID) && !lightsSeen.Contains (key.light))
-	{
-	  lights.Push (key.light);
-	  lightsSeen.AddNoTest (key.light);
-	}
+        GroupAndLight key (0, 0);
+        inflIt.Next (key);
+        if ((key.groupID == groupID) && !lightsSeen.Contains (key.light))
+        {
+	        lights.Push (key.light);
+	        lightsSeen.AddNoTest (key.light);
+        }
       }
     }
     

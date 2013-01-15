@@ -22,6 +22,8 @@
 #include "common.h"
 #include "swappable.h"
 
+#include "maxrect.h"
+
 namespace lighter
 {
   class LightmapMask;
@@ -53,7 +55,8 @@ namespace lighter
 
     // Set a pixel to given color
     inline void SetAddPixel (size_t u, size_t v, csColor c)
-    {     
+    {
+      CS::Threading::MutexScopedLock lock (writeMutex);
       colorArray[v*GetWidth() + u] += c;
     }
 
@@ -69,8 +72,8 @@ namespace lighter
     inline int GetWidth () const { return width; }
     inline int GetHeight () const { return height; }
 
-    inline CS::SubRectanglesCompact& GetAllocator () { return lightmapAllocator; }
-    inline const CS::SubRectanglesCompact& GetAllocator () const { return lightmapAllocator; }
+    inline MaxRectanglesCompact& GetAllocator () { return lightmapAllocator; }
+    inline const MaxRectanglesCompact& GetAllocator () const { return lightmapAllocator; }
     inline void UpdateDimensions ()
     {
       width = lightmapAllocator.GetRectangle().Width();
@@ -91,7 +94,7 @@ namespace lighter
     {
       if (!IsLocked() && (colorArray == 0))
       {
-	colorArray = AllocColors();
+        colorArray = AllocColors();
       }           
       Swappable::Lock();
 
@@ -129,12 +132,14 @@ namespace lighter
     int width, height;
 
     // Area allocator
-    CS::SubRectanglesCompact lightmapAllocator;
+    MaxRectanglesCompact lightmapAllocator;
 
     // Filename
     csString filename;
 
     iTextureWrapper* texture;
+
+    CS::Threading::Mutex writeMutex;
 
     inline csColor* BogusPointer () const 
     { return ((csColor*)~0) - (GetWidth() * GetHeight()); }

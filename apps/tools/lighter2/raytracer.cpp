@@ -22,6 +22,8 @@
 #include "kdtree.h"
 #include "primitive.h"
 
+#include "scene.h"
+
 namespace lighter
 {
   RaytraceCore globalRaycore;
@@ -147,9 +149,11 @@ namespace lighter
           hit = thisHit;
           return isctHit;
         }
+
         if (thisHit.distance < hit.distance) 
           hit = thisHit;
-	if (!continueTrace) return isctHitAndExit;
+        
+        if (!continueTrace) return isctHitAndExit;
       }
     }
 
@@ -320,16 +324,35 @@ namespace lighter
     HitPoint &hit, HitIgnoreCallback* ignoreCB) 
   {
     HitCallbackNone hitCB;
+    bool haveHit;
     if (ignoreCB)
     {
       IgnoreCallbackObj ignCB (ignoreCB);
-      return TraceFunction<false> (tree, ray, hit, hitCB, ignCB);
+      haveHit =  TraceFunction<false> (tree, ray, hit, hitCB, ignCB);
     }
     else
     {
       IgnoreCallbackNone ignCB;
-      return TraceFunction<false> (tree, ray, hit, hitCB, ignCB);
+      haveHit = TraceFunction<false> (tree, ray, hit, hitCB, ignCB);
     }
+    
+    if (haveHit&& hit.primitive->isFromPortal())
+    {
+      Ray secondRay = ray;
+      float oldDistance = hit.distance;
+      hit.distance = FLT_MAX*0.9f;
+      Portal* port = hit.primitive->GetPortal();
+      secondRay.origin = port->wrapTransform.This2Other(hit.hitPoint);
+      Sector* sect = port->destSector;
+      
+      haveHit = TraceClosestHit(sect->kdTree,secondRay,hit,ignoreCB);
+      if (haveHit)
+      {
+        hit.distance += oldDistance;
+      }
+    }
+
+    return haveHit && (!hit.primitive->isFromPortal());
   }
 
   bool Raytracer::TraceAllHits (const KDTree* tree, const Ray &ray, 

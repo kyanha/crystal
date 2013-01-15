@@ -51,6 +51,9 @@ namespace lighter
     // Do the fancy lighting
     bool LightEmUp ();
 
+    // Notify a message, always returns false
+    bool Notify (const char* msg, ...);
+
     // Report an error/warning, always returns false
     bool Report (const char* msg, ...);
 
@@ -67,10 +70,14 @@ namespace lighter
     iObjectRegistry *objectRegistry;
     csRef<iShaderVarStringSet> svStrings;
     csRef<iJobQueue> jobManager;
+    csRef<iThreadManager> threadManager;
     csRef<iSyntaxService> syntaxService;
 
     SwapManager* swapManager;
     RayDebugHelper rayDebug;
+
+    // Thread return array
+    csRefArray<iThreadReturn> sectorGroupProcess;
 
   protected:
     // Cleanup and prepare for shutdown
@@ -88,6 +95,9 @@ namespace lighter
 
     // Adjust light attenuation
     void ForceRealisticAttenuation();
+
+    // Process all the ligthing calculation of one group
+    void ProcessSectorGroups(bool enableRaytracer, bool enablePhotonMapping);
 
     // Initialize objects after LM construction
     void InitializeObjects ();
@@ -127,9 +137,6 @@ namespace lighter
     Statistics::Progress progSaveMeshesMain;
     Statistics::Progress progSaveMeshes;
     Statistics::Progress progSaveFinish;
-    Statistics::Progress progBuildKDTree;
-    Statistics::Progress progPhotonEmission;
-    Statistics::Progress progPhotonBalancing;
     Statistics::Progress progCalcLighting;
     Statistics::Progress progPostproc;
     Statistics::Progress progPostprocSector;

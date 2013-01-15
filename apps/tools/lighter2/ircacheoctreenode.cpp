@@ -121,7 +121,6 @@ namespace lighter
         float weight = Weight(samp, Pi);
         if(weight > 1.0/alpha)
         {
-          #pragma omp critical
           {
             nearest->samples[nearest->count] = Pi;
             nearest->weights[nearest->count] = weight;
@@ -139,7 +138,6 @@ namespace lighter
       childSizeSq *= childSizeSq;
 
       // Compute distance to center of each child
-      #pragma omp parallel for
       for(int i=0; i<8; i++)
       {
         float tmp[3], distSq;

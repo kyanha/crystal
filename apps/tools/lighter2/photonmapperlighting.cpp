@@ -22,10 +22,6 @@
 #include "material.h"
 #include "scene.h"
 
-#if defined(_OPENMP)
-#include "omp.h"
-#endif
-
 namespace lighter
 {
   PhotonmapperLighting::PhotonmapperLighting ()
@@ -153,7 +149,6 @@ namespace lighter
         // Cache the results if we accumulated some energy
         if(rayCount > 0)
         {
-          #pragma omp critical
           sector->AddToIRCache(point, normal, c, rayCount/meanDist);
           globalStats.photonmapping.irCachePrimary++;
         }
@@ -171,13 +166,13 @@ namespace lighter
 
   void PhotonmapperLighting::BalancePhotons(Sector *sect, Statistics::Progress& progress)
   {
+    Statistics::ProgressState progressState(progress, (int)(0.6*globalStats.photonmapping.numStoredPhotons),0.02f);
+
+    // Scale the photons for this light
+    sect->ScalePhotons(1.0/sect->numPhotonsToEmit);
+
     // Balance the PhotonMap KD-Trees
-    progress.SetProgress(0.0f);
-    Statistics::ProgressState progressState(progress, (int)(0.5*sect->GetPhotonCount()));
-
     sect->BalancePhotons(progressState);
-
-    progress.SetProgress(0.0f);
 
     // Save the photon map if requested
     if(globalConfig.GetIndirectProperties ().savePhotonMap)
@@ -188,6 +183,8 @@ namespace lighter
       sect->SavePhotonMap(filename);
       secCount++;
     }
+
+    progressState.Finish();
   }
 
   bool PhotonmapperLighting::ParseSector(Sector *sect)
@@ -203,7 +200,7 @@ namespace lighter
       csRef<Object> obj = objIt.Next ();
       csString matName = obj->materialName;
       Scene * curScene = sect->scene;
-      lighter::RadMaterial * radMat = curScene->radMaterials[matName];
+      lighter::RadMaterial * radMat = *curScene->radMaterials[matName];
       
       if (radMat)
       {
@@ -224,10 +221,6 @@ namespace lighter
 
   void PhotonmapperLighting::EmitPhotons(Sector *sect, Statistics::Progress& progress)
   {
-    progress.SetProgress(0.0f);
-
-    // Sleep Time
-	//Sleep(10000);
     // Determine maximum allowed photon recursion
     size_t maxDepth = 0;
     if(indirectLightEnabled)
@@ -238,7 +231,7 @@ namespace lighter
 
     // Iterate through all the non 'Pseudo Dynamic' light sources
     const LightRefArray& allNonPDLights = sect->allNonPDLights;
-    Statistics::ProgressState progressState(progress, numPhotonsPerSector);
+    Statistics::ProgressState progressState(progress, globalStats.scene.numPhotons,0.03f);
 
     // Iterate over the lights to determine the total lumen power in the sector
     double sectorLumenPower = 0;
@@ -247,7 +240,7 @@ namespace lighter
       Light* curLight = allNonPDLights[lightIdx];
       csColor pow = curLight->GetColor()*curLight->GetPower()*
         globalConfig.GetLighterProperties ().PMLightScale;
-      sectorLumenPower += (pow.red + pow.green + pow.blue)/3.0;
+      sectorLumenPower += pow.Luminance();
     }
 
     
@@ -261,6 +254,10 @@ namespace lighter
       {
         numCausticPhotonsPerSector = 0;
         enableCaustics = false;
+      }
+      else
+      {
+        sect->InitCausticPhotonMap();
       }
     }
 
@@ -337,14 +334,8 @@ namespace lighter
       }
 
       // Loop to generate the requested number of photons for this light source
-    #if defined(_OPENMP)
-      omp_set_num_threads(omp_get_num_procs()*2);
-    #endif
-
 	  if(!stop)
 	  {
-
-		  #pragma omp parallel for
 		  for (int num = 0; num < photonsForCurLight; ++num)
 		  {
 			// Get direction to emit the photon
@@ -414,10 +405,10 @@ namespace lighter
           // Setting one time light properties
       
           float spRadius, spanAngle;
-	  spRadius = spanAngle = 0.0f;
+          spRadius = spanAngle = 0.0f;
           csVector3 lightDir (0.0f);
-	  csVector3 objDir (0.0f);
-	  csVector3 pseudoPos (0.0f);
+          csVector3 objDir (0.0f);
+          csVector3 pseudoPos (0.0f);
 
           switch (curLightType)
           {
@@ -498,7 +489,6 @@ namespace lighter
 
 		  if(!stop)
 		  {
-			  #pragma omp parallel for
 			  for (int cnum = 0; cnum < causticPhotonsForMesh; ++cnum)
 			  {
 				// Get direction to emit the photon
@@ -548,13 +538,13 @@ namespace lighter
     }
 
     // Scale the photons for this light
-    sect->ScalePhotons(1.0/numPhotonsPerSector);
+    //sect->ScalePhotons(1.0/sect->numPhotonsToEmit);
     if (enableCaustics)
     {
       sect->ScaleCausticPhotons(1.0/numCausticPhotonsPerSector);
     }
 
-    progress.SetProgress(1.0f);
+    progressState.Finish();
   }
 
   void PhotonmapperLighting::EmitPhoton(Sector* &sect, const PhotonRay &photon,
@@ -572,13 +562,15 @@ namespace lighter
     hit.distance = FLT_MAX*0.9f;
     lighter::Ray ray = photon.getRay();
     bool hitResult;
-    #pragma omp critical
     hitResult = lighter::Raytracer::TraceClosestHit(sect->kdTree, ray, hit); 
 
     if (hitResult)
     {
       // TODO: Why would a hit be returned and 'hit.primitive' be NULL?
       if (!hit.primitive || !hit.primitive->GetMaterial()) { return; }
+
+      // Get the sector where the primitive hitted
+      Sector* hitSector = hit.primitive->GetObject()->GetSector();
 
       // Get the surface normal and direction from light source
       csVector3 N = hit.primitive->ComputeNormal(hit.hitPoint);
@@ -606,14 +598,12 @@ namespace lighter
       {
         if(!produceCaustic)
         {
-	  #pragma omp critical
-          sect->AddPhoton(reflColor, hit.hitPoint, L);
+          hitSector->AddPhoton(reflColor, hit.hitPoint, L);
         }
         else if (!hitPtMaterial->produceCaustic)
         {
           // Add the photon to the caustic photon map
-	  #pragma omp critical
-          sect->AddCausticPhoton(reflColor, hit.hitPoint, L);
+          hitSector->AddCausticPhoton(reflColor, hit.hitPoint, L);
           return;
         }
       }
@@ -645,7 +635,7 @@ namespace lighter
 
             // Emit a new Photon
             const PhotonRay newPhoton = { hit.hitPoint, scatterDir, newColor, newPower, photon.source, RAY_TYPE_REFLECT, refrIndex };
-            EmitPhoton(sect, newPhoton, maxDepth, depth+1, ignoreDirect, produceCaustic);
+            EmitPhoton(hitSector, newPhoton, maxDepth, depth+1, ignoreDirect, produceCaustic);
           }
         }
         else
@@ -662,7 +652,7 @@ namespace lighter
 
           // Emit a new Photon
           const PhotonRay newPhoton = { hit.hitPoint, scatterDir, newColor, newPower, photon.source, RAY_TYPE_REFLECT, refrIndex };
-          EmitPhoton(sect, newPhoton, maxDepth, depth+1, ignoreDirect, produceCaustic);
+          EmitPhoton(hitSector, newPhoton, maxDepth, depth+1, ignoreDirect, produceCaustic);
         }
       }
     }

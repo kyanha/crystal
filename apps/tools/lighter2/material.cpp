@@ -32,6 +32,7 @@ namespace lighter
   }
   csColor RadMaterial::GetTextureValue(csVector2 uv) const
   {
+    CS::Threading::MutexScopedLock lock(lockMutex);
     csRGBpixel* imgPtr = (csRGBpixel*)((*textureImg)->GetImageData());
 
     int w = (*textureImg)->GetWidth();

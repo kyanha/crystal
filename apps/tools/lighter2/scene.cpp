@@ -28,6 +28,11 @@
 #include "photonmap.h"
 #include "irradiancecache.h"
 
+#include "lightcalculator.h"
+
+#include "raytracerlighting.h"
+#include "photonmapperlighting.h"
+
 #include <functional>
 
 using namespace CS;
@@ -37,10 +42,7 @@ namespace lighter
   Sector::~Sector()
   {
     delete kdTree;
-    if (photonMap != NULL)
-    {
-      delete photonMap;
-    }
+    FreePhotonMappingData();
   }
 
   void Sector::Initialize (Statistics::Progress& progress)
@@ -65,8 +67,6 @@ namespace lighter
         u = updateFreq;
       }
     }
-    
-    scene->PropagateLights (this);
 
     progress.SetProgress (1);
   }
@@ -101,8 +101,9 @@ namespace lighter
   {
     // Build KD-tree
     ObjectHash::GlobalIterator objIt = allObjects.GetIterator ();
+    PortalRefArray::Iterator portalIt = allPortals.GetIterator();
     KDTreeBuilder builder;
-    kdTree = builder.BuildTree (objIt, progress);
+    kdTree = builder.BuildTree (objIt,portalIt,progress);
   }
 
   void Sector::InitPhotonMap()
@@ -110,7 +111,7 @@ namespace lighter
     if(photonMap == NULL)
     {
       photonMap = new PhotonMap(
-        2 * globalConfig.GetIndirectProperties ().numPhotons);
+        2 * numPhotonsToEmit);
     }
   }
 
@@ -123,15 +124,190 @@ namespace lighter
     }
   }
 
+  void Sector::InitPhotonNumber()
+  {
+    float maxPower = 0;
+    bool interactive = globalConfig.GetIndirectProperties().interactiveConfiguration;
+    numPhotonsToEmit = 0;
+
+    csBox3 sectorBBox;
+    
+    if (allObjects.GetSize() > 0)
+    {
+      ObjectHash::GlobalIterator objIt = allObjects.GetIterator();
+      sectorBBox = objIt.Next()->GetMeshWrapper()->GetWorldBoundingBox();
+
+      while(objIt.HasNext())
+      {
+        sectorBBox.AddBoundingBox(objIt.Next()->GetMeshWrapper()->GetWorldBoundingBox());
+      }
+
+      LightRefArray::Iterator lightIt = allNonPDLights.GetIterator();
+      while (lightIt.HasNext())
+      {
+        csRef<Light> light = lightIt.Next();    
+
+        if (light->IsRealLight())
+        {
+          numPhotonsToEmit += (int)getLightPhotonsNumber(light,sectorBBox);
+
+          objIt.Reset();
+          while (objIt.HasNext())
+          {
+            //TODO find a better heuristics for the complexity due to the objects
+            csRef<Object> object = objIt.Next();
+            csBox3 objectBBox = object->GetMeshWrapper()->GetWorldBoundingBox();
+            float factor = 0.1 * csSquaredDist::PointPoint(objectBBox.Min(),objectBBox.Max())
+              / csSquaredDist::PointPoint(sectorBBox.Min(),sectorBBox.Max());
+            factor *= factor;
+            
+            float objectPhotonsContribution = ((float)getLightPhotonsNumber(light,objectBBox));
+            if ( objectPhotonsContribution < 1) objectPhotonsContribution = 0;
+
+            numPhotonsToEmit += objectPhotonsContribution * factor;
+          }
+        }
+      }
+    }
+
+    /*
+      lightIt = allPDLights.GetIterator();
+      while (lightIt.HasNext())
+      {
+        csRef<Light> light = lightIt.Next();
+
+        if (light->IsRealLight())
+        {
+          numPhotonsToEmit += getLightPhotonsNumber(light,sectorBBox)*1.5f;
+        }
+      }*/
+
+    numPhotonsToEmit += allPortals.GetSize() * 1000;
+
+    // Round to the upper factor of 100 number
+    numPhotonsToEmit += (100 - numPhotonsToEmit%100);
+    globalTUI.DrawPhotonNumber(sectorName,numPhotonsToEmit,interactive);
+  }
+
+  size_t Sector::getLightPhotonsNumber(Light* light, csBox3& sectorBBox)
+  {
+    // The number of photon for this to get the face correctly shaded;
+    size_t lightPhotonNumber = 0;
+    csVector3 bBoxCenter = sectorBBox.GetCenter();
+    if (light->IsRealLight())
+    {
+      csVector3 lightPos = light->GetPosition() - bBoxCenter;
+          
+      float maxDistance = 0.0f;
+      int farthestSide = 0;
+              
+      for (int i=0; i < 6 ; i++)
+      {
+        int axis;
+        float distance;
+        float sideOffset;
+        sectorBBox.GetAxisPlane(i,axis,sideOffset);
+
+        switch (axis)
+        {
+          case CS_AXIS_X :
+            distance = sideOffset - lightPos.x;
+            break;
+          case CS_AXIS_Y :
+            distance = sideOffset - lightPos.y;
+            break;
+          case CS_AXIS_Z :
+            distance = sideOffset - lightPos.z;
+            break;
+        }
+        if (distance < 0) distance *= -1;
+
+        if ( distance > maxDistance)
+        {
+          maxDistance = distance;
+          farthestSide = i;
+        }
+      }
+
+      csBox2 side = sectorBBox.GetSide(farthestSide);
+
+      float photonNeeded = side.Area();
+
+      if (globalConfig.GetIndirectProperties().finalGather)
+      {
+        photonNeeded *= log(globalConfig.GetLMProperties().lmDensity)/(8*log(2.0));
+      }
+      else
+      {
+        photonNeeded *= globalConfig.GetLMProperties().lmDensity;
+      }
+
+      //Project 3 point of the side to the sphere in order to find the surface area
+      //on the sphere
+      csVector3 projectedTriangle[3];
+      for (int i=0; i<3;i++)
+      {
+        csSegment3 edge = sectorBBox.GetEdge(sectorBBox.GetFaceEdges(farthestSide)[i]);
+        csVector3 corner = edge.Start();
+
+        projectedTriangle[i] = (corner - lightPos);
+      }
+              
+      //We compute the angles between the three point using girard theorem
+      float angles[3];
+      double portionArea = -PI;
+      for (int i=0; i<3; i++)
+      {
+        csVector3 edge1 = (projectedTriangle[(i+1)%3] - lightPos);
+        csVector3 edge2 = (projectedTriangle[(i+2)%3] - lightPos);
+                  
+        edge1.Normalize();
+        edge2.Normalize();
+
+        angles[i] = fabsf(acosf(edge1 * edge2));
+      }
+
+      float sphericAngles[3];
+      for (int i=0; i<3; i++)
+      {
+        sphericAngles[i] = 0.00001 + fabsf(acos(
+                          (cos(angles[i])-cos(angles[(i+1)%3])*cos(angles[(i+2)%3]))
+                          /(sin(angles[(i+1)%3])*sin(angles[(i+2)%3]))
+                          ));
+                    
+        portionArea += sphericAngles[i];
+      }
+
+      // To get the area of the square from the triangleArea
+      portionArea *=2;
+      if (portionArea > 0.000001)
+        lightPhotonNumber = photonNeeded * (4*PI) / portionArea ;
+    }
+        
+    return lightPhotonNumber;
+  }
+
+  void Sector::FreePhotonMappingData()
+  { 
+    if(photonMap != NULL)
+    {
+      delete photonMap;
+      photonMap = NULL;
+
+      delete irradianceCache;
+      irradianceCache = NULL;
+
+      if (causticPhotonMap != NULL)
+      {
+        delete causticPhotonMap;
+        causticPhotonMap = NULL;
+      }
+    }
+  }
+
   void Sector::AddPhoton(const csColor power, const csVector3 pos,
     const csVector3 dir )
   {
-    if(photonMap == NULL)
-    {
-      photonMap = new PhotonMap(
-        2 * globalConfig.GetIndirectProperties ().numPhotons);
-    }
-
     const float fPower[3] = { power.red, power.green, power.blue };
     const float fPos[3] = { pos.x, pos.y, pos.z };
     const float fDir[3] = { dir.x, dir.y, dir.z };
@@ -142,12 +318,6 @@ namespace lighter
   void Sector::AddCausticPhoton(const csColor power, const csVector3 pos,
     const csVector3 dir )
   {
-    if(causticPhotonMap == NULL)
-    {
-      causticPhotonMap = new PhotonMap(
-        2 * globalConfig.GetIndirectProperties ().numCausticPhotons);
-    }
-
     const float fPower[3] = { power.red, power.green, power.blue };
     const float fPos[3] = { pos.x, pos.y, pos.z };
     const float fDir[3] = { dir.x, dir.y, dir.z };
@@ -197,14 +367,13 @@ namespace lighter
     if(irradianceCache == NULL) return false;
 
     // Check cache to see if we can reuse old results
-    float* result = new float[3];
+    float result[3];
     float fPos[3] = { point.x, point.y, point.z };
     float fNorm[3] = { normal.x, normal.y, normal.z };
     
     if(irradianceCache->EstimateIrradiance(fPos, fNorm, result))
     {
       irrad.Set(result[0], result[1], result[2]);
-      delete [] result;
       return true;
     }
 
@@ -214,7 +383,7 @@ namespace lighter
   csColor Sector::SamplePhoton(const csVector3 point, const csVector3 normal,
                     const float searchRad)
   {
-    if(photonMap == NULL) return csColor(0, 0, 0);
+    if (photonMap->GetPhotonCount() == 0) return csColor(0, 0, 0);
 
     // Local copy of the global options
     const static size_t densitySamples =
@@ -226,7 +395,7 @@ namespace lighter
     float fNorm[3] = { normal.x, normal.y, normal.z };
     photonMap->IrradianceEstimate(result, fPos, fNorm, searchRad, densitySamples);
     
-    if (causticPhotonMap != NULL)
+    if ((causticPhotonMap != NULL) && (causticPhotonMap->GetPhotonCount() > 0))
     {
       float causticIrradiance[3] = {0,0,0};
       causticPhotonMap->IrradianceEstimate(causticIrradiance,fPos,fNorm,searchRad,densitySamples);
@@ -247,23 +416,350 @@ namespace lighter
     float fNorm[3] = { normal.x, normal.y, normal.z };
 
     // Add sample to the irradiance cache for reuse
-    if(irradianceCache == NULL)
-    {
-      irradianceCache = new IrradianceCache(
-        photonMap->GetBBoxMin(), photonMap->GetBBoxMax(), 1000);
+    irradianceCache->Store(fPos, fNorm, fPow, mean);
+  }
+
+  csArray<csArray<csRef<Object> > *> Sector::getObjectBatches(size_t& primitivesCount)
+  {
+    primitivesCount = 0;
+
+    // We multiply the number of thread by 2 because sometimes all the jobs
+    // don't request the same amount of time
+    const int numJobs = ((float)globalConfig.GetLighterProperties().numThreads)*2.0f;
+
+    csArray<csArray<csRef<lighter::Object> >*> objectsBatches;
+
+    for (int i =0; i < numJobs; i++){
+      objectsBatches.Push(new csArray<csRef<lighter::Object> >());
     }
 
-    irradianceCache->Store(fPos, fNorm, fPow, mean);
+    int assignedBatch=0;
+
+    // Sum up total amount of elements for progress display purposes
+    ObjectHash::GlobalIterator giter = allObjects.GetIterator ();
+    while (giter.HasNext ())
+    {
+      // Get the next object and skip unlight objects
+      csRef<Object> obj = giter.Next ();
+      if (!obj->GetFlags ().Check (OBJECT_FLAG_NOLIGHT))
+      {
+
+        // Count elements (vertices or primitives depending on global settings)
+        if (obj->lightPerVertex)
+          primitivesCount += obj->GetVertexData().positions.GetSize();
+
+        else
+        {
+          // Loop through submesses to get a count all primitives
+          csArray<PrimitiveArray>& submeshArray = obj->GetPrimitives ();
+          for (size_t submesh = 0; submesh < submeshArray.GetSize (); ++submesh)
+          {
+            PrimitiveArray& primArray = submeshArray[submesh];
+
+            for (size_t pidx = 0; pidx < primArray.GetSize (); ++pidx)
+            {
+              Primitive& prim = primArray[pidx];
+              primitivesCount += prim.GetElementCount();
+            }
+          }
+        }
+
+        objectsBatches[assignedBatch]->Push(obj);
+        assignedBatch = (assignedBatch+1)%numJobs;
+      }
+    }
+
+    // Prevent empty batch
+    int batchId = objectsBatches.GetSize()-1;
+    while ((batchId >= 0 ) && objectsBatches[batchId]->IsEmpty())
+    {
+      delete objectsBatches[batchId];
+      objectsBatches.DeleteIndex(batchId);
+      batchId--;
+    }
+
+    return objectsBatches;
   }
 
   void Sector::SavePhotonMap(const char* filename)
   {
-    if(photonMap != NULL) photonMap->SaveToFile(filename);
+    if((photonMap != NULL)&&(photonMap->GetPhotonCount() > 0))
+    {
+      photonMap->SaveToFile(filename);
+    }
   }
 
   void Sector::SaveCausticPhotonMap(const char* filename)
   {
-    if(causticPhotonMap != NULL) causticPhotonMap->SaveToFile(filename);
+    if((causticPhotonMap != NULL)&&(causticPhotonMap->GetPhotonCount() > 0))
+    {
+      causticPhotonMap->SaveToFile(filename);
+    }
+  }
+
+  //-------------------------------------------------------------------------
+
+  SectorGroup::SectorGroup(Sector* sector, SectorProcessor* processor)
+    :sectorProcessor(processor)
+  {
+    this->addSector(sector);
+  }
+
+
+  void SectorGroup::addSector(csRef<Sector> sect)
+  {
+    if (sect->sectorGroup == 0)
+    {
+      sect->sectorGroup = this;
+      sectors.Put(sect->sectorName,sect);
+
+      LightRefArray lights = sect->allPDLights;
+      LightRefArray::Iterator ligthIt = lights.GetIterator();
+      while (ligthIt.HasNext())
+      {
+        csRef<Light> light = ligthIt.Next();
+        if (!light->IsRealLight())
+        {
+          addSector(light->GetOriginalLight()->GetSector());
+        }
+      }
+
+      lights = sect->allNonPDLights;
+      ligthIt = lights.GetIterator();
+      while (ligthIt.HasNext())
+      {
+        csRef<Light> light = ligthIt.Next();
+
+        if (!light->IsRealLight())
+        {
+          addSector(light->GetOriginalLight()->GetSector());
+        }
+      }
+    }
+  }
+
+  void SectorGroup::BuildKDTreeAndPhotonMaps(bool buildPhotonMaps, Statistics::Progress& progress)
+  {
+    csRefArray<iThreadReturn> returns;
+
+    SectorHash::GlobalIterator sectIt = sectors.GetIterator();
+    while (sectIt.HasNext())
+    {
+      csRef<Sector> sect = sectIt.Next();
+      returns.Push(sectorProcessor->BuildKDTree(sect,&progress));
+      if(buildPhotonMaps)
+      {
+        sect->InitPhotonMap();
+      }
+    }
+
+    globalLighter->threadManager->Wait(returns);
+    
+    if(buildPhotonMaps)
+    {
+      returns.DeleteAll();
+      sectIt.Reset();
+      while (sectIt.HasNext())
+      {
+        csRef<Sector> sect = sectIt.Next();
+        returns.Push(sectorProcessor->BuildPhotonMaps(sect,&progress));
+      }
+      globalLighter->threadManager->Wait(returns);
+
+      returns.DeleteAll();
+      sectIt.Reset();
+      while (sectIt.HasNext())
+      {
+        csRef<Sector> sect = sectIt.Next();
+        returns.Push(sectorProcessor->BalancePhotonMaps(sect,&progress));
+      }
+      globalLighter->threadManager->Wait(returns);
+    }
+  }
+
+  void SectorGroup::ComputeLighting(bool enableRaytracer, bool enablePhotonMapper,
+    Statistics::Progress& progress)
+  { 
+    int numPasses = 
+      globalConfig.GetLighterProperties().directionalLMs ? 4 : 1;
+
+    csRefArray<iThreadReturn> returns;
+    SectorHash::GlobalIterator sectIt = sectors.GetIterator();
+
+    csArray<csArray<csArray<csRef<lighter::Object> >*> >sectorObjectBatch;
+    size_t totalPrimitivesCount = 0;
+    float totalObject = 0;
+
+    
+    while (sectIt.HasNext())
+    {
+      csRef<Sector> sector = sectIt.Next();
+      totalObject += sector->allObjects.GetSize();
+      size_t sectorPrimitivesCount;
+      csArray<csArray<csRef<lighter::Object> >*> batches = sector->getObjectBatches(sectorPrimitivesCount);
+      if (!batches.IsEmpty())
+      {
+        totalPrimitivesCount += sectorPrimitivesCount;
+        sectorObjectBatch.Push(batches);
+      }
+    }
+
+    float progressFactor = totalObject / ((float) globalStats.scene.numObjects);
+
+    csArray<csArray<csRef<lighter::Object> >*> objectBatch;
+    int id = 0;
+    while (!sectorObjectBatch.IsEmpty())
+    {
+      id %= sectorObjectBatch.GetSize();
+
+      objectBatch.Push(sectorObjectBatch[id].Pop());
+      if (sectorObjectBatch[id].IsEmpty()) {
+        sectorObjectBatch.DeleteIndex(id);
+      }
+      else {
+        id += 1;
+      }
+    }
+
+    csArray<csArray<csRef<lighter::Object> >*>::Iterator batchIt = objectBatch.GetIterator();
+    for (int pass=0; pass < numPasses; pass ++)
+    {
+      while (batchIt.HasNext())
+      {
+        lightComputations.Push(sectorProcessor->ComputeObjectGroupLighting(batchIt.Next(),
+          enableRaytracer,enablePhotonMapper,pass,
+          &progress,totalPrimitivesCount,progressFactor));
+      }
+   
+      batchIt.Reset();
+    }
+
+  }
+
+  int SectorGroup::computeNeededPhotonNumber()
+  {
+    SectorHash::GlobalIterator sectIt = sectors.GetIterator();
+    int groupPhotons = 0;
+    while (sectIt.HasNext())
+    {
+      csRef<Sector> sector = sectIt.Next();
+      if (sector->numPhotonsToEmit < 0)
+      {
+        sector->InitPhotonNumber();
+      }
+      groupPhotons += sector->numPhotonsToEmit;
+    }
+    return groupPhotons;
+   }
+
+  void SectorGroup::Process(bool enableRaytracer, bool enablePhotonMapper, Statistics::Progress& progress)
+  {
+    BuildKDTreeAndPhotonMaps(enablePhotonMapper,progress);
+    ComputeLighting(enableRaytracer,enablePhotonMapper,progress);
+
+    // We ask for the lightmaps to be saved once the compute lighting will be finished
+    globalLighter->sectorGroupProcess.Push(sectorProcessor->SaveLightmaps(this));
+  }
+
+  void SectorGroup::SaveLightmaps()
+  {
+    SectorHash::GlobalIterator sectIt = sectors.GetIterator();
+    // First Release all the photon mapping memory
+    while (sectIt.HasNext())
+    {
+      csRef<Sector> sect = sectIt.Next();
+      sect->FreePhotonMappingData();
+    }
+  }
+
+  //-------------------------------------------------------------------------
+
+  SectorProcessor::SectorProcessor(iObjectRegistry* objectRegistry)
+    :scfImplementationType(this),objReg(objectRegistry)
+  {
+  }
+
+  THREADED_CALLABLE_IMPL2(SectorProcessor,BuildKDTree, csRef<Sector> sector,
+    Statistics::Progress* progress)
+  {
+    sector->BuildKDTree(*progress);
+    return true;
+  } 
+
+  THREADED_CALLABLE_IMPL2(SectorProcessor,BuildPhotonMaps, csRef<Sector> sector,
+    Statistics::Progress* progress)
+  {
+    PhotonmapperLighting lighting;
+
+    lighting.EmitPhotons(sector,*progress);
+    return true;
+  }
+
+  THREADED_CALLABLE_IMPL2(SectorProcessor,BalancePhotonMaps, csRef<Sector> sector,
+    Statistics::Progress* progress)
+  {
+    sector->InitPhotonMap();
+    PhotonmapperLighting lighting;
+
+    lighting.BalancePhotons(sector,*progress);
+    return true;
+  }
+
+  THREADED_CALLABLE_IMPL7(SectorProcessor,ComputeObjectGroupLighting, csArray<csRef<Object> >* objectsBatches,
+    bool enableRaytracer, bool enablePhotonMapper, int pass,
+    Statistics::Progress* progress, size_t totalPrimitives, float progressFactor)
+  {
+    const csVector3 bases[4] =
+    {
+      csVector3 (0, 0, 1),
+      csVector3 (/* -1/sqrt(6) */ -0.408248f, /* 1/sqrt(2) */ 0.707107f, /* 1/sqrt(3) */ 0.577350f),
+      csVector3 (/* sqrt(2/3) */ 0.816497f, 0, /* 1/sqrt(3) */ 0.577350f),
+      csVector3 (/* -1/sqrt(6) */ -0.408248f, /* -1/sqrt(2) */ -0.707107f, /* 1/sqrt(3) */ 0.577350f)
+    };
+
+    LightCalculator lighting (bases[pass],pass);
+
+    // Add components to the light calculator
+    RaytracerLighting *raytracerComponent = NULL;
+    PhotonmapperLighting *photonmapperComponent = NULL;
+
+    if(enableRaytracer)
+    {
+      raytracerComponent = new RaytracerLighting (bases[pass],pass);
+      lighting.addComponent(raytracerComponent, 1.0f, 0.0f);
+    }
+
+    if(enablePhotonMapper)
+    {
+      photonmapperComponent = new PhotonmapperLighting();
+      lighting.addComponent(photonmapperComponent, 1.0f, 0.0f);
+    }
+    
+    Statistics::ProgressState progressState(*progress,totalPrimitives,progressFactor*0.90f);
+    objectsBatches->Get(0)->GetSector();
+    lighting.ComputeObjectGroupLighting(objectsBatches,progressState);
+    progressState.Finish();
+
+    if(raytracerComponent != NULL) delete raytracerComponent;
+    if(photonmapperComponent != NULL) delete photonmapperComponent;
+
+    int numPasses = globalConfig.GetLighterProperties().directionalLMs ? 4 : 1;
+    if ( pass == numPasses)
+    {
+      objectsBatches->DeleteAll();
+      delete objectsBatches;
+    }
+
+    return true;
+  }
+
+  THREADED_CALLABLE_IMPL1(SectorProcessor,SaveLightmaps,csRef<SectorGroup> sectorGroup)
+  {
+    globalLighter->threadManager->Wait(sectorGroup->lightComputations,false);
+
+    sectorGroup->SaveLightmaps();
+
+    return true;
   }
 
   //-------------------------------------------------------------------------
@@ -458,6 +954,36 @@ namespace lighter
     }
 
     ParseEngineAll (allProgress);
+    
+    //Now we propagate lights
+    SectorHash::GlobalIterator sectIt =  sectors.GetIterator();
+    while (sectIt.HasNext())
+    {
+      csRef<Sector> sect = sectIt.Next ();
+      PropagateLights(sect);
+    }
+    
+    bool photonMapperActive = (globalConfig.GetLighterProperties().directLightEngine == LIGHT_ENGINE_PHOTONMAPPER)
+      || (globalConfig.GetLighterProperties().indirectLightEngine == LIGHT_ENGINE_PHOTONMAPPER);
+
+    //With the proxy lights we are able to know the adjacent sector
+    csRef<SectorProcessor> sectorProcessor;
+    sectorProcessor.AttachNew (new SectorProcessor(globalLighter->objectRegistry));
+    sectIt.Reset();
+
+    while (sectIt.HasNext())
+    {
+      csRef<Sector> sect = sectIt.Next();
+      if (sect->sectorGroup == 0)
+      {
+        csRef<SectorGroup> sectorGroup = new SectorGroup(sect,sectorProcessor);
+        if (photonMapperActive)
+        {
+          globalStats.scene.numPhotons += sectorGroup->computeNeededPhotonNumber();
+        }
+        sectorGroups.Push(sectorGroup);
+      }
+    }
 
     /* We have turned everything needed into our own objects which keep
        refs to the engine objects as needed. Hence instruct engine to
@@ -670,7 +1196,7 @@ namespace lighter
         progFile->SetProgress (1);
         delete progFile;
   
-	progress.SetProgress (i * fileProgress);
+        progress.SetProgress (i * fileProgress);
       }
   
       progress.SetProgress (1);
@@ -1018,12 +1544,28 @@ namespace lighter
     // Setup a sector struct
     const char* sectorName = sector->QueryObject ()->GetName ();
     csRef<Sector> radSector = sectors.Get (sectorName, 0);
+
     if (radSector == 0)
     {
       radSector.AttachNew (new Sector (this));
       radSector->sectorName = sectorName;
       sectors.Put (radSector->sectorName, radSector);
       originalSectorHash.Put (sector, radSector);
+    }
+
+    csRef<iObjectIterator> objIt = sector->QueryObject()->GetIterator();
+    while (objIt->HasNext())
+    {
+      iObject* obj = objIt->Next();
+
+      csRef<iKeyValuePair> kvp =  scfQueryInterface<iKeyValuePair> (obj);
+
+      if (kvp.IsValid() && (strcmp (kvp->GetKey(), "lighter2") == 0))
+      {
+        int numPhotons = 0;
+        csScanStr(kvp->GetValue("numphotons"),"%d",&numPhotons);
+        radSector->numPhotonsToEmit = numPhotons;
+      }
     }
 
     size_t u, updateFreq;
@@ -1234,7 +1776,9 @@ namespace lighter
         for (int j = 0; j < portal->GetVertexIndicesCount (); ++j)
         {
           lightPortal->worldVertices.Push (vertices[vi[j]]);
+          lightPortal->vertexData.positions.Push(vertices[vi[j]]);
         }
+        lightPortal->computePrimitives();
 
         sector->allPortals.Push (lightPortal);
       }
@@ -1251,7 +1795,7 @@ namespace lighter
     {
       Light* l = lid.Next ();
       if (l->IsRealLight ())
-	PropagateLight (l, l->GetFrustum ());
+	      PropagateLight (l, l->GetFrustum ());
     }
 
     tmpArray = sector->allPDLights;
@@ -1261,7 +1805,7 @@ namespace lighter
       Light* l = lid.Next ();
       
       if (l->IsRealLight ())
-	PropagateLight (l, l->GetFrustum ());
+	      PropagateLight (l, l->GetFrustum ());
     }
   }
   
@@ -1411,7 +1955,8 @@ namespace lighter
     
   bool Scene::ParseMaterial (iMaterialWrapper* material)
   {
-    RadMaterial radMat;
+    csRef<RadMaterial> radMat;
+    radMat.AttachNew(new RadMaterial());
     
     // Material properties from key-value-pairs
     // Right now the only key value pair used is for caustics
@@ -1427,7 +1972,7 @@ namespace lighter
       {
         if(strcmp (kvp->GetValue(),"produce caustic")==0)
         {
-          radMat.produceCaustic=true;
+          radMat->produceCaustic=true;
         }
       }
     }
@@ -1446,7 +1991,7 @@ namespace lighter
     {
       float refrIndex = 0.0f;
       svRefrIndex->GetValue(refrIndex);
-      radMat.SetRefractiveIndex(refrIndex);
+      radMat->SetRefractiveIndex(refrIndex);
     }
     if (svTex.IsValid())
     {
@@ -1455,11 +2000,11 @@ namespace lighter
       if (texwrap != 0)
       {
         iImage* teximg = texwrap->GetImageFile ();
-        radMat.SetTextureImage(teximg);
+        radMat->SetTextureImage(teximg);
         if (teximg != 0)
         {
           if (teximg->GetFormat() & CS_IMGFMT_ALPHA)
-			radMat.ComputeFilterImage (teximg);
+			      radMat->ComputeFilterImage (teximg);
         }
       }
     }
@@ -1532,11 +2077,11 @@ namespace lighter
     
       if (globalConfig.GetLighterProperties().specularDirectionMaps)
       {
-	textureFilename.Format ("lightmaps/%s_%zu_sd%%d",
-	  fileInfo->levelName.GetData(), i);
-	directionMapBaseNames.Push (textureFilename);
-	for (int x = 0; x < specDirectionMapCount; x++)
-	  texturesToSave.Push (GetDirectionMapFilename ((uint)i, x));
+        textureFilename.Format ("lightmaps/%s_%zu_sd%%d",
+	        fileInfo->levelName.GetData(), i);
+        directionMapBaseNames.Push (textureFilename);
+        for (int x = 0; x < specDirectionMapCount; x++)
+	        texturesToSave.Push (GetDirectionMapFilename ((uint)i, x));
       }
     }
   }

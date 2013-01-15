@@ -57,11 +57,12 @@ namespace lighter
     diProperties.pointLightMultiplier = 1.0f;
     diProperties.areaLightMultiplier = 1.0f;
 		
-    indtLightProperties.numPhotons = 500;
+    indtLightProperties.interactiveConfiguration = false;
+    indtLightProperties.numPhotons = -1;
     indtLightProperties.caustics = false;
     indtLightProperties.numCausticPhotons = 0;
     indtLightProperties.maxRecursionDepth = 10;
-    indtLightProperties.maxDensitySamples = 50;
+    indtLightProperties.maxDensitySamples = 250;
     indtLightProperties.sampleDistance = 1.0f;
 
     indtLightProperties.finalGather = true;
@@ -168,6 +169,8 @@ namespace lighter
     debugProperties.rayDebugRE =
       cfgFile->GetStr ("lighter2.debugOcclusionRays");
 		
+    indtLightProperties.interactiveConfiguration = cfgFile->GetBool("lighter2.interactive",
+      indtLightProperties.interactiveConfiguration);
     indtLightProperties.numPhotons = cfgFile->GetInt("lighter2.numPhotons",
       indtLightProperties.numPhotons);
     indtLightProperties.numCausticPhotons = cfgFile->GetInt("lighter2.numCausticPhotons",

@@ -102,7 +102,7 @@ number of visible edges and shadow issues. At the next density -- 16x16,
 a 16-fold increase from the lowest lightmap resolution -- the appearance is
 smoother, but still some visible artifacts remain.  With the highest density
 -- 64x64 -- the object looks acceptable, but the price being a ridiculously
-high lightmap density which is directly reflected in a hight number of lightmaps
+high lightmap density which is directly reflected in a high number of lightmaps
 needed, high runtime memory usage and, ultimatively, lower runtime performance. 
 In comparison, the vertex-lit variant has a bit less detailed shadows, but
 looks more smooth overall with zero visible edges. Per-vertex lighting also has
@@ -117,6 +117,24 @@ no benefit from using lightmaps, as the shadowing detail they can possible
 provide is not present. Using per-vertex lighting on such an object can save
 resources by omitting the lightmaps with little visual difference.
 
+@subheading Direct and Indirect light
+
+Light computation can be computed using two model :
+@itemize @bullet
+@item direct light : sampled points are lighted only if it exists a ray from
+a light to the sampled point which don't met objects obstacles.
+@item indirect light : this model is a better heuristic toward the physical
+model, it's basically compute light bounce.
+@end itemize
+
+In order to improve lightmap quality, @code{lighter2} provides two rendering
+algorithm : the raycasting and the photonmapping.
+
+While the first one permit to compute only direct lighting the second can
+do both. Nevertheless raycasting is much faster than photonmapping and give
+better result for direct light so it's advised to use a combination of
+the two rendering method to bake both direct and indirect light.
+
 @heading Setting Global Options
 
 Some options are ``global'' and affect all meshes or factories or the execution
@@ -126,7 +144,7 @@ line and a configuration file.
 For example, the global option @samp{foo} can be set to the value @samp{bar} 
 in any of the following ways:
 @itemize @bullet
-@item On the command line by specifying @code{-foo=bar}.
+@item On the command line by specifying @code{--foo=bar}.
 @item In a configuration file by setting the key @samp{Lighter2.foo=bar}.
 The configuration file can be utilized via CrystalSpace's @code{-cfgfile}
 command line option.
@@ -139,6 +157,9 @@ user-specified configuration file will always override options from
 @file{lighter2.cfg}.
 
 @heading List of Options
+
+@code{lighter2} contains a lot of option regarding lightmap generation
+so don't hesitate to run @code{lighter2 --help}
 
 @subheading Lightmap Density
 
@@ -162,6 +183,17 @@ read the paragraph ``When to Use Per-vertex Lighting''.
 @item Can be set on mesh factories.
 @item Can be set on mesh objects. Note that if per-vertex lighting has been
   enabled for a factory it can't be disabled for objects of that factory.
+@end itemize
+
+@subheading Direct / Indirect Ligthing
+
+Setting direct and indirect lighting give you a way to choose your light
+computation heuristic. Read the paragraph ``Direct and Indirect light'' to
+know how to use it. 
+
+@itemize @bullet
+@item Can be set globally for both @code{directlight) and @code{indirectlight}
+  possible value are @code{none}, @code{raytracer} except for @code{indirectlight}, @code{photonmapper}
 @end itemize
 
 @subheading Disable self shadows

@@ -44,51 +44,57 @@ namespace lighter
 
   void TUI::Redraw (int drawFlags)
   {
+    if (!drawMutex.TryLock())
+      return;
+
     // Redraw the "static" background
     if (simpleMode)
     {
       DrawSimple ();
-      return;
+    }
+    else
+    {
+      // Clear
+      if (drawFlags & TUI_DRAW_CLEAR)
+        csPrintf (CS_ANSI_CLEAR_SCREEN);
+
+      // Screen layout (keep to 80x25...)
+      if (drawFlags & TUI_DRAW_STATIC)
+        DrawStatic ();
+
+      // Draw progress
+      if (drawFlags & TUI_DRAW_PROGRESS)
+        DrawProgress ();
+
+      // Draw messages
+      if (drawFlags & TUI_DRAW_MESSAGES)
+        DrawMessage ();
+
+      // Draw RayCore stats
+      if (drawFlags & TUI_DRAW_RAYCORE)
+        DrawRayCore ();
+
+      // Draw photonmapper stats
+      if (drawFlags & TUI_DRAW_PMCORE)
+        DrawPMCore ();
+
+      // Draw global settings
+      if (drawFlags & TUI_DRAW_SETTINGS)
+        DrawSettings ();
+      
+      // Draw global stats
+      if (drawFlags & TUI_DRAW_STATS)
+        DrawStats ();
+      
+      if (drawFlags & TUI_DRAW_SWAPCACHE)
+        DrawSwapCacheStats ();
+
+      /* Linux: output is buffered, and the UI may appear "incomplete" if not 
+       * flushed */
+      fflush (stdout);
     }
 
-    // Clear
-    if (drawFlags & TUI_DRAW_CLEAR)
-      csPrintf (CS_ANSI_CLEAR_SCREEN);
-
-    // Screen layout (keep to 80x25...)
-    if (drawFlags & TUI_DRAW_STATIC)
-      DrawStatic ();
-
-    // Draw progress
-    if (drawFlags & TUI_DRAW_PROGRESS)
-      DrawProgress ();
-
-    // Draw messages
-    if (drawFlags & TUI_DRAW_MESSAGES)
-      DrawMessage ();
-
-    // Draw RayCore stats
-    if (drawFlags & TUI_DRAW_RAYCORE)
-      DrawRayCore ();
-
-    // Draw photonmapper stats
-    if (drawFlags & TUI_DRAW_PMCORE)
-      DrawPMCore ();
-
-    // Draw global settings
-    if (drawFlags & TUI_DRAW_SETTINGS)
-      DrawSettings ();
-      
-    // Draw global stats
-    if (drawFlags & TUI_DRAW_STATS)
-      DrawStats ();
-      
-    if (drawFlags & TUI_DRAW_SWAPCACHE)
-      DrawSwapCacheStats ();
-
-    /* Linux: output is buffered, and the UI may appear "incomplete" if not 
-     * flushed */
-    fflush (stdout);
+    drawMutex.Unlock();
   }
 
   void TUI::FinishDraw ()
@@ -321,8 +327,8 @@ namespace lighter
 
   void TUI::DrawPMCore () const
   {
-    // Suffix for ray units (none, thousands, millions, billions, trillians)
-    const char* siConv[] = {" ", "K", "M", "B", "T"};
+    // Suffix for ray units (none, thousands, millions, billions, trillions; quadrillion)
+    const char* siConv[] = {" ", "K", "M", "B", "T","P"};
 
     // Make local copies of counters
     uint64 photons = globalStats.photonmapping.numStoredPhotons;
@@ -516,5 +522,22 @@ namespace lighter
 
     kdLastNumNodes = globalStats.kdtree.numNodes;
   }
+
+   void TUI::DrawPhotonNumber(csString sectorName, int &photons,bool interactive)
+   {
+     if (interactive)
+     {
+       int redrawFlags = TUI::TUI_DRAW_ALL ^ TUI::TUI_DRAW_MESSAGES;
+       TUI::Redraw(redrawFlags);
+       csPrintf (CS_ANSI_CURSOR(3, 21));
+       csPrintf("%d photons advised for %s sector",photons,sectorName.GetData());
+       csPrintf (CS_ANSI_CURSOR(3, 22));
+       int userPhotonsNbr;
+       csPrintf("Number to emit (type -1 to use the advised number) : ",photons,sectorName.GetData());
+       scanf("%d",&userPhotonsNbr);
+       if (userPhotonsNbr >= 0)  photons = userPhotonsNbr;
+     }
+     globalLighter->Notify("%d photons for %s sector",photons,sectorName.GetData());
+   }
 
 }

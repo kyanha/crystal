@@ -191,18 +191,19 @@ namespace lighter
         
         InfluenceRecorder inflRec (element.primitive.GetObject(),
           u, v, ts, element.primitive.GetGroupID(), 0.25f);
-	res += shade.ShadeLight (element.primitive.GetObject(), 
-	  pos, normal, lightSampler,
-	  &element.primitive,
-	  elemType == Primitive::ELEMENT_BORDER,
-	  &inflRec);
+        
+        res += shade.ShadeLight (element.primitive.GetObject(), 
+	        pos, normal, lightSampler,
+	        &element.primitive,
+	        elemType == Primitive::ELEMENT_BORDER,
+	        &inflRec);
       }
       else
       {
-	res += shade.ShadeLight (element.primitive.GetObject(), 
-	  pos, normal, lightSampler,
-	  &element.primitive,
-	  elemType == Primitive::ELEMENT_BORDER);
+        res += shade.ShadeLight (element.primitive.GetObject(), 
+          pos, normal, lightSampler,
+        &element.primitive,
+        elemType == Primitive::ELEMENT_BORDER);
       }
     }
     

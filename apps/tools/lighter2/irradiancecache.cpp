@@ -52,6 +52,8 @@ namespace lighter
                            const float power[3],
                            const float mean)
   {
+    CS::Threading::MutexScopedLock lock(writeMutex);
+
     // Check for storage and attempt to expand if needed
     if (storedSamples>=maxSamples && !Expand())
       return;
@@ -72,7 +74,7 @@ namespace lighter
   }
 
   bool IrradianceCache :: EstimateIrradiance(
-      const float pos[3], const float norm[3], float* &power)
+      const float pos[3], const float norm[3], float (&power)[3])
   {
     // Put in sample struct
     IrradianceSample* samp = new IrradianceSample();

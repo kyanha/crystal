@@ -39,9 +39,9 @@ namespace lighter
       globalLightmaps (globalLightmaps), glmOfs (globalLightmaps.GetSize()) {}
 
     size_t GetSize() const { return globalLightmaps.GetSize() - glmOfs; }
-    CS::SubRectanglesCompact& Get (size_t n)
+    MaxRectanglesCompact& Get (size_t n)
     { return globalLightmaps[glmOfs + n]->GetAllocator(); }
-    CS::SubRectanglesCompact& New (size_t& index) 
+    MaxRectanglesCompact& New (size_t& index) 
     { 
       Lightmap *newL = new Lightmap (globalConfig.GetLMProperties ().maxLightmapU,
                                      globalConfig.GetLMProperties ().maxLightmapV);
@@ -76,15 +76,21 @@ namespace lighter
   int SimpleUVFactoryLayouter::SortPDLQueues (const PDLQueue& p1,
                                               const PDLQueue& p2)
   {
-    if (p1.sector != p2.sector)
+    // PDLQueue with no pdBits are pushed at the end of the array
+    // so if only p1 or p2 have all bit false we avoid the sector
+    // comparison
+    if ((p1.pdBits.AllBitsFalse() == p2.pdBits.AllBitsFalse() ) 
+      && (p1.sector != p2.sector))
+    {
       return csComparator<Sector*, Sector*>::Compare (p1.sector, p2.sector);
+    }
 
     size_t nb1 = p1.pdBits.NumBitsSet();
     size_t nb2 = p2.pdBits.NumBitsSet();
     if (nb1 > nb2)
-      return 1;
-    else if (nb1 < nb2)
       return -1;
+    else if (nb1 < nb2)
+      return 1;
 
     size_t c1 = 0;
     size_t c2 = 0;
@@ -103,6 +109,31 @@ namespace lighter
       return 1;
 
     return 0;
+  }
+
+  int SimpleUVFactoryLayouter::SortLayoutTransform (
+      LayoutTransform* const & l1, LayoutTransform* const & l2)
+  {
+    int result = 0;
+
+    int longest1 = csMax(l1->rect.Height(),l1->rect.Width());
+    int longest2 = csMax(l2->rect.Height(),l2->rect.Width());
+    float area1 = l1->rect.Area();
+    float area2 = l2->rect.Area();
+ 
+    if (longest1 > longest2)
+    {
+      result = -1;
+    }
+    else if ((longest2 > longest1) || ( area2 > area1))
+    {
+      result = 1;
+    }
+    else if ( area1 > area2)  {
+      result = -1;
+    }
+
+    return result;
   }
 
   int SimpleUVFactoryLayouter::SortLQMaps (LayoutedQueue::Map const& s1, 
@@ -126,7 +157,7 @@ namespace lighter
   /// Allocate a rect of dimension \a w and \h onto one of \a allocs.
   template<class Allocators>
   bool AllocOntoOne (int w, int h, Allocators& allocs,
-    CS::SubRectangles::SubRect*& subRect, size_t& nAlloc,
+    MaxRectangles::SubRect*& subRect, size_t& nAlloc,
     csRect& rect)
   {
     bool success = false;
@@ -142,7 +173,7 @@ namespace lighter
     }
     if (!success)
     {
-      CS::SubRectanglesCompact& alloc = allocs.New (nAlloc);
+      MaxRectanglesCompact& alloc = allocs.New (nAlloc);
       subRect = alloc.Alloc (w, h, rect);
       success = subRect != 0;
     }
@@ -151,9 +182,9 @@ namespace lighter
 
   struct GloballyAllocated
   {
-    CS::SubRectanglesCompact* globalAlloc;
-    CS::SubRectangles::SubRect* globalSR;
-    CS::SubRectanglesCompact* srcAlloc;
+    MaxRectanglesCompact* globalAlloc;
+    MaxRectangles::SubRect* globalSR;
+    MaxRectanglesCompact* srcAlloc;
   };
 
   void SimpleUVFactoryLayouter::PrepareLighting (Statistics::Progress& progress)
@@ -161,12 +192,8 @@ namespace lighter
     CS_ASSERT_MSG("You can only prepare a UV layouter once", !prepared);
     prepared = true;
     progress.SetProgress (0);
-
-    Statistics::Progress progressPDLQueues (0, 90, &progress);
-    Statistics::Progress progressOntoGlobal (0, 1, &progress);
+    
     Statistics::Progress progressNonPDL (0, 3, &progress);
-    size_t u = 0, updateFreq = 0;
-    float progressStep;
 
     totalAffectedPrimCount = new csArray<size_t> ();
     // Sort queues by number of PD lights they're affected by.
@@ -190,21 +217,38 @@ namespace lighter
 
     // Prims unaffected by PDLs are handled a bit specially.
     csArray<PDLQueue> queuesNoPDL;
-    while ((allQueues.GetSize() > 0) && (allQueues[0].pdBits.AllBitsFalse()))
+    size_t queueSize = allQueues.GetSize();
+    while ((queueSize > 0) && (allQueues[--queueSize].pdBits.AllBitsFalse()))
     {
-      queuesNoPDL.Push (allQueues[0]);
-      allQueues.DeleteIndex (0);
+      queuesNoPDL.Push (allQueues[queueSize]);
+      allQueues.DeleteIndex (queueSize);
     }
+
+    PrepareLightingPDL(allQueues,progress);
+
+    PrepareLightingNoPDL(queuesNoPDL,progressNonPDL);
+
+    progress.SetProgress (1);
+  }
+
+  void SimpleUVFactoryLayouter::PrepareLightingPDL(csArray<PDLQueue>& queuesPDL,
+    Statistics::Progress& prepareProgress)
+  {
+    size_t u = 0, updateFreq = 0;
+    float progressStep;
+
+   Statistics::Progress progressPDLQueues (0, 90, &prepareProgress);
+    Statistics::Progress progressOntoGlobal (0, 1, &prepareProgress);
 
     csArray<LayoutedQueue> layoutedQueues;
 
     progressPDLQueues.SetProgress (0);
-    progressStep = 1.0f / allQueues.GetSize();
-    for (size_t q = 0; q < allQueues.GetSize(); q++)
+    progressStep = 1.0f / queuesPDL.GetSize();
+    for (size_t q = 0; q < queuesPDL.GetSize(); q++)
     {
       progressPDLQueues.SetProgress (q * progressStep);
 
-      PDLQueue& currentQueue = allQueues[q];
+      PDLQueue& currentQueue = queuesPDL[q];
       LayoutedQueue newEntry;
       newEntry.pdBits = currentQueue.pdBits;
       newEntry.sector = currentQueue.sector;
@@ -222,8 +266,7 @@ namespace lighter
       {
         LayoutedQueue& currentLayouted = layoutedQueues[l];
         if ((currentLayouted.sector == newEntry.sector)
-          && (currentLayouted.pdBits & ~newEntry.pdBits).AllBitsFalse ()
-          && !((currentLayouted.pdBits & newEntry.pdBits).AllBitsFalse ()))
+          && (currentLayouted.pdBits ^ newEntry.pdBits).AllBitsFalse ())
         {
           /**
            * Layouted queue matches, reserve space on one of the allocs on the
@@ -238,7 +281,7 @@ namespace lighter
             const csRect& rect = map.alloc->GetRectangle ();
             csRect newRect;
             /// Allocated SR
-            CS::SubRectangles::SubRect* sr;
+            MaxRectangles::SubRect* sr;
             /// Position of rectangle
             csVector2 ofs;
             /**
@@ -304,7 +347,7 @@ namespace lighter
          "filling gaps".
          The nicest way would be filling gaps + large rects to alloc from
          available ... unfortunately that's not trivial to achieve due the way
-         CS::SubRectanglesCompact works.
+         MaxRectanglesCompact works.
        */
       AllocResultHash results;
       AllocLQ allocLQ (newEntry);
@@ -361,9 +404,26 @@ namespace lighter
     {
       LayoutedQueue& currentLayouted = layoutedQueues[l];
 
+      //
+      SectorAndPDBits s(currentLayouted.sector,currentLayouted.pdBits);
+      if (pdLayoutTransforms.Contains(s))
+      {
+        csArray<csArray<LayoutTransform*> > resultArray =
+          pdLayoutTransforms.GetAll(s);
+
+        csArray<csArray<LayoutTransform*> >::Iterator it = 
+          resultArray.GetIterator();
+
+        while (it.HasNext())
+        {
+          AllocLayoutArray(it.Next());
+        }
+        pdLayoutTransforms.DeleteAll(s);
+      }
+
       for (size_t a = 0; a < currentLayouted.maps.GetSize(); a++)
       {
-        CS::SubRectanglesCompact& allocator = *currentLayouted.maps[a].alloc;
+        MaxRectanglesCompact& allocator = *currentLayouted.maps[a].alloc;
         csRect minRect (allocator.GetMinimumRectangle());
         allocator.Shrink (minRect.Width(), minRect.Height());
       }
@@ -435,7 +495,28 @@ namespace lighter
         delete currentLayouted.maps[m].alloc;
       }
     }
+
+    // Allocate the remaining pd Affected layout 
+    LayoutTransformHash::GlobalIterator it = pdLayoutTransforms.GetIterator();
+    while (it.HasNext())
+    {
+      AllocLayoutArray(it.Next());
+    }
+    pdLayoutTransforms.Empty();
+
     progressOntoGlobal.SetProgress (1);
+  }
+
+
+  /* Assign space to non affected by pseudodynamic light
+   *
+   */
+
+  void SimpleUVFactoryLayouter::PrepareLightingNoPDL(csArray<PDLQueue>& queuesNoPDL,
+    Statistics::Progress& progressNonPDL)
+  {
+    size_t u = 0, updateFreq = 0;
+    float progressStep;
 
     progressNonPDL.SetProgress (0);
     if (queuesNoPDL.GetSize() > 0)
@@ -444,6 +525,8 @@ namespace lighter
         queuesNoPDL.GetSize());
       progressStep = updateFreq * (1.0f / queuesNoPDL.GetSize());
     }
+
+    AllocLayoutArray(globalLayoutTransforms);
 
     // Distribute unaffected prims to the space that's left
     for (size_t q = 0; q < queuesNoPDL.GetSize(); q++)
@@ -521,10 +604,38 @@ namespace lighter
         }
       }
     }
-
-    progress.SetProgress (1);
   }
  
+  void SimpleUVFactoryLayouter::AllocLayoutArray(
+    csArray<LayoutTransform*>& layouts)
+  {
+    layouts.Sort(SortLayoutTransform);
+
+    for (size_t l=0; l < layouts.GetSize(); l++)
+    {
+      csRect& rect = layouts[l]->rect;
+      AllocResultHash results;
+      AllocLightmapArray<> allocGLM (globalLightmaps);
+      bool b = AllocAllPrims (ArraysOneUV (rect.Width(), rect.Height()), 
+        allocGLM, results, 0, allocTryNoGrow);
+
+      if (!b)
+      {
+        b = AllocAllPrims (ArraysOneUV (rect.Width(), rect.Height()), 
+          allocGLM, results, 0, allocDefault);
+        CS_ASSERT(b);
+      }
+      
+      if (b)
+      {
+        const AllocResult& result = *results.GetElementPointer (0);
+        rect.xmin = int (result.positions[0].x);
+        rect.ymin = int (result.positions[0].y);
+        layouts[l]->lmID = (uint)result.allocIndex;
+      }
+    }
+  }
+  
 
 }
 

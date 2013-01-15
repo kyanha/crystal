@@ -40,7 +40,7 @@ namespace lighter
      * This should split vertices as necessary and assign primitives
      * to lightmaps.
      * \param inPrims Input primitives.
-     * \param inPrims Input vertex data.
+     * \param vertexData Input vertex data.
      * \param factory Factory object primitives are part of
      * \param outPrims Output primitives. A number of primitive arrays. All
      *   primitives of a sub-array would fit on a single lightmap.
@@ -75,8 +75,20 @@ namespace lighter
     virtual size_t LayoutUVOnPrimitives (PrimitiveArray &prims, 
       size_t groupNum, Sector* sector, const csBitArray& pdBits) = 0;
 
+    /**
+     * Lay out lightmaps for a primitive group of an object according his factory layout
+     */
+    virtual size_t LayoutUVOnGroup (PrimitiveArray &prims,
+      size_t groupNum, Sector* sector, const csBitArray& pdBits) = 0;
+
     virtual void FinalLightmapLayout (PrimitiveArray &prims, size_t layoutID,
-      size_t groupNum, ObjectVertexData& vertexData, uint& lmID) = 0;
+      size_t groupNum, ObjectVertexData& vertexData, bool unwrappedByObject,
+      uint& lmID) = 0;
+
+    /**
+     * Get the percentage of really used space in the lightmap
+     */
+    virtual float getFilledRatio(size_t groupNum) = 0;
   };
 
 } // namespace lighter

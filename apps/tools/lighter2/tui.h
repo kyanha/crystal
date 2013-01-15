@@ -60,6 +60,11 @@ namespace lighter
     /// iReporterListener
     THREADED_CALLABLE_DECL4(TUI, Report, csThreadReturn, iReporter*, reporter,
       int, severity, const char*, msgId, const char*, description, HIGH, true, false);
+
+    //Draw sector photon number, and if it's interactive ask to the user
+    //how many photon he want to put
+    void DrawPhotonNumber(csString sectorName, int &photons,bool interactive);
+
   private:
     csString GetProgressBar (uint percent) const;
 
@@ -105,6 +110,9 @@ namespace lighter
 
     // Last printed task
     csString lastTask; float lastTaskProgress;
+
+    // Draw mutex
+    CS::Threading::Mutex drawMutex;
 
     iObjectRegistry* GetObjectRegistry() const { return object_reg; }
     iObjectRegistry* object_reg;

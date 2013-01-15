@@ -267,10 +267,13 @@ namespace lighter
       csRef<LightmapUVObjectLayouter> layouter;
       size_t layoutID;
       size_t group;
+      bool unwrapByObject;
 
       LMLayoutingInfo (LightmapUVObjectLayouter* layouter, size_t layoutID,
-        size_t group) :
-        layouter (layouter), layoutID (layoutID), group (group) {}
+        size_t group, bool unwrapByObject) : 
+      layouter (layouter), layoutID (layoutID), group (group),
+        unwrapByObject(unwrapByObject)
+        {}
     };
     csArray<LMLayoutingInfo> lmLayouts;
 

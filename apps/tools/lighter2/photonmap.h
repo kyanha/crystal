@@ -190,6 +190,8 @@ namespace lighter
     float bboxMin[3];         ///< Minimum value in each dimension for bounding box computation
     float bboxMax[3];         ///< Maximum value in each dimension for bounding box computation
 
+    CS::Threading::Mutex writeMutex;  //< Mutex for the write operations
+
     // Precomputed cosine and sine lookup tables for spherical coordinate conversion
     static bool directionTablesReady;
     static float cosTheta[256];
