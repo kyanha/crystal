@@ -312,22 +312,6 @@ static void FillImgRect (uint8* data, uint8 color, int imgW, int imgH,
   }
 }
 
-static void IncImgRect (uint8* data, int imgW, int imgH, 
-			const csRect& r)
-{
-  CS_ASSERT((r.xmax <= imgW) && (r.ymax <= imgH));
-  int x, y;
-  uint8* p = data + (r.ymin * imgW) + r.xmin;
-  for (y = r.ymin; y < r.ymax; y++)
-  {
-    for (x = r.xmin; x < r.xmax; x++)
-    {
-      (*p++)++;
-    }
-    p += (imgW - r.Width ());
-  }
-}
-
 // Debug dump: write some rect distribution into some images.
 void MaxRectangles::Dump (iObjectRegistry* object_reg, const char* tag)
 {
@@ -552,14 +536,16 @@ bool MaxRectangles::SplitFreeRect(const csRect& freeRect, const csRect& allocate
 //--------------------------------------------------------------------------
 
 MaxRectanglesCompact::MaxRectanglesCompact(const csRect& maxRectSize)
-  : MaxRectangles (csRect (0, 0, 0, 0)), growPO2 (false),
-  maxRectSize (maxRectSize), maxRectArea(maxRectSize.Area())
+  : MaxRectangles (csRect (0, 0, 0, 0)),
+    maxRectSize (maxRectSize), maxRectArea(maxRectSize.Area()),
+    growPO2 (false)
 {
 }
 
 MaxRectanglesCompact::MaxRectanglesCompact(const MaxRectanglesCompact& other)
-  : MaxRectangles (other), growPO2 (other.growPO2),
-  maxRectSize (other.maxRectSize), maxRectArea(other.maxRectArea)
+  : MaxRectangles (other),
+    maxRectSize (other.maxRectSize), maxRectArea(other.maxRectArea),
+    growPO2 (other.growPO2)
 {
 }
 

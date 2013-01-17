@@ -533,7 +533,7 @@ namespace lighter
        csPrintf("%d photons advised for %s sector",photons,sectorName.GetData());
        csPrintf (CS_ANSI_CURSOR(3, 22));
        int userPhotonsNbr;
-       csPrintf("Number to emit (type -1 to use the advised number) : ",photons,sectorName.GetData());
+       csPrintf("Number to emit (type -1 to use the advised number) : ");
        scanf("%d",&userPhotonsNbr);
        if (userPhotonsNbr >= 0)  photons = userPhotonsNbr;
      }

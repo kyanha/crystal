@@ -148,11 +148,6 @@ namespace lighter
     {
       explicit LayoutTransform(csRect initialRect) :rect(initialRect) {}
 
-      ~LayoutTransform()
-      {
-        int a = 20;
-      }
-
       uint lmID;
       csRect rect;
     };
