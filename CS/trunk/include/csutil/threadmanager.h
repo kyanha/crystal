@@ -100,7 +100,7 @@ public:
     bool noThread = alwaysRunNow || (IsMainThread() && queueType != THREADED && queueType != THREADEDL && !forceQueue);
 
     // True if we're executing something to not be run in the main thread, while all other threads are busy.
-    bool runNow = noThread || (!forceQueue) && ((queueType == THREADED || queueType == THREADEDL) && !IsMainThread() 
+    bool runNow = noThread || (!forceQueue && (queueType == THREADED || queueType == THREADEDL) && !IsMainThread()
       && ((waiting >= threadCount-1) || (threadQueue->GetQueueCount() > 2*threadCount-1) || wait));
 
     return runNow;
