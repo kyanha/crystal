@@ -126,7 +126,6 @@ namespace lighter
 
   void Sector::InitPhotonNumber()
   {
-    float maxPower = 0;
     bool interactive = globalConfig.GetIndirectProperties().interactiveConfiguration;
     numPhotonsToEmit = 0;
 

@@ -79,7 +79,7 @@ protected:
   bool minRectDirty;
 
   bool needPrune;
-  int notPrunedIndex;
+  size_t notPrunedIndex;
 
 public:
   inline SubRect* AllocSubrect ()
@@ -189,7 +189,7 @@ public:
   }
 
 private :
-  void inline DeleteFreeRect(int index)
+  void inline DeleteFreeRect (size_t index)
   {
     freeRects.DeleteIndex(index);
     if (index < notPrunedIndex)

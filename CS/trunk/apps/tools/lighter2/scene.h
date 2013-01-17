@@ -119,8 +119,10 @@ namespace lighter
   {
   public:
     Sector (Scene* scene)
-        : kdTree (0), scene (scene), sectorGroup(0), photonMap(NULL), causticPhotonMap(NULL), irradianceCache(NULL),
-        numPhotonsToEmit(globalConfig.GetIndirectProperties().numPhotons)
+        : kdTree (nullptr), scene (scene), sectorGroup(nullptr),
+          numPhotonsToEmit(globalConfig.GetIndirectProperties().numPhotons),
+          photonMap (nullptr), causticPhotonMap (nullptr),
+          irradianceCache (nullptr)
     {}
 
     ~Sector ();

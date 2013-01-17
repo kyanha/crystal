@@ -28,9 +28,12 @@ namespace lighter
 {
   //--------------------------------------------------------------------------
   LightCalculator::LightCalculator (const csVector3& tangentSpaceNorm, 
-    size_t subLightmapNum) : tangentSpaceNorm (tangentSpaceNorm),
-    fancyTangentSpaceNorm (!(tangentSpaceNorm - csVector3 (0, 0, 1)).IsZero ()),
-    subLightmapNum (subLightmapNum),objReg(globalLighter->objectRegistry),scfImplementationType(this)
+                                    size_t subLightmapNum)
+    : scfImplementationType(this),
+      tangentSpaceNorm (tangentSpaceNorm),
+      fancyTangentSpaceNorm (!(tangentSpaceNorm - csVector3 (0, 0, 1)).IsZero ()),
+      subLightmapNum (subLightmapNum),
+      objReg (globalLighter->objectRegistry)
   {}
 
   LightCalculator::~LightCalculator() {}

@@ -234,7 +234,7 @@ namespace lighter
   void SimpleUVFactoryLayouter::PrepareLightingPDL(csArray<PDLQueue>& queuesPDL,
     Statistics::Progress& prepareProgress)
   {
-    size_t u = 0, updateFreq = 0;
+    size_t updateFreq = 0;
     float progressStep;
 
    Statistics::Progress progressPDLQueues (0, 90, &prepareProgress);
@@ -393,7 +393,7 @@ namespace lighter
     progressOntoGlobal.SetProgress (0);
     if (layoutedQueues.GetSize() > 0)
     {
-      u = updateFreq = progressOntoGlobal.GetUpdateFrequency (
+      updateFreq = progressOntoGlobal.GetUpdateFrequency (
         layoutedQueues.GetSize());
       progressStep = updateFreq * (1.0f / layoutedQueues.GetSize());
     }
