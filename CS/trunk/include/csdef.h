@@ -131,9 +131,6 @@
   #ifndef PRId32
     #define PRId32 "d"
   #endif
-  #ifndef PRId64
-    #define PRId64 __CS_PRI64_PREFIX "d"
-  #endif
   #ifndef PRIu8
     #define PRIu8  "u"
   #endif
@@ -142,9 +139,6 @@
   #endif
   #ifndef PRIu32
     #define PRIu32 "u"
-  #endif
-  #ifndef PRIu64
-    #define PRIu64 __CS_PRI64_PREFIX "u"
   #endif
   #ifndef PRIx8
     #define PRIx8  "x"
@@ -155,9 +149,6 @@
   #ifndef PRIx32
     #define PRIx32 "x"
   #endif
-  #ifndef PRIx64
-    #define PRIx64 __CS_PRI64_PREFIX "x"
-  #endif
   #ifndef PRIX8
     #define PRIX8  "X"
   #endif
@@ -166,9 +157,6 @@
   #endif
   #ifndef PRIX32
     #define PRIX32 "X"
-  #endif
-  #ifndef PRIX64
-    #define PRIX64 __CS_PRI64_PREFIX "X"
   #endif
   
   #if CS_PROCESSOR_SIZE == 64
