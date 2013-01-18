@@ -78,6 +78,7 @@ namespace lighter
     void DrawMessage () const;
 
     //Draw raytracer stats
+    static csString FormatAmount (uint64 value, int width = 6);
     void DrawRayCore () const;
 
     //Draw photonmapper stats

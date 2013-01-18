@@ -260,11 +260,24 @@ namespace lighter
     csPrintf (CS_ANSI_CURSOR(1,1));
   }
 
+  csString TUI::FormatAmount (uint64 value, int width)
+  {
+    // Suffix for ray units (none, thousands, millions, billions, trillions; quadrillion)
+    const char* siConv[] = {" ", "K", "M", "G", "T", "P"};
+    size_t suffix (0);
+
+    while ((value > CONST_UINT64(99999))
+      && (suffix < sizeof(siConv)/sizeof(siConv[0])))
+    {
+      value /= CONST_UINT64(1000);
+      suffix++;
+    }
+
+    return csString().Format ("%*" CS_PRIu64 " %s", width, value, siConv[suffix]);
+  }
+
   void TUI::DrawRayCore () const
   {
-    // Suffix for ray units (none, thousands, millions, billions, trillians)
-    const char* siConv[] = {" ", "K", "M", "B", "T"};
-
     // Make local copies of counters
     uint64 directRays = globalStats.raytracer.numShadowRays;
     uint64 lightRays = globalStats.raytracer.numLightRays;
@@ -273,63 +286,19 @@ namespace lighter
     uint64 finalGatherRays = globalStats.raytracer.numFinalGatherRays;
     uint64 totalRays = globalStats.raytracer.numRays;
 
-    // Adjust counter precision and compute suffix to indicate units
-    int directSuffix = 0, lightSuffix = 0, reflectSuffix = 0,
-        refractSuffix = 0, finalGatherSuffix = 0,
-        totalSuffix = 0;
-    
-    while (totalRays > CONST_UINT64(99999) && totalSuffix < 5)
-    {
-      totalRays /= CONST_UINT64(1000);
-      totalSuffix++;
-    }
-
-    while (directRays > CONST_UINT64(99999) && directSuffix < 5)
-    {
-      directRays /= CONST_UINT64(1000);
-      directSuffix++;
-    }
-
-    while (lightRays > CONST_UINT64(99999) && lightSuffix < 5)
-    {
-      lightRays /= CONST_UINT64(1000);
-      lightSuffix++;
-    }
-
-    while (reflectRays > CONST_UINT64(99999) && reflectSuffix < 5)
-    {
-      reflectRays /= CONST_UINT64(1000);
-      reflectSuffix++;
-    }
-
-    while (refractRays > CONST_UINT64(99999) && refractSuffix < 5)
-    {
-      refractRays /= CONST_UINT64(1000);
-      refractSuffix++;
-    }
-
-    while (finalGatherRays > CONST_UINT64(99999) && finalGatherSuffix < 5)
-    {
-      finalGatherRays /= CONST_UINT64(1000);
-      finalGatherSuffix++;
-    }
-
     // Output ray counters with suffix
-    csPrintf (CS_ANSI_CURSOR(12,9) "%6" PRIu64 " %s", directRays, siConv[directSuffix]);
-    csPrintf (CS_ANSI_CURSOR(12,10) "%6" PRIu64 " %s", lightRays, siConv[lightSuffix]);
-    csPrintf (CS_ANSI_CURSOR(12,11) "%6" PRIu64 " %s", reflectRays, siConv[reflectSuffix]);
-    csPrintf (CS_ANSI_CURSOR(12,12) "%6" PRIu64 " %s", refractRays, siConv[refractSuffix]);
-    csPrintf (CS_ANSI_CURSOR(12,13) "%6" PRIu64 " %s", finalGatherRays, siConv[finalGatherSuffix]);
-    csPrintf (CS_ANSI_CURSOR(10,15) "%8" PRIu64 " %s", totalRays, siConv[totalSuffix]);
+    csPrintf (CS_ANSI_CURSOR(12,9) "%s", FormatAmount (directRays).GetData());
+    csPrintf (CS_ANSI_CURSOR(12,10) "%s", FormatAmount (lightRays).GetData());
+    csPrintf (CS_ANSI_CURSOR(12,11) "%s", FormatAmount (reflectRays).GetData());
+    csPrintf (CS_ANSI_CURSOR(12,12) "%s", FormatAmount (refractRays).GetData());
+    csPrintf (CS_ANSI_CURSOR(12,13) "%s", FormatAmount (finalGatherRays).GetData());
+    csPrintf (CS_ANSI_CURSOR(10,15) "%s", FormatAmount (totalRays).GetData());
 
     csPrintf (CS_ANSI_CURSOR(1,1));
   }
 
   void TUI::DrawPMCore () const
   {
-    // Suffix for ray units (none, thousands, millions, billions, trillions; quadrillion)
-    const char* siConv[] = {" ", "K", "M", "B", "T","P"};
-
     // Make local copies of counters
     uint64 photons = globalStats.photonmapping.numStoredPhotons;
     uint64 lookups = globalStats.photonmapping.numKDLookups;
@@ -339,62 +308,15 @@ namespace lighter
     uint64 irLookups = globalStats.photonmapping.irCacheLookups;
     uint64 irSplits = globalStats.photonmapping.irCacheSplits;
 
-    // Adjust counter precision and compute suffix to indicate units
-    int photonSuffix = 0, lookupSuffix = 0, KDdepthSuffix = 0,
-        primarySuffix = 0, secondarySuffix = 0,
-        irSplitsSuffix = 0, irLookupsSuffix = 0;
-    
-    while (photons > CONST_UINT64(99999) && photonSuffix < 5)
-    {
-      photons /= CONST_UINT64(1000);
-      photonSuffix++;
-    }
-
-    while (lookups > CONST_UINT64(99999) && lookupSuffix < 5)
-    {
-      lookups /= CONST_UINT64(1000);
-      lookupSuffix++;
-    }
-
-    while (KDdepth > CONST_UINT64(99999) && KDdepthSuffix < 5)
-    {
-      KDdepth /= CONST_UINT64(1000);
-      KDdepthSuffix++;
-    }
-
-    while (irPrim > CONST_UINT64(99999) && primarySuffix < 5)
-    {
-      irPrim /= CONST_UINT64(1000);
-      primarySuffix++;
-    }
-
-    while (irSecnd > CONST_UINT64(99999) && secondarySuffix < 5)
-    {
-      irSecnd /= CONST_UINT64(1000);
-      secondarySuffix++;
-    }
-
-    while (irSplits > CONST_UINT64(99999) && irSplitsSuffix < 5)
-    {
-      irSplits /= CONST_UINT64(1000);
-      irSplitsSuffix++;
-    }
-
-    while (irLookups > CONST_UINT64(99999) && irLookupsSuffix < 5)
-    {
-      irLookups /= CONST_UINT64(1000);
-      irLookupsSuffix++;
-    }
-
     // Output photon counters with suffix
-    csPrintf (CS_ANSI_CURSOR(33,9) "%6" PRIu64 " %s", photons, siConv[photonSuffix]);
-    csPrintf (CS_ANSI_CURSOR(33,10) "%6" PRIu64 " %s", lookups, siConv[lookupSuffix]);
-    csPrintf (CS_ANSI_CURSOR(33,11) "%6" PRIu64 " %s", KDdepth, siConv[KDdepthSuffix]);
+    csPrintf (CS_ANSI_CURSOR(33,9) "%s", FormatAmount (photons).GetData());
+    csPrintf (CS_ANSI_CURSOR(33,10) "%s", FormatAmount (lookups).GetData());
+    csPrintf (CS_ANSI_CURSOR(33,11) "%s", FormatAmount (KDdepth).GetData());
 
-    csPrintf (CS_ANSI_CURSOR(32,15) "%7" PRIu64 " %s", irPrim, siConv[primarySuffix]);
-    csPrintf (CS_ANSI_CURSOR(32,16) "%7" PRIu64 " %s", irSecnd, siConv[secondarySuffix]);
-    csPrintf (CS_ANSI_CURSOR(33,17) "%6" PRIu64 " %s", irLookups, siConv[irLookupsSuffix]);
-    csPrintf (CS_ANSI_CURSOR(33,18) "%6" PRIu64 " %s", irSplits, siConv[irSplitsSuffix]);
+    csPrintf (CS_ANSI_CURSOR(32,15) "%s", FormatAmount (irPrim, 7).GetData());
+    csPrintf (CS_ANSI_CURSOR(32,16) "%s", FormatAmount (irSecnd, 7).GetData());
+    csPrintf (CS_ANSI_CURSOR(33,17) "%s", FormatAmount (irLookups).GetData());
+    csPrintf (CS_ANSI_CURSOR(33,18) "%s", FormatAmount (irSplits).GetData());
 
     csPrintf (CS_ANSI_CURSOR(1,1));
   }
