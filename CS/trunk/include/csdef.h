@@ -94,21 +94,31 @@
   #define ceilf(X)    static_cast<float> (ceil(X))
 #endif
 
+#if CS_LONG_SIZE == 8
+  #define __CS_PRI64_PREFIX "l"
+#else
+  #define __CS_PRI64_PREFIX "ll"
+#endif
+
+/* Using the CS_PRI?64 macros will prevent format string warnings on MinGW.
+ * (The MinGW headers put the VC runtime specific 64-bit formatting specifier
+ * into the PRI?64 macros, however, this specifier triggers a warning with
+ * gcc's format string checker.)
+ */
+#define CS_PRId64 __CS_PRI64_PREFIX "d"
+#define CS_PRIu64 __CS_PRI64_PREFIX "u"
+#define CS_PRIx64 __CS_PRI64_PREFIX "x"
+#define CS_PRIX64 __CS_PRI64_PREFIX "X"
+
 // Platforms which have the PRIx99 printf()-formatting directives should define
 // CS_HAVE_C_FORMAT_MACROS. Platforms which also have macros for 64-bit
 // data-types should further define CS_HAVE_C_FORMAT64_MACROS.  For platforms
 // which do not provide these macros, we fake up the commonly used ones.
 #if !defined(CS_HAVE_C_FORMAT64_MACROS)
-  #if CS_LONG_SIZE == 8
-    #define __CS_PRI64_PREFIX "l"
-  #else
-    #define __CS_PRI64_PREFIX "ll"
-  #endif
-
-  #define PRId64 __CS_PRI64_PREFIX "d"
-  #define PRIu64 __CS_PRI64_PREFIX "u"
-  #define PRIx64 __CS_PRI64_PREFIX "x"
-  #define PRIX64 __CS_PRI64_PREFIX "X"
+  #define PRId64 CS_PRId64
+  #define PRIu64 CS_PRIu64
+  #define PRIx64 CS_PRIx64
+  #define PRIX64 CS_PRIX64
 #endif
 
 #if !defined(CS_HAVE_C_FORMAT_MACROS)
