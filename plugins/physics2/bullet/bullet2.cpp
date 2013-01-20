@@ -353,10 +353,10 @@ CS::Collisions::HitBeamResult csBulletSector::HitBeam (const csVector3& start, c
 
     if (rayCallback.m_collisionObject->getInternalType () == btCollisionObject::CO_SOFT_BODY)
     {
-      btSoftBody* body = btSoftBody::upcast (rayCallback.m_collisionObject);
+      const btSoftBody* body = btSoftBody::upcast (rayCallback.m_collisionObject);
       btSoftBody::sRayCast ray;
 
-      if (body->rayTest (rayFrom, rayTo, ray))
+      if (const_cast<btSoftBody*> (body)->rayTest (rayFrom, rayTo, ray))
       {
         result.object = collObject;
         result.isect = BulletToCS (rayCallback.m_hitPointWorld,
@@ -371,7 +371,7 @@ CS::Collisions::HitBeamResult csBulletSector::HitBeam (const csVector3& start, c
         {
         case btSoftBody::eFeature::Face:
           {
-            btSoftBody::Face& face = body->m_faces[ray.index];
+            const btSoftBody::Face& face = body->m_faces[ray.index];
             btSoftBody::Node* node = face.m_n[0];
             float distance = (node->m_x - impact).length2 ();
 
@@ -554,8 +554,8 @@ bool csBulletSector::CollisionTest (CS::Collisions::iCollisionObject* object,
       for (int j=0;j<manifoldArray.size();j++)
       {
         btPersistentManifold* manifold = manifoldArray[j];
-        btCollisionObject* objA = static_cast<btCollisionObject*> (manifold->getBody0 ());
-        btCollisionObject* objB = static_cast<btCollisionObject*> (manifold->getBody1 ());
+        const btCollisionObject* objA = static_cast<const btCollisionObject*> (manifold->getBody0 ());
+        const btCollisionObject* objB = static_cast<const btCollisionObject*> (manifold->getBody1 ());
         CS::Collisions::iCollisionObject* csCOA = static_cast<CS::Collisions::iCollisionObject*>(objA->getUserPointer ());
         CS::Collisions::iCollisionObject* csCOB = static_cast<CS::Collisions::iCollisionObject*>(objB->getUserPointer ());
         for (int p=0;p<manifold->getNumContacts();p++)
@@ -1099,10 +1099,10 @@ void csBulletSector::CheckCollisions ()
       bulletWorld->getDispatcher ()->getManifoldByIndexInternal (i);
     if (contactManifold->getNumContacts ())
     {
-      btCollisionObject* obA =
-        static_cast<btCollisionObject*> (contactManifold->getBody0 ());
-      btCollisionObject* obB =
-        static_cast<btCollisionObject*> (contactManifold->getBody1 ());
+      const btCollisionObject* obA =
+        static_cast<const btCollisionObject*> (contactManifold->getBody0 ());
+      const btCollisionObject* obB =
+        static_cast<const btCollisionObject*> (contactManifold->getBody1 ());
 
       CS::Collisions::iCollisionObject* cs_obA = 
         static_cast<CS::Collisions::iCollisionObject*> (obA->getUserPointer ());

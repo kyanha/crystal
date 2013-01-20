@@ -107,7 +107,7 @@ class csBulletSector : public scfImplementationExt3<
 
   bool isSoftWorld;
   csVector3 gravity;
-  btGhostObject* hitPortal;
+  const btGhostObject* hitPortal;
   csBulletDebugDraw* debugDraw;
   btDynamicsWorld* bulletWorld;
   btCollisionDispatcher* dispatcher;
