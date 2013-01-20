@@ -63,8 +63,8 @@ class csBulletRigidBody : public scfImplementationExt2<csBulletRigidBody,
   csRef<iLight> light;
   csRef<iCamera> camera;
 
-  csArray<btCollisionObject*> contactObjects;
-  csArray<btCollisionObject*> lastContactObjects;
+  csArray<const btCollisionObject*> contactObjects;
+  csArray<const btCollisionObject*> lastContactObjects;
 
   void RebuildBody ();
 

@@ -241,7 +241,7 @@ void csBulletDynamicsSystem::SetAutoDisableParams (float linear,
 }
 
 void csBulletDynamicsSystem::CheckCollision (csBulletRigidBody& cs_obA,
-					     btCollisionObject *obB,
+					     const btCollisionObject *obB,
 					     btPersistentManifold &contactManifold)
 {
   // @@@ TODO: make both calls in just one pass
@@ -289,7 +289,7 @@ void csBulletDynamicsSystem::CheckCollisions ()
     if (body->IsEnabled() && !body->IsStatic())
     {
       body->lastContactObjects.Empty();
-      csArray<btCollisionObject*>::Iterator it = body->contactObjects.GetIterator();
+      csArray<const btCollisionObject*>::Iterator it = body->contactObjects.GetIterator();
       while (it.HasNext())
       {
         body->lastContactObjects.Push(it.Next());
@@ -305,10 +305,10 @@ void csBulletDynamicsSystem::CheckCollisions ()
       bulletWorld->getDispatcher ()->getManifoldByIndexInternal (i);
     if (contactManifold->getNumContacts ())
     {
-      btCollisionObject* obA =
-	static_cast<btCollisionObject*> (contactManifold->getBody0 ());
-      btCollisionObject* obB =
-	static_cast<btCollisionObject*> (contactManifold->getBody1 ());
+      const btCollisionObject* obA =
+	static_cast<const btCollisionObject*> (contactManifold->getBody0 ());
+      const btCollisionObject* obB =
+	static_cast<const btCollisionObject*> (contactManifold->getBody1 ());
 
       iBody* cs_obA = static_cast<iBody*> (obA->getUserPointer ());
       iBody* cs_obB = static_cast<iBody*> (obB->getUserPointer ());
@@ -388,7 +388,8 @@ void csBulletDynamicsSystem::RemoveBody (::iRigidBody* body)
       }
 
       // wake up this body since the environment has changed
-      csBody->contactObjects[i]->activate ();
+      // FIXME: const_cast<> as method constness changed between versions
+      const_cast<btCollisionObject*> (csBody->contactObjects[i])->activate ();
     }
 
     // TODO: remove any connected joint
@@ -736,9 +737,9 @@ CS::Physics::Bullet::HitBeamResult csBulletDynamicsSystem::HitBeam
 
       case CS::Physics::Bullet::SOFT_BODY:
 	{
-	btSoftBody* body = btSoftBody::upcast (rayCallback.m_collisionObject);
+	const btSoftBody* body = btSoftBody::upcast (rayCallback.m_collisionObject);
 	btSoftBody::sRayCast ray;
-	if (body->rayTest (rayFrom, rayTo, ray))
+	if (const_cast<btSoftBody*> (body)->rayTest (rayFrom, rayTo, ray))
 	{
 	  result.hasHit = true;
 	  result.body = bulletBody;
@@ -754,7 +755,7 @@ CS::Physics::Bullet::HitBeamResult csBulletDynamicsSystem::HitBeam
 	  {
 	  case btSoftBody::eFeature::Face:
 	    {
-	      btSoftBody::Face& face = body->m_faces[ray.index];
+	      const btSoftBody::Face& face = body->m_faces[ray.index];
 	      btSoftBody::Node* node = face.m_n[0];
 	      float distance = (node->m_x - impact).length2 ();
 

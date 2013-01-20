@@ -135,7 +135,7 @@ private:
   csBulletDebugDraw* debugDraw;
 
   void CheckCollisions();
-  void CheckCollision(csBulletRigidBody& cs_obA, btCollisionObject *obB,
+  void CheckCollision(csBulletRigidBody& cs_obA, const btCollisionObject *obB,
 		      btPersistentManifold &contactManifold);
 
 public:
