@@ -139,6 +139,12 @@ namespace CS
   }
 
   /**
+   * Multimedia content manipulation
+   */
+  namespace Media
+  {}
+
+  /**
    * Memory allocation
    */
   namespace Memory
