@@ -21,6 +21,8 @@
 
 #include "cssysdef.h"
 #include "csutil/event.h"
+
+#include "csutil/callstack.h"
 #include "csutil/csevent.h"
 
 utf32_char csKeyEventHelper::GetRawCode (const iEvent* event)
@@ -499,34 +501,77 @@ class csWeakEventHandler :
   public scfImplementation1<csWeakEventHandler, iEventHandler>
 {
 private:
+#ifdef CS_DEBUG
+  /* Debug mode: record creator of weak event handler.
+   * Useful to determine where a dangling weak listener originated */
+  char* creator;
+#endif
+
   csWeakRef<iEventHandler> parent;
 
 public:
   csWeakEventHandler (iEventHandler *parent) :
-    scfImplementationType (this), parent(parent) { }
+    scfImplementationType (this), 
+  #ifdef CS_DEBUG
+    creator (nullptr),
+  #endif
+    parent(parent)
+  {
+  #ifdef CS_DEBUG
+    CS::Debug::CallStack stack (2);
+    creator = CS::StrDup (stack->GetEntryAll (0));
+  #endif
+  }
+  ~csWeakEventHandler ()
+  {
+  #ifdef CS_DEBUG
+    cs_free (creator);
+  #endif
+  }
 
   bool HandleEvent (iEvent &e)
-  { return parent->HandleEvent(e); }
+  {
+    CS_ASSERT(parent);
+    return parent->HandleEvent(e);
+  }
   const char * GenericName() const
-  { return parent->GenericName(); }
+  {
+    CS_ASSERT(parent);
+    return parent->GenericName();
+  }
   csHandlerID GenericID (csRef<iEventHandlerRegistry> &r) const
-  { return parent->GenericID(r); }
+  {
+    CS_ASSERT(parent);
+    return parent->GenericID(r);
+  }
   const csHandlerID * GenericPrec (
     csRef<iEventHandlerRegistry> &hr, csRef<iEventNameRegistry> &nr,
     csEventID id) const
-  { return parent->GenericPrec(hr, nr, id); }
+  {
+    CS_ASSERT(parent);
+    return parent->GenericPrec(hr, nr, id);
+   }
   const csHandlerID * GenericSucc (
     csRef<iEventHandlerRegistry> &hr, csRef<iEventNameRegistry> &nr,
     csEventID id) const
-  { return parent->GenericSucc(hr, nr, id); }
+  {
+    CS_ASSERT(parent);
+    return parent->GenericSucc(hr, nr, id);
+  }
   const csHandlerID * InstancePrec (
     csRef<iEventHandlerRegistry> &hr, csRef<iEventNameRegistry> &nr,
     csEventID id) const
-  { return parent->InstancePrec(hr, nr, id); }
+  {
+    CS_ASSERT(parent);
+    return parent->InstancePrec(hr, nr, id);
+   }
   const csHandlerID * InstanceSucc (
     csRef<iEventHandlerRegistry> &hr, csRef<iEventNameRegistry> &nr,
     csEventID id) const
-  { return parent->InstanceSucc(hr, nr, id); }
+  {
+    CS_ASSERT(parent);
+    return parent->InstanceSucc(hr, nr, id);
+  }
 };
 
 namespace CS
