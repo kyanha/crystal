@@ -181,4 +181,57 @@ public:
   static csCallStack* CreateCallStack (int skip = 0, bool fast = false);
 };
 
+namespace CS
+{
+  namespace Debug
+  {
+    /// Convenience wrapper around csCallStack and csCallStackHelper
+    class CallStack
+    {
+      csCallStack* stack;
+    public:
+      /**
+       * Create a new call stack.
+       * Arguments have the same meaning as those to
+       * csCallStackHelper::CreateCallStack().
+       */
+      CallStack (int skip = 0, bool fast = false) : stack (nullptr)
+      {
+        stack = csCallStackHelper::CreateCallStack (skip, fast);
+      }
+      ~CallStack() { Invalidate(); }
+
+      // Smart-pointer style interface
+      /// Dereference underlying call stack.
+      csCallStack* operator -> () const
+      { return stack; }
+
+      /// Cast to the underlying call stack.
+      operator csCallStack* () const
+      { return stack; }
+
+      /// Dereference underlying call stack.
+      csCallStack& operator* () const
+      { return *stack; }
+
+      /**
+      * Call stack validity check.  Returns true if a valid call stack is wrapped.
+      */
+      bool IsValid () const
+      { return (stack != 0); }
+
+      /// Invalidate the smart pointer by setting it to null.
+      void Invalidate()
+      {
+        if (stack) stack->Free();
+        stack = nullptr;
+      }
+
+      /// Return a hash value for this smart pointer.
+      uint GetHash() const
+      { return (uintptr_t)stack;  }
+    };
+  } // namespace Debug
+} // namespace CS
+
 #endif // __CS_UTIL_CALLSTACK_H__
