@@ -737,8 +737,7 @@ void csBulletRigidBody::SetPosition (const csVector3& pos)
 
     // wake up all connected bodies
     for (size_t i = 0; i < contactObjects.GetSize (); i++)
-      // FIXME: const_cast<> as method constness changed between versions
-      const_cast<btCollisionObject*> (contactObjects[i])->activate ();
+      contactObjects[i]->activate ();
   }
 
   // create new motion state
@@ -776,8 +775,7 @@ void csBulletRigidBody::SetOrientation (const csMatrix3& rot)
 
     // wake up all connected bodies
     for (size_t i = 0; i < contactObjects.GetSize (); i++)
-      // FIXME: const_cast<> as method constness changed between versions
-      const_cast<btCollisionObject*> (contactObjects[i])->activate ();
+      contactObjects[i]->activate ();
   }
 
   // create new motion state
@@ -816,8 +814,7 @@ void csBulletRigidBody::SetTransform (const csOrthoTransform& trans)
 
     // wake up all connected bodies
     for (size_t i = 0; i < contactObjects.GetSize (); i++)
-      // FIXME: const_cast<> as method constness changed between versions
-      const_cast<btCollisionObject*> (contactObjects[i])->activate ();
+      contactObjects[i]->activate ();
   }
 
   // create new motion state
