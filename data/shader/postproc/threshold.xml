@@ -21,7 +21,10 @@
 			uniform float4 hdrScale) : COLOR
 	      {
 		      float4 src = tex2D (Texture1, TexCoord);
-		      float3 thresholded = max ((src.rgb * hdrScale.x + hdrScale.z - float3 (threshold))/(1-threshold), 0);
+              float3 color_scaled = src.rgb * hdrScale.x + hdrScale.z;
+              float lum = dot (color_scaled, float3 (0.2126, 0.7152, 0.0722));
+              float color_scale = max ((lum - threshold)/(1-threshold), 0) / lum;
+		      float3 thresholded = src.rgb * color_scale;
 		      return float4 (thresholded* hdrScale.y + hdrScale.w, src.a);
 	      }
 
