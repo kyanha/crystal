@@ -507,9 +507,9 @@ void PostEffectManager::DimensionData::SetupRenderInfo (PostEffectManager& pfx)
     
     // Setup the vertices & texcoords
     screenQuadVerts[(size_t)0].Set (targetRect.xmin, targetRect.ymin, 0);
-    screenQuadVerts[(size_t)1].Set (targetRect.xmax, targetRect.ymin, 0);
-    screenQuadVerts[(size_t)2].Set (targetRect.xmax, targetRect.ymax, 0);
-    screenQuadVerts[(size_t)3].Set (targetRect.xmin, targetRect.ymax, 0);
+    screenQuadVerts[(size_t)1].Set (targetRect.xmax-1, targetRect.ymin, 0);
+    screenQuadVerts[(size_t)2].Set (targetRect.xmax-1, targetRect.ymax-1, 0);
+    screenQuadVerts[(size_t)3].Set (targetRect.xmin, targetRect.ymax-1, 0);
   }
 }
 
