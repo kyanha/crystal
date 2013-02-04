@@ -158,7 +158,7 @@ namespace CS
       }
       virtual void GetRGB (int color, int& r, int& g, int& b, int& a)
       {
-        a = 255 - (color >> 24);
+        a = (255 - (color >> 24)) & 0xff;
         GetRGB (color, r, g, b);
       }
 
