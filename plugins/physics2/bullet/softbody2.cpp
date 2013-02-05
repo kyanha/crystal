@@ -1,19 +1,24 @@
 /*
-  Copyright (C) 2011 by Liu Lu
+    Copyright (C) 2011-2012 Christian Van Brussel, Institute of Information
+      and Communication Technologies, Electronics and Applied Mathematics
+      at Universite catholique de Louvain, Belgium
+      http://www.uclouvain.be/en-icteam.html
+    Copyright (C) 2012 by Dominik Seifert
+    Copyright (C) 2011 by Liu Lu
 
-  This library is free software; you can redistribute it and/or
-  modify it under the terms of the GNU Library General Public
-  License as published by the Free Software Foundation; either
-  version 2 of the License, or (at your option) any later version.
+    This library is free software; you can redistribute it and/or
+    modify it under the terms of the GNU Library General Public
+    License as published by the Free Software Foundation; either
+    version 2 of the License, or (at your option) any later version.
 
-  This library is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
-  Library General Public License for more details.
+    This library is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+    Library General Public License for more details.
 
-  You should have received a copy of the GNU Library General Public
-  License along with this library; if not, write to the Free
-  Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+    You should have received a copy of the GNU Library General Public
+    License along with this library; if not, write to the Free
+    Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 
 #include "cssysdef.h"
@@ -21,6 +26,7 @@
 #include "csgeom/transfrm.h"
 #include "csgeom/quaternion.h"
 #include "csgeom/vector3.h"
+#include "iengine/scenenode.h"
 #include "iutil/strset.h"
 
 // Bullet includes.
@@ -36,64 +42,76 @@
 
 CS_PLUGIN_NAMESPACE_BEGIN (Bullet2)
 {
+
+void csBulletSoftBody::CreateSoftBodyObject (BulletSoftBodyFactory* factory)
+{
+  CreatePhysicalBodyObject (factory);
+  SetLinearStiffness (factory->linearStiffness);
+  SetAngularStiffness (factory->angularStiffness);
+  SetVolumeStiffness (factory->volumeStiffness);
+  SetSRHardness (factory->SRHhardness);
+  SetSKHardness (factory->SKHhardness);
+  SetSSHardness (factory->SSHhardness);
+  SetSRImpulse (factory->SRimpulse);
+  SetSKImpulse (factory->SKimpulse);
+  SetSSImpulse (factory->SSimpulse);
+  SetDamping (factory->damping);
+  SetDrag (factory->drag);
+  SetLift (factory->lift);
+  SetPressure (factory->pressure);
+  SetVolumeConversationCoefficient (factory->conversation);
+  SetShapeMatchThreshold (factory->matching);
+  SetRContactsHardness (factory->Rhardness);
+  SetKContactsHardness (factory->Khardness);
+  SetSContactsHardness (factory->Shardness);
+  SetAnchorsHardness (factory->anchorHardness);
+  if (factory->match)
+    SetShapeMatching (true);
+  if (factory->generateBending)
+    GenerateBendingConstraints (factory->bendingDistance);
+}
+
 csBulletSoftBody::csBulletSoftBody (csBulletSystem* phySys, btSoftBody* body)
-  :scfImplementationType (this, phySys), btBody (body), friction (5.0f),
-  density (0.1f), anchorCount (0)
+  :scfImplementationType (this, phySys), btBody (body), anchorCount (0), gravityEnabled (true)
 {
   btObject = body;
-  btBody->setUserPointer (dynamic_cast<iPhysicalBody*> (this));
-  this->type = CS::Collisions::COLLISION_OBJECT_PHYSICAL;
+  btBody->setUserPointer (dynamic_cast<CS::Collisions::iCollisionObject*>(this));
 }
 
 csBulletSoftBody::~csBulletSoftBody ()
 {
-  RemoveBulletObject ();
-  (sector->anchoredSoftBodies).Delete (this);
-}
-
-void csBulletSoftBody::SetTransform (const csOrthoTransform& trans)
-{
-  btTransform btTrans = CSToBullet (trans, system->getInternalScale ());
-  btTransform t = transform.inverse () * btTrans;
-  transform = btTrans;
-  btBody->transform (t);
-}
-
-csOrthoTransform csBulletSoftBody::GetTransform ()
-{
-  return BulletToCS (transform, system->getInverseInternalScale ());
 }
 
 void csBulletSoftBody::RebuildObject ()
 {
-  btBody->setCollisionFlags(0);
+  btBody->setCollisionFlags (0);
 }
 
 CS::Collisions::HitBeamResult csBulletSoftBody::HitBeam (const csVector3& start, const csVector3& end)
 {
   CS::Collisions::HitBeamResult result;
-  btVector3 rayFrom = CSToBullet (start, system->getInternalScale ());
-  btVector3 rayTo = CSToBullet (end, system->getInternalScale ());
+  btVector3 rayFrom = CSToBullet (start, system->GetInternalScale ());
+  btVector3 rayTo = CSToBullet (end, system->GetInternalScale ());
   btSoftBody::sRayCast ray;
 
   btCollisionWorld::ClosestRayResultCallback rayCallback (rayFrom, rayTo);
   if (btBody->rayTest (rayFrom, rayTo, ray))
   {
     result.hasHit = true;
-    result.object = QueryCollisionObject ();
+    result.object = this;
     result.isect = BulletToCS (rayCallback.m_hitPointWorld,
-      system->getInverseInternalScale ());
+			       system->GetInverseInternalScale ());
     result.normal = BulletToCS (rayCallback.m_hitNormalWorld,
-      system->getInverseInternalScale ());	
+				system->GetInverseInternalScale ());	
     
     btVector3 impact = rayFrom + (rayTo - rayFrom) * ray.fraction;
     switch (ray.feature)
     {
     case btSoftBody::eFeature::Face:
-      {
-        btSoftBody::Face& face = btBody->m_faces[ray.index];
-        btSoftBody::Node* node = face.m_n[0];
-        float distance = (node->m_x - impact).length2 ();
+    {
+      btSoftBody::Face& face = btBody->m_faces[ray.index];
+      btSoftBody::Node* node = face.m_n[0];
+      float distance = (node->m_x - impact).length2 ();
 
         for (int i = 1; i < 3; i++)
         {
@@ -119,9 +137,10 @@ bool csBulletSoftBody::RemoveBulletObject ()
   if (insideWorld)
   {
     for (size_t i = 0; i < joints.GetSize (); i++)
+    {
       sector->RemoveJoint (joints[i]);
-    btSoftRigidDynamicsWorld* softWorld =
-      static_cast<btSoftRigidDynamicsWorld*> (sector->bulletWorld);
+    }
+    btSoftRigidDynamicsWorld* softWorld = static_cast<btSoftRigidDynamicsWorld*> (sector->bulletWorld);
     softWorld->removeSoftBody (btBody);
     insideWorld = false;
     anchorCount = 0;
@@ -130,8 +149,7 @@ bool csBulletSoftBody::RemoveBulletObject ()
     for (int i = 0; i < btBody->m_anchors.size (); i++)
     {
       btRigidBody* btRB = btBody->m_anchors[i].m_body;
-      CS::Collisions::iCollisionObject* collObject = static_cast<CS::Collisions::iCollisionObject*> (
-        btRB->getUserPointer ());
+      CS::Collisions::iCollisionObject* collObject = static_cast<CS::Collisions::iCollisionObject*> (btRB->getUserPointer ());
       csBulletRigidBody* rb = dynamic_cast<csBulletRigidBody*> (collObject);
       rb->anchorCount -- ;
     }
@@ -148,43 +166,42 @@ bool csBulletSoftBody::AddBulletObject ()
     btSoftRigidDynamicsWorld* softWorld =
       static_cast<btSoftRigidDynamicsWorld*> (sector->bulletWorld);
 
-    softWorld->addSoftBody (btBody, collGroup.value, collGroup.mask);
-    btBody->setUserPointer (static_cast<CS::Collisions::iCollisionObject*> (
-      dynamic_cast<iPhysicalBody*>(this)));
+    softWorld->addSoftBody (btBody, group->value, group->mask);
+    btBody->setUserPointer (dynamic_cast<CS::Collisions::iCollisionObject*>(this));
     insideWorld = true;
   }
   return true;
 }
 
-bool csBulletSoftBody::Disable ()
+void csBulletSoftBody::SetTransform (const csOrthoTransform& trans)
 {
-  SetLinearVelocity (csVector3 (0.0f));
-  CS_ASSERT (btBody);
-  btBody->setActivationState (ISLAND_SLEEPING);
-  return true;
-}
+  CS_ASSERT (btObject);
 
-bool csBulletSoftBody::Enable ()
-{
-  CS_ASSERT (btBody);
-  btBody->setActivationState (ACTIVE_TAG);
-  return true;
-}
+  btTransform btTrans = CSToBullet (trans, system->GetInternalScale ());
+  
+  iSceneNode* sceneNode = GetAttachedSceneNode ();
+  if (sceneNode)
+  {
+    sceneNode->GetMovable ()->SetFullTransform (trans);
+    sceneNode->GetMovable ()->UpdateMove ();
+  }
 
-bool csBulletSoftBody::IsEnabled ()
-{
- CS_ASSERT (btBody);
- return btBody->isActive ();
+  if (camera)
+  {
+    camera->SetTransform (trans);
+  }
+
+  btTransform& worldTrans = btObject->getWorldTransform ();
+  btBody->transform (worldTrans.inverse () * btTrans);           // transform relative to last
 }
 
 void csBulletSoftBody::SetMass (float mass)
 {
   CS_ASSERT (btBody);
-  this->totalMass = mass;
   btBody->setTotalMass (mass);
 }
 
-float csBulletSoftBody::GetMass ()
+float csBulletSoftBody::GetMass () const
 {
   CS_ASSERT (btBody);
   return btBody->getTotalMass ();
@@ -197,7 +214,7 @@ void csBulletSoftBody::SetDensity (float density)
   btBody->setTotalDensity (density);
 }
 
-float csBulletSoftBody::GetVolume ()
+float csBulletSoftBody::GetVolume () const
 {
   CS_ASSERT (btBody);
   return btBody->getVolume ();
@@ -206,27 +223,42 @@ float csBulletSoftBody::GetVolume ()
 void csBulletSoftBody::AddForce (const csVector3& force)
 {
   CS_ASSERT (btBody);
-  btBody->addForce (CSToBullet (force, system->getInternalScale ()));
+  btBody->addForce (CSToBullet (force, system->GetInternalScale ()));
 }
 
 void csBulletSoftBody::SetLinearVelocity (const csVector3& vel)
 {
   CS_ASSERT (btBody);
-  btBody->setVelocity (CSToBullet (vel, system->getInternalScale ()));
+  btBody->setVelocity (CSToBullet (vel, system->GetInternalScale ()));
+}
+
+csVector3 csBulletSoftBody::GetLinearVelocity () const
+{
+  CS_ASSERT ( btBody );
+
+  // Weighted sum of of all node velocities
+  btVector3 vel = btVector3 (0, 0, 0);
+  for (int i = 0; i < btBody->m_nodes.size (); ++i)
+  {
+    vel += btBody->m_nodes[i].m_v * btBody->getMass (i);
+  }
+  return BulletToCS (vel / GetMass (), system->GetInverseInternalScale ());
 }
 
 csVector3 csBulletSoftBody::GetLinearVelocity (size_t index /* = 0 */) const
 {
   CS_ASSERT ( btBody && index < (size_t) btBody->m_nodes.size ());
-  return BulletToCS (btBody->m_nodes[int (index)].m_v, system->getInverseInternalScale ());
+
+  return BulletToCS (btBody->m_nodes[int (index)].m_v, system->GetInverseInternalScale ());
 }
 
 void csBulletSoftBody::SetFriction (float friction)
 {
   CS_ASSERT (btBody);
-  this->friction = friction;
-  if (friction >= 0.0f && friction <= 1.0f)
-    btBody->m_cfg.kDF = friction;
+  CS_ASSERT (friction >= 0.0f && friction <= 1.0f);
+  
+  // dynamic friction
+  btBody->m_cfg.kDF = friction;
 }
 
 void csBulletSoftBody::SetVertexMass (float mass, size_t index)
@@ -249,21 +281,21 @@ size_t csBulletSoftBody::GetVertexCount ()
 
 csVector3 csBulletSoftBody::GetVertexPosition (size_t index) const
 {
-  CS_ASSERT(btBody && index < (size_t) btBody->m_nodes.size ());
-  return BulletToCS (btBody->m_nodes[int (index)].m_x, system->getInverseInternalScale ());
+  CS_ASSERT (btBody && index < (size_t) btBody->m_nodes.size ());
+  return BulletToCS (btBody->m_nodes[int (index)].m_x, system->GetInverseInternalScale ());
 }
 
 void csBulletSoftBody::AnchorVertex (size_t vertexIndex)
 {
-  CS_ASSERT(vertexIndex < (size_t) btBody->m_nodes.size ());
+  CS_ASSERT (vertexIndex < (size_t) btBody->m_nodes.size ());
   btBody->setMass (int (vertexIndex), 0.0f);
   anchorCount ++;
 }
 
 void csBulletSoftBody::AnchorVertex (size_t vertexIndex, iRigidBody* body)
 {
-  csBulletRigidBody* rigidBody = static_cast<csBulletRigidBody*> (body);
-  CS_ASSERT(rigidBody
+  csBulletRigidBody* rigidBody = dynamic_cast<csBulletRigidBody*> (body);
+  CS_ASSERT (rigidBody
     && vertexIndex < (size_t) this->btBody->m_nodes.size ()
     && rigidBody->btBody);
   this->btBody->appendAnchor (int (vertexIndex), rigidBody->btBody);
@@ -282,7 +314,7 @@ void csBulletSoftBody::AnchorVertex (size_t vertexIndex,
 
 void csBulletSoftBody::UpdateAnchor (size_t vertexIndex, csVector3& position)
 {
-  CS_ASSERT(vertexIndex < (size_t) btBody->m_nodes.size ());
+  CS_ASSERT (vertexIndex < (size_t) btBody->m_nodes.size ());
 
   // Update the local position of the anchor
   for (int i = 0; i < this->btBody->m_anchors.size (); i++)
@@ -290,14 +322,14 @@ void csBulletSoftBody::UpdateAnchor (size_t vertexIndex, csVector3& position)
     {
       this->btBody->m_anchors[i].m_local =
         this->btBody->m_anchors[i].m_body->getInterpolationWorldTransform ().inverse ()
-        * CSToBullet (position, system->getInternalScale ());
+        * CSToBullet (position, system->GetInternalScale ());
       return;
     }
 }
 
 void csBulletSoftBody::RemoveAnchor (size_t vertexIndex)
 {
-  CS_ASSERT(vertexIndex < (size_t) btBody->m_nodes.size ());
+  CS_ASSERT (vertexIndex < (size_t) btBody->m_nodes.size ());
 
   // Check if it is a fixed anchor
   if (btBody->getMass (int (vertexIndex)) < SMALL_EPSILON)
@@ -326,52 +358,12 @@ void csBulletSoftBody::RemoveAnchor (size_t vertexIndex)
     if (this->btBody->m_anchors[i].m_node == &this->btBody->m_nodes[int (vertexIndex)])
     {
       // TODO: this is not possible within Bullet
+      system->ReportWarning
+	("Removal of anchor %zu is not possible within the Bullet API. Expect wrong behavior.", vertexIndex);
       //btSoftBody::Anchor* anchor = this->body->m_anchors[i];
       //this->body->m_anchors.remove (i);
       return;
     }
-}
-
-float csBulletSoftBody::GetRigidity ()
-{
-  CS_ASSERT (btBody);
-  return this->btBody->m_materials[0]->m_kLST;
-}
-
-void csBulletSoftBody::SetRigidity (float rigidity)
-{
-  CS_ASSERT(rigidity >= 0.0f && rigidity <= 1.0f);
-
-  btBody->m_materials[0]->m_kLST = rigidity;
-}
-
-void csBulletSoftBody::SetLinearVelocity (const csVector3& velocity, size_t vertexIndex)
-{
-  CS_ASSERT (vertexIndex < (size_t) btBody->m_nodes.size ());
-  btBody->addVelocity (CSToBullet (velocity, system->getInternalScale ())
-    - btBody->m_nodes[int (vertexIndex)].m_v, int (vertexIndex));
-}
-
-void csBulletSoftBody::SetWindVelocity (const csVector3& velocity)
-{
-  CS_ASSERT (btBody);
-  btVector3 velo = CSToBullet (velocity, system->getInternalScale ());
-  btBody->setWindVelocity (velo);
-}
-
-const csVector3 csBulletSoftBody::GetWindVelocity () const
-{
-  CS_ASSERT (btBody);
-  csVector3 velo = BulletToCS (btBody->getWindVelocity (), system->getInternalScale ());
-  return velo;
-}
-
-void csBulletSoftBody::AddForce (const csVector3& force, size_t vertexIndex)
-{
-  CS_ASSERT (vertexIndex < (size_t) btBody->m_nodes.size());
-  //TODO: in softbodies.cpp the force was multiplied by 100, why?
-  btBody->addForce (CSToBullet (force, system->getInternalScale () * system->getInternalScale ()),
-    int (vertexIndex));
 }
 
 size_t csBulletSoftBody::GetTriangleCount ()
@@ -382,7 +374,7 @@ size_t csBulletSoftBody::GetTriangleCount ()
 
 csTriangle csBulletSoftBody::GetTriangle (size_t index) const
 {
-  CS_ASSERT(index < (size_t) btBody->m_faces.size ());
+  CS_ASSERT (index < (size_t) btBody->m_faces.size ());
   btSoftBody::Face& face = btBody->m_faces[int (index)];
   return csTriangle (face.m_n[0] - &btBody->m_nodes[0],
     face.m_n[1] - &btBody->m_nodes[0],
@@ -391,7 +383,7 @@ csTriangle csBulletSoftBody::GetTriangle (size_t index) const
 
 csVector3 csBulletSoftBody::GetVertexNormal (size_t index) const
 {
-  CS_ASSERT(index < (size_t) btBody->m_nodes.size ());
+  CS_ASSERT (index < (size_t) btBody->m_nodes.size ());
   csVector3 normal (btBody->m_nodes[int (index)].m_n.getX (),
     btBody->m_nodes[int (index)].m_n.getY (),
     btBody->m_nodes[int (index)].m_n.getZ ());
@@ -399,44 +391,61 @@ csVector3 csBulletSoftBody::GetVertexNormal (size_t index) const
   return normal;
 }
 
-void csBulletSoftBody::DebugDraw (iView* rView)
+void csBulletSoftBody::SetLinearVelocity (size_t vertexIndex, const csVector3& velocity)
 {
-  if (!sector->debugDraw)
-  {
-    sector->debugDraw = new csBulletDebugDraw (system->getInverseInternalScale ());
-    sector->bulletWorld->setDebugDrawer (sector->debugDraw);
-  }
-
-  btSoftBodyHelpers::Draw (btBody, sector->debugDraw);
-  sector->debugDraw->DebugDraw (rView);
+  CS_ASSERT (vertexIndex < (size_t) btBody->m_nodes.size ());
+  btBody->addVelocity (CSToBullet (velocity, system->GetInternalScale ())
+		       - btBody->m_nodes[int (vertexIndex)].m_v, int (vertexIndex));
 }
 
-void csBulletSoftBody::SetLinearStiff (float stiff)
-{
-  if (stiff >= 0.0f && stiff <= 1.0f)
-  {
-    btSoftBody::Material*	pm=btBody->m_materials[0];
-    pm->m_kLST = stiff;
-  }
-}
-
-void csBulletSoftBody::SetAngularStiff (float stiff)
+void csBulletSoftBody::SetWindVelocity (const csVector3& velocity)
 {
   CS_ASSERT (btBody);
-  if (stiff >= 0.0f && stiff <= 1.0f)
+  btVector3 velo = CSToBullet (velocity, system->GetInternalScale ());
+  btBody->setWindVelocity (velo);
+}
+
+const csVector3 csBulletSoftBody::GetWindVelocity () const
+{
+  CS_ASSERT (btBody);
+  csVector3 velo = BulletToCS (btBody->getWindVelocity (), system->GetInternalScale ());
+  return velo;
+}
+
+void csBulletSoftBody::AddForce (const csVector3& force, size_t vertexIndex)
+{
+  CS_ASSERT (vertexIndex < (size_t) btBody->m_nodes.size ());
+  //TODO: in softbodies.cpp the force was multiplied by 100, why?
+  btBody->addForce (CSToBullet (force, system->GetInternalScale () * system->GetInternalScale ()),
+    int (vertexIndex));
+}
+
+void csBulletSoftBody::SetLinearStiffness (float stiffness)
+{
+  if (stiffness >= 0.0f && stiffness <= 1.0f)
   {
-    btSoftBody::Material*	pm=btBody->m_materials[0];
-    pm->m_kAST = stiff;
+    btSoftBody::Material* pm = btBody->m_materials[0];
+    pm->m_kLST = stiffness;
   }
 }
 
-void csBulletSoftBody::SetVolumeStiff (float stiff)
+void csBulletSoftBody::SetAngularStiffness (float stiffness)
 {
   CS_ASSERT (btBody);
-  if (stiff >= 0.0f && stiff <= 1.0f)
+  if (stiffness >= 0.0f && stiffness <= 1.0f)
   {
-    btSoftBody::Material*	pm=btBody->m_materials[0];
-    pm->m_kVST = stiff;
+    btSoftBody::Material* pm = btBody->m_materials[0];
+    pm->m_kAST = stiffness;
+  }
+}
+
+void csBulletSoftBody::SetVolumeStiffness (float stiffness)
+{
+  CS_ASSERT (btBody);
+  if (stiffness >= 0.0f && stiffness <= 1.0f)
+  {
+    btSoftBody::Material* pm = btBody->m_materials[0];
+    pm->m_kVST = stiffness;
   }
 }
 
@@ -450,9 +459,9 @@ void csBulletSoftBody::SetClusterCollisionRS (bool cluster)
 {
   CS_ASSERT (btBody);
   if (cluster)
-    btBody->m_cfg.collisions	+=	btSoftBody::fCollision::CL_RS;
+    btBody->m_cfg.collisions += btSoftBody::fCollision::CL_RS;
   else
-    btBody->m_cfg.collisions	+=	btSoftBody::fCollision::SDF_RS;
+    btBody->m_cfg.collisions += btSoftBody::fCollision::SDF_RS;
 }
 
 bool csBulletSoftBody::GetClusterCollisionRS ()
@@ -630,30 +639,46 @@ void csBulletSoftBody::SetShapeMatching (bool match)
     btBody->setPose (true,false);
 }
 
-void csBulletSoftBody::SetBendingConstraint (bool bending)
+void csBulletSoftBody::GenerateBendingConstraints (size_t distance)
 {
   CS_ASSERT (btBody);
-  if (bending)
-  {
-    btBody->generateBendingConstraints (2);
-    btBody->randomizeConstraints();
-  }
+  btBody->generateBendingConstraints (distance);
+  btBody->randomizeConstraints ();
 }
 
 void csBulletSoftBody::GenerateCluster (int iter)
 {
   CS_ASSERT (btBody);
   if (btBody->m_cfg.collisions & (btSoftBody::fCollision::CL_RS + btSoftBody::fCollision::CL_SS))
-    btBody->generateClusters(iter);
+    btBody->generateClusters (iter);
 }
 
-void csBulletSoftBody::UpdateAnchorPositions ()
+size_t csBulletSoftBody::GetNodeCount () const 
+{ 
+  return size_t (btBody->m_nodes.size ()); 
+}
+
+void csBulletSoftBody::PreStep (float dt)
 {
   CS_ASSERT (btBody);
+
+  // Counter gravity effects (that will be applied during simulation)
+  if (!gravityEnabled)
+  {
+    if (sector->GetGravity ().SquaredNorm () > 0)
+    {
+      // apply the exact opposite of gravity (since it cannot simply be disabled or set)
+      // this is how gravity is applied in btSoftBody.cpp
+      btVector3 minusGravity = -(btBody->m_cfg.timescale * system->GetWorldTimeStep ()) * btBody->m_worldInfo->m_gravity;
+      btBody->addVelocity (minusGravity);
+    }
+  }
+
+  // Update anchor positions
   for (csArray<AnimatedAnchor>::Iterator it = animatedAnchors.GetIterator (); it.HasNext (); )
   {
     AnimatedAnchor& anchor = it.Next ();
-    anchor.position = CSToBullet (anchor.controller->GetAnchorPosition (), system->getInternalScale ());
+    anchor.position = CSToBullet (anchor.controller->GetAnchorPosition (), system->GetInternalScale ());
   }
 }
 
@@ -667,9 +692,17 @@ void csBulletSoftBody::UpdateAnchorInternalTick (btScalar timeStep)
     btVector3 delta = anchor.position - btBody->m_nodes[int (anchor.vertexIndex)].m_x;
     static const btScalar maxdrag = 10;
     if (delta.length2 () > maxdrag * maxdrag)
-      delta = delta.normalized() * maxdrag;
+      delta = delta.normalized () * maxdrag;
     btBody->m_nodes[int (anchor.vertexIndex)].m_v += delta / timeStep;
   }  
 }
+
+void csBulletSoftBody::DebugDraw (iView* rView)
+{
+  system->InitDebugDraw ();
+  btSoftBodyHelpers::Draw (btBody, system->debugDraw);
+  system->debugDraw->DebugDraw (rView);
+}
+
 }
 CS_PLUGIN_NAMESPACE_END (Bullet2)

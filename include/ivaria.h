@@ -26,7 +26,6 @@
 #include "ivaria/bodytype.h"
 #include "ivaria/bugplug.h"
 #include "ivaria/bullet.h"
-#include "ivaria/bullet2.h"
 #include "ivaria/cameramanager.h"
 #include "ivaria/collada.h"
 #include "ivaria/collider.h"

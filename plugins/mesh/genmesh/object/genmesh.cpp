@@ -1470,6 +1470,19 @@ void csGenmeshMeshObjectFactory::GenerateCapsule (float l, float r, uint sides)
   Invalidate ();
 }
 
+void csGenmeshMeshObjectFactory::GenerateCone (float l, float r, uint sides)
+{
+  CreateLegacyBuffers();
+  subMeshes.GetDefaultSubmesh()->CreateLegacyBuffer();
+  CS::Geometry::DensityTextureMapper mapper (10);
+  CS::Geometry::Primitives::GenerateCone (
+      l, r, sides, legacyBuffers.mesh_vertices, legacyBuffers.mesh_texels,
+      legacyBuffers.mesh_normals, 
+      subMeshes.GetDefaultSubmesh()->legacyTris.mesh_triangles, &mapper);
+  legacyBuffers.mesh_colors.DeleteAll ();
+  Invalidate ();
+}
+
 void csGenmeshMeshObjectFactory::GenerateSphere (const csEllipsoid& ellips,
     int num, bool cyl_mapping, bool toponly, bool reversed)
 {

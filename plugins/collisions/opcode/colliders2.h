@@ -22,7 +22,7 @@
 #include "imesh/terrain2.h"
 #include "ivaria/collisions.h"
 #include "Opcode.h"
-#include "csOpcode2.h"
+#include "opcodecollisionsystem.h"
 
 CS_PLUGIN_NAMESPACE_BEGIN (Opcode2)
 {
@@ -31,7 +31,8 @@ class csOpcodeCollider : public scfImplementation1<
 {
   friend class csOpcodeCollisionObject;
   friend class csOpcodeCollisionSector;
-private:
+
+protected:
   csOpcodeCollisionSystem* system;
   iMeshWrapper* mesh;
   float volume;
@@ -44,19 +45,49 @@ private:
 
   static void MeshCallback (udword triangle_index, 
     Opcode::VertexPointers& triangle, void* user_data);
+
+  // for overriding
+  csOpcodeCollider (csOpcodeCollisionSystem* sys) : scfImplementationType (this), system (sys), mesh (nullptr) {}
+
 public:
   csOpcodeCollider (iMeshWrapper* mesh, csOpcodeCollisionSystem* sys);
   virtual ~csOpcodeCollider();
-  virtual CS::Collisions::ColliderType GetGeometryType () const {return CS::Collisions::COLLIDER_CONCAVE_MESH;}
+  virtual CS::Collisions::ColliderType GetColliderType () const {return CS::Collisions::COLLIDER_CONCAVE_MESH;}
   virtual iMeshWrapper* GetMesh () {return mesh;}
   virtual void SetLocalScale (const csVector3& scale) {}
   virtual const csVector3& GetLocalScale () const {return scale;}
   virtual void SetMargin (float margin) {}
   virtual float GetMargin () const {return 0;}
   virtual float GetVolume () const {return volume;}
+  virtual bool IsDynamic () const {return false;}
+
+  virtual void GetAABB(csVector3& aabbMin, csVector3& aabbMax) const { /* TODO */ }
+  
+  virtual void AddCollider (CS::Collisions::iCollider* collider, const csOrthoTransform& relaTrans = csOrthoTransform ()) {}
+  virtual void RemoveCollider (CS::Collisions::iCollider* collider) {}
+  virtual void RemoveCollider (size_t index) {}
+
+  virtual CS::Collisions::iCollider* GetCollider (size_t index) { return this; }
+  virtual size_t GetColliderCount () { return 1;}
+  
+  /// Get the frame of reference
+  virtual csOrthoTransform GetPrincipalAxisTransform() const 
+  {
+    csOrthoTransform trans;
+    return trans;
+  }
+
+  /// Set the frame of reference
+  virtual void SetPrincipalAxisTransform(const csOrthoTransform& trans)
+  {
+    // Does nothing for now
+  }
 };
 
-class TerrainCellCollider
+class csOpcodeColliderTerrain : public scfVirtImplementationExt1<
+  csOpcodeColliderTerrain, 
+  csOpcodeCollider, 
+  CS::Collisions::iColliderTerrain>
 {
   friend class csOpcodeCollisionObject;
 
@@ -64,36 +95,51 @@ class TerrainCellCollider
     Opcode::VertexPointers& triangle, void* user_data);
 
 public:
-  Opcode::MeshInterface opcMeshInt;
-  Opcode::Model* model;
   iTerrainCell* cell;
-  unsigned int* indexholder;
-  Point *vertholder;
   csOrthoTransform cellTransform;
-  TerrainCellCollider(iTerrainCell* cell, csOrthoTransform trans);
-  virtual ~TerrainCellCollider();
-  //Do not support update.
+
+  csOpcodeColliderTerrain(iTerrainCell* cell, csOrthoTransform trans, csOpcodeCollisionSystem* sys);
+  virtual ~csOpcodeColliderTerrain();
+  
+  virtual CS::Collisions::ColliderType GetColliderType () const {return CS::Collisions::COLLIDER_TERRAIN;}
+  virtual iTerrainCell* GetCell() const { return cell; }
+
+  /// Get the frame of reference
+  virtual csOrthoTransform GetPrincipalAxisTransform() const 
+  {
+    csOrthoTransform trans;
+    return trans;
+  }
+
+  /// Set the frame of reference
+  virtual void SetPrincipalAxisTransform(const csOrthoTransform& trans)
+  {
+    // Does nothing for now
+  }
 };
 
-class csOpcodeColliderTerrain:
-  public scfImplementation2<csOpcodeColliderTerrain,
-  CS::Collisions::iColliderTerrain, iTerrainCellLoadCallback>
+class csOpcodeCollisionTerrain : public scfVirtImplementation2<
+  csOpcodeCollisionTerrain,
+  CS::Collisions::iCollisionTerrain, 
+  iTerrainCellLoadCallback>
 {
   friend class csOpcodeCollisionObject;
   friend class csOpcodeCollisionSector;
 
-  csArray<TerrainCellCollider*> colliders;
+  csRefArray<csOpcodeCollisionObject> objects;
   iTerrainSystem* terrainSystem;
   csOpcodeCollisionSystem* system;
+
+  csOpcodeCollisionSector* sector;
   csOrthoTransform terrainTransform;
   float volume;
   bool unload;
   csVector3 scale;
 
 public:
-  csOpcodeColliderTerrain(iTerrainSystem* terrain, csOpcodeCollisionSystem* sys);
-  virtual ~csOpcodeColliderTerrain();
-  virtual CS::Collisions::ColliderType GetGeometryType() const {return CS::Collisions::COLLIDER_TERRAIN;}
+  csOpcodeCollisionTerrain(iTerrainSystem* terrain, csOpcodeCollisionSystem* sys);
+  virtual ~csOpcodeCollisionTerrain();
+  virtual CS::Collisions::ColliderType GetType() const {return CS::Collisions::COLLIDER_TERRAIN;}
   virtual iTerrainSystem* GetTerrain() const {return terrainSystem;}
   virtual void SetLocalScale (const csVector3& scale) {}
   virtual const csVector3& GetLocalScale () const {return scale;}
@@ -104,10 +150,7 @@ public:
   virtual void OnCellLoad (iTerrainCell *cell);
   virtual void OnCellPreLoad (iTerrainCell *cell);
   virtual void OnCellUnload (iTerrainCell *cell);
-  Opcode::Model* GetColliderModel (size_t index) {return colliders[index]->model;}
-  csOrthoTransform GetColliderTransform (size_t index) {return colliders[index]->cellTransform;}
-  Point* GetVertexHolder (size_t index) {return colliders[index]->vertholder;}
-  udword* GetIndexHolder (size_t index) {return colliders[index]->indexholder;}
+
   void LoadCellToCollider (iTerrainCell* cell);
 };
 }

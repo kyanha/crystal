@@ -49,6 +49,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(Particles)
     virtual csPtr<iParticleBuiltinEffectorVelocityField> 
       CreateVelocityField () const;
     virtual csPtr<iParticleBuiltinEffectorLight> CreateLight () const;
+    virtual csPtr<iParticleBuiltinEffectorPhysical> CreatePhysical () const;
 
     //-- iComponent
     virtual bool Initialize (iObjectRegistry*)

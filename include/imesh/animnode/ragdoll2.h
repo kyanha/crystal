@@ -1,8 +1,8 @@
 /*
-  Copyright (C) 2009-10 Christian Van Brussel, Communications and Remote
-      Sensing Laboratory of the School of Engineering at the 
-      Universite catholique de Louvain, Belgium
-      http://www.tele.ucl.ac.be
+  Copyright (C) 2009-2012 Christian Van Brussel, Institute of Information
+      and Communication Technologies, Electronics and Applied Mathematics
+      at Universite catholique de Louvain, Belgium
+      http://www.uclouvain.be/en-icteam.html
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Library General Public
@@ -18,17 +18,15 @@
   License along with this library; if not, write to the Free
   Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
-#ifndef __CS_IMESH_ANIMNODE_RAGDOLL_H__
-#define __CS_IMESH_ANIMNODE_RAGDOLL_H__
+#ifndef __CS_IMESH_ANIMNODE_RAGDOLL2_H__
+#define __CS_IMESH_ANIMNODE_RAGDOLL2_H__
 
 /**\file
  * Ragdoll animation node for an animated mesh.
  */
 
 #include "csutil/scf_interface.h"
-
-#include "ivaria/physics.h"
-#include "imesh/bodymesh.h"
+#include "imesh/animnode/skeleton2anim.h"
 
 /**\addtogroup meshplugins
  * @{ */
@@ -41,18 +39,34 @@ struct iAnimatedMesh;
 } // namespace Mesh
 } // namespace CS
 
-namespace CS{
-namespace Physics{
+namespace CS {
+namespace Physics {
 
-struct iPhysicalSystem;
-struct iRigidBody;
 struct iJoint;
+struct iRigidBody;
 
-}
-}
+} // namespace Physics
+} // namespace CS
 
 namespace CS {
 namespace Animation {
+
+struct iSkeletonChain;
+struct iSkeletonRagdollNodeFactory2;
+
+/**
+ * A class to manage the creation and deletion of ragdoll animation 
+ * node factories.
+ */
+struct iSkeletonRagdollNodeManager2
+  : public virtual CS::Animation::iSkeletonAnimNodeManager<CS::Animation::iSkeletonRagdollNodeFactory2>
+{
+  SCF_ISKELETONANIMNODEMANAGER_INTERFACE (CS::Animation::iSkeletonRagdollNodeManager2, 2, 0, 0);
+};
+
+// This enum is also defined in the 'physics1' ragdoll node
+#ifndef __CS_IMESH_ANIMNODE_RAGDOLL_STATES_H__
+#define __CS_IMESH_ANIMNODE_RAGDOLL_STATES_H__
 
 /**
  * The physical state of a body chain.
@@ -67,59 +81,26 @@ enum RagdollState
 			  but its bones do interact with the dynamic simulation. */
 };
 
-struct iSkeletonRagdollNodeFactory2;
-
-/**
- * A class to manage the creation and deletion of ragdoll animation 
- * node factories.
- */
-struct iSkeletonRagdollNodeManager2
-  : public virtual CS::Animation::iSkeletonAnimNodeManager<CS::Animation::iSkeletonRagdollNodeFactory2>
-{
-  SCF_ISKELETONANIMNODEMANAGER_INTERFACE (CS::Animation::iSkeletonRagdollNodeManager2, 1, 0, 0);
-};
-
-///**
-// * The physical state of a body chain.
-// */
-//enum RagdollState
-//{
-//  STATE_INACTIVE = 0,   /*!< The chain is physically inactive. */
-//  STATE_DYNAMIC,        /*!< The chain is dynamic, ie the motion of 
-//			  the chain is controlled by the dynamic simulation. */
-//  STATE_KINEMATIC       /*!< The chain is kinematic, ie the motion 
-//			  of the chain is controlled by the animation system,
-//			  but its bones do interact with the dynamic simulation. */
-//};
+#endif
 
 /**
  * Factory for the ragdoll animation node.
  */
 struct iSkeletonRagdollNodeFactory2 : public virtual iSkeletonAnimNodeFactory
 {
-  SCF_INTERFACE(CS::Animation::iSkeletonRagdollNodeFactory2, 1, 0, 0);
-
-  /**
-   * Set the physical description of the skeleton.
-   */
-  virtual void SetBodySkeleton (CS::Animation::iBodySkeleton* skeleton) = 0;
-
-  /**
-   * Get the physical description of the skeleton.
-   */
-  virtual CS::Animation::iBodySkeleton* GetBodySkeleton () const = 0;
+  SCF_INTERFACE(CS::Animation::iSkeletonRagdollNodeFactory2, 2, 0, 0);
 
   /**
    * Add a new body chain to the ragdoll animation node. The dynamic state
    * of each body chain can be set separately.
    * \param state The initial state of the body chain.
    */
-  virtual void AddBodyChain (iBodyChain* chain, RagdollState state = STATE_INACTIVE) = 0;
+  virtual void AddChain (iSkeletonChain* chain, RagdollState state = STATE_INACTIVE) = 0;
 
   /**
    * Remove the chain from the ragdoll animation node.
    */
-  virtual void RemoveBodyChain (iBodyChain* chain) = 0;
+  virtual void RemoveChain (iSkeletonChain* chain) = 0;
 
   /**
    * Set the child animation node of this node. The ragdoll animation node will
@@ -148,39 +129,17 @@ struct iSkeletonRagdollNodeFactory2 : public virtual iSkeletonAnimNodeFactory
  */
 struct iSkeletonRagdollNode2 : public virtual iSkeletonAnimNode
 {
-  SCF_INTERFACE(CS::Animation::iSkeletonRagdollNode2, 1, 0, 0);
-
-  /**
-   * Set the dynamic system.
-   */
-  virtual void SetPhysicalSystem (CS::Physics::iPhysicalSystem* system) = 0;
-
-  /**
-   * Get the dynamic system.
-   */
-  virtual CS::Physics::iPhysicalSystem* GetPhysicalSystem () const = 0;
-
-   /**
-   * Set the physical sector where the rigid bodies are evolving. It is valid to provide a
-   * null system, in this case the bodies already created will be removed from any dynamic
-   * system.
-   */
-  virtual void SetPhysicalSector (CS::Physics::iPhysicalSector* sector) = 0;
-
-  /**
-   * Get the physical sector where the rigid bodies are evolving
-   */
-  virtual CS::Physics::iPhysicalSector* GetPhysicalSector () const = 0;
+  SCF_INTERFACE(CS::Animation::iSkeletonRagdollNode2, 2, 0, 0);
 
   /**
    * Set the body chain in the given physical state.
    */
-  virtual void SetBodyChainState (iBodyChain* chain, RagdollState state) = 0;
+  virtual void SetChainState (iSkeletonChain* chain, RagdollState state) = 0;
 
   /**
    * Get the physical state of the given body chain.
    */
-  virtual RagdollState GetBodyChainState (iBodyChain* chain) const = 0;
+  virtual RagdollState GetChainState (iSkeletonChain* chain) const = 0;
 
   /**
    * Get the rigid body of the given bone.
@@ -203,6 +162,12 @@ struct iSkeletonRagdollNode2 : public virtual iSkeletonAnimNode
   virtual BoneID GetBone (RagdollState state, uint index) const = 0;
 
   /**
+   * Find a bone from its associated rigid body. Return CS::Animation::InvalidBoneID
+   * if the given rigid body is not part of this ragdoll node.
+   */
+  virtual BoneID FindBone (CS::Physics::iRigidBody* body) const = 0;
+
+  /**
    * Reset the transform of each rigid body of the chain to the initial 'bind'
    * transform. This can be used only on chains that are in a dynamic state.
    *
@@ -212,14 +177,7 @@ struct iSkeletonRagdollNode2 : public virtual iSkeletonAnimNode
    * handle such a radical teleportation might lead to an unstable and unwanted
    * behavior.
    */
-  virtual void ResetChainTransform (iBodyChain* chain) = 0;
-
-  /**
-   * Get the bone associated with the given rigid body, or
-   * CS::Animation::InvalidBoneID if the given rigid body is not part of this
-   * physical body.
-   */
-  virtual BoneID GetRigidBodyBone (CS::Physics::iRigidBody* body) const = 0;
+  virtual void ResetChainTransform (iSkeletonChain* chain) = 0;
 };
 
 } // namespace Animation
@@ -227,4 +185,4 @@ struct iSkeletonRagdollNode2 : public virtual iSkeletonAnimNode
 
 /** @} */
 
-#endif //__CS_IMESH_ANIMNODE_RAGDOLL_H__
+#endif //__CS_IMESH_ANIMNODE_RAGDOLL2_H__

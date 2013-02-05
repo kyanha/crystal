@@ -102,9 +102,6 @@ private:
   csRef<FrameBegin3DDraw> drawer;
   csRef<FramePrinter> printer;
 
-  // Collider's local transform
-  csOrthoTransform localTrans;
-
   // Environments
   int environment;
 

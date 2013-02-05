@@ -1,25 +1,31 @@
 /*
-  Copyright (C) 2011 by Liu Lu
+    Copyright (C) 2011-2012 Christian Van Brussel, Institute of Information
+      and Communication Technologies, Electronics and Applied Mathematics
+      at Universite catholique de Louvain, Belgium
+      http://www.uclouvain.be/en-icteam.html
+    Copyright (C) 2012 by Dominik Seifert
+    Copyright (C) 2011 by Liu Lu
 
-  This library is free software; you can redistribute it and/or
-  modify it under the terms of the GNU Library General Public
-  License as published by the Free Software Foundation; either
-  version 2 of the License, or (at your option) any later version.
+    This library is free software; you can redistribute it and/or
+    modify it under the terms of the GNU Library General Public
+    License as published by the Free Software Foundation; either
+    version 2 of the License, or (at your option) any later version.
 
-  This library is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
-  Library General Public License for more details.
+    This library is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+    Library General Public License for more details.
 
-  You should have received a copy of the GNU Library General Public
-  License along with this library; if not, write to the Free
-  Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+    You should have received a copy of the GNU Library General Public
+    License along with this library; if not, write to the Free
+    Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 
 #ifndef __CS_BULLET_COMMON2_H__
 #define __CS_BULLET_COMMON2_H__
 
-#include "bullet2.h"
+#include "bulletsystem.h"
+#include "bulletsector.h"
 #include "csgeom/matrix3.h"
 #include "csgeom/transfrm.h"
 #include "csgeom/vector3.h"
@@ -29,6 +35,8 @@
 #include "iengine/camera.h"
 #include "csutil/cscolor.h"
 #include "btBulletCollisionCommon.h"
+#include "motionstates.h"
+
 
 CS_PLUGIN_NAMESPACE_BEGIN(Bullet2)
 {
@@ -94,6 +102,65 @@ static inline btVector3 CSToBullet (const csVector3& v,
 		    v.z * internalScale);
 }
 
+/// Returns the index'th component of the given vector
+static inline btScalar& BulletVectorComponent(btVector3& v, int index)
+{
+  return v.m_floats[index];
+}
+
+/// Returns the index'th component of the given vector
+static inline const btScalar& BulletVectorComponent(const btVector3& v, int index)
+{
+  return v.m_floats[index];
+}
+
+/**
+ * Computes the index into a 1D bullet array, given a 2D CS index (in x/y)
+ */
+static inline int CSToBulletIndex2D (int x, int y, int w, int h)
+{
+  return (h-y-1) * w + x;
+}
+
+
+/*
+ * Returns the reflection direction of a ray going 'direction' hitting a surface with normal 'normal'
+ *
+ * from: http://www-cs-students.stanford.edu/~adityagp/final/node3.html
+ */
+static inline btVector3 BtVectorComputeReflectionDirection (const btVector3& direction, const btVector3& normal)
+{
+	return direction - (btScalar(2.0) * direction.dot(normal)) * normal;
+}
+
+/*
+ * Returns the portion of 'direction' that is parallel to 'normal'
+ */
+static inline btVector3 BtVectorNormalComponent (const btVector3& direction, const btVector3& normal)
+{
+  btScalar magnitude = direction.dot(normal);
+  return normal * magnitude;
+}
+
+/*
+ * Returns the portion of 'direction' that is perpendicular to 'normal'
+ */
+static inline btVector3 BtVectorTangentialComponent(const btVector3& direction, const btVector3& normal)
+{
+  return direction - BtVectorNormalComponent(direction, normal);
+}
+
+//----------------------- DowncastPtr ----------------------------
+
+/**
+ * Very ugly and inefficient work-around to easily cast between two known-to-be-compatible types
+ */
+template<typename T, typename T2>
+inline csPtr<T> DowncastPtr(csPtr<T2> ptr)
+{
+  return csPtr<T>(csRef<T>(csRef<T2>(ptr)));
+}
+
 //----------------------- csBulletDebugDraw ----------------------------
 
 struct csBulletDebugLine
@@ -150,30 +217,26 @@ public:
   virtual void draw3dText (const btVector3 &location, const char *textString)
   {}
 
-  void SetDebugMode (CS::Physics::Bullet2::DebugMode mode)
+  void SetDebugMode (CS::Physics::DebugMode mode)
   {
     this->mode = 0;
-    if (mode & CS::Physics::Bullet2::DEBUG_COLLIDERS)
+    if (mode & CS::Physics::DEBUG_COLLIDERS)
       this->mode |= DBG_DrawWireframe;
-    if (mode & CS::Physics::Bullet2::DEBUG_AABB)
+    if (mode & CS::Physics::DEBUG_AABB)
       this->mode |= DBG_DrawAabb;
-    if (mode & CS::Physics::Bullet2::DEBUG_JOINTS)
+    if (mode & CS::Physics::DEBUG_JOINTS)
       this->mode |= DBG_DrawConstraints | DBG_DrawConstraintLimits;
   }
 
-  CS::Physics::Bullet2::DebugMode GetDebugMode ()
+  CS::Physics::DebugMode GetDebugMode ()
   {
-    CS::Physics::Bullet2::DebugMode mode =
-      CS::Physics::Bullet2::DEBUG_NOTHING;
+    CS::Physics::DebugMode mode = CS::Physics::DEBUG_NOTHING;
     if (this->mode & DBG_DrawWireframe)
-      mode = (CS::Physics::Bullet2::DebugMode)
-      (mode | CS::Physics::Bullet2::DEBUG_COLLIDERS);
+      mode = (CS::Physics::DebugMode) (mode | CS::Physics::DEBUG_COLLIDERS);
     if (this->mode & DBG_DrawAabb)
-      mode = (CS::Physics::Bullet2::DebugMode)
-      (mode | CS::Physics::Bullet2::DEBUG_AABB);
+      mode = (CS::Physics::DebugMode) (mode | CS::Physics::DEBUG_AABB);
     if (this->mode & DBG_DrawConstraints)
-      mode = (CS::Physics::Bullet2::DebugMode)
-      (mode | CS::Physics::Bullet2::DEBUG_JOINTS);
+      mode = (CS::Physics::DebugMode) (mode | CS::Physics::DEBUG_JOINTS);
     return mode;
   }
 
@@ -219,37 +282,45 @@ public:
     lines.Empty ();
   }
 };
-//------------------------ csBulletMotionState ----------------------
 
-class csBulletMotionState : public btDefaultMotionState
+////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Some extra Bullet vector operations
+
+///Reflect the vector d around the vector r
+inline btVector3 reflect( const btVector3& d, const btVector3& r )
 {
-public:
-  csBulletCollisionObject* body;
-  // we save the inverse of the principal axis for performance reasons
-  btTransform inversePrincipalAxis;
-
-public:
-  csBulletMotionState (csBulletCollisionObject* body,
-		       const btTransform& initialTransform,
-		       const btTransform& principalAxis);
-
-  virtual void setWorldTransform (const btTransform& trans);
-};
+  return d - ( btScalar( 2.0 ) * d.dot( r ) ) * r;
+}
 
 
-//------------------------ csBulletKinematicMotionState ----------------------
-
-class csBulletKinematicMotionState : public csBulletMotionState
+///Project a vector u on another vector v
+inline btVector3 project( const btVector3& u, const btVector3& v )
 {
-  csOrthoTransform principalAxis;
+  return v * u.dot( v );
+}
 
-public:
-  csBulletKinematicMotionState (csBulletCollisionObject* body,
-		       const btTransform& initialTransform,
-				const btTransform& principalAxis);
 
-  virtual void getWorldTransform (btTransform& trans) const;
-};
+///Helper for computing the character sliding
+inline btVector3 slide( const btVector3& direction, const btVector3& planeNormal )
+{
+  return direction - project( direction, planeNormal );
+}
+
+inline btVector3 slideOnCollision( const btVector3& fromPosition, const btVector3& toPosition, const btVector3& hitNormal )
+{
+  btVector3 moveDirection = toPosition - fromPosition;
+  btScalar moveLength = moveDirection.length();
+
+  if( moveLength <= btScalar( SIMD_EPSILON ) )
+    return toPosition;
+
+  moveDirection.normalize();
+
+  btVector3 reflectDir = reflect( moveDirection, hitNormal );
+  reflectDir.normalize();
+
+  return fromPosition + slide( reflectDir, hitNormal ) * moveLength;
+}
 
 }
 CS_PLUGIN_NAMESPACE_END(Bullet2)

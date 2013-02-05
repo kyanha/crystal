@@ -392,6 +392,16 @@ CS_PLUGIN_NAMESPACE_BEGIN(Skeleton2)
     orderListDirty = false;
   }
 
+  void SkeletonFactory::SetSkeletonModel (CS::Animation::iSkeletonModel* model)
+  {
+    skeletonModel = model;
+  }
+
+  CS::Animation::iSkeletonModel* SkeletonFactory::GetSkeletonModel () const
+  {
+    return skeletonModel;
+  }
+
   const char* SkeletonFactory::GetName () const
   {
     return name;

@@ -22,7 +22,7 @@
 #ifndef __FUR_MESH_H__
 #define __FUR_MESH_H__
 
-#include <imesh/furmesh.h>
+#include "imesh/furmesh.h"
 
 #include "furmeshfactory.h"
 #include "furdata.h"

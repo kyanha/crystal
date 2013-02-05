@@ -22,8 +22,6 @@
 #ifndef __HAIR_PHYSICS_CONTROL_H__
 #define __HAIR_PHYSICS_CONTROL_H__
 
-#include "crystalspace.h"
-
 #include "csutil/scf_implementation.h"
 
 CS_PLUGIN_NAMESPACE_BEGIN(FurMesh)
@@ -58,7 +56,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(FurMesh)
     };
 
     csHash<Anchor*, size_t > guideRopes;
-    csRef<iRigidBody> rigidBody;
+    csRef< ::iRigidBody> rigidBody;
     csRef<CS::Physics::Bullet::iDynamicSystem> bulletDynamicSystem;
     CS::Mesh::iAnimatedMesh* animesh;
     size_t maxRange;

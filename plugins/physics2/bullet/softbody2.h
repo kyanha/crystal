@@ -1,42 +1,60 @@
 /*
-  Copyright (C) 2011 by Liu Lu
+    Copyright (C) 2011-2012 Christian Van Brussel, Institute of Information
+      and Communication Technologies, Electronics and Applied Mathematics
+      at Universite catholique de Louvain, Belgium
+      http://www.uclouvain.be/en-icteam.html
+    Copyright (C) 2012 by Dominik Seifert
+    Copyright (C) 2011 by Liu Lu
 
-  This library is free software; you can redistribute it and/or
-  modify it under the terms of the GNU Library General Public
-  License as published by the Free Software Foundation; either
-  version 2 of the License, or (at your option) any later version.
+    This library is free software; you can redistribute it and/or
+    modify it under the terms of the GNU Library General Public
+    License as published by the Free Software Foundation; either
+    version 2 of the License, or (at your option) any later version.
 
-  This library is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
-  Library General Public License for more details.
+    This library is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+    Library General Public License for more details.
 
-  You should have received a copy of the GNU Library General Public
-  License along with this library; if not, write to the Free
-  Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+    You should have received a copy of the GNU Library General Public
+    License along with this library; if not, write to the Free
+    Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 
 #ifndef __CS_BULLET_SOFTBODY_H__
 #define __CS_BULLET_SOFTBODY_H__
 
-#include "bullet2.h"
+#include "bulletsystem.h"
 #include "common2.h"
-#include "collisionobject2.h"
+#include "physicalbody.h"
+#include "updatable.h"
 
 class btSoftBody;
 
 CS_PLUGIN_NAMESPACE_BEGIN (Bullet2)
 {
 
-class csBulletSoftBody : public scfImplementationExt2<csBulletSoftBody, 
-  csBulletCollisionObject, CS::Physics::iSoftBody,
-  CS::Physics::Bullet2::iSoftBody>
+class csBulletSoftBody : public scfImplementationExt2<
+  csBulletSoftBody, 
+  csPhysicalBody,
+  CS::Physics::iSoftBody,
+  iUpdatable>
 {
   friend class csBulletRigidBody;
   friend class csBulletJoint;
   friend class csBulletSector;
-private:
+  friend class CollisionPortal;
+  
+  friend class BulletSoftRopeFactory;
+  friend class BulletSoftClothFactory;
+  friend class BulletSoftMeshFactory;
 
+  using csPhysicalBody::SetEnabled;
+  using csPhysicalBody::GetEnabled;
+  using csPhysicalBody::GetLinearVelocity;
+  using csPhysicalBody::SetLinearVelocity;
+
+private:
   struct AnimatedAnchor
   {
     AnimatedAnchor (size_t vertexIndex, CS::Physics::iAnchorAnimationControl* controller)
@@ -48,57 +66,39 @@ private:
   };
 
   btSoftBody* btBody;
-  float friction;
-  float density;
-  float totalMass;
   short anchorCount;
   csArray<AnimatedAnchor> animatedAnchors;
+  bool gravityEnabled;
+
+public:
+  void CreateSoftBodyObject (BulletSoftBodyFactory* factory);
 
 public:
   csBulletSoftBody (csBulletSystem* phySys, btSoftBody* body);
   virtual ~csBulletSoftBody ();
 
-  virtual iObject* QueryObject (void) { return (iObject*) this; }
   //iCollisionObject
-  virtual CS::Collisions::iCollisionObject* QueryCollisionObject () {return dynamic_cast<csBulletCollisionObject*> (this);}  
-  virtual CS::Physics::iPhysicalBody* QueryPhysicalBody () {return this;}
+  virtual iObject* QueryObject (void) { return (iObject*) this; }
 
-  virtual void SetObjectType (CS::Collisions::CollisionObjectType type, bool forceRebuild = true) {}
-  virtual CS::Collisions::CollisionObjectType GetObjectType ()
-  {return CS::Collisions::COLLISION_OBJECT_PHYSICAL;}
-
-  virtual void SetAttachedMovable (iMovable* movable) {csBulletCollisionObject::SetAttachedMovable (movable);}
-  virtual iMovable* GetAttachedMovable () {return csBulletCollisionObject::GetAttachedMovable ();}
-
-  virtual void SetAttachedCamera (iCamera* camera) {csBulletCollisionObject::SetAttachedCamera (camera);}
-  virtual iCamera* GetAttachedCamera () {return csBulletCollisionObject::GetAttachedCamera ();}
-
-  virtual void SetTransform (const csOrthoTransform& trans);
-  virtual csOrthoTransform GetTransform ();
+  virtual void SetAttachedCamera (iCamera* camera)
+  { csBulletCollisionObject::SetAttachedCamera (camera); }
+  virtual iCamera* GetAttachedCamera ()
+  { return csBulletCollisionObject::GetAttachedCamera (); }
 
   virtual void RebuildObject ();
 
+  virtual void SetTransform (const csOrthoTransform& trans);
+
   // btSoftBody don't use collision shape.
-  virtual void AddCollider (CS::Collisions::iCollider* collider, const csOrthoTransform& relaTrans
-    = csOrthoTransform (csMatrix3 (), csVector3 (0))) {}
+  virtual void AddCollider
+    (CS::Collisions::iCollider* collider,
+     const csOrthoTransform& relaTrans = csOrthoTransform (csMatrix3 (), csVector3 (0))) {}
   virtual void RemoveCollider (CS::Collisions::iCollider* collider) {}
   virtual void RemoveCollider (size_t index) {}
 
-  virtual CS::Collisions::iCollider* GetCollider (size_t index) {return NULL;}
-  virtual size_t GetColliderCount () {return 0;}
+  virtual CS::Collisions::iCollider* GetCollider (size_t index) {return nullptr;}
 
-  virtual void SetCollisionGroup (const char* name) {csBulletCollisionObject::SetCollisionGroup (name);}
-  virtual const char* GetCollisionGroup () const {return csBulletCollisionObject::GetCollisionGroup ();}
-
-  virtual void SetCollisionCallback (CS::Collisions::iCollisionCallback* cb) {collCb = cb;}
-  virtual CS::Collisions::iCollisionCallback* GetCollisionCallback () {return collCb;}
-
-  virtual bool Collide (iCollisionObject* otherObject) {return csBulletCollisionObject::Collide (otherObject);}
   virtual CS::Collisions::HitBeamResult HitBeam (const csVector3& start, const csVector3& end);
-
-  virtual size_t GetContactObjectsCount () {return contactObjects.GetSize ();}
-  virtual CS::Collisions::iCollisionObject* GetContactObject (size_t index) {
-    return csBulletCollisionObject::GetContactObject (index);}
 
   btSoftBody* GetBulletSoftPointer () {return btBody;}
   virtual bool RemoveBulletObject ();
@@ -106,30 +106,28 @@ public:
 
   //iPhysicalBody
 
-  virtual CS::Physics::PhysicalBodyType GetBodyType () const {return CS::Physics::BODY_SOFT;}
-  virtual CS::Physics::iRigidBody* QueryRigidBody () {return NULL;}
-  virtual CS::Physics::iSoftBody* QuerySoftBody () {return dynamic_cast<CS::Physics::iSoftBody*>(this);}
-
-  virtual bool Disable ();
-  virtual bool Enable ();
-  virtual bool IsEnabled ();
-
-  virtual void SetMass (float mass);
-  virtual float GetMass ();
-
-  virtual float GetDensity () const {return density;}
-  virtual void SetDensity (float density);
-
-  virtual float GetVolume ();
+  virtual CS::Physics::PhysicalObjectType GetPhysicalObjectType () const
+  { return CS::Physics::PHYSICAL_OBJECT_SOFTBODY; }
+  virtual CS::Physics::iRigidBody* QueryRigidBody ()
+  { return dynamic_cast<CS::Physics::iRigidBody*>(this); }
+  virtual CS::Physics::iSoftBody* QuerySoftBody ()
+  { return dynamic_cast<CS::Physics::iSoftBody*>(this); }
 
   virtual void AddForce (const csVector3& force);
 
-  virtual csVector3 GetLinearVelocity (size_t index = 0) const;
+  virtual void SetAngularVelocity (const csVector3& vel)
+  { /* does nothing for now */ }
+  virtual csVector3 GetAngularVelocity () const
+  { /* does nothing for now */ return csVector3 (0, 0, 0); }
+
+  virtual void SetMass (float mass);
+  virtual float GetMass () const;
 
   virtual void SetFriction (float friction);
-  virtual float GetFriction () {return friction;}
+  virtual void SetDensity (float density);
+  
+  virtual float GetVolume () const;
 
-  //iSoftBody
   virtual void SetVertexMass (float mass, size_t index);
   virtual float GetVertexMass (size_t index);
 
@@ -138,20 +136,19 @@ public:
 
   virtual void AnchorVertex (size_t vertexIndex);
   virtual void AnchorVertex (size_t vertexIndex,
-    CS::Physics::iRigidBody* body);
+      CS::Physics::iRigidBody* body);
   virtual void AnchorVertex (size_t vertexIndex,
-    CS::Physics::iAnchorAnimationControl* controller);
+      CS::Physics::iAnchorAnimationControl* controller);
 
   virtual void UpdateAnchor (size_t vertexIndex,
-    csVector3& position);
+      csVector3& position);
   virtual void RemoveAnchor (size_t vertexIndex);
 
-  virtual float GetRigidity ();
-  virtual void SetRigidity (float rigidity);
-
+  virtual csVector3 GetLinearVelocity () const;
   virtual void SetLinearVelocity (const csVector3& vel);
-  virtual void SetLinearVelocity (const csVector3& velocity,
-    size_t vertexIndex);
+  
+  virtual csVector3 GetLinearVelocity (size_t vertexIndex) const;
+  virtual void SetLinearVelocity (size_t vertexIndex, const csVector3& velocity);
 
   virtual void SetWindVelocity (const csVector3& velocity);
   virtual const csVector3 GetWindVelocity () const;
@@ -168,9 +165,9 @@ public:
 
   virtual void DebugDraw (iView* rView);
 
-  virtual void SetLinearStiff (float stiff);
-  virtual void SetAngularStiff (float stiff);
-  virtual void SetVolumeStiff (float stiff);
+  virtual void SetLinearStiffness (float stiffness);
+  virtual void SetAngularStiffness (float stiffness);
+  virtual void SetVolumeStiffness (float stiffness);
 
   virtual void ResetCollisionFlag ();
 
@@ -208,12 +205,35 @@ public:
   virtual void SetClusterIterations (int iter);
 
   virtual void SetShapeMatching (bool match);
-  virtual void SetBendingConstraint (bool bending);
+  virtual void GenerateBendingConstraints (size_t distance);
 
   virtual void GenerateCluster (int iter);
 
-  void UpdateAnchorPositions ();
+  // Nodes
+  virtual size_t GetNodeCount () const;
+
+  /// Whether this object is affected by gravity
+  virtual bool GetGravityEnabled () const { return gravityEnabled; }
+  /// Whether this object is affected by gravity
+  virtual void SetGravityEnabled (bool enabled) { gravityEnabled = enabled; }
+
+  // iUpdatable
+  /// Update the softbody before a simulation step
+  virtual void PreStep (float dt);
   void UpdateAnchorInternalTick (btScalar timeStep);
+  
+  /// Update the softbody after a simulation step
+  virtual void PostStep (float dt) {}
+
+  /// We don't want the AddUpdatable method to add this object again when adding it as an updatable
+  virtual CS::Collisions::iCollisionObject* GetCollisionObject ()
+  { return nullptr; }
+
+  /// Called when updatable is added to the given sector
+  virtual void OnAdded (CS::Physics::iPhysicalSector* sector) {}
+
+  /// Called when updatable is removed from the given sector
+  virtual void OnRemoved (CS::Physics::iPhysicalSector* sector) {} 
 };
 }
 CS_PLUGIN_NAMESPACE_END (Bullet2)

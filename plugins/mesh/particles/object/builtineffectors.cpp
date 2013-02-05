@@ -32,6 +32,7 @@
 
 #include "builtineffectors.h"
 #include "particles.h"
+#include "physparticles.h"
 
 
 CS_PLUGIN_NAMESPACE_BEGIN(Particles)
@@ -44,7 +45,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(Particles)
   {
     return new ParticleEffectorForce;
   }
-
+  
   csPtr<iParticleBuiltinEffectorLinColor> 
     ParticleEffectorFactory::CreateLinColor () const
   {
@@ -69,12 +70,15 @@ CS_PLUGIN_NAMESPACE_BEGIN(Particles)
     return new ParticleEffectorLight;
   }
 
+  csPtr<iParticleBuiltinEffectorPhysical> ParticleEffectorFactory::CreatePhysical () const
+  {
+    return new ParticleEffectorPhysical ();
+  }
 
   csPtr<iParticleEffector> ParticleEffectorForce::Clone () const
   {
     return 0;
   }
-
 
   void ParticleEffectorForce::EffectParticles (iParticleSystemBase* system,
     const csParticleBuffer& particleBuffer, float dt, float totalTime)
@@ -601,8 +605,8 @@ CS_PLUGIN_NAMESPACE_BEGIN(Particles)
       else
       {
         light = engine->CreateLight (0, csVector3 (0.0f),
-                                     cutoffDistance, csColor4 (0.0f),
-                                     CS_LIGHT_DYNAMICTYPE_DYNAMIC);
+			       cutoffDistance, csColor4 (0.0f),
+			       CS_LIGHT_DYNAMICTYPE_DYNAMIC);
       }
 
       // Put the light in the scene

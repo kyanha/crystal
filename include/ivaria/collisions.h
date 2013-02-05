@@ -1,4 +1,9 @@
 /*
+    Copyright (C) 2011-2012 Christian Van Brussel, Institute of Information
+      and Communication Technologies, Electronics and Applied Mathematics
+      at Universite catholique de Louvain, Belgium
+      http://www.uclouvain.be/en-icteam.html
+    Copyright (C) 2012 by Dominik Seifert
     Copyright (C) 2011 by Liu Lu
 
     This library is free software; you can redistribute it and/or
@@ -24,87 +29,49 @@
  */
 
 #include "csutil/scf.h"
-#include "csutil/csstring.h"
-#include "csgeom/vector3.h"
-#include "csgeom/matrix3.h"
-#include "csgeom/transfrm.h"
-#include "csgeom/plane3.h"
+#include "iutil/strset.h"
+#include "ivaria/colliders.h"
 
-struct iTerrainSystem;
-struct iSector;
+struct iCamera;
 struct iMeshWrapper;
 struct iMovable;
 struct iPortal;
-struct iCamera;
+struct iSceneNode;
+struct iSector;
+struct iTerrainSystem;
+struct iTriangleMesh;
 struct iView;
 
-namespace CS
-{
-namespace Physics
-{
+namespace CS {
+namespace Physics {
+
 struct iPhysicalBody;
+struct iPhysicalSector;
+struct iPhysicalSystem;
+
 }
 }
 
-namespace CS
-{
-namespace Collisions
-{
+namespace CS {
+namespace Collisions {
 
-struct csConvexResult;
-struct iCollisionCallback;
+struct iActor;
+struct iCollisionActor;
 struct iCollisionObject;
-typedef short CollisionGroupMask;
-
-/**
- * The type of a collider.
- */
-enum ColliderType
-{
-COLLIDER_INVALID = 0,
-COLLIDER_BOX,
-COLLIDER_SPHERE,
-COLLIDER_CYLINDER,
-COLLIDER_CAPSULE,
-COLLIDER_CONE,
-COLLIDER_PLANE,
-COLLIDER_CONVEX_MESH,
-COLLIDER_CONCAVE_MESH,
-COLLIDER_CONCAVE_MESH_SCALED,
-COLLIDER_TERRAIN
-};
+struct iCollisionSector;
+struct iCollisionSystem;
 
 /**
  * The type of a collision object.
  */
 enum CollisionObjectType
 {
-COLLISION_OBJECT_BASE = 0,
-COLLISION_OBJECT_PHYSICAL,
-COLLISION_OBJECT_GHOST,
-COLLISION_OBJECT_ACTOR
-};
-
-/**
- * A structure of collision group. 
- * The objects in the group will not collide with each other.
- */
-struct CollisionGroup
-{
-  /// The name of the group.
-  csString name;
-
-  /// The value of the group.
-  CollisionGroupMask value;
-
-  /// The mask of the group.
-  CollisionGroupMask mask;
-
-  CollisionGroup () {}
-
-  CollisionGroup (const char* name)
-    : name (name)
-  {}
+  COLLISION_OBJECT_SIMPLE = 0,     /*!< The collision object is a simple static collision object.
+				     It can never be upcast to a iPhysicalObject.*/
+  COLLISION_OBJECT_PHYSICAL,       /*!< The collision object is a physical object and can be
+				     upcast to a iPhysicalObject. */
+  COLLISION_OBJECT_GHOST,          /*!< The collision object is a ghost. */
+  COLLISION_OBJECT_ACTOR           /*!< The collision object is an actor. */
 };
 
 /**
@@ -136,27 +103,62 @@ struct HitBeamResult
 };
 
 /**
- * A structure used to return the collision data between two objects.
+ * A structure used to describe a collision contact between two objects.
  */
-struct CollisionData
+struct iCollisionContact : public virtual iBase
 {
-  /// Collision object A.
-  iCollisionObject* objectA;
+  SCF_INTERFACE (CS::Collisions::iCollisionContact, 1, 0, 0);
 
-  /// Collision object B.
-  iCollisionObject* objectB;
+  /// Get the collision position of A in world space.
+  virtual csVector3 GetPositionOnA () const = 0;
 
-  /// The collision position of A in world space.
-  csVector3 positionWorldOnA;
+  /// Get the collision position of B in world space.
+  virtual csVector3 GetPositionOnB () const = 0;
 
-  /// The collision position of B in world space.
-  csVector3 positionWorldOnB;
+  /// Get the normal of the hit position on A in world space.
+  //virtual csVector3 GetNormalOnA () const = 0;
 
-  /// The normal of hit position on B.
-  csVector3 normalWorldOnB;
+  /// Get the normal of the hit position on B in world space.
+  virtual csVector3 GetNormalOnB () const = 0;
 
-  /// The depth of penetration.
-  float penetration; 
+  /// Get the depth of penetration.
+  virtual float GetPenetration () const = 0;
+};
+
+/**
+ * A structure used to return the collision data between two objects.
+ * When two objects are in contact, they have one or more
+ * CS::Collisions::iCollisionContact.
+ */
+struct iCollisionData : public virtual iBase
+{
+  SCF_INTERFACE (CS::Collisions::iCollisionData, 1, 0, 0);
+
+  /// Get the first collision object (A).
+  virtual iCollisionObject* GetObjectA () const = 0;
+
+  /// Get the second collision object (B).
+  virtual iCollisionObject* GetObjectB () const = 0;
+
+  /// Get the count of contacts between those two objects
+  virtual size_t GetContactCount () const = 0;
+
+  /// Get the contact at the given index
+  virtual iCollisionContact* GetContact (size_t index) = 0;
+};
+
+/**
+ * A list of CS::Collisions::iCollisionData.
+ */
+struct iCollisionDataList : public virtual iBase
+{
+  SCF_INTERFACE (CS::Collisions::iCollisionDataList, 1, 0, 0);
+
+  /// Get the count of collisions in this list
+  virtual size_t GetCollisionCount () const = 0;
+
+  /// Get the collision at the given index
+  virtual iCollisionData* GetCollision (size_t index) const = 0;
 };
 
 /**
@@ -168,242 +170,94 @@ struct CollisionData
  * Main users of this interface:
  * - iCollisionSystem
  */
-struct iCollisionCallback: public virtual iBase
+struct iCollisionCallback : public virtual iBase
 {
   SCF_INTERFACE (CS::Collisions::iCollisionCallback, 1, 0, 0);
 
   /**
    * A collision occurred.
-   * \param thisbody The body that received a collision.
-   * \param otherbody The body that collided with \a thisBody.
-   * \param collisions The list of collisions between the two bodies.  
    */
-  virtual void OnCollision (iCollisionObject *thisbody, iCollisionObject *otherbody, 
-      const csArray<CollisionData>& collisions) = 0; 
+  virtual void OnCollision (iCollisionData* collision) = 0; 
 };
 
 /**
- * A base interface for colliders. 
- * Other colliders will be derived from this one.
- */
-struct iCollider : public virtual iBase
-{
-  SCF_INTERFACE (CS::Collisions::iCollider, 1, 0, 0);
-
-  /// Get the geometry type of this collider. 
-  virtual ColliderType GetGeometryType () const = 0;
-
-  /// Set the scale of the collider shape on X/Y/Z axis.
-  virtual void SetLocalScale (const csVector3& scale) = 0;
-
-  /// Get the scale on X/Y/Z axis.
-  virtual const csVector3& GetLocalScale () const = 0;
-  
-  /// Set the margin of collision shape.
-  virtual void SetMargin (float margin) = 0;
-
-  /// Get the margin of collision shape.
-  virtual float GetMargin () const = 0; 
-};
-
-/**
- * A box collider.
+ * Collision groups allow to filter the collisions occuring between the objects in
+ * the system. Each iCollisionObject is associated with a collision group, and the
+ * user can define whether or not the objects from one group will collide with the
+ * objects of another.
  *
+ * There is a maximum of 16 collision groups that can be created in total, and those
+ * groups cannot (currently) be removed once created. You should therefore be careful
+ * when defining and managing your set of collision groups.
+ *
+ * The collision system will always create one default collision group named "Default".
+ * This collision group is associated by default to all collision objects without any
+ * valid group.
+ * 
  * Main creators of instances implementing this interface:
- * - iCollisionSystem::CreateColliderBox()
+ * - iCollisionSystem::CreateCollisionGroup()
  * 
  * Main ways to get pointers to this interface:
- * - iCollisionObject::GetCollider()
+ * - iCollisionSystem::FindCollisionGroup()
  * 
  * Main users of this interface:
- * - iCollisionObject
+ * - iCollisionSystem, iCollisionObject
  */
-struct iColliderBox : public virtual iCollider
+struct iCollisionGroup : public virtual iBase
 {
-  SCF_INTERFACE (CS::Collisions::iColliderBox, 1, 0, 0);
+  /// Get the name of this collision group
+  virtual const char* GetName () const = 0;
 
-  /// Get the box geometry of this collider.
-  virtual csVector3 GetBoxGeometry ()  = 0;
+  /**
+   * Set whether or not the objects from this group will collide with the objects of
+   * the group \a other. By default, all groups will collide with all others.
+   *
+   * Note that it is valid to use the same group as the parameter and the one being
+   * called. This defines whether or not the objects of the group will collide together.
+   *
+   * \param other The other group that will or not collide with this one.
+   * \param enabled Whether or not the collisions are enabled between the two groups.
+   */
+  virtual void SetCollisionEnabled (iCollisionGroup* other, bool enabled) = 0;
+
+  /**
+   * Get whether or not the objects from this group will collide with the objects of
+   * the group \a other.
+   */
+  virtual bool GetCollisionEnabled (iCollisionGroup* other) = 0;
 };
 
 /**
- * A sphere collider.
- *
- * Main creators of instances implementing this interface:
- * - iCollisionSystem::CreateColliderSphere()
- * 
- * Main ways to get pointers to this interface:
- * - iCollisionObject::GetCollider()
- * 
- * Main users of this interface:
- * - iCollisionObject
+ * Factory to create instances of iCollisionObject.
  */
-struct iColliderSphere : public virtual iCollider
+struct iCollisionObjectFactory : public virtual iBase
 {
-  SCF_INTERFACE (CS::Collisions::iColliderSphere, 1, 0, 0);
+  SCF_INTERFACE (CS::Collisions::iCollisionObjectFactory, 1, 0, 0);
 
-  /// Get the sphere geometry of this collider.
-  virtual float GetSphereGeometry () = 0;
-};
+  /// Return the underlying object
+  virtual iObject *QueryObject () = 0;
 
-/**
- * A cylinder collider.
- *
- * Main creators of instances implementing this interface:
- * - iCollisionSystem::CreateColliderCylinder()
- * 
- * Main ways to get pointers to this interface:
- * - iCollisionObject::GetCollider()
- * 
- * Main users of this interface:
- * - iCollisionObject
- */
-struct iColliderCylinder : public virtual iCollider
-{
-  SCF_INTERFACE (CS::Collisions::iColliderCylinder, 1, 0, 0);
+  /// Get the system of this factory
+  virtual iCollisionSystem* GetSystem () const = 0;
 
-  /// Get the cylinder geometry of this collider.
-  virtual void GetCylinderGeometry (float& length, float& radius) = 0;
-};
+  /// Create an instance
+  virtual csPtr<iCollisionObject> CreateCollisionObject () = 0;
 
-/**
- * A capsule collider.
- *
- * Main creators of instances implementing this interface:
- * - iCollisionSystem::CreateColliderCapsule()
- * 
- * Main ways to get pointers to this interface:
- * - iCollisionObject::GetCollider()
- * 
- * Main users of this interface:
- * - iCollisionObject
- */
-struct iColliderCapsule : public virtual iCollider
-{
-  SCF_INTERFACE (CS::Collisions::iColliderCapsule, 1, 0, 0);
+  /// Set the collider of this factory
+  virtual void SetCollider (iCollider* value,
+			    const csOrthoTransform& transform = csOrthoTransform ())  = 0;
+  /// Get the collider of this factory
+  virtual iCollider* GetCollider () const = 0;
 
-  /// Get the capsule geometry of this collider.
-  virtual void GetCapsuleGeometry (float& length, float& radius) = 0;
-};
+  /// Set the relative transform of the collider of this object
+  virtual void SetColliderTransform (const csOrthoTransform& transform) = 0;
+  /// Get the relative transform of the collider of this object
+  virtual const csOrthoTransform& GetColliderTransform () const = 0;
 
-/**
- * A cone collider.
- *
- * Main creators of instances implementing this interface:
- * - iCollisionSystem::CreateColliderCone()
- * 
- * Main ways to get pointers to this interface:
- * - iCollisionObject::GetCollider()
- * 
- * Main users of this interface:
- * - iCollisionObject
- */
-struct iColliderCone : public virtual iCollider
-{
-  SCF_INTERFACE (CS::Collisions::iColliderCone, 1, 0, 0);
-
-  /// Get the cone geometry of this collider.
-  virtual void GetConeGeometry (float& length, float& radius) = 0;
-};
-
-/**
- * A static plane collider.
- *
- * Main creators of instances implementing this interface:
- * - iCollisionSystem::CreateColliderPlane()
- * 
- * Main ways to get pointers to this interface:
- * - iCollisionObject::GetCollider()
- * 
- * Main users of this interface:
- * - iCollisionObject
- */
-struct iColliderPlane : public virtual iCollider
-{
-  SCF_INTERFACE (CS::Collisions::iColliderPlane, 1, 0, 0);
-
-  /// Get the plane geometry of this collider.
-  virtual csPlane3 GetPlaneGeometry () = 0;
-};
-
-/**
- * A convex mesh collider.
- *
- * Main creators of instances implementing this interface:
- * - iCollisionSystem::CreateColliderConvexMesh()
- * 
- * Main ways to get pointers to this interface:
- * - iCollisionObject::GetCollider()
- * 
- * Main users of this interface:
- * - iCollisionObject
- */
-struct iColliderConvexMesh : public virtual iCollider
-{
-  SCF_INTERFACE (CS::Collisions::iColliderConvexMesh, 1, 0, 0);
-
-  /// Get the mesh factory of this collider.
-  virtual iMeshWrapper* GetMesh () = 0;
-};
-
-/**
- * A static concave mesh collider.
- *
- * Main creators of instances implementing this interface:
- * - iCollisionSystem::CreateColliderConcaveMesh()
- * 
- * Main ways to get pointers to this interface:
- * - iCollisionObject::GetCollider()
- * 
- * Main users of this interface:
- * - iCollisionObject
- */
-struct iColliderConcaveMesh : public virtual iCollider
-{
-  SCF_INTERFACE (CS::Collisions::iColliderConcaveMesh, 1, 0, 0);
-
-  /// Get the mesh factory of this collider.
-  virtual iMeshWrapper* GetMesh () = 0;
-};
-
-/**
- * A scaled static concave mesh collider.
- *
- * Main creators of instances implementing this interface:
- * - iCollisionSystem::CreateColliderConcaveMeshScaled()
- * 
- * Main ways to get pointers to this interface:
- * - iCollisionObject::GetCollider()
- * 
- * Main users of this interface:
- * - iCollisionObject
- */
-struct iColliderConcaveMeshScaled : public virtual iCollider
-{
-  SCF_INTERFACE (CS::Collisions::iColliderConcaveMeshScaled, 1, 0, 0);
-
-  /// Get the concave collider scaled by this collider.
-  virtual iColliderConcaveMesh* GetCollider () = 0;
-};
-
-/**
- * A terrain collider.
- *
- * Main creators of instances implementing this interface:
- * - iCollisionSystem::CreateColliderTerrain()
- * 
- * Main ways to get pointers to this interface:
- * - iCollisionObject::GetCollider()
- * 
- * Main users of this interface:
- * - iCollisionObject
- */
-struct iColliderTerrain : public virtual iCollider
-{
-  SCF_INTERFACE (CS::Collisions::iColliderTerrain, 1, 0, 0);
-
-  /// Get the terrain system.
-  virtual iTerrainSystem* GetTerrain () const = 0;
+  /// Set the collision group of this factory
+  virtual void SetCollisionGroup (iCollisionGroup* group) = 0;
+  /// Get the collision group of this factory
+  virtual iCollisionGroup* GetCollisionGroup () const = 0;
 };
 
 /**
@@ -411,7 +265,7 @@ struct iColliderTerrain : public virtual iCollider
  *It contains the collision information of the object.
  * 
  * Main creators of instances implementing this interface:
- * - iCollisionSystem::CreateCollisionObject()
+ * - iCollisionObjectFactory::CreateCollisionObject()
  * 
  * Main ways to get pointers to this interface:
  * - iCollisionSystem::GetCollisionObject()
@@ -426,26 +280,38 @@ struct iCollisionObject : public virtual iBase
   /// Return the underlying object
   virtual iObject *QueryObject (void) = 0;
 
-  /// Return the collision object pointer.
-  virtual iCollisionObject* QueryCollisionObject () = 0;
-
-  /// Return the physical body pointer if it's a physical body, or NULL.
+  /// Return the physical body pointer if it's a physical body, or nullptr otherwise.
   virtual CS::Physics::iPhysicalBody* QueryPhysicalBody () = 0;
 
-  /// Set the type of the collision object.
-  virtual void SetObjectType (CollisionObjectType type, bool forceRebuild = true) = 0;
-
-  /// Return the type of the collision object.
-  virtual CollisionObjectType GetObjectType () = 0;
+  /// Return the actor pointer if it's an actor, or nullptr.
+  virtual iActor* QueryActor () = 0;
 
   /**
-   * Set the movable attached to this collision object. Its position will be updated
-   * automatically when this object is moved.
+   * Put this object into the given collision sector. The object will now be
+   * part of the physical simulation.
+   * \note This is equivalent to a call to
+   * CS::Collisions::iCollisionSector::AddCollisionObject().
    */
-  virtual void SetAttachedMovable (iMovable* movable) = 0;
+  virtual void SetSector (iCollisionSector* sector) = 0;
 
-  /// Get the movable attached to this collision object.
-  virtual iMovable* GetAttachedMovable () = 0;
+  /**
+   * Return the collision sector containing this object, or nullptr if it is not
+   * in a sector (therefore not currently part of the physical simulation).
+   */
+  virtual iCollisionSector* GetSector () const = 0;
+
+  /// Return the type of the collision object.
+  virtual CollisionObjectType GetObjectType () const = 0;
+  
+  /// Set whether or not this object may be excluded from deactivation.
+  virtual void SetDeactivable (bool d) = 0;
+  /// Get whether or not this object may be excluded from deactivation.
+  virtual bool GetDeactivable () const = 0;
+
+  /// Set the iSceneNode attached to this collision object. Its transform will always coincide with the object's transform
+  virtual void SetAttachedSceneNode (iSceneNode* sceneNode) = 0;
+  /// Get the iSceneNode attached to this collision object. Its transform will always coincide with the object's transform
+  virtual iSceneNode* GetAttachedSceneNode () const = 0;
 
   /**
    * Set the camera attached to this collision object. Its position will be updated
@@ -454,141 +320,250 @@ struct iCollisionObject : public virtual iBase
   virtual void SetAttachedCamera (iCamera* camera) = 0;
 
   /// Get the camera attached to this collision object.
-  virtual iCamera* GetAttachedCamera () = 0;
-  
-  /// Set the transform.
+  virtual iCamera* GetAttachedCamera () const = 0;
+
+  /// Set the collider that defines this object's shape
+  virtual void SetCollider (iCollider* collider,
+			    const csOrthoTransform& transform = csOrthoTransform ()) = 0;
+
+  /// Get the collider that defines this object's shape
+  virtual iCollider* GetCollider () const = 0;
+
+  /// Set the relative transform of the collider of this object
+  virtual void SetColliderTransform (const csOrthoTransform& transform) = 0;
+
+  /// Get the relative transform of the collider of this object
+  virtual const csOrthoTransform& GetColliderTransform () const = 0;
+
+  /// Set the transform of this object.
   virtual void SetTransform (const csOrthoTransform& trans) = 0;
 
-  /// Get the transform.
-  virtual csOrthoTransform GetTransform () = 0;
-
-  /// Add a collider to this collision body.
-  virtual void AddCollider (iCollider* collider, const csOrthoTransform& relaTrans
-    = csOrthoTransform (csMatrix3 (), csVector3 (0))) = 0;
-
-  /// Remove the given collider from this collision object.
-  virtual void RemoveCollider (iCollider* collider) = 0;
-
-  /// Remove the collider with the given index from this collision object.
-  virtual void RemoveCollider (size_t index) = 0;
-
-  /// Get the collider with the given index.
-  virtual iCollider* GetCollider (size_t index) = 0;
-
-  /// Get the count of colliders in this collision object.
-  virtual size_t GetColliderCount () = 0;
+  /// Get the transform of this object.
+  virtual csOrthoTransform GetTransform () const = 0;
+  
+  /**
+   * Set the current rotation in angles around every axis and set to actor.
+   * If a camera is used, set it to camera too.
+   */
+  virtual void SetRotation (const csMatrix3& rot) = 0;
 
   /// Rebuild this collision object.
   virtual void RebuildObject () = 0;
 
-  /// Set the collision group this object belongs to by name.
-  virtual void SetCollisionGroup (const char* name) = 0;
+  /// Set the collision group of this object
+  virtual void SetCollisionGroup (iCollisionGroup* group) = 0;
 
-  /// Get the collision group this object belongs to.
-  virtual const char* GetCollisionGroup () const = 0;
+  /// Get the collision group of this object
+  virtual iCollisionGroup* GetCollisionGroup () const = 0;
 
   /**
    * Set a callback to be executed when this body collides with another.
-   * If 0, no callback is executed.
+   * If nullptr, then no callback is executed.
+   * \todo Currently no callback will be triggered unless the test method Collide() is used.
    */
   virtual void SetCollisionCallback (iCollisionCallback* cb) = 0;
 
   /// Get the collision response callback.
   virtual iCollisionCallback* GetCollisionCallback () = 0;
 
-  /// Test collision with another collision objects.
-  virtual bool Collide (iCollisionObject* otherObject) = 0;
+  /// Test for the collisions with another collision object
+  // TODO: really useful?
+  virtual csPtr<iCollisionData> Collide (iCollisionObject* otherObject) const = 0;
 
-  /// Follow a beam from start to end and return whether this body was hit.
-  virtual HitBeamResult HitBeam (
-      const csVector3& start, const csVector3& end) = 0;
+  /// Follow a beam from start to end and return whether or not this body was hit.
+  // TODO: add a collision filter parameter
+  virtual HitBeamResult HitBeam (const csVector3& start, const csVector3& end) const = 0;
 
-  /// Get the count of collision objects contacted with this object.
+  /// Get the count of collision objects in contact with this object.
   virtual size_t GetContactObjectsCount () = 0;
 
-  /// Get the collision object contacted with this object by index.
+  /// Get the collision object in contact with this object at the given index.
   virtual iCollisionObject* GetContactObject (size_t index) = 0;
 };
 
 /**
- * A iCollisionActor is a kinematic collision object. It has a faster collision detection and response.
- * You can use it to create a player or character model with gravity handling.
+ * A collision terrain consists of multiple cells.
  *
  * Main creators of instances implementing this interface:
- * - iCollisionSystem::CreateCollisionActor()
+ * - iCollisionSystem::CreateCollisionTerrain()
  * 
  * Main ways to get pointers to this interface:
- * - iCollisionSystem::GetCollisionActor()
+ * - iCollisionObject::GetCollider()
+ * 
+ * Main users of this interface:
+ * - iCollisionSector
+ */
+struct iCollisionTerrain : public virtual iBase
+{
+  SCF_INTERFACE (CS::Collisions::iCollisionTerrain, 1, 0, 0);
+
+  /// Get the terrain system.
+  virtual iTerrainSystem* GetTerrain () const = 0;
+
+  // TODO: Methods to iterate over the terrain cells
+};
+
+/**
+ * Common abstract interface for factories of iActor objects.
+ *
+ * Main ways to create instances implementing this interface:
+ * - CS::Collisions::iCollisionSystem::CreateCollisionActorFactory()
+ * - CS::Physics::iPhysicalSystem::CreateDynamicActorFactory()
+ */
+struct iActorFactory : public virtual iCollisionObjectFactory
+{
+  SCF_INTERFACE (CS::Collisions::iActorFactory, 1, 0, 0);
+
+  /// Create an instance
+  virtual csPtr<iActor> CreateActor () = 0;
+
+  /// Get the max vertical threshold that this actor can step over
+  virtual float GetStepHeight () const = 0;
+  /// Set the max vertical threshold that this actor can step over
+  virtual void SetStepHeight (float h) = 0;
+
+  /// Get the walk speed
+  virtual float GetWalkSpeed () const = 0;
+  /// Set the walk speed
+  virtual void SetWalkSpeed (float s) = 0;
+
+  /// Get the jump speed
+  virtual float GetJumpSpeed () const = 0;
+  /// Set the jump speed
+  virtual void SetJumpSpeed (float s)  = 0;
+
+  /// Determines how much the actor can control movement when free falling (1 = completely, 0 = not at all)
+  virtual float GetAirControlFactor () const = 0;
+  /// Determines how much the actor can control movement when free falling (1 = completely, 0 = not at all)
+  virtual void SetAirControlFactor (float f) = 0;
+};
+
+/**
+ * A iActor is the common abstract interface for actor motion controlling, and can
+ * be used to create eg a player or a Non-Player Character model.
+ *
+ * Actors can be used to move objects around the environnement, while keeping reactions
+ * to the collisions that are generated and handling gravity.
+ *
+ * \remark The collider of iCollisionActor must be a convex shape, for example a
+ * capsule or a sphere.
+ *
+ * Main ways to create instances implementing this interface:
+ * - CS::Collisions::iCollisionActorFactory::CreateCollisionActor()
+ * - CS::Physics::iDynamicActorFactory::CreateDynamicActor()
  * 
  * Main users of this interface:
  * - iCollisionSystem
- * \remark The collider of iCollisionActor must be a convex shape. For example, box, convex mesh.
  */
-// kickvb: most of this would have to be redesigned, let's do it later
-struct iCollisionActor : public virtual iCollisionObject
+struct iActor : public virtual iCollisionObject
+{
+  SCF_INTERFACE (CS::Collisions::iActor, 1, 0, 0);
+
+  /**
+   * Start walking in the given direction with walk speed. 
+   * Sets linear velocity. 
+   * Takes air control into consideration.
+   * Adds the current vertical velocity to the given vertical velocity.
+   */
+  virtual void Walk (csVector3 dir) = 0;
+  
+  /**
+   * Start walking in the given horizontal direction with walk speed. 
+   * Sets linear velocity. 
+   * Takes air control into consideration.
+   * Does not influence vertical movement.
+   */
+  virtual void WalkHorizontal (csVector2 dir) = 0;
+
+  /// Applies an upward impulse to this actor, and an inverse impulse to objects beneath
+  virtual void Jump () = 0;
+
+  /// Stops any player-controlled movement
+  virtual void StopMoving () = 0;
+  
+  /// Whether the actor is not on ground and gravity applies
+  virtual bool IsFreeFalling () const = 0;
+
+  /// Whether this actor touches the ground
+  virtual bool IsOnGround () const = 0;
+
+  /// Get the maximum vertical threshold that this actor can step over
+  virtual float GetStepHeight () const = 0;
+  /// Set the maximum vertical threshold that this actor can step over
+  virtual void SetStepHeight (float h) = 0;
+
+  /// Get the walk speed
+  virtual float GetWalkSpeed () const = 0;
+  /// Set the walk speed
+  virtual void SetWalkSpeed (float s) = 0;
+  
+  /// Get the jump speed
+  virtual float GetJumpSpeed () const = 0;
+  /// Set the jump speed
+  virtual void SetJumpSpeed (float s) = 0;
+  
+  /// Determines how much the actor can control movement when free falling
+  virtual float GetAirControlFactor () const = 0;
+  /// Determines how much the actor can control movement when free falling
+  virtual void SetAirControlFactor (float f) = 0;
+
+  /// Whether or not this object is subject to the constant gravitational forces of its sector
+  // TODO: working?
+  virtual bool GetGravityEnabled () const = 0;
+  /// Whether or not this object is subject to the constant gravitational forces of its sector
+  virtual void SetGravityEnabled (bool g) = 0;
+};
+
+/**
+ * Factory to create instances of iCollisionActor.
+ */
+struct iCollisionActorFactory : public virtual iCollisionObjectFactory,
+  public virtual iActorFactory
+{
+  SCF_INTERFACE (CS::Collisions::iCollisionActorFactory, 1, 0, 0);
+
+  /// Create an instance
+  virtual csPtr<iCollisionActor> CreateCollisionActor () = 0;
+
+  /**
+   * Get the maximum slope, in radians. The maximum slope determines the maximum
+   * angle that the actor can walk up.
+   */
+  virtual float GetMaximumSlope () const = 0;
+  /**
+   * The maximum slope determines the maximum angle that the actor can walk up.
+   * The slope angle is measured in radians. The default value is 0.7854f (45 degree).
+   */
+  virtual void SetMaximumSlope (float slope) = 0;
+};
+
+/**
+ * A iCollisionActor is a basic collision agent, that will be blocked by the
+ * collision objects standing in its way, but won't interact with them by
+ * generating opposite collision forces on the objects hit.
+ *
+ * Main creators of instances implementing this interface:
+ * - iCollisionActorFactory::CreateCollisionObject
+ * 
+ * Main users of this interface:
+ * - iCollisionSystem
+ * \remark The collider of iCollisionActor must be a convex shape. For example a
+ * capsule or a sphere.
+ */
+struct iCollisionActor : public virtual iCollisionObject, public virtual iActor
 {
   SCF_INTERFACE (CS::Collisions::iCollisionActor, 1, 0, 0);
 
-  /// Check if we are on the ground.
-  virtual bool IsOnGround () = 0;
-
-  /// Set the onground status.
-  //virtual void SetOnGround (bool og) = 0;
-
-  /// Attach a camera to the collision actor.
-  virtual void SetCamera (iCamera* camera) = 0;
-
   /**
-   * Set current rotation in angles around every axis and set to actor.
-   * If a camera is used, set it to camera too.
+   * Get the maximum slope, in radians. The maximum slope determines the maximum
+   * angle that the actor can walk up.
    */
-  virtual void SetRotation (const csMatrix3& rot) = 0;
-
-  /// Rotate the collision actor.
-  virtual void Rotate (const csVector3& v, float angle) = 0;
-
-  /// Move the actor.
-  virtual void UpdateAction (float delta) = 0;
-
-  /// Set the walking velocity of the actor.
-  virtual void SetVelocity (float speed) = 0;
-
+  virtual float GetMaximumSlope () const = 0;
   /**
-   * This is used by UpdateAction() but you can also call it manually.
-   * It will adjust the new position to match with collision
-   * detection.
+   * The maximum slope determines the maximum angle that the actor can walk up.
+   * The slope angle is measured in radians. The default value is 0.7854f (45 degree).
    */
-  virtual void PreStep () = 0;
-
-  /**
-   * This is used by UpdateAction() but you can also call it manually.
-   * Move the actor to proper target position.
-   */
-  virtual void PlayerStep (float delta) = 0;
-
-  /// Set the falling speed.
-  virtual void SetFallSpeed (float fallSpeed) = 0;
-
-  /// Set the jumping speed.
-  virtual void SetJumpSpeed (float jumpSpeed) = 0;
-
-  /// Set the max jump height an actor can have.
-  virtual void SetMaxJumpHeight (float maxJumpHeight) = 0;
-
-  /// Set the step up height an actor can have.
-  virtual void StepHeight (float stepHeight) = 0;
-
-  /// Let the actor jump.
-  virtual void Jump () = 0;
-
-  /**
-   * The max slope determines the maximum angle that the actor can walk up.
-   * The slope angle is measured in radians.
-   */
-  virtual void SetMaxSlope (float slopeRadians) = 0;
-  
-  /// Get the max slope.
-  virtual float GetMaxSlope () const = 0;
+  virtual void SetMaximumSlope (float slope) = 0;
 };
 
 /**
@@ -601,14 +576,41 @@ struct iCollisionActor : public virtual iCollisionObject
  * Main ways to get pointers to this interface:
  * - iCollisionSystem::FindCollisionSector()
  *
- * \sa CS::Physics::iPhysicalSector CS::Physics::Bullet2::iPhysicalSector
+ * \sa CS::Physics::iPhysicalSector CS::Physics::iPhysicalSector
  */
 struct iCollisionSector : public virtual iBase
 {
   SCF_INTERFACE (CS::Collisions::iCollisionSector, 1, 0, 0);
 
+  /// Return the system that this sector belongs to
+  virtual CS::Collisions::iCollisionSystem* GetSystem () const = 0;
+
   /// Return the underlying object
-  virtual iObject *QueryObject (void) = 0;
+  virtual iObject *QueryObject (void) const = 0;
+
+  /**
+   * Return the type of this sector, that is either CS::Collisions::COLLISION_OBJECT_PHYSICAL
+   * For sectors that can be upcast to a iPhysicalSector, or CS::Collisions::COLLISION_OBJECT_SIMPLE
+   * for sectors that cannot be upcast to a iPhysicalSector.
+   */
+  virtual CollisionObjectType GetSectorType () const = 0;
+
+  /**
+   * Return a reference to the physical interface of this sector if its type is
+   * CS::Collisions::COLLISION_OBJECT_PHYSICAL, or nullptr otherwise.
+   */
+  virtual CS::Physics::iPhysicalSector* QueryPhysicalSector () const = 0;
+
+  /**
+   * Set the engine iSector related to this collision sector. The iMovable that are 
+   * attached to a iCollisionObject present in this collision sector will be put
+   * automatically in the given engine sector. The portals in iSector will be added
+   * to this collision sector.
+   */
+  virtual void SetSector (iSector* sector) = 0;
+
+  /// Get the engine iSector related to this collision sector.
+  virtual iSector* GetSector () = 0;
 
   /// Set the global gravity.
   virtual void SetGravity (const csVector3& v) = 0;
@@ -618,11 +620,12 @@ struct iCollisionSector : public virtual iBase
 
   /**
    * Add a collision object into the sector.
-   * The collision object has to be initialized.
    */
+  // TODO: remove: The collision object has to be initialized.
+  // TODO: rename all AddXXX() methods in Add()
   virtual void AddCollisionObject (iCollisionObject* object) = 0;
 
-  /// Remove a collision object by pointer.
+  /// Remove the given collision object from this sector
   virtual void RemoveCollisionObject (iCollisionObject* object) = 0;
 
   /// Get the count of collision objects.
@@ -631,8 +634,24 @@ struct iCollisionSector : public virtual iBase
   /// Get the collision object by index.
   virtual iCollisionObject* GetCollisionObject (size_t index) = 0;
 
-  /// Find a collision object within a sector.
-  virtual iCollisionObject* FindCollisionObject (const char* name) = 0;
+  //  Terrain
+
+  /// Adds the given terrain to this sector
+  virtual void AddCollisionTerrain (iCollisionTerrain* terrain) = 0;
+
+  /// Remove the given collision terrain from this sector
+  virtual void RemoveCollisionTerrain (iCollisionTerrain* terrain) = 0;
+
+  /// Total amount if iCollisionTerrain objects in this sector
+  virtual size_t GetCollisionTerrainCount () const = 0;
+
+  /// Get the index'th iCollisionTerrain object
+  virtual iCollisionTerrain* GetCollisionTerrain (size_t index) const = 0;
+
+  /// Retreive the CollisionTerrain that wraps the given TerrainSystem
+  virtual iCollisionTerrain* GetCollisionTerrain (iTerrainSystem* terrain) = 0;
+
+  // Portals
 
   /// Add a portal into the sector. Collision objects crossing a portal will be switched from iCollisionSector's.
   virtual void AddPortal (iPortal* portal, const csOrthoTransform& meshTrans) = 0;
@@ -640,56 +659,36 @@ struct iCollisionSector : public virtual iBase
   /// Remove the given portal from this sector.
   virtual void RemovePortal (iPortal* portal) = 0;
 
-  /**
-   * Set the engine iSector related to this collision sector. The iMovable that are 
-   * attached to a iCollisionObject present in this collision sector will be put automatically in the given engine sector.
-   * The portals in iSector will be added to this collision sector.
-   */
-  virtual void SetSector (iSector* sector) = 0;
+  /// Delete all objects in this collision sector.
+  // TODO: mask for selecting the type/state/collgroup of the objects to be removed?
+  // TODO: flag indicating whether the attached iSceneNode should be removed from the engine?
+  virtual void DeleteAll () = 0;
 
-  /// Get the engine iSector related to this collision sector.
-  virtual iSector* GetSector () = 0;
-
-  /// Follow a beam from start to end and return the first body that is hit.
-  virtual HitBeamResult HitBeam (
-      const csVector3& start, const csVector3& end) = 0;
+  // Other stuff
 
   /**
-   * Follow a beam from start to end and return the first body that is hit.
+   * Follow a beam from start to end and return the first body that is hit. This version
+   * ignores the portals and won't therefore cross them to another sector.
+   * \param start The start of the beam
+   * \param end The end of the beam
    */
-  virtual HitBeamResult HitBeamPortal (
-      const csVector3& start, const csVector3& end) = 0;
+  // TODO: allow resuming the beam test when an object has been hit in order to find the next
+  // object on the beam
+  virtual HitBeamResult HitBeam (const csVector3& start, const csVector3& end) const = 0;
 
   /**
-   * Performs a discrete collision test against all objects in this iCollisionSector.
-   * it reports one or more contact points for every overlapping object
+   * Follow a beam from start to end and return the first body that is hit. This version
+   * will cross any portal hit and continue the the hit test on the other side of it.
+   * \param start The start of the beam
+   * \param end The end of the beam
    */
-  virtual bool CollisionTest (iCollisionObject* object, csArray<CollisionData>& collisions) = 0;
-
-  /// Create a collision group.
-  virtual CollisionGroup& CreateCollisionGroup (const char* name) = 0;
-
-  /// Find a collision group by name.
-  virtual CollisionGroup& FindCollisionGroup (const char* name) = 0;
-
-  /// Set whether the two groups collide with each other.
-  virtual void SetGroupCollision (const char* name1,
-    const char* name2, bool collide) = 0;
-
-  /// Get true if the two groups collide with each other.
-  virtual bool GetGroupCollision (const char* name1, const char* name2) = 0;
+  virtual HitBeamResult HitBeamPortal (const csVector3& start, const csVector3& end) const = 0;
 
   /**
-   * Add a collision actor into the sector.
-   * The collision actor has to be initialized.
+   * Perform a discrete collision test against all objects in this iCollisionSector,
+   * and return the list of all collisions with the given object.
    */
-  virtual void AddCollisionActor (iCollisionActor* actor) = 0;
-
-  /// Remove a collision object by pointer.
-  virtual void RemoveCollisionActor () = 0;
-
-  /// Get the collision object by index.
-  virtual iCollisionActor* GetCollisionActor () = 0;
+  virtual csPtr<iCollisionDataList> CollisionTest (iCollisionObject* object) = 0;
 };
 
 /**
@@ -706,84 +705,119 @@ struct iCollisionSector : public virtual iBase
  * 
  * \sa CS::Physics::iPhysicalSystem
  */
+// TODO: global collision callback
 struct iCollisionSystem : public virtual iBase
 {
-  SCF_INTERFACE (CS::Collisions::iCollisionSystem, 1, 0, 0);
+  SCF_INTERFACE (CS::Collisions::iCollisionSystem, 2, 0, 0);
 
   /**
-   * Set the internal scale to be applied to the whole dynamic world. Use this
-   *to put back the range of dimensions you use for your objects to the one
-   * Bullet was designed for.
-   * 
-   * Bullet does not work well if the dimensions of your objects are smaller
-   * than 0.1 to 1.0 units or bigger than 10 to 100 units. Use this method to
-   * fix the problem.
-   * 
-   * \warning You have to call this method before adding any objects in the
-   * world, otherwise the objects won't have the same scale.
+   * Return the physical system pointer if this interface is also implemented by
+   * the system, or nullptr otherwise.
    */
-  virtual void SetInternalScale (float scale) = 0;
+  virtual CS::Physics::iPhysicalSystem* QueryPhysicalSystem () = 0;
+
+  /**
+   * Set the speed of the simulation, that is the time ratio that is applied
+   * when updating the motion of the objects. The default value is 1.0f.
+   */
+  virtual void SetSimulationSpeed (float speed) = 0;
+
+  /**
+   * Get the speed of the simulation, that is the time ratio that is applied
+   * when updating the motion of the objects.
+   */
+  virtual float GetSimulationSpeed () const = 0;
+
+  /**
+   * Create an empty collider (it does not have a root shape, but only potentially
+   * children). The collider type of this object is CS::Collisions::COLLIDER_COMPOUND.
+   */
+  virtual csPtr<iCollider> CreateCollider () = 0;
 
   /// Create a convex mesh collider.
-  virtual csRef<iColliderConvexMesh> CreateColliderConvexMesh (
-    iMeshWrapper* mesh, bool simplify = false) = 0;
+  // TODO: what is simplify?
+  virtual csPtr<iColliderConvexMesh> CreateColliderConvexMesh (iTriangleMesh* mesh, bool simplify = false) = 0;
 
   /// Create a static concave mesh collider.
-  virtual csRef<iColliderConcaveMesh> CreateColliderConcaveMesh (iMeshWrapper* mesh) = 0;
+  virtual csPtr<iColliderConcaveMesh> CreateColliderConcaveMesh (iTriangleMesh* mesh) = 0;
 
-  /// Create a scaled concave mesh collider.
-  virtual csRef<iColliderConcaveMeshScaled> CreateColliderConcaveMeshScaled (
-    iColliderConcaveMesh* collider, csVector3 scale) = 0;
+  /// Create a static, scaled concave mesh collider.
+  virtual csPtr<iColliderConcaveMeshScaled> CreateColliderConcaveMeshScaled (
+    iColliderConcaveMesh* collider, const csVector3& scale) = 0;
 
-  /// Create a cylinder collider.
-  virtual csRef<iColliderCylinder> CreateColliderCylinder (float length, float radius) = 0;
+  /// Create a cylinder collider, oriented along the y-axis
+  virtual csPtr<iColliderCylinder> CreateColliderCylinder (float length, float radius) = 0;
 
   /// Create a box collider.
-  virtual csRef<iColliderBox> CreateColliderBox (const csVector3& size) = 0;
+  virtual csPtr<iColliderBox> CreateColliderBox (const csVector3& size) = 0;
 
   /// Create a sphere collider.
-  virtual csRef<iColliderSphere> CreateColliderSphere (float radius) = 0;
+  virtual csPtr<iColliderSphere> CreateColliderSphere (float radius) = 0;
 
   /// Create a capsule collider.
-  virtual csRef<iColliderCapsule> CreateColliderCapsule (float length, float radius) = 0;
+  virtual csPtr<iColliderCapsule> CreateColliderCapsule (float length, float radius) = 0;
 
   /// Create a cone collider.
-  virtual csRef<iColliderCone> CreateColliderCone (float length, float radius) = 0;
+  virtual csPtr<iColliderCone> CreateColliderCone (float length, float radius) = 0;
 
   /// Create a static plane collider.
-  virtual csRef<iColliderPlane> CreateColliderPlane (const csPlane3& plane) = 0;
+  virtual csPtr<iColliderPlane> CreateColliderPlane (const csPlane3& plane) = 0;
 
   /// Create a terrain collider.
-  virtual csRef<iColliderTerrain> CreateColliderTerrain (iTerrainSystem* terrain,
+  virtual csPtr<iCollisionTerrain> CreateCollisionTerrain (iTerrainSystem* terrain,
       float minHeight = 0, float maxHeight = 0) = 0;
 
-  /**
-   * Create a collision object. Without any initialization.
-   * Need to call iCollisionObject::RebuildObject.
-   */
-  virtual csRef<iCollisionObject> CreateCollisionObject () = 0;
-
-  /**
-   * Create a collision actor.
-   * Need to call iCollisionObject::RebuildObject.
-   */
-  virtual csRef<iCollisionActor> CreateCollisionActor () = 0;
+  /// Creates a new collision sector and adds it to the system's set
+  virtual iCollisionSector* CreateCollisionSector (iSector* sector = nullptr) = 0;
   
-  /// Create a collision sector.
-  virtual csRef<iCollisionSector> CreateCollisionSector () = 0;
+  /// Remove the given collision sector
+  virtual void RemoveCollisionSector (iCollisionSector* sector) = 0;
+  
+  /// Return the amount of sectors in this system
+  virtual size_t GetCollisionSectorCount () const = 0;
 
-  /// Find a collision sector by name.
-  virtual iCollisionSector* FindCollisionSector (const char* name) = 0; 
+  /// Get a collision sector by index
+  virtual iCollisionSector* GetCollisionSector (size_t index) = 0; 
+  
+  /// Find a collision sector by its associated iSector, or nullptr if it has not been found
+  virtual iCollisionSector* FindCollisionSector (const iSector* sceneSector) = 0;
 
   /**
-   * Decompose a concave mesh in convex parts. Each convex part will be added to
-   * the collision object as a separate iColliderConvexMesh. By this way you can
-   * get a dynamic concave mesh collider.
+   * Create a collision group of the given name. Return nullptr if the group could
+   * not be created. If a group with the given name already exists, then return a
+   * reference to this group.
+   * \warning You cannot create more than 16 collision groups in total.
+   * \warning Collision groups cannot be removed once created.
    */
-  virtual void DecomposeConcaveMesh (iCollisionObject* object, 
-    iMeshWrapper* mesh, bool simplify = false) = 0;
+  virtual iCollisionGroup* CreateCollisionGroup (const char* name) = 0;
+
+  /// Find the collision group of the given name, or return nullptr if it has not been found.
+  virtual iCollisionGroup* FindCollisionGroup (const char* name) const = 0;
+
+  /// Get the count of collision groups in this system
+  virtual size_t GetCollisionGroupCount () const = 0;
+
+  /// Get a collision group by its index
+  virtual iCollisionGroup* GetCollisionGroup (size_t index) const = 0;
+
+  // Factory
+
+  /// Create a iCollisionObjectFactory
+  virtual csPtr<iCollisionObjectFactory> CreateCollisionObjectFactory
+    (CS::Collisions::iCollider* collider = nullptr) = 0;
+
+  /// Create a iCollisionObjectFactory of type CS::Collisions::COLLISION_OBJECT_GHOST
+  virtual csPtr<iCollisionObjectFactory> CreateGhostCollisionObjectFactory
+    (CS::Collisions::iCollider* collider = nullptr) = 0;
+
+  /// Create a iCollisionActorFactory
+  virtual csPtr<iCollisionActorFactory> CreateCollisionActorFactory
+    (CS::Collisions::iCollider* collider = nullptr) = 0;
+
+  /// Reset the entire system and delete all sectors
+  virtual void DeleteAll () = 0;
 };
-}
-}
+
+} }
 
 #endif
