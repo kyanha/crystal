@@ -37,7 +37,7 @@
   #pragma warning(disable:4251)	  /* 'identifier' : class 'type' needs to have
 				   * dll-interface to be used by clients of 
 				   * class 'type2' */
-  #pragma warning(disable:4275)	  /* non – DLL-interface class 'identifier'
+  #pragma warning(disable:4275)	  /* non DLL-interface class 'identifier'
 				   * used as base for DLL-interface class 
 				   * 'identifier' */
   #pragma warning(disable:4290)   // C++ exception specification ignored

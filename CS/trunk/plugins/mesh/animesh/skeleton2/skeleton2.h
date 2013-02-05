@@ -21,6 +21,7 @@
 
 #include "csutil/scf_implementation.h"
 #include "imesh/skeleton2.h"
+#include "imesh/skeletonmodel.h"
 #include "iutil/comp.h"
 #include "csutil/array.h"
 #include "csgeom/vector3.h"
@@ -106,6 +107,9 @@ CS_PLUGIN_NAMESPACE_BEGIN(Skeleton2)
 
     virtual const char* GetName () const;
 
+    virtual void SetSkeletonModel (CS::Animation::iSkeletonModel* model);
+    virtual CS::Animation::iSkeletonModel* GetSkeletonModel () const;
+
     //-- "Private"
     void UpdateCachedTransforms ();
     void UpdateOrderList ();
@@ -137,6 +141,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(Skeleton2)
 
     csArray<CS::Animation::BoneID> boneOrderList;
     csRef<CS::Animation::iSkeletonAnimPacketFactory> animationPacket;
+    csRef<CS::Animation::iSkeletonModel> skeletonModel;
 
     bool autostart;
 

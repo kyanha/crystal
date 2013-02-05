@@ -23,6 +23,9 @@ CS_IMPLEMENT_APPLICATION
 
 #define ENVIRONMENT_WALLS 1
 #define ENVIRONMENT_TERRAIN 2
+  
+using namespace CS::Collisions;
+using namespace CS::Physics;
 
 //---------------------------------------------------------------------------
 
@@ -35,8 +38,6 @@ Simple::Simple ()
   rot1_direction = 1;
   rot2_direction = -1;
   sprite_col = 0;
-  
-  localTrans.Identity ();
 }
 
 Simple::~Simple ()
@@ -439,12 +440,12 @@ void Simple::CreateRoom ()
   // Or you can just create one group. Objects in this group will not collide with others.
   //--------
 
-  /*collisionSector->CreateCollisionGroup ("Sprite");
-  collisionSector->CreateCollisionGroup ("SpriteFiltered");
+  /*collisionSystem->CreateCollisionGroup ("Sprite");
+  collisionSystem->CreateCollisionGroup ("SpriteFiltered");
 
-  bool coll = collisionSector->GetGroupCollision ("Sprite", "SpriteFiltered");
+  bool coll = collisionSystem->GetGroupCollision ("Sprite", "SpriteFiltered");
   if (coll)
-    collisionSector->SetGroupCollision ("Sprite", "SpriteFiltered", false);*/
+    collisionSystem->SetGroupCollision ("Sprite", "SpriteFiltered", false);*/
 
 
   //---------
@@ -465,48 +466,54 @@ void Simple::CreateRoom ()
   parent_sprite->GetMovable ()->Transform (csZRotMatrix3 (PI/2.));
   parent_sprite->GetMovable ()->UpdateMove ();
   csOrthoTransform parTrans = parent_sprite->GetMovable ()->GetFullTransform ();
-
-  // Now create the first child.
-  sprite1 = engine->CreateMeshWrapper (imeshfact, "Rotater1");
+  
   csOrthoTransform tc (csZRotMatrix3 (PI/2.), csVector3 (0, -.5, -.5));
+  {
+    // Now create the first child.
+    sprite1 = engine->CreateMeshWrapper (imeshfact, "Rotater1");
 
-  spstate = scfQueryInterface<iSprite3DState> (sprite1->GetMeshObject ());
-  spstate->SetAction ("default");
-  sprite1->QuerySceneNode ()->SetParent (parent_sprite->QuerySceneNode ());
+    spstate = scfQueryInterface<iSprite3DState> (sprite1->GetMeshObject ());
+    spstate->SetAction ("default");
+    sprite1->QuerySceneNode ()->SetParent (parent_sprite->QuerySceneNode ());
+    
+    csRef<iCollisionObjectProperties> props = collisionSystem->CreateCollisionObjectProperties();
 
-  // Create a collider.
-  sprite_col = collisionSystem->CreateColliderConcaveMesh (sprite1);
+    // Create a collider.
+    sprite_col = collisionSystem->CreateColliderConcaveMesh (sprite1);
 
-  // Create a collision object. Set the collider and the movable.
-  sprite1_obj = collisionSystem->CreateCollisionObject ();
-  sprite1_obj->AddCollider (sprite_col, localTrans);
-  sprite1_obj->SetAttachedMovable (sprite1->GetMovable ());
-  // You have to set a world transform to collision object.
-  sprite1_obj->SetTransform (tc * parTrans);
-  // The object must rebuild before it's added to a sector.
-  sprite1_obj->RebuildObject ();
+    // Create a collision object. Set the collider and the movable.
+    sprite1_obj = collisionSystem->CreateCollisionObject (props);
 
-  // Add the object to the sector.
-  collisionSector->AddCollisionObject (sprite1_obj);
-  // Give it a collision group.
-  //sprite1_obj->SetCollisionGroup ("Sprite");
+    sprite1_obj->SetAttachedMovable (sprite1->GetMovable ());
+    // You have to set a world transform to collision object.
+    sprite1_obj->SetTransform (tc * parTrans);
+    // The object must rebuild before it's added to a sector.
 
-  // Now create the second child.
-  sprite2 = engine->CreateMeshWrapper (imeshfact, "Rotater2");
-  tc = csOrthoTransform (csZRotMatrix3 (PI/2.), csVector3 (0, .5, -.5));
+    // Add the object to the sector.
+    collisionSector->AddCollisionObject (sprite1_obj);
+    // Give it a collision group.
+    //sprite1_obj->SetCollisionGroup ("Sprite");
+  }
 
-  spstate = scfQueryInterface<iSprite3DState> (sprite2->GetMeshObject ());
-  spstate->SetAction ("default");
-  sprite2->QuerySceneNode ()->SetParent (parent_sprite->QuerySceneNode ());
+  {
+    // Now create the second child.
+    sprite2 = engine->CreateMeshWrapper (imeshfact, "Rotater2");
+    tc = csOrthoTransform (csZRotMatrix3 (PI/2.), csVector3 (0, .5, -.5));
 
-  sprite2_obj = collisionSystem->CreateCollisionObject ();
-  sprite2_obj->AddCollider (sprite_col, localTrans);
-  sprite2_obj->SetAttachedMovable (sprite2->GetMovable ());
-  sprite2_obj->SetTransform (tc * parTrans);
-  sprite2_obj->RebuildObject ();
+    spstate = scfQueryInterface<iSprite3DState> (sprite2->GetMeshObject ());
+    spstate->SetAction ("default");
+    sprite2->QuerySceneNode ()->SetParent (parent_sprite->QuerySceneNode ());
 
-  collisionSector->AddCollisionObject (sprite2_obj);
-  //sprite2_obj->SetCollisionGroup ("SpriteFiltered");
+    CollisionObjectProperties props(sprite_col);
+    sprite1_obj = collisionSystem->CreateCollisionObject (&props);
+
+    sprite2_obj->SetAttachedMovable (sprite2->GetMovable ());
+    sprite2_obj->SetTransform (tc * parTrans);
+    sprite2_obj->RebuildObject ();
+
+    collisionSector->AddCollisionObject (sprite2_obj);
+    //sprite2_obj->SetCollisionGroup ("SpriteFiltered");
+  }
 }
 
 void Simple::CreateTerrain ()
@@ -557,15 +564,10 @@ void Simple::CreateTerrain ()
   collisionSector->SetSector (room);
 
   // Create a terrain collider.
-  csRef<CS::Collisions::iColliderTerrain> terrainCollider = collisionSystem->CreateColliderTerrain (terrain);
+  csRef<CS::Collisions::iCollisionTerrain> colTerrain = collisionSystem->CreateCollisionTerrain (terrain);
 
-  // Create a collision object. Set the collider.
-  terrainObject = collisionSystem->CreateCollisionObject ();
-  terrainObject->AddCollider (terrainCollider, localTrans);
-  terrainObject->RebuildObject ();
-
-  // Add the object to the sector.
-  collisionSector->AddCollisionObject (terrainObject);
+  // Add the terrain to the sector.
+  collisionSector->AddCollisionTerrain(colTerrain);
 
   // Now we need light to see something.
   csRef<iLight> light;
@@ -618,45 +620,51 @@ void Simple::CreateTerrain ()
   parent_sprite->GetMovable ()->Transform (csZRotMatrix3 (PI/2.));
   parent_sprite->GetMovable ()->UpdateMove ();
   csOrthoTransform parTrans = parent_sprite->GetMovable ()->GetFullTransform ();
-
-  // Now create the first child.
-  sprite1 = engine->CreateMeshWrapper (imeshfact, "Rotater1");
+  
   csOrthoTransform tc (csZRotMatrix3 (0), csVector3 (0, -.5, -.5));
+  {
+    // Now create the first child.
+    sprite1 = engine->CreateMeshWrapper (imeshfact, "Rotater1");
 
-  spstate = scfQueryInterface<iSprite3DState> (sprite1->GetMeshObject ());
-  spstate->SetAction ("default");
-  sprite1->QuerySceneNode ()->SetParent (parent_sprite->QuerySceneNode ());
+    spstate = scfQueryInterface<iSprite3DState> (sprite1->GetMeshObject ());
+    spstate->SetAction ("default");
+    sprite1->QuerySceneNode ()->SetParent (parent_sprite->QuerySceneNode ());
 
-  // Create a collider.
-  sprite_col = collisionSystem->CreateColliderConcaveMesh (sprite1);
+    // Create a collider.
+    sprite_col = collisionSystem->CreateColliderConcaveMesh (sprite1);
 
-  // Create a collision object. Set the collider and the movable.
-  sprite1_obj = collisionSystem->CreateCollisionObject ();
-  sprite1_obj->AddCollider (sprite_col, localTrans);
-  sprite1_obj->SetAttachedMovable (sprite1->GetMovable ());
+    // Create a collision object. Set the collider and the movable.
+    CollisionObjectProperties props(sprite_col);
+    sprite1_obj = collisionSystem->CreateCollisionObject (&props);
 
-  // You have to set a world transform to collision object.
-  sprite1_obj->SetTransform (tc * parTrans);
-  sprite1_obj->RebuildObject ();
+    sprite1_obj->SetAttachedMovable (sprite1->GetMovable ());
 
-  // Add the object to the sector.
-  collisionSector->AddCollisionObject (sprite1_obj);
+    // You have to set a world transform to collision object.
+    sprite1_obj->SetTransform (tc * parTrans);
+    sprite1_obj->RebuildObject ();
 
-  // Now create the second child.
-  sprite2 = engine->CreateMeshWrapper (imeshfact, "Rotater2");
-  tc = csOrthoTransform (csZRotMatrix3 (0), csVector3 (0, .5, -.5));
+    // Add the object to the sector.
+    collisionSector->AddCollisionObject (sprite1_obj);
+  }
 
-  spstate = scfQueryInterface<iSprite3DState> (sprite2->GetMeshObject ());
-  spstate->SetAction ("default");
-  sprite2->QuerySceneNode ()->SetParent (parent_sprite->QuerySceneNode ());
+  {
+    // Now create the second child.
+    sprite2 = engine->CreateMeshWrapper (imeshfact, "Rotater2");
+    tc = csOrthoTransform (csZRotMatrix3 (0), csVector3 (0, .5, -.5));
 
-  sprite2_obj = collisionSystem->CreateCollisionObject ();
-  sprite2_obj->AddCollider (sprite_col, localTrans);
-  sprite2_obj->SetAttachedMovable (sprite2->GetMovable ());
-  sprite2_obj->SetTransform (tc * parTrans);
-  sprite2_obj->RebuildObject ();
+    spstate = scfQueryInterface<iSprite3DState> (sprite2->GetMeshObject ());
+    spstate->SetAction ("default");
+    sprite2->QuerySceneNode ()->SetParent (parent_sprite->QuerySceneNode ());
 
-  collisionSector->AddCollisionObject (sprite2_obj);
+    CollisionObjectProperties props(sprite_col);
+    sprite1_obj = collisionSystem->CreateCollisionObject (&props);
+
+    sprite2_obj->SetAttachedMovable (sprite2->GetMovable ());
+    sprite2_obj->SetTransform (tc * parTrans);
+    sprite2_obj->RebuildObject ();
+
+    collisionSector->AddCollisionObject (sprite2_obj);
+  }
 }
 
 bool Simple::OnMouseDown (iEvent& event)

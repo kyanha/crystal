@@ -45,20 +45,19 @@ struct iAnimatedMesh;
 namespace CS {
 namespace Animation {
 
-struct iSkeletonFactory;
 struct iSkeleton;
+struct iSkeletonAnimPacket;
+struct iSkeletonAnimPacketFactory;
+struct iSkeletonFactory;
+struct iSkeletonModel;
 
 class AnimatedMeshState;
-
-struct iSkeletonAnimPacketFactory;
-struct iSkeletonAnimPacket;
 
 /**\addtogroup meshplugins
  * @{ */
 
 /**\name Skeleton
  * @{ */
-
 
 /// Identifier for single bone data
 typedef size_t BoneID;
@@ -123,7 +122,7 @@ struct iSkeletonManager : public virtual iBase
  */
 struct iSkeletonFactory : public virtual iBase
 {
-  SCF_INTERFACE(CS::Animation::iSkeletonFactory, 1, 0, 4);
+  SCF_INTERFACE(CS::Animation::iSkeletonFactory, 1, 0, 5);
 
   /**\name Bone handling
    * @{ */
@@ -267,6 +266,22 @@ struct iSkeletonFactory : public virtual iBase
    * Get the name of the skeleton factory
    */
   virtual const char* GetName () const = 0;
+
+  /**
+   * Set the physical model of this skeleton factory. The physical model
+   * describes the colliders and physical properties of the skeleton, and can
+   * be used eg by the CS::Animation::iSkeletonRagdollNode2 in order to animate
+   * the skeleton through physical simulation.
+   */
+  virtual void SetSkeletonModel (CS::Animation::iSkeletonModel* model) = 0;
+
+  /**
+   * Get the physical model of this skeleton factory. The physical model
+   * describes the colliders and physical properties of the skeleton, and can
+   * be used eg by the CS::Animation::iSkeletonRagdollNode2 in order to animate
+   * the skeleton through physical simulation.
+   */
+  virtual CS::Animation::iSkeletonModel* GetSkeletonModel () const = 0;
 };
 
 /**

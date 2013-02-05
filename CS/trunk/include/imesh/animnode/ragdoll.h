@@ -55,6 +55,10 @@ struct iSkeletonRagdollNodeManager
   SCF_ISKELETONANIMNODEMANAGER_INTERFACE (CS::Animation::iSkeletonRagdollNodeManager, 1, 0, 0);
 };
 
+// This enum is also defined in the 'physics2' ragdoll node
+#ifndef __CS_IMESH_ANIMNODE_RAGDOLL_STATES_H__
+#define __CS_IMESH_ANIMNODE_RAGDOLL_STATES_H__
+
 /**
  * The physical state of a body chain.
  */
@@ -67,6 +71,8 @@ enum RagdollState
 			  of the chain is controlled by the animation system,
 			  but its bones do interact with the dynamic simulation. */
 };
+
+#endif
 
 /**
  * Factory for the ragdoll animation node.

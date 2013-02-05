@@ -50,9 +50,9 @@ namespace std
 }
 
 #ifndef CS_NO_NULLPTR_RENAME_HACK
-/* Hack around the “identifier ‘nullptr’ will become a keyword in C++0x”
+/* Hack around the "identifier 'nullptr' will become a keyword in C++0x"
  * warnings gcc 4.6 emits.
- * The “proper” way – using a #pragma GCC diagnostic – is, unfortunately,
+ * The "proper" way - using a #pragma GCC diagnostic - is, unfortunately,
  * broken: http://gcc.gnu.org/bugzilla/show_bug.cgi?id=48914
  * Instead, to avoid use of that identifier, rename that identifier.
  */

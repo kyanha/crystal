@@ -1,499 +1,303 @@
+/*
+    Copyright (C) 2012 by Dominik Seifert
+    Copyright (C) 2011 by Liu Lu
+
+    This library is free software; you can redistribute it and/or
+    modify it under the terms of the GNU Library General Public
+    License as published by the Free Software Foundation; either
+    version 2 of the License, or (at your option) any later version.
+
+    This library is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+    Library General Public License for more details.
+
+    You should have received a copy of the GNU Library General Public
+    License along with this library; if not, write to the Free
+    Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+*/
+
 #include "btBulletDynamicsCommon.h"
 #include "btBulletCollisionCommon.h"
 #include "BulletCollision/CollisionDispatch/btGhostObject.h"
 
 #include "cssysdef.h"
 #include "iengine/movable.h"
+#include "iengine/scenenode.h"
 #include "collisionobject2.h"
-#include "colliders2.h"
+#include "colliderprimitives.h"
+#include "collisionterrain.h"
+
+#include "portal.h"
+
+using namespace CS::Collisions;
 
 CS_PLUGIN_NAMESPACE_BEGIN (Bullet2)
 {
-
-csBulletCollisionObject::csBulletCollisionObject (csBulletSystem* sys)
-: scfImplementationType (this), movable (NULL), camera (NULL), collCb (NULL),
-  type (CS::Collisions::COLLISION_OBJECT_BASE), transform (btTransform::getIdentity ()),
-  portalWarp (btQuaternion::getIdentity ()), sector (NULL), system (sys),
-  btObject (NULL), compoundShape (NULL), objectOrigin (NULL), objectCopy (NULL),
-  haveStaticColliders(0), insideWorld (false), shapeChanged (false), isTerrain (false)
-{
-  btTransform identity;
-  identity.setIdentity ();
-  motionState = new csBulletMotionState (this, identity, identity);
-}
-
-csBulletCollisionObject::~csBulletCollisionObject ()
-{
-  RemoveBulletObject ();
-  colliders.DeleteAll ();
-  if (btObject)
-    delete btObject;
-  if (compoundShape)
-    delete compoundShape;
-  if (motionState)
-    delete motionState;
-}
-
-void csBulletCollisionObject::SetObjectType (CS::Collisions::CollisionObjectType type,
-                                             bool forceRebuild /* = true */)
-{
-  //many many constraints.
-  if (type == CS::Collisions::COLLISION_OBJECT_ACTOR || type == CS::Collisions::COLLISION_OBJECT_PHYSICAL)
+  // TODO: factory in constructor (everywhere)
+  void csBulletCollisionObject::CreateCollisionObject (iCollisionObjectFactory* props)
   {
-    csFPrintf  (stderr, "csBulletCollisionObject: Can't change from BASE/GHOST to ACTOR/PHYSICAL\n");
-    return;
+    collider = dynamic_cast<csBulletCollider*>(props->GetCollider ());
+    group = dynamic_cast<CollisionGroup*> (props->GetCollisionGroup ());
   }
-  else if (isTerrain && type != CS::Collisions::COLLISION_OBJECT_BASE)
+
+  csBulletCollisionObject::csBulletCollisionObject (csBulletSystem* sys)
+    : scfImplementationType (this), portalWarp (btQuaternion::getIdentity ()), sector (nullptr),
+    system (sys), portalData (nullptr), btObject (nullptr), insideWorld (false)
   {
-    csFPrintf  (stderr, "csBulletCollisionObject: Can't change terrain object from BASE to other type\n");
-    return;
   }
-  else if (haveStaticColliders > 0)
+
+  csBulletCollisionObject::~csBulletCollisionObject ()
   {
-    csFPrintf  (stderr, "csBulletCollisionObject: Can't change static object from BASE to other type\n");
-    return;
-  }
-  else
-    this->type = type; // You can change type between base and ghost.
-  if (forceRebuild)
-    RebuildObject ();
-}
-
-void csBulletCollisionObject::SetTransform (const csOrthoTransform& trans)
-{
-
-  //Lulu: I don't understand why remove the body from the world then set MotionState,
-  //      then add it back to the world. 
-
-  transform = CSToBullet (trans, system->getInternalScale ());
-
-  if (type == CS::Collisions::COLLISION_OBJECT_BASE || type == CS::Collisions::COLLISION_OBJECT_PHYSICAL)
-  {
-    if (!isTerrain)
-    {
-      if (insideWorld)
-        sector->bulletWorld->removeRigidBody (btRigidBody::upcast (btObject));
-
-      btTransform principalAxis = motionState->inversePrincipalAxis.inverse ();
-
-      delete motionState;
-      motionState = new csBulletMotionState (this, transform * principalAxis, principalAxis);
-
-      if (btObject)
-      {
-        dynamic_cast<btRigidBody*>(btObject)->setMotionState (motionState);
-        dynamic_cast<btRigidBody*>(btObject)->setCenterOfMassTransform (motionState->m_graphicsWorldTrans);
-      }
-
-      if (insideWorld)
-        sector->bulletWorld->addRigidBody (btRigidBody::upcast (btObject), collGroup.value, collGroup.mask);
-    }
-    else
-    {
-      //Do not support change transform of terrain?
-      //Currently in CS it's not supported.
-    }
-  }
-  else // ghost or actor
-  {
-    if (movable)
-      movable->SetFullTransform (BulletToCS (transform * invPricipalAxis, system->getInverseInternalScale ()));
-    if (camera)
-      camera->SetTransform (BulletToCS (transform * invPricipalAxis, system->getInverseInternalScale ()));
     if (btObject)
-      btObject->setWorldTransform(transform);
-  }
-}
+      delete btObject;
 
-csOrthoTransform csBulletCollisionObject::GetTransform ()
-{
-  float inverseScale = system->getInverseInternalScale ();
-
-  if (type == CS::Collisions::COLLISION_OBJECT_BASE || type == CS::Collisions::COLLISION_OBJECT_PHYSICAL)
-  {
-    if (!isTerrain)
+    if (portalData)
     {
-      btTransform trans;
-      motionState->getWorldTransform (trans);
-      return BulletToCS (trans * motionState->inversePrincipalAxis,
-        inverseScale);
-    }
-    else
-    {
-      csBulletColliderTerrain* terrainCollider = dynamic_cast<csBulletColliderTerrain*> (colliders[0]);
-      return terrainCollider->terrainTransform;      
+      // must not still be traversing
+      CS_ASSERT (!portalData->Portal);
+      delete portalData;
     }
   }
-  if (isTerrain)
-  {
-    csBulletColliderTerrain* terrainCollider = dynamic_cast<csBulletColliderTerrain*> (colliders[0]);
-    return terrainCollider->terrainTransform;   
-  }
-  else // ghost or actor
-    if (btObject)
-      return BulletToCS (btObject->getWorldTransform(), system->getInverseInternalScale ());
-    else
-      return BulletToCS (transform, system->getInverseInternalScale ());
-}
-
-void csBulletCollisionObject::AddCollider (CS::Collisions::iCollider* collider,
-                                           const csOrthoTransform& relaTrans)
-{
-  csRef<csBulletCollider> coll (dynamic_cast<csBulletCollider*>(collider));
-
-  CS::Collisions::ColliderType type = collider->GetGeometryType ();
-  if (type == CS::Collisions::COLLIDER_CONCAVE_MESH
-    ||type == CS::Collisions::COLLIDER_CONCAVE_MESH_SCALED
-    ||type == CS::Collisions::COLLIDER_PLANE)
-    haveStaticColliders ++;
   
-  if(type == CS::Collisions::COLLIDER_TERRAIN)
+  void csBulletCollisionObject::SetSector (CS::Collisions::iCollisionSector* sector)
   {
-    colliders.Empty ();
-    relaTransforms.Empty ();
-    colliders.Push (coll);
-    relaTransforms.Push (relaTrans);
-    isTerrain = true;
+    if (this->sector) this->sector->RemoveCollisionObject (this);
+    if (!sector) this->sector = nullptr;
+    else sector->AddCollisionObject (this);
   }
-  else if (!isTerrain)
-  {
-    // If a collision object has a terrain collider. Then it is not allowed to add other colliders.
-    colliders.Push (coll);
-    relaTransforms.Push (relaTrans);
-  }
-  shapeChanged = true;
-  //User must call RebuildObject() after this.
-}
 
-void csBulletCollisionObject::RemoveCollider (CS::Collisions::iCollider* collider)
-{
-  for (size_t i =0; i < colliders.GetSize(); i++)
+  void csBulletCollisionObject::SetAttachedSceneNode (iSceneNode* newSceneNode) 
   {
-    if (colliders[i] == collider)
+    if (sceneNode == newSceneNode) return;
+
+    if (sceneNode)
     {
-      RemoveCollider (i);
-      return;
+      // remove old SceneNode from sector
+      if (sector) sector->RemoveSceneNodeFromSector (sceneNode); 
     }
-  }
-  //User must call RebuildObject() after this.
-}
-
-void csBulletCollisionObject::RemoveCollider (size_t index)
-{
-  if (index < colliders.GetSize ())
-  {  
-    if (isTerrain && index == 0)
-      isTerrain = false;
-
-    CS::Collisions::ColliderType type = colliders[index]->GetGeometryType ();
-    if (type == CS::Collisions::COLLIDER_CONCAVE_MESH
-      ||type == CS::Collisions::COLLIDER_CONCAVE_MESH_SCALED
-      ||type == CS::Collisions::COLLIDER_PLANE)
-      haveStaticColliders --;
-
-    colliders.DeleteIndex (index);
-    relaTransforms.DeleteIndex (index);
-  }
-  //User must call RebuildObject() after this.
-}
-
-CS::Collisions::iCollider* csBulletCollisionObject::GetCollider (size_t index)
-{
-  if (index < colliders.GetSize ())
-    return colliders[index];
-  return NULL;
-}
-
-void csBulletCollisionObject::RebuildObject ()
-{
-  size_t colliderCount = colliders.GetSize ();
-  if (colliderCount == 0)
-  {  
-    csFPrintf (stderr, "csBulletCollisionObject: Haven't add any collider to the object.\nRebuild failed.\n");
-    return;
-  }
-
-  if (shapeChanged)
-  {
-    if(compoundShape)
-      delete compoundShape;
-
-    if (isTerrain)
+    sceneNode = newSceneNode; 
+    if (sceneNode) 
     {
-      csBulletColliderTerrain* terrainColl = dynamic_cast<csBulletColliderTerrain*> (colliders[0]);
-      for (size_t i = 0; i < terrainColl->bodies.GetSize (); i++)
+      // add new movable to sector
+      sceneNode->GetMovable ()->SetFullTransform (GetTransform ()); 
+      sceneNode->GetMovable ()->UpdateMove ();
+      if (sector)
       {
-        btRigidBody* body = terrainColl->GetBulletObject (i);
-        body->setUserPointer (this);
+        sector->AddSceneNodeToSector (sceneNode); 
       }
     }
-
-    else if(colliderCount >= 2)
-    {  
-      compoundShape = new btCompoundShape();
-      for (size_t i = 0; i < colliderCount; i++)
-      {
-        btTransform relaTrans = CSToBullet (relaTransforms[i], system->getInternalScale ());
-        compoundShape->addChildShape (relaTrans, colliders[i]->shape);
-      }
-      //Shift children shape?
+  }
+  
+  void csBulletCollisionObject::SetCollider (CS::Collisions::iCollider* newCollider,
+					     const csOrthoTransform& transform)
+  {
+    colliderTransform = transform;
+    if (newCollider)
+    {
+      collider = dynamic_cast<csBulletCollider*>(newCollider);
+      RebuildObject ();
     }
   }
 
-  bool wasInWorld = false;
-  if (insideWorld)
+  void csBulletCollisionObject::SetColliderTransform (const csOrthoTransform& transform)
   {
-    wasInWorld = true;
-    RemoveBulletObject ();
+    colliderTransform = transform;
   }
 
-  if (wasInWorld)
-    AddBulletObject ();
-}
-
-void csBulletCollisionObject::SetCollisionGroup (const char* name)
-{
-  if (!sector)
-    return;
-
-  CS::Collisions::CollisionGroup& group = sector->FindCollisionGroup (name);
-  this->collGroup = group;
-
-  if (btObject && insideWorld)
+  const csOrthoTransform& csBulletCollisionObject::GetColliderTransform () const
   {
-    btObject->getBroadphaseHandle ()->m_collisionFilterGroup = collGroup.value;
-    btObject->getBroadphaseHandle ()->m_collisionFilterMask = collGroup.mask;
+    return colliderTransform;
   }
-}
 
-bool csBulletCollisionObject::Collide (CS::Collisions::iCollisionObject* otherObject)
-{
-  csArray<CS::Collisions::CollisionData> data;
-  csBulletCollisionObject* otherObj = dynamic_cast<csBulletCollisionObject*> (otherObject);
-  if (isTerrain)
+  void csBulletCollisionObject::SetTransform (const csOrthoTransform& trans)
   {
-    //Terrain VS Terrain???
-    if (otherObj->isTerrain == true)
-      return false;
+    CS_ASSERT (btObject);
 
-    //Terrain VS object/Body.
-    btCollisionObject* otherBtObject = otherObj->GetBulletCollisionPointer ();
-    csBulletColliderTerrain* terrainColl = dynamic_cast<csBulletColliderTerrain*> (colliders[0]);
-    for (size_t i = 0; i < terrainColl->bodies.GetSize (); i++)
+    btTransform btTrans = CSToBullet (trans, system->GetInternalScale ());
+
+    iSceneNode* sceneNode = GetAttachedSceneNode ();
+    if (sceneNode)
     {
-      btRigidBody* body = terrainColl->GetBulletObject (i);
-      if (sector->BulletCollide (body, otherBtObject, data))
+      sceneNode->GetMovable ()->SetFullTransform (trans);
+      sceneNode->GetMovable ()->UpdateMove ();
+    }
+
+    if (camera)
+    {
+      camera->SetTransform (trans);
+    }
+
+    btObject->setWorldTransform (btTrans);
+  }
+
+  csOrthoTransform csBulletCollisionObject::GetTransform () const
+  {
+    CS_ASSERT (btObject);
+    return BulletToCS (btObject->getWorldTransform (), system->GetInverseInternalScale ());
+  }
+
+  void csBulletCollisionObject::SetCollisionGroup (iCollisionGroup* group)
+  {
+    // TODO: fallback to the factory value
+    this->group = dynamic_cast<CollisionGroup*> (group);
+    if (!this->group) this->group = system->GetDefaultGroup ();
+  }
+
+  iCollisionGroup* csBulletCollisionObject::GetCollisionGroup () const
+  {
+    return group;
+  }
+
+  CS::Collisions::HitBeamResult csBulletCollisionObject::HitBeam
+    (const csVector3& start, const csVector3& end) const
+  {
+    return sector->RigidHitBeam (btObject, start, end);
+  }
+
+  csPtr<CS::Collisions::iCollisionData> csBulletCollisionObject::Collide (iCollisionObject* otherObject) const
+  {
+    btCollisionObject* otherBtObject = dynamic_cast<csBulletCollisionObject*>
+      (otherObject)->GetBulletCollisionPointer ();
+    csRef<CS::Collisions::iCollisionData> data =
+      sector->BulletCollide (btObject, otherBtObject);
+
+    // Call the listener if any (probably not desired)
+/*
+    if (data && collCb)
+    {
+      csBulletCollisionObject* otherObj =
+	dynamic_cast<csBulletCollisionObject*> (otherObject);
+      collCb->OnCollision (data);
+    }
+*/
+
+    return csPtr<CS::Collisions::iCollisionData> (data);
+  }
+
+  size_t csBulletCollisionObject::GetContactObjectsCount ()
+  {
+    if (IsPassive ()) return 0;
+
+    size_t result = 0;
+    if (GetObjectType () == COLLISION_OBJECT_PHYSICAL)
+    {
+      result = contactObjects.GetSize ();
+    }
+    else
+    {
+      btGhostObject* ghost = btGhostObject::upcast (btObject);
+      if (ghost)
+        result = ghost->getNumOverlappingObjects ();
+      else 
+        return 0;
+    } 
+
+    if (portalData && portalData->OtherObject)
+    {
+      result += portalData->OtherObject->GetContactObjectsCount ();
+    }
+
+    return result;
+  }
+
+  CS::Collisions::iCollisionObject* csBulletCollisionObject::GetContactObject (size_t index)
+  {
+    if (IsPassive ()) return nullptr;
+
+    // TODO: Fix this method and split it up into the corresponding sub-classes
+    if (GetObjectType () == COLLISION_OBJECT_PHYSICAL)
+    {
+      if (index < contactObjects.GetSize () && index >= 0)
       {
-        if (otherObj->collCb)
-          otherObj->collCb->OnCollision (otherObj, this, data);
-        return true;
+        return contactObjects[index];
+      }
+      else
+      {
+        if (portalData && portalData->OtherObject)
+        {
+          index -= contactObjects.GetSize ();
+          return portalData->OtherObject->GetContactObject (index);
+        }
+        else
+        {
+          return nullptr;
+        }
+      }
+    }
+    else
+    {
+      btGhostObject* ghost = btGhostObject::upcast (btObject);
+      if (ghost)
+      {
+        if (index < (size_t) ghost->getNumOverlappingObjects () && index >= 0)
+        {
+          btCollisionObject* obj = ghost->getOverlappingObject (index);
+          if (obj)
+            return static_cast<CS::Collisions::iCollisionObject*> (obj->getUserPointer ());
+          else 
+            return nullptr;
+        }
+        else
+        {
+          if (portalData && portalData->OtherObject)
+          {
+            index -= ghost->getNumOverlappingObjects ();
+            return portalData->OtherObject->GetContactObject (index);
+          }
+          else
+            return nullptr;
+        }
+      }
+      else 
+        return nullptr;
+    }
+  }
+
+  void csBulletCollisionObject::SetRotation (const csMatrix3& rot)
+  {
+    iSceneNode* sceneNode = GetAttachedSceneNode ();
+    if (sceneNode)
+      sceneNode->GetMovable ()->GetTransform ().SetT2O (rot);
+    if (camera)
+      camera->GetTransform ().SetT2O (rot);
+    if (btObject)
+    {
+      csOrthoTransform trans = GetTransform ();
+      trans.SetT2O (rot);
+      btObject->setWorldTransform (CSToBullet (trans, system->GetInternalScale ()));
+    }
+  }
+
+  bool csBulletCollisionObject::TestOnGround ()
+  { 
+    static const float groundAngleCosThresh = .7f;
+
+    // Find any objects that can at least remotely support the object
+    // TODO: this is really not efficient
+    csRef<iCollisionDataList> collisions = sector->CollisionTest (this);
+
+    for (size_t i = 0; i < collisions->GetCollisionCount (); i++)
+    {
+      iCollisionData* coll = collisions->GetCollision (i);
+      
+      int dir = coll->GetObjectA () == this ? 1 : -1;
+
+      for (size_t j = 0; j < coll->GetContactCount (); j++)
+      {
+	iCollisionContact* contact = coll->GetContact (j);
+	
+	float groundAngleCos = contact->GetNormalOnB () * csVector3 (0.0f, 1.0f, 0.0f);
+	if (dir * groundAngleCos > groundAngleCosThresh)
+	  return true;
       }
     }
     return false;
   }
-  else
+
+  bool csBulletCollisionObject::IsPassive () const
   {
-    //Object/Body CS terrain.
-    if (otherObj->isTerrain == true)
-      return otherObject->Collide (this);
-
-    //Object/Body VS object.
-    btCollisionObject* otherBtObject = dynamic_cast<csBulletCollisionObject*> (otherObject)->GetBulletCollisionPointer ();
-    bool result = sector->BulletCollide (btObject, otherBtObject, data);
-    if (result)
-      if (collCb)
-        collCb->OnCollision (this, otherObj, data);
-
-    return result;
+    return portalData != nullptr && !portalData->IsOriginal;
   }
-  return false;
-}
-
-CS::Collisions::HitBeamResult csBulletCollisionObject::HitBeam (const csVector3& start,
-                                                const csVector3& end)
-{
-  //Terrain part
-  if (isTerrain)
-  {
-    csBulletColliderTerrain* terrainColl = dynamic_cast<csBulletColliderTerrain*> (colliders[0]);
-    for (size_t i = 0; i < terrainColl->bodies.GetSize (); i++)
-    {
-      btRigidBody* body = terrainColl->GetBulletObject (i);
-      CS::Collisions::HitBeamResult result = sector->RigidHitBeam (body, start, end);
-      if (result.hasHit)
-        return result;
-    }
-    return CS::Collisions::HitBeamResult();
-  }
-  //Others part
-  else
-    return sector->RigidHitBeam (btObject, start, end);
-}
-
-size_t csBulletCollisionObject::GetContactObjectsCount ()
-{
-  size_t result = 0;
-  if (type == CS::Collisions::COLLISION_OBJECT_BASE 
-    || type == CS::Collisions::COLLISION_OBJECT_PHYSICAL)
-    result = contactObjects.GetSize ();
-  else
-  {
-    btGhostObject* ghost = btGhostObject::upcast (btObject);
-    if (ghost)
-      result = ghost->getNumOverlappingObjects ();
-    else 
-      return 0;
-  }
-
-  if (objectCopy)
-    result += objectCopy->GetContactObjectsCount ();
-
-  return result;
-}
-
-CS::Collisions::iCollisionObject* csBulletCollisionObject::GetContactObject (size_t index)
-{
-  if (type == CS::Collisions::COLLISION_OBJECT_BASE 
-    || type == CS::Collisions::COLLISION_OBJECT_PHYSICAL)
-  {
-    if (index < contactObjects.GetSize () && index >= 0)
-      return contactObjects[index];
-    else
-    {
-      if (objectCopy)
-      {
-        index -= contactObjects.GetSize ();
-        return objectCopy->GetContactObject (index);
-      }
-      else
-        return NULL;
-    }
-  }
-  else
-  {
-    btGhostObject* ghost = btGhostObject::upcast (btObject);
-    if (ghost)
-    {
-      if (index < (size_t) ghost->getNumOverlappingObjects () && index >= 0)
-      {
-        btCollisionObject* obj = ghost->getOverlappingObject (index);
-        if (obj)
-          return static_cast<CS::Collisions::iCollisionObject*> (obj->getUserPointer ());
-        else 
-          return NULL;
-      }
-      else
-      {
-        if (objectCopy)
-        {
-          index -= ghost->getNumOverlappingObjects ();
-          return objectCopy->GetContactObject (index);
-        }
-        else
-          return NULL;
-      }
-    }
-    else 
-      return NULL;
-  }
-}
-
-bool csBulletCollisionObject::RemoveBulletObject ()
-{
-  if (insideWorld)
-  {
-    if (type == CS::Collisions::COLLISION_OBJECT_BASE)
-    {
-      if (isTerrain)
-      {
-        csBulletColliderTerrain* terrainColl = dynamic_cast<csBulletColliderTerrain*> (colliders[0]);
-        terrainColl->RemoveRigidBodies ();
-      }
-      else
-      {
-        sector->bulletWorld->removeRigidBody (btRigidBody::upcast(btObject));
-        delete btObject;
-        btObject = NULL;
-      }
-    }
-    else
-    {
-      sector->bulletWorld->removeCollisionObject (btObject);
-      delete btObject;
-      btObject = NULL;
-    }
-    insideWorld = false;
-
-    if (objectCopy)
-      objectCopy->sector->RemoveCollisionObject (objectCopy);
-    if (objectOrigin)
-      objectOrigin->objectCopy = NULL;
-
-    objectCopy = NULL;
-    objectOrigin = NULL;
-    return true;
-  }
-  return false;
-}
-
-bool csBulletCollisionObject::AddBulletObject ()
-{
-  //Add to world in this function...
-  if (insideWorld)
-    RemoveBulletObject ();
-
-  btCollisionShape* shape;
-  if (compoundShape)
-    shape = compoundShape;
-  else
-    shape = colliders[0]->shape;
-
-  btTransform pricipalAxis;
-  if (compoundShape)
-    pricipalAxis.setIdentity ();
-  else
-    pricipalAxis = CSToBullet (relaTransforms[0], system->getInternalScale ());
-
-  invPricipalAxis = pricipalAxis.inverse ();
-
-  if (type == CS::Collisions::COLLISION_OBJECT_BASE)
-  {
-    if (!isTerrain)
-    {
-      btTransform trans;
-      motionState->getWorldTransform (trans);
-      trans = trans * motionState->inversePrincipalAxis;
-      delete motionState;
-      motionState = new csBulletMotionState (this, trans * pricipalAxis, pricipalAxis);
-
-      btVector3 localInertia (0.0f, 0.0f, 0.0f);
-      btRigidBody::btRigidBodyConstructionInfo infos (0.0, motionState,
-        shape, localInertia);
-      btObject = new btRigidBody (infos);
-      btObject->setUserPointer (dynamic_cast<iCollisionObject*> (this));
-      sector->bulletWorld->addRigidBody (btRigidBody::upcast(btObject), collGroup.value, collGroup.mask);
-
-    }
-    else
-      dynamic_cast<csBulletColliderTerrain*> (colliders[0])->AddRigidBodies (sector, this);
-  }
-  else if (type == CS::Collisions::COLLISION_OBJECT_GHOST 
-    || type == CS::Collisions::COLLISION_OBJECT_ACTOR)
-  {
-
-    btObject = new btPairCachingGhostObject ();
-    btObject->setWorldTransform (transform);
-    if (movable)
-      movable->SetFullTransform (BulletToCS(transform * invPricipalAxis, system->getInverseInternalScale ()));
-    if (camera)
-      camera->SetTransform (BulletToCS(transform * invPricipalAxis, system->getInverseInternalScale ()));
-    btObject->setUserPointer (dynamic_cast<CS::Collisions::iCollisionObject*> (this));
-    btObject->setCollisionShape (shape);
-    sector->broadphase->getOverlappingPairCache()->setInternalGhostPairCallback(new btGhostPairCallback());
-    sector->bulletWorld->addCollisionObject (btObject, collGroup.value, collGroup.mask);
-  }
-  insideWorld = true;
-  return true;
-}
 }
 CS_PLUGIN_NAMESPACE_END (Bullet2)

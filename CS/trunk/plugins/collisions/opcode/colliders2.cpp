@@ -24,6 +24,9 @@
 #include "csutil/stringquote.h"
 #include "imesh/objmodel.h"
 #include "colliders2.h"
+#include "collisionobject2.h"
+
+using namespace CS::Collisions;
 
 CS_PLUGIN_NAMESPACE_BEGIN (Opcode2)
 {
@@ -145,9 +148,10 @@ void csOpcodeCollider::MeshCallback (udword triangle_index,
   triangle.Vertex[2] = &vertholder [tri_array[index + 2]];
 }
 
-TerrainCellCollider::TerrainCellCollider (iTerrainCell* cell, csOrthoTransform trans)
-: cell (cell), cellTransform (trans)
+csOpcodeColliderTerrain::csOpcodeColliderTerrain (iTerrainCell* cell, csOrthoTransform trans, csOpcodeCollisionSystem* sys)
+ : scfImplementationType (this, sys), cell (cell), cellTransform (trans)
 {
+  mesh = nullptr;
   opcMeshInt.SetCallback (&MeshCallback, this);
 
   Opcode::OPCODECREATE OPCC;
@@ -208,7 +212,7 @@ TerrainCellCollider::TerrainCellCollider (iTerrainCell* cell, csOrthoTransform t
   model->Build (OPCC);
 }
 
-TerrainCellCollider::~TerrainCellCollider ()
+csOpcodeColliderTerrain::~csOpcodeColliderTerrain ()
 {
   if (model)
   {
@@ -224,11 +228,11 @@ TerrainCellCollider::~TerrainCellCollider ()
   vertholder = NULL;
 }
 
-void TerrainCellCollider::MeshCallback (udword triangle_index,
+void csOpcodeColliderTerrain::MeshCallback (udword triangle_index,
                                      Opcode::VertexPointers& triangle,
                                      void* user_data)
 {
-  TerrainCellCollider* collider = (TerrainCellCollider*)user_data;
+  csOpcodeColliderTerrain* collider = (csOpcodeColliderTerrain*)user_data;
 
   udword *tri_array = collider->indexholder;
   Point *vertholder = collider->vertholder;
@@ -238,16 +242,17 @@ void TerrainCellCollider::MeshCallback (udword triangle_index,
   triangle.Vertex[2] = &vertholder [tri_array[index + 2]];
 }
 
-csOpcodeColliderTerrain::csOpcodeColliderTerrain (iTerrainSystem* terrain,
+csOpcodeCollisionTerrain::csOpcodeCollisionTerrain (iTerrainSystem* terrain,
                                                   csOpcodeCollisionSystem* sys)
- : scfImplementationType (this), terrainSystem (terrain), system (sys), scale(1.0, 1.0, 1.0)
+ : scfImplementationType (this), terrainSystem (terrain), system (sys), sector(nullptr)
 {
   unload = true;
 
   terrain->AddCellLoadListener (this);
+
   // Find the transform of the terrain
-  csRef<iMeshObject> mesh = scfQueryInterface<iMeshObject> (terrain);
-  terrainTransform = mesh->GetMeshWrapper ()->GetMovable ()->GetFullTransform ();
+  csRef<iMeshObject> meshObj = scfQueryInterface<iMeshObject> (terrain);
+  terrainTransform = meshObj->GetMeshWrapper ()->GetMovable ()->GetFullTransform ();
   if(unload)
   {
     for (size_t i =0; i<terrainSystem->GetCellCount (); i++)
@@ -264,40 +269,51 @@ csOpcodeColliderTerrain::csOpcodeColliderTerrain (iTerrainSystem* terrain,
   volume = FLT_MAX;
 }
 
-csOpcodeColliderTerrain::~csOpcodeColliderTerrain ()
+csOpcodeCollisionTerrain::~csOpcodeCollisionTerrain ()
 {
-  for (size_t i = 0; i < colliders.GetSize (); i++)
-    delete colliders[i];
 }
 
-void csOpcodeColliderTerrain::OnCellLoad (iTerrainCell *cell)
+void csOpcodeCollisionTerrain::OnCellLoad (iTerrainCell *cell)
 {
   LoadCellToCollider (cell);
 }
 
-void csOpcodeColliderTerrain::OnCellPreLoad (iTerrainCell *cell)
+void csOpcodeCollisionTerrain::OnCellPreLoad (iTerrainCell *cell)
 {
 
 }
 
-void csOpcodeColliderTerrain::OnCellUnload (iTerrainCell *cell)
+void csOpcodeCollisionTerrain::OnCellUnload (iTerrainCell *cell)
 {
-  for (size_t i = 0;i<colliders.GetSize ();i++)
-    if (colliders[i]->cell == cell)
+  for (size_t i = 0;i<objects.GetSize ();i++)
+  {
+    csOpcodeColliderTerrain* collider = dynamic_cast<csOpcodeColliderTerrain*>(objects[i]->GetCollider());
+    if (collider->cell == cell)
     {
-      delete colliders[i];
-      colliders.DeleteIndexFast (i);
+      objects.DeleteIndexFast (i);
       break;
     }
+  }
 }
 
-void csOpcodeColliderTerrain::LoadCellToCollider (iTerrainCell* cell)
+void csOpcodeCollisionTerrain::LoadCellToCollider (iTerrainCell* cell)
 {
   csOrthoTransform cellTransform;
   cellTransform.Identity ();
 
-  TerrainCellCollider* colliderData = new TerrainCellCollider (cell, cellTransform);
-  colliders.Push (colliderData);
+  csRef<csOpcodeColliderTerrain> collider = csPtr<csOpcodeColliderTerrain>(new csOpcodeColliderTerrain (cell, cellTransform, system));
+  
+  CollisionObjectProperties props(collider);
+  props.SetName("terrain");
+
+  csRef<iCollisionObject> iobj = csPtr<iCollisionObject>(system->CreateCollisionObject(&props));
+  csOpcodeCollisionObject* obj = dynamic_cast<csOpcodeCollisionObject*>(&*iobj);
+
+  objects.Push (obj);
+  if (sector)
+  {
+    sector->AddCollisionObject(iobj);
+  }
 }
 }
 CS_PLUGIN_NAMESPACE_END (Opcode2)

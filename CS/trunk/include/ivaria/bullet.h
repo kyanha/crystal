@@ -467,7 +467,7 @@ struct iSoftBody : public iBody
    * Anchor the given vertex to the given rigid body. The relative position of the
    * vertex and the body will remain constant.
    */
-  virtual void AnchorVertex (size_t vertexIndex, iRigidBody* body) = 0;
+  virtual void AnchorVertex (size_t vertexIndex, ::iRigidBody* body) = 0;
 
   /**
    * Anchor the given vertex to the given controller. The relative position of the

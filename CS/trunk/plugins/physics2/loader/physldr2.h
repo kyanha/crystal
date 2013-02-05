@@ -15,8 +15,6 @@
     License along with this library; if not, write to the Free
     Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
-
-
 #ifndef __CS_PHYSLDR2_H__
 #define __CS_PHYSLDR2_H__
 
@@ -31,10 +29,8 @@ struct iReporter;
 struct iSyntaxService;
 struct iEngine;
 
-namespace CS
-{
-namespace Physics
-{
+namespace CS {
+namespace Physics {
 struct iPhysicalSystem;
 struct iPhysicalSector;
 struct iRigidBody;
@@ -43,10 +39,8 @@ struct iJoint;
 }
 }
 
-namespace CS
-{
-namespace Collisions
-{
+namespace CS {
+namespace Collisions {
 struct iCollisionSystem;
 struct iCollisionSector;
 struct iCollisionObject;
@@ -113,7 +107,7 @@ public:
   	CS::Physics::iPhysicalSector* sector);
   /// Parse a transform
   virtual bool ParseTransform (iDocumentNode *node, csOrthoTransform &t);
-  /// Parse a constraint definition
+  /// Parse a joint constraint definition
   virtual bool ParseConstraint (iDocumentNode *node,
   	bool &, bool &, bool &, csVector3 &, csVector3 &);
 

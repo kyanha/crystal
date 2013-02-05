@@ -312,7 +312,7 @@ struct iGeneralMeshState : public virtual iGeneralMeshCommonState
  */
 struct iGeneralFactoryState : public virtual iGeneralMeshCommonState
 {
-  SCF_INTERFACE (iGeneralFactoryState, 2, 0, 2);
+  SCF_INTERFACE (iGeneralFactoryState, 3, 0, 0);
   
   /// Set the color to use. Will be added to the lighting values.
   virtual void SetColor (const csColor& col) = 0;
@@ -429,6 +429,22 @@ struct iGeneralFactoryState : public virtual iGeneralMeshCommonState
   virtual void GenerateCapsule (float l, float r, uint sides) = 0;
 
   /**
+   * Generate procedurally a cone of given length and radius.
+   * \param l Cone length.
+   * \param r Cone radius.
+   * \param sides Number of sides.
+   */
+  virtual void GenerateCone (float l, float r, uint sides) = 0;
+
+  /**
+   * Generate procedurally a cylinder of given length and radius.
+   * \param l Cylinder length.
+   * \param r Cylinder radius.
+   * \param sides Number of sides.
+   */
+  virtual void GenerateCylinder (float l, float r, uint sides) = 0;
+
+  /**
    * Generate procedurally a sphere. This will set the apropriate number 
    * of vertices and generate vertices, texels, normals, and triangles.
    * The vertex colors are set to black.
@@ -527,14 +543,6 @@ struct iGeneralFactoryState : public virtual iGeneralMeshCommonState
    * factories, as all vertex normals will be written out explicitly.
    */
   virtual void DisableAutoNormals () = 0;
-
-  /**
-   * Generate procedurally a cylinder of given length and radius.
-   * \param l Cylinder length.
-   * \param r Cylinder radius.
-   * \param sides Number of sides.
-   */
-  virtual void GenerateCylinder (float l, float r, uint sides) = 0;
 
   /**\name Progressive LODs
    * @{ */
