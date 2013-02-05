@@ -1,6 +1,6 @@
-/* ivideo.h -- Generated automatically; do not edit. */
-#ifndef __IVIDEO_H__
-#define __IVIDEO_H__
+/* ivideodecode.h -- Generated automatically; do not edit. */
+#ifndef __IVIDEODECODE_H__
+#define __IVIDEODECODE_H__
 /*
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Library General Public
@@ -22,23 +22,5 @@
  * subdirectory of the top Crystal Space include directory.
  */
 #include "cssysdef.h"
-#include "ivideo/canvas.h"
-#include "ivideo/cursor.h"
-#include "ivideo/custcursor.h"
-#include "ivideo/fontserv.h"
-#include "ivideo/gfxmem.h"
-#include "ivideo/graph2d.h"
-#include "ivideo/graph3d.h"
-#include "ivideo/halo.h"
-#include "ivideo/lighting.h"
-#include "ivideo/material.h"
-#include "ivideo/natwin.h"
-#include "ivideo/rendermesh.h"
-#include "ivideo/rndbuf.h"
-#include "ivideo/shader/shader.h"
-#include "ivideo/shader/xmlshader.h"
-#include "ivideo/texture.h"
-#include "ivideo/txtmgr.h"
-#include "ivideo/videodecode.h"
-#endif /* __IVIDEO_H__ */
+#endif /* __IVIDEODECODE_H__ */
 
