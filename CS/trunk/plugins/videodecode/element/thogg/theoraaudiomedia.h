@@ -15,6 +15,7 @@ You should have received a copy of the GNU Library General Public
 License along with this library; if not, write to the Free
 Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
+
 #ifndef __CS_THOGGAUDIOMEDIA_H__
 #define __CS_THOGGAUDIOMEDIA_H__
 
@@ -73,9 +74,9 @@ private:
 
   // The stream used to play audio
   csRef<iSndSysStream> _outputStream;
-  
+
 public:
-  
+
   // Provide access to the Vorbis specific members
   // Inline because it's faster, although a bit slow
   inline ogg_stream_state*   StreamState ()    { return &_streamState; }
@@ -93,7 +94,7 @@ public:
   virtual bool Initialize (iObjectRegistry*);
 
   //-- iMedia
-  virtual const char* GetName () const;  
+  virtual const char* GetName () const;
   virtual const char* GetType () const;
   virtual unsigned long GetFrameCount () const;
   virtual float GetDuration () const;
@@ -109,8 +110,8 @@ public:
 
   inline void SetLength (float length)  { this->_length=length; }
   void SetPosition (float time, ogg_sync_state *oy,ogg_page *op,ogg_stream_state *thState);
-  void InitializeStream (const char* name, ogg_stream_state &state, 
-                         vorbis_info &info, vorbis_comment &comments, 
+  void InitializeStream (const char* name, ogg_stream_state &state,
+                         vorbis_info &info, vorbis_comment &comments,
                          FILE *source);
 };
 

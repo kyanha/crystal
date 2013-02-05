@@ -15,6 +15,7 @@ You should have received a copy of the GNU Library General Public
 License along with this library; if not, write to the Free
 Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
+
 #include "cssysdef.h"
 #include "isndsys/ss_renderer.h"
 #include "iutil/objreg.h"
@@ -27,7 +28,7 @@ Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
 CS_LEAKGUARD_IMPLEMENT (csTheoraAudioMedia);
 
-csTheoraAudioMedia::csTheoraAudioMedia () 
+csTheoraAudioMedia::csTheoraAudioMedia ()
 : scfImplementationType (this), _object_reg (0), _cacheSize (1)
 {
 }
@@ -125,7 +126,7 @@ bool csTheoraAudioMedia::Update ()
 {
   if (_cache.GetSize ()>=_cacheSize)
     return false;
-    
+
   _audiobuf_ready=false;
 
   while (_vorbis_p && !_audiobuf_ready)
@@ -243,8 +244,8 @@ void csTheoraAudioMedia::SwapBuffers ()
 {
 }
 
-void csTheoraAudioMedia::InitializeStream (const char* name,  ogg_stream_state &state, 
-                                           vorbis_info &info, vorbis_comment &comments, 
+void csTheoraAudioMedia::InitializeStream (const char* name,  ogg_stream_state &state,
+                                           vorbis_info &info, vorbis_comment &comments,
                                            FILE *source)
 {
   _name = new char[strlen (name)];
@@ -266,7 +267,7 @@ void csTheoraAudioMedia::WriteData ()
   }
 }
 
-void csTheoraAudioMedia::SetCacheSize (size_t size) 
+void csTheoraAudioMedia::SetCacheSize (size_t size)
 {
   _cacheSize = size;
 }

@@ -15,6 +15,7 @@ You should have received a copy of the GNU Library General Public
 License along with this library; if not, write to the Free
 Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
+
 #ifndef __VPLPLAYER_H__
 #define __VPLPLAYER_H__
 
@@ -63,7 +64,7 @@ public:
   virtual void RemoveActiveStream (int index);
   virtual iTextureHandle* GetTargetTexture ();
   virtual iSndSysStream* GetTargetAudio ();
-  THREADED_CALLABLE_DECL (csVplPlayer, Update, csThreadReturn, 
+  THREADED_CALLABLE_DECL (csVplPlayer, Update, csThreadReturn,
                           THREADED, false, false);
   virtual void UpdatePlayer ();
   virtual void Play ();
@@ -89,8 +90,8 @@ public:
    * Embedded iEventHandler interface that handles the Frame event
    * in order to write data and swap buffers
    */
-  class FrameEventHandler : 
-    public scfImplementation1<FrameEventHandler, 
+  class FrameEventHandler :
+    public scfImplementation1<FrameEventHandler,
     iEventHandler>
   {
   private:
@@ -105,7 +106,7 @@ public:
           if (parent->IsPlaying ())
           {
             parent->WriteData ();
-            parent->SwapBuffers (); 
+            parent->SwapBuffers ();
           }
 
           return false;

@@ -15,6 +15,7 @@ You should have received a copy of the GNU Library General Public
 License along with this library; if not, write to the Free
 Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
+
 #include "cssysdef.h"
 #include "isndsys/ss_data.h"
 #include "isndsys/ss_loader.h"
@@ -141,14 +142,14 @@ void TheoraMediaContainer::DropFrame ()
 void TheoraMediaContainer::Update ()
 {
   // If processingCache is true, that means we've reached the end
-  // of the file, but there still is data in the caches of the 
+  // of the file, but there still is data in the caches of the
   // active streams which needs processing
   static bool processingCache=false;
 
   static csTicks frameTime = 0;
   static csTicks lastTime=csGetTicks ();
 
-  if (frameTime==0 && _activeTheoraStream.IsValid () 
+  if (frameTime==0 && _activeTheoraStream.IsValid ()
       && _activeTheoraStream->GetTargetFPS () != 0)
   {
     frameTime = 1000/_activeTheoraStream->GetTargetFPS ();
@@ -175,13 +176,13 @@ void TheoraMediaContainer::Update ()
     {
       // First, we want to know if any stream needs more data.
       // If one stream needs data, updateState will be different from 0
-      // If we're at the end of the file but there's still data 
+      // If we're at the end of the file but there's still data
       // in the caches, we don't care if a stream needs more data
       if ( _media [_activeStreams [i]]->Update () && !processingCache)
         _updateState++;
 
       // Next, we want to know if all the active streams have
-      // a full cache. if they do, we won't read more data until 
+      // a full cache. if they do, we won't read more data until
       // there's space left in the cache
       if ( _media [_activeStreams [i]]->IsCacheFull ())
         cacheFull++;
@@ -246,7 +247,7 @@ void TheoraMediaContainer::Update ()
 
 void TheoraMediaContainer::QueuePage (ogg_page *page)
 {
-  // If there are no active stream (i.e. the video file is currently being loaded), 
+  // If there are no active stream (i.e. the video file is currently being loaded),
   // queue the page to every stream
   if (_activeStreams.GetSize () == 0)
   {
@@ -329,7 +330,7 @@ void TheoraMediaContainer::DoSeek ()
   // If a video stream is present, seek
   long frame;
   unsigned long frameCount = _activeTheoraStream->GetFrameCount ();
-  unsigned long targetFrame = (unsigned long) 
+  unsigned long targetFrame = (unsigned long)
     (frameCount * _timeToSeekTo / _activeTheoraStream->GetDuration ());
 
   // Check if we're seeking outside the video
@@ -345,7 +346,7 @@ void TheoraMediaContainer::DoSeek ()
                                    false,&_syncState,_fileSize);
 
   // TODO: In case audio from video file is implemented later on, seek to this time
-  //float time = ( (float) targetFrame/_activeTheoraStream->GetFrameCount () ) 
+  //float time = ( (float) targetFrame/_activeTheoraStream->GetFrameCount () )
   //                * _activeTheoraStream->GetDuration ();
 
 
@@ -407,18 +408,18 @@ void TheoraMediaContainer::AutoActivateStreams ()
   }
 }
 
-iTextureHandle* TheoraMediaContainer::GetTargetTexture () 
+iTextureHandle* TheoraMediaContainer::GetTargetTexture ()
 {
   if (_activeTheoraStream.IsValid ())
     return _activeTheoraStream->GetVideoTarget ();
-  else 
+  else
     return nullptr;
 }
 iSndSysStream* TheoraMediaContainer::GetTargetAudio ()
 {
   if (_sndstream.IsValid ())
     return _sndstream;
-  else 
+  else
     return nullptr;
 }
 
@@ -507,12 +508,12 @@ void TheoraMediaContainer::WriteData ()
   }
 }
 
-void TheoraMediaContainer::SetCacheSize (size_t size) 
+void TheoraMediaContainer::SetCacheSize (size_t size)
 {
   _cacheSize = size;
 }
 
-float TheoraMediaContainer::GetAspectRatio () 
+float TheoraMediaContainer::GetAspectRatio ()
 {
   if (_activeTheoraStream.IsValid ())
     return _activeTheoraStream->GetAspectRatio ();
@@ -579,7 +580,7 @@ void TheoraMediaContainer::SetCurrentLanguage (const char* identifier)
       break;
     }
   }
-  
+
   if (!found)
     csReport (_object_reg, CS_REPORTER_SEVERITY_ERROR, QUALIFIED_PLUGIN_NAME,
               "Can't set '%s': language not found.\n", identifier);

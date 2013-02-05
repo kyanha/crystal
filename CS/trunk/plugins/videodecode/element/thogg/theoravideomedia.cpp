@@ -15,6 +15,7 @@ You should have received a copy of the GNU Library General Public
 License along with this library; if not, write to the Free
 Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
+
 #include "cssysdef.h"
 #include "csutil/refarr.h"
 #include "iutil/objreg.h"
@@ -26,7 +27,7 @@ Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 SCF_IMPLEMENT_FACTORY (csTheoraVideoMedia)
 
 
-csTheoraVideoMedia::csTheoraVideoMedia (iBase* parent) 
+csTheoraVideoMedia::csTheoraVideoMedia (iBase* parent)
 : scfImplementationType (this, parent),
   _object_reg (0), _name (nullptr)
 {
@@ -162,7 +163,7 @@ bool csTheoraVideoMedia::Update ()
   return false;
 }
 
-long csTheoraVideoMedia::SeekPage (long targetFrame, long frameCount, bool return_keyframe, 
+long csTheoraVideoMedia::SeekPage (long targetFrame, long frameCount, bool return_keyframe,
                                    ogg_sync_state *oy,unsigned long fileSize)
 {
   if (frameCount == 0)
@@ -187,7 +188,7 @@ long csTheoraVideoMedia::SeekPage (long targetFrame, long frameCount, bool retur
   float seekRatio = (float)targetFrame / frameCount;
   float frameSize = (float)fileSize / frameCount;
   int seek_min = std::max(0, (int)(fileSize * seekRatio - 10 * frameSize));
-  int seek_max = targetFrame == 0 ? 
+  int seek_max = targetFrame == 0 ?
     0 : std::min((int)(fileSize * seekRatio + 10 * frameSize), (int)fileSize);
 
   // Init data
@@ -198,8 +199,8 @@ long csTheoraVideoMedia::SeekPage (long targetFrame, long frameCount, bool retur
 
   for (int i=0; i<100; i++)
   {
-    // Reset the internal counters of the ogg_sync_state struct 
-    // that tracks the synchronization of the current page. 
+    // Reset the internal counters of the ogg_sync_state struct
+    // that tracks the synchronization of the current page.
     ogg_sync_reset (oy);
 
     // Goto searching position in the stream
@@ -227,7 +228,7 @@ long csTheoraVideoMedia::SeekPage (long targetFrame, long frameCount, bool retur
           {
             // Convert granule position to an absolute frame index.
             frame = (long) th_granule_frame (_decodeControl,granule);
-            if ((targetFrame == 0 and frame == 0) or                
+            if ((targetFrame == 0 and frame == 0) or
                 (frame < targetFrame-1 && targetFrame-frame < 10))
             {
               fineseek = true;
@@ -237,16 +238,16 @@ long csTheoraVideoMedia::SeekPage (long targetFrame, long frameCount, bool retur
             if (fineseek && frame >= targetFrame)
               break;
 
-            if (fineseek) 
+            if (fineseek)
               continue;
-            
+
             if (seek_max - seek_min <= 1)
             {
               fineseek = true;
               break;
             }
-            
-            if (targetFrame-1 > frame) 
+
+            if (targetFrame-1 > frame)
               seek_min = (seek_min+seek_max)/2;
             else
               seek_max = (seek_min+seek_max)/2;
@@ -284,8 +285,8 @@ long csTheoraVideoMedia::SeekPage (long targetFrame, long frameCount, bool retur
   return -1;
 }
 
-void csTheoraVideoMedia::InitializeStream (const char* name, ogg_stream_state &state, th_info &info, 
-                                           th_comment &comments, th_setup_info *setupInfo, FILE *source, 
+void csTheoraVideoMedia::InitializeStream (const char* name, ogg_stream_state &state, th_info &info,
+                                           th_comment &comments, th_setup_info *setupInfo, FILE *source,
                                            iTextureManager* texManager)
 {
   _name = new char[strlen (name)];
@@ -300,12 +301,12 @@ void csTheoraVideoMedia::InitializeStream (const char* name, ogg_stream_state &s
   _infile = source;
 
   // Create the buffers needed for double buffering
-  csRef<iTextureHandle> tex1 = texManager->CreateTexture 
+  csRef<iTextureHandle> tex1 = texManager->CreateTexture
     (_streamInfo.pic_width, _streamInfo.pic_height, 0, csimg2D, "rgb8",
      CS_TEXTURE_2D | CS_TEXTURE_NPOTS);
   _buffers.Push (tex1);
 
-  csRef<iTextureHandle> tex2 = texManager->CreateTexture 
+  csRef<iTextureHandle> tex2 = texManager->CreateTexture
     (_streamInfo.pic_width, _streamInfo.pic_height, 0, csimg2D, "rgb8",
      CS_TEXTURE_2D | CS_TEXTURE_NPOTS);
   _buffers.Push (tex2);
@@ -352,7 +353,7 @@ void csTheoraVideoMedia::Convert ()
   // 4:2:0 pixel format
   if (_streamInfo.pixel_fmt==TH_PF_420)
   {
-    // Chroma is decimated by 2 in both the X and Y directions (4:2:0). 
+    // Chroma is decimated by 2 in both the X and Y directions (4:2:0).
     // The Cb and Cr chroma planes are half the width and half the height of the luma plane.
     int uv_offset = (_streamInfo.pic_x/2) + (_currentYUVBuffer[1].stride) * (_streamInfo.pic_y/2);
     uint8* outputBuffer = new uint8[_streamInfo.pic_width*_streamInfo.pic_height*4];
@@ -389,8 +390,8 @@ void csTheoraVideoMedia::Convert ()
   // 4:2:2 pixel format
   else if (_streamInfo.pixel_fmt==TH_PF_422)
   {
-    // Chroma is decimated by 2 in the X direction (4:2:2). 
-    // The Cb and Cr chroma planes are half the width of the luma plane, but full height. 
+    // Chroma is decimated by 2 in the X direction (4:2:2).
+    // The Cb and Cr chroma planes are half the width of the luma plane, but full height.
     int uv_offset = (_streamInfo.pic_x/2) + (_currentYUVBuffer[1].stride) * (_streamInfo.pic_y);
     uint8 * outputBuffer = new uint8[_streamInfo.pic_width*_streamInfo.pic_height*4];
     int k=0;
@@ -427,7 +428,7 @@ void csTheoraVideoMedia::Convert ()
   else if (_streamInfo.pixel_fmt==TH_PF_444)
   {
     // No chroma decimation (4:4:4).
-    // The Cb and Cr chroma planes are full width and full height. 
+    // The Cb and Cr chroma planes are full width and full height.
     int uv_offset = (_streamInfo.pic_x) + (_currentYUVBuffer[1].stride) * (_streamInfo.pic_y);
     uint8 * outputBuffer = new uint8[_streamInfo.pic_width*_streamInfo.pic_height*4];
     int k=0;
@@ -517,7 +518,7 @@ void csTheoraVideoMedia::WriteData ()
   _isWrite=false;
 }
 
-void csTheoraVideoMedia::SetCacheSize (size_t size) 
+void csTheoraVideoMedia::SetCacheSize (size_t size)
 {
   _cacheSize = size;
 }

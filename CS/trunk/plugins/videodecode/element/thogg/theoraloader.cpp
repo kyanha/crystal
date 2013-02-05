@@ -15,6 +15,7 @@ You should have received a copy of the GNU Library General Public
 License along with this library; if not, write to the Free
 Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
+
 #include "cssysdef.h"
 #include "iutil/objreg.h"
 #include "iutil/plugin.h"
@@ -48,7 +49,7 @@ bool csThOggLoader::Initialize (iObjectRegistry* r)
   return true;
 }
 
-csPtr<iMediaContainer> csThOggLoader::LoadMedia (const char* pFileName, 
+csPtr<iMediaContainer> csThOggLoader::LoadMedia (const char* pFileName,
                                                  const char *pDescription)
 {
   _path = pFileName;
@@ -74,7 +75,7 @@ csPtr<iMediaContainer> csThOggLoader::LoadMedia (const char* pFileName,
       "Unable to open '%s' for playback.\n", pFileName);
     return csPtr<iMediaContainer> (nullptr);
   }
-  else	
+  else
   {
     // Create a new container
     csRef<TheoraMediaContainer> container;
@@ -160,7 +161,7 @@ bool csThOggLoader::ParseHeaders (TheoraMediaContainer* container)
       // Identify the codec
       if (th_decode_headerin (&ti,&tc,&ts,&op) >= 0)
       {
-        // It is Theora 
+        // It is Theora
         if (foundVideo)
           continue;
 
@@ -179,8 +180,8 @@ bool csThOggLoader::ParseHeaders (TheoraMediaContainer* container)
       else
         if (vorbis_synthesis_headerin (&_vi,&_vc,&op) == 0)
         {
-          // It is Vorbis 
-          
+          // It is Vorbis
+
           // TODO: support for Vorbis audio stream
           // Debug this part of code that triggers a segfault
           /*
@@ -189,7 +190,7 @@ bool csThOggLoader::ParseHeaders (TheoraMediaContainer* container)
           name.Append ("_audiostream_").Append (audioCnt);
 
           csRef<csTheoraAudioMedia> audioStream;
-          audioStream.AttachNew ( new csTheoraAudioMedia ((iBase*)this) ); 
+          audioStream.AttachNew ( new csTheoraAudioMedia ((iBase*)this) );
           audioStream->InitializeStream (name.GetData (), test, _vi, _vc, _infile);
           container->AddMedia (audioStream);
 
@@ -204,7 +205,7 @@ bool csThOggLoader::ParseHeaders (TheoraMediaContainer* container)
           ogg_stream_clear (&test);
         }
     }
-    
+
   }
 
   // If there isn't a Theora video stream in the file, we don't care anymore
@@ -230,9 +231,9 @@ bool csThOggLoader::ParseHeaders (TheoraMediaContainer* container)
       // Read extra headers for video
       if (strcmp (container->GetMedia (i)->GetType (), "TheoraVideo")==0)
       {
-        csRef<iVideoMedia> media = scfQueryInterface<iVideoMedia> (container->GetMedia (i)); 
-        if (media.IsValid ()) 
-        { 
+        csRef<iVideoMedia> media = scfQueryInterface<iVideoMedia> (container->GetMedia (i));
+        if (media.IsValid ())
+        {
           csRef<csTheoraVideoMedia> buff = static_cast<csTheoraVideoMedia*> ( (iVideoMedia*)media);
 
           while (buff->Theora_p () && (buff->Theora_p ()<3) && (ret=ogg_stream_packetpeek (buff->StreamState (),&op)))
@@ -317,12 +318,12 @@ bool csThOggLoader::ParseHeaders (TheoraMediaContainer* container)
     }
   }
 
-  // Compute the length in seconds and frame count (where applicable) 
+  // Compute the length in seconds and frame count (where applicable)
   // of the streams
   ComputeStreamLength (container);
 
-  // In order to get everything back in order, we need to reparse 
-  // the headers. Streams aren't recreated, but we need to get 
+  // In order to get everything back in order, we need to reparse
+  // the headers. Streams aren't recreated, but we need to get
   // the sync state in the proper position
   stateflag=0;
   ts=0;
@@ -394,9 +395,9 @@ void csThOggLoader::ComputeStreamLength (TheoraMediaContainer* container)
   {
     if (strcmp (container->GetMedia (i)->GetType (), "TheoraVideo") == 0)
     {
-      csRef<iVideoMedia> media = scfQueryInterface<iVideoMedia> (container->GetMedia (i)); 
-      if (media.IsValid ()) 
-      { 
+      csRef<iVideoMedia> media = scfQueryInterface<iVideoMedia> (container->GetMedia (i));
+      if (media.IsValid ())
+      {
         csRef<csTheoraVideoMedia> buff = static_cast<csTheoraVideoMedia*> ( (iVideoMedia*)media);
         buff->Initialize (this->_object_reg);
 

@@ -15,6 +15,7 @@ You should have received a copy of the GNU Library General Public
 License along with this library; if not, write to the Free
 Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
+
 #ifndef __CS_THOGGVIDEOMEDIA_H__
 #define __CS_THOGGVIDEOMEDIA_H__
 
@@ -36,7 +37,7 @@ using namespace CS::Threading;
 
 #define QUALIFIED_PLUGIN_NAME "crystalspace.videodecode.element.thogg"
 
-struct iTextureWrapper; 
+struct iTextureWrapper;
 struct csVPLvideoFormat;
 
 class csTheoraVideoMedia
@@ -82,7 +83,7 @@ private:
   // Stuff for conversion on the other thread
   uint8*  _rgbBuff;
   void    Convert ();
-  
+
   th_ycbcr_buffer _currentYUVBuffer;
   uint8*          _currentPixels;
 
@@ -117,7 +118,7 @@ public:
   virtual bool Initialize (iObjectRegistry*);
 
   //-- iMedia
-  virtual const char* GetName () const;  
+  virtual const char* GetName () const;
   virtual const char* GetType () const;
   virtual unsigned long GetFrameCount () const;
   virtual float GetDuration () const;
@@ -138,9 +139,9 @@ public:
 
   inline void SetFrameCount (unsigned long count)  { _frameCount=count; }
   inline void SetLength (float length)  { this->_length=length; }
-  long SeekPage (long targetFrame, long frameCount, bool return_keyframe, 
+  long SeekPage (long targetFrame, long frameCount, bool return_keyframe,
                  ogg_sync_state *oy, unsigned  long fileSize);
-  void InitializeStream (const char* name, ogg_stream_state &state, th_info &info, 
+  void InitializeStream (const char* name, ogg_stream_state &state, th_info &info,
                          th_comment &comments, th_setup_info *setupInfo,
                          FILE *source, iTextureManager* texManager);
 };
