@@ -89,6 +89,7 @@
 #include "csutil/hashcomputer.h"
 #include "csutil/hashr.h"
 #include "csutil/inputdef.h"
+#include "csutil/invasivelist.h"
 #include "csutil/leakguard.h"
 #include "csutil/list.h"
 #include "csutil/md5.h"
