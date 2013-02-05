@@ -15,6 +15,7 @@ You should have received a copy of the GNU Library General Public
 License along with this library; if not, write to the Free
 Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
+
 #include "cssysdef.h"
 #include "iutil/objreg.h"
 #include "iutil/plugin.h"
@@ -96,7 +97,7 @@ void csVplPlayer::SetCacheSize (size_t size)
   }
 }
 
-void csVplPlayer::SetActiveStream (int index) 
+void csVplPlayer::SetActiveStream (int index)
 {
   if (_mediaFile.IsValid ())
   {
@@ -107,13 +108,13 @@ void csVplPlayer::SetActiveStream (int index)
   }
 }
 
-void csVplPlayer::RemoveActiveStream (int index) 
+void csVplPlayer::RemoveActiveStream (int index)
 {
   if (_mediaFile.IsValid ())
     _mediaFile->RemoveActiveStream (index);
 }
 
-iTextureHandle* csVplPlayer::GetTargetTexture () 
+iTextureHandle* csVplPlayer::GetTargetTexture ()
 {
   return _mediaFile->GetTargetTexture ();
 }
@@ -149,7 +150,7 @@ THREADED_CALLABLE_IMPL (csVplPlayer, Update)
       {
         if (_mediaFile->Eof ())
         {
-          if (_shouldLoop) 
+          if (_shouldLoop)
           {
             // Seek back to the beginning of the stream
             SetPosition (0.0f);
@@ -172,7 +173,7 @@ THREADED_CALLABLE_IMPL (csVplPlayer, Update)
   return true;
 }
 
-void csVplPlayer::Play () 
+void csVplPlayer::Play ()
 {
   if (!_threadInfo.IsValid ())
   {
@@ -197,7 +198,7 @@ void csVplPlayer::Play ()
   }
 }
 
-void csVplPlayer::Pause () 
+void csVplPlayer::Pause ()
 {
   _playing=false;
   _shouldUpdate = false;
@@ -207,7 +208,7 @@ void csVplPlayer::Pause ()
   }
 }
 
-void csVplPlayer::Stop () 
+void csVplPlayer::Stop ()
 {
   _shouldStop = true;
   if (_mediaFile.IsValid ())
@@ -216,7 +217,7 @@ void csVplPlayer::Stop ()
   }
 }
 
-bool csVplPlayer::IsPlaying () 
+bool csVplPlayer::IsPlaying ()
 {
   return _playing;
 }
@@ -260,7 +261,7 @@ void csVplPlayer::WriteData ()
   _mediaFile->WriteData ();
 }
 
-float csVplPlayer::GetAspectRatio () 
+float csVplPlayer::GetAspectRatio ()
 {
   return _mediaFile->GetAspectRatio ();
 }

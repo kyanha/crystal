@@ -15,6 +15,7 @@ You should have received a copy of the GNU Library General Public
 License along with this library; if not, write to the Free
 Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
+
 #ifndef __THOGGLOADER_H__
 #define __THOGGLOADER_H__
 
@@ -65,7 +66,7 @@ private:
   // Media data
   csString            _path;        // video file path
   FILE *              _infile;      // video file
-  csArray<MediaLanguage>   _languages;   // array of languages 
+  csArray<MediaLanguage>   _languages;   // array of languages
                                     // (audio file paths and names)
 
 public:
@@ -75,12 +76,12 @@ public:
   //-- iComponent
   virtual bool Initialize (iObjectRegistry*);
 
-  virtual csPtr<iMediaContainer> LoadMedia 
+  virtual csPtr<iMediaContainer> LoadMedia
     (const char * pFileName, const char *pDescription=0);
 
 private:
 
-  /* Helper; just grab some more compressed bitstream 
+  /* Helper; just grab some more compressed bitstream
      and sync it for page extraction */
   int BufferData (ogg_sync_state *oy);
 

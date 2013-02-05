@@ -15,6 +15,7 @@ You should have received a copy of the GNU Library General Public
 License along with this library; if not, write to the Free
 Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
+
 #include "cssysdef.h"
 
 //#include <ctype.h>
@@ -62,7 +63,7 @@ bool csVplParser::Initialize (iObjectRegistry* r)
   return true;
 }
 
-csPtr<iBase> csVplParser::Parse (iDocumentNode* node, iStreamSource*, 
+csPtr<iBase> csVplParser::Parse (iDocumentNode* node, iStreamSource*,
                                  iLoaderContext* ldr_context, iBase* context)
 {
   csRef<iDocumentNodeIterator> it = node->GetNodes ();
@@ -80,7 +81,7 @@ csPtr<iBase> csVplParser::Parse (iDocumentNode* node, iStreamSource*,
         const char* type = child->GetAttributeValue ("type");
         if (type == 0)
         {
-          _synldr->ReportError (msgidFactory, child, 
+          _synldr->ReportError (msgidFactory, child,
                                "No type defined while loading video");
           return 0;
         }
@@ -88,7 +89,7 @@ csPtr<iBase> csVplParser::Parse (iDocumentNode* node, iStreamSource*,
         if (strcmp (type,"theoraVideo")==0)
         {
           csRef<iPluginManager> mgr = csQueryRegistry<iPluginManager> (_object_reg);
-          csRef<iMediaLoader> m_pThOggLoader = csLoadPlugin<iMediaLoader> 
+          csRef<iMediaLoader> m_pThOggLoader = csLoadPlugin<iMediaLoader>
             (mgr, "crystalspace.videodecode.element.thogg");
 
           // Get the type of the media
@@ -111,7 +112,7 @@ csPtr<iBase> csVplParser::Parse (iDocumentNode* node, iStreamSource*,
                 const char* vidPath = child2->GetAttributeValue ("path");
                 if (vidPath == 0)
                 {
-                  _synldr->ReportError (msgidFactory, child2, 
+                  _synldr->ReportError (msgidFactory, child2,
                                        "No path defined while loading videostream");
                   return 0;
                 }
@@ -137,7 +138,7 @@ csPtr<iBase> csVplParser::Parse (iDocumentNode* node, iStreamSource*,
                       const char* name = child3->GetAttributeValue ("name");
                       if (name == 0)
                       {
-                        _synldr->ReportError (msgidFactory, child3, 
+                        _synldr->ReportError (msgidFactory, child3,
                                              "No language name defined while loading audiostream");
                         return 0;
                       }
@@ -145,7 +146,7 @@ csPtr<iBase> csVplParser::Parse (iDocumentNode* node, iStreamSource*,
                       const char* langPath = child3->GetAttributeValue ("path");
                       if (langPath == 0)
                       {
-                        _synldr->ReportError (msgidFactory, child3, 
+                        _synldr->ReportError (msgidFactory, child3,
                                              "No language path defined while loading audiostream");
                         return 0;
                       }
