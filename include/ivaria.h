@@ -29,9 +29,11 @@
 #include "ivaria/cameramanager.h"
 #include "ivaria/collada.h"
 #include "ivaria/collider.h"
+#include "ivaria/colliders.h"
 #include "ivaria/collisions.h"
 #include "ivaria/conin.h"
 #include "ivaria/conout.h"
+#include "ivaria/convexdecompose.h"
 #include "ivaria/decal.h"
 #include "ivaria/docpreproc.h"
 #include "ivaria/dynamics.h"
@@ -55,6 +57,7 @@
 #include "ivaria/stdrep.h"
 #include "ivaria/terraform.h"
 #include "ivaria/translator.h"
+#include "ivaria/vehicle.h"
 #include "ivaria/view.h"
 #endif /* __IVARIA_H__ */
 

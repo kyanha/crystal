@@ -27,6 +27,7 @@
 #include "cstool/basetexfact.h"
 #include "cstool/bitmasktostr.h"
 #include "cstool/collider.h"
+#include "cstool/collisionhelper.h"
 #include "cstool/csanim2d.h"
 #include "cstool/csapplicationframework.h"
 #include "cstool/csfxscr.h"
