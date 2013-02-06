@@ -94,7 +94,7 @@ bool PhysDemo::OnInitialize (int argc, char* argv[])
   // Load the soft body animation control plugin & factory
   if (isSoftBodyWorld)
   {
-    softBodyAnimationType = csLoadPlugin<CS::Animation::iSoftBodyAnimationControlType>
+    softBodyAnimationType = csLoadPlugin<CS::Animation::iSoftBodyAnimationControl2Type>
       (plugmgr, "crystalspace.physics.softanim2");
     if (!softBodyAnimationType)
       return ReportError ("Could not load the soft body animation controller for the genmeshes!");
