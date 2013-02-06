@@ -33,7 +33,7 @@ CS_PLUGIN_NAMESPACE_BEGIN (SoftAnim2)
 {
 
 class SoftBodyControlType : public scfImplementation2<SoftBodyControlType,
-    CS::Animation::iSoftBodyAnimationControlType, iComponent>
+    CS::Animation::iSoftBodyAnimationControl2Type, iComponent>
 {
   public:
     CS_LEAKGUARD_DECLARE(SoftBodyControlType);
@@ -58,10 +58,10 @@ class SoftBodyControlType : public scfImplementation2<SoftBodyControlType,
 
 class SoftBodyControlFactory : public scfImplementation2<SoftBodyControlFactory, 
     scfFakeInterface<iGenMeshAnimationControlFactory>,
-    CS::Animation::iSoftBodyAnimationControlFactory>
+    CS::Animation::iSoftBodyAnimationControl2Factory>
 {
   public:
-    CS_LEAKGUARD_DECLARE(CS::Animation::iSoftBodyAnimationControlFactory);
+    CS_LEAKGUARD_DECLARE(CS::Animation::iSoftBodyAnimationControl2Factory);
 
     SoftBodyControlFactory (SoftBodyControlType* type);
 
@@ -77,14 +77,14 @@ class SoftBodyControlFactory : public scfImplementation2<SoftBodyControlFactory,
 };
 
 class SoftBodyControl : public scfImplementation2<SoftBodyControl, 
-    scfFakeInterface<iGenMeshAnimationControl>, CS::Animation::iSoftBodyAnimationControl>
+    scfFakeInterface<iGenMeshAnimationControl>, CS::Animation::iSoftBodyAnimationControl2>
 {
   public:
-    CS_LEAKGUARD_DECLARE(CS::Animation::iSoftBodyAnimationControl);
+    CS_LEAKGUARD_DECLARE(CS::Animation::iSoftBodyAnimationControl2);
 
     SoftBodyControl (SoftBodyControlFactory* factory, iMeshObject* mesh);
 
-    //-- CS::Animation::iSoftBodyAnimationControl
+    //-- CS::Animation::iSoftBodyAnimationControl2
     virtual void SetSoftBody (CS::Physics::iSoftBody* body,
 			      CS::Physics::MeshDuplicationMode duplicationMode
 			      = CS::Physics::MESH_DUPLICATION_NONE);

@@ -50,16 +50,16 @@ namespace Animation {
  * Main users of this interface:
  * - Genmesh plugin (crystalspace.mesh.object.genmesh) 
  */
-struct iSoftBodyAnimationControlType : public iGenMeshAnimationControlType
+struct iSoftBodyAnimationControl2Type : public iGenMeshAnimationControlType
 {
-  SCF_INTERFACE (CS::Animation::iSoftBodyAnimationControlType, 1, 0, 0);
+  SCF_INTERFACE (CS::Animation::iSoftBodyAnimationControl2Type, 1, 0, 0);
 };
 
 /**
  * Animation control factory for a genmesh animated by a CS::Physics::iSoftBody.
  *
  * Main creators of instances implementing this interface:
- * - CS::Animation::iSoftBodyAnimationControlType::CreateAnimationControlFactory()
+ * - CS::Animation::iSoftBodyAnimationControl2Type::CreateAnimationControlFactory()
  *
  * Main ways to get pointers to this interface:
  * - iGeneralFactoryState::GetAnimationControlFactory()
@@ -67,9 +67,9 @@ struct iSoftBodyAnimationControlType : public iGenMeshAnimationControlType
  * Main users of this interface:
  * - Genmesh plugin (crystalspace.mesh.object.genmesh) 
  */
-struct iSoftBodyAnimationControlFactory : public iGenMeshAnimationControlFactory
+struct iSoftBodyAnimationControl2Factory : public iGenMeshAnimationControlFactory
 {
-  SCF_INTERFACE (CS::Animation::iSoftBodyAnimationControlFactory, 1, 0, 0);
+  SCF_INTERFACE (CS::Animation::iSoftBodyAnimationControl2Factory, 1, 0, 0);
 };
 
 /**
@@ -82,7 +82,7 @@ struct iSoftBodyAnimationControlFactory : public iGenMeshAnimationControlFactory
  * of the animesh, even when it is deformed by the skinning and morphing processes.
  *
  * Main creators of instances implementing this interface:
- * - CS::Animation::iSoftBodyAnimationControlFactory::CreateAnimationControl()
+ * - CS::Animation::iSoftBodyAnimationControl2Factory::CreateAnimationControl()
  *
  * Main ways to get pointers to this interface:
  * - iGeneralMeshState::GetAnimationControl()
@@ -90,9 +90,9 @@ struct iSoftBodyAnimationControlFactory : public iGenMeshAnimationControlFactory
  * Main users of this interface:
  * - Genmesh plugin (crystalspace.mesh.object.genmesh) 
  */
-struct iSoftBodyAnimationControl : public iGenMeshAnimationControl
+struct iSoftBodyAnimationControl2 : public iGenMeshAnimationControl
 {
-  SCF_INTERFACE (CS::Animation::iSoftBodyAnimationControl, 2, 0, 0);
+  SCF_INTERFACE (CS::Animation::iSoftBodyAnimationControl2, 2, 0, 0);
 
   /**
    * Set the soft body to be used to animate the genmesh. You can switch this soft body

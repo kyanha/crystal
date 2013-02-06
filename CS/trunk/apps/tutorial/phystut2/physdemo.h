@@ -141,7 +141,7 @@ public:
   csRef<CS::Physics::iPhysicalSystem> physicalSystem;
   csRef<CS::Collisions::iConvexDecomposer> convexDecomposer;
 
-  csRef<CS::Animation::iSoftBodyAnimationControlType> softBodyAnimationType;
+  csRef<CS::Animation::iSoftBodyAnimationControl2Type> softBodyAnimationType;
 
   csRef<iGenMeshAnimationControlFactory> softBodyAnimationFactory;
   bool isSoftBodyWorld;

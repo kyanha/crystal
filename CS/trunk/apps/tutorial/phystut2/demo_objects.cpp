@@ -1280,8 +1280,8 @@ CS::Physics::iSoftBody* PhysDemo::SpawnCloth ()
   // to setup the animation controller with the correct vertex duplication mode.
   csRef<iGeneralMeshState> meshState =
     scfQueryInterface<iGeneralMeshState> (mesh->GetMeshObject ());
-  csRef<CS::Animation::iSoftBodyAnimationControl> animationControl =
-    scfQueryInterface<CS::Animation::iSoftBodyAnimationControl> (meshState->GetAnimationControl ());
+  csRef<CS::Animation::iSoftBodyAnimationControl2> animationControl =
+    scfQueryInterface<CS::Animation::iSoftBodyAnimationControl2> (meshState->GetAnimationControl ());
   animationControl->SetSoftBody (body, CS::Physics::MESH_DUPLICATION_CONTIGUOUS);
 
   return body;
