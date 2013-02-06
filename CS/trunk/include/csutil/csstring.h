@@ -1034,7 +1034,7 @@ protected:
       {
 	CS_ASSERT(MaxSize == 0);
         csStringBase::SetCapacityInternal(NewSize, soft);
-	memcpy(Data, minibuff, Size + 1);
+	memcpy(Data, minibuff, miniused);
       }
     }
   }
