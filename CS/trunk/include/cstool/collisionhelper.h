@@ -33,6 +33,7 @@
 
 struct iCollection;
 struct iEngine;
+struct iMeshFactoryWrapper;
 struct iMeshWrapper;
 struct iSector;
 struct iSyntaxService;
