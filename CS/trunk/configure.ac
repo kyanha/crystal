@@ -1989,10 +1989,17 @@ CS_CHECK_LIB_WITH([assimp],
 	    [], [C++],
 	    [CS_HEADER_PROPERTY([CS_ASSIMP_VERSION], [2])],
 	    [unset cs_cv_libassimp], [],
-            [$cs_cv_libassimp_cflags], [$cs_cv_libassimp_lflags], [$cs_cv_libassimp_libs], [], [])],
+            [$cs_cv_libassimp_cflags $cs_cv_libz_cflags],
+            [$cs_cv_libassimp_lflags $cs_cv_libz_lflags],
+            [$cs_cv_libassimp_libs   $cs_cv_libz_libs])],
         [],
-        [$cs_cv_libassimp_cflags], [$cs_cv_libassimp_lflags], [$cs_cv_libassimp_libs], [], [])]
-    [], [], [], [])
+        [$cs_cv_libassimp_cflags $cs_cv_libz_cflags],
+        [$cs_cv_libassimp_lflags $cs_cv_libz_lflags],
+        [$cs_cv_libassimp_libs   $cs_cv_libz_libs])],
+    [],
+    [$cs_cv_libz_cflags],
+    [$cs_cv_libz_lflags],
+    [$cs_cv_libz_libs])
 
 unset cs_cv_assimp2
 unset cs_cv_assimp2_cflags
