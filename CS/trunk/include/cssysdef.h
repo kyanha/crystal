@@ -777,6 +777,8 @@ Type &Class::getterFunc ()                                     \
  */
 #if defined(CS_COMPILER_GCC)
 #  define CS_FUNCTION_NAME		__PRETTY_FUNCTION__
+#elif defined( __FUNCSIG__ )
+#  define CS_FUNCTION_NAME               __FUNCSIG__ 
 #elif defined(__FUNCTION__)
 #  define CS_FUNCTION_NAME		__FUNCTION__
 #else
