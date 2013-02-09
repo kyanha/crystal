@@ -758,8 +758,8 @@ static bool wxCodeToCSCode(int wxkey, utf32_char& raw, utf32_char& cooked)
     MAP (MENU,            CONTEXT,      CONTEXT)
     MAP (PAUSE,           PAUSE,        PAUSE)
     MAP (CAPITAL,         CAPSLOCK,     CAPSLOCK)
-    MAP (PRIOR,           PGUP,         PGUP)
-    MAP (NEXT,            PGDN,         PGDN)
+    MAP (PAGEUP,          PGUP,         PGUP)
+    MAP (PAGEDOWN,        PGDN,         PGDN)
     MAP (END,             END,          END)
     MAP (HOME,            HOME,         HOME)
     MAP (LEFT,            LEFT,         LEFT)
@@ -775,10 +775,7 @@ static bool wxCodeToCSCode(int wxkey, utf32_char& raw, utf32_char& cooked)
     MAPC (NUMPAD2,        PAD2,         '2')
     MAP (NUMPAD_DOWN,     PAD2,         DOWN)
     MAPC (NUMPAD3,        PAD3,         '3')
-    MAP (NUMPAD_NEXT,     PAD3,         PGDN)
-#if wxVERSION_NUMBER < 2700
     MAP (NUMPAD_PAGEDOWN, PAD3,         PGDN)
-#endif
     MAPC (NUMPAD4,        PAD4,         '4')
     MAP (NUMPAD_LEFT,     PAD4,         LEFT)
     MAPC (NUMPAD5,        PAD5,         '5')
@@ -789,10 +786,7 @@ static bool wxCodeToCSCode(int wxkey, utf32_char& raw, utf32_char& cooked)
     MAPC (NUMPAD8,        PAD8,         '8')
     MAP (NUMPAD_UP,       PAD8,         UP)
     MAPC (NUMPAD9,        PAD9,         '9')
-    MAP (NUMPAD_PRIOR,    PAD9,         PGUP)
-#if wxVERSION_NUMBER < 2700
     MAP (NUMPAD_PAGEUP,   PAD9,         PGUP)
-#endif
     MAPC (MULTIPLY,       PADMULT,      '*')
     MAPC (NUMPAD_MULTIPLY,PADMULT,      '*')
     MAPC (ADD,            PADPLUS,      '+')
@@ -818,10 +812,6 @@ static bool wxCodeToCSCode(int wxkey, utf32_char& raw, utf32_char& cooked)
     MAP (F12,             F12,          F12)
     MAP (NUMLOCK,         PADNUM,       PADNUM)
     MAP (SCROLL,          SCROLLLOCK,   SCROLLLOCK)
-#if wxVERSION_NUMBER < 2700
-    MAP (PAGEUP,          PGUP,         PGUP)
-    MAP (PAGEDOWN,        PGDN,         PGDN)
-#endif
     MAP (NUMPAD_ENTER,    PADENTER,     ENTER)
     default: return false;
   }
@@ -861,13 +851,13 @@ void csGLCanvas::EmitKeyEvent(wxKeyEvent& event, bool down)
   }
   else
   {
-    const KeyEventCodes* codes = keyCodeToCS.GetElementPointer (event.KeyCode());
+    const KeyEventCodes* codes = keyCodeToCS.GetElementPointer (event.GetKeyCode());
     if (codes)
     {
       cskey_raw = codes->raw;
       cskey_cooked = codes->cooked;
     }
-    keyCodeToCS.DeleteAll (event.KeyCode());
+    keyCodeToCS.DeleteAll (event.GetKeyCode());
   }
   if (cskey_raw != 0)
   {
