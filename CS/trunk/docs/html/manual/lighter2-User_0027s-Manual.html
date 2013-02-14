@@ -115,9 +115,9 @@ in the world and the lighting for a surface being computed at the grid points.
 <p>The distribution of lighting grid points for a surface is controlled by the
 <em>lightmap density</em>. This density specifies the amount of sample points 
 in u- respectively v-direction of the surface, measured in points per world 
-unit. E.g. a density of 2 means 2 by 2 sample points for a square of 
+unit. E.g. a density of 4 means 4 by 4 sample points for a square of
 1 by 1 world units of a surface. If a world unit equals one meter, this would 
-mean a lighting value is computed every 0.5m.
+mean a lighting value is computed every 0.25m.
 </p>
 <p>Increasing the lightmap density means shadows get more detailed, but lightmaps
 also get bigger (and more lightmaps may be produced).  Decreasing the lightmap
@@ -125,7 +125,7 @@ density reduces lightmap sizes and amounts, but also means less detailed and
 blurrier shadows. However, it may make sense for cases where shadows are not
 very detailed anyway (such as large outdoor surfaces).
 </p>
-<p>The default lightmap density is 2x2, which can usually be considered &ldquo;low&rdquo; 
+<p>The default lightmap density is 4x4, which can usually be considered &ldquo;low&rdquo;
 quality. A density of 8x8 can be considered &ldquo;medium&rdquo; quality and 16x16 as
 &ldquo;high&rdquo; quality and sufficient in most cases.
 </p>
@@ -160,7 +160,7 @@ number of visible edges and shadow issues. At the next density &ndash; 16x16,
 a 16-fold increase from the lowest lightmap resolution &ndash; the appearance is
 smoother, but still some visible artifacts remain.  With the highest density
 &ndash; 64x64 &ndash; the object looks acceptable, but the price being a ridiculously
-high lightmap density which is directly reflected in a hight number of lightmaps
+high lightmap density which is directly reflected in a high number of lightmaps
 needed, high runtime memory usage and, ultimatively, lower runtime performance. 
 In comparison, the vertex-lit variant has a bit less detailed shadows, but
 looks more smooth overall with zero visible edges. Per-vertex lighting also has
@@ -175,6 +175,25 @@ provide is not present. Using per-vertex lighting on such an object can save
 resources by omitting the lightmaps with little visual difference.
 </p>
 <a name="5"></a>
+<h3 class="subheading"> Direct and Indirect light </h3>
+
+<p>Light computation can be computed using two model :
+</p><ul>
+<li> direct light : sampled points are lighted only if it exists a ray from
+a light to the sampled point which don't met objects obstacles.
+</li><li> indirect light : this model is a better heuristic toward the physical
+model, it's basically compute light bounce.
+</li></ul>
+
+<p>In order to improve lightmap quality, <code>lighter2</code> provides two rendering
+algorithm : the raycasting and the photonmapping.
+</p>
+<p>While the first one permit to compute only direct lighting the second can
+do both. Nevertheless raycasting is much faster than photonmapping and give
+better result for direct light so it's advised to use a combination of
+the two rendering method to bake both direct and indirect light.
+</p>
+<a name="6"></a>
 <h2 class="heading"> Setting Global Options </h2>
 
 <p>Some options are &ldquo;global&rdquo; and affect all meshes or factories or the execution
@@ -184,7 +203,7 @@ line and a configuration file.
 <p>For example, the global option <samp>&lsquo;foo&rsquo;</samp> can be set to the value <samp>&lsquo;bar&rsquo;</samp> 
 in any of the following ways:
 </p><ul>
-<li> On the command line by specifying <code>-foo=bar</code>.
+<li> On the command line by specifying <code>--foo=bar</code>.
 </li><li> In a configuration file by setting the key <samp>&lsquo;Lighter2.foo=bar&rsquo;</samp>.
 The configuration file can be utilized via CrystalSpace's <code>-cfgfile</code>
 command line option.
@@ -196,10 +215,13 @@ will always override an option set in a configuration file, and a
 user-specified configuration file will always override options from
 <tt>&lsquo;lighter2.cfg&rsquo;</tt>.
 </p>
-<a name="6"></a>
+<a name="7"></a>
 <h2 class="heading"> List of Options </h2>
 
-<a name="7"></a>
+<p><code>lighter2</code> contains a lot of option regarding lightmap generation
+so don't hesitate to run <code>lighter2 --help</code>
+</p>
+<a name="8"></a>
 <h3 class="subheading"> Lightmap Density </h3>
 
 <p>Please see the &ldquo;Light computation&rdquo; section above for an explanation of
@@ -210,7 +232,7 @@ lightmap density.
 </li><li> Can be set globally: <code>lmdensity</code>
 </li></ul>
 
-<a name="8"></a>
+<a name="9"></a>
 <h3 class="subheading"> Per-Vertex Lighting </h3>
 
 <p>Per-vertex lighting means that lighting is not computed on a grid laid over the
@@ -225,7 +247,19 @@ read the paragraph &ldquo;When to Use Per-vertex Lighting&rdquo;.
   enabled for a factory it can't be disabled for objects of that factory.
 </li></ul>
 
-<a name="9"></a>
+<a name="10"></a>
+<h3 class="subheading"> Direct / Indirect Ligthing </h3>
+
+<p>Setting direct and indirect lighting give you a way to choose your light
+computation heuristic. Read the paragraph &ldquo;Direct and Indirect light&rdquo; to
+know how to use it. 
+</p>
+<ul>
+<li> Can be set globally for both <code>directlight</code> and <code>indirectlight</code>
+  possible value are <code>none</code>, <code>raytracer</code> except for <code>indirectlight</code>, <code>photonmapper</code>
+</li></ul>
+
+<a name="11"></a>
 <h3 class="subheading"> Disable self shadows </h3>
 
 <p>Disables casting of shadows from an object onto itself.
@@ -235,10 +269,10 @@ read the paragraph &ldquo;When to Use Per-vertex Lighting&rdquo;.
 </li><li> Can be set on mesh objects.
 </li></ul>
 
-<a name="10"></a>
+<a name="12"></a>
 <h3 class="subheading"> Advanced Options </h3>
 
-<a name="11"></a>
+<a name="13"></a>
 <h4 class="subsubheading"> Black Threshold </h4>
 
 <p>This controls the threshold of a lightmap pixel below which it is considered
@@ -251,7 +285,7 @@ lightmaps to be produced, it may also cause visible lighting artifacts
 <li> Can be set globally: <code>blackthreshold</code>.
 </li></ul>
 
-<a name="12"></a>
+<a name="14"></a>
 <h4 class="subsubheading"> Normals Tolerance </h4>
 
 <p>When computing the lightmap layout (that is, determining the area of the
