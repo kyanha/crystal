@@ -22,7 +22,7 @@ static char const metainfo_bullet2[] =
 "  <scf>"
 "    <classes>"
 "      <class>"
-"        <name>crystalspace.physics.bullet2</name>"
+"        <name>crystalspace.physics.bullet</name>"
 "        <implementation>csBulletSystem</implementation>"
 "        <description>Bullet collision and physics</description>"
 "      </class>"
