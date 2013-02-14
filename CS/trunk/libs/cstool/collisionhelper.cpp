@@ -349,7 +349,7 @@ iTriangleMesh* CollisionHelper::FindCollisionMesh
 }
 
 void CollisionHelper::DecomposeConcaveMesh
-(iTriangleMesh* mesh, iCollider* collider,
+(iTriangleMesh* mesh, CS::Collisions::iCollider* collider,
  CS::Collisions::iConvexDecomposer* decomposer) const
 {
   // Decompose the mesh in its convex parts
