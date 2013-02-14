@@ -23,24 +23,24 @@ static char const metainfo_softanim2[] =
 "    <classes>"
 "      <class>"
 "        <name>crystalspace.physics.softanim2</name>"
-"        <implementation>SoftBodyControlType2</implementation>"
+"        <implementation>SoftBodyControlType</implementation>"
 "        <description>Generic animation of a genmesh from the simulation of soft bodies</description>"
 "      </class>"
 "    </classes>"
 "  </scf>"
 "</plugin>"
 ;
-  #ifndef SoftBodyControlType2_FACTORY_REGISTER_DEFINED 
-  #define SoftBodyControlType2_FACTORY_REGISTER_DEFINED 
-    SCF_DEFINE_FACTORY_FUNC_REGISTRATION(SoftBodyControlType2) 
+  #ifndef SoftBodyControlType_FACTORY_REGISTER_DEFINED 
+  #define SoftBodyControlType_FACTORY_REGISTER_DEFINED 
+    SCF_DEFINE_FACTORY_FUNC_REGISTRATION(SoftBodyControlType) 
   #endif
 
 class softanim2
 {
 SCF_REGISTER_STATIC_LIBRARY(softanim2,metainfo_softanim2)
-  #ifndef SoftBodyControlType2_FACTORY_REGISTERED 
-  #define SoftBodyControlType2_FACTORY_REGISTERED 
-    SoftBodyControlType2_StaticInit SoftBodyControlType2_static_init__; 
+  #ifndef SoftBodyControlType_FACTORY_REGISTERED 
+  #define SoftBodyControlType_FACTORY_REGISTERED 
+    SoftBodyControlType_StaticInit SoftBodyControlType_static_init__; 
   #endif
 public:
  softanim2();
