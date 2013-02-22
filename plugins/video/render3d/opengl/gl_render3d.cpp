@@ -3651,6 +3651,8 @@ bool csGLGraphics3D::OQIsVisible(unsigned int occlusion_query, unsigned int samp
   }
 }
 
+// @@@ Temporary comment: Core dumps below on Mesa 9.0 with Intel hardware on Ubuntu. No
+// support for 'GL_ANY_SAMPLES_PASSED_ARB'. Update coming. Check on release.
 void csGLGraphics3D::OQBeginQuery (unsigned int occlusion_query)
 {
   if (ext->CS_GL_ARB_occlusion_query2)
