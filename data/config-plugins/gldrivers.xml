@@ -336,6 +336,15 @@
        </OpenGL>
       </Video>
     </config>
+    <config name="nooccq2">
+      <Video>
+	    <OpenGL>
+	      <UseExtension>
+	        <GL_ARB_occlusion_query2>no</GL_ARB_occlusion_query2>
+	      </UseExtension>
+	    </OpenGL>
+      </Video>
+    </config>
   </configs>
   <rules>
     <!-- rule description="Some more examples">
@@ -944,6 +953,23 @@
       </conditions>
       <applicable>
 	<usecfg>noArbColorBufferFloat</usecfg>
+      </applicable>
+    </rule>
+    
+    <!--
+      * 2013-02-23: Mesa 9.0. Intel DRI: GL_ARB_occlusion_query2 not present or
+        not working as expected on Ubuntu 12.04.2 and 12.10.
+    -->
+    <rule description="Intel DRI: Disable GL_ARB_occlusion_query2">
+      <conditions fulfill="all">
+        <regexp string="platform" pattern="Unix" />
+        <regexp string="renderer" pattern="Mesa.*Intel" />
+        <conditions fulfill="all">
+          <regexp string="glversion" pattern="3.0 Mesa 9.0" />
+        </conditions>
+      </conditions>
+      <applicable>
+        <usecfg>nooccq2</usecfg>
       </applicable>
     </rule>
   </rules>
