@@ -117,6 +117,9 @@ bool TextHUDManager::Initialize (iObjectRegistry* registry)
   keyDescriptions.AttachNew (new scfStringArray ());
   stateDescriptions.AttachNew (new scfStringArray ());
 
+  textColor = g2d->FindRGB (255, 255, 255);
+  backColor = g2d->FindRGB (0, 0, 0, 128);
+
   return true;
 }
 
@@ -142,7 +145,6 @@ bool TextHUDManager::HandleEvent (iEvent& event)
   int margin = 15;
   int logoMargin = 5;
   int lineSize = 18;
-  int fontColor = g2d->FindRGB (255, 150, 100);
 
   // Display the available keys
   if (keyDescriptions->GetSize ())
@@ -156,10 +158,10 @@ bool TextHUDManager::HandleEvent (iEvent& event)
     if (keyDescriptions->GetSize () < maxKeys)
     {
       currentKeyPage = 0;
-      WriteShadow (margin, y, fontColor, "Keys available:");
+      WriteShadow (margin, y, textColor, "Keys available:");
     }
     else
-      WriteShadow (margin, y, fontColor, "Keys available (%i/%i):",
+      WriteShadow (margin, y, textColor, "Keys available (%i/%i):",
 		   currentKeyPage + 1, keyDescriptions->GetSize () / maxKeys + 1);
     y += lineSize;
 
@@ -168,14 +170,14 @@ bool TextHUDManager::HandleEvent (iEvent& event)
     {
       if (i / maxKeys == currentKeyPage)
       {
-	WriteShadow (margin + 5, y, fontColor, keyDescriptions->Get (i));
+	WriteShadow (margin + 5, y, textColor, keyDescriptions->Get (i));
 	y += lineSize;
       }
     }
 
     if (keyDescriptions->GetSize () > maxKeys)
     {
-      WriteShadow (margin, y, fontColor, "F1: more keys");
+      WriteShadow (margin, y, textColor, "F1: more keys");
       y += lineSize;
     }
   }
@@ -183,12 +185,12 @@ bool TextHUDManager::HandleEvent (iEvent& event)
   // Display the state descriptions
   int y = g2d->GetHeight () - margin - lineSize;
 
-  WriteShadow (margin, y, fontColor, "FPS: %.2f", currentFPS);
+  WriteShadow (margin, y, textColor, "FPS: %.2f", currentFPS);
   y -= lineSize;
 
   for (int i = stateDescriptions->GetSize () - 1; i >= 0; i--)
   {
-    WriteShadow (margin, y, fontColor, stateDescriptions->Get (i));
+    WriteShadow (margin, y, textColor, stateDescriptions->Get (i));
     y -= lineSize;
   }
 
@@ -212,7 +214,8 @@ void TextHUDManager::WriteShadowV (int x, int y, int fg, const char *str, va_lis
 {
   csString buf;
   buf.FormatV (str, arg);
-  WriteStr (x + 1, y - 1, 0, -1, buf.GetData ());
+  int s = 2;
+  WriteStr (x + s, y - s, 0, backColor, buf.GetData ());
   WriteStr (x, y, fg, -1, buf.GetData ());
 }
 

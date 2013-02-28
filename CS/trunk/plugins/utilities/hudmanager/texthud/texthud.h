@@ -89,6 +89,8 @@ private:
   csRef<iFont> font;
   // Crystal Space logo
   csPixmap* cslogo;
+  int textColor;
+  int backColor;
 
   // Whether or not the HUD is displayed
   bool enabled;
