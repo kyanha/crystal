@@ -185,7 +185,11 @@ namespace CS
 {
   namespace Debug
   {
-    /// Convenience wrapper around csCallStack and csCallStackHelper
+    /**
+     * Convenience wrapper around csCallStack and csCallStackHelper.
+     * Creates a new csCallStack instance on construction and acts like
+     * a smart pointer to a csCallStack.
+     */
     class CallStack
     {
       csCallStack* stack;
@@ -201,7 +205,9 @@ namespace CS
       }
       ~CallStack() { Invalidate(); }
 
-      // Smart-pointer style interface
+      /**\name
+       * Smart-pointer style interface
+       * @{ */
       /// Dereference underlying call stack.
       csCallStack* operator -> () const
       { return stack; }
@@ -230,6 +236,7 @@ namespace CS
       /// Return a hash value for this smart pointer.
       uint GetHash() const
       { return (uintptr_t)stack;  }
+      /** @} */
     };
   } // namespace Debug
 } // namespace CS
