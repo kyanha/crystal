@@ -42,6 +42,5 @@
 #include "iutil.h"
 #include "ivaria.h"
 #include "ivideo.h"
-#include "ivideodecode.h"
 #endif /* __CRYSTALSPACE_H__ */
 
