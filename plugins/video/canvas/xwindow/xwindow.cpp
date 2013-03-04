@@ -298,6 +298,12 @@ bool csXWindow::Open ()
   keyboardIM = XOpenIM (dpy, 0, 0, 0);
   if (keyboardIM == 0)
   {
+    // From: http://www.mail-archive.com/fltk-bugs@easysw.com/msg01159.html
+    XSetLocaleModifiers ("@im=local");
+    keyboardIM = XOpenIM (dpy, 0, 0, 0);
+  }
+  if (keyboardIM == 0)
+  {
     Report (CS_REPORTER_SEVERITY_ERROR, "XOpenIM() failed");
     return false;
   }
