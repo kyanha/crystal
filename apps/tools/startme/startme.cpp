@@ -318,13 +318,13 @@ bool StartMe::Application()
 
   // Setup the fonts
   cegui->GetFontManagerPtr ()->createFreeTypeFont
-    (FONT_NORMAL, 10, true, "/fonts/ttf/DejaVuSerif.ttf");
+    (FONT_NORMAL, 10, true, "/fonts/dejavu/DejaVuSerif.ttf");
   cegui->GetFontManagerPtr ()->createFreeTypeFont
-    (FONT_NORMAL_ITALIC, 10, true, "/fonts/ttf/DejaVuSerif-Italic.ttf");
+    (FONT_NORMAL_ITALIC, 10, true, "/fonts/dejavu/DejaVuSerif-Italic.ttf");
   cegui->GetFontManagerPtr ()->createFreeTypeFont
-    (FONT_TITLE, 15, true, "/fonts/ttf/DejaVuSerif-Bold.ttf");
+    (FONT_TITLE, 15, true, "/fonts/dejavu/DejaVuSerif-Bold.ttf");
   cegui->GetFontManagerPtr ()->createFreeTypeFont
-    (FONT_TITLE_ITALIC, 15, true, "/fonts/ttf/DejaVuSerif-BoldItalic.ttf");
+    (FONT_TITLE_ITALIC, 15, true, "/fonts/dejavu/DejaVuSerif-BoldItalic.ttf");
 
   CEGUI::WindowManager* winMgr = cegui->GetWindowManagerPtr ();
 
