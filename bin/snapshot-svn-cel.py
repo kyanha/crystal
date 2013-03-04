@@ -159,7 +159,7 @@ class Snapshot:
         self.revision = 0
         self.hasdiff = False
         self.dirstack = DirStack()
-        self.svncommand = '/usr/bin/svn'
+        self.svncommand = 'svn'
 
 
     def timenow(self):
