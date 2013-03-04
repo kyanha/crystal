@@ -1665,8 +1665,8 @@ typedef GLvoid (csAPIENTRY* csGLUNIFORMMATRIX3FV) (GLint location, GLsizei count
 typedef GLvoid (csAPIENTRY* csGLUNIFORMMATRIX4FV) (GLint location, GLsizei count, GLboolean transpose, GLfloat* value);
 typedef GLvoid (csAPIENTRY* csGLGETSHADERIV) (GLuint shader, GLenum pname, GLint* params);
 typedef GLvoid (csAPIENTRY* csGLGETPROGRAMIV) (GLuint program, GLenum pname, GLint* params);
-typedef GLvoid (csAPIENTRY* csGLGETSHADERINFOLOG) (GLuint obj, GLsizei maxLength, GLsizei* length, GLchar* infoLog);
-typedef GLvoid (csAPIENTRY* csGLGETPROGRAMINFOLOG) (GLuint obj, GLsizei maxLength, GLsizei* length, GLchar* infoLog);
+typedef GLvoid (csAPIENTRY* csGLGETSHADERINFOLOG) (GLuint shader, GLsizei maxLength, GLsizei* length, GLchar* infoLog);
+typedef GLvoid (csAPIENTRY* csGLGETPROGRAMINFOLOG) (GLuint program, GLsizei maxLength, GLsizei* length, GLchar* infoLog);
 typedef GLvoid (csAPIENTRY* csGLGETATTACHEDSHADERS) (GLuint program, GLsizei maxCount, GLsizei* count, GLuint* shaders);
 typedef GLint (csAPIENTRY* csGLGETUNIFORMLOCATION) (GLuint programObj, const GLchar* name);
 typedef GLvoid (csAPIENTRY* csGLGETACTIVEUNIFORM) (GLuint programObj, GLuint index, GLsizei maxLength, GLsizei* length, GLint* size, GLenum* type, GLchar* name);
@@ -11898,6 +11898,50 @@ typedef GLvoid (csAPIENTRY* csGLGETINTEGER64V) (GLenum value, GLint64* data);
 typedef GLvoid (csAPIENTRY* csGLQUERYCOUNTER) (GLuint id, GLenum target);
 
 /** @} */
+/**\name GL_EXT_texture_compression_dxt1 constants
+ * For a description of what this ext does, see <a href="http://www.opengl.org/registry/specs/EXT/texture_compression_dxt1.txt">http://www.opengl.org/registry/specs/EXT/texture_compression_dxt1.txt</a>.
+ * @{ */
+
+/** @} */
+
+/**\name GL_EXT_texture_compression_dxt1 functions
+ * For a description of what this ext does, see <a href="http://www.opengl.org/registry/specs/EXT/texture_compression_dxt1.txt">http://www.opengl.org/registry/specs/EXT/texture_compression_dxt1.txt</a>.
+ * @{ */
+
+/** @} */
+/**\name GL_ANGLE_texture_compression_dxt1 constants
+ * For a description of what this ext does, see <a href="http://www.opengl.org/registry/specs/ANGLE/texture_compression_dxt1.txt">http://www.opengl.org/registry/specs/ANGLE/texture_compression_dxt1.txt</a>.
+ * @{ */
+
+/** @} */
+
+/**\name GL_ANGLE_texture_compression_dxt1 functions
+ * For a description of what this ext does, see <a href="http://www.opengl.org/registry/specs/ANGLE/texture_compression_dxt1.txt">http://www.opengl.org/registry/specs/ANGLE/texture_compression_dxt1.txt</a>.
+ * @{ */
+
+/** @} */
+/**\name GL_ANGLE_texture_compression_dxt3 constants
+ * For a description of what this ext does, see <a href="http://www.opengl.org/registry/specs/ANGLE/texture_compression_dxt3.txt">http://www.opengl.org/registry/specs/ANGLE/texture_compression_dxt3.txt</a>.
+ * @{ */
+
+/** @} */
+
+/**\name GL_ANGLE_texture_compression_dxt3 functions
+ * For a description of what this ext does, see <a href="http://www.opengl.org/registry/specs/ANGLE/texture_compression_dxt3.txt">http://www.opengl.org/registry/specs/ANGLE/texture_compression_dxt3.txt</a>.
+ * @{ */
+
+/** @} */
+/**\name GL_ANGLE_texture_compression_dxt5 constants
+ * For a description of what this ext does, see <a href="http://www.opengl.org/registry/specs/ANGLE/texture_compression_dxt5.txt">http://www.opengl.org/registry/specs/ANGLE/texture_compression_dxt5.txt</a>.
+ * @{ */
+
+/** @} */
+
+/**\name GL_ANGLE_texture_compression_dxt5 functions
+ * For a description of what this ext does, see <a href="http://www.opengl.org/registry/specs/ANGLE/texture_compression_dxt5.txt">http://www.opengl.org/registry/specs/ANGLE/texture_compression_dxt5.txt</a>.
+ * @{ */
+
+/** @} */
 
 
 // end of definitions
@@ -17936,6 +17980,26 @@ public:
 
 
   /** @} */
+  /**\name GL_EXT_texture_compression_dxt1 functions
+   * For a description of what this ext does, see <a href="http://www.opengl.org/registry/specs/EXT/texture_compression_dxt1.txt">http://www.opengl.org/registry/specs/EXT/texture_compression_dxt1.txt</a>.
+   * @{ */
+
+  /** @} */
+  /**\name GL_ANGLE_texture_compression_dxt1 functions
+   * For a description of what this ext does, see <a href="http://www.opengl.org/registry/specs/ANGLE/texture_compression_dxt1.txt">http://www.opengl.org/registry/specs/ANGLE/texture_compression_dxt1.txt</a>.
+   * @{ */
+
+  /** @} */
+  /**\name GL_ANGLE_texture_compression_dxt3 functions
+   * For a description of what this ext does, see <a href="http://www.opengl.org/registry/specs/ANGLE/texture_compression_dxt3.txt">http://www.opengl.org/registry/specs/ANGLE/texture_compression_dxt3.txt</a>.
+   * @{ */
+
+  /** @} */
+  /**\name GL_ANGLE_texture_compression_dxt5 functions
+   * For a description of what this ext does, see <a href="http://www.opengl.org/registry/specs/ANGLE/texture_compression_dxt5.txt">http://www.opengl.org/registry/specs/ANGLE/texture_compression_dxt5.txt</a>.
+   * @{ */
+
+  /** @} */
 
 // end of functions
 };
@@ -18526,6 +18590,18 @@ public:
   /** Whether the <a href="http://www.opengl.org/registry/specs/ARB/timer_query.txt">GL_ARB_timer_query</a> extension was found. 
    * Set by csGLExtensionManager::InitGL_ARB_timer_query(). */
   bool CS_GL_ARB_timer_query;
+  /** Whether the <a href="http://www.opengl.org/registry/specs/EXT/texture_compression_dxt1.txt">GL_EXT_texture_compression_dxt1</a> extension was found. 
+   * Set by csGLExtensionManager::InitGL_EXT_texture_compression_dxt1(). */
+  bool CS_GL_EXT_texture_compression_dxt1;
+  /** Whether the <a href="http://www.opengl.org/registry/specs/ANGLE/texture_compression_dxt1.txt">GL_ANGLE_texture_compression_dxt1</a> extension was found. 
+   * Set by csGLExtensionManager::InitGL_ANGLE_texture_compression_dxt1(). */
+  bool CS_GL_ANGLE_texture_compression_dxt1;
+  /** Whether the <a href="http://www.opengl.org/registry/specs/ANGLE/texture_compression_dxt3.txt">GL_ANGLE_texture_compression_dxt3</a> extension was found. 
+   * Set by csGLExtensionManager::InitGL_ANGLE_texture_compression_dxt3(). */
+  bool CS_GL_ANGLE_texture_compression_dxt3;
+  /** Whether the <a href="http://www.opengl.org/registry/specs/ANGLE/texture_compression_dxt5.txt">GL_ANGLE_texture_compression_dxt5</a> extension was found. 
+   * Set by csGLExtensionManager::InitGL_ANGLE_texture_compression_dxt5(). */
+  bool CS_GL_ANGLE_texture_compression_dxt5;
 
 protected:
   bool tested_CS_GL_version_1_2;
@@ -18724,6 +18800,10 @@ protected:
   bool tested_CS_GL_ARB_seamless_cube_map;
   bool tested_CS_GL_AMD_seamless_cubemap_per_texture;
   bool tested_CS_GL_ARB_timer_query;
+  bool tested_CS_GL_EXT_texture_compression_dxt1;
+  bool tested_CS_GL_ANGLE_texture_compression_dxt1;
+  bool tested_CS_GL_ANGLE_texture_compression_dxt3;
+  bool tested_CS_GL_ANGLE_texture_compression_dxt5;
 
 };
 
@@ -25771,6 +25851,122 @@ public:
       EXTMGR_FUNC_INIT(glQueryCounter, GLQUERYCOUNTER);
 
       EXTMGR_REPORT_INIT_RESULT("GL", GL_ARB_timer_query)
+    }
+    else
+    {
+      Report (msgExtNotFound, "GL", CS::Quote::Single (ext));
+    }
+  }
+  
+  /** Initialize <a href="http://www.opengl.org/registry/specs/EXT/texture_compression_dxt1.txt">GL_EXT_texture_compression_dxt1</a> extension. 
+   * Check presence with csGLExtensionFlags::CS_GL_EXT_texture_compression_dxt1. */
+  void InitGL_EXT_texture_compression_dxt1 ()
+  {
+    if (tested_CS_GL_EXT_texture_compression_dxt1) return;
+    if (!extstrGL) return;
+    tested_CS_GL_EXT_texture_compression_dxt1 = true;
+    const char* ext = "GL_EXT_texture_compression_dxt1";
+
+    char cfgkey[26 + 31 + 1];
+    sprintf (cfgkey, "Video.OpenGL.UseExtension.%s", ext);
+    
+    CS_GL_EXT_texture_compression_dxt1 = CheckExtension (extstrGL, ext);
+
+    bool allclear, funcTest;
+    (void)funcTest; // shut up "variable unused" warnings
+    bool init = CS_GL_EXT_texture_compression_dxt1;
+    allclear = true;
+    if (init)	// Don't check the functions if ext isn't reported anyway
+    {
+
+      EXTMGR_REPORT_INIT_RESULT("GL", GL_EXT_texture_compression_dxt1)
+    }
+    else
+    {
+      Report (msgExtNotFound, "GL", CS::Quote::Single (ext));
+    }
+  }
+  
+  /** Initialize <a href="http://www.opengl.org/registry/specs/ANGLE/texture_compression_dxt1.txt">GL_ANGLE_texture_compression_dxt1</a> extension. 
+   * Check presence with csGLExtensionFlags::CS_GL_ANGLE_texture_compression_dxt1. */
+  void InitGL_ANGLE_texture_compression_dxt1 ()
+  {
+    if (tested_CS_GL_ANGLE_texture_compression_dxt1) return;
+    if (!extstrGL) return;
+    tested_CS_GL_ANGLE_texture_compression_dxt1 = true;
+    const char* ext = "GL_ANGLE_texture_compression_dxt1";
+
+    char cfgkey[26 + 33 + 1];
+    sprintf (cfgkey, "Video.OpenGL.UseExtension.%s", ext);
+    
+    CS_GL_ANGLE_texture_compression_dxt1 = CheckExtension (extstrGL, ext);
+
+    bool allclear, funcTest;
+    (void)funcTest; // shut up "variable unused" warnings
+    bool init = CS_GL_ANGLE_texture_compression_dxt1;
+    allclear = true;
+    if (init)	// Don't check the functions if ext isn't reported anyway
+    {
+
+      EXTMGR_REPORT_INIT_RESULT("GL", GL_ANGLE_texture_compression_dxt1)
+    }
+    else
+    {
+      Report (msgExtNotFound, "GL", CS::Quote::Single (ext));
+    }
+  }
+  
+  /** Initialize <a href="http://www.opengl.org/registry/specs/ANGLE/texture_compression_dxt3.txt">GL_ANGLE_texture_compression_dxt3</a> extension. 
+   * Check presence with csGLExtensionFlags::CS_GL_ANGLE_texture_compression_dxt3. */
+  void InitGL_ANGLE_texture_compression_dxt3 ()
+  {
+    if (tested_CS_GL_ANGLE_texture_compression_dxt3) return;
+    if (!extstrGL) return;
+    tested_CS_GL_ANGLE_texture_compression_dxt3 = true;
+    const char* ext = "GL_ANGLE_texture_compression_dxt3";
+
+    char cfgkey[26 + 33 + 1];
+    sprintf (cfgkey, "Video.OpenGL.UseExtension.%s", ext);
+    
+    CS_GL_ANGLE_texture_compression_dxt3 = CheckExtension (extstrGL, ext);
+
+    bool allclear, funcTest;
+    (void)funcTest; // shut up "variable unused" warnings
+    bool init = CS_GL_ANGLE_texture_compression_dxt3;
+    allclear = true;
+    if (init)	// Don't check the functions if ext isn't reported anyway
+    {
+
+      EXTMGR_REPORT_INIT_RESULT("GL", GL_ANGLE_texture_compression_dxt3)
+    }
+    else
+    {
+      Report (msgExtNotFound, "GL", CS::Quote::Single (ext));
+    }
+  }
+  
+  /** Initialize <a href="http://www.opengl.org/registry/specs/ANGLE/texture_compression_dxt5.txt">GL_ANGLE_texture_compression_dxt5</a> extension. 
+   * Check presence with csGLExtensionFlags::CS_GL_ANGLE_texture_compression_dxt5. */
+  void InitGL_ANGLE_texture_compression_dxt5 ()
+  {
+    if (tested_CS_GL_ANGLE_texture_compression_dxt5) return;
+    if (!extstrGL) return;
+    tested_CS_GL_ANGLE_texture_compression_dxt5 = true;
+    const char* ext = "GL_ANGLE_texture_compression_dxt5";
+
+    char cfgkey[26 + 33 + 1];
+    sprintf (cfgkey, "Video.OpenGL.UseExtension.%s", ext);
+    
+    CS_GL_ANGLE_texture_compression_dxt5 = CheckExtension (extstrGL, ext);
+
+    bool allclear, funcTest;
+    (void)funcTest; // shut up "variable unused" warnings
+    bool init = CS_GL_ANGLE_texture_compression_dxt5;
+    allclear = true;
+    if (init)	// Don't check the functions if ext isn't reported anyway
+    {
+
+      EXTMGR_REPORT_INIT_RESULT("GL", GL_ANGLE_texture_compression_dxt5)
     }
     else
     {
