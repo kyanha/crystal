@@ -111,6 +111,8 @@ class iSkeletonFactory(core.iBase):
     def Description(*args): return _animation.iSkeletonFactory_Description(*args)
     def GetBoneOrderList(*args): return _animation.iSkeletonFactory_GetBoneOrderList(*args)
     def GetName(*args): return _animation.iSkeletonFactory_GetName(*args)
+    def SetSkeletonModel(*args): return _animation.iSkeletonFactory_SetSkeletonModel(*args)
+    def GetSkeletonModel(*args): return _animation.iSkeletonFactory_GetSkeletonModel(*args)
     scfGetVersion = staticmethod(_animation.iSkeletonFactory_scfGetVersion)
     scfGetName = staticmethod(_animation.iSkeletonFactory_scfGetName)
     __swig_destroy__ = _animation.delete_iSkeletonFactory
