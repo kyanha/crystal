@@ -46,14 +46,33 @@ void csGLTextureManager::InitFormats ()
   G3D->ext->InitGL_EXT_packed_depth_stencil ();
   G3D->ext->InitGL_ARB_depth_texture ();
 
-  if (G3D->ext->CS_GL_EXT_texture_compression_s3tc)
+  if (G3D->ext->CS_GL_ARB_texture_compression)
+  {
+    G3D->ext->InitGL_EXT_texture_compression_dxt1 ();
+    G3D->ext->InitGL_ANGLE_texture_compression_dxt1 ();
+    G3D->ext->InitGL_ANGLE_texture_compression_dxt3 ();
+    G3D->ext->InitGL_ANGLE_texture_compression_dxt5 ();
+  }
+
+
+  if (G3D->ext->CS_GL_EXT_texture_compression_s3tc
+    || G3D->ext->CS_GL_EXT_texture_compression_dxt1
+    || G3D->ext->CS_GL_ANGLE_texture_compression_dxt1)
   {
     specialFormats.Put ("*dxt1", 
       TextureStorageFormat (GL_COMPRESSED_RGB_S3TC_DXT1_EXT, true));
     specialFormats.Put ("*dxt1a", 
       TextureStorageFormat (GL_COMPRESSED_RGBA_S3TC_DXT1_EXT, true));
+  }
+  if (G3D->ext->CS_GL_EXT_texture_compression_s3tc
+    || G3D->ext->CS_GL_ANGLE_texture_compression_dxt3)
+  {
     specialFormats.Put ("*dxt3", 
       TextureStorageFormat (GL_COMPRESSED_RGBA_S3TC_DXT3_EXT, true));
+  }
+  if (G3D->ext->CS_GL_EXT_texture_compression_s3tc
+    || G3D->ext->CS_GL_ANGLE_texture_compression_dxt5)
+  {
     specialFormats.Put ("*dxt5", 
       TextureStorageFormat (GL_COMPRESSED_RGBA_S3TC_DXT5_EXT, true));
   }
