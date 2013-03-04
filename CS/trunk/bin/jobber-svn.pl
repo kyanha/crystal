@@ -324,7 +324,7 @@ my @jobber_archivers = ($ARCHIVER_BZIP2, $ARCHIVER_GZIP, $ARCHIVER_ZIP, $ARCHIVE
 my %jobber_properties = ();
 
 # SVN binary name
-my $jobber_svn_command = '/usr/bin/svn';
+my $jobber_svn_command = 'svn';
 
 my $CONFIG_FILE = undef;
 my $TESTING = undef;
