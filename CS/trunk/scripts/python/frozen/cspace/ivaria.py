@@ -81,6 +81,7 @@ class iDecalTemplate(core.iBase):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
     def __init__(self, *args, **kwargs): raise AttributeError, "No constructor defined"
     __repr__ = _swig_repr
+    def QueryObject(*args): return _ivaria.iDecalTemplate_QueryObject(*args)
     def GetTimeToLive(*args): return _ivaria.iDecalTemplate_GetTimeToLive(*args)
     def GetMaterialWrapper(*args): return _ivaria.iDecalTemplate_GetMaterialWrapper(*args)
     def GetRenderPriority(*args): return _ivaria.iDecalTemplate_GetRenderPriority(*args)

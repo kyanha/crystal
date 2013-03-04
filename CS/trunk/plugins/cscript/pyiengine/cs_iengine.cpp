@@ -30076,75 +30076,6 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_iMeshWrapper_AddMeshToStaticLOD(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  iMeshWrapper *arg1 = (iMeshWrapper *) 0 ;
-  int arg2 ;
-  iMeshWrapper *arg3 = (iMeshWrapper *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  int val2 ;
-  int ecode2 = 0 ;
-  void *argp3 = 0 ;
-  int res3 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  PyObject * obj2 = 0 ;
-  
-  if(!PyArg_UnpackTuple(args,(char *)"iMeshWrapper_AddMeshToStaticLOD",3,3,&obj0,&obj1,&obj2)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_iMeshWrapper, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "iMeshWrapper_AddMeshToStaticLOD" "', argument " "1"" of type '" "iMeshWrapper *""'"); 
-  }
-  arg1 = reinterpret_cast< iMeshWrapper * >(argp1);
-  ecode2 = SWIG_AsVal_int(obj1, &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "iMeshWrapper_AddMeshToStaticLOD" "', argument " "2"" of type '" "int""'");
-  } 
-  arg2 = static_cast< int >(val2);
-  res3 = SWIG_ConvertPtr(obj2, &argp3,SWIGTYPE_p_iMeshWrapper, 0 |  0 );
-  if (!SWIG_IsOK(res3)) {
-    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "iMeshWrapper_AddMeshToStaticLOD" "', argument " "3"" of type '" "iMeshWrapper *""'"); 
-  }
-  arg3 = reinterpret_cast< iMeshWrapper * >(argp3);
-  (arg1)->AddMeshToStaticLOD(arg2,arg3);
-  resultobj = SWIG_Py_Void();
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_iMeshWrapper_RemoveMeshFromStaticLOD(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  iMeshWrapper *arg1 = (iMeshWrapper *) 0 ;
-  iMeshWrapper *arg2 = (iMeshWrapper *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  void *argp2 = 0 ;
-  int res2 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  
-  if(!PyArg_UnpackTuple(args,(char *)"iMeshWrapper_RemoveMeshFromStaticLOD",2,2,&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_iMeshWrapper, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "iMeshWrapper_RemoveMeshFromStaticLOD" "', argument " "1"" of type '" "iMeshWrapper *""'"); 
-  }
-  arg1 = reinterpret_cast< iMeshWrapper * >(argp1);
-  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_iMeshWrapper, 0 |  0 );
-  if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "iMeshWrapper_RemoveMeshFromStaticLOD" "', argument " "2"" of type '" "iMeshWrapper *""'"); 
-  }
-  arg2 = reinterpret_cast< iMeshWrapper * >(argp2);
-  (arg1)->RemoveMeshFromStaticLOD(arg2);
-  resultobj = SWIG_Py_Void();
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
 SWIGINTERN PyObject *_wrap_iMeshWrapper_GetSVContext(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   iMeshWrapper *arg1 = (iMeshWrapper *) 0 ;
@@ -30161,58 +30092,6 @@ SWIGINTERN PyObject *_wrap_iMeshWrapper_GetSVContext(PyObject *SWIGUNUSEDPARM(se
   arg1 = reinterpret_cast< iMeshWrapper * >(argp1);
   result = (iShaderVariableContext *)(arg1)->GetSVContext();
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_iShaderVariableContext, 0 |  0 );
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_iMeshWrapper_GetRenderMeshes(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  iMeshWrapper *arg1 = (iMeshWrapper *) 0 ;
-  int *arg2 = 0 ;
-  iRenderView *arg3 = (iRenderView *) 0 ;
-  uint32 arg4 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  void *argp2 = 0 ;
-  int res2 = 0 ;
-  void *argp3 = 0 ;
-  int res3 = 0 ;
-  unsigned long val4 ;
-  int ecode4 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  PyObject * obj2 = 0 ;
-  PyObject * obj3 = 0 ;
-  csRenderMesh **result = 0 ;
-  
-  if(!PyArg_UnpackTuple(args,(char *)"iMeshWrapper_GetRenderMeshes",4,4,&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_iMeshWrapper, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "iMeshWrapper_GetRenderMeshes" "', argument " "1"" of type '" "iMeshWrapper *""'"); 
-  }
-  arg1 = reinterpret_cast< iMeshWrapper * >(argp1);
-  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_int,  0 );
-  if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "iMeshWrapper_GetRenderMeshes" "', argument " "2"" of type '" "int &""'"); 
-  }
-  if (!argp2) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "iMeshWrapper_GetRenderMeshes" "', argument " "2"" of type '" "int &""'"); 
-  }
-  arg2 = reinterpret_cast< int * >(argp2);
-  res3 = SWIG_ConvertPtr(obj2, &argp3,SWIGTYPE_p_iRenderView, 0 |  0 );
-  if (!SWIG_IsOK(res3)) {
-    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "iMeshWrapper_GetRenderMeshes" "', argument " "3"" of type '" "iRenderView *""'"); 
-  }
-  arg3 = reinterpret_cast< iRenderView * >(argp3);
-  ecode4 = SWIG_AsVal_unsigned_SS_long(obj3, &val4);
-  if (!SWIG_IsOK(ecode4)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "iMeshWrapper_GetRenderMeshes" "', argument " "4"" of type '" "uint32""'");
-  } 
-  arg4 = static_cast< uint32 >(val4);
-  result = (csRenderMesh **)(arg1)->GetRenderMeshes(*arg2,arg3,arg4);
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_p_CS__Graphics__RenderMesh, 0 |  0 );
   return resultobj;
 fail:
   return NULL;
@@ -31149,75 +31028,6 @@ fail:
     "  Possible C/C++ prototypes are:\n"
     "    GetStaticLOD(iMeshFactoryWrapper *)\n"
     "    GetStaticLOD(iMeshFactoryWrapper const *,float &,float &)\n");
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_iMeshFactoryWrapper_AddFactoryToStaticLOD(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  iMeshFactoryWrapper *arg1 = (iMeshFactoryWrapper *) 0 ;
-  int arg2 ;
-  iMeshFactoryWrapper *arg3 = (iMeshFactoryWrapper *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  int val2 ;
-  int ecode2 = 0 ;
-  void *argp3 = 0 ;
-  int res3 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  PyObject * obj2 = 0 ;
-  
-  if(!PyArg_UnpackTuple(args,(char *)"iMeshFactoryWrapper_AddFactoryToStaticLOD",3,3,&obj0,&obj1,&obj2)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_iMeshFactoryWrapper, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "iMeshFactoryWrapper_AddFactoryToStaticLOD" "', argument " "1"" of type '" "iMeshFactoryWrapper *""'"); 
-  }
-  arg1 = reinterpret_cast< iMeshFactoryWrapper * >(argp1);
-  ecode2 = SWIG_AsVal_int(obj1, &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "iMeshFactoryWrapper_AddFactoryToStaticLOD" "', argument " "2"" of type '" "int""'");
-  } 
-  arg2 = static_cast< int >(val2);
-  res3 = SWIG_ConvertPtr(obj2, &argp3,SWIGTYPE_p_iMeshFactoryWrapper, 0 |  0 );
-  if (!SWIG_IsOK(res3)) {
-    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "iMeshFactoryWrapper_AddFactoryToStaticLOD" "', argument " "3"" of type '" "iMeshFactoryWrapper *""'"); 
-  }
-  arg3 = reinterpret_cast< iMeshFactoryWrapper * >(argp3);
-  (arg1)->AddFactoryToStaticLOD(arg2,arg3);
-  resultobj = SWIG_Py_Void();
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_iMeshFactoryWrapper_RemoveFactoryFromStaticLOD(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  iMeshFactoryWrapper *arg1 = (iMeshFactoryWrapper *) 0 ;
-  iMeshFactoryWrapper *arg2 = (iMeshFactoryWrapper *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  void *argp2 = 0 ;
-  int res2 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  
-  if(!PyArg_UnpackTuple(args,(char *)"iMeshFactoryWrapper_RemoveFactoryFromStaticLOD",2,2,&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_iMeshFactoryWrapper, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "iMeshFactoryWrapper_RemoveFactoryFromStaticLOD" "', argument " "1"" of type '" "iMeshFactoryWrapper *""'"); 
-  }
-  arg1 = reinterpret_cast< iMeshFactoryWrapper * >(argp1);
-  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_iMeshFactoryWrapper, 0 |  0 );
-  if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "iMeshFactoryWrapper_RemoveFactoryFromStaticLOD" "', argument " "2"" of type '" "iMeshFactoryWrapper *""'"); 
-  }
-  arg2 = reinterpret_cast< iMeshFactoryWrapper * >(argp2);
-  (arg1)->RemoveFactoryFromStaticLOD(arg2);
-  resultobj = SWIG_Py_Void();
-  return resultobj;
-fail:
   return NULL;
 }
 
@@ -41014,10 +40824,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"iMeshWrapper_CreateStaticLOD", _wrap_iMeshWrapper_CreateStaticLOD, METH_VARARGS, NULL},
 	 { (char *)"iMeshWrapper_DestroyStaticLOD", _wrap_iMeshWrapper_DestroyStaticLOD, METH_VARARGS, NULL},
 	 { (char *)"iMeshWrapper_GetStaticLOD", _wrap_iMeshWrapper_GetStaticLOD, METH_VARARGS, NULL},
-	 { (char *)"iMeshWrapper_AddMeshToStaticLOD", _wrap_iMeshWrapper_AddMeshToStaticLOD, METH_VARARGS, NULL},
-	 { (char *)"iMeshWrapper_RemoveMeshFromStaticLOD", _wrap_iMeshWrapper_RemoveMeshFromStaticLOD, METH_VARARGS, NULL},
 	 { (char *)"iMeshWrapper_GetSVContext", _wrap_iMeshWrapper_GetSVContext, METH_VARARGS, NULL},
-	 { (char *)"iMeshWrapper_GetRenderMeshes", _wrap_iMeshWrapper_GetRenderMeshes, METH_VARARGS, NULL},
 	 { (char *)"iMeshWrapper_AddExtraRenderMesh", _wrap_iMeshWrapper_AddExtraRenderMesh, METH_VARARGS, NULL},
 	 { (char *)"iMeshWrapper_GetExtraRenderMesh", _wrap_iMeshWrapper_GetExtraRenderMesh, METH_VARARGS, NULL},
 	 { (char *)"iMeshWrapper_GetExtraRenderMeshCount", _wrap_iMeshWrapper_GetExtraRenderMeshCount, METH_VARARGS, NULL},
@@ -41044,8 +40851,6 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"iMeshFactoryWrapper_DestroyStaticLOD", _wrap_iMeshFactoryWrapper_DestroyStaticLOD, METH_VARARGS, NULL},
 	 { (char *)"iMeshFactoryWrapper_SetStaticLOD", _wrap_iMeshFactoryWrapper_SetStaticLOD, METH_VARARGS, NULL},
 	 { (char *)"iMeshFactoryWrapper_GetStaticLOD", _wrap_iMeshFactoryWrapper_GetStaticLOD, METH_VARARGS, NULL},
-	 { (char *)"iMeshFactoryWrapper_AddFactoryToStaticLOD", _wrap_iMeshFactoryWrapper_AddFactoryToStaticLOD, METH_VARARGS, NULL},
-	 { (char *)"iMeshFactoryWrapper_RemoveFactoryFromStaticLOD", _wrap_iMeshFactoryWrapper_RemoveFactoryFromStaticLOD, METH_VARARGS, NULL},
 	 { (char *)"iMeshFactoryWrapper_SetZBufMode", _wrap_iMeshFactoryWrapper_SetZBufMode, METH_VARARGS, NULL},
 	 { (char *)"iMeshFactoryWrapper_GetZBufMode", _wrap_iMeshFactoryWrapper_GetZBufMode, METH_VARARGS, NULL},
 	 { (char *)"iMeshFactoryWrapper_SetZBufModeRecursive", _wrap_iMeshFactoryWrapper_SetZBufModeRecursive, METH_VARARGS, NULL},

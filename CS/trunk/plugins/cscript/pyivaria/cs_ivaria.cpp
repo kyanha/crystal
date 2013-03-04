@@ -3478,6 +3478,28 @@ SWIGINTERN PyObject *iDecal_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObjec
   return SWIG_Py_Void();
 }
 
+SWIGINTERN PyObject *_wrap_iDecalTemplate_QueryObject(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  iDecalTemplate *arg1 = (iDecalTemplate *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  iObject *result = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"iDecalTemplate_QueryObject",1,1,&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_iDecalTemplate, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "iDecalTemplate_QueryObject" "', argument " "1"" of type '" "iDecalTemplate *""'"); 
+  }
+  arg1 = reinterpret_cast< iDecalTemplate * >(argp1);
+  result = (iObject *)(arg1)->QueryObject();
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_iObject, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_iDecalTemplate_GetTimeToLive(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   iDecalTemplate *arg1 = (iDecalTemplate *) 0 ;
@@ -45448,6 +45470,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"new_iDecal", _wrap_new_iDecal, METH_VARARGS, NULL},
 	 { (char *)"delete_iDecal", _wrap_delete_iDecal, METH_VARARGS, NULL},
 	 { (char *)"iDecal_swigregister", iDecal_swigregister, METH_VARARGS, NULL},
+	 { (char *)"iDecalTemplate_QueryObject", _wrap_iDecalTemplate_QueryObject, METH_VARARGS, NULL},
 	 { (char *)"iDecalTemplate_GetTimeToLive", _wrap_iDecalTemplate_GetTimeToLive, METH_VARARGS, NULL},
 	 { (char *)"iDecalTemplate_GetMaterialWrapper", _wrap_iDecalTemplate_GetMaterialWrapper, METH_VARARGS, NULL},
 	 { (char *)"iDecalTemplate_GetRenderPriority", _wrap_iDecalTemplate_GetRenderPriority, METH_VARARGS, NULL},
@@ -46474,6 +46497,12 @@ static void *_p_iODEAMotorJointTo_p_iODEGeneralJointState(void *x, int *SWIGUNUS
 static void *_p_iODEHinge2JointTo_p_iODEGeneralJointState(void *x, int *SWIGUNUSEDPARM(newmemory)) {
     return (void *)((iODEGeneralJointState *)  ((iODEHinge2Joint *) x));
 }
+static void *_p_iGeomTo_p_iMovingObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((iMovingObject *)  ((iGeom *) x));
+}
+static void *_p_iBlobTo_p_iMovingObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((iMovingObject *)  ((iBlob *) x));
+}
 static void *_p_scfImplementation1T_csObject_iObject_tTo_p_iObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
     return (void *)((iObject *)  ((scfImplementation1< csObject,iObject > *) x));
 }
@@ -46482,12 +46511,6 @@ static void *_p_csObjectTo_p_iObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
 }
 static void *_p_scfImplementationExt1T_csPath_csObject_iPath_tTo_p_iObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
     return (void *)((iObject *) (scfImplementation1< csObject,iObject > *)(csObject *) ((scfImplementationExt1< csPath,csObject,iPath > *) x));
-}
-static void *_p_iGeomTo_p_iMovingObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((iMovingObject *)  ((iGeom *) x));
-}
-static void *_p_iBlobTo_p_iMovingObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((iMovingObject *)  ((iBlob *) x));
 }
 static void *_p_iDocumentNodeIteratorTo_p_iBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
     return (void *)((iBase *)  ((iDocumentNodeIterator *) x));

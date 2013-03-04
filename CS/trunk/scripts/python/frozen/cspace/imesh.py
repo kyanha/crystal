@@ -247,6 +247,8 @@ class iGeneralFactoryState(iGeneralMeshCommonState):
     def Compress(*args): return _imesh.iGeneralFactoryState_Compress(*args)
     def GenerateBox(*args): return _imesh.iGeneralFactoryState_GenerateBox(*args)
     def GenerateCapsule(*args): return _imesh.iGeneralFactoryState_GenerateCapsule(*args)
+    def GenerateCone(*args): return _imesh.iGeneralFactoryState_GenerateCone(*args)
+    def GenerateCylinder(*args): return _imesh.iGeneralFactoryState_GenerateCylinder(*args)
     def GenerateSphere(*args): return _imesh.iGeneralFactoryState_GenerateSphere(*args)
     def SetBack2Front(*args): return _imesh.iGeneralFactoryState_SetBack2Front(*args)
     def IsAutoNormals(*args): return _imesh.iGeneralFactoryState_IsAutoNormals(*args)
@@ -260,7 +262,6 @@ class iGeneralFactoryState(iGeneralMeshCommonState):
     def GetSubMeshCount(*args): return _imesh.iGeneralFactoryState_GetSubMeshCount(*args)
     def GetSubMesh(*args): return _imesh.iGeneralFactoryState_GetSubMesh(*args)
     def DisableAutoNormals(*args): return _imesh.iGeneralFactoryState_DisableAutoNormals(*args)
-    def GenerateCylinder(*args): return _imesh.iGeneralFactoryState_GenerateCylinder(*args)
     def GetNumProgLODLevels(*args): return _imesh.iGeneralFactoryState_GetNumProgLODLevels(*args)
     def GetProgLODDistances(*args): return _imesh.iGeneralFactoryState_GetProgLODDistances(*args)
     def SetProgLODDistances(*args): return _imesh.iGeneralFactoryState_SetProgLODDistances(*args)
@@ -2163,6 +2164,19 @@ iParticleBuiltinEffectorForce_swigregister(iParticleBuiltinEffectorForce)
 iParticleBuiltinEffectorForce_scfGetVersion = _imesh.iParticleBuiltinEffectorForce_scfGetVersion
 iParticleBuiltinEffectorForce_scfGetName = _imesh.iParticleBuiltinEffectorForce_scfGetName
 
+class iParticleBuiltinEffectorPhysical(iParticleBuiltinEffectorForce):
+    thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    def __init__(self, *args, **kwargs): raise AttributeError, "No constructor defined"
+    __repr__ = _swig_repr
+    def SetRestitution(*args): return _imesh.iParticleBuiltinEffectorPhysical_SetRestitution(*args)
+    def GetRestitution(*args): return _imesh.iParticleBuiltinEffectorPhysical_GetRestitution(*args)
+    def SetRestitutionMagnitude(*args): return _imesh.iParticleBuiltinEffectorPhysical_SetRestitutionMagnitude(*args)
+    def GetRestitutionMagnitude(*args): return _imesh.iParticleBuiltinEffectorPhysical_GetRestitutionMagnitude(*args)
+    __swig_destroy__ = _imesh.delete_iParticleBuiltinEffectorPhysical
+    __del__ = lambda self : None;
+iParticleBuiltinEffectorPhysical_swigregister = _imesh.iParticleBuiltinEffectorPhysical_swigregister
+iParticleBuiltinEffectorPhysical_swigregister(iParticleBuiltinEffectorPhysical)
+
 class iParticleBuiltinEffectorLinColor(iParticleEffector):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
     def __init__(self, *args, **kwargs): raise AttributeError, "No constructor defined"
@@ -2274,6 +2288,7 @@ class iParticleBuiltinEffectorFactory(core.iBase):
     def CreateVelocityField(*args): return _imesh.iParticleBuiltinEffectorFactory_CreateVelocityField(*args)
     def CreateLinear(*args): return _imesh.iParticleBuiltinEffectorFactory_CreateLinear(*args)
     def CreateLight(*args): return _imesh.iParticleBuiltinEffectorFactory_CreateLight(*args)
+    def CreatePhysical(*args): return _imesh.iParticleBuiltinEffectorFactory_CreatePhysical(*args)
     scfGetVersion = staticmethod(_imesh.iParticleBuiltinEffectorFactory_scfGetVersion)
     scfGetName = staticmethod(_imesh.iParticleBuiltinEffectorFactory_scfGetName)
     __swig_destroy__ = _imesh.delete_iParticleBuiltinEffectorFactory
