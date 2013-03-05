@@ -56,7 +56,7 @@ def InitCegui():
     # set cursor
     sysPtr.DefaultMouseCursor = ("ice","MouseArrow")
     # load font
-    cegui_font = Cegui.FontManager.createFont("FreeType","Vera", "/fonts/ttf/Vera.ttf")
+    cegui_font = Cegui.FontManager.createFont("FreeType","DejaVuSans", "/fonts/dejavu/DejaVuSans.ttf")
     cegui_font.setProperty("PointSize", "10")
     cegui_font.load()
     # load layout
