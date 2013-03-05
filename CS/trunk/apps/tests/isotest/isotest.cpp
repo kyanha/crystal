@@ -330,7 +330,7 @@ bool IsoTest::SetupModules ()
   view->SetRectangle (0, 0, g2d->GetWidth (), g2d->GetHeight ());
 
   font = g3d->GetDriver2D ()->GetFontServer()->LoadFont
-    ("/fonts/ttf/DejaVuSans.ttf", 10);
+    ("/fonts/dejavu/DejaVuSans.ttf", 10);
   if(!font) // fallback
     font = g3d->GetDriver2D ()->GetFontServer()->LoadFont(CSFONT_LARGE);
 
