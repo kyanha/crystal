@@ -4,12 +4,13 @@
 # Crystal Space 3D - Deb based GNU Linux distribution build rules
 #
 
-export DEB_BUILD_OPTIONS := nocheck
+# Attempt to use 'up to' 8 processes at build time - For multiple core CPU's.
+export DEB_BUILD_OPTIONS := parallel=8
 
 #
 # Crystal Space 3D release version number
 #
-VERSION = 2.0.0
+VERSION = 2.1.0
 
 #
 # GNU Linux distribution being built for
@@ -43,7 +44,7 @@ override_dh_auto_configure:
 # Override auto install
 #
 override_dh_auto_install:
-	$(MAKE) DESTDIR=$(CURDIR)/debian/libcrystalspace-2.0 install_lib install_plugin
+	$(MAKE) DESTDIR=$(CURDIR)/debian/libcrystalspace-2.1 install_lib install_plugin
 	$(MAKE) DESTDIR=$(CURDIR)/debian/libcrystalspace-dev install_include
 	$(MAKE) DESTDIR=$(CURDIR)/debian/crystalspace install_bin
 	$(MAKE) DESTDIR=$(CURDIR)/debian/crystalspace-data install_data install_config
@@ -59,12 +60,12 @@ override_dh_auto_install:
 
 	# Move .dbg files from /usr/lib to libcrystalspace-dbg package
 	mkdir -p $(CURDIR)/debian/libcrystalspace-dbg/usr/lib/debug/usr/lib && \
-		mv $(CURDIR)/debian/libcrystalspace-2.0/usr/lib/*.dbg \
+		mv $(CURDIR)/debian/libcrystalspace-2.1/usr/lib/*.dbg \
 		$(CURDIR)/debian/libcrystalspace-dbg/usr/lib/debug/usr/lib
 
 	# Remove .dbg files generated during build
 	rm $(CURDIR)/debian/crystalspace/usr/bin/*.dbg
-	rm $(CURDIR)/debian/libcrystalspace-2.0/usr/lib/crystalspace-2.0/*.dbg
+	rm $(CURDIR)/debian/libcrystalspace-2.1/usr/lib/crystalspace-2.1/*.dbg
 
 	# Fix extra-license-file lintian warnings:
 	-rm $(CURDIR)/debian/crystalspace-doc/usr/share/doc/crystalspace-*/LICENSE
@@ -73,7 +74,7 @@ override_dh_auto_install:
 # Override shared lib
 #
 override_dh_makeshlibs:
-	dh_makeshlibs -V 'libcrystalspace-2.0 (>= 2.0.0+${DISTRIBUTION}-1)'
+	dh_makeshlibs -V 'libcrystalspace-2.1 (>= ${VERSION}+${DISTRIBUTION}-1)'
 
 #
 # Get original source
