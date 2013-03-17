@@ -73,10 +73,8 @@ public:
   {
     if(queueType == THREADED || queueType == THREADEDL)
     {
-      {
-        CS::Threading::MutexScopedLock lock(waitingThreadsLock);
-        threadQueue->Enqueue(job);
-      }
+      CS::Threading::MutexScopedLock lock(waitingThreadsLock);
+      threadQueue->Enqueue(job);
 
       for(size_t i=0; i<waitingThreads.GetSize(); ++i)
       {
