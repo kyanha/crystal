@@ -338,11 +338,12 @@ bool csPhysicsLoader::ParseSystem (iDocumentNode* node, iDynamicSystem* system,
 	  {
 	    case XMLTOKEN_WORLDSTEP:
 		osys->EnableQuickStep(false);
-		osys->EnableStepFast(false);
 		break;
 	    case XMLTOKEN_STEPFAST:
-		osys->EnableStepFast(true);
-		break;
+                synldr->Report ("crystalspace.dynamics.loader",
+                                CS_REPORTER_SEVERITY_WARNING,
+                                child, "StepFast mode is not supported any more");
+                /* Fall through to quickstep instead... */
 	    case XMLTOKEN_QUICKSTEP:
 		osys->EnableQuickStep(true);
 		break;
