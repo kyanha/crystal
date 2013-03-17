@@ -36,7 +36,7 @@ Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
 Simple::Simple ()
   : DemoApplication ("CrystalSpace.PhysTut"),
-    isSoftBodyWorld (true), environment (ENVIRONMENT_WALLS), solver (0),
+    isSoftBodyWorld (true), environment (ENVIRONMENT_WALLS), solver (quickStep),
     autodisable (false), do_bullet_debug (false), remainingStepDuration (0.0f),
     debugMode (false), allStatic (false), pauseDynamic (false), dynamicSpeed (1.0f),
     physicalCameraMode (CAMERA_DYNAMIC), dragging (false), softDragging (false)
@@ -201,11 +201,9 @@ void Simple::Frame ()
 
   if (phys_engine_id == ODE_ID)
   {
-    if (solver==0)
+    if (solver == worldStep)
       hudManager->GetStateDescriptions ()->Push (csString ("Solver: WorldStep"));
-    else if (solver==1)
-      hudManager->GetStateDescriptions ()->Push (csString ("Solver: StepFast"));
-    else if (solver==2)
+    else if (solver == quickStep)
       hudManager->GetStateDescriptions ()->Push (csString ("Solver: QuickStep"));
   }
 
@@ -477,28 +475,18 @@ bool Simple::OnKeyboard (iEvent &ev)
       // Toggle stepfast.
       csRef<iODEDynamicSystemState> osys = 
 	scfQueryInterface<iODEDynamicSystemState> (dynamicSystem);
-      osys->EnableStepFast (0);
-      solver=0;
+      osys->EnableQuickStep (1);
+      solver = quickStep;
       return true;
     }
     else if (csKeyEventHelper::GetCookedCode (&ev) == '2'
 	     && phys_engine_id == ODE_ID)
     {
-      // Toggle stepfast.
-      csRef<iODEDynamicSystemState> osys = 
-	scfQueryInterface<iODEDynamicSystemState> (dynamicSystem);
-      osys->EnableStepFast (1);
-      solver=1;
-      return true;
-    }
-    else if (csKeyEventHelper::GetCookedCode (&ev) == '3'
-	     && phys_engine_id == ODE_ID)
-    {
       // Toggle quickstep.
       csRef<iODEDynamicSystemState> osys = 
 	scfQueryInterface<iODEDynamicSystemState> (dynamicSystem);
-      osys->EnableQuickStep (1);
-      solver=2;
+      osys->EnableQuickStep (0);
+      solver = worldStep;
       return true;
     }
 
@@ -882,6 +870,7 @@ bool Simple::Application ()
   {
     csRef<iODEDynamicSystemState> osys = 
       scfQueryInterface<iODEDynamicSystemState> (dynamicSystem);
+    solver = (osys->QuickStepEnabled() ? quickStep : worldStep);
     osys->SetContactMaxCorrectingVel (.1f);
     osys->SetContactSurfaceLayer (.0001f);
   }
@@ -991,9 +980,8 @@ bool Simple::Application ()
   hudManager->GetKeyDescriptions ()->Push ("I: toggle autodisable");
   if (phys_engine_id == ODE_ID)
   {
-    hudManager->GetKeyDescriptions ()->Push ("1: enable StepFast solver");
-    hudManager->GetKeyDescriptions ()->Push ("2: disable StepFast solver");
-    hudManager->GetKeyDescriptions ()->Push ("3: enable QuickStep solver");
+    hudManager->GetKeyDescriptions ()->Push ("1: enable QuickStep solver");
+    hudManager->GetKeyDescriptions ()->Push ("2: disable QuickStep solver");
   }
 #ifdef CS_HAVE_BULLET_SERIALIZER
   if (phys_engine_id == BULLET_ID)
