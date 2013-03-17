@@ -56,10 +56,13 @@ struct iODEDynamicState : public virtual iBase
   virtual void SetGlobalCFM (float cfm) = 0;
   virtual float GlobalCFM () = 0;
 
-  /// Enables the experimental StepFast code in ode
+  CS_DEPRECATED_METHOD_MSG("StepFast supported was dropped")
   virtual void EnableStepFast (bool enable) = 0;
+  CS_DEPRECATED_METHOD_MSG("StepFast supported was dropped")
   virtual bool StepFastEnabled () = 0;
+  CS_DEPRECATED_METHOD_MSG("StepFast supported was dropped")
   virtual void SetStepFastIterations (int iter) = 0;
+  CS_DEPRECATED_METHOD_MSG("StepFast supported was dropped")
   virtual int StepFastIterations () = 0;
 
   virtual void EnableQuickStep (bool enable) = 0;
@@ -151,14 +154,13 @@ struct iODEDynamicSystemState : public virtual iBase
   virtual void SetCFM (float cfm) = 0;
   virtual float CFM () = 0;
 
-  /**
-   * Enables the experimental StepFast code in ode
-   * Setting this in ODEDynamicState sets it here
-   * Only modify it if you want a specific system to behave differently
-   */
+  CS_DEPRECATED_METHOD_MSG("StepFast supported was dropped")
   virtual void EnableStepFast (bool enable) = 0;
+  CS_DEPRECATED_METHOD_MSG("StepFast supported was dropped")
   virtual bool StepFastEnabled () = 0;
+  CS_DEPRECATED_METHOD_MSG("StepFast supported was dropped")
   virtual void SetStepFastIterations (int iter) = 0;
+  CS_DEPRECATED_METHOD_MSG("StepFast supported was dropped")
   virtual int StepFastIterations () = 0;
 
   virtual void EnableQuickStep (bool enable) = 0;

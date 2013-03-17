@@ -142,8 +142,6 @@ private:
 
   csRefArray<iDynamicsStepCallback> step_callbacks;
 
-  bool stepfast;
-  int sfiter;
   bool quickstep;
   int qsiter;
   bool fastobjects;
@@ -189,10 +187,10 @@ public:
   void SetGlobalCFM (float cfm);
   float GlobalCFM () { return cfm; }
 
-  void EnableStepFast (bool enable);
-  bool StepFastEnabled () { return stepfast; }
-  void SetStepFastIterations (int iter);
-  int StepFastIterations () { return sfiter; }
+  void EnableStepFast (bool enable) {}
+  bool StepFastEnabled () { return false; }
+  void SetStepFastIterations (int iter) {}
+  int StepFastIterations () { return 0; }
   void EnableQuickStep (bool enable);
   bool QuickStepEnabled () { return quickstep; };
   void SetQuickStepIterations (int iter);
@@ -275,8 +273,6 @@ private:
   float total_elapsed;
   csRefArrayObject<iODEFrameUpdateCallback> updates;
 
-  bool stepfast;
-  int sfiter;
   bool quickstep;
   int qsiter;
   bool fastobjects;
@@ -291,11 +287,11 @@ public:
   float ERP () { return dWorldGetERP (worldID); }
   void SetCFM (float cfm) { dWorldSetCFM (worldID, cfm); }
   float CFM () { return dWorldGetCFM (worldID); }
-  void EnableStepFast (bool enable) { stepfast = enable; quickstep = false; };
-  bool StepFastEnabled () { return stepfast; }
-  void SetStepFastIterations (int iter) { sfiter = iter; }
-  int StepFastIterations () { return sfiter; }
-  void EnableQuickStep (bool enable) { quickstep = enable; stepfast = false; };
+  void EnableStepFast (bool enable) { };
+  bool StepFastEnabled () { return false; }
+  void SetStepFastIterations (int iter) { }
+  int StepFastIterations () { return 0; }
+  void EnableQuickStep (bool enable) { quickstep = enable; };
   bool QuickStepEnabled () { return quickstep; };
   void SetQuickStepIterations (int iter) { qsiter = iter; };
   int QuickStepIterations () { return qsiter; }
