@@ -193,7 +193,7 @@ void Simple::Frame ()
   txt.Format ("Rigid bodies count: %d", dynamicSystem->GetBodysCount ());
   hudManager->GetStateDescriptions ()->Push (txt);
 
-  if (isSoftBodyWorld)
+  if ((phys_engine_id == BULLET_ID) && isSoftBodyWorld)
   {
     txt.Format ("Soft bodies count: %d", (int) bulletDynamicSystem->GetSoftBodyCount ());
     hudManager->GetStateDescriptions ()->Push (txt);
@@ -238,7 +238,7 @@ void Simple::Frame ()
     bulletDynamicSystem->DebugDraw (view);
 
   // Display the rope soft bodies
-  else if (isSoftBodyWorld)
+  else if ((phys_engine_id == BULLET_ID) && isSoftBodyWorld)
     for (size_t i = 0; i < bulletDynamicSystem->GetSoftBodyCount (); i++)
     {
       CS::Physics::Bullet::iSoftBody* softBody = bulletDynamicSystem->GetSoftBody (i);
@@ -813,7 +813,7 @@ bool Simple::OnInitialize (int argc, char* argv[])
       return ReportError ("Could not find any suitable iDynamics plugin!");
 
     // Check whether the soft bodies are enabled or not
-    isSoftBodyWorld = clp->GetBoolOption ("soft", true);
+    isSoftBodyWorld = (phys_engine_id == ODE_ID) && clp->GetBoolOption ("soft", true);
 
     // Load the soft body animation control plugin & factory
     if (isSoftBodyWorld)
