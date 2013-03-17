@@ -206,9 +206,7 @@ csODEDynamics::csODEDynamics (iBase* parent) :
   limittime = 1.0f;
   total_elapsed = 0.0f;
 
-  stepfast = false;
-  sfiter = 10;
-  quickstep = false;
+  quickstep = true;
   qsiter = 10;
   fastobjects = false;
 }
@@ -285,8 +283,7 @@ csPtr<iDynamicSystem> csODEDynamics::CreateSystem ()
   csRef<csODEDynamicSystem> system;
   system.AttachNew (new csODEDynamicSystem (object_reg, erp, cfm));
   systems.Push (system);
-  if(stepfast) system->EnableStepFast(true);
-  else if(quickstep) system->EnableQuickStep(true);
+  if(quickstep) system->EnableQuickStep(true);
   return csPtr<iDynamicSystem> (system);
 }
 
@@ -494,35 +491,9 @@ void csODEDynamics::SetGlobalCFM (float cfm)
   }
 }
 
-void csODEDynamics::EnableStepFast (bool enable)
-{
-  stepfast = enable;
-  quickstep = false;
-
-  for (size_t i = 0; i < systems.GetSize (); i ++)
-  {
-    csRef<iODEDynamicSystemState> sys = 
-      scfQueryInterface<iODEDynamicSystemState> (systems[i]);
-    sys->EnableStepFast (enable);
-  }
-}
-
-void csODEDynamics::SetStepFastIterations (int iter)
-{
-  sfiter = iter;
-
-  for (size_t i = 0; i < systems.GetSize (); i ++)
-  {
-    csRef<iODEDynamicSystemState> sys = 
-      scfQueryInterface<iODEDynamicSystemState> (systems[i]);
-    sys->SetStepFastIterations (iter);
-  }
-}
-
 void csODEDynamics::EnableQuickStep (bool enable)
 {
   quickstep = enable;
-  stepfast = false;
 
   for (size_t i = 0; i < systems.GetSize (); i ++)
   {
@@ -621,9 +592,7 @@ csODEDynamicSystem::csODEDynamicSystem (iObjectRegistry* object_reg,
   steptime = 0.01f;
   limittime = 1.0f;
 
-  stepfast = false;
-  sfiter = 10;
-  quickstep = false;
+  quickstep = true;
   qsiter = 10;
   fastobjects = false;
   autodisable = true;
@@ -798,20 +767,13 @@ void csODEDynamicSystem::Step (float elapsed_time)
   while (total_elapsed > stepsize)
   {
     total_elapsed -= stepsize;
-    if (!stepfast)
+    if (!quickstep)
     {
-      if (!quickstep)
-      {
-        dWorldStep (worldID, stepsize);
-      }
-      else
-      {
-        dWorldQuickStep (worldID, stepsize);
-      }
+      dWorldStep (worldID, stepsize);
     }
     else
     {
-      dWorldStepFast1 (worldID, stepsize, sfiter);
+      dWorldQuickStep (worldID, stepsize);
     }
     for (size_t i = 0; i < bodies.GetSize (); i ++)
     {
