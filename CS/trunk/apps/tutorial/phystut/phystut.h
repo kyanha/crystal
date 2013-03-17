@@ -49,7 +49,11 @@ private:
   csRef<iMeshWrapper> walls;
 
   // Configuration related
-  int solver;
+  enum ODESolver
+  {
+    worldStep,
+    quickStep
+  } solver;
   bool autodisable;
   csString phys_engine_name;
   int phys_engine_id;
