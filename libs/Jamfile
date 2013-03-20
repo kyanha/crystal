@@ -149,33 +149,3 @@ if [ Property build : projgen ] = msvc
 CSLIB.DECLARED = yes ;
 
 SubInclude TOP libs csplugincommon ;
-
-if $(WX.AVAILABLE) = "yes"
-{
-  CSLIB.SOURCES = ;
-  CSLIB.TESTS = ;
-  CSLIB.ROOT = $(SUBDIR_TOKENS) ;
-
-  SubInclude TOP libs cseditor ;
-
-  SubDir TOP libs ;
-
-  Description crystalspace_gui : "Crystal Space Graphical User Interface library" ;
-  Library crystalspace_gui : $(CSLIB.SOURCES) : notest ;
-  LibDepends crystalspace_gui : crystalspace ;
-  ExternalLibs crystalspace_gui : WX ;
-  CFlags crystalspace_gui :
-    [ FDefines CS_CRYSTALSPACE_GUI_LIB ]
-    [ FDefines WXMAKINGDLL_PROPGRID ]
-    [ FDefines wxPG_USE_WXMODULE=0 ] ;
-  MsvcDefine crystalspace_gui : CS_CRYSTALSPACE_GUI_LIB ;
-  MsvcDefine crystalspace_gui :
-    CS_COMPILER_NAME_AND_VERSION : "\"VC_$(MSVC_VERSION)\"" ;
-  {
-    local def ;
-    for def in $(CSLIB.MSVC_DEFINES)
-    {
-      MsvcDefine crystalspace_gui : $(def) ;
-    }
-  }
-}
