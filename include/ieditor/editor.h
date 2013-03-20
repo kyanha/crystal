@@ -1,4 +1,5 @@
 /*
+    Copyright (C) 2011-2012 by Jorrit Tyberghein, Jelle Hellemans, Christian Van Brussel
     Copyright (C) 2007 by Seth Yastrov
 
     This library is free software; you can redistribute it and/or
@@ -15,116 +16,83 @@
     License along with this library; if not, write to the Free
     Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
-
 #ifndef __IEDITOR_EDITOR_H__
 #define __IEDITOR_EDITOR_H__
 
-#include "csutil/array.h"
 #include "csutil/scf.h"
 #include "csutil/scf_implementation.h"
 
-#include "ieditor/editorobject.h"
+class wxFrame;
 
-class wxWindow;
-
-struct iCollection;
+struct iDocumentNode;
 struct iProgressMeter;
-struct iThreadReturn;
-struct csSimpleRenderMesh;
 
 namespace CS {
 namespace EditorApp {
 
-struct iObjectList;
-struct iPanelManager;
-struct iMenuBar;
+struct iActionManager;
+struct iComponentManager;
+struct iContext;
+struct iEditor;
+struct iEditorFrame;
+struct iMenuManager;
+struct iOperatorManager;
+struct iPerspective;
+struct iPerspectiveManager;
 
-/// Listens for map actions
-struct iMapListener : public virtual iBase
+// TODO namespace CS::Editor::Core
+
+struct iEditorManager : public virtual iBase
 {
-  SCF_INTERFACE (iMapListener, 0, 0, 1);
-
-  /// Called after map is loaded.
-  virtual void OnMapLoaded (const char* path, const char* filename) = 0;
-
-  /// Called after library is loaded.
-  virtual void OnLibraryLoaded (const char* path, const char* filename, iCollection* collection) = 0;
-};
-
-/**
- * The main editor interface.
- */
-struct iEditor : public virtual iBase
-{
-  SCF_INTERFACE (iEditor, 0, 0, 1);
+  SCF_INTERFACE (iEditorManager, 1, 0, 0);
 
   virtual bool StartEngine () = 0;
   virtual bool StartApplication () = 0;
-  virtual bool LoadPlugin (const char* name) = 0;
 
-  /// Get the underlying wxWindow content area of this editor.
-  virtual wxWindow* GetWindow () = 0;
+  virtual iEditor* CreateEditor (const char* name, const char* title,
+				 iContext* context) = 0;
+  virtual void DeleteEditor (iEditor* editor) = 0;
+  virtual iEditor* FindEditor (const char* name) = 0;
+  virtual iEditor* GetEditor (size_t index) = 0;
+  virtual size_t GetEditorCount () const = 0;
+};
 
-  /// Get the panel manager associated with this editor
-  virtual iPanelManager* GetPanelManager () const = 0;
+struct iEditor : public virtual iBase
+{
+  SCF_INTERFACE (iEditor, 1, 0, 0);
 
-  /// Get the panel manager associated with this editor
-  virtual iMenuBar* GetMenuBar () const = 0;
+  virtual iContext* GetContext () const = 0;
 
-  /// Get a progress meter to be notified of the progress of an action
-  virtual csPtr<iProgressMeter> GetProgressMeter () = 0;
+  virtual iActionManager* GetActionManager () const = 0;
+  virtual iEditorManager* GetEditorManager () const = 0;
+  virtual iMenuManager* GetMenuManager () const = 0;
+  virtual iOperatorManager* GetOperatorManager () const = 0;
+  virtual iPerspectiveManager* GetPerspectiveManager () const = 0;
+  virtual iComponentManager* GetComponentManager () const = 0;
+  // TODO: icon/image manager
+  // TODO: translation manager
 
-  /// Load a map from the given VFS file.
-  virtual iThreadReturn* LoadMapFile (const char* path, const char* filename,
-				      bool clearEngine = true) = 0;
+  virtual csPtr<iProgressMeter> CreateProgressMeter () const = 0;
+  virtual void ReportStatus (const char* text) = 0;
 
-  /// Save the engine contents to the given file
-  virtual void SaveMapFile (const char* path, const char* filename) = 0;
-  
-  /// Load a library file.
-  virtual iThreadReturn* LoadLibraryFile (const char* path, const char* filename) = 0;
+  //virtual void Save (iDocumentNode* node) const = 0;
+  //virtual bool Load (iDocumentNode* node) = 0;
 
-  /// Add a map listener.
-  virtual void AddMapListener (iMapListener* listener) = 0;
+  virtual iEditorFrame* CreateFrame (const char* title,
+				     iPerspective* perspective = nullptr) = 0;
+  virtual void DeleteFrame (iEditorFrame* frame) = 0;
+  virtual size_t GetFrameCount () const = 0;
+  virtual iEditorFrame* GetFrame (size_t index = 0) const = 0;
+};
 
-  /// Remove a map listener.
-  virtual void RemoveMapListener (iMapListener* listener) = 0;
+struct iEditorFrame : public virtual iBase
+{
+  SCF_INTERFACE (iEditorFrame, 1, 0, 0);
 
-  /// Create an editor object wrapping the specified object
-  virtual csPtr<iEditorObject> CreateEditorObject (iBase* object, wxBitmap* icon) = 0;
-  
-  /// Get the active selection.
-  virtual iObjectList* GetSelection () = 0;
+  virtual wxFrame* GetwxFrame () = 0;
 
-  /// Get the list of objects registered with the editor.
-  virtual iObjectList* GetObjects () = 0;
-
-  // TODO: remove all of that
-  virtual void SetHelperMeshes (csArray<csSimpleRenderMesh>* helpers) = 0;
-  virtual csArray<csSimpleRenderMesh>* GetHelperMeshes () = 0;
-  
-  enum TransformStatus
-  {
-    NOTHING = 0,
-  
-    MOVING,
-    MOVEX,
-    MOVEY,
-    MOVEZ,
-  
-    ROTATING,
-    ROTATEX,
-    ROTATEY,
-    ROTATEZ,
-  
-    SCALING,
-    SCALEX,
-    SCALEY,
-    SCALEZ
-  };
-
-  virtual void SetTransformStatus (TransformStatus status) = 0;
-  virtual TransformStatus GetTransformStatus () = 0;
+  virtual bool SetPerspective (iPerspective* perspective) = 0;
+  virtual iPerspective* GetPerspective () const = 0;
 };
 
 } // namespace EditorApp

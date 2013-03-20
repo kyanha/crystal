@@ -19,15 +19,15 @@
 #ifndef __STATUSBAR_H__
 #define __STATUSBAR_H__
 
-#include <csutil/scf_implementation.h>
-#include <ivaria/pmeter.h>
-#include <csutil/csstring.h>
+#include "csutil/scf_implementation.h"
+#include "csutil/csstring.h"
+#include "ivaria/pmeter.h"
 
 #include <wx/statusbr.h>
 #include <wx/event.h>
 #include <wx/gauge.h>
 
-CS_PLUGIN_NAMESPACE_BEGIN(CSE)
+CS_PLUGIN_NAMESPACE_BEGIN (CSEditor)
 {
 
 /// Custom status bar which shows a progress gauge
@@ -53,7 +53,7 @@ private:
     Field_Max
   };
   
-  DECLARE_EVENT_TABLE()
+  DECLARE_EVENT_TABLE ();
 };
 
 /// Implementation of iProgressMeter using StatusBar
@@ -65,8 +65,8 @@ public:
                            granularity (1) // Default of 1 is more exciting
   {
     gauge = statusBar->GetGauge ();
-    gauge->SetValue(0);
-    gauge->Show();
+    gauge->SetValue (0);
+    gauge->Show ();
   }
   
   virtual ~StatusBarProgressMeter () {}
@@ -102,21 +102,21 @@ public:
   {
     csString text;
     text.FormatV (description, args);
-    statusBar->SetStatusText (wxString (text.GetData(), wxConvUTF8));
+    statusBar->SetStatusText (wxString (text.GetData (), wxConvUTF8));
   }
 
   /// Increment the meter by n units (default 1) and print a tick mark.
   virtual void Step (unsigned int n = 1)
   {
-    gauge->SetValue(gauge->GetValue() + n);
-    if (GetCurrent() % granularity == 0) {
-      gauge->Update();
-      wxYield();
+    gauge->SetValue (gauge->GetValue () + n);
+    if (GetCurrent () % granularity == 0) {
+      gauge->Update ();
+      wxYield ();
     }
   }
   
   /// Reset the meter to 0%.
-  virtual void Reset () { gauge->SetValue(0); gauge->Refresh(); }
+  virtual void Reset () { gauge->SetValue (0); gauge->Refresh (); }
   /// Reset the meter and print the initial tick mark ("0%").
   virtual void Restart () { Reset (); }
   /// Abort the meter.
@@ -125,11 +125,11 @@ public:
   virtual void Finalize () { Reset (); }
 
   /// Set the total element count represented by the meter and perform a reset.
-  virtual void SetTotal (int n) { gauge->SetRange(n); Reset(); }
+  virtual void SetTotal (int n) { gauge->SetRange (n); Reset (); }
   /// Get the total element count represented by the meter.
-  virtual int GetTotal () const { return gauge->GetRange(); }
+  virtual int GetTotal () const { return gauge->GetRange (); }
   /// Get the current value of the meter (<= total).
-  virtual int GetCurrent () const { return gauge->GetValue(); }
+  virtual int GetCurrent () const { return gauge->GetValue (); }
 
   /**
    * Set the refresh granularity.  Valid values are 1-100, inclusive.  Default
@@ -150,6 +150,6 @@ private:
 };
 
 }
-CS_PLUGIN_NAMESPACE_END(CSE)
+CS_PLUGIN_NAMESPACE_END (CSEditor)
 
 #endif

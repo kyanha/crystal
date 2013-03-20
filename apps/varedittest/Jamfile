@@ -1,0 +1,13 @@
+SubDir TOP apps varedittest ;
+
+#if $(WX.AVAILABLE) = "yes"
+{
+  Description : "Crystal Space iModifiable entities test" ;
+  Application varedittest : [ Wildcard *.cpp *.h ] ;
+  ExternalLibs varedittest : CRYSTAL WX ;
+  CFlags varedittest : $(COMPILER.C++FLAGS.STRICTALIASING.DISABLE) ;
+  LinkWith varedittest : crystalspace crystalspace_gui ;
+  Win32Resource varedittest : [ ConcatDirs $(SUBDIR) varedittest.rc ] ;
+  # To locate wx.rc
+  Win32RcFlags varedittest : [ Match ^(-I.*) ^(-D.*) : [ SplitToList $(WX.CFLAGS) ] ] ;
+}

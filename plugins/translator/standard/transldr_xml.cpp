@@ -16,9 +16,7 @@
     License along with this library; if not, write to the Free
     Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
-
 #include "cssysdef.h"
-#include "csutil/cfgacc.h"
 #include "iutil/objreg.h"
 #include "iutil/plugin.h"
 #include "iutil/document.h"
@@ -77,6 +75,10 @@ bool csTranslatorLoaderXml::Process (iDocumentNode* node, const char* lang)
     csStringID id1 = tokens.Request (ch1->GetValue ());
     switch (id1)
     {
+      case XMLTOKEN_LANGUAGES:
+	Process (ch1, lang);
+	break;
+
       case XMLTOKEN_LANGUAGE:
       {
         const char* language = ch1->GetAttributeValue ("name");
@@ -88,6 +90,7 @@ bool csTranslatorLoaderXml::Process (iDocumentNode* node, const char* lang)
 		CS::Quote::Single ("name"));
           return false;
         }
+
         if (!strcmp (lang, language))
         {
           found_language = true;
@@ -134,93 +137,70 @@ bool csTranslatorLoaderXml::Process (iDocumentNode* node, const char* lang)
         }
       }
       break;
+
       default:
         if (synldr) synldr->ReportBadToken (ch1);
         return false;
     }
   }
+
   return found_language;
 }
 
 csPtr<iBase> csTranslatorLoaderXml::Parse (iDocumentNode* node,
 	iStreamSource*, iLoaderContext* ldr_context, iBase* context)
 {
-  size_t start = 0;
-  size_t pos = 0;
-  if (!node)
-    return 0;
-  trans.AttachNew (new csTranslator (context));
+  if (!node) return csPtr<iBase> (nullptr);
+
+  // Attempt to find a translator in the loading context
+  csRef<iTranslator> translator;
+  if (context)
+  {
+    translator = scfQueryInterface<iTranslator> (context);
+    if (translator)
+      trans = static_cast<csTranslator*> ((iTranslator*) translator);
+  }
+
+  // Attempt to find a translator in the global registry
   if (!trans)
   {
-    Report (CS_REPORTER_SEVERITY_ERROR, "Couldn't initialize csTranslator!");
-    return 0;
+    translator = csQueryRegistry<iTranslator> (object_reg);
+    if (translator)
+      trans = static_cast<csTranslator*> ((iTranslator*) translator);
   }
-  // local and global configuration
-  csConfigAccess cfg;
-  cfg.AddConfig (object_reg, "/config/translator.cfg");
-  const char* lang = 0;
-  lang = cfg->GetStr ("Translator.Language", 0);
-/*  if (!lang)
+
+  // Attempt to create a translator from scratch
+  if (!trans)
   {
-    const char* syslang = 0;
-    // Unix
-    syslang = getenv ("LANG");
-    // Windows
-    //WCHAR wcBuffer [32];
-    //if (GetSystemDefaultLocaleName (wcBuffer, 32) > 0)
-    //{
-    //  syslang = wcBuffer;
-    //}
-    csRef<iConfigIterator> it_alias (cfg->Enumerate ("Translator.Alias."));
-    if (it_alias)
-      while (it_alias->Next ())
-      {
-        csString keystr = it_alias->GetStr ();
-        start = 0;
-        pos = 0;
-        do
-        {
-          pos = keystr.Find (" ", pos + 1);
-          csString keyslice = keystr.Slice (start, pos - start);
-          if (!strcmp (syslang, keyslice.GetData ()))
-          {
-            lang = it_alias->GetKey (true);
-            break;
-          }
-          start = pos + 1;
-        }
-        while (pos != (size_t)-1);
-        if (pos != (size_t)-1)
-          break;
-      }
-  }*/
-  if (lang)
-  {
-    if (!Process (node, lang))
+    trans.AttachNew (new csTranslator (context));
+
+    if (!trans)
     {
-      char fallbackname [24];
-      strcpy (fallbackname, "Translator.Fallback.");
-      strcat (fallbackname, lang);
-      csString fallback = cfg->GetStr (fallbackname);
-      start = 0;
-      pos = 0;
-      do
-      {
-        pos = fallback.Find (" ", pos + 1);
-        csString keyslice = fallback.Slice (start, pos - start);
-        if (Process (node, keyslice.GetData ()))
-          break;
-        start = pos + 1;
-      }
-      while (pos != (size_t)-1);
+      Report (CS_REPORTER_SEVERITY_ERROR, "Couldn't find any valid iTranslator instance!");
+      return csPtr<iBase> (nullptr);
     }
+/*
+    // Unregister any previous translator before registering this one
+    csRef<iTranslator> old = csQueryRegistry<iTranslator> (object_reg);
+    if (old) object_reg->Unregister (old, "iTranslator");
+
+    // TODO: who unregisters?
+    if (!object_reg->Register (trans, "iTranslator"))
+      Report (CS_REPORTER_SEVERITY_ERROR, "Couldn't register iTranslator!");
+*/
   }
-  csRef<iTranslator> old = csQueryRegistry<iTranslator> (object_reg);
-  object_reg->Unregister (old, "iTranslator");
-  if (!object_reg->Register (trans, "iTranslator"))
-    Report (CS_REPORTER_SEVERITY_ERROR,
-    	"Couldn't register iTranslator!");
-  return csPtr<iBase> (trans);
+
+  // Process the file until some data is found for the default language
+  // or for the fallback ones
+  if (Process (node, trans->GetCurrentLanguage ()))
+    return csPtr<iBase> (trans);
+
+  csRef<iStringArray> fallbacks = trans->GetFallbacks (trans->GetCurrentLanguage ());
+  for (size_t i = 0; i < fallbacks->GetSize (); i++)
+    if (Process (node, fallbacks->Get (i)))
+      return csPtr<iBase> (trans);
+
+  return csPtr<iBase> (nullptr);
 }
 
 }

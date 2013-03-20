@@ -51,28 +51,29 @@ CS_PLUGIN_NAMESPACE_BEGIN(Particles)
 
   csPtr<iParticleBuiltinEmitterSphere> ParticleEmitterFactory::CreateSphere () const
   {
-    return new ParticleEmitterSphere;
+    return new ParticleEmitterSphere(object_reg);
   }
 
   csPtr<iParticleBuiltinEmitterCone> ParticleEmitterFactory::CreateCone () const
   {
-    return new ParticleEmitterCone;
+    return new ParticleEmitterCone(object_reg);
   }
 
   csPtr<iParticleBuiltinEmitterBox> ParticleEmitterFactory::CreateBox () const
   {
-    return new ParticleEmitterBox;
+    return new ParticleEmitterBox(object_reg);
   }
 
   csPtr<iParticleBuiltinEmitterCylinder> ParticleEmitterFactory::CreateCylinder () const
   {
-    return new ParticleEmitterCylinder;
+    return new ParticleEmitterCylinder(object_reg);
   }
 
 
 
-  ParticleEmitterSphere::ParticleEmitterSphere ()
-    : radius (1.0f)
+  ParticleEmitterSphere::ParticleEmitterSphere (iObjectRegistry* object_reg)
+    : ParticleEmitterHelper<iParticleBuiltinEmitterSphere>(object_reg),
+      radius (1.0f)
   {
   }
 
@@ -84,7 +85,6 @@ CS_PLUGIN_NAMESPACE_BEGIN(Particles)
   {
     return 0;
   }
-
 
   void ParticleEmitterSphere::EmitParticles (iParticleSystemBase* system,
     const csParticleBuffer& particleBuffer, float dt, float totalTime,
@@ -131,8 +131,9 @@ CS_PLUGIN_NAMESPACE_BEGIN(Particles)
   }
 
 
-  ParticleEmitterBox::ParticleEmitterBox ()
-    : genBox (csBox3 (csVector3 (-0.5f), csVector3 (0.5f)))
+  ParticleEmitterBox::ParticleEmitterBox (iObjectRegistry* object_reg)
+    : ParticleEmitterHelper<iParticleBuiltinEmitterBox>(object_reg),
+      genBox (csBox3 (csVector3 (-0.5f), csVector3 (0.5f)))
   {
   }
 
@@ -219,8 +220,9 @@ CS_PLUGIN_NAMESPACE_BEGIN(Particles)
   }
 
 
-  ParticleEmitterCylinder::ParticleEmitterCylinder ()
-    : radius (1.0f), extent (1.0f, 0.0f, 0.0f), normal0 (0.0f, 1.0f, 0.0f),
+  ParticleEmitterCylinder::ParticleEmitterCylinder (iObjectRegistry* object_reg)
+    : ParticleEmitterHelper<iParticleBuiltinEmitterCylinder>(object_reg),
+    radius (1.0f), extent (1.0f, 0.0f, 0.0f), normal0 (0.0f, 1.0f, 0.0f),
     normal1 (0.0f, 0.0f, 1.0f)
   {}
 
@@ -313,8 +315,9 @@ CS_PLUGIN_NAMESPACE_BEGIN(Particles)
   }
 
   
-  ParticleEmitterCone::ParticleEmitterCone ()
-    : coneAngle (PI/8.0f), extent (1.0f, 0.0f, 0.0f), normal0 (0.0f, 1.0f, 0.0f),
+  ParticleEmitterCone::ParticleEmitterCone (iObjectRegistry* object_reg)
+    : ParticleEmitterHelper<iParticleBuiltinEmitterCone> (object_reg),
+    coneAngle (PI/8.0f), extent (1.0f, 0.0f, 0.0f), normal0 (0.0f, 1.0f, 0.0f),
     normal1 (0.0f, 0.0f, 1.0f)
   {}
 

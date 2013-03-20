@@ -45,6 +45,7 @@
 #include "iutil/job.h"
 #include "iutil/kitchensink.h"
 #include "iutil/memdebug.h"
+#include "iutil/modifiable.h"
 #include "iutil/object.h"
 #include "iutil/objreg.h"
 #include "iutil/plugin.h"

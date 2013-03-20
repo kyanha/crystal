@@ -15,7 +15,6 @@
     License along with this library; if not, write to the Free
     Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
-
 #ifndef __CS_TRANSLDR_XML_H__
 #define __CS_TRANSLDR_XML_H__
 
@@ -33,7 +32,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(TransStd)
 {
 
 /**
- * Implementation of the iTranslator API.
+ * Implementation of the iLoader API for the iTranslator.
  */
 class csTranslatorLoaderXml :public scfImplementation2<csTranslatorLoaderXml,
 	iComponent, iLoaderPlugin>
@@ -56,7 +55,7 @@ public:
   virtual csPtr<iBase> Parse (iDocumentNode* node,
   	iStreamSource*, iLoaderContext* ldr_context, iBase* context);
 
-  virtual bool IsThreadSafe() { return true; }
+  virtual bool IsThreadSafe () { return true; }
 };
 
 }

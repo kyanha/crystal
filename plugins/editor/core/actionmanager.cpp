@@ -1,5 +1,6 @@
 /*
     Copyright (C) 2007 by Seth Yastrov
+    Copyright (C) 2011 by Jelle Hellemans
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Library General Public
@@ -16,37 +17,40 @@
     Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 
-#include <cssysdef.h>
+#include "cssysdef.h"
+#include "csutil/objreg.h"
 #include "csutil/scf.h"
-
-#include <csutil/objreg.h>
+#include "ieditor/context.h"
+#include "iutil/eventq.h"
 
 #include "actionmanager.h"
 
-#include "ieditor/action.h"
-
-namespace CS {
-namespace EditorApp {
-
-ActionManager::ActionManager (iObjectRegistry* obj_reg)
-  : scfImplementationType (this), object_reg (obj_reg)
+CS_PLUGIN_NAMESPACE_BEGIN (CSEditor)
 {
-  object_reg->Register (this, "iActionManager");
+
+ActionManager::ActionManager (iObjectRegistry* obj_reg, iEditor* editor)
+  : scfImplementationType (this), object_reg (obj_reg), editor (editor), maximumStackSize (100)
+{
+  csRef<iEventNameRegistry> registry = csQueryRegistry<iEventNameRegistry>
+    (editor->GetContext ()->GetObjectRegistry ());
+  eventID = registry->GetID ("crystalspace.editor.action.actiondone");
 }
 
 ActionManager::~ActionManager ()
 {
-  object_reg->Unregister (this, "iActionManager");
 }
 
 bool ActionManager::Do (iAction* action)
 {
-  csRef<iAction> undoAction (action->Do ());
-  if (!undoAction.IsValid ())
+  if (!action->Do (editor->GetContext ()))
     return false;
   
   redoStack.Empty ();
-  undoStack.Push (undoAction);
+  undoStack.Push (action);
+
+  // Limit the size of the 'Undo' stack
+  if (undoStack.GetSize () > maximumStackSize)
+    undoStack.DeleteIndex (0);
 
   NotifyListeners (action);
   
@@ -61,9 +65,8 @@ bool ActionManager::Undo ()
   csRef<iAction> action (undoStack.Pop ());
 
   // Store redo action
-  csRef<iAction> redoAction (action->Do ());
-  if (redoAction.IsValid ())
-    redoStack.Push (redoAction);
+  if (action->Undo (editor->GetContext ()))
+    redoStack.Push (action);
 
   NotifyListeners (action);
 
@@ -77,9 +80,8 @@ bool ActionManager::Redo ()
   
   csRef<iAction> action (redoStack.Pop ());
   
-  csRef<iAction> undoAction (action->Do ());
-  if (undoAction.IsValid ())
-    undoStack.Push (undoAction);
+  if (action->Do (editor->GetContext ()))
+    undoStack.Push (action);
 
   NotifyListeners (action);
 
@@ -102,24 +104,24 @@ const iAction* ActionManager::PeekRedo () const
   return redoStack.Get (redoStack.GetSize () - 1);
 }
 
-void ActionManager::AddListener (iActionListener* listener)
+void ActionManager::SetMaximumStackSize (size_t size)
 {
-  listeners.Push (listener);
+  maximumStackSize = size;
 }
 
-void ActionManager::RemoveListener (iActionListener* listener)
+size_t ActionManager::GetMaximumStackSize () const
 {
-  listeners.Delete (listener);
+  return  maximumStackSize;
 }
 
 void ActionManager::NotifyListeners (iAction* action)
 {
-  csRefArray<iActionListener>::Iterator it = listeners.GetIterator ();
-  while (it.HasNext ())
-  {
-    it.Next ()->OnActionDone (action);
-  }
+  iEventQueue* queue = editor->GetContext ()->GetEventQueue ();
+  csRef<iEvent> event = queue->CreateEvent (eventID);
+  event->Add ("action", action);
+  queue->Post (event);
+  queue->Process ();
 }
 
-} // namespace EditorApp
-} // namespace CS
+}
+CS_PLUGIN_NAMESPACE_END (CSEditor)
