@@ -19,6 +19,7 @@
 #ifndef __CS_MESH_PARTICLES_H__
 #define __CS_MESH_PARTICLES_H__
 
+#include "cstool/modifiableimpl.h"
 #include "cstool/objmodel.h"
 #include "cstool/rendermeshholder.h"
 #include "csutil/scf_implementation.h"
@@ -29,6 +30,7 @@
 #include "imesh/object.h"
 #include "imesh/particles.h"
 #include "iutil/comp.h"
+#include "iutil/modifiable.h"
 #include "ivideo/rndbuf.h"
 
 CS_PLUGIN_NAMESPACE_BEGIN(Particles)
@@ -60,9 +62,10 @@ CS_PLUGIN_NAMESPACE_BEGIN(Particles)
   /**
   * Particle object factory
   */
-  class ParticlesMeshFactory : public scfImplementation3<ParticlesMeshFactory,
+  class ParticlesMeshFactory : public scfImplementation4<ParticlesMeshFactory,
                                                          iMeshObjectFactory,
                                                          iParticleSystemFactory,
+                                                         CS::Utility::iModifiable,
                                                          scfFakeInterface<iParticleSystemBase> >
   {
   public:
@@ -77,7 +80,6 @@ CS_PLUGIN_NAMESPACE_BEGIN(Particles)
     {
       return objectType;
     }
-
 
     /**\name iMeshObjectFactory implementation
      * @{ */
@@ -152,6 +154,88 @@ CS_PLUGIN_NAMESPACE_BEGIN(Particles)
     {
       return deepCreation;
     }
+    /** @} */
+
+    /**\name CS::Utility::iModifiable implementation
+      * @{ */
+    MODIF_DECLARE (8);
+    MODIF_GETDESCRIPTION_BEGIN ("PARTICLE_MESH", "Particle mesh object");
+
+    MODIF_GETDESCRIPTION_CENUM_DECLARE ();
+    MODIF_GETDESCRIPTION_CENUM_PUSH (CS_PARTICLE_CAMERAFACE, 
+				     "Billboard always facing the camera");
+    MODIF_GETDESCRIPTION_CENUM_PUSH (CS_PARTICLE_CAMERAFACE_APPROX,
+				     "Billboard always facing the camera direction");
+    MODIF_GETDESCRIPTION_CENUM_PUSH (CS_PARTICLE_ORIENT_COMMON,
+				     "Orient around a common direction (y/up direction), facing the camera");
+    MODIF_GETDESCRIPTION_CENUM_PUSH (CS_PARTICLE_ORIENT_COMMON_APPROX,
+				     "Orient around a common direction (y/up direction), facing the camera, using the camera direction");
+    MODIF_GETDESCRIPTION_CENUM_PUSH (CS_PARTICLE_ORIENT_VELOCITY,
+				     "Use velocity vector as direction");
+    MODIF_GETDESCRIPTION_CENUM_PUSH (CS_PARTICLE_ORIENT_SELF,
+				     "Orient particles according to their internal rotation");
+    MODIF_GETDESCRIPTION_CENUM_PUSH (CS_PARTICLE_ORIENT_SELF_FORWARD,
+				     "Orient self forward - towards camera");
+    MODIF_GETDESCRIPTION_CENUM (LONG, "ORIENTATION", "Orientation", "Particle render orientation");
+
+    MODIF_GETDESCRIPTION_CENUM_DECLARE ();
+    MODIF_GETDESCRIPTION_CENUM_PUSH (CS_PARTICLE_ROTATE_NONE, "No rotation");
+    MODIF_GETDESCRIPTION_CENUM_PUSH (CS_PARTICLE_SORT_DISTANCE, "Sort by distance to the camera");
+    MODIF_GETDESCRIPTION_CENUM_PUSH (CS_PARTICLE_SORT_DOT,
+				     "Sort by the dot product of the normalized camera vector and the particle direction");
+    MODIF_GETDESCRIPTION_CENUM (LONG, "ROTATION", "Rotation mode", "Rotation mode applied on each particle");
+
+    MODIF_GETDESCRIPTION_CENUM_DECLARE ();
+    MODIF_GETDESCRIPTION_CENUM_PUSH (CS_PARTICLE_SORT_NONE, "No sorting");
+    MODIF_GETDESCRIPTION_CENUM_PUSH (CS_PARTICLE_SORT_DISTANCE, "Sort by distance to the camera");
+    MODIF_GETDESCRIPTION_CENUM_PUSH (CS_PARTICLE_SORT_DOT,
+				     "Sort by the dot product of the normalized camera vector and the particle direction");
+    MODIF_GETDESCRIPTION_CENUM (LONG, "SORT", "Sort mode", "Mode used to sort the particles before rendering them");
+
+    MODIF_GETDESCRIPTION_CENUM_DECLARE ();
+    MODIF_GETDESCRIPTION_CENUM_PUSH (CS_PARTICLE_INTEGRATE_NONE, "No integration");
+    MODIF_GETDESCRIPTION_CENUM_PUSH (CS_PARTICLE_INTEGRATE_LINEAR, "Integrate linear velocity into linear position");
+    MODIF_GETDESCRIPTION_CENUM_PUSH (CS_PARTICLE_INTEGRATE_BOTH, "Integrate both linear and angular velocity into pose");
+    MODIF_GETDESCRIPTION_CENUM (LONG, "INTEGRATION", "Integration mode",
+				"Mode used to integrate the linear and/or angular velocities of the particles");
+
+    MODIF_GETDESCRIPTION_CENUM_DECLARE ();
+    MODIF_GETDESCRIPTION_CENUM_PUSH (CS_PARTICLE_LOCAL_MODE,
+				     "Fully local mode - all positions and coordinates are relative to the particle system");
+    MODIF_GETDESCRIPTION_CENUM_PUSH (CS_PARTICLE_LOCAL_EMITTER,
+				     "Particle positions and effectors operate in world space, emitters in local mode");
+    MODIF_GETDESCRIPTION_CENUM_PUSH (CS_PARTICLE_WORLD_MODE, "All coordinates are in world space");
+    MODIF_GETDESCRIPTION_CENUM (LONG, "TRANSFORMATION", "Transformation mode",
+				"Coordinate system to be used for the computation of the transforms of the particles");
+
+    MODIF_GETDESCRIPTION (BOOL, "SIZE_INDIV", "Individual size", "Whether or not individual sizes should be computed for each particles");
+    MODIF_GETDESCRIPTION (VECTOR2, "SIZE_PARTICLE", "Particle size", "Size to be used for all particles");
+    MODIF_GETDESCRIPTION (VECTOR3, "DIRECTION", "Common direction", "Common motion direction for all particles");
+
+    MODIF_GETDESCRIPTION_END ();
+
+    MODIF_GETPARAMETERVALUE_BEGIN ();
+    MODIF_GETPARAMETERVALUE (0, Long, particleOrientation);
+    MODIF_GETPARAMETERVALUE (1, Long, rotationMode);
+    MODIF_GETPARAMETERVALUE (2, Long, sortMode);
+    MODIF_GETPARAMETERVALUE (3, Long, integrationMode);
+    MODIF_GETPARAMETERVALUE (4, Long, transformMode);
+    MODIF_GETPARAMETERVALUE (5, Bool, individualSize);
+    MODIF_GETPARAMETERVALUE (6, Vector2, particleSize);
+    MODIF_GETPARAMETERVALUE (7, Vector3, commonDirection);
+    MODIF_GETPARAMETERVALUE_END ();
+
+    MODIF_SETPARAMETERVALUE_BEGIN ();
+    MODIF_SETPARAMETERVALUE_ENUM (0, Long, particleOrientation, csParticleRenderOrientation);
+    MODIF_SETPARAMETERVALUE_ENUM (1, Long, rotationMode, csParticleRotationMode);
+    MODIF_SETPARAMETERVALUE_ENUM (2, Long, sortMode, csParticleSortMode);
+    MODIF_SETPARAMETERVALUE_ENUM (3, Long, integrationMode, csParticleIntegrationMode);
+    MODIF_SETPARAMETERVALUE_ENUM (4, Long, transformMode, csParticleTransformMode);
+    MODIF_SETPARAMETERVALUE (5, Bool, individualSize);
+    MODIF_SETPARAMETERVALUE (6, Vector2, particleSize);
+    MODIF_SETPARAMETERVALUE (7, Vector3, commonDirection);
+    MODIF_SETPARAMETERVALUE_END ();
+
     /** @} */
 
     /**\name iParticleSystemBase implementation

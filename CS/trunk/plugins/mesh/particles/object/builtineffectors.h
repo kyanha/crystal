@@ -19,6 +19,7 @@
 #ifndef __CS_MESH_BUILTINEFFECTORS_H__
 #define __CS_MESH_BUILTINEFFECTORS_H__
 
+#include "cstool/modifiableimpl.h"
 #include "csutil/scf_implementation.h"
 
 #include "imesh/particles.h"
@@ -52,21 +53,26 @@ CS_PLUGIN_NAMESPACE_BEGIN(Particles)
     virtual csPtr<iParticleBuiltinEffectorPhysical> CreatePhysical () const;
 
     //-- iComponent
-    virtual bool Initialize (iObjectRegistry*)
+    virtual bool Initialize (iObjectRegistry* object_reg)
     {
+      this->object_reg = object_reg;
       return true;
     }
+
+  private:
+    iObjectRegistry* object_reg;
   };
 
   //------------------------------------------------------------------------
 
   class ParticleEffectorForce : public 
-    scfImplementation2<ParticleEffectorForce,
+    scfImplementation3<ParticleEffectorForce,
                        iParticleBuiltinEffectorForce,
-                       scfFakeInterface<iParticleEffector> >
+                       scfFakeInterface<iParticleEffector>,
+                       CS::Utility::iModifiable>
   {
   public:
-    ParticleEffectorForce ()
+    ParticleEffectorForce (iObjectRegistry* object_reg)
       : scfImplementationType (this),
       acceleration (0.0f), force (0.0f), randomAcceleration (0.0f, 0.0f, 0.0f),
       do_randomAcceleration (false)
@@ -114,6 +120,30 @@ CS_PLUGIN_NAMESPACE_BEGIN(Particles)
       return randomAcceleration;
     }
 
+    //-- CS::Utility::iModifiable
+    MODIF_DECLARE (4);
+
+    MODIF_GETDESCRIPTION_BEGIN ("EFFECT.FORCE", "Force effector");
+    MODIF_GETDESCRIPTION (VECTOR3, "ACCELERATION", "Acceleration", "Rate at which the force increases");
+    MODIF_GETDESCRIPTION (VECTOR3, "FORCE", "Force", "Effector's initial force");
+    MODIF_GETDESCRIPTION (BOOL, "ENABLE_RANDOMACC", "Enable random acceleration", "");
+    MODIF_GETDESCRIPTION (VECTOR3, "RANDOMACC", "Random acceleration", "");
+    MODIF_GETDESCRIPTION_END ();
+
+    MODIF_GETPARAMETERVALUE_BEGIN ();
+    MODIF_GETPARAMETERVALUE (0, Vector3, acceleration);
+    MODIF_GETPARAMETERVALUE (1, Vector3, force);
+    MODIF_GETPARAMETERVALUE (2, Bool, do_randomAcceleration);
+    MODIF_GETPARAMETERVALUE (3, Vector3, randomAcceleration);
+    MODIF_GETPARAMETERVALUE_END ();
+
+    MODIF_SETPARAMETERVALUE_BEGIN ();
+    MODIF_SETPARAMETERVALUE (0, Vector3, acceleration);
+    MODIF_SETPARAMETERVALUE (1, Vector3, force);
+    MODIF_SETPARAMETERVALUE (2, Bool, do_randomAcceleration);
+    MODIF_SETPARAMETERVALUE_F (3, Vector3, SetRandomAcceleration);
+    MODIF_SETPARAMETERVALUE_END ();
+
   private:
     csVector3 acceleration;
     csVector3 force;
@@ -124,13 +154,14 @@ CS_PLUGIN_NAMESPACE_BEGIN(Particles)
   //------------------------------------------------------------------------
 
   class ParticleEffectorLinColor : public
-    scfImplementation2<ParticleEffectorLinColor,
+    scfImplementation3<ParticleEffectorLinColor,
                        iParticleBuiltinEffectorLinColor,
-                       scfFakeInterface<iParticleEffector> >
+                       scfFakeInterface<iParticleEffector>,
+                       CS::Utility::iModifiable>
   {
   public:
     //-- ParticleEffectorLinColor
-    ParticleEffectorLinColor ();
+    ParticleEffectorLinColor (iObjectRegistry* object_reg);
 
     //-- iParticleEffector
     virtual csPtr<iParticleEffector> Clone () const;
@@ -169,6 +200,18 @@ CS_PLUGIN_NAMESPACE_BEGIN(Particles)
       return colorList.GetSize ();
     }
 
+    //-- CS::Utility::iModifiable
+    MODIF_DECLARE (0);
+
+    MODIF_GETDESCRIPTION_BEGIN ("EFFECT.COLOR", "Linear color effector");
+    MODIF_GETDESCRIPTION_END ();
+
+    MODIF_GETPARAMETERVALUE_BEGIN ();
+    MODIF_GETPARAMETERVALUE_END ();
+
+    MODIF_SETPARAMETERVALUE_BEGIN ();
+    MODIF_SETPARAMETERVALUE_END ();
+
   private:
     void Precalc ();
 
@@ -194,13 +237,14 @@ CS_PLUGIN_NAMESPACE_BEGIN(Particles)
   //------------------------------------------------------------------------
 
   class ParticleEffectorLinear : public
-    scfImplementation2<ParticleEffectorLinear,
+    scfImplementation3<ParticleEffectorLinear,
                        iParticleBuiltinEffectorLinear,
-                       scfFakeInterface<iParticleEffector> >
+                       scfFakeInterface<iParticleEffector>,
+                       CS::Utility::iModifiable>
   {
   public:
     //-- ParticleEffectorLinear
-    ParticleEffectorLinear ();
+    ParticleEffectorLinear (iObjectRegistry* object_reg);
 
     //-- iParticleEffector
     virtual csPtr<iParticleEffector> Clone () const;
@@ -246,6 +290,18 @@ CS_PLUGIN_NAMESPACE_BEGIN(Particles)
       return paramList.GetSize ();
     }
 
+    //-- CS::Utility::iModifiable
+    MODIF_DECLARE (0);
+
+    MODIF_GETDESCRIPTION_BEGIN ("EFFECT.LINEAR", "Linear effector");
+    MODIF_GETDESCRIPTION_END ();
+
+    MODIF_GETPARAMETERVALUE_BEGIN ();
+    MODIF_GETPARAMETERVALUE_END ();
+
+    MODIF_SETPARAMETERVALUE_BEGIN ();
+    MODIF_SETPARAMETERVALUE_END ();
+
   private:
     void Precalc ();
 
@@ -273,12 +329,13 @@ CS_PLUGIN_NAMESPACE_BEGIN(Particles)
   //------------------------------------------------------------------------
 
   class ParticleEffectorVelocityField : public 
-    scfImplementation2<ParticleEffectorVelocityField,
+    scfImplementation3<ParticleEffectorVelocityField,
                        iParticleBuiltinEffectorVelocityField,
-                       scfFakeInterface<iParticleEffector> >
+                       scfFakeInterface<iParticleEffector>,
+                       CS::Utility::iModifiable>
   {
   public:
-    ParticleEffectorVelocityField  ()
+    ParticleEffectorVelocityField  (iObjectRegistry* object_reg)
       : scfImplementationType (this),
       type (CS_PARTICLE_BUILTIN_SPIRAL)
     {
@@ -357,6 +414,18 @@ CS_PLUGIN_NAMESPACE_BEGIN(Particles)
       vparams.DeleteIndex(index);
     }
 
+    //-- CS::Utility::iModifiable
+    MODIF_DECLARE (0);
+
+    MODIF_GETDESCRIPTION_BEGIN ("EFFECT.VELOCITY", "Velocity field effector");
+    MODIF_GETDESCRIPTION_END ();
+
+    MODIF_GETPARAMETERVALUE_BEGIN ();
+    MODIF_GETPARAMETERVALUE_END ();
+
+    MODIF_SETPARAMETERVALUE_BEGIN ();
+    MODIF_SETPARAMETERVALUE_END ();
+
   private:
     csParticleBuiltinEffectorVFType type;
     csArray<csVector3> vparams;
@@ -372,7 +441,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(Particles)
   {
   public:
     //-- ParticleEffectorLight
-    ParticleEffectorLight ();
+    ParticleEffectorLight (iObjectRegistry* object_reg);
     ~ParticleEffectorLight ();
 
     //-- iParticleEffector

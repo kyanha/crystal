@@ -1,4 +1,5 @@
 /*
+    Copyright (C) 2011-2012 by Jelle Hellemans, Christian Van Brussel
     Copyright (C) 2007 by Seth Yastrov
 
     This library is free software; you can redistribute it and/or
@@ -15,377 +16,395 @@
     License along with this library; if not, write to the Free
     Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
-
 #include "cssysdef.h"
-#include "csutil/scf.h"
-
 #include "cstool/initapp.h"
-#include "csutil/cmdhelp.h"
-#include "imap/saverfile.h"
-#include "iutil/cmdline.h"
-#include "iutil/stringarray.h"
-#include "ivaria/collider.h"
-#include "ivideo/graph2d.h"
-#include "ivideo/wxwin.h"
+#include "csutil/scf.h"
+#include "csutil/stringquote.h"
+#include "iutil/virtclk.h"
 
-#include "ieditor/panelmanager.h"
-#include "objectlist.h"
-#include "menubar.h"
-#include "auipanelmanager.h"
-#include "interfacewrappermanager.h"
 #include "actionmanager.h"
-#include "editorobject.h"
-#include "mainframe.h"
-
 #include "editor.h"
+#include "menubar.h"
+#include "operatormanager.h"
+#include "perspective.h"
+#include "spacemanager.h"
+#include "statusbar.h"
+#include "window.h"
 
-CS_PLUGIN_NAMESPACE_BEGIN(CSE)
+#include <wx/app.h>
+#include <wx/log.h>
+
+CS_PLUGIN_NAMESPACE_BEGIN (CSEditor)
 {
 
-SCF_IMPLEMENT_FACTORY (Editor)
+//------------------------------------  EditorManager  ------------------------------------
 
-Editor::Editor (iBase* parent)
-: scfImplementationType (this, parent), helper_meshes (0), transstatus (NOTHING)
+SCF_IMPLEMENT_FACTORY (EditorManager)
+
+EditorManager::EditorManager (iBase* parent)
+  : scfImplementationType (this, parent), pump (nullptr)
 {
+}
+
+EditorManager::~EditorManager ()
+{
+  delete pump;
+
+  // The deletion of the iEditor instances is managed automatically
+  // by wxWidgets
+}
+
+bool EditorManager::ReportError (const char* description, ...) const
+{
+  va_list arg;
+  va_start (arg, description);
+  csReportV (object_reg, CS_REPORTER_SEVERITY_ERROR,
+	     "crystalspace.editor.core",
+	     description, arg);
+  va_end (arg);
+  return false;
+}
+
+bool EditorManager::ReportWarning (const char* description, ...) const
+{
+  va_list arg;
+  va_start (arg, description);
+  csReportV (object_reg, CS_REPORTER_SEVERITY_WARNING,
+	     "crystalspace.editor.core",
+	     description, arg);
+  va_end (arg);
+  return false;
+}
+
+bool EditorManager::Initialize (iObjectRegistry* reg)
+{
+  object_reg = reg;
+  //StartEngine ();
+
+  // Find references to the virtual clock and the main event queue
+  vc = csQueryRegistry<iVirtualClock> (object_reg);
+  eventQueue = csQueryRegistry<iEventQueue> (object_reg);
+
+  return true;
+}
+
+bool EditorManager::StartEngine ()
+{
+  // Request every standard plugin of Crystal Space
+  if (!csInitializer::RequestPlugins (object_reg,
+        CS_REQUEST_VFS,
+        CS_REQUEST_FONTSERVER,
+        CS_REQUEST_REPORTER,
+        CS_REQUEST_END))
+  {
+    wxLogError (wxT ("Can't initialize standard Crystal Space plugins!"));
+    return false;
+  }
+
+  return true;
+}
+
+bool EditorManager::StartApplication ()
+{
+  // Open the main system. This will open all the previously loaded plug-ins.
+  if (!csInitializer::OpenApplication (object_reg))
+    return ReportError ("Error opening system!");
+
+  // TODO: remove this hack?
+  for (size_t i = 0; i < editors.GetSize (); i++)
+    editors[i]->Init ();
+
+  // Initialize the pump (the refresh rate is in millisecond)
+  // This pump will update the editors and the manager regularly
+  pump = new Pump (this);
+  pump->Start (20);
+
+  // Connect to the Idle event
+  wxTheApp->Connect (wxEVT_IDLE, wxIdleEventHandler (EditorManager::OnIdle), 0, this);
+
+  return true;
+}
+
+iEditor* EditorManager::CreateEditor (const char* name, const char* title, iContext* context)
+{
+  if (!context)
+  {
+    ReportError ("No context provided when creating an editor instance!");
+    return nullptr;
+  }
+
+  csRef<Editor> editor;
+  editor.AttachNew (new Editor (this, name, title, context));
+  editors.Push (editor);
+
+  return editor;
+}
+
+void EditorManager::DeleteEditor (iEditor* editor)
+{
+  Editor* cseditor = static_cast<Editor*> (editor);
+  editors.Delete (cseditor);
+}
+
+iEditor* EditorManager::FindEditor (const char* name)
+{
+  for (size_t i = 0; i < editors.GetSize (); i++)
+    if (editors[i]->name == name)
+      return editors[i];
+  return nullptr;
+}
+
+iEditor* EditorManager::GetEditor (size_t index)
+{
+  return editors[index];
+}
+
+size_t EditorManager::GetEditorCount () const
+{
+  return editors.GetSize ();
+}
+
+void EditorManager::Update ()
+{
+  // Update each editor instance
+  for (size_t i = 0; i < editors.GetSize (); i++)
+    editors[i]->Update ();
+
+  // Ensure idle events are regularly generated
+  wxWakeUpIdle ();
+}
+
+void EditorManager::OnIdle (wxIdleEvent& event)
+{
+  // Update the virtual clock and the global event queue
+  vc->Advance ();
+  eventQueue->Process ();
+
+  // Ask for more idle events
+  // TODO: add an option defining whether or not this is suitable
+  //event.RequestMore();
+}
+
+//------------------------------------  Editor  ------------------------------------
+
+Editor::Editor (EditorManager* manager, const char* name, const char* title,
+		iContext* context)
+  // TODO: use size from CS config
+  : scfImplementationType (this), name (name), title (title), manager (manager),
+    context (context), statusBar (nullptr)
+{
+  // Create the main objects and managers
+  actionManager.AttachNew (new ActionManager (manager->object_reg, this));
+  menuManager.AttachNew (new MenuManager (this));
+  operatorManager.AttachNew (new OperatorManager (manager->object_reg, this));
+  perspectiveManager.AttachNew (new PerspectiveManager (manager->object_reg, this));
+  componentManager.AttachNew (new ComponentManager (this));
+
+  // Create the default frame
+  CreateFrame (title);
 }
 
 Editor::~Editor ()
 {
-  delete helper_meshes;
-
-  panelManager->Uninitialize ();
-
-  // Remove ourself from object registry
-  object_reg->Unregister (this, "iEditor");
 }
 
-void Editor::Help ()
+iContext* Editor::GetContext () const
 {
-  csCommandLineHelper commandLineHelper;
-
-  // Usage examples
-  commandLineHelper.AddCommandLineExample ("cseditor data/castel/world");
-  commandLineHelper.AddCommandLineExample ("cseditor -R=data/kwartz.zip kwartz.lib");
-  commandLineHelper.AddCommandLineExample ("cseditor -R=data/seymour.zip Seymour.dae");
-
-  // Command line options
-  commandLineHelper.AddCommandLineOption
-    ("R", "Real path to be mounted in VFS", csVariant (""));
-  commandLineHelper.AddCommandLineOption
-    ("C", "VFS directory where to find the files", csVariant ("/"));
-  commandLineHelper.AddCommandLineOption
-    ("L", "Load a library file (for textures/materials)", csVariant (""));
-
-  // Printing help
-  commandLineHelper.PrintApplicationHelp
-    (object_reg, "cseditor", "cseditor <OPTIONS> [filename]",
-     "The Crystal Space editor\n\n"
-     "If provided, it will load the given file from the specified VFS directory."
-     " If no VFS directory is provided then it will assume the one of the file. "
-     "An additional real path can be provided to be mounted before loading the file."
-     " This is useful for example to mount an archive in VFS before accessing the"
-     " files in it.");
+  return context;
 }
 
-bool Editor::Initialize (iObjectRegistry* reg)
+iActionManager* Editor::GetActionManager () const
 {
-  // Check for commandline help.
-  if (csCommandLineHelper::CheckHelp (reg))
-  {
-    Help ();
-    return true;
-  }
-
-  object_reg = reg;
-  object_reg->Register (this, "iEditor");
-  
-  actionManager.AttachNew (new ActionManager (object_reg));
-  
-  // Create the main frame
-  mainFrame = new MainFrame (object_reg, this, wxT (""), wxDefaultPosition, wxSize (1024, 768));
-
-  menuBar.AttachNew (new MenuBar (object_reg, mainFrame->GetMenuBar ()));
-  mainFrame->Show ();
-  
-  panelManager.AttachNew (new AUIPanelManager (object_reg, mainFrame));
-  interfaceManager.AttachNew (new InterfaceWrapperManager (object_reg));
-
-  selection.AttachNew (new ObjectList ());
-  objects.AttachNew (new ObjectList ());
-
-  return true;
+  return actionManager;
 }
 
-bool Editor::StartEngine ()
+iEditorManager* Editor::GetEditorManager () const
 {
-  // Request every standard plugin except for OpenGL/WXGL canvas
-  if (!csInitializer::RequestPlugins (object_reg,
-        CS_REQUEST_VFS,
-	CS_REQUEST_PLUGIN ("crystalspace.graphics2d.wxgl", iGraphics2D),
-	CS_REQUEST_OPENGL3D,
-        CS_REQUEST_ENGINE,
-        CS_REQUEST_FONTSERVER,
-        CS_REQUEST_IMAGELOADER,
-        CS_REQUEST_LEVELLOADER,
-        CS_REQUEST_REPORTER,
-        CS_REQUEST_REPORTERLISTENER,
-        CS_REQUEST_PLUGIN ("crystalspace.collisiondetection.opcode",
-                           iCollideSystem),
-        CS_REQUEST_END))
-  {
-    csReport (object_reg, CS_REPORTER_SEVERITY_ERROR,
-              "crystalspace.application.editor",
-              "Can't initialize plugins!");
-    return false;
-  }
-
-  vfs = csQueryRegistry<iVFS> (object_reg);
-  if (!vfs)
-  {
-    csReport (object_reg, CS_REPORTER_SEVERITY_ERROR,
-              "crystalspace.application.editor",
-              "Failed to locate iVFS plugin!");
-    return false;
-  }
-
-  engine = csQueryRegistry<iEngine> (object_reg);
-  if (!engine)
-  {
-    csReport (object_reg, CS_REPORTER_SEVERITY_ERROR,
-              "crystalspace.application.editor",
-              "Failed to locate 3D engine!");
-    return false;
-  }
-  engine->SetSaveableFlag(true);
-
-  if (!csInitializer::RequestPlugins(object_reg,
-    CS_REQUEST_LEVELSAVER,
-    CS_REQUEST_END))
-  {
-    csReport (object_reg, CS_REPORTER_SEVERITY_ERROR,
-              "crystalspace.application.editor",
-              "Failed to initialize iSaver plugin!");
-    return false;
-  }
-  
-  loader = csQueryRegistry<iThreadedLoader> (object_reg);
-  if (!loader)
-  {
-    csReport (object_reg, CS_REPORTER_SEVERITY_ERROR,
-              "crystalspace.application.editor",
-              "Failed to locate iThreadedLoader plugin!");
-    return false;
-  }
-
-  saver = csQueryRegistry<iSaver> (object_reg);
-  if (!saver)
-  {
-    csReport (object_reg, CS_REPORTER_SEVERITY_ERROR,
-              "crystalspace.application.editor",
-              "Failed to locate iSaver plugin!");
-    return false;
-  }
-
-  csRef<iGraphics3D> g3d = csQueryRegistry<iGraphics3D> (object_reg);
-  if (!g3d)
-  {
-    csReport (object_reg, CS_REPORTER_SEVERITY_ERROR,
-              "crystalspace.application.editor",
-              "Failed to locate iGraphics3d!");
-    return false;
-  }
-
-  csRef<iWxWindow> wxwin = scfQueryInterface<iWxWindow> (g3d->GetDriver2D ());
-  if(!wxwin)
-  {
-    csReport (object_reg, CS_REPORTER_SEVERITY_ERROR,
-              "crystalspace.application.editor",
-              "The drawing canvas is not a iWxWindow plugin!");
-    return false;
-  }
-  wxwin->SetParent (mainFrame);
-
-  return true;
+  return manager;
 }
 
-bool Editor::StartApplication ()
+iMenuManager* Editor::GetMenuManager () const
 {
-  // Open the main system. This will open all the previously loaded plug-ins.
-  if (!csInitializer::OpenApplication (object_reg))
-  {
-    csReport (object_reg, CS_REPORTER_SEVERITY_ERROR,
-              "crystalspace.application.editor",
-              "Error opening system!");
-    return false;
-  }
-
-  mainCollection = engine->CreateCollection ("Main collection");
-
-  mainFrame->Initialize ();
-  panelManager->Initialize ();
-
-  // Analyze the command line arguments
-  csRef<iCommandLineParser> cmdline =
-    csQueryRegistry<iCommandLineParser> (object_reg);
-
-  const char* libname;
-  for (int i = 0; (libname = cmdline->GetOption ("L", i)); i++)
-    mainFrame->PushLibraryFile ("", libname);
-
-  const char* realPath = cmdline->GetOption ("R");
-  if (realPath)
-  {
-    vfs->Mount ("/tmp/cseditor", realPath);
-    //vfs->ChDir ("/tmp/cseditor");
-  }
-
-  csString filename = cmdline->GetName (0);
-  csString vfsDir = cmdline->GetOption ("C");
-  if (vfsDir.IsEmpty ())
-    vfsDir = realPath;
-
-  if (vfsDir.IsEmpty () && filename)
-  {
-    size_t index = filename.FindLast ('/');
-    if (index != (size_t) -1)
-    {
-      vfsDir = filename.Slice (0, index);
-      filename = filename.Slice (index + 1);
-    }
-  }
-
-  if (filename)
-    mainFrame->PushMapFile (vfsDir, filename, false);
-
-  return true;
+  return menuManager;
 }
 
-bool Editor::LoadPlugin (const char* name)
+iOperatorManager* Editor::GetOperatorManager () const
 {
-  csRef<iPluginManager> plugmgr =
-    csQueryRegistry<iPluginManager> (object_reg);
+  return operatorManager;
+}
 
-  csRef<iComponent> c (plugmgr->LoadPluginInstance (name,
-        iPluginManager::lpiInitialize | iPluginManager::lpiReportErrors
-        | iPluginManager::lpiLoadDependencies));
-  csRef<iBase> b = scfQueryInterface<iBase> (c);
+iPerspectiveManager* Editor::GetPerspectiveManager () const
+{
+  return perspectiveManager;
+}
 
-  csReport (object_reg, CS_REPORTER_SEVERITY_NOTIFY,
-	    "crystalspace.application.editor", "Attempt to load plugin '%s' %s",
-	    name, b ? "successful" : "failed");
-  if (b)
-  {
-    return true;
-  }
+iComponentManager* Editor::GetComponentManager () const
+{
+  return componentManager;
+}
 
+csPtr<iProgressMeter> Editor::CreateProgressMeter () const
+{
+  csRef<iProgressMeter> meter;
+  meter.AttachNew (new StatusBarProgressMeter (statusBar));
+  return csPtr<iProgressMeter> (meter);
+}
+
+void Editor::ReportStatus (const char* text)
+{
+  if (frames.GetSize ())
+    frames[0]->SetStatusText (wxString::FromUTF8 (text));
+  csReport (manager->object_reg, CS_REPORTER_SEVERITY_NOTIFY,
+	    "status", text, nullptr);
+}
+
+iEditorFrame* Editor::CreateFrame (const char* title, iPerspective* perspective)
+{
+  csString cstitle = title;
+  if (!title) cstitle = this->title;
+
+  EditorFrame* frame = new EditorFrame (this, cstitle, perspective);
+  frames.Push (frame);
+  return frame;
+}
+
+void Editor::DeleteFrame (iEditorFrame* frame)
+{
+  frame->GetwxFrame ()->Close (false);
+}
+
+size_t Editor::GetFrameCount () const
+{
+  return frames.GetSize ();
+}
+
+iEditorFrame* Editor::GetFrame (size_t index) const
+{
+  return frames[index];
+}
+
+void Editor::Save (iDocumentNode* node) const
+{
+}
+
+bool Editor::Load (iDocumentNode* node)
+{
   return false;
 }
 
-csPtr<iProgressMeter> Editor::GetProgressMeter ()
+void Editor::Init ()
 {
-  return mainFrame->GetProgressMeter ();
+  // Create a default perspective if none have been defined
+  if (!perspectiveManager->GetPerspectiveCount ())
+    perspectiveManager->CreatePerspective ("Default");
+
+  for (size_t i = 0; i < frames.GetSize (); i++)
+    frames[i]->Init ();
+
+  ReportStatus ("Ready");
 }
 
-iThreadReturn* Editor::LoadMapFile (const char* path, const char* filename, bool clearEngine)
+void Editor::Update ()
 {
-  vfs->ChDir (path);
+  componentManager->Update ();
+}
 
-  if (clearEngine)
+void Editor::Close ()
+{
+  componentManager.Invalidate ();
+  perspectiveManager.Invalidate ();
+  operatorManager.Invalidate ();
+  menuManager.Invalidate ();
+  actionManager.Invalidate ();
+}
+
+//------------------------------------  EditorFrame  ------------------------------------
+
+EditorFrame::EditorFrame (Editor* editor, const char* title, iPerspective* perspective)
+  : wxFrame (nullptr, -1, wxString::FromAscii (title), wxDefaultPosition,
+	     wxSize (1024, 768)),
+    scfImplementationType (this), editor (editor)
+{
+  if (perspective)
+    this->perspective = static_cast<Perspective*> (perspective);
+
+  // If this is the first frame created, then add the status and menu bars to it
+  if (!editor->frames.GetSize ())
   {
-    engine->RemoveCollection (mainCollection);
-    mainCollection = engine->CreateCollection ("Main collection");
-  }
+    // Setup the menu
+    editor->menuManager->SetFrame (this);
 
-  csRef<iThreadReturn> loadingResult =
-    loader->LoadMapFile (vfs->GetCwd (), filename, clearEngine, mainCollection);
-  return loadingResult;
+    // Create the status bar
+    editor->statusBar = new StatusBar (this);
+    editor->statusBar->Show ();
+    SetStatusBar (editor->statusBar);
+    //PositionStatusBar ();
+  }    
+
+  // Make this frame visible
+  Show (true);
 }
 
-iThreadReturn* Editor::LoadLibraryFile (const char* path, const char* filename)
+EditorFrame::~EditorFrame ()
 {
-  vfs->ChDir (path);
+  // Remove this frame from the list maintained by the editor
+  editor->frames.Delete (this);
 
-  csRef<iThreadReturn> loadingResult =
-    loader->LoadLibraryFile (vfs->GetCwd (), filename, mainCollection);
-  return loadingResult;
+  // If this was the last frame, then close the editor managers
+  if (!editor->frames.GetSize ())
+    editor->Close ();
+
+  // TODO: transmit the ownership of the menu and status bar
 }
 
-void Editor::SaveMapFile (const char* path, const char* filename)
+void EditorFrame::Init ()
 {
-  vfs->ChDir (path);
-  
-  saver->SaveCollectionFile (mainCollection, filename, CS_SAVER_FILE_WORLD);
+  // Setup the perspective of the window
+  if (!perspective)
+    perspective = editor->perspectiveManager->perspectives[0];
+  perspective->CreateWindow (this);
+
+  // Reset the window size
+  //SetSize (wxSize (1024, 768));
+  PositionStatusBar ();
+
+  Show (true);
+  Layout ();
 }
 
-void Editor::FireMapLoaded (const char* path, const char* filename)
+wxFrame* EditorFrame::GetwxFrame ()
 {
-  csRef<iProgressMeter> progressMeter = GetProgressMeter ();
-  engine->Prepare (progressMeter);
+  return this;
+}
 
-  // TODO: Remove me. I'm only here to test the relighting progress gauge.
-  //engine->SetLightingCacheMode (0);
+bool EditorFrame::SetPerspective (iPerspective* perspective)
+{
+  if (this->perspective == perspective)
+    return true;
 
-  // Notify map listeners
-  csRefArray<iMapListener>::Iterator it = mapListeners.GetIterator ();
-  while (it.HasNext ())
+  // Remove the previous window
+  // TODO: Or keep a cache of the active perspectives instead
+  GetSizer ()->Clear (true);
+  SetSizer (nullptr);
+
+  // Setup the perspective
+  if (perspective)
   {
-    it.Next ()->OnMapLoaded (path, filename);
+    this->perspective = static_cast<Perspective*> (perspective);
+    this->perspective->CreateWindow (this);
   }
+  else
+    this->perspective = nullptr;
+
+  Layout ();
+
+  return true;
 }
 
-void Editor::FireLibraryLoaded (const char* path, const char* filename)
+iPerspective* EditorFrame::GetPerspective () const
 {
-  // Notify map listeners
-  csRefArray<iMapListener>::Iterator it = mapListeners.GetIterator ();
-  while (it.HasNext ())
-  {
-    it.Next ()->OnLibraryLoaded (path, filename, mainCollection);
-  }
-}
-
-void Editor::AddMapListener (iMapListener* listener)
-{
-  mapListeners.Push (listener);
-}
-
-void Editor::RemoveMapListener (iMapListener* listener)
-{
-  mapListeners.Delete (listener);
-}
-
-csPtr<iEditorObject> Editor::CreateEditorObject (iBase* object, wxBitmap* icon)
-{
-  return csPtr<iEditorObject> (new EditorObject (object_reg, object, icon));
-}
-
-iObjectList* Editor::GetSelection ()
-{
-  return selection;
-}
-
-iObjectList* Editor::GetObjects ()
-{
-  return objects;
-}
-
-void Editor::SetHelperMeshes (csArray<csSimpleRenderMesh>* helpers)
-{
-  delete helper_meshes;
-  helper_meshes = helpers;
-}
-csArray<csSimpleRenderMesh>* Editor::GetHelperMeshes ()
-{
-  return helper_meshes;
-}
-
-void Editor::SetTransformStatus (TransformStatus status)
-{
-  transstatus = status;
-}
-Editor::TransformStatus Editor::GetTransformStatus ()
-{
-  return transstatus;
+  return perspective;
 }
 
 }
-CS_PLUGIN_NAMESPACE_END(CSE)
+CS_PLUGIN_NAMESPACE_END (CSEditor)

@@ -1,24 +1,146 @@
 SubDir TOP apps tools editor ;
 
-if $(WX.AVAILABLE) = "yes" && $(WX.AUI.AVAILABLE) = "yes"
+# TODO: remove the CS dependency on wx AUI
+if $(WX.AVAILABLE) = "yes"
 {
-#  Description propgrid : "wxPropertyGrid library" ;
-#  Library propgrid : [ Wildcard wx propgrid : *.cpp *.h ] : notest ;
-#  ExternalLibs propgrid : WX ;
-#  CFlags propgrid : $(COMPILER.C++FLAGS.STRICTALIASING.DISABLE) ;
-
-#  IncludeDir : propgrid ;
+  CSEDITOR.SOURCES = [ Wildcard *.cpp *.h ] ;
 
   Description : "Crystal Space Editor" ;
-  Application cseditor : [ Wildcard *.cpp *.h ] ;
+  Application cseditor : $(CSEDITOR.SOURCES) ;
   ExternalLibs cseditor : CRYSTAL WX ;
   CFlags cseditor : $(COMPILER.C++FLAGS.STRICTALIASING.DISABLE) ;
-#  LinkWith cseditor : propgrid crystalspace ;
   LinkWith cseditor : crystalspace ;
   Win32Resource cseditor : [ ConcatDirs $(SUBDIR) cseditor.rc ] ;
   # To locate wx.rc
   Win32RcFlags cseditor : [ Match ^(-I.*) ^(-D.*) : [ SplitToList $(WX.CFLAGS) ] ] ;
+  FileListEntryApplications cseditor : app-tool ;
 
-  #CompileGroups cseditorcore : cseditorall ;
-  #CompileGroups cseditor : cseditorall ;
+  SubVariant static ;
+  Description cseditor_static : "Crystal Space Editor (static build)" ;
+  Application cseditor_static : $(CSEDITOR.SOURCES) : nohelp independent noinstall ;
+  ExternalLibs cseditor_static : CRYSTAL WX ;
+  CFlags cseditor_static : $(COMPILER.C++FLAGS.STRICTALIASING.DISABLE) ;
+  LinkWith cseditor_static : crystalspace ;
+  FileListEntryApplications cseditor_static : app-tool-static ;
+  Win32Resource cseditor_static : [ ConcatDirs $(SUBDIR) cseditor.rc ] ;
+  # To locate wx.rc
+  Win32RcFlags cseditor_static : [ Match ^(-I.*) ^(-D.*) : [ SplitToList $(WX.CFLAGS) ] ] ;
+
+  CSEDITOR.PLUGINLIST =
+    animesh
+    animeshldr
+    bindoc
+    bruteblock
+    bugplug
+    cameramanager
+    csbmpimg
+    cscegui
+    csddsimg
+    cseditorcomponents
+    cseditorcore
+    cseditorheaders
+    cseditormenus
+    cseditoroperators
+    cseditorpanels
+    cseditorspaces
+    csfont
+    csgifimg
+    csopcode
+    csparser
+    cssaver
+    cssynldr
+    docpreproc
+    dsplex
+    emit
+    emitldr
+    engine
+    fontplex
+    frustvis
+    genmesh
+    gmeshanim
+    gmeshanimpdl
+    gmeshldr
+    gmeshskelanim2
+    haze
+    hazeldr
+    imgplex
+    nullmesh
+    particles
+    particlesldr
+    protomesh
+    protomeshldr
+    ptpdlight
+    rendloop_loader
+    rendstep_std
+    rendstep_stencil
+    reporter
+    rm_rlcompat
+    rm_unshadowed
+    rm_shadow_pssm
+    sequence
+    shadermgr
+    shaderweaver
+    simpleformer
+    simpleformerldr
+    skeleton
+    skeleton2
+    skeleton2ldr
+    skelldr
+    sndmanager
+    sndsysnull
+    spr2d
+    spr2dldr
+    spr3d
+    spr3dldr
+    stdpt
+    stdrep
+    terrainldr
+    texthud
+    vproc_std
+    xmlread
+    xmlshader
+    ;
+
+  if $(ZLIB.AVAILABLE) = "yes"
+  {
+    CSEDITOR.PLUGINLIST += vfs ;
+  }
+  if $(JPEG.AVAILABLE) = "yes"
+  {
+    CSEDITOR.PLUGINLIST += csjpgimg ;
+  }
+  if $(MNG.AVAILABLE) = "yes" && $(JPEG.AVAILABLE) = "yes" && $(ZLIB.AVAILABLE) = "yes"
+  {
+    CSEDITOR.PLUGINLIST += csjngimg ;
+  }
+  if $(PNG.AVAILABLE) = "yes"
+  {
+    CSEDITOR.PLUGINLIST += cspngimg ;
+  }
+  if $(CAL3D.AVAILABLE) = "yes"
+  {
+    CSEDITOR.PLUGINLIST += sprcal3d sprcal3dldr ;
+    CFlags cseditor_static : [ FDefines CS_HAVE_CAL3D ] ;
+    ExternalLibs cseditor_static : CAL3D ;
+  }
+
+  # Plugins needed by renderers
+  if $(X11.AVAILABLE) = "yes"
+  {
+    CSEDITOR.PLUGINLIST += xwin ;
+    if $(XFREE86VM.AVAILABLE) = "yes" { CSEDITOR.PLUGINLIST += xext86vm ; }
+  }
+  if $(GL.AVAILABLE) = "yes"
+  {
+    CSEDITOR.PLUGINLIST += gl3d glshader_arb glshader_fixed ;
+    # GL canvases
+    if $(GLX.AVAILABLE) = "yes" { CSEDITOR.PLUGINLIST += glx2d ; }
+    if $(TARGET.OS) = "WIN32" { CSEDITOR.PLUGINLIST += glwin32 ; }
+    if $(TARGET.OS) = "MACOS_X" { CSEDITOR.PLUGINLIST += glosx2d ; }
+
+    if $(CG.AVAILABLE) = "yes" { CSEDITOR.PLUGINLIST += glshader_cg ; }
+  }
+
+  LinkStaticPlugins cseditor_static : $(CSEDITOR.PLUGINLIST) ;
+  SubVariant ;
 }

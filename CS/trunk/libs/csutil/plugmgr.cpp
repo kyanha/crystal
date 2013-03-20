@@ -200,6 +200,9 @@ void csPluginManager::QueryOptions (iComponent *obj)
 	    if (!val) continue;
 	    optval.SetString (val);
 	    break;
+	  default:
+	    // TODO
+	    break;
         }
         pio->Config->SetOption (pio->ID, &optval);
       }

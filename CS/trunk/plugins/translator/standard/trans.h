@@ -15,7 +15,6 @@
     License along with this library; if not, write to the Free
     Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
-
 #ifndef __CS_TRANS_H__
 #define __CS_TRANS_H__
 
@@ -40,14 +39,28 @@ class csTranslator : public scfImplementation2<csTranslator, iTranslator,
 {
 private:
   iObjectRegistry* object_reg;
+  csString language;
   csHash<csString, csString> messages;
 
 public:
   csTranslator (iBase* parent);
   virtual ~csTranslator ();
+
+  //-- iComponent
   virtual bool Initialize (iObjectRegistry *object_reg);
-  virtual const char* GetMsg (const char* src) const;
+
+  //-- iTranslator
+  virtual const char* GetCurrentLanguage () const;
+  virtual void SetCurrentLanguage (const char* language);
+  virtual csPtr<iStringArray> GetFallbacks (const char* language) const;
+
+  virtual bool LoadTranslation (const char* file, iLoaderPlugin* loader = nullptr);
+
+  virtual const char* GetMsg (const char* src, bool fallback = true) const;
   void SetMsg (const char* src, const char* dst);
+
+private:
+  bool ReportError (const char* description, ...);
 };
 
 }

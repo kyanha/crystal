@@ -18,10 +18,12 @@ CS_PLUGIN_NAMESPACE_BEGIN (Particles)
   /**
   * Behaves like the default ParticleEffectorForce but does not penetrate physical boundaries
   */ 
-  class ParticleEffectorPhysical : public scfImplementationExt1<
+  class ParticleEffectorPhysical : public scfImplementation3<
     ParticleEffectorPhysical,
-    ParticleEffectorForce, 
-    iParticleBuiltinEffectorPhysical>
+    iParticleBuiltinEffectorPhysical,
+    scfFakeInterface<iParticleEffector>,
+    //scfFakeInterface<ParticleEffectorForce>, 
+    CS::Utility::iModifiable>
   {
   private:
     csVector3 acceleration;
@@ -79,6 +81,18 @@ CS_PLUGIN_NAMESPACE_BEGIN (Particles)
 
     virtual void SetRestitutionMagnitude (float rest) { restitution = csVector2 (rest / sqrt (2.f)); }
     virtual float GetRestitutionMagnitude () const { return sqrt (restitution * restitution); }    // what is the method to get a vector's magnitude?
+
+    //-- CS::Utility::iModifiable
+    MODIF_DECLARE (0);
+
+    MODIF_GETDESCRIPTION_BEGIN ("EFFECT.PHYSICAL", "Physical effector");
+    MODIF_GETDESCRIPTION_END ();
+
+    MODIF_GETPARAMETERVALUE_BEGIN ();
+    MODIF_GETPARAMETERVALUE_END ();
+
+    MODIF_SETPARAMETERVALUE_BEGIN ();
+    MODIF_SETPARAMETERVALUE_END ();
   };
 
 }

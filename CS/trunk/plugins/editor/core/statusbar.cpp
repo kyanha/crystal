@@ -16,19 +16,19 @@
     Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 
-#include <cssysdef.h>
+#include "cssysdef.h"
 #include "csutil/scf.h"
 
 #include <wx/event.h>
 
 #include "statusbar.h"
 
-CS_PLUGIN_NAMESPACE_BEGIN(CSE)
+CS_PLUGIN_NAMESPACE_BEGIN(CSEditor)
 {
 
-BEGIN_EVENT_TABLE(StatusBar, wxStatusBar)
-  EVT_SIZE(StatusBar::OnSize)
-END_EVENT_TABLE()
+BEGIN_EVENT_TABLE (StatusBar, wxStatusBar)
+  EVT_SIZE (StatusBar::OnSize)
+END_EVENT_TABLE ()
 
 StatusBar::StatusBar (wxWindow* parent)
   : wxStatusBar (parent)
@@ -52,9 +52,9 @@ void StatusBar::OnSize (wxSizeEvent& event)
   GetFieldRect(Field_Gauge, gaugeRect);
 
   gauge->SetSize(gaugeRect);
-
+  Layout();
   event.Skip();
 }
 
 }
-CS_PLUGIN_NAMESPACE_END(CSE)
+CS_PLUGIN_NAMESPACE_END(CSEditor)

@@ -79,7 +79,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(Particles)
     rotationMode (CS_PARTICLE_ROTATE_NONE), sortMode (CS_PARTICLE_SORT_NONE),
     integrationMode (CS_PARTICLE_INTEGRATE_LINEAR), 
     transformMode (CS_PARTICLE_LOCAL_MODE),
-    commonDirection (1.0f,0,0), individualSize (false), particleSize (1.0f)
+    commonDirection (1.0f, 0, 0), individualSize (false), particleSize (1.0f)
   {
   }
 

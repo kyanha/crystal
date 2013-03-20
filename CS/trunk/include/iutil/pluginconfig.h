@@ -15,155 +15,17 @@
     License along with this library; if not, write to the Free
     Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
-
 #ifndef __CS_IUTIL_PLUGINCONFIG_H__
 #define __CS_IUTIL_PLUGINCONFIG_H__
 
 /**\file
- * Plugin configuration interface and variant types
+ * Plugin configuration interface.
  */
+
 /**\addtogroup util
  * @{ */
-#include "csutil/scf.h"
-#include "csutil/scfstr.h"
 
-/// Type of the values that can be contained within a csVariant.
-enum csVariantType
-{
-  /// Long type, obviously also valid for integers
-  CSVAR_LONG,
-  /// Boolean type
-  CSVAR_BOOL,
-  /// A command. A command has no value, it is just a flag which can be set or not.
-  CSVAR_CMD,
-  /// Float type
-  CSVAR_FLOAT,
-  /// String type
-  CSVAR_STRING
-};
-
-/**
- * Variant, ie a value whose type is set at runtime.
- * \warning Requesting another type than the contained one
- * will trigger an assertion
- */
-struct csVariant
-{
-private:
-  csVariantType type;
-  union value
-  {
-    long l;
-    bool b;
-    float f;
-    iString* s;
-  } v;
-  void Clear()
-  {
-    if ((type == CSVAR_STRING) && (v.s != 0)) v.s->DecRef();
-  }
-public:
-  /// Constructor initialized with a value of type CSVAR_CMD
-  csVariant () { type = CSVAR_CMD; memset (&v, 0, sizeof (v)); }
-  /// Constructor initialized with a value of type CSVAR_LONG
-  csVariant (int i) { type = CSVAR_LONG; v.l = i; }
-  /// Constructor initialized with a value of type CSVAR_LONG
-  csVariant (long l) { type = CSVAR_LONG; v.l = l; }
-  /// Constructor initialized with a value of type CSVAR_BOOL
-  csVariant (bool b) { type = CSVAR_BOOL; v.b = b; }
-  /// Constructor initialized with a value of type CSVAR_FLOAT
-  csVariant (float f) { type = CSVAR_FLOAT; v.f = f; }
-  /// Constructor initialized with a value of type CSVAR_STRING
-  csVariant (const char* s) { type = CSVAR_STRING; v.s = s ? new scfString (s) : nullptr; }
-
-  /// Copy constructor.
-  csVariant (const csVariant& var)
-  {
-    memset (&v, 0, sizeof (v));
-    
-    type = var.type;
-    v = var.v;
-    if ((type == CSVAR_STRING) && (v.s != 0)) v.s->IncRef(); 
-  }
-
-  ~csVariant () { Clear(); }
-
-  /// Assignment operator.
-  const csVariant& operator = (const csVariant& var)
-  {
-    Clear ();
-    type = var.type;
-    v = var.v;
-    if ((type == CSVAR_STRING) && (v.s != 0)) v.s->IncRef ();
-    return var;
-  }
-  
-  /// Assign a long
-  void SetLong (long l)
-  {
-    Clear();
-    type = CSVAR_LONG;
-    v.l = l;
-  }
-  /// Assign a bool
-  void SetBool (bool b)
-  {
-    Clear();
-    type = CSVAR_BOOL;
-    v.b = b;
-  }
-  /// Assign a float
-  void SetFloat (float f)
-  {
-    Clear();
-    type = CSVAR_FLOAT;
-    v.f = f;
-  }
-  /// Assign a string
-  void SetString (const char* s)
-  {
-    Clear();
-    type = CSVAR_STRING;
-    if (s)
-      v.s = new scfString (s);
-    else
-      v.s = 0;
-  }
-  /// Assign a command. A command has no value, it is just a flag which can be set or not.
-  void SetCommand ()
-  {
-    Clear();
-    type = CSVAR_CMD;
-  }
-
-  /// Retrieve a long
-  long GetLong () const
-  {
-    CS_ASSERT (type == CSVAR_LONG);
-    return v.l;
-  }
-  /// Retrieve a bool
-  bool GetBool () const
-  {
-    CS_ASSERT (type == CSVAR_BOOL);
-    return v.b;
-  }
-  /// Retrieve a float
-  float GetFloat () const
-  {
-    CS_ASSERT (type == CSVAR_FLOAT);
-    return v.f;
-  }
-  /// Retrieve a string
-  const char* GetString () const
-  {
-    CS_ASSERT (type == CSVAR_STRING);
-    return v.s->GetData();
-  }
-
-  /// Get the type of the contained value. The default value is CSVAR_LONG.
-  csVariantType GetType () const { return type; }
-};
+#include "csutil/variant.h"
 
 /// Description of a configuration option, to be used by the iPluginConfig interfaces
 struct csOptionDescription
@@ -246,6 +108,7 @@ struct iPluginConfig : public virtual iBase
    */
   virtual bool GetOption (int index, csVariant* value) = 0;
 };
+
 /** @} */
 
 #endif // __CS_IUTIL_PLUGINCONFIG_H__

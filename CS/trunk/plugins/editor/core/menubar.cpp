@@ -17,37 +17,47 @@
 */
 
 #include "cssysdef.h"
+#include "csutil/objreg.h"
 #include "csutil/scf.h"
-
-#include <csutil/objreg.h>
-
+#include "ieditor/context.h"
+#include "iutil/event.h"
+#include "iutil/eventq.h"
 
 #include "menubar.h"
+#include "editor.h"
 
 #include <wx/menu.h>
 
-
-namespace CS {
-namespace EditorApp {
-
-
-MenuItem::MenuItem (wxMenuBar* menuBar, wxMenu* menu, wxMenuItem* item)
-  : scfImplementationType (this), menuBar(menuBar), menu(menu), item(item)
+CS_PLUGIN_NAMESPACE_BEGIN (CSEditor)
 {
-  menuBar->GetParent()->Connect(item->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler(MenuItem::OnToggle), 0, this);
+
+MenuItem::MenuItem (MenuManager* menuManager, wxMenu* menu, wxMenuItem* item, const char* eventName)
+  : scfImplementationType (this), menuManager (menuManager), menu (menu), item (item)
+{
+  menuManager->GetwxMenuBar ()->GetParent ()->Connect
+    (item->GetId (), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler (MenuItem::OnToggle), 0, this);
+
+  csRef<iEventNameRegistry> registry = csQueryRegistry<iEventNameRegistry>
+    (menuManager->editor->GetContext ()->GetObjectRegistry ());
+  csString name = "crystalspace.editor.event.menu.";
+  name += eventName;
+  eventID = registry->GetID (name);
 }
 
 MenuItem::~MenuItem ()
 {
-  menuBar->GetParent()->Disconnect(item->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler(MenuItem::OnToggle), 0, this); 
-  menu->Remove(item);
+  menuManager->GetwxMenuBar ()->GetParent ()->Disconnect
+    (item->GetId (), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler (MenuItem::OnToggle), 0, this); 
+  menu->Remove (item);
   delete item;
 }
 
-void MenuItem::OnToggle (wxCommandEvent& event)
+void MenuItem::OnToggle (wxCommandEvent& wxevent)
 {
-  for (size_t i = 0; i < listeners.GetSize(); i++)
-    listeners.Get(i)->OnClick(this);
+  iEventQueue* queue = menuManager->editor->GetContext ()->GetEventQueue ();
+  csRef<iEvent> event = queue->CreateEvent (eventID);
+  queue->Post (event);
+  queue->Process ();
 }
 
 wxMenuItem* MenuItem::GetwxMenuItem () const
@@ -55,156 +65,131 @@ wxMenuItem* MenuItem::GetwxMenuItem () const
   return item;
 }
 
-void MenuItem::AddListener (iMenuItemEventListener* l)
+const csEventID MenuItem::GetEventID () const
 {
-  listeners.Push(l);
-}
-
-void MenuItem::RemoveListener (iMenuItemEventListener* l)
-{
-  listeners.Delete(l);
+  return eventID;
 }
 
 //---------------------------------------------------------------
 
-
-MenuCheckItem::MenuCheckItem (wxMenuBar* menuBar, wxMenu* menu, wxMenuItem* item)
-  : scfImplementationType (this), menuBar(menuBar), menu(menu), item(item)
+SeparatorMenuItem::SeparatorMenuItem (wxMenu* menu, wxMenuItem* item)
+  : scfImplementationType (this), menu (menu), item (item)
 {
-  menuBar->GetParent()->Connect(item->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler(MenuCheckItem::OnToggle), 0, this);
 }
 
-MenuCheckItem::~MenuCheckItem ()
+SeparatorMenuItem::~SeparatorMenuItem ()
 {
-  menuBar->GetParent()->Disconnect(item->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler(MenuCheckItem::OnToggle), 0, this); 
-  menu->Remove(item);
+  menu->Remove (item);
   delete item;
 }
 
-bool MenuCheckItem::IsChecked () const
-{
-  return item->IsChecked();
-}
-  
-void MenuCheckItem::Check (bool v)
-{
-  item->Check(v);
-}
-
-void MenuCheckItem::OnToggle (wxCommandEvent& event)
-{
-  for (size_t i = 0; i < listeners.GetSize(); i++)
-    listeners.Get(i)->OnClick(this);
-}
-
-wxMenuItem* MenuCheckItem::GetwxMenuItem () const
+wxMenuItem* SeparatorMenuItem::GetwxMenuItem () const
 {
   return item;
 }
 
-void MenuCheckItem::AddListener (iMenuItemEventListener* l)
+const csEventID SeparatorMenuItem::GetEventID () const
 {
-  listeners.Push(l);
-}
-
-void MenuCheckItem::RemoveListener (iMenuItemEventListener* l)
-{
-  listeners.Delete(l);
+  return (csEventID) 0;
 }
 
 //---------------------------------------------------------------
 
-Menu::Menu (wxMenuBar* menuBar, wxMenu* menu, const wxString& title)
-  : scfImplementationType (this), menuBar(menuBar), menu(menu), title(title)
+SubMenu::SubMenu (MenuManager* menuManager, wxMenu* menu, const wxString& title)
+  : scfImplementationType (this), menuManager (menuManager), menu (menu), title (title)
 {
 }
 
-Menu::~Menu ()
+SubMenu::~SubMenu ()
 {
-  int pos = menuBar->FindMenu(title);
-  if (pos != wxNOT_FOUND) menuBar->Remove(pos);
+  int pos = menuManager->GetwxMenuBar ()->FindMenu (title);
+  if (pos != wxNOT_FOUND) menuManager->GetwxMenuBar ()->Remove (pos);
   delete menu;
 }
 
-wxMenu* Menu::GetwxMenu () const
+wxMenu* SubMenu::GetwxMenu () const
 {
   return menu;
 }
 
-csPtr<iMenuItem> Menu::AppendItem (const char* item)
+csPtr<iMenuItem> SubMenu::AppendItem (const char* item, const char* eventName)
 {
-  wxString str = wxString::FromUTF8 (item);
-  wxMenuItem* i = menu->Append(wxID_ANY, str);
+  wxString str (item, wxConvUTF8);
+  wxMenuItem* i = menu->Append (wxID_ANY, str);
 
   csRef<iMenuItem> ref;
-  ref.AttachNew (new MenuItem (menuBar, menu, i));
-
-  return csPtr<iMenuItem> (ref);
-}
-  
-csPtr<iMenuCheckItem> Menu::AppendCheckItem (const char* item)
-{
-  wxString str = wxString::FromUTF8 (item);
-  wxMenuItem* i = menu->AppendCheckItem(wxID_ANY, str);
-
-  csRef<iMenuCheckItem> ref;
-  ref.AttachNew (new MenuCheckItem (menuBar, menu, i));
-
-  return csPtr<iMenuCheckItem> (ref);
-}
-
-csPtr<iMenuItem> Menu::AppendSeparator ()
-{
-  wxMenuItem* i = menu->AppendSeparator();
-
-  csRef<iMenuItem> ref;
-  ref.AttachNew (new MenuItem (menuBar, menu, i));
+  ref.AttachNew (new MenuItem (menuManager, menu, i, eventName));
 
   return csPtr<iMenuItem> (ref);
 }
 
-csPtr<iMenu> Menu::AppendSubMenu (const char* item)
+csPtr<iMenuItem> SubMenu::AppendSeparator ()
 {
-  wxMenu* m = new wxMenu();
-  wxString str = wxString::FromUTF8 (item);
-  menu->AppendSubMenu(m, str);
+  wxMenuItem* i = menu->AppendSeparator ();
 
-  csRef<iMenu> ref;
-  ref.AttachNew (new Menu (menuBar, m, str));
+  csRef<iMenuItem> ref;
+  ref.AttachNew (new SeparatorMenuItem (menu, i));
 
-  return csPtr<iMenu> (ref);
+  return csPtr<iMenuItem> (ref);
+}
+
+csPtr<iSubMenu> SubMenu::AppendSubMenu (const char* item)
+{
+  wxMenu* m = new wxMenu ();
+  wxString str (item, wxConvUTF8);
+  menu->AppendSubMenu (m, str);
+
+  csRef<iSubMenu> ref;
+  ref.AttachNew (new SubMenu (menuManager, m, str));
+
+  return csPtr<iSubMenu> (ref);
 }
 
 //---------------------------------------------------------------
 
-MenuBar::MenuBar (iObjectRegistry* obj_reg, wxMenuBar* menuBar)
-  : scfImplementationType (this), object_reg (obj_reg), menuBar (menuBar)
+MenuManager::MenuManager (Editor* editor)
+  : scfImplementationType (this), editor (editor)
 {
-  object_reg->Register (this, "iMenuBar");
+  menuBar = new wxMenuBar ();
 }
 
-MenuBar::~MenuBar ()
+MenuManager::~MenuManager ()
 {
-  object_reg->Unregister (this, "iMenuBar");
+  // The 'menuBar' doesn't need to be deleted since this is made
+  // automatically by wxWidgets
 }
 
-wxMenuBar* MenuBar::GetwxMenuBar () const
+void MenuManager::SetFrame (wxFrame* frame)
+{
+  frame->SetMenuBar (menuBar);
+  menuBar->Reparent (frame);
+}
+
+wxMenuBar* MenuManager::GetwxMenuBar () const
 {
   return menuBar;
 }
-  
-csPtr<iMenu> MenuBar::Append (const char* item)
+
+csRef<iSubMenu> MenuManager::GetSubMenu (const char* item)
 {
-  assert(menuBar);
-  wxMenu* menu = new wxMenu();
-  wxString str = wxString::FromUTF8 (item);
-  menuBar->Append(menu, str);
+  wxString title (item, wxConvUTF8);
 
-  csRef<iMenu> ref;
-  ref.AttachNew (new Menu (menuBar, menu, str));
+  // Check if this submenu already exists
+  subMenus.Compact ();
+  for (size_t i = 0; i < subMenus.GetSize (); i++)
+    if (subMenus[i]->title.CmpNoCase (title) == 0)
+      return csRef<iSubMenu> (subMenus[i]);
 
-  return csPtr<iMenu> (ref);
+  // If not found then create a new submenu
+  wxMenu* menu = new wxMenu ();
+  menuBar->Append (menu, title);
+
+  csRef<SubMenu> ref;
+  ref.AttachNew (new SubMenu (this, menu, title));
+  subMenus.Push (ref);
+
+  return ref;
 }
 
-} // namespace EditorApp
-} // namespace CS
+}
+CS_PLUGIN_NAMESPACE_END (CSEditor)

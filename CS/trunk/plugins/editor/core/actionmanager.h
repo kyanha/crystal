@@ -1,5 +1,6 @@
 /*
     Copyright (C) 2007 by Seth Yastrov
+    Copyright (C) 2011 by Jelle Hellemans
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Library General Public
@@ -19,19 +20,22 @@
 #ifndef __ACTIONMANAGER_H__
 #define __ACTIONMANAGER_H__
 
-#include "ieditor/actionmanager.h"
-
-#include <csutil/refarr.h>
+#include "csutil/refarr.h"
+#include "ieditor/action.h"
+#include "ieditor/editor.h"
+#include "iutil/event.h"
 
 struct iObjectRegistry;
 
-namespace CS {
-namespace EditorApp {
+using namespace CS::EditorApp;
+
+CS_PLUGIN_NAMESPACE_BEGIN (CSEditor)
+{
 
 class ActionManager : public scfImplementation1<ActionManager, iActionManager>
 {
 public:
-  ActionManager (iObjectRegistry* obj_reg);
+  ActionManager (iObjectRegistry* obj_reg, iEditor* editor);
   virtual ~ActionManager ();
 
   virtual bool Do (iAction* action);
@@ -42,20 +46,22 @@ public:
   virtual const iAction* PeekUndo () const;
   virtual const iAction* PeekRedo () const;
 
-  virtual void AddListener (iActionListener* listener);
-  virtual void RemoveListener (iActionListener* listener);
-  
+  virtual void SetMaximumStackSize (size_t size);
+  virtual size_t GetMaximumStackSize () const;
+
 private:
-  void NotifyListeners (iAction* listener);
+  void NotifyListeners (iAction* action);
   
   iObjectRegistry* object_reg;
+  iEditor* editor;
 
   csRefArray<iAction> undoStack, redoStack;
-  csRefArray<iActionListener> listeners;
+  size_t maximumStackSize;
 
+  csEventID eventID;
 };
 
-} // namespace EditorApp
-} // namespace CS
+}
+CS_PLUGIN_NAMESPACE_END (CSEditor)
 
 #endif
