@@ -22,6 +22,7 @@
 #include "csutil/csobject.h"
 #include "csutil/array.h"
 #include "csutil/weakref.h"
+#include "csutil/weakkeyedhash.h"
 #include "csutil/parray.h"
 #include "csutil/randomgen.h"
 #include "csutil/refarr.h"
@@ -238,7 +239,7 @@ public:
   /**
    * Free a mesh instance.
    */
-  void FreeMesh (int cidx, csMGPosition& pos);
+  void FreeMesh (csMGPosition& pos);
 
   /**
    * Perform housekeeping on geometry after an update for a position.
@@ -335,16 +336,19 @@ struct csMGCell
   /// Box for this cell (in 2D space).
   csBox2 box;
 
+  typedef CS::Container::WeakKeyedHash<csRef<csMGPositionBlock>, csWeakRef<iCamera> > PositionBlocksHash;
   /**
    * Block of positions. Can be 0 in case none was generated yet.
    */
-  csRef<csMGPositionBlock> block;
+  PositionBlocksHash blocks;
 
   /**
    * An array of meshes that are relevant in this cell (for calculating the
    * beam downwards).
    */
   csRefArray<iMeshWrapper> meshes;
+
+  void DisownBlock (csMGPositionBlock* block);
 };
 
 /**
@@ -433,15 +437,15 @@ private:
   /**
    * Allocate a block for the given cell.
    */
-  void AllocateBlock (int cidx, csMGCell& cell);
+  void AllocateBlock (iCamera* cam, int cidx, csMGCell& cell);
 
   /**
    * Allocate the meshes in this block that are close enough to
    * the given position.
    * This function assumes the cell has a valid block.
    */
-  void AllocateMeshes (int cidx, csMGCell& cell, const csVector3& pos, 
-    const csVector3& delta);
+  void AllocateMeshes (iCamera* cam, int cidx, csMGCell& cell,
+    const csVector3& pos, const csVector3& delta);
 
 
   /**
@@ -449,10 +453,14 @@ private:
    */
   void GeneratePositions (int cidx, csMGCell& cell, csMGPositionBlock* block);
 
+  //@{
   /**
    * Free all meshes in a block.
    */
-  void FreeMeshesInBlock (int cidx, csMGCell& cell);
+  void FreeMeshesInBlock (iCamera* cam, csMGCell& cell);
+  void FreeMeshesInBlock (csMGCell& cell);
+  void FreeMeshesInBlock (csMGPositionBlock* block);
+  //@}
 
   /// Get the total maximum distance for all geometries.
   float GetTotalMaxDist ();

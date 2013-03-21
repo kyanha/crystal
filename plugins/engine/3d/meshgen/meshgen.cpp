@@ -383,7 +383,7 @@ void csMeshGeneratorGeometry::SetWindSpeed (float speed)
   }
 }
 
-void csMeshGeneratorGeometry::FreeMesh (int cidx, csMGPosition& pos)
+void csMeshGeneratorGeometry::FreeMesh (csMGPosition& pos)
 {
   csMGGeom& geom = factories[pos.lod];
   
@@ -491,7 +491,24 @@ void csMeshGeneratorGeometry::UpdatePosition (const csVector3& pos)
   { 
     factories[f].meshobj.mesh->GetMovable()->SetPosition (pos); 
   } 
-} 
+}
+
+//--------------------------------------------------------------------------
+
+void csMGCell::DisownBlock (csMGPositionBlock* block)
+{
+  csMGCell::PositionBlocksHash::GlobalIterator blocksIter (blocks.GetIterator());
+  while (blocksIter.HasNext())
+  {
+    csRef<csMGPositionBlock> aBlock (blocksIter.NextNoAdvance ());
+    if (aBlock == block)
+    {
+      blocks.DeleteElement (blocksIter);
+      return;
+    }
+    blocksIter.Advance ();
+  }
+}
 
 //--------------------------------------------------------------------------
 
@@ -600,13 +617,18 @@ void csMeshGenerator::SetCellCount (int number)
       {
         int cidx = z*cell_dim + x;
         csMGCell& cell = cells[cidx];
-        FreeMeshesInBlock (cidx, cell);
-        if (cell.block)
+        FreeMeshesInBlock (cell);
+        csMGCell::PositionBlocksHash::GlobalIterator blocksIter (cell.blocks.GetIterator());
+        while (blocksIter.HasNext())
         {
-          cell.block->parent_cell = csArrayItemNotFound;
-          cache_blocks.Push (cell.block);
-          cell.block->next = cell.block->prev = 0;
-          cell.block = 0;
+          csRef<csMGPositionBlock>& block (blocksIter.Next ());
+          if (block)
+          {
+            block->parent_cell = csArrayItemNotFound;
+            cache_blocks.Push (block);
+            block->next = block->prev = 0;
+            block = 0;
+          }
         }
       }
       inuse_blocks = 0;
@@ -629,13 +651,18 @@ void csMeshGenerator::SetBlockCount (int number)
       {
         int cidx = z*cell_dim + x;
         csMGCell& cell = cells[cidx];
-        FreeMeshesInBlock (cidx, cell);
-        if (cell.block)
+        FreeMeshesInBlock (cell);
+        csMGCell::PositionBlocksHash::GlobalIterator blocksIter (cell.blocks.GetIterator());
+        while (blocksIter.HasNext())
         {
-          cell.block->parent_cell = csArrayItemNotFound;
-          cache_blocks.Push (cell.block);
-          cell.block->next = cell.block->prev = 0;
-          cell.block = 0;
+          csRef<csMGPositionBlock>& block (blocksIter.Next ());
+          if (block)
+          {
+            block->parent_cell = csArrayItemNotFound;
+            cache_blocks.Push (block);
+            block->next = block->prev = 0;
+            block = 0;
+          }
         }
       }
       inuse_blocks = 0;
@@ -910,13 +937,13 @@ void csMeshGenerator::GeneratePositions (int cidx, csMGCell& cell,
   }
 }
 
-void csMeshGenerator::AllocateBlock (int cidx, csMGCell& cell)
+void csMeshGenerator::AllocateBlock (iCamera* cam, int cidx, csMGCell& cell)
 {
-  if (cell.block)
+  csRef<csMGPositionBlock>& block (cell.blocks.GetOrCreate (cam));
+  if (block)
   {
     // Our block is already there. We just push it back to the
     // front of 'inuse_blocks' if it is not already there.
-    csRef<csMGPositionBlock> block = cell.block;
     if (block->prev)
     {
       // Unlink first.
@@ -940,11 +967,10 @@ void csMeshGenerator::AllocateBlock (int cidx, csMGCell& cell)
   else if (cache_blocks.GetSize () > 0)
   {
     // We need a new block and one is available in the cache.
-    csRef<csMGPositionBlock> block = cache_blocks.Pop ();
+    block = cache_blocks.Pop ();
     CS_ASSERT (block->parent_cell == csArrayItemNotFound);
     CS_ASSERT (block->next == 0 && block->prev == 0);
     block->parent_cell = cidx;
-    cell.block = block;
     // Link block to the front.
     block->next = inuse_blocks;
     block->prev = 0;
@@ -958,12 +984,10 @@ void csMeshGenerator::AllocateBlock (int cidx, csMGCell& cell)
   {
     // We need a new block and the cache is empty.
     // Now we take the last used block from 'inuse_blocks'.
-    csRef<csMGPositionBlock> block = inuse_blocks_last;
+    block = inuse_blocks_last;
     CS_ASSERT (block->parent_cell != csArrayItemNotFound);
-    CS_ASSERT (block == cells[block->parent_cell].block);
-    cells[block->parent_cell].block = 0;
+    cells[block->parent_cell].DisownBlock (block);
     block->parent_cell = cidx;
-    cell.block = block;
 
     // Unlink first.
     block->prev->next = 0;
@@ -979,13 +1003,15 @@ void csMeshGenerator::AllocateBlock (int cidx, csMGCell& cell)
   }
 }
 
-void csMeshGenerator::AllocateMeshes (int cidx, csMGCell& cell,
+void csMeshGenerator::AllocateMeshes (iCamera* cam,
+                                      int cidx, csMGCell& cell,
                                       const csVector3& pos,
                                       const csVector3& delta)
 {
-  CS_ASSERT (cell.block != 0);
+  csRef<csMGPositionBlock> block (cell.blocks.Get (cam, csRef<csMGPositionBlock> ()));
+  CS_ASSERT (block);
   CS_ASSERT (sector != 0);
-  csPDelArray<csMGPosition>& positions = cell.block->positions;
+  csPDelArray<csMGPosition>& positions = block->positions;
   GetTotalMaxDist ();
   size_t i;
   for (i = 0 ; i < positions.GetSize () ; i++)
@@ -1010,7 +1036,7 @@ void csMeshGenerator::AllocateMeshes (int cidx, csMGCell& cell,
         if (!geometries[p.geom_type]->IsRightLOD (sqdist, p.lod))
         {
           // We need a different mesh here.
-          geometries[p.geom_type]->FreeMesh (cidx, p);
+          geometries[p.geom_type]->FreeMesh (p);
           if (geometries[p.geom_type]->AllocMesh (cidx, cell, sqdist, p))
           {
             geometries[p.geom_type]->MoveMesh (cidx, p,
@@ -1031,7 +1057,7 @@ void csMeshGenerator::AllocateMeshes (int cidx, csMGCell& cell,
     {
       if (p.idInGeometry != csArrayItemNotFound)
       {
-        geometries[p.geom_type]->FreeMesh (cidx, p);
+        geometries[p.geom_type]->FreeMesh (p);
         p.idInGeometry = csArrayItemNotFound;
       }
     }
@@ -1052,7 +1078,7 @@ void csMeshGenerator::ClearAllPositions ()
     {
       int cidx = z*cell_dim + x;
       csMGCell& cell = cells[cidx];
-      FreeMeshesInBlock (cidx, cell);
+      FreeMeshesInBlock (cell);
     }
 }
 
@@ -1065,7 +1091,7 @@ void csMeshGenerator::ClearPosition (const csVector3& pos)
 
   int cidx = cellz*cell_dim + cellx;
   csMGCell& cell = cells[cidx];
-  FreeMeshesInBlock (cidx, cell);
+  FreeMeshesInBlock (cell);
 }
 
 void csMeshGenerator::UpdateForPosition (iCamera* cam, const csVector3& pos)
@@ -1117,7 +1143,7 @@ void csMeshGenerator::UpdateForPosition (iCamera* cam, const csVector3& pos)
         {
           int cidx = z*cell_dim + x;
           csMGCell& cell = cells[cidx];
-          FreeMeshesInBlock (cidx, cell);
+          FreeMeshesInBlock (cell);
         }
   }
   prev_cells = cur_cells;
@@ -1142,14 +1168,14 @@ void csMeshGenerator::UpdateForPosition (iCamera* cam, const csVector3& pos)
             "The mesh generator needs more blocks than %d!", max_blocks);
           return;	// @@@ What to do here???
         }
-        AllocateBlock (cidx, cell);
-        AllocateMeshes (cidx, cell, pos, delta);
+        AllocateBlock (cam, cidx, cell);
+        AllocateMeshes (cam, cidx, cell, pos, delta);
       }
       else
       {
         // Block is out of range. We keep the block in the cache
         // but free all meshes that are in it.
-        FreeMeshesInBlock (cidx, cell);
+        FreeMeshesInBlock (cam, cell);
       }
       cidx++;
     }
@@ -1163,11 +1189,27 @@ void csMeshGenerator::UpdateForPosition (iCamera* cam, const csVector3& pos)
   }
 }
 
-void csMeshGenerator::FreeMeshesInBlock (int cidx, csMGCell& cell)
+void csMeshGenerator::FreeMeshesInBlock (iCamera* cam, csMGCell& cell)
 {
-  if (cell.block)
+  csRef<csMGPositionBlock> block (cell.blocks.Get (cam, csRef<csMGPositionBlock> ()));
+  FreeMeshesInBlock (block);
+}
+
+void csMeshGenerator::FreeMeshesInBlock (csMGCell& cell)
+{
+  csMGCell::PositionBlocksHash::GlobalIterator blocksIter (cell.blocks.GetIterator());
+  while (blocksIter.HasNext())
   {
-    csPDelArray<csMGPosition>& positions = cell.block->positions;
+    csRef<csMGPositionBlock> block (blocksIter.Next ());
+    FreeMeshesInBlock (block);
+  }
+}
+
+void csMeshGenerator::FreeMeshesInBlock (csMGPositionBlock* block)
+{
+  if (block)
+  {
+    csPDelArray<csMGPosition>& positions = block->positions;
     size_t i;
     for (i = 0 ; i < positions.GetSize () ; i++)
     {
@@ -1175,12 +1217,11 @@ void csMeshGenerator::FreeMeshesInBlock (int cidx, csMGCell& cell)
       {
         CS_ASSERT (positions[i]->geom_type >= 0);
         CS_ASSERT (positions[i]->geom_type < geometries.GetSize ());
-        geometries[positions[i]->geom_type]->FreeMesh (cidx,
-          *(positions[i]));
+        geometries[positions[i]->geom_type]->FreeMesh (*(positions[i]));
         positions[i]->idInGeometry = csArrayItemNotFound;
       }
     }
-    cell.block->needPositions = true;
+    block->needPositions = true;
   }
 }
 
