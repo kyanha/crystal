@@ -88,6 +88,9 @@ namespace CS
 	csRef<iGraphics3D> g3d = csQueryRegistry<iGraphics3D> (objReg);
 	texCache.SetG3D (g3d);
 	texCacheDepth.SetG3D (g3d);
+
+        csRef<iEngine> engine (csQueryRegistry<iEngine> (objReg));
+        reflectionCams.Initialize (engine);
       }
   
       void RRBPD::UpdateNewFrame ()
@@ -116,6 +119,8 @@ namespace CS
 	  }
 	  reflRefrCache.DeleteElement (reflRefrIt);
 	}
+	
+	reflectionCams.Purge ();
 	
 	currentFrame++;
 	updatesThisFrame = 0;
