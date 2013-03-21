@@ -314,7 +314,7 @@ struct csMGPositionBlock : public CS::Utility::FastRefCount<csMGPositionBlock>
   csRef<csMGPositionBlock> next;
   csMGPositionBlock* prev;
 
-  csArray<csMGPosition*> positions;
+  csPDelArray<csMGPosition> positions;
 
   /// An index back to the cell that holds this block (or csArrayItemNotFound).
   size_t parent_cell;
