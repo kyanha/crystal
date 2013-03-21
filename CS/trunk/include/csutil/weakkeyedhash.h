@@ -53,7 +53,26 @@ namespace CS
     {
       typedef csHash<T, K, ArrayMemoryAlloc, ArrayElementHandler> Superclass;
     public:
-      
+      /// Check all keys and discard data for invalid keys.
+      void Purge ()
+      {
+        for (size_t e = 0; e < this->Elements.GetSize(); e++)
+        {
+          typename Superclass::ElementArray& values = this->Elements[e];
+          for (size_t i = 0; i < values.GetSize (); ++i)
+          {
+            const typename Superclass::Element& v = values[i];
+            // Delete any elements with 'invalid' keys while searching
+            if (!v.GetKey())
+            {
+              values.DeleteIndexFast (i);
+              this->Size--;
+              i--;
+            }
+          }
+        }
+      }
+
       /**
        * Get the first element matching the given key, or \a fallback if there is 
        * none.
