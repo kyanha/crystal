@@ -483,7 +483,9 @@ namespace CS
                 CameraCache::syncSector | CameraCache::syncFarPlane
                 | CameraCache::syncProjection));
               iCamera* inewcam = newCam;
-              reflView = renderTree.GetPersistentData().renderViews.CreateRenderView (rview);
+              /* 'Keeping' the camera prevents a clone to be made, which we'd immediately replace
+               * anyway */
+              reflView = renderTree.GetPersistentData().renderViews.CreateRenderView (rview, true);
               reflView->SetCamera (inewcam);
               reflView->SetOriginalCamera (rview->GetOriginalCamera ());
 	      CS::Utility::MeshFilter meshFilter;
