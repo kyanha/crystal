@@ -507,7 +507,7 @@ public:
    * take one from 'cache_blocks'. If 'cache_blocks' is empty
    * then we take the block we needed last from 'inuse_blocks'.
    */
-  void UpdateForPosition (const csVector3& pos);
+  void UpdateForPosition (iCamera* camera, const csVector3& pos);
 
   /**
    * Make sure that the sample box dependend data is correctly set up.
