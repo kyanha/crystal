@@ -203,14 +203,15 @@ namespace CS
 	  while (iter.HasNext ())
 	  {
 	    K key;
-	    value = &(iter.Next (key));
+	    value = &(iter.NextNoAdvance (key));
 	    if (key)
 	    {
 	      this->key = key;
 	      this->value = value;
 	      haveNext = true;
-	      break;
+	      return;
 	    }
+	    iter.Advance ();
 	    // @@@ Would be nice to clear out invalid keys as well here
 	    // like: ...->DeleteElement (*this);
 	  }
@@ -249,6 +250,7 @@ namespace CS
 	/// Advance the iterator of one step
 	void Advance ()
 	{
+      iter.Advance ();
 	  NextElement ();
 	}
 
