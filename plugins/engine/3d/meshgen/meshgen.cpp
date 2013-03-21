@@ -985,7 +985,7 @@ void csMeshGenerator::AllocateMeshes (int cidx, csMGCell& cell,
 {
   CS_ASSERT (cell.block != 0);
   CS_ASSERT (sector != 0);
-  csArray<csMGPosition*>& positions = cell.block->positions;
+  csPDelArray<csMGPosition>& positions = cell.block->positions;
   GetTotalMaxDist ();
   size_t i;
   for (i = 0 ; i < positions.GetSize () ; i++)
@@ -1169,7 +1169,7 @@ void csMeshGenerator::FreeMeshesInBlock (int cidx, csMGCell& cell)
 {
   if (cell.block)
   {
-    csArray<csMGPosition*>& positions = cell.block->positions;
+    csPDelArray<csMGPosition>& positions = cell.block->positions;
     size_t i;
     for (i = 0 ; i < positions.GetSize () ; i++)
     {
