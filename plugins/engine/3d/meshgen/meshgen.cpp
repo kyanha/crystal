@@ -771,7 +771,7 @@ void csMeshGenerator::GeneratePositions (int cidx, csMGCell& cell,
   random.Initialize ((unsigned int)cidx); // @@@ Consider using a better seed?
 
   block->positions.Empty ();
-  cell.needPositions = false;
+  block->needPositions = false;
 
   const csBox2& box = cell.box;
   float box_area = box.Area ();
@@ -932,7 +932,7 @@ void csMeshGenerator::AllocateBlock (int cidx, csMGCell& cell)
     }
     // It is possible that our positions got cleared so we may have to
     // recalculate them here.
-    if (cell.needPositions)
+    if (block->needPositions)
     {
       GeneratePositions (cidx, cell, block);
     }
@@ -1053,7 +1053,6 @@ void csMeshGenerator::ClearAllPositions ()
       int cidx = z*cell_dim + x;
       csMGCell& cell = cells[cidx];
       FreeMeshesInBlock (cidx, cell);
-      cell.needPositions = true;
     }
 }
 
@@ -1067,7 +1066,6 @@ void csMeshGenerator::ClearPosition (const csVector3& pos)
   int cidx = cellz*cell_dim + cellx;
   csMGCell& cell = cells[cidx];
   FreeMeshesInBlock (cidx, cell);
-  cell.needPositions = true;
 }
 
 void csMeshGenerator::UpdateForPosition (iCamera* cam, const csVector3& pos)
@@ -1182,6 +1180,7 @@ void csMeshGenerator::FreeMeshesInBlock (int cidx, csMGCell& cell)
         positions[i]->idInGeometry = csArrayItemNotFound;
       }
     }
+    cell.block->needPositions = true;
   }
 }
 
