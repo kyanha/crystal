@@ -133,7 +133,8 @@ private:
   // Array of factories. Every index corresponds with a 'lod' level.
   // This array is sorted automatically.
   csArray<csMGGeom> factories;
-  csRef<GeomMeshObjectArrayRefCounted> meshobjs;
+  CS::Container::WeakKeyedHash<csRef<GeomMeshObjectArrayRefCounted>,
+    csWeakRef<iCamera> > meshobjs;
   float radius;
   float density;
   float total_max_dist;
@@ -174,6 +175,7 @@ private:
   void SetMeshBBox (iMeshWrapper* mesh, const csBox3& bbox); 
 
   void SetupGeomMeshObject (GeomMeshObject& meshobj, const csMGGeom& geom);
+  GeomMeshObjectArrayRefCounted* GetMeshObjects (iCamera* cam);
 public:
   csMeshGeneratorGeometry (csMeshGenerator* generator);
   virtual ~csMeshGeneratorGeometry ();
@@ -247,25 +249,25 @@ public:
    * Allocate a new mesh for the given distance. Possibly from the
    * cache if possible. If the distance is too large it will return 0.
    */
-  bool AllocMesh (int cidx, const csMGCell& cell,
+  bool AllocMesh (iCamera* cam, int cidx, const csMGCell& cell,
       float sqdist, csMGPosition& pos);
 
   /**
    * Free a mesh instance.
    */
-  void FreeMesh (csMGPosition& pos);
+  void FreeMesh (iCamera* cam, csMGPosition& pos);
 
   /**
    * Perform housekeeping on geometry after an update for a position.
    * Takes care of updating buffers for new instancing data or removing
    * a mesh from all sectors if not used.
    */
-  void FinishUpdate ();
+  void FinishUpdate (iCamera* cam);
 
   /**
    * Move the mesh to some position.
    */
-  void MoveMesh (int cidx, const csMGPosition& pos,
+  void MoveMesh (iCamera* cam, int cidx, const csMGPosition& pos,
 		 const csVector3& position, const csMatrix3& matrix); 
 
   /// Set the fade params for the geometry.
@@ -282,7 +284,7 @@ public:
    */
   bool IsRightLOD (float sqdist, size_t current_lod);
 
-  void UpdatePosition (const csVector3& pos);
+  void UpdatePosition (iCamera* cam, const csVector3& pos);
 };
 
 /**
@@ -473,7 +475,8 @@ private:
    */
   void FreeMeshesInBlock (iCamera* cam, csMGCell& cell);
   void FreeMeshesInBlock (csMGCell& cell);
-  void FreeMeshesInBlock (csMGPositionBlock* block);
+  void FreeMeshesInBlock (csMGCell& cell, csMGPositionBlock* block);
+  void FreeMeshesInBlock (iCamera* cam, csMGPositionBlock* block);
   //@}
 
   /// Get the total maximum distance for all geometries.

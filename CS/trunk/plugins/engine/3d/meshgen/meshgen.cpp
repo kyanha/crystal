@@ -105,6 +105,24 @@ void csMeshGeneratorGeometry::SetupGeomMeshObject (GeomMeshObject& meshobj,
   SetMeshBBox (meshobj.mesh, bbox);
 }
 
+GeomMeshObjectArrayRefCounted* csMeshGeneratorGeometry::GetMeshObjects (iCamera* cam)
+{
+  csRef<GeomMeshObjectArrayRefCounted> meshobj_array (
+    meshobjs.Get (cam, csRef<GeomMeshObjectArrayRefCounted> ()));
+  if (meshobj_array) return meshobj_array;
+  meshobj_array.AttachNew (new GeomMeshObjectArrayRefCounted);
+  for (size_t f = 0; f < factories.GetSize(); f++)
+  {
+    GeomMeshObject meshobj;
+    SetupGeomMeshObject (meshobj, factories[f]);
+    static_cast<csMeshWrapper*> ((iMeshWrapper*)(meshobj.mesh))
+      ->SetCameraRestriction (cam);
+    meshobj_array->Insert (f, meshobj);
+  }
+  meshobjs.PutUnique (cam, meshobj_array);
+  return meshobj_array;
+}
+
 void csMeshGeneratorGeometry::GetDensityMapFactor (float x, float z,
                                                    float &data)
 {
@@ -248,11 +266,11 @@ void csMeshGeneratorGeometry::AddFactory (iMeshFactoryWrapper* factory,
   g.windDataVar->SetType (csShaderVariable::VECTOR3);
   g.fadeInfoVar.AttachNew (new csShaderVariable (generator->varFadeInfo));
   g.fadeInfoVar->SetType (csShaderVariable::VECTOR4);
-  GeomMeshObject meshobj;
-  SetupGeomMeshObject (meshobj, g);
+  //GeomMeshObject meshobj;
+  //SetupGeomMeshObject (meshobj, g);
 
-  size_t factoryIndex = factories.InsertSorted (g, CompareGeom);
-  meshobjs->Insert (factoryIndex, meshobj);
+  /*size_t factoryIndex = */factories.InsertSorted (g, CompareGeom);
+  //meshobjs->Insert (factoryIndex, meshobj);
 
   if (maxdist > total_max_dist) total_max_dist = maxdist;
 }
@@ -272,7 +290,7 @@ void csMeshGeneratorGeometry::SetDensity (float density)
   csMeshGeneratorGeometry::density = density;
 }
 
-bool csMeshGeneratorGeometry::AllocMesh (
+bool csMeshGeneratorGeometry::AllocMesh (iCamera* cam,
   int cidx, const csMGCell& cell, float sqdist,
   csMGPosition& pos)
 {
@@ -281,7 +299,7 @@ bool csMeshGeneratorGeometry::AllocMesh (
   if (lod == csArrayItemNotFound) return false;
   pos.lod = lod;
 
-  GeomMeshObject& meshobj = (*meshobjs)[lod];
+  GeomMeshObject& meshobj = (*GetMeshObjects (cam))[lod];
   size_t i = meshobj.allPositions.GetSize();
   pos.idInGeometry = i;
   csMGPosition*& newPos = meshobj.allPositions.GetExtend (i);
@@ -295,12 +313,13 @@ bool csMeshGeneratorGeometry::AllocMesh (
   return true;
 }
 
-void csMeshGeneratorGeometry::MoveMesh (int cidx,
+void csMeshGeneratorGeometry::MoveMesh (iCamera* cam,
+                                        int cidx,
                                         const csMGPosition& pos,
                                         const csVector3& position,
                                         const csMatrix3& matrix)
 {
-  GeomMeshObject& meshobj = (*meshobjs)[pos.lod];
+  GeomMeshObject& meshobj = (*GetMeshObjects (cam))[pos.lod];
   csVector3 meshpos = meshobj.mesh->GetMovable ()->GetFullPosition ();
   csVector3 relPos = position - meshpos;
   GeomMeshObject::Transform& tf = meshobj.allTransforms[pos.idInGeometry];
@@ -392,9 +411,9 @@ void csMeshGeneratorGeometry::SetWindSpeed (float speed)
   }
 }
 
-void csMeshGeneratorGeometry::FreeMesh (csMGPosition& pos)
+void csMeshGeneratorGeometry::FreeMesh (iCamera* cam, csMGPosition& pos)
 {
-  GeomMeshObject& meshobj = (*meshobjs)[pos.lod];
+  GeomMeshObject& meshobj = (*GetMeshObjects (cam))[pos.lod];
   
   size_t index = pos.idInGeometry;
   meshobj.allPositions.DeleteIndexFast (index);
@@ -427,7 +446,7 @@ static void UpdateInstancingParams (bool allDataDirty,
   if (updateData) buffer->SetData (array.GetArray());
 }
 
-void csMeshGeneratorGeometry::FinishUpdate ()
+void csMeshGeneratorGeometry::FinishUpdate (iCamera* cam)
 {
   float fadeOpaqueDist =
     generator->use_alpha_scaling ? generator->alpha_mindist : total_max_dist;
@@ -438,7 +457,7 @@ void csMeshGeneratorGeometry::FinishUpdate ()
   for (lod = 0 ; lod < factories.GetSize () ; lod++)
   {
     csMGGeom& geom = factories[lod];
-    GeomMeshObject& meshobj = (*meshobjs)[lod];
+    GeomMeshObject& meshobj = (*GetMeshObjects (cam))[lod];
      if (meshobj.allPositions.GetSize() == 0)
     {
       // No instances
@@ -467,6 +486,9 @@ void csMeshGeneratorGeometry::FinishUpdate ()
     }
     meshobj.mesh->GetMovable ()->UpdateMove ();
   }
+
+  // @@@ FIXME: This actually something only needed once per frame
+  meshobjs.Purge ();
 }
 
 size_t csMeshGeneratorGeometry::GetLODLevel (float sqdist)
@@ -495,11 +517,11 @@ bool csMeshGeneratorGeometry::IsRightLOD (float sqdist, size_t current_lod)
     (sqdist > factories[current_lod-1].sqmaxdistance);
 }
 
-void csMeshGeneratorGeometry::UpdatePosition (const csVector3& pos)
+void csMeshGeneratorGeometry::UpdatePosition (iCamera* cam, const csVector3& pos)
 { 
   for (size_t f = 0; f < factories.GetSize(); f++) 
   { 
-    GeomMeshObject& meshobj = (*meshobjs)[f];
+    GeomMeshObject& meshobj = (*GetMeshObjects (cam))[f];
     meshobj.mesh->GetMovable()->SetPosition (pos);
   } 
 }
@@ -997,6 +1019,7 @@ void csMeshGenerator::AllocateBlock (iCamera* cam, int cidx, csMGCell& cell)
     // Now we take the last used block from 'inuse_blocks'.
     block = inuse_blocks_last;
     CS_ASSERT (block->parent_cell != csArrayItemNotFound);
+    FreeMeshesInBlock (cells[block->parent_cell], block);
     cells[block->parent_cell].DisownBlock (block);
     block->parent_cell = cidx;
 
@@ -1035,9 +1058,9 @@ void csMeshGenerator::AllocateMeshes (iCamera* cam,
       if (p.idInGeometry == csArrayItemNotFound)
       {
         // We didn't have a mesh here so we allocate one.
-        if (geometries[p.geom_type]->AllocMesh (cidx, cell, sqdist, p))
+        if (geometries[p.geom_type]->AllocMesh (cam, cidx, cell, sqdist, p))
         {
-          geometries[p.geom_type]->MoveMesh (cidx, p,
+          geometries[p.geom_type]->MoveMesh (cam, cidx, p,
                                               p.position, rotation_matrices[p.rotation]);
         }
       }
@@ -1047,10 +1070,10 @@ void csMeshGenerator::AllocateMeshes (iCamera* cam,
         if (!geometries[p.geom_type]->IsRightLOD (sqdist, p.lod))
         {
           // We need a different mesh here.
-          geometries[p.geom_type]->FreeMesh (p);
-          if (geometries[p.geom_type]->AllocMesh (cidx, cell, sqdist, p))
+          geometries[p.geom_type]->FreeMesh (cam, p);
+          if (geometries[p.geom_type]->AllocMesh (cam, cidx, cell, sqdist, p))
           {
-            geometries[p.geom_type]->MoveMesh (cidx, p,
+            geometries[p.geom_type]->MoveMesh (cam, cidx, p,
               p.position, rotation_matrices[p.rotation]);
           }
           else
@@ -1059,7 +1082,7 @@ void csMeshGenerator::AllocateMeshes (iCamera* cam,
         else if(!delta.IsZero())
         { 
           // LOD level is fine, adjust for new pos 
-          geometries[p.geom_type]->MoveMesh (cidx, p, 
+          geometries[p.geom_type]->MoveMesh (cam, cidx, p, 
             p.position, rotation_matrices[p.rotation]); 
         } 
       }
@@ -1068,7 +1091,7 @@ void csMeshGenerator::AllocateMeshes (iCamera* cam,
     {
       if (p.idInGeometry != csArrayItemNotFound)
       {
-        geometries[p.geom_type]->FreeMesh (p);
+        geometries[p.geom_type]->FreeMesh (cam, p);
         p.idInGeometry = csArrayItemNotFound;
       }
     }
@@ -1114,7 +1137,7 @@ void csMeshGenerator::UpdateForPosition (iCamera* cam, const csVector3& pos)
 
   for (size_t i = 0 ; i < geometries.GetSize () ; i++) 
   { 
-    geometries[i]->UpdatePosition (pos); 
+    geometries[i]->UpdatePosition (cam, pos); 
   } 
 
   int cellx = GetCellX (pos.x);
@@ -1196,14 +1219,14 @@ void csMeshGenerator::UpdateForPosition (iCamera* cam, const csVector3& pos)
   size_t i;
   for (i = 0 ; i < geometries.GetSize () ; i++)
   {
-    geometries[i]->FinishUpdate ();
+    geometries[i]->FinishUpdate (cam);
   }
 }
 
 void csMeshGenerator::FreeMeshesInBlock (iCamera* cam, csMGCell& cell)
 {
   csRef<csMGPositionBlock> block (cell.blocks.Get (cam, csRef<csMGPositionBlock> ()));
-  FreeMeshesInBlock (block);
+  FreeMeshesInBlock (cam, block);
 }
 
 void csMeshGenerator::FreeMeshesInBlock (csMGCell& cell)
@@ -1211,12 +1234,31 @@ void csMeshGenerator::FreeMeshesInBlock (csMGCell& cell)
   csMGCell::PositionBlocksHash::GlobalIterator blocksIter (cell.blocks.GetIterator());
   while (blocksIter.HasNext())
   {
-    csRef<csMGPositionBlock> block (blocksIter.Next ());
-    FreeMeshesInBlock (block);
+    csWeakRef<iCamera> cam;
+    csRef<csMGPositionBlock> block (blocksIter.Next (cam));
+    csRef<iCamera> cam_ref;
+    cam.Get (cam_ref);
+    FreeMeshesInBlock (cam_ref, block);
   }
 }
 
-void csMeshGenerator::FreeMeshesInBlock (csMGPositionBlock* block)
+void csMeshGenerator::FreeMeshesInBlock (csMGCell& cell, csMGPositionBlock* block)
+{
+  csMGCell::PositionBlocksHash::GlobalIterator blocksIter (cell.blocks.GetIterator());
+  while (blocksIter.HasNext())
+  {
+    csWeakRef<iCamera> cam;
+    csRef<csMGPositionBlock> aBlock (blocksIter.Next (cam));
+    if (aBlock == block)
+    {
+      csRef<iCamera> cam_ref;
+      cam.Get (cam_ref);
+      FreeMeshesInBlock (cam_ref, block);
+    }
+  }
+}
+
+void csMeshGenerator::FreeMeshesInBlock (iCamera* cam, csMGPositionBlock* block)
 {
   if (block)
   {
@@ -1228,7 +1270,7 @@ void csMeshGenerator::FreeMeshesInBlock (csMGPositionBlock* block)
       {
         CS_ASSERT (positions[i]->geom_type >= 0);
         CS_ASSERT (positions[i]->geom_type < geometries.GetSize ());
-        geometries[positions[i]->geom_type]->FreeMesh (*(positions[i]));
+        geometries[positions[i]->geom_type]->FreeMesh (cam, *(positions[i]));
         positions[i]->idInGeometry = csArrayItemNotFound;
       }
     }
