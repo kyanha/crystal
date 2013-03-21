@@ -84,6 +84,27 @@ void csMeshGeneratorGeometry::SetMeshBBox (iMeshWrapper* mesh,
     SetMeshBBox (children->Get (i)->QueryMesh (), bbox); 
 } 
 
+void csMeshGeneratorGeometry::SetupGeomMeshObject (GeomMeshObject& meshobj,
+                                                   const csMGGeom& geom)
+{
+  meshobj.mesh = generator->engine->CreateMeshWrapper (geom.factory, 0);
+  meshobj.mesh->GetFlags ().Set (CS_ENTITY_NOHITBEAM);
+  meshobj.mesh->SetZBufModeRecursive (CS_ZBUF_USE);
+  meshobj.instancesNumVar.AttachNew (new csShaderVariable (generator->varInstancesNum));
+  meshobj.transformVar.AttachNew (new csShaderVariable (generator->varTransform));
+  meshobj.instanceExtraVar.AttachNew (new csShaderVariable (generator->varInstanceExtra));
+  AddSVToMesh (meshobj.mesh, geom.windDataVar);
+  AddSVToMesh (meshobj.mesh, meshobj.instancesNumVar);
+  AddSVToMesh (meshobj.mesh, geom.fadeInfoVar);
+  AddSVToMesh (meshobj.mesh, meshobj.transformVar);
+  AddSVToMesh (meshobj.mesh, meshobj.instanceExtraVar);
+
+  float maxdist (geom.maxdistance);
+  csBox3 bbox;
+  bbox.SetSize (csVector3 (maxdist, maxdist, maxdist));
+  SetMeshBBox (meshobj.mesh, bbox);
+}
+
 void csMeshGeneratorGeometry::GetDensityMapFactor (float x, float z,
                                                    float &data)
 {
@@ -223,27 +244,15 @@ void csMeshGeneratorGeometry::AddFactory (iMeshFactoryWrapper* factory,
   g.maxdistance = maxdist;
   g.sqmaxdistance = maxdist * maxdist;
   g.factory->GetMeshObjectFactory ()->SetMixMode (CS_FX_COPY);
-  g.meshobj.mesh = generator->engine->CreateMeshWrapper (g.factory, 0);
-  g.meshobj.mesh->GetFlags ().Set (CS_ENTITY_NOHITBEAM);
-  g.meshobj.mesh->SetZBufModeRecursive (CS_ZBUF_USE); 
   g.windDataVar.AttachNew (new csShaderVariable (generator->varWindData));
   g.windDataVar->SetType (csShaderVariable::VECTOR3);
-  g.meshobj.instancesNumVar.AttachNew (new csShaderVariable (generator->varInstancesNum));
-  g.fadeInfoVar.AttachNew (new csShaderVariable (generator->varFadeInfo)); 
+  g.fadeInfoVar.AttachNew (new csShaderVariable (generator->varFadeInfo));
   g.fadeInfoVar->SetType (csShaderVariable::VECTOR4);
-  g.meshobj.transformVar.AttachNew (new csShaderVariable (generator->varTransform)); 
-  g.meshobj.instanceExtraVar.AttachNew (new csShaderVariable (generator->varInstanceExtra)); 
-  AddSVToMesh (g.meshobj.mesh, g.windDataVar);
-  AddSVToMesh (g.meshobj.mesh, g.meshobj.instancesNumVar);
-  AddSVToMesh (g.meshobj.mesh, g.fadeInfoVar); 
-  AddSVToMesh (g.meshobj.mesh, g.meshobj.transformVar); 
-  AddSVToMesh (g.meshobj.mesh, g.meshobj.instanceExtraVar); 
+  GeomMeshObject meshobj;
+  SetupGeomMeshObject (meshobj, g);
 
-  csBox3 bbox;
-  bbox.SetSize (csVector3 (maxdist, maxdist, maxdist));
-  SetMeshBBox (g.meshobj.mesh, bbox);
-
-  factories.InsertSorted (g, CompareGeom);
+  size_t factoryIndex = factories.InsertSorted (g, CompareGeom);
+  meshobjs->Insert (factoryIndex, meshobj);
 
   if (maxdist > total_max_dist) total_max_dist = maxdist;
 }
@@ -272,16 +281,16 @@ bool csMeshGeneratorGeometry::AllocMesh (
   if (lod == csArrayItemNotFound) return false;
   pos.lod = lod;
 
-  csMGGeom& geom = factories[lod];
-  size_t i = geom.meshobj.allPositions.GetSize();
+  GeomMeshObject& meshobj = (*meshobjs)[lod];
+  size_t i = meshobj.allPositions.GetSize();
   pos.idInGeometry = i;
-  csMGPosition*& newPos = geom.meshobj.allPositions.GetExtend (i);
+  csMGPosition*& newPos = meshobj.allPositions.GetExtend (i);
   newPos = &pos;
   
-  geom.meshobj.allTransforms.GetExtend (i);
-  geom.meshobj.allInstanceExtra.GetExtend (i).Set (rng.Get());
+  meshobj.allTransforms.GetExtend (i);
+  meshobj.allInstanceExtra.GetExtend (i).Set (rng.Get());
 
-  geom.meshobj.dataDirty = true;
+  meshobj.dataDirty = true;
   
   return true;
 }
@@ -291,10 +300,10 @@ void csMeshGeneratorGeometry::MoveMesh (int cidx,
                                         const csVector3& position,
                                         const csMatrix3& matrix)
 {
-  csMGGeom& geom = factories[pos.lod];
-  csVector3 meshpos = geom.meshobj.mesh->GetMovable ()->GetFullPosition ();
+  GeomMeshObject& meshobj = (*meshobjs)[pos.lod];
+  csVector3 meshpos = meshobj.mesh->GetMovable ()->GetFullPosition ();
   csVector3 relPos = position - meshpos;
-  GeomMeshObject::Transform& tf = geom.meshobj.allTransforms[pos.idInGeometry];
+  GeomMeshObject::Transform& tf = meshobj.allTransforms[pos.idInGeometry];
 
   /* Based on makeGLMatrix()
      (Transposition 'inherited' from there ...) */
@@ -314,7 +323,7 @@ void csMeshGeneratorGeometry::MoveMesh (int cidx,
   tf.m[7] = relPos.y;
   tf.m[11] = relPos.z;
 
-  geom.meshobj.dataDirty = true;
+  meshobj.dataDirty = true;
 }
 
 void csMeshGeneratorGeometry::SetFadeParams (csMGGeom& geom, float opaqueDist, float scale)
@@ -385,16 +394,16 @@ void csMeshGeneratorGeometry::SetWindSpeed (float speed)
 
 void csMeshGeneratorGeometry::FreeMesh (csMGPosition& pos)
 {
-  csMGGeom& geom = factories[pos.lod];
+  GeomMeshObject& meshobj = (*meshobjs)[pos.lod];
   
   size_t index = pos.idInGeometry;
-  geom.meshobj.allPositions.DeleteIndexFast (index);
-  geom.meshobj.allTransforms.DeleteIndexFast (index);
-  geom.meshobj.allInstanceExtra.DeleteIndexFast (index);
-  geom.meshobj.dataDirty = true;
-  if (index < geom.meshobj.allPositions.GetSize())
+  meshobj.allPositions.DeleteIndexFast (index);
+  meshobj.allTransforms.DeleteIndexFast (index);
+  meshobj.allInstanceExtra.DeleteIndexFast (index);
+  meshobj.dataDirty = true;
+  if (index < meshobj.allPositions.GetSize())
   {
-    csMGPosition*& newPos = geom.meshobj.allPositions[index];
+    csMGPosition*& newPos = meshobj.allPositions[index];
     newPos->idInGeometry = index;
   }
 }
@@ -429,33 +438,34 @@ void csMeshGeneratorGeometry::FinishUpdate ()
   for (lod = 0 ; lod < factories.GetSize () ; lod++)
   {
     csMGGeom& geom = factories[lod];
-    if (geom.meshobj.allPositions.GetSize() == 0)
+    GeomMeshObject& meshobj = (*meshobjs)[lod];
+     if (meshobj.allPositions.GetSize() == 0)
     {
       // No instances
-      geom.meshobj.mesh->GetMovable()->ClearSectors ();
+      meshobj.mesh->GetMovable()->ClearSectors ();
     }
     else
     {
-      if (geom.meshobj.mesh->GetMovable ()->GetSectors()->GetCount() == 0)
+      if (meshobj.mesh->GetMovable ()->GetSectors()->GetCount() == 0)
       {
-	geom.meshobj.mesh->GetMovable ()->SetSector (generator->GetSector ()); 
+	meshobj.mesh->GetMovable ()->SetSector (generator->GetSector ());
       }
       
       SetFadeParams (geom, fadeOpaqueDist, fadeDistScale);
-      geom.meshobj.instancesNumVar->SetValue (int (geom.meshobj.allPositions.GetSize()));
+      meshobj.instancesNumVar->SetValue (int (meshobj.allPositions.GetSize()));
 
       /* Update buffers
          (Compare capacity instead of size so a buffer is kept if the number of
          elements changes only slightly.) */
-      UpdateInstancingParams (geom.meshobj.dataDirty, geom.meshobj.allTransforms,
-                              geom.meshobj.transformBuffer, geom.meshobj.transformVar);
+      UpdateInstancingParams (meshobj.dataDirty, meshobj.allTransforms,
+                              meshobj.transformBuffer, meshobj.transformVar);
 
-      UpdateInstancingParams (geom.meshobj.dataDirty, geom.meshobj.allInstanceExtra,
-                              geom.meshobj.instanceExtraBuffer, geom.meshobj.instanceExtraVar);
+      UpdateInstancingParams (meshobj.dataDirty, meshobj.allInstanceExtra,
+                              meshobj.instanceExtraBuffer, meshobj.instanceExtraVar);
 
-      geom.meshobj.dataDirty = false;
+      meshobj.dataDirty = false;
     }
-    geom.meshobj.mesh->GetMovable ()->UpdateMove ();
+    meshobj.mesh->GetMovable ()->UpdateMove ();
   }
 }
 
@@ -489,7 +499,8 @@ void csMeshGeneratorGeometry::UpdatePosition (const csVector3& pos)
 { 
   for (size_t f = 0; f < factories.GetSize(); f++) 
   { 
-    factories[f].meshobj.mesh->GetMovable()->SetPosition (pos); 
+    GeomMeshObject& meshobj = (*meshobjs)[f];
+    meshobj.mesh->GetMovable()->SetPosition (pos);
   } 
 }
 
