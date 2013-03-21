@@ -227,6 +227,9 @@ private:
   iCamera* last_camera;
   uint last_frame_number;
 
+  /// Render view this mesh is restricted to.
+  csWeakRef<iCamera> restrictCam;
+
   // An infinite bounding box.
   static csBox3 infBBox;
 
@@ -533,6 +536,18 @@ public:
   virtual const csBox3& GetWorldBoundingBox ();
   virtual csBox3 GetTransformedBoundingBox (const csReversibleTransform& trans);
   virtual csScreenBoxResult GetScreenBoundingBox (iCamera *camera);
+
+  /**
+   * Set a specific render view this mesh should be restricted to (or nullptr
+   * to remove any restriction) */
+  void SetCameraRestriction (iCamera* cam) { restrictCam = cam; }
+  /// Get render view this mesh is restricted to
+  csRef<iCamera> GetCameraRestriction ()
+  {
+    csRef<iCamera> restrictCam;
+    this->restrictCam.Get (restrictCam);
+    return restrictCam;
+  }
 
   //--------------------- SCF stuff follows ------------------------------//
 

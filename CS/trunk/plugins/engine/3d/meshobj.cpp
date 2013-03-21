@@ -503,6 +503,17 @@ csRenderMesh** csMeshWrapper::GetRenderMeshes (int& n, iRenderView* rview,
 					       uint32 frustum_mask,
 					       iMeshObject* loddedobject)
 {
+  {
+    // Check for view restriction
+    csRef<iCamera> restrictCam;
+    this->restrictCam.Get (restrictCam);
+    if (restrictCam && (restrictCam != rview->GetCamera()))
+    {
+      n = 0;
+      return nullptr;
+    }
+  }
+
   if (DoInstancing())
   {
     /* If instancing is enabled, but instance count is 0, simply return 0
@@ -634,6 +645,17 @@ size_t csMeshWrapper::AddExtraRenderMesh (CS::Graphics::RenderMesh* renderMesh,
 CS::Graphics::RenderMesh** csMeshWrapper::GetExtraRenderMeshes (size_t& num, 
                     iRenderView* rview, uint32 frustum_mask)
 {
+  {
+    // Check for view restriction
+    csRef<iCamera> restrictCam;
+    this->restrictCam.Get (restrictCam);
+    if (restrictCam && (restrictCam != rview->GetCamera()))
+    {
+      num = 0;
+      return nullptr;
+    }
+  }
+
   // Here we check the CS_ENTITY_NOCLIP flag. If that flag is set
   // we will only render the object once in a give frame/camera combination.
   // So if multiple portals arrive in a sector containing this object the
