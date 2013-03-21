@@ -310,6 +310,15 @@ namespace CS
 	return GlobalIterator (Superclass::GetIterator ());
       }
 
+      /**
+       * Delete the element pointed by the iterator. This is safe for this
+       * iterator, not for the others.
+       */
+      void DeleteElement (GlobalIterator& iterator)
+      {
+        Superclass::DeleteElement (iterator.iter);
+      }
+
       // @@@ FIXME: More csHash<> methods (and iterators) need to be 'ported'
     };
   } // namespace Container
