@@ -485,7 +485,7 @@ bool csMeshGeneratorGeometry::IsRightLOD (float sqdist, size_t current_lod)
     (sqdist > factories[current_lod-1].sqmaxdistance);
 }
 
-void csMeshGeneratorGeometry::UpdatePosition (const csVector3& pos) 
+void csMeshGeneratorGeometry::UpdatePosition (const csVector3& pos)
 { 
   for (size_t f = 0; f < factories.GetSize(); f++) 
   { 
@@ -1069,7 +1069,7 @@ void csMeshGenerator::ClearPosition (const csVector3& pos)
   cell.needPositions = true;
 }
 
-void csMeshGenerator::UpdateForPosition (const csVector3& pos)
+void csMeshGenerator::UpdateForPosition (iCamera* cam, const csVector3& pos)
 {
   csVector3 delta = pos - last_pos;
 
