@@ -507,7 +507,11 @@ csMeshGenerator::csMeshGenerator (csEngine* engine) :
   cells = new csMGCell [cell_dim * cell_dim];
 
   for (size_t i = 0 ; i < size_t (max_blocks) ; i++)
-    cache_blocks.Push (new csMGPositionBlock ());
+  {
+    csRef<csMGPositionBlock> new_block;
+    new_block.AttachNew (new csMGPositionBlock ());
+    cache_blocks.Push (new_block);
+  }
 
   prev_cells.MakeEmpty ();
 
@@ -534,12 +538,6 @@ csMeshGenerator::csMeshGenerator (csEngine* engine) :
 csMeshGenerator::~csMeshGenerator ()
 {
   delete[] cells;
-  while (inuse_blocks)
-  {
-    csMGPositionBlock* n = inuse_blocks->next;
-    delete inuse_blocks;
-    inuse_blocks = n;
-  }
 }
 
 void csMeshGenerator::SelfDestruct ()
@@ -649,14 +647,17 @@ void csMeshGenerator::SetBlockCount (int number)
   if (number > max_blocks)
   {
     for (i = max_blocks ; i < size_t (number) ; i++)
-      cache_blocks.Push (new csMGPositionBlock ());
+    {
+      csRef<csMGPositionBlock> new_block;
+      new_block.AttachNew (new csMGPositionBlock ());
+      cache_blocks.Push (new_block);
+    }
   }
   else
   {
     for (i = number ; i < size_t (max_blocks) ; i++)
     {
-      csMGPositionBlock* block = cache_blocks.Pop ();
-      delete block;
+      cache_blocks.Pop ();
     }
   }
   max_blocks = number;
@@ -915,7 +916,7 @@ void csMeshGenerator::AllocateBlock (int cidx, csMGCell& cell)
   {
     // Our block is already there. We just push it back to the
     // front of 'inuse_blocks' if it is not already there.
-    csMGPositionBlock* block = cell.block;
+    csRef<csMGPositionBlock> block = cell.block;
     if (block->prev)
     {
       // Unlink first.
@@ -939,7 +940,7 @@ void csMeshGenerator::AllocateBlock (int cidx, csMGCell& cell)
   else if (cache_blocks.GetSize () > 0)
   {
     // We need a new block and one is available in the cache.
-    csMGPositionBlock* block = cache_blocks.Pop ();
+    csRef<csMGPositionBlock> block = cache_blocks.Pop ();
     CS_ASSERT (block->parent_cell == csArrayItemNotFound);
     CS_ASSERT (block->next == 0 && block->prev == 0);
     block->parent_cell = cidx;
@@ -957,7 +958,7 @@ void csMeshGenerator::AllocateBlock (int cidx, csMGCell& cell)
   {
     // We need a new block and the cache is empty.
     // Now we take the last used block from 'inuse_blocks'.
-    csMGPositionBlock* block = inuse_blocks_last;
+    csRef<csMGPositionBlock> block = inuse_blocks_last;
     CS_ASSERT (block->parent_cell != csArrayItemNotFound);
     CS_ASSERT (block == cells[block->parent_cell].block);
     cells[block->parent_cell].block = 0;

@@ -308,17 +308,18 @@ struct csMGCell;
  * it. Otherwise the position block will be put back in the pool for later
  * use (potentially for another cell).
  */
-struct csMGPositionBlock
+struct csMGPositionBlock : public CS::Utility::FastRefCount<csMGPositionBlock>
 {
   /// Used when block is in 'inuse_blocks'.
-  csMGPositionBlock* next, * prev;
+  csRef<csMGPositionBlock> next;
+  csMGPositionBlock* prev;
 
   csArray<csMGPosition*> positions;
 
   /// An index back to the cell that holds this block (or csArrayItemNotFound).
   size_t parent_cell;
 
-  csMGPositionBlock () : next (0), prev (0),
+  csMGPositionBlock () : prev (0),
 			 parent_cell (csArrayItemNotFound) { }
 };
 
@@ -334,7 +335,7 @@ struct csMGCell
   /**
    * Block of positions. Can be 0 in case none was generated yet.
    */
-  csMGPositionBlock* block;
+  csRef<csMGPositionBlock> block;
 
   /// Flag whether the block needs new positions to be generated.
   bool needPositions;
@@ -422,12 +423,12 @@ private:
   csRect prev_cells;
 
   /// Cache of unused position blocks.
-  csPDelArray<csMGPositionBlock> cache_blocks;
+  csRefArray<csMGPositionBlock> cache_blocks;
   /**
    * Position blocks that are used. These blocks are linked to a cell.
    * This list is ordered so that the most recently used blocks are in front.
    */
-  csMGPositionBlock* inuse_blocks, * inuse_blocks_last;
+  csRef<csMGPositionBlock> inuse_blocks, inuse_blocks_last;
   /// Maximum number of blocks (both in 'cache_blocks' as in 'inuse_blocks').
   int max_blocks;
 
