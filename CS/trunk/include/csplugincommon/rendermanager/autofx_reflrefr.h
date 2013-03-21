@@ -28,6 +28,7 @@
 #include "imesh/objmodel.h"
 #include "csgeom/polyclip.h"
 
+#include "csplugincommon/rendermanager/cameracache.h"
 #include "csplugincommon/rendermanager/posteffects.h"
 #include "csplugincommon/rendermanager/rendertree.h"
 #include "csplugincommon/rendermanager/texturecache.h"
@@ -96,7 +97,9 @@ namespace CS
 	  };
 	  typedef csHash<ReflectRefractSVs, csPtrKey<iMeshWrapper> > ReflRefrCache;
 	  ReflRefrCache reflRefrCache;
-	    
+        /// Cameras used for reflections
+        CameraCache reflectionCams;
+
 	  int resolutionReduceRefl;
 	  int resolutionReduceRefr;
 	  uint texUpdateInterval;
@@ -469,18 +472,20 @@ namespace CS
 	  {
 	    csRef<csShaderVariable> svReflection;
 	    csRef<csShaderVariable> svReflectionDepth;
-	    
+
 	    if (needReflTex && doRender)
 	    {
 	      // Compute reflection view
 	      iCamera* cam = rview->GetCamera();
 	      // Create a new view
 	      csRef<CS::RenderManager::RenderView> reflView;
-	      csRef<iCamera> newCam (cam->Clone());
-	      iCamera* inewcam = newCam;
+              csRef<iCamera> newCam (persist.reflectionCams.GetClone (cam,
+                CameraCache::syncSector | CameraCache::syncFarPlane
+                | CameraCache::syncProjection));
+              iCamera* inewcam = newCam;
               reflView = renderTree.GetPersistentData().renderViews.CreateRenderView (rview);
-	      reflView->SetCamera (inewcam);
-	      reflView->SetOriginalCamera (rview->GetOriginalCamera ());
+              reflView->SetCamera (inewcam);
+              reflView->SetOriginalCamera (rview->GetOriginalCamera ());
 	      CS::Utility::MeshFilter meshFilter;
 	      meshFilter.AddFilterMesh (mesh.meshWrapper);
 	      reflView->SetMeshFilter(meshFilter);
@@ -488,7 +493,7 @@ namespace CS
 	      // Change the camera transform to be a reflection across reflRefrPlane
 	      csReversibleTransform reflection (csTransform::GetReflect (reflRefrPlane));
 	      csTransform reflection_cam (csTransform::GetReflect (reflRefrPlane_cam));
-	      const csTransform& world2cam (inewcam->GetTransform());
+	      const csTransform& world2cam (cam->GetTransform());
 	      csTransform reflected;
 	      reflected.SetO2T (reflection_cam.GetO2T() * world2cam.GetO2T());
 	      reflected.SetOrigin (reflection.Other2This (world2cam.GetOrigin()));
