@@ -319,6 +319,129 @@ namespace CS
         Superclass::DeleteElement (iterator.iter);
       }
 
+      /// An iterator class for WeakKeyedHash.
+      class ConstGlobalIterator
+      {
+      private:
+        typedef typename Superclass::ConstGlobalIterator WrappedIterator;
+        WrappedIterator iter;
+
+        bool haveNext;
+        K key;
+        const T* value;
+      protected:
+        void NextElement ()
+        {
+          while (iter.HasNext ())
+          {
+            K key;
+            value = &(iter.NextNoAdvance (key));
+            if (key)
+            {
+              this->key = key;
+              this->value = value;
+              haveNext = true;
+              return;
+            }
+            iter.Advance ();
+            // @@@ Would be nice to clear out invalid keys as well here
+            // like: ...->DeleteElement (*this);
+          }
+          haveNext = false;
+          key = K ();
+        }
+
+        ConstGlobalIterator (const WrappedIterator& iter)
+        : iter (iter)
+        {
+          NextElement ();
+        }
+
+        friend class WeakKeyedHash<T, K, ArrayMemoryAlloc, ArrayElementHandler>;
+      public:
+        /// Copy constructor.
+        ConstGlobalIterator (const ConstGlobalIterator& o)
+        : iter (o.iter), haveNext (o.haveNext), key (o.key), value (o.value) {}
+
+        /// Assignment operator.
+        ConstGlobalIterator& operator=(const ConstGlobalIterator& o)
+        {
+          iter = o.iter;
+          haveNext = o.haveNext;
+          key = o.key;
+          value = o.value;
+          return *this;
+        }
+
+        /// Returns a boolean indicating whether or not the hash has more elements.
+        bool HasNext () const
+        {
+          return haveNext;
+        }
+
+        /// Advance the iterator of one step
+        void Advance ()
+        {
+          iter.Advance();
+          NextElement ();
+        }
+
+        /// Get the next element's value, don't move the iterator.
+        const T& NextNoAdvance ()
+        {
+          return *value;
+        }
+
+        /// Get the next element's value.
+        const T& Next ()
+        {
+          const T &ret = NextNoAdvance ();
+          Advance ();
+          return ret;
+        }
+
+        /// Get the next element's value and key, don't move the iterator.
+        const T& NextNoAdvance (K &key)
+        {
+          key = this->key;
+          return NextNoAdvance ();
+        }
+
+        /// Get the next element's value and key.
+        const T& Next (K &key)
+        {
+          key = this->key;
+          return Next ();
+        }
+
+        /// Return a tuple of the value and key.
+        const csTuple2<T, K> NextTuple ()
+        {
+          csTuple2<T, K> t (NextNoAdvance (),
+            this->key);
+          Advance ();
+          return t;
+        }
+
+        /// Move the iterator back to the first element.
+        void Reset ()
+        {
+          iter->Reset ();
+          NextElement ();
+        }
+      };
+      friend class ConstGlobalIterator;
+
+      /**
+       * Return an iterator for the hash, to iterate over all elements.
+       * \warning Modifying the hash (except with DeleteElement()) while you have
+       *   open iterators will result in undefined behaviour.
+       */
+      ConstGlobalIterator GetIterator () const
+      {
+        return ConstGlobalIterator (Superclass::GetIterator ());
+      }
+
       // @@@ FIXME: More csHash<> methods (and iterators) need to be 'ported'
     };
   } // namespace Container
