@@ -314,12 +314,15 @@ struct csMGPositionBlock : public CS::Utility::FastRefCount<csMGPositionBlock>
   csRef<csMGPositionBlock> next;
   csMGPositionBlock* prev;
 
+  /// Flag whether the block needs new positions to be generated.
+  bool needPositions;
+
   csPDelArray<csMGPosition> positions;
 
   /// An index back to the cell that holds this block (or csArrayItemNotFound).
   size_t parent_cell;
 
-  csMGPositionBlock () : prev (0),
+  csMGPositionBlock () : prev (0), needPositions (true),
 			 parent_cell (csArrayItemNotFound) { }
 };
 
@@ -337,16 +340,11 @@ struct csMGCell
    */
   csRef<csMGPositionBlock> block;
 
-  /// Flag whether the block needs new positions to be generated.
-  bool needPositions;
-  
   /**
    * An array of meshes that are relevant in this cell (for calculating the
    * beam downwards).
    */
   csRefArray<iMeshWrapper> meshes;
-
-  csMGCell () : block (0), needPositions (true) { }
 };
 
 /**
