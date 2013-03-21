@@ -101,8 +101,20 @@ struct csMGGeom
    * (fadeInM,fadeInN,fadeOutM,fadeOutN)
    */
   csRef<csShaderVariable> fadeInfoVar;
-  
-  GeomMeshObject meshobj;
+};
+
+class GeomMeshObjectArrayRefCounted :
+  public CS::Utility::FastRefCount<GeomMeshObjectArrayRefCounted>,
+  public csArray<GeomMeshObject>
+{
+public:
+  ~GeomMeshObjectArrayRefCounted()
+  {
+    for (size_t i = 0; i < GetSize(); i++)
+    {
+      if (Get (i).mesh) Get (i).mesh->GetMovable()->ClearSectors();
+    }
+  }
 };
 
 struct csMGDensityMaterialFactor
@@ -121,6 +133,7 @@ private:
   // Array of factories. Every index corresponds with a 'lod' level.
   // This array is sorted automatically.
   csArray<csMGGeom> factories;
+  csRef<GeomMeshObjectArrayRefCounted> meshobjs;
   float radius;
   float density;
   float total_max_dist;
@@ -160,6 +173,7 @@ private:
   void AddSVToMesh (iMeshWrapper* mesh, csShaderVariable* sv); 
   void SetMeshBBox (iMeshWrapper* mesh, const csBox3& bbox); 
 
+  void SetupGeomMeshObject (GeomMeshObject& meshobj, const csMGGeom& geom);
 public:
   csMeshGeneratorGeometry (csMeshGenerator* generator);
   virtual ~csMeshGeneratorGeometry ();
