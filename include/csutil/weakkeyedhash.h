@@ -63,8 +63,7 @@ namespace CS
 	if (this->Elements.GetSize() == 0) return fallback;
 	typename Superclass::ElementArray& values = 
 	  this->Elements[csHashComputer<K>::ComputeHash (key) % this->Modulo];
-	const size_t len = values.GetSize ();
-	for (size_t i = 0; i < len; ++i)
+	for (size_t i = 0; i < values.GetSize (); ++i)
 	{
 	  const typename Superclass::Element& v = values[i];
 	  // Delete any elements with 'invalid' keys while searching
