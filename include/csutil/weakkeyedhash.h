@@ -81,7 +81,36 @@ namespace CS
 	return fallback;
       }
       using Superclass::Get;
+      using Superclass::GetOrCreate;
       
+      /**
+       * Get a pointer to the first element matching the given key,
+       * or 0 if there is none.
+       */
+      T* GetElementPointer (const K& key)
+      {
+        if (this->Elements.GetSize() == 0) return 0;
+        typename Superclass::ElementArray& values =
+          this->Elements[csHashComputer<K>::ComputeHash (key) % this->Modulo];
+        for (size_t i = 0; i < values.GetSize (); ++i)
+        {
+          typename Superclass::Element& v = values[i];
+          // Delete any elements with 'invalid' keys while searching
+          if (!v.GetKey())
+          {
+            values.DeleteIndexFast (i);
+            this->Size--;
+            i--;
+            continue;
+          }
+          if (csComparator<K, K>::Compare (v.GetKey(), key) == 0)
+            return &v.GetValue();
+        }
+
+        return 0;
+      }
+      using Superclass::GetElementPointer;
+
       /**
        * Add an element to the hash table.
        * \remarks If \a key is already present, does NOT replace the existing value,
@@ -119,7 +148,43 @@ namespace CS
 	}
 	return values[idx].GetValue();
       }
-      
+      /// Add an element to the hash table, overwriting if the key already exists.
+      T& PutUnique (const K& key, const T &value)
+      {
+        if (this->Elements.GetSize() == 0) this->Elements.SetSize (this->Modulo);
+        typename Superclass::ElementArray& values =
+          this->Elements[csHashComputer<K>::ComputeHash (key) % this->Modulo];
+        const size_t len = values.GetSize ();
+        for (size_t i = 0; i < len; )
+        {
+          typename Superclass::Element& v = values[i];
+          // Delete any elements 'invalid' with keys while looking for the slot
+          if (!v.GetKey())
+          {
+            values.DeleteIndexFast (i);
+            continue;
+          }
+          if (csComparator<K, K>::Compare (v.GetKey(), key) == 0)
+          {
+            v.GetValue() = value;
+            return v.GetValue();
+          }
+          ++i;
+        }
+
+        size_t idx = values.Push (typename Superclass::Element (key, value));
+        this->Size++;
+        if (values.GetSize () > this->Elements.GetSize () / this->GrowRate
+          && this->Elements.GetSize () < this->MaxSize)
+        {
+          this->Grow ();
+          /* can't use 'values[idx]' since that is no longer the place where
+            the item is stored. */
+          return *(GetElementPointer (key));
+        }
+        return values[idx].GetValue();
+      }
+
       using Superclass::DeleteAll;
       
       /// An iterator class for WeakKeyedHash.
