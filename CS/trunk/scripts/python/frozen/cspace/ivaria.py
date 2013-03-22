@@ -1658,6 +1658,10 @@ class iTranslator(core.iBase):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
     def __init__(self, *args, **kwargs): raise AttributeError, "No constructor defined"
     __repr__ = _swig_repr
+    def GetCurrentLanguage(*args): return _ivaria.iTranslator_GetCurrentLanguage(*args)
+    def SetCurrentLanguage(*args): return _ivaria.iTranslator_SetCurrentLanguage(*args)
+    def GetFallbacks(*args): return _ivaria.iTranslator_GetFallbacks(*args)
+    def LoadTranslation(*args): return _ivaria.iTranslator_LoadTranslation(*args)
     def GetMsg(*args): return _ivaria.iTranslator_GetMsg(*args)
     scfGetVersion = staticmethod(_ivaria.iTranslator_scfGetVersion)
     scfGetName = staticmethod(_ivaria.iTranslator_scfGetName)

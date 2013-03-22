@@ -2665,97 +2665,98 @@ SWIG_Python_MustGetPtr(PyObject *obj, swig_type_info *ty, int argnum, int flags)
 #define SWIGTYPE_p_iKeyComposer swig_types[142]
 #define SWIGTYPE_p_iKeyboardDriver swig_types[143]
 #define SWIGTYPE_p_iLight swig_types[144]
-#define SWIGTYPE_p_iMapNode swig_types[145]
-#define SWIGTYPE_p_iMaterialWrapper swig_types[146]
-#define SWIGTYPE_p_iMeshObject swig_types[147]
-#define SWIGTYPE_p_iMeshWrapper swig_types[148]
-#define SWIGTYPE_p_iMouseDriver swig_types[149]
-#define SWIGTYPE_p_iMovieRecorder swig_types[150]
-#define SWIGTYPE_p_iMovingObject swig_types[151]
-#define SWIGTYPE_p_iNativeWindowManager swig_types[152]
-#define SWIGTYPE_p_iODEAMotorJoint swig_types[153]
-#define SWIGTYPE_p_iODEBallJoint swig_types[154]
-#define SWIGTYPE_p_iODEDynamicState swig_types[155]
-#define SWIGTYPE_p_iODEDynamicSystemState swig_types[156]
-#define SWIGTYPE_p_iODEFrameUpdateCallback swig_types[157]
-#define SWIGTYPE_p_iODEGeneralJointState swig_types[158]
-#define SWIGTYPE_p_iODEHinge2Joint swig_types[159]
-#define SWIGTYPE_p_iODEHingeJoint swig_types[160]
-#define SWIGTYPE_p_iODEJointState swig_types[161]
-#define SWIGTYPE_p_iODESliderJoint swig_types[162]
-#define SWIGTYPE_p_iODEUniversalJoint swig_types[163]
-#define SWIGTYPE_p_iObject swig_types[164]
-#define SWIGTYPE_p_iObjectIterator swig_types[165]
-#define SWIGTYPE_p_iObjectNameChangeListener swig_types[166]
-#define SWIGTYPE_p_iObjectRegistry swig_types[167]
-#define SWIGTYPE_p_iObjectRegistryIterator swig_types[168]
-#define SWIGTYPE_p_iParameterESM swig_types[169]
-#define SWIGTYPE_p_iPath swig_types[170]
-#define SWIGTYPE_p_iPerspectiveCamera swig_types[171]
-#define SWIGTYPE_p_iPluginIterator swig_types[172]
-#define SWIGTYPE_p_iPluginManager swig_types[173]
-#define SWIGTYPE_p_iReporter swig_types[174]
-#define SWIGTYPE_p_iReporterIterator swig_types[175]
-#define SWIGTYPE_p_iReporterListener swig_types[176]
-#define SWIGTYPE_p_iRigidBody swig_types[177]
-#define SWIGTYPE_p_iSCF swig_types[178]
-#define SWIGTYPE_p_iScript swig_types[179]
-#define SWIGTYPE_p_iScriptObject swig_types[180]
-#define SWIGTYPE_p_iScriptValue swig_types[181]
-#define SWIGTYPE_p_iSector swig_types[182]
-#define SWIGTYPE_p_iSequence swig_types[183]
-#define SWIGTYPE_p_iSequenceCondition swig_types[184]
-#define SWIGTYPE_p_iSequenceManager swig_types[185]
-#define SWIGTYPE_p_iSequenceOperation swig_types[186]
-#define SWIGTYPE_p_iSequenceTimedOperation swig_types[187]
-#define SWIGTYPE_p_iSequenceTrigger swig_types[188]
-#define SWIGTYPE_p_iSequenceWrapper swig_types[189]
-#define SWIGTYPE_p_iSharedVariable swig_types[190]
-#define SWIGTYPE_p_iSimpleFormerState swig_types[191]
-#define SWIGTYPE_p_iStandardReporterListener swig_types[192]
-#define SWIGTYPE_p_iString swig_types[193]
-#define SWIGTYPE_p_iStringArray swig_types[194]
-#define SWIGTYPE_p_iStringSet swig_types[195]
-#define SWIGTYPE_p_iStringSetBaseT_CS__StringSetTag__General_t swig_types[196]
-#define SWIGTYPE_p_iTerraFormer swig_types[197]
-#define SWIGTYPE_p_iTerraSampler swig_types[198]
-#define SWIGTYPE_p_iTerrainSystem swig_types[199]
-#define SWIGTYPE_p_iThreadManager swig_types[200]
-#define SWIGTYPE_p_iThreadReturn swig_types[201]
-#define SWIGTYPE_p_iTranslator swig_types[202]
-#define SWIGTYPE_p_iTriangleMesh swig_types[203]
-#define SWIGTYPE_p_iVFS swig_types[204]
-#define SWIGTYPE_p_iView swig_types[205]
-#define SWIGTYPE_p_iVirtualClock swig_types[206]
-#define SWIGTYPE_p_int swig_types[207]
-#define SWIGTYPE_p_int16_t swig_types[208]
-#define SWIGTYPE_p_int64_t swig_types[209]
-#define SWIGTYPE_p_int8_t swig_types[210]
-#define SWIGTYPE_p_long_long swig_types[211]
-#define SWIGTYPE_p_p_csVector3 swig_types[212]
-#define SWIGTYPE_p_p_int swig_types[213]
-#define SWIGTYPE_p_scfImplementation1T_FrameBegin3DDraw_iEventHandler_t swig_types[214]
-#define SWIGTYPE_p_scfImplementation1T_FramePrinter_iEventHandler_t swig_types[215]
-#define SWIGTYPE_p_scfImplementation1T_csConfigFile_iConfigFile_t swig_types[216]
-#define SWIGTYPE_p_scfImplementation1T_csEventHandlerRegistry_iEventHandlerRegistry_t swig_types[217]
-#define SWIGTYPE_p_scfImplementation1T_csObject_iObject_t swig_types[218]
-#define SWIGTYPE_p_scfImplementation2T_FrameSignpost_2DConsole_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_t swig_types[219]
-#define SWIGTYPE_p_scfImplementation2T_FrameSignpost_3D2D_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_t swig_types[220]
-#define SWIGTYPE_p_scfImplementation2T_FrameSignpost_ConsoleDebug_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_t swig_types[221]
-#define SWIGTYPE_p_scfImplementation2T_FrameSignpost_DebugFrame_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_t swig_types[222]
-#define SWIGTYPE_p_scfImplementation2T_FrameSignpost_Logic3D_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_t swig_types[223]
-#define SWIGTYPE_p_scfImplementationExt1T_csPath_csObject_iPath_t swig_types[224]
-#define SWIGTYPE_p_size_t swig_types[225]
-#define SWIGTYPE_p_uint16_t swig_types[226]
-#define SWIGTYPE_p_uint32_t swig_types[227]
-#define SWIGTYPE_p_uint64_t swig_types[228]
-#define SWIGTYPE_p_uint8_t swig_types[229]
-#define SWIGTYPE_p_unsigned_int swig_types[230]
-#define SWIGTYPE_p_unsigned_long swig_types[231]
-#define SWIGTYPE_p_unsigned_long_long swig_types[232]
-#define SWIGTYPE_p_void swig_types[233]
-static swig_type_info *swig_types[235];
-static swig_module_info swig_module = {swig_types, 234, 0, 0, 0, 0};
+#define SWIGTYPE_p_iLoaderPlugin swig_types[145]
+#define SWIGTYPE_p_iMapNode swig_types[146]
+#define SWIGTYPE_p_iMaterialWrapper swig_types[147]
+#define SWIGTYPE_p_iMeshObject swig_types[148]
+#define SWIGTYPE_p_iMeshWrapper swig_types[149]
+#define SWIGTYPE_p_iMouseDriver swig_types[150]
+#define SWIGTYPE_p_iMovieRecorder swig_types[151]
+#define SWIGTYPE_p_iMovingObject swig_types[152]
+#define SWIGTYPE_p_iNativeWindowManager swig_types[153]
+#define SWIGTYPE_p_iODEAMotorJoint swig_types[154]
+#define SWIGTYPE_p_iODEBallJoint swig_types[155]
+#define SWIGTYPE_p_iODEDynamicState swig_types[156]
+#define SWIGTYPE_p_iODEDynamicSystemState swig_types[157]
+#define SWIGTYPE_p_iODEFrameUpdateCallback swig_types[158]
+#define SWIGTYPE_p_iODEGeneralJointState swig_types[159]
+#define SWIGTYPE_p_iODEHinge2Joint swig_types[160]
+#define SWIGTYPE_p_iODEHingeJoint swig_types[161]
+#define SWIGTYPE_p_iODEJointState swig_types[162]
+#define SWIGTYPE_p_iODESliderJoint swig_types[163]
+#define SWIGTYPE_p_iODEUniversalJoint swig_types[164]
+#define SWIGTYPE_p_iObject swig_types[165]
+#define SWIGTYPE_p_iObjectIterator swig_types[166]
+#define SWIGTYPE_p_iObjectNameChangeListener swig_types[167]
+#define SWIGTYPE_p_iObjectRegistry swig_types[168]
+#define SWIGTYPE_p_iObjectRegistryIterator swig_types[169]
+#define SWIGTYPE_p_iParameterESM swig_types[170]
+#define SWIGTYPE_p_iPath swig_types[171]
+#define SWIGTYPE_p_iPerspectiveCamera swig_types[172]
+#define SWIGTYPE_p_iPluginIterator swig_types[173]
+#define SWIGTYPE_p_iPluginManager swig_types[174]
+#define SWIGTYPE_p_iReporter swig_types[175]
+#define SWIGTYPE_p_iReporterIterator swig_types[176]
+#define SWIGTYPE_p_iReporterListener swig_types[177]
+#define SWIGTYPE_p_iRigidBody swig_types[178]
+#define SWIGTYPE_p_iSCF swig_types[179]
+#define SWIGTYPE_p_iScript swig_types[180]
+#define SWIGTYPE_p_iScriptObject swig_types[181]
+#define SWIGTYPE_p_iScriptValue swig_types[182]
+#define SWIGTYPE_p_iSector swig_types[183]
+#define SWIGTYPE_p_iSequence swig_types[184]
+#define SWIGTYPE_p_iSequenceCondition swig_types[185]
+#define SWIGTYPE_p_iSequenceManager swig_types[186]
+#define SWIGTYPE_p_iSequenceOperation swig_types[187]
+#define SWIGTYPE_p_iSequenceTimedOperation swig_types[188]
+#define SWIGTYPE_p_iSequenceTrigger swig_types[189]
+#define SWIGTYPE_p_iSequenceWrapper swig_types[190]
+#define SWIGTYPE_p_iSharedVariable swig_types[191]
+#define SWIGTYPE_p_iSimpleFormerState swig_types[192]
+#define SWIGTYPE_p_iStandardReporterListener swig_types[193]
+#define SWIGTYPE_p_iString swig_types[194]
+#define SWIGTYPE_p_iStringArray swig_types[195]
+#define SWIGTYPE_p_iStringSet swig_types[196]
+#define SWIGTYPE_p_iStringSetBaseT_CS__StringSetTag__General_t swig_types[197]
+#define SWIGTYPE_p_iTerraFormer swig_types[198]
+#define SWIGTYPE_p_iTerraSampler swig_types[199]
+#define SWIGTYPE_p_iTerrainSystem swig_types[200]
+#define SWIGTYPE_p_iThreadManager swig_types[201]
+#define SWIGTYPE_p_iThreadReturn swig_types[202]
+#define SWIGTYPE_p_iTranslator swig_types[203]
+#define SWIGTYPE_p_iTriangleMesh swig_types[204]
+#define SWIGTYPE_p_iVFS swig_types[205]
+#define SWIGTYPE_p_iView swig_types[206]
+#define SWIGTYPE_p_iVirtualClock swig_types[207]
+#define SWIGTYPE_p_int swig_types[208]
+#define SWIGTYPE_p_int16_t swig_types[209]
+#define SWIGTYPE_p_int64_t swig_types[210]
+#define SWIGTYPE_p_int8_t swig_types[211]
+#define SWIGTYPE_p_long_long swig_types[212]
+#define SWIGTYPE_p_p_csVector3 swig_types[213]
+#define SWIGTYPE_p_p_int swig_types[214]
+#define SWIGTYPE_p_scfImplementation1T_FrameBegin3DDraw_iEventHandler_t swig_types[215]
+#define SWIGTYPE_p_scfImplementation1T_FramePrinter_iEventHandler_t swig_types[216]
+#define SWIGTYPE_p_scfImplementation1T_csConfigFile_iConfigFile_t swig_types[217]
+#define SWIGTYPE_p_scfImplementation1T_csEventHandlerRegistry_iEventHandlerRegistry_t swig_types[218]
+#define SWIGTYPE_p_scfImplementation1T_csObject_iObject_t swig_types[219]
+#define SWIGTYPE_p_scfImplementation2T_FrameSignpost_2DConsole_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_t swig_types[220]
+#define SWIGTYPE_p_scfImplementation2T_FrameSignpost_3D2D_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_t swig_types[221]
+#define SWIGTYPE_p_scfImplementation2T_FrameSignpost_ConsoleDebug_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_t swig_types[222]
+#define SWIGTYPE_p_scfImplementation2T_FrameSignpost_DebugFrame_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_t swig_types[223]
+#define SWIGTYPE_p_scfImplementation2T_FrameSignpost_Logic3D_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_t swig_types[224]
+#define SWIGTYPE_p_scfImplementationExt1T_csPath_csObject_iPath_t swig_types[225]
+#define SWIGTYPE_p_size_t swig_types[226]
+#define SWIGTYPE_p_uint16_t swig_types[227]
+#define SWIGTYPE_p_uint32_t swig_types[228]
+#define SWIGTYPE_p_uint64_t swig_types[229]
+#define SWIGTYPE_p_uint8_t swig_types[230]
+#define SWIGTYPE_p_unsigned_int swig_types[231]
+#define SWIGTYPE_p_unsigned_long swig_types[232]
+#define SWIGTYPE_p_unsigned_long_long swig_types[233]
+#define SWIGTYPE_p_void swig_types[234]
+static swig_type_info *swig_types[236];
+static swig_module_info swig_module = {swig_types, 235, 0, 0, 0, 0};
 #define SWIG_TypeQuery(name) SWIG_TypeQueryModule(&swig_module, &swig_module, name)
 #define SWIG_MangledTypeQuery(name) SWIG_MangledTypeQueryModule(&swig_module, &swig_module, name)
 
@@ -45376,7 +45377,277 @@ SWIGINTERN PyObject *iTerraSampler_swigregister(PyObject *SWIGUNUSEDPARM(self), 
   return SWIG_Py_Void();
 }
 
-SWIGINTERN PyObject *_wrap_iTranslator_GetMsg(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_iTranslator_GetCurrentLanguage(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  iTranslator *arg1 = (iTranslator *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  char *result = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"iTranslator_GetCurrentLanguage",1,1,&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_iTranslator, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "iTranslator_GetCurrentLanguage" "', argument " "1"" of type '" "iTranslator const *""'"); 
+  }
+  arg1 = reinterpret_cast< iTranslator * >(argp1);
+  result = (char *)((iTranslator const *)arg1)->GetCurrentLanguage();
+  resultobj = SWIG_FromCharPtr((const char *)result);
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_iTranslator_SetCurrentLanguage(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  iTranslator *arg1 = (iTranslator *) 0 ;
+  char *arg2 = (char *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int res2 ;
+  char *buf2 = 0 ;
+  int alloc2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"iTranslator_SetCurrentLanguage",2,2,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_iTranslator, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "iTranslator_SetCurrentLanguage" "', argument " "1"" of type '" "iTranslator *""'"); 
+  }
+  arg1 = reinterpret_cast< iTranslator * >(argp1);
+  res2 = SWIG_AsCharPtrAndSize(obj1, &buf2, NULL, &alloc2);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "iTranslator_SetCurrentLanguage" "', argument " "2"" of type '" "char const *""'");
+  }
+  arg2 = reinterpret_cast< char * >(buf2);
+  (arg1)->SetCurrentLanguage((char const *)arg2);
+  resultobj = SWIG_Py_Void();
+  if (alloc2 == SWIG_NEWOBJ) delete[] buf2;
+  return resultobj;
+fail:
+  if (alloc2 == SWIG_NEWOBJ) delete[] buf2;
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_iTranslator_GetFallbacks(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  iTranslator *arg1 = (iTranslator *) 0 ;
+  char *arg2 = (char *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int res2 ;
+  char *buf2 = 0 ;
+  int alloc2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  SwigValueWrapper< csPtr< iStringArray > > result;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"iTranslator_GetFallbacks",2,2,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_iTranslator, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "iTranslator_GetFallbacks" "', argument " "1"" of type '" "iTranslator const *""'"); 
+  }
+  arg1 = reinterpret_cast< iTranslator * >(argp1);
+  res2 = SWIG_AsCharPtrAndSize(obj1, &buf2, NULL, &alloc2);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "iTranslator_GetFallbacks" "', argument " "2"" of type '" "char const *""'");
+  }
+  arg2 = reinterpret_cast< char * >(buf2);
+  result = ((iTranslator const *)arg1)->GetFallbacks((char const *)arg2);
+  {
+    csRef<iStringArray> ref((csPtr<iStringArray>&)result); /* explicit cast */
+    
+    if (!ref.IsValid())
+    {
+      Py_INCREF(Py_None);
+      return Py_None;
+    }
+    ref->IncRef();
+    resultobj = SWIG_NewPointerObj((void *)(iStringArray *)ref, SWIGTYPE_p_iStringArray, 1);
+  }
+  if (alloc2 == SWIG_NEWOBJ) delete[] buf2;
+  return resultobj;
+fail:
+  if (alloc2 == SWIG_NEWOBJ) delete[] buf2;
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_iTranslator_LoadTranslation__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  iTranslator *arg1 = (iTranslator *) 0 ;
+  char *arg2 = (char *) 0 ;
+  iLoaderPlugin *arg3 = (iLoaderPlugin *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int res2 ;
+  char *buf2 = 0 ;
+  int alloc2 = 0 ;
+  void *argp3 = 0 ;
+  int res3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  bool result;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"iTranslator_LoadTranslation",3,3,&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_iTranslator, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "iTranslator_LoadTranslation" "', argument " "1"" of type '" "iTranslator *""'"); 
+  }
+  arg1 = reinterpret_cast< iTranslator * >(argp1);
+  res2 = SWIG_AsCharPtrAndSize(obj1, &buf2, NULL, &alloc2);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "iTranslator_LoadTranslation" "', argument " "2"" of type '" "char const *""'");
+  }
+  arg2 = reinterpret_cast< char * >(buf2);
+  res3 = SWIG_ConvertPtr(obj2, &argp3,SWIGTYPE_p_iLoaderPlugin, 0 |  0 );
+  if (!SWIG_IsOK(res3)) {
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "iTranslator_LoadTranslation" "', argument " "3"" of type '" "iLoaderPlugin *""'"); 
+  }
+  arg3 = reinterpret_cast< iLoaderPlugin * >(argp3);
+  result = (bool)(arg1)->LoadTranslation((char const *)arg2,arg3);
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
+  if (alloc2 == SWIG_NEWOBJ) delete[] buf2;
+  return resultobj;
+fail:
+  if (alloc2 == SWIG_NEWOBJ) delete[] buf2;
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_iTranslator_LoadTranslation__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  iTranslator *arg1 = (iTranslator *) 0 ;
+  char *arg2 = (char *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int res2 ;
+  char *buf2 = 0 ;
+  int alloc2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  bool result;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"iTranslator_LoadTranslation",2,2,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_iTranslator, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "iTranslator_LoadTranslation" "', argument " "1"" of type '" "iTranslator *""'"); 
+  }
+  arg1 = reinterpret_cast< iTranslator * >(argp1);
+  res2 = SWIG_AsCharPtrAndSize(obj1, &buf2, NULL, &alloc2);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "iTranslator_LoadTranslation" "', argument " "2"" of type '" "char const *""'");
+  }
+  arg2 = reinterpret_cast< char * >(buf2);
+  result = (bool)(arg1)->LoadTranslation((char const *)arg2);
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
+  if (alloc2 == SWIG_NEWOBJ) delete[] buf2;
+  return resultobj;
+fail:
+  if (alloc2 == SWIG_NEWOBJ) delete[] buf2;
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_iTranslator_LoadTranslation(PyObject *self, PyObject *args) {
+  int argc;
+  PyObject *argv[4];
+  int ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = (int)PyObject_Length(args);
+  for (ii = 0; (ii < argc) && (ii < 3); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 2) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_iTranslator, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      int res = SWIG_AsCharPtrAndSize(argv[1], 0, NULL, 0);
+      _v = SWIG_CheckState(res);
+      if (_v) {
+        return _wrap_iTranslator_LoadTranslation__SWIG_1(self, args);
+      }
+    }
+  }
+  if (argc == 3) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_iTranslator, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      int res = SWIG_AsCharPtrAndSize(argv[1], 0, NULL, 0);
+      _v = SWIG_CheckState(res);
+      if (_v) {
+        void *vptr = 0;
+        int res = SWIG_ConvertPtr(argv[2], &vptr, SWIGTYPE_p_iLoaderPlugin, 0);
+        _v = SWIG_CheckState(res);
+        if (_v) {
+          return _wrap_iTranslator_LoadTranslation__SWIG_0(self, args);
+        }
+      }
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number of arguments for overloaded function 'iTranslator_LoadTranslation'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    LoadTranslation(iTranslator *,char const *,iLoaderPlugin *)\n"
+    "    LoadTranslation(iTranslator *,char const *)\n");
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_iTranslator_GetMsg__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  iTranslator *arg1 = (iTranslator *) 0 ;
+  char *arg2 = (char *) 0 ;
+  bool arg3 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int res2 ;
+  char *buf2 = 0 ;
+  int alloc2 = 0 ;
+  bool val3 ;
+  int ecode3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  char *result = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"iTranslator_GetMsg",3,3,&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_iTranslator, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "iTranslator_GetMsg" "', argument " "1"" of type '" "iTranslator const *""'"); 
+  }
+  arg1 = reinterpret_cast< iTranslator * >(argp1);
+  res2 = SWIG_AsCharPtrAndSize(obj1, &buf2, NULL, &alloc2);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "iTranslator_GetMsg" "', argument " "2"" of type '" "char const *""'");
+  }
+  arg2 = reinterpret_cast< char * >(buf2);
+  ecode3 = SWIG_AsVal_bool(obj2, &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "iTranslator_GetMsg" "', argument " "3"" of type '" "bool""'");
+  } 
+  arg3 = static_cast< bool >(val3);
+  result = (char *)((iTranslator const *)arg1)->GetMsg((char const *)arg2,arg3);
+  resultobj = SWIG_FromCharPtr((const char *)result);
+  if (alloc2 == SWIG_NEWOBJ) delete[] buf2;
+  return resultobj;
+fail:
+  if (alloc2 == SWIG_NEWOBJ) delete[] buf2;
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_iTranslator_GetMsg__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   iTranslator *arg1 = (iTranslator *) 0 ;
   char *arg2 = (char *) 0 ;
@@ -45406,6 +45677,58 @@ SWIGINTERN PyObject *_wrap_iTranslator_GetMsg(PyObject *SWIGUNUSEDPARM(self), Py
   return resultobj;
 fail:
   if (alloc2 == SWIG_NEWOBJ) delete[] buf2;
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_iTranslator_GetMsg(PyObject *self, PyObject *args) {
+  int argc;
+  PyObject *argv[4];
+  int ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = (int)PyObject_Length(args);
+  for (ii = 0; (ii < argc) && (ii < 3); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 2) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_iTranslator, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      int res = SWIG_AsCharPtrAndSize(argv[1], 0, NULL, 0);
+      _v = SWIG_CheckState(res);
+      if (_v) {
+        return _wrap_iTranslator_GetMsg__SWIG_1(self, args);
+      }
+    }
+  }
+  if (argc == 3) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_iTranslator, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      int res = SWIG_AsCharPtrAndSize(argv[1], 0, NULL, 0);
+      _v = SWIG_CheckState(res);
+      if (_v) {
+        {
+          int res = SWIG_AsVal_bool(argv[2], NULL);
+          _v = SWIG_CheckState(res);
+        }
+        if (_v) {
+          return _wrap_iTranslator_GetMsg__SWIG_0(self, args);
+        }
+      }
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number of arguments for overloaded function 'iTranslator_GetMsg'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    GetMsg(iTranslator const *,char const *,bool)\n"
+    "    GetMsg(iTranslator const *,char const *)\n");
   return NULL;
 }
 
@@ -46471,6 +46794,10 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"iTerraSampler_scfGetName", _wrap_iTerraSampler_scfGetName, METH_VARARGS, NULL},
 	 { (char *)"delete_iTerraSampler", _wrap_delete_iTerraSampler, METH_VARARGS, NULL},
 	 { (char *)"iTerraSampler_swigregister", iTerraSampler_swigregister, METH_VARARGS, NULL},
+	 { (char *)"iTranslator_GetCurrentLanguage", _wrap_iTranslator_GetCurrentLanguage, METH_VARARGS, NULL},
+	 { (char *)"iTranslator_SetCurrentLanguage", _wrap_iTranslator_SetCurrentLanguage, METH_VARARGS, NULL},
+	 { (char *)"iTranslator_GetFallbacks", _wrap_iTranslator_GetFallbacks, METH_VARARGS, NULL},
+	 { (char *)"iTranslator_LoadTranslation", _wrap_iTranslator_LoadTranslation, METH_VARARGS, NULL},
 	 { (char *)"iTranslator_GetMsg", _wrap_iTranslator_GetMsg, METH_VARARGS, NULL},
 	 { (char *)"iTranslator_scfGetVersion", _wrap_iTranslator_scfGetVersion, METH_VARARGS, NULL},
 	 { (char *)"iTranslator_scfGetName", _wrap_iTranslator_scfGetName, METH_VARARGS, NULL},
@@ -47103,6 +47430,7 @@ static swig_type_info _swigt__p_iImage = {"_p_iImage", "iImage *", 0, 0, (void*)
 static swig_type_info _swigt__p_iImageModifier = {"_p_iImageModifier", "iImageModifier *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_iJoint = {"_p_iJoint", "iJoint *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_iLight = {"_p_iLight", "iLight *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_iLoaderPlugin = {"_p_iLoaderPlugin", "iLoaderPlugin *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_iMapNode = {"_p_iMapNode", "iMapNode *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_iMaterialWrapper = {"_p_iMaterialWrapper", "iMaterialWrapper *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_iMeshObject = {"_p_iMeshObject", "iMeshObject *", 0, 0, (void*)0, 0};
@@ -47310,6 +47638,7 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_iKeyComposer,
   &_swigt__p_iKeyboardDriver,
   &_swigt__p_iLight,
+  &_swigt__p_iLoaderPlugin,
   &_swigt__p_iMapNode,
   &_swigt__p_iMaterialWrapper,
   &_swigt__p_iMeshObject,
@@ -47575,6 +47904,7 @@ static swig_cast_info _swigc__p_iImage[] = {  {&_swigt__p_iImage, 0, 0, 0},{0, 0
 static swig_cast_info _swigc__p_iImageModifier[] = {  {&_swigt__p_iImageModifier, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_iJoint[] = {  {&_swigt__p_iJoint, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_iLight[] = {  {&_swigt__p_iLight, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_iLoaderPlugin[] = {  {&_swigt__p_iLoaderPlugin, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_iMapNode[] = {  {&_swigt__p_iMapNode, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_iMaterialWrapper[] = {  {&_swigt__p_iMaterialWrapper, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_iMeshObject[] = {  {&_swigt__p_iMeshObject, 0, 0, 0},{0, 0, 0, 0}};
@@ -47782,6 +48112,7 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_iKeyComposer,
   _swigc__p_iKeyboardDriver,
   _swigc__p_iLight,
+  _swigc__p_iLoaderPlugin,
   _swigc__p_iMapNode,
   _swigc__p_iMaterialWrapper,
   _swigc__p_iMeshObject,
