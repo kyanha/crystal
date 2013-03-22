@@ -911,7 +911,6 @@ void csSector::PrepareDraw (iRenderView *rview)
   }
 
   // Mesh generators.
-  csPrintf ("view %p  cam %p\n", rview, rview->GetCamera ());
   const csVector3& pos = rview->GetCamera ()->GetTransform ().GetOrigin ();
   for (i = 0 ; i < meshGenerators.GetSize () ; i++)
   {
