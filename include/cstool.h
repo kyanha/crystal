@@ -48,6 +48,7 @@
 #include "cstool/meshfilter.h"
 #include "cstool/meshobjtmpl.h"
 #include "cstool/mocapparser.h"
+#include "cstool/modifiableimpl.h"
 #include "cstool/normalcalc.h"
 #include "cstool/numberedfilenamehelper.h"
 #include "cstool/objectcomment.h"
