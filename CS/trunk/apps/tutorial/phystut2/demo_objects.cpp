@@ -1369,7 +1369,7 @@ void PhysDemo::SpawnBoxStacks (int stackNum, int stackHeight, float boxLen, floa
   csVector2 hdistDir = dist * dir2;                               // horizontal stack distance in dir
   csVector2 hdistOrth = dist * dirOrth2;                          // horizontal stack distance orthogonal to dir
   
-  int numDir = int (sqrt (stackNum)) + 0.99999f;             // amount of stacks in dir direction
+  int numDir = int (sqrt (float (stackNum))) + 0.99999f;             // amount of stacks in dir direction
   int numOrth = int (stackNum / numDir + 1);                       // amount of stacks in orth direction
 
   float halfWidth = .5f * (numOrth - 1) * (boxLen + hspace);      // half the width of the OBB that covers all box centers
