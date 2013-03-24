@@ -18,6 +18,8 @@
 #
 #============================================================================
 
+ALL_LISTS = ;
+
 ##  ListFile list
 ##    Returns the output file name for a certain file list.
 rule ListFile
@@ -59,16 +61,23 @@ rule DoFileListEntries
 ##    list targets.
 rule DoFileListEntry
 {
-    local target destdir srcdir listfile ;
+    local target destdir srcdir listfile list ;
     dir = [ ConcatDirs $(2) ] ;
     target = $(1:G=filelist!$(SUBDIR:J=!)) ;
+    list = $(4) ;
     
-    listfile = [ ListFile $(4) ] ;
+    if ! [ IsElem $(list) : $(ALL_LISTS) ]
+    {
+      ALL_LISTS += $(list) ;
+    }
+    
+    listfile = [ ListFile $(list) ] ;
     
     SEARCH on $(target) = [ on $(1) GetVar SEARCH ] ;
     NoCare $(target) ;
     WriteFileListEntry $(listfile) : $(target) : $(dir) : $(1) ;
-    Depends $(listfile) : $(target) ;
+
+    LIST_ENTRIES_$(list) += $(target) ;
     
     return $(listfile) ;
 }
