@@ -616,6 +616,7 @@ private:
     CS_ASSERT_MSG ("Invalid type for comparing...",
 		   t == CSVAR_FLOAT || t == CSVAR_LONG || t == CSVAR_VECTOR2 
 		   ||  t == CSVAR_VECTOR3 || t == CSVAR_VECTOR4);
+    (void)t;
   }
 };
 
