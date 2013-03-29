@@ -21,7 +21,8 @@ AC_PREREQ([2.56])
 
 #------------------------------------------------------------------------------
 # CS_CHECK_BUILD_LIBS_SHARED([HEADER-PROPERTY-SHARED],
-#                            [HEADER-PROPERTY-STATIC])
+#                            [HEADER-PROPERTY-STATIC],
+#                            [EMITTER], [EMITTER-OPTIONS])
 #
 # Decides, based on platform and `configure' command line arguments, whether
 # libraries should be built shared or static.
@@ -32,8 +33,14 @@ AC_PREREQ([2.56])
 # if shared libraries are disabled, a preprocessor macro with the name given
 # in HEADER-PROPERTY-STATIC will be defined.
 # HEADER-PROPERTY-STATIC is optional.
+# How the requested preprocessor macros are defined is controlled by the
+# EMITTER and EMITTER-OPTIONS parameters. By default, the CS_HEADER_PROPERTY
+# facility is used.
 #------------------------------------------------------------------------------
 AC_DEFUN([CS_CHECK_BUILD_LIBS_SHARED],
+    [_CS_CHECK_BUILD_LIBS_SHARED([$1], [$2],
+        [m4_default([$3], [CS_HEADER_PROPERTY])], [$4])])
+AC_DEFUN([_CS_CHECK_BUILD_LIBS_SHARED],
     [AC_MSG_CHECKING([whether to build shared libraries])
     case $host_os in
         cygwin*|linux*) enable_shared_default=yes ;;
@@ -46,7 +53,5 @@ AC_DEFUN([CS_CHECK_BUILD_LIBS_SHARED],
     AC_MSG_RESULT([$enable_shared])
     CS_EMIT_BUILD_PROPERTY([BUILD_SHARED_LIBS], [$enable_shared])
     AS_IF([test $enable_shared = yes], 
-      [CS_HEADER_PROPERTY([$1])],
-      m4_ifval([$2], [CS_HEADER_PROPERTY([$2])], []))])
-
-
+      [$3([$1], [$4])],
+      m4_ifval([$2], [$3([$2], [$4])], []))])
