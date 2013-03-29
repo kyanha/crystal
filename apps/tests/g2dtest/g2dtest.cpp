@@ -388,6 +388,10 @@ void G2DTestSystemDriver::StateAdvance ()
       break;
     case stBlitTest:
       break;
+    case stPause:
+    case stWaitKey:
+      // Stay in state, do nothing
+      break;
   }
 }
 
