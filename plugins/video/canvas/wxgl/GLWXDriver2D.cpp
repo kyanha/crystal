@@ -67,8 +67,6 @@
 
 #include "GLWXDriver2D.h"
 
-
-
 SCF_IMPLEMENT_FACTORY (csGraphics2DWX)
 
 // csGraphics2DWX function
@@ -117,8 +115,6 @@ void csGraphics2DWX::Report (int severity, const char* msg, ...)
   }
   va_end (arg);
 }
-
-
 
 bool csGraphics2DWX::Initialize (iObjectRegistry *object_reg)
 {
@@ -189,7 +185,16 @@ bool csGraphics2DWX::SetMouseCursor (csMouseCursorID shape)
 void csGraphics2DWX::SetParent(wxWindow* wx)
 {
   myParent = wx;
-  if (myParent && theCanvas) theCanvas->Reparent(myParent);
+  if (!myParent) return;
+
+  // Recreate the canvas if it has been deleted
+  if (!theCanvas && is_open)
+  {
+    CreateCanvas();
+    // TODO: reset previous config such as mouse cursor
+  }
+
+  if (theCanvas) theCanvas->Reparent(myParent);
 }
 
 wxWindow* csGraphics2DWX::GetWindow()
@@ -218,7 +223,7 @@ void* csGraphics2DWX::GetProcAddress (const char *funcname)
 csGraphics2DWX::~csGraphics2DWX ()
 {
   Close ();
-  // theCanvas is destroyed by wxWindows
+  // All instances of theCanvas are always destroyed by wxWindows
 }
 
 #ifdef USE_GLX
@@ -244,23 +249,8 @@ static const char *visual_class_name (int cls)
 }
 #endif
 
-bool csGraphics2DWX::Open()
+void csGraphics2DWX::CreateCanvas ()
 {
-  if (is_open) return true;
-
-#ifdef WIN32
-  csRef<iWin32Assistant> w32(csQueryRegistry<iWin32Assistant> (object_reg));
-  if(w32 != 0) w32->UseOwnMessageLoop(false);
-#endif
-
-  Report (CS_REPORTER_SEVERITY_NOTIFY, "Opening WX-GL canvas!\n");
-
-  if(myParent == 0)
-  {
-    Report (CS_REPORTER_SEVERITY_ERROR, "Parent frame in wxGLCanvas not initialized!!");
-  return false;
-  }
-
   /*
     GLPixelFormat format;
 
@@ -323,17 +313,38 @@ bool csGraphics2DWX::Open()
     WX_GL_MIN_ACCUM_GREEN, accumComponentSize,
     WX_GL_MIN_ACCUM_ALPHA, format[glpfvAccumAlphaBits],*/
 
-  AllowResize(true);
-
   int w, h;
   myParent->GetClientSize(&w, &h);
 
   theCanvas = new csGLCanvas(this, myParent, wxID_ANY,
-                             wxPoint(0, 0), wxSize(w, h), 0, wxT(""), desired_attributes);
+                             wxPoint(0, 0), wxSize(w, h), 0, wxT(""),
+                             desired_attributes);
+  if(!theCanvas) Report(CS_REPORTER_SEVERITY_ERROR, "Failed creating GL Canvas!");
 
-  if(theCanvas == 0) Report(CS_REPORTER_SEVERITY_ERROR, "Failed creating GL Canvas!");
-  theCanvas->Show (true);
-  theCanvas->SetCurrent ();
+  theCanvas->Show(true);
+  theCanvas->SetCurrent();
+}
+
+bool csGraphics2DWX::Open()
+{
+  if (is_open) return true;
+
+#ifdef WIN32
+  csRef<iWin32Assistant> w32(csQueryRegistry<iWin32Assistant> (object_reg));
+  if(w32 != 0) w32->UseOwnMessageLoop(false);
+#endif
+
+  Report (CS_REPORTER_SEVERITY_NOTIFY, "Opening WX-GL canvas!\n");
+
+  if(myParent == 0)
+  {
+    Report (CS_REPORTER_SEVERITY_ERROR,
+            "Parent frame in wxGLCanvas not initialized!!");
+    return false;
+  }
+
+  AllowResize(true);
+  CreateCanvas();
 
 #ifdef WIN32
 #elif defined(USE_GLX)
@@ -348,8 +359,8 @@ bool csGraphics2DWX::Open()
     if (!glXIsDirect (dpy, active_GLContext))
     {
       Report (CS_REPORTER_SEVERITY_WARNING,
-  "Indirect rendering may indicate a flawed OpenGL setup if you run on "
-  "a local X server.");
+              "Indirect rendering may indicate a flawed OpenGL setup "
+              "if you run on a local X server.");
     }
 
     Depth = xvis->depth;
@@ -402,7 +413,7 @@ bool csGraphics2DWX::Open()
     if (ctype)
     {
       Report (CS_REPORTER_SEVERITY_NOTIFY, "R%d:G%d:B%d:A%d, ",
-	r_bits, g_bits, b_bits, alpha_bits);
+              r_bits, g_bits, b_bits, alpha_bits);
     }
   }
 #endif
@@ -416,6 +427,7 @@ bool csGraphics2DWX::Open()
 
   return true;
 }
+
 #ifdef WIN32
 
 struct DummyWndInfo
@@ -424,6 +436,7 @@ struct DummyWndInfo
   csGraphics2DWX* this_;
   csGraphics2DGLCommon::GLPixelFormat* chosenFormat;
 };
+
 int csGraphics2DWX::FindPixelFormatGDI (HDC hDC, 
                                         csGLPixelFormatPicker& picker)
 {
@@ -486,8 +499,8 @@ int csGraphics2DWX::FindPixelFormatGDI (HDC hDC,
   return newPixelFormat;
 }
 
-
-int csGraphics2DWX::FindPixelFormat (csGLPixelFormatPicker& picker, PIXELFORMATDESCRIPTOR& pfd)
+int csGraphics2DWX::FindPixelFormat (csGLPixelFormatPicker& picker,
+                                     PIXELFORMATDESCRIPTOR& pfd)
 {
   static const char* dummyClassName = "CSGL_DummyWindow";
 
@@ -541,14 +554,16 @@ void csGraphics2DWX::Close(void)
 
   // Close your graphic interface
   csGraphics2DGLCommon::Close ();
-
 }
 
 bool csGraphics2DWX::BeginDraw(void)
 {
+  if (!theCanvas) return false;
+
   theCanvas->SetCurrent();
-  //glClear(GL_COLOR_BUFFER_BIT| GL_DEPTH_BUFFER_BIT |                                                 GL_ACCUM_BUFFER_BIT);
-  if( csGraphics2DGLCommon::BeginDraw())
+
+  //glClear(GL_COLOR_BUFFER_BIT| GL_DEPTH_BUFFER_BIT | GL_ACCUM_BUFFER_BIT);
+  if (csGraphics2DGLCommon::BeginDraw())
   {
     return true;
   }
@@ -557,7 +572,6 @@ bool csGraphics2DWX::BeginDraw(void)
     Report(CS_REPORTER_SEVERITY_ERROR,"Common BeginDraw fails");
     return false;
   }
-
 }
 
 void csGraphics2DWX::FinishDraw(void)
@@ -602,6 +616,8 @@ void csGraphics2DWX::AllowResize (bool iAllow)
   // TODO: do something?
 }
 
+// -------------------------------------------------------------------
+
 BEGIN_EVENT_TABLE(csGLCanvas, wxGLCanvas)
   EVT_SIZE(csGLCanvas::OnSize)
   EVT_PAINT(csGLCanvas::OnPaint)
@@ -620,8 +636,8 @@ csGLCanvas::csGLCanvas(csGraphics2DWX* g, wxWindow *parent,
                        const wxPoint& pos,
                        const wxSize& size, long style,
                        const wxString& name, int* attr)
-  : wxGLCanvas(parent, id, pos, size, style | wxWANTS_CHARS, name, attr),
-        g2d (g), mouseState (0), wheelPosition (0), lastKeyCode (-1)
+  : wxGLCanvas (parent, id, pos, size, style | wxWANTS_CHARS, name, attr),
+  g2d (g), mouseState (0), wheelPosition (0), lastKeyCode (-1)
 {
   int w, h;
   GetClientSize(&w, &h);
@@ -646,6 +662,9 @@ csGLCanvas::csGLCanvas(csGraphics2DWX* g, wxWindow *parent,
 
 csGLCanvas::~csGLCanvas()
 {
+  // The canvas may have been deleted by wxWidgets due to a parent wxWindow getting
+  // deleted too. Hence notify the parent csGraphics2DWX that the canvas is no longer valid.
+  g2d->theCanvas = nullptr;
 }
 
 void csGLCanvas::OnPaint(wxPaintEvent& WXUNUSED(event))

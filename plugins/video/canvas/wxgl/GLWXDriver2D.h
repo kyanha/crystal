@@ -31,7 +31,7 @@ class csGLCanvas;
 class csGraphics2DWX : public scfImplementationExt3<csGraphics2DWX,
                   csGraphics2DGLCommon,
                   iWxWindow,
-		  iWin32Canvas,
+		              iWin32Canvas,
                   iOpenGLInterface>
 #else
 class csGraphics2DWX : public scfImplementationExt2<csGraphics2DWX,
@@ -40,6 +40,8 @@ class csGraphics2DWX : public scfImplementationExt2<csGraphics2DWX,
                   iOpenGLInterface>
 #endif
 {
+  friend class csGLCanvas;
+
   wxWindow* myParent;
   csGLCanvas* theCanvas;
 
@@ -61,6 +63,8 @@ public:
   virtual bool Initialize (iObjectRegistry *object_reg);
   virtual bool Open ();
   virtual void Close ();
+
+  void CreateCanvas ();
 
   /**
    * This routine should be called before any draw operations.
