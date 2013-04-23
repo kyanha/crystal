@@ -517,8 +517,8 @@ bool RMDeferred::RenderView(iView *view, bool recursePortals)
   if (showGBuffer)
     ShowGBuffer (renderTree, &gbuffer);
 
-  startContext->renderTargets[rtaColor0].texHandle = postEffects.GetScreenTarget ();
   postEffects.SetupView (view, startContext->perspectiveFixup);
+  startContext->renderTargets[rtaColor0].texHandle = postEffects.GetScreenTarget ();
 
   // Setup the main context
   {
