@@ -157,13 +157,13 @@ static const csGLTextureManager::FormatTemplate formatsARGB[] = {
   {{ 8,  8,  8,  8}, fmtColor8,    GL_UNSIGNED_INT_8_8_8_8_REV},
   {{ 2, 10, 10, 10}, fmtColor10_2, GL_UNSIGNED_INT_2_10_10_10_REV},
   {{16, 16, 16, 16}, fmtColor16,   UNSIGNED_SHORTS_16_16_16_16_REV},
-  {{0, 0, 0, 0}, 0, 0}
+  {{0, 0, 0, 0}, -1, 0}
 };
 
 static const csGLTextureManager::FormatTemplate formatsARGBfloat[] = {
   {{16, 16, 16, 16}, fmtColor16F,   FLOATS_32_32_32_32_REV},
   {{32, 32, 32, 32}, fmtColor32F,   FLOATS_32_32_32_32_REV},
-  {{0, 0, 0, 0}, 0, 0}
+  {{0, 0, 0, 0}, -1, 0}
 };
 
 enum
