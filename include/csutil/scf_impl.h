@@ -33,13 +33,21 @@
 #error Do not include this file directly. Included from scf_implgen.h
 #endif
 
+#ifdef SCF_IMPL_VIRT
+#  define SCF_IMPL_ITF_DECL     virtual
+#  define SCF_IMPL_NAME_PREFIX  scfVirt
+#else
+#  define SCF_IMPL_ITF_DECL
+#  define SCF_IMPL_NAME_PREFIX  scf
+#endif
+
 #ifndef SCF_IMPL_EXT
-#  define SCF_IMPL_NAME SCF_IMPL_CAT(scfImplementation,SCF_IMPL_N)
+#  define SCF_IMPL_NAME SCF_IMPL_CAT(SCF_IMPL_CAT(SCF_IMPL_NAME_PREFIX, Implementation),SCF_IMPL_N)
 #  define SCF_IMPL_SUPER scfImplementation<Class>
 #  define SCF_IMPL_PRE_TYPES
 #  define SCF_IMPL_PRE_ARGS
 #else /* SCF_IMPL_EXT */
-#  define SCF_IMPL_NAME SCF_IMPL_CAT(scfImplementationExt,SCF_IMPL_N)
+#  define SCF_IMPL_NAME SCF_IMPL_CAT(SCF_IMPL_CAT(SCF_IMPL_NAME_PREFIX, ImplementationExt),SCF_IMPL_N)
 #  define SCF_IMPL_SUPER Super
 #  define SCF_IMPL_PRE_TYPES ,class Super
 #  define SCF_IMPL_PRE_ARGS ,Super
@@ -51,67 +59,82 @@
 #  define SCF_IMPL_ARGS SCF_IMPL_PRE_ARGS
 #elif SCF_IMPL_N == 1
 #  define SCF_IMPL_TYPES SCF_IMPL_PRE_TYPES ,class I1
-#  define SCF_IMPL_INTERFACES ,public I1
+#  define SCF_IMPL_INTERFACES ,public SCF_IMPL_ITF_DECL I1
 #  define SCF_IMPL_ARGS SCF_IMPL_PRE_ARGS ,I1
 #elif SCF_IMPL_N == 2
 #  define SCF_IMPL_TYPES SCF_IMPL_PRE_TYPES ,class I1, class I2
-#  define SCF_IMPL_INTERFACES ,public I1, public I2
+#  define SCF_IMPL_INTERFACES ,public SCF_IMPL_ITF_DECL I1, public SCF_IMPL_ITF_DECL I2
 #  define SCF_IMPL_ARGS SCF_IMPL_PRE_ARGS ,I1, I2
 #elif SCF_IMPL_N == 3
 #  define SCF_IMPL_TYPES SCF_IMPL_PRE_TYPES ,class I1, class I2, class I3
-#  define SCF_IMPL_INTERFACES ,public I1, public I2, public I3
+#  define SCF_IMPL_INTERFACES \
+    ,public SCF_IMPL_ITF_DECL I1, public SCF_IMPL_ITF_DECL I2, public SCF_IMPL_ITF_DECL I3
 #  define SCF_IMPL_ARGS SCF_IMPL_PRE_ARGS ,I1, I2, I3
 #elif SCF_IMPL_N == 4
 #  define SCF_IMPL_TYPES SCF_IMPL_PRE_TYPES \
     ,class I1, class I2, class I3, class I4
 #  define SCF_IMPL_INTERFACES \
-    ,public I1, public I2, public I3, public I4
+    ,public SCF_IMPL_ITF_DECL I1, public SCF_IMPL_ITF_DECL I2 \
+    ,public SCF_IMPL_ITF_DECL I3, public SCF_IMPL_ITF_DECL I4
 #  define SCF_IMPL_ARGS SCF_IMPL_PRE_ARGS ,I1, I2, I3, I4
 #elif SCF_IMPL_N == 5
 #  define SCF_IMPL_TYPES SCF_IMPL_PRE_TYPES \
     ,class I1, class I2, class I3, class I4, class I5
 #  define SCF_IMPL_INTERFACES \
-    ,public I1, public I2, public I3, public I4, public I5
+    ,public SCF_IMPL_ITF_DECL I1, public SCF_IMPL_ITF_DECL I2 \
+    ,public SCF_IMPL_ITF_DECL I3, public SCF_IMPL_ITF_DECL I4 \
+    ,public SCF_IMPL_ITF_DECL I5
 #  define SCF_IMPL_ARGS SCF_IMPL_PRE_ARGS ,I1, I2, I3, I4, I5
 #elif SCF_IMPL_N == 6
 #  define SCF_IMPL_TYPES SCF_IMPL_PRE_TYPES \
     ,class I1, class I2, class I3, class I4, class I5, \
     class I6
 #  define SCF_IMPL_INTERFACES \
-    ,public I1, public I2, public I3, public I4, public I5, \
-    public I6
+    ,public SCF_IMPL_ITF_DECL I1, public SCF_IMPL_ITF_DECL I2 \
+    ,public SCF_IMPL_ITF_DECL I3, public SCF_IMPL_ITF_DECL I4 \
+    ,public SCF_IMPL_ITF_DECL I5, public SCF_IMPL_ITF_DECL I6
 #  define SCF_IMPL_ARGS SCF_IMPL_PRE_ARGS ,I1, I2, I3, I4, I5, I6
 #elif SCF_IMPL_N == 7
 #  define SCF_IMPL_TYPES SCF_IMPL_PRE_TYPES \
     ,class I1, class I2, class I3, class I4, class I5, \
     class I6, class I7
 #  define SCF_IMPL_INTERFACES \
-    ,public I1, public I2, public I3, public I4, public I5, \
-    public I6, public I7
+    ,public SCF_IMPL_ITF_DECL I1, public SCF_IMPL_ITF_DECL I2 \
+    ,public SCF_IMPL_ITF_DECL I3, public SCF_IMPL_ITF_DECL I4 \
+    ,public SCF_IMPL_ITF_DECL I5, public SCF_IMPL_ITF_DECL I6 \
+    ,public I7
 #  define SCF_IMPL_ARGS SCF_IMPL_PRE_ARGS ,I1, I2, I3, I4, I5, I6, I7
 #elif SCF_IMPL_N == 8
 #  define SCF_IMPL_TYPES SCF_IMPL_PRE_TYPES \
     ,class I1, class I2, class I3, class I4, class I5, \
     class I6, class I7, class I8
 #  define SCF_IMPL_INTERFACES \
-    ,public I1, public I2, public I3, public I4, public I5, \
-    public I6, public I7, public I8
+    ,public SCF_IMPL_ITF_DECL I1, public SCF_IMPL_ITF_DECL I2 \
+    ,public SCF_IMPL_ITF_DECL I3, public SCF_IMPL_ITF_DECL I4 \
+    ,public SCF_IMPL_ITF_DECL I5, public SCF_IMPL_ITF_DECL I6 \
+    ,public SCF_IMPL_ITF_DECL I7, public SCF_IMPL_ITF_DECL I8
 #  define SCF_IMPL_ARGS SCF_IMPL_PRE_ARGS ,I1, I2, I3, I4, I5, I6, I7, I8
 #elif SCF_IMPL_N == 9
 #  define SCF_IMPL_TYPES SCF_IMPL_PRE_TYPES \
     ,class I1, class I2, class I3, class I4, class I5, \
     class I6, class I7, class I8, class I9
 #  define SCF_IMPL_INTERFACES \
-    ,public I1, public I2, public I3, public I4, public I5, \
-    public I6, public I7, public I8, public I9
+    ,public SCF_IMPL_ITF_DECL I1, public SCF_IMPL_ITF_DECL I2 \
+    ,public SCF_IMPL_ITF_DECL I3, public SCF_IMPL_ITF_DECL I4 \
+    ,public SCF_IMPL_ITF_DECL I5, public SCF_IMPL_ITF_DECL I6 \
+    ,public SCF_IMPL_ITF_DECL I7, public SCF_IMPL_ITF_DECL I8 \
+    ,public SCF_IMPL_ITF_DECL I9
 #  define SCF_IMPL_ARGS SCF_IMPL_PRE_ARGS ,I1, I2, I3, I4, I5, I6, I7, I8, I9
 #elif SCF_IMPL_N == 10
 #  define SCF_IMPL_TYPES SCF_IMPL_PRE_TYPES \
     ,class I1, class I2, class I3, class I4, class I5, \
     class I6, class I7, class I8, class I9, class I10
 #  define SCF_IMPL_INTERFACES \
-    ,public I1, public I2, public I3, public I4, public I5, \
-    public I6, public I7, public I8, public I9, public I10
+    ,public SCF_IMPL_ITF_DECL I1, public SCF_IMPL_ITF_DECL I2 \
+    ,public SCF_IMPL_ITF_DECL I3, public SCF_IMPL_ITF_DECL I4 \
+    ,public SCF_IMPL_ITF_DECL I5, public SCF_IMPL_ITF_DECL I6 \
+    ,public SCF_IMPL_ITF_DECL I7, public SCF_IMPL_ITF_DECL I8 \
+    ,public SCF_IMPL_ITF_DECL I9, public SCF_IMPL_ITF_DECL I10
 #  define SCF_IMPL_ARGS SCF_IMPL_PRE_ARGS \
     ,I1, I2, I3, I4, I5, I6, I7, I8, I9, I10
 #else
@@ -125,6 +148,41 @@
 
 
 
+#ifdef SCF_IMPL_VIRT
+#ifdef SCF_IMPL_EXT
+/**
+ * Base class to extend the SCF class \c Super with additional virtually
+ * inherited interfaces.
+ * \c Super itself must be derived from one of the scfImplementation* classes.
+ * \c Class is the declared class. 
+ *
+ * Typical usage:
+ * \code
+ * class MyPath : public scfVirtImplementationExt1<MyPath, csPath, iMyPath>
+ * {
+ * public:
+ *   // ... iMyPath methods ... 
+ * };
+ * \endcode
+ */
+#else
+/**
+ * Base class for an SCF class implementation with the given number of 
+ * virtual interfaces.
+ * iBase is implicitly implemented and available.
+ * \c Class is the declared class. 
+ *
+ * Typical usage:
+ * \code
+ * class MyPlugin : public scfVirtImplementation1<MyPlugin, iComponent>
+ * {
+ * public:
+ *   // ... iComponent methods ... 
+ * };
+ * \endcode
+ */
+#endif
+#else
 #ifdef SCF_IMPL_EXT
 /**
  * Base class to extend the SCF class \c Super with additional interfaces.
@@ -155,6 +213,7 @@
  * };
  * \endcode
  */
+#endif
 #endif
 template<class Class SCF_IMPL_TYPES>
 class SCF_IMPL_NAME :
@@ -462,3 +521,5 @@ private:
 #undef SCF_IMPL_ARGS
 #undef SCF_IMPL_INTERFACES
 
+#undef SCF_IMPL_ITF_DECL
+#undef SCF_IMPL_NAME_PREFIX
