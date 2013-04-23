@@ -40,109 +40,15 @@
 class __Doxygen_Workaround__ {};
 #endif
 
-/* The deprecation turn-off may seem odd here - but MSVC emits
-* deprecation warnings when using the destructor of a deprecated
-* class. Since interfaces may be deprecated this may cause 
-* deprecation warnings emitted in ~SCF_IMPL_NAME, which is kinda silly.
-*/
-#include "deprecated_warn_off.h"
+#define SCF_IN_IMPLGEN1_H 1
 
-#define SCF_IN_IMPLGEN_H 1
-// Instead of duplicating the code for every scfImplementationN and
-// scfImplementationExtN, the code is factored out into an include file
-// that we include multiple times.
-#define SCF_IMPL_N 0
-#include "scf_impl.h"
-#undef SCF_IMPL_N
+// Generate classes with direct interface inheritance
+#include "scf_implgen2.h"
 
-#define SCF_IMPL_N 1
-#include "scf_impl.h"
-#undef SCF_IMPL_N
+// Generate classes with virtual interface inheritance
+#define SCF_IMPL_VIRT
+#include "scf_implgen2.h"
+#undef SCF_IMPL_VIRT
 
-#define SCF_IMPL_N 2
-#include "scf_impl.h"
-#undef SCF_IMPL_N
+#undef SCF_IN_IMPLGEN_H1
 
-#define SCF_IMPL_N 3
-#include "scf_impl.h"
-#undef SCF_IMPL_N
-
-#define SCF_IMPL_N 4
-#include "scf_impl.h"
-#undef SCF_IMPL_N
-
-#define SCF_IMPL_N 5
-#include "scf_impl.h"
-#undef SCF_IMPL_N
-
-#define SCF_IMPL_N 6
-#include "scf_impl.h"
-#undef SCF_IMPL_N
-
-#define SCF_IMPL_N 7
-#include "scf_impl.h"
-#undef SCF_IMPL_N
-/*
-#define SCF_IMPL_N 8
-#include "scf_impl.h"
-#undef SCF_IMPL_N
-
-#define SCF_IMPL_N 9
-#include "scf_impl.h"
-#undef SCF_IMPL_N
-
-#define SCF_IMPL_N 10
-#include "scf_impl.h"
-#undef SCF_IMPL_N
-*/
-// Now all the scfImplementationExt are defined
-#define SCF_IMPL_EXT
-
-#define SCF_IMPL_N 0
-#include "scf_impl.h"
-#undef SCF_IMPL_N
-
-#define SCF_IMPL_N 1
-#include "scf_impl.h"
-#undef SCF_IMPL_N
-
-#define SCF_IMPL_N 2
-#include "scf_impl.h"
-#undef SCF_IMPL_N
-
-#define SCF_IMPL_N 3
-#include "scf_impl.h"
-#undef SCF_IMPL_N
-
-#define SCF_IMPL_N 4
-#include "scf_impl.h"
-#undef SCF_IMPL_N
-
-#define SCF_IMPL_N 5
-#include "scf_impl.h"
-#undef SCF_IMPL_N
-
-#define SCF_IMPL_N 6
-#include "scf_impl.h"
-#undef SCF_IMPL_N
-
-#define SCF_IMPL_N 7
-#include "scf_impl.h"
-#undef SCF_IMPL_N
-/*
-#define SCF_IMPL_N 8
-#include "scf_impl.h"
-#undef SCF_IMPL_N
-
-#define SCF_IMPL_N 9
-#include "scf_impl.h"
-#undef SCF_IMPL_N
-
-#define SCF_IMPL_N 10
-#include "scf_impl.h"
-#undef SCF_IMPL_N
-*/
-#undef SCF_IMPL_EXT
-#undef SCF_IN_IMPLGEN_H
-
-#include "deprecated_warn_on.h"
