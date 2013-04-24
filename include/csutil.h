@@ -131,6 +131,7 @@
 #include "csutil/scanstr.h"
 #include "csutil/scf.h"
 #include "csutil/scf_implementation.h"
+#include "csutil/scf_implgen2.h"
 #include "csutil/scf_interface.h"
 #include "csutil/scfarray.h"
 #include "csutil/scfstr.h"
