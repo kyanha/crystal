@@ -130,6 +130,8 @@ bool csGraphics2DOpenGL::Initialize (iObjectRegistry *object_reg)
   if (!csGraphics2DGLCommon::Initialize (object_reg))
     return false;
 
+  wglext.Initialize (object_reg, this);
+
   m_piWin32Assistant = csQueryRegistry<iWin32Assistant> (object_reg);
   if (!m_piWin32Assistant)
     SystemFatalError (L"csGraphics2DOpenGL::Open(QI) -- system passed does not support iWin32Assistant.");
@@ -236,6 +238,20 @@ int csGraphics2DOpenGL::FindPixelFormatWGL (csGLPixelFormatPicker& picker)
   return dwi.pixelFormat;
 }
 
+static const char* GetWGLextStr (HDC hDC)
+{
+  csWGLGETEXTENSIONSSTRINGARB wglGetExtensionsStringARB =
+    (csWGLGETEXTENSIONSSTRINGARB)wglGetProcAddress ("wglGetExtensionsStringARB");
+  if (wglGetExtensionsStringARB)
+  {
+    return wglGetExtensionsStringARB (hDC);
+  }
+  else
+  {
+    return (const char*)glGetString (GL_EXTENSIONS);
+  }
+}
+
 LRESULT CALLBACK csGraphics2DOpenGL::DummyWindow (HWND hWnd, UINT message,
   WPARAM wParam, LPARAM lParam)
 {
@@ -266,14 +282,14 @@ LRESULT CALLBACK csGraphics2DOpenGL::DummyWindow (HWND hWnd, UINT message,
       HGLRC hGLRC = wglCreateContext (hDC);
       wglMakeCurrent (hDC, hGLRC);
 
-      csGLExtensionManager& ext = dwi->this_->ext;
-      ext.Open();
+      CS::WGLExtensionManager& wglext = dwi->this_->wglext;
+      wglext.Open (GetWGLextStr (hDC));
 
       dwi->this_->detector.DoDetection (hWnd, hDC);
       dwi->this_->OpenDriverDB ("preinit");
 
-      ext.InitWGL_ARB_pixel_format (hDC);
-      if (ext.CS_WGL_ARB_pixel_format)
+      wglext.InitWGL_ARB_pixel_format (hDC);
+      if (wglext.CS_WGL_ARB_pixel_format)
       {
 	unsigned int numFormats = 0;
 	int iAttributes[26];
@@ -312,14 +328,14 @@ LRESULT CALLBACK csGraphics2DOpenGL::DummyWindow (HWND hWnd, UINT message,
 	  iAttributes[index++] = 0;
 	  iAttributes[index++] = 0;
 
-	  if ((ext.wglChoosePixelFormatARB (hDC, iAttributes, fAttributes,
+	  if ((wglext.wglChoosePixelFormatARB (hDC, iAttributes, fAttributes,
 	    1, &dwi->pixelFormat, &numFormats) == GL_TRUE) && (numFormats != 0))
 	  {
 	    int queriedAttrs[] = {WGL_SAMPLES_ARB};
 	    const int queriedAttrNum = sizeof(queriedAttrs) / sizeof(int);
 	    int attrValues[queriedAttrNum];
 
-	    if (ext.wglGetPixelFormatAttribivARB (hDC, dwi->pixelFormat, 0,
+	    if (wglext.wglGetPixelFormatAttribivARB (hDC, dwi->pixelFormat, 0,
 	      queriedAttrNum, queriedAttrs, attrValues) == GL_TRUE)
 	    {
 	      (*dwi->chosenFormat)[glpfvMultiSamples] = attrValues[0];
@@ -491,12 +507,14 @@ bool csGraphics2DOpenGL::Open ()
   if (!csGraphics2DGLCommon::Open ())
     return false;
 
-  ext.InitWGL_EXT_swap_control (hDC);
+  wglext.Open (GetWGLextStr (hDC));
 
-  if (ext.CS_WGL_EXT_swap_control)
+  wglext.InitWGL_EXT_swap_control (hDC);
+
+  if (wglext.CS_WGL_EXT_swap_control)
   {
-    ext.wglSwapIntervalEXT (vsync ? 1 : 0);
-    vsync = (ext.wglGetSwapIntervalEXT() != 0);
+    wglext.wglSwapIntervalEXT (vsync ? 1 : 0);
+    vsync = (wglext.wglGetSwapIntervalEXT() != 0);
     Report (CS_REPORTER_SEVERITY_NOTIFY,
       "VSync is %s.", 
       vsync ? "enabled" : "disabled");
