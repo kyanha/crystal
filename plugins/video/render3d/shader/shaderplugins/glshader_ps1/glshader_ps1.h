@@ -27,8 +27,11 @@ Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
 #include "ps1_instr.h"
 
-struct csGLExtensionManager;
 class csGLStateCache;
+namespace CS
+{
+  struct GLExtensionManager;
+}
 
 CS_PLUGIN_NAMESPACE_BEGIN(GLShaderPS1)
 {
@@ -43,7 +46,7 @@ private:
 
   void Report (int severity, const char* msg, ...);
 public:
-  csGLExtensionManager* ext;
+  CS::GLExtensionManager* ext;
   csGLStateCache* stateCache;
   iObjectRegistry* object_reg;
   bool useLists;

@@ -23,7 +23,10 @@
 
 #include "csplugincommon/opengl/shaderplugin.h"
 
-struct csGLExtensionManager;
+namespace CS
+{
+  struct GLExtensionManager;
+}
 struct iFile;
 
 CS_PLUGIN_NAMESPACE_BEGIN(GLShaderCg)
@@ -47,7 +50,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(GLShaderCg)
       CS::PluginCommon::ShaderProgramPluginGL::HardwareVendor vendor,
       CGprofile profile);
     
-    void GetCurrentLimits (csGLExtensionManager* ext);
+    void GetCurrentLimits (CS::GLExtensionManager* ext);
     void ReadFromConfig (iConfigFile* cfg, const char* prefix);
     void GetCgDefaults ();
     
@@ -82,7 +85,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(GLShaderCg)
     void SetDefaults ();
     /// Like cgGetProfileString(), but also handles CG_PROFILE_UNKNOWN
     static const char* GetProfileString (CGprofile);
-    static uint glGetProgramInteger (csGLExtensionManager* ext,
+    static uint glGetProgramInteger (CS::GLExtensionManager* ext,
       GLenum target, GLenum what);
   };
   
@@ -103,7 +106,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(GLShaderCg)
       CGprofile profileFP) : vp (vendorVP, profileVP),
         fp (vendorFP, profileFP) {}
       
-    void GetCurrentLimits (csGLExtensionManager* ext)
+    void GetCurrentLimits (CS::GLExtensionManager* ext)
     {
       vp.GetCurrentLimits (ext);
       fp.GetCurrentLimits (ext);

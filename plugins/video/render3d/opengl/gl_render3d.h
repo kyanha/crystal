@@ -54,8 +54,6 @@
 #include "profilinghelper.h"
 #include "querypool.h"
 
-struct csGLExtensionManager;
-
 struct iBugPlug;
 struct iClipper2D;
 struct iLightingManager;
@@ -68,10 +66,11 @@ struct iEvent;
 
 namespace CS
 {
-namespace Graphics
-{
-  struct AlphaTestOptions;
-}
+  struct GLExtensionManager;
+  namespace Graphics
+  {
+    struct AlphaTestOptions;
+  }
 }
 
 CS_PLUGIN_NAMESPACE_BEGIN(gl3d)

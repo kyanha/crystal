@@ -34,8 +34,6 @@ Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 #include "profile_limits.h"
 #include "progcache.h"
 
-struct csGLExtensionManager;
-
 CS_PLUGIN_NAMESPACE_BEGIN(GLShaderCg)
 {
 class StringStore;

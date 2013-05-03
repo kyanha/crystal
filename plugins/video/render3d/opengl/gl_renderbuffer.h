@@ -26,8 +26,11 @@
 #include "csutil/scf_implementation.h"
 #include "csutil/set.h"
 
-struct csGLExtensionManager;
 class csGLStateCache;
+namespace CS
+{
+  struct GLExtensionManager;
+}
 
 CS_PLUGIN_NAMESPACE_BEGIN(gl3d)
 {
@@ -55,7 +58,7 @@ class csGLVBOBufferManager : public scfImplementation1<csGLVBOBufferManager,
 {
 public:  
   CS_LEAKGUARD_DECLARE (csGLVBOBufferManager);
-  csGLVBOBufferManager (csGLGraphics3D* G3D, csGLExtensionManager *ext,
+  csGLVBOBufferManager (csGLGraphics3D* G3D, CS::GLExtensionManager *ext,
     csGLStateCache *state, size_t maxAlloction = 64*1024*1024,
     bool forceSeparateVBOs = false);
   virtual ~csGLVBOBufferManager ();
@@ -108,7 +111,7 @@ private:
 
   // Global state
   csGLGraphics3D* G3D;
-  csGLExtensionManager *extensionManager; 
+  CS::GLExtensionManager *extensionManager; 
   csGLStateCache *stateCache;
 
   size_t currentVBOAllocation;
