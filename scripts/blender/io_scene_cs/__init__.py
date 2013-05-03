@@ -30,11 +30,6 @@ def register():
     bpy.utils.register_module(__name__)
     #bpy.types.INFO_MT_file_export.append(menu_func)
 
-    if "io_scene_cs.settings" not in bpy.data.texts:
-        bpy.data.texts.new("io_scene_cs.settings")
-    if "io_scene_cs.utilities" not in bpy.data.texts:
-        bpy.data.texts.new("io_scene_cs.utilities")
-
     from . import utilities
     from . import ui
     from . import io
