@@ -25,6 +25,7 @@
 
 #include "csutil/scf.h"
 #include "csplugincommon/opengl/glcommon2d.h"
+#include "csplugincommon/opengl/glxextmanager.h"
 #include "csplugincommon/iopengl/openglinterface.h"
 #include "ivaria/xwindow.h"
 
@@ -39,6 +40,7 @@
 class csGraphics2DGLX : public scfImplementationExt1<csGraphics2DGLX , 
   csGraphics2DGLCommon, iOpenGLInterface>
 {
+  CS::GLXExtensionManager glxext;
   csRef<iXWindow> xwin;
   // The display context
   Display* dpy;

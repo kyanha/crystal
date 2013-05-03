@@ -8,9 +8,6 @@ from string import *
 
 xmldoc = minidom.parse ("metaglext.xml")
 
-writtenFuncs = list()
-writtenFuncTypes = list()
-
 templates = {}
 
 def getTemplate (template):
@@ -115,67 +112,88 @@ def getArgument (arg, prevarg):
     return interpolate (getTemplate ("func_arg"), values);
 
 
-def getDefinitions (ext):
-    name = ext.getAttribute ("name");
-    #type = ((name.split ("_"))[0]).lower();
-    type = ext.getAttribute ("type")
-    values = { "name" : name, "tokens" : "", "functiontypes" : "" };
-    for const in ext.getElementsByTagName ("token"):
-      values["tokens"] = values["tokens"] + join (getConstant (const), "");
-    for func in ext.getElementsByTagName ("function"):
-      if func.getAttribute("name") not in writtenFuncTypes:
-	values["functiontypes"] = values["functiontypes"] + \
-	  join (getFunctionType (func), "");
-	writtenFuncTypes.append (func.getAttribute("name"))
-    return interpolate (getTemplateK ("defs", type), values);
+class Extensions(object):
+    def __init__(self):
+        self.writtenFuncs = list()
+        self.writtenFuncTypes = list()
+        self.tflags = list()
+        self.dflags = list()
+        self.initflags = list()
+        self.defs = list()
+        self.funcs = list()
+        self.initext = list()
 
-def getExtensions (extensions):
-    tflags = list();
-    dflags = list();
-    initflags = list();
-    defs = list();
-    funcs = list();
-    initext = list();
-    for ext in extensions:
+    def getDefinitions (self, ext, template_key):
+        name = ext.getAttribute ("name");
+        #type = ((name.split ("_"))[0]).lower();
+        values = { "name" : name, "tokens" : "", "functiontypes" : "" };
+        for const in ext.getElementsByTagName ("token"):
+          values["tokens"] = values["tokens"] + join (getConstant (const), "");
+        for func in ext.getElementsByTagName ("function"):
+          if func.getAttribute("name") not in self.writtenFuncTypes:
+            values["functiontypes"] = values["functiontypes"] + \
+              join (getFunctionType (func), "");
+            self.writtenFuncTypes.append (func.getAttribute("name"))
+        return interpolate (getTemplateK ("defs", template_key), values);
+
+    def getFunctions (self, ext, template_key):
+      funcs = list();
       name = ext.getAttribute ("name");
       #type = ((name.split ("_"))[0]).lower();
-      type = ext.getAttribute ("type")
-      print name + "...";
-      values = { "name" : name };
-      print " flags...";
-      tflags += interpolate (getTemplate ("ext_tested"), values);
-      dflags += interpolate (getTemplateK ("ext_flag", type), values);
-      initflags += interpolate (getTemplate ("ext_init"), values);
-      print " tokens...";
-      defs += getDefinitions (ext);
-      print " funcs...";
-      funcs += getFunctions (ext);
-      initext += getInitExtensions (ext);
-    values = {
-      "definitions" : concat (defs),
-      "initflags" : concat (initflags),
-      "functions" : concat (funcs),
-      "extflagsdetected" : concat (dflags),
-      "extflagstested" : concat (tflags),
-      "initextensions" : concat (initext)
-    };
-    print "assembling...";
-    return interpolate (getTemplate ("headerfiletemplate"), values);
+      for func in ext.getElementsByTagName ("function"):
+        values = { "name" : func.getAttribute("name") };
+        if func.getAttribute("name") not in self.writtenFuncs:
+          funcs = funcs + interpolate (getTemplate ("func"), values);
+          self.writtenFuncs.append (func.getAttribute("name"))
+      values = {"name" : name, "functions" : join (funcs, "") };
+      return interpolate (getTemplateK ("funcs", template_key), values);
 
-def getFunctions (ext):
-  funcs = list();
-  name = ext.getAttribute ("name");
-  #type = ((name.split ("_"))[0]).lower();
-  type = ext.getAttribute ("type")
-  for func in ext.getElementsByTagName ("function"):
-    values = { "name" : func.getAttribute("name") };
-    if func.getAttribute("name") not in writtenFuncs:
-      funcs = funcs + interpolate (getTemplate ("func"), values);
-      writtenFuncs.append (func.getAttribute("name"))
-  values = {"name" : name, "functions" : join (funcs, "") };
-  return interpolate (getTemplateK ("funcs", type), values);
+def getExtensions (extensions):
+    by_type = dict();
+    for ext in extensions:
+        name = ext.getAttribute ("name");
+        #type = ((name.split ("_"))[0]).lower();
+        type = ext.getAttribute ("type")
+        print name + "...";
+        template_key = type
+        if type.startswith("ver"):
+            type = type[3:]
+            template_key = type + "ver"
+        elif type.startswith("pseudo"):
+            type = type[6:]
+            template_key = "pseudo"
+        if type in by_type:
+            ext_data = by_type[type]
+        else:
+            ext_data = Extensions()
+            by_type[type] = ext_data
+        values = { "name" : name }
+        print " flags..."
+        ext_data.tflags += interpolate (getTemplate ("ext_tested"), values)
+        ext_data.dflags += interpolate (getTemplateK ("ext_flag", template_key), values)
+        ext_data.initflags += interpolate (getTemplate ("ext_init"), values)
+        print " tokens..."
+        ext_data.defs += ext_data.getDefinitions (ext, template_key)
+        print " funcs..."
+        ext_data.funcs += ext_data.getFunctions (ext, template_key)
+        ext_data.initext += getInitExtensions (ext, template_key)
+    interpolated = dict()
+    for (type, ext_dat) in by_type.iteritems():
+        values = {
+          "definitions" : concat (ext_dat.defs),
+          "initflags" : concat (ext_dat.initflags),
+          "functions" : concat (ext_dat.funcs),
+          "extflagsdetected" : concat (ext_dat.dflags),
+          "extflagstested" : concat (ext_dat.tflags),
+          "initextensions" : concat (ext_dat.initext),
+          "tech": type,
+          "footer": join (getTemplateK ("footer", type), "")
+        };
+        print "assembling " + type + "...";
+        interpolated[type] = interpolate (getTemplate ("headerfiletemplate"), values);
+    return interpolated
 
-def getInitExtensions (ext):
+def getInitExtensions (ext, template_key):
     cfgprefix = "Video.OpenGL.UseExtension.";
     name = ext.getAttribute ("name")
     values = { 
@@ -186,21 +204,19 @@ def getInitExtensions (ext):
       "functionsinit" : "",
       "depcheck" : "" };
     #type = ((name.split ("_"))[0]).lower();
-    type = ext.getAttribute ("type")
-    ettype = type;
     specials = ( 
       "WGL_ARB_extensions_string"
       );
     if name in specials:
       ettype = "special";
     values["extcheck"] = join (interpolate (getTemplateK ("extcheck", 
-      ettype), values), "");
+      template_key), values), "");
     for func in ext.getElementsByTagName ("function"):
       values["functionsinit"] += join (getFunctionInit (func), "");
     for dep in ext.getElementsByTagName ("depends"):
       values["depcheck"] += join (getDependency (dep), "");
     return interpolate (getTemplateK ("initext", 
-      type), values);
+      template_key), values);
 
 def getFunctionInit (func):
     name = func.getAttribute ("name")
@@ -214,11 +230,12 @@ def getDependency (dep):
       "ext" : ext};
     return interpolate (getTemplate ("depends"), values);
 
-stuff = join (getExtensions (xmldoc.getElementsByTagName ("extension")),
-  "");
-output = file ("glextmanager.h", "w")
-output.write ("/**\n")
-output.write (" * WARNING - This file is automagically generated from scripts/glextgen/glextgen.py\n")
-output.write (" */\n\n")
-output.write (stuff)
-output.close ()
+by_type = getExtensions (xmldoc.getElementsByTagName ("extension"))
+for (type, ext_header) in by_type.iteritems():
+    stuff = join (ext_header, "")
+    output = file (type.lower() + "extmanager.h", "w")
+    output.write ("/**\n")
+    output.write (" * WARNING - This file is automagically generated from scripts/glextgen/glextgen.py\n")
+    output.write (" */\n\n")
+    output.write (stuff)
+    output.close ()

@@ -29,11 +29,12 @@
 #include "csplugincommon/shader/shaderplugin.h"
 #include "csutil/scf_implementation.h"
 
-struct csGLExtensionManager;
 class csGLStateCache;
 
 namespace CS
 {
+  struct GLExtensionManager;
+
   namespace PluginCommon
   {
     /**
@@ -99,7 +100,7 @@ namespace CS
       /// Object registry
       iObjectRegistry* object_reg;
       /// GL extension manager
-      csGLExtensionManager* ext;
+      CS::GLExtensionManager* ext;
       /// GL state cache
       csGLStateCache* statecache;
       /// Whether verbose reporting was enabled.

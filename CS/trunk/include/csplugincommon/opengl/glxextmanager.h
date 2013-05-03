@@ -1,3 +1,7 @@
+/**
+ * WARNING - This file is automagically generated from scripts/glextgen/glextgen.py
+ */
+
 /*
   Copyright (C) 2002 by Anders Stenberg
 
@@ -30,11 +34,11 @@
  */
 
 /**\file
- * %Tech% extensions manager
+ * GLX extensions manager
  */
 
-#ifndef __CS_%Tech%EXTENSIONMANAGER_H__
-#define __CS_%Tech%EXTENSIONMANAGER_H__
+#ifndef __CS_GLXEXTENSIONMANAGER_H__
+#define __CS_GLXEXTENSIONMANAGER_H__
 
 /**********************************************************************
  * Begin system-specific stuff.
@@ -166,7 +170,47 @@ typedef uint64 GLuint64;
 #include "csutil/stringquote.h"
 #include "csplugincommon/iopengl/openglinterface.h"
 
-%Definitions%
+#ifdef CS_OPENGL_GLX
+/**\name GLX_ARB_multisample constants
+ * For a description of what this ext does, see <a href="http://www.opengl.org/registry/specs//ARB_multisample.txt">http://www.opengl.org/registry/specs//ARB_multisample.txt</a>.
+ * @{ */
+#ifndef GLX_SAMPLE_BUFFERS_ARB
+#define GLX_SAMPLE_BUFFERS_ARB                                       100000
+#endif
+
+#ifndef GLX_SAMPLES_ARB
+#define GLX_SAMPLES_ARB                                              100001
+#endif
+
+
+/** @} */
+
+/**\name GLX_ARB_multisample functions
+ * For a description of what this ext does, see <a href="http://www.opengl.org/registry/specs//ARB_multisample.txt">http://www.opengl.org/registry/specs//ARB_multisample.txt</a>.
+ * @{ */
+
+/** @} */
+#endif
+
+#ifdef CS_OPENGL_GLX
+/**\name GLX_ARB_framebuffer_sRGB constants
+ * For a description of what this ext does, see <a href="http://www.opengl.org/registry/specs//ARB_framebuffer_sRGB.txt">http://www.opengl.org/registry/specs//ARB_framebuffer_sRGB.txt</a>.
+ * @{ */
+#ifndef GLX_FRAMEBUFFER_SRGB_CAPABLE_ARB
+#define GLX_FRAMEBUFFER_SRGB_CAPABLE_ARB                             0x20B2
+#endif
+
+
+/** @} */
+
+/**\name GLX_ARB_framebuffer_sRGB functions
+ * For a description of what this ext does, see <a href="http://www.opengl.org/registry/specs//ARB_framebuffer_sRGB.txt">http://www.opengl.org/registry/specs//ARB_framebuffer_sRGB.txt</a>.
+ * @{ */
+
+/** @} */
+#endif
+
+
 
 // end of definitions
 
@@ -210,29 +254,53 @@ typedef uint64 GLuint64;
 namespace CS
 {
 
-/// Struct containing all %Tech% extension functions.
-struct %Tech%ExtensionFunctions
+/// Struct containing all GLX extension functions.
+struct GLXExtensionFunctions
 {
 public:
-%Functions%
+#ifdef CS_OPENGL_GLX
+  /**\name GLX_ARB_multisample functions
+   * For a description of what this ext does, see <a href="http://www.opengl.org/registry/specs//ARB_multisample.txt">http://www.opengl.org/registry/specs//ARB_multisample.txt</a>.
+   * @{ */
+
+  /** @} */
+#endif // CS_OPENGL_GLX
+
+#ifdef CS_OPENGL_GLX
+  /**\name GLX_ARB_framebuffer_sRGB functions
+   * For a description of what this ext does, see <a href="http://www.opengl.org/registry/specs//ARB_framebuffer_sRGB.txt">http://www.opengl.org/registry/specs//ARB_framebuffer_sRGB.txt</a>.
+   * @{ */
+
+  /** @} */
+#endif // CS_OPENGL_GLX
+
+
 // end of functions
 };
 
-/// Struct containing all %Tech% extension test flags.
-struct %Tech%ExtensionFlags
+/// Struct containing all GLX extension test flags.
+struct GLXExtensionFlags
 {
 public:
-%ExtFlagsDetected%
+  /** Whether the <a href="http://www.opengl.org/registry/specs//ARB_multisample.txt">GLX_ARB_multisample</a> extension was found. 
+   * Set by csGLExtensionManager::InitGLX_ARB_multisample(). */
+  bool CS_GLX_ARB_multisample;
+  /** Whether the <a href="http://www.opengl.org/registry/specs//ARB_framebuffer_sRGB.txt">GLX_ARB_framebuffer_sRGB</a> extension was found. 
+   * Set by csGLExtensionManager::InitGLX_ARB_framebuffer_sRGB(). */
+  bool CS_GLX_ARB_framebuffer_sRGB;
+
 protected:
-%ExtFlagsTested%
+  bool tested_CS_GLX_ARB_multisample;
+  bool tested_CS_GLX_ARB_framebuffer_sRGB;
+
 };
 
 /**
- * %Tech% extensions manager. Checks for the presence of specific GL extensions
+ * GLX extensions manager. Checks for the presence of specific GL extensions
  * and fetches all function pointers if present.
  */
-struct %Tech%ExtensionManager : public %Tech%ExtensionFunctions,
-			      public %Tech%ExtensionFlags
+struct GLXExtensionManager : public GLXExtensionFunctions,
+			      public GLXExtensionFlags
 {
 private:
   iObjectRegistry* object_reg;
@@ -352,26 +420,94 @@ public:
     extstrGLX = 0;
 #endif
 
-    memset ((%Tech%ExtensionFunctions*)this, 0, 
-      sizeof (%Tech%ExtensionFunctions));
-    memset ((%Tech%ExtensionFlags*)this, 0, sizeof (%Tech%ExtensionFlags));
+    memset ((GLXExtensionFunctions*)this, 0, 
+      sizeof (GLXExtensionFunctions));
+    memset ((GLXExtensionFlags*)this, 0, sizeof (GLXExtensionFlags));
   }
   
-  %Tech%ExtensionManager () : object_reg (0), gl (0), doVerbose (false),
+  GLXExtensionManager () : object_reg (0), gl (0), doVerbose (false),
     defaultUse (true)
   {
-    msgExtRetrieveFail = "Failed to retrieve %%s";
-    msgExtFoundAndUsed = "%%s Extension %%s found and used.";
-    msgExtFoundAndNotUsed = "%%s Extension %%s found, but not used.";
-    msgExtInitFail = "%%s Extension %%s failed to initialize.";
-    msgExtNotFound = "%%s Extension %%s not found.";
-    msgDependencyNotFound = "%%s Extension %%s depends on %%s which did "
+    msgExtRetrieveFail = "Failed to retrieve %s";
+    msgExtFoundAndUsed = "%s Extension %s found and used.";
+    msgExtFoundAndNotUsed = "%s Extension %s found, but not used.";
+    msgExtInitFail = "%s Extension %s failed to initialize.";
+    msgExtNotFound = "%s Extension %s not found.";
+    msgDependencyNotFound = "%s Extension %s depends on %s which did "
       "not initialize.";
     
     Reset ();
   }
   
-%InitExtensions%
+#if defined(CS_OPENGL_GLX) && defined (CS_GLEXTMANAGER_USE_GLX)
+  /** Initialize <a href="http://www.opengl.org/registry/specs//ARB_multisample.txt">GLX_ARB_multisample</a> extension. 
+   * Check presence with csGLExtensionFlags::CS_GLX_ARB_multisample. */
+  void InitGLX_ARB_multisample (Display* glxDisplay, int glxScreen)
+  {
+    if (tested_CS_GLX_ARB_multisample) return;
+    tested_CS_GLX_ARB_multisample = true;
+    const char* ext = "GLX_ARB_multisample";
+    char cfgkey[26 + 19 + 1];
+    sprintf (cfgkey, "Video.OpenGL.UseExtension.%s", ext);
+    
+    (void)glxDisplay;      // avoid `unused variable' warning.
+    (void)glxScreen;
+    SetupGLXextStr (glxDisplay, glxScreen);
+    if (!extstrGLX) return;
+    CS_GLX_ARB_multisample = CheckExtension (extstrGLX, ext);
+
+    bool allclear, funcTest;
+    (void)funcTest; // avoid `unused variable' warning.
+    bool init = CS_GLX_ARB_multisample;
+    allclear = true;
+    if (init)
+    {
+
+      EXTMGR_REPORT_INIT_RESULT("GLX", GLX_ARB_multisample)
+      CS_GLX_ARB_multisample &= allclear;
+    }
+    else
+    {
+      Report (msgExtNotFound, "GLX", CS::Quote::Single (ext));
+    }
+  }
+#endif
+
+#if defined(CS_OPENGL_GLX) && defined (CS_GLEXTMANAGER_USE_GLX)
+  /** Initialize <a href="http://www.opengl.org/registry/specs//ARB_framebuffer_sRGB.txt">GLX_ARB_framebuffer_sRGB</a> extension. 
+   * Check presence with csGLExtensionFlags::CS_GLX_ARB_framebuffer_sRGB. */
+  void InitGLX_ARB_framebuffer_sRGB (Display* glxDisplay, int glxScreen)
+  {
+    if (tested_CS_GLX_ARB_framebuffer_sRGB) return;
+    tested_CS_GLX_ARB_framebuffer_sRGB = true;
+    const char* ext = "GLX_ARB_framebuffer_sRGB";
+    char cfgkey[26 + 24 + 1];
+    sprintf (cfgkey, "Video.OpenGL.UseExtension.%s", ext);
+    
+    (void)glxDisplay;      // avoid `unused variable' warning.
+    (void)glxScreen;
+    SetupGLXextStr (glxDisplay, glxScreen);
+    if (!extstrGLX) return;
+    CS_GLX_ARB_framebuffer_sRGB = CheckExtension (extstrGLX, ext);
+
+    bool allclear, funcTest;
+    (void)funcTest; // avoid `unused variable' warning.
+    bool init = CS_GLX_ARB_framebuffer_sRGB;
+    allclear = true;
+    if (init)
+    {
+
+      EXTMGR_REPORT_INIT_RESULT("GLX", GLX_ARB_framebuffer_sRGB)
+      CS_GLX_ARB_framebuffer_sRGB &= allclear;
+    }
+    else
+    {
+      Report (msgExtNotFound, "GLX", CS::Quote::Single (ext));
+    }
+  }
+#endif
+
+
 };
 
 #undef REPORT_MISSING_ENTRIES
@@ -381,7 +517,7 @@ public:
 
 } // namespace CS
 
-%Footer%
 
-#endif // __CS_%Tech%EXTENSIONMANAGER_H__
+
+#endif // __CS_GLXEXTENSIONMANAGER_H__
 

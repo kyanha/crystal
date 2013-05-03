@@ -72,6 +72,7 @@ bool csGraphics2DGLX::Initialize (iObjectRegistry *object_reg)
 
   if (!csGraphics2DGLCommon::Initialize (object_reg))
     return false;
+  glxext.Initialize (object_reg, this);
 
   /* Mesa DRI drivers don't support S3TC compressed textures entirely, only
    * upload. This behaviour is not conform to the specification for the
@@ -134,7 +135,8 @@ bool csGraphics2DGLX::Open ()
   // to destroy double buffered contexts and then create a single buffered
   // one.
   
-  ext.InitGLX_ARB_multisample (dpy, screen_num);
+  glxext.Open();
+  glxext.InitGLX_ARB_multisample (dpy, screen_num);
 
   if (!ChooseVisual ())
     return false;
@@ -240,7 +242,7 @@ bool csGraphics2DGLX::ChooseVisual ()
   csGLPixelFormatPicker picker (this);
   csDirtyAccessArray<int> desired_attributes;
   
-  bool tryMultisample = ext.CS_GLX_ARB_multisample;
+  bool tryMultisample = glxext.CS_GLX_ARB_multisample;
   
   for (int run = (tryMultisample ? 2 : 1); (run-- > 0) && !xvis; )
   {
@@ -429,7 +431,7 @@ void csGraphics2DGLX::GetCurrentAttributes ()
   currentFormat[glpfvAccumColorBits] = accumBits;
   currentFormat[glpfvAccumAlphaBits] = accumAlpha;
   
-  if (ext.CS_GLX_ARB_multisample)
+  if (glxext.CS_GLX_ARB_multisample)
   {
     int v;
     glXGetConfig (dpy, xvis, GLX_SAMPLES_ARB, &v);
