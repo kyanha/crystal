@@ -57,6 +57,11 @@ def ExportWorld(path):
       are exported as separated libraries in the 'factories' subfolder.
   """
 
+  if "io_scene_cs.settings" not in bpy.data.texts:
+    bpy.data.texts.new("io_scene_cs.settings")
+  if "io_scene_cs.utilities" not in bpy.data.texts:
+    bpy.data.texts.new("io_scene_cs.utilities")
+
   # Create the export directory for textures
   if not os.path.exists(Join(path, 'textures/')):
     os.makedirs(Join(path, 'textures/'))
