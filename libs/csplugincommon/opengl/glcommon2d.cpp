@@ -60,7 +60,8 @@ namespace CS
         if (!CS::PluginCommon::Graphics2DCommon::Initialize (object_reg))
           return false;
 
-        ext.Initialize (object_reg, this);
+        csRef<iOpenGLInterface> gli (scfQueryInterface<iOpenGLInterface> (this));
+        ext.Initialize (object_reg, gli);
 
         csConfigAccess config (object_reg);
         multiFavorQuality = config->GetBool ("Video.OpenGL.MultisampleFavorQuality");

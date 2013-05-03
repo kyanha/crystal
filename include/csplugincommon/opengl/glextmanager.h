@@ -17320,10 +17320,10 @@ private:
     return true;
   }
 public:
-  void Initialize (iObjectRegistry* object_reg, iGraphics2D* g2d)
+  void Initialize (iObjectRegistry* object_reg, iOpenGLInterface* gli)
   {
     this->object_reg = object_reg;
-    gl = csRef<iOpenGLInterface> (scfQueryInterface<iOpenGLInterface> (g2d));
+    gl = gli;
     // Low priority so canvas/renderer cfgs may override the settings
     config.AddConfig (object_reg, "/config/glext.cfg", true,
       iConfigManager::ConfigPriorityPlugin - 1);
