@@ -134,9 +134,9 @@ bool csGraphics2DGLX::Open ()
   // We now select the visual here as with a mesa bug it is not possible
   // to destroy double buffered contexts and then create a single buffered
   // one.
-  
-  glxext.Open();
-  glxext.InitGLX_ARB_multisample (dpy, screen_num);
+
+  glxext.Open (glXQueryExtensionsString (dpy, screen_num));
+  glxext.InitGLX_ARB_multisample ();
 
   if (!ChooseVisual ())
     return false;
