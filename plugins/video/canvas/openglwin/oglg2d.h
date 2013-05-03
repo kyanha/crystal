@@ -23,6 +23,7 @@
 #include "csutil/scf.h"
 #include "csplugincommon/canvas/graph2d.h"
 #include "csplugincommon/opengl/glcommon2d.h"
+#include "csplugincommon/opengl/wglextmanager.h"
 #include "csplugincommon/iopengl/openglinterface.h"
 #include "csplugincommon/win32/customcursor.h"
 
@@ -109,6 +110,7 @@ public:
   virtual bool SetWindowDecoration (WindowDecoration decoration, bool flag);
   virtual bool GetWindowDecoration (WindowDecoration decoration);
 protected:
+  CS::WGLExtensionManager wglext;
 
   HDC hDC;
   HGLRC hGLRC;
