@@ -85,7 +85,7 @@ namespace CS
       {
         if (is_open) return true;
 
-        ext.Open ();
+        ext.Open ((const char*)glGetString (GL_EXTENSIONS));
         OpenDriverDB ();
 
         statecache = new csGLStateCache (&ext);

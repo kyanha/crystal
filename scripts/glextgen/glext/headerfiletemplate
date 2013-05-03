@@ -241,7 +241,7 @@ private:
   bool doVerbose;
   bool defaultUse;
   
-  const char* extstrGL;
+  const char* extstr;
   const char* msgExtRetrieveFail;
   const char* msgExtFoundAndUsed;
   const char* msgExtFoundAndNotUsed;
@@ -249,6 +249,7 @@ private:
   const char* msgExtNotFound;
   const char* msgDependencyNotFound;
 
+#if 0
 #ifdef __WIN32__
   const char* extstrWGL;
   void SetupWGLextStr (HDC hDC)
@@ -264,17 +265,6 @@ private:
     {
       extstrWGL = extstrGL;
     }
-  }
-#endif
-
-#ifdef CS_OPENGL_GLX
-  const char* extstrGLX;
-#ifdef CS_GLEXTMANAGER_USE_GLX
-  void SetupGLXextStr (Display* glxDisplay, int glxScreen)
-  {
-    if (extstrGLX != 0) return;
-  
-    extstrGLX = glXQueryExtensionsString (glxDisplay, glxScreen);
   }
 #endif
 #endif
@@ -332,9 +322,9 @@ public:
     doVerbose = verbosemgr->Enabled ("renderer");
   }
   
-  void Open () 
+  void Open (const char* extstr) 
   { 
-    extstrGL = (const char*)glGetString (GL_EXTENSIONS);
+    this->extstr = extstr;
     defaultUse = config->GetBool ("Video.OpenGL.UseExtension.ALL", true);
     if (!defaultUse)
       Report ("ALL extensions are disabled by default");
@@ -344,13 +334,7 @@ public:
 public:
   void Reset ()
   {
-    extstrGL = 0;
-#ifdef __WIN32__
-    extstrWGL = 0;
-#endif
-#ifdef CS_OPENGL_GLX
-    extstrGLX = 0;
-#endif
+    this->extstr = nullptr;
 
     memset ((%Tech%ExtensionFunctions*)this, 0, 
       sizeof (%Tech%ExtensionFunctions));

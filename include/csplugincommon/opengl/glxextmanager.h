@@ -309,7 +309,7 @@ private:
   bool doVerbose;
   bool defaultUse;
   
-  const char* extstrGL;
+  const char* extstr;
   const char* msgExtRetrieveFail;
   const char* msgExtFoundAndUsed;
   const char* msgExtFoundAndNotUsed;
@@ -317,6 +317,7 @@ private:
   const char* msgExtNotFound;
   const char* msgDependencyNotFound;
 
+#if 0
 #ifdef __WIN32__
   const char* extstrWGL;
   void SetupWGLextStr (HDC hDC)
@@ -332,17 +333,6 @@ private:
     {
       extstrWGL = extstrGL;
     }
-  }
-#endif
-
-#ifdef CS_OPENGL_GLX
-  const char* extstrGLX;
-#ifdef CS_GLEXTMANAGER_USE_GLX
-  void SetupGLXextStr (Display* glxDisplay, int glxScreen)
-  {
-    if (extstrGLX != 0) return;
-  
-    extstrGLX = glXQueryExtensionsString (glxDisplay, glxScreen);
   }
 #endif
 #endif
@@ -400,9 +390,9 @@ public:
     doVerbose = verbosemgr->Enabled ("renderer");
   }
   
-  void Open () 
+  void Open (const char* extstr) 
   { 
-    extstrGL = (const char*)glGetString (GL_EXTENSIONS);
+    this->extstr = extstr;
     defaultUse = config->GetBool ("Video.OpenGL.UseExtension.ALL", true);
     if (!defaultUse)
       Report ("ALL extensions are disabled by default");
@@ -412,13 +402,7 @@ public:
 public:
   void Reset ()
   {
-    extstrGL = 0;
-#ifdef __WIN32__
-    extstrWGL = 0;
-#endif
-#ifdef CS_OPENGL_GLX
-    extstrGLX = 0;
-#endif
+    this->extstr = nullptr;
 
     memset ((GLXExtensionFunctions*)this, 0, 
       sizeof (GLXExtensionFunctions));
@@ -442,7 +426,7 @@ public:
 #if defined(CS_OPENGL_GLX) && defined (CS_GLEXTMANAGER_USE_GLX)
   /** Initialize <a href="http://www.opengl.org/registry/specs//ARB_multisample.txt">GLX_ARB_multisample</a> extension. 
    * Check presence with csGLExtensionFlags::CS_GLX_ARB_multisample. */
-  void InitGLX_ARB_multisample (Display* glxDisplay, int glxScreen)
+  void InitGLX_ARB_multisample ()
   {
     if (tested_CS_GLX_ARB_multisample) return;
     tested_CS_GLX_ARB_multisample = true;
@@ -450,11 +434,8 @@ public:
     char cfgkey[26 + 19 + 1];
     sprintf (cfgkey, "Video.OpenGL.UseExtension.%s", ext);
     
-    (void)glxDisplay;      // avoid `unused variable' warning.
-    (void)glxScreen;
-    SetupGLXextStr (glxDisplay, glxScreen);
-    if (!extstrGLX) return;
-    CS_GLX_ARB_multisample = CheckExtension (extstrGLX, ext);
+    if (!extstr) return;
+    CS_GLX_ARB_multisample = CheckExtension (extstr, ext);
 
     bool allclear, funcTest;
     (void)funcTest; // avoid `unused variable' warning.
@@ -476,7 +457,7 @@ public:
 #if defined(CS_OPENGL_GLX) && defined (CS_GLEXTMANAGER_USE_GLX)
   /** Initialize <a href="http://www.opengl.org/registry/specs//ARB_framebuffer_sRGB.txt">GLX_ARB_framebuffer_sRGB</a> extension. 
    * Check presence with csGLExtensionFlags::CS_GLX_ARB_framebuffer_sRGB. */
-  void InitGLX_ARB_framebuffer_sRGB (Display* glxDisplay, int glxScreen)
+  void InitGLX_ARB_framebuffer_sRGB ()
   {
     if (tested_CS_GLX_ARB_framebuffer_sRGB) return;
     tested_CS_GLX_ARB_framebuffer_sRGB = true;
@@ -484,11 +465,8 @@ public:
     char cfgkey[26 + 24 + 1];
     sprintf (cfgkey, "Video.OpenGL.UseExtension.%s", ext);
     
-    (void)glxDisplay;      // avoid `unused variable' warning.
-    (void)glxScreen;
-    SetupGLXextStr (glxDisplay, glxScreen);
-    if (!extstrGLX) return;
-    CS_GLX_ARB_framebuffer_sRGB = CheckExtension (extstrGLX, ext);
+    if (!extstr) return;
+    CS_GLX_ARB_framebuffer_sRGB = CheckExtension (extstr, ext);
 
     bool allclear, funcTest;
     (void)funcTest; // avoid `unused variable' warning.

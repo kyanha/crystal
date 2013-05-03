@@ -1763,7 +1763,7 @@ private:
   bool doVerbose;
   bool defaultUse;
   
-  const char* extstrGL;
+  const char* extstr;
   const char* msgExtRetrieveFail;
   const char* msgExtFoundAndUsed;
   const char* msgExtFoundAndNotUsed;
@@ -1771,6 +1771,7 @@ private:
   const char* msgExtNotFound;
   const char* msgDependencyNotFound;
 
+#if 0
 #ifdef __WIN32__
   const char* extstrWGL;
   void SetupWGLextStr (HDC hDC)
@@ -1786,17 +1787,6 @@ private:
     {
       extstrWGL = extstrGL;
     }
-  }
-#endif
-
-#ifdef CS_OPENGL_GLX
-  const char* extstrGLX;
-#ifdef CS_GLEXTMANAGER_USE_GLX
-  void SetupGLXextStr (Display* glxDisplay, int glxScreen)
-  {
-    if (extstrGLX != 0) return;
-  
-    extstrGLX = glXQueryExtensionsString (glxDisplay, glxScreen);
   }
 #endif
 #endif
@@ -1854,9 +1844,9 @@ public:
     doVerbose = verbosemgr->Enabled ("renderer");
   }
   
-  void Open () 
+  void Open (const char* extstr) 
   { 
-    extstrGL = (const char*)glGetString (GL_EXTENSIONS);
+    this->extstr = extstr;
     defaultUse = config->GetBool ("Video.OpenGL.UseExtension.ALL", true);
     if (!defaultUse)
       Report ("ALL extensions are disabled by default");
@@ -1866,13 +1856,7 @@ public:
 public:
   void Reset ()
   {
-    extstrGL = 0;
-#ifdef __WIN32__
-    extstrWGL = 0;
-#endif
-#ifdef CS_OPENGL_GLX
-    extstrGLX = 0;
-#endif
+    this->extstr = nullptr;
 
     memset ((WGLExtensionFunctions*)this, 0, 
       sizeof (WGLExtensionFunctions));
@@ -1905,9 +1889,8 @@ public:
     sprintf (cfgkey, "Video.OpenGL.UseExtension.%s", ext);
     
     (void)hDC;      // avoid `unused variable' warning.
-    SetupWGLextStr (hDC);
-    if (!extstrWGL) return;
-    CS_WGL_ARB_extensions_string = CheckExtension (extstrWGL, ext);
+    if (!extstr) return;
+    CS_WGL_ARB_extensions_string = CheckExtension (extstr, ext);
 
     bool allclear, funcTest;
     (void)funcTest; // avoid `unused variable' warning.
@@ -1939,9 +1922,8 @@ public:
     sprintf (cfgkey, "Video.OpenGL.UseExtension.%s", ext);
     
     (void)hDC;      // avoid `unused variable' warning.
-    SetupWGLextStr (hDC);
-    if (!extstrWGL) return;
-    CS_WGL_ARB_buffer_region = CheckExtension (extstrWGL, ext);
+    if (!extstr) return;
+    CS_WGL_ARB_buffer_region = CheckExtension (extstr, ext);
 
     bool allclear, funcTest;
     (void)funcTest; // avoid `unused variable' warning.
@@ -1976,9 +1958,8 @@ public:
     sprintf (cfgkey, "Video.OpenGL.UseExtension.%s", ext);
     
     (void)hDC;      // avoid `unused variable' warning.
-    SetupWGLextStr (hDC);
-    if (!extstrWGL) return;
-    CS_WGL_I3D_image_buffer = CheckExtension (extstrWGL, ext);
+    if (!extstr) return;
+    CS_WGL_I3D_image_buffer = CheckExtension (extstr, ext);
 
     bool allclear, funcTest;
     (void)funcTest; // avoid `unused variable' warning.
@@ -2013,9 +1994,8 @@ public:
     sprintf (cfgkey, "Video.OpenGL.UseExtension.%s", ext);
     
     (void)hDC;      // avoid `unused variable' warning.
-    SetupWGLextStr (hDC);
-    if (!extstrWGL) return;
-    CS_WGL_I3D_swap_frame_lock = CheckExtension (extstrWGL, ext);
+    if (!extstr) return;
+    CS_WGL_I3D_swap_frame_lock = CheckExtension (extstr, ext);
 
     bool allclear, funcTest;
     (void)funcTest; // avoid `unused variable' warning.
@@ -2050,9 +2030,8 @@ public:
     sprintf (cfgkey, "Video.OpenGL.UseExtension.%s", ext);
     
     (void)hDC;      // avoid `unused variable' warning.
-    SetupWGLextStr (hDC);
-    if (!extstrWGL) return;
-    CS_WGL_I3D_swap_frame_usage = CheckExtension (extstrWGL, ext);
+    if (!extstr) return;
+    CS_WGL_I3D_swap_frame_usage = CheckExtension (extstr, ext);
 
     bool allclear, funcTest;
     (void)funcTest; // avoid `unused variable' warning.
@@ -2087,9 +2066,8 @@ public:
     sprintf (cfgkey, "Video.OpenGL.UseExtension.%s", ext);
     
     (void)hDC;      // avoid `unused variable' warning.
-    SetupWGLextStr (hDC);
-    if (!extstrWGL) return;
-    CS_WGL_ARB_pixel_format = CheckExtension (extstrWGL, ext);
+    if (!extstr) return;
+    CS_WGL_ARB_pixel_format = CheckExtension (extstr, ext);
 
     bool allclear, funcTest;
     (void)funcTest; // avoid `unused variable' warning.
@@ -2123,9 +2101,8 @@ public:
     sprintf (cfgkey, "Video.OpenGL.UseExtension.%s", ext);
     
     (void)hDC;      // avoid `unused variable' warning.
-    SetupWGLextStr (hDC);
-    if (!extstrWGL) return;
-    CS_WGL_ARB_make_current_read = CheckExtension (extstrWGL, ext);
+    if (!extstr) return;
+    CS_WGL_ARB_make_current_read = CheckExtension (extstr, ext);
 
     bool allclear, funcTest;
     (void)funcTest; // avoid `unused variable' warning.
@@ -2158,9 +2135,8 @@ public:
     sprintf (cfgkey, "Video.OpenGL.UseExtension.%s", ext);
     
     (void)hDC;      // avoid `unused variable' warning.
-    SetupWGLextStr (hDC);
-    if (!extstrWGL) return;
-    CS_WGL_ARB_pbuffer = CheckExtension (extstrWGL, ext);
+    if (!extstr) return;
+    CS_WGL_ARB_pbuffer = CheckExtension (extstr, ext);
 
     bool allclear, funcTest;
     (void)funcTest; // avoid `unused variable' warning.
@@ -2196,9 +2172,8 @@ public:
     sprintf (cfgkey, "Video.OpenGL.UseExtension.%s", ext);
     
     (void)hDC;      // avoid `unused variable' warning.
-    SetupWGLextStr (hDC);
-    if (!extstrWGL) return;
-    CS_WGL_EXT_swap_control = CheckExtension (extstrWGL, ext);
+    if (!extstr) return;
+    CS_WGL_EXT_swap_control = CheckExtension (extstr, ext);
 
     bool allclear, funcTest;
     (void)funcTest; // avoid `unused variable' warning.
@@ -2231,9 +2206,8 @@ public:
     sprintf (cfgkey, "Video.OpenGL.UseExtension.%s", ext);
     
     (void)hDC;      // avoid `unused variable' warning.
-    SetupWGLextStr (hDC);
-    if (!extstrWGL) return;
-    CS_WGL_ARB_render_texture = CheckExtension (extstrWGL, ext);
+    if (!extstr) return;
+    CS_WGL_ARB_render_texture = CheckExtension (extstr, ext);
 
     bool allclear, funcTest;
     (void)funcTest; // avoid `unused variable' warning.
@@ -2267,9 +2241,8 @@ public:
     sprintf (cfgkey, "Video.OpenGL.UseExtension.%s", ext);
     
     (void)hDC;      // avoid `unused variable' warning.
-    SetupWGLextStr (hDC);
-    if (!extstrWGL) return;
-    CS_WGL_EXT_extensions_string = CheckExtension (extstrWGL, ext);
+    if (!extstr) return;
+    CS_WGL_EXT_extensions_string = CheckExtension (extstr, ext);
 
     bool allclear, funcTest;
     (void)funcTest; // avoid `unused variable' warning.
@@ -2301,9 +2274,8 @@ public:
     sprintf (cfgkey, "Video.OpenGL.UseExtension.%s", ext);
     
     (void)hDC;      // avoid `unused variable' warning.
-    SetupWGLextStr (hDC);
-    if (!extstrWGL) return;
-    CS_WGL_EXT_make_current_read = CheckExtension (extstrWGL, ext);
+    if (!extstr) return;
+    CS_WGL_EXT_make_current_read = CheckExtension (extstr, ext);
 
     bool allclear, funcTest;
     (void)funcTest; // avoid `unused variable' warning.
@@ -2336,9 +2308,8 @@ public:
     sprintf (cfgkey, "Video.OpenGL.UseExtension.%s", ext);
     
     (void)hDC;      // avoid `unused variable' warning.
-    SetupWGLextStr (hDC);
-    if (!extstrWGL) return;
-    CS_WGL_EXT_pbuffer = CheckExtension (extstrWGL, ext);
+    if (!extstr) return;
+    CS_WGL_EXT_pbuffer = CheckExtension (extstr, ext);
 
     bool allclear, funcTest;
     (void)funcTest; // avoid `unused variable' warning.
@@ -2374,9 +2345,8 @@ public:
     sprintf (cfgkey, "Video.OpenGL.UseExtension.%s", ext);
     
     (void)hDC;      // avoid `unused variable' warning.
-    SetupWGLextStr (hDC);
-    if (!extstrWGL) return;
-    CS_WGL_EXT_pixel_format = CheckExtension (extstrWGL, ext);
+    if (!extstr) return;
+    CS_WGL_EXT_pixel_format = CheckExtension (extstr, ext);
 
     bool allclear, funcTest;
     (void)funcTest; // avoid `unused variable' warning.
@@ -2410,9 +2380,8 @@ public:
     sprintf (cfgkey, "Video.OpenGL.UseExtension.%s", ext);
     
     (void)hDC;      // avoid `unused variable' warning.
-    SetupWGLextStr (hDC);
-    if (!extstrWGL) return;
-    CS_WGL_I3D_digital_video_control = CheckExtension (extstrWGL, ext);
+    if (!extstr) return;
+    CS_WGL_I3D_digital_video_control = CheckExtension (extstr, ext);
 
     bool allclear, funcTest;
     (void)funcTest; // avoid `unused variable' warning.
@@ -2445,9 +2414,8 @@ public:
     sprintf (cfgkey, "Video.OpenGL.UseExtension.%s", ext);
     
     (void)hDC;      // avoid `unused variable' warning.
-    SetupWGLextStr (hDC);
-    if (!extstrWGL) return;
-    CS_WGL_I3D_gamma = CheckExtension (extstrWGL, ext);
+    if (!extstr) return;
+    CS_WGL_I3D_gamma = CheckExtension (extstr, ext);
 
     bool allclear, funcTest;
     (void)funcTest; // avoid `unused variable' warning.
@@ -2482,9 +2450,8 @@ public:
     sprintf (cfgkey, "Video.OpenGL.UseExtension.%s", ext);
     
     (void)hDC;      // avoid `unused variable' warning.
-    SetupWGLextStr (hDC);
-    if (!extstrWGL) return;
-    CS_WGL_I3D_genlock = CheckExtension (extstrWGL, ext);
+    if (!extstr) return;
+    CS_WGL_I3D_genlock = CheckExtension (extstr, ext);
 
     bool allclear, funcTest;
     (void)funcTest; // avoid `unused variable' warning.
@@ -2527,9 +2494,8 @@ public:
     sprintf (cfgkey, "Video.OpenGL.UseExtension.%s", ext);
     
     (void)hDC;      // avoid `unused variable' warning.
-    SetupWGLextStr (hDC);
-    if (!extstrWGL) return;
-    CS_WGL_ARB_framebuffer_sRGB = CheckExtension (extstrWGL, ext);
+    if (!extstr) return;
+    CS_WGL_ARB_framebuffer_sRGB = CheckExtension (extstr, ext);
 
     bool allclear, funcTest;
     (void)funcTest; // avoid `unused variable' warning.
