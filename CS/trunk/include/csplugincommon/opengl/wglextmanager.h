@@ -1771,26 +1771,6 @@ private:
   const char* msgExtNotFound;
   const char* msgDependencyNotFound;
 
-#if 0
-#ifdef __WIN32__
-  const char* extstrWGL;
-  void SetupWGLextStr (HDC hDC)
-  {
-    if (extstrWGL != 0) return;
-  
-    if (!tested_CS_WGL_ARB_extensions_string) InitWGL_ARB_extensions_string (hDC);
-    if (CS_WGL_ARB_extensions_string)
-    {
-      extstrWGL = wglGetExtensionsStringARB (hDC);
-    }
-    else
-    {
-      extstrWGL = extstrGL;
-    }
-  }
-#endif
-#endif
-
   void Report (const char* msg, ...)
   {
     if (!doVerbose)
