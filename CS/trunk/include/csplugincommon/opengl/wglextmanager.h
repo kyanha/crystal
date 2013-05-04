@@ -1860,7 +1860,7 @@ public:
 #ifdef _WIN32
   /** Initialize <a href="http://www.opengl.org/registry/specs/ARB/wgl_extensions_string.txt">WGL_ARB_extensions_string</a> extension. 
    * Check presence with csGLExtensionFlags::CS_WGL_ARB_extensions_string. */
-  void InitWGL_ARB_extensions_string (HDC hDC)
+  void InitWGL_ARB_extensions_string ()
   {
     if (tested_CS_WGL_ARB_extensions_string) return;
     tested_CS_WGL_ARB_extensions_string = true;
@@ -1868,7 +1868,6 @@ public:
     char cfgkey[26 + 25 + 1];
     sprintf (cfgkey, "Video.OpenGL.UseExtension.%s", ext);
     
-    (void)hDC;      // avoid `unused variable' warning.
     if (!extstr) return;
     CS_WGL_ARB_extensions_string = CheckExtension (extstr, ext);
 
@@ -1893,7 +1892,7 @@ public:
 #ifdef _WIN32
   /** Initialize <a href="http://www.opengl.org/registry/specs/ARB/wgl_buffer_region.txt">WGL_ARB_buffer_region</a> extension. 
    * Check presence with csGLExtensionFlags::CS_WGL_ARB_buffer_region. */
-  void InitWGL_ARB_buffer_region (HDC hDC)
+  void InitWGL_ARB_buffer_region ()
   {
     if (tested_CS_WGL_ARB_buffer_region) return;
     tested_CS_WGL_ARB_buffer_region = true;
@@ -1901,7 +1900,6 @@ public:
     char cfgkey[26 + 21 + 1];
     sprintf (cfgkey, "Video.OpenGL.UseExtension.%s", ext);
     
-    (void)hDC;      // avoid `unused variable' warning.
     if (!extstr) return;
     CS_WGL_ARB_buffer_region = CheckExtension (extstr, ext);
 
@@ -1929,7 +1927,7 @@ public:
 #ifdef _WIN32
   /** Initialize <a href="http://www.opengl.org/registry/specs/I3D/wgl_image_buffer.txt">WGL_I3D_image_buffer</a> extension. 
    * Check presence with csGLExtensionFlags::CS_WGL_I3D_image_buffer. */
-  void InitWGL_I3D_image_buffer (HDC hDC)
+  void InitWGL_I3D_image_buffer ()
   {
     if (tested_CS_WGL_I3D_image_buffer) return;
     tested_CS_WGL_I3D_image_buffer = true;
@@ -1937,7 +1935,6 @@ public:
     char cfgkey[26 + 20 + 1];
     sprintf (cfgkey, "Video.OpenGL.UseExtension.%s", ext);
     
-    (void)hDC;      // avoid `unused variable' warning.
     if (!extstr) return;
     CS_WGL_I3D_image_buffer = CheckExtension (extstr, ext);
 
@@ -1965,7 +1962,7 @@ public:
 #ifdef _WIN32
   /** Initialize <a href="http://www.opengl.org/registry/specs/I3D/wgl_swap_frame_lock.txt">WGL_I3D_swap_frame_lock</a> extension. 
    * Check presence with csGLExtensionFlags::CS_WGL_I3D_swap_frame_lock. */
-  void InitWGL_I3D_swap_frame_lock (HDC hDC)
+  void InitWGL_I3D_swap_frame_lock ()
   {
     if (tested_CS_WGL_I3D_swap_frame_lock) return;
     tested_CS_WGL_I3D_swap_frame_lock = true;
@@ -1973,7 +1970,6 @@ public:
     char cfgkey[26 + 23 + 1];
     sprintf (cfgkey, "Video.OpenGL.UseExtension.%s", ext);
     
-    (void)hDC;      // avoid `unused variable' warning.
     if (!extstr) return;
     CS_WGL_I3D_swap_frame_lock = CheckExtension (extstr, ext);
 
@@ -2001,7 +1997,7 @@ public:
 #ifdef _WIN32
   /** Initialize <a href="http://www.opengl.org/registry/specs/I3D/wgl_swap_frame_usage.txt">WGL_I3D_swap_frame_usage</a> extension. 
    * Check presence with csGLExtensionFlags::CS_WGL_I3D_swap_frame_usage. */
-  void InitWGL_I3D_swap_frame_usage (HDC hDC)
+  void InitWGL_I3D_swap_frame_usage ()
   {
     if (tested_CS_WGL_I3D_swap_frame_usage) return;
     tested_CS_WGL_I3D_swap_frame_usage = true;
@@ -2009,7 +2005,6 @@ public:
     char cfgkey[26 + 24 + 1];
     sprintf (cfgkey, "Video.OpenGL.UseExtension.%s", ext);
     
-    (void)hDC;      // avoid `unused variable' warning.
     if (!extstr) return;
     CS_WGL_I3D_swap_frame_usage = CheckExtension (extstr, ext);
 
@@ -2037,7 +2032,7 @@ public:
 #ifdef _WIN32
   /** Initialize <a href="http://www.opengl.org/registry/specs/ARB/wgl_pixel_format.txt">WGL_ARB_pixel_format</a> extension. 
    * Check presence with csGLExtensionFlags::CS_WGL_ARB_pixel_format. */
-  void InitWGL_ARB_pixel_format (HDC hDC)
+  void InitWGL_ARB_pixel_format ()
   {
     if (tested_CS_WGL_ARB_pixel_format) return;
     tested_CS_WGL_ARB_pixel_format = true;
@@ -2045,7 +2040,6 @@ public:
     char cfgkey[26 + 20 + 1];
     sprintf (cfgkey, "Video.OpenGL.UseExtension.%s", ext);
     
-    (void)hDC;      // avoid `unused variable' warning.
     if (!extstr) return;
     CS_WGL_ARB_pixel_format = CheckExtension (extstr, ext);
 
@@ -2072,7 +2066,7 @@ public:
 #ifdef _WIN32
   /** Initialize <a href="http://www.opengl.org/registry/specs/ARB/wgl_make_current_read.txt">WGL_ARB_make_current_read</a> extension. 
    * Check presence with csGLExtensionFlags::CS_WGL_ARB_make_current_read. */
-  void InitWGL_ARB_make_current_read (HDC hDC)
+  void InitWGL_ARB_make_current_read ()
   {
     if (tested_CS_WGL_ARB_make_current_read) return;
     tested_CS_WGL_ARB_make_current_read = true;
@@ -2080,7 +2074,6 @@ public:
     char cfgkey[26 + 25 + 1];
     sprintf (cfgkey, "Video.OpenGL.UseExtension.%s", ext);
     
-    (void)hDC;      // avoid `unused variable' warning.
     if (!extstr) return;
     CS_WGL_ARB_make_current_read = CheckExtension (extstr, ext);
 
@@ -2106,7 +2099,7 @@ public:
 #ifdef _WIN32
   /** Initialize <a href="http://www.opengl.org/registry/specs/ARB/wgl_pbuffer.txt">WGL_ARB_pbuffer</a> extension. 
    * Check presence with csGLExtensionFlags::CS_WGL_ARB_pbuffer. */
-  void InitWGL_ARB_pbuffer (HDC hDC)
+  void InitWGL_ARB_pbuffer ()
   {
     if (tested_CS_WGL_ARB_pbuffer) return;
     tested_CS_WGL_ARB_pbuffer = true;
@@ -2114,7 +2107,6 @@ public:
     char cfgkey[26 + 15 + 1];
     sprintf (cfgkey, "Video.OpenGL.UseExtension.%s", ext);
     
-    (void)hDC;      // avoid `unused variable' warning.
     if (!extstr) return;
     CS_WGL_ARB_pbuffer = CheckExtension (extstr, ext);
 
@@ -2143,7 +2135,7 @@ public:
 #ifdef _WIN32
   /** Initialize <a href="http://www.opengl.org/registry/specs/EXT/wgl_swap_control.txt">WGL_EXT_swap_control</a> extension. 
    * Check presence with csGLExtensionFlags::CS_WGL_EXT_swap_control. */
-  void InitWGL_EXT_swap_control (HDC hDC)
+  void InitWGL_EXT_swap_control ()
   {
     if (tested_CS_WGL_EXT_swap_control) return;
     tested_CS_WGL_EXT_swap_control = true;
@@ -2151,7 +2143,6 @@ public:
     char cfgkey[26 + 20 + 1];
     sprintf (cfgkey, "Video.OpenGL.UseExtension.%s", ext);
     
-    (void)hDC;      // avoid `unused variable' warning.
     if (!extstr) return;
     CS_WGL_EXT_swap_control = CheckExtension (extstr, ext);
 
@@ -2177,7 +2168,7 @@ public:
 #ifdef _WIN32
   /** Initialize <a href="http://www.opengl.org/registry/specs/ARB/wgl_render_texture.txt">WGL_ARB_render_texture</a> extension. 
    * Check presence with csGLExtensionFlags::CS_WGL_ARB_render_texture. */
-  void InitWGL_ARB_render_texture (HDC hDC)
+  void InitWGL_ARB_render_texture ()
   {
     if (tested_CS_WGL_ARB_render_texture) return;
     tested_CS_WGL_ARB_render_texture = true;
@@ -2185,7 +2176,6 @@ public:
     char cfgkey[26 + 22 + 1];
     sprintf (cfgkey, "Video.OpenGL.UseExtension.%s", ext);
     
-    (void)hDC;      // avoid `unused variable' warning.
     if (!extstr) return;
     CS_WGL_ARB_render_texture = CheckExtension (extstr, ext);
 
@@ -2212,7 +2202,7 @@ public:
 #ifdef _WIN32
   /** Initialize <a href="http://www.opengl.org/registry/specs/EXT/wgl_extensions_string.txt">WGL_EXT_extensions_string</a> extension. 
    * Check presence with csGLExtensionFlags::CS_WGL_EXT_extensions_string. */
-  void InitWGL_EXT_extensions_string (HDC hDC)
+  void InitWGL_EXT_extensions_string ()
   {
     if (tested_CS_WGL_EXT_extensions_string) return;
     tested_CS_WGL_EXT_extensions_string = true;
@@ -2220,7 +2210,6 @@ public:
     char cfgkey[26 + 25 + 1];
     sprintf (cfgkey, "Video.OpenGL.UseExtension.%s", ext);
     
-    (void)hDC;      // avoid `unused variable' warning.
     if (!extstr) return;
     CS_WGL_EXT_extensions_string = CheckExtension (extstr, ext);
 
@@ -2245,7 +2234,7 @@ public:
 #ifdef _WIN32
   /** Initialize <a href="http://www.opengl.org/registry/specs/EXT/wgl_make_current_read.txt">WGL_EXT_make_current_read</a> extension. 
    * Check presence with csGLExtensionFlags::CS_WGL_EXT_make_current_read. */
-  void InitWGL_EXT_make_current_read (HDC hDC)
+  void InitWGL_EXT_make_current_read ()
   {
     if (tested_CS_WGL_EXT_make_current_read) return;
     tested_CS_WGL_EXT_make_current_read = true;
@@ -2253,7 +2242,6 @@ public:
     char cfgkey[26 + 25 + 1];
     sprintf (cfgkey, "Video.OpenGL.UseExtension.%s", ext);
     
-    (void)hDC;      // avoid `unused variable' warning.
     if (!extstr) return;
     CS_WGL_EXT_make_current_read = CheckExtension (extstr, ext);
 
@@ -2279,7 +2267,7 @@ public:
 #ifdef _WIN32
   /** Initialize <a href="http://www.opengl.org/registry/specs/EXT/wgl_pbuffer.txt">WGL_EXT_pbuffer</a> extension. 
    * Check presence with csGLExtensionFlags::CS_WGL_EXT_pbuffer. */
-  void InitWGL_EXT_pbuffer (HDC hDC)
+  void InitWGL_EXT_pbuffer ()
   {
     if (tested_CS_WGL_EXT_pbuffer) return;
     tested_CS_WGL_EXT_pbuffer = true;
@@ -2287,7 +2275,6 @@ public:
     char cfgkey[26 + 15 + 1];
     sprintf (cfgkey, "Video.OpenGL.UseExtension.%s", ext);
     
-    (void)hDC;      // avoid `unused variable' warning.
     if (!extstr) return;
     CS_WGL_EXT_pbuffer = CheckExtension (extstr, ext);
 
@@ -2316,7 +2303,7 @@ public:
 #ifdef _WIN32
   /** Initialize <a href="http://www.opengl.org/registry/specs/EXT/wgl_pixel_format.txt">WGL_EXT_pixel_format</a> extension. 
    * Check presence with csGLExtensionFlags::CS_WGL_EXT_pixel_format. */
-  void InitWGL_EXT_pixel_format (HDC hDC)
+  void InitWGL_EXT_pixel_format ()
   {
     if (tested_CS_WGL_EXT_pixel_format) return;
     tested_CS_WGL_EXT_pixel_format = true;
@@ -2324,7 +2311,6 @@ public:
     char cfgkey[26 + 20 + 1];
     sprintf (cfgkey, "Video.OpenGL.UseExtension.%s", ext);
     
-    (void)hDC;      // avoid `unused variable' warning.
     if (!extstr) return;
     CS_WGL_EXT_pixel_format = CheckExtension (extstr, ext);
 
@@ -2351,7 +2337,7 @@ public:
 #ifdef _WIN32
   /** Initialize <a href="http://www.opengl.org/registry/specs/I3D/wgl_digital_video_control.txt">WGL_I3D_digital_video_control</a> extension. 
    * Check presence with csGLExtensionFlags::CS_WGL_I3D_digital_video_control. */
-  void InitWGL_I3D_digital_video_control (HDC hDC)
+  void InitWGL_I3D_digital_video_control ()
   {
     if (tested_CS_WGL_I3D_digital_video_control) return;
     tested_CS_WGL_I3D_digital_video_control = true;
@@ -2359,7 +2345,6 @@ public:
     char cfgkey[26 + 29 + 1];
     sprintf (cfgkey, "Video.OpenGL.UseExtension.%s", ext);
     
-    (void)hDC;      // avoid `unused variable' warning.
     if (!extstr) return;
     CS_WGL_I3D_digital_video_control = CheckExtension (extstr, ext);
 
@@ -2385,7 +2370,7 @@ public:
 #ifdef _WIN32
   /** Initialize <a href="http://www.opengl.org/registry/specs/I3D/wgl_gamma.txt">WGL_I3D_gamma</a> extension. 
    * Check presence with csGLExtensionFlags::CS_WGL_I3D_gamma. */
-  void InitWGL_I3D_gamma (HDC hDC)
+  void InitWGL_I3D_gamma ()
   {
     if (tested_CS_WGL_I3D_gamma) return;
     tested_CS_WGL_I3D_gamma = true;
@@ -2393,7 +2378,6 @@ public:
     char cfgkey[26 + 13 + 1];
     sprintf (cfgkey, "Video.OpenGL.UseExtension.%s", ext);
     
-    (void)hDC;      // avoid `unused variable' warning.
     if (!extstr) return;
     CS_WGL_I3D_gamma = CheckExtension (extstr, ext);
 
@@ -2421,7 +2405,7 @@ public:
 #ifdef _WIN32
   /** Initialize <a href="http://www.opengl.org/registry/specs/I3D/wgl_genlock.txt">WGL_I3D_genlock</a> extension. 
    * Check presence with csGLExtensionFlags::CS_WGL_I3D_genlock. */
-  void InitWGL_I3D_genlock (HDC hDC)
+  void InitWGL_I3D_genlock ()
   {
     if (tested_CS_WGL_I3D_genlock) return;
     tested_CS_WGL_I3D_genlock = true;
@@ -2429,7 +2413,6 @@ public:
     char cfgkey[26 + 15 + 1];
     sprintf (cfgkey, "Video.OpenGL.UseExtension.%s", ext);
     
-    (void)hDC;      // avoid `unused variable' warning.
     if (!extstr) return;
     CS_WGL_I3D_genlock = CheckExtension (extstr, ext);
 
@@ -2465,7 +2448,7 @@ public:
 #ifdef _WIN32
   /** Initialize <a href="http://www.opengl.org/registry/specs/ARB/wgl_framebuffer_sRGB.txt">WGL_ARB_framebuffer_sRGB</a> extension. 
    * Check presence with csGLExtensionFlags::CS_WGL_ARB_framebuffer_sRGB. */
-  void InitWGL_ARB_framebuffer_sRGB (HDC hDC)
+  void InitWGL_ARB_framebuffer_sRGB ()
   {
     if (tested_CS_WGL_ARB_framebuffer_sRGB) return;
     tested_CS_WGL_ARB_framebuffer_sRGB = true;
@@ -2473,7 +2456,6 @@ public:
     char cfgkey[26 + 24 + 1];
     sprintf (cfgkey, "Video.OpenGL.UseExtension.%s", ext);
     
-    (void)hDC;      // avoid `unused variable' warning.
     if (!extstr) return;
     CS_WGL_ARB_framebuffer_sRGB = CheckExtension (extstr, ext);
 
