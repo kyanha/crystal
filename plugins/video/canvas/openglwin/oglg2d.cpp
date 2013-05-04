@@ -288,7 +288,7 @@ LRESULT CALLBACK csGraphics2DOpenGL::DummyWindow (HWND hWnd, UINT message,
       dwi->this_->detector.DoDetection (hWnd, hDC);
       dwi->this_->OpenDriverDB ("preinit");
 
-      wglext.InitWGL_ARB_pixel_format (hDC);
+      wglext.InitWGL_ARB_pixel_format ();
       if (wglext.CS_WGL_ARB_pixel_format)
       {
 	unsigned int numFormats = 0;
@@ -509,7 +509,7 @@ bool csGraphics2DOpenGL::Open ()
 
   wglext.Open (GetWGLextStr (hDC));
 
-  wglext.InitWGL_EXT_swap_control (hDC);
+  wglext.InitWGL_EXT_swap_control ();
 
   if (wglext.CS_WGL_EXT_swap_control)
   {
