@@ -57,11 +57,6 @@ def ExportWorld(path):
       are exported as separated libraries in the 'factories' subfolder.
   """
 
-  if "io_scene_cs.settings" not in bpy.data.texts:
-    bpy.data.texts.new("io_scene_cs.settings")
-  if "io_scene_cs.utilities" not in bpy.data.texts:
-    bpy.data.texts.new("io_scene_cs.utilities")
-
   # Create the export directory for textures
   if not os.path.exists(Join(path, 'textures/')):
     os.makedirs(Join(path, 'textures/'))
@@ -89,7 +84,7 @@ def ExportWorld(path):
       for name, fact in deps[typ].items():
         print('\nEXPORT OBJECT "%s" AS A CS ANIMATED MESH\n'%(fact.object.name))
         print('Writing fact',fact.uname,':', Join(path, 'factories/', fact.object.name))
-        fact.AsCSRef(Write(f), 2, 'factories/')
+        fact.AsCSRef(Write(f), 2, 'factories/', animesh=True)
         # Export animesh factory
         fact.AsCSLib(path, animesh=True)
     elif typ == 'F':
@@ -97,7 +92,7 @@ def ExportWorld(path):
       for name, fact in deps[typ].items():
         print('\nEXPORT OBJECT "%s" AS A CS GENERAL MESH\n'%(fact.object.name))
         print('Writing fact',fact.uname,':', Join(path, 'factories/', fact.object.name))
-        fact.AsCSRef(Write(f), 2, 'factories/')
+        fact.AsCSRef(Write(f), 2, 'factories/', animesh=False)
         # Export genmesh factory
         fact.AsCSLib(path, animesh=False)
     elif typ == 'G':

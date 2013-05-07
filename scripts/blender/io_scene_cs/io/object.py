@@ -33,9 +33,12 @@ class Hierarchy:
   def uname(self):
     return "hier" + str(self.id)
 
-  def AsCSRef(self, func, depth=0, dirName='factories/'):
+  def AsCSRef(self, func, depth=0, dirName='factories/', animesh=False):
     if self.object.parent_type != 'BONE' and self.object.data.name not in Hierarchy.exportedFactories:
-      func(' '*depth +'<library>%s%s</library>'%(dirName,self.object.data.name))
+      if animesh:
+        func(' '*depth +'<library>%s%s</library>'%(dirName,self.object.name))
+      else:
+        func(' '*depth +'<library>%s%s</library>'%(dirName,self.object.data.name))
 
   def GetDependencies(self):
     dependencies = EmptyDependencies()
@@ -129,7 +132,10 @@ class Hierarchy:
       print('Skipping "%s" factory export, already done' % (self.object.data.name))
       return
     # Export mesh
-    fa = open(Join(path, 'factories/', self.object.data.name), 'w')
+    if animesh:
+      fa = open(Join(path, 'factories/', self.object.name), 'w')
+    else:
+      fa = open(Join(path, 'factories/', self.object.data.name), 'w')
     self.WriteCSLibHeader(Write(fa), animesh)
     if not B2CS.properties.sharedMaterial:
       objectDeps = self.object.GetDependencies()
