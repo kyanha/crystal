@@ -39,10 +39,8 @@
 #include "ivideo/graph3d.h"
 #include "ivideo/shader/shader.h"
 
-#include "movable.h"
 #include "impmesh.h"
 #include "meshlod.h"
-#include "scenenode.h"
 #include "light.h"
 
 struct iMeshFactLoaderIterator;

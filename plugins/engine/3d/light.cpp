@@ -34,6 +34,8 @@
 #include "sector.h"
 #include "portal.h"
 
+#include "cstool/emptyscenenode.h"
+
 #define HUGE_RADIUS 100000000
 
 CS_PLUGIN_NAMESPACE_BEGIN(Engine)
@@ -249,7 +251,7 @@ void csLight::SetParent (iSceneNode* parent)
     sectors.Empty();
   }
 
-  csSceneNode::SetParent ((iSceneNode*)this, parent, &movable);
+  CS::Engine::SceneNodeHelper::SetParent ((iSceneNode*)this, parent, &movable);
 }
 
 void csLight::OnSetPosition ()
@@ -259,7 +261,7 @@ void csLight::OnSetPosition ()
     const csBox3 oldBox = worldBoundingBox;
     UpdateBBox ();
     
-    iSectorList* list = movable.csMovable::GetSectors ();
+    iSectorList* list = movable.BaseMovable::GetSectors ();
     if (list)
     {
       for (int i = 0; i < list->GetCount (); ++i)
@@ -305,7 +307,7 @@ void csLight::OnSetPosition ()
 
   GetPropertySV (csLightShaderVarCache::lightPositionWorld)->SetValue (pos);
   const csReversibleTransform& lightT = 
-    movable.csMovable::GetFullTransform ();
+    movable.BaseMovable::GetFullTransform ();
   GetPropertySV (csLightShaderVarCache::lightTransformWorld)->SetValue (
     lightT);
   GetPropertySV (csLightShaderVarCache::lightTransformWorldInverse)->SetValue (
@@ -423,7 +425,7 @@ void csLight::SetCutoffDistance (float radius)
     const csBox3 oldBox = worldBoundingBox;
     UpdateBBox ();
     
-    iSectorList* list = movable.csMovable::GetSectors ();
+    iSectorList* list = movable.BaseMovable::GetSectors ();
     if (list)
     {
       for (int i = 0; i < list->GetCount (); ++i)
@@ -448,7 +450,7 @@ void csLight::SetDirectionalCutoffRadius (float radius)
     const csBox3 oldBox = worldBoundingBox;
     UpdateBBox ();
     
-    iSectorList* list = movable.csMovable::GetSectors ();
+    iSectorList* list = movable.BaseMovable::GetSectors ();
     if (list)
     {
       for (int i = 0; i < list->GetCount (); ++i)
@@ -473,7 +475,7 @@ void csLight::SetSpotLightFalloff (float inner, float outer)
     const csBox3 oldBox = worldBoundingBox;
     UpdateBBox ();
     
-    iSectorList* list = movable.csMovable::GetSectors ();
+    iSectorList* list = movable.BaseMovable::GetSectors ();
     if (list)
     {
       for (int i = 0; i < list->GetCount (); ++i)

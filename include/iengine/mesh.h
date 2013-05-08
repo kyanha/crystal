@@ -52,6 +52,7 @@ struct iShaderVariableContext;
 struct iSharedVariable;
 struct iSceneNode;
 struct iMaterialWrapper;
+struct iSector;
 
 class csEllipsoid;
 class csFlags;
@@ -652,6 +653,14 @@ struct iMeshWrapper : public virtual iBase
    * Removes a (pseudo-)instance of the mesh.
    */
   virtual void RemoveInstance (csShaderVariable* instance) = 0;
+
+  /**
+   * Remove this object from all sectors it is in (but not from the engine).
+   * If a sector is given then it will only be removed from that sector.
+   * Don't call this function yourselves!
+   * @@@ Ugly? Need to think if we can avoid this somehow.
+   */
+  virtual void RemoveFromSectors (iSector* sector = 0) = 0;
 };
 
 /**

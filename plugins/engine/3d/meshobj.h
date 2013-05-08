@@ -38,11 +38,10 @@
 #include "iengine/viscull.h"
 #include "ivideo/graph3d.h"
 #include "ivideo/shader/shader.h"
+#include "cstool/basemovable.h"
 
-#include "movable.h"
 #include "impmesh.h"
 #include "meshlod.h"
-#include "scenenode.h"
 #include "light.h"
 
 struct iMeshLoaderIterator;
@@ -57,8 +56,8 @@ CS_PLUGIN_NAMESPACE_BEGIN(Engine)
 {
   class csLight;
   class csMeshWrapper;
-  class csMovable;
-  class csMovableSectorList;
+  class BaseMovable;
+  class MovableSectorList;
 
 /**
  * General list of meshes.
@@ -134,8 +133,6 @@ class csMeshWrapper :
                                iSelfDestruct>,
   public CS::Graphics::OverlayShaderVariableContextImpl
 {
-  friend class csMovable;
-  friend class csMovableSectorList;
   friend class ::csImposterManager;
 
 protected:
@@ -151,7 +148,7 @@ protected:
   /**
    * Position in the world.
    */
-  csMovable movable; //@@MS: BAAAD
+  CS::Engine::BaseMovable movable; //@@MS: BAAAD
 
   /**
    * The renderer will render all objects in a sector based on this
@@ -293,24 +290,6 @@ protected:
   /// Get the bounding box in world space and correct in hierarchy.
   void GetFullBBox (csBox3& box);
 
-  /// Move this object to the specified sector. Can be called multiple times.
-  void MoveToSector (iSector* s);
-
-  /**
-   * Remove this object from all sectors it is in (but not from the engine).
-   * If a sector is given then it will only be removed from that sector.
-   */
-  void RemoveFromSectors (iSector* sector = 0);
-
-  /**
-   * Update transformations after the object has moved
-   * (through updating the movable instance).
-   * This MUST be done after you change the movable otherwise
-   * some of the internal data structures will not be updated
-   * correctly. This function is called by movable.UpdateMove();
-   */
-  void UpdateMove ();
-
   /**
    * Destructor.  This is private in order to force clients to use DecRef()
    * for object destruction.
@@ -370,13 +349,22 @@ public:
    * to make sure that internal data structures are
    * correctly updated.
    */
-  csMovable& GetCsMovable () { return movable; }
+  CS::Engine::BaseMovable& GetCsMovable () { return movable; }
 
   // For iVisibilityObject.
   virtual iMovable* GetMovable () const
   {
     return (iMovable*)&movable;
   }
+
+  /**
+   * Remove this object from all sectors it is in (but not from the engine).
+   * If a sector is given then it will only be removed from that sector.
+   */
+  void RemoveFromSectors (iSector* sector = 0);
+
+  /// Move this object to the specified sector. Can be called multiple times.
+  void MoveToSector (iSector* s);
 
   /// Set the render priority for this object.
   virtual void SetRenderPriority (CS::Graphics::RenderPriority rp);

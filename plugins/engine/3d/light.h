@@ -36,11 +36,11 @@
 #include "csutil/threading/rwmutex.h"
 #include "iutil/selfdestruct.h"
 #include "plugins/engine/3d/halo.h"
-#include "plugins/engine/3d/movable.h"
-#include "plugins/engine/3d/scenenode.h"
 #include "iengine/light.h"
 #include "iengine/lightmgr.h"
 #include "iengine/viscull.h"
+
+#include "cstool/basemovable.h"
 
 class csLightMap;
 class csPolygon3D;
@@ -73,7 +73,7 @@ private:
   
 protected:
   /// Movable for the light
-  mutable csMovable movable;
+  mutable CS::Engine::BaseMovable movable;
 
   /// Object model for the light
   class csLightObjectModel : public csObjectModel
@@ -208,7 +208,7 @@ public:
    */
   iSector* GetSector ()
   { 
-    iSectorList* list = movable.csMovable::GetSectors ();
+    iSectorList* list = movable.BaseMovable::GetSectors ();
     iSector *s = 0;
     if (list && list->GetCount () > 0)
     {
@@ -227,8 +227,8 @@ public:
    */
   void SetCenter (const csVector3& v)
   {
-    movable.csMovable::SetPosition (v);
-    movable.csMovable::UpdateMove ();
+    movable.BaseMovable::SetPosition (v);
+    movable.BaseMovable::UpdateMove ();
   }
 
   /**
@@ -236,7 +236,7 @@ public:
    */
   const csVector3& GetCenter () const
   { 
-    return movable.csMovable::GetPosition (); 
+    return movable.BaseMovable::GetPosition (); 
   }
   
   /**
@@ -245,7 +245,7 @@ public:
    */
   const csVector3 GetFullCenter () const
   { 
-    return movable.csMovable::GetFullPosition (); 
+    return movable.BaseMovable::GetFullPosition (); 
   }
   
   /**
@@ -422,7 +422,7 @@ public:
   /**
    * Called by the movable when position changes 
    */
-  void OnSetPosition ();
+  virtual void OnSetPosition ();
 
   virtual iObject *QueryObject() { return this; }
   virtual iSceneNode* QuerySceneNode () { return this; }

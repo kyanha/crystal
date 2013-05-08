@@ -45,6 +45,7 @@ struct iLightList;
 struct iLight;
 struct iPortal;
 struct iVisibilityCuller;
+struct iMovable;
 
 struct iObject;
 
@@ -252,7 +253,7 @@ struct csSectorVisibleRenderMeshes
  */
 struct iSector : public virtual iBase
 {
-  SCF_INTERFACE(iSector,4,1,0);
+  SCF_INTERFACE(iSector,4,1,1);
   /// Get the iObject for this sector.
   virtual iObject *QueryObject () = 0;
 
@@ -580,6 +581,13 @@ struct iSector : public virtual iBase
    */
   virtual csSectorVisibleRenderMeshes* GetVisibleRenderMeshes (int& num,
     iMeshWrapper* mesh, iRenderView *rview, uint32 frustum_mask) = 0;
+
+  /**
+   * A new movable has been put in this sector. Make sure all is ok.
+   * This function is normally not called by the user. It is called
+   * automatically by the movable system.
+   */
+  virtual bool PrepareMovable (iMovable* movable) = 0;
 };
 
 

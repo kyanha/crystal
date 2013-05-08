@@ -174,6 +174,22 @@ void csSector::UnlinkObjects ()
 
 //----------------------------------------------------------------------
 
+bool csSector::PrepareMovable (iMovable* movable)
+{
+  // if the movable has a parent, no sectors can be added.
+  // We still call MoveToSector() because MoveToSector will
+  // also register portal containers to the sector.
+  CS_ASSERT (movable != 0);
+  iSceneNode* sn = movable->GetSceneNode ();
+  iMeshWrapper* mw = sn->QueryMesh ();
+  if (mw) (static_cast<csMeshWrapper*> (mw))->MoveToSector (this);
+
+  iLight* l = sn->QueryLight ();
+  if (l) (static_cast<csLight*>(l))->OnSetSector (this);
+
+  return true;
+}
+
 void csSector::RegisterEntireMeshToCuller (iMeshWrapper* mesh)
 {
   csMeshWrapper* cmesh = (csMeshWrapper*)mesh;

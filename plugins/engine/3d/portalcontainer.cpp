@@ -242,13 +242,13 @@ void csPortalContainer::RemovePortal (iPortal* portal)
 void csPortalContainer::CheckMovable ()
 {
   Prepare ();
-  const csMovable& cmovable = meshwrapper->GetCsMovable ();
+  const CS::Engine::BaseMovable& cmovable = meshwrapper->GetCsMovable ();
   if (movable_nr == cmovable.GetUpdateNumber ()) return;
   const csReversibleTransform movtrans = cmovable.GetFullTransform ();
   ObjectToWorld (cmovable, movtrans);
 }
 
-void csPortalContainer::ObjectToWorld (const csMovable& movable,
+void csPortalContainer::ObjectToWorld (const CS::Engine::BaseMovable& movable,
 	const csReversibleTransform& movtrans)
 {
   movable_nr = movable.GetUpdateNumber ();
@@ -866,7 +866,7 @@ void csPortalContainer::GetBoundingSpheres (iRenderView* rview,
 {
   iCamera* camera = rview->GetCamera ();
   const csReversibleTransform& camtrans = camera->GetTransform ();
-  const csMovable& cmovable = meshwrapper->GetCsMovable ();
+  const CS::Engine::BaseMovable& cmovable = meshwrapper->GetCsMovable ();
   if (movable_nr != cmovable.GetUpdateNumber ())
   {
     const csReversibleTransform movtrans = cmovable.GetFullTransform ();
