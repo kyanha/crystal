@@ -1,5 +1,5 @@
   /*
-    Copyright (C) 2000-2001 by Jorrit Tyberghein
+    Copyright (C) 2013 by Jorrit Tyberghein
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Library General Public
@@ -18,94 +18,89 @@
 
 #include "cssysdef.h"
 #include "csqint.h"
-#include "plugins/engine/3d/movable.h"
-#include "plugins/engine/3d/sector.h"
-#include "plugins/engine/3d/engine.h"
-#include "plugins/engine/3d/light.h"
-#include "plugins/engine/3d/meshobj.h"
-#include "plugins/engine/3d/camera.h"
 
-CS_PLUGIN_NAMESPACE_BEGIN(Engine)
+#include "cstool/basemovable.h"
+#include "iengine/light.h"
+#include "iengine/mesh.h"
+#include "iengine/camera.h"
+
+namespace CS
+{
+namespace Engine
 {
 
 //---------------------------------------------------------------------------
-csMovableSectorList::csMovableSectorList ()
+MovableSectorList::MovableSectorList ()
   : scfImplementationType (this)
 {
   movable = 0;
 }
 
-csMovableSectorList::~csMovableSectorList ()
+MovableSectorList::~MovableSectorList ()
 {
   DeleteAll ();
 }
 
-bool csMovableSectorList::PrepareSector (iSector* sector)
+bool MovableSectorList::PrepareSector (iSector* sector)
 {
   // Check for a valid item.
   if (sector == 0) return false;
 
-  // if the movable has a parent, no sectors can be added.
-  // We still call MoveToSector() because MoveToSector will
-  // also register portal containers to the sector.
-  CS_ASSERT (movable != 0);
-  csMeshWrapper *mw = movable->GetMeshWrapper ();
-  if (mw) mw->MoveToSector (sector);
+  bool rc = sector->PrepareMovable (movable);
 
-  csLight *l = movable->GetCsLight ();
-  if (l) l->OnSetSector (sector);
   // Make sure camera and light only is in one sector
-  CS_ASSERT (!(movable->GetCsLight () && GetSize () > 0));
-  CS_ASSERT (!(movable->GetCsCamera () && GetSize () > 0));
-  return true;
+  CS_ASSERT (!(movable->GetLight () && GetSize () > 0));
+  CS_ASSERT (!(movable->GetCamera () && GetSize () > 0));
+
+  return rc;
 }
 
-int csMovableSectorList::Add (iSector *obj)
+int MovableSectorList::Add (iSector *obj)
 {
   if (!PrepareSector (obj)) return -1;
   return (int)Push (obj);
 }
 
-bool csMovableSectorList::Remove (iSector *obj)
+bool MovableSectorList::Remove (iSector *obj)
 {
-  csMeshWrapper* object = movable->GetMeshWrapper ();
+  iMeshWrapper* object = movable->GetMeshWrapper ();
   if (object) object->RemoveFromSectors (obj);
   return Delete (obj);
 }
 
-bool csMovableSectorList::Remove (int n)
+bool MovableSectorList::Remove (int n)
 {
   iSector* obj = Get (n);
-  csMeshWrapper* object = movable->GetMeshWrapper ();
+  iMeshWrapper* object = movable->GetMeshWrapper ();
   if (object) object->RemoveFromSectors (obj);
   return DeleteIndex (n);
 }
 
-void csMovableSectorList::RemoveAll ()
+void MovableSectorList::RemoveAll ()
 {
   movable->ClearSectors ();
 }
 
-int csMovableSectorList::Find (iSector *obj) const
+int MovableSectorList::Find (iSector *obj) const
 {
   return (int)csRefArrayObject<iSector>::Find (obj);
 }
 
-iSector *csMovableSectorList::FindByName (const char *Name) const
+iSector *MovableSectorList::FindByName (const char *Name) const
 {
   return csRefArrayObject<iSector>::FindByName (Name);
 }
 
 //---------------------------------------------------------------------------
 
-csMovable::csMovable ()
+BaseMovable::BaseMovable ()
   : scfImplementationType (this), is_identity (true), parent (0),
     meshobject (0), lightobject (0), cameraobject (0), updatenr (0)
 {
   sectors.SetMovable (this);
 }
 
-csMovable::~csMovable ()
+BaseMovable::~BaseMovable ()
 {
   size_t i = listeners.GetSize ();
   while (i > 0)
@@ -116,44 +111,44 @@ csMovable::~csMovable ()
   }
 }
 
-void csMovable::SetPosition (iSector *home, const csVector3 &pos)
+void BaseMovable::SetPosition (iSector *home, const csVector3 &pos)
 {
   obj.SetOrigin (pos);
   SetSector (home);
 }
 
-void csMovable::SetTransform (const csMatrix3 &matrix)
+void BaseMovable::SetTransform (const csMatrix3 &matrix)
 {
   obj.SetT2O (matrix);
 }
 
-void csMovable::SetFullTransform (const csReversibleTransform& t)
+void BaseMovable::SetFullTransform (const csReversibleTransform& t)
 {
-  if (parent == (csMovable*)nullptr)
+  if (parent == (BaseMovable*)nullptr)
     obj = t;
   else
     obj = t * parent->GetFullTransform ().GetInverse ();
 }
 
-void csMovable::SetFullPosition (const csVector3& v)
+void BaseMovable::SetFullPosition (const csVector3& v)
 {
-  if (parent == (csMovable*)nullptr)
+  if (parent == (BaseMovable*)nullptr)
     obj.SetOrigin (v);
   else
     obj.SetOrigin (parent->GetFullTransform ().Other2This (v));
 }
 
-void csMovable::MovePosition (const csVector3 &rel)
+void BaseMovable::MovePosition (const csVector3 &rel)
 {
   obj.Translate (rel);
 }
 
-void csMovable::Transform (const csMatrix3 &matrix)
+void BaseMovable::Transform (const csMatrix3 &matrix)
 {
   obj.SetT2O (matrix * obj.GetT2O ());  
 }
 
-void csMovable::SetSector (iSector *sector)
+void BaseMovable::SetSector (iSector *sector)
 {
   if (parent != 0) return;
   if (sectors.GetSize () == 1 && sector == sectors[0]) return ;
@@ -162,29 +157,28 @@ void csMovable::SetSector (iSector *sector)
     sectors.Push (sector);
 }
 
-void csMovable::ClearSectors ()
+void BaseMovable::ClearSectors ()
 {
   if (meshobject) meshobject->RemoveFromSectors ();
   sectors.Empty ();
 }
 
-void csMovable::AddListener (iMovableListener *listener)
+void BaseMovable::AddListener (iMovableListener *listener)
 {
   RemoveListener (listener);
   listeners.Push (listener);
 }
 
-void csMovable::RemoveListener (iMovableListener *listener)
+void BaseMovable::RemoveListener (iMovableListener *listener)
 {
   listeners.Delete (listener);
 }
 
-void csMovable::UpdateMove ()
+void BaseMovable::UpdateMove ()
 {
   updatenr++;
   is_identity = obj.IsIdentity ();
 
-  if (meshobject) meshobject->UpdateMove ();
   if (lightobject) lightobject->OnSetPosition ();
 
   size_t i;
@@ -200,7 +194,7 @@ void csMovable::UpdateMove ()
   }
 }
 
-iSceneNode* csMovable::GetSceneNode ()
+iSceneNode* BaseMovable::GetSceneNode ()
 {
   if (meshobject)
     return meshobject->QuerySceneNode ();
@@ -212,4 +206,5 @@ iSceneNode* csMovable::GetSceneNode ()
 }
 
 }
-CS_PLUGIN_NAMESPACE_END(Engine)
+}
+

@@ -1,6 +1,5 @@
 /*
-    Copyright (C) 2000 by Jorrit Tyberghein
-                  2005 by Marten Svanfeldt
+    Copyright (C) 2013 by Jorrit Tyberghein
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Library General Public
@@ -17,8 +16,11 @@
     Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 
-#ifndef __CS_MOVABLE_H__
-#define __CS_MOVABLE_H__
+#ifndef __CS_CSTOOL_BASEMOVABLE_H__
+#define __CS_CSTOOL_BASEMOVABLE_H__
+
+class csVector3;
+class csMatrix3;
 
 #include "csgeom/transfrm.h"
 #include "csutil/nobjvec.h"
@@ -28,29 +30,26 @@
 #include "iengine/sector.h"
 #include "iengine/scenenode.h"
 
-class csVector3;
-class csMatrix3;
-
-CS_PLUGIN_NAMESPACE_BEGIN(Engine)
+namespace CS
 {
-  class csCameraBase;
-  class csLight;
-  class csMeshWrapper;
-  class csMovable;
+namespace Engine
+{
+
+class BaseMovable;
+
 
 /// A list of sectors as the movable uses it
-class csMovableSectorList : public scfImplementation1<csMovableSectorList,
+class CS_CRYSTALSPACE_EXPORT MovableSectorList : public scfImplementation1<MovableSectorList,
 				iSectorList>,
                             public csRefArrayObject<iSector>
 {
 private:
-  csMovable* movable;
+  BaseMovable* movable;
 
 public:
-
-  csMovableSectorList ();
-  virtual ~csMovableSectorList ();
-  void SetMovable (csMovable* mov) { movable = mov; }
+  MovableSectorList ();
+  virtual ~MovableSectorList ();
+  void SetMovable (BaseMovable* mov) { movable = mov; }
 
   bool PrepareSector (iSector* item);
 
@@ -65,13 +64,9 @@ public:
 };
 
 /**
- * This class represents an entity that can move in the engine.
- * It has a list of sectors and a position (a list of sectors
- * because an entity can overlap several sectors at the same time
- * through portals). This class itself does not have geometry.
- * It is only responsible for managing movement.
+ * A base movable implementation.
  */
-class csMovable : public scfImplementation1<csMovable, iMovable>
+class CS_CRYSTALSPACE_EXPORT BaseMovable : public scfImplementation1<BaseMovable, iMovable>
 {
 private:
   /// World to object transformation.
@@ -79,7 +74,7 @@ private:
   /// The following flag is true if the transform is still identity.
   bool is_identity;
   /// List of sectors.
-  csMovableSectorList sectors;
+  MovableSectorList sectors;
   /// List of listeners to this movable.
   csRefArray<iMovableListener> listeners;
 
@@ -90,7 +85,7 @@ private:
    * returned) and the 'obj' transformation is relative to
    * the parent one. The pointer is not reference-counted.
    */
-  csMovable* parent;
+  BaseMovable* parent;
 
   /// Children.
   csRefArray<iSceneNode> scene_children;
@@ -98,17 +93,17 @@ private:
   /**
    * Meshobject on which this movable operates.
    */
-  csMeshWrapper* meshobject;
+  iMeshWrapper* meshobject;
 
   /**
    * Light on which this movable operates.
    */
-  csLight* lightobject;
+  iLight* lightobject;
 
   /**
    * Camera on which this movable operates.
    */
-  csCameraBase* cameraobject;
+  iCamera* cameraobject;
 
   /// Update number.
   long updatenr;
@@ -117,19 +112,21 @@ public:
   /**
    * Create a default movable.
    */
-  csMovable ();
+  BaseMovable ();
 
   /// Destructor.
-  virtual ~csMovable ();
+  virtual ~BaseMovable ();
+
+  iMovable* QueryMovable () const { return (iMovable*)this; }
 
   /// Set meshobject on which this movable operates.
-  void SetMeshWrapper (csMeshWrapper* obj)
+  void SetMeshWrapper (iMeshWrapper* obj)
   {
     meshobject = obj;
   }
 
   /// Get the meshobject on which we operate.
-  csMeshWrapper* GetMeshWrapper () const
+  iMeshWrapper* GetMeshWrapper () const
   {
     return meshobject;
   }
@@ -138,37 +135,37 @@ public:
   const csRefArray<iSceneNode>& GetChildren () const { return scene_children; }
 
   /// Set light on which this movable operates.
-  void SetLight (csLight* obj)
+  void SetLight (iLight* obj)
   {
     lightobject = obj;
   }
 
   /// Get the light on which we operate.
-  csLight* GetCsLight () const
+  iLight* GetLight () const
   {
     return lightobject;
   }
 
   /// Set camera on which this movable operates.
-  void SetCamera (csCameraBase* obj)
+  void SetCamera (iCamera* obj)
   {
     cameraobject = obj;
   }
 
   /// Get the camera on which we operate.
-  csCameraBase* GetCsCamera () const
+  iCamera* GetCamera () const
   {
     return cameraobject;
   }
 
   /// Set the parent movable.
-  void SetParent (csMovable* par)
+  void SetParent (BaseMovable* par)
   {
     parent = par;
   }
 
   /// Get the parent movable.
-  csMovable* GetParent () const
+  BaseMovable* GetParent () const
   {
     return parent;
   }
@@ -334,7 +331,7 @@ public:
   }
 };
 
-}
-CS_PLUGIN_NAMESPACE_END(Engine)
+} // namespace Engine
+} // namespace CS
 
-#endif // __CS_MOVABLE_H__
+#endif // __CS_CSTOOL_BASEMOVABLE_H__

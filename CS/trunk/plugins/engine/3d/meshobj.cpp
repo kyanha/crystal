@@ -34,6 +34,8 @@
 #include "ivideo/graph3d.h"
 #include "ivideo/rendermesh.h"
 
+#include "cstool/emptyscenenode.h"
+
 #include "reflectomotron3000.h"
 
 CS_LEAKGUARD_IMPLEMENT (csMeshWrapper);
@@ -286,8 +288,8 @@ void csMeshWrapper::AddToSectorPortalLists ()
   if (portal_container)
   {
     int i;
-    csMovable* prev = &movable;
-    csMovable* m = movable.GetParent ();
+    CS::Engine::BaseMovable* prev = &movable;
+    CS::Engine::BaseMovable* m = movable.GetParent ();
     while (m) { prev = m; m = m->GetParent (); }
     const iSectorList *sectors = prev->GetSectors ();
     for (i = 0; i < sectors->GetCount (); i++)
@@ -309,8 +311,8 @@ void csMeshWrapper::ClearFromSectorPortalLists (iSector* sector)
     }
     else
     {
-      csMovable* prev = &movable;
-      csMovable* m = movable.GetParent ();
+      CS::Engine::BaseMovable* prev = &movable;
+      CS::Engine::BaseMovable* m = movable.GetParent ();
       while (m) { prev = m; m = m->GetParent (); }
 
       const iSectorList *sectors = prev->GetSectors ();
@@ -357,10 +359,6 @@ csMeshWrapper::~csMeshWrapper ()
   ClearFromSectorPortalLists ();
   
   if (instancing != 0) GetInstancingAlloc().Free (instancing);
-}
-
-void csMeshWrapper::UpdateMove ()
-{
 }
 
 void csMeshWrapper::MoveToSector (iSector *s)
@@ -602,7 +600,7 @@ csRenderMesh** csMeshWrapper::GetRenderMeshes (int& n, iRenderView* rview,
   csMeshWrapper *meshwrap = this;
   last_anim_time = lt;
   csMeshWrapper* lastparent = meshwrap;
-  csMovable* parent = movable.GetParent ();
+  CS::Engine::BaseMovable* parent = movable.GetParent ();
   while (parent != 0)
   {
     iMeshWrapper* parent_mesh = parent->GetSceneNode ()->QueryMesh ();
@@ -808,7 +806,7 @@ void csMeshWrapper::SetMaximumRenderDistanceVar (iSharedVariable* max)
 
 void csMeshWrapper::SetParent (iSceneNode* parent)
 {
-  csMovable* parent_mov = movable.GetParent ();
+  CS::Engine::BaseMovable* parent_mov = movable.GetParent ();
   if (!parent_mov && !parent) return;
   if (parent_mov && parent_mov->GetSceneNode () == parent) return;
 
@@ -828,7 +826,7 @@ void csMeshWrapper::SetParent (iSceneNode* parent)
     csEngine::currentEngine->GetMeshes ()->Remove ((iMeshWrapper*)this);
   }
 #endif
-  csSceneNode::SetParent ((iSceneNode*)this, parent, &movable);
+  CS::Engine::SceneNodeHelper::SetParent ((iSceneNode*)this, parent, &movable);
 
   /* csSector->PrepareMesh tells the culler about the mesh
      (since removing the mesh above also removes it from the culler...) */
@@ -1058,7 +1056,7 @@ float csMeshWrapper::GetSquaredDistance (const csVector3& pos)
 void csMeshWrapper::GetFullBBox (csBox3& box)
 {
   box = GetObjectModel ()->GetObjectBoundingBox ();
-  csMovable* mov = &movable;
+  CS::Engine::BaseMovable* mov = &movable;
   while (mov)
   {
     if (!mov->IsTransformIdentity ())
@@ -1074,7 +1072,7 @@ void csMeshWrapper::GetFullBBox (csBox3& box)
       b.AddBoundingVertexSmart (trans.This2Other (box.GetCorner (7)));
       box = b;
     }
-    mov = ((csMovable*)mov)->GetParent ();
+    mov = ((CS::Engine::BaseMovable*)mov)->GetParent ();
   }
 }
 
@@ -1388,7 +1386,7 @@ void csMeshMeshList::PrepareMesh (iMeshWrapper* child)
   }
 
   child->SetParentContainer ((iMeshWrapper*)mesh);
-  (cchild->GetCsMovable ()).csMovable::SetParent (&mesh->GetCsMovable ());
+  (cchild->GetCsMovable ()).BaseMovable::SetParent (&mesh->GetCsMovable ());
   // Readd our child to sectors if it happens to be a portal container.
   cchild->AddToSectorPortalLists ();
 }
@@ -1404,14 +1402,14 @@ void csMeshMeshList::FreeMesh (iMeshWrapper* item)
 
   for (int i = 0 ; i < mesh->GetCsMovable().GetSectors()->GetCount() ; i++)
   {
-    iSector* isector = (mesh->GetCsMovable ()).csMovable::GetSectors ()
+    iSector* isector = (mesh->GetCsMovable ()).BaseMovable::GetSectors ()
     	->Get (i);
     csSector* sector = (csSector*)isector;
     sector->UnprepareMesh (item);
   }
 
   item->SetParentContainer (0);
-  ((csMovable*)(item->GetMovable ()))->SetParent (0);
+  ((CS::Engine::BaseMovable*)(item->GetMovable ()))->SetParent (0);
 
   mesh->RemoveMeshFromStaticLOD (item);
 

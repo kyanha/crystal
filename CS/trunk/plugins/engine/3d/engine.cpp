@@ -2971,9 +2971,9 @@ csPtr<iMeshWrapper> csEngine::LoadMeshWrapper (
   imw->DecRef (); // the ref is now stored in the MeshList
   if (sector)
   {
-    (meshwrap->GetCsMovable ()).csMovable::SetSector (sector);
-    (meshwrap->GetCsMovable ()).csMovable::SetPosition (pos);
-    (meshwrap->GetCsMovable ()).csMovable::UpdateMove ();
+    (meshwrap->GetCsMovable ()).BaseMovable::SetSector (sector);
+    (meshwrap->GetCsMovable ()).BaseMovable::SetPosition (pos);
+    (meshwrap->GetCsMovable ()).BaseMovable::UpdateMove ();
   }
 
   csRef<iLoaderContext> elctxt (CreateLoaderContext (0, true));
@@ -3108,9 +3108,9 @@ csPtr<iMeshWrapper> csEngine::CreateMeshWrapper (
   }
   if (sector)
   {
-    (meshwrap->GetCsMovable ()).csMovable::SetSector (sector);
-    (meshwrap->GetCsMovable ()).csMovable::SetPosition (pos);
-    (meshwrap->GetCsMovable ()).csMovable::UpdateMove ();
+    (meshwrap->GetCsMovable ()).BaseMovable::SetSector (sector);
+    (meshwrap->GetCsMovable ()).BaseMovable::SetPosition (pos);
+    (meshwrap->GetCsMovable ()).BaseMovable::UpdateMove ();
   }
 
   mesh->SetMeshWrapper ((iMeshWrapper*)meshwrap);

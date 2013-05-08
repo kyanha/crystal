@@ -232,7 +232,7 @@ struct iLightCallback : public virtual iBase
  */
 struct iLight : public virtual iBase
 {
-  SCF_INTERFACE(iLight,3,0,1);
+  SCF_INTERFACE(iLight,3,0,2);
   /// Get the id of this light. This is a 16-byte MD5.
   virtual const char* GetLightID () = 0;
 
@@ -424,6 +424,13 @@ struct iLight : public virtual iBase
   virtual const csBox3& GetLocalBBox () const = 0;
   virtual const csBox3& GetWorldBBox () const = 0;
   //@}
+
+  /**
+   * Called by the movable when position changes 
+   * Never call this function directly!
+   * @@@ Dirty? Can we avoid this?
+   */
+  virtual void OnSetPosition () = 0;
 };
 
 /**

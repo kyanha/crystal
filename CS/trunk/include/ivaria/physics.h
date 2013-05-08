@@ -83,17 +83,21 @@ enum DebugMode
 };
 
 /**
- * The mode of duplication used for the faces of the mesh. That is, if the mesh is double sided,
- * and whether the vertices and triangles that are duplicated are interleaved or contiguous.
+ * The mode of duplication used for the faces of the mesh. That is, if the mesh is
+ * double sided, and whether the vertices and triangles that are duplicated are
+ * interleaved or contiguous.
  */
 enum MeshDuplicationMode
 {
-  MESH_DUPLICATION_NONE = 0,     /*!< The faces of the mesh are not double sided, i.e. the vertices and
-				   triangles are not duplicated. */
-  MESH_DUPLICATION_INTERLEAVED,  /*!< The faces of the mesh are double sided, and the duplicated vertices
-				   and triangles are interleaved with the original ones. */
-  MESH_DUPLICATION_CONTIGUOUS    /*!< The faces of the mesh are double sided, and the duplicated vertices
-				   and triangles are packed contiguously at the end of their buffer. */
+  /*!< The faces of the mesh are not double sided, i.e. the vertices and
+	triangles are not duplicated. */
+  MESH_DUPLICATION_NONE = 0,
+  /*!< The faces of the mesh are double sided, and the duplicated vertices
+	and triangles are interleaved with the original ones. */
+  MESH_DUPLICATION_INTERLEAVED,
+    /*!< The faces of the mesh are double sided, and the duplicated vertices
+	and triangles are packed contiguously at the end of their buffer. */
+  MESH_DUPLICATION_CONTIGUOUS
 };
 
 /**

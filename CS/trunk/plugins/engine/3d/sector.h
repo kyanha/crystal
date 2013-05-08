@@ -443,6 +443,9 @@ private:
   void UpdateFogSVs ();
 
   void SetupSVNames();
+
+  virtual bool PrepareMovable (iMovable* movable);
+
 private:
   // PRIVATE MEMBERS
 

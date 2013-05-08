@@ -25,8 +25,9 @@
 #include "iengine/camera.h"
 #include "iengine/scenenode.h"
 
+#include "cstool/basemovable.h"
+
 #include "sector.h"
-#include "movable.h"
 
 class csEngine;
 
@@ -45,7 +46,7 @@ class csCameraBase : public csOrthoTransform,
 {
 protected:
   /// @@@@@@@@@@@@@@  NOT USED YET!!!
-  csMovable movable;
+  CS::Engine::BaseMovable movable;
 
   /// The sector the camera is in.
   csWeakRef<iSector> sector;

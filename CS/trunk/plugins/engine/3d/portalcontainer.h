@@ -31,10 +31,11 @@
 #include "ivideo/rendermesh.h"
 #include "plugins/engine/3d/portal.h"
 
+namespace CS { namespace Engine { class BaseMovable; } }
+
 CS_PLUGIN_NAMESPACE_BEGIN(Engine)
 {
 class csMeshWrapper;
-class csMovable;
 
 /**
  * A helper class for iTriangleMesh implementations used by csPortalContainer.
@@ -180,7 +181,7 @@ public:
   /// Check if the object to world needs updating.
   void CheckMovable ();
   /// Transform from object to world space.
-  void ObjectToWorld (const csMovable& movable,
+  void ObjectToWorld (const CS::Engine::BaseMovable& movable,
   	const csReversibleTransform& movtrans);
   /// Transform from world to camera space.
   void WorldToCamera (iCamera* camera, const csReversibleTransform& camtrans);
