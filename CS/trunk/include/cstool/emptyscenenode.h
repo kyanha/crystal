@@ -25,6 +25,7 @@
 
 #include "iengine/scenenode.h"
 #include "cstool/basemovable.h"
+#include "cstool/objmodel.h"
 
 namespace CS
 {
@@ -69,9 +70,8 @@ public:
   }
 };
 
-class /*CS_CRYSTALSPACE_EXPORT*/ EmptySceneNode
-      // Note: not exported b/c entirely implemented inline
-  : public scfImplementation1<EmptySceneNode, iSceneNode>
+class EmptySceneNode : public scfImplementationExt1<
+					      EmptySceneNode, csObjectModel, iSceneNode>
 {
 private:
   BaseMovable movable;
@@ -81,7 +81,7 @@ public:
   virtual ~EmptySceneNode () { }
 
   virtual iMovable* GetMovable () const { return movable.QueryMovable (); }
-  virtual iObjectModel* GetObjectModel () { return 0; }
+  virtual iObjectModel* GetObjectModel () { return this; }
   virtual iMeshWrapper* QueryMesh () { return movable.GetMeshWrapper (); }
   virtual iLight* QueryLight () { return movable.GetLight (); }
   virtual iCamera* QueryCamera () { return movable.GetCamera (); }
