@@ -32,7 +32,8 @@ namespace Engine
 {
 
 /// Helper class for iSceneNode.
-class CS_CRYSTALSPACE_EXPORT SceneNodeHelper
+class /*CS_CRYSTALSPACE_EXPORT*/ SceneNodeHelper
+      // Note: not exported b/c entirely implemented inline
 {
 public:
   static void SetParent (iSceneNode* this_node, iSceneNode* parent,
@@ -68,8 +69,9 @@ public:
   }
 };
 
-class CS_CRYSTALSPACE_EXPORT EmptySceneNode : public scfImplementation1<
-					      EmptySceneNode, iSceneNode>
+class /*CS_CRYSTALSPACE_EXPORT*/ EmptySceneNode
+      // Note: not exported b/c entirely implemented inline
+  : public scfImplementation1<EmptySceneNode, iSceneNode>
 {
 private:
   BaseMovable movable;
