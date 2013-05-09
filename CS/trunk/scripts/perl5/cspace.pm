@@ -19655,6 +19655,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *GetSVContext = *cspacec::iLight_GetSVContext;
 *GetLocalBBox = *cspacec::iLight_GetLocalBBox;
 *GetWorldBBox = *cspacec::iLight_GetWorldBBox;
+*OnSetPosition = *cspacec::iLight_OnSetPosition;
 *scfGetVersion = *cspacec::iLight_scfGetVersion;
 *scfGetName = *cspacec::iLight_scfGetName;
 sub DESTROY {
@@ -20141,6 +20142,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *PrecacheDraw = *cspacec::iSector_PrecacheDraw;
 *CallSectorCallbacks = *cspacec::iSector_CallSectorCallbacks;
 *GetVisibleRenderMeshes = *cspacec::iSector_GetVisibleRenderMeshes;
+*PrepareMovable = *cspacec::iSector_PrepareMovable;
 *scfGetVersion = *cspacec::iSector_scfGetVersion;
 *scfGetName = *cspacec::iSector_scfGetName;
 sub DESTROY {
@@ -21331,6 +21333,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *RemoveExtraRenderMesh = *cspacec::iMeshWrapper_RemoveExtraRenderMesh;
 *AddInstance = *cspacec::iMeshWrapper_AddInstance;
 *RemoveInstance = *cspacec::iMeshWrapper_RemoveInstance;
+*RemoveFromSectors = *cspacec::iMeshWrapper_RemoveFromSectors;
 *scfGetVersion = *cspacec::iMeshWrapper_scfGetVersion;
 *scfGetName = *cspacec::iMeshWrapper_scfGetName;
 sub DESTROY {
