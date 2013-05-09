@@ -4870,6 +4870,27 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_iLight_OnSetPosition(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  iLight *arg1 = (iLight *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"iLight_OnSetPosition",1,1,&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_iLight, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "iLight_OnSetPosition" "', argument " "1"" of type '" "iLight *""'"); 
+  }
+  arg1 = reinterpret_cast< iLight * >(argp1);
+  (arg1)->OnSetPosition();
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_iLight_scfGetVersion(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   int result;
@@ -10575,6 +10596,37 @@ SWIGINTERN PyObject *_wrap_iSector_GetVisibleRenderMeshes(PyObject *SWIGUNUSEDPA
   arg5 = static_cast< uint32 >(val5);
   result = (csSectorVisibleRenderMeshes *)(arg1)->GetVisibleRenderMeshes(*arg2,arg3,arg4,arg5);
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_csSectorVisibleRenderMeshes, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_iSector_PrepareMovable(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  iSector *arg1 = (iSector *) 0 ;
+  iMovable *arg2 = (iMovable *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  bool result;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"iSector_PrepareMovable",2,2,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_iSector, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "iSector_PrepareMovable" "', argument " "1"" of type '" "iSector *""'"); 
+  }
+  arg1 = reinterpret_cast< iSector * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_iMovable, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "iSector_PrepareMovable" "', argument " "2"" of type '" "iMovable *""'"); 
+  }
+  arg2 = reinterpret_cast< iMovable * >(argp2);
+  result = (bool)(arg1)->PrepareMovable(arg2);
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
   return NULL;
@@ -30492,6 +30544,100 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_iMeshWrapper_RemoveFromSectors__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  iMeshWrapper *arg1 = (iMeshWrapper *) 0 ;
+  iSector *arg2 = (iSector *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"iMeshWrapper_RemoveFromSectors",2,2,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_iMeshWrapper, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "iMeshWrapper_RemoveFromSectors" "', argument " "1"" of type '" "iMeshWrapper *""'"); 
+  }
+  arg1 = reinterpret_cast< iMeshWrapper * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_iSector, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "iMeshWrapper_RemoveFromSectors" "', argument " "2"" of type '" "iSector *""'"); 
+  }
+  arg2 = reinterpret_cast< iSector * >(argp2);
+  (arg1)->RemoveFromSectors(arg2);
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_iMeshWrapper_RemoveFromSectors__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  iMeshWrapper *arg1 = (iMeshWrapper *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"iMeshWrapper_RemoveFromSectors",1,1,&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_iMeshWrapper, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "iMeshWrapper_RemoveFromSectors" "', argument " "1"" of type '" "iMeshWrapper *""'"); 
+  }
+  arg1 = reinterpret_cast< iMeshWrapper * >(argp1);
+  (arg1)->RemoveFromSectors();
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_iMeshWrapper_RemoveFromSectors(PyObject *self, PyObject *args) {
+  int argc;
+  PyObject *argv[3];
+  int ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = (int)PyObject_Length(args);
+  for (ii = 0; (ii < argc) && (ii < 2); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 1) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_iMeshWrapper, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      return _wrap_iMeshWrapper_RemoveFromSectors__SWIG_1(self, args);
+    }
+  }
+  if (argc == 2) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_iMeshWrapper, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      void *vptr = 0;
+      int res = SWIG_ConvertPtr(argv[1], &vptr, SWIGTYPE_p_iSector, 0);
+      _v = SWIG_CheckState(res);
+      if (_v) {
+        return _wrap_iMeshWrapper_RemoveFromSectors__SWIG_0(self, args);
+      }
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number of arguments for overloaded function 'iMeshWrapper_RemoveFromSectors'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    RemoveFromSectors(iMeshWrapper *,iSector *)\n"
+    "    RemoveFromSectors(iMeshWrapper *)\n");
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_iMeshWrapper_scfGetVersion(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   int result;
@@ -40229,6 +40375,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"iLight_GetSVContext", _wrap_iLight_GetSVContext, METH_VARARGS, NULL},
 	 { (char *)"iLight_GetLocalBBox", _wrap_iLight_GetLocalBBox, METH_VARARGS, NULL},
 	 { (char *)"iLight_GetWorldBBox", _wrap_iLight_GetWorldBBox, METH_VARARGS, NULL},
+	 { (char *)"iLight_OnSetPosition", _wrap_iLight_OnSetPosition, METH_VARARGS, NULL},
 	 { (char *)"iLight_scfGetVersion", _wrap_iLight_scfGetVersion, METH_VARARGS, NULL},
 	 { (char *)"iLight_scfGetName", _wrap_iLight_scfGetName, METH_VARARGS, NULL},
 	 { (char *)"delete_iLight", _wrap_delete_iLight, METH_VARARGS, NULL},
@@ -40386,6 +40533,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"iSector_PrecacheDraw", _wrap_iSector_PrecacheDraw, METH_VARARGS, NULL},
 	 { (char *)"iSector_CallSectorCallbacks", _wrap_iSector_CallSectorCallbacks, METH_VARARGS, NULL},
 	 { (char *)"iSector_GetVisibleRenderMeshes", _wrap_iSector_GetVisibleRenderMeshes, METH_VARARGS, NULL},
+	 { (char *)"iSector_PrepareMovable", _wrap_iSector_PrepareMovable, METH_VARARGS, NULL},
 	 { (char *)"iSector_scfGetVersion", _wrap_iSector_scfGetVersion, METH_VARARGS, NULL},
 	 { (char *)"iSector_scfGetName", _wrap_iSector_scfGetName, METH_VARARGS, NULL},
 	 { (char *)"delete_iSector", _wrap_delete_iSector, METH_VARARGS, NULL},
@@ -40832,6 +40980,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"iMeshWrapper_RemoveExtraRenderMesh", _wrap_iMeshWrapper_RemoveExtraRenderMesh, METH_VARARGS, NULL},
 	 { (char *)"iMeshWrapper_AddInstance", _wrap_iMeshWrapper_AddInstance, METH_VARARGS, NULL},
 	 { (char *)"iMeshWrapper_RemoveInstance", _wrap_iMeshWrapper_RemoveInstance, METH_VARARGS, NULL},
+	 { (char *)"iMeshWrapper_RemoveFromSectors", _wrap_iMeshWrapper_RemoveFromSectors, METH_VARARGS, NULL},
 	 { (char *)"iMeshWrapper_scfGetVersion", _wrap_iMeshWrapper_scfGetVersion, METH_VARARGS, NULL},
 	 { (char *)"iMeshWrapper_scfGetName", _wrap_iMeshWrapper_scfGetName, METH_VARARGS, NULL},
 	 { (char *)"delete_iMeshWrapper", _wrap_delete_iMeshWrapper, METH_VARARGS, NULL},

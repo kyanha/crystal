@@ -140,6 +140,7 @@ class iLight(core.iBase):
     def GetSVContext(*args): return _iengine.iLight_GetSVContext(*args)
     def GetLocalBBox(*args): return _iengine.iLight_GetLocalBBox(*args)
     def GetWorldBBox(*args): return _iengine.iLight_GetWorldBBox(*args)
+    def OnSetPosition(*args): return _iengine.iLight_OnSetPosition(*args)
     scfGetVersion = staticmethod(_iengine.iLight_scfGetVersion)
     scfGetName = staticmethod(_iengine.iLight_scfGetName)
     __swig_destroy__ = _iengine.delete_iLight
@@ -386,6 +387,7 @@ class iSector(core.iBase):
     def PrecacheDraw(*args): return _iengine.iSector_PrecacheDraw(*args)
     def CallSectorCallbacks(*args): return _iengine.iSector_CallSectorCallbacks(*args)
     def GetVisibleRenderMeshes(*args): return _iengine.iSector_GetVisibleRenderMeshes(*args)
+    def PrepareMovable(*args): return _iengine.iSector_PrepareMovable(*args)
     scfGetVersion = staticmethod(_iengine.iSector_scfGetVersion)
     scfGetName = staticmethod(_iengine.iSector_scfGetName)
     __swig_destroy__ = _iengine.delete_iSector
@@ -1070,6 +1072,7 @@ class iMeshWrapper(core.iBase):
     def RemoveExtraRenderMesh(*args): return _iengine.iMeshWrapper_RemoveExtraRenderMesh(*args)
     def AddInstance(*args): return _iengine.iMeshWrapper_AddInstance(*args)
     def RemoveInstance(*args): return _iengine.iMeshWrapper_RemoveInstance(*args)
+    def RemoveFromSectors(*args): return _iengine.iMeshWrapper_RemoveFromSectors(*args)
     scfGetVersion = staticmethod(_iengine.iMeshWrapper_scfGetVersion)
     scfGetName = staticmethod(_iengine.iMeshWrapper_scfGetName)
     __swig_destroy__ = _iengine.delete_iMeshWrapper
