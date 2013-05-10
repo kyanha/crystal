@@ -134,10 +134,7 @@ bool csBulletSystem::Initialize (iObjectRegistry* object_reg)
   csRef<CS::Collisions::iCollisionSystem> collisionSystem =
     csQueryRegistry<CS::Collisions::iCollisionSystem> (object_reg);
   if (!collisionSystem)
-  {
     object_reg->Register (this, "CS::Collisions::iCollisionSystem");
-    object_reg->Register (this, "CS::Physics::iPhysicalSystem");
-  }
 
   return true;
 }
