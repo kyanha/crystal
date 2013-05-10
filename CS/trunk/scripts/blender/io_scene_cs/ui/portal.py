@@ -29,7 +29,7 @@ class csPortalPanel():
 
 @rnaOperator
 class MESH_OT_csPortal_RemoveProperty(bpy.types.Operator):
-  bl_idname = "csPortal_RemoveProperty"
+  bl_idname = "csportal.removeproperty"
   bl_label = ""
 
   def invoke(self, context, event):

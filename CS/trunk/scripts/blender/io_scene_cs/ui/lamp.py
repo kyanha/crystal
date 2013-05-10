@@ -28,7 +28,7 @@ class csLampPanel():
 
 @rnaOperator
 class MESH_OT_csLamp_RemoveProperty(bpy.types.Operator):
-  bl_idname = "csLamp_RemoveProperty"
+  bl_idname = "cslamp.removeproperty"
   bl_label = ""
 
   def invoke(self, context, event):

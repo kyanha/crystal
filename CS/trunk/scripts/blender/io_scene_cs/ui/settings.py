@@ -2,7 +2,7 @@ import os
 
 import bpy
 
-from io_scene_cs.utilities import rnaType, rnaOperator, B2CS
+from io_scene_cs.utilities import rnaType, rnaOperator, B2CS, GetExportPath
 from io_scene_cs.utilities import RemovePanels, RestorePanels 
 from io_scene_cs.io import Export
 
@@ -19,7 +19,7 @@ class csSettingsPanel():
   def poll(cls, context):
     return True
  
-   
+  
 @rnaType    
 class B2CS_OT_export(bpy.types.Operator):
   "Export"
@@ -28,7 +28,11 @@ class B2CS_OT_export(bpy.types.Operator):
 
   def execute(self, context): 
     
-    Export(B2CS.properties.exportPath)
+    try:
+      exportPath = context.user_preferences.addons["io_scene_cs"].preferences.exportpath
+    except:
+      exportPath = B2CS.properties.exportPath
+    Export(exportPath)
 
     return {'FINISHED'}
 
@@ -56,9 +60,11 @@ class B2CS_OT_export_run(bpy.types.Operator):
 
   def execute(self, context): 
     
-    path = B2CS.properties.exportPath.replace('\\', '/')
-    
-    Export(path)
+    try:
+      exportPath = context.user_preferences.addons["io_scene_cs"].preferences.exportpath
+    except:
+      exportPath = B2CS.properties.exportPath
+    Export(exportPath)
     
     options = " "
     if B2CS.properties.console:
@@ -99,8 +105,11 @@ class RENDER_PT_csSettingsPanel(csSettingsPanel, bpy.types.Panel):
     row = layout.row()
     row.prop(B2CS.properties, "enableDoublesided")
     row = layout.row()
-    row.prop(B2CS.properties, "exportPath")
-      
+    try:
+      row.prop(context.user_preferences.addons["io_scene_cs"].preferences, "exportpath")
+    except:
+      row.prop(B2CS.properties, "exportPath")
+
     row = layout.row()
     row.operator("io_scene_cs.export", text="Export")
       
@@ -116,21 +125,12 @@ class RENDER_PT_csSettingsPanel(csSettingsPanel, bpy.types.Panel):
       else:
         row.label(text="'walktest' isn't available!")
       
-        
-default_path = os.environ.get("TEMP")
-if not default_path:
-  if os.name == 'nt':
-    default_path = "c:/tmp/"
-  else:
-    default_path = "/tmp/"
-elif not default_path.endswith(os.sep):
-  default_path += os.sep
-            
+
 B2CS.StringProperty( attr="exportPath",
         name="Export path",
         description="Export path", 
-        default=default_path, subtype='DIR_PATH')
-        
+        default=GetExportPath(), subtype='DIR_PATH')
+
 B2CS.BoolProperty( attr="console",
         name="Console",
         description="Enable the '-console' flag of 'walktest'", 
