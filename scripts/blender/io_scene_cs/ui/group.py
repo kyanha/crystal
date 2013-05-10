@@ -29,7 +29,7 @@ class csGroupPanel():
 
 @rnaOperator
 class OBJECT_OT_csGroup_RemoveProperty(bpy.types.Operator):
-  bl_idname = "csGroup_RemoveProperty"
+  bl_idname = "csgroup.removeproperty"
   bl_label = ""
 
   def invoke(self, context, event):

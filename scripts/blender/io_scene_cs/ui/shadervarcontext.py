@@ -23,7 +23,7 @@ class csShaderVarContextPanel():
 
 @rnaOperator
 class OBJECT_PT_csShaderVarContext_RemoveProperty(bpy.types.Operator):
-    bl_idname = "csShaderVarContext_RemoveProperty"
+    bl_idname = "csshadersarcontext.removeproperty"
     bl_label = ""
 
     def invoke(self, context, event):

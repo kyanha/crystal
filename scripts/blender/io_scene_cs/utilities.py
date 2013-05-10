@@ -1,7 +1,30 @@
+import os
+import bpy
+
 try:
-  import bpy
+  from bpy.types import AddonPreferences
 except:
-  bpy = None
+  AddonPreferences = None
+
+
+def GetExportPath ():
+
+  ve = bpy.app.version
+  if (ve[0] > 2) or ((ve[0] == 2) and (ve[1] >= 65) and (ve[2] >= 5)):
+    if AddonPreferences != None and "io_scene_cs" in context.user_preferences.addons:
+      return bpy.context.user_preferences.addons["io_scene_cs"].preferences.exportpath
+
+  default_path = os.environ.get("TEMP")
+  if not default_path:
+    if os.name == 'nt':
+      default_path = "c:/tmp/"
+    else:
+      default_path = "/tmp/"
+  elif not default_path.endswith(os.sep):
+    default_path += os.sep
+
+  return default_path
+
 
 def rnaType(rna_type):
     if bpy: bpy.utils.register_class(rna_type)

@@ -30,7 +30,7 @@ class csFactoryPanel():
 
 @rnaOperator
 class MESH_OT_csFactory_RemoveProperty(bpy.types.Operator):
-  bl_idname = "csFactory_RemoveProperty"
+  bl_idname = "csfactory.removeproperty"
   bl_label = ""
 
   def invoke(self, context, event):
@@ -53,7 +53,7 @@ class MESH_PT_csFactory(csFactoryPanel, bpy.types.Panel):
     if not HasSetProperty(ob, name):
       colR.label(text="(default: '%s')"%getattr(ob, name))
     else:
-      d = colR.operator("csFactory_RemoveProperty", text="Default")
+      d = colR.operator("csfactory.removeproperty", text="Default")
       d.prop = name
 
   

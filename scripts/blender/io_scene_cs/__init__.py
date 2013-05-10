@@ -4,35 +4,79 @@ bl_info = {
     "name": "Export Crystal Space 3D format",
     "description": "Export meshes, scenes and animations",
     "author": "The Crystal Space team",
-    "version": (2, 1),
-    "blender": (2, 5, 9),
-    "api": 39685,
+    "version": (2, 2),
+    "blender": (2, 59, 0),
+    "api": 55057,
     "location": "The main panel is in 'Properties > Render'",
     "warning": "",
     "wiki_url": "http://www.crystalspace3d.org/docs/online/manual/Blender.html",
     "tracker_url": "http://crystalspace3d.org/trac/CS/report",
     "category": "Import-Export"}
 
-import bpy
+if "bpy" in locals():
+  import imp
+  imp.reload(utilities)
+  imp.reload(ui)
+  imp.reload(io)
 
-class ExportCS(bpy.types.Operator):
+else:
+  import os
+  import bpy
+  from bpy.types import Operator
+  from bpy.props import StringProperty, IntProperty, BoolProperty
+
+  from . import utilities
+  from . import ui
+  from . import io
+
+try:
+  from bpy.types import AddonPreferences
+except:
+  AddonPreferences = None
+
+
+if AddonPreferences != None:
+
+  class ExportCSPreferences(AddonPreferences):
+    bl_idname = __name__
+
+    exportpath = StringProperty(
+            name = "Default Export Path",
+            default = utilities.GetExportPath(),
+            subtype ='FILE_PATH',
+            )
+
+    def draw(self, context):
+        layout = self.layout
+        layout.label(text="This is a preferences view for our addon")
+        layout.prop(self, "exportpath")
+
+
+class ExportCS(Operator):
     bl_idname = "export.cs"
-    bl_label = 'Export CS'
+    bl_label = "Export CS"
+    bl_options = {'REGISTER', 'UNDO'}
 
     def execute(self, context):
-        #TODO: let the user specify a file path
-        return {'FINISHED'}
-        
-def menu_func(self, context):
-    self.layout.operator(ExportCS.bl_idname, text="CrystalSpace 3D")
+        """
+        user_preferences = context.user_preferences
+        addon_prefs = user_preferences.addons[__name__].preferences
+        info = ("Path: %s" % addon_prefs.exportpath)
 
+        self.report({'INFO'}, info)
+        print(info)
+        """
+
+        return {'FINISHED'}
+
+
+def menu_func(self, context):
+    self.layout.operator(ExportCS.bl_idname, text="CrystalSpace 3D") 
+
+# Registration
 def register():
     bpy.utils.register_module(__name__)
     #bpy.types.INFO_MT_file_export.append(menu_func)
-
-    from . import utilities
-    from . import ui
-    from . import io
 
 def unregister():
     bpy.utils.unregister_module(__name__)
