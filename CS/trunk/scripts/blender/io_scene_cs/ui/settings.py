@@ -82,7 +82,7 @@ class B2CS_OT_export_run(bpy.types.Operator):
     
     import shlex, subprocess
     print(WalkTestPath())
-    args = shlex.split(WalkTestPath() + options + path)
+    args = shlex.split(WalkTestPath() + options + exportPath)
     print(args)
     output = subprocess.call(args)
     print(output)
