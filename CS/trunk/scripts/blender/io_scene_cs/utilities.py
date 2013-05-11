@@ -11,7 +11,7 @@ def GetExportPath ():
 
   ve = bpy.app.version
   if (ve[0] > 2) or ((ve[0] == 2) and (ve[1] >= 65) and (ve[2] >= 5)):
-    if AddonPreferences != None and "io_scene_cs" in context.user_preferences.addons:
+    if AddonPreferences != None and "io_scene_cs" in bpy.context.user_preferences.addons:
       return bpy.context.user_preferences.addons["io_scene_cs"].preferences.exportpath
 
   default_path = os.environ.get("TEMP")
