@@ -126,10 +126,22 @@ class RENDER_PT_csSettingsPanel(csSettingsPanel, bpy.types.Panel):
         row.label(text="'walktest' isn't available!")
       
 
+try:
+  default_path = bpy.context.user_preferences.addons["io_scene_cs"].preferences.exportpath
+except:
+  default_path = os.environ.get("TEMP")
+  if not default_path:
+    if os.name == 'nt':
+      default_path = "c:/tmp/"
+    else:
+      default_path = "/tmp/"
+  elif not default_path.endswith(os.sep):
+    default_path += os.sep
+
 B2CS.StringProperty( attr="exportPath",
         name="Export path",
         description="Export path", 
-        default=GetExportPath(), subtype='DIR_PATH')
+        default=default_path, subtype='DIR_PATH')
 
 B2CS.BoolProperty( attr="console",
         name="Console",

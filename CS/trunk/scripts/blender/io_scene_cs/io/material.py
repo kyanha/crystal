@@ -3,8 +3,7 @@ import bpy
 from .util import *
 from io_scene_cs.utilities import GetShaderName
 from io_scene_cs.utilities import StringProperty
-from io_scene_cs.utilities import B2CS
-
+from io_scene_cs.utilities import GetExportPath
 
 # Property defining an UV texture's name for a material ('None' if not defined)
 StringProperty(['Material'], attr="uv_texture", name="UV texture", default='None')
@@ -104,7 +103,7 @@ def ExportMaterials(func, depth, dependencies, use_imposter):
     func(' '*depth +"<textures>")
     for name, tex in dependencies['T'].items():
       tex.AsCS(func, depth+2)
-      tex.save_export(B2CS.properties.exportPath)
+      tex.save_export(GetExportPath ())
     func(' '*depth +"</textures>")
 
   # Export materials
