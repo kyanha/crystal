@@ -34,15 +34,23 @@ try:
 except:
   AddonPreferences = None
 
-
 if AddonPreferences != None:
 
   class ExportCSPreferences(AddonPreferences):
     bl_idname = __name__
 
+    default_path = os.environ.get("TEMP")
+    if not default_path:
+      if os.name == 'nt':
+        default_path = "c:/tmp/"
+      else:
+        default_path = "/tmp/"
+    elif not default_path.endswith(os.sep):
+      default_path += os.sep
+
     exportpath = StringProperty(
             name = "Default Export Path",
-            default = utilities.GetExportPath(),
+            default = default_path,
             subtype ='FILE_PATH',
             )
 

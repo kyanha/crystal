@@ -10,20 +10,11 @@ except:
 def GetExportPath ():
 
   ve = bpy.app.version
-  if (ve[0] > 2) or ((ve[0] == 2) and (ve[1] >= 65) and (ve[2] >= 5)):
+  if (ve[0] > 2) or (ve[0] == 2 and (ve[1] >= 66 or (ve[1] == 65 and ve[2] >= 5))):
     if AddonPreferences != None and "io_scene_cs" in bpy.context.user_preferences.addons:
       return bpy.context.user_preferences.addons["io_scene_cs"].preferences.exportpath
 
-  default_path = os.environ.get("TEMP")
-  if not default_path:
-    if os.name == 'nt':
-      default_path = "c:/tmp/"
-    else:
-      default_path = "/tmp/"
-  elif not default_path.endswith(os.sep):
-    default_path += os.sep
-
-  return default_path
+  return B2CS.properties.exportPath
 
 
 def rnaType(rna_type):

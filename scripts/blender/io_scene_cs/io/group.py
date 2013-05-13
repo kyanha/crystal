@@ -285,7 +285,7 @@ def HasImposter(self):
       uses an imposter
   """
   for m, ob in self.allObjects():
-    if ob.data.use_imposter:
+    if "use_imposter" in ob.data and ob.data.use_imposter:
       return True
   return False
 
