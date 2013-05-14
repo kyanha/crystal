@@ -95,8 +95,7 @@ public:
 
   void SetMassInternal (btScalar mass);
 
-  virtual btScalar GetDensity () const 
-  { return density; }
+  virtual btScalar GetDensity () const;
   virtual void SetDensity (btScalar density);
 
   virtual btScalar GetVolume () const;

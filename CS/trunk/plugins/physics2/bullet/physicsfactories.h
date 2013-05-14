@@ -67,10 +67,10 @@ CS_PLUGIN_NAMESPACE_BEGIN (Bullet2)
     virtual csPtr<CS::Collisions::iCollisionObject> CreateCollisionObject ()
     { return csPtr<CS::Collisions::iCollisionObject> (nullptr); }
 
-    virtual void SetCollider (CS::Collisions::iCollider* value,
+    virtual void SetCollider (CS::Collisions::iCollider* collider,
 			      const csOrthoTransform& transform = csOrthoTransform ())
     {
-      collider = value;
+      this->collider = collider;
       this->transform = transform;
     }
     virtual CS::Collisions::iCollider* GetCollider () const { return collider; }
@@ -87,22 +87,52 @@ CS_PLUGIN_NAMESPACE_BEGIN (Bullet2)
   {
   protected:
     float density, mass;
+    bool densityDefined;
     float friction;
     bool gravityEnabled;
 
   public:
     BulletPhysicalObjectFactory (csBulletSystem* system, CS::Collisions::iCollider* collider = nullptr) : 
     scfImplementationType (this, system, collider),
-        density (1.0f), mass (1.0f),     // static objects // TODO: really?
-        friction (10.0f), gravityEnabled (true)
-    {}
+      density (0.0f), mass (1.0f), densityDefined (false), friction (10.0f),
+      gravityEnabled (true)
+    {
+      if (!collider || !collider->IsDynamic ())
+	mass = 0.0f;
+    }
 
-    virtual float GetDensity () const { return density; }
-    virtual void SetDensity (float value) { density = value; mass = 0; }
+    virtual float GetDensity () const
+    {
+      if (densityDefined)
+	return density;
+      if (mass < SMALL_EPSILON)
+	return 0.0f;
+      return mass / collider->GetVolume ();
+    }
+    virtual void SetDensity (float value)
+    {
+      density = value;
+      densityDefined = true;
+      if (collider && collider->IsDynamic ())
+	mass = density * collider->GetVolume ();
+    }
     
     virtual float GetMass () const { return mass; }
-    virtual void SetMass (float value) { mass = value; density = 0; }
+    virtual void SetMass (float value)
+    {
+      mass = value;
+      densityDefined = false;
+    }
 
+    virtual void SetCollider (CS::Collisions::iCollider* collider,
+			      const csOrthoTransform& transform = csOrthoTransform ())
+    {
+      this->collider = collider;
+      this->transform = transform;
+      if (!collider || !collider->IsDynamic ())
+	mass = 0.0f;
+    }
+ 
     virtual void SetFriction (float value) { friction = value; }
     virtual float GetFriction () const { return friction; }
     
@@ -133,7 +163,16 @@ CS_PLUGIN_NAMESPACE_BEGIN (Bullet2)
     virtual CS::Physics::PhysicalObjectType GetPhysicalObjectType () const
     { return CS::Physics::PHYSICAL_OBJECT_RIGIDBODY; }
 
-    virtual void SetState (CS::Physics::RigidBodyState state) { this->state = state; }
+    virtual void SetState (CS::Physics::RigidBodyState state)
+    {
+      this->state = state;
+      if (state == CS::Physics::STATE_DYNAMIC)
+      {
+	if (mass < SMALL_EPSILON)
+	  mass = 1.0f;
+      }
+      else mass = 0.0f;
+    }
     virtual CS::Physics::RigidBodyState GetState () const { return state; }
 
     virtual void SetElasticity (float value) { elasticity = value; }

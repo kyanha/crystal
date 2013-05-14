@@ -46,26 +46,14 @@ CS_PLUGIN_NAMESPACE_BEGIN (Bullet2)
     // TODO: use factory's state
     // TODO: use collider transform
 
-    // set mass & density
-    btScalar mass;
-    if (!collider->IsDynamic ())
-    {
-      mass = density = 0;
-    }
-    else if (factory->GetDensity ())
-    {
-      density = factory->GetDensity ();
-      mass = density * collider->GetVolume ();
-    }
-    else
-    {
-      mass = factory->GetMass ();
-      density = collider->GetVolume () > 0 ? mass / collider->GetVolume () : 0;
-    }
-    
+    // set mass
+    btScalar mass = factory->mass;
+  
     // construct bullet object
     btCollisionShape* shape = collider->GetOrCreateBulletShape ();
     btRigidBody::btRigidBodyConstructionInfo infos
+      // TODO motion states not needed if not dynamic
+      // TODO: mass * collider->GetLocalInertia () seems strange
       (mass, CreateMotionState (collider->GetPrincipalAxisTransform ()), shape, mass * collider->GetLocalInertia ());
 
     infos.m_friction = factory->GetFriction ();
@@ -77,8 +65,7 @@ CS_PLUGIN_NAMESPACE_BEGIN (Bullet2)
     btBody->setUserPointer (dynamic_cast<CS::Collisions::iCollisionObject*>(this));
     //btBody->setContactProcessingThreshold (1e18f);
 
-    bool isStatic = density == 0;
-    SetState (isStatic ? STATE_STATIC : STATE_DYNAMIC);
+    SetState (factory->state);
 
     group = dynamic_cast<CollisionGroup*> (factory->GetCollisionGroup ());
   }
@@ -178,18 +165,6 @@ CS_PLUGIN_NAMESPACE_BEGIN (Bullet2)
 
   void csBulletRigidBody::SetMass (btScalar mass)
   {
-    // TODO: don't store those values, compute them only if really needed
-    float volume = collider->GetVolume ();
-    if (volume > EPSILON)
-    {
-      density = mass / collider->GetVolume ();
-    }
-    else
-    {
-      mass = 0;
-      density = 0;
-    }
-
     // SetMassInternal (mass); SetState calls SetMassInternal
 
     if (mass == 0)
@@ -258,17 +233,19 @@ CS_PLUGIN_NAMESPACE_BEGIN (Bullet2)
 
   float csBulletRigidBody::GetMass () const
   {
-    // TODO: don't store those values, compute them only if really needed
-    //btScalar mass = btBody->getInvMass ();
-    //return mass > 0 ? 1 / mass : 0;
-    return density * collider->GetVolume ();
+    return 1.0f / btBody->getInvMass ();
   }
 
-  void csBulletRigidBody::SetDensity (float newDensity)
+  void csBulletRigidBody::SetDensity (float density)
   {
-    // TODO: don't store those values, compute them only if really needed
-    density = newDensity;
     SetMass (density * collider->GetVolume ());
+  }
+
+  btScalar csBulletRigidBody::GetDensity () const
+  {
+    float volume = collider->GetVolume ();
+    if (volume < SMALL_EPSILON) return 0.0f;
+    return 1.0f / (btBody->getInvMass () * volume);
   }
 
   float csBulletRigidBody::GetVolume () const
@@ -336,7 +313,7 @@ CS_PLUGIN_NAMESPACE_BEGIN (Bullet2)
           btBody->setLinearVelocity (linearVelo);
           btBody->setAngularVelocity (angularVelo);
 
-          SetMassInternal (density * collider->GetVolume ());
+          SetMassInternal (factory->mass);
           break;
         }
       case STATE_KINEMATIC:
@@ -365,7 +342,6 @@ CS_PLUGIN_NAMESPACE_BEGIN (Bullet2)
           btBody->setInterpolationLinearVelocity (btVector3 (0.0f, 0.0f, 0.0f));
           btBody->setInterpolationAngularVelocity (btVector3 (0.0f, 0.0f, 0.0f));
 
-
           SetMassInternal (0);
           break;
         }
@@ -388,7 +364,7 @@ CS_PLUGIN_NAMESPACE_BEGIN (Bullet2)
 
       if (state == STATE_DYNAMIC)
       {
-        // dynamic now
+        // Reactivate the body
         SetEnabled (true);
       }
     }
