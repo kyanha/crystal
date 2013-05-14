@@ -69,6 +69,7 @@ void csBulletSoftBody::CreateSoftBodyObject (BulletSoftBodyFactory* factory)
     SetShapeMatching (true);
   if (factory->generateBending)
     GenerateBendingConstraints (factory->bendingDistance);
+  // TODO: mass?
 }
 
 csBulletSoftBody::csBulletSoftBody (csBulletSystem* phySys, btSoftBody* body)

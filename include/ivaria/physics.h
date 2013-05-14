@@ -1428,7 +1428,7 @@ struct iPhysicalSystem : public virtual CS::Collisions::iCollisionSystem
   virtual void SetStepParameters (float timeStep, size_t maxSteps,
     size_t iterations) = 0;  
 
-  /// Step the simulation forward by the given duration, in second
+  /// Step the simulation forward by the given duration (csTicks are in millisecond).
   // TODO: auto-step
   virtual void Step (csTicks duration) = 0;
 
