@@ -555,12 +555,17 @@ void csBulletSystem::InitDebugDraw ()
   }
 }
 
-void csBulletSystem::DebugDraw (iView* rview)
+void csBulletSystem::DebugDraw (iView* view)
+{
+  DebugDraw (view->GetContext (), view->GetCamera ());
+}
+
+void csBulletSystem::DebugDraw (iGraphics3D* g3d, iCamera* camera)
 {
   InitDebugDraw ();
   for (size_t i = 0; i < collSectors.GetSize (); i++)
     collSectors[i]->bulletWorld->debugDrawWorld ();
-  debugDraw->DebugDraw (rview);
+  debugDraw->DebugDraw (g3d, camera);
 }
 
 void csBulletSystem::SetDebugMode (CS::Physics::DebugMode mode)

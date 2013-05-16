@@ -240,6 +240,7 @@ public:
 
   virtual void InitDebugDraw ();
   virtual void DebugDraw (iView* rview);
+  virtual void DebugDraw (iGraphics3D* g3d, iCamera* camera);
   virtual void SetDebugMode (CS::Physics::DebugMode mode);
   virtual CS::Physics::DebugMode GetDebugMode ();
 

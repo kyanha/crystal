@@ -260,12 +260,11 @@ public:
     return mode;
   }
 
-  void DebugDraw (iView* view)
+  void DebugDraw (iGraphics3D* g3d, iCamera* camera)
   {
-    iGraphics3D* g3d = view->GetContext ();
     iGraphics2D* g2d = g3d->GetDriver2D ();
-    csTransform tr_w2c = view->GetCamera ()->GetTransform ();
-    const CS::Math::Matrix4& projection (view->GetCamera ()->GetProjectionMatrix ());
+    csTransform tr_w2c = camera->GetTransform ();
+    const CS::Math::Matrix4& projection (camera->GetProjectionMatrix ());
 
     if (!g3d->BeginDraw (CSDRAW_2DGRAPHICS))
       return;

@@ -698,11 +698,11 @@ void csBulletSoftBody::UpdateAnchorInternalTick (btScalar timeStep)
   }  
 }
 
-void csBulletSoftBody::DebugDraw (iView* rView)
+void csBulletSoftBody::DebugDraw (iView* view)
 {
   system->InitDebugDraw ();
   btSoftBodyHelpers::Draw (btBody, system->debugDraw);
-  system->debugDraw->DebugDraw (rView);
+  system->debugDraw->DebugDraw (view->GetContext (), view->GetCamera ());
 }
 
 }

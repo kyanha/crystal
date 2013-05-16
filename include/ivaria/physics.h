@@ -1606,6 +1606,15 @@ struct iPhysicalSystem : public virtual CS::Collisions::iCollisionSystem
   virtual void DebugDraw (iView* rview) = 0;
 
   /**
+   * Draw the debug informations of the dynamic system. This has to be called
+   * at each frame, and will add 2D lines on top of the rendered scene. The
+   * objects to be displayed are defined by SetDebugMode().
+   * \param g3d The 3D renderer
+   * \param camera The camera viewing the scene
+   */
+  virtual void DebugDraw (iGraphics3D* g3d, iCamera* camera) = 0;
+
+  /**
    * Set the mode to be used when displaying debug informations. The default value
    * is 'CS::Physics::DEBUG_COLLIDERS | CS::Physics::DEBUG_JOINTS'.
    * \remark Don't forget to call DebugDraw() at each frame to effectively display
