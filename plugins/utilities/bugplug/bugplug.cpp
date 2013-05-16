@@ -91,6 +91,7 @@
 #include "iutil/virtclk.h"
 #include "ivaria/collider.h"
 #include "ivaria/conout.h"
+#include "ivaria/physics.h"
 #include "ivaria/reporter.h"
 #include "ivaria/profile.h"
 #include "ivaria/stdrep.h"
@@ -183,6 +184,8 @@ csBugPlug::csBugPlug (iBase *iParent)
 
   do_shadow_debug = false;
   delay_command = DEBUGCMD_UNKNOWN;
+
+  do_physics = false;
 
   do_profiler_reset = false;
   do_profiler_log = false;
@@ -1266,6 +1269,22 @@ bool csBugPlug::ExecCommand (int cmd, const csString& args)
 	  CaptureUberScreen (shotW, shotH);
         }
         break;
+    case DEBUGCMD_PHYSICS:
+        {
+	  if (do_physics)
+	  {
+	    do_physics = false;
+	    Report (CS_REPORTER_SEVERITY_DEBUG,
+	    	"BugPlug disabled showing physical objects.");
+	  }
+	  else
+	  {
+	    do_physics = true;
+	    Report (CS_REPORTER_SEVERITY_DEBUG,
+	    	"BugPlug is showing physical objects.");
+	  }
+        }
+        break;
     default:
         return false;
   }
@@ -1646,6 +1665,22 @@ bool csBugPlug::HandleFrame (iEvent& /*event*/)
       float y = debug_view.points[i].y;
       G2D->DrawLine (x-5, y-5, x+5, y+5, pointcol);
       G2D->DrawLine (x-5, y+5, x+5, y-5, pointcol);
+    }
+  }
+
+  if (do_physics && catcher->camera)
+  {
+    csRef<CS::Collisions::iCollisionSystem> collisionSystem = 
+      csQueryRegistry<CS::Collisions::iCollisionSystem> (object_reg);
+    if (collisionSystem)
+    {
+      CS::Physics::iPhysicalSystem* system = collisionSystem->QueryPhysicalSystem ();
+      if (system)
+      {
+	system->SetDebugMode ((CS::Physics::DebugMode) (CS::Physics::DEBUG_COLLIDERS
+							| CS::Physics::DEBUG_JOINTS));
+	system->DebugDraw (G3D, catcher->camera);
+      }
     }
   }
 
@@ -2285,6 +2320,7 @@ int csBugPlug::GetCommandCode (const char* cmdstr, csString& args)
   if (!strcmp (cmd, "meshskel"))        return DEBUGCMD_MESHSKEL;
   if (!strcmp (cmd, "printportals"))    return DEBUGCMD_PRINTPORTALS;
   if (!strcmp (cmd, "printposition"))   return DEBUGCMD_PRINTPOSITION;
+  if (!strcmp (cmd, "physics"))         return DEBUGCMD_PHYSICS;
 
   return DEBUGCMD_UNKNOWN;
 }
