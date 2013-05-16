@@ -149,6 +149,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(BugPlug)
 #define DEBUGCMD_MESHSKEL       1080    // Draw skeleton of selected mesh
 #define DEBUGCMD_PRINTPORTALS   1090    // Print portal info for the current sector
 #define DEBUGCMD_PRINTPOSITION  1091    // Print current camera position in CS format
+#define DEBUGCMD_PHYSICS        1092    // Display the models and positions of all physical objects
 
 // For showing of polygon meshes.
 #define BUGPLUG_POLYMESH_NO	0
@@ -288,6 +289,9 @@ private:
   void RemoveSelectedMesh (iMeshWrapper* m);
   bool HasSelectedMeshes () const { return selected_meshes.GetSize () > 0; }
   void MoveSelectedMeshes (const csVector3& offset);  
+
+  // Display of physical objects
+  bool do_physics;
 
   // Shadow!
   csShadow* shadow;
