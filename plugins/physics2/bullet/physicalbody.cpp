@@ -28,15 +28,7 @@ CS_PLUGIN_NAMESPACE_BEGIN (Bullet2)
   void csPhysicalBody::CreatePhysicalBodyObject (iPhysicalObjectFactory* props)
   {
     CreateCollisionObject (props);
-
-    if (props->GetDensity ())
-    {
-      SetDensity (props->GetDensity ());
-    }
-    else
-    {
-      SetMass (props->GetMass ());
-    }
+    SetMass (props->GetMass ());
 
     SetFriction (props->GetFriction ());
     SetGravityEnabled (props->GetGravityEnabled ());
