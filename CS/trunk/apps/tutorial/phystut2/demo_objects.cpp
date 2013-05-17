@@ -165,13 +165,15 @@ CS::Physics::iRigidBody* PhysDemo::SpawnSphere (bool setVelocity /* = true */)
   return SpawnSphere (view->GetCamera ()->GetTransform ().GetOrigin () + GetCameraDirection (), rand ()%5/10. + .2, setVelocity);
 }
 
-CS::Physics::iRigidBody* PhysDemo::SpawnSphere (const csVector3& pos, float radiusf, bool setVelocity /* = true */)
+CS::Physics::iRigidBody* PhysDemo::SpawnSphere
+(const csVector3& pos, float radiusf, bool setVelocity)
 {
   // Use the camera transform.
   const csOrthoTransform& tc = view->GetCamera ()->GetTransform ();
 
   // Create the ball mesh factory.
-  csRef<iMeshFactoryWrapper> ballFact = engine->CreateMeshFactory ("crystalspace.mesh.object.genmesh", "ballFact");
+  csRef<iMeshFactoryWrapper> ballFact =
+    engine->CreateMeshFactory ("crystalspace.mesh.object.genmesh", "ballFact");
   if (!ballFact)
   {
     ReportError ("Error creating mesh object factory!");
@@ -186,10 +188,11 @@ CS::Physics::iRigidBody* PhysDemo::SpawnSphere (const csVector3& pos, float radi
   gmstate->GenerateSphere (ellips, 16);
 
   // We do a hardtransform here to make sure our sphere has an artificial
-  // offset. That way we can test if the physics engine supports that.
+  // offset over its center of gravity. That way we can test if the physics
+  // engine supports that.
   csReversibleTransform artificialTransform =
     csReversibleTransform (csMatrix3 (), csVector3 (1, 1, 1));
-  //ballFact->HardTransform (artificialTransform);
+  ballFact->HardTransform (artificialTransform);
 
   // Create the mesh.
   csRef<iMeshWrapper> mesh (engine->CreateMeshWrapper (ballFact, "ball"));
@@ -215,18 +218,16 @@ CS::Physics::iRigidBody* PhysDemo::SpawnSphere (const csVector3& pos, float radi
   factory->SetDensity (DefaultDensity);
   factory->SetElasticity (DefaultElasticity);
   factory->SetFriction (DefaultFriction);
+  factory->SetColliderTransform (artificialTransform);
   csRef<CS::Physics::iRigidBody> rb = factory->CreateRigidBody ();
 
   iSceneNode* meshNode = mesh->QuerySceneNode ();
-  // TODO: collider transform
-  //meshNode->GetMovable ()->SetTransform (artificialTransform);//.GetInverse ());
-  //meshNode->GetMovable ()->UpdateMove ();
   rb->SetAttachedSceneNode (meshNode);
   rb->QueryObject ()->SetObjectParent (mesh->QueryObject ());
 
   csOrthoTransform trans = tc;
   trans.SetOrigin (pos);
-  rb->SetTransform (trans);
+  rb->SetTransform (artificialTransform.GetInverse () * trans);
   
   if (setVelocity)
   {

@@ -97,12 +97,6 @@ struct iCollider : public virtual iBase
   /// Get the volume of this collider
   virtual float GetVolume () const = 0;
 
-  /// Set the transform of this collider relatively to its parent.
-  //virtual void SetTransform (const csOrthoTransform& transform) = 0;
-
-  /// Get the transform of this collider relatively to its parent.
-  //virtual const csOrthoTransform& GetTransform () const = 0;
-
   /**
    * Whether this collider (and all its children) can potentially be animated dynamically
    * by the physical simulation. All colliders are potentially dynamic, excepted the
