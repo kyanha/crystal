@@ -254,6 +254,8 @@ public:
   CS::Physics::iSoftBody* SpawnCloth ();
   CS::Physics::iSoftBody* SpawnSoftBody (bool setVelocity = true);
   void SpawnBoxStacks (int stackNum = 4, int stackHeight = 4, float boxLen = .5f, float mass = 20.f);
+  
+  CS::Physics::iRigidBody* SpawnChainLink ();
 
   /**
    * Room is the inside of a cuboid of the given size, and wall thickness

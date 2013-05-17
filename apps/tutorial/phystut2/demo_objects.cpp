@@ -238,9 +238,6 @@ CS::Physics::iRigidBody* PhysDemo::SpawnSphere
 
   GetCurrentSector ()->AddCollisionObject (rb);
 
-  // Update the display of the dynamics debugger
-  //dynamicsDebugger->UpdateDisplay ();
-
   return rb;
 }
 
@@ -302,9 +299,6 @@ CS::Physics::iRigidBody* PhysDemo::SpawnCone (bool setVelocity /* = true */)
 
   // TODO: Attach a mesh
   GetCurrentSector ()->AddCollisionObject (rb);
-
-  // Update the display of the dynamics debugger
-  //dynamicsDebugger->UpdateDisplay ();
 
   return rb;
 }
@@ -371,9 +365,6 @@ CS::Physics::iRigidBody* PhysDemo::SpawnCylinder (bool setVelocity /* = true */)
   rb->RebuildObject ();
   GetCurrentSector ()->AddCollisionObject (rb);
 
-  // Update the display of the dynamics debugger
-  //dynamicsDebugger->UpdateDisplay ();
-
   return rb;
 }
 
@@ -431,8 +422,6 @@ CS::Physics::iRigidBody* PhysDemo::SpawnCapsule (float length, float radius, boo
     rb->SetLinearVelocity (tc.GetT2O () * csVector3 (0, 0, 5));
     rb->SetAngularVelocity (tc.GetT2O () * csVector3 (5, 0, 0));
   }
-  // Update the display of the dynamics debugger
-  //dynamicsDebugger->UpdateDisplay ();
 
   return rb;
 }
@@ -491,9 +480,6 @@ CS::Collisions::iCollisionObject* PhysDemo::SpawnConcaveMesh ()
   co->SetTransform (trans);
   
   GetCurrentSector ()->AddCollisionObject (co);
-
-  // Update the display of the dynamics debugger
-  //dynamicsDebugger->UpdateDisplay ();
 
   return co;
 }
@@ -555,9 +541,6 @@ CS::Physics::iRigidBody* PhysDemo::SpawnConvexMesh (bool setVelocity /* = true *
   // Add to world
   GetCurrentSector ()->AddCollisionObject (rb);
 
-  // Update the display of the dynamics debugger
-  //dynamicsDebugger->UpdateDisplay ();
-
   return rb;
 }
 
@@ -611,9 +594,6 @@ CS::Physics::iRigidBody* PhysDemo::SpawnCompound (bool setVelocity /* = true */)
     rb->SetLinearVelocity (tc.GetT2O () * csVector3 (0, 0, 5));
     rb->SetAngularVelocity (tc.GetT2O () * csVector3 (5, 0, 0));
   }
-
-  // Update the display of the dynamics debugger
-  //dynamicsDebugger->UpdateDisplay ();
 
   return rb;
 }
@@ -804,33 +784,59 @@ CS::Physics::iJoint* PhysDemo::SpawnJointed ()
   return joint;
 }
 
+CS::Physics::iRigidBody* PhysDemo::SpawnChainLink ()
+{
+  csVector3 extents (0.1f, 0.105f, 0.02f);
+  RenderMeshColliderPair pair;
+  pair.MeshFactory = engine->FindMeshFactory ("chainlinkFact");
+  pair.Collider = csRef<iColliderBox> (physicalSystem->CreateColliderBox (extents));
+
+  // Create the mesh.
+  csRef<iMeshWrapper> mesh = engine->CreateMeshWrapper (pair.MeshFactory, "chainlink");
+
+  // Create the body
+  csRef<iRigidBodyFactory> factory = physicalSystem->CreateRigidBodyFactory (pair.Collider);
+  factory->SetDensity (DefaultDensity);
+  factory->SetElasticity (DefaultElasticity);
+  factory->SetFriction (DefaultFriction);
+
+  csRef<CS::Physics::iRigidBody> body = factory->CreateRigidBody ();
+  body->SetAttachedSceneNode (mesh->QuerySceneNode ());
+  body->QueryObject ()->SetObjectParent (mesh->QueryObject ());
+  
+  GetCurrentSector ()->AddCollisionObject (body);
+  
+  return body;
+}
+
 void PhysDemo::SpawnChain ()
 {
-  CS::Physics::iRigidBody* rb1 = SpawnBox (false);
+  csVector3 initPos = view->GetCamera ()->GetTransform ().GetOrigin () + 1.5f * GetCameraDirection ();
+  CS::Physics::iRigidBody* rb1 = SpawnChainLink ();
+  
   csOrthoTransform trans = rb1->GetTransform ();
-  csVector3 initPos = trans.GetOrigin () + csVector3 (0.0f, 5.0f, 0.0f);
   trans.SetOrigin (initPos);
   rb1->SetTransform (trans);
   rb1->SetState (CS::Physics::STATE_STATIC);
 
-  csVector3 offset (0.0f, 1.3f, 0.0f);
+  csVector3 offset (0.0f, 0.095f, 0.0f);
 
-  CS::Physics::iRigidBody* rb2 = SpawnCapsule (0.4f, 0.3f, false);
-  trans.SetO2T (csXRotMatrix3 (PI / 2.0f));
+  CS::Physics::iRigidBody* rb2 = SpawnChainLink ();
+  trans.SetO2T (csYRotMatrix3 (PI / 2.0f));
   trans.SetOrigin (initPos - offset);
   rb2->SetTransform (trans);
 
-  CS::Physics::iRigidBody* rb3 = SpawnBox (false);
+  CS::Physics::iRigidBody* rb3 = SpawnChainLink ();
   trans.Identity ();
   trans.SetOrigin (initPos - 2.0f * offset);
   rb3->SetTransform (trans);
 
-  CS::Physics::iRigidBody* rb4 = SpawnCapsule (0.4f, 0.3f, false);
-  trans.SetO2T (csXRotMatrix3 (PI / 2.0f));
+  CS::Physics::iRigidBody* rb4 = SpawnChainLink ();
+  trans.SetO2T (csYRotMatrix3 (PI / 2.0f));
   trans.SetOrigin (initPos - 3.0f * offset);
   rb4->SetTransform (trans);
 
-  CS::Physics::iRigidBody* rb5 = SpawnBox (false);
+  CS::Physics::iRigidBody* rb5 = SpawnChainLink ();
   trans.Identity ();
   trans.SetOrigin (initPos - 4.0f * offset);
   rb5->SetTransform (trans);
@@ -842,21 +848,24 @@ void PhysDemo::SpawnChain ()
   // Min = max means full constraint; min < max means move in the range. 
   // The translations are fully constrained.
   jointFactory->SetTransConstraints (true, true, true);
-  jointFactory->SetMinimumDistance (csVector3 (0,0,0));
-  jointFactory->SetMaximumDistance (csVector3 (0,0,0));
+  jointFactory->SetMinimumDistance (csVector3 (0, 0, 0));
+  jointFactory->SetMaximumDistance (csVector3 (0, 0, 0));
+    jointFactory->SetSpring (false);
 
   // The rotations are bounded
   jointFactory->SetRotConstraints (true, true, true);
-  jointFactory->SetMinimumAngle (csVector3 (-PI/4.0, -PI/6.0, -PI/6.0));
-  jointFactory->SetMaximumAngle (csVector3 (PI/4.0, PI/6.0, PI/6.0));
+  jointFactory->SetMinimumAngle (csVector3 (-PI/4.0f, -PI/6.0f, -PI/6.0f));
+  jointFactory->SetMaximumAngle (csVector3 (PI/4.0f, PI/6.0f, PI/6.0f));
 
   // Create the joints and attach the bodies to them.
   csOrthoTransform jointTransform;
   csRef<CS::Physics::iJoint> joint;
+  
+  csVector3 jointOffset (0.0f, 0.04f, 0.0f);
 
   joint = jointFactory->CreateJoint ();
   jointTransform.SetO2T (csZRotMatrix3 (PI * .5f));
-  jointTransform.SetOrigin (initPos - csVector3 (0.0f, 0.6f, 0.0f));
+  jointTransform.SetOrigin (initPos - jointOffset);
   joint->SetTransform (jointTransform);
   joint->Attach (rb1, rb2, false);
   joint->RebuildJoint ();
@@ -864,7 +873,7 @@ void PhysDemo::SpawnChain ()
 
   joint = jointFactory->CreateJoint ();
   jointTransform.SetO2T (csZRotMatrix3 (PI * .5f));
-  jointTransform.SetOrigin (initPos - csVector3 (0.0f, 0.6f, 0.0f) - offset);
+  jointTransform.SetOrigin (initPos - jointOffset - offset);
   joint->SetTransform (jointTransform);
   joint->Attach (rb2, rb3, false);
   joint->RebuildJoint ();
@@ -872,7 +881,7 @@ void PhysDemo::SpawnChain ()
 
   joint = jointFactory->CreateJoint ();
   jointTransform.SetO2T (csZRotMatrix3 (PI * .5f));
-  jointTransform.SetOrigin (initPos - csVector3 (0.0f, 0.6f, 0.0f) - 2.0f * offset);
+  jointTransform.SetOrigin (initPos - jointOffset - 2.0f * offset);
   joint->SetTransform (jointTransform);
   joint->Attach (rb3, rb4, false);
   joint->RebuildJoint ();
@@ -880,14 +889,11 @@ void PhysDemo::SpawnChain ()
 
   joint = jointFactory->CreateJoint ();
   jointTransform.SetO2T (csZRotMatrix3 (PI * .5f));
-  jointTransform.SetOrigin (initPos - csVector3 (0.0f, 0.6f, 0.0f) - 3.0f * offset);
+  jointTransform.SetOrigin (initPos - jointOffset - 3.0f * offset);
   joint->SetTransform (jointTransform);
   joint->Attach (rb4, rb5, false);
   joint->RebuildJoint ();
   GetCurrentSector ()->AddJoint (joint);
-
-  // Update the display of the dynamics debugger
-  //dynamicsDebugger->UpdateDisplay ();
 }
 
 void PhysDemo::SpawnParticles ()
@@ -1237,9 +1243,9 @@ CS::Physics::iSoftBody* PhysDemo::SpawnCloth ()
   size_t segmentsH = 10;
   size_t segmentsV = 10;
   csRef<CS::Physics::iSoftClothFactory> factory = physicalSystem->CreateSoftClothFactory ();
-  factory->SetCorners (csVector3 (-2, 2, 1),
-		       csVector3 (2, 2, 1),
-		       csVector3 (-2, 0, 1),
+  factory->SetCorners (csVector3 (0, 3, 1),
+		       csVector3 (2, 3, 1),
+		       csVector3 (0, 0, 1),
 		       csVector3 (2, 0, 1));
   factory->SetSegmentCounts (segmentsH, segmentsV);
   factory->SetDiagonals (true);
@@ -1254,7 +1260,7 @@ CS::Physics::iSoftBody* PhysDemo::SpawnCloth ()
   // Create the cloth mesh factory
   csRef<iMeshFactoryWrapper> clothFact =
     CS::Physics::SoftBodyHelper::CreateClothGenMeshFactory
-    (GetObjectRegistry (), "clothFact", body);
+    (GetObjectRegistry (), "clothFact", body, csVector2 (0.3f, 0.5f));
   csRef<iGeneralFactoryState> gmstate = scfQueryInterface<iGeneralFactoryState>
     (clothFact->GetMeshObjectFactory ());
 
@@ -1262,8 +1268,11 @@ CS::Physics::iSoftBody* PhysDemo::SpawnCloth ()
   gmstate->SetAnimationControlFactory (softBodyAnimationFactory);
   csRef<iMeshWrapper> mesh (engine->CreateMeshWrapper (
     clothFact, "cloth_body"));
-  iMaterialWrapper* mat = CS::Material::MaterialBuilder::CreateColorMaterial
-    (GetObjectRegistry (), "cloth", csColor4 (1.0f, 0.0f, 0.0f, 1.0f));
+  iMaterialWrapper* mat = engine->GetMaterialList ()->FindByName ("flag");  
+  if (!mat)
+  {
+    ReportError ("Could not find the material %s!", CS::Quote::Single ("flag"));
+  }
   mesh->GetMeshObject ()->SetMaterialWrapper (mat);
 
   body->SetAttachedSceneNode (mesh->QuerySceneNode ());

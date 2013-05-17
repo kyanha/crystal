@@ -20,7 +20,6 @@
 * Handle keyboard/mouse/etc input
 */
 
-
 #include "cssysdef.h"
 #include "csgeom/poly3d.h"
 #include "csgeom/sphere.h"
@@ -290,9 +289,6 @@ bool PhysDemo::OnKeyboard (iEvent &event)
         CS::Physics::iSoftBody* softBody = clipboardBody->QuerySoftBody ();
         GetCurrentSector ()->RemoveCollisionObject (softBody);
       }
-
-      // Update the display of the dynamics debugger
-      //dynamicsDebugger->UpdateDisplay ();
     }
   }
 
@@ -327,9 +323,6 @@ bool PhysDemo::OnKeyboard (iEvent &event)
 
     clipboardBody = 0;
     clipboardMovable = 0;
-
-    // Update the display of the dynamics debugger
-    //dynamicsDebugger->UpdateDisplay ();
   }
   // TODO: move in tool options in order to free keyboard keys
   else if (csKeyEventHelper::GetRawCode (&event) == 'i'
