@@ -28,7 +28,6 @@
  */
 
 #include "csgeom/tri.h"
-#include "cstool/primitives.h"
 #include "csutil/scf.h"
 #include "csutil/scf_interface.h"
 #include "iengine/mesh.h"
@@ -809,21 +808,26 @@ struct iSoftBody : public virtual iPhysicalBody
 };
 
 /**
- * General helper class for CS::Physics::Bullet::iSoftBody.
+ * General helper class for CS::Physics::iSoftBody.
  */
 // TODO: move in a lib tool class
 struct SoftBodyHelper
 {
   /**
-   * Create a genmesh from the given cloth soft body.
+   * Create a genmesh from the given cloth soft body. This may be useful eg if you
+   * created the soft body using a iSoftClothFactory.
    * The genmesh will be double-sided, in order to have correct normals on both
    * sides of the cloth (ie the vertices of the soft body will be duplicated for the
    * genmesh). The duplication mode of the faces of the mesh generated is
    * CS::Physics::MESH_DUPLICATION_CONTIGUOUS, that parameter can therefore be used
-   * e.g. in CS::Animation::iSoftBodyAnimationControl::SetSoftBody(). 
+   * e.g. in CS::Animation::iSoftBodyAnimationControl::SetSoftBody().
+   * \param object_reg The object registry
+   * \param factoryName The name of the factory to be created
+   * \param scale The scale to be applied on the UV mapping.
    */
-  static csPtr<iMeshFactoryWrapper> CreateClothGenMeshFactory
-  (iObjectRegistry* object_reg, const char* factoryName, iSoftBody* cloth)
+static csPtr<iMeshFactoryWrapper> CreateClothGenMeshFactory
+(iObjectRegistry* object_reg, const char* factoryName, iSoftBody* cloth,
+ csVector2 scale = csVector2 (1.0f))
   {
     csRef<iEngine> engine = csQueryRegistry<iEngine> (object_reg);
 
@@ -836,14 +840,21 @@ struct SoftBodyHelper
     csRef<iGeneralFactoryState> gmstate = scfQueryInterface<iGeneralFactoryState>
       (clothFact->GetMeshObjectFactory ());
 
-    // Create the vertices of the genmesh
+    // Create the vertices and normals of the genmesh
     size_t vertexCount = cloth->GetVertexCount ();
     gmstate->SetVertexCount (int (vertexCount * 2));
     csVector3* vertices = gmstate->GetVertices ();
+    csVector3* normals = gmstate->GetNormals ();
+
     for (size_t i = 0; i < vertexCount; i++)
     {
       vertices[i] = cloth->GetVertexPosition (i);
       vertices[i + vertexCount] = cloth->GetVertexPosition (i);
+      
+      normals[i] = cloth->GetVertexNormal (i);
+      normals[i + vertexCount] = cloth->GetVertexNormal (i);
+      normals[i] = csVector3 (0.f, 0.f, 1.f);
+      normals[i + vertexCount] = csVector3 (0.f, 0.f, 1.f);
     }
 
     // Create the triangles of the genmesh
@@ -858,14 +869,24 @@ struct SoftBodyHelper
 					 int (triangle[0] + vertexCount));
     }
 
-    gmstate->CalculateNormals ();
-
     // Set up the texels of the genmesh
     csVector2* texels = gmstate->GetTexels ();
-    csVector3* normals = gmstate->GetNormals ();
-    CS::Geometry::DensityTextureMapper mapper (1.0f);
     for (size_t i = 0; i < vertexCount * 2; i++)
-      texels[i] = mapper.Map (vertices[i], normals[i], i);
+    {
+      csVector3 p = vertices[i];
+      csVector3 n = normals[i];
+      csVector3 a1, a2;
+      csPlane3::FindOrthogonalPoints (n, a1, a2);
+
+      // Calculate the closest point from point 'p' on the plane given
+      // by 'n' and the origin.
+      csVector3 closest = p - n * (n * p);
+
+      csVector2 uv;
+      uv.x = a1 * closest * scale.x;
+      uv.y = a2 * closest * scale.y;
+      texels[i] = uv;
+    }
 
     gmstate->Invalidate ();
 
