@@ -234,12 +234,16 @@ bool PhysDemo::SetLevel (const char* mapPath, bool convexDecomp)
   // Initialize the actor
   UpdateActorMode (actorMode);
 
-  // Preload some materials
+  // Preload some materials and objects
   if (!loader->LoadTexture ("fire", "/lib/std/castle/fire1.png")) return ReportError ("Error loading texture: fire");
   if (!loader->LoadTexture ("stone", "/lib/std/stone4.gif")) return ReportError ("Could not load texture: stone");
   if (!loader->LoadTexture ("objtexture", "/lib/std/blobby.jpg")) return ReportError ("Error loading texture: blobby");
   if (!loader->LoadTexture ("misty", "/lib/std/misty.jpg")) return ReportError ("Error loading texture: misty");
+  if (!loader->LoadTexture ("spark", "/lib/std/spark.png")) return ReportError ("Error loading texture: spark");
 
+  if (!loader->LoadLibraryFile ("/data/phystut/flag.xml")) return ReportError ("Error loading library: flag");
+  if (!loader->LoadLibraryFile ("/data/phystut/chainlink")) return ReportError ("Error loading library: chainlink");
+  
   // Create the environment
   bool loaded = false;
   if (mapPath)
