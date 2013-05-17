@@ -43,18 +43,16 @@ CS_PLUGIN_NAMESPACE_BEGIN (Bullet2)
     collider = dynamic_cast<csBulletCollider*> (factory->GetCollider ());
 
     // TODO: handle no colliders
-    // TODO: use factory's state
-    // TODO: use collider transform
 
-    // set mass
-    btScalar mass = factory->mass;
-  
-    // construct bullet object
+    // Build the bullet object
     btCollisionShape* shape = collider->GetOrCreateBulletShape ();
+    btScalar mass = factory->mass;
+    btTransform trans = CSToBullet (factory->GetColliderTransform (), system->GetInternalScale ())
+			 * collider->GetPrincipalAxisTransform ();
     btRigidBody::btRigidBodyConstructionInfo infos
       // TODO motion states not needed if not dynamic
       // TODO: mass * collider->GetLocalInertia () seems strange
-      (mass, CreateMotionState (collider->GetPrincipalAxisTransform ()), shape, mass * collider->GetLocalInertia ());
+      (mass, CreateMotionState (trans), shape, mass * collider->GetLocalInertia ());
 
     infos.m_friction = factory->GetFriction ();
     infos.m_restitution = factory->GetElasticity ();
@@ -77,7 +75,9 @@ CS_PLUGIN_NAMESPACE_BEGIN (Bullet2)
 
   csBulletMotionState* csBulletRigidBody::CreateMotionState (const btTransform& trans)
   {
-    return motionState = new csBulletMotionState (this, trans, collider->GetPrincipalAxisTransform ());
+    return motionState = new csBulletMotionState
+      (this, trans, CSToBullet (factory->GetColliderTransform (), system->GetInternalScale ())
+       * collider->GetPrincipalAxisTransform ());
   }
 
   bool csBulletRigidBody::RemoveBulletObject ()
@@ -201,13 +201,12 @@ CS_PLUGIN_NAMESPACE_BEGIN (Bullet2)
     {
       sector->bulletWorld->removeRigidBody (btRigidBody::upcast (btObject));
     }
-    
+
+    // Re-create the motion state
     btTransform principalAxis = motionState->inversePrincipalAxis.inverse ();
     delete motionState;
-    motionState = new csBulletMotionState (this, btTrans * principalAxis, principalAxis);
-
+    CreateMotionState (btTrans * principalAxis);
     btBody->setMotionState (motionState);
-    btBody->setCenterOfMassTransform (motionState->m_graphicsWorldTrans);
 
     if (insideWorld)
     {
@@ -227,8 +226,6 @@ CS_PLUGIN_NAMESPACE_BEGIN (Bullet2)
     {
       camera->SetTransform (BulletToCS (btTrans * motionState->inversePrincipalAxis, system->GetInverseInternalScale ()));
     }
-
-    btObject->setWorldTransform (btTrans);
   }
 
   float csBulletRigidBody::GetMass () const
@@ -293,10 +290,9 @@ CS_PLUGIN_NAMESPACE_BEGIN (Bullet2)
           btTransform trans;
           motionState->getWorldTransform (trans);
           trans *= motionState->inversePrincipalAxis;
+          trans *= collider->GetPrincipalAxisTransform ();
 
           delete motionState;
-
-          trans *= collider->GetPrincipalAxisTransform ();
           motionState = CreateMotionState (trans);
           btBody->setMotionState (motionState);
         }
@@ -537,11 +533,12 @@ CS_PLUGIN_NAMESPACE_BEGIN (Bullet2)
   {
     btTransform trans;
     motionState->getWorldTransform (trans);
-    trans = trans * motionState->inversePrincipalAxis;
+    trans *= motionState->inversePrincipalAxis;
+    trans *= CSToBullet (factory->GetColliderTransform (), system->GetInternalScale ());
+    trans *= collider->GetPrincipalAxisTransform ();
     
     btCollisionShape* shape = collider->GetOrCreateBulletShape ();
     btScalar mass = GetMass ();
-    trans *= collider->GetPrincipalAxisTransform ();
 
     btRigidBody::btRigidBodyConstructionInfo infos (mass, CreateMotionState (trans), shape, mass * collider->GetLocalInertia ());
 
