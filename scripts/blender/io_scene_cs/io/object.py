@@ -426,7 +426,7 @@ def ObjectAsCS(self, func, depth=0, **kwargs):
       #func(' '*depth +'<meshref name="%s_object">'%(self.name))
       #func(' '*depth +'  <factory>%s</factory>'%(self.name))
 
-      func(' '*depth +'<meshobj name="%s_object">'%(self.name))
+      func(' '*depth +'<meshobj name="%s_object">'%(name))
 
       if self.parent and self.parent.type == 'ARMATURE':
         func(' '*depth +'  <plugin>crystalspace.mesh.loader.animesh</plugin>')
@@ -441,7 +441,7 @@ def ObjectAsCS(self, func, depth=0, **kwargs):
       else:
         matrix = self.relative_matrix
         if 'transform' in kwargs:
-          matrix =  matrix * kwargs['transform']
+          matrix =  kwargs['transform'] * matrix
       MatrixAsCS(matrix, func, depth+2)
 
       #func(' '*depth +'</meshref>')
@@ -469,9 +469,14 @@ def ObjectAsCS(self, func, depth=0, **kwargs):
     func(' '*depth +'</meshobj>')
 
   elif self.type == 'LAMP':
+
+    matrix = self.relative_matrix
+    if 'transform' in kwargs:
+      matrix =  kwargs['transform'] * matrix
+
     func(' '*depth +'<light name="%s">'%(name))
     # Flip Y and Z axis.
-    func(' '*depth +'  <center x="%f" z="%f" y="%f" />'% tuple(self.relative_matrix.to_translation()))
+    func(' '*depth +'  <center x="%f" z="%f" y="%f" />'% tuple(matrix.to_translation()))
     func(' '*depth +'  <color red="%f" green="%f" blue="%f" />'% tuple(self.data.color))
     func(' '*depth +'  <radius>%f</radius>'%(self.data.distance))
     func(' '*depth +'  <attenuation>linear</attenuation>')
