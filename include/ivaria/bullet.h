@@ -610,9 +610,9 @@ struct SoftBodyHelper
     // Set up the texels of the genmesh
     csVector2* texels = gmstate->GetTexels ();
     csVector3* normals = gmstate->GetNormals ();
-    CS::Geometry::TextureMapper* mapper = new CS::Geometry::DensityTextureMapper (1.0f);
+    CS::Geometry::DensityTextureMapper mapper (1.0f);
     for (size_t i = 0; i < vertexCount * 2; i++)
-      texels[i] = mapper->Map (vertices[i], normals[i], i);
+      texels[i] = mapper.Map (vertices[i], normals[i], i);
 
     gmstate->Invalidate ();
 
