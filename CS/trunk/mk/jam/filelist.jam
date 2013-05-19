@@ -75,6 +75,7 @@ rule DoFileListEntry
     
     SEARCH on $(target) = [ on $(1) GetVar SEARCH ] ;
     NoCare $(target) ;
+    NoUpdate $(target) ;
     WriteFileListEntry $(listfile) : $(target) : $(dir) : $(1) ;
 
     LIST_ENTRIES_$(list) += $(target) ;
@@ -121,6 +122,7 @@ rule WriteFileListEntry
   
   local listfile_gristed = $(listfile:G=$(destname)) ;
   MakeLocate $(listfile_gristed) : [ on $(listfile) GetVar LOCATE ] ;
+  Depends $(listfile_gristed) : $(srcfile) ;
   
   DESTNAME on $(listfile_gristed) = $(destname) ;
   LOCATE on $(srcfile) = [ on $(srcfile) GetVar SEARCH ] ;
