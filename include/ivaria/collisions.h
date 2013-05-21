@@ -708,7 +708,7 @@ struct iCollisionSector : public virtual iBase
 // TODO: global collision callback
 struct iCollisionSystem : public virtual iBase
 {
-  SCF_INTERFACE (CS::Collisions::iCollisionSystem, 2, 0, 0);
+  SCF_INTERFACE (CS::Collisions::iCollisionSystem, 2, 0, 1);
 
   /**
    * Return the physical system pointer if this interface is also implemented by
@@ -781,6 +781,9 @@ struct iCollisionSystem : public virtual iBase
   
   /// Find a collision sector by its associated iSector, or nullptr if it has not been found
   virtual iCollisionSector* FindCollisionSector (const iSector* sceneSector) = 0;
+
+  /// Find a collision sector by name.
+  virtual iCollisionSector* FindCollisionSector (const char* name) = 0;
 
   /**
    * Create a collision group of the given name. Return nullptr if the group could
