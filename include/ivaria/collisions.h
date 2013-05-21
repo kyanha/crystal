@@ -770,11 +770,11 @@ struct iCollisionSystem : public virtual iBase
   /// Creates a new collision sector and adds it to the system's set
   virtual iCollisionSector* CreateCollisionSector (iSector* sector = nullptr) = 0;
   
-  /// Remove the given collision sector
-  virtual void RemoveCollisionSector (iCollisionSector* sector) = 0;
+  /// Delete the given collision sector
+  virtual void DeleteCollisionSector (iCollisionSector* sector) = 0;
 
-  /// Remove all collision sectors.
-  virtual void RemoveCollisionSectors () = 0;
+  /// Delete all collision sectors.
+  virtual void DeleteCollisionSectors () = 0;
   
   /// Return the amount of sectors in this system
   virtual size_t GetCollisionSectorCount () const = 0;
@@ -820,7 +820,7 @@ struct iCollisionSystem : public virtual iBase
   virtual csPtr<iCollisionActorFactory> CreateCollisionActorFactory
     (CS::Collisions::iCollider* collider = nullptr) = 0;
 
-  /// Reset the entire system and delete all sectors
+  /// Reset the entire system and delete all sectors and collision groups
   virtual void DeleteAll () = 0;
 };
 

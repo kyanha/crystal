@@ -286,13 +286,13 @@ CS::Collisions::iCollisionSector* csBulletSystem::CreateCollisionSector (iSector
   return collSector;
 }
 
-void csBulletSystem::RemoveCollisionSector (CS::Collisions::iCollisionSector* sector)
+void csBulletSystem::DeleteCollisionSector (CS::Collisions::iCollisionSector* sector)
 {
   csBulletSector* collSector = dynamic_cast<csBulletSector*> (sector);
   collSectors.Delete (collSector);
 }
 
-void csBulletSystem::RemoveCollisionSectors ()
+void csBulletSystem::DeleteCollisionSectors ()
 {
   while (collSectors.GetSize () > 0)
   {
@@ -565,6 +565,12 @@ csPtr<CS::Physics::iSoftMeshFactory> csBulletSystem::CreateSoftMeshFactory ()
 void csBulletSystem::DeleteAll () 
 {
   collSectors.DeleteAll ();
+  collisionGroups.DeleteAll ();
+
+  // Create the default collision group
+  csRef<CollisionGroup> group;
+  group.AttachNew (new CollisionGroup ("Default", 0));
+  defaultGroup = collisionGroups.Put ("Default", group);
 }
 
 void csBulletSystem::InitDebugDraw ()

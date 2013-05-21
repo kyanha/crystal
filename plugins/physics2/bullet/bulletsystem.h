@@ -162,8 +162,8 @@ public:
     (iTerrainSystem* terrain, float minHeight = 0, float maxHeight = 0);
   
   virtual CS::Collisions::iCollisionSector* CreateCollisionSector (iSector* sector = nullptr);
-  virtual void RemoveCollisionSector (CS::Collisions::iCollisionSector* sector);
-  virtual void RemoveCollisionSectors ();
+  virtual void DeleteCollisionSector (CS::Collisions::iCollisionSector* sector);
+  virtual void DeleteCollisionSectors ();
   virtual size_t GetCollisionSectorCount () const { return collSectors.GetSize (); }
   virtual CS::Collisions::iCollisionSector* GetCollisionSector (size_t index) 
   {

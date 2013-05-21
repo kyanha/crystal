@@ -476,7 +476,6 @@ bool csBulletJoint::RebuildJoint ()
 
       if (fabs (desiredVelocity[1]) > EPSILON)
       {
-        printf ("Setting motor\n");
         btRotationalLimitMotor* motor = dofJoint->getRotationalLimitMotor (1);
         motor->m_enableMotor = true;
         motor->m_targetVelocity = desiredVelocity[1];
