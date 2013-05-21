@@ -305,6 +305,20 @@ CS::Collisions::iCollisionSector* csBulletSystem::FindCollisionSector (const iSe
   return nullptr;
 }
 
+CS::Collisions::iCollisionSector* csBulletSystem::FindCollisionSector (const char* name)
+{
+  csString n = name;
+  // TODO: use a hash for faster access
+  for (size_t i = 0; i < collSectors.GetSize (); i++)
+  {
+    if (n == collSectors[i]->QueryObject ()->GetName ())
+    {
+      return collSectors[i];
+    }
+  }
+  return nullptr;
+}
+
 // Groups
 
 CS::Collisions::iCollisionGroup* csBulletSystem::CreateCollisionGroup (const char* name)

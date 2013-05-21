@@ -176,8 +176,16 @@ csPtr<iBase> csPhysicsLoader2::Parse (iDocumentNode *node,
     {
     case XMLTOKEN_COLLISIONSECTOR:
     {
-      csRef<CS::Collisions::iCollisionSector> collisionSector =
-	collisionSystem->CreateCollisionSector ();
+      csRef<CS::Collisions::iCollisionSector> collisionSector;
+      const char* name = child->GetAttributeValue ("name");
+      if (name && *name)
+        collisionSector = collisionSystem->FindCollisionSector (name);
+      if (!collisionSector)
+      {
+        collisionSector = collisionSystem->CreateCollisionSector ();
+	if (name && *name)
+	  collisionSector->QueryObject ()->SetName (name);
+      }
       if (!ParseCollisionSector (child, collisionSector, ldr_context))
         return csPtr<iBase> (nullptr);
       else

@@ -170,6 +170,7 @@ public:
       (scfQueryInterface<CS::Collisions::iCollisionSector>(collSectors.Get (index)));
   }
   virtual CS::Collisions::iCollisionSector* FindCollisionSector (const iSector* sceneSector);
+  virtual CS::Collisions::iCollisionSector* FindCollisionSector (const char* name);
 
   virtual CS::Collisions::iCollisionGroup* CreateCollisionGroup (const char* name);
   virtual CS::Collisions::iCollisionGroup* FindCollisionGroup (const char* name) const;
