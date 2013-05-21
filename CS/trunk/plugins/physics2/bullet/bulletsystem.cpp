@@ -292,6 +292,14 @@ void csBulletSystem::RemoveCollisionSector (CS::Collisions::iCollisionSector* se
   collSectors.Delete (collSector);
 }
 
+void csBulletSystem::RemoveCollisionSectors ()
+{
+  while (collSectors.GetSize () > 0)
+  {
+    collSectors.DeleteIndex (0);
+  }
+}
+
 CS::Collisions::iCollisionSector* csBulletSystem::FindCollisionSector (const iSector* sec)
 {
   // TODO: use a hash for faster access
