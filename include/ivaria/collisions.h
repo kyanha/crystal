@@ -772,6 +772,9 @@ struct iCollisionSystem : public virtual iBase
   
   /// Remove the given collision sector
   virtual void RemoveCollisionSector (iCollisionSector* sector) = 0;
+
+  /// Remove all collision sectors.
+  virtual void RemoveCollisionSectors () = 0;
   
   /// Return the amount of sectors in this system
   virtual size_t GetCollisionSectorCount () const = 0;

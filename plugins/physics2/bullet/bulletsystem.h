@@ -163,6 +163,7 @@ public:
   
   virtual CS::Collisions::iCollisionSector* CreateCollisionSector (iSector* sector = nullptr);
   virtual void RemoveCollisionSector (CS::Collisions::iCollisionSector* sector);
+  virtual void RemoveCollisionSectors ();
   virtual size_t GetCollisionSectorCount () const { return collSectors.GetSize (); }
   virtual CS::Collisions::iCollisionSector* GetCollisionSector (size_t index) 
   {
