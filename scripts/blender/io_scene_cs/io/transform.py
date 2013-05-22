@@ -1,4 +1,5 @@
 import bpy
+from mathutils import *
 
 from .util import *
 
@@ -32,6 +33,5 @@ def MatrixAsCS(matrix, func, depth=0, noMove=False):
     if rot[0]:
       func(' '*depth +'    <rotx>%s</rotx>'%(-rot[0]))
     func(' '*depth +'  </matrix>')
-  
   if not noMove:
     func(' '*depth +'</move>')

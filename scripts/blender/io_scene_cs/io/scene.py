@@ -38,6 +38,7 @@ def SceneAsCS(self, func, depth=0):
       with a reference to all mesh, armature, group, lamp and portal objects
       contained in this scene (no reference to cameras and socket objects)
   """
+  print("\nEXPORT sector '%s'"%self.uname)
   func(' '*depth +'<sector name="%s">'%(self.uname))
 
   # Export portals

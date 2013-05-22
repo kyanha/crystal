@@ -82,16 +82,16 @@ def ExportWorld(path):
     if typ == 'A':
       # Animated meshes
       for name, fact in deps[typ].items():
-        print('\nEXPORT OBJECT "%s" AS A CS ANIMATED MESH\n'%(fact.object.name))
-        print('Writing fact',fact.uname,':', Join(path, 'factories/', fact.object.name))
+        print('\nEXPORT OBJECT "%s" AS A CS ANIMATED MESH\n'%(fact.object.uname))
+        print('Writing fact',fact.uname,':', Join(path, 'factories/', fact.object.uname))
         fact.AsCSRef(Write(f), 2, 'factories/', animesh=True)
         # Export animesh factory
         fact.AsCSLib(path, animesh=True)
     elif typ == 'F':
       # General meshes
       for name, fact in deps[typ].items():
-        print('\nEXPORT OBJECT "%s" AS A CS GENERAL MESH\n'%(fact.object.name))
-        print('Writing fact',fact.uname,':', Join(path, 'factories/', fact.object.name))
+        print('\nEXPORT OBJECT "%s" AS A CS GENERAL MESH\n'%(fact.object.uname))
+        print('Writing fact',fact.uname,':', Join(path, 'factories/', fact.object.uname))
         fact.AsCSRef(Write(f), 2, 'factories/', animesh=False)
         # Export genmesh factory
         fact.AsCSLib(path, animesh=False)
