@@ -36,9 +36,9 @@ class Hierarchy:
   def AsCSRef(self, func, depth=0, dirName='factories/', animesh=False):
     if self.object.parent_type != 'BONE' and self.object.data.name not in Hierarchy.exportedFactories:
       if animesh:
-        func(' '*depth +'<library>%s%s</library>'%(dirName,self.object.name))
+        func(' '*depth +'<library>%s%s</library>'%(dirName,self.object.uname))
       else:
-        func(' '*depth +'<library>%s%s</library>'%(dirName,self.object.data.name))
+        func(' '*depth +'<library>%s%s</library>'%(dirName,self.object.data.uname))
 
   def GetDependencies(self):
     dependencies = EmptyDependencies()
@@ -84,10 +84,10 @@ class Hierarchy:
     """
     # Reference skeleton as a CS library
     if skelRef and self.object.type == 'ARMATURE':
-      func(" "*depth + "<library>factories/%s_rig</library>"%(self.object.name))
+      func(" "*depth + "<library>factories/%s_rig</library>"%(self.object.uname))
 
     # Animesh factory header
-    func(" "*depth + "<meshfact name=\"%s\">"%(self.object.name))
+    func(" "*depth + "<meshfact name=\"%s\">"%(self.object.uname))
     func(" "*depth + "  <plugin>crystalspace.mesh.loader.factory.animesh</plugin>")
 
     # Render priority and Z-mode properties
@@ -129,13 +129,13 @@ class Hierarchy:
       return write
 
     if self.object.data.name in Hierarchy.exportedFactories:
-      print('Skipping "%s" factory export, already done' % (self.object.data.name))
+      print('Skipping "%s" factory export, already done' % (self.object.data.uname))
       return
     # Export mesh
     if animesh:
-      fa = open(Join(path, 'factories/', self.object.name), 'w')
+      fa = open(Join(path, 'factories/', self.object.uname), 'w')
     else:
-      fa = open(Join(path, 'factories/', self.object.data.name), 'w')
+      fa = open(Join(path, 'factories/', self.object.data.uname), 'w')
     self.WriteCSLibHeader(Write(fa), animesh)
     if not B2CS.properties.sharedMaterial:
       objectDeps = self.object.GetDependencies()
@@ -232,7 +232,7 @@ class Hierarchy:
           if export:
             indexObject = find(lambda obCpy: obCpy.name[:-4] == ob.name[:len(obCpy.name[:-4])], meshData)
             lib = "from library '%s'"%(bpy.path.abspath(ob.library.filepath)) if ob.library else ''
-            print('EXPORT mesh "%s" %s'%(ob.name, lib))
+            print('EXPORT mesh "%s" %s'%(ob.uname, lib))
             args = copy.deepcopy(kwargs)
             args['meshData'] = [meshData[indexObject]]
             args['subMeshes'] = subMeshess[indexObject]
@@ -289,14 +289,14 @@ class Hierarchy:
       func(" "*depth + "    <material>%s</material>"%(self.uv_texture if self.uv_texture!=None else 'None'))
 
     # Export object's render buffers
-    print('EXPORT factory "%s"' % (self.object.name))
+    print('EXPORT factory "%s"' % (self.object.uname))
     for buf in GetRenderBuffers(**kwargs):
       buf.AsCS(func, depth+4, True)
 
     # Export bone influences
     if self.object.type == 'ARMATURE':
       # Specify skeleton name
-      func(' '*depth + '    <skeleton>%s_rig</skeleton>'%(self.object.name))
+      func(' '*depth + '    <skeleton>%s_rig</skeleton>'%(self.object.uname))
 
       func(' '*depth + '    <boneinfluences>')
       for influences in self.object.data.GetBoneInfluences(**kwargs):
@@ -343,7 +343,7 @@ def AsCSGenmeshLib(self, func, depth=0, **kwargs):
   """
 
   # Write genmesh header
-  func(' '*depth + '<meshfact name=\"%s\">'%(self.data.name))
+  func(' '*depth + '<meshfact name=\"%s\">'%(self.data.uname))
   func(' '*depth + '  <plugin>crystalspace.mesh.loader.factory.genmesh</plugin>')
   if self.data.use_imposter:
     func(' '*depth + '  <imposter range="100.0" tolerance="0.4" camera_tolerance="0.4" shader="lighting_imposter"/>')
@@ -423,8 +423,8 @@ def ObjectAsCS(self, func, depth=0, **kwargs):
       # Temporary disable of meshref support because of incompatibility
       # issues with lighter2 that needs to be genmesh aware in order to
       # pack the lightmaps per submeshes
-      #func(' '*depth +'<meshref name="%s_object">'%(self.name))
-      #func(' '*depth +'  <factory>%s</factory>'%(self.name))
+      #func(' '*depth +'<meshref name="%s_object">'%(self.uname))
+      #func(' '*depth +'  <factory>%s</factory>'%(self.data.uname))
 
       func(' '*depth +'<meshobj name="%s_object">'%(name))
 
@@ -433,7 +433,7 @@ def ObjectAsCS(self, func, depth=0, **kwargs):
       else:
         func(' '*depth +'  <plugin>crystalspace.mesh.loader.genmesh</plugin>')
       func(' '*depth +'  <params>')
-      func(' '*depth +'    <factory>%s</factory>'%(self.data.name))
+      func(' '*depth +'    <factory>%s</factory>'%(self.data.uname))
       func(' '*depth +'  </params>')
 
       if self.parent and self.parent_type == 'BONE':
@@ -454,15 +454,15 @@ def ObjectAsCS(self, func, depth=0, **kwargs):
     #func(' '*depth +'<meshref name="%s_object">'%(name))
     #func(' '*depth +'  <factory>%s</factory>'%(name))
 
-    func(' '*depth +'<meshobj name="%s_object">'%(self.name))
+    func(' '*depth +'<meshobj name="%s_object">'%(self.uname))
     func(' '*depth +'  <plugin>crystalspace.mesh.loader.animesh</plugin>')
     func(' '*depth +'  <params>')
-    func(' '*depth +'    <factory>%s</factory>'%(self.name))
+    func(' '*depth +'    <factory>%s</factory>'%(self.uname))
     func(' '*depth +'  </params>')
 
     matrix = self.relative_matrix
     if 'transform' in kwargs:
-      matrix =  matrix * kwargs['transform']
+      matrix = kwargs['transform'] * matrix
     MatrixAsCS(matrix, func, depth+2)
 
     #func(' '*depth +'</meshref>')
@@ -472,7 +472,7 @@ def ObjectAsCS(self, func, depth=0, **kwargs):
 
     matrix = self.relative_matrix
     if 'transform' in kwargs:
-      matrix =  kwargs['transform'] * matrix
+      matrix = kwargs['transform'] * matrix
 
     func(' '*depth +'<light name="%s">'%(name))
     # Flip Y and Z axis.
@@ -503,7 +503,68 @@ def ObjectAsCS(self, func, depth=0, **kwargs):
         obj.AsCS(func, depth, transform=self.relative_matrix, name=self.uname)
 
   elif self.type != 'CAMERA':
-    print('\nWARNING: Object "%s" of type "%s" is not supported!'%(self.name, self.type))
+    print("WARNING: Object '%s' of type '%s' is not supported!"%(self.name, self.type))
+
+  # Process modifiers
+  for modifier in self.modifiers:
+
+    if modifier.type == "ARRAY":
+      if modifier.fit_type != "FIXED_COUNT":
+        print("WARNING: Unable to export modifier '%s' of type %s on object '%s' (of factory '%s')"%(modifier.name,modifier.fit_type,name,self.data.uname))
+        continue
+
+      # Disable the array modifier
+      viewstate = modifier.show_viewport
+      modifier.show_viewport = False
+      bpy.ops.object.mode_set(mode='EDIT')
+
+      # Get transformation matrix and bounding box of base object
+      matrix = self.relative_matrix
+      if 'transform' in kwargs:
+        matrix =  kwargs['transform'] * matrix
+      bbsize = Vector((abs(self.bound_box[6][0] - self.bound_box[0][0]),
+                       abs(self.bound_box[6][1] - self.bound_box[0][1]),
+                       abs(self.bound_box[6][2] - self.bound_box[0][2])))
+
+      # Restore object mode and modifier
+      modifier.show_viewport = viewstate
+      bpy.ops.object.mode_set(mode='OBJECT')
+
+      # Calculate array transformation
+      transform = Matrix.Identity(4)
+      if modifier.use_object_offset:
+        transform = modifier.offset_object.relative_matrix * matrix.inverted()
+
+      if modifier.use_constant_offset:
+        offset = modifier.constant_offset_displace
+        m = Matrix.Identity(4)
+        for i in range(3):
+          if offset[i] != 0.0:
+            m[i][3] = offset[i]
+        transform = m * transform
+
+      if modifier.use_relative_offset:
+        scaling = modifier.relative_offset_displace
+        if scaling != [-1.0,-1.0,-1.0]:
+          m = Matrix.Identity(4)
+          for i in range(3):
+            if modifier.count != 0 and scaling[i] != 0.0:
+              m[i][3] = scaling[i] * bbsize[i]
+          transform = m * transform
+
+      # Create instances of base object respecting the array modifier
+      for cnt in range(modifier.count - 1):
+        func(' '*depth +'<meshobj name="%s_array_object_%i">'%(self.uname,cnt+1))
+        func(' '*depth +'  <plugin>crystalspace.mesh.loader.genmesh</plugin>')
+        func(' '*depth +'  <params>')
+        func(' '*depth +'    <factory>%s</factory>'%(self.data.uname))
+        func(' '*depth +'  </params>')
+        matrix = transform * matrix
+        MatrixAsCS(matrix, func, depth+2)
+        func(' '*depth +'</meshobj>')
+
+    else:
+      print("WARNING: unable to export modifier '%s' on object '%s' (of factory '%s')"%(modifier.name,name,self.data.uname))
 
 bpy.types.Object.AsCS = ObjectAsCS
 
@@ -587,7 +648,7 @@ def ObjectDependencies(self, empty=None):
     # Object with skeleton ==> 'A' type (animesh)
     if self.children:
       hier = Hierarchy(self, empty)
-      print('ObjectDependencies: ', hier.uname, '-', self.name)
+      print('ObjectDependencies: ', hier.uname, '-', self.uname)
       dependencies['A'][hier.uname] = hier
       MergeDependencies(dependencies, self.GetMaterialDependencies())
 
@@ -595,13 +656,13 @@ def ObjectDependencies(self, empty=None):
     if self.data.shape_keys:
       # Mesh with morph targets ==> 'A' type (animesh)
       hier = Hierarchy(self, empty)
-      print('ObjectDependencies: ', hier.uname, '-', self.name)
+      print('ObjectDependencies: ', hier.uname, '-', self.uname)
       dependencies['A'][hier.uname] = hier
     else:
       # Mesh without skeleton neither morph target 
       # or child of a bone (attached by socket) ==> 'F' type (genmesh)
       hier = Hierarchy(self, empty)
-      print('ObjectDependencies: ', hier.uname, '-', self.name)
+      print('ObjectDependencies: ', hier.uname, '-', self.uname)
       dependencies['F'][hier.uname] = hier
 
     # Material of the mesh ==> 'M' type
@@ -640,7 +701,7 @@ def GetDefaultMaterial (self, notifications = True):
           foundMaterial = True
           break
     if not foundMaterial and notifications:
-      print('WARNING: armature object "%s" has no child with texture coordinates'%(self.name))
+      print('WARNING: armature object "%s" has no child with texture coordinates'%(self.uname))
   elif self.type == 'MESH':
     # Mesh object
     if len(self.data.uv_textures) != 0 and self.data.GetFirstMaterial():
@@ -648,7 +709,7 @@ def GetDefaultMaterial (self, notifications = True):
       mat = self.data.GetFirstMaterial()
     elif notifications:
       if len(self.data.uv_textures) == 0:
-        print('WARNING: mesh object "%s" has no texture coordinates'%(self.name))
+        print('WARNING: mesh object "%s" has no texture coordinates'%(self.uname))
           
   return mat
 
