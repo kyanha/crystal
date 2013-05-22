@@ -60,6 +60,7 @@ public:
   {
   }
 
+  // Get the index of the object with the given name
   size_t GetIndexByName (const char* name) const
   {
     size_t i;
@@ -73,6 +74,7 @@ public:
     return csArrayItemNotFound;
   }
 
+  // Find the object with the given name
   T* FindByName (const char* name) const
   {
     size_t i = GetIndexByName (name);
@@ -100,6 +102,7 @@ public:
   {
   }
 
+  // Get the index of the object with the given name
   size_t GetIndexByName (const char* name) const
   {
     size_t i;
@@ -113,6 +116,7 @@ public:
     return csArrayItemNotFound;
   }
 
+  // Find the object with the given name
   T* FindByName (const char* name) const
   {
     size_t i = GetIndexByName (name);
