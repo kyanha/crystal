@@ -1,4 +1,4 @@
-__all__ = ["data", "group", "object", "settings", "image", "material", "portal", "lamp"]
+__all__ = ["data", "group", "object", "settings", "image", "material", "portal", "lamp", "modifier"]
 
 
 from . import data
@@ -8,3 +8,4 @@ from . import image
 from . import material
 from . import portal
 from . import lamp
+from . import modifier
