@@ -78,7 +78,7 @@ public:
   virtual ~csBulletSoftBody ();
 
   //iCollisionObject
-  virtual iObject* QueryObject (void) { return (iObject*) this; }
+  virtual iObject* QueryObject () { return (iObject*) this; }
 
   virtual void SetAttachedCamera (iCamera* camera)
   { csBulletCollisionObject::SetAttachedCamera (camera); }

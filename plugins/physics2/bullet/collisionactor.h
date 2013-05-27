@@ -85,7 +85,7 @@ public:
   csBulletCollisionActor (csBulletSystem* sys);
   virtual ~csBulletCollisionActor ();
 
-  virtual iObject* QueryObject (void) { return (iObject*) this; }
+  virtual iObject* QueryObject () { return (iObject*) this; }
 
   //-- iCollisionObject
   virtual CS::Collisions::iCollisionObject* QueryCollisionObject ()

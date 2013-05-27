@@ -38,6 +38,7 @@ struct iMovable;
 struct iPortal;
 struct iSceneNode;
 struct iSector;
+struct iTerrainFactory;
 struct iTerrainSystem;
 struct iTriangleMesh;
 struct iView;
@@ -60,6 +61,7 @@ struct iCollisionActor;
 struct iCollisionObject;
 struct iCollisionSector;
 struct iCollisionSystem;
+struct iCollisionTerrain;
 
 /**
  * The type of a collision object.
@@ -71,7 +73,8 @@ enum CollisionObjectType
   COLLISION_OBJECT_PHYSICAL,       /*!< The collision object is a physical object and can be
 				     upcast to a iPhysicalObject. */
   COLLISION_OBJECT_GHOST,          /*!< The collision object is a ghost. */
-  COLLISION_OBJECT_ACTOR           /*!< The collision object is an actor. */
+  COLLISION_OBJECT_ACTOR,          /*!< The collision object is an actor. */
+  COLLISION_OBJECT_TERRAIN         /*!< The collision object is a terrain. */
 };
 
 /**
@@ -245,7 +248,7 @@ struct iCollisionObjectFactory : public virtual iBase
 
   /// Set the collider of this factory
   virtual void SetCollider (iCollider* value,
-			    const csOrthoTransform& transform = csOrthoTransform ())  = 0;
+			    const csOrthoTransform& transform = csOrthoTransform ()) = 0;
   /// Get the collider of this factory
   virtual iCollider* GetCollider () const = 0;
 
@@ -345,10 +348,13 @@ struct iCollisionObject : public virtual iBase
    * Set the current rotation in angles around every axis and set to actor.
    * If a camera is used, set it to camera too.
    */
+  // TODO: remove?
   virtual void SetRotation (const csMatrix3& rot) = 0;
 
   /// Rebuild this collision object.
-  virtual void RebuildObject () = 0;
+  // TODO: objects are not spawn correctly nor at the correct location if this
+  // method is called before having the object in a sector
+  //virtual void RebuildObject () = 0;
 
   /// Set the collision group of this object
   virtual void SetCollisionGroup (iCollisionGroup* group) = 0;
@@ -382,25 +388,50 @@ struct iCollisionObject : public virtual iBase
 };
 
 /**
- * A collision terrain consists of multiple cells.
+ * Factory to create instances of iCollisionTerrain.
  *
  * Main creators of instances implementing this interface:
- * - iCollisionSystem::CreateCollisionTerrain()
- * 
- * Main ways to get pointers to this interface:
- * - iCollisionObject::GetCollider()
+ * - iCollisionSystem::CreateCollisionTerrainFactory()
+ */
+struct iCollisionTerrainFactory : public virtual iCollisionObjectFactory
+{
+  SCF_INTERFACE (CS::Collisions::iCollisionTerrainFactory, 1, 0, 0);
+
+  /// Get the terrain mesh factory associated with this collision object.
+  virtual iTerrainFactory* GetTerrainFactory () const = 0;
+
+  /// Create an instance
+  virtual csPtr<iCollisionTerrain> CreateTerrain (iTerrainSystem* system) = 0;
+};
+
+/**
+ * A collision terrain is associated with a iTerrainSystem mesh, and consists
+ * of multiple cell colliders (CS::Collisions::iColliderTerrainCell objects).
+ *
+ * This collision object is particular in the sense that it manages automatically
+ * by itself the addition and removal of cell colliders.
+ *
+ * Main creators of instances implementing this interface:
+ * - iCollisionTerrainFactory::CreateInstance()
  * 
  * Main users of this interface:
  * - iCollisionSector
  */
-struct iCollisionTerrain : public virtual iBase
+struct iCollisionTerrain : public virtual iCollisionObject
 {
   SCF_INTERFACE (CS::Collisions::iCollisionTerrain, 1, 0, 0);
 
   /// Get the terrain system.
   virtual iTerrainSystem* GetTerrain () const = 0;
 
-  // TODO: Methods to iterate over the terrain cells
+  /// Get the terrain cell collider with the given index
+  virtual iColliderTerrainCell* GetCell (size_t index) const = 0;
+
+  /// Get the terrain cell collider associated with the given terrain cell
+  virtual iColliderTerrainCell* GetCell (iTerrainCell* cell) const = 0;
+
+  /// Get the count of terrain cell colliders in this collision terrain
+  virtual size_t GetCellCount () const = 0;
 };
 
 /**
@@ -582,6 +613,9 @@ struct iCollisionSector : public virtual iBase
 {
   SCF_INTERFACE (CS::Collisions::iCollisionSector, 1, 0, 0);
 
+  /**\name General methods
+   * @{ */
+
   /// Return the system that this sector belongs to
   virtual CS::Collisions::iCollisionSystem* GetSystem () const = 0;
 
@@ -618,6 +652,11 @@ struct iCollisionSector : public virtual iBase
   /// Get the global gravity.
   virtual csVector3 GetGravity () const = 0;
 
+  /** @} */
+
+  /**\name Collision objects management
+   * @{ */
+
   /**
    * Add a collision object into the sector.
    */
@@ -634,24 +673,10 @@ struct iCollisionSector : public virtual iBase
   /// Get the collision object by index.
   virtual iCollisionObject* GetCollisionObject (size_t index) = 0;
 
-  //  Terrain
+  /** @} */
 
-  /// Adds the given terrain to this sector
-  virtual void AddCollisionTerrain (iCollisionTerrain* terrain) = 0;
-
-  /// Remove the given collision terrain from this sector
-  virtual void RemoveCollisionTerrain (iCollisionTerrain* terrain) = 0;
-
-  /// Total amount if iCollisionTerrain objects in this sector
-  virtual size_t GetCollisionTerrainCount () const = 0;
-
-  /// Get the index'th iCollisionTerrain object
-  virtual iCollisionTerrain* GetCollisionTerrain (size_t index) const = 0;
-
-  /// Retreive the CollisionTerrain that wraps the given TerrainSystem
-  virtual iCollisionTerrain* GetCollisionTerrain (iTerrainSystem* terrain) = 0;
-
-  // Portals
+  /**\name Portals
+   * @{ */
 
   /// Add a portal into the sector. Collision objects crossing a portal will be switched from iCollisionSector's.
   virtual void AddPortal (iPortal* portal, const csOrthoTransform& meshTrans) = 0;
@@ -664,7 +689,10 @@ struct iCollisionSector : public virtual iBase
   // TODO: flag indicating whether the attached iSceneNode should be removed from the engine?
   virtual void DeleteAll () = 0;
 
-  // Other stuff
+  /** @} */
+
+  /**\name Collision detection
+   * @{ */
 
   /**
    * Follow a beam from start to end and return the first body that is hit. This version
@@ -689,6 +717,8 @@ struct iCollisionSector : public virtual iBase
    * and return the list of all collisions with the given object.
    */
   virtual csPtr<iCollisionDataList> CollisionTest (iCollisionObject* object) = 0;
+
+  /** @} */
 };
 
 /**
@@ -710,6 +740,9 @@ struct iCollisionSystem : public virtual iBase
 {
   SCF_INTERFACE (CS::Collisions::iCollisionSystem, 2, 0, 1);
 
+  /**\name General methods
+   * @{ */
+
   /**
    * Return the physical system pointer if this interface is also implemented by
    * the system, or nullptr otherwise.
@@ -727,6 +760,14 @@ struct iCollisionSystem : public virtual iBase
    * when updating the motion of the objects.
    */
   virtual float GetSimulationSpeed () const = 0;
+
+  /// Reset the entire system and delete all sectors and collision groups
+  virtual void DeleteAll () = 0;
+
+  /** @} */
+
+  /**\name Colliders
+   * @{ */
 
   /**
    * Create an empty collider (it does not have a root shape, but only potentially
@@ -763,9 +804,10 @@ struct iCollisionSystem : public virtual iBase
   /// Create a static plane collider.
   virtual csPtr<iColliderPlane> CreateColliderPlane (const csPlane3& plane) = 0;
 
-  /// Create a terrain collider.
-  virtual csPtr<iCollisionTerrain> CreateCollisionTerrain (iTerrainSystem* terrain,
-      float minHeight = 0, float maxHeight = 0) = 0;
+  /** @} */
+
+  /**\name Collision sectors
+   * @{ */
 
   /// Creates a new collision sector and adds it to the system's set
   virtual iCollisionSector* CreateCollisionSector (iSector* sector = nullptr) = 0;
@@ -788,6 +830,11 @@ struct iCollisionSystem : public virtual iBase
   /// Find a collision sector by name.
   virtual iCollisionSector* FindCollisionSector (const char* name) = 0;
 
+  /** @} */
+
+  /**\name Collision groups
+   * @{ */
+
   /**
    * Create a collision group of the given name. Return nullptr if the group could
    * not be created. If a group with the given name already exists, then return a
@@ -806,7 +853,10 @@ struct iCollisionSystem : public virtual iBase
   /// Get a collision group by its index
   virtual iCollisionGroup* GetCollisionGroup (size_t index) const = 0;
 
-  // Factory
+  /** @} */
+
+  /**\name Collision object factories
+   * @{ */
 
   /// Create a iCollisionObjectFactory
   virtual csPtr<iCollisionObjectFactory> CreateCollisionObjectFactory
@@ -820,8 +870,11 @@ struct iCollisionSystem : public virtual iBase
   virtual csPtr<iCollisionActorFactory> CreateCollisionActorFactory
     (CS::Collisions::iCollider* collider = nullptr) = 0;
 
-  /// Reset the entire system and delete all sectors and collision groups
-  virtual void DeleteAll () = 0;
+  /// Create a iCollisionTerrainFactory
+  virtual csPtr<iCollisionTerrainFactory> CreateCollisionTerrainFactory
+    (iTerrainFactory* terrain) = 0;
+
+  /** @} */
 };
 
 } }

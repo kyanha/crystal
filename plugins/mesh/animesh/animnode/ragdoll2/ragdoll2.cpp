@@ -656,7 +656,7 @@ CS_PLUGIN_NAMESPACE_BEGIN (Ragdoll)
       csOrthoTransform bodyTransform = boneTransform * animeshTransform;
       boneData->rigidBody->SetTransform (bodyTransform);
 
-      boneData->rigidBody->RebuildObject ();
+      //boneData->rigidBody->RebuildObject ();
       physicalSector->AddCollisionObject (boneData->rigidBody);
     }
 

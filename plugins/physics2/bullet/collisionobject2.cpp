@@ -42,8 +42,8 @@ CS_PLUGIN_NAMESPACE_BEGIN (Bullet2)
   }
 
   csBulletCollisionObject::csBulletCollisionObject (csBulletSystem* sys)
-    : scfImplementationType (this), portalWarp (btQuaternion::getIdentity ()), sector (nullptr),
-    system (sys), portalData (nullptr), btObject (nullptr), insideWorld (false)
+    : scfImplementationType (this), sector (nullptr), system (sys),
+    portalData (nullptr), btObject (nullptr), insideWorld (false)
   {
   }
 
@@ -76,7 +76,8 @@ CS_PLUGIN_NAMESPACE_BEGIN (Bullet2)
       // remove old SceneNode from sector
       if (sector) sector->RemoveSceneNodeFromSector (sceneNode); 
     }
-    sceneNode = newSceneNode; 
+
+    sceneNode = newSceneNode;
     if (sceneNode) 
     {
       // add new movable to sector
@@ -139,9 +140,11 @@ CS_PLUGIN_NAMESPACE_BEGIN (Bullet2)
 
   void csBulletCollisionObject::SetCollisionGroup (iCollisionGroup* group)
   {
-    // TODO: fallback to the factory value
     this->group = dynamic_cast<CollisionGroup*> (group);
+    // TODO: fallback to factory value
+    //if (!this->group) this->group = factory->GetCollisionGroup ();
     if (!this->group) this->group = system->GetDefaultGroup ();
+    // TODO: update the rigid body
   }
 
   iCollisionGroup* csBulletCollisionObject::GetCollisionGroup () const

@@ -241,8 +241,19 @@ CS_PLUGIN_NAMESPACE_BEGIN (SkeletonModel)
     }
 
     // Find the physical system
+    csRef<CS::Collisions::iCollisionSystem> collisionSystem =
+      csQueryRegistry<CS::Collisions::iCollisionSystem> (manager->object_reg);
+    if (!collisionSystem)
+    {
+      manager->Report (CS_REPORTER_SEVERITY_ERROR,
+		       "Could not find any collision system for the creation of the "
+		       "physical factories");
+      return;
+    }
+
+
     csRef<CS::Physics::iPhysicalSystem> physicalSystem =
-      csQueryRegistry<CS::Physics::iPhysicalSystem> (manager->object_reg);
+      scfQueryInterface<CS::Physics::iPhysicalSystem> (collisionSystem);
     if (!physicalSystem)
     {
       manager->Report (CS_REPORTER_SEVERITY_ERROR,

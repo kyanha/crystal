@@ -158,8 +158,6 @@ public:
   virtual csPtr<CS::Collisions::iColliderCapsule> CreateColliderCapsule (float length, float radius);
   virtual csPtr<CS::Collisions::iColliderCone> CreateColliderCone (float length, float radius);
   virtual csPtr<CS::Collisions::iColliderPlane> CreateColliderPlane (const csPlane3& plane);
-  virtual csPtr<CS::Collisions::iCollisionTerrain> CreateCollisionTerrain
-    (iTerrainSystem* terrain, float minHeight = 0, float maxHeight = 0);
   
   virtual CS::Collisions::iCollisionSector* CreateCollisionSector (iSector* sector = nullptr);
   virtual void DeleteCollisionSector (CS::Collisions::iCollisionSector* sector);
@@ -206,6 +204,9 @@ public:
 
   virtual csPtr<CS::Collisions::iCollisionActorFactory> CreateCollisionActorFactory
     (CS::Collisions::iCollider* collider = nullptr);
+
+  virtual csPtr<CS::Collisions::iCollisionTerrainFactory> CreateCollisionTerrainFactory
+    (iTerrainFactory* terrain);
 
   virtual csPtr<CS::Physics::iRigidBodyFactory> CreateRigidBodyFactory
     (CS::Collisions::iCollider* collider = nullptr);

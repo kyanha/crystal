@@ -196,13 +196,16 @@ void CollisionHelper::InitializeCollisionObjects
   iTerrainSystem* terrainSys = objectModel->GetTerrainColldet ();
   if (terrainSys)
   {
-    // Check whether the sector did not add this terrain yet
-    if (!collisionSector->GetCollisionTerrain (terrainSys))
-    {
-      // Create and add a collision Terrain
-      csRef<iCollisionTerrain> colTerrain = collisionSystem->CreateCollisionTerrain (terrainSys);
-      collisionSector->AddCollisionTerrain (colTerrain);
-    }
+    // Create and add a collision terrain
+    csRef<iTerrainFactory> factory = scfQueryInterface<iTerrainFactory>
+      (mesh->GetFactory ()->GetMeshObjectFactory ());
+    csRef<iCollisionTerrainFactory> terrainFactory =
+      collisionSystem->CreateCollisionTerrainFactory (factory);
+    csRef<iCollisionTerrain> terrain = terrainFactory->CreateTerrain (terrainSys);
+    collisionSector->AddCollisionObject (terrain);
+
+    terrain->SetAttachedSceneNode (mesh->QuerySceneNode ());
+    terrain->QueryObject ()->SetObjectParent (mesh->QueryObject ());
   }
 
   // Check if we have a portal mesh
@@ -239,7 +242,7 @@ void CollisionHelper::InitializeCollisionObjects
       for (csRef<iObjectIterator> it = meshFactoryObj->GetIterator (); it->HasNext (); )
       {
         ::iObject* next = it->Next ();
-        csRef<iCollisionObjectFactory> nextFactory = scfQueryInterface<iCollisionObjectFactory>(next);
+        csRef<iCollisionObjectFactory> nextFactory = scfQueryInterface<iCollisionObjectFactory> (next);
         if (nextFactory)
         {
           collisionObject = nextFactory->CreateCollisionObject ();

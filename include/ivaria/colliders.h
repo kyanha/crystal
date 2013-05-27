@@ -311,13 +311,16 @@ struct iColliderConcaveMeshScaled : public virtual iCollider
 };
 
 /**
- * A terrain collider.
+ * A terrain cell collider, part of a iCollisionTerrain.
+ *
+ * Terrain cells cannot be created manually, they are created instead
+ * automatically by the associated iCollisionTerrain.
  */
-struct iColliderTerrain : public virtual iCollider
+struct iColliderTerrainCell : public virtual iCollider
 {
-  SCF_INTERFACE (CS::Collisions::iColliderTerrain, 1, 0, 0);
+  SCF_INTERFACE (CS::Collisions::iColliderTerrainCell, 1, 0, 0);
 
-  /// Returns the terrain cell, represented by this collider
+  /// Get the terrain cell associated with this collider
   virtual iTerrainCell* GetCell () const = 0;
 };
 

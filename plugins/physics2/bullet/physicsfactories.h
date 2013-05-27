@@ -58,7 +58,7 @@ CS_PLUGIN_NAMESPACE_BEGIN (Bullet2)
   public:
     BulletCollisionObjectFactory (csBulletSystem* system, CS::Collisions::iCollider* collider);
 
-    virtual iObject *QueryObject (void) { return this; }
+    virtual iObject *QueryObject () { return this; }
 
     virtual CS::Collisions::iCollisionSystem* GetSystem () const
     { return (CS::Collisions::iCollisionSystem*) system; }

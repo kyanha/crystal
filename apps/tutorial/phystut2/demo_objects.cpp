@@ -362,7 +362,7 @@ CS::Physics::iRigidBody* PhysDemo::SpawnCylinder (bool setVelocity /* = true */)
     rb->SetAngularVelocity (tc.GetT2O () * csVector3 (5, 0, 0));
   }
   
-  rb->RebuildObject ();
+  //rb->RebuildObject ();
   GetCurrentSector ()->AddCollisionObject (rb);
 
   return rb;
@@ -1345,7 +1345,7 @@ CS::Physics::iSoftBody* PhysDemo::SpawnSoftBody (bool setVelocity /* = true */)
 
   body->SetAttachedSceneNode (mesh->QuerySceneNode ());
   body->QueryObject ()->SetObjectParent (mesh->QueryObject ());
-  body->RebuildObject ();
+  //body->RebuildObject ();
   
   csOrthoTransform trans;
   trans.SetOrigin (tc.GetOrigin () + tc.GetT2O () * csVector3 (0, 0, 1));

@@ -296,7 +296,7 @@ CS_PLUGIN_NAMESPACE_BEGIN (Bullet2)
         m_currentPosition = m_targetPosition;
       }
 
-      //	if (callback.m_closestHitFraction == 0.f)
+      //	if (callback.m_closestHitFraction < SMALL_EPSILON)
       //		break;
 
     }
@@ -309,7 +309,7 @@ CS_PLUGIN_NAMESPACE_BEGIN (Bullet2)
     // phase 3: down
     /*btScalar additionalDownStep = (m_wasOnGround && !onGround()) ? m_stepHeight : 0.0;
     btVector3 step_drop = getUpAxisDirections()[m_upAxis] * (m_currentStepOffset + additionalDownStep);
-    btScalar downVelocity = (additionalDownStep == 0.0 && m_verticalVelocity<0.0?-m_verticalVelocity:0.0) * dt;
+    btScalar downVelocity = (additionalDownStep < SMALL_EPSILON && m_verticalVelocity<0.0?-m_verticalVelocity:0.0) * dt;
     btVector3 gravity_drop = getUpAxisDirections()[m_upAxis] * downVelocity; 
     m_targetPosition -= (step_drop + gravity_drop);*/
 
@@ -510,7 +510,7 @@ CS_PLUGIN_NAMESPACE_BEGIN (Bullet2)
 
   bool csKinematicActorController::onGround () const
   {
-    return m_verticalVelocity == 0.0 && m_verticalOffset == 0.0;
+    return m_verticalVelocity < SMALL_EPSILON && m_verticalOffset < SMALL_EPSILON;
   }
 
 
@@ -524,5 +524,6 @@ CS_PLUGIN_NAMESPACE_BEGIN (Bullet2)
   void csKinematicActorController::debugDraw(btIDebugDraw* debugDrawer)
   {
   }
+
 }
 CS_PLUGIN_NAMESPACE_END(Bullet2)

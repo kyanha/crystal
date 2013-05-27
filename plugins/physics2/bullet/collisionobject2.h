@@ -59,11 +59,11 @@ protected:
   csWeakRef<iCamera> camera;
   csRef<CS::Collisions::iCollisionCallback> collCb;
 
-  btQuaternion portalWarp;
-
   csBulletSector* sector;
+  // TODO: this is redundant with the one of the factory
   csBulletSystem* system;
 
+  // TODO: move this data into the collision portal
   PortalTraversalData* portalData;
   
   btCollisionObject* btObject;
@@ -78,7 +78,7 @@ public:
 
   virtual ~csBulletCollisionObject ();
 
-  virtual iObject* QueryObject (void) { return (iObject*) this; }
+  virtual iObject* QueryObject () { return (iObject*) this; }
   virtual CS::Physics::iPhysicalBody* QueryPhysicalBody () { return nullptr; }
   virtual CS::Collisions::iActor* QueryActor () { return nullptr; }
 
@@ -126,8 +126,9 @@ public:
   virtual CS::Collisions::iCollisionObject* GetContactObject (size_t index);
 
   btCollisionObject* GetBulletCollisionPointer () { return btObject; }
-  virtual bool RemoveBulletObject () = 0;
+
   virtual bool AddBulletObject () = 0;
+  virtual bool RemoveBulletObject () = 0;
 
   bool TestOnGround ();
 
