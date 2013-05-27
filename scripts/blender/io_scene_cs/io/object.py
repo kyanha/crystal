@@ -131,6 +131,7 @@ class Hierarchy:
     if self.object.data.name in Hierarchy.exportedFactories:
       print('Skipping "%s" factory export, already done' % (self.object.data.uname))
       return
+
     # Export mesh
     if animesh:
       fa = open(Join(path, 'factories/', self.object.uname), 'w')
@@ -197,6 +198,7 @@ class Hierarchy:
               obCpy = ob.GetTransformedCopy(ob.relative_matrix)
             else:
               obCpy = ob.GetTransformedCopy()
+
             # Tessellate the copied mesh object
             obCpy.data.update_faces()
             meshData.append(obCpy)
@@ -447,6 +449,9 @@ def ObjectAsCS(self, func, depth=0, **kwargs):
       #func(' '*depth +'</meshref>')
       func(' '*depth +'</meshobj>')
 
+      # Process array modifiers
+      self.ExportArrayModifier (func, depth, **kwargs)
+
   elif self.type == 'ARMATURE':
     # Temporary disable of meshref support because of incompatibility
     # issues with lighter2 that needs to be genmesh aware in order to
@@ -502,69 +507,8 @@ def ObjectAsCS(self, func, depth=0, **kwargs):
       if not obj.hide:
         obj.AsCS(func, depth, transform=self.relative_matrix, name=self.uname)
 
-  elif self.type != 'CAMERA':
-    print("WARNING: Object '%s' of type '%s' is not supported!"%(self.name, self.type))
-
-  # Process modifiers
-  for modifier in self.modifiers:
-
-    if modifier.type == "ARRAY":
-      if modifier.fit_type != "FIXED_COUNT":
-        print("WARNING: Unable to export modifier '%s' of type %s on object '%s' (of factory '%s')"%(modifier.name,modifier.fit_type,name,self.data.uname))
-        continue
-
-      # Disable the array modifier
-      viewstate = modifier.show_viewport
-      modifier.show_viewport = False
-      bpy.ops.object.mode_set(mode='EDIT')
-
-      # Get transformation matrix and bounding box of base object
-      matrix = self.relative_matrix
-      if 'transform' in kwargs:
-        matrix =  kwargs['transform'] * matrix
-      bbsize = Vector((abs(self.bound_box[6][0] - self.bound_box[0][0]),
-                       abs(self.bound_box[6][1] - self.bound_box[0][1]),
-                       abs(self.bound_box[6][2] - self.bound_box[0][2])))
-
-      # Restore object mode and modifier
-      modifier.show_viewport = viewstate
-      bpy.ops.object.mode_set(mode='OBJECT')
-
-      # Calculate array transformation
-      transform = Matrix.Identity(4)
-      if modifier.use_object_offset:
-        transform = modifier.offset_object.relative_matrix * matrix.inverted()
-
-      if modifier.use_constant_offset:
-        offset = modifier.constant_offset_displace
-        m = Matrix.Identity(4)
-        for i in range(3):
-          if offset[i] != 0.0:
-            m[i][3] = offset[i]
-        transform = m * transform
-
-      if modifier.use_relative_offset:
-        scaling = modifier.relative_offset_displace
-        if scaling != [-1.0,-1.0,-1.0]:
-          m = Matrix.Identity(4)
-          for i in range(3):
-            if modifier.count != 0 and scaling[i] != 0.0:
-              m[i][3] = scaling[i] * bbsize[i]
-          transform = m * transform
-
-      # Create instances of base object respecting the array modifier
-      for cnt in range(modifier.count - 1):
-        func(' '*depth +'<meshobj name="%s_array_object_%i">'%(self.uname,cnt+1))
-        func(' '*depth +'  <plugin>crystalspace.mesh.loader.genmesh</plugin>')
-        func(' '*depth +'  <params>')
-        func(' '*depth +'    <factory>%s</factory>'%(self.data.uname))
-        func(' '*depth +'  </params>')
-        matrix = transform * matrix
-        MatrixAsCS(matrix, func, depth+2)
-        func(' '*depth +'</meshobj>')
-
-    else:
-      print("WARNING: unable to export modifier '%s' on object '%s' (of factory '%s')"%(modifier.name,name,self.data.uname))
+  elif self.type != 'CAMERA' and self.type != 'CURVE':
+    print("WARNING: Object '%s' of type '%s' is not supported!"%(self.uname, self.type))
 
 bpy.types.Object.AsCS = ObjectAsCS
 
@@ -794,7 +738,8 @@ bpy.types.Object.GetScale = GetScale
 
 
 def GetTransformedCopy(self, matrix = None):
-  """ Get a deep copy of this object, transformed by matrix
+  """ Get a deep copy of this object, transformed by matrix,
+      with applied modifiers
   """
   # Make a copy of the current object
   obCpy = self.copy()
@@ -805,6 +750,99 @@ def GetTransformedCopy(self, matrix = None):
     obCpy.data.transform(matrix)
     obCpy.data.calc_normals()
 
-  return obCpy
+  # Don't apply modifiers if the CS property 'array_as_meshobj' is set and 
+  # the object contains only 'FIXED_COUNT' array modifiers:
+  # this type of modifier is exported as instances of object factory in 'world' file
+  # (cfr. ExportArrayModifier() )
+  if self.data.array_as_meshobj:
+    arrays = [mod for mod in obCpy.modifiers \
+                if mod.type=='ARRAY' and mod.fit_type=='FIXED_COUNT'] 
+    if len(arrays) == len(obCpy.modifiers):
+      return obCpy 
+
+  # Arbitrary take the first scene containing current object
+  if len(self.users_scene) == 0:
+    return obCpy
+  scene = self.users_scene[0]
+  # Create a deep copy of mesh data block with applied modifiers
+  modifiedObject = obCpy.copy()
+  modifiedObject.data = obCpy.to_mesh(scene, True, 'PREVIEW')
+  return modifiedObject
 
 bpy.types.Object.GetTransformedCopy = GetTransformedCopy
+
+
+def ExportArrayModifier(self, func, depth, **kwargs):
+  """ If current object contains only array modifiers with fixed count copies,
+      export each object copy as a factory instance ('meshobj')
+  """
+  # Don't export array copies of this mesh if CS property 'array_as_meshobj' is not set
+  if not self.data.array_as_meshobj:
+    return
+
+  # If stack contains other modifiers than arrays with fixed number of copies,
+  # don't export the array copies (they have been already applied to the mesh
+  # by method GetTransformedCopy() )
+  arrays = [mod for mod in self.modifiers \
+              if mod.type=='ARRAY' and mod.fit_type=='FIXED_COUNT'] 
+  if len(arrays) != len(self.modifiers):
+    return
+
+  # Export all array modifiers of the stack
+  for modifier in self.modifiers:
+    # Disable the array modifier
+    viewstate = modifier.show_viewport
+    modifier.show_viewport = False
+    bpy.ops.object.mode_set(mode='EDIT')
+
+    # Get transformation matrix and bounding box of base object
+    matrix = self.relative_matrix
+    if 'transform' in kwargs:
+      matrix =  kwargs['transform'] * matrix
+    bbsize = Vector((abs(self.bound_box[6][0] - self.bound_box[0][0]),
+                     abs(self.bound_box[6][1] - self.bound_box[0][1]),
+                     abs(self.bound_box[6][2] - self.bound_box[0][2])))
+
+    # Restore object mode and modifier
+    modifier.show_viewport = viewstate
+    bpy.ops.object.mode_set(mode='OBJECT')
+
+    # Calculate array transformation
+    transform = Matrix.Identity(4)
+    if modifier.use_object_offset:
+      transform = modifier.offset_object.relative_matrix * matrix.inverted()
+
+    if modifier.use_constant_offset:
+      offset = modifier.constant_offset_displace
+      m = Matrix.Identity(4)
+      for i in range(3):
+        if offset[i] != 0.0:
+          m[i][3] = offset[i]
+      transform = m * transform
+
+    if modifier.use_relative_offset:
+      scaling = modifier.relative_offset_displace
+      if scaling != [-1.0,-1.0,-1.0]:
+        m = Matrix.Identity(4)
+        for i in range(3):
+          if modifier.count != 0 and scaling[i] != 0.0:
+            m[i][3] = scaling[i] * bbsize[i]
+        transform = m * transform
+
+    # Create instances of base object respecting the array modifier
+    # (since an instance of mesh factory has already been exported,
+    # only N-1 copies of the mesh are generated)
+    for cnt in range(modifier.count - 1):
+      func(' '*depth +'<meshobj name="%s_array_object_%i">'%(self.uname,cnt+1))
+      func(' '*depth +'  <plugin>crystalspace.mesh.loader.genmesh</plugin>')
+      func(' '*depth +'  <params>')
+      func(' '*depth +'    <factory>%s</factory>'%(self.data.uname))
+      func(' '*depth +'  </params>')
+      matrix = transform * matrix
+      MatrixAsCS(matrix, func, depth+2)
+      func(' '*depth +'</meshobj>')
+
+  # TODO: process other types of ARRAY modifiers (fit_type = 'FIT_LENGTH' or 'FIT_CURVE')
+  # and other ARRAY options
+
+bpy.types.Object.ExportArrayModifier = ExportArrayModifier

@@ -122,6 +122,7 @@ def ExportWorld(path):
     ExportMaterials(Write(f), 2, deps, use_imposter)
 
   # Export scenes as CS sectors in the 'world' file
+  print("\nEXPORT SCENES:")
   for scene in bpy.data.scenes:
     scene.AsCS(Write(f), 2)
 
