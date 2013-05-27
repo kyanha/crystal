@@ -455,7 +455,7 @@ bool csPhysicsLoader2::ParseCollisionObject (iDocumentNode *node,
     }
   }
 
-  object->RebuildObject ();
+  //object->RebuildObject ();
   collisionSector->AddCollisionObject (object);
 
   csOrthoTransform trans;
@@ -564,7 +564,7 @@ bool csPhysicsLoader2::ParseSoftBody (iDocumentNode *node,
   
   csRef<CS::Collisions::iCollisionSector> colSector = scfQueryInterface<CS::Collisions::iCollisionSector> (physSector);
 
-  body->RebuildObject ();
+  //body->RebuildObject ();
   colSector->AddCollisionObject (body);
 
   it = node->GetNodes ();
@@ -783,7 +783,8 @@ bool csPhysicsLoader2::ParseColliderTerrain (iDocumentNode *node, CS::Collisions
       synldr->ReportError ("crystalspace.dynamics.loader", node, "Unable to find terrain system in engine");
       return false;
     }
-    csRef<CS::Collisions::iCollisionTerrain> terr = collisionSystem->CreateCollisionTerrain (terrain);
+    // TODO
+    //csRef<CS::Collisions::iCollisionTerrain> terr = collisionSystem->CreateCollisionTerrain (terrain);
 
     csOrthoTransform trans;
     trans.Identity ();

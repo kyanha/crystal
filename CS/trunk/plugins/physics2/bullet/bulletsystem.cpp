@@ -269,15 +269,6 @@ csPtr<CS::Collisions::iColliderPlane> csBulletSystem::CreateColliderPlane (const
   return csPtr<iColliderPlane> (collider);
 }
 
-csPtr<CS::Collisions::iCollisionTerrain> csBulletSystem::CreateCollisionTerrain (iTerrainSystem* terrain, 
-                                                               float minHeight /* = 0 */, 
-                                                               float maxHeight /* = 0 */)
-{
-  csRef<csBulletCollisionTerrain> collider = csPtr<csBulletCollisionTerrain>
-    (new csBulletCollisionTerrain (terrain, minHeight, maxHeight, this));
-  return csPtr<iCollisionTerrain> (collider);
-}
-
 CS::Collisions::iCollisionSector* csBulletSystem::CreateCollisionSector (iSector* sector)
 {
   csRef<csBulletSector> collSector = csPtr<csBulletSector> (new csBulletSector (this));
@@ -512,15 +503,19 @@ csPtr<CS::Collisions::iCollisionActorFactory>
   csBulletSystem::CreateCollisionActorFactory (CS::Collisions::iCollider* collider) 
 {
   BulletCollisionActorFactory* fact = new BulletCollisionActorFactory (this, collider);
-  fact->system = this;
   return csPtr<iCollisionActorFactory> (fact); 
+}
+
+csPtr<CS::Collisions::iCollisionTerrainFactory> csBulletSystem::CreateCollisionTerrainFactory
+  (iTerrainFactory* terrain)
+{
+  return new csBulletCollisionTerrainFactory (this, terrain);
 }
 
 csPtr<CS::Physics::iRigidBodyFactory> 
   csBulletSystem::CreateRigidBodyFactory (CS::Collisions::iCollider* collider)
 {
   BulletRigidBodyFactory* fact = new BulletRigidBodyFactory (this, collider);
-  fact->system = this;
   return csPtr<iRigidBodyFactory> (fact); 
 }
 
@@ -528,28 +523,24 @@ csPtr<CS::Physics::iDynamicActorFactory>
   csBulletSystem::CreateDynamicActorFactory (CS::Collisions::iCollider* collider)
 {
   BulletDynamicActorFactory* fact = new BulletDynamicActorFactory (this, collider);
-  fact->system = this;
   return csPtr<iDynamicActorFactory> (fact);
 }
 
 csPtr<CS::Physics::iSoftRopeFactory> csBulletSystem::CreateSoftRopeFactory ()
 {
   BulletSoftRopeFactory* fact = new BulletSoftRopeFactory (this);
-  fact->system = this;
   return csPtr<iSoftRopeFactory> (fact);
 }
 
 csPtr<CS::Physics::iSoftClothFactory> csBulletSystem::CreateSoftClothFactory ()
 {
   BulletSoftClothFactory* fact = new BulletSoftClothFactory (this);
-  fact->system = this;
   return csPtr<iSoftClothFactory> (fact);
 }
 
 csPtr<CS::Physics::iSoftMeshFactory> csBulletSystem::CreateSoftMeshFactory ()
 {
   BulletSoftMeshFactory* fact = new BulletSoftMeshFactory (this);
-  fact->system = this;
   return csPtr<iSoftMeshFactory> (fact);
 }
 

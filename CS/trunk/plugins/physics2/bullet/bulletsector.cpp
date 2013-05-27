@@ -50,7 +50,6 @@
 #include "colliderprimitives.h"
 #include "collisionactor.h"
 #include "collisiondata.h"
-#include "collisionterrain.h"
 #include "common2.h"
 #include "dynamicactor.h"
 #include "joint2.h"
@@ -252,13 +251,6 @@ CS_PLUGIN_NAMESPACE_BEGIN (Bullet2)
       joints[i]->RemoveBulletJoint ();
     }
 
-    // remove terrains
-    for (size_t i = 0; i < terrains.GetSize (); ++i)
-    {
-      terrains[i]->RemoveRigidBodies ();
-    }
-
-    terrains.DeleteAll ();
     joints.DeleteAll ();
     actors.DeleteAll ();
     softBodies.DeleteAll ();
@@ -635,41 +627,6 @@ CS_PLUGIN_NAMESPACE_BEGIN (Bullet2)
     }
   }
 
-  void csBulletSector::AddCollisionTerrain (CS::Collisions::iCollisionTerrain* terrain)
-  {
-    csBulletCollisionTerrain* csTerrain = dynamic_cast<csBulletCollisionTerrain*> (terrain);
-
-    csTerrain->RemoveRigidBodies ();
-    csTerrain->AddRigidBodies (this);
-
-    terrains.Push (csTerrain);
-  }
-  
-  void csBulletSector::RemoveCollisionTerrain (CS::Collisions::iCollisionTerrain* terrain)
-  {
-    csBulletCollisionTerrain* csTerrain = dynamic_cast<csBulletCollisionTerrain*> (terrain);
-    csTerrain->RemoveRigidBodies ();
-    terrains.Delete (csTerrain);
-  }
-
-  CS::Collisions::iCollisionTerrain* csBulletSector::GetCollisionTerrain (size_t index) const 
-  { 
-    return csRef<CS::Collisions::iCollisionTerrain>
-      (scfQueryInterface<CS::Collisions::iCollisionTerrain> (terrains.Get (index)));
-  }
-
-  CS::Collisions::iCollisionTerrain* csBulletSector::GetCollisionTerrain (iTerrainSystem* terrain) 
-  {
-    for (size_t i = 0; i < terrains.GetSize (); ++i)
-    {
-      if (terrains.Get (i)->GetTerrain () == terrain)
-      {
-        return terrains.Get (i);
-      }
-    }
-    return nullptr;
-  }
-
   void csBulletSector::AddPortal (iPortal* portal, const csOrthoTransform& meshTrans)
   {
     CollisionPortal* newPortal = new CollisionPortal (portal, meshTrans, this);
@@ -785,6 +742,7 @@ CS_PLUGIN_NAMESPACE_BEGIN (Bullet2)
       }
 
     }
+
     return result;
   }
 
@@ -799,13 +757,13 @@ CS_PLUGIN_NAMESPACE_BEGIN (Bullet2)
 
     if (rayCallback.hasHit ())
     {
-      CS::Collisions::iCollisionObject* collObject = static_cast<CS::Collisions::iCollisionObject*> (
-        rayCallback.m_collisionObject->getUserPointer ());
+      CS::Collisions::iCollisionObject* collObject = static_cast<CS::Collisions::iCollisionObject*>
+	(rayCallback.m_collisionObject->getUserPointer ());
 
       result.hasHit = true;
 
       if (rayCallback.m_collisionObject->getInternalType () == btCollisionObject::CO_GHOST_OBJECT
-        && rayCallback.m_collisionObject->getUserPointer () == nullptr)
+	  && rayCallback.m_collisionObject->getUserPointer () == nullptr)
       {
         // hit a ghost object (potentially a portal...)
         collObject = nullptr;
@@ -822,6 +780,7 @@ CS_PLUGIN_NAMESPACE_BEGIN (Bullet2)
 	  return hitPortal;
         }
       }
+
       else if (rayCallback.m_collisionObject->getInternalType () == btCollisionObject::CO_SOFT_BODY)
       {
         // hit a soft body
@@ -863,12 +822,14 @@ CS_PLUGIN_NAMESPACE_BEGIN (Bullet2)
           default:
             break;
           }
+
           return nullptr;
         } //has hit softbody
       } //softBody
+
       else
       { 
-        // "normal" object
+        // hit a terrain or a "normal" object
         result.object = collObject;
         result.isect = BulletToCS (rayCallback.m_hitPointWorld,
           system->GetInverseInternalScale ());
@@ -877,6 +838,7 @@ CS_PLUGIN_NAMESPACE_BEGIN (Bullet2)
         return nullptr;
       } // not softBody
     } //has hit
+
     return nullptr;
   }
 

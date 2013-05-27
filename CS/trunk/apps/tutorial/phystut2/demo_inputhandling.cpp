@@ -476,7 +476,6 @@ bool PhysDemo::OnMouseDown (iEvent &event)
         csRef<CS::Physics::iRigidBody> bulletBody = scfQueryInterface<CS::Physics::iRigidBody> (physicalBody);
 
         // Create a pivot joint at the point clicked
-	//dragJoint = physicalSystem->CreatePivotJoint (bulletBody, hitResult.isect);
 	csRef<CS::Physics::iJointFactory> jointFactory =
 	  physicalSystem->CreatePivotJointFactory ();
 	dragJoint = jointFactory->CreateJoint ();

@@ -27,9 +27,11 @@
 #include "BulletCollision/CollisionShapes/btHeightfieldTerrainShape.h"
 #include "csutil/weakref.h"
 #include "csgeom/plane3.h"
+#include "iengine/scenenode.h"
 #include "imesh/terrain2.h"
 #include "ivaria/collisions.h"
 #include "common2.h"
+#include "collisionobject2.h"
 #include "colliderprimitives.h"
 #include "rigidbody2.h"
 
@@ -37,69 +39,123 @@ struct csLockedHeightData;
 struct iTerrainSystem;
 struct iTriangleMesh;
 
+using namespace CS::Collisions;
+using namespace CS::Physics;
+
 CS_PLUGIN_NAMESPACE_BEGIN (Bullet2)
 {
 
+class csBulletCollisionTerrain;
 class csBulletSector;
 class csBulletSystem;
 
-class csBulletColliderTerrain : public scfVirtImplementationExt1<
-  csBulletColliderTerrain, csBulletCollider, CS::Collisions::iColliderTerrain>
+//--------------------------------- csBulletColliderTerrainCell ---------------------------------
+
+class csBulletColliderTerrainCell : public scfVirtImplementationExt1<
+  csBulletColliderTerrainCell, csBulletCollider, iColliderTerrainCell>
 {
   friend class csBulletCollisionTerrain;
   
 private:
+  csBulletCollisionTerrain* terrain;
   csWeakRef<iTerrainCell> cell;
   float* heightData;
-
+  btHeightfieldTerrainShape* shape;
+  btRigidBody* body;
   btVector3 localScale;
 
-  void UpdataMinHeight (float minHeight);
-  void UpdateMaxHeight (float maxHeight);
   void UpdateHeight (const csRect& area);
 
 protected:
   virtual float ComputeShapeVolume () const { return 0; }
 
 public:
-  csBulletColliderTerrain (float* gridData, iTerrainCell* cell,
-			   float minHeight, float maxHeight, float internalScale, csBulletSystem* sys);
-  virtual ~csBulletColliderTerrain ();
-  
-  virtual CS::Collisions::ColliderType GetColliderType () const
-  { return CS::Collisions::COLLIDER_TERRAIN_CELL; }
+  csBulletColliderTerrainCell (csBulletCollisionTerrain* terrain, float* gridData, iTerrainCell* cell,
+			       float minHeight, float maxHeight);
+  virtual ~csBulletColliderTerrainCell ();
 
+  //-- CS::Collisions::iCollider
+  virtual ColliderType GetColliderType () const
+  { return COLLIDER_TERRAIN_CELL; }
+
+  //-- CS::Collisions::iColliderTerrainCell
   virtual iTerrainCell* GetCell () const { return cell; }
-  
-  btHeightfieldTerrainShape* GetBulletHeightfieldShape () const
-  { return static_cast<btHeightfieldTerrainShape*>(shape); }
 };
 
-class csBulletCollisionTerrain:
-  public scfImplementation3<csBulletCollisionTerrain, 
-  CS::Collisions::iCollisionTerrain, iTerrainCellLoadCallback, iTerrainCellHeightDataCallback>
+//--------------------------------- csBulletCollisionTerrainFactory ---------------------------------
+
+class csBulletCollisionTerrainFactory :
+  public scfVirtImplementationExt1<csBulletCollisionTerrainFactory, 
+    BulletCollisionObjectFactory, iCollisionTerrainFactory>
+{
+  friend class csBulletColliderTerrainCell;
+
+  csRef<iTerrainFactory> terrain;
+
+public:
+  csBulletCollisionTerrainFactory (csBulletSystem* system, iTerrainFactory* terrain);
+
+  //-- CS::Collisions::iCollisionObjectFactory
+  virtual void SetCollider (CS::Collisions::iCollider* value,
+			    const csOrthoTransform& transform = csOrthoTransform ()) {}
+  virtual CS::Collisions::iCollider* GetCollider () const;
+
+  virtual void SetColliderTransform (const csOrthoTransform& transform) {}
+  virtual const csOrthoTransform& GetColliderTransform () const;
+
+  //-- CS::Collisions::iCollisionTerrainFactory
+  virtual iTerrainFactory* GetTerrainFactory () const;
+  virtual csPtr<iCollisionTerrain> CreateTerrain (iTerrainSystem* terrain);
+};
+
+//--------------------------------- csBulletCollisionTerrain ---------------------------------
+
+class csBulletCollisionTerrain :
+  public scfVirtImplementationExt3<csBulletCollisionTerrain, 
+    csBulletCollisionObject, iCollisionTerrain,
+    iTerrainCellLoadCallback, iTerrainCellHeightDataCallback>
 {
   friend class csBulletSector;
   friend class csBulletCollisionObject;
-  
-  csRefArray<csBulletRigidBody> bodies;
+  friend class csBulletColliderTerrainCell;
+
+  csRef<csBulletCollisionTerrainFactory> factory;
+  csRefArray<csBulletColliderTerrainCell> cells;
   csOrthoTransform terrainTransform;
-  csWeakRef<csBulletSector> collSector;
-  csWeakRef<csBulletSystem> collSystem;
-  csWeakRef<iTerrainSystem> terrainSystem;
+  csRef<iTerrainSystem> terrainSystem;
   float minimumHeight;
   float maximumHeight;
   
   csRef<CS::Physics::iRigidBodyFactory> cellFactory;
 
-  void LoadCellToCollider (iTerrainCell* cell);
+  void CreateCellCollider (iTerrainCell* cell);
+
 public:
-  csBulletCollisionTerrain (iTerrainSystem* terrain,
-    float minimumHeight, float maximumHeight,
-    csBulletSystem* sys);
+  csBulletCollisionTerrain (csBulletCollisionTerrainFactory* factory, iTerrainSystem* terrain,
+			    float minimumHeight = 0.0f, float maximumHeight = 0.0f);
   virtual ~csBulletCollisionTerrain ();
 
-  virtual iTerrainSystem* GetTerrain () const {return terrainSystem;}
+  //-- CS::Collisions::iCollisionObject
+  virtual CollisionObjectType GetObjectType () const
+  { return COLLISION_OBJECT_TERRAIN; }
+  virtual iObject* QueryObject () { return this; }
+
+  virtual void SetAttachedSceneNode (iSceneNode* newSceneNode)
+  { sceneNode = newSceneNode; }
+  virtual void SetTransform (const csOrthoTransform& trans) {}
+  virtual csOrthoTransform GetTransform () const
+  { return terrainTransform; }
+  virtual void SetRotation (const csMatrix3& rot) {}
+
+  virtual void RebuildObject ();
+  virtual bool AddBulletObject ();
+  virtual bool RemoveBulletObject ();
+
+  //-- CS::Collisions::iCollisionTerrain
+  virtual iTerrainSystem* GetTerrain () const { return terrainSystem; }
+  virtual iColliderTerrainCell* GetCell (size_t index) const;
+  virtual iColliderTerrainCell* GetCell (iTerrainCell* cell) const;
+  virtual size_t GetCellCount () const;
 
   //-- iTerrainCellLoadCallback
   virtual void OnCellLoad (iTerrainCell *cell);
@@ -108,21 +164,7 @@ public:
 
   //-- iTerrainCellHeightDataCallback
   virtual void OnHeightUpdate (iTerrainCell* cell, const csRect& rectangle);
-
-  /**
-   * Returns the collider that represents the given cell in the physical world
-   */
-  csBulletRigidBody* GetCellBody (iTerrainCell* cell) const;
-  csBulletRigidBody* GetCellBody (size_t index) const { return bodies[index]; }
-  
-  csBulletColliderTerrain* GetCellCollider (iTerrainCell* cell) const;
-  csBulletColliderTerrain* GetCellCollider (size_t index) const
-  { return dynamic_cast<csBulletColliderTerrain*>(bodies[index]->GetCollider ()); }
-  
-  void AddRigidBodies (csBulletSector* sector);
-  void RemoveRigidBodies ();
 };
-
 
 }
 CS_PLUGIN_NAMESPACE_END (Bullet2)

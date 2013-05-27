@@ -62,7 +62,6 @@ class csBulletRigidBody;
 class csBulletSoftBody;
 class csBulletCollisionActor;
 class csBulletCollisionObject;
-class csBulletCollisionTerrain;
 class csBulletCollider;
 class csBulletJoint;
 class CollisionPortal;
@@ -119,7 +118,6 @@ class csBulletSector : public scfVirtImplementationExt2<
   csRefArrayObject<csBulletSoftBody> softBodies;
   csWeakRefArray<csBulletSoftBody> anchoredSoftBodies;
   csRefArray<csActor> actors;
-  csRefArray<csBulletCollisionTerrain> terrains;
   csRefArray<iUpdatable> updatables;
 
   void CheckCollisions ();
@@ -155,12 +153,6 @@ public:
 
   virtual size_t GetCollisionObjectCount () {return collisionObjects.GetSize ();}
   virtual CS::Collisions::iCollisionObject* GetCollisionObject (size_t index);
-
-  virtual void AddCollisionTerrain (CS::Collisions::iCollisionTerrain* terrain);
-  virtual void RemoveCollisionTerrain (CS::Collisions::iCollisionTerrain* terrain);
-  virtual size_t GetCollisionTerrainCount () const { return terrains.GetSize (); }
-  virtual CS::Collisions::iCollisionTerrain* GetCollisionTerrain (size_t index) const;
-  virtual CS::Collisions::iCollisionTerrain* GetCollisionTerrain (iTerrainSystem* terrain);
 
   virtual void AddPortal (iPortal* portal, const csOrthoTransform& meshTrans);
   virtual void RemovePortal (iPortal* portal);
