@@ -104,12 +104,13 @@ public:
     transConstraintY = Y;
     transConstraintZ = Z;
   }
-  virtual bool IsXTransConstrained () const
-  { return transConstraintX; }
-  virtual bool IsYTransConstrained () const
-  { return transConstraintY; }
-  virtual bool IsZTransConstrained () const
-  { return transConstraintZ; }
+
+  virtual void GetTransConstraints (bool& X, bool& Y, bool& Z) const
+  {
+    X = transConstraintX;
+    Y = transConstraintY;
+    Z = transConstraintZ;
+  }
 
   virtual void SetRotConstraints (bool X, bool Y, bool Z)
   {
@@ -117,12 +118,13 @@ public:
     rotConstraintY = Y;
     rotConstraintZ = Z;
   }
-  virtual bool IsXRotConstrained () const
-  { return rotConstraintX; }
-  virtual bool IsYRotConstrained () const
-  { return rotConstraintY; }
-  virtual bool IsZRotConstrained () const
-  { return rotConstraintZ; }
+
+  virtual void GetRotConstraints (bool& X, bool& Y, bool& Z) const
+  {
+    X = rotConstraintX;
+    Y = rotConstraintY;
+    Z = rotConstraintZ;
+  }
 
   virtual void SetMinimumDistance (const csVector3& distance)
   { minDist = distance; }
@@ -199,6 +201,7 @@ class csBulletJoint : public scfImplementation1<
   friend class CollisionPortal;
 
 private:
+  // TODO: 'sys' is redundant with the one of the sector
   csBulletSystem* sys;
   csBulletSector* sector;
 
@@ -265,9 +268,12 @@ public:
 
   virtual void SetTransConstraints (bool X, 
     bool Y, bool Z, bool forceUpdate = false);
-  virtual bool IsXTransConstrained () const { return transConstraintX; }
-  virtual bool IsYTransConstrained () const { return transConstraintY; }
-  virtual bool IsZTransConstrained () const { return transConstraintZ; }
+  virtual void GetTransConstraints (bool& X, bool& Y, bool& Z) const
+  {
+    X = transConstraintX;
+    Y = transConstraintY;
+    Z = transConstraintZ;
+  }
 
   virtual void SetMinimumDistance (const csVector3& dist,
     bool forceUpdate = false);
@@ -280,9 +286,12 @@ public:
 
   virtual void SetRotConstraints (bool X, 
     bool Y, bool Z, bool forceUpdate = false);
-  virtual bool IsXRotConstrained () const { return rotConstraintX; }
-  virtual bool IsYRotConstrained () const { return rotConstraintY; }
-  virtual bool IsZRotConstrained () const { return rotConstraintZ; }
+  virtual void GetRotConstraints (bool& X, bool& Y, bool& Z) const
+  {
+    X = rotConstraintX;
+    Y = rotConstraintY;
+    Z = rotConstraintZ;
+  }
 
   virtual void SetMinimumAngle (const csVector3& angle,
     bool forceUpdate = false);

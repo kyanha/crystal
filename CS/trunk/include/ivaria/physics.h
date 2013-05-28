@@ -968,14 +968,11 @@ struct iJointFactory : public virtual iBase
    */
   virtual void SetTransConstraints (bool X, bool Y, bool Z) = 0;
 
-  /// True if this axis' translation is constrained.
-  virtual bool IsXTransConstrained () const = 0;
-
-  /// True if this axis' translation is constrained.
-  virtual bool IsYTransConstrained () const = 0;
-
-  /// True if this axis' translation is constrained.
-  virtual bool IsZTransConstrained () const = 0;
+  /**
+   * Get the translation constraints on the 3 axes. A value of \a true means that
+   * no motion are allowed along that axis.
+   */
+  virtual void GetTransConstraints (bool& X, bool& Y, bool& Z) const = 0;
 
   /**
    * Set the minimum allowed distance between the two bodies. Set force_update to true if 
@@ -1005,14 +1002,11 @@ struct iJointFactory : public virtual iBase
    */
   virtual void SetRotConstraints (bool X, bool Y, bool Z) = 0;
 
-  /// True if this axis' rotation is constrained.
-  virtual bool IsXRotConstrained () const = 0;
-
-  /// True if this axis' rotation is constrained.
-  virtual bool IsYRotConstrained () const = 0;
-
-  /// True if this axis' rotation is constrained.
-  virtual bool IsZRotConstrained () const = 0;
+  /**
+   * Get the rotational constraints on the 3 axes. A value of \a true means that
+   * no motion are allowed around that axis.
+   */
+  virtual void GetRotConstraints (bool& X, bool& Y, bool& Z) const = 0;
 
   /**
    * Set the minimum allowed angle between the two bodies, in radian. Set force_update to true if 
@@ -1158,14 +1152,11 @@ struct iJoint : public virtual iBase
       bool Y, bool Z, 
       bool forceUpdate = false) = 0;
 
-  /// True if this axis' translation is constrained.
-  virtual bool IsXTransConstrained () const = 0;
-
-  /// True if this axis' translation is constrained.
-  virtual bool IsYTransConstrained () const = 0;
-
-  /// True if this axis' translation is constrained.
-  virtual bool IsZTransConstrained () const = 0;
+  /**
+   * Get the translation constraints on the 3 axes. A value of \a true means that
+   * no motion are allowed along that axis.
+   */
+  virtual void GetTransConstraints (bool& X, bool& Y, bool& Z) const = 0;
 
   /**
    * Set the rotational constraints on the 3 axes. If true is
@@ -1179,14 +1170,11 @@ struct iJoint : public virtual iBase
       bool Y, bool Z, 
       bool forceUpdate = false) = 0;
 
-  /// True if this axis' rotation is constrained.
-  virtual bool IsXRotConstrained () const = 0;
-
-  /// True if this axis' rotation is constrained.
-  virtual bool IsYRotConstrained () const = 0;
-
-  /// True if this axis' rotation is constrained.
-  virtual bool IsZRotConstrained () const = 0;
+  /**
+   * Get the rotational constraints on the 3 axes. A value of \a true means that
+   * no motion are allowed around that axis.
+   */
+  virtual void GetRotConstraints (bool& X, bool& Y, bool& Z) const = 0;
 
   /**
    * Set the minimum allowed distance between the two bodies. Set force_update to true if 

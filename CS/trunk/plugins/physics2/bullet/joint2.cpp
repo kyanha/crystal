@@ -127,7 +127,7 @@ void csBulletJoint::Attach (CS::Physics::iPhysicalBody* body1, CS::Physics::iPhy
     else
     {
       // Two rigid bodies.
-      if (body2->QueryRigidBody())
+      if (body2->QueryRigidBody ())
       {
         jointFlag &= ~JOINT_SOFT;
 
@@ -156,7 +156,7 @@ void csBulletJoint::Attach (CS::Physics::iPhysicalBody* body1, CS::Physics::iPhy
     bodies[0] = body1;
     bodies[1] = nullptr;
 
-    if (body1->QueryRigidBody())
+    if (body1->QueryRigidBody ())
       jointFlag &= ~JOINT_SOFT;
     else
     {
@@ -206,6 +206,7 @@ void csBulletJoint::SetPosition (const csVector3& position, bool forceUpdate)
 
 void csBulletJoint::SetTransConstraints (bool X, bool Y, bool Z, bool forceUpdate)
 {
+  // TODO: update min/max distances
   transConstraintX = X;
   transConstraintY = Y;
   transConstraintZ = Z;
@@ -308,13 +309,13 @@ bool csBulletJoint::RebuildJoint ()
     if (jointFlag & (JOINT_POSITION | JOINT_TRANSFORM))
     {
       btTransform jointTransform = CSToBullet (transform , sys->GetInternalScale ());
-      frA = body1->btBody->getCenterOfMassTransform().inverse() * jointTransform;
+      frA = body1->btBody->getCenterOfMassTransform ().inverse () * jointTransform;
       if (bodies[1])
       {
         body2 = dynamic_cast<csBulletRigidBody*> (bodies[1]);
         if (!body2 || !body2->btBody)
           return false;
-        frB = body2->btBody->getCenterOfMassTransform().inverse() * jointTransform;
+        frB = body2->btBody->getCenterOfMassTransform ().inverse () * jointTransform;
       }
     }
 
@@ -325,7 +326,7 @@ bool csBulletJoint::RebuildJoint ()
     {
       btHingeConstraint* pHinge;
       btVector3 btPivotA = frA.getOrigin ();
-      btVector3 btAxisA( 0.0f, 0.0f, 0.0f );
+      btVector3 btAxisA ( 0.0f, 0.0f, 0.0f );
       btAxisA[axis] = 1.0f;
       if (bodies[1])
       {
@@ -333,14 +334,14 @@ bool csBulletJoint::RebuildJoint ()
         if (!body2 || !body2->btBody)
           return false;
         btVector3 btPivotB = frB.getOrigin ();
-        pHinge = new btHingeConstraint( *body1->btBody, *body2->btBody,
+        pHinge = new btHingeConstraint ( *body1->btBody, *body2->btBody,
           btPivotA, btPivotB, btAxisA, btAxisA, true);
       }
       else
-        pHinge = new btHingeConstraint( *body1->btBody, btPivotA, btAxisA );
+        pHinge = new btHingeConstraint ( *body1->btBody, btPivotA, btAxisA );
 
       if (!desiredVelocity.IsZero (EPSILON))
-        pHinge->enableAngularMotor(true, desiredVelocity[axis], maxForce[axis]); 
+        pHinge->enableAngularMotor (true, desiredVelocity[axis], maxForce[axis]); 
       rigidJoint = pHinge;
     }
     else
@@ -356,7 +357,7 @@ bool csBulletJoint::RebuildJoint ()
         {
           btGeneric6DofSpringConstraint* springJoint = new btGeneric6DofSpringConstraint (
             *(body1->btBody), *(body2->btBody), frA, frB, true);
-          if (transConstraintX && abs(linearStiff[0]) > EPSILON)
+          if (transConstraintX && abs (linearStiff[0]) > EPSILON)
           {
             springJoint->enableSpring (0, true);
             springJoint->setStiffness (0, linearStiff[0]);
@@ -364,7 +365,7 @@ bool csBulletJoint::RebuildJoint ()
             if (jointFlag & JOINT_EQUIL_POINT)
               springJoint->setEquilibriumPoint (0, linearEquilPoint[0]);
           }
-          if (transConstraintY && abs(linearStiff[1]) > EPSILON)
+          if (transConstraintY && abs (linearStiff[1]) > EPSILON)
           {
             springJoint->enableSpring (1, true);
             springJoint->setStiffness (1, linearStiff[1]);
@@ -372,7 +373,7 @@ bool csBulletJoint::RebuildJoint ()
             if (jointFlag & JOINT_EQUIL_POINT)
               springJoint->setEquilibriumPoint (1, linearEquilPoint[1]);
           }
-          if (transConstraintZ && abs(linearStiff[2]) > EPSILON)
+          if (transConstraintZ && abs (linearStiff[2]) > EPSILON)
           {
             springJoint->enableSpring (2, true);
             springJoint->setStiffness (2, linearStiff[2]);
@@ -380,7 +381,7 @@ bool csBulletJoint::RebuildJoint ()
             if (jointFlag & JOINT_EQUIL_POINT)
               springJoint->setEquilibriumPoint (2, linearEquilPoint[2]);
           }
-          if (rotConstraintX && abs(angularStiff[0]) > EPSILON)
+          if (rotConstraintX && abs (angularStiff[0]) > EPSILON)
           {
             springJoint->enableSpring (3, true);
             springJoint->setStiffness (3, angularStiff[0]);
@@ -388,7 +389,7 @@ bool csBulletJoint::RebuildJoint ()
             if (jointFlag & JOINT_EQUIL_POINT)
               springJoint->setEquilibriumPoint (3, angularEquilPoint[0]);
           }
-          if (rotConstraintY && abs(angularStiff[1]) > EPSILON)
+          if (rotConstraintY && abs (angularStiff[1]) > EPSILON)
           {
             springJoint->enableSpring (4, true);
             springJoint->setStiffness (4, angularStiff[1]);
@@ -396,7 +397,7 @@ bool csBulletJoint::RebuildJoint ()
             if (jointFlag & JOINT_EQUIL_POINT)
               springJoint->setEquilibriumPoint (4, angularEquilPoint[1]);
           }
-          if (rotConstraintZ && abs(angularStiff[2]) > EPSILON)
+          if (rotConstraintZ && abs (angularStiff[2]) > EPSILON)
           {
             springJoint->enableSpring (5, true);
             springJoint->setStiffness (5, angularStiff[2]);
@@ -410,61 +411,61 @@ bool csBulletJoint::RebuildJoint ()
         }
         else
           dofJoint = new btGeneric6DofConstraint (*(body1->btBody), *(body2->btBody),
-          frA, frB, true);
+          frA, frB, false);
       }
       else
       {
         if (jointFlag & JOINT_SPRING)
           return false;
         else
-          dofJoint = new btGeneric6DofConstraint (*(body1->btBody), frA, true);
+          dofJoint = new btGeneric6DofConstraint (*(body1->btBody), frA, false);
       }
 
-
-      btVector3 minLinear(0.0f, 0.0f, 0.0f);
-      btVector3 maxLinear(-1.0f, -1.0f, -1.0f);
-      btVector3 minAngular(0.0f, 0.0f, 0.0f);
-      btVector3 maxAngular(-1.0f, -1.0f, -1.0f);
+      // Compute the linear/angular min/max values
+      btVector3 minLinear (0.0f, 0.0f, 0.0f);
+      btVector3 maxLinear (-1.0f, -1.0f, -1.0f);
+      btVector3 minAngular (0.0f, 0.0f, 0.0f);
+      btVector3 maxAngular (-1.0f, -1.0f, -1.0f);
 
       if (transConstraintX)
       {
-        minLinear.setX(minDist[0]);
-        maxLinear.setX(maxDist[0]);
+        minLinear.setX (minDist[0]);
+        maxLinear.setX (maxDist[0]);
       }
       if (transConstraintY)
       {
-        minLinear.setY(minDist[1]);
-        maxLinear.setY(maxDist[1]);
+        minLinear.setY (minDist[1]);
+        maxLinear.setY (maxDist[1]);
       }
       if (transConstraintZ)
       {
-        minLinear.setZ(minDist[2]);
-        maxLinear.setZ(maxDist[2]);
+        minLinear.setZ (minDist[2]);
+        maxLinear.setZ (maxDist[2]);
       }
 
       if (rotConstraintX)
       {
-        minAngular.setX(minAngle[0]);
-        maxAngular.setX(maxAngle[0]);
+        minAngular.setX (minAngle[0]);
+        maxAngular.setX (maxAngle[0]);
       }
       if (rotConstraintY)
       {
-        minAngular.setY(minAngle[1]);
-        maxAngular.setY(maxAngle[1]);
+        minAngular.setY (minAngle[1]);
+        maxAngular.setY (maxAngle[1]);
       }
       if (rotConstraintZ)
       {
-        minAngular.setZ(minAngle[2]);
-        maxAngular.setZ(maxAngle[2]);
+        minAngular.setZ (minAngle[2]);
+        maxAngular.setZ (maxAngle[2]);
       }
 
-      // apply min/max values
+      // Apply the min/max values
       dofJoint->setLinearLowerLimit (minLinear);
       dofJoint->setLinearUpperLimit (maxLinear);
       dofJoint->setAngularLowerLimit (minAngular);
       dofJoint->setAngularUpperLimit (maxAngular);
 
-      // apply the parameters for the motor
+      // Apply the parameters for the motor
       if (fabs (desiredVelocity[0]) > EPSILON)
       {
         btRotationalLimitMotor* motor = dofJoint->getRotationalLimitMotor (0);
@@ -493,11 +494,14 @@ bool csBulletJoint::RebuildJoint ()
         motor->m_damping = 0.1f;
       }
       dofJoint->getRotationalLimitMotor (2)->m_bounce = bounce[2];
+
       rigidJoint = dofJoint;
-    } 
+    }
+
     rigidJoint->setBreakingImpulseThreshold (threshold * sys->GetInternalScale ());
-    rigidJoint->setDbgDrawSize(sys->GetInternalScale ());
+    rigidJoint->setDbgDrawSize (sys->GetInternalScale ());
   }
+
   return true;
 }
 
@@ -617,7 +621,7 @@ void csBulletJoint::AddBulletJoint ()
       lspecs.cfm		=	1;
       lspecs.erp		=	1; 
       lspecs.position = CSToBullet (position, sys->GetInternalScale ());
-      if (bodies[1]->QueryRigidBody())
+      if (bodies[1]->QueryRigidBody ())
       {  
         csBulletRigidBody* body2 = dynamic_cast<csBulletRigidBody*> (bodies[1]);
         body->btBody->appendLinearJoint (lspecs, body2->btBody);
@@ -636,13 +640,13 @@ void csBulletJoint::AddBulletJoint ()
       aspecs.cfm		=	1;
       aspecs.erp		=	1;
       if (!rotConstraintX)
-        aspecs.axis = btVector3(1,0,0);
+        aspecs.axis = btVector3 (1,0,0);
       else if (!rotConstraintY)
-        aspecs.axis = btVector3(0,1,0);
+        aspecs.axis = btVector3 (0,1,0);
       else if (!rotConstraintZ)
-        aspecs.axis = btVector3(0,0,1);
+        aspecs.axis = btVector3 (0,0,1);
 
-      if (bodies[1]->QueryRigidBody())
+      if (bodies[1]->QueryRigidBody ())
       {  
         csBulletRigidBody* body2 = dynamic_cast<csBulletRigidBody*> (bodies[1]);
         body->btBody->appendAngularJoint (aspecs, body2->btBody);
@@ -657,7 +661,7 @@ void csBulletJoint::AddBulletJoint ()
     }
     else
       return;
-    softJoint = body->btBody->m_joints[body->btBody->m_joints.size()-1];
+    softJoint = body->btBody->m_joints[body->btBody->m_joints.size () - 1];
     jointFlag |= JOINT_INSIDE_WORLD;
   }
 }
