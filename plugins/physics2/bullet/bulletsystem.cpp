@@ -364,7 +364,7 @@ csPtr<CS::Physics::iJointFactory> csBulletSystem::CreateP2PJointFactory ()
 {
   csRef<JointFactory> factory = csPtr<JointFactory> (new JointFactory (this));
   factory->SetTransConstraints (true, true, true);
-  csVector3 trans (0.0f,0.0f,0.0f);
+  csVector3 trans (0.0f);
   factory->SetMaximumDistance (trans);
   factory->SetMinimumDistance (trans);
   factory->SetType (RIGID_P2P_JOINT);
@@ -379,8 +379,8 @@ csPtr<CS::Physics::iJointFactory> csBulletSystem::CreateSlideJointFactory
   csRef<JointFactory> factory = csPtr<JointFactory> (new JointFactory (this));
   factory->SetTransConstraints (true, true, true);
   factory->SetRotConstraints (true, true, true);
-  csVector3 minDistant (0.0f, 0.0f, 0.0f);
-  csVector3 maxDistant (0.0f, 0.0f, 0.0f);
+  csVector3 minDistant (0.0f);
+  csVector3 maxDistant (0.0f);
 
   minDistant[axis] = minDist;
   maxDistant[axis] = maxDist;
@@ -400,8 +400,8 @@ csPtr<CS::Physics::iJointFactory> csBulletSystem::CreateHingeJointFactory
   if (axis < 0 || axis > 2)
     return csPtr<CS::Physics::iJointFactory> (nullptr);
   csRef<JointFactory> factory = csPtr<JointFactory> (new JointFactory (this));
-  csVector3 minDistant (0.0f, 0.0f, 0.0f);
-  csVector3 maxDistant (0.0f, 0.0f, 0.0f);
+  csVector3 minDistant (0.0f);
+  csVector3 maxDistant (0.0f);
   minDistant[axis] = minAngle;
   maxDistant[axis] = maxAngle;
   factory->SetMinimumAngle (minDistant);
@@ -418,8 +418,8 @@ csPtr<CS::Physics::iJointFactory> csBulletSystem::CreateConeTwistJointFactory
   factory->SetTransConstraints (true, true, true);
   factory->SetRotConstraints (true, true, true);
 
-  csVector3 minDistant (0.0f, 0.0f, 0.0f);
-  csVector3 maxDistant (0.0f, 0.0f, 0.0f);
+  csVector3 minDistant (0.0f);
+  csVector3 maxDistant (0.0f);
   factory->SetMaximumDistance (minDistant);
   factory->SetMinimumDistance (maxDistant);
   minDistant.Set (-twistSpan, -swingSpan2, -swingSpan1);  
@@ -458,7 +458,7 @@ csPtr<CS::Physics::iJointFactory> csBulletSystem::CreatePivotJointFactory ()
 {
   csRef<JointFactory> factory = csPtr<JointFactory> (new JointFactory (this));
   factory->SetTransConstraints (true, true, true);
-  csVector3 trans (0.0f, 0.0f, 0.0f);
+  csVector3 trans (0.0f);
   factory->SetMaximumDistance (trans);
   factory->SetMinimumDistance (trans);
   factory->SetType (RIGID_PIVOT_JOINT);
