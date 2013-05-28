@@ -149,7 +149,6 @@ bool PhysDemo::OnKeyboard (iEvent &event)
     switch (actorMode)
     {
     case ActorModeNone:
-      actorMode = ActorModeDynamic;
     case ActorModeKinematic:
       actorMode = ActorModeDynamic;
       break;

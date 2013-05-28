@@ -16,9 +16,7 @@
     Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 
-/**
- * This code is a (very very) basic implementation of an item and weapon system.
- */
+// TODO: Remove all of that and/or move it in DemoApplication
 
 #ifndef __PHYSTUT2_ITEMS_H__
 #define __PHYSTUT2_ITEMS_H__
