@@ -227,6 +227,18 @@ struct iSkeletonBoneModel : public virtual iBase
   virtual CS::Physics::iRigidBodyFactory* GetRigidBodyFactory () const = 0;
 
   /**
+   * Set the local transform of the rigid body of this bone model, relatively to the
+   * transform of the animesh's bone.
+   */
+  virtual void SetRigidBodyTransform (const csOrthoTransform &transform) = 0;
+
+  /**
+   * Get the local transform of the rigid body of this bone model, relatively to the
+   * transform of the animesh's bone.
+   */
+  virtual const csOrthoTransform& GetRigidBodyTransform () const = 0;
+
+  /**
    * Set the joint factory of this bone model. It describes the properties of the joint
    * linking the physical body of this bone to the one of the parent bone.
    */
@@ -239,12 +251,14 @@ struct iSkeletonBoneModel : public virtual iBase
   virtual CS::Physics::iJointFactory* GetJointFactory () const = 0;
 
   /**
-   * Set the local transform of the joint of this bone model.
+   * Set the local transform of the joint of this bone model, relatively to the
+   * transform of the animesh's bone.
    */
   virtual void SetJointTransform (const csOrthoTransform &transform) = 0;
 
   /**
-   * Get the local transform of the joint of this bone model.
+   * Get the local transform of the joint of this bone model, relatively to the
+   * transform of the animesh's bone.
    */
   virtual const csOrthoTransform& GetJointTransform () const = 0;
 };
