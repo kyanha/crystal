@@ -82,13 +82,24 @@ CS_PLUGIN_NAMESPACE_BEGIN (Ragdoll)
     manager (manager)
   {
     // Find the physical system from the object registry
-    physicalSystem = csQueryRegistry<CS::Physics::iPhysicalSystem>
-      (manager->object_reg);
-#ifdef CS_DEBUG
+    csRef<CS::Collisions::iCollisionSystem> collisionSystem =
+      csQueryRegistry<CS::Collisions::iCollisionSystem> (manager->object_reg);
+    if (!collisionSystem)
+    {
+      manager->Report (CS_REPORTER_SEVERITY_ERROR,
+		       "Could not find any collision system for the creation of the "
+		       "physical factories");
+      return;
+    }
+
+    physicalSystem = scfQueryInterface<CS::Physics::iPhysicalSystem> (collisionSystem);
     if (!physicalSystem)
-      manager->Report (CS_REPORTER_SEVERITY_WARNING,
-		       "Could not find any physical system");
-#endif
+    {
+      manager->Report (CS_REPORTER_SEVERITY_ERROR,
+		       "Could not find any physical system for the creation of the "
+		       "physical factories");
+      return;
+    }
   }
 
   void RagdollNodeFactory::AddChain (CS::Animation::iSkeletonChain* chain,
@@ -674,7 +685,8 @@ CS_PLUGIN_NAMESPACE_BEGIN (Ragdoll)
 	skeleton->GetTransformAbsSpace (boneData->boneID, rotation, offset);
 	csOrthoTransform boneTransform (csMatrix3 (rotation.GetConjugate ()), offset);
 	csOrthoTransform animeshTransform = sceneNode->GetMovable ()->GetFullTransform ();
-	csOrthoTransform bodyTransform = boneTransform * animeshTransform;
+	csOrthoTransform bodyTransform = boneModel->GetRigidBodyTransform ()
+	  * boneTransform * animeshTransform;
 	boneData->rigidBody->SetTransform (bodyTransform);
       }
 
@@ -704,16 +716,11 @@ CS_PLUGIN_NAMESPACE_BEGIN (Ragdoll)
       csQuaternion rotation; 
       csVector3 offset; 
 
-      // TODO: GetTransformBindSpace seems to return a wrong data 
-      //skeleton->GetTransformBindSpace (boneData->boneID, rotation, offset); 
-      //csOrthoTransform jointTransform (csMatrix3 (rotation.GetConjugate ()), offset); 
-
-      skeleton->GetTransformBoneSpace (boneData->boneID, rotation, offset); 
+      skeleton->GetTransformAbsSpace (boneData->boneID, rotation, offset); 
       csOrthoTransform boneTransform (csMatrix3 (rotation.GetConjugate ()), offset); 
-      skeleton->GetFactory ()->GetTransformBoneSpace (boneData->boneID, rotation, offset); 
-      csOrthoTransform boneSTransform (csMatrix3 (rotation.GetConjugate ()), offset); 
-      boneData->joint->SetTransform (boneModel->GetJointTransform () *
-				     boneSTransform * boneTransform.GetInverse ()); 
+      boneData->joint->SetTransform
+	(boneModel->GetJointTransform () * boneTransform
+	 * sceneNode->GetMovable ()->GetFullTransform ()); 
 
       // Attach the rigid bodies to the joint
       boneData->joint->Attach (parentBoneData->rigidBody, boneData->rigidBody, false);

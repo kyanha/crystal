@@ -251,7 +251,6 @@ CS_PLUGIN_NAMESPACE_BEGIN (SkeletonModel)
       return;
     }
 
-
     csRef<CS::Physics::iPhysicalSystem> physicalSystem =
       scfQueryInterface<CS::Physics::iPhysicalSystem> (collisionSystem);
     if (!physicalSystem)
@@ -307,7 +306,8 @@ CS_PLUGIN_NAMESPACE_BEGIN (SkeletonModel)
       // Create a default physical model if there are none previously defined
       if (!bone->rigidBody)
       {
-	csRef<CS::Collisions::iCollider> root = physicalSystem->CreateCollider ();
+	csRef<CS::Collisions::iCollider> collider;
+	csOrthoTransform transform;
 
 	switch (colliderType)
 	{
@@ -315,14 +315,16 @@ CS_PLUGIN_NAMESPACE_BEGIN (SkeletonModel)
 	{
 	  csRef<CS::Collisions::iColliderBox> box =
 	    physicalSystem->CreateColliderBox (bbox.GetSize ());
-	  root->AddChild (box, csOrthoTransform (csMatrix3 (), bbox.GetCenter ()));
+	  collider = box;
+	  transform.SetOrigin (bbox.GetCenter ());
 	}
 	  break;
 	case CS::Collisions::COLLIDER_SPHERE:
 	{
 	  csRef<CS::Collisions::iColliderSphere> sphere =
 	    physicalSystem->CreateColliderSphere (bbox.GetSize ().Norm () * 0.4f);
-	  root->AddChild (sphere, csOrthoTransform (csMatrix3 (), bbox.GetCenter ()));
+	  collider = sphere;
+	  transform.SetOrigin (bbox.GetCenter ());
 	}
 	  break;
 	case CS::Collisions::COLLIDER_CYLINDER:
@@ -331,31 +333,25 @@ CS_PLUGIN_NAMESPACE_BEGIN (SkeletonModel)
 	  csRef<CS::Collisions::iColliderCylinder> cylinder =
 	    physicalSystem->CreateColliderCylinder
 	    (size[2], csQsqrt (size[0] * size[0] + size[1] * size[1]) * 0.4f);
-	  root->AddChild (cylinder, csOrthoTransform (csMatrix3 (), bbox.GetCenter ()));
+	  collider = cylinder;
+	  transform.SetOrigin (bbox.GetCenter ());
 	}
 	  break;
 	case CS::Collisions::COLLIDER_CAPSULE:
 	{
-/*
 	  const csVector3 size = bbox.GetSize ();
 	  float radius = csQsqrt (size[0] * size[0] + size[1] * size[1]) * 0.4f;
 	  csRef<CS::Collisions::iColliderCapsule> capsule =
 	    physicalSystem->CreateColliderCapsule (size[2] - radius, radius);
-	  root->AddChild (capsule, csOrthoTransform (csMatrix3 (), bbox.GetCenter ()));
-*/
-	  const csVector3 size = bbox.GetSize ();
-	  float radius = csQsqrt (size[0] * size[0] + size[1] * size[1]) * 0.4f;
-	  csRef<CS::Collisions::iColliderCapsule> capsule =
-	    physicalSystem->CreateColliderCapsule (size[2] - radius, radius);
-	  root->AddChild (capsule, csOrthoTransform (csMatrix3 (), bbox.GetCenter ()));
-	  //root = capsule;
+	  collider = capsule;
+	  transform.SetOrigin (bbox.GetCenter ());
 	}
 	  break;
 	default:
 	  break;
 	}
 
-	bone->rigidBody = physicalSystem->CreateRigidBodyFactory (root);
+	bone->rigidBody = physicalSystem->CreateRigidBodyFactory (collider);
       }
 
       // Create a default joint if it has not been previously defined
@@ -363,7 +359,7 @@ CS_PLUGIN_NAMESPACE_BEGIN (SkeletonModel)
       if (!bone->joint)
       {
 	CS::Animation::BoneID parentBoneID = skeletonFactory->GetBoneParent (boneID);
-	//if (parentBoneID == CS::Animation::InvalidBoneID)
+	if (parentBoneID == CS::Animation::InvalidBoneID)
 	  continue;
 
 	if (!boneHash.Contains (parentBoneID))
@@ -373,10 +369,10 @@ CS_PLUGIN_NAMESPACE_BEGIN (SkeletonModel)
 	if (!parentBone->rigidBody)
 	  continue;
 
-	bone->joint = physicalSystem->CreateJointFactory ();
-
-	// Constraint the translation by default
-	bone->joint->SetTransConstraints (true, true, true);
+	bone->joint = physicalSystem->CreateP2PJointFactory ();
+	bone->joint->SetMinimumAngle (csVector3 (-PI * 0.25f));
+	bone->joint->SetMaximumAngle (csVector3 (PI * 0.25f));
+	//bone->joint->SetAngularDamping (csVector3 (0.1f));
       }
     }
   }
@@ -452,11 +448,6 @@ CS_PLUGIN_NAMESPACE_BEGIN (SkeletonModel)
   BoneModel::BoneModel (CS::Animation::BoneID boneID)
     : scfImplementationType (this), animeshBone (boneID)
   {
-  }
-
-  CS::Animation::BoneID BoneModel::GetAnimeshBone () const
-  {
-    return animeshBone;
   }
 
   /********************
