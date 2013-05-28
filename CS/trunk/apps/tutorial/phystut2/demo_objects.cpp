@@ -1124,21 +1124,17 @@ void PhysDemo::LoadKrystalRagdoll ()
   csRef<CS::Animation::iSkeletonModel> skeletonModel =
     modelManager->CreateModel (animeshFactory->GetSkeletonFactory ());
   skeletonModel->PopulateDefaultModels (animeshFactory);
-  //skeletonModel->QueryObject ()->SetObjectParent (meshfact->QueryObject ());
   animeshFactory->GetSkeletonFactory ()->SetSkeletonModel (skeletonModel);
 
   // Create the bone chain
   CS::Animation::iSkeletonChain* chain = skeletonModel->CreateChain
     ("skeleton_chain", animeshFactory->GetSkeletonFactory ()->FindBone ("Hips"));
-/*
   chain->AddSubChain (animeshFactory->GetSkeletonFactory ()->FindBone ("Head"));
   chain->AddSubChain (animeshFactory->GetSkeletonFactory ()->FindBone ("RightFoot"));
   chain->AddSubChain (animeshFactory->GetSkeletonFactory ()->FindBone ("LeftFoot"));
   chain->AddSubChain (animeshFactory->GetSkeletonFactory ()->FindBone ("RightHand"));
   chain->AddSubChain (animeshFactory->GetSkeletonFactory ()->FindBone ("LeftHand"));
-*/
-  chain->AddAllSubChains ();
-  printf ("%s\n", chain->Description ().GetData ());
+  //chain->AddAllSubChains ();
 
   // Create the ragdoll animation node factory
   csRef<CS::Animation::iSkeletonRagdollNodeFactory2> ragdollFactory =
@@ -1166,25 +1162,27 @@ void PhysDemo::SpawnKrystalRagdoll ()
   printf ("spawning Krystal\n");
 
   // Create the animesh
-  csRef<iMeshWrapper> ragdollMesh = engine->CreateMeshWrapper (meshfact, "Krystal",
-    room, csVector3 (0, -4, 0));
-  csRef<CS::Mesh::iAnimatedMesh> animesh =
-    scfQueryInterface<CS::Mesh::iAnimatedMesh> (ragdollMesh->GetMeshObject ());
+  const csOrthoTransform& tc = view->GetCamera ()->GetTransform ();
+  csOrthoTransform position =
+    csOrthoTransform (csMatrix3 (), csVector3 (0.0f, -1.0f, 1.0f)) * tc;
+  csRef<iMeshWrapper> ragdollMesh =
+    engine->CreateMeshWrapper (meshfact, "Krystal", room, position.GetOrigin ());
 
   // Set the initial position of the body
-  const csOrthoTransform& tc = view->GetCamera ()->GetTransform ();
-  ragdollMesh->QuerySceneNode ()->GetMovable ()->SetPosition (
-    tc.GetOrigin () + tc.GetT2O () * csVector3 (0, 0, 1));
+  ragdollMesh->QuerySceneNode ()->GetMovable ()->SetFullTransform (position);
 
   // Start the ragdoll animation node so that the rigid bodies of the bones are created
+  // directly.
+  csRef<CS::Mesh::iAnimatedMesh> animesh =
+    scfQueryInterface<CS::Mesh::iAnimatedMesh> (ragdollMesh->GetMeshObject ());
   CS::Animation::iSkeletonAnimNode* root = animesh->GetSkeleton ()->GetAnimationPacket ()->
     GetAnimationRoot ();
   csRef<CS::Animation::iSkeletonRagdollNode2> ragdoll =
     scfQueryInterfaceSafe<CS::Animation::iSkeletonRagdollNode2> (root);
   ragdoll->Play ();
 
-  // Fling the body.
-  for (uint i = 0; i < ragdoll->GetBoneCount (CS::Animation::STATE_DYNAMIC); i++)
+  // Fling the body (that's why we needed that the rigid bodies were created directly).
+  for (size_t i = 0; i < ragdoll->GetBoneCount (CS::Animation::STATE_DYNAMIC); i++)
   {
     CS::Animation::BoneID boneID = ragdoll->GetBone (CS::Animation::STATE_DYNAMIC, i);
     CS::Physics::iRigidBody* rb = ragdoll->GetBoneRigidBody (boneID);

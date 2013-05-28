@@ -71,6 +71,7 @@ bool PhysDemo::OnInitialize (int argc, char* argv[])
   // Load the Physics plugin
   physicalSystem = csLoadPlugin<CS::Physics::iPhysicalSystem> (plugmgr, "crystalspace.physics.bullet");
   if (!physicalSystem) return ReportError ("Could not load the Bullet plugin!");
+  //physicalSystem->SetInternalScale (10.0f);
 
   // Load Convex Decomposition plugin
   convexDecomposer = csLoadPlugin<iConvexDecomposer> (plugmgr, "crystalspace.mesh.convexdecompose.hacd");
@@ -403,6 +404,8 @@ void PhysDemo::UpdateActorMode (ActorMode newActorMode)
     // The camera is controlled by a rigid body
   case ActorModeDynamic:
     {
+      cameraManager->SetCameraMode (CS::Utility::CAMERA_NO_MOVE);
+
       if (!dynamicActor)
       {
         //csRef<CS::Collisions::iColliderSphere> collider = physicalSystem->CreateColliderSphere (ActorDimensions.y);
@@ -444,8 +447,6 @@ void PhysDemo::UpdateActorMode (ActorMode newActorMode)
         kinematicActor = factory->CreateCollisionActor ();
       }
 
-      kinematicActor->SetCollisionGroup (physicalSystem->FindCollisionGroup ("Actor"));
-
       player.SetObject (kinematicActor);
     }
     break;
@@ -464,39 +465,22 @@ void PhysDemo::UpdateActorMode (ActorMode newActorMode)
       lastActorObj->GetSector ()->RemoveCollisionObject (lastActorObj);
       
       // move new actor to old transform
-      player.GetObject ()->SetTransform (lastActorObj->GetTransform ());
+      player.GetObject ()->SetTransform (view->GetCamera ()->GetTransform ());
       lastActorObj->GetSector ()->AddCollisionObject (player.GetObject ());
     }
-    player.GetObject ()->SetCollisionGroup (physicalSystem->FindCollisionGroup ("Actor"));
-    SetGravity (csVector3 (0.0f, -9.81f, 0.0f));
   }
   else
   {
-    // The camera is free now -> Requires actor object to already be created & set
-    player.GetObject ()->SetCollisionGroup (physicalSystem->FindCollisionGroup ("None"));
-    iPhysicalBody* physActor = player.GetObject ()->QueryPhysicalBody ();
-    if (physActor)
-    {
-      physActor->SetLinearVelocity (0);
-      physActor->SetGravityEnabled (false);
-      if (physActor->QueryRigidBody ())
-      {
-        physActor->QueryRigidBody ()->SetAngularVelocity (0);
-      }
-    }
-    // TODO: remove this hack and use SetGravityEnabled instead
-    SetGravity (0);
+    // No clip mode
+    cameraManager->SetCameraMode (CS::Utility::CAMERA_MOVE_FREE);
   }
 }
 
 bool PhysDemo::IsDynamic (CS::Collisions::iCollisionObject* obj) const
 {
-  return 
-    obj->QueryPhysicalBody () &&
-    (
-    !obj->QueryPhysicalBody ()->QueryRigidBody () || 
-    obj->QueryPhysicalBody ()->QueryRigidBody ()->GetState () == STATE_DYNAMIC
-    );
+  return obj->QueryPhysicalBody () &&
+    (!obj->QueryPhysicalBody ()->QueryRigidBody ()
+     || obj->QueryPhysicalBody ()->QueryRigidBody ()->GetState () == STATE_DYNAMIC);
 }
 
 bool PhysDemo::IsActor (CS::Collisions::iCollisionObject* obj) const

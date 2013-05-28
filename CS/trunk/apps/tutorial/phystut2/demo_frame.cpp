@@ -60,30 +60,34 @@ void PhysDemo::Frame ()
   // Update the demo's state information
   UpdateHUD ();
 
-  // Rotate actor
-  RotateActor ();
+  // Simulate one step
+  DoStep ();
 
-  if (!paused)
+  if (actorMode != ActorModeNoclip)
   {
-    if (actorVehicle)
+    // Rotate actor
+    RotateActor ();
+
+    if (!paused)
     {
-      // Update vehicle
-      MoveActorVehicle ();
+      if (actorVehicle)
+      {
+	// Update vehicle
+	MoveActorVehicle ();
+      }
+      else
+      {
+	// Update actor
+	MoveActor ();
+      }
     }
-    else
-    {
-      // Update actor
-      MoveActor ();
-    }
-    // Simulate one step
-    DoStep ();
+
+    // Update passengers of all vehicles (this should probably be assisted by the physics plugin)
+    UpdateVehiclePassengers ();
+
+    // Move the camera
+    MoveCamera ();
   }
-
-  // Update passengers of all vehicles (this should probably be assisted by the physics plugin)
-  UpdateVehiclePassengers ();
-
-  // Move the camera
-  MoveCamera ();
 
   // Update position of an object currently dragged by the mouse
   UpdateDragging ();
@@ -114,9 +118,8 @@ void PhysDemo::MoveActor ()
 
   const float timeMs = elapsed_time / 1000.0;
 
-  iCamera* cam = view->GetCamera ();
-  csOrthoTransform& camTrans = cam->GetTransform ();
-  // player.GetObject ()->SetTransform (actorTrans);
+  iCamera* camera = view->GetCamera ();
+  csOrthoTransform& camTrans = camera->GetTransform ();
   csOrthoTransform actorTrans = player.GetObject ()->GetTransform ();
 
   // handle movement
@@ -175,7 +178,7 @@ void PhysDemo::MoveActor ()
       // add upward movement
       newVel[UpAxis] += moveSpeed;
     }
-    cam->Move (newVel * moveSpeed * timeMs);
+    camera->Move (newVel * moveSpeed * timeMs);
   }
 }
 
@@ -187,8 +190,8 @@ void PhysDemo::RotateActor ()
 
   static const float MaxPitchCos = .965f;      // can't get closer than 15 degrees to UpAxis to prevent gimbal lock
 
-  iCamera* cam = view->GetCamera ();
-  csOrthoTransform& camTrans = cam->GetTransform ();
+  iCamera* camera = view->GetCamera ();
+  csOrthoTransform& camTrans = camera->GetTransform ();
   // player.GetObject ()->SetTransform (actorTrans);
   csOrthoTransform actorTrans = player.GetObject ()->GetTransform ();
 
