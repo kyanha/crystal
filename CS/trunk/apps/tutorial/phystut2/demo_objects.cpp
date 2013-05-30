@@ -627,6 +627,8 @@ CS::Physics::iJoint* PhysDemo::SpawnJointed ()
   csRef<CS::Physics::iJointFactory> jointFactory = physicalSystem->CreateP2PJointFactory ();
   csRef<CS::Physics::iJoint> joint = jointFactory->CreateJoint ();
   joint->SetPosition (jointPosition);
+  joint->SetMinimumAngle (csVector3 (-HALF_PI, 0.0f, 0.0f));
+  joint->SetMaximumAngle (csVector3 (HALF_PI, 0.0f, 0.0f));
   joint->Attach (rb2, rb1);
 #endif
 
@@ -959,25 +961,24 @@ void PhysDemo::SpawnParticles ()
   partstate->AddEffector (physicalEffector);
 }
 
-void PhysDemo::LoadFrankieRagdoll () {}
-void PhysDemo::SpawnFrankieRagdoll () {}
-
-/*
 void PhysDemo::LoadFrankieRagdoll ()
 {
   // Load animesh factory
-  printf ("Loading the Frankie model... ");
+  printf ("Loading the Frankie model... "); fflush (stdout);
   csLoadResult rc = loader->Load ("/lib/frankie/frankie.xml");
   if (!rc.success)
   {
     ReportError ("Can't load Frankie!");
     return;
   }
-  printf ("Done");
+  printf ("Done\n");
 
   csRef<iMeshFactoryWrapper> meshfact = engine->FindMeshFactory ("franky_frankie");
   if (!meshfact)
+  {
+    ReportError ("Can't find Frankie's mesh factory!");
     return;
+  }
 
   csRef<CS::Mesh::iAnimatedMeshFactory> animeshFactory =
     scfQueryInterface<CS::Mesh::iAnimatedMeshFactory>
@@ -988,43 +989,41 @@ void PhysDemo::LoadFrankieRagdoll ()
     return;
   }
 
-  // Load bodymesh (animesh's physical properties)
-  rc = loader->Load ("/lib/frankie/skelfrankie_body");
+  // Load the skeleton model (i.e. the animesh's physical properties)
+  rc = loader->Load ("/lib/frankie/skelfrankie_model.xml");
   if (!rc.success)
   {
-    ReportError ("Can't load Frankie's body description!");
+    ReportError ("Can't load Frankie's skeleton model description!");
     return;
   }
 
-  csRef<CS::Animation::iBodyManager> bodyManager =
-    csQueryRegistry<CS::Animation::iBodyManager> (GetObjectRegistry ());
-  CS::Animation::iBodySkeleton* bodySkeleton = bodyManager->FindBodySkeleton ("frankie_body");
-  if (!bodySkeleton)
+  CS::Animation::iSkeletonModel* skeletonModel =
+    animeshFactory->GetSkeletonFactory ()->GetSkeletonModel ();
+  if (!skeletonModel)
   {
-    ReportError ("Can't find Frankie's body description!");
+    ReportError ("Can't find Frankie's skeleton model description!");
     return;
   }
 
-  // Create bone chain
-  CS::Animation::iBodyChain* chain = bodySkeleton->CreateBodyChain
+  // Create the bone chain
+  CS::Animation::iSkeletonChain* chain = skeletonModel->CreateChain
     ("body_chain", animeshFactory->GetSkeletonFactory ()->FindBone ("Frankie_Main"));
   chain->AddSubChain (animeshFactory->GetSkeletonFactory ()->FindBone ("CTRL_Head"));
   chain->AddSubChain (animeshFactory->GetSkeletonFactory ()->FindBone ("Tail_8"));
 
-  // Create ragdoll animation node factory
+  // Create the ragdoll animation node factory
   csRef<CS::Animation::iSkeletonRagdollNodeFactory2> ragdollFactory =
     ragdollManager->CreateAnimNodeFactory ("frankie_ragdoll");
-  ragdollFactory->SetBodySkeleton (bodySkeleton);
-  ragdollFactory->AddBodyChain (chain, CS::Animation::STATE_DYNAMIC);
+  ragdollFactory->AddChain (chain, CS::Animation::STATE_DYNAMIC);
 
-  // Set the ragdoll anim node as the only node of the animation tree
+  // Set the ragdoll animation node as the only node of the animation tree
   animeshFactory->GetSkeletonFactory ()->GetAnimationPacket ()
     ->SetAnimationRoot (ragdollFactory);
 }
 
 void PhysDemo::SpawnFrankieRagdoll ()
 {
-  // Load frankie's factory if not yet done
+  // Load Frankie's factory if not yet done
   csRef<iMeshFactoryWrapper> meshfact =
     engine->FindMeshFactory ("franky_frankie");
   if (!meshfact)
@@ -1036,34 +1035,33 @@ void PhysDemo::SpawnFrankieRagdoll ()
   if (!meshfact)
     return;
 
-  // Create animesh
-  csRef<iMeshWrapper> ragdollMesh = engine->CreateMeshWrapper (meshfact, "Frankie",
-    room, csVector3 (0, -4, 0));
-  csRef<CS::Mesh::iAnimatedMesh> animesh =
-    scfQueryInterface<CS::Mesh::iAnimatedMesh> (ragdollMesh->GetMeshObject ());
+  // Create the animesh
+  const csOrthoTransform& tc = view->GetCamera ()->GetTransform ();
+  csOrthoTransform position =
+    csOrthoTransform (csMatrix3 (), csVector3 (0.0f, 0.0f, 1.0f)) * tc;
+  csRef<iMeshWrapper> ragdollMesh =
+    engine->CreateMeshWrapper (meshfact, "Frankie", room, position.GetOrigin ());
+
+  // Set the initial position of the body
+  ragdollMesh->QuerySceneNode ()->GetMovable ()->SetFullTransform (position);
 
   // Close the eyes of Frankie as he is dead
   csRef<CS::Mesh::iAnimatedMeshFactory> animeshFactory =
     scfQueryInterface<CS::Mesh::iAnimatedMeshFactory>
     (meshfact->GetMeshObjectFactory ());
-
+  csRef<CS::Mesh::iAnimatedMesh> animesh =
+    scfQueryInterface<CS::Mesh::iAnimatedMesh> (ragdollMesh->GetMeshObject ());
   animesh->SetMorphTargetWeight (animeshFactory->FindMorphTarget ("eyelids_closed"), 0.7f);
 
-  // Set the initial position of the body
-  const csOrthoTransform& tc = view->GetCamera ()->GetTransform ();
-  ragdollMesh->QuerySceneNode ()->GetMovable ()->SetPosition (
-    tc.GetOrigin () + tc.GetT2O () * csVector3 (0, 0, 1));
-
   // Start the ragdoll animation node so that the rigid bodies of the bones are created
+  // directly.
   CS::Animation::iSkeletonAnimNode* root = animesh->GetSkeleton ()->GetAnimationPacket ()->
     GetAnimationRoot ();
   csRef<CS::Animation::iSkeletonRagdollNode2> ragdoll =
     scfQueryInterfaceSafe<CS::Animation::iSkeletonRagdollNode2> (root);
-  ragdoll->SetPhysicalSystem (physicalSystem);
-  ragdoll->SetPhysicalSector (GetCurrentSector ());
   ragdoll->Play ();
 
-  // Fling the body.
+  // Fling the body (that's why we needed the rigid bodies to be created directly).
   for (uint i = 0; i < ragdoll->GetBoneCount (CS::Animation::STATE_DYNAMIC); i++)
   {
     CS::Animation::BoneID boneID = ragdoll->GetBone (CS::Animation::STATE_DYNAMIC, i);
@@ -1072,21 +1070,20 @@ void PhysDemo::SpawnFrankieRagdoll ()
     rb->SetAngularVelocity (tc.GetT2O () * csVector3 (5, 5, 0));
   }
 }
-*/
+
 void PhysDemo::LoadKrystalRagdoll ()
 {
   // Load animesh factory
-  printf ("Loading the Krystal model... ");
+  printf ("Loading the Krystal model... "); fflush (stdout);
   csLoadResult rc = loader->Load ("/lib/krystal/krystal.xml");
   if (!rc.success)
   {
     ReportError ("Can't load Krystal library file!");
     return;
   }
-  printf ("Done");
+  printf ("Done\n");
 
-  csRef<iMeshFactoryWrapper> meshfact =
-    engine->FindMeshFactory ("krystal");
+  csRef<iMeshFactoryWrapper> meshfact = engine->FindMeshFactory ("krystal");
   if (!meshfact)
   {
     ReportError ("Can't find Krystal's mesh factory!");
@@ -1102,30 +1099,28 @@ void PhysDemo::LoadKrystalRagdoll ()
     return;
   }
 
-/*
-  // Load bodymesh (animesh's physical properties)
-  rc = loader->Load ("/lib/krystal/skelkrystal_body");
+  // Load the skeleton model (i.e. the animesh's physical properties)
+  rc = loader->Load ("/lib/krystal/skelkrystal_model.xml");
   if (!rc.success)
   {
-    ReportError ("Can't load Krystal's body mesh file!");
+    ReportError ("Can't load Krystal's skeleton model description!");
     return;
   }
 
-  csRef<CS::Animation::iBodyManager> bodyManager =
-    csQueryRegistry<CS::Animation::iBodyManager> (GetObjectRegistry ());
-  csRef<CS::Animation::iBodySkeleton> bodySkeleton = bodyManager->FindBodySkeleton ("krystal_body");
-  if (!bodySkeleton)
+  CS::Animation::iSkeletonModel* skeletonModel =
+    animeshFactory->GetSkeletonFactory ()->GetSkeletonModel ();
+  if (!skeletonModel)
   {
-    ReportError ("Can't find Krystal's body mesh description!");
+    ReportError ("Can't find Krystal's skeleton model description!");
     return;
   }
-*/
+/*
   // Generate automatically a skeleton model
   csRef<CS::Animation::iSkeletonModel> skeletonModel =
     modelManager->CreateModel (animeshFactory->GetSkeletonFactory ());
   skeletonModel->PopulateDefaultModels (animeshFactory);
   animeshFactory->GetSkeletonFactory ()->SetSkeletonModel (skeletonModel);
-
+*/
   // Create the bone chain
   CS::Animation::iSkeletonChain* chain = skeletonModel->CreateChain
     ("skeleton_chain", animeshFactory->GetSkeletonFactory ()->FindBone ("Hips"));
@@ -1134,7 +1129,6 @@ void PhysDemo::LoadKrystalRagdoll ()
   chain->AddSubChain (animeshFactory->GetSkeletonFactory ()->FindBone ("LeftFoot"));
   chain->AddSubChain (animeshFactory->GetSkeletonFactory ()->FindBone ("RightHand"));
   chain->AddSubChain (animeshFactory->GetSkeletonFactory ()->FindBone ("LeftHand"));
-  //chain->AddAllSubChains ();
 
   // Create the ragdoll animation node factory
   csRef<CS::Animation::iSkeletonRagdollNodeFactory2> ragdollFactory =
@@ -1149,7 +1143,7 @@ void PhysDemo::LoadKrystalRagdoll ()
 
 void PhysDemo::SpawnKrystalRagdoll ()
 {
-  // Load krystal's factory if not yet done
+  // Load Krystal's factory if not yet done
   csRef<iMeshFactoryWrapper> meshfact = engine->FindMeshFactory ("krystal");
   if (!meshfact)
   {
@@ -1159,7 +1153,6 @@ void PhysDemo::SpawnKrystalRagdoll ()
 
   if (!meshfact)
     return;
-  printf ("spawning Krystal\n");
 
   // Create the animesh
   const csOrthoTransform& tc = view->GetCamera ()->GetTransform ();
@@ -1181,7 +1174,7 @@ void PhysDemo::SpawnKrystalRagdoll ()
     scfQueryInterfaceSafe<CS::Animation::iSkeletonRagdollNode2> (root);
   ragdoll->Play ();
 
-  // Fling the body (that's why we needed that the rigid bodies were created directly).
+  // Fling the body (that's why we needed the rigid bodies to be created directly).
   for (size_t i = 0; i < ragdoll->GetBoneCount (CS::Animation::STATE_DYNAMIC); i++)
   {
     CS::Animation::BoneID boneID = ragdoll->GetBone (CS::Animation::STATE_DYNAMIC, i);
