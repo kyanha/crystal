@@ -379,7 +379,6 @@ CS_PLUGIN_NAMESPACE_BEGIN (SkeletonModel)
 
   void SkeletonModel::PopulateDefaultChains ()
   {
-/*
     const csArray<CS::Animation::BoneID> &bones = skeletonFactory->GetBoneOrderList ();
 
     // Check that there are any bones in the skeleton
@@ -392,7 +391,7 @@ CS_PLUGIN_NAMESPACE_BEGIN (SkeletonModel)
       const CS::Animation::BoneID &boneID = bones.Get (i);
 
       if (skeletonFactory->GetBoneParent (boneID) == CS::Animation::InvalidBoneID)
-	PopulateDefaultSkeletonChainNode (nullptr, bones, i);
+	PopulateDefaultChainNode (nullptr, bones, i);
     }
   }
 
@@ -403,10 +402,10 @@ CS_PLUGIN_NAMESPACE_BEGIN (SkeletonModel)
   {
     const CS::Animation::BoneID &boneID = bones.Get (index);
 
-    // Check if there is any collider defined for this bone
+    // Check if there is a rigid body defined for this bone
     csRef<SkeletonChainNode> node;
     if (boneHash.Contains (boneID)
-	&& (*boneHash.GetElementPointer (boneID))->colliders.GetSize ())
+	&& (*boneHash.GetElementPointer (boneID))->rigidBody)
     {
       // If there are no parent node then create a new chain
       if (!parentNode)
@@ -436,7 +435,6 @@ CS_PLUGIN_NAMESPACE_BEGIN (SkeletonModel)
 
       PopulateDefaultChainNode (node, bones, i);
     }
-*/
   }
 
   /********************

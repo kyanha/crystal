@@ -125,10 +125,6 @@ CS_PLUGIN_NAMESPACE_BEGIN (SkeletonModel)
     { rigidBody = factory; }
     virtual CS::Physics::iRigidBodyFactory* GetRigidBodyFactory () const
     { return rigidBody; }
-    virtual void SetRigidBodyTransform (const csOrthoTransform &transform)
-    { bodyTransform = transform; }
-    virtual const csOrthoTransform& GetRigidBodyTransform () const
-    { return bodyTransform; }
     virtual void SetJointFactory (CS::Physics::iJointFactory* factory)
     { joint = factory; }
     virtual CS::Physics::iJointFactory* GetJointFactory () const
@@ -141,7 +137,6 @@ CS_PLUGIN_NAMESPACE_BEGIN (SkeletonModel)
   private:
     CS::Animation::BoneID animeshBone;
     csRef<CS::Physics::iRigidBodyFactory> rigidBody;
-    csOrthoTransform bodyTransform;
     csRef<CS::Physics::iJointFactory> joint;
     csOrthoTransform jointTransform;
 
