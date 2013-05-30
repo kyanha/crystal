@@ -38,13 +38,15 @@
 #include "motionstates.h"
 
 
-CS_PLUGIN_NAMESPACE_BEGIN(Bullet2)
+CS_PLUGIN_NAMESPACE_BEGIN (Bullet2)
 {
 
 class csBulletCollisionObject;
 
 //----------------------- Bullet-CS matrices and vectors conversion ----------------------------
 
+// TODO: move those conversion methods within csBulletSystem in order to avoid problems
+// with the inverse scale being used correctly or not
 static inline csReversibleTransform BulletToCS (const btTransform& trans,
 						float inverseInternalScale)
 {
@@ -56,10 +58,9 @@ static inline csReversibleTransform BulletToCS (const btTransform& trans,
   const btVector3& row0 = trans_m.getRow (0);
   const btVector3& row1 = trans_m.getRow (1);
   const btVector3& row2 = trans_m.getRow (2);
-  csMatrix3 m (
-      row0.getX (), row1.getX (), row2.getX (),
-      row0.getY (), row1.getY (), row2.getY (),
-      row0.getZ (), row1.getZ (), row2.getZ ());
+  csMatrix3 m (row0.getX (), row1.getX (), row2.getX (),
+	       row0.getY (), row1.getY (), row2.getY (),
+	       row0.getZ (), row1.getZ (), row2.getZ ());
   return csReversibleTransform (m, origin);
 }
 
@@ -71,19 +72,17 @@ static inline btTransform CSToBullet (const csReversibleTransform& tr,
 		     origin.y * internalScale,
 		     origin.z * internalScale);
   const csMatrix3& m = tr.GetO2T ();
-  btMatrix3x3 trans_m (
-      m.m11, m.m21, m.m31,
-      m.m12, m.m22, m.m32,
-      m.m13, m.m23, m.m33);
+  btMatrix3x3 trans_m (m.m11, m.m21, m.m31,
+		       m.m12, m.m22, m.m32,
+		       m.m13, m.m23, m.m33);
   return btTransform (trans_m, trans_o);
 }
 
 static inline btMatrix3x3 CSToBullet (const csMatrix3& m)
 {
-  return btMatrix3x3 (
-      m.m11, m.m21, m.m31,
-      m.m12, m.m22, m.m32,
-      m.m13, m.m23, m.m33);
+  return btMatrix3x3 (m.m11, m.m21, m.m31,
+		      m.m12, m.m22, m.m32,
+		      m.m13, m.m23, m.m33);
 }
 
 static inline csVector3 BulletToCS (const btVector3& v,
@@ -102,61 +101,14 @@ static inline btVector3 CSToBullet (const csVector3& v,
 		    v.z * internalScale);
 }
 
-/// Returns the index'th component of the given vector
-static inline btScalar& BulletVectorComponent(btVector3& v, int index)
-{
-  return v.m_floats[index];
-}
-
-/// Returns the index'th component of the given vector
-static inline const btScalar& BulletVectorComponent(const btVector3& v, int index)
-{
-  return v.m_floats[index];
-}
-
-/**
- * Computes the index into a 1D bullet array, given a 2D CS index (in x/y)
- */
-static inline int CSToBulletIndex2D (int x, int y, int w, int h)
-{
-  return (h-y-1) * w + x;
-}
-
-
-/*
- * Returns the reflection direction of a ray going 'direction' hitting a surface with normal 'normal'
- *
- * from: http://www-cs-students.stanford.edu/~adityagp/final/node3.html
- */
-static inline btVector3 BtVectorComputeReflectionDirection (const btVector3& direction, const btVector3& normal)
-{
-	return direction - (btScalar(2.0) * direction.dot(normal)) * normal;
-}
-
-/*
- * Returns the portion of 'direction' that is parallel to 'normal'
- */
-static inline btVector3 BtVectorNormalComponent (const btVector3& direction, const btVector3& normal)
-{
-  btScalar magnitude = direction.dot(normal);
-  return normal * magnitude;
-}
-
-/*
- * Returns the portion of 'direction' that is perpendicular to 'normal'
- */
-static inline btVector3 BtVectorTangentialComponent(const btVector3& direction, const btVector3& normal)
-{
-  return direction - BtVectorNormalComponent(direction, normal);
-}
-
 //----------------------- DowncastPtr ----------------------------
 
 /**
  * Very ugly and inefficient work-around to easily cast between two known-to-be-compatible types
  */
+// TODO: remove that
 template<typename T, typename T2>
-inline csPtr<T> DowncastPtr(csPtr<T2> ptr)
+inline csPtr<T> DowncastPtr (csPtr<T2> ptr)
 {
   return csPtr<T>(csRef<T>(csRef<T2>(ptr)));
 }
@@ -282,46 +234,7 @@ public:
   }
 };
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Some extra Bullet vector operations
-
-///Reflect the vector d around the vector r
-inline btVector3 reflect( const btVector3& d, const btVector3& r )
-{
-  return d - ( btScalar( 2.0 ) * d.dot( r ) ) * r;
 }
-
-
-///Project a vector u on another vector v
-inline btVector3 project( const btVector3& u, const btVector3& v )
-{
-  return v * u.dot( v );
-}
-
-
-///Helper for computing the character sliding
-inline btVector3 slide( const btVector3& direction, const btVector3& planeNormal )
-{
-  return direction - project( direction, planeNormal );
-}
-
-inline btVector3 slideOnCollision( const btVector3& fromPosition, const btVector3& toPosition, const btVector3& hitNormal )
-{
-  btVector3 moveDirection = toPosition - fromPosition;
-  btScalar moveLength = moveDirection.length();
-
-  if( moveLength <= btScalar( SIMD_EPSILON ) )
-    return toPosition;
-
-  moveDirection.normalize();
-
-  btVector3 reflectDir = reflect( moveDirection, hitNormal );
-  reflectDir.normalize();
-
-  return fromPosition + slide( reflectDir, hitNormal ) * moveLength;
-}
-
-}
-CS_PLUGIN_NAMESPACE_END(Bullet2)
+CS_PLUGIN_NAMESPACE_END (Bullet2)
 
 #endif //__CS_BULLET_COMMON2_H__

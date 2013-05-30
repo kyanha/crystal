@@ -364,9 +364,11 @@ csPtr<CS::Physics::iJointFactory> csBulletSystem::CreateP2PJointFactory ()
 {
   csRef<JointFactory> factory = csPtr<JointFactory> (new JointFactory (this));
   factory->SetTransConstraints (true, true, true);
+/*
   csVector3 trans (0.0f);
-  factory->SetMaximumDistance (trans);
   factory->SetMinimumDistance (trans);
+  factory->SetMaximumDistance (trans);
+*/
   factory->SetType (RIGID_P2P_JOINT);
   return csPtr<CS::Physics::iJointFactory> (factory);
 }

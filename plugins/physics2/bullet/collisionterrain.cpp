@@ -39,6 +39,14 @@
 CS_PLUGIN_NAMESPACE_BEGIN (Bullet2)
 {
 
+/**
+ * Computes the index into a 1D bullet array, given a 2D CS index (in x/y)
+ */
+static inline int CSToBulletIndex2D (int x, int y, int w, int h)
+{
+  return (h-y-1) * w + x;
+}
+
 //--------------------------------- csBulletColliderTerrainCell ---------------------------------
 
 csBulletColliderTerrainCell::csBulletColliderTerrainCell

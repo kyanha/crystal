@@ -155,7 +155,7 @@ CS_PLUGIN_NAMESPACE_BEGIN (Bullet2)
   bool csBulletRigidBody::IsMovingUpward () const 
   { 
     // TODO: Consider scaling threshold by actor size or similar
-    return BulletVectorComponent (btBody->getLinearVelocity (), 1) > 1.f * system->GetInternalScale (); 
+    return btBody->getLinearVelocity ()[1] > 1.f * system->GetInternalScale (); 
   }
 
   void csBulletRigidBody::SetCollider (CS::Collisions::iCollider* collider)

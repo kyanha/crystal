@@ -20,7 +20,6 @@
     License along with this library; if not, write to the Free
     Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
-
 #include "cssysdef.h"
 #include "rigidbody2.h"
 #include "softbody2.h"
@@ -37,7 +36,7 @@ JointFactory::JointFactory (csBulletSystem* system)
   : scfImplementationType (this), system (system), type (RIGID_6DOF_JOINT),
   transConstraintX (false), transConstraintY (false), transConstraintZ (false),
   rotConstraintX (false), rotConstraintY (false), rotConstraintZ (false),
-  minDist (1.0f, 1.0f, 1.0f), maxDist (1.0f, 1.0f, 1.0f), minAngle (PI / 2.0f), maxAngle (PI / 2.0f),
+  minDist (1.0f, 1.0f, 1.0f), maxDist (1.0f, 1.0f, 1.0f), minAngle (PI, HALF_PI, PI), maxAngle (-PI, -HALF_PI, -PI),
   bounce (0.0f), desiredVelocity (0.0f), maxForce (0.1f), isSpring (false),
   linearStiff (0.f, 0.f, 0.f), angularStiff (0.f, 0.f, 0.f), linearDamp (1.f, 1.f, 1.f),
   angularDamp (1.f, 1.f, 1.f), linearEquilPoint (0.f, 0.f, 0.f),
@@ -56,7 +55,7 @@ csBulletJoint::csBulletJoint (csBulletSystem* system)
   angularStiff (0.f, 0.f, 0.f), linearDamp (1.f, 1.f, 1.f),
   angularDamp (1.f, 1.f, 1.f), linearEquilPoint (0.f, 0.f, 0.f),
   angularEquilPoint (0.f, 0.f, 0.f), minDist (1.0f, 1.0f, 1.0f),
-  maxDist (1.0f, 1.0f, 1.0f), minAngle (PI / 2.0f), maxAngle (PI / 2.0f),
+  maxDist (1.0f, 1.0f, 1.0f), minAngle (PI, HALF_PI, PI), maxAngle (-PI, -HALF_PI, -PI),
   bounce (0.0f), desiredVelocity (0.0f), type (RIGID_6DOF_JOINT),
   rigidJoint (nullptr), softJoint (nullptr), threshold (FLT_MAX), jointFlag (0),
   transConstraintX (false), transConstraintY (false), transConstraintZ (false),
@@ -423,37 +422,37 @@ bool csBulletJoint::RebuildJoint ()
 
       // Compute the linear/angular min/max values
       btVector3 minLinear (0.0f, 0.0f, 0.0f);
-      btVector3 maxLinear (-1.0f, -1.0f, -1.0f);
+      btVector3 maxLinear (0.0f, 0.0f, 0.0f);
       btVector3 minAngular (0.0f, 0.0f, 0.0f);
-      btVector3 maxAngular (-1.0f, -1.0f, -1.0f);
+      btVector3 maxAngular (0.0f, 0.0f, 0.0f);
 
-      if (transConstraintX)
+      if (!transConstraintX)
       {
         minLinear.setX (minDist[0]);
         maxLinear.setX (maxDist[0]);
       }
-      if (transConstraintY)
+      if (!transConstraintY)
       {
         minLinear.setY (minDist[1]);
         maxLinear.setY (maxDist[1]);
       }
-      if (transConstraintZ)
+      if (!transConstraintZ)
       {
         minLinear.setZ (minDist[2]);
         maxLinear.setZ (maxDist[2]);
       }
 
-      if (rotConstraintX)
+      if (!rotConstraintX)
       {
         minAngular.setX (minAngle[0]);
         maxAngular.setX (maxAngle[0]);
       }
-      if (rotConstraintY)
+      if (!rotConstraintY)
       {
         minAngular.setY (minAngle[1]);
         maxAngular.setY (maxAngle[1]);
       }
-      if (rotConstraintZ)
+      if (!rotConstraintZ)
       {
         minAngular.setZ (minAngle[2]);
         maxAngular.setZ (maxAngle[2]);
@@ -466,6 +465,7 @@ bool csBulletJoint::RebuildJoint ()
       dofJoint->setAngularUpperLimit (maxAngular);
 
       // Apply the parameters for the motor
+      // TODO: allow a null value for the target velocity
       if (fabs (desiredVelocity[0]) > EPSILON)
       {
         btRotationalLimitMotor* motor = dofJoint->getRotationalLimitMotor (0);
@@ -499,7 +499,7 @@ bool csBulletJoint::RebuildJoint ()
     }
 
     rigidJoint->setBreakingImpulseThreshold (threshold * sys->GetInternalScale ());
-    rigidJoint->setDbgDrawSize (sys->GetInternalScale ());
+    rigidJoint->setDbgDrawSize (sys->GetInternalScale () * 0.1f);
   }
 
   return true;
@@ -615,6 +615,7 @@ void csBulletJoint::AddBulletJoint ()
     csBulletSoftBody* body = dynamic_cast<csBulletSoftBody*> (bodies[0]);
     if (!body->GetClusterCollisionRS () && !body->GetClusterCollisionSS ())
       return;
+
     if (type == SOFT_LINEAR_JOINT)
     {
       btSoftBody::LJoint::Specs	lspecs;
@@ -634,6 +635,7 @@ void csBulletJoint::AddBulletJoint ()
         body->btBody->appendLinearJoint (lspecs, body2->btBody);
       }
     }
+
     else if (type == SOFT_ANGULAR_JOINT)
     {
       btSoftBody::AJoint::Specs	aspecs;
@@ -659,8 +661,10 @@ void csBulletJoint::AddBulletJoint ()
         body->btBody->appendAngularJoint (aspecs, body2->btBody);
       }
     }
+
     else
       return;
+
     softJoint = body->btBody->m_joints[body->btBody->m_joints.size () - 1];
     jointFlag |= JOINT_INSIDE_WORLD;
   }
@@ -684,17 +688,8 @@ void csBulletJoint::RemoveBulletJoint ()
     }
 
     jointFlag &= ~(JOINT_INSIDE_WORLD | JOINT_POSITION | JOINT_TRANSFORM);
-    //jointFlag = 0;
     sector = nullptr;
-    /*transConstraintX = transConstraintY = transConstraintZ = false;
-    rotConstraintX = rotConstraintY = rotConstraintZ = false;
-    linearStiff.Set (0.f, 0.f, 0.f);
-    angularStiff.Set (0.f, 0.f, 0.f);
-    linearDamp.Set (1.f, 1.f, 1.f);
-    angularDamp.Set (1.f, 1.f, 1.f);
-    desiredVelocity.Set (0.0f);
-    maxForce.setZero ();
-    bounce.Set (0.0f);*/
+
     csBulletCollisionObject *collBody1 = dynamic_cast<csBulletCollisionObject*> (bodies[0]);
     collBody1->joints.Delete (this);
     if (bodies[1])

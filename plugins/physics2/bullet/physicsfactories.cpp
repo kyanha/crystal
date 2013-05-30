@@ -95,6 +95,7 @@ CS_PLUGIN_NAMESPACE_BEGIN (Bullet2)
 
   csPtr<CS::Physics::iRigidBody> BulletRigidBodyFactory::CreateRigidBody ()
   {
+    CS_ASSERT (collider);
     return new csBulletRigidBody (this);
   }
 
