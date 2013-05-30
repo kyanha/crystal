@@ -249,7 +249,7 @@ CS_PLUGIN_NAMESPACE_BEGIN (Bullet2)
     
     // we went up by stepHeight during the StepUp routine, and what goes up must come down!
     btVector3 targetPosition = currentPosition;
-    BulletVectorComponent (targetPosition, 1) -= stepHeight;
+    targetPosition[1] -= stepHeight;
 
     start.setIdentity ();
     end.setIdentity ();
