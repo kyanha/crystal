@@ -25,10 +25,11 @@
 #include "imap/reader.h"
 #include "imap/writer.h"
 #include "iutil/comp.h"
+#include "cstool/collisionhelper.h"
 #include "csutil/csstring.h"
-#include "imesh/bodymesh.h"
+#include "imesh/skeletonmodel.h"
 
-CS_PLUGIN_NAMESPACE_BEGIN(ModelLoader)
+CS_PLUGIN_NAMESPACE_BEGIN (ModelLoader)
 {
 
   class ModelLoader :
@@ -39,6 +40,9 @@ CS_PLUGIN_NAMESPACE_BEGIN(ModelLoader)
   public:
     ModelLoader (iBase* parent);
 
+    //-- iComponent
+    virtual bool Initialize (iObjectRegistry*);
+
     //-- iLoaderPlugin
     virtual csPtr<iBase> Parse (iDocumentNode* node,
       iStreamSource* ssource, iLoaderContext* ldr_context,
@@ -46,25 +50,16 @@ CS_PLUGIN_NAMESPACE_BEGIN(ModelLoader)
 
     virtual bool IsThreadSafe() { return true; }
 
-    //-- iComponent
-    virtual bool Initialize (iObjectRegistry*);
-
-  private: 
-    bool ParseSkeleton (iDocumentNode* node, iLoaderContext* ldr_context);
-    bool ParseBone (iDocumentNode* node, iLoaderContext* ldr_context,
-		    CS::Animation::iBodySkeleton* skeleton);
-    bool ParseProperties (iDocumentNode* node, CS::Animation::iBodyBone* bone);
-    bool ParseColliders (iDocumentNode* node, iLoaderContext* ldr_context,
-			 CS::Animation::iBodyBone* bone);
-    bool ParseColliderParams (iDocumentNode* node, CS::Animation::iBodyBoneCollider* collider);
-    bool ParseJoint (iDocumentNode* node, CS::Animation::iBodyBone* bone);
-    bool ParseConstraint (iDocumentNode *node, bool &x, bool &y, bool &z,
-			  csVector3 &min, csVector3 &max);
-    bool ParseChain (iDocumentNode* node, CS::Animation::iBodySkeleton* skeleton);
+  private:
+    bool ParseModel (iDocumentNode* node, iLoaderContext* ldr_context);
+    bool ParseBone (iDocumentNode* node, iLoaderContext* ldr_context);
+    bool ParseChain (iDocumentNode* node);
 
     iObjectRegistry* object_reg;
     csRef<iSyntaxService> synldr;
-    csRef<CS::Animation::iBodyManager> bodyManager;
+    csRef<CS::Animation::iSkeletonModelManager> modelManager;
+    csRef<CS::Animation::iSkeletonModel> model;
+    CS::Collisions::CollisionHelper collisionHelper;
 
     csStringHash xmltokens;
 #define CS_TOKEN_ITEM_FILE \
@@ -73,8 +68,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(ModelLoader)
 #undef CS_TOKEN_ITEM_FILE
   };
 
-
 }
-CS_PLUGIN_NAMESPACE_END(ModelLoader)
+CS_PLUGIN_NAMESPACE_END (ModelLoader)
 
 #endif
