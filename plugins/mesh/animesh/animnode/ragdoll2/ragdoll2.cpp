@@ -18,20 +18,19 @@
   License along with this library; if not, write to the Free
   Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
-
 #include "cssysdef.h"
-#include "csutil/scf.h"
-
-#include "ragdoll2.h"
-#include "ivaria/reporter.h"
 #include "csgeom/transfrm.h"
 #include "csgeom/plane3.h"
-#include "iengine/scenenode.h"
-#include "iengine/movable.h"
+#include "csutil/stringquote.h"
 #include "iengine/mesh.h"
+#include "iengine/movable.h"
+#include "iengine/scenenode.h"
 #include "iengine/sector.h"
-#include "imesh/object.h"
 #include "imesh/animesh.h"
+#include "imesh/object.h"
+#include "ivaria/reporter.h"
+
+#include "ragdoll2.h"
 
 CS_PLUGIN_NAMESPACE_BEGIN (Ragdoll)
 {
@@ -187,8 +186,27 @@ CS_PLUGIN_NAMESPACE_BEGIN (Ragdoll)
 
     CS::Animation::iSkeletonBoneModel* boneModel =
       skeletonModel->FindBoneModel (chainNode->GetAnimeshBone ());
-    // TODO: lower the agressivity of this behavior
-    CS_ASSERT (boneModel);
+#ifdef CS_DEBUG
+    if (!boneModel)
+    {
+      factory->manager->Report
+	(CS_REPORTER_SEVERITY_ERROR,
+	 "Could not find the bone model for the bone %s. "
+	 "Adding child bones to this one may potentially segfault!",
+	 CS::Quote::Single (skeleton->GetFactory ()->GetBoneName (chainNode->GetAnimeshBone ())));
+      return;
+    }
+
+    if (!boneModel->GetRigidBodyFactory ()
+	|| !boneModel->GetRigidBodyFactory ()->GetCollider ())
+    {
+      factory->manager->Report
+	(CS_REPORTER_SEVERITY_ERROR,
+	 "Could not find any valid rigid body factory for the bone %s! "
+	 "Activating this bone may potentially segfault!",
+	 CS::Quote::Single (skeleton->GetFactory ()->GetBoneName (chainNode->GetAnimeshBone ())));
+    }
+#endif
 
     // Check if the bone is already defined
     if (!bones.Contains (boneModel->GetAnimeshBone ()))
@@ -685,8 +703,8 @@ CS_PLUGIN_NAMESPACE_BEGIN (Ragdoll)
 	skeleton->GetTransformAbsSpace (boneData->boneID, rotation, offset);
 	csOrthoTransform boneTransform (csMatrix3 (rotation.GetConjugate ()), offset);
 	csOrthoTransform animeshTransform = sceneNode->GetMovable ()->GetFullTransform ();
-	csOrthoTransform bodyTransform = boneModel->GetRigidBodyTransform ()
-	  * boneTransform * animeshTransform;
+	// TODO: remove RigidBodyTransform?
+	csOrthoTransform bodyTransform = boneTransform * animeshTransform;
 	boneData->rigidBody->SetTransform (bodyTransform);
       }
 
