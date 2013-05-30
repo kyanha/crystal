@@ -37,6 +37,7 @@
 #include "imesh/objmodel.h"
 #include "imesh/terrain2.h"
 #include "iutil/document.h"
+#include "iutil/plugin.h"
 #include "ivaria/convexdecompose.h"
 #include "ivaria/collisions.h"
 #include "ivaria/physics.h"
@@ -72,6 +73,7 @@ enum
   XMLTOKEN_ROTATE,
   XMLTOKEN_COLLIDER,
   XMLTOKEN_BOX,
+  XMLTOKEN_BOUNCE,
   XMLTOKEN_CAPSULE,
   XMLTOKEN_CONCAVEMESH,
   XMLTOKEN_CONE,
@@ -102,13 +104,17 @@ bool CollisionHelper::Initialize
 (iObjectRegistry* objectRegistry, CS::Collisions::iCollisionSystem* collisionSystem,
  CS::Collisions::iConvexDecomposer* decomposer)
 {
-  CS_ASSERT (objectRegistry && collisionSystem);
+  CS_ASSERT (objectRegistry);
 
   this->objectRegistry = objectRegistry;
   this->collisionSystem = collisionSystem;
   this->decomposer = decomposer;
 
-  // TODO: create the collision system if none are provided or found?
+  // Create the collision system if none are provided or found
+  if (!collisionSystem)
+    this->collisionSystem =
+      csQueryRegistryOrLoad<CS::Collisions::iCollisionSystem> (objectRegistry,
+	"crystalspace.physics.bullet");
 
   engine = csQueryRegistry<iEngine> (objectRegistry);
 
@@ -144,6 +150,7 @@ bool CollisionHelper::Initialize
   xmltokens.Register ("max", XMLTOKEN_MAX);
   xmltokens.Register ("distance", XMLTOKEN_DISTANCE);
   xmltokens.Register ("angle", XMLTOKEN_ANGLE);
+  xmltokens.Register ("bounce", XMLTOKEN_BOUNCE);
   xmltokens.Register ("spring", XMLTOKEN_SPRING);
   xmltokens.Register ("linearstiffness", XMLTOKEN_LINEARSTIFFNESS);
   xmltokens.Register ("angularstiffness", XMLTOKEN_ANGULARSTIFFNESS);
@@ -646,16 +653,19 @@ void CollisionHelper::ParseCollisionObjectProperties
       objectFactory->SetCollisionGroup (group);
       break;
     }
+
+    case XMLTOKEN_COLLIDER:
+    {
+      csTransform transform;
+      csRef<CS::Collisions::iCollider> collider =
+	ParseCollider (child, transform, loaderContext, context);
+      if (collider) objectFactory->SetCollider (collider, transform);
+    }
+
     default:
       break;
     }
   }
-
-  // Parse the colliders
-  csTransform transform;
-  csRef<CS::Collisions::iCollider> collider =
-    ParseCollider (node, transform, loaderContext, context);
-  if (collider) objectFactory->SetCollider (collider, transform);
 }
 
 csPtr<CS::Collisions::iCollisionObjectFactory> CollisionHelper::ParseCollisionObjectSimpleFactory
@@ -746,7 +756,8 @@ bool CollisionHelper::ParseJointConstraint
 }
 
 csPtr<CS::Physics::iJointFactory> CollisionHelper::ParseJointFactory
-(iDocumentNode* node, iLoaderContext* loaderContext, iBase* context) const
+(iDocumentNode* node, csTransform& transform, iLoaderContext* loaderContext,
+ iBase* context) const
 {
   CS_ASSERT (collisionSystem->QueryPhysicalSystem ());
 
@@ -800,6 +811,13 @@ csPtr<CS::Physics::iJointFactory> CollisionHelper::ParseJointFactory
       break;
     }
     // TODO: use attribute values instead of nodes
+    case XMLTOKEN_BOUNCE:
+    {
+      csVector3 bounce;
+      synldr->ParseVector (child, bounce);
+      factory->SetBounce (bounce);
+      break;
+    }
     case XMLTOKEN_SPRING:
     {
       factory->SetSpring (true);
@@ -831,6 +849,20 @@ csPtr<CS::Physics::iJointFactory> CollisionHelper::ParseJointFactory
       csVector3 v;
       synldr->ParseVector (child, v);
       factory->SetAngularDamping (v);
+      break;
+    }
+    case XMLTOKEN_MOVE:
+    {
+      csVector3 v;
+      synldr->ParseVector (child, v);
+      transform.SetOrigin (v);
+      break;
+    }
+    case XMLTOKEN_ROTATE:
+    {
+      csMatrix3 m;
+      synldr->ParseMatrix (child, m);
+      transform.SetO2T (m);
       break;
     }
     default:

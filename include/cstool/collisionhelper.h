@@ -80,6 +80,10 @@ class CS_CRYSTALSPACE_EXPORT CollisionHelper
   void ParsePhysicalObjectProperties
     (iDocumentNode* node, CS::Physics::iPhysicalObjectFactory* object,
      iLoaderContext* loaderContext, iBase* context) const;
+  csPtr<CS::Collisions::iCollisionObjectFactory> ParseCollisionObjectSimpleFactory
+    (iDocumentNode* node, iLoaderContext* loaderContext, iBase* context) const;
+  csPtr<CS::Collisions::iCollisionObjectFactory> ParseCollisionObjectGhostFactory
+    (iDocumentNode* node, iLoaderContext* loaderContext, iBase* context) const;
   bool ParseJointConstraint
     (iDocumentNode *node, bool& x, bool& y, bool& z, csVector3& min, csVector3& max) const;
 
@@ -131,21 +135,46 @@ public:
   void DecomposeConcaveMesh (iMeshWrapper* mesh, CS::Collisions::iCollider* collider,
 			     CS::Collisions::iConvexDecomposer* decomposer) const;
 
-  // TODO: CollisionParser?
-  // TODO: Document me
+  // TODO: in another tool class, eg CollisionParser?
+  /**
+   * Parse a collider. Return nullptr if none are found.
+   * \param node The document node to parse the collider from.
+   * \param transform The transform of the collider to be parsed along it.
+   * \param loaderContext The loader context.
+   * \param The parent object being currently parsed if any.
+   */
   csPtr<CS::Collisions::iCollider> ParseCollider
     (iDocumentNode* node, csTransform& transform, iLoaderContext* loaderContext,
      iBase* context) const;
+
+  /**
+   * Parse a collision object factory. Return nullptr if none are found.
+   * \param node The document node to parse the factory from.
+   * \param loaderContext The loader context.
+   * \param The parent object being currently parsed if any.
+   */
   csPtr<CS::Collisions::iCollisionObjectFactory> ParseCollisionObjectFactory
     (iDocumentNode* node, iLoaderContext* loaderContext, iBase* context) const;
-  csPtr<CS::Collisions::iCollisionObjectFactory> ParseCollisionObjectSimpleFactory
-    (iDocumentNode* node, iLoaderContext* loaderContext, iBase* context) const;
-  csPtr<CS::Collisions::iCollisionObjectFactory> ParseCollisionObjectGhostFactory
-    (iDocumentNode* node, iLoaderContext* loaderContext, iBase* context) const;
+
+  /**
+   * Parse a rigid body factory. Return nullptr if none are found.
+   * \param node The document node to parse the factory from.
+   * \param loaderContext The loader context.
+   * \param The parent object being currently parsed if any.
+   */
   csPtr<CS::Physics::iRigidBodyFactory> ParseRigidBodyFactory
     (iDocumentNode* node, iLoaderContext* loaderContext, iBase* context) const;
+
+  /**
+   * Parse a joint factory. Return nullptr if none are found.
+   * \param node The document node to parse the joint from.
+   * \param transform The transform of the joint to be parsed along it.
+   * \param loaderContext The loader context.
+   * \param The parent object being currently parsed if any.
+   */
   csPtr<CS::Physics::iJointFactory> ParseJointFactory
-    (iDocumentNode* node, iLoaderContext* loaderContext, iBase* context) const;
+    (iDocumentNode* node, csTransform& transform, iLoaderContext* loaderContext,
+     iBase* context) const;
 };
 
 } // namespace Collisions
