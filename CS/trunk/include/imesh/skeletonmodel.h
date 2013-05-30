@@ -193,11 +193,11 @@ struct iSkeletonModel : public virtual iBase
   /**
    * Populate this skeleton model with default skeleton chains. This method will try to
    * create as less skeleton chains as possible, covering all the bones that contains
-   * at least one collider.
+   * a rigid body factory.
    *
    * The name of the chains that are created are of the format 'default_' + \a root_bone_name.
    *
-   * \note This method should work well when called after PopulateDefaultColliders ().
+   * \note This method should work well when called after PopulateDefaultModels ().
    */
   // TODO: tool class?
   virtual void PopulateDefaultChains () = 0;
@@ -225,18 +225,6 @@ struct iSkeletonBoneModel : public virtual iBase
    * \return nullptr if no properties were defined. 
    */
   virtual CS::Physics::iRigidBodyFactory* GetRigidBodyFactory () const = 0;
-
-  /**
-   * Set the local transform of the rigid body of this bone model, relatively to the
-   * transform of the animesh's bone.
-   */
-  virtual void SetRigidBodyTransform (const csOrthoTransform &transform) = 0;
-
-  /**
-   * Get the local transform of the rigid body of this bone model, relatively to the
-   * transform of the animesh's bone.
-   */
-  virtual const csOrthoTransform& GetRigidBodyTransform () const = 0;
 
   /**
    * Set the joint factory of this bone model. It describes the properties of the joint
