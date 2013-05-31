@@ -51,7 +51,7 @@ csPtr<CS::Physics::iJoint> JointFactory::CreateJoint ()
 }
 
 csBulletJoint::csBulletJoint (csBulletSystem* system)
-  : scfImplementationType (this), sys (system), linearStiff (0.f, 0.f, 0.f),
+  : scfImplementationType (this), system (system), linearStiff (0.f, 0.f, 0.f),
   angularStiff (0.f, 0.f, 0.f), linearDamp (1.f, 1.f, 1.f),
   angularDamp (1.f, 1.f, 1.f), linearEquilPoint (0.f, 0.f, 0.f),
   angularEquilPoint (0.f, 0.f, 0.f), minDist (1.0f, 1.0f, 1.0f),
@@ -61,17 +61,17 @@ csBulletJoint::csBulletJoint (csBulletSystem* system)
   transConstraintX (false), transConstraintY (false), transConstraintZ (false),
   rotConstraintX (false), rotConstraintY (false), rotConstraintZ (false)
 {
-  float squaredScale = sys->GetInternalScale () * sys->GetInternalScale ();
+  float squaredScale = system->GetInternalScale () * system->GetInternalScale ();
   maxForce = btVector3 (0.1f * squaredScale,
-    0.1f * squaredScale,
-    0.1f * squaredScale);
+			0.1f * squaredScale,
+			0.1f * squaredScale);
 }
 
 csBulletJoint::csBulletJoint (csBulletSystem* system, JointFactory* factory)
-  : scfImplementationType (this), sys (system), 
+  : scfImplementationType (this), system (system), 
   rigidJoint (nullptr), softJoint (nullptr), jointFlag (0)
 {
-  float squaredScale = sys->GetInternalScale () * sys->GetInternalScale ();
+  float squaredScale = system->GetInternalScale () * system->GetInternalScale ();
   if (factory->isSpring) jointFlag |= JOINT_SPRING;
   linearStiff = factory->linearStiff;
   angularStiff = factory->angularStiff;
@@ -83,8 +83,8 @@ csBulletJoint::csBulletJoint (csBulletSystem* system, JointFactory* factory)
   angularEquilPoint = factory->angularEquilPoint;
   if (angularEquilPoint.Norm () > SMALL_EPSILON)
     jointFlag |= JOINT_EQUIL_POINT;
-  minDist = CSToBullet (factory->minDist, sys->GetInternalScale ());
-  maxDist = CSToBullet (factory->maxDist, sys->GetInternalScale ());
+  minDist = CSToBullet (factory->minDist, system->GetInternalScale ());
+  maxDist = CSToBullet (factory->maxDist, system->GetInternalScale ());
   minAngle = factory->minAngle;
   maxAngle = factory->maxAngle;
   bounce = factory->bounce;
@@ -159,7 +159,7 @@ void csBulletJoint::Attach (CS::Physics::iPhysicalBody* body1, CS::Physics::iPhy
       jointFlag &= ~JOINT_SOFT;
     else
     {
-      csFPrintf (stderr, "csBulletJoint: Can not attach a joint to only one soft body.\n");
+      system->ReportWarning ("Can not attach a joint to only one soft body.");
       return;
     }
   }
@@ -188,7 +188,7 @@ void csBulletJoint::SetPosition (const csVector3& position, bool forceUpdate)
    
     csBulletRigidBody* body1 = dynamic_cast<csBulletRigidBody*> (bodies[0]);
 
-    btTransform jointTransform = CSToBullet (transform , sys->GetInternalScale ());
+    btTransform jointTransform = CSToBullet (transform , system->GetInternalScale ());
 
     if (!body1->btBody)
       return;
@@ -216,14 +216,14 @@ void csBulletJoint::SetTransConstraints (bool X, bool Y, bool Z, bool forceUpdat
 void csBulletJoint::SetMinimumDistance (const csVector3& dist, bool forceUpdate)
 
 {
-  minDist = CSToBullet (dist, sys->GetInternalScale ());
+  minDist = CSToBullet (dist, system->GetInternalScale ());
   if (forceUpdate)
     RebuildJoint ();
 }
 
 void csBulletJoint::SetMaximumDistance (const csVector3& dist, bool forceUpdate)
 {
-  maxDist = CSToBullet (dist, sys->GetInternalScale ());
+  maxDist = CSToBullet (dist, system->GetInternalScale ());
   if (forceUpdate)
     RebuildJoint ();
 }
@@ -267,7 +267,7 @@ void csBulletJoint::SetDesiredVelocity (const csVector3& velo, bool forceUpdate)
 
 void csBulletJoint::SetMaxForce (const csVector3& force, bool forceUpdate)
 {
-  float squaredScale = sys->GetInternalScale () * sys->GetInternalScale ();
+  float squaredScale = system->GetInternalScale () * system->GetInternalScale ();
   maxForce = btVector3 (force.x * squaredScale,
     force.y * squaredScale,
     force.z * squaredScale);
@@ -278,7 +278,7 @@ void csBulletJoint::SetMaxForce (const csVector3& force, bool forceUpdate)
 
 csVector3 csBulletJoint::GetMaxForce () const
 {
-  float squaredInverseScale = sys->GetInverseInternalScale () * sys->GetInverseInternalScale ();
+  float squaredInverseScale = system->GetInverseInternalScale () * system->GetInverseInternalScale ();
   return csVector3 (maxForce.getX () * squaredInverseScale,
     maxForce.getY () * squaredInverseScale,
     maxForce.getZ () * squaredInverseScale);
@@ -307,7 +307,7 @@ bool csBulletJoint::RebuildJoint ()
 
     if (jointFlag & (JOINT_POSITION | JOINT_TRANSFORM))
     {
-      btTransform jointTransform = CSToBullet (transform , sys->GetInternalScale ());
+      btTransform jointTransform = CSToBullet (transform , system->GetInternalScale ());
       frA = body1->btBody->getCenterOfMassTransform ().inverse () * jointTransform;
       if (bodies[1])
       {
@@ -498,8 +498,8 @@ bool csBulletJoint::RebuildJoint ()
       rigidJoint = dofJoint;
     }
 
-    rigidJoint->setBreakingImpulseThreshold (threshold * sys->GetInternalScale ());
-    rigidJoint->setDbgDrawSize (sys->GetInternalScale () * 0.1f);
+    rigidJoint->setBreakingImpulseThreshold (threshold * system->GetInternalScale ());
+    rigidJoint->setDbgDrawSize (system->GetInternalScale () * 0.1f);
   }
 
   return true;
@@ -581,7 +581,7 @@ void csBulletJoint::SetBreakingImpulseThreshold (float threshold, bool forceUpda
 {
   this->threshold = threshold;
   if (rigidJoint)
-    rigidJoint->setBreakingImpulseThreshold (threshold * sys->GetInternalScale ());
+    rigidJoint->setBreakingImpulseThreshold (threshold * system->GetInternalScale ());
   else
     if (forceUpdate)
       RebuildJoint ();
@@ -597,9 +597,9 @@ void csBulletJoint::AddBulletJoint ()
   if (bodies[1])
     collBody2 = dynamic_cast<csBulletCollisionObject*> (bodies[1]);
   if (collBody1->sector != sector)
-    csFPrintf (stderr, "csBulletJoint: Can not attach a joint to bodies in different sectors.\n");
+    system->ReportWarning ("Can not attach a joint to bodies in different sectors.");
   else if (collBody2 && (collBody2->sector != sector))
-    csFPrintf (stderr, "csBulletJoint: Can not attach a joint to bodies in different sectors.\n");
+    system->ReportWarning ("Can not attach a joint to bodies in different sectors.");
 
   collBody1->joints.Push (this);
   if (bodies[1])
@@ -621,7 +621,7 @@ void csBulletJoint::AddBulletJoint ()
       btSoftBody::LJoint::Specs	lspecs;
       lspecs.cfm		=	1;
       lspecs.erp		=	1; 
-      lspecs.position = CSToBullet (position, sys->GetInternalScale ());
+      lspecs.position = CSToBullet (position, system->GetInternalScale ());
       if (bodies[1]->QueryRigidBody ())
       {  
         csBulletRigidBody* body2 = dynamic_cast<csBulletRigidBody*> (bodies[1]);

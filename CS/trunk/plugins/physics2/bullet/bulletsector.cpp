@@ -1000,11 +1000,12 @@ CS_PLUGIN_NAMESPACE_BEGIN (Bullet2)
 
     if (collObject->GetPortalData () && collObject->GetPortalData ()->OtherObject)
     {
-      // Object is traversing a portal and thus has a clone that is in symbiosis with itself
+      // The object is traversing a portal and thus has a clone that is in symbiosis with itself
       // TODO: objects colliding through both side of the portal will be added twice
       csBulletCollisionObject* portalClone = collObject->GetPortalData ()->OtherObject;
       csRef<CS::Collisions::iCollisionDataList> portalCollisions =
 	portalClone->sector->CollisionTest (portalClone);
+
       for (size_t i = 0; i < portalCollisions->GetCollisionCount (); i++)
       {
 	CS::Collisions::iCollisionData* collision = portalCollisions->GetCollision (i);
@@ -1016,7 +1017,7 @@ CS_PLUGIN_NAMESPACE_BEGIN (Bullet2)
 
         if (collision->GetObjectA () == portalClone)
         {
-	  for (size_t j = 0; j < collisions->GetCollisionCount (); j++)
+	  for (size_t j = 0; j < collision->GetContactCount (); j++)
 	  {
 	    iCollisionContact* portalContact = collision->GetContact (j);
 
@@ -1035,7 +1036,7 @@ CS_PLUGIN_NAMESPACE_BEGIN (Bullet2)
         }
         else
         {
-	  for (size_t j = 0; j < collisions->GetCollisionCount (); j++)
+	  for (size_t j = 0; j < collision->GetContactCount (); j++)
 	  {
 	    iCollisionContact* portalContact = collision->GetContact (j);
 

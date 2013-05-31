@@ -201,8 +201,8 @@ class csBulletJoint : public scfImplementation1<
   friend class CollisionPortal;
 
 private:
-  // TODO: 'sys' is redundant with the one of the sector
-  csBulletSystem* sys;
+  // TODO: 'system' is redundant with the one of the sector
+  csBulletSystem* system;
   csBulletSector* sector;
 
   csOrthoTransform transform;
@@ -278,11 +278,11 @@ public:
   virtual void SetMinimumDistance (const csVector3& dist,
     bool forceUpdate = false);
   virtual csVector3 GetMinimumDistance () const
-  { return BulletToCS (minDist, sys->GetInverseInternalScale ()); }
+  { return BulletToCS (minDist, system->GetInverseInternalScale ()); }
   virtual void SetMaximumDistance (const csVector3& dist,
     bool forceUpdate = false);
   virtual csVector3 GetMaximumDistance () const
-  { return BulletToCS (maxDist, sys->GetInverseInternalScale ()); }
+  { return BulletToCS (maxDist, system->GetInverseInternalScale ()); }
 
   virtual void SetRotConstraints (bool X, 
     bool Y, bool Z, bool forceUpdate = false);
