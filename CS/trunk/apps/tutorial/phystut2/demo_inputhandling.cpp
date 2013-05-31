@@ -463,7 +463,7 @@ bool PhysDemo::OnMouseDown (iEvent &event)
     csVector3 endBeam = camera->GetTransform ().This2Other (v3d);
 
     // Trace the physical beam
-    CS::Collisions::HitBeamResult hitResult = GetCurrentSector ()->HitBeam (startBeam, endBeam);
+    CS::Collisions::HitBeamResult hitResult = GetCurrentSector ()->HitBeamPortal (startBeam, endBeam);
     if (!hitResult.hasHit || !hitResult.object) return false;
 
     if (IsDynamic (hitResult.object))
@@ -480,7 +480,7 @@ bool PhysDemo::OnMouseDown (iEvent &event)
 	dragJoint = jointFactory->CreateJoint ();
 	dragJoint->SetTransform (csOrthoTransform (csMatrix3 (), hitResult.isect));
 	dragJoint->Attach (bulletBody, nullptr);
-        GetCurrentSector ()->AddJoint (dragJoint);
+        bulletBody->GetSector ()->QueryPhysicalSector ()->AddJoint (dragJoint);
 
         dragging = true;
         dragDistance = (hitResult.isect - startBeam).Norm ();

@@ -50,9 +50,8 @@ bool PhysDemo::PickCursorObject (CS::Collisions::HitBeamResult& result)
   csVector3 startBeam = camera->GetTransform ().GetOrigin ();
   csVector3 endBeam = camera->GetTransform ().This2Other (v3d);
 
-  // Trace the physical bea
-  //result = GetCurrentSector ()->HitBeamPortal (startBeam, endBeam);
-  result = GetCurrentSector ()->HitBeam (startBeam, endBeam);
+  // Trace the physical beam
+  result = GetCurrentSector ()->HitBeamPortal (startBeam, endBeam);
 
   // Print the name of the object and its relations on standard output
   if (result.hasHit)

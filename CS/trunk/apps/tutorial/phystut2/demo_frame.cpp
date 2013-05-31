@@ -270,16 +270,15 @@ void PhysDemo::RotateActor ()
 
 void PhysDemo::MoveCamera ()
 {
-  iCamera* cam = view->GetCamera ();
-  csOrthoTransform& camTrans = cam->GetTransform ();
+  iCamera* camera = view->GetCamera ();
+  csOrthoTransform& camTrans = camera->GetTransform ();
 
-  if (player.GetObject ())
+  // TODO: use iCollisionObject::SetAttachedCamera() instead
+  if (player.GetObject () && actorMode != ActorModeNoclip)
   {
-    // set sector
-    if (cam->GetSector () != player.GetObject ()->GetSector ()->GetSector ())
-    {
-      cam->SetSector (player.GetObject ()->GetSector ()->GetSector ());
-    }
+    // Update the sector of the camera if needed
+    if (camera->GetSector () != player.GetObject ()->GetSector ()->GetSector ())
+      camera->SetSector (player.GetObject ()->GetSector ()->GetSector ());
 
     // adjust camera relative to actor
     csOrthoTransform actorTrans = player.GetObject ()->GetTransform ();
@@ -328,6 +327,7 @@ void PhysDemo::UpdateDragging ()
     csVector3 newPosition = endBeam - startBeam;
     newPosition.Normalize ();
     newPosition = camTrans.GetOrigin () + newPosition * dragDistance;
+    // TODO: switch the joint's collision sector if crossing a portal...
     dragJoint->SetPosition (newPosition);
   }
 }
