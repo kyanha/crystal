@@ -201,6 +201,14 @@ void PhysDemo::Reset ()
   }
 }
 
+CS::Physics::iPhysicalSector* PhysDemo::GetCurrentSector () const
+{ 
+  iCollisionSector* collisionSector =
+    physicalSystem->FindCollisionSector (view->GetCamera ()->GetSector ());
+  if (!collisionSector) return nullptr;
+  return collisionSector->QueryPhysicalSector ();
+}
+
 bool PhysDemo::SetLevel (PhysDemoLevel level, bool convexDecomp)
 {
   csString path;
@@ -349,14 +357,6 @@ void PhysDemo::SetupHUD ()
     Item* item = player.GetInventory ().GetItem (i);
     desc.Push (csString ().Format (" F%zu: %s", i+1, item->GetName ()));
   }
-}
-
-
-iPhysicalSector* PhysDemo::CreatePhysicalSector (iSector* isector)
-{
-  iPhysicalSector* sector =
-    physicalSystem->CreateCollisionSector (isector)->QueryPhysicalSector ();
-  return sector;
 }
 
 

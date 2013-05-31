@@ -40,33 +40,6 @@ using namespace CS::Collisions;
 using namespace CS::Physics;
 using namespace CS::Geometry;
 
-/**
- * Utility function - Should eventually be added to csPoly3D.
- * Rotates polyIn by rotation and stores it in polyOut.
- */
-void TransformPoly3D (const csPoly3D& polyIn, csPoly3D& polyOut, const csOrthoTransform& trans)
-{
-  polyOut.SetVertexCount (polyIn.GetVertexCount ());
-  for (size_t i = 0; i < polyIn.GetVertexCount (); ++i)
-  {
-    csVector3 vert = polyIn[i];
-    vert = trans.GetOrigin () + trans.GetT2O () * vert;
-    polyOut[i] = vert;
-  }
-}
-
-void RotatePoly3D (const csPoly3D& polyIn, csPoly3D& polyOut, const csMatrix3& rot)
-{
-  polyOut.SetVertexCount (polyIn.GetVertexCount ());
-  for (size_t i = 0; i < polyIn.GetVertexCount (); ++i)
-  {
-    csVector3 vert = polyIn[i];
-    vert = rot * vert;
-    polyOut[i] = vert;
-  }
-}
-
-
 void PhysDemo::CreateBoxRoom (const csVector3& roomExtents, const csVector3& pos, float wallThickness)
 {
   // The boxes that make up floor and ceiling
@@ -115,7 +88,8 @@ void PhysDemo::CreateBoxRoom (float size)
   room = engine->CreateSector (DefaultSectorName);
   iPhysicalSector* sector =
     physicalSystem->CreateCollisionSector (room)->QueryPhysicalSector ();
-  SetCurrentSector (sector);
+  sector->AddCollisionObject (player.GetObject ());
+  view->GetCamera ()->SetSector (room);
 
   // Setup the camera position
   iCameraPosition* pos = engine->GetCameraPositions ()->NewCameraPosition ("Center");
@@ -187,6 +161,7 @@ bool PhysDemo::LoadLevel (const char* pathname, bool convexDecomp)
 
   // Set the default sector
   room = engine->GetSectors ()->Get (0);
+  view->GetCamera ()->SetSector (room);
 
   CS_ASSERT (room && "Invalid level - Has no sectors.");
 

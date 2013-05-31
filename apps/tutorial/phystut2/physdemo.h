@@ -445,15 +445,7 @@ public:
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   // Level setup & management
   
-  /// Create new iPhysicalSector for the given iSector
-  CS::Physics::iPhysicalSector* CreatePhysicalSector (iSector* sector);
-  
-  inline void SetCurrentSector (CS::Physics::iPhysicalSector* sector)
-  { sector->AddCollisionObject (player.GetObject ()); }
-  inline CS::Physics::iPhysicalSector* GetCurrentSector () const 
-  { 
-    return player.GetObject ()->GetSector ()->QueryPhysicalSector ();
-  }
+  CS::Physics::iPhysicalSector* GetCurrentSector () const;
 
   /// Clears & deletes the scene
   void Reset ();
