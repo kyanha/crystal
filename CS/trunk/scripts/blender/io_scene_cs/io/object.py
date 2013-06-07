@@ -784,65 +784,90 @@ def ExportArrayModifier(self, func, depth, **kwargs):
   # don't export the array copies (they have been already applied to the mesh
   # by method GetTransformedCopy() )
   arrays = [mod for mod in self.modifiers \
-              if mod.type=='ARRAY' and mod.fit_type=='FIXED_COUNT'] 
+              if mod.type=='ARRAY' and mod.fit_type=='FIXED_COUNT' and mod.count>1] 
   if len(arrays) != len(self.modifiers):
     return
 
   # Export all array modifiers of the stack
   for modifier in self.modifiers:
-    # Disable the array modifier
-    viewstate = modifier.show_viewport
-    modifier.show_viewport = False
-    bpy.ops.object.mode_set(mode='EDIT')
 
-    # Get transformation matrix and bounding box of base object
+    # Get transformation matrix of base object
     matrix = self.relative_matrix
     if 'transform' in kwargs:
       matrix =  kwargs['transform'] * matrix
-    bbsize = Vector((abs(self.bound_box[6][0] - self.bound_box[0][0]),
-                     abs(self.bound_box[6][1] - self.bound_box[0][1]),
-                     abs(self.bound_box[6][2] - self.bound_box[0][2])))
 
-    # Restore object mode and modifier
-    modifier.show_viewport = viewstate
-    bpy.ops.object.mode_set(mode='OBJECT')
-
-    # Calculate array transformation
-    transform = Matrix.Identity(4)
+    # Calculate array transformation:
+    # - object offset
+    objoffset = Matrix.Identity(4)
     if modifier.use_object_offset:
-      transform = modifier.offset_object.relative_matrix * matrix.inverted()
+      objoffset = modifier.offset_object.relative_matrix * matrix.inverted()
 
+    # - constant offset
+    offset = Matrix.Identity(4)
     if modifier.use_constant_offset:
-      offset = modifier.constant_offset_displace
-      m = Matrix.Identity(4)
-      for i in range(3):
-        if offset[i] != 0.0:
-          m[i][3] = offset[i]
-      transform = m * transform
+      cstoffset = modifier.constant_offset_displace
+      m = Matrix.Translation(cstoffset)
+      offset = m * offset
 
+    # - relative offset
     if modifier.use_relative_offset:
       scaling = modifier.relative_offset_displace
       if scaling != [-1.0,-1.0,-1.0]:
+        # get bounding box of base object
+        bbsize = self.GetBBoxSize()
         m = Matrix.Identity(4)
         for i in range(3):
-          if modifier.count != 0 and scaling[i] != 0.0:
+          if scaling[i] != 0.0:
             m[i][3] = scaling[i] * bbsize[i]
-        transform = m * transform
+        offset = m * offset
 
     # Create instances of base object respecting the array modifier
     # (since an instance of mesh factory has already been exported,
     # only N-1 copies of the mesh are generated)
+    tt = Matrix.Identity(4)
+    ot = matrix
+    mtot = matrix
+
     for cnt in range(modifier.count - 1):
       func(' '*depth +'<meshobj name="%s_array_object_%i">'%(self.uname,cnt+1))
       func(' '*depth +'  <plugin>crystalspace.mesh.loader.genmesh</plugin>')
       func(' '*depth +'  <params>')
       func(' '*depth +'    <factory>%s</factory>'%(self.data.uname))
       func(' '*depth +'  </params>')
-      matrix = transform * matrix
-      MatrixAsCS(matrix, func, depth+2)
+
+      # Calculate transformation matrix of mesh factory instance
+      loc, rot, scale = DecomposeMatrix(mtot)
+      roffset = Matrix.Translation((rot*offset).to_translation())
+      tt = roffset * tt
+      ot = objoffset * ot
+      mtot = tt * ot
+
+      MatrixAsCS(mtot, func, depth+2)
       func(' '*depth +'</meshobj>')
 
   # TODO: process other types of ARRAY modifiers (fit_type = 'FIT_LENGTH' or 'FIT_CURVE')
   # and other ARRAY options
 
 bpy.types.Object.ExportArrayModifier = ExportArrayModifier
+
+
+def GetBBoxSize (self):
+  """ Return the size of object bounding box in a 3 dimensional vector
+      (no modifier is applied to the object)
+  """
+
+  if not self.type == 'MESH' or not self.data or len(self.data.vertices) == 0:
+    return
+
+  posmin = Vector(self.data.vertices[0].co)
+  posmax = Vector(self.data.vertices[0].co)
+  for vi in self.data.vertices:
+    for i in range (3):
+      if vi.co[i] < posmin[i]:
+        posmin[i] = vi.co[i]
+      if vi.co[i] > posmax[i]:
+        posmax[i] = vi.co[i]
+  BBsize = [abs(posmax[0]-posmin[0]),abs(posmax[1]-posmin[1]),abs(posmax[2]-posmin[2])]
+  return BBsize
+
+bpy.types.Object.GetBBoxSize = GetBBoxSize
