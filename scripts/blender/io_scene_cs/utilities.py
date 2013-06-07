@@ -121,5 +121,3 @@ def GetShaderName(f):
   if i >=0:
     return SHADERS[i][1]
   return None
-    
-bpy.types.OperatorProperties.prop = bpy.props.StringProperty(name="operator argument", description="")
