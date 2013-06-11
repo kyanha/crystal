@@ -21,52 +21,6 @@ def rnaType(rna_type):
     if bpy: bpy.utils.register_class(rna_type)
     return rna_type
 
-
-def rnaOperator(rna_op):
-    #if bpy: bpy.types.register(rna_op)
-    return rna_op
-
-    
-def HasSetProperty(ob, name):
-  if isinstance(ob, bpy.types.Object):
-     return bpy.types.Object.is_property_set(ob, name)
-  elif isinstance(ob, bpy.types.Mesh):
-     return bpy.types.Mesh.is_property_set(ob, name)
-  return False
-
-
-def RemoveSetPropertySet(ob, name):
-  if isinstance(ob, bpy.types.Object):
-     bpy.types.Object.__delitem__(ob, name)
-  elif isinstance(ob, bpy.types.Mesh):
-     bpy.types.Mesh.__delitem__(ob, name)
-
-
-def RemovePanels(bl_context, exceptions=[], removed=[]):
-  '''
-  for typeName in dir(bpy.types):
-    type = getattr(bpy.types, typeName)
-    if hasattr(type, "bl_context") and type.bl_context == bl_context:
-      if hasattr(type, "bl_space_type") and type.bl_space_type == "PROPERTIES":
-        if hasattr(type, "bl_region_type") and type.bl_region_type == "WINDOW":
-          if not hasattr(type, "b2cs_context"):
-            if typeName not in exceptions:
-              print("Removing: ", type.__module__, type.__name__)
-              removed.append([type.__module__, type])
-              #bpy.types.unregister(type)
-              bpy.utils.unregister_class(type)
-  '''
-  return removed
-  
-
-def RestorePanels(removed):
-  for m, c in removed:
-    if not hasattr(bpy.types, str(c.__name__)):
-      print("Restoring: ", m, c.__name__)
-      c = getattr(__import__(m), c.__name__)
-      #bpy.types.register(c)
-      bpy.utils.register_class(c)
-
   
 def Property(typ, types, **kwargs):
   attr = kwargs['attr']

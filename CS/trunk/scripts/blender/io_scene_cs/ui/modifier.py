@@ -1,10 +1,6 @@
 import bpy
 
-from io_scene_cs.utilities import rnaType, rnaOperator, B2CS, BoolProperty
-
-from io_scene_cs.utilities import HasSetProperty, RemoveSetPropertySet 
-
-from io_scene_cs.utilities import RemovePanels, RestorePanels 
+from io_scene_cs.utilities import rnaType, B2CS, BoolProperty
 
 
 class csModifierPanel():
@@ -13,7 +9,6 @@ class csModifierPanel():
   bl_context = "modifier"
   b2cs_context = "modifiers"
   bl_label = ""
-  REMOVED = []
 
   @classmethod
   def poll(cls, context):
@@ -22,24 +17,8 @@ class csModifierPanel():
                 if mod.type=='ARRAY' and mod.fit_type=='FIXED_COUNT'] 
     r = (ob and ob.type == 'MESH' and ob.data and \
            len(ob.modifiers)!=0 and len(arrays) == len(ob.modifiers))
-    if r:
-      csModifierPanel.REMOVED = RemovePanels("modifiers")
-    else:
-      RestorePanels(csModifierPanel.REMOVED)
-      csModifierPanel.REMOVED = []
     return r
 
-
-@rnaOperator
-class MESH_OT_csModifier_RemoveProperty(bpy.types.Operator):
-  bl_idname = "csmodifier.removeproperty"
-  bl_label = ""
-
-  def invoke(self, context, event):
-    ob = bpy.context.active_object.data
-    RemoveSetPropertySet(ob, self.properties.prop)
-    return('FINISHED',)
-        
 
 @rnaType
 class MESH_PT_csModifier(csModifierPanel, bpy.types.Panel):

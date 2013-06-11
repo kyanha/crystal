@@ -750,7 +750,7 @@ def GetTransformedCopy(self, matrix = None, animesh = False):
     obCpy.data.transform(matrix)
     obCpy.data.calc_normals()
 
-  if animesh or len(self.users_scene) == 0:
+  if animesh or len(self.users_scene) == 0 or self.type != 'MESH':
     return obCpy
 
   # Don't apply modifiers if the CS property 'array_as_meshobj' is set and 

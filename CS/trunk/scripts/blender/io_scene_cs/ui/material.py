@@ -1,9 +1,7 @@
 
 import bpy
 
-from io_scene_cs.utilities import rnaType, rnaOperator, B2CS, EnumProperty, StringProperty, FloatProperty, SHADERS
-
-from io_scene_cs.utilities import RemovePanels, RestorePanels 
+from io_scene_cs.utilities import rnaType, B2CS, EnumProperty, StringProperty, FloatProperty, SHADERS
 
 
 class csMaterialPanel():
@@ -11,16 +9,10 @@ class csMaterialPanel():
   bl_region_type = 'WINDOW'
   bl_context = "material"
   b2cs_context = "material"
-  REMOVED = []
   
   @classmethod
   def poll(cls, context):
     r = (context.material or context.object)
-    if r:
-      csMaterialPanel.REMOVED = RemovePanels("material", ["MATERIAL_PT_preview", "MATERIAL_PT_context_material1"])
-    else:
-      csMaterialPanel(csMaterialPanel.REMOVED)
-      csMaterialPanel.REMOVED = []
     return r    
 
 

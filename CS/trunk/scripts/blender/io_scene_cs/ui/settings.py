@@ -2,8 +2,7 @@ import os
 
 import bpy
 
-from io_scene_cs.utilities import rnaType, rnaOperator, B2CS, GetExportPath
-from io_scene_cs.utilities import RemovePanels, RestorePanels 
+from io_scene_cs.utilities import rnaType, B2CS, GetExportPath
 from io_scene_cs.io import Export
 
 
@@ -13,7 +12,6 @@ class csSettingsPanel():
   bl_context = "render"
   b2cs_context = "render"
   bl_label = ""
-  REMOVED = []
 
   @classmethod
   def poll(cls, context):

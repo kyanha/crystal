@@ -1,10 +1,6 @@
 import bpy
 
-from io_scene_cs.utilities import rnaType, rnaOperator
-
-from io_scene_cs.utilities import HasSetProperty, RemoveSetPropertySet 
-
-from io_scene_cs.utilities import RemovePanels, RestorePanels 
+from io_scene_cs.utilities import rnaType
 
     
 class csShaderVarContextPanel():
@@ -17,19 +13,8 @@ class csShaderVarContextPanel():
     @classmethod
     def poll(cls, context): 
         ob = bpy.context.active_object
-        return (ob and ob.type == 'MESH' and ob.data and ob.data.cstype != "none")
-
-
-
-@rnaOperator
-class OBJECT_PT_csShaderVarContext_RemoveProperty(bpy.types.Operator):
-    bl_idname = "csshadersarcontext.removeproperty"
-    bl_label = ""
-
-    def invoke(self, context, event):
-        ob = bpy.context.active_object
-        RemoveSetPropertySet(ob, self.properties.prop)
-        return('FINISHED',)
+        r = ob and ob.type == 'MESH' and ob.data and ob.data.cstype != "none"
+        return r
 
 
 @rnaType
