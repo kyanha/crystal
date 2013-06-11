@@ -136,6 +136,8 @@ public:
 			     CS::Collisions::iConvexDecomposer* decomposer) const;
 
   // TODO: in another tool class, eg CollisionParser?
+  // TODO: parse soft body factories
+
   /**
    * Parse a collider. Return nullptr if none are found.
    * \param node The document node to parse the collider from.

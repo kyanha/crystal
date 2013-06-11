@@ -169,7 +169,7 @@ void CollisionHelper::InitializeCollisionObjects
   for (i = 0 ; i < meshes->GetCount () ; i++)
   {
     iMeshWrapper* mesh = meshes->Get (i);
-    if ((collection && !collection->IsParentOf (mesh->QueryObject ())) || !mesh->GetMovable ()) continue;
+    if (collection && !collection->IsParentOf (mesh->QueryObject ())) continue;
     InitializeCollisionObjects (mesh->GetMovable ()->GetSectors ()->Get (0), mesh);
   }
 }
@@ -219,7 +219,7 @@ void CollisionHelper::InitializeCollisionObjects
   iPortalContainer* portalCont = mesh->GetPortalContainer ();
   if (portalCont)
   {
-    for (size_t i = 0; i < (size_t)portalCont->GetPortalCount (); ++i)
+    for (size_t i = 0; i < (size_t) portalCont->GetPortalCount (); i++)
     {
       iPortal* portal = portalCont->GetPortal (i);
 
@@ -253,7 +253,6 @@ void CollisionHelper::InitializeCollisionObjects
         if (nextFactory)
         {
           collisionObject = nextFactory->CreateCollisionObject ();
-          // TODO: Movables need to be able to define an offset transform relative to the collision object
           break;
         }
       }
@@ -309,7 +308,7 @@ void CollisionHelper::InitializeCollisionObjects
     collisionSector->AddCollisionObject (collisionObject);
   }
 
-  // recurse
+  // Recurse on the children scene nodes
   const csRef<iSceneNodeArray> ml = mesh->QuerySceneNode ()->GetChildrenArray ();
   size_t i;
   for (i = 0 ; i < ml->GetSize () ; i++)
@@ -468,29 +467,31 @@ csPtr<CS::Collisions::iCollider> CollisionHelper::ParseCollider
     {
       // Search for the mesh factory holding the definition of the collider
       csRef<iMeshFactoryWrapper> meshFactory;
-/*
-      // TODO: Start by looking if this is the parent mesh that has to be used
-      if (child->GetAttributeValueAsBool ("parentmesh", false))
-      {
 
-      }
-*/
+      // Search for a mesh specified through the dedicated tag
       csString meshName = child->GetAttributeValue ("mesh");
-      if (meshName.IsEmpty ())
+      if (!meshName.IsEmpty ())
       {
-	synldr->ReportError ("crystalspace.collisions.helper", child,
-			     "No mesh specified for the convex collider");
-	continue;
+	meshFactory = loaderContext->FindMeshFactory (meshName);
+	if (!meshFactory)
+	  meshFactory = engine->FindMeshFactory (meshName);
+	if (!meshFactory)
+	{
+	  synldr->ReportError ("crystalspace.collisions.helper", child,
+			       "Could not find the mesh factory %s for the convex collider",
+			       CS::Quote::Single (child->GetAttributeValue ("mesh")));
+	  continue;
+	}
       }
 
-      meshFactory = loaderContext->FindMeshFactory (meshName);
+      // Search for a mesh in the context
       if (!meshFactory)
-	meshFactory = engine->FindMeshFactory (meshName);
+	meshFactory = scfQueryInterface<iMeshFactoryWrapper> (context);
+
       if (!meshFactory)
       {
 	synldr->ReportError ("crystalspace.collisions.helper", child,
-			     "Could not find the mesh factory %s for the convex collider",
-			     CS::Quote::Single (child->GetAttributeValue ("mesh")));
+			     "No valid mesh factory defined for the convex collider");
 	continue;
       }
 
@@ -499,8 +500,7 @@ csPtr<CS::Collisions::iCollider> CollisionHelper::ParseCollider
       if (!triangles)
       {
 	synldr->ReportError ("crystalspace.collisions.helper", child,
-			     "Could not find the triangle mesh of the factory %s for the convex collider",
-			     CS::Quote::Single (child->GetAttributeValue ("mesh")));
+			     "Could not find the triangle mesh for the convex collider");
 	continue;
       }
 
@@ -515,22 +515,30 @@ csPtr<CS::Collisions::iCollider> CollisionHelper::ParseCollider
       // Search for the mesh factory holding the definition of the collider
       csRef<iMeshFactoryWrapper> meshFactory;
 
+      // Search for a mesh specified through the dedicated tag
       csString meshName = child->GetAttributeValue ("mesh");
-      if (meshName.IsEmpty ())
+      if (!meshName.IsEmpty ())
       {
-	synldr->ReportError ("crystalspace.collisions.helper", child,
-			     "No mesh specified for the concave collider");
-	continue;
+	meshFactory = loaderContext->FindMeshFactory (meshName);
+	if (!meshFactory)
+	  meshFactory = engine->FindMeshFactory (meshName);
+	if (!meshFactory)
+	{
+	  synldr->ReportError ("crystalspace.collisions.helper", child,
+			       "Could not find the mesh factory %s for the concave collider",
+			       CS::Quote::Single (child->GetAttributeValue ("mesh")));
+	  continue;
+	}
       }
 
-      meshFactory = loaderContext->FindMeshFactory (meshName);
+      // Search for a mesh in the context
       if (!meshFactory)
-	meshFactory = engine->FindMeshFactory (meshName);
+	meshFactory = scfQueryInterface<iMeshFactoryWrapper> (context);
+
       if (!meshFactory)
       {
 	synldr->ReportError ("crystalspace.collisions.helper", child,
-			     "Could not find the mesh factory %s for the concave collider",
-			     CS::Quote::Single (child->GetAttributeValue ("mesh")));
+			     "No valid mesh factory defined for the concave collider");
 	continue;
       }
 
@@ -539,8 +547,7 @@ csPtr<CS::Collisions::iCollider> CollisionHelper::ParseCollider
       if (!triangles)
       {
 	synldr->ReportError ("crystalspace.collisions.helper", child,
-			     "Could not find the triangle mesh of the factory %s for the concave collider",
-			     CS::Quote::Single (child->GetAttributeValue ("mesh")));
+			     "Could not find the triangle mesh for the concave collider");
 	continue;
       }
 
@@ -696,6 +703,11 @@ void CollisionHelper::ParsePhysicalObjectProperties
     factory->SetDensity (node->GetAttributeValueAsFloat ("density"));
   if (node->GetAttributeValue ("friction"))
     factory->SetFriction (node->GetAttributeValueAsFloat ("friction"));
+
+  // If the context object is a mesh factory then add this factory as a child of
+  // the iObject of the mesh factory.
+  csRef<iMeshFactoryWrapper> meshFactory = scfQueryInterface<iMeshFactoryWrapper> (context);
+  if (meshFactory) meshFactory->QueryObject ()->ObjAdd (factory->QueryObject ());
 }
 
 csPtr<CS::Physics::iRigidBodyFactory> CollisionHelper::ParseRigidBodyFactory
