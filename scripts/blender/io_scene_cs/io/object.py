@@ -195,7 +195,7 @@ class Hierarchy:
               # If the mesh is child of another object (i.e. an armature in case of 
               # animesh export and a mesh in case of genmesh export), transform the 
               # copied object relatively to its parent
-              obCpy = ob.GetTransformedCopy(ob.relative_matrix)
+              obCpy = ob.GetTransformedCopy(ob.relative_matrix, True)
             else:
               obCpy = ob.GetTransformedCopy()
 
@@ -737,7 +737,7 @@ def GetScale(self):
 bpy.types.Object.GetScale = GetScale
 
 
-def GetTransformedCopy(self, matrix = None):
+def GetTransformedCopy(self, matrix = None, animesh = False):
   """ Get a deep copy of this object, transformed by matrix,
       with applied modifiers
   """
@@ -750,6 +750,9 @@ def GetTransformedCopy(self, matrix = None):
     obCpy.data.transform(matrix)
     obCpy.data.calc_normals()
 
+  if animesh or len(self.users_scene) == 0:
+    return obCpy
+
   # Don't apply modifiers if the CS property 'array_as_meshobj' is set and 
   # the object contains only 'FIXED_COUNT' array modifiers:
   # this type of modifier is exported as instances of object factory in 'world' file
@@ -761,8 +764,6 @@ def GetTransformedCopy(self, matrix = None):
       return obCpy 
 
   # Arbitrary take the first scene containing current object
-  if len(self.users_scene) == 0:
-    return obCpy
   scene = self.users_scene[0]
   # Create a deep copy of mesh data block with applied modifiers
   modifiedObject = obCpy.copy()
