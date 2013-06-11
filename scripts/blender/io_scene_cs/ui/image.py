@@ -1,8 +1,7 @@
 import bpy
 
-from io_scene_cs.utilities import rnaType, rnaOperator, B2CS, BoolProperty
+from io_scene_cs.utilities import rnaType, B2CS, BoolProperty
 
-from io_scene_cs.utilities import RemovePanels, RestorePanels 
 
 def active_node_mat(mat):
   if mat is not None:
@@ -35,17 +34,11 @@ class csTexturePanel():
   bl_region_type = 'WINDOW'
   bl_context = "texture"
   b2cs_context = "texture"
-  REMOVED = []
   
   @classmethod
   def poll(cls, context):
     tex = context.texture
     r = (tex and tex.type == 'IMAGE')
-    if r:
-      csTexturePanel.REMOVED = RemovePanels("texture", ["TEXTURE_PT_preview", "TEXTURE_PT_context_texture", "TEXTURE_PT_image1"])
-    else:
-      RestorePanels(csTexturePanel.REMOVED)
-      csTexturePanel.REMOVED = []
     return r    
 
 
