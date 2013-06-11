@@ -19,8 +19,12 @@
 #define __CS_PHYSLDR2_H__
 
 #include "imap/reader.h"
+#include "ivaria/collisions.h"
+#include "ivaria/convexdecompose.h"
+#include "ivaria/physics.h"
 #include "iutil/eventh.h"
 #include "iutil/comp.h"
+#include "cstool/collisionhelper.h"
 #include "csutil/strhash.h"
 #include "csutil/scf_implementation.h"
 
@@ -28,25 +32,6 @@ struct iObjectRegistry;
 struct iReporter;
 struct iSyntaxService;
 struct iEngine;
-
-namespace CS {
-namespace Physics {
-struct iPhysicalSystem;
-struct iPhysicalSector;
-struct iRigidBody;
-struct iSoftBody;
-struct iJoint;
-}
-}
-
-namespace CS {
-namespace Collisions {
-struct iCollisionSystem;
-struct iCollisionSector;
-struct iCollisionObject;
-struct iCollider;
-}
-}
 
 class csPhysicsLoader2 :
   public scfImplementation2<csPhysicsLoader2, iLoaderPlugin, iComponent>
@@ -57,59 +42,17 @@ public:
 
   bool Initialize (iObjectRegistry*);
 
-  /// Parse the physics node and setup the environment
-  virtual csPtr<iBase> Parse (iDocumentNode *node,
-    iStreamSource*, iLoaderContext* ldr_context, iBase* context);
-
   virtual bool IsThreadSafe() { return true; }
-  ///// Parse the system specific sub section
-  //virtual bool ParseSystem (iDocumentNode *node, CS::Collisions::iCollisionSystem* system, iLoaderContext* ldr_context);
-  /// Parse the collision sector specific sub section
-  virtual bool ParseCollisionSector (iDocumentNode *node, CS::Collisions::iCollisionSector* collSector, iLoaderContext* ldr_context);
-  /// Parse the collision object specific sub section
-  virtual bool ParseCollisionObject (iDocumentNode *node, CS::Collisions::iCollisionObject* object, 
-    CS::Collisions::iCollisionSector* collSector, iLoaderContext* ldr_context);
-  /// Parse the rigid body specific sub section
-  virtual bool ParseRigidBody (iDocumentNode *node, CS::Physics::iRigidBody* body, 
-    CS::Collisions::iCollisionSector* collSector, iLoaderContext* ldr_context);
-  /// Parse the soft body specific sub section
-  virtual bool ParseSoftBody (iDocumentNode *node, 
-    CS::Physics::iPhysicalSector* physSector, iLoaderContext* ldr_context);
-  /// Parse an anonymous mesh collider of the collision object.
-  virtual bool ParseColliderConcaveMesh (iDocumentNode *node,
-    CS::Collisions::iCollisionObject* object, iLoaderContext* ldr_context);
-  /// Parse an anonymous mesh collider of the collision object.
-  virtual bool ParseColliderConvexMesh (iDocumentNode *node,
-    CS::Collisions::iCollisionObject* object, iLoaderContext* ldr_context);
-  /// Parse an anonymous sphere collider of the collision object.
-  virtual bool ParseColliderSphere (iDocumentNode *node,
-  	CS::Collisions::iCollisionObject* object);
-  /// Parse an anonymous cylinder collider of the collision object.
-  virtual bool ParseColliderCylinder (iDocumentNode *node,
-  	CS::Collisions::iCollisionObject* object);
-  /// Parse an anonymous capsule collider of the collision object.
-  virtual bool ParseColliderCapsule (iDocumentNode *node,
-  	CS::Collisions::iCollisionObject* object);
-  /// Parse an anonymous cone collider of the collision object.
-  virtual bool ParseColliderCone (iDocumentNode *node,
-    CS::Collisions::iCollisionObject* object);
-  /// Parse an anonymous box collider of the collision object.
-  virtual bool ParseColliderBox (iDocumentNode *node,
-  	CS::Collisions::iCollisionObject* object);
-  /// Parse an anonymous plane collider of the collision object.
-  virtual bool ParseColliderPlane (iDocumentNode *node,
-  	CS::Collisions::iCollisionObject* object);
-  /// Parse an anonymous terrain collider of the collision object.
-  virtual bool ParseColliderTerrain (iDocumentNode *node,
-    CS::Collisions::iCollisionObject* object, iLoaderContext* ldr_context);
-  /// Parse the joint specific sub section
-  virtual bool ParseJoint (iDocumentNode *node, CS::Physics::iJoint* joint,
-  	CS::Physics::iPhysicalSector* sector);
-  /// Parse a transform
-  virtual bool ParseTransform (iDocumentNode *node, csOrthoTransform &t);
-  /// Parse a joint constraint definition
-  virtual bool ParseConstraint (iDocumentNode *node,
-  	bool &, bool &, bool &, csVector3 &, csVector3 &);
+
+  virtual csPtr<iBase> Parse (iDocumentNode *node,
+    iStreamSource*, iLoaderContext* loaderContext, iBase* context);
+
+  virtual bool ParseSystem (iDocumentNode *node, iLoaderContext* loaderContext);
+  virtual bool ParseCollisionSector
+    (iDocumentNode *node, CS::Collisions::iCollisionSector* collSector,
+     iLoaderContext* loaderContext);
+  //virtual bool ParseSoftBody (iDocumentNode *node, 
+  //CS::Physics::iPhysicalSector* physSector, iLoaderContext* loaderContext);
 
 private:
   iObjectRegistry* object_reg;
@@ -118,7 +61,13 @@ private:
   csRef<iEngine> engine;
   csRef<CS::Collisions::iCollisionSystem> collisionSystem;
   csRef<CS::Physics::iPhysicalSystem> physicalSystem;
+  CS::Collisions::CollisionHelper collisionHelper;
+
   csStringHash xmltokens;
+#define CS_TOKEN_ITEM_FILE \
+  "plugins/physics2/loader/physldr2.tok"
+#include "cstool/tokenlist.h"
+#undef CS_TOKEN_ITEM_FILE
 };
 
 #endif // __CS_PHYSLDR_H__

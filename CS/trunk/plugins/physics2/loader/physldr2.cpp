@@ -15,7 +15,6 @@
     License along with this library; if not, write to the Free
     Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
-
 #include "cssysdef.h"
 
 #include "csgeom/plane3.h"
@@ -24,74 +23,27 @@
 #include "iengine/engine.h"
 #include "iengine/mesh.h"
 #include "iengine/movable.h"
+#include "iengine/sector.h"
 #include "imap/ldrctxt.h"
 #include "imap/loader.h"
 #include "imap/services.h"
 #include "iutil/document.h"
 #include "iutil/object.h"
 #include "iutil/objreg.h"
+#include "iutil/plugin.h"
 #include "ivaria/reporter.h"
-#include "ivaria/collisions.h"
-#include "ivaria/physics.h"
 #include "imesh/terrain2.h"
 #include "physldr2.h"
 
 using namespace CS::Collisions;
 using namespace CS::Physics;
 
-enum
-{
-  XMLTOKEN_INTERNALSCALE,
-  XMLTOKEN_COLLISIONSECTOR,
-  XMLTOKEN_GRAVITY,
-  XMLTOKEN_DAMPING,
-  XMLTOKEN_GROUP,
-  XMLTOKEN_SECTOR,
-  XMLTOKEN_STEPPARAS,
-  XMLTOKEN_SIMULATIONSPEED,
-  XMLTOKEN_RIGIDBODY,
-  XMLTOKEN_SOFTBODY,
-  XMLTOKEN_COLLISIONOBJECT,
-  XMLTOKEN_MASS,
-  XMLTOKEN_MESH,
-  XMLTOKEN_COLLIDERCONVEXMESH,
-  XMLTOKEN_COLLIDERCONCAVEMESH,
-  XMLTOKEN_COLLIDERSPHERE,
-  XMLTOKEN_COLLIDERCYLINDER,
-  XMLTOKEN_COLLIDERCAPSULE,
-  XMLTOKEN_COLLIDERCONE,
-  XMLTOKEN_COLLIDERBOX,
-  XMLTOKEN_COLLIDERPLANE,
-  XMLTOKEN_COLLIDERTERRAIN,
-  XMLTOKEN_MOVE,
-  XMLTOKEN_ROTATE,
-  XMLTOKEN_JOINT,
-  XMLTOKEN_CONSTRAINTS,
-  XMLTOKEN_DISTANCE,
-  XMLTOKEN_ANGLE,
-  XMLTOKEN_CONSTRAINED,
-  XMLTOKEN_FREE,
-  XMLTOKEN_MIN,
-  XMLTOKEN_MAX,
-  XMLTOKEN_MOVABLE,
-  XMLTOKEN_DYNAMICSTATE,
-  XMLTOKEN_DYNAMIC,
-  XMLTOKEN_STATIC,
-  XMLTOKEN_KINEMATIC,
-  XMLTOKEN_ANCHOR,
-  XMLTOKEN_WIND,
-  XMLTOKEN_SPRING,
-  XMLTOKEN_LINEARSTIFFNESS,
-  XMLTOKEN_ANGULARSTIFFNESS,
-  XMLTOKEN_LINEARDAMPING,
-  XMLTOKEN_ANGULARDAMPING
-};
-
 SCF_IMPLEMENT_FACTORY (csPhysicsLoader2)
 
+static const char* msgid = "crystalspace.physics.loader";
 
 csPhysicsLoader2::csPhysicsLoader2 (iBase* pParent) :
-scfImplementationType (this, pParent)
+  scfImplementationType (this, pParent)
 {
 }
 
@@ -102,69 +54,28 @@ csPhysicsLoader2::~csPhysicsLoader2 ()
 bool csPhysicsLoader2::Initialize (iObjectRegistry* object_reg)
 {
   csPhysicsLoader2::object_reg = object_reg;
+  engine = csQueryRegistry<iEngine> (object_reg);
   reporter = csQueryRegistry<iReporter> (object_reg);
   synldr = csQueryRegistry<iSyntaxService> (object_reg);
 
-  xmltokens.Register ("scale", XMLTOKEN_INTERNALSCALE);
-  xmltokens.Register ("collisionsector", XMLTOKEN_COLLISIONSECTOR);
-  xmltokens.Register ("gravity", XMLTOKEN_GRAVITY);
-  xmltokens.Register ("dampener", XMLTOKEN_DAMPING);
-  xmltokens.Register ("group", XMLTOKEN_GROUP);
-  xmltokens.Register ("sector", XMLTOKEN_SECTOR);
-  xmltokens.Register ("stepparas", XMLTOKEN_STEPPARAS);
-  xmltokens.Register ("simulationspeed", XMLTOKEN_SIMULATIONSPEED);
-  xmltokens.Register ("rigidbody", XMLTOKEN_RIGIDBODY);
-  xmltokens.Register ("softbody", XMLTOKEN_SOFTBODY);
-  xmltokens.Register ("collisionobject", XMLTOKEN_COLLISIONOBJECT);
-  xmltokens.Register ("mass", XMLTOKEN_MASS);
-  xmltokens.Register ("mesh", XMLTOKEN_MESH);
-  xmltokens.Register ("colliderconcavemesh", XMLTOKEN_COLLIDERCONCAVEMESH);
-  xmltokens.Register ("colliderconvexmesh", XMLTOKEN_COLLIDERCONVEXMESH);
-  xmltokens.Register ("collidersphere", XMLTOKEN_COLLIDERSPHERE);
-  xmltokens.Register ("collidercylinder", XMLTOKEN_COLLIDERCYLINDER);
-  xmltokens.Register ("collidercapsule", XMLTOKEN_COLLIDERCAPSULE);
-  xmltokens.Register ("collidercone", XMLTOKEN_COLLIDERCONE);
-  xmltokens.Register ("colliderbox", XMLTOKEN_COLLIDERBOX);
-  xmltokens.Register ("colliderplane", XMLTOKEN_COLLIDERPLANE);
-  xmltokens.Register ("colliderterrain", XMLTOKEN_COLLIDERTERRAIN);
-  xmltokens.Register ("move", XMLTOKEN_MOVE);
-  xmltokens.Register ("rotate", XMLTOKEN_ROTATE);
-  xmltokens.Register ("joint", XMLTOKEN_JOINT);
-  xmltokens.Register ("constraints", XMLTOKEN_CONSTRAINTS);
-  xmltokens.Register ("distance", XMLTOKEN_DISTANCE);
-  xmltokens.Register ("angle", XMLTOKEN_ANGLE);
-  xmltokens.Register ("min", XMLTOKEN_MIN);
-  xmltokens.Register ("max", XMLTOKEN_MAX);
-  xmltokens.Register ("movable", XMLTOKEN_MOVABLE);
-  xmltokens.Register ("dynamicstate", XMLTOKEN_DYNAMICSTATE);
-  xmltokens.Register ("dynamic", XMLTOKEN_DYNAMIC);
-  xmltokens.Register ("static", XMLTOKEN_STATIC);
-  xmltokens.Register ("kinematic", XMLTOKEN_KINEMATIC);
-  xmltokens.Register ("anchor", XMLTOKEN_ANCHOR);
-  xmltokens.Register ("wind", XMLTOKEN_WIND);
-  xmltokens.Register ("spring", XMLTOKEN_SPRING);
-  xmltokens.Register ("linearstiffness", XMLTOKEN_LINEARSTIFFNESS);
-  xmltokens.Register ("angularstiffness", XMLTOKEN_ANGULARSTIFFNESS);
-  xmltokens.Register ("lineardamping", XMLTOKEN_LINEARDAMPING);
-  xmltokens.Register ("angulardamping", XMLTOKEN_ANGULARDAMPING);
+  InitTokenTable (xmltokens);
+
+  // Search for a collision and a physical system
+  collisionSystem = csQueryRegistry<CS::Collisions::iCollisionSystem> (object_reg);
+  if (collisionSystem)
+  {
+    physicalSystem = scfQueryInterface<CS::Physics::iPhysicalSystem> (collisionSystem);
+    collisionHelper.Initialize (object_reg, collisionSystem);
+  }
+
   return true;
 }
 
 csPtr<iBase> csPhysicsLoader2::Parse (iDocumentNode *node, 
                                       iStreamSource*, 
-                                      iLoaderContext* ldr_context, 
+                                      iLoaderContext* loaderContext, 
                                       iBase* context)
 {
-  engine = csQueryRegistry<iEngine> (object_reg);
-  CS_ASSERT (engine);
-  collisionSystem = csQueryRegistry<CS::Collisions::iCollisionSystem> (object_reg);
-  if (collisionSystem == nullptr)
-  {
-    synldr->ReportError ("crystalspace.dynamics.loader",
-      node, "No physics in object registry!");
-    return csPtr<iBase> (nullptr);
-  }
-  physicalSystem = scfQueryInterface<CS::Physics::iPhysicalSystem> (collisionSystem);
   csRef<iDocumentNodeIterator> it = node->GetNodes ();
   while (it->HasNext ())
   {
@@ -174,79 +85,219 @@ csPtr<iBase> csPhysicsLoader2::Parse (iDocumentNode *node,
     csStringID id = xmltokens.Request (value);
     switch (id)
     {
+    case XMLTOKEN_COLLISIONSYSTEM:
+    {
+      if (!ParseSystem (child, loaderContext))
+	return csPtr<iBase> (nullptr);
+      return csPtr<iBase> (collisionSystem);
+    }
+    // TODO: parse the groups & collision filtering properties
+/*
+  case XMLTOKEN_COLLISIONGROUP:
+  {
+  const char* name = child->GetAttributeValue ("name");
+  CS::Collisions::iCollisionGroup* group = collisionSystem->CreateCollisionGroup (name);
+  if (!group)
+  synldr->Report (msgid, CS_REPORTER_SEVERITY_WARNING,
+  child, "Could not create the collision group '%s' "
+  "probably because the maximum count of groups has been reached",
+  CS::Quote::Single (name));
+  break;
+  }
+*/
     case XMLTOKEN_COLLISIONSECTOR:
     {
-      csRef<CS::Collisions::iCollisionSector> collisionSector;
+      csRef<iSector> sector = scfQueryInterface<iSector> (context);
+      if (!sector) 
+      {
+	synldr->Report (msgid, CS_REPORTER_SEVERITY_WARNING,
+			child, "Could not create the collision sector"
+			"because the parent object is not an engine sector");
+	break;
+      }
+
+      csRef<CS::Collisions::iCollisionSector> collisionSector =
+	collisionSystem->FindCollisionSector (sector);
+
       const char* name = child->GetAttributeValue ("name");
       if (name && *name)
-        collisionSector = collisionSystem->FindCollisionSector (name);
+      {
+	if (!collisionSector)
+	  collisionSector = collisionSystem->FindCollisionSector (name);
+	else
+	  collisionSector->QueryObject ()->SetName (name);
+      }
+
       if (!collisionSector)
       {
-        collisionSector = collisionSystem->CreateCollisionSector ();
+        collisionSector = collisionSystem->CreateCollisionSector (sector);
 	if (name && *name)
 	  collisionSector->QueryObject ()->SetName (name);
       }
-      if (!ParseCollisionSector (child, collisionSector, ldr_context))
-        return csPtr<iBase> (nullptr);
+
+      if (ParseCollisionSector (child, collisionSector, loaderContext))
+        return csPtr<iBase> (collisionSector);
       else
       {
         synldr->ReportBadToken (child);
         return csPtr<iBase> (nullptr);
       }
+
       break;
     }
-    case XMLTOKEN_INTERNALSCALE:
+    case XMLTOKEN_COLLISIONOBJECT:
     {
-      physicalSystem->SetInternalScale (child->GetAttributeValueAsFloat ("scale"));
-      break;
+      if (!collisionSystem)
+      {
+	synldr->ReportError
+	  (msgid, node, "No collision system while creating a collision object factory");
+	break;
+      }
+
+      csRef<CS::Collisions::iCollisionObjectFactory> factory =
+	collisionHelper.ParseCollisionObjectFactory (child, loaderContext, context);
+      return csPtr<iBase> (factory);
     }
-    case XMLTOKEN_SIMULATIONSPEED:
+    case XMLTOKEN_COLLISIONGHOST:
     {
-      float speed = child->GetAttributeValueAsFloat ("speed");
-      physicalSystem->SetSimulationSpeed (speed);
-      break;
+      if (!collisionSystem)
+      {
+	synldr->ReportError
+	  (msgid, node, "No collision system while creating a ghost collision object factory");
+	break;
+      }
+
+      csRef<CS::Collisions::iCollisionObjectFactory> factory =
+	collisionHelper.ParseCollisionObjectFactory (child, loaderContext, context);
+      return csPtr<iBase> (factory);
     }
-    case XMLTOKEN_STEPPARAS:
+    case XMLTOKEN_RIGIDBODY:
     {
-      float timeStep = child->GetAttributeValueAsFloat ("timestep", 0.0166f);
-      int maxStep = child->GetAttributeValueAsInt ("maxstep", 1);
-      int iteration = child->GetAttributeValueAsInt ("iteration", 10);
-      physicalSystem->SetStepParameters (timeStep, maxStep, iteration);
-      break;
-    }
-    case XMLTOKEN_DAMPING:
-    {
-      float angular = child->GetAttributeValueAsFloat ("angular", 0.1f);
-      float linear = child->GetAttributeValueAsFloat ("linear", 0.1f);
-      physicalSystem->SetAngularDamping (angular);
-      physicalSystem->SetLinearDamping (linear);
-      break;
-    }
-    case XMLTOKEN_GROUP:
-    {
-      const char* name = child->GetAttributeValue ("name");
-      CS::Collisions::iCollisionGroup* group = collisionSystem->CreateCollisionGroup (name);
-      if (!group)
-	synldr->Report ("crystalspace.dynamics.loader", CS_REPORTER_SEVERITY_WARNING,
-			child, "Could not create the collision group '%s' "
-			"because the maximum count of groups has been reached",
-			CS::Quote::Single (name));
-      break;
+      if (!physicalSystem)
+      {
+	synldr->ReportError
+	  (msgid, node, "No physical system while creating a rigid body factory");
+	break;
+      }
+
+      csRef<CS::Physics::iRigidBodyFactory> factory =
+	collisionHelper.ParseRigidBodyFactory (child, loaderContext, context);
+      return csPtr<iBase> (factory);
     }
     default:
       synldr->ReportBadToken (child);
       return csPtr<iBase> (nullptr);
     }
   }
-  return csPtr<iBase> (collisionSystem);
+
+  return csPtr<iBase> (nullptr);
+}
+
+bool csPhysicsLoader2::ParseSystem (iDocumentNode *node, iLoaderContext* loaderContext)
+{
+  // Load the collision system
+  const char* plugin = node->GetAttributeValue ("plugin");
+  if (!plugin)
+  {
+    synldr->ReportError (msgid, node, "No plugin specified for the system!");
+    return false;
+  }
+
+  collisionSystem = csQueryRegistryOrLoad<CS::Collisions::iCollisionSystem> (object_reg, plugin);
+  if (!collisionSystem)
+  {
+    synldr->ReportError (msgid, node, "Unable to load the collision system plugin %s",
+			 CS::Quote::Single (plugin));
+    return false;
+  }
+
+  physicalSystem = scfQueryInterface<CS::Physics::iPhysicalSystem> (collisionSystem);
+  collisionHelper.Initialize (object_reg, collisionSystem);
+
+  csRef<iDocumentNodeIterator> it = node->GetNodes ();
+  while (it->HasNext ())
+  {
+    csRef<iDocumentNode> child = it->Next ();
+    if (child->GetType () != CS_NODE_ELEMENT)
+      continue;
+    const char* value = child->GetValue ();
+    csStringID id = xmltokens.Request (value);
+    switch (id)
+    {
+    case XMLTOKEN_SIMULATIONSPEED:
+    {
+      float speed = child->GetAttributeValueAsFloat ("speed");
+      collisionSystem->SetSimulationSpeed (speed);
+      break;
+    }
+    case XMLTOKEN_STEPPARAMS:
+    {
+      if (!physicalSystem)
+      {
+	synldr->ReportError (msgid, node, "Invalid attribute for a pure collision system plugin");
+	break;
+      }
+
+      float timeStep = child->GetAttributeValueAsFloat ("timestep", 0.0166f);
+      int maxStep = child->GetAttributeValueAsInt ("maxstep", 1);
+      int iterations = child->GetAttributeValueAsInt ("iterations", 10);
+      physicalSystem->SetStepParameters (timeStep, maxStep, iterations);
+
+      break;
+    }
+    case XMLTOKEN_INTERNALSCALE:
+    {
+      if (!physicalSystem)
+      {
+	synldr->ReportError (msgid, node, "Invalid attribute for a pure collision system plugin");
+	break;
+      }
+
+      physicalSystem->SetInternalScale (child->GetAttributeValueAsFloat ("scale", 1.0f));
+      break;
+    }
+    case XMLTOKEN_SOFTBODYENABLED:
+    {
+      if (!physicalSystem)
+      {
+	synldr->ReportError (msgid, node, "Invalid attribute for a pure collision system plugin");
+	break;
+      }
+
+      physicalSystem->SetSoftBodyEnabled (child->GetAttributeValueAsBool ("enabled", true));
+      break;
+    }
+    case XMLTOKEN_DAMPING:
+    {
+      if (!physicalSystem)
+      {
+	synldr->ReportError (msgid, node, "Invalid attribute for a pure collision system plugin");
+	break;
+      }
+
+      float linear = child->GetAttributeValueAsFloat ("linear", 0.1f);
+      float angular = child->GetAttributeValueAsFloat ("angular", 0.1f);
+      physicalSystem->SetLinearDamping (linear);
+      physicalSystem->SetAngularDamping (angular);
+
+      break;
+    }
+    default:
+      synldr->ReportBadToken (child);
+      return false;
+    }
+  }
+
+  return true;
 }
 
 bool csPhysicsLoader2::ParseCollisionSector (iDocumentNode *node, 
                                              CS::Collisions::iCollisionSector* collisionSector,
-                                             iLoaderContext* ldr_context)
+                                             iLoaderContext* loaderContext)
 {
-  csRef<CS::Physics::iPhysicalSector> physSector = 
+  csRef<CS::Physics::iPhysicalSector> physicalSector = 
     scfQueryInterface<CS::Physics::iPhysicalSector> (collisionSector);
+
   csRef<iDocumentNodeIterator> it = node->GetNodes ();
   while (it->HasNext ())
   {
@@ -258,272 +309,61 @@ bool csPhysicsLoader2::ParseCollisionSector (iDocumentNode *node,
     switch (id)
     {
     case XMLTOKEN_GRAVITY:
+    {
+      csVector3 v;
+      if (!synldr->ParseVector (child, v))
       {
-        csVector3 v;
-        if (!synldr->ParseVector (child, v))
-        {
-          synldr->ReportError ("crystalspace.dynamics.loader",
-            child, "Error processing gravity token");
-          return false;
-        }
-        collisionSector->SetGravity (v);
-        break;
+	synldr->ReportError (msgid,
+			     child, "Error processing gravity token");
+	return false;
       }
-    case XMLTOKEN_SECTOR:
-      {
-        const char* name = child->GetAttributeValue ("name");
-        iSector* sec = engine->FindSector (name);
-        if (sec)
-          collisionSector->SetSector (sec);
-        else
-        {
-          synldr->ReportError ("crystalspace.dynamics.loader",
-            child, "Error processing sector token");
-          return false;
-        }
-        break;
-      }
+      collisionSector->SetGravity (v);
+
+      break;
+    }
     case XMLTOKEN_DAMPING:
+    {
+      if (!physicalSector)
       {
-        float angular = child->GetAttributeValueAsFloat ("angular", 0.1f);
-        float linear = child->GetAttributeValueAsFloat ("linear", 0.1f);
-        physSector->SetAngularDamping (angular);
-        physSector->SetLinearDamping (linear);
-        break;
+	synldr->ReportError (msgid, node, "Invalid attribute for a pure collision system plugin");
+	break;
       }
-    case XMLTOKEN_COLLISIONOBJECT:
-      {
-        csRef<CS::Collisions::iCollisionObject> obj;
-        
-        csRef<CS::Collisions::iCollider> rootCollider =
-	  csRef<CS::Collisions::iCollider>(physicalSystem->CreateCollider ());
-        
-        csRef<iCollisionObjectFactory> factory;
 
-        if (child->GetAttribute ("ghost"))
-        {
-          factory = csRef<iCollisionObjectFactory>
-	    (physicalSystem->CreateGhostCollisionObjectFactory (rootCollider));
-        }
-        else
-        {
-          factory = physicalSystem->CreateCollisionObjectFactory (rootCollider);
-        }
-        
-        obj = factory->CreateCollisionObject ();
-        
-        if (!ParseCollisionObject (child, obj, collisionSector, ldr_context))
-          return false;
-        break;
-      }
-    case XMLTOKEN_RIGIDBODY:
-      {
-        csRef<CS::Collisions::iCollider> rootCollider =
-	  csRef<CS::Collisions::iCollider>(physicalSystem->CreateCollider ());
+      float linear = child->GetAttributeValueAsFloat ("linear", 0.1f);
+      float angular = child->GetAttributeValueAsFloat ("angular", 0.1f);
+      physicalSector->SetLinearDamping (linear);
+      physicalSector->SetAngularDamping (angular);
 
-        csRef<iRigidBodyFactory> factory = physicalSystem->CreateRigidBodyFactory (rootCollider);
-        csRef<CS::Physics::iRigidBody> rb = factory->CreateRigidBody ();
-        if (!ParseRigidBody (child, rb, collisionSector, ldr_context))
-          return false;
-        break;
-      }
-    case XMLTOKEN_SOFTBODY:
+      break;
+    }
+    case XMLTOKEN_AUTODISABLING:
+    {
+      if (!physicalSector)
       {
-        if (!ParseSoftBody (child, physSector, ldr_context))
-          return false;
-        break;
+	synldr->ReportError (msgid, node, "Invalid attribute for a pure collision system plugin");
+	break;
       }
-    case XMLTOKEN_JOINT:
-      {
-/*
-        csRef<CS::Physics::iJoint> joint = physicalSystem->CreateJoint ();
-        if (!ParseJoint (child, joint, physSector))
-          return false;
-*/
-        break;
-      }
+
+      float linear = child->GetAttributeValueAsFloat ("linear", 0.8f);
+      float angular = child->GetAttributeValueAsFloat ("angular", 1.0f);
+      float time = child->GetAttributeValueAsFloat ("time", 0.0f);
+      physicalSector->SetAutoDisableParams (linear, angular, time);
+
+      break;
+    }
     default:
       synldr->ReportBadToken (child);
       return false;
     }
   }
+
   return true;
 }
 
-bool csPhysicsLoader2::ParseCollisionObject (iDocumentNode *node, 
-                                             CS::Collisions::iCollisionObject* object, 
-                                             CS::Collisions::iCollisionSector* collisionSector, 
-                                             iLoaderContext* ldr_context)
-{
-  iCollisionSystem* collisionSystem = collisionSector->GetSystem ();
-
-  csRef<iDocumentNodeIterator> it = node->GetNodes ();
-  while (it->HasNext ())
-  {
-    csRef<iDocumentNode> child = it->Next ();
-    if (child->GetType () != CS_NODE_ELEMENT) continue;
-    const char *value = child->GetValue ();
-    csStringID id = xmltokens.Request (value);
-    switch (id)
-    {
-    case XMLTOKEN_MOVABLE:
-      {
-        if (child->GetContentsValue ())
-        {
-          csRef<iMeshWrapper> m = ldr_context->FindMeshObject (child->GetContentsValue ());
-          if (m)
-          {
-            object->SetAttachedSceneNode (m->QuerySceneNode ());
-          }
-          else
-          {
-            synldr->ReportError ("crystalspace.dynamics.loader",
-              child, "Unable to find mesh in engine");
-            return false;
-          }
-        }
-        break;
-      }
-    case XMLTOKEN_COLLIDERBOX:
-      {
-        if (!ParseColliderBox (child, object))
-          return false;
-        break;
-      }
-    case XMLTOKEN_COLLIDERSPHERE:
-      {
-        if (!ParseColliderSphere (node, object))
-          return false;
-        break;
-      }
-    case XMLTOKEN_COLLIDERCAPSULE:
-      {
-        if (!ParseColliderCapsule (node, object))
-          return false;
-        break;
-      }
-    case XMLTOKEN_COLLIDERCYLINDER:
-      {
-        if (!ParseColliderCylinder (node, object))
-          return false;
-        break;
-      }
-    case XMLTOKEN_COLLIDERCONE:
-      {
-        if (!ParseColliderCone (node, object))
-          return false;
-        break;
-      }
-    case XMLTOKEN_COLLIDERPLANE:
-      {
-        if (!ParseColliderPlane (node, object))
-          return false;
-        break;
-      }
-    case XMLTOKEN_COLLIDERCONVEXMESH:
-      {
-        if (!ParseColliderConvexMesh (node, object, ldr_context))
-          return false;
-        break;
-      }
-    case XMLTOKEN_COLLIDERCONCAVEMESH:
-      {
-        if (!ParseColliderConcaveMesh (node, object, ldr_context))
-          return false;
-        break;
-      }
-    case XMLTOKEN_COLLIDERTERRAIN:
-      {
-        if (!ParseColliderTerrain (node, object, ldr_context))
-          return false;
-        break;
-      }
-    case XMLTOKEN_GROUP:
-      {
-	const char* name = node->GetAttributeValue ("name");
-	CS::Collisions::iCollisionGroup* group = collisionSystem->FindCollisionGroup (name);
-	if (!group)
-	{
-	  synldr->ReportError ("crystalspace.dynamics.loader", child,
-			       "Could not find the collision group '%s'",
-			       CS::Quote::Single (name));
-	  return false;
-	}
-	object->SetCollisionGroup (group);
-	break;
-      }
-    }
-  }
-
-  //object->RebuildObject ();
-  collisionSector->AddCollisionObject (object);
-
-  csOrthoTransform trans;
-  ParseTransform (node, trans);
-  object->SetTransform (trans);
-  
-  return true;
-}
-
-bool csPhysicsLoader2::ParseRigidBody (iDocumentNode *node, 
-                                       CS::Physics::iRigidBody* body,
-                                       CS::Collisions::iCollisionSector* collisionSector,
-                                       iLoaderContext* ldr_context)
-{
-  if (node->GetAttributeValue ("mass"))
-    body->SetMass (node->GetAttributeValueAsFloat ("mass"));
-
-  if (node->GetAttributeValue ("density"))
-    body->SetDensity (node->GetAttributeValueAsFloat ("density"));
-
-  if (node->GetAttributeValue ("friction"))
-    body->SetFriction (node->GetAttributeValueAsFloat ("friction"));
-  if (node->GetAttributeValue ("elasticity"))
-    body->SetElasticity (node->GetAttributeValueAsFloat ("elasticity"));
-
-  csRef<iDocumentNodeIterator> it = node->GetNodes ();
-  while (it->HasNext ())
-  {
-    csRef<iDocumentNode> child = it->Next ();
-    if (child->GetType () != CS_NODE_ELEMENT) continue;
-    const char *value = child->GetValue ();
-    csStringID id = xmltokens.Request (value);
-    if (id == XMLTOKEN_DAMPING)
-    {
-      float angular = child->GetAttributeValueAsFloat ("angular");
-      float linear = child->GetAttributeValueAsFloat ("linear");
-      body->SetAngularDamping (angular);
-      body->SetLinearDamping (linear);
-      break;
-    }
-    else if (id == XMLTOKEN_DYNAMICSTATE)
-    {
-      const char* state = child->GetContentsValue ();
-      csStringID stateID = xmltokens.Request (state);
-      switch (stateID)
-      {
-      case XMLTOKEN_DYNAMIC:
-        body->SetState (CS::Physics::STATE_DYNAMIC);
-        break;
-      case XMLTOKEN_STATIC:
-        body->SetState (CS::Physics::STATE_STATIC);
-        break;
-      case XMLTOKEN_KINEMATIC:
-        body->SetState (CS::Physics::STATE_KINEMATIC);
-        break;
-      default:
-        synldr->ReportBadToken (child);
-        return false;
-      }
-    }
-  }
-
-  return ParseCollisionObject (node, body, collisionSector, ldr_context);
-}
-
+/*
 bool csPhysicsLoader2::ParseSoftBody (iDocumentNode *node, 
-                                      CS::Physics::iPhysicalSector* physSector,
-                                      iLoaderContext* ldr_context)
+                                      CS::Physics::iPhysicalSector* physicalSector,
+                                      iLoaderContext* loaderContext)
 {
   csRef<CS::Physics::iSoftBody> body;
   csRef<iDocumentNodeIterator> it = node->GetNodes ();
@@ -538,11 +378,11 @@ bool csPhysicsLoader2::ParseSoftBody (iDocumentNode *node,
     case XMLTOKEN_MESH:
       if (child->GetContentsValue ())
       {
-        csRef<iMeshFactoryWrapper> m = ldr_context->FindMeshFactory (child->GetContentsValue ());
+        csRef<iMeshFactoryWrapper> m = loaderContext->FindMeshFactory (child->GetContentsValue ());
         if (!m)
         {
-          synldr->ReportError ("crystalspace.dynamics.loader",
-            child, "Unable to find mesh factory in engine");
+          synldr->ReportError (msgid,
+			       child, "Unable to find mesh factory in engine");
           return false;
         }
         csRef<iGeneralFactoryState> gmstate = scfQueryInterface<
@@ -562,7 +402,7 @@ bool csPhysicsLoader2::ParseSoftBody (iDocumentNode *node,
   if (node->GetAttributeValue ("friction"))
     body->SetFriction (node->GetAttributeValueAsFloat ("friction"));
   
-  csRef<CS::Collisions::iCollisionSector> colSector = scfQueryInterface<CS::Collisions::iCollisionSector> (physSector);
+  csRef<CS::Collisions::iCollisionSector> colSector = scfQueryInterface<CS::Collisions::iCollisionSector> (physicalSector);
 
   //body->RebuildObject ();
   colSector->AddCollisionObject (body);
@@ -577,33 +417,31 @@ bool csPhysicsLoader2::ParseSoftBody (iDocumentNode *node,
     switch (id)
     {
     case XMLTOKEN_ANCHOR:
-      {
-        size_t index = child->GetAttributeValueAsInt ("index");
-/*
-        const char* rname = child->GetAttributeValue ("rigidbody");
-        if (rname)
-        {
-          CS::Physics::iRigidBody* rb = physSector->FindRigidBody (rname);
-          if (!rb)
-          {
-            synldr->ReportError ("crystalspace.dynamics.loader",
-              child, "Can't find rigid body with name %s!", CS::Quote::Single (rname));
-            return false;
-          }
-          body->AnchorVertex (index, rb);
-        }
-        else
-*/
-          body->AnchorVertex (index);
-        break;
-      }
+    {
+      size_t index = child->GetAttributeValueAsInt ("index");
+  const char* rname = child->GetAttributeValue ("rigidbody");
+  if (rname)
+  {
+  CS::Physics::iRigidBody* rb = physicalSector->FindRigidBody (rname);
+  if (!rb)
+  {
+  synldr->ReportError (msgid,
+  child, "Can't find rigid body with name %s!", CS::Quote::Single (rname));
+  return false;
+  }
+  body->AnchorVertex (index, rb);
+  }
+  else
+      body->AnchorVertex (index);
+      break;
+    }
     case XMLTOKEN_WIND:
-      {
-        csVector3 v;
-        synldr->ParseVector (child, v);
-        body->SetWindVelocity (v);
-        break;
-      }
+    {
+      csVector3 v;
+      synldr->ParseVector (child, v);
+      body->SetWindVelocity (v);
+      break;
+    }
     default:
       synldr->ReportBadToken (child);
       return false;
@@ -611,475 +449,5 @@ bool csPhysicsLoader2::ParseSoftBody (iDocumentNode *node,
   }
   return true;
 }
-
-bool csPhysicsLoader2::ParseColliderBox (iDocumentNode *node, CS::Collisions::iCollisionObject* object)
-{
-  csVector3 v;
-  if (!synldr->ParseVector (node, v))
-  {
-    synldr->ReportError ("crystalspace.dynamics.loader",
-      node, "Error processing box parameters");
-    return false;
-  }
-
-  csOrthoTransform trans;
-  trans.Identity ();
-  ParseTransform (node, trans);
-
-  csRef<CS::Collisions::iColliderBox> box = collisionSystem->CreateColliderBox (v);
-  object->GetCollider ()->AddChild (box, trans);
-  return true;
-}
-
-bool csPhysicsLoader2::ParseColliderSphere (iDocumentNode *node, CS::Collisions::iCollisionObject* object)
-{
-  float r = node->GetAttributeValueAsFloat ("radius");
-  csRef<CS::Collisions::iColliderSphere> sp = collisionSystem->CreateColliderSphere (r);
-
-  csOrthoTransform trans;
-  trans.Identity ();
-  ParseTransform (node, trans);
-
-  object->GetCollider ()->AddChild (sp, trans);
-  return true;
-}
-
-bool csPhysicsLoader2::ParseColliderCylinder (iDocumentNode *node, CS::Collisions::iCollisionObject* object)
-{
-  float l = node->GetAttributeValueAsFloat ("length");
-  float r = node->GetAttributeValueAsFloat ("radius");
-  csRef<CS::Collisions::iColliderCylinder> cy = collisionSystem->CreateColliderCylinder (l, r);
-
-  csOrthoTransform trans;
-  trans.Identity ();
-  ParseTransform (node, trans);
-
-  object->GetCollider ()->AddChild (cy, trans);
-  return true;
-}
-
-bool csPhysicsLoader2::ParseColliderCapsule (iDocumentNode *node, CS::Collisions::iCollisionObject* object)
-{
-  float l = node->GetAttributeValueAsFloat ("length");
-  float r = node->GetAttributeValueAsFloat ("radius");
-  csRef<CS::Collisions::iColliderCapsule> ca = collisionSystem->CreateColliderCapsule (l, r);
-
-  csOrthoTransform trans;
-  trans.Identity ();
-  ParseTransform (node, trans);
-
-  object->GetCollider ()->AddChild (ca, trans);
-  return true;
-}
-
-bool csPhysicsLoader2::ParseColliderCone (iDocumentNode *node, CS::Collisions::iCollisionObject* object)
-{
-  float l = node->GetAttributeValueAsFloat ("length");
-  float r = node->GetAttributeValueAsFloat ("radius");
-  csRef<CS::Collisions::iColliderCone> co = collisionSystem->CreateColliderCone (l, r);
-
-  csOrthoTransform trans;
-  trans.Identity ();
-  ParseTransform (node, trans);
-
-  object->GetCollider ()->AddChild (co, trans);
-  return true;
-}
-
-bool csPhysicsLoader2::ParseColliderPlane (iDocumentNode *node, CS::Collisions::iCollisionObject* object)
-{
-  csPlane3 plane;
-  if (synldr->ParsePlane (node, plane))
-  {
-    synldr->ReportError ("crystalspace.dynamics.loader",
-      node, "Error processing plane parameters");
-    return false;
-  }
-  csRef<CS::Collisions::iColliderPlane> pl = collisionSystem->CreateColliderPlane (plane);
-
-  csOrthoTransform trans;
-  trans.Identity ();
-  ParseTransform (node, trans);
-
-  object->GetCollider ()->AddChild (pl, trans);
-  return true;
-}
-
-bool csPhysicsLoader2::ParseColliderConvexMesh (iDocumentNode *node, CS::Collisions::iCollisionObject* object, iLoaderContext* ldr_context)
-{
-  if (!node->GetContentsValue ()) { return false; }
-
-  // Wait for load - assume it will exist eventually.
-  csRef<iMeshWrapper> m = ldr_context->FindMeshObject
-    (node->GetContentsValue ());
-  
-  if (m)
-  {
-    // TODO
-/*
-    csRef<CS::Collisions::iColliderConvexMesh> conv = collisionSystem->CreateColliderConvexMesh (m);
-
-    csOrthoTransform trans;
-    trans.Identity ();
-    ParseTransform (node, trans);
-
-    object->GetCollider ()->AddChild (conv, trans);
-    return true;
 */
-    return false;
-  }
-  else
-  {
-    synldr->ReportError ("crystalspace.dynamics.loader",
-      node, "Unable to find collider mesh in engine");
-    return false;
-  }
-}
 
-bool csPhysicsLoader2::ParseColliderConcaveMesh (iDocumentNode *node, CS::Collisions::iCollisionObject* object, iLoaderContext* ldr_context)
-{
-  if (!node->GetContentsValue ()) { return false; }
-
-  // Wait for load - assume it will exist eventually.
-  csRef<iMeshWrapper> m = ldr_context->FindMeshObject
-    (node->GetContentsValue ());
-
-  if (m)
-  {
-    // TODO
-/*
-    csRef<CS::Collisions::iColliderConcaveMesh> conc = collisionSystem->CreateColliderConcaveMesh (m);
-
-    csOrthoTransform trans;
-    trans.Identity ();
-    ParseTransform (node, trans);
-
-    object->GetCollider ()->AddChild (conc, trans);
-    return true;
-*/
-    return false;
-  }
-  else
-  {
-    synldr->ReportError ("crystalspace.dynamics.loader",
-      node, "Unable to find collider mesh in engine");
-    return false;
-  }
-}
-
-bool csPhysicsLoader2::ParseColliderTerrain (iDocumentNode *node, CS::Collisions::iCollisionObject* object, iLoaderContext* ldr_context)
-{
-  if (!node->GetContentsValue ()) { return false; }
-
-  // Wait for load - assume it will exist eventually.
-  csRef<iMeshWrapper> m = ldr_context->FindMeshObject
-    (node->GetContentsValue ());
-
-  if (m)
-  {
-    csRef<iTerrainSystem> terrain = scfQueryInterface<iTerrainSystem> (m->GetMeshObject ());
-    if (!terrain)
-    {
-      synldr->ReportError ("crystalspace.dynamics.loader", node, "Unable to find terrain system in engine");
-      return false;
-    }
-    // TODO
-    //csRef<CS::Collisions::iCollisionTerrain> terr = collisionSystem->CreateCollisionTerrain (terrain);
-
-    csOrthoTransform trans;
-    trans.Identity ();
-    ParseTransform (node, trans);
-
-    // TODO: Fix terrain parsing
-    return true;
-  }
-  else
-  {
-    synldr->ReportError ("crystalspace.dynamics.loader",
-      node, "Unable to find collider mesh in engine");
-    return false;
-  }
-}
-
-bool csPhysicsLoader2::ParseTransform (iDocumentNode* node, csOrthoTransform &t)
-{
-  csRef<iDocumentNodeIterator> it = node->GetNodes ();
-  while (it->HasNext ())
-  {
-    csRef<iDocumentNode> child = it->Next ();
-    if (child->GetType () != CS_NODE_ELEMENT) continue;
-    const char *value = child->GetValue ();
-    csStringID id = xmltokens.Request (value);
-    switch (id)
-    {
-    case XMLTOKEN_MOVE:
-      {
-        csVector3 v;
-        synldr->ParseVector (child, v);
-        t.SetOrigin (v);
-        break;
-      }
-    case XMLTOKEN_ROTATE:
-      {
-        csMatrix3 m;
-        synldr->ParseMatrix (child, m);
-        t.SetO2T (m);
-        break;
-      }
-    }
-  }
-  return true;
-}
-
-bool csPhysicsLoader2::ParseJoint (iDocumentNode *node, CS::Physics::iJoint* joint, CS::Physics::iPhysicalSector* sector)
-{
-  joint->SetTransConstraints (false, false, false);
-  joint->SetRotConstraints (false, false, false);
-  csRef<iDocumentNodeIterator> it = node->GetNodes ();
-  csOrthoTransform t;
-  csRef<CS::Physics::iPhysicalBody> body1 = 0;
-  csRef<CS::Physics::iPhysicalBody> body2 = 0;
-  while (it->HasNext ())
-  {
-    csRef<iDocumentNode> child = it->Next ();
-    if (child->GetType () != CS_NODE_ELEMENT) continue;
-    const char *value = child->GetValue ();
-    csStringID id = xmltokens.Request (value);
-    switch (id)
-    {
-    case XMLTOKEN_RIGIDBODY:
-      if (body1 == nullptr)
-      {
-/*
-        const char* name = child->GetContentsValue ();
-        if (name)
-        {
-          body1 = sector->FindRigidBody (name);
-          if (!body1)
-          {
-            synldr->ReportError ("crystalspace.dynamics.loader",
-              child, "Can't find rigid body with name %s!", CS::Quote::Single (name));
-            return false;
-          }
-        }
-        else
-*/
-        {
-          synldr->ReportError ("crystalspace.dynamics.loader",
-            child, "Body should have a name");
-          return false;
-        }
-      }
-      else if (body2 == nullptr)
-      {
-/*
-        const char* name = child->GetContentsValue ();
-        if (name)
-        {
-          body2 = sector->FindRigidBody (name);
-          if (!body2)
-          {
-            synldr->ReportError ("crystalspace.dynamics.loader",
-              child, "Can't find rigid body with name %s!", CS::Quote::Single (name));
-            return false;
-          }
-        }
-        else
-*/
-        {
-          synldr->ReportError ("crystalspace.dynamics.loader",
-            child, "Body should have a name");
-          return false;
-        }
-      }
-      else
-      {
-        synldr->ReportError ("crystalspace.dynamics.loader",
-          child, "Too many bodies attached to joint");
-        return false;
-      }
-      break;
-    case XMLTOKEN_SOFTBODY:
-/*
-      if (body1 == 0)
-      {
-        const char* name = child->GetContentsValue ();
-        if (name)
-        {
-          body1 = sector->FindSoftBody (name);
-          if (!body1)
-          {
-            synldr->ReportError ("crystalspace.dynamics.loader",
-              child, "Can't find soft body with name %s!", CS::Quote::Single (name));
-            return false;
-          }
-        }
-        else
-        {
-          synldr->ReportError ("crystalspace.dynamics.loader",
-            child, "Body should have a name");
-          return false;
-        }
-      }
-      else if (body2 == 0)
-      {
-        const char* name = child->GetContentsValue ();
-        if (name)
-        {
-          body2 = sector->FindSoftBody (name);
-          if (!body2)
-          {
-            synldr->ReportError ("crystalspace.dynamics.loader",
-              child, "Can't find soft body with name %s!", CS::Quote::Single (name));
-            return false;
-          }
-        }
-        else
-        {
-          synldr->ReportError ("crystalspace.dynamics.loader",
-            child, "Body should have a name");
-          return false;
-        }
-      }
-      else
-      {
-        synldr->ReportError ("crystalspace.dynamics.loader",
-          child, "Too many bodies attached to joint");
-        return false;
-      }
-*/
-      break;
-    case XMLTOKEN_CONSTRAINTS:
-      {
-        csRef<iDocumentNodeIterator> cit = child->GetNodes ();
-        while (cit->HasNext ())
-        {
-          csRef<iDocumentNode> cchild = cit->Next ();
-          if (cchild->GetType () != CS_NODE_ELEMENT) continue;
-          const char *cvalue = cchild->GetValue ();
-          csStringID cid = xmltokens.Request (cvalue);
-          switch (cid)
-          {
-          case XMLTOKEN_DISTANCE:
-            {
-              bool x, y, z;
-              csVector3 min, max;
-              ParseConstraint (child, x, y, z, min, max);
-              joint->SetTransConstraints (x, y, z);
-              joint->SetMinimumDistance (min);
-              joint->SetMaximumDistance (max);
-              break;
-            }
-          case XMLTOKEN_ANGLE:
-            {
-              bool x, y, z;
-              csVector3 min, max;
-              ParseConstraint (child, x, y, z, min, max);
-              joint->SetRotConstraints (x, y, z);
-              joint->SetMinimumAngle (min);
-              joint->SetMaximumAngle (max);
-              break;
-            }
-          default:
-            synldr->ReportBadToken (child);
-            return false;
-          }
-        }
-        break;
-      }
-    case XMLTOKEN_MOVE:
-      {
-        csVector3 v;
-        synldr->ParseVector (child, v);
-        t.SetOrigin (v);
-        break;
-      }
-    case XMLTOKEN_ROTATE:
-      {
-        csMatrix3 m;
-        synldr->ParseMatrix (child, m);
-        t.SetO2T (m);
-        break;
-      }
-    case XMLTOKEN_SPRING:
-      {
-        joint->SetSpring (true);
-
-        csRef<iDocumentNodeIterator> chIt = child->GetNodes ();
-        while (chIt->HasNext ())
-        {
-          csRef<iDocumentNode> vchild = chIt->Next ();
-          if (vchild->GetType () != CS_NODE_ELEMENT) continue;
-          const char *vvalue = vchild->GetValue ();
-          csStringID id = xmltokens.Request (vvalue);
-          if (id == XMLTOKEN_LINEARSTIFFNESS)
-          {
-            csVector3 v;
-            synldr->ParseVector (vchild, v);
-            joint->SetLinearStiffness (v);
-          }
-          else if (id == XMLTOKEN_ANGULARSTIFFNESS)
-          {
-            csVector3 v;
-            synldr->ParseVector (vchild, v);
-            joint->SetAngularStiffness (v);
-          }
-          else if (id == XMLTOKEN_LINEARDAMPING)
-          {
-            csVector3 v;
-            synldr->ParseVector (vchild, v);
-            joint->SetLinearDamping (v);
-          }
-          else if (id == XMLTOKEN_ANGULARDAMPING)
-          {
-            csVector3 v;
-            synldr->ParseVector (vchild, v);
-            joint->SetAngularDamping (v);
-          }
-          else
-          {
-            synldr->ReportBadToken (vchild);
-            return false;
-          }
-        }
-        break;
-      }
-    default:
-      synldr->ReportBadToken (child);
-      return false;
-    }
-  }
-  joint->SetTransform (t);
-  joint->Attach (body1, body2);
-  return true;
-}
-
-bool csPhysicsLoader2::ParseConstraint (iDocumentNode *node, bool &x,
-                                        bool &y, bool &z, csVector3 &min,
-                                        csVector3 &max)
-{
-  x = strcmp (node->GetAttributeValue ("x"), "true") == 0;
-  y = strcmp (node->GetAttributeValue ("y"), "true") == 0;
-  z = strcmp (node->GetAttributeValue ("z"), "true") == 0;
-  csRef<iDocumentNodeIterator> it = node->GetNodes ();
-  while (it->HasNext ())
-  {
-    csRef<iDocumentNode> child = it->Next ();
-    if (child->GetType () != CS_NODE_ELEMENT) continue;
-    const char *value = child->GetValue ();
-    csStringID id = xmltokens.Request (value);
-    switch (id)
-    {
-    case XMLTOKEN_MIN:
-      synldr->ParseVector (child, min);
-      break;
-    case XMLTOKEN_MAX:
-      synldr->ParseVector (child, max);
-      break;
-    default:
-      synldr->ReportBadToken (child);
-      return false;
-    }
-  }
-  return true;
-}
