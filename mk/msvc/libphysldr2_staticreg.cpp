@@ -22,7 +22,7 @@ static char const metainfo_physldr2[] =
 "  <scf>"
 "    <classes>"
 "      <class>"
-"        <name>crystalspace.physics.loader2</name>"
+"        <name>crystalspace.physics.loader</name>"
 "        <implementation>csPhysicsLoader2</implementation>"
 "        <description>Crystal Space physics loader</description>"
 "      </class>"
