@@ -20,7 +20,6 @@
     License along with this library; if not, write to the Free
     Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
-
 #include "cssysdef.h"
 #include "csgeom/sphere.h"
 #include "csgeom/tri.h"
@@ -271,6 +270,14 @@ csPtr<CS::Collisions::iColliderPlane> csBulletSystem::CreateColliderPlane (const
 
 CS::Collisions::iCollisionSector* csBulletSystem::CreateCollisionSector (iSector* sector)
 {
+  // Look first if there is already a collision sector associated to the given engine sector
+  if (sector)
+  {
+    CS::Collisions::iCollisionSector* collisionSector = FindCollisionSector (sector);
+    if (collisionSector) return collisionSector;
+  }
+
+  // Create a new collision sector
   csRef<csBulletSector> collSector = csPtr<csBulletSector> (new csBulletSector (this));
   if (sector) collSector->SetSector (sector);
   collSectors.Push (collSector);
@@ -291,16 +298,13 @@ void csBulletSystem::DeleteCollisionSectors ()
   }
 }
 
-CS::Collisions::iCollisionSector* csBulletSystem::FindCollisionSector (const iSector* sec)
+CS::Collisions::iCollisionSector* csBulletSystem::FindCollisionSector (const iSector* sector)
 {
   // TODO: use a hash for faster access
   for (size_t i = 0; i < collSectors.GetSize (); i++)
-  {
-    if (collSectors[i]->GetSector () == sec)
-    {
+    if (collSectors[i]->GetSector () == sector)
       return collSectors[i];
-    }
-  }
+
   return nullptr;
 }
 

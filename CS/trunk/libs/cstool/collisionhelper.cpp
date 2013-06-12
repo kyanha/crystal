@@ -191,10 +191,8 @@ void CollisionHelper::InitializeCollisionObjects
 void CollisionHelper::InitializeCollisionObjects
 (iSector* sector, iMeshWrapper* mesh) const
 {
-  // Create the iCollisionSector from the iSector if not yet made
-  iCollisionSector* collisionSector = collisionSystem->FindCollisionSector (sector);
-  if (!collisionSector)
-    collisionSector = collisionSystem->CreateCollisionSector (sector);
+  // Create or find the iCollisionSector associated with the iSector
+  iCollisionSector* collisionSector = collisionSystem->CreateCollisionSector (sector);
 
   // TODO: search first for a collision factory, then fallback on the object model only if not found
   iObjectModel* objectModel = mesh->GetMeshObject ()->GetObjectModel ();

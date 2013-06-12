@@ -348,7 +348,7 @@ struct iCollisionObject : public virtual iBase
    * Set the current rotation in angles around every axis and set to actor.
    * If a camera is used, set it to camera too.
    */
-  // TODO: remove?
+  // TODO: move in iActor
   virtual void SetRotation (const csMatrix3& rot) = 0;
 
   /// Rebuild this collision object.
@@ -620,7 +620,7 @@ struct iCollisionSector : public virtual iBase
   virtual CS::Collisions::iCollisionSystem* GetSystem () const = 0;
 
   /// Return the underlying object
-  virtual iObject *QueryObject (void) const = 0;
+  virtual iObject* QueryObject (void) const = 0;
 
   /**
    * Return the type of this sector, that is either CS::Collisions::COLLISION_OBJECT_PHYSICAL
@@ -809,7 +809,12 @@ struct iCollisionSystem : public virtual iBase
   /**\name Collision sectors
    * @{ */
 
-  /// Creates a new collision sector and adds it to the system's set
+  /**
+   * Create a new collision sector and add it to the system's set. If \a sector is provided
+   * then it will first search if a previous collision sector associated to it is already
+   * available. No new collision sector would be created in this case, and the previous one
+   * would be returned instead.
+   */
   virtual iCollisionSector* CreateCollisionSector (iSector* sector = nullptr) = 0;
   
   /// Delete the given collision sector
