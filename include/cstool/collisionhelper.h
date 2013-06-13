@@ -74,6 +74,7 @@ class CS_CRYSTALSPACE_EXPORT CollisionHelper
   void ReportError (const char* msg, ...);
   void ReportWarning (const char* msg, ...);
 
+  void ParseTransform (iDocumentNode* node, csTransform& transform) const;
   void ParseCollisionObjectProperties
     (iDocumentNode* node, CS::Collisions::iCollisionObjectFactory* object,
      iLoaderContext* loaderContext, iBase* context) const;
