@@ -111,10 +111,21 @@ bool CollisionHelper::Initialize
   this->decomposer = decomposer;
 
   // Create the collision system if none are provided or found
-  if (!collisionSystem)
-    this->collisionSystem =
-      csQueryRegistryOrLoad<CS::Collisions::iCollisionSystem> (objectRegistry,
-	"crystalspace.physics.bullet");
+  if (!this->collisionSystem)
+    this->collisionSystem = csQueryRegistry<CS::Collisions::iCollisionSystem> (objectRegistry);
+
+  if (!this->collisionSystem)
+  {
+    csRef<iPluginManager> pluginManager = csQueryRegistry<iPluginManager> (objectRegistry);
+    this->collisionSystem = csLoadPlugin<CS::Collisions::iCollisionSystem>
+      (pluginManager, "crystalspace.physics.bullet");
+  }
+
+  if (!this->collisionSystem)
+  {
+    ReportError ("Unable to find or load a collision system plugin");
+    return false;
+  }
 
   engine = csQueryRegistry<iEngine> (objectRegistry);
 
@@ -383,6 +394,35 @@ void CollisionHelper::DecomposeConcaveMesh
 
 //--------------------------------- Parsing ---------------------------------
 
+void CollisionHelper::ParseTransform (iDocumentNode* node, csTransform& transform) const
+{
+  csRef<iDocumentNodeIterator> it = node->GetNodes ();
+  while (it->HasNext ())
+  {
+    csRef<iDocumentNode> child = it->Next ();
+    if (child->GetType () != CS_NODE_ELEMENT) continue;
+    const char *value = child->GetValue ();
+    csStringID id = xmltokens.Request (value);
+    switch (id)
+    {
+      case XMLTOKEN_MOVE:
+      {
+        csVector3 v;
+        synldr->ParseVector (child, v);
+        transform.SetOrigin (v);
+        break;
+      }
+      case XMLTOKEN_ROTATE:
+      {
+        csMatrix3 m;
+        synldr->ParseMatrix (child, m);
+        transform.SetO2T (m);
+        break;
+      }
+    }
+  }
+}
+
 csPtr<CS::Collisions::iCollider> CollisionHelper::ParseCollider
 (iDocumentNode* node, csTransform& transform, iLoaderContext* loaderContext,
  iBase* context) const
@@ -395,6 +435,9 @@ csPtr<CS::Collisions::iCollider> CollisionHelper::ParseCollider
   {
     csRef<iDocumentNode> child = it->Next ();
     if (child->GetType () != CS_NODE_ELEMENT) continue;
+
+    ParseTransform (child, transform);
+
     const char *value = child->GetValue ();
     csStringID id = xmltokens.Request (value);
     switch (id)
@@ -558,20 +601,6 @@ csPtr<CS::Collisions::iCollider> CollisionHelper::ParseCollider
     case XMLTOKEN_TERRAIN:
     {
       // TODO?
-      break;
-    }
-    case XMLTOKEN_MOVE:
-    {
-      csVector3 v;
-      if (synldr->ParseVector (child, v))
-	transform.SetOrigin (v);
-      break;
-    }
-    case XMLTOKEN_ROTATE:
-    {
-      csMatrix3 m;
-      if (synldr->ParseMatrix (child, m))
-	transform.SetO2T (m);
       break;
     }
     case XMLTOKEN_COLLIDER:
