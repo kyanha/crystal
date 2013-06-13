@@ -204,8 +204,6 @@ public:
   /// The currently applied terrain mode (if any)
   csRef<iTerrainModifier> terrainMod;
 
-  csHash<int, csString> debugNameMap;
-
   // Vehicles
   csRef<CS::Physics::iVehicle> actorVehicle;
 

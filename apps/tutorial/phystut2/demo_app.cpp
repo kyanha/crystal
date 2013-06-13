@@ -180,8 +180,6 @@ void PhysDemo::Reset ()
   moddedTerrainFeeder = nullptr;
   terrainMod = nullptr;
 
-  debugNameMap.DeleteAll ();
-
   actorVehicle = nullptr;
 
   walls = nullptr;
@@ -278,11 +276,19 @@ bool PhysDemo::SetLevel (const char* mapPath, bool convexDecomp)
   // Update Camera Manager item
   UpdateCameraManager ();
 
-  // Initialize HUD
+  // Initialize the HUD
   SetupHUD ();
 
-  // Move actor to initial position
-  TeleportObject (player.GetObject (), engine->GetCameraPositions ()->Get (0));
+  // Create a default camera positions if there are none
+  iCameraPositionList* cameraPositions = engine->GetCameraPositions ();
+  if (!cameraPositions->GetCount ())
+  {
+    iCameraPosition* position = cameraPositions->NewCameraPosition ("start");
+    position->SetSector (engine->GetSectors ()->Get (0)->QueryObject ()->GetName ());
+  }
+
+  // Move the actor to the initial position
+  TeleportObject (player.GetObject (), cameraPositions->Get (0));
 
   return true;
 }

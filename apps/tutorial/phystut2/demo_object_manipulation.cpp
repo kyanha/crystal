@@ -212,7 +212,6 @@ void PhysDemo::ToggleObjectDynamic (CS::Collisions::iCollisionObject* obj)
   }
 }
 
-
 void PhysDemo::TeleportObject (CS::Collisions::iCollisionObject* obj, iCameraPosition* pos)
 {
   // set transform
