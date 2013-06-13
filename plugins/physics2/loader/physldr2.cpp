@@ -156,6 +156,7 @@ csPtr<iBase> csPhysicsLoader2::Parse (iDocumentNode *node,
 
       csRef<CS::Collisions::iCollisionObjectFactory> factory =
 	collisionHelper.ParseCollisionObjectFactory (child, loaderContext, context);
+      // TODO: check context OK
       return csPtr<iBase> (factory);
     }
     case XMLTOKEN_COLLISIONGHOST:
@@ -203,7 +204,13 @@ bool csPhysicsLoader2::ParseSystem (iDocumentNode *node, iLoaderContext* loaderC
     return false;
   }
 
-  collisionSystem = csQueryRegistryOrLoad<CS::Collisions::iCollisionSystem> (object_reg, plugin);
+  collisionSystem = csQueryRegistry<CS::Collisions::iCollisionSystem> (object_reg);
+  if (!collisionSystem)
+  {
+    csRef<iPluginManager> pluginManager = csQueryRegistry<iPluginManager> (object_reg);
+    collisionSystem = csLoadPlugin<CS::Collisions::iCollisionSystem> (pluginManager, plugin);
+  }
+
   if (!collisionSystem)
   {
     synldr->ReportError (msgid, node, "Unable to load the collision system plugin %s",
