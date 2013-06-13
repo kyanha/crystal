@@ -169,7 +169,6 @@ bool PhysDemo::LoadLevel (const char* pathname, bool convexDecomp)
   return true;
 }
 
-
 iModifiableDataFeeder* PhysDemo::GetFirstTerrainModDataFeeder (CS::Collisions::iCollisionSector* sector)
 {
   // iterate over all terrains in the sector
