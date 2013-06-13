@@ -51,8 +51,7 @@ CS_PLUGIN_NAMESPACE_BEGIN (Bullet2)
 			 * collider->GetPrincipalAxisTransform ();
     btRigidBody::btRigidBodyConstructionInfo infos
       // TODO motion states not needed if not dynamic
-      // TODO: mass * collider->GetLocalInertia () seems strange
-      (mass, CreateMotionState (trans), shape, mass * collider->GetLocalInertia ());
+      (mass, CreateMotionState (trans), shape, collider->GetLocalInertia ());
 
     infos.m_friction = factory->GetFriction ();
     infos.m_restitution = factory->GetElasticity ();
@@ -64,6 +63,8 @@ CS_PLUGIN_NAMESPACE_BEGIN (Bullet2)
     //btBody->setContactProcessingThreshold (1e18f);
 
     SetState (factory->state);
+
+    printf ("csBulletRigidBody %s: mass %f state %i\n", GetName (), mass, (int) physicalState);
 
     group = dynamic_cast<CollisionGroup*> (factory->GetCollisionGroup ());
   }
@@ -194,7 +195,11 @@ CS_PLUGIN_NAMESPACE_BEGIN (Bullet2)
   void csBulletRigidBody::SetTransform (const csOrthoTransform& trans)
   {
     CS_ASSERT (btObject);
-
+/*
+    btTransform motionTransform;
+    motionState->getWorldTransform (motionTransform);
+    btTransform btTrans = motionTransform * motionState->inversePrincipalAxis;
+*/
     btTransform btTrans = CSToBullet (trans, system->GetInternalScale ());
     
     if (insideWorld)
@@ -226,6 +231,14 @@ CS_PLUGIN_NAMESPACE_BEGIN (Bullet2)
     {
       camera->SetTransform (BulletToCS (btTrans * motionState->inversePrincipalAxis, system->GetInverseInternalScale ()));
     }
+  }
+
+  csOrthoTransform csBulletRigidBody::GetTransform () const
+  {
+    btTransform trans;
+    motionState->getWorldTransform (trans);
+    return BulletToCS (trans * motionState->inversePrincipalAxis,
+		       system->inverseInternalScale);
   }
 
   float csBulletRigidBody::GetMass () const
@@ -421,7 +434,7 @@ CS_PLUGIN_NAMESPACE_BEGIN (Bullet2)
     if (!btBody)
       return; 
 
-    csOrthoTransform trans = csBulletCollisionObject::GetTransform ();
+    csOrthoTransform trans = GetTransform ();
     csVector3 absForce = trans.This2Other (force);
     btBody->applyCentralImpulse (CSToBullet (absForce, system->GetInternalScale ()));
     btBody->activate (true);
@@ -433,7 +446,7 @@ CS_PLUGIN_NAMESPACE_BEGIN (Bullet2)
       return; 
     btBody->activate (true);
 
-    csOrthoTransform trans = csBulletCollisionObject::GetTransform ();
+    csOrthoTransform trans = GetTransform ();
     csVector3 absTorque = trans.This2Other (torque);
     btBody->applyTorque (CSToBullet (absTorque, system->GetInternalScale () * system->GetInternalScale ()));
   }
@@ -446,7 +459,7 @@ CS_PLUGIN_NAMESPACE_BEGIN (Bullet2)
     btBody->activate (true);
 
     btVector3 btForce (CSToBullet (force, system->GetInternalScale ()));
-    csOrthoTransform trans = csBulletCollisionObject::GetTransform ();
+    csOrthoTransform trans = GetTransform ();
     csVector3 relPos = trans.Other2This (pos);
     
     btBody->applyImpulse (btForce, CSToBullet (relPos, system->GetInternalScale ()));
@@ -459,7 +472,7 @@ CS_PLUGIN_NAMESPACE_BEGIN (Bullet2)
       return; 
     
     btBody->activate (true);
-    csOrthoTransform trans = csBulletCollisionObject::GetTransform ();
+    csOrthoTransform trans = GetTransform ();
     csVector3 relPos = trans.Other2This (pos);
     btBody->applyImpulse (CSToBullet (force, system->GetInternalScale ()), CSToBullet (relPos, system->GetInternalScale ()));
   }
@@ -470,7 +483,7 @@ CS_PLUGIN_NAMESPACE_BEGIN (Bullet2)
       return; 
     
     btBody->activate (true);
-    csOrthoTransform trans = csBulletCollisionObject::GetTransform ();
+    csOrthoTransform trans = GetTransform ();
     csVector3 absForce = trans.This2Other (force);
     csVector3 relPos = trans.Other2This (pos);
     btBody->applyImpulse (CSToBullet (absForce, system->GetInternalScale ()),
@@ -484,7 +497,7 @@ CS_PLUGIN_NAMESPACE_BEGIN (Bullet2)
       return; 
     
     btBody->activate (true);
-    csOrthoTransform trans = csBulletCollisionObject::GetTransform ();
+    csOrthoTransform trans = GetTransform ();
     csVector3 absForce = trans.This2Other (force);
     btBody->applyImpulse (CSToBullet (absForce, system->GetInternalScale ()),
       CSToBullet (pos, system->GetInternalScale ()));

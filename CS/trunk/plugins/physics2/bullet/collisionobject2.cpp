@@ -37,7 +37,8 @@ CS_PLUGIN_NAMESPACE_BEGIN (Bullet2)
   // TODO: factory in constructor (everywhere)
   void csBulletCollisionObject::CreateCollisionObject (iCollisionObjectFactory* props)
   {
-    collider = dynamic_cast<csBulletCollider*>(props->GetCollider ());
+    collider = dynamic_cast<csBulletCollider*> (props->GetCollider ());
+    colliderTransform = props->GetColliderTransform ();
     group = dynamic_cast<CollisionGroup*> (props->GetCollisionGroup ());
   }
 

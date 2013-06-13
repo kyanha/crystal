@@ -97,8 +97,10 @@ CS_PLUGIN_NAMESPACE_BEGIN (Bullet2)
       density (0.0f), mass (1.0f), densityDefined (false), friction (10.0f),
       gravityEnabled (true)
     {
+/*
       if (!collider || !collider->IsDynamic ())
 	mass = 0.0f;
+*/
     }
 
     virtual float GetDensity () const

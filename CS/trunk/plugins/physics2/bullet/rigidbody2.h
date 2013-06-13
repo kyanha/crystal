@@ -80,6 +80,7 @@ public:
   virtual bool AddBulletObject ();
 
   virtual void SetTransform (const csOrthoTransform& trans);
+  virtual csOrthoTransform GetTransform () const;
 
   //-- iPhysicalBody
   virtual CS::Physics::PhysicalObjectType GetPhysicalObjectType () const
