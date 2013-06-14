@@ -61,7 +61,7 @@ void PhysDemo::Frame ()
   UpdateHUD ();
 
   // Simulate one step
-  DoStep ();
+  physicalSystem->Step (vc->GetElapsedSeconds ());
 
   if (actorMode != ActorModeNoclip)
   {
@@ -100,13 +100,6 @@ void PhysDemo::Frame ()
 
   // Display debug informations
   DoDebugDraw ();
-}
-
-void PhysDemo::DoStep ()
-{
-  // TODO: use iPhysicalSystem::SetSimulationSpeed ()
-  csTicks elapsed_time = vc->GetElapsedTicks ();
-  physicalSystem->Step (elapsed_time);
 }
 
 void PhysDemo::MoveActor ()
