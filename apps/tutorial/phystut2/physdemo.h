@@ -156,7 +156,6 @@ public:
   int phys_engine_id;
   bool do_bullet_debug;
   bool do_soft_debug;
-  //float remainingStepDuration;
 
   // Dynamic simulation related
   bool allStatic;
@@ -421,8 +420,6 @@ public:
   
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   // Frame
-
-  void DoStep ();
 
   void MoveActor ();
   void MoveActorVehicle ();
