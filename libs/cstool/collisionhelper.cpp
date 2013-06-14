@@ -225,21 +225,21 @@ void CollisionHelper::InitializeCollisionObjects
   }
 
   // Check if we have a portal mesh
-  iPortalContainer* portalCont = mesh->GetPortalContainer ();
-  if (portalCont)
+  iPortalContainer* portalContainer = mesh->GetPortalContainer ();
+  if (portalContainer)
   {
-    for (size_t i = 0; i < (size_t) portalCont->GetPortalCount (); i++)
+    for (int i = 0; i < portalContainer->GetPortalCount (); i++)
     {
-      iPortal* portal = portalCont->GetPortal (i);
+      iPortal* portal = portalContainer->GetPortal (i);
 
-      // TODO: Ignore all portals that don't do warping
-      // TODO: Flag portals as see-through only (for example in-game monitors that display a video camera stream)
-      //if (!portal->GetFlags ().Check (CS_PORTAL_WARP)) continue;
-      // TODO: use CS_PORTAL_COLLDET and put on this flag by default for all portals?
-      //if (!portal->GetFlags ().Check (CS_PORTAL_COLLDET)) continue;
+      // Exclude portals with the collision detection flag set
+      if (portal->GetFlags ().Check (CS_PORTAL_COLLDET))
+      {
+	// TODO: create a collision object instead
+	continue;
+      }
 
-      // This is very odd: Multiple portals with the same mesh transform?
-      // TODO: Mesh transform can/should be retreived from the iPortal object - Don't need to pass it as an argument
+      // Add the collision portal to its sector
       collisionSector->AddPortal (portal, mesh->GetMovable ()->GetFullTransform ());
     }
   }
@@ -268,7 +268,7 @@ void CollisionHelper::InitializeCollisionObjects
     }
   }
 
-  if (!terrainSys && !portalCont && !collisionObject)
+  if (!terrainSys && !portalContainer && !collisionObject)
   {
     // did not find a specific physical factory and its not a placeholder
     // -> Create a static collision object from the mesh, using default values for physical values (if available)
@@ -733,8 +733,11 @@ void CollisionHelper::ParsePhysicalObjectProperties
 
   // If the context object is a mesh factory then add this factory as a child of
   // the iObject of the mesh factory.
-  csRef<iMeshFactoryWrapper> meshFactory = scfQueryInterface<iMeshFactoryWrapper> (context);
-  if (meshFactory) meshFactory->QueryObject ()->ObjAdd (factory->QueryObject ());
+  if (context)
+  {
+    csRef<iMeshFactoryWrapper> meshFactory = scfQueryInterface<iMeshFactoryWrapper> (context);
+    if (meshFactory) meshFactory->QueryObject ()->ObjAdd (factory->QueryObject ());
+  }
 }
 
 csPtr<CS::Physics::iRigidBodyFactory> CollisionHelper::ParseRigidBodyFactory
