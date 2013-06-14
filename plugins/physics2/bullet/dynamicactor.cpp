@@ -21,6 +21,7 @@ TODO: Implement general surface hugging. Kinematic step direction can currently 
 */
 
 #include "cssysdef.h"
+#include "iengine/scenenode.h"
 #include "dynamicactor.h"
 
 #include "btBulletDynamicsCommon.h"
@@ -110,6 +111,21 @@ CS_PLUGIN_NAMESPACE_BEGIN (Bullet2)
     csBulletRigidBody::SetTransform (trans);
   }
 
+  void csBulletDynamicActor::SetRotation (const csMatrix3& rot)
+  {
+    iSceneNode* sceneNode = GetAttachedSceneNode ();
+    if (sceneNode)
+      sceneNode->GetMovable ()->GetTransform ().SetT2O (rot);
+    if (camera)
+      camera->GetTransform ().SetT2O (rot);
+    if (btObject)
+    {
+      csOrthoTransform trans = GetTransform ();
+      trans.SetT2O (rot);
+      btObject->setWorldTransform (CSToBullet (trans, system->GetInternalScale ()));
+    }
+  }
+
   void csBulletDynamicActor::Walk (csVector3 newVel)
   {
     newVel.Normalize ();
@@ -164,7 +180,34 @@ CS_PLUGIN_NAMESPACE_BEGIN (Bullet2)
     }
   }
 
+  bool csBulletDynamicActor::TestOnGround ()
+  { 
+    static const float groundAngleCosThresh = .7f;
+
+    // Find any objects that can at least remotely support the object
+    // TODO: this is really not efficient
+    csRef<iCollisionDataList> collisions = sector->CollisionTest (this);
+
+    for (size_t i = 0; i < collisions->GetCollisionCount (); i++)
+    {
+      iCollisionData* coll = collisions->GetCollision (i);
+      
+      int dir = coll->GetObjectA () == this ? 1 : -1;
+
+      for (size_t j = 0; j < coll->GetContactCount (); j++)
+      {
+	iCollisionContact* contact = coll->GetContact (j);
+	
+	float groundAngleCos = contact->GetNormalOnB () * csVector3 (0.0f, 1.0f, 0.0f);
+	if (dir * groundAngleCos > groundAngleCosThresh)
+	  return true;
+      }
+    }
+    return false;
+  }
+
   bool csBulletDynamicActor::IsFreeFalling () const
+  // TODO: diff VS TestOnGround ()?
   { 
     return 
       (!IsOnGround () ||                 // not in contact with ground or

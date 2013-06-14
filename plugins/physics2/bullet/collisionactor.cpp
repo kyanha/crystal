@@ -87,6 +87,21 @@ CS_PLUGIN_NAMESPACE_BEGIN (Bullet2)
     csBulletCollisionObject::SetTransform (trans);
   }
 
+  void csBulletCollisionActor::SetRotation (const csMatrix3& rot)
+  {
+    iSceneNode* sceneNode = GetAttachedSceneNode ();
+    if (sceneNode)
+      sceneNode->GetMovable ()->GetTransform ().SetT2O (rot);
+    if (camera)
+      camera->GetTransform ().SetT2O (rot);
+    if (btObject)
+    {
+      csOrthoTransform trans = GetTransform ();
+      trans.SetT2O (rot);
+      btObject->setWorldTransform (CSToBullet (trans, system->GetInternalScale ()));
+    }
+  }
+
   bool csBulletCollisionActor::AddBulletObject ()
   {
     if (csBulletGhostCollisionObject::AddBulletObject ())
@@ -214,7 +229,8 @@ CS_PLUGIN_NAMESPACE_BEGIN (Bullet2)
     controller->jump ();
   }
   
-  bool csBulletCollisionActor::IsOnGround () const { return controller->onGround (); }
+  bool csBulletCollisionActor::IsOnGround () const
+  { return controller->onGround (); }
 
   float csBulletCollisionActor::GetGravity () const
   {

@@ -85,6 +85,8 @@ CS_PLUGIN_NAMESPACE_BEGIN (Bullet2)
 
     virtual bool IsFreeFalling () const;
 
+    bool TestOnGround ();
+
     //virtual bool IsOnGround () const { return touchedGroundObjectCount > 0; }
     virtual bool IsOnGround () const { return onGround; }
 
@@ -105,6 +107,7 @@ CS_PLUGIN_NAMESPACE_BEGIN (Bullet2)
 
     /// Override SetTransform
     virtual void SetTransform (const csOrthoTransform& trans);
+    virtual void SetRotation (const csMatrix3& rot);
     
     virtual bool GetGravityEnabled () const
     { return csBulletRigidBody::GetGravityEnabled (); }

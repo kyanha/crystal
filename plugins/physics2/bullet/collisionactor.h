@@ -112,6 +112,7 @@ public:
   void SetGravity (float gravity);
 
   virtual void SetTransform (const csOrthoTransform& trans);
+  virtual void SetRotation (const csMatrix3& rot);
 
   virtual void Walk (csVector3 vel);
   virtual void WalkHorizontal (csVector2 vel);

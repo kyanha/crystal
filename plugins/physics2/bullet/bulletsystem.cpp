@@ -158,11 +158,11 @@ void csBulletSystem::SetStepParameters (float timeStep,
   }
 }
 
-void csBulletSystem::Step (csTicks duration)
+void csBulletSystem::Step (float duration)
 {
-  float fduration = duration * simulationSpeed * 0.001f;
+  duration *= simulationSpeed;
   for (size_t i = 0; i < collSectors.GetSize (); i++)
-    collSectors[i]->Step (fduration);
+    collSectors[i]->Step (duration);
 }
 
 void csBulletSystem::SetSoftBodyEnabled (bool enabled)
