@@ -106,7 +106,6 @@ public:
 
   virtual void SetTransform (const csOrthoTransform& trans);
   virtual csOrthoTransform GetTransform () const;
-  virtual void SetRotation (const csMatrix3& rot);
 
   virtual void RebuildObject () = 0;
 
@@ -129,8 +128,6 @@ public:
 
   virtual bool AddBulletObject () = 0;
   virtual bool RemoveBulletObject () = 0;
-
-  bool TestOnGround ();
 
   /// Whether this object may be excluded from deactivation.
   virtual bool GetDeactivable () const

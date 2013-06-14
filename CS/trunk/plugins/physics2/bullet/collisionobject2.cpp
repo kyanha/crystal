@@ -258,47 +258,6 @@ CS_PLUGIN_NAMESPACE_BEGIN (Bullet2)
     }
   }
 
-  void csBulletCollisionObject::SetRotation (const csMatrix3& rot)
-  {
-    iSceneNode* sceneNode = GetAttachedSceneNode ();
-    if (sceneNode)
-      sceneNode->GetMovable ()->GetTransform ().SetT2O (rot);
-    if (camera)
-      camera->GetTransform ().SetT2O (rot);
-    if (btObject)
-    {
-      csOrthoTransform trans = GetTransform ();
-      trans.SetT2O (rot);
-      btObject->setWorldTransform (CSToBullet (trans, system->GetInternalScale ()));
-    }
-  }
-
-  bool csBulletCollisionObject::TestOnGround ()
-  { 
-    static const float groundAngleCosThresh = .7f;
-
-    // Find any objects that can at least remotely support the object
-    // TODO: this is really not efficient
-    csRef<iCollisionDataList> collisions = sector->CollisionTest (this);
-
-    for (size_t i = 0; i < collisions->GetCollisionCount (); i++)
-    {
-      iCollisionData* coll = collisions->GetCollision (i);
-      
-      int dir = coll->GetObjectA () == this ? 1 : -1;
-
-      for (size_t j = 0; j < coll->GetContactCount (); j++)
-      {
-	iCollisionContact* contact = coll->GetContact (j);
-	
-	float groundAngleCos = contact->GetNormalOnB () * csVector3 (0.0f, 1.0f, 0.0f);
-	if (dir * groundAngleCos > groundAngleCosThresh)
-	  return true;
-      }
-    }
-    return false;
-  }
-
   bool csBulletCollisionObject::IsPassive () const
   {
     return portalData != nullptr && !portalData->IsOriginal;

@@ -64,8 +64,6 @@ CS_PLUGIN_NAMESPACE_BEGIN (Bullet2)
 
     SetState (factory->state);
 
-    printf ("csBulletRigidBody %s: mass %f state %i\n", GetName (), mass, (int) physicalState);
-
     group = dynamic_cast<CollisionGroup*> (factory->GetCollisionGroup ());
   }
 

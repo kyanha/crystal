@@ -344,13 +344,6 @@ struct iCollisionObject : public virtual iBase
   /// Get the transform of this object.
   virtual csOrthoTransform GetTransform () const = 0;
   
-  /**
-   * Set the current rotation in angles around every axis and set to actor.
-   * If a camera is used, set it to camera too.
-   */
-  // TODO: move in iActor
-  virtual void SetRotation (const csMatrix3& rot) = 0;
-
   /// Rebuild this collision object.
   // TODO: objects are not spawn correctly nor at the correct location if this
   // method is called before having the object in a sector
@@ -489,6 +482,12 @@ struct iActorFactory : public virtual iCollisionObjectFactory
 struct iActor : public virtual iCollisionObject
 {
   SCF_INTERFACE (CS::Collisions::iActor, 1, 0, 0);
+
+  /**
+   * Set the current rotation in angles around every axis and set to actor.
+   */
+  // TODO: change in/add Rotate (const csVector3& angles);
+  virtual void SetRotation (const csMatrix3& rot) = 0;
 
   /**
    * Start walking in the given direction with walk speed. 
