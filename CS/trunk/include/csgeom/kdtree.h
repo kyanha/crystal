@@ -290,7 +290,7 @@ public:
 
   /**
    * Set the minimum amount of objects before we consider splitting this tree.
-   * By default this is set to 1.
+   * By default this is set to 50.
    */
   void SetMinimumSplitAmount (int m) { min_split_objects = m; }
 

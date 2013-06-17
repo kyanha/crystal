@@ -140,6 +140,7 @@ csKDTree::csKDTree () : scfImplementationType(this)
   num_objects = max_objects = 0;
   disallow_distribute = 0;
   split_axis = CS_KDTREE_AXISINVALID;
+  min_split_objects = 50;
 
   node_bbox.Set (-KDTREE_MAX, -KDTREE_MAX,
         -KDTREE_MAX, KDTREE_MAX,
