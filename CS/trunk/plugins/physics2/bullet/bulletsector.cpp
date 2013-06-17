@@ -445,12 +445,15 @@ CS_PLUGIN_NAMESPACE_BEGIN (Bullet2)
         scfQueryInterface<iGeneralMeshState> (mesh->GetMeshObject ());
       if (!meshState) return;
 
-      csRef<CS::Animation::iSoftBodyAnimationControl2> animationControl =
-        scfQueryInterface<CS::Animation::iSoftBodyAnimationControl2> (meshState->GetAnimationControl ());
+      iGenMeshAnimationControl* animationControl = meshState->GetAnimationControl ();
       if (!animationControl) return;
 
-      if (!animationControl->GetSoftBody ())
-        animationControl->SetSoftBody (body);
+      csRef<CS::Animation::iSoftBodyAnimationControl2> softAnimationControl =
+        scfQueryInterface<CS::Animation::iSoftBodyAnimationControl2> (animationControl);
+      if (!softAnimationControl) return;
+
+      if (!softAnimationControl->GetSoftBody ())
+        softAnimationControl->SetSoftBody (body);
     }
   }
 
