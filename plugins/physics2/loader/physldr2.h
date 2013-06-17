@@ -51,8 +51,6 @@ public:
   virtual bool ParseCollisionSector
     (iDocumentNode *node, CS::Collisions::iCollisionSector* collSector,
      iLoaderContext* loaderContext);
-  //virtual bool ParseSoftBody (iDocumentNode *node, 
-  //CS::Physics::iPhysicalSector* physSector, iLoaderContext* loaderContext);
 
 private:
   iObjectRegistry* object_reg;

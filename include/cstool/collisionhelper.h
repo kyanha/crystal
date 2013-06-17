@@ -45,6 +45,7 @@ namespace Physics {
 struct iJointFactory;
 struct iPhysicalObjectFactory;
 struct iRigidBodyFactory;
+struct iSoftBodyFactory;
 
 } // namespace Physics
 } // namespace CS
@@ -71,8 +72,8 @@ class CS_CRYSTALSPACE_EXPORT CollisionHelper
   csStringID baseID;
   csStringID collisionID;
 
-  void ReportError (const char* msg, ...);
-  void ReportWarning (const char* msg, ...);
+  void ReportError (const char* msg, ...) const;
+  void ReportWarning (const char* msg, ...) const;
 
   void ParseTransform (iDocumentNode* node, csTransform& transform) const;
   void ParseCollisionObjectProperties
@@ -166,6 +167,15 @@ public:
    * \param The parent object being currently parsed if any.
    */
   csPtr<CS::Physics::iRigidBodyFactory> ParseRigidBodyFactory
+    (iDocumentNode* node, iLoaderContext* loaderContext, iBase* context) const;
+
+  /**
+   * Parse a soft body factory. Return nullptr if none are found.
+   * \param node The document node to parse the factory from.
+   * \param loaderContext The loader context.
+   * \param The parent object being currently parsed if any.
+   */
+  csPtr<CS::Physics::iSoftBodyFactory> ParseSoftBodyFactory
     (iDocumentNode* node, iLoaderContext* loaderContext, iBase* context) const;
 
   /**
