@@ -23,7 +23,11 @@
 #include "common2.h"
 #include "rigidbody2.h"
 
-#include "kinematicactorcontroller.h"
+//#include "kinematicactorcontroller.h"
+
+#include "csutil/custom_new_disable.h"
+#include "BulletDynamics/Character/btKinematicCharacterController.h"
+#include "csutil/custom_new_enable.h"
 
 CS_PLUGIN_NAMESPACE_BEGIN (Bullet2)
 {

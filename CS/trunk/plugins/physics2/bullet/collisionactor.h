@@ -22,7 +22,11 @@
 #include "actor.h"
 #include "common2.h"
 #include "collisionghost.h"
-#include "kinematicactorcontroller.h"
+//#include "kinematicactorcontroller.h"
+
+#include "csutil/custom_new_disable.h"
+#include "BulletDynamics/Character/btKinematicCharacterController.h"
+#include "csutil/custom_new_enable.h"
 
 CS_PLUGIN_NAMESPACE_BEGIN (Bullet2)
 {
@@ -72,7 +76,7 @@ public:
 class csBulletCollisionActor : public scfVirtImplementationExt1<csBulletCollisionActor,
     csBulletGhostCollisionObject, CS::Collisions::iCollisionActor>, public csActor
 {
-  csKinematicActorController* controller;
+  btKinematicCharacterController* controller;
   float airControlFactor;
   float walkSpeed;
   bool gravityEnabled;
