@@ -35,6 +35,7 @@
 #include "imap/loader.h"
 #include "imap/services.h"
 #include "imesh/objmodel.h"
+#include "imesh/softanim.h"
 #include "imesh/terrain2.h"
 #include "iutil/document.h"
 #include "iutil/plugin.h"
@@ -47,7 +48,7 @@
 
 using namespace CS::Collisions;
 
-void CollisionHelper::ReportError (const char* msg, ...)
+void CollisionHelper::ReportError (const char* msg, ...) const
 {
   va_list arg;
   va_start (arg, msg);
@@ -57,7 +58,7 @@ void CollisionHelper::ReportError (const char* msg, ...)
   va_end (arg);
 }
 
-void CollisionHelper::ReportWarning (const char* msg, ...)
+void CollisionHelper::ReportWarning (const char* msg, ...) const
 {
   va_list arg;
   va_start (arg, msg);
@@ -87,6 +88,7 @@ enum
   XMLTOKEN_COLLISIONACTOR,
   XMLTOKEN_RIGIDBODY,
   XMLTOKEN_SOFTBODY,
+  XMLTOKEN_MESHFACT,
   XMLTOKEN_GROUP,
   XMLTOKEN_CONSTRAINTS,
   XMLTOKEN_MIN,
@@ -94,6 +96,7 @@ enum
   XMLTOKEN_DISTANCE,
   XMLTOKEN_ANGLE,
   XMLTOKEN_SPRING,
+  XMLTOKEN_STIFFNESS,
   XMLTOKEN_LINEARSTIFFNESS,
   XMLTOKEN_ANGULARSTIFFNESS,
   XMLTOKEN_LINEARDAMPING,
@@ -155,6 +158,7 @@ bool CollisionHelper::Initialize
   xmltokens.Register ("collisionactor", XMLTOKEN_COLLISIONACTOR);
   xmltokens.Register ("rigidbody", XMLTOKEN_RIGIDBODY);
   xmltokens.Register ("softbody", XMLTOKEN_SOFTBODY);
+  xmltokens.Register ("meshfact", XMLTOKEN_MESHFACT);
   xmltokens.Register ("group", XMLTOKEN_GROUP);
   xmltokens.Register ("constraints", XMLTOKEN_CONSTRAINTS);
   xmltokens.Register ("min", XMLTOKEN_MIN);
@@ -163,6 +167,7 @@ bool CollisionHelper::Initialize
   xmltokens.Register ("angle", XMLTOKEN_ANGLE);
   xmltokens.Register ("bounce", XMLTOKEN_BOUNCE);
   xmltokens.Register ("spring", XMLTOKEN_SPRING);
+  xmltokens.Register ("stiffness", XMLTOKEN_STIFFNESS);
   xmltokens.Register ("linearstiffness", XMLTOKEN_LINEARSTIFFNESS);
   xmltokens.Register ("angularstiffness", XMLTOKEN_ANGULARSTIFFNESS);
   xmltokens.Register ("lineardamping", XMLTOKEN_LINEARDAMPING);
@@ -614,6 +619,7 @@ csPtr<CS::Collisions::iCollider> CollisionHelper::ParseCollider
       break;
     }
     default:
+      synldr->ReportBadToken (child);
       break;
     }
   }
@@ -653,6 +659,7 @@ CollisionHelper::ParseCollisionObjectFactory
       // TODO
       return ParseCollisionObjectSimpleFactory (child, loaderContext, context);
     default:
+      synldr->ReportBadToken (child);
       break;
     }
   }
@@ -697,6 +704,7 @@ void CollisionHelper::ParseCollisionObjectProperties
     }
 
     default:
+      synldr->ReportBadToken (child);
       break;
     }
   }
@@ -763,6 +771,135 @@ csPtr<CS::Physics::iRigidBodyFactory> CollisionHelper::ParseRigidBodyFactory
     if (state == "dynamic") factory->SetState (CS::Physics::STATE_DYNAMIC);
     else if (state == "static") factory->SetState (CS::Physics::STATE_STATIC);
     else if (state == "kinematic") factory->SetState (CS::Physics::STATE_KINEMATIC);
+  }
+
+  return factory;
+}
+
+csPtr<CS::Physics::iSoftBodyFactory> CollisionHelper::ParseSoftBodyFactory
+(iDocumentNode* node, iLoaderContext* loaderContext, iBase* context) const
+{
+  CS_ASSERT (collisionSystem->QueryPhysicalSystem ());
+
+  csRef<CS::Physics::iSoftMeshFactory> factory =
+      collisionSystem->QueryPhysicalSystem ()->CreateSoftMeshFactory ();
+  //ParseCollisionObjectProperties (node, factory, loaderContext, context);
+  ParsePhysicalObjectProperties (node, factory, loaderContext, context);
+
+  csRef<iMeshFactoryWrapper> meshFactory; 
+
+  csRef<iDocumentNodeIterator> it = node->GetNodes ();
+  while (it->HasNext ())
+  {
+    csRef<iDocumentNode> child = it->Next ();
+    if (child->GetType () != CS_NODE_ELEMENT) continue;
+    const char *value = child->GetValue ();
+    csStringID id = xmltokens.Request (value);
+    switch (id)
+    {
+      case XMLTOKEN_MESHFACT:
+      {
+	const char* name = child->GetAttributeValue ("name");
+
+	// Search for the mesh specified in the context then in the engine
+	if (name && *name)
+	{
+	  meshFactory = loaderContext->FindMeshFactory (name);
+	  if (!meshFactory)
+	    meshFactory = engine->FindMeshFactory (name);
+	  if (!meshFactory)
+	  {
+	    synldr->ReportError ("crystalspace.collisions.helper", child,
+				 "Could not find the mesh factory %s for the soft body factory",
+				 CS::Quote::Single (name));
+	    continue;
+	  }
+	}
+
+	// Parse the duplication mode
+	const char* duplication = child->GetAttributeValue ("duplication");
+	if (duplication && *duplication)
+	{
+	  if (!strcmp (duplication, "none")) {}
+	  else if (!strcmp (duplication, "interleaved"))
+	    factory->SetDuplicationMode (CS::Physics::MESH_DUPLICATION_INTERLEAVED);
+	  else if (!strcmp (duplication, "contiguous"))
+	    factory->SetDuplicationMode (CS::Physics::MESH_DUPLICATION_CONTIGUOUS);
+	  else
+	    synldr->ReportError ("crystalspace.collisions.helper", child,
+				 "Wrong mesh duplication mode for the soft body factory: %s",
+				 CS::Quote::Single (duplication));
+	}
+
+	break;
+      }
+
+    case XMLTOKEN_STIFFNESS:
+    {
+      if (child->GetAttributeValue ("linear"))
+	factory->SetLinearStiffness (child->GetAttributeValueAsFloat ("linear", 1.f));
+      if (child->GetAttributeValue ("angular"))
+	factory->SetAngularStiffness (child->GetAttributeValueAsFloat ("angular", 1.f));
+      if (child->GetAttributeValue ("volume"))
+	factory->SetVolumeStiffness (child->GetAttributeValueAsFloat ("volume", 1.f));
+
+      break;
+    }
+
+      // TODO: Parse the remaining soft body parameters
+    default:
+      synldr->ReportBadToken (child);
+      continue;
+    }
+  }
+
+  // Search for a mesh in the context
+  if (!meshFactory)
+    meshFactory = scfQueryInterface<iMeshFactoryWrapper> (context);
+
+  if (!meshFactory)
+  {
+    synldr->ReportError ("crystalspace.collisions.helper", node,
+			 "No valid mesh factory defined for the soft body factory");
+    return csPtr<CS::Physics::iSoftBodyFactory> (nullptr);
+  }
+
+  // Search for the triangle mesh associated to the factory
+  iTriangleMesh* triangles = FindCollisionMesh (meshFactory);
+  if (!triangles)
+  {
+    synldr->ReportError ("crystalspace.collisions.helper", node,
+			 "Could not find the triangle mesh for the soft body factory");
+    return csPtr<CS::Physics::iSoftBodyFactory> (nullptr);
+  }
+
+  factory->SetMesh (triangles);
+
+  // If the context is a genmesh factory, then add automatically a soft body animation controller
+  meshFactory = scfQueryInterface<iMeshFactoryWrapper> (context);
+  if (meshFactory)
+  {
+    csRef<iGeneralFactoryState> genmeshFactory =
+      scfQueryInterface<iGeneralFactoryState> (meshFactory->GetMeshObjectFactory ());
+
+    if (genmeshFactory && !genmeshFactory->GetAnimationControlFactory ())
+    {
+      // Search for the animation control plugin
+      csRef<iPluginManager> pluginManager = csQueryRegistry<iPluginManager> (objectRegistry);
+      csRef<CS::Animation::iSoftBodyAnimationControl2Type> softBodyAnimationType =
+	csLoadPlugin<CS::Animation::iSoftBodyAnimationControl2Type>
+	(pluginManager, "crystalspace.physics.softanim2");
+      if (!softBodyAnimationType)
+	ReportError ("Could not load the soft body animation controller");
+
+      else
+      {
+	// Set up the animation control factory
+	csRef<iGenMeshAnimationControlFactory> animationControl = 
+	  softBodyAnimationType->CreateAnimationControlFactory ();
+	genmeshFactory->SetAnimationControlFactory (animationControl);
+      }
+    }
   }
 
   return factory;
@@ -847,6 +984,7 @@ csPtr<CS::Physics::iJointFactory> CollisionHelper::ParseJointFactory
 	  break;
 	}
 	default:
+	  synldr->ReportBadToken (cchild);
 	  break;
 	}
       }
@@ -908,6 +1046,7 @@ csPtr<CS::Physics::iJointFactory> CollisionHelper::ParseJointFactory
       break;
     }
     default:
+      synldr->ReportBadToken (child);
       break;
     }
   }

@@ -185,6 +185,19 @@ csPtr<iBase> csPhysicsLoader2::Parse (iDocumentNode *node,
 	collisionHelper.ParseRigidBodyFactory (child, loaderContext, context);
       return csPtr<iBase> (factory);
     }
+    case XMLTOKEN_SOFTBODY:
+    {
+      if (!physicalSystem)
+      {
+	synldr->ReportError
+	  (msgid, node, "No physical system while creating a soft body factory");
+	break;
+      }
+
+      csRef<CS::Physics::iSoftBodyFactory> factory =
+	collisionHelper.ParseSoftBodyFactory (child, loaderContext, context);
+      return csPtr<iBase> (factory);
+    }
     default:
       synldr->ReportBadToken (child);
       return csPtr<iBase> (nullptr);
@@ -366,95 +379,3 @@ bool csPhysicsLoader2::ParseCollisionSector (iDocumentNode *node,
 
   return true;
 }
-
-/*
-bool csPhysicsLoader2::ParseSoftBody (iDocumentNode *node, 
-                                      CS::Physics::iPhysicalSector* physicalSector,
-                                      iLoaderContext* loaderContext)
-{
-  csRef<CS::Physics::iSoftBody> body;
-  csRef<iDocumentNodeIterator> it = node->GetNodes ();
-  while (it->HasNext ())
-  {
-    csRef<iDocumentNode> child = it->Next ();
-    if (child->GetType () != CS_NODE_ELEMENT) continue;
-    const char *value = child->GetValue ();
-    csStringID id = xmltokens.Request (value);
-    switch (id)
-    {
-    case XMLTOKEN_MESH:
-      if (child->GetContentsValue ())
-      {
-        csRef<iMeshFactoryWrapper> m = loaderContext->FindMeshFactory (child->GetContentsValue ());
-        if (!m)
-        {
-          synldr->ReportError (msgid,
-			       child, "Unable to find mesh factory in engine");
-          return false;
-        }
-        csRef<iGeneralFactoryState> gmstate = scfQueryInterface<
-          iGeneralFactoryState> (m->GetMeshObjectFactory ());
-        
-        csRef<CS::Physics::iSoftMeshFactory> factory = physicalSystem->CreateSoftMeshFactory ();
-        //factory->SetGenmeshFactory (gmstate);
-        body = factory->CreateSoftBody ();
-      }
-      break;
-    }
-  }
-
-  if (node->GetAttributeValue ("mass"))
-    body->SetMass ( node->GetAttributeValueAsFloat ("mass"));
-
-  if (node->GetAttributeValue ("friction"))
-    body->SetFriction (node->GetAttributeValueAsFloat ("friction"));
-  
-  csRef<CS::Collisions::iCollisionSector> colSector = scfQueryInterface<CS::Collisions::iCollisionSector> (physicalSector);
-
-  //body->RebuildObject ();
-  colSector->AddCollisionObject (body);
-
-  it = node->GetNodes ();
-  while (it->HasNext ())
-  {
-    csRef<iDocumentNode> child = it->Next ();
-    if (child->GetType () != CS_NODE_ELEMENT) continue;
-    const char *value = child->GetValue ();
-    csStringID id = xmltokens.Request (value);
-    switch (id)
-    {
-    case XMLTOKEN_ANCHOR:
-    {
-      size_t index = child->GetAttributeValueAsInt ("index");
-  const char* rname = child->GetAttributeValue ("rigidbody");
-  if (rname)
-  {
-  CS::Physics::iRigidBody* rb = physicalSector->FindRigidBody (rname);
-  if (!rb)
-  {
-  synldr->ReportError (msgid,
-  child, "Can't find rigid body with name %s!", CS::Quote::Single (rname));
-  return false;
-  }
-  body->AnchorVertex (index, rb);
-  }
-  else
-      body->AnchorVertex (index);
-      break;
-    }
-    case XMLTOKEN_WIND:
-    {
-      csVector3 v;
-      synldr->ParseVector (child, v);
-      body->SetWindVelocity (v);
-      break;
-    }
-    default:
-      synldr->ReportBadToken (child);
-      return false;
-    }
-  }
-  return true;
-}
-*/
-
