@@ -56,7 +56,7 @@ CS_PLUGIN_NAMESPACE_BEGIN (Bullet2)
     
     btPairCachingGhostObject* go = GetPairCachingGhostObject ();
     btConvexShape* convShape = (btConvexShape*)(go->getCollisionShape ());
-    controller = new csKinematicActorController
+    controller = new btKinematicCharacterController
       (go, convShape, stepHeight = props->GetStepHeight (), 1);
     
     SetWalkSpeed (props->GetWalkSpeed ());
@@ -117,7 +117,7 @@ CS_PLUGIN_NAMESPACE_BEGIN (Bullet2)
     btPairCachingGhostObject* go = GetPairCachingGhostObject ();
     btConvexShape* convShape = (btConvexShape*)(go->getCollisionShape ());
     delete controller;
-    controller = new csKinematicActorController (go, convShape, stepHeight = newHeight, 1);
+    controller = new btKinematicCharacterController (go, convShape, stepHeight = newHeight, 1);
   }
 
   void csBulletCollisionActor::SetMaximumSlope (float slope) 
