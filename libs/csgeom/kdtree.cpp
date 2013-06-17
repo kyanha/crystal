@@ -256,7 +256,7 @@ void csKDTree::DumpNode (const char* msg)
 
 void csKDTree::RemoveObject (int idx)
 {
-  if (idx < 0 && idx >= num_objects)
+  if (idx < 0 || idx >= num_objects)
   {
     DumpNode ("Something bad happened in csKDTree::RemoveObject!\n");
     DebugExit ();
