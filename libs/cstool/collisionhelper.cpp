@@ -659,7 +659,6 @@ CollisionHelper::ParseCollisionObjectFactory
       // TODO
       return ParseCollisionObjectSimpleFactory (child, loaderContext, context);
     default:
-      synldr->ReportBadToken (child);
       break;
     }
   }
@@ -704,7 +703,6 @@ void CollisionHelper::ParseCollisionObjectProperties
     }
 
     default:
-      synldr->ReportBadToken (child);
       break;
     }
   }
