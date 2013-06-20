@@ -401,6 +401,7 @@ public:
   // Frame
 
   void MoveActor ();
+  void MoveActorVehicle ();
 
   void UpdateVehiclePassengers ();
 

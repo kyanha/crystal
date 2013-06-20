@@ -42,7 +42,6 @@ PhysDemo::PhysDemo ()
   paused (false), simulationSpeed (1.0f),
   dragging (false), softDragging (false),
   debugMode (DEBUG_COLLIDERS),
-  actorAirControl (.2f),
   moveSpeed (3.f),
   turnSpeed (1.6f),
   actorMode (ActorModePhysical),
