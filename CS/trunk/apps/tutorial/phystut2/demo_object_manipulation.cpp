@@ -92,9 +92,9 @@ bool PhysDemo::PickCursorObject (CS::Collisions::HitBeamResult& result)
   // TODO: Need a generic mechanism to determine ownership of objects
 
   // check for actor
-  if (obj->QueryActor ())
+  if (obj->QueryCollisionActor ())
   {
-    return obj->QueryActor ();
+    return obj->QueryCollisionActor ();
   }
 
   // check for vehicle

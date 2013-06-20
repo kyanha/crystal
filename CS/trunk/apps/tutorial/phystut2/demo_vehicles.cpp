@@ -190,25 +190,32 @@ void PhysDemo::MoveActorVehicle ()
   // actorVehicle != nullptr
 
   // Steering
-  float steering = steeringIncrement * GetLeftRight ();
+  float steering = 0.0f;
+
+  if (kbd->GetKeyState (KeyLeft) || kbd->GetKeyState (CSKEY_LEFT))
+    steering -= steeringIncrement;
+
+  if (kbd->GetKeyState (KeyRight) || kbd->GetKeyState (CSKEY_RIGHT))
+    steering += steeringIncrement;
+
   actorVehicle->Steer (0, steering);
 
   // Acceleration
-  if (GetForward ())
-  {
+  if (kbd->GetKeyState (KeyForward) || kbd->GetKeyState (CSKEY_UP))
     actorVehicle->SetEngineForce (engineForce);
-  }
+
   else 
   {
     // do nothing because engine force is resetted automatically
     //actorVehicle->SetEngineForce (actorVehicle->GetEngineForce () * .99);
   }
 
-  if (GetBackward ())
+  if (kbd->GetKeyState (KeyBackward) || kbd->GetKeyState (CSKEY_DOWN))
   {
     // Backward
     actorVehicle->SetEngineForce (-engineForce / 10);
   }
+
   if (kbd->GetKeyState (KeyHandbrake))
   {
     // Apply the handbrake (which is the first brake that has been added to the vehicle).

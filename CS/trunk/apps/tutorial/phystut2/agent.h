@@ -46,10 +46,13 @@ public:
 
   Inventory& GetInventory () { return inventory; }
 
-  CS::Collisions::iCollisionObject* GetObject () const { return object; }
-  void SetObject (CS::Collisions::iCollisionObject* o) { object = o; } 
+  CS::Collisions::iCollisionObject* GetObject () const
+  { return object; }
+  void SetObject (CS::Collisions::iCollisionObject* o)
+  { object = o; } 
 
-  CS::Collisions::iActor* GetActor () const { return object ? object->QueryActor () : nullptr; }
+  CS::Collisions::iCollisionActor* GetActor () const
+  { return object ? object->QueryCollisionActor () : nullptr; }
 };
 
 #endif

@@ -45,8 +45,7 @@ PhysDemo::PhysDemo ()
   actorAirControl (.2f),
   moveSpeed (3.f),
   turnSpeed (1.6f),
-  //actorMode (ActorModeKinematic),
-  actorMode (ActorModeDynamic),
+  actorMode (ActorModePhysical),
   cameraMode (CameraMode1stPerson),
   selectedItem (nullptr)
 {
@@ -169,8 +168,7 @@ void PhysDemo::Reset ()
   draggedBody = nullptr;
 
   player.SetObject (nullptr);
-  dynamicActor = nullptr;
-  kinematicActor = nullptr;
+  actor = nullptr;
 
   clipboardBody = nullptr;
   clipboardMovable = nullptr;
@@ -405,66 +403,24 @@ void PhysDemo::UpdateActorMode (ActorMode newActorMode)
 
   iCollisionObject* lastActorObj = player.GetObject ();
 
-  switch (actorMode)
+  if (actorMode == ActorModePhysical)
   {
-    // The camera is controlled by a rigid body
-  case ActorModeDynamic:
+    cameraManager->SetCameraMode (CS::Utility::CAMERA_NO_MOVE);
+
+    if (!actor)
     {
-      cameraManager->SetCameraMode (CS::Utility::CAMERA_NO_MOVE);
+      //csRef<CS::Collisions::iColliderSphere> collider = physicalSystem->CreateColliderSphere (ActorDimensions.y);
+      //csRef<CS::Collisions::iColliderCylinder> collider = physicalSystem->CreateColliderCylinder (ActorDimensions.y, ActorDimensions.x/2);
+      csRef<CS::Collisions::iColliderBox> collider = physicalSystem->CreateColliderBox (ActorDimensions);
+      csRef<iCollisionActorFactory> factory = physicalSystem->CreateCollisionActorFactory (collider);
+      factory->SetStepHeight (0.4);
 
-      if (!dynamicActor)
-      {
-        //csRef<CS::Collisions::iColliderSphere> collider = physicalSystem->CreateColliderSphere (ActorDimensions.y);
-        //csRef<CS::Collisions::iColliderCylinder> collider = physicalSystem->CreateColliderCylinder (ActorDimensions.y, ActorDimensions.x/2);
-        csRef<CS::Collisions::iColliderBox> collider = physicalSystem->CreateColliderBox (ActorDimensions);
-        csRef<iDynamicActorFactory> factory = physicalSystem->CreateDynamicActorFactory (collider);
-        factory->SetMass (80.);
-        factory->SetElasticity (0);
-        factory->SetFriction (.1);
-
-        factory->SetAirControlFactor (actorAirControl);
-        factory->SetStepHeight (0.2);
-
-        dynamicActor = factory->CreateDynamicActor ();
-      }
-
-      player.SetObject (dynamicActor);
-      break;
+      actor = factory->CreateCollisionActor ();
     }
 
-  case ActorModeKinematic:
-    {
-      if (!kinematicActor)
-      {
-        //csRef<CS::Collisions::iColliderSphere> collider = physicalSystem->CreateColliderSphere (ActorDimensions.y/2);
-        csRef<CS::Collisions::iColliderCylinder> collider = physicalSystem->CreateColliderCylinder (ActorDimensions.y / 1.5, ActorDimensions.x/2);
-        //csRef<CS::Collisions::iColliderBox> collider = physicalSystem->CreateColliderBox (ActorDimensions);
+    actor->SetAttachedCamera (view->GetCamera ());
+    player.SetObject (actor);
 
-        /*csOrthoTransform trans;
-        trans.RotateThis (csVector3 (1, 0, 0), HALF_PI);
-        csRef<CS::Collisions::iCollider> parent = physicalSystem->CreateCollider ();
-        parent->AddCollider (collider, trans);
-        csRef<iCollisionActorFactory> factory = physicalSystem->CreateCollisionActorFactory (parent);*/
-        csRef<iCollisionActorFactory> factory = physicalSystem->CreateCollisionActorFactory (collider);
-        factory->SetAirControlFactor (actorAirControl);
-        factory->SetJumpSpeed (moveSpeed);
-        factory->SetStepHeight (0.2);
-
-        kinematicActor = factory->CreateCollisionActor ();
-      }
-
-      player.SetObject (kinematicActor);
-    }
-    break;
-
-  default:
-    break;
-  }
-
-  CS_ASSERT (player.GetObject ()->QueryActor ());
-
-  if (actorMode != ActorModeNoclip)
-  {
     if (lastActorObj)
     {
       // remove previous actor
@@ -475,6 +431,7 @@ void PhysDemo::UpdateActorMode (ActorMode newActorMode)
       lastActorObj->GetSector ()->AddCollisionObject (player.GetObject ());
     }
   }
+
   else
   {
     // No clip mode
@@ -491,7 +448,7 @@ bool PhysDemo::IsDynamic (CS::Collisions::iCollisionObject* obj) const
 
 bool PhysDemo::IsActor (CS::Collisions::iCollisionObject* obj) const
 {
-  return obj->QueryActor () != nullptr;
+  return obj->QueryCollisionActor () != nullptr;
 }
 
 void PhysDemo::SetGravity (const csVector3& g)

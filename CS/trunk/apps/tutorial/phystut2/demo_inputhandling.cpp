@@ -33,43 +33,6 @@
 using namespace CS::Collisions;
 using namespace CS::Physics;
 
-float PhysDemo::GetForward ()
-{
-  if (kbd->GetKeyState (KeyForward) || kbd->GetKeyState (CSKEY_UP))
-  {
-    return 1;
-  }
-  return 0;
-}
-
-float PhysDemo::GetBackward ()
-{
-  if (kbd->GetKeyState (KeyBack) || kbd->GetKeyState (CSKEY_DOWN))
-  {
-     return 1;
-  }
-  return 0;
-}
-
-float PhysDemo::GetLeftRight ()
-{
-  float val = 0;
-  if (kbd->GetKeyState (KeyStrafeLeft))
-  {
-    val -= 1;
-  }
-  if (kbd->GetKeyState (KeyStrafeRight))
-  {
-    val += 1;
-  }
-  return val;
-}
-
-csVector3 PhysDemo::GetInputDirection ()
-{
-  return csVector3 (GetLeftRight (), 0, GetForward () - GetBackward ());
-}
-
 bool PhysDemo::OnKeyboard (iEvent &event)
 {
   //DemoApplication::OnKeyboard (event);
@@ -149,16 +112,12 @@ bool PhysDemo::OnKeyboard (iEvent &event)
     switch (actorMode)
     {
     case ActorModeNone:
-    case ActorModeKinematic:
-      actorMode = ActorModeDynamic;
-      break;
-
-    case ActorModeDynamic:
+    case ActorModePhysical:
       actorMode = ActorModeNoclip;
       break;
 
     case ActorModeNoclip:
-      actorMode = ActorModeKinematic;
+      actorMode = ActorModePhysical;
       break;
     }
 
