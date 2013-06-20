@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2011-2012 Christian Van Brussel, Institute of Information
+    Copyright (C) 2011-2013 Christian Van Brussel, Institute of Information
       and Communication Technologies, Electronics and Applied Mathematics
       at Universite catholique de Louvain, Belgium
       http://www.uclouvain.be/en-icteam.html
@@ -39,7 +39,6 @@
 namespace CS { 
 namespace Physics {
 
-struct iDynamicActor;
 struct iJoint;
 struct iKinematicCallback;
 struct iPhysicalSystem;
@@ -66,8 +65,7 @@ enum RigidBodyState
 enum PhysicalObjectType
 {
   PHYSICAL_OBJECT_RIGIDBODY = 0,  /*!< The physical object is a rigid body. */
-  PHYSICAL_OBJECT_SOFTBODY,       /*!< The physical object is a soft body. */
-  PHYSICAL_OBJECT_DYNAMICACTOR    /*!< The physical object is a dynamic actor. */
+  PHYSICAL_OBJECT_SOFTBODY       /*!< The physical object is a soft body. */
 };
 
 /**
@@ -216,8 +214,6 @@ struct iPhysicalBody : public virtual CS::Collisions::iCollisionObject
 
 // TODO: There are a lot more configurable parameters - See btRigidBodyConstructionInfo:
 /*
-  btVector3			m_localInertia;
-
   ///best simulation results using zero restitution.
   btScalar			m_restitution;
 
@@ -898,51 +894,6 @@ static csPtr<iMeshFactoryWrapper> CreateClothGenMeshFactory
 };
 
 /**
- * Factory to create instances of iDynamicActor.
- */
-struct iDynamicActorFactory : public virtual iRigidBodyFactory,
-  public virtual CS::Collisions::iActorFactory
-{
-  SCF_INTERFACE (CS::Physics::iDynamicActorFactory, 1, 0, 0);
-
-  /// Create a dynamic actor
-  virtual csPtr<iDynamicActor> CreateDynamicActor () = 0;
-
-  /// Get whether to use a kinematic method for smooth steps
-  virtual bool GetKinematicStepsEnabled () const = 0;
-  /// Set whether to use a kinematic method for smooth steps
-  virtual void SetKinematicStepsEnabled (bool u) = 0;
-};
-
-/**
- * A dynamic actor allows the user to easily navigate a physical object on
- * ground, and to interact with the dynamic objects that are colliding with it
- * by pushing away the objects that are hit.
- *
- * The actual collider that represents the actor always floats <step height>
- * above the ground to be able to move smoothly over terrain and small obstacles.
- *
- * The air control factor determines whether and how well the actor can be
- * controlled while not touching the ground. Air control is always 100% when gravity
- * is off.
- *
- * Main creators of instances implementing this interface:
- * - iPhysicalSystem::CreateDynamicActor()
- * 
- * Main users of this interface:
- * - iPhysicalSector
- */
-struct iDynamicActor : public virtual iRigidBody, public virtual CS::Collisions::iActor
-{
-  SCF_INTERFACE (CS::Physics::iDynamicActor, 1, 0, 0);
-
-  /// Get whether to use a kinematic method for smooth steps
-  virtual bool GetKinematicStepsEnabled () const = 0;
-  /// Set whether to use a kinematic method for smooth steps
-  virtual void SetKinematicStepsEnabled (bool u) = 0;
-};
-
-/**
  * A joint that can constrain the relative motion between two iPhysicalBody.
  * For instance if all motion in along the local X axis is constrained
  * then the bodies will stay motionless relative to each other
@@ -1586,10 +1537,6 @@ struct iPhysicalSystem : public virtual CS::Collisions::iCollisionSystem
   
   /// Create a rigid body factory
   virtual csPtr<iRigidBodyFactory> CreateRigidBodyFactory
-    (CS::Collisions::iCollider* collider = nullptr) = 0;
-
-  /// Create a dynamic actor factory
-  virtual csPtr<iDynamicActorFactory> CreateDynamicActorFactory
     (CS::Collisions::iCollider* collider = nullptr) = 0;
 
   /// Create a soft rope factory

@@ -52,7 +52,6 @@
 #include "collisionterrain.h"
 #include "rigidbody2.h"
 #include "softbody2.h"
-#include "dynamicactor.h"
 #include "collisionactor.h"
 #include "joint2.h"
 
@@ -523,13 +522,6 @@ csPtr<CS::Physics::iRigidBodyFactory>
 {
   BulletRigidBodyFactory* fact = new BulletRigidBodyFactory (this, collider);
   return csPtr<iRigidBodyFactory> (fact); 
-}
-
-csPtr<CS::Physics::iDynamicActorFactory> 
-  csBulletSystem::CreateDynamicActorFactory (CS::Collisions::iCollider* collider)
-{
-  BulletDynamicActorFactory* fact = new BulletDynamicActorFactory (this, collider);
-  return csPtr<iDynamicActorFactory> (fact);
 }
 
 csPtr<CS::Physics::iSoftRopeFactory> csBulletSystem::CreateSoftRopeFactory ()

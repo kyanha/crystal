@@ -1,4 +1,8 @@
 /*
+    Copyright (C) 2013 Christian Van Brussel, Institute of Information
+      and Communication Technologies, Electronics and Applied Mathematics
+      at Universite catholique de Louvain, Belgium
+      http://www.uclouvain.be/en-icteam.html
     Copyright (C) 2012 by Dominik Seifert
 
     This library is free software; you can redistribute it and/or
@@ -18,14 +22,11 @@
 #ifndef __CS_BULLET_COLLISIONACTOR_H__
 #define __CS_BULLET_COLLISIONACTOR_H__
 
-#include "cssysdef.h"
-#include "actor.h"
 #include "common2.h"
 #include "collisionghost.h"
-//#include "kinematicactorcontroller.h"
 
 #include "csutil/custom_new_disable.h"
-#include "BulletDynamics/Character/btKinematicCharacterController.h"
+#include "btKinematicCharacterController.h"
 #include "csutil/custom_new_enable.h"
 
 CS_PLUGIN_NAMESPACE_BEGIN (Bullet2)
@@ -34,68 +35,57 @@ CS_PLUGIN_NAMESPACE_BEGIN (Bullet2)
 class BulletCollisionActorFactory : public scfVirtImplementationExt1<
   BulletCollisionActorFactory, BulletGhostCollisionObjectFactory, CS::Collisions::iCollisionActorFactory> 
 {
+  friend class BulletCollisionActor;
+
   float stepHeight;
-  float walkSpeed, jumpSpeed;
   float maximumSlope;
-  float airControlFactor;
+  float jumpSpeed;
+  //float airControlFactor;
 
 public:
   BulletCollisionActorFactory
     (csBulletSystem* system, CS::Collisions::iCollider* collider = nullptr)
     : scfImplementationType (this, system, collider),
-    stepHeight (.5f),
-    walkSpeed (10.f),
-    jumpSpeed (10.f),
+    stepHeight (.4f),
     maximumSlope (0.785398163f),
-    airControlFactor (0.04f)
+    jumpSpeed (10.f)
+    //,airControlFactor (0.04f)
     {}
 
-  virtual csPtr<CS::Collisions::iActor> CreateActor ();
   virtual csPtr<CS::Collisions::iCollisionActor> CreateCollisionActor ();
   virtual csPtr<CS::Collisions::iCollisionObject> CreateCollisionObject ();
 
-  virtual float GetStepHeight () const { return stepHeight; }
-  virtual void SetStepHeight (float h) { stepHeight = h; }
+  virtual float GetStepHeight () const { return stepHeight * system->GetInverseInternalScale (); }
+  virtual void SetStepHeight (float h) { stepHeight = h * system->GetInternalScale (); }
 
   virtual float GetMaximumSlope () const { return maximumSlope; };
   virtual void SetMaximumSlope (float slope) { maximumSlope = slope; };
 
-  virtual float GetWalkSpeed () const { return walkSpeed; }
-  virtual void SetWalkSpeed (float s) { walkSpeed = s; }
+  virtual float GetJumpSpeed () const { return jumpSpeed * system->GetInverseInternalScale (); }
+  virtual void SetJumpSpeed (float s) { jumpSpeed = s * system->GetInternalScale (); }
 
-  virtual float GetJumpSpeed () const { return jumpSpeed; }
-  virtual void SetJumpSpeed (float s) { jumpSpeed = s; }
-
-  virtual float GetAirControlFactor () const { return airControlFactor; }
-  virtual void SetAirControlFactor (float f) { airControlFactor = f; }
+  //virtual float GetAirControlFactor () const { return airControlFactor; }
+  //virtual void SetAirControlFactor (float f) { airControlFactor = f; }
 };
 
- /**
-  * TODO: IsMovingUp
-  */
-class csBulletCollisionActor : public scfVirtImplementationExt1<csBulletCollisionActor,
-    csBulletGhostCollisionObject, CS::Collisions::iCollisionActor>, public csActor
+class BulletCollisionActor : public scfVirtImplementationExt1<BulletCollisionActor,
+    csBulletGhostCollisionObject, CS::Collisions::iCollisionActor>,
+    public btActionInterface
 {
   btKinematicCharacterController* controller;
-  float airControlFactor;
-  float walkSpeed;
-  bool gravityEnabled;
-  float stepHeight;
+  //float airControlFactor;
 
 public:
-  void CreateCollisionActor (CS::Collisions::iCollisionActorFactory* props);
-
-public:
-  csBulletCollisionActor (csBulletSystem* sys);
-  virtual ~csBulletCollisionActor ();
+  BulletCollisionActor (BulletCollisionActorFactory* factory);
+  virtual ~BulletCollisionActor ();
 
   virtual iObject* QueryObject () { return (iObject*) this; }
 
   //-- iCollisionObject
   virtual CS::Collisions::iCollisionObject* QueryCollisionObject ()
   { return dynamic_cast<CS::Collisions::iCollisionObject*> (this); }
-  virtual CS::Collisions::iActor* QueryActor ()
-  { return dynamic_cast<CS::Collisions::iActor*> (this); }
+  virtual CS::Collisions::iCollisionActor* QueryCollisionActor ()
+  { return dynamic_cast<CS::Collisions::iCollisionActor*> (this); }
 
   virtual bool IsPhysicalObject () const { return false; }
 
@@ -103,59 +93,40 @@ public:
   { return CS::Collisions::COLLISION_OBJECT_ACTOR; }
 
   virtual bool AddBulletObject ();
+  virtual bool RemoveBulletObject ();
 
   //-- iCollisionActor
-  virtual bool IsOnGround () const;
-
-  virtual void SetAttachedCamera (iCamera* camera);
-  
-  virtual void UpdatePreStep (float delta);
-  virtual void UpdatePostStep (float delta);
-
-  float GetGravity () const;
-  void SetGravity (float gravity);
-
-  virtual void SetTransform (const csOrthoTransform& trans);
-  virtual void SetRotation (const csMatrix3& rot);
-
-  virtual void Walk (csVector3 vel);
-  virtual void WalkHorizontal (csVector2 vel);
-  virtual void Jump ();
-  virtual void StopMoving ();
-  
-  virtual float GetAirControlFactor () const { return airControlFactor; }
-  virtual void SetAirControlFactor (float f) { airControlFactor = f; }
-  
-  virtual float GetJumpSpeed () const { return 0; }
-  virtual void SetJumpSpeed (float jumpSpeed);
-  
-  virtual float GetStepHeight () const { return stepHeight; }
+  virtual float GetStepHeight () const;
   virtual void SetStepHeight (float stepHeight);
 
   virtual float GetMaximumSlope () const;
   virtual void SetMaximumSlope (float slopeRadians);
-
-  virtual float GetWalkSpeed () const { return walkSpeed; }
-  virtual void SetWalkSpeed (float s) { walkSpeed = s; }
-
-  virtual bool GetGravityEnabled () const { return gravityEnabled; }
-  virtual void SetGravityEnabled (bool enabled) { gravityEnabled = enabled; }
-
-  bool DoesGravityApply () const { return GetGravityEnabled () && GetGravity () != 0; }
   
-  /// Whether the actor is not on ground and gravity applies
-  virtual bool IsFreeFalling () const
-  { 
-    // kinematic character controller does not reveal its linear velocity
-    return 
-      (!IsOnGround ()) &&                // not touching the ground
-      DoesGravityApply ();               // and gravity applies
-  }
+  virtual float GetJumpSpeed () const { return 0; }
+  virtual void SetJumpSpeed (float jumpSpeed);
 
-  btPairCachingGhostObject* GetBulletGhostObject ()
-  {
-    return static_cast<btPairCachingGhostObject*> (btObject);
-  }
+  virtual void SetSpeed (const csVector3& speed);
+  //virtual csVector3 GetSpeed () const;
+
+  virtual void SetRotation (const csMatrix3& rot);
+  virtual void Rotate (float yaw, float pitch);
+
+  virtual void Jump ();
+
+  virtual bool IsOnGround () const;
+
+/*
+  virtual float GetAirControlFactor () const { return airControlFactor; }
+  virtual void SetAirControlFactor (float f) { airControlFactor = f; }
+*/
+
+  //-- btActionInterface
+  void updateAction (btCollisionWorld* collisionWorld, btScalar deltaTime);
+  void debugDraw (btIDebugDraw* debugDrawer) {}
+
+  // Misc
+  void SetGravity (float gravity);
+  //float GetGravity () const;
 };
 
 }

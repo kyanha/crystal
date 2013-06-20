@@ -388,48 +388,6 @@ CS_PLUGIN_NAMESPACE_BEGIN (Bullet2)
     { this->mode = mode; }
   };
 
-  class BulletDynamicActorFactory : public scfVirtImplementationExt1<
-    BulletDynamicActorFactory, BulletRigidBodyFactory, CS::Physics::iDynamicActorFactory>
-  {
-    friend class BulletDynamicActor;
-
-    float stepHeight;
-    float walkSpeed, jumpSpeed;
-    float airControlFactor;
-    bool kinematicSteps;
-
-  public:
-  BulletDynamicActorFactory (csBulletSystem* system, CS::Collisions::iCollider* collider = nullptr) : 
-    scfImplementationType (this, system, collider),
-      stepHeight (.1f),
-      walkSpeed (10.f),
-      jumpSpeed (10.f),
-      airControlFactor (0.04f),
-      kinematicSteps (true)
-    {
-    }
-
-    virtual csPtr<CS::Collisions::iCollisionObject> CreateCollisionObject ();
-    virtual csPtr<CS::Physics::iRigidBody> CreateRigidBody ();
-    virtual csPtr<CS::Collisions::iActor> CreateActor ();
-    virtual csPtr<CS::Physics::iDynamicActor> CreateDynamicActor ();
-
-    float GetStepHeight () const { return stepHeight; }
-    void SetStepHeight (float h) { stepHeight = h; }
-
-    float GetWalkSpeed () const { return walkSpeed; }
-    void SetWalkSpeed (float s) { walkSpeed = s; }
-
-    float GetJumpSpeed () const { return jumpSpeed; }
-    void SetJumpSpeed (float s) { jumpSpeed = s; }
-
-    float GetAirControlFactor () const { return airControlFactor; }
-    void SetAirControlFactor (float f) { airControlFactor = f; }
-    
-    bool GetKinematicStepsEnabled () const { return kinematicSteps; }
-    void SetKinematicStepsEnabled (bool u) { kinematicSteps = u; }
-  };
-
 }
 CS_PLUGIN_NAMESPACE_END (Bullet2)
 

@@ -72,7 +72,7 @@ class csBulletCollider : public scfVirtImplementation1<csBulletCollider, CS::Col
   //public virtual CS::Collisions::iCollider
 {
   friend class csBulletCollisionObject;
-  friend class csBulletCollisionActor;
+  friend class BulletCollisionActor;
   friend class csBulletGhostCollisionObject;
   friend class csBulletRigidBody;
   friend class csBulletSystem;

@@ -85,6 +85,16 @@ static inline btMatrix3x3 CSToBullet (const csMatrix3& m)
 		      m.m13, m.m23, m.m33);
 }
 
+static inline csMatrix3 BulletToCS (const btMatrix3x3& m)
+{
+  const btVector3& row0 = m.getRow (0);
+  const btVector3& row1 = m.getRow (1);
+  const btVector3& row2 = m.getRow (2);
+  return csMatrix3 (row0.getX (), row1.getX (), row2.getX (),
+		    row0.getY (), row1.getY (), row2.getY (),
+		    row0.getZ (), row1.getZ (), row2.getZ ());
+}
+
 static inline csVector3 BulletToCS (const btVector3& v,
 				    float inverseInternalScale)
 {
