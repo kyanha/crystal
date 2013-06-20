@@ -54,13 +54,12 @@ class btActionInterface;
 CS_PLUGIN_NAMESPACE_BEGIN (Bullet2)
 {
 
-class csActor;
 class csBulletSystem;
 class csBulletSector;
 class csBulletDebugDraw;
 class csBulletRigidBody;
 class csBulletSoftBody;
-class csBulletCollisionActor;
+class BulletCollisionActor;
 class csBulletCollisionObject;
 class csBulletCollider;
 class csBulletJoint;
@@ -81,7 +80,7 @@ class csBulletSector : public scfVirtImplementationExt2<
   CS::Collisions::iCollisionSector>
 {
   friend class csBulletCollisionObject;
-  friend class csBulletCollisionActor;
+  friend class BulletCollisionActor;
   friend class csBulletRigidBody;
   friend class csBulletSoftBody;
   friend class csBulletJoint;
@@ -117,7 +116,7 @@ class csBulletSector : public scfVirtImplementationExt2<
   csRefArrayObject<csBulletRigidBody> rigidBodies;
   csRefArrayObject<csBulletSoftBody> softBodies;
   csWeakRefArray<csBulletSoftBody> anchoredSoftBodies;
-  csRefArray<csActor> actors;
+  csRefArray<BulletCollisionActor> actors;
   csRefArray<iUpdatable> updatables;
 
   void CheckCollisions ();

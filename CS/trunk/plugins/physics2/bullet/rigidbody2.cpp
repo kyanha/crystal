@@ -381,10 +381,6 @@ CS_PLUGIN_NAMESPACE_BEGIN (Bullet2)
   {
     if (!btBody || physicalState != STATE_DYNAMIC)
       return; 
-    if (!QueryActor ())
-    {
-      SetEnabled (true);
-    }
     btBody->setLinearVelocity (CSToBullet (vel, system->GetInternalScale ()));
     btBody->activate ();
   }

@@ -53,17 +53,16 @@ class btTriangleMesh;
 CS_PLUGIN_NAMESPACE_BEGIN (Bullet2)
 {
   
-class csBulletSector;
-class csBulletSystem;
+class csBulletCollider;
+class BulletCollisionActor;
+class csBulletCollisionObject;
 class csBulletDebugDraw;
 class csBulletGhostCollisionObject;
-class csBulletRigidBody;
-class csBulletSoftBody;
-class csBulletDynamicActor;
-class csBulletCollisionObject;
-class csBulletCollisionActor;
-class csBulletCollider;
 class csBulletJoint;
+class csBulletRigidBody;
+class csBulletSector;
+class csBulletSoftBody;
+class csBulletSystem;
 
 class CollisionGroup : public scfImplementation1<CollisionGroup,
   CS::Collisions::iCollisionGroup>
@@ -209,9 +208,6 @@ public:
     (iTerrainFactory* terrain);
 
   virtual csPtr<CS::Physics::iRigidBodyFactory> CreateRigidBodyFactory
-    (CS::Collisions::iCollider* collider = nullptr);
-
-  virtual csPtr<CS::Physics::iDynamicActorFactory> CreateDynamicActorFactory
     (CS::Collisions::iCollider* collider = nullptr);
 
   virtual csPtr<CS::Physics::iSoftRopeFactory> CreateSoftRopeFactory ();

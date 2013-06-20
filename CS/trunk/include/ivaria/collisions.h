@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2011-2012 Christian Van Brussel, Institute of Information
+    Copyright (C) 2011-2013 Christian Van Brussel, Institute of Information
       and Communication Technologies, Electronics and Applied Mathematics
       at Universite catholique de Louvain, Belgium
       http://www.uclouvain.be/en-icteam.html
@@ -56,7 +56,6 @@ struct iPhysicalSystem;
 namespace CS {
 namespace Collisions {
 
-struct iActor;
 struct iCollisionActor;
 struct iCollisionObject;
 struct iCollisionSector;
@@ -287,7 +286,7 @@ struct iCollisionObject : public virtual iBase
   virtual CS::Physics::iPhysicalBody* QueryPhysicalBody () = 0;
 
   /// Return the actor pointer if it's an actor, or nullptr.
-  virtual iActor* QueryActor () = 0;
+  virtual iCollisionActor* QueryCollisionActor () = 0;
 
   /**
    * Put this object into the given collision sector. The object will now be
@@ -428,172 +427,142 @@ struct iCollisionTerrain : public virtual iCollisionObject
 };
 
 /**
- * Common abstract interface for factories of iActor objects.
+ * A iCollisionActor is dedicated to actor motion controlling, and can be used to manage
+ * eg a Player or a Non-Player Character object.
+ *
+ * Although most physical bodies cannot be moved freely in the virtual environment for
+ * stability reasons, actors can be used to move objects around the environnement, while
+ * keeping reactions to the collisions that are generated and handling gravity. They will
+ * also interact with the dynamic objects that are collided by pushing away the objects
+ * that are hit.
+ *
+ * The actual collider that represents the actor always floats <step height>
+ * above the ground to be able to move smoothly over terrain and small obstacles.
+ *
+ * \remark The collider of iCollisionActor must be a convex shape, for example a
+ * capsule or a sphere.
  *
  * Main ways to create instances implementing this interface:
  * - CS::Collisions::iCollisionSystem::CreateCollisionActorFactory()
- * - CS::Physics::iPhysicalSystem::CreateDynamicActorFactory()
+ *
+ * Main users of this interface:
+ * - iCollisionSystem
  */
-struct iActorFactory : public virtual iCollisionObjectFactory
+struct iCollisionActorFactory : public virtual iCollisionObjectFactory
 {
-  SCF_INTERFACE (CS::Collisions::iActorFactory, 1, 0, 0);
+  SCF_INTERFACE (CS::Collisions::iCollisionActorFactory, 1, 0, 0);
 
-  /// Create an instance
-  virtual csPtr<iActor> CreateActor () = 0;
+  /// Create an instance of a collision actor
+  virtual csPtr<iCollisionActor> CreateCollisionActor () = 0;
 
   /// Get the max vertical threshold that this actor can step over
   virtual float GetStepHeight () const = 0;
   /// Set the max vertical threshold that this actor can step over
   virtual void SetStepHeight (float h) = 0;
 
-  /// Get the walk speed
-  virtual float GetWalkSpeed () const = 0;
-  /// Set the walk speed
-  virtual void SetWalkSpeed (float s) = 0;
+  /**
+   * Get the maximum slope, in radians. The maximum slope determines the maximum
+   * angle that the actor can walk up.
+   */
+  virtual float GetMaximumSlope () const = 0;
+  /**
+   * The maximum slope determines the maximum angle that the actor can walk up.
+   * The slope angle is measured in radians. The default value is 0.7854f (45 degree).
+   */
+  virtual void SetMaximumSlope (float slope) = 0;
 
   /// Get the jump speed
+  // TODO: use a speed parameter in Jump() instead?
   virtual float GetJumpSpeed () const = 0;
   /// Set the jump speed
   virtual void SetJumpSpeed (float s)  = 0;
 
   /// Determines how much the actor can control movement when free falling (1 = completely, 0 = not at all)
-  virtual float GetAirControlFactor () const = 0;
+  //virtual float GetAirControlFactor () const = 0;
   /// Determines how much the actor can control movement when free falling (1 = completely, 0 = not at all)
-  virtual void SetAirControlFactor (float f) = 0;
+  //virtual void SetAirControlFactor (float f) = 0;
 };
 
 /**
- * A iActor is the common abstract interface for actor motion controlling, and can
- * be used to create eg a player or a Non-Player Character model.
+ * A iCollisionActor is dedicated to actor motion controlling, and can be used to manage
+ * eg a Player or a Non-Player Character object.
  *
- * Actors can be used to move objects around the environnement, while keeping reactions
- * to the collisions that are generated and handling gravity.
+ * Although most physical bodies cannot be moved freely in the virtual environment for
+ * stability reasons, actors can be used to move objects around the environnement, while
+ * keeping reactions to the collisions that are generated and handling gravity. They will
+ * also interact with the dynamic objects that are collided by pushing away the objects
+ * that are hit.
+ *
+ * The actual collider that represents the actor always floats <step height>
+ * above the ground to be able to move smoothly over terrain and small obstacles.
  *
  * \remark The collider of iCollisionActor must be a convex shape, for example a
  * capsule or a sphere.
  *
  * Main ways to create instances implementing this interface:
  * - CS::Collisions::iCollisionActorFactory::CreateCollisionActor()
- * - CS::Physics::iDynamicActorFactory::CreateDynamicActor()
  * 
  * Main users of this interface:
- * - iCollisionSystem
+ * - iCollisionSector
  */
-struct iActor : public virtual iCollisionObject
+struct iCollisionActor : public virtual iCollisionObject
 {
-  SCF_INTERFACE (CS::Collisions::iActor, 1, 0, 0);
-
-  /**
-   * Set the current rotation in angles around every axis and set to actor.
-   */
-  // TODO: change in/add Rotate (const csVector3& angles);
-  virtual void SetRotation (const csMatrix3& rot) = 0;
-
-  /**
-   * Start walking in the given direction with walk speed. 
-   * Sets linear velocity. 
-   * Takes air control into consideration.
-   * Adds the current vertical velocity to the given vertical velocity.
-   */
-  virtual void Walk (csVector3 dir) = 0;
-  
-  /**
-   * Start walking in the given horizontal direction with walk speed. 
-   * Sets linear velocity. 
-   * Takes air control into consideration.
-   * Does not influence vertical movement.
-   */
-  virtual void WalkHorizontal (csVector2 dir) = 0;
-
-  /// Applies an upward impulse to this actor, and an inverse impulse to objects beneath
-  virtual void Jump () = 0;
-
-  /// Stops any player-controlled movement
-  virtual void StopMoving () = 0;
-  
-  /// Whether the actor is not on ground and gravity applies
-  virtual bool IsFreeFalling () const = 0;
-
-  /// Whether this actor touches the ground
-  virtual bool IsOnGround () const = 0;
+  SCF_INTERFACE (CS::Collisions::iCollisionActor, 1, 0, 0);
 
   /// Get the maximum vertical threshold that this actor can step over
   virtual float GetStepHeight () const = 0;
   /// Set the maximum vertical threshold that this actor can step over
   virtual void SetStepHeight (float h) = 0;
 
-  /// Get the walk speed
-  virtual float GetWalkSpeed () const = 0;
-  /// Set the walk speed
-  virtual void SetWalkSpeed (float s) = 0;
-  
-  /// Get the jump speed
+  /**
+   * Get the maximum slope, in radians. The maximum slope determines the maximum
+   * angle that the actor can walk up.
+   */
+  virtual float GetMaximumSlope () const = 0;
+  /**
+   * The maximum slope determines the maximum angle that the actor can walk up.
+   * The slope angle is measured in radians. The default value is 0.7854f (45 degree).
+   */
+  virtual void SetMaximumSlope (float slope) = 0;
+
+  /**
+   * Set the current motion speed of this actor.
+   * \param speed Relative movement vector in object space of the model (i.e.
+   * 0,0,1 will move the model forward). 
+   */
+  virtual void SetSpeed (const csVector3& speed) = 0;
+  //virtual csVector3 GetSpeed () const = 0;
+
+  /// Get the jump speed of this actor
   virtual float GetJumpSpeed () const = 0;
-  /// Set the jump speed
+  /// Set the jump speed of this actor
   virtual void SetJumpSpeed (float s) = 0;
   
   /// Determines how much the actor can control movement when free falling
-  virtual float GetAirControlFactor () const = 0;
+  //virtual float GetAirControlFactor () const = 0;
   /// Determines how much the actor can control movement when free falling
-  virtual void SetAirControlFactor (float f) = 0;
-
-  /// Whether or not this object is subject to the constant gravitational forces of its sector
-  // TODO: working?
-  virtual bool GetGravityEnabled () const = 0;
-  /// Whether or not this object is subject to the constant gravitational forces of its sector
-  virtual void SetGravityEnabled (bool g) = 0;
-};
-
-/**
- * Factory to create instances of iCollisionActor.
- */
-struct iCollisionActorFactory : public virtual iCollisionObjectFactory,
-  public virtual iActorFactory
-{
-  SCF_INTERFACE (CS::Collisions::iCollisionActorFactory, 1, 0, 0);
-
-  /// Create an instance
-  virtual csPtr<iCollisionActor> CreateCollisionActor () = 0;
+  //virtual void SetAirControlFactor (float f) = 0;
 
   /**
-   * Get the maximum slope, in radians. The maximum slope determines the maximum
-   * angle that the actor can walk up.
+   * Set the current rotation of the actor. \a angles are the Euler angles
+   * around every axis, in radiant and relative to the origin of the coordinate sytem.
    */
-  virtual float GetMaximumSlope () const = 0;
-  /**
-   * The maximum slope determines the maximum angle that the actor can walk up.
-   * The slope angle is measured in radians. The default value is 0.7854f (45 degree).
-   */
-  virtual void SetMaximumSlope (float slope) = 0;
-};
-
-/**
- * A iCollisionActor is a basic collision agent, that will be blocked by the
- * collision objects standing in its way, but won't interact with them by
- * generating opposite collision forces on the objects hit.
- *
- * Main creators of instances implementing this interface:
- * - iCollisionActorFactory::CreateCollisionObject
- * 
- * Main users of this interface:
- * - iCollisionSystem
- * \remark The collider of iCollisionActor must be a convex shape. For example a
- * capsule or a sphere.
- */
-struct iCollisionActor : public virtual iCollisionObject, public virtual iActor
-{
-  SCF_INTERFACE (CS::Collisions::iCollisionActor, 1, 0, 0);
+  virtual void SetRotation (const csMatrix3& rotation) = 0;
 
   /**
-   * Get the maximum slope, in radians. The maximum slope determines the maximum
-   * angle that the actor can walk up.
+   * Apply the given delta rotation on this actor.
+   * \param yaw Is the delta angle to be applied around the Y axis
+   * \param pitch Is the delta angle to be applied around the X axis
    */
-  virtual float GetMaximumSlope () const = 0;
+  virtual void Rotate (float yaw, float pitch) = 0;
+
+  /// Applies an upward impulse to this actor, and an inverse impulse to objects beneath
+  virtual void Jump () = 0;
+
   /**
-   * The maximum slope determines the maximum angle that the actor can walk up.
-   * The slope angle is measured in radians. The default value is 0.7854f (45 degree).
+   * Return whether or not this actor touches the ground
    */
-  virtual void SetMaximumSlope (float slope) = 0;
+  virtual bool IsOnGround () const = 0;
 };
 
 /**

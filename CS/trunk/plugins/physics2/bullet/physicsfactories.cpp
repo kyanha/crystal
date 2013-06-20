@@ -49,7 +49,6 @@
 #include "collisionterrain.h"
 #include "rigidbody2.h"
 #include "softbody2.h"
-#include "dynamicactor.h"
 #include "collisionactor.h"
 #include "joint2.h"
 
@@ -97,28 +96,6 @@ CS_PLUGIN_NAMESPACE_BEGIN (Bullet2)
   {
     CS_ASSERT (collider);
     return new csBulletRigidBody (this);
-  }
-
-  csPtr<CS::Collisions::iActor> BulletDynamicActorFactory::CreateActor ()
-  {
-    csRef<CS::Physics::iDynamicActor> actor = CreateDynamicActor ();
-    return csPtr<iActor> (actor);
-  }
-
-  csPtr<CS::Physics::iDynamicActor> BulletDynamicActorFactory::CreateDynamicActor ()
-  {
-    csRef<csBulletDynamicActor> body = csPtr<csBulletDynamicActor> (new csBulletDynamicActor (this));
-    return csPtr<CS::Physics::iDynamicActor> (body);
-  }
-
-  csPtr<CS::Physics::iRigidBody> BulletDynamicActorFactory::CreateRigidBody ()
-  { 
-    return DowncastPtr<CS::Physics::iRigidBody, CS::Physics::iDynamicActor> (CreateDynamicActor ()); 
-  }
-
-  csPtr<CS::Collisions::iCollisionObject> BulletDynamicActorFactory::CreateCollisionObject () 
-  { 
-    return DowncastPtr<CS::Collisions::iCollisionObject, CS::Physics::iDynamicActor> (CreateDynamicActor ()); 
   }
 
   csPtr<CS::Collisions::iCollisionObject> BulletSoftBodyFactory::CreateCollisionObject () 

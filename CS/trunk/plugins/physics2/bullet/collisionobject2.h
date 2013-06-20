@@ -42,7 +42,6 @@ class csBulletCollisionObject : public scfVirtImplementationExt1<
   friend class csBulletKinematicMotionState;
   friend class csBulletJoint;
   friend class csBulletCollisionTerrain;
-  friend class csBulletCollisionActor;
   friend class csBulletGhostCollisionObject;
   friend class CollisionPortal;
 
@@ -80,7 +79,7 @@ public:
 
   virtual iObject* QueryObject () { return (iObject*) this; }
   virtual CS::Physics::iPhysicalBody* QueryPhysicalBody () { return nullptr; }
-  virtual CS::Collisions::iActor* QueryActor () { return nullptr; }
+  virtual CS::Collisions::iCollisionActor* QueryCollisionActor () { return nullptr; }
 
   virtual CS::Collisions::iCollisionSystem* GetSystem () const { return system; }
   virtual void SetSector (CS::Collisions::iCollisionSector* sector);

@@ -26,7 +26,10 @@
 
 #include "bulletsystem.h"
 #include "common2.h"
+
+#include "csutil/custom_new_disable.h"
 #include "BulletSoftBody/btSoftBody.h"
+#include "csutil/custom_new_enable.h"
 
 class btGeneric6DofConstraint;
 
@@ -226,7 +229,7 @@ private:
   csJointType type;
   btTypedConstraint* rigidJoint;
   btSoftBody::Joint* softJoint;
-  iPhysicalBody* bodies[2];
+  CS::Physics::iPhysicalBody* bodies[2];
   float threshold;
   int axis;
 
