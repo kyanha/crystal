@@ -38,7 +38,6 @@ using namespace CS::Collisions;
 using namespace CS::Physics;
 using namespace CS::Geometry;
 
-
 bool PhysDemo::PickCursorObject (CS::Collisions::HitBeamResult& result)
 { 
   // Find the object under the cursor:
@@ -217,11 +216,16 @@ void PhysDemo::TeleportObject (CS::Collisions::iCollisionObject* obj, iCameraPos
   // set transform
   csOrthoTransform trans (csMatrix3 (), pos->GetPosition ());
   trans.LookAt (pos->GetForwardVector (), pos->GetUpwardVector ());
-  obj->SetTransform (trans);
-  
+  if (obj) obj->SetTransform (trans);
+  else view->GetCamera ()->SetTransform (trans);
+
   // set sector
   iSector* isector = engine->FindSector (pos->GetSector ());
-  iCollisionSector* collSector = physicalSystem->FindCollisionSector (isector);
-  CS_ASSERT (collSector);
-  collSector->AddCollisionObject (obj);
+  if (obj)
+  {
+    iCollisionSector* collSector = physicalSystem->FindCollisionSector (isector);
+    CS_ASSERT (collSector);
+    collSector->AddCollisionObject (obj);
+  }
+  else view->GetCamera ()->SetSector (isector);
 }

@@ -83,18 +83,20 @@ static const int KeyDown = CSKEY_PGDN;
 static const int KeyJump = CSKEY_SPACE;
 static const int KeyHandbrake = CSKEY_SPACE;
 
+#if 1
 // For QWERTY keyboards:
 static const int KeyForward = 'w';
 static const int KeyBackward = 's';
 static const int KeyLeft = 'a';
 static const int KeyRight = 'd';
-/*
+#else
 // For AZERTY keyboards:
 static const int KeyForward = 'z';
 static const int KeyBackward = 's';
 static const int KeyLeft = 'q';
 static const int KeyRight = 'd';
-*/
+#endif
+
 /// Retreives folder and file information from a full (unix-style) path
 inline void GetFolderAndFile (const char* _path, csString& folder, csString& filename)
 {

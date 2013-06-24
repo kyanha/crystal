@@ -95,6 +95,8 @@ public:
   virtual bool AddBulletObject ();
   virtual bool RemoveBulletObject ();
 
+  virtual void SetTransform (const csOrthoTransform& trans);
+
   //-- iCollisionActor
   virtual float GetStepHeight () const;
   virtual void SetStepHeight (float stepHeight);
@@ -108,8 +110,8 @@ public:
   virtual void SetSpeed (const csVector3& speed);
   //virtual csVector3 GetSpeed () const;
 
-  virtual void SetRotation (const csMatrix3& rot);
-  virtual void Rotate (float yaw, float pitch);
+  //virtual void SetRotation (const csMatrix3& rot);
+  virtual void Rotate (float yaw);
 
   virtual void Jump ();
 

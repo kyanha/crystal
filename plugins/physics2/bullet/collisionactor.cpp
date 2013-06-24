@@ -66,7 +66,7 @@ CS_PLUGIN_NAMESPACE_BEGIN (Bullet2)
   {
     delete controller;
   }
-
+/*
   void BulletCollisionActor::SetRotation (const csMatrix3& rot)
   {
     btObject->getWorldTransform ().setBasis (CSToBullet (rot));
@@ -77,44 +77,11 @@ CS_PLUGIN_NAMESPACE_BEGIN (Bullet2)
     if (camera)
       camera->GetTransform ().SetT2O (rot);
   }
-
-  void BulletCollisionActor::Rotate (float yaw, float pitch)
+*/
+  void BulletCollisionActor::Rotate (float yaw)
   {
-    // Compute the Euler angles of the current rotation
     btMatrix3x3 rotation = btObject->getWorldTransform ().getBasis ();
-    csQuaternion quaternion;
-    quaternion.SetMatrix (BulletToCS (rotation).GetInverse ());
-
-    // TODO: merge this code within the csQuaternion class
-    csVector3 v = quaternion.v;
-    float w = quaternion.w;
-
-    const float case1 = HALF_PI;
-    const float case2 = -HALF_PI;
-
-    float sine = -2.0f * (v.y*v.z - w*v.x);
-
-    float currentPitch;
-    if (sine >= 1)     // cases where value is 1 or -1 cause NAN
-      currentPitch = case1;
-    else if (sine <= -1)
-      currentPitch = case2;
-    else
-      currentPitch = asinf (sine);
-
-    float currentYaw = atan2f (2.0f * (w*v.y + v.x*v.z), (w*w - v.y*v.y - v.x*v.x + v.z*v.z)) ;
-
-    // Apply the rotation delta
-    currentYaw += yaw;
-    currentPitch += pitch;
-
-    // Clamping of the pitch value
-    currentPitch = csMin (currentPitch, 1.4f);
-    currentPitch = csMax (currentPitch, -1.4f);
-
-    // Compute and apply the new rotation matrix
-    rotation = btMatrix3x3 (btQuaternion (btVector3 (0.0f, 1.0f, 0.0f), currentYaw))
-      * btMatrix3x3 (btQuaternion (btVector3 (1.0f, 0.0f, 0.0f), currentPitch));
+    rotation *= btMatrix3x3 (btQuaternion (btVector3 (0.0f, 1.0f, 0.0f), yaw));
     btObject->getWorldTransform ().setBasis (rotation);
 
     iSceneNode* sceneNode = GetAttachedSceneNode ();
@@ -131,6 +98,7 @@ CS_PLUGIN_NAMESPACE_BEGIN (Bullet2)
     insideWorld = true;
 
     controller->setGravity (- sector->bulletWorld->getGravity ()[1] * 3);
+    controller->reset ();
     sector->bulletWorld->addCollisionObject (btObject, group->value, group->mask);
     sector->bulletWorld->addAction (this);
 
@@ -145,6 +113,12 @@ CS_PLUGIN_NAMESPACE_BEGIN (Bullet2)
     sector->bulletWorld->removeCollisionObject (btObject);
 
     return true;
+  }
+
+  void BulletCollisionActor::SetTransform (const csOrthoTransform& trans)
+  {
+    csBulletCollisionObject::SetTransform (trans);
+    controller->reset ();
   }
 
   void BulletCollisionActor::SetStepHeight (float height)
@@ -169,7 +143,9 @@ CS_PLUGIN_NAMESPACE_BEGIN (Bullet2)
 
   void BulletCollisionActor::SetJumpSpeed (float jumpSpeed) 
   {
-    controller->setJumpSpeed (jumpSpeed * system->GetInternalScale ());
+    jumpSpeed *= system->GetInternalScale ();
+    controller->setJumpSpeed (jumpSpeed);
+    controller->setFallSpeed (jumpSpeed);
   }
 
   void BulletCollisionActor::SetSpeed (const csVector3& speed)
@@ -199,6 +175,7 @@ CS_PLUGIN_NAMESPACE_BEGIN (Bullet2)
   {
     // For some reason, the actor controller needs a 3G acceleration
     controller->setGravity (- gravity * 3);
+    controller->reset ();
   }
 
   void BulletCollisionActor::updateAction (btCollisionWorld* collisionWorld, btScalar deltaTime)

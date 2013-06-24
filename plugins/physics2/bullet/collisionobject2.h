@@ -90,10 +90,7 @@ public:
   virtual void SetAttachedSceneNode (iSceneNode* newSceneNode);
   virtual iSceneNode* GetAttachedSceneNode () const { return sceneNode; }
 
-  virtual void SetAttachedCamera (iCamera* camera) 
-  { 
-    this->camera = camera; if (camera) camera->SetTransform (GetTransform ());
-  }
+  virtual void SetAttachedCamera (iCamera* camera);
   virtual iCamera* GetAttachedCamera () const { return camera; }
 
   virtual CS::Collisions::iCollider* GetCollider () const { return collider; }

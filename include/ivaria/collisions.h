@@ -544,17 +544,10 @@ struct iCollisionActor : public virtual iCollisionObject
   //virtual void SetAirControlFactor (float f) = 0;
 
   /**
-   * Set the current rotation of the actor. \a angles are the Euler angles
-   * around every axis, in radiant and relative to the origin of the coordinate sytem.
-   */
-  virtual void SetRotation (const csMatrix3& rotation) = 0;
-
-  /**
    * Apply the given delta rotation on this actor.
    * \param yaw Is the delta angle to be applied around the Y axis
-   * \param pitch Is the delta angle to be applied around the X axis
    */
-  virtual void Rotate (float yaw, float pitch) = 0;
+  virtual void Rotate (float yaw) = 0;
 
   /// Applies an upward impulse to this actor, and an inverse impulse to objects beneath
   virtual void Jump () = 0;

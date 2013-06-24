@@ -508,6 +508,9 @@ btScalar timeInterval
 
 void btKinematicCharacterController::reset ()
 {
+  m_wasOnGround = false;
+  m_wasJumping = true;
+  m_verticalOffset = 1.0f;
 }
 
 void btKinematicCharacterController::warp (const btVector3& origin)

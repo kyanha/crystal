@@ -89,6 +89,7 @@ class csBulletSector : public scfVirtImplementationExt2<
   friend class csBulletMotionState;
   friend class csBulletSystem;
   friend class csBulletGhostCollisionObject;
+  friend class BulletVehicle;
   friend class CollisionPortal;
 
   csBulletSystem* system;
@@ -210,9 +211,6 @@ public:
   // Internal methods
   void Step (float duration);
   void UpdateSoftBodies (float timeStep);
-
-  void AddSceneNodeToSector (iSceneNode* sceneNode);
-  void RemoveSceneNodeFromSector (iSceneNode* sceneNode);
 
   virtual bool Save (const char* filename);
 };

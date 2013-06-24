@@ -32,6 +32,11 @@ namespace Physics {
 }
 }
 
+CS_PLUGIN_NAMESPACE_BEGIN (Bullet2)
+{
+
+class csBulletSector;
+
 /**
  * Custom code to be called upon every step
  */
@@ -52,10 +57,13 @@ struct iUpdatable : public virtual iBase
   virtual CS::Collisions::iCollisionObject* GetCollisionObject () = 0;
 
   /// Called when updatable is added to the given sector
-  virtual void OnAdded (CS::Physics::iPhysicalSector* sector) = 0;
+  virtual void OnAdded (csBulletSector* sector) = 0;
 
   /// Called when updatable is removed from the given sector
-  virtual void OnRemoved (CS::Physics::iPhysicalSector* sector) = 0;
+  virtual void OnRemoved (csBulletSector* sector) = 0;
 };
+
+}
+CS_PLUGIN_NAMESPACE_END (Bullet2)
 
 #endif // __CS_PHYSICS_BULLET_UPDATABLE_H__

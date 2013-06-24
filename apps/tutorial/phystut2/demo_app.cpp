@@ -45,6 +45,7 @@ PhysDemo::PhysDemo ()
   moveSpeed (3.f),
   turnSpeed (1.6f),
   actorMode (ActorModePhysical),
+  //actorMode (ActorModeNoclip),
   cameraMode (CameraMode1stPerson),
   selectedItem (nullptr)
 {
@@ -399,8 +400,7 @@ void PhysDemo::ApplyGhostSlowEffect ()
 void PhysDemo::UpdateActorMode (ActorMode newActorMode)
 {
   actorMode = newActorMode;
-
-  iCollisionObject* lastActorObj = player.GetObject ();
+  iSector* currentSector = view->GetCamera ()->GetSector ();
 
   if (actorMode == ActorModePhysical)
   {
@@ -408,32 +408,38 @@ void PhysDemo::UpdateActorMode (ActorMode newActorMode)
 
     if (!actor)
     {
-      //csRef<CS::Collisions::iColliderSphere> collider = physicalSystem->CreateColliderSphere (ActorDimensions.y);
-      //csRef<CS::Collisions::iColliderCylinder> collider = physicalSystem->CreateColliderCylinder (ActorDimensions.y, ActorDimensions.x/2);
-      csRef<CS::Collisions::iColliderBox> collider = physicalSystem->CreateColliderBox (ActorDimensions);
-      csRef<iCollisionActorFactory> factory = physicalSystem->CreateCollisionActorFactory (collider);
+      csRef<CS::Collisions::iColliderBox> collider =
+	physicalSystem->CreateColliderBox (ActorDimensions);
+      csRef<iCollisionActorFactory> factory =
+	physicalSystem->CreateCollisionActorFactory (collider);
       factory->SetStepHeight (0.4);
 
       actor = factory->CreateCollisionActor ();
     }
 
-    actor->SetAttachedCamera (view->GetCamera ());
+    actor->SetTransform (view->GetCamera ()->GetTransform ());
+    iCollisionSector* collisionSector =
+      physicalSystem->FindCollisionSector (view->GetCamera ()->GetSector ());
+    if (collisionSector)
+      collisionSector->AddCollisionObject (actor);
     player.SetObject (actor);
-
-    if (lastActorObj)
-    {
-      // remove previous actor
-      lastActorObj->GetSector ()->RemoveCollisionObject (lastActorObj);
-      
-      // move new actor to old transform
-      player.GetObject ()->SetTransform (view->GetCamera ()->GetTransform ());
-      lastActorObj->GetSector ()->AddCollisionObject (player.GetObject ());
-    }
+    actor->SetAttachedCamera (view->GetCamera ());
   }
 
   else
   {
     // No clip mode
+    if (actor)
+    {
+      iCollisionSector* collisionSector =
+	physicalSystem->FindCollisionSector (currentSector);
+      if (collisionSector)
+	collisionSector->RemoveCollisionObject (actor);
+      actor.Invalidate ();
+      player.SetObject (nullptr);
+    }
+
+    view->GetCamera ()->SetSector (currentSector);
     cameraManager->SetCameraMode (CS::Utility::CAMERA_MOVE_FREE);
   }
 }

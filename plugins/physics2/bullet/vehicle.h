@@ -279,8 +279,8 @@ CS_PLUGIN_NAMESPACE_BEGIN (Bullet2)
     virtual void PreStep (float dt) {}
     virtual void PostStep (float dt);
 
-    virtual void OnAdded (CS::Physics::iPhysicalSector* sector);
-    virtual void OnRemoved (CS::Physics::iPhysicalSector* sector);
+    virtual void OnAdded (csBulletSector* sector);
+    virtual void OnRemoved (csBulletSector* sector);
 
     virtual btActionInterface* GetBulletAction () { return btVehicle; }
   };

@@ -293,38 +293,14 @@ CS_PLUGIN_NAMESPACE_BEGIN (Bullet2)
     
     this->sector = sector;
 
-    if (sector)
+    // Update the engine sector of the attached objects
+    for (size_t i = 0; i < collisionObjects.GetSize (); i++)
     {
-      // sector is set
-
-      // add portal meshes
-      /*const csSet<csPtrKey<iMeshWrapper> >& portal_meshes = 
-        sector->GetPortalMeshes ();
-      csSet<csPtrKey<iMeshWrapper> >::GlobalIterator it = 
-        portal_meshes.GetIterator ();
-      while (it.HasNext ())
-      {
-        iMeshWrapper* portalMesh = it.Next ();
-        iPortalContainer* portalContainer = portalMesh->GetPortalContainer ();
-        int i; 
-        for (i = 0; i < portalContainer->GetPortalCount (); i++)
-        {
-          iPortal* portal = portalContainer->GetPortal (i);
-          AddPortal (portal, portalMesh->GetMovable ()->GetFullTransform ());
-        }
-      }*/
-
-      // add object meshes
-      for (size_t i = 0; i < collisionObjects.GetSize (); i++)
-      {
-        iCollisionObject* obj = collisionObjects[i];
-        AddSceneNodeToSector (obj->GetAttachedSceneNode ());
-      }
-    }
-    else
-    {
-      // sector is unset
-      // TODO: Remove meshes
+      iCollisionObject* object = collisionObjects[i];
+      if (object->GetAttachedSceneNode ())
+	object->GetAttachedSceneNode ()->GetMovable ()->SetSector (sector);
+      if (object->GetAttachedCamera ())
+	object->GetAttachedCamera ()->SetSector (sector);
     }
   }
 
@@ -483,39 +459,6 @@ CS_PLUGIN_NAMESPACE_BEGIN (Bullet2)
     joints.Delete (csJoint);
   }
 
-  void csBulletSector::AddSceneNodeToSector (iSceneNode* sceneNode)
-  {
-    // TODO: use iMovable::SetSector () instead (same everywhere)
-    if (sceneNode && sector)
-    {
-      iMeshWrapper* mesh = sceneNode->QueryMesh ();
-      iLight* light = sceneNode->QueryLight ();
-
-      if (mesh && size_t (sector->GetMeshes ()->Find (mesh)) == csArrayItemNotFound)
-      {
-        sector->GetMeshes ()->Add (mesh);
-      }
-
-      if (light && size_t (sector->GetLights ()->Find (light)) == csArrayItemNotFound)
-      {
-        sector->GetLights ()->Add (light);
-      }
-    }
-  }
-
-  void csBulletSector::RemoveSceneNodeFromSector (iSceneNode* sceneNode)
-  {
-    if (sceneNode && sector)
-    {
-      iMeshWrapper* mesh = sceneNode->QueryMesh ();
-      iLight* light = sceneNode->QueryLight ();
-      if (mesh)
-        sector->GetMeshes ()->Remove (mesh);
-      if (light)
-        sector->GetLights ()->Remove (light);
-    }
-  }
-
   void csBulletSector::AddCollisionObject (CS::Collisions::iCollisionObject* object)
   {
     if (object->GetSector ())
@@ -566,9 +509,16 @@ CS_PLUGIN_NAMESPACE_BEGIN (Bullet2)
       break;
     }
 
-    AddSceneNodeToSector (object->GetAttachedSceneNode ());
+    // Update the engine sector of the attached objects
+    if (object->GetAttachedSceneNode () && sector)
+    {
+      object->GetAttachedSceneNode ()->GetMovable ()->GetSectors ()->Add (sector);
+      object->GetAttachedSceneNode ()->GetMovable ()->UpdateMove ();
+    }
+    if (object->GetAttachedCamera () && sector)
+      object->GetAttachedCamera ()->SetSector (sector);
 
-    // add all objects to the collisionObjects list
+    // Add all objects to the collisionObjects list
     collisionObjects.Push (obj);
   }
 
@@ -582,7 +532,15 @@ CS_PLUGIN_NAMESPACE_BEGIN (Bullet2)
     if (removed)
     {
       collisionObjects.Delete (collObject);
-      RemoveSceneNodeFromSector (object->GetAttachedSceneNode ());
+
+      // Update the engine sector of the attached objects
+      if (object->GetAttachedSceneNode () && sector)
+      {
+	object->GetAttachedSceneNode ()->GetMovable ()->GetSectors ()->Remove (sector);
+	object->GetAttachedSceneNode ()->GetMovable ()->UpdateMove ();
+      }
+      if (object->GetAttachedCamera ())
+	object->GetAttachedCamera ()->SetSector (nullptr);
 
       if (collObject->GetObjectType () == CS::Collisions::COLLISION_OBJECT_ACTOR)
 	actors.Delete (static_cast<BulletCollisionActor*> (collObject));
