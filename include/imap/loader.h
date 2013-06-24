@@ -583,7 +583,7 @@ struct iThreadedLoader : public virtual iBase
   THREADED_INTERFACE4(LoadShader, const char* cwd, const char* filename, bool registerShader = true,
   bool do_verbose = false);
 
-  //@}
+  //@{
   /**
    * Load a map file. If 'clearEngine' is true then the current contents
    * of the engine will be deleted before loading.
@@ -722,7 +722,7 @@ struct iThreadedLoader : public virtual iBase
   THREADED_INTERFACE7(LoadLibrary, const char* cwd, csRef<iDocumentNode> lib_node, csRef<iCollection> collection = 0,
   csRef<iStreamSource> ssource = 0, csRef<iMissingLoaderData> missingdata = 0, uint keepFlags = KEEP_ALL,
   bool do_verbose = false);
-  //@)
+  //@}
 
   //@{
   /**
@@ -1055,7 +1055,7 @@ struct iLoader : public virtual iBase
     iCollection* Collection = 0, uint keepFlags = KEEP_ALL) = 0;
   //@}
 
-  //@}
+  //@{
   /**
    * Load a map file. If 'clearEngine' is true then the current contents
    * of the engine will be deleted before loading.
@@ -1196,7 +1196,7 @@ struct iLoader : public virtual iBase
   virtual bool LoadLibrary (iDocumentNode* lib_node, iCollection* collection = 0,
     bool searchCollectionOnly = true, bool checkDupes = false, iStreamSource* ssource = 0,
     iMissingLoaderData* missingdata = 0, uint keepFlags = KEEP_ALL) = 0;
-  //@)
+  //@}
 
   //@{
   /**
