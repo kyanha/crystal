@@ -87,8 +87,7 @@ CS_PLUGIN_NAMESPACE_BEGIN (Bullet2)
 
   csPtr<iVehicle> BulletVehicleFactory::CreateVehicle (CS::Physics::iPhysicalSector* isector)
   {
-    return new BulletVehicle (this);
-/*
+    // TODO: move this code in the vehicle constructor
     csRef<BulletVehicle> vehicle = csPtr<BulletVehicle> (new BulletVehicle (this));
     csBulletRigidBody* chassis = dynamic_cast<csBulletRigidBody*> (&*vehicle);
     // TODO: really?
@@ -136,7 +135,6 @@ CS_PLUGIN_NAMESPACE_BEGIN (Bullet2)
     }
     
     return csPtr<iVehicle> (vehicle);
-*/
   }
 
   CS::Physics::iVehicleBrake* BulletVehicleFactory::CreateBrake ()
@@ -277,30 +275,38 @@ CS_PLUGIN_NAMESPACE_BEGIN (Bullet2)
       }
     }
   }
-  
-  void BulletVehicle::OnAdded (iPhysicalSector* isector)
+
+  void BulletVehicle::OnAdded (csBulletSector* sector)
   {
     // TODO: Re-create the vehicle body here instead of at creation time in order
     // to get rid of the 'sector' creation parameter
 
-    // add wheels to sector
-    for (size_t i = 0; i < wheels.GetSize (); ++i)
-    {
-      iVehicleWheel* iwheel = wheels[i];
-      csBulletSector* sector = dynamic_cast<csBulletSector*> (isector);
-      sector->AddSceneNodeToSector (iwheel->GetAttachedSceneNode ());
-    }
+    // Add the wheel scene nodes to the engine sector
+    if (sector->sector)
+      for (size_t i = 0; i < wheels.GetSize (); ++i)
+      {
+	iVehicleWheel* wheel = wheels[i];
+	if (wheel->GetAttachedSceneNode ())
+	{
+	  wheel->GetAttachedSceneNode ()->GetMovable ()->GetSectors ()->Add (sector->sector);
+	  wheel->GetAttachedSceneNode ()->GetMovable ()->UpdateMove ();
+	}
+      }
   }
-  
-  void BulletVehicle::OnRemoved (iPhysicalSector* isector)
+
+  void BulletVehicle::OnRemoved (csBulletSector* sector)
   {
-    // remove wheels from sector
-    for (size_t i = 0; i < wheels.GetSize (); ++i)
-    {
-      iVehicleWheel* iwheel = wheels[i];
-      csBulletSector* sector = dynamic_cast<csBulletSector*> (isector);
-      sector->RemoveSceneNodeFromSector (iwheel->GetAttachedSceneNode ());
-    }
+    // Remove the wheel scene nodes from the engine sector
+    if (sector->sector)
+      for (size_t i = 0; i < wheels.GetSize (); ++i)
+      {
+	iVehicleWheel* wheel = wheels[i];
+	if (wheel->GetAttachedSceneNode ())
+	{
+	  wheel->GetAttachedSceneNode ()->GetMovable ()->GetSectors ()->Remove (sector->sector);
+	  wheel->GetAttachedSceneNode ()->GetMovable ()->UpdateMove ();
+	}
+      }
   }
 
 }

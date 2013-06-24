@@ -72,25 +72,48 @@ CS_PLUGIN_NAMESPACE_BEGIN (Bullet2)
   {
     if (sceneNode == newSceneNode) return;
 
-    if (sceneNode)
+    if (sceneNode && sector && sector->sector)
     {
-      // remove old SceneNode from sector
-      if (sector) sector->RemoveSceneNodeFromSector (sceneNode); 
+      // Remove the previous movable from the engine sector
+      sceneNode->GetMovable ()->GetSectors ()->Remove (sector->sector);
+      sceneNode->GetMovable ()->UpdateMove ();
     }
 
     sceneNode = newSceneNode;
+
     if (sceneNode) 
     {
-      // add new movable to sector
-      sceneNode->GetMovable ()->SetFullTransform (GetTransform ()); 
-      sceneNode->GetMovable ()->UpdateMove ();
-      if (sector)
+      sceneNode->GetMovable ()->SetFullTransform (GetTransform ());
+
+      if (sector && sector->sector)
       {
-        sector->AddSceneNodeToSector (sceneNode); 
+	// Add the new movable to the engine sector
+	sceneNode->GetMovable ()->GetSectors ()->Add (sector->sector);
+	sceneNode->GetMovable ()->UpdateMove ();
       }
     }
   }
   
+  void csBulletCollisionObject::SetAttachedCamera (iCamera* newCamera) 
+  { 
+    if (camera == newCamera) return;
+
+    if (camera && sector && sector->sector)
+    {
+      // Remove the previous camera from the engine sector
+      camera->SetSector (sector->sector);
+    }
+
+    camera = newCamera;
+    if (camera) 
+    {
+      // Add the new camera to the engine sector
+      //camera->SetTransform (GetTransform ());
+      if (sector && sector->sector)
+	camera->SetSector (sector->sector);
+    }
+  }
+
   void csBulletCollisionObject::SetCollider (CS::Collisions::iCollider* newCollider,
 					     const csOrthoTransform& transform)
   {

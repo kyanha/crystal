@@ -119,7 +119,7 @@ class SoftBodyControl : public scfImplementation2<SoftBodyControl,
     virtual const csBox3* UpdateBoundingBoxes (csTicks current, uint32 version_id);
 
   private:
-    SoftBodyControlFactory* factory;
+    csRef<SoftBodyControlFactory> factory;
     csWeakRef<iMeshObject> mesh;
     csRef<CS::Physics::iSoftBody> softBody;
     CS::Physics::MeshDuplicationMode duplicationMode;

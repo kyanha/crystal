@@ -230,10 +230,10 @@ public:
   { return nullptr; }
 
   /// Called when updatable is added to the given sector
-  virtual void OnAdded (CS::Physics::iPhysicalSector* sector) {}
+  virtual void OnAdded (csBulletSector* sector) {}
 
   /// Called when updatable is removed from the given sector
-  virtual void OnRemoved (CS::Physics::iPhysicalSector* sector) {} 
+  virtual void OnRemoved (csBulletSector* sector) {} 
 };
 }
 CS_PLUGIN_NAMESPACE_END (Bullet2)

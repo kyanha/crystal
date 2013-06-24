@@ -100,23 +100,26 @@ void PhysDemo::MoveActor ()
 {
   // Compute the rotation delta of the actor from the keys activated
   float yaw = 0.0f;
-  float pitch = 0.0f;
+  //float pitch = 0.0f;
   float rotationSpeed = vc->GetElapsedSeconds () * turnSpeed;
 
-  if (kbd->GetKeyState (CSKEY_RIGHT))
+  if (kbd->GetKeyState (CSKEY_SHIFT))
+    rotationSpeed *= 3.0f;
+
+  if (kbd->GetKeyState (CSKEY_RIGHT) && !kbd->GetKeyState (CSKEY_CTRL))
     yaw += rotationSpeed;
 
-  if (kbd->GetKeyState (CSKEY_LEFT))
+  if (kbd->GetKeyState (CSKEY_LEFT) && !kbd->GetKeyState (CSKEY_CTRL))
     yaw -= rotationSpeed;
-
+/*
   if (kbd->GetKeyState (KeyUp))
     pitch -= rotationSpeed;
 
   if (kbd->GetKeyState (KeyDown))
     pitch += rotationSpeed;
-
+*/
   // Apply the actor rotation
-  player.GetActor ()->Rotate (yaw, pitch);
+  player.GetActor ()->Rotate (yaw);
 
   // Compute the speed of the actor from the keys activated
   csVector3 speed (0.0f);
@@ -132,10 +135,12 @@ void PhysDemo::MoveActor ()
   if (kbd->GetKeyState (KeyBackward) || kbd->GetKeyState (CSKEY_DOWN))
     speed[2] -= motionSpeed;
 
-  if (kbd->GetKeyState (KeyLeft))
+  if (kbd->GetKeyState (KeyLeft)
+      || (kbd->GetKeyState (CSKEY_LEFT) && kbd->GetKeyState (CSKEY_CTRL)))
     speed[0] -= motionSpeed;
 
-  if (kbd->GetKeyState (KeyRight))
+  if (kbd->GetKeyState (KeyRight)
+      || (kbd->GetKeyState (CSKEY_RIGHT) && kbd->GetKeyState (CSKEY_CTRL)))
     speed[0] += motionSpeed;
 
   // Apply the actor speed
@@ -144,6 +149,8 @@ void PhysDemo::MoveActor ()
   // Jump if needed
   if (kbd->GetKeyState (KeyJump) && player.GetActor ()->IsOnGround ())
     player.GetActor ()->Jump ();
+
+  // TODO: Update the pitch of the camera
 }
 
 void PhysDemo::UpdateDragging ()
@@ -172,7 +179,8 @@ void PhysDemo::UpdateHUD ()
   hudManager->GetStateDescriptions ()->Empty ();
   csString txt;
 
-  if (actorVehicle || player.GetObject ()->QueryPhysicalBody ())
+  if (actorVehicle
+      || (player.GetObject () && player.GetObject ()->QueryPhysicalBody ()))
   {
     float speed;
     if (actorVehicle)
