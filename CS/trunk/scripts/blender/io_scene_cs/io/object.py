@@ -547,7 +547,7 @@ def IsExportable(self):
                (ob.parent.type=='MESH' and not ob.parent.hide)
       return False
 
-    if not IsChildOfExportedFactory(self) and not self.data.portal \
+    if not IsChildOfExportedFactory(self) and not self.portal \
           and len(self.data.vertices)!=0 and len(self.data.all_faces)!=0:
       return True
     return False      

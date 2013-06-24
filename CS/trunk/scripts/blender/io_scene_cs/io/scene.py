@@ -62,30 +62,13 @@ def SceneAsCS(self, func, depth=0):
 bpy.types.Scene.AsCS = SceneAsCS
 
 
-def GetTarget(name):
-  """ Search for the object called 'name' in the current world.
-      Return the object and the scene it belongs to if it was found; 
-      None otherwise
-  """
-  targetOb = None
-  targetSc = None
-  for sc in bpy.data.scenes:
-    for ob in sc.objects:
-      if ob.name == name:
-        targetOb = ob
-        targetSc = sc
-        break
-
-  return targetOb, targetSc
-
-
 def PortalsAsCS(self, func, depth=0):
   """ Export portals defined in the current scene and
       return them as a list of objects
   """
   epsilon = 1e-7
   portals = []
-  for ob in [o for o in self.objects if o.type=='MESH' and o.data.portal]:
+  for ob in [o for o in self.objects if o.type=='MESH' and o.portal]:
     portals.append(ob)
     # Check if the portal is visible
     if ob.hide:
@@ -96,22 +79,34 @@ def PortalsAsCS(self, func, depth=0):
       print("\nWARNING: portal '%s' not exported: this mesh has no vertex"%(ob.name))
       continue
 
-    # Find the destination mesh and scene
+    # Find the destination scene
     source = ob
-    destName = source.data.destinationPortal
-    destObject, destScene = GetTarget(destName)
-    if destObject == None:
-      print("\nWARNING: portal '%s' not exported: target mesh '%s' " \
-              "is not a valid object name"%(source.name,destName))
+    destScName = source.portalDestScene
+    scenes = [s.name for s in bpy.data.scenes]
+    if destScName == '' or not destScName in scenes:
+      print("WARNING: portal '%s' not exported: target scene '%s' " \
+            "is not a valid scene name"%(source.name,destScName))
       continue
+    destScene = bpy.data.scenes[destScName]
+
+    # Find the destination mesh object
+    destObjName = source.portalDestObject
+    objects = [o.name for o in destScene.objects]
+    if destObjName == '' or not destObjName in objects:
+      print("WARNING: portal '%s' not exported: target mesh '%s' " \
+            "is not a valid object name"%(source.name,destObjName))
+      continue
+    destObject = destScene.objects[destObjName]
 
     # Export the portal
     func(' '*depth +'  <portals name="%s">'%(ob.uname))
     func(' '*depth +'    <portal>')
-    # Write the position of the portal (i.e. the coordinates of its vertices)
-    for v in ob.data.vertices:
-      vPos = ob.relative_matrix * v.co
+
+    # Write the position of portal (i.e. the coordinates of its vertices)
+    for v in source.data.vertices:
+      vPos = source.relative_matrix * v.co
       func(' '*depth +'      <v x="%f" z="%f" y="%f" />'%(tuple(vPos)))
+
     # Write the name of the destination sector
     func(' '*depth +'      <sector>%s</sector>'%(destScene.uname))
 

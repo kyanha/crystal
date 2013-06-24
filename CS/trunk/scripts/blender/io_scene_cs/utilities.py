@@ -21,6 +21,9 @@ def rnaType(rna_type):
     if bpy: bpy.utils.register_class(rna_type)
     return rna_type
 
+def rnaOperator(rna_op):
+    #if bpy: bpy.types.register(rna_op)
+    return rna_op
   
 def Property(typ, types, **kwargs):
   attr = kwargs['attr']
