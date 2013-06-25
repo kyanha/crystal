@@ -8,9 +8,9 @@ in the file is exported as a Crystal Space sector, and the use of specific meshe
 define portals between them.
 
 This is made using the @samp{Crystal Space Portal} panel that is found in the
-@samp{Object Data} context of the @samp{Properties} window:
+@samp{Object} context of the @samp{Properties} window:
 
-@picturess{content,blender,io_scene_cs_portal}
+@picturess{content,blender,io_scene_cs_portal_1}
 
 @subsubheading Creating portals
 
@@ -23,21 +23,48 @@ limitation and a portal is allowed to lead to the same sector than the starting 
 You must pay attention to the shape of your source mesh as well as to the order of its
 vertices. The shape of the mesh will be used as the one of the Crystal Space portal, but
 one tricky problem is that the order of creation of the vertices will also define its
-orientation. For a correct behavior, be sure to create the vertices of your source mesh
-in clockwise order when you look at the portal.
+orientation. For a correct behavior, be sure to @strong{create the vertices of your source mesh
+in clockwise order when you look at the portal}.
 
 Unless you plan to create another portal to go back in the other direction, the actual
 shape of the destination mesh has no importance at all, only its position will be important.
 
 Once the two portal meshes are created, select the source mesh, go to the
-@samp{Crystal Space Portal} panel, and activate the @samp{Portal} checkbox. A text entry
-@samp{Destination mesh} appears, you must now type into it the name of the destination mesh
-of the portal. Once done, the object will be exported as a portal instead of a mesh.
+@samp{Crystal Space Portal} panel, and activate the @samp{Portal} checkbox. A drop-down
+list @samp{Destination scene} appears, you must now select the destination scene
+of the portal. You can reset the portal configuration by selecting scene @samp{NONE}. 
+Once le scene is selected, a second drop-down list @samp{Destination object} and a button 
+@samp{Create destination portal} appear:
+
+@picturess{content,blender,io_scene_cs_portal_2}
+
+The list is composed of all mesh objects belonging to selected scene. Once its destination
+mesh is selected, current object will be exported as a portal instead of a mesh. Select 
+@samp{NONE} entry to reset the selection tool.
+
+Commonly, the destination object will be defined as a portal that leads back to the 
+source portal. To do this, select the object, check its @samp{Portal} option 
+in @samp{Crystal Space Portal} panel, then select its destination scene and object. 
+Both objects will be exported as portals instead of meshes.
 
 You must also pay attention to the relative transform of the source and destination meshes
 since it will define the warping transform that is applied when crossing the portal. If the
 source and the destination of the portal are the same (i.e. there is no warping transform),
 then the two meshes should be at the same position.
+
+@subsubheading Automatic creation of destination portal
+
+Last section explains how to manually create two corresponding portals. Here is a tool 
+to automatically generate the destination portal of a mesh.
+
+Unlike preceding method where a corresponding mesh had to be manually created, then 
+selected as destination object of a portal and finally configured itself as a portal,
+all these steps are automatically performed by button '@strong{Create destination portal}'.
+
+Once the source mesh is correctly created, select it, check its @samp{Portal} option and select 
+its destination scene. Instead of selecting a destination object, click on the @samp{Create 
+destination portal} button. It will generate an identical mesh of current one (same position and 
+orientation) in the destination scene and configure it as a portal to go back to current scene.
 
 @subsubheading The @samp{portaltut} example file
 
@@ -72,7 +99,7 @@ Create the source mesh of the portal: add a new dummy mesh, e.g. a cube, then go
 
 @item
 Create the vertices of the source mesh: use @samp{Ctrl-LMB} for all vertices, being sure to
-turn in clockwise order. You can create a face after that.
+turn in clockwise order. You can create a face after that by pressing @samp{F}.
 
 @picturess{content,blender,portals_04}
 
@@ -83,10 +110,17 @@ the mesh has been renamed purposely @samp{PortalA2C}.
 @picturess{content,blender,portals_05}
 
 @item
-Now we will create the destination mesh: in object mode, select your source mesh and duplicate it with
-@samp{Shift-D + LMB}, create a link to it in the scene @samp{Corridor} with @samp{Ctrl-L}
-then @samp{Objects to scene}, delete the copy in the first scene, then finally rename your
-destination mesh into @samp{PortalC2A}.
+Now we will create the destination mesh. There is two ways to do this: a manual creation
+or an automatic creation.
+
+1. Manual creation of destination portal:
+
+@itemize @bullet
+@item
+In object mode, select your source mesh and duplicate it with @samp{Shift-D + LMB}, create 
+a link to it in the scene @samp{Corridor} with @samp{Ctrl-L} then @samp{Objects to scene}, 
+delete the copy in the first scene, then finally rename your destination mesh into 
+@samp{PortalC2A}.
 
 @item
 Re-orient the vertices of the destination mesh: since the mesh is a copy of the original
@@ -97,15 +131,37 @@ this, go to @samp{Edit} mode, select all the vertices and rotate them with @samp
 @picturess{content,blender,portals_06}
 
 @item
-Now that both meshes have been created, we can define them as portals. Select the source mesh,
-go to the @samp{Crystal Space Portal} panel (in the @samp{Object Data} context of the
-@samp{Properties} window), select the checkbox @samp{Portal}, and enter the name of the
-destination mesh, i.e. @samp{PortalC2A}. Repeat the same process for the destination mesh in
-order to define a portal back to the first room.
+Now that both meshes have been created, we can define them as portals. Select the source mesh 
+@samp{PortalA2C}, go to the @samp{Crystal Space Portal} panel (in the @samp{Object} context of the
+@samp{Properties} window), check the @samp{Portal} property, select destination scene, i.e. 
+@samp{Corridor}, and destination mesh, i.e. @samp{PortalC2A}.
 
 @picturess{content,blender,portals_07}
 
+Repeat the same process for the destination mesh in order to define a portal back to the first room.
+
+@end itemize
+
+2. Automatic creation of destination portal:
+
+@itemize @bullet
 @item
+In object mode, select your source mesh @samp{PortalA2C}, go to the @samp{Crystal Space Portal} 
+panel, check the @samp{Portal} property and select the destination scene, i.e. @samp{Corridor}.
+
+@picturess{content,blender,portals_08}
+
+@item
+Then press button @samp{Create destination portal}. It will automatically create a destination 
+mesh called @samp{portaltoRoomA_1} in @samp{Corridor} scene and configure it as a portal leading 
+back to current scene @samp{RoomA}.
+
+@picturess{content,blender,portals_09}
+
+@end itemize
+
+@item
+
 Repeat the process for the other portals leading to the second room. Here is the result once
 you press the @samp{Export and Run} button:
 
@@ -119,16 +175,18 @@ If some of the portals don't look ok while exporting Blender worlds, check that:
 
 @itemize @bullet
 @item
-the name of the destination mesh has been accepted, i.e. the error message
-@samp{ERROR: unknown mesh name} does not appear in the portal tool panel.
+the name of the destination object is valid, i.e. the error message
+@samp{WARNING: destination objet has been deleted!} does not appear in the portal tool panel.
 @item
 there is no error message on the console.
 @item
 you have defined the vertices of the portal in clockwise order (if done wrong, you
-may typically see some problems with the triangles of the portal).
+may typically see a black face in place of your portal).
 @item
-the destination mesh is not linked at several places in the scenes (in this case, the
-script will randomly pick one of those linked meshes).
+the destination mesh is not linked to the source mesh, i.e. both objects don't share the same 
+datablock (in this case, the script won't be able to generate valid portals since both of them 
+share the same vertex list, making impossible to define one portal in clockwise order and the 
+other in counter-clockwise order).
 @item
 the relative position of the source and the destination mesh corresponds correctly
 to the warping transform of the portal (i.e. they are at the same position if the
