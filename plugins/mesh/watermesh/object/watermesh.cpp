@@ -363,7 +363,7 @@ csRenderMesh** csWaterMeshObject::GetRenderMeshes (
 {
   n = 0;
 
-  if (vis_cb) if (!vis_cb->BeforeDrawing (this, rview)) return false;
+  if (vis_cb) if (!vis_cb->BeforeDrawing (this, rview)) return 0;
 
   iCamera* camera = rview->GetCamera ();
 
