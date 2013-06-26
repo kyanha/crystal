@@ -157,7 +157,7 @@ const char *csSkeletonFactoryLoader::ParseBone (iDocumentNode* node,
           {
             csVector3 v;
             if (!SyntaxService->ParseVector (vector_node, v))
-              return false;
+              return 0;
             bone->GetTransform ().SetOrigin (v);
           }
 
@@ -166,7 +166,7 @@ const char *csSkeletonFactoryLoader::ParseBone (iDocumentNode* node,
           {
             csMatrix3 m;
             if (!SyntaxService->ParseMatrix (matrix_node, m))
-              return false;
+              return 0;
             bone->GetTransform ().SetO2T (m);
           }
         }
@@ -201,7 +201,7 @@ const char *csSkeletonFactoryLoader::ParseBone (iDocumentNode* node,
             {
               csVector3 v;
               if (!SyntaxService->ParseVector (vector_node, v))
-              return false;
+              return 0;
               socket_transform.SetOrigin (v);
             }
     
@@ -210,7 +210,7 @@ const char *csSkeletonFactoryLoader::ParseBone (iDocumentNode* node,
             {
               csMatrix3 m;
               if (!SyntaxService->ParseMatrix (matrix_node, m))
-              return false;
+              return 0;
               socket_transform.SetO2T (m);
             }
             socket->SetTransform(socket_transform);
@@ -550,7 +550,7 @@ const char *csSkeletonFactoryLoader::ParseFrame (iDocumentNode* node,
           {
           csVector3 v;
           if (!SyntaxService->ParseVector (vector_node, v))
-            return false;
+            return 0;
           key_transform.SetOrigin (v);
           }
 
@@ -559,7 +559,7 @@ const char *csSkeletonFactoryLoader::ParseFrame (iDocumentNode* node,
           {
           csMatrix3 m;
           if (!SyntaxService->ParseMatrix (matrix_node, m))
-            return false;
+            return 0;
           key_transform.SetO2T (m);
           }
         }
