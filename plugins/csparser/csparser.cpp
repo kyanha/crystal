@@ -1286,7 +1286,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
         {
           csColor c;
           if (!SyntaxService->ParseColor (child, c))
-            return false;
+            return 0;
           sector->SetDynamicAmbientLight (c);
         }
         break;
@@ -1479,7 +1479,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
           iRenderLoop* loop = ParseRenderLoop (child, set);
           if (!loop)
           {
-            return false;
+            return 0;
           }
           if (set)
           {
@@ -1661,7 +1661,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
         return 0;
       case XMLTOKEN_KEY:
         if (!ParseKey (child, pNode->QueryObject()))
-          return false;
+          return 0;
         break;
       case XMLTOKEN_POSITION:
         if (!SyntaxService->ParseVector (child, pos))
