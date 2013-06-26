@@ -1012,7 +1012,7 @@ printf("%s\n",fn.GetData());
   else
   {
     // Something we can't return was requested
-    return false;
+    return 0;
   }
 }
 
