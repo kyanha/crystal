@@ -514,7 +514,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(Skeleton2Ldr)
     if (!name)
     {
       synldr->ReportError (msgid, node, "No name set for animation");
-      return false;
+      return 0;
     }
 
     CS::Animation::iSkeletonAnimation* fact = packet->CreateAnimation (name);
@@ -522,7 +522,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(Skeleton2Ldr)
     {
       synldr->ReportError (msgid, node, 
         "Could not create animation, another animation with same name already exist");
-      return false;
+      return 0;
     }
 
     if (node->GetAttributeValueAsBool ("bindspace", false))
