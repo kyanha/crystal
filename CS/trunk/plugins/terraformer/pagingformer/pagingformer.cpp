@@ -1159,7 +1159,7 @@ const int *csPagingSampler::SampleInteger (csStringID type)
   else
   {
     // Something we can't return was requested
-    return false;
+    return 0;
   }
 }
 
