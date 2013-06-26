@@ -269,7 +269,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(Animeshldr)
 	    {
 	      csRef<csShaderVariable> sv;
 	      sv.AttachNew (new csShaderVariable);
-	      if (!synldr->ParseShaderVar (ldr_context, child2, *sv)) return false;
+	      if (!synldr->ParseShaderVar (ldr_context, child2, *sv)) return 0;
 	      shadervars.Push (sv);
 	      break;
 	    }
