@@ -185,7 +185,7 @@ public:
 
   virtual csPtr<iStringArray> GetEffectors() { return 0; }
 
-  virtual iParticleEmitter* AddEmitter(uint type) { return false; }
+  virtual iParticleEmitter* AddEmitter(uint type) { return 0; }
 
   virtual bool DeleteEmitter(uint idx) { return false; }
 
@@ -207,7 +207,7 @@ public:
   virtual bool SetEmitterPropValue(iParticleEmitter* emitter, uint id, csVector3& val) { return false; }
   virtual bool SetEmitterPropValue(iParticleEmitter* emitter, uint id, csColor4& val) { return false; }
 
-  virtual iParticleEffector* AddEffector(uint type) { return false; }
+  virtual iParticleEffector* AddEffector(uint type) { return 0; }
 
   virtual bool DeleteEffector(uint idx) { return false; }
 
