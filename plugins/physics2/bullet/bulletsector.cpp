@@ -536,7 +536,7 @@ CS_PLUGIN_NAMESPACE_BEGIN (Bullet2)
       // Update the engine sector of the attached objects
       if (object->GetAttachedSceneNode () && sector)
       {
-	object->GetAttachedSceneNode ()->GetMovable ()->GetSectors ()->Remove (sector);
+	object->GetAttachedSceneNode ()->GetMovable ()->SetSector (nullptr);
 	object->GetAttachedSceneNode ()->GetMovable ()->UpdateMove ();
       }
       if (object->GetAttachedCamera ())

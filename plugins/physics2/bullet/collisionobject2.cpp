@@ -75,7 +75,7 @@ CS_PLUGIN_NAMESPACE_BEGIN (Bullet2)
     if (sceneNode && sector && sector->sector)
     {
       // Remove the previous movable from the engine sector
-      sceneNode->GetMovable ()->GetSectors ()->Remove (sector->sector);
+      sceneNode->GetMovable ()->SetSector (nullptr);
       sceneNode->GetMovable ()->UpdateMove ();
     }
 
@@ -88,7 +88,7 @@ CS_PLUGIN_NAMESPACE_BEGIN (Bullet2)
       if (sector && sector->sector)
       {
 	// Add the new movable to the engine sector
-	sceneNode->GetMovable ()->GetSectors ()->Add (sector->sector);
+	sceneNode->GetMovable ()->SetSector (sector->sector);
 	sceneNode->GetMovable ()->UpdateMove ();
       }
     }
