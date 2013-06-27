@@ -288,7 +288,7 @@ CS_PLUGIN_NAMESPACE_BEGIN (Bullet2)
 	iVehicleWheel* wheel = wheels[i];
 	if (wheel->GetAttachedSceneNode ())
 	{
-	  wheel->GetAttachedSceneNode ()->GetMovable ()->GetSectors ()->Add (sector->sector);
+	  wheel->GetAttachedSceneNode ()->GetMovable ()->SetSector (sector->sector);
 	  wheel->GetAttachedSceneNode ()->GetMovable ()->UpdateMove ();
 	}
       }
@@ -303,7 +303,7 @@ CS_PLUGIN_NAMESPACE_BEGIN (Bullet2)
 	iVehicleWheel* wheel = wheels[i];
 	if (wheel->GetAttachedSceneNode ())
 	{
-	  wheel->GetAttachedSceneNode ()->GetMovable ()->GetSectors ()->Remove (sector->sector);
+	  wheel->GetAttachedSceneNode ()->GetMovable ()->SetSector (nullptr);
 	  wheel->GetAttachedSceneNode ()->GetMovable ()->UpdateMove ();
 	}
       }
