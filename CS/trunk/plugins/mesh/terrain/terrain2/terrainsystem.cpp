@@ -138,9 +138,12 @@ iTerrainCell* csTerrainSystem::GetCell (const char* name, bool loadData)
 
   for (size_t i = 0; i < cells.GetSize (); ++i)
   {
-    if (!strcmp (cells[i]->GetName (), name))
+    const char* cellName = cells[i]->GetName ();
+    if (cellName == 0) continue;
+    if (!strcmp (cellName, name))
     {
       cell = cells[i];
+      break;
     }
   }
 
@@ -156,17 +159,18 @@ iTerrainCell* csTerrainSystem::GetCell (const csVector2& pos, bool loadData)
 {
   iTerrainCell* cell = 0;
 
-  for (size_t i = 0; i < cells.GetSize (); ++i)
+  for (size_t i = cells.GetSize (); i > 0; i--)
   {
-    const csVector2& cell_pos = cells[i]->GetPosition ();
-    const csVector3& cell_size = cells[i]->GetSize ();
+    const csVector2& cell_pos = cells[i - 1]->GetPosition ();
+    const csVector3& cell_size = cells[i - 1]->GetSize ();
 
     if (cell_pos.x <= pos.x + EPSILON &&
         cell_pos.x + cell_size.x >= pos.x - EPSILON &&
         cell_pos.y <= pos.y + EPSILON &&
         cell_pos.y + cell_size.z >= pos.y - EPSILON)
     {
-      cell = cells[i];
+      cell = cells[i - 1];
+      break;
     }
   }
 
