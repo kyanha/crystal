@@ -38,6 +38,7 @@ csCommonImageFileLoader::~csCommonImageFileLoader()
   delete[] indexData;
   delete[] palette;
   delete[] rgbaData;
+  delete[] alpha;
 }
 
 void csCommonImageFileLoader::ApplyTo (csImageMemory* image)
