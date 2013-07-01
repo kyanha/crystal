@@ -1,7 +1,7 @@
 
 import bpy
 
-from io_scene_cs.utilities import rnaType, B2CS, EnumProperty, StringProperty, FloatProperty, SHADERS
+from io_scene_cs.utilities import rnaType, B2CS, EnumProperty, StringProperty, FloatProperty, SHADERS, GetShaderName
 
 
 class csMaterialPanel():
@@ -37,12 +37,16 @@ class MATERIAL_PT_B2CS__context_material(csMaterialPanel, bpy.types.Panel):
           row.prop(mat, "priority")
           row = layout.row()
           row.prop(mat, "zbuf_mode")
-          row = layout.row()
-          row.prop(mat, "water_fog_color")
-          row = layout.row()
-          row.prop(mat, "water_perturb_scale")
-          row = layout.row()
-          row.prop(mat, "water_fog_density")
+          name1 = GetShaderName(mat.ambient_step)
+          name2 = GetShaderName(mat.diffuse_step)
+          if name1 == 'reflect_water_plane' or \
+                name2 == 'reflect_water_plane':
+            row = layout.row()
+            row.prop(mat, "water_fog_color")
+            row = layout.row()
+            row.prop(mat, "water_perturb_scale")
+            row = layout.row()
+            row.prop(mat, "water_fog_density")
 
        
         
