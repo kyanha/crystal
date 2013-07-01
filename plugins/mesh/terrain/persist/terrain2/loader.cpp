@@ -370,8 +370,9 @@ bool csTerrain2FactoryLoader::ParseCell (iDocumentNode *node,
       const char* name = child->GetContentsValue ();
       if (name && fact->GetCell (name))
       {
-	synldr->ReportError (
+	synldr->Report (
 	  "crystalspace.terrain.object.loader.cell",
+	  CS_REPORTER_SEVERITY_WARNING,
 	  child, "Another cell with the name %s already exists",
 	  CS::Quote::Single (name));
 	return false;
