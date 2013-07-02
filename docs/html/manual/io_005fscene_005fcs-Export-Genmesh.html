@@ -62,7 +62,7 @@ ul.toc {list-style: none}
 <h3 class="subsection"> 5.8.4 Exporting Static Meshes </h3>
 
 <p>If a Blender mesh object has neither an armature nor any shape keys, then it will be
-exported as a <a href="MeshObject-Genmesh.html#0">Genmesh Mesh Object</a>. In the other case, then it
+exported as a <a href="MeshObject-Genmesh.html#0">Genmesh Mesh Object</a>. In other cases, it
 will be <a href="io_005fscene_005fcs-Export-Animesh.html#0">exported as an animated mesh</a>.
 </p>
 <a name="1"></a>
@@ -130,13 +130,19 @@ of the <samp>&lsquo;Mesh Tools&rsquo;</samp> window. If you select this option t
 normals and these normals are then also exported to Crystal Space.
 </p>
 <a name="5"></a>
-<h4 class="subsubheading"> Warning on the Blender Object Modifiers </h4>
+<h4 class="subsubheading"> Blender Object Modifiers </h4>
 
-<p>The Blender object modifiers that can be defined in the <samp>&lsquo;Object Modifier&rsquo;</samp>
-context of the <samp>&lsquo;Properties&rsquo;</samp> window are not supported by the <code>io_scene_cs</code> add-on.
-Please make sure that all modifiers are either applied or removed before exporting your mesh.
+<p>The Blender object modifiers that can be defined in the <samp>&lsquo;Object Modifiers&rsquo;</samp>
+context of the <samp>&lsquo;Properties&rsquo;</samp> window are supported by the <code>io_scene_cs</code> add-on
+for static meshes. They will be automatically applied to Genmeshes before the export.
 </p>
-
+<p>One particular case can alter this default behaviour: static meshes having only <samp>&lsquo;Array&rsquo;</samp> modifiers 
+with <samp>&lsquo;Fixed Count&rsquo;</samp> copies. For such objects, an additional panel called <samp>&lsquo;Crystal Space 
+Modifier&rsquo;</samp> allows the activation of option <samp>&lsquo;Export arrays as mesh factory instances&rsquo;</samp>. 
+If this option is activated, only the raw object is actually exported as mesh factory while each 
+array copy of the object is exported as an instance of the factory in <samp>&lsquo;world&rsquo;</samp> file, allowing 
+to spare memory space.
+</p>
 <hr size="1">
 <table cellpadding="1" cellspacing="1" border="0">
 <tr><td valign="middle" align="left">[<a href="io_005fscene_005fcs-Export-Scenes.html#0" title="Previous section in reading order"> &lt; </a>]</td>
