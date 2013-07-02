@@ -240,6 +240,10 @@ bool csTerrainSystem::CollideSegment (const csVector3& start, const csVector3&
       if (csIntersect3::BoxSegment (box, seg, isect) >= 0)
         seg.SetStart (isect);
 
+      // Load the cell if it is not yet made
+      if (cells[i]->GetLoadState () != csTerrainCell::Loaded)
+        cells[i]->SetLoadState (csTerrainCell::Loaded);
+
       if (cells[i]->CollideSegment (seg.End (), seg.Start (), oneHit, points)
           && oneHit)
       {
@@ -275,6 +279,10 @@ bool csTerrainSystem::CollideSegment (const csVector3& start, const csVector3& e
       if (csIntersect3::BoxSegment (box, seg, isect) >= 0)
         seg.SetStart (isect);
 
+      // Load the cell if it is not yet made
+      if (cells[i]->GetLoadState () != csTerrainCell::Loaded)
+        cells[i]->SetLoadState (csTerrainCell::Loaded);
+
       if (cells[i]->CollideSegment (seg.End (), seg.Start (), hitPoint))
       {
         if (hitMaterial)
@@ -305,6 +313,10 @@ csTerrainColliderCollideSegmentResult csTerrainSystem::CollideSegment (
 
     if (csIntersect3::ClipSegmentBox (seg, box, use_ray))
     {
+      // Load the cell if it is not yet made
+      if (cells[i]->GetLoadState () != csTerrainCell::Loaded)
+        cells[i]->SetLoadState (csTerrainCell::Loaded);
+
       rc = cells[i]->CollideSegment (seg.End (), seg.Start ());
       if (rc.hit)
         return rc;
@@ -333,10 +345,9 @@ bool csTerrainSystem::CollideTriangles (const csVector3* vertices,
 
     if (csIntersect3::BoxSphere (box, sphere.GetCenter (), sphere.GetRadius ()))
     {
+      // Load the cell if it is not yet made
       if (cells[i]->GetLoadState () != csTerrainCell::Loaded)
-      {
         cells[i]->SetLoadState (csTerrainCell::Loaded);
-      }
 
       if (cells[i]->CollideTriangles (vertices, tri_count, indices, radius,
           trans, oneHit, pairs) && oneHit)
@@ -365,6 +376,10 @@ bool csTerrainSystem::Collide (iCollider* collider,
 
     if (csIntersect3::BoxSphere (box, sphere.GetCenter (), sphere.GetRadius ()))
     {
+      // Load the cell if it is not yet made
+      if (cells[i]->GetLoadState () != csTerrainCell::Loaded)
+        cells[i]->SetLoadState (csTerrainCell::Loaded);
+
       if (cells[i]->Collide (collider, radius, trans, oneHit, pairs) &&
         oneHit)
         return true;
@@ -435,7 +450,14 @@ float csTerrainSystem::GetHeight (const csVector2& pos)
   iTerrainCell* cell = GetCell (pos);
   
   if (cell) 
+  {
+    // Load the cell if it is not yet made
+    if (cell->GetLoadState () != csTerrainCell::Loaded)
+      cell->SetLoadState (csTerrainCell::Loaded);
+
     return cell->GetHeight (pos - cell->GetPosition ());
+  }
+
   else 
     return 0;
 }
@@ -445,7 +467,14 @@ csVector3 csTerrainSystem::GetTangent (const csVector2& pos)
   iTerrainCell* cell = GetCell (pos);
   
   if (cell) 
+  {
+    // Load the cell if it is not yet made
+    if (cell->GetLoadState () != csTerrainCell::Loaded)
+      cell->SetLoadState (csTerrainCell::Loaded);
+
     return cell->GetTangent (pos - cell->GetPosition ());
+  }
+
   else 
     return csVector3(0, 0, 0);
 }
@@ -455,7 +484,14 @@ csVector3 csTerrainSystem::GetBinormal (const csVector2& pos)
   iTerrainCell* cell = GetCell (pos);
   
   if (cell) 
+  {
+    // Load the cell if it is not yet made
+    if (cell->GetLoadState () != csTerrainCell::Loaded)
+      cell->SetLoadState (csTerrainCell::Loaded);
+
     return cell->GetBinormal (pos - cell->GetPosition ());
+  }
+
   else 
     return csVector3(0, 0, 0);
 }
@@ -465,7 +501,14 @@ csVector3 csTerrainSystem::GetNormal (const csVector2& pos)
   iTerrainCell* cell = GetCell (pos);
   
   if (cell) 
+  {
+    // Load the cell if it is not yet made
+    if (cell->GetLoadState () != csTerrainCell::Loaded)
+      cell->SetLoadState (csTerrainCell::Loaded);
+
     return cell->GetNormal (pos - cell->GetPosition ());
+  }
+
   else 
     return csVector3(0, 0, 0);
 }
