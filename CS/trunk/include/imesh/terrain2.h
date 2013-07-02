@@ -605,28 +605,27 @@ struct iTerrainSystem : public virtual iBase
   /**
    * Query a cell by name
    *
-   * \param name name of cell
-   * \param load set if cell should be loaded if it isn't. Default is not
-   * to load cell data.
-   * \return pointer to the cell with the given name, or NULL, if none found
+   * \param name Name of the cell
+   * \param loadData Whether or not the cell should be loaded if it hasn't yet
+   * been made. The default is to not load the cell data.
+   * \return A pointer to the cell with the given name, or nullptr if none is
+   * found. In case several cells have the same name, this method will return the
+   * first to be met.
    */
   virtual iTerrainCell* GetCell (const char* name, bool loadData = false) = 0;
 
   /**
    * Query a cell by position
    *
-   * \param load set if cell should be loaded if it isn't. Default is not
-   * to load cell data.
-   * \return pointer to the first cell which intersects with the vertical ray
-   * of given position, or NULL if none found
-   *
-   * \rem this will perform cell loading if the resulted cell was not
-   * completely loaded
+   * \param loadData Whether or not the cell should be loaded if it hasn't yet
+   * been made. The default is to not load the cell data.
+   * \return A pointer to the first cell which intersects with the vertical ray
+   * of the given position, or nullptr if none is found.
    */
   virtual iTerrainCell* GetCell (const csVector2& pos, bool loadData = false) = 0;
 
   /**
-   * Query a cell by index (0 to GetCellCount ()).
+   * Query a cell by index (0 to GetCellCount () - 1).
    *
    * \param load set if cell should be loaded if it isn't. Default is not to
    * load cell data.
@@ -634,12 +633,12 @@ struct iTerrainSystem : public virtual iBase
   virtual iTerrainCell* GetCell (size_t index, bool loadData = false) = 0;
 
   /**
-   * Get total number of cells in terrain (loaded or not)
+   * Get the total number of cells in the terrain (loaded or not)
    */
   virtual size_t GetCellCount () const = 0;
 
   /**
-   * Get material palette. The material map indices index this array.
+   * Get the material palette. The material map indices index this array.
    *
    * \return material palette
    */
@@ -924,6 +923,12 @@ struct iTerrainSystem : public virtual iBase
  * rendering, etc.) are done at cell level.
  *
  * A cell can be created via iTerrainFactory interface.
+ *
+ * \rem Pay attention that most data access that are performed through the
+ * methods in this interface will need that the cell is actually loaded in
+ * order to work correctly. A workaround this problem is to launch manually
+ * the loading of the cell through the method SetLoadState() before accessing
+ * its data.
  */
 struct iTerrainCell : public virtual iBase
 {
@@ -1698,7 +1703,12 @@ struct iTerrainFactory : public virtual iBase
    */
   virtual iTerrainFactoryCell* AddCell () = 0;
 
-  /// Get a cell in this factory by name
+  /**
+   * Get a cell in this factory by name
+   * \return A pointer to the cell factory with the given name, or nullptr if none
+   * is found. In case several cells have the same name, this method will return the
+   * first to be met.
+   */
   virtual iTerrainFactoryCell* GetCell (const char* name) = 0;
 
   /// Remove the given cell from this factory
