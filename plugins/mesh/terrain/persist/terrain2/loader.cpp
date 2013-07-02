@@ -375,7 +375,6 @@ bool csTerrain2FactoryLoader::ParseCell (iDocumentNode *node,
 	  CS_REPORTER_SEVERITY_WARNING,
 	  child, "Another cell with the name %s already exists",
 	  CS::Quote::Single (name));
-	return false;
       }
     }
 #endif
