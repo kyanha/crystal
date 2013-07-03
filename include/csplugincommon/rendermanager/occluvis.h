@@ -193,6 +193,10 @@ namespace CS
 
         ~NodeMeshList ()
         {
+          for (int m = 0; m < numMeshes; ++m)
+          {
+            delete[] meshList[m].rmeshes;
+          }
           delete[] meshList;
         }
 
