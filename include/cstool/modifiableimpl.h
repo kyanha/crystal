@@ -1,5 +1,6 @@
 /*
-  Copyright (C) 2012 Christian Van Brussel, Andrei Barsan
+  Copyright (C) 2012-2013 by Christian Van Brussel
+  Copyright (C) 2012 by Andrei Barsan
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Library General Public
@@ -39,37 +40,37 @@ namespace Utility {
   virtual inline void RemoveListener (iModifiableListener* listener) {listeners.Delete (listener);}
   
 #define MODIF_GETDESCRIPTION_BEGIN(label, name)				\
-  csPtr<iModifiableDescription> GetDescription (iObjectRegistry* object_reg) const \
+  virtual csPtr<iModifiableDescription> GetDescription (iObjectRegistry* object_reg) const \
   {									\
-    csBasicModifiableDescription* description = new csBasicModifiableDescription (label, name); \
-    csRef<csBasicModifiableParameter> parameter;			\
+    BaseModifiableDescription* description = new BaseModifiableDescription (label, name); \
+    csRef<BaseModifiableParameter> parameter;				\
     csRef<iModifiableConstraint> constraint;				\
     csRef<iStringSet> strings =						\
       csQueryRegistryTagInterface<iStringSet> (object_reg, "crystalspace.shared.stringset"); \
     csStringID id;
 
 #define MODIF_GETDESCRIPTION_END()		\
-  return description;				\
+    return description;				\
 }
 
 #define MODIF_GETDESCRIPTION(type, label, name, desc)			\
-  parameter.AttachNew (new csBasicModifiableParameter (CSVAR_##type, strings->Request (label), label, name, desc)); \
+  parameter.AttachNew (new BaseModifiableParameter (CSVAR_##type, strings->Request (label), label, name, desc)); \
   description->Push (parameter);
 
 #define MODIF_GETDESCRIPTION_C(type, label, name, desc, constr)		\
   constraint.AttachNew (new constr);					\
-  parameter.AttachNew (new csBasicModifiableParameter (CSVAR_##type, strings->Request (label), label, name, desc, constraint)); \
+  parameter.AttachNew (new BaseModifiableParameter (CSVAR_##type, strings->Request (label), label, name, desc, constraint)); \
   description->Push (parameter);
 
 #define MODIF_GETDESCRIPTION_CENUM_DECLARE()	\
-  {csRef<csConstraintEnum> constraint;		\
-  constraint.AttachNew (new csConstraintEnum);
+  {csRef<ModifiableConstraintEnum> constraint;		\
+  constraint.AttachNew (new ModifiableConstraintEnum);
 
 #define MODIF_GETDESCRIPTION_CENUM_PUSH(value, desc)	\
   constraint->PushValue (value, desc);
 
 #define MODIF_GETDESCRIPTION_CENUM(type, label, name, desc)		\
-  parameter.AttachNew (new csBasicModifiableParameter (CSVAR_##type, strings->Request (label), label, name, desc, constraint)); \
+  parameter.AttachNew (new BaseModifiableParameter (CSVAR_##type, strings->Request (label), label, name, desc, constraint)); \
   description->Push (parameter);}
 
 #define MODIF_GETDESCRIPTION_PARENT(parent)				\
@@ -78,18 +79,18 @@ namespace Utility {
     iStringArray* resources = child->GetResources ();			\
     for (size_t i = 0; i < resources->GetSize (); i++)			\
       description->Push (resources->Get (i));				\
-    csBasicModifiableDescription* csChild =				\
-      static_cast<csBasicModifiableDescription*> ((iModifiableDescription*) child); \
+    BaseModifiableDescription* csChild =				\
+      static_cast<BaseModifiableDescription*> ((iModifiableDescription*) child); \
     description->Push (csChild);					\
   }
 
 #define MODIF_GETDESCRIPTION_CHILD_BEGIN(label, name)			\
   {									\
-    csRef<csBasicModifiableDescription> child;				\
-    child.AttachNew (new csBasicModifiableDescription (label, name));	\
+    csRef<BaseModifiableDescription> child;				\
+    child.AttachNew (new BaseModifiableDescription (label, name));	\
     description->Push (child);						\
     {									\
-      csBasicModifiableDescription* description = child;
+      BaseModifiableDescription* description = child;
 
 #define MODIF_GETDESCRIPTION_CHILD_END()	\
   }}
@@ -98,7 +99,7 @@ namespace Utility {
   description->Push (resource);
 
 #define MODIF_GETPARAMETERVALUE_BEGIN()				\
-  void GetParameterValue (size_t index, csVariant& value) const	\
+  virtual void GetParameterValue (size_t index, csVariant& value) const	\
   {								\
     switch (index)						\
     {
@@ -112,6 +113,11 @@ namespace Utility {
 #define MODIF_GETPARAMETERVALUE(id, type, val)	\
   case id:					\
     value.Set##type (val);			\
+    return;
+
+#define MODIF_GETPARAMETERVALUE_F(id, type, func)	\
+  case id:						\
+    value.Set##type (func ());				\
     return;
 
 #define MODIF_GETPARAMETERVALUE_PARENT_BEGIN()	\
@@ -134,7 +140,7 @@ namespace Utility {
   offset += count;					\
 
 #define MODIF_SETPARAMETERVALUE_BEGIN()				\
-  bool SetParameterValue (size_t index, const csVariant& value)	\
+  virtual bool SetParameterValue (size_t index, const csVariant& value)	\
   {								\
     bool changed = true;					\
     switch (index)						\
@@ -174,7 +180,6 @@ namespace Utility {
     size_t count;
 
 #define MODIF_SETPARAMETERVALUE_PARENT_END()				\
-  if (changed) printf ("changed\n");					\
     if (changed) for (size_t i = 0; i < listeners.GetSize (); i++)	\
 		   listeners[i]->ValueChanged (this, index);		\
     return changed;							\
@@ -196,11 +201,11 @@ namespace Utility {
  * Implementation of some of the most common CS::Utility::iModifiableParameter usage. 
  * Stores the parameter's name, description, type, ID and an optional constraint.
  */
-class csBasicModifiableParameter
-: public scfImplementation1<csBasicModifiableParameter, iModifiableParameter> 
+class BaseModifiableParameter
+: public scfImplementation1<BaseModifiableParameter, iModifiableParameter> 
 {
 public:
-  csBasicModifiableParameter (csVariantType type, csStringID id, const char* label,
+  BaseModifiableParameter (csVariantType type, csStringID id, const char* label,
 			      const char* name, const char* description,
 			      iModifiableConstraint* constraint = nullptr)
     : scfImplementationType (this),
@@ -212,24 +217,31 @@ public:
     constraint (constraint)
     {}
 
+  /// Default implementation for CS::Utility::iModifiableParameter::GetID()
   virtual csStringID GetID () const
   { return id; }
 
+  /// Default implementation for CS::Utility::iModifiableParameter::GetLabel()
   virtual const char* GetLabel () const
   { return label; }
 
+  /// Default implementation for CS::Utility::iModifiableParameter::GetName()
   virtual const char* GetName () const
   { return name; }
 
+  /// Default implementation for CS::Utility::iModifiableParameter::GetDescription()
   virtual const char* GetDescription () const
   { return description; }
 
+  /// Default implementation for CS::Utility::iModifiableParameter::GetType()
   virtual csVariantType GetType () const 
   { return type; }
 
+  /// Set the constraint on this parameter
   virtual void SetConstraint (iModifiableConstraint* constraint)
   { this->constraint = constraint; }
 
+  /// Default implementation for CS::Utility::iModifiableParameter::GetConstraint()
   virtual iModifiableConstraint* GetConstraint () const 
   { return constraint; }
 
@@ -247,11 +259,11 @@ protected:
  * Simply holds a csRefArray of CS::Utility::iModifiableParameter and implements 
  * GetParameterCount() and GetParameter().
  */
-class csBasicModifiableDescription
-: public scfImplementation1<csBasicModifiableDescription, iModifiableDescription>
+class BaseModifiableDescription
+: public scfImplementation1<BaseModifiableDescription, iModifiableDescription>
 {
 public:
-  csBasicModifiableDescription (const char* label, const char* name) :
+  BaseModifiableDescription (const char* label, const char* name) :
   scfImplementationType (this), label (label), name (name)
   {
     resources.AttachNew (new scfStringArray ());
@@ -335,7 +347,7 @@ public:
   }
 
   /// Add the given description to the list of children
-  inline void Push (csBasicModifiableDescription* child)
+  inline void Push (BaseModifiableDescription* child)
   {
     children.Push (child);
   }
@@ -369,7 +381,7 @@ protected:
   csString label;
   csString name;
   csRefArray<iModifiableParameter> parameters;
-  csRefArray<csBasicModifiableDescription> children;
+  csRefArray<BaseModifiableDescription> children;
   csRef<iStringArray> resources;
 };
 
@@ -379,13 +391,13 @@ protected:
  * long values that are members of the respective enum, as well as their string labels,
  * for displaying in a combo box.
  */
-class csConstraintEnum : public scfImplementation1<csConstraintEnum, iModifiableConstraintEnum>
+class ModifiableConstraintEnum : public scfImplementation1<ModifiableConstraintEnum, iModifiableConstraintEnum>
 {
 public:
   /**
    * Constructor
    */
-  csConstraintEnum ()
+  ModifiableConstraintEnum ()
     : scfImplementationType (this)
   {
   }  
@@ -413,7 +425,7 @@ public:
     return MODIFIABLE_CONSTRAINT_ENUM;
   }
 
-  //-- csConstraintEnum
+  //-- ModifiableConstraintEnum
   virtual void PushValue (long value, const char* label)
   {
     values.Push (value);
@@ -435,12 +447,12 @@ private:
  * Currently works for the following value types:
  * CSVAR_FLOAT, CSVAR_LONG, CSVAR_VECTOR2, CSVAR_VECTOR3, CSVAR_VECTOR4
  */
-class csConstraintBounded : public scfImplementation1<csConstraintBounded, 
+class ModifiableConstraintBounded : public scfImplementation1<ModifiableConstraintBounded, 
   iModifiableConstraintBounded>
 {
 public:
   /// Initializes this constraint with both a min and a max value
-  csConstraintBounded (const csVariant& min, const csVariant& max)
+  ModifiableConstraintBounded (const csVariant& min, const csVariant& max)
     : scfImplementationType (this),
     min (new csVariant (min)),
     max (new csVariant (max))
@@ -449,7 +461,7 @@ public:
     }
 
   /// Initializes the constraint to have just a maximum value
-  csConstraintBounded (const csVariant& max)
+  ModifiableConstraintBounded (const csVariant& max)
     : scfImplementationType (this),
     min (nullptr),
     max (new csVariant (max))
@@ -457,7 +469,7 @@ public:
       CheckTypes ();
     }
 
-  ~csConstraintBounded ()
+  ~ModifiableConstraintBounded ()
   {
     delete min;
     delete max;
@@ -624,17 +636,18 @@ private:
  * Attached to an CS::Utility::iModifiable parameters, verifies that the value entered within
  * is always a VFS file, not a path or a directory.
  */
-class csConstraintVfsFile : public scfImplementation1<csConstraintVfsFile, iModifiableConstraint>
+class ModifiableConstraintVFSFile : public scfImplementation1<ModifiableConstraintVFSFile, iModifiableConstraint>
 {
+  // TODO: a single class for all VFS constraints
 public:
-  csConstraintVfsFile () 
+  ModifiableConstraintVFSFile () 
     : scfImplementationType (this)
   {
     // Should match anything that's got a special delimiter in it
     matcher = new csRegExpMatcher ("[^][[:alnum:]_ ,~!@#%.{}$-]");
   }
 
-  virtual ~csConstraintVfsFile () 
+  virtual ~ModifiableConstraintVFSFile () 
   {
     delete matcher;
   }
@@ -660,17 +673,17 @@ private:
  * Attached to an CS::Utility::iModifiable parameters, verifies that the value entered within
  * is always a VFS directory, relative or absolute.
  */
-class csConstraintVfsDir : public scfImplementation1<csConstraintVfsDir, iModifiableConstraint>
+class ModifiableConstraintVFSDir : public scfImplementation1<ModifiableConstraintVFSDir, iModifiableConstraint>
 {
 public:
-  csConstraintVfsDir ()
+  ModifiableConstraintVFSDir ()
     : scfImplementationType (this)
   {
     // Just like the file matcher, only allows colons and forward slashes
     matcher = new csRegExpMatcher ("[^][[:alnum:]_ ,~!@#%.{}$/-]");
   }
 
-  virtual ~csConstraintVfsDir () 
+  virtual ~ModifiableConstraintVFSDir () 
   {
     delete matcher;
   }
@@ -695,17 +708,17 @@ private:
  * Attached to an CS::Utility::iModifiable parameters, verifies that the value entered within
  * is always a full VFS path - a directory and a file, relative or absolute.
  */
-class csConstraintVfsPath : public scfImplementation1<csConstraintVfsPath, iModifiableConstraint>
+class ModifiableConstraintVFSPath : public scfImplementation1<ModifiableConstraintVFSPath, iModifiableConstraint>
 {
 public:
-  csConstraintVfsPath ()
+  ModifiableConstraintVFSPath ()
     : scfImplementationType (this)
   {
     // Just like the dir regex
     matcher = new csRegExpMatcher ("[^][[:alnum:]_ ,~!@#%.{}$/-]");
   }
 
-  virtual ~csConstraintVfsPath () 
+  virtual ~ModifiableConstraintVFSPath () 
   {
     delete matcher;
   }
@@ -728,10 +741,10 @@ private:
 /**
  * Can validate a text entry, using minimum/ maximum length and/or a regular expression.
  */
-class csConstraintTextEntry : public scfImplementation1<csConstraintTextEntry, iModifiableConstraint>
+class ModifiableConstraintTextEntry : public scfImplementation1<ModifiableConstraintTextEntry, iModifiableConstraint>
 {
 public:
-  csConstraintTextEntry (long maxLength = -1, long minLength = -1, const char* regex = 0)
+  ModifiableConstraintTextEntry (long maxLength = -1, long minLength = -1, const char* regex = 0)
     : scfImplementationType (this),
     minLength (minLength),
     maxLength (maxLength)
@@ -742,7 +755,7 @@ public:
 	matcher = nullptr;
     }
 
-  virtual ~csConstraintTextEntry () 
+  virtual ~ModifiableConstraintTextEntry () 
   {
     delete matcher;
   }
@@ -775,9 +788,9 @@ private:
  * Validates a CSVAR_LONG value, checking that its bits satisfy a given mask. When a bit
  * that's not part of the mask is set, the validation fails.
  */
-class csConstraintBitMask : public scfImplementation1<csConstraintBitMask, iModifiableConstraint>
+class ModifiableConstraintBitMask : public scfImplementation1<ModifiableConstraintBitMask, iModifiableConstraint>
 {
-  csConstraintBitMask (long mask)
+  ModifiableConstraintBitMask (long mask)
     : scfImplementationType (this),
     mask (mask)
     {
