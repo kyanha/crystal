@@ -41,25 +41,6 @@ class csTexturePanel():
     r = (tex and tex.type == 'IMAGE')
     return r    
 
-
-@rnaType
-class TEXTURE_PT_B2CS_image(csTexturePanel, bpy.types.Panel):
-  bl_label = "Image"
-
-  def draw(self, context):
-    layout = self.layout
-
-    tex = context.texture
-
-    #layout.template_image(tex, "image", tex.image_user, True)
-    
-    row = layout.row(align=True)
-    row.template_ID(tex, "image", new='image.new', open='image.open', unlink='image.unlink')
-    row = layout.row(align=True)
-    row.prop(tex.image, "filepath")
-    row.operator("image.reload", icon='FILE_REFRESH', text='')
-
-
             
 @rnaType
 class TEXTURE_PT_B2CS_texture(csTexturePanel, bpy.types.Panel):
