@@ -374,10 +374,12 @@ def AsCSGenmeshLib(self, func, depth=0, **kwargs):
   # Take the first found material as default object material
   if mat != None:
     func(" "*depth + "    <material>%s</material>"%(mat.uname))
+
+    if not mat.HasDiffuseTexture() and mat.uv_texture != 'None':
+      func(' '*depth + '    <shadervar type="texture" name="tex diffuse">%s</shadervar>'%(mat.uv_texture))
+
   else:
     func(" "*depth + "    <material>%s</material>"%(self.uv_texture if self.uv_texture!=None else 'None'))
-  if mat != None and not mat.HasDiffuseTexture() and mat.uv_texture != 'None':
-    func(' '*depth + '    <shadervar type="texture" name="tex diffuse">%s</shadervar>'%(mat.uv_texture))
 
   # Export mesh's render buffers
   for buf in GetRenderBuffers(**kwargs):
@@ -665,28 +667,29 @@ def GetMaterialDeps(self):
   """
   dependencies = EmptyDependencies()
   if self.type == 'MESH':
-    foundDiffuseTexture = False
     # Material of the mesh ==> 'M' type
     # and associated textures ==> 'T' type
     for mat in self.materials:
       dependencies['M'][mat.uname] = mat
       MergeDependencies(dependencies, mat.GetDependencies())
-      foundDiffuseTexture = foundDiffuseTexture or mat.HasDiffuseTexture() 
-    # Search for a diffuse texture if none is defined among the materials
-    if not foundDiffuseTexture:
-      if self.data and self.data.uv_textures and self.data.uv_textures.active:
-        # UV texture of the mesh ==> 'T' type
-        for index, facedata in enumerate(self.data.uv_textures.active.data):
-          if facedata.image and facedata.image.uname not in dependencies['T'].keys():
+
+    # Search for a possible diffuse texture that overlays underlying materials
+    if self.data and self.data.uv_textures and self.data.uv_textures.active:
+      # UV texture of the mesh ==> 'T' type
+      for index, facedata in enumerate(self.data.uv_textures.active.data):
+        if facedata.image:
+          if facedata.image.uname not in dependencies['T'].keys():
             dependencies['T'][facedata.image.uname] = facedata.image
-            material = self.data.GetMaterial(self.data.all_faces[index].material_index)
-            if material:
-              material.uv_texture = facedata.image.uname
-            else:
-              # Create a material if the mesh has a texture but no material
-              dependencies['TM'][facedata.image.uname] = facedata.image
-              if self.uv_texture == 'None':
-                self.uv_texture = facedata.image.uname
+
+          material = self.data.GetMaterial(self.data.all_faces[index].material_index)
+          if material:
+            material.uv_texture = facedata.image.uname
+          else:
+            # Create a material if the mesh has a texture but no material
+            dependencies['TM'][facedata.image.uname] = facedata.image
+            if self.uv_texture == 'None':
+              self.uv_texture = facedata.image.uname
+
   return dependencies
 
 bpy.types.Object.GetMaterialDeps = GetMaterialDeps

@@ -55,10 +55,16 @@ class SubMesh:
 
     if self.material:
       func(' '*depth +'  <material>'+self.material.uname+'</material>')
-      if not self.material.HasDiffuseTexture() and self.material.uv_texture != 'None':
-        func(' '*depth +'  <shadervar type="texture" name="tex diffuse">%s</shadervar>'%(self.material.uv_texture))
-    elif self.image:
-      func(' '*depth +'  <material>'+self.image.uname+'</material>')
+
+      if self.image:
+        diffusetexnames = [slot.texture.image.name for slot in self.material.texture_slots \
+                             if slot and slot.texture and slot.texture.type =='IMAGE' \
+                             and slot.use_map_color_diffuse]
+        if not self.material.HasDiffuseTexture() or \
+              (self.material.HasDiffuseTexture() and self.image.name not in diffusetexnames):
+          func(' '*depth +'  <shadervar type="texture" name="tex diffuse">%s</shadervar>'%(self.image.uname))
+    else:
+      func(' '*depth +'  <material>%s</material>'%(self.image.uname if self.image else 'None'))
 
     if self.material:
       if self.material.priority != 'object':
