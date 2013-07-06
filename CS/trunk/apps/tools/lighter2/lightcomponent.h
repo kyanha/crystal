@@ -36,7 +36,7 @@ namespace lighter
   public:
     // Setup
     LightComponent ();
-    ~LightComponent ();
+    virtual ~LightComponent ();
 
     bool SupportsPDLights ();
 
