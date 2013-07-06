@@ -43,7 +43,7 @@ namespace lighter
   public:
     // Setup
     RaytracerLighting (const csVector3& tangentSpaceNorm, size_t subLightmapNum);
-    ~RaytracerLighting ();
+    virtual ~RaytracerLighting ();
 
     virtual csColor ComputeElementLightingComponent(Sector* sector, 
       ElementProxy element, SamplerSequence<2>& lightSampler,

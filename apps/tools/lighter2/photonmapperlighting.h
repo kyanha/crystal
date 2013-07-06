@@ -60,7 +60,7 @@ namespace lighter
   public:
     // Setup
     PhotonmapperLighting ();
-    ~PhotonmapperLighting ();
+    virtual ~PhotonmapperLighting ();
 
     virtual csColor ComputeElementLightingComponent(Sector* sector, 
       ElementProxy element, SamplerSequence<2>& lightSampler,
