@@ -35,7 +35,7 @@ struct iModifiableDescription;
 //----------------- iModifiableParameter ---------------------
 
 /**
- * Description of a specific parameter of a iMovable.
+ * Description of a specific parameter of a CS::Utility::iMovable.
  * \sa BaseModifiableParameter for a default implementation
  */
 struct iModifiableParameter : public virtual iBase
@@ -80,7 +80,7 @@ struct iModifiableParameter : public virtual iBase
 //----------------- iModifiableDescription ---------------------
 
 /**
- * The descriptor of an CS::Utility::iModifiable object. It contains all the
+ * The description of an CS::Utility::iModifiable object. It contains all the
  * information needed in order to expose and access the properties of a iModifiable.
  *
  * It can be used fo an automated access to an object, eg in order to generate a
@@ -89,7 +89,11 @@ struct iModifiableParameter : public virtual iBase
  * 
  * A iModifiableDescription is created through iModifiable::GetDescription() if a user
  * application would like to access the object without knowing its external interface.
- * The iModifiableDescription will then allow to know how the object should be accessed.
+ * The iModifiableDescription will then allow to know how the object can be accessed
+ * or represented in a graphical user environment.
+ *
+ * A iModifiableDescription can be structured hierachically (see GetChild() and
+ * GetChildrenCount()) in order to gather logical subsets of parameters.
  *
  * \sa BaseModifiableDescription for a default implementation
  */
@@ -185,13 +189,12 @@ struct iModifiableListener : public virtual iBase
  * It provide access to the parameters of the CS objects, and to their type, description and
  * constraints. 
  *
- * @TODO An iModifiableDescription object should also be provided to allow a listing of the properties
- * , helping programs such as cseditor to generate Graphical User Interfaces in order
- * to modify their attributes. It can also be used by any automated process such as an animation
- * or a persistance system.
+ * A iModifiableDescription can be accessed through GetDescription() in order to obtain the
+ * description of the list of parameters of this iModifiable.
  *
- * \remark Triggers a crystalspace.modifiable.param.set event when a parameter value
- * gets set
+ * This mechanism allows for example programs such as cseditor to generate automatically
+ * Graphical User Interfaces in order to modify their attributes. It can also be used by any
+ * automated process such as an animation or a persistance system.
  *
  * \see iModifiableDescription
  * \see iModifiableParameter
@@ -207,26 +210,16 @@ struct iModifiable : public virtual iBase
 
   /**
    * Returns the value of one of this object's parameters. 
-   * \remark Each modifiable property should have its own id in
-   * order to be properly accessible.
    */
   virtual void GetParameterValue (size_t parameterIndex, csVariant& value) const = 0;
 
   /**
    * Sets a value for the parameter with the unique identifier id. 
-   * \remark Each modifiable property should have its own id in 
-   * order to be properly accessible. 
    *
    * \return true if the value can be set, false if a property with
    * that index couldn't be found
    */
   virtual bool SetParameterValue (size_t parameterIndex, const csVariant& value) = 0;
-
-  /**
-   * This method is there only to help securing the current code generation. This method
-   * should therefore be removed once a better code generation system would be implemented.
-   */
-  virtual size_t GetTotalParameterCount () const = 0;
 
   /**
    * Add a listener to the list.
@@ -237,20 +230,86 @@ struct iModifiable : public virtual iBase
    * Remove the given listener from the list.
    */
   virtual void RemoveListener (iModifiableListener* listener) = 0;
+
+  /**
+   * This method is there only to help securing the current code generation. This method
+   * should therefore be removed once a better code generation system would be implemented.
+   */
+  virtual size_t GetTotalParameterCount () const = 0;
 };
 
 //----------------- iModifiableConstraintType ---------------------
 
-// TODO: doc
+/**
+ * List of types that a CS::Utility::iModifiableConstraint can be.
+ */
 enum iModifiableConstraintType
 {
+  /**
+   * This constraint is a bounded constraint. It can be upcast to a
+   * CS::Utility::iModifiableConstraintBounded.
+   *
+   * This constraint can only be set for parameters of type CSVAR_LONG,
+   * CSVAR_FLOAT, CSVAR_VECTOR2, CSVAR_VECTOR3, or CSVAR_VECTOR4.
+   */
   MODIFIABLE_CONSTRAINT_BOUNDED = 0,
+
+  /**
+   * This constraint is an enum. It can be upcast to a
+   * CS::Utility::iModifiableConstraintEnum.
+   *
+   * This constraint can be set on all type of parameters.
+   */
   MODIFIABLE_CONSTRAINT_ENUM,
+
+  /**
+   * This constraint defines a string referencing a VFS path to a file.
+   *
+   * This constraint can only be set for parameters of type CSVAR_STRING.
+   *
+   * \sa CS::Utility::ModifiableConstraintVFSFile for a default implementation
+   */
   MODIFIABLE_CONSTRAINT_VFS_FILE,
+
+  /**
+   * This constraint defines a string referencing a VFS path to a directory.
+   *
+   * This constraint can only be set for parameters of type CSVAR_STRING.
+   *
+   * \sa CS::Utility::ModifiableConstraintVFSDir for a default implementation
+   */
   MODIFIABLE_CONSTRAINT_VFS_DIR,
+
+  /**
+   * This constraint defines a string referencing a VFS path to either a file or a
+   * directory.
+   *
+   * This constraint can only be set for parameters of type CSVAR_STRING.
+   *
+   * \sa CS::Utility::ModifiableConstraintVFSPath for a default implementation
+   */
   MODIFIABLE_CONSTRAINT_VFS_PATH,
+
+  /**
+   * This constraint defines a single line string.
+   *
+   * This constraint can only be set for parameters of type CSVAR_STRING.
+   */
   MODIFIABLE_CONSTRAINT_TEXT_ENTRY,
+
+  /**
+   * This constraint defines a string that uses to have a great size. It is
+   * usually represented in more than one line of text.
+   *
+   * This constraint can only be set for parameters of type CSVAR_STRING.
+   */
   MODIFIABLE_CONSTRAINT_TEXT_BLOB,
+
+  /**
+   * This constraint defines a mask of bits than can be set separately.
+   *
+   * This constraint can only be set for parameters of type CSVAR_LONG.
+   */
   MODIFIABLE_CONSTRAINT_BITMASK
   //MODIFIABLE_CONSTRAINT_ARRAY_STATIC
 };
@@ -258,58 +317,75 @@ enum iModifiableConstraintType
 //----------------- iModifiableConstraint ---------------------
 
 /**
- * Useful for validating various iModifiable parameters.
- * It's generally attached to an iModifiableProperty in an iModifiable object's 
- * GetDescription () method.
+ * A constraint allows to limit the range of values that a parameter of a
+ * CS::Utility::iMovable can take.
  *
- * \see iModifiable
- * \see PUSH_PARAM_CONSTRAINT for a helper macro
+ * Main ways to get pointers to this interface:
+ * - CS::Utility::iModifiableParameter::GetConstraint()
+ *
+ * \sa iModifiable
  */
 struct iModifiableConstraint : public virtual iBase
 {
   SCF_INTERFACE (iModifiableConstraint, 1, 0, 0);
 
+  /// Get the type of this constraint.
   virtual iModifiableConstraintType GetType () const = 0;
   
   /**
-   * Takes in a const csVariant* that it validates, according to the rules of a specific
-   * constraint type. For instance, a long value could be limited by a bounded constraint
-   * so that it stays between certain limits.
-   *
-   * Other types, such as enum constraints, don't actually use this function, since they
-   * also have a helper role in creating a GUI that validates itself. For instance, the
-   * enum constraint generate combo boxes with the allowed values, so it's certain that
-   * any value the user might pick is valid.
+   * Return whether or not the value of this variant is valid according to this constraint.
+   * The variant is supposed to be of a csVariantType compatible with this constraint.
    */
-  // TODO: remove
   virtual bool Validate (const csVariant* variant) const = 0;
 };
 
 //----------------- iModifiableConstraintBounded ---------------------
 
 /**
- * Constraint that forces a variant to either stay under a certain value, over
- * a certain value, or between two values. 
+ * A bounded constraint forces the value of a parameter to either stay under
+ * a certain value, over a certain value, or between two values. 
+ * \sa CS::Utility::ModifiableConstraintBounded for a default implementation
  */
 struct iModifiableConstraintBounded : public virtual iModifiableConstraint
 {
+  /// Get whether or not the value of this parameter has a minimum value
   virtual bool HasMinimum () const = 0;
+
+  /**
+   * Get the minimum value of this parameter. The behavior is undefined if
+   * HasMinimum() doesn't return true.
+   */
   virtual csVariant& GetMinimum () const = 0;
 
+  /// Get whether or not the value of this parameter has a maximum value
   virtual bool HasMaximum () const = 0;
+
+  /**
+   * Get the maximum value of this parameter. The behavior is undefined if
+   * HasMaximum() doesn't return true.
+   */
   virtual csVariant& GetMaximum () const = 0;
 };
 
 //----------------- iModifiableConstraintEnum ---------------------
 
 /**
- * @TODO
+ * An enum constraint defines a list of values that a parameter can take.
+ * No other values are allowed for this parameter.
+ * \sa CS::Utility::ModifiableConstraintEnum for a default implementation
  */
 struct iModifiableConstraintEnum : public virtual iModifiableConstraint
 {
+  /// Get the count of different values that are allowed
   virtual size_t GetValueCount () const = 0;
-  // TODO: return csVariant
-  virtual long GetValue (size_t index) const = 0;
+
+  /// Get the value of the given index.
+  virtual const csVariant& GetValue (size_t index) const = 0;
+
+  /**
+   * Get the textual description of the value of the given index.
+   * \note You might want to process this string by the translator.
+   */
   virtual const char* GetLabel (size_t index) const = 0;
 };
 
