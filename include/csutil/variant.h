@@ -38,7 +38,7 @@
 /// Type of the values that can be contained within a csVariant.
 enum csVariantType
 {
-  // Signed 32-bit integer (long)
+  /// Signed 32-bit integer (long)
   CSVAR_LONG,
   /// Boolean type
   CSVAR_BOOL,
@@ -65,11 +65,13 @@ enum csVariantType
   /// A key-value pair
   //CSVAR_KEYVAL,
   /// csMatrix3 type
+  // TODO: quaternion instead?
   CSVAR_MATRIX3,
   /// csTransform type
+  // TODO: remove?
   CSVAR_TRANSFORM,
   /// An iBase entity
-  CSVAR_IBASE
+  CSVAR_BASE
 };
 
 /**
@@ -101,7 +103,7 @@ private:
       delete val.m;
     else if ((type == CSVAR_TRANSFORM) && (val.t != 0))
       delete val.t;
-    else if ((type == CSVAR_IBASE) && (val.ib != 0))
+    else if ((type == CSVAR_BASE) && (val.ib != 0))
       val.ib->DecRef ();
   }
 
@@ -138,7 +140,7 @@ public:
   /// Constructor initialized with a value of type CSVAR_TRANSFORM
   csVariant (const csTransform& t) { type = CSVAR_TRANSFORM; val.t = new csTransform (t); }
   /// Constructor initialized with an iBase
-  csVariant (iBase* ib) { type = CSVAR_IBASE; val.ib = ib; val.ib->IncRef (); }
+  csVariant (iBase* ib) { type = CSVAR_BASE; val.ib = ib; val.ib->IncRef (); }
 
   /// Copy constructor.
   csVariant (const csVariant& var)
@@ -150,7 +152,7 @@ public:
     if ((type == CSVAR_STRING)
 	&& (val.s != 0)) val.s->IncRef (); 
 
-    if ((type == CSVAR_IBASE)
+    if ((type == CSVAR_BASE)
       && (val.ib != 0)) val.ib->IncRef ();
   }
 
@@ -165,7 +167,7 @@ public:
     if ((type == CSVAR_STRING)
 	&& (val.s != 0)) val.s->IncRef ();
 
-    if ((type == CSVAR_IBASE)
+    if ((type == CSVAR_BASE)
        && (val.ib != 0)) val.ib->IncRef ();
 
     return var;
@@ -269,10 +271,10 @@ public:
     val.t = new csTransform (t);
   }
   /// Assign an iBase
-  void SetIBase (const csRef<iBase>& ib)
+  void SetBase (iBase* ib)
   {
     Clear ();
-    type = CSVAR_IBASE;
+    type = CSVAR_BASE;
     val.ib = ib;
     ib->IncRef ();
   }
@@ -344,9 +346,9 @@ public:
     return *val.t;
   }
   /// Retrieve an iBase
-  iBase* GetIBase () const
+  iBase* GetBase () const
   {
-    CS_ASSERT (type == CSVAR_IBASE);
+    CS_ASSERT (type == CSVAR_BASE);
     return val.ib;
   }
 
@@ -390,7 +392,7 @@ public:
       s.Format ("[variant type: color value: %f ; %f ; %f ; %f]",
 		val.f[0], val.f[1], val.f[2], val.f[3]);
     break;
-    case CSVAR_IBASE:
+    case CSVAR_BASE:
 /*
       csRef<iObject> asObj = scfQueryInterface<iObject>(GetIBase ());
       s.Format ("[variant type: iBase pointer, name: %s]\n", 
