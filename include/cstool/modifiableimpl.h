@@ -391,7 +391,8 @@ protected:
  * long values that are members of the respective enum, as well as their string labels,
  * for displaying in a combo box.
  */
-class ModifiableConstraintEnum : public scfImplementation1<ModifiableConstraintEnum, iModifiableConstraintEnum>
+class ModifiableConstraintEnum
+  : public scfImplementation1<ModifiableConstraintEnum, iModifiableConstraintEnum>
 {
 public:
   /**
@@ -415,7 +416,7 @@ public:
     return labels.GetSize ();
   }
 
-  virtual long GetValue (size_t index) const
+  virtual const csVariant& GetValue (size_t index) const
   {
     return values.Get (index);
   }
@@ -426,7 +427,7 @@ public:
   }
 
   //-- ModifiableConstraintEnum
-  virtual void PushValue (long value, const char* label)
+  virtual void PushValue (const csVariant& value, const char* label)
   {
     values.Push (value);
     labels.Push (label);
@@ -439,7 +440,7 @@ public:
 
 private:
   csStringArray labels;
-  csArray<long> values;
+  csArray<csVariant> values;
 };
 
 /**
