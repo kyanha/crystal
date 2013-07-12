@@ -37,33 +37,34 @@ MAP = {'use_map_color_diffuse': 'tex diffuse',
 def MaterialAsCS(self, func, depth=0, **kwargs):
   """ Write an xml decription of this material
   """
-  func(' '*depth +'<material name="%s">'%(self.uname))
-  dic = {}
-  for slot in self.texture_slots:
-    if slot and slot.texture and slot.texture.type =='IMAGE':
-      for type, name in MAP.items():
-        if getattr(slot, type, False):
-          func(' '*depth +'  <shadervar type="texture" name="%s">%s</shadervar>'%(GetName(name, dic), slot.texture.image.uname))
+  if not self.csMatRef:
+    func(' '*depth +'<material name="%s">'%(self.uname))
+    dic = {}
+    for slot in self.texture_slots:
+      if slot and slot.texture and slot.texture.type =='IMAGE':
+        for type, name in MAP.items():
+          if getattr(slot, type, False):
+            func(' '*depth +'  <shadervar type="texture" name="%s">%s</shadervar>'%(GetName(name, dic), slot.texture.image.uname))
 
-  func(' '*depth +'  <shadervar type="vector4" name="specular">%f, %f, %f, 1</shadervar>'% tuple(self.specular_color))
+    func(' '*depth +'  <shadervar type="vector4" name="specular">%f, %f, %f, 1</shadervar>'% tuple(self.specular_color))
   
-  haswater = False
+    haswater = False
 
-  for step in ['depthwrite', 'ambient', 'diffuse']:
-    if getattr(self, step+'_step') != 'DEFAULT':
-      name = GetShaderName(getattr(self, step+'_step'))
-      if name == 'reflect_water_plane':
-        haswater = True
-        if step == 'ambient':
-          step = 'base'     # Hacky@@@
-      func(' '*depth +'  <shader type="%s">%s</shader>'%(step, name))   
+    for step in ['depthwrite', 'ambient', 'diffuse']:
+      if getattr(self, step+'_step') != 'DEFAULT':
+        name = GetShaderName(getattr(self, step+'_step'))
+        if name == 'reflect_water_plane':
+          haswater = True
+          if step == 'ambient':
+            step = 'base'     # Hacky@@@
+        func(' '*depth +'  <shader type="%s">%s</shader>'%(step, name))   
 
-  if haswater:
-    func(' '*depth +'  <shadervar type="vector4" name="water fog color">%s</shadervar>'%(self.water_fog_color,))
-    func(' '*depth +'  <shadervar type="vector4" name="water perturb scale">%s</shadervar>'%(self.water_perturb_scale,))
-    func(' '*depth +'  <shadervar type="float" name="water fog density">%s</shadervar>'%(self.water_fog_density,))
+    if haswater:
+      func(' '*depth +'  <shadervar type="vector4" name="water fog color">%s</shadervar>'%(self.water_fog_color,))
+      func(' '*depth +'  <shadervar type="vector4" name="water perturb scale">%s</shadervar>'%(self.water_perturb_scale,))
+      func(' '*depth +'  <shadervar type="float" name="water fog density">%s</shadervar>'%(self.water_fog_density,))
 
-  func(' '*depth +'</material>')
+    func(' '*depth +'</material>')
 
 bpy.types.Material.AsCS = MaterialAsCS
 
@@ -81,10 +82,12 @@ bpy.types.Material.GetShaders = MaterialGetShaders
 
 def MaterialDependencies(self):
   dependencies = EmptyDependencies()
-  for tex in self.textures:
-    if tex.type=='IMAGE' and tex.image:
-      tex.image.IdentifyNormalMap(self)
-      dependencies['T'][tex.image.uname] = tex.image
+
+  if not self.csMatRef:    # skip materials replaced by references to CS materials
+    for tex in self.textures:
+      if tex.type=='IMAGE' and tex.image:
+        tex.image.IdentifyNormalMap(self)
+        dependencies['T'][tex.image.uname] = tex.image
   return dependencies
   
 bpy.types.Material.GetDependencies = MaterialDependencies

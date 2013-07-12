@@ -94,7 +94,8 @@ def ExportWorld(path):
         print('Writing fact',fact.uname,':', Join(path, 'factories/', fact.object.uname))
         fact.AsCSRef(Write(f), 2, 'factories/', animesh=False)
         # Export genmesh factory
-        fact.AsCSLib(path, animesh=False)
+        if not fact.object.csFactRef:
+          fact.AsCSLib(path, animesh=False)
     elif typ == 'G':
       # Groups of objects
       for name, group in deps[typ].items():
@@ -103,6 +104,14 @@ def ExportWorld(path):
         group.AsCSRef(Write(f), 2, 'factories/')
         # Export group of genmeshes
         group.AsCSLib(path)
+    elif typ == 'M':
+      # Materials
+      for name, mat in deps[typ].items():
+        if mat.csMatRef and mat.csMaterialName != 'None' and mat.csMaterialVfs != '':
+          if mat.csMaterialVfs not in Hierarchy.libraryReferences:
+            # Export references to CS libraries defining materials
+            Hierarchy.libraryReferences.append(mat.csMaterialVfs)
+            Write(f)(' '*2 +'<library>%s</library>'%(mat.csMaterialVfs))
 
   # Export cameras
   if cameras:
@@ -153,6 +162,13 @@ def ExportLibrary(path):
   Write(f)('<?xml version="1.0" encoding="UTF-8"?>')
   Write(f)('<library xmlns=\"http://crystalspace3d.org/xml/library\">')
 
+  # Export references to CS libraries defining materials
+  for name, mat in deps['M'].items():
+    if mat.csMatRef and mat.csMaterialName != 'None' and mat.csMaterialVfs != '':
+      if mat.csMaterialVfs not in Hierarchy.libraryReferences:
+        Hierarchy.libraryReferences.append(mat.csMaterialVfs)
+        Write(f)(' '*2 +'<library>%s</library>'%(mat.csMaterialVfs))
+
   # Export the textures/materials/shaders of the objects
   use_imposter = False
   for scene in bpy.data.scenes:
@@ -186,7 +202,8 @@ def ExportLibrary(path):
         print('\nEXPORT OBJECT "%s" AS A CS GENERAL MESH\n'%(ob.name))
         print('Writing fact',fact.uname,'in', Join(path, 'library'))
         # Export genmesh factory
-        fact.WriteCSMeshBuffers(Write(f), 2, path, animesh=False, dontClose=True)
+        if not fact.object.csFactRef:
+          fact.WriteCSMeshBuffers(Write(f), 2, path, animesh=False, dontClose=True)
     elif typ == 'G':
       # Groups of objects
       for name, group in deps[typ].items():

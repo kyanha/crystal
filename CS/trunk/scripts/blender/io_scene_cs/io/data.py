@@ -129,12 +129,6 @@ def GetSubMeshes(self, name = '', mappingBuffer = None, numVertices = 0):
 bpy.types.Mesh.GetSubMeshes = GetSubMeshes
 
 
-def MeshAsCSRef(self, func, depth=0, dirName='factories/'):
-  func(' '*depth +'<library>%s%s</library>'%(dirName,self.uname))
-
-bpy.types.Mesh.AsCSRef = MeshAsCSRef
-
-
 #======= Mapping buffers ===========================================
 
 def GetCSMappingBuffers (self):

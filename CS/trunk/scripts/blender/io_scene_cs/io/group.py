@@ -187,7 +187,7 @@ def WriteCSGroup(self, func, depth=0, use_imposter=False, dontClose=False):
       matrix = ob.matrix_world
       if m: 
         matrix = matrix * m
-      MatrixAsCS(matrix, func, depth+4, True)
+      MatrixAsCS(matrix, func, depth+4, noMove=True)
       func(' '*depth + '    </instance>')
       
       # Determine object's bounding box
