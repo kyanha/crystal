@@ -139,6 +139,7 @@ def ExportWorld(path):
   f.close()
 
   Hierarchy.exportedFactories = []
+  Hierarchy.libraryReferences = []
 
   print("\nEXPORTING complete ==================================================")
 
@@ -215,5 +216,7 @@ def ExportLibrary(path):
 
   Write(f)('</library>')
   f.close()
+
+  Hierarchy.libraryReferences = []
 
   print("\nEXPORTING complete ==================================================")
