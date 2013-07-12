@@ -14,7 +14,7 @@ class csPortalPanel():
   @classmethod
   def poll(cls, context):
     ob = bpy.context.active_object
-    r = (ob and ob.type == 'MESH' and ob.data)
+    r = (ob and ob.type == 'MESH' and ob.data and not ob.csFactRef)
     return r
 
 

@@ -47,6 +47,9 @@ def EnumProperty(types, **kwargs):
 
 def FloatProperty(types, **kwargs):
   Property('FloatProperty', types, **kwargs)  
+
+def CollectionProperty(types, **kwargs):
+  Property('CollectionProperty', types, **kwargs)  
         
 class B2CS:
   def B2CSGetProperties(self):
@@ -61,6 +64,9 @@ class B2CS:
     
   def StringProperty(self, **kwargs):
     StringProperty(['Text'], **kwargs)
+
+  def CollectionProperty(self, **kwargs):
+    CollectionProperty(['Text'], **kwargs)
     
   properties = property(B2CSGetProperties) 
 

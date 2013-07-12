@@ -2,7 +2,7 @@ import os
 
 import bpy
 
-from io_scene_cs.utilities import rnaType, B2CS, GetExportPath
+from io_scene_cs.utilities import rnaType, rnaOperator, B2CS, GetExportPath
 from io_scene_cs.io import Export
 
 
@@ -17,6 +17,20 @@ class csSettingsPanel():
   def poll(cls, context):
     return True
  
+#=============== Crystal Space Export panel ====================
+
+try:
+  default_path = bpy.context.user_preferences.addons["io_scene_cs"].preferences.exportpath
+except:
+  default_path = os.environ.get("TEMP")
+  if not default_path:
+    if os.name == 'nt':
+      default_path = "c:/tmp/"
+    else:
+      default_path = "/tmp/"
+  elif not default_path.endswith(os.sep):
+    default_path += os.sep
+
   
 @rnaType    
 class B2CS_OT_export(bpy.types.Operator):
@@ -124,17 +138,127 @@ class RENDER_PT_csSettingsPanel(csSettingsPanel, bpy.types.Panel):
         row.label(text="'walktest' isn't available!")
       
 
-try:
-  default_path = bpy.context.user_preferences.addons["io_scene_cs"].preferences.exportpath
-except:
-  default_path = os.environ.get("TEMP")
-  if not default_path:
-    if os.name == 'nt':
-      default_path = "c:/tmp/"
-    else:
-      default_path = "/tmp/"
-  elif not default_path.endswith(os.sep):
-    default_path += os.sep
+#=============== Crystal Space Factory Reference panel ======================
+
+class csFactoryRef (bpy.types.PropertyGroup):
+  name = bpy.props.StringProperty(name="Name Prop", default="Unknown", \
+                description="Name of an existing Crystal Space factory")
+  vfs  = bpy.props.StringProperty(name="VFS Prop", default=default_path, \
+                description="VFS path of an existing Crystal Space library file")
+
+bpy.utils.register_class(csFactoryRef)
+
+
+@rnaOperator
+class B2CS_OT_csAddFactory(bpy.types.Operator):
+  bl_idname = "io_scene_cs.add_factory"
+  bl_label = "Add factory reference"
+  bl_description = "Define a reference to existing Crystal Space factory"
+
+  def execute(self, context): 
+    new_fact = B2CS.properties.FactoryRefs.add()
+
+    return {'FINISHED'}
+
+@rnaOperator
+class B2CS_OT_csRemoveFactory(bpy.types.Operator):
+  bl_idname = "io_scene_cs.rmv_factory"
+  bl_label = "Remove factory reference"
+  bl_description = "Remove a reference to existing CS factory"
+
+  def execute(self, context): 
+    for i,fact in enumerate(B2CS.properties.FactoryRefs):
+      if fact.name == context.current_factory.name:
+        B2CS.properties.FactoryRefs.remove(i)
+        break
+
+    return {'FINISHED'}
+
+
+@rnaType
+class RENDER_PT_csReferenceFactoryPanel(csSettingsPanel, bpy.types.Panel):
+  bl_label = "Crystal Space Factory References"
+  bl_options = {'DEFAULT_CLOSED'}
+
+  def draw(self, context):
+    layout = self.layout
+    
+    row = layout.row(align=True)
+    row.operator("io_scene_cs.add_factory", text="Add factory reference")
+
+    for fact in  B2CS.properties.FactoryRefs:
+      col = layout.column()
+      col.context_pointer_set("current_factory", fact)
+      box = col.box()
+      
+      row = box.row()
+      row.prop(fact, "name", text="Factory name")
+      row.operator("io_scene_cs.rmv_factory", text="", icon='X', emboss=False)
+
+      row = box.row()
+      row.prop(fact, "vfs", text="VFS path")
+
+#============= Crystal Space Material Reference panel ====================
+
+class csMaterialRef (bpy.types.PropertyGroup):
+  name = bpy.props.StringProperty(name="Name Prop", default="Unknown", \
+                description="Name of an existing Crystal Space material")
+  vfs  = bpy.props.StringProperty(name="VFS Prop", default=default_path, \
+                description="VFS path of an existing Crystal Space library file")
+
+bpy.utils.register_class(csMaterialRef)
+
+
+@rnaOperator
+class B2CS_OT_csAddMaterial(bpy.types.Operator):
+  bl_idname = "io_scene_cs.add_material"
+  bl_label = "Add material reference"
+  bl_description = "Define a reference to existing Crystal Space material"
+
+  def execute(self, context): 
+    new_mat = B2CS.properties.MaterialRefs.add()
+
+    return {'FINISHED'}
+
+@rnaOperator
+class B2CS_OT_csRemoveMaterial(bpy.types.Operator):
+  bl_idname = "io_scene_cs.rmv_material"
+  bl_label = "Remove material reference"
+  bl_description = "Remove a reference to existing Crystal Space material"
+
+  def execute(self, context): 
+    for i,mat in enumerate(B2CS.properties.MaterialRefs):
+      if mat.name == context.current_material.name:
+        B2CS.properties.MaterialRefs.remove(i)
+        break
+
+    return {'FINISHED'}
+
+
+@rnaType
+class RENDER_PT_csReferenceMaterialPanel(csSettingsPanel, bpy.types.Panel):
+  bl_label = "Crystal Space Material References"
+  bl_options = {'DEFAULT_CLOSED'}
+
+  def draw(self, context):
+    layout = self.layout
+    
+    row = layout.row(align=True)
+    row.operator("io_scene_cs.add_material", text="Add material reference")
+
+    for mat in  B2CS.properties.MaterialRefs:
+      col = layout.column()
+      col.context_pointer_set("current_material", mat)
+      box = col.box()
+      
+      row = box.row()
+      row.prop(mat, "name", text="Material name")
+      row.operator("io_scene_cs.rmv_material", text="", icon='X', emboss=False)
+
+      row = box.row()
+      row.prop(mat, "vfs", text="VFS path")
+
+
 
 B2CS.StringProperty( attr="exportPath",
         name="Export path",
@@ -175,3 +299,13 @@ B2CS.BoolProperty( attr="sharedMaterial",
         name="Shared materials and textures",
         description="Define all textures and materials in the world file",
         default=True)
+
+B2CS.CollectionProperty( attr="FactoryRefs",
+        name="Collection of Crystal Space factory references",
+        type=csFactoryRef,
+        description="Define references to existing Crystal Space factories")
+
+B2CS.CollectionProperty( attr="MaterialRefs",
+        name="Collection of Crystal Space material references",
+        type=csMaterialRef,
+        description="Define references to existing Crystal Space materials")

@@ -12,6 +12,8 @@ from io_scene_cs.utilities import B2CS
 class Hierarchy:
   OBJECTS = {}
   exportedFactories = []
+  libraryReferences = []
+
   def __init__(self, anObject, anEmpty):
     self.object = anObject
     self.empty = anEmpty
@@ -34,7 +36,15 @@ class Hierarchy:
     return "hier" + str(self.id)
 
   def AsCSRef(self, func, depth=0, dirName='factories/', animesh=False):
-    if self.object.parent_type != 'BONE' and self.object.data.name not in Hierarchy.exportedFactories:
+    if self.object.csFactRef:
+      if self.object.csFactoryName != '' and self.object.csFactoryVfs != '':
+        if self.object.csFactoryVfs not in Hierarchy.libraryReferences:
+          Hierarchy.libraryReferences.append(self.object.csFactoryVfs)
+          func(' '*depth +'<library>%s</library>'%(self.object.csFactoryVfs))
+      else:
+        print("WARNING: Object '%s' references an invalid CS factory"%(self.object.uname))
+    elif self.object.parent_type != 'BONE' \
+          and self.object.data.name not in Hierarchy.exportedFactories:
       if animesh:
         func(' '*depth +'<library>%s%s</library>'%(dirName,self.object.uname))
       else:
@@ -92,10 +102,11 @@ class Hierarchy:
 
     # Render priority and Z-mode properties
     mat = self.object.GetDefaultMaterial()
-    if mat != None and mat.priority != 'object':
-      func(' '*depth + '  <priority>%s</priority>'%(mat.priority))
-    if mat != None and mat.zbuf_mode != 'zuse':
-      func(' '*depth + '  <%s/>'%(mat.zbuf_mode))
+    if mat != None:
+      if mat.priority != 'object':
+        func(' '*depth + '  <priority>%s</priority>'%(mat.priority))
+      if mat.zbuf_mode != 'zuse':
+        func(' '*depth + '  <%s/>'%(mat.zbuf_mode))
 
     # Shadow properties
     noshadowreceive = noshadowcast = limitedshadowcast = False
@@ -286,7 +297,8 @@ class Hierarchy:
     # Take the first found material as default object material
     mat = self.object.GetDefaultMaterial()
     if mat != None:
-      func(" "*depth + "    <material>%s</material>"%(mat.uname))
+      mat_name = mat.csMaterialName if mat.csMatRef else mat.uname
+      func(" "*depth + "    <material>%s</material>"%(mat_name))
     else:
       func(" "*depth + "    <material>%s</material>"%(self.uv_texture if self.uv_texture!=None else 'None'))
 
@@ -350,10 +362,11 @@ def AsCSGenmeshLib(self, func, depth=0, **kwargs):
   if self.data.use_imposter:
     func(' '*depth + '  <imposter range="100.0" tolerance="0.4" camera_tolerance="0.4" shader="lighting_imposter"/>')
   mat = self.GetDefaultMaterial()
-  if mat != None and mat.priority != 'object':
-    func(' '*depth + '  <priority>%s</priority>'%(mat.priority))
-  if mat != None and mat.zbuf_mode != 'zuse':
-    func(' '*depth + '  <%s/>'%(mat.zbuf_mode))
+  if mat != None:
+    if mat.priority != 'object':
+      func(' '*depth + '  <priority>%s</priority>'%(mat.priority))
+    if mat.zbuf_mode != 'zuse':
+      func(' '*depth + '  <%s/>'%(mat.zbuf_mode))
   if self.data.no_shadow_receive:
     func(' '*depth + '  <noshadowreceive />')
   if self.data.no_shadow_cast:
@@ -373,10 +386,13 @@ def AsCSGenmeshLib(self, func, depth=0, **kwargs):
 
   # Take the first found material as default object material
   if mat != None:
-    func(" "*depth + "    <material>%s</material>"%(mat.uname))
+    if mat.csMatRef:
+      func(" "*depth + "    <material>%s</material>"%(mat.csMaterialName))
+    else:
+      func(" "*depth + "    <material>%s</material>"%(mat.uname))
 
-    if not mat.HasDiffuseTexture() and mat.uv_texture != 'None':
-      func(' '*depth + '    <shadervar type="texture" name="tex diffuse">%s</shadervar>'%(mat.uv_texture))
+      if not mat.HasDiffuseTexture() and mat.uv_texture != 'None':
+        func(' '*depth + '    <shadervar type="texture" name="tex diffuse">%s</shadervar>'%(mat.uv_texture))
 
   else:
     func(" "*depth + "    <material>%s</material>"%(self.uv_texture if self.uv_texture!=None else 'None'))
@@ -423,22 +439,29 @@ def ObjectAsCS(self, func, depth=0, **kwargs):
     name = kwargs['name']+':'+name
 
   if self.type == 'MESH':
-    if len(self.data.vertices)!=0 and len(self.data.all_faces)!=0:
+    isValidRef = self.csFactRef and self.csFactoryName != '' and self.csFactoryVfs != ''
+    if self.csFactRef and not isValidRef:
+      return
+
+    if isValidRef or (len(self.data.vertices)!=0 and len(self.data.all_faces)!=0):
       # Temporary disable of meshref support because of incompatibility
       # issues with lighter2 that needs to be genmesh aware in order to
       # pack the lightmaps per submeshes
       #func(' '*depth +'<meshref name="%s_object">'%(self.uname))
       #func(' '*depth +'  <factory>%s</factory>'%(self.data.uname))
-
-      func(' '*depth +'<meshobj name="%s_object">'%(name))
-
-      if self.parent and self.parent.type == 'ARMATURE':
-        func(' '*depth +'  <plugin>crystalspace.mesh.loader.animesh</plugin>')
+      if isValidRef:
+        # Only use meshref when object is defined as a reference to a CS factory
+        func(' '*depth +'<meshref name="%s_object">'%(name))
+        func(' '*depth +'  <factory>%s</factory>'%(self.csFactoryName))
       else:
-        func(' '*depth +'  <plugin>crystalspace.mesh.loader.genmesh</plugin>')
-      func(' '*depth +'  <params>')
-      func(' '*depth +'    <factory>%s</factory>'%(self.data.uname))
-      func(' '*depth +'  </params>')
+        func(' '*depth +'<meshobj name="%s_object">'%(name))
+        if self.parent and self.parent.type == 'ARMATURE':
+          func(' '*depth +'  <plugin>crystalspace.mesh.loader.animesh</plugin>')
+        else:
+          func(' '*depth +'  <plugin>crystalspace.mesh.loader.genmesh</plugin>')
+        func(' '*depth +'  <params>')
+        func(' '*depth +'    <factory>%s</factory>'%(self.data.uname))
+        func(' '*depth +'  </params>')
 
       if self.parent and self.parent_type == 'BONE':
         matrix = self.matrix_world
@@ -446,10 +469,12 @@ def ObjectAsCS(self, func, depth=0, **kwargs):
         matrix = self.relative_matrix
         if 'transform' in kwargs:
           matrix =  kwargs['transform'] * matrix
-      MatrixAsCS(matrix, func, depth+2)
+      MatrixAsCS(matrix, func, depth+2, noScale=not isValidRef)
 
-      #func(' '*depth +'</meshref>')
-      func(' '*depth +'</meshobj>')
+      if isValidRef:
+        func(' '*depth +'</meshref>')
+      else:
+        func(' '*depth +'</meshobj>')
 
       # Process array modifiers
       self.ExportArrayModifier (func, depth, **kwargs)
@@ -650,7 +675,7 @@ def GetDefaultMaterial (self, notifications = True):
       print('WARNING: armature object "%s" has no child with texture coordinates'%(self.uname))
   elif self.type == 'MESH':
     # Mesh object
-    if len(self.data.uv_textures) != 0 and self.data.GetFirstMaterial():
+    if self.data.GetFirstMaterial():
       # Take the first defined material as default object material
       mat = self.data.GetFirstMaterial()
     elif notifications:
