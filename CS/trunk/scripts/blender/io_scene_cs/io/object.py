@@ -176,6 +176,10 @@ class Hierarchy:
           are exported as a Crystal Space animated mesh factory
     """
 
+    if dontClose and self.object.data.name in Hierarchy.exportedFactories:
+      print('Skipping "%s" factory export, already done' % (self.object.data.uname))
+      return
+
     # Build CS mapping buffers and submeshes for this object
     print("Building CS mapping buffers...")
     meshData = []
@@ -255,6 +259,9 @@ class Hierarchy:
             args['scales'] = [scales[indexObject]]
             args['dontClose'] = True
             ob.AsCSGenmeshLib(func, d, **args)
+            if dontClose:
+              Hierarchy.exportedFactories.append(self.object.data.name)
+
           Export(children, d+2)
           if export:
             func(" "*d + "</meshfact>")
@@ -271,6 +278,8 @@ class Hierarchy:
       args['mappingNormals'] = mappingNormals
       args['scales'] = scales
       self.AsCSAnimeshLib(func, depth, totalVertices, dontClose, **args)
+      if dontClose:
+        Hierarchy.exportedFactories.append(self.object.data.name)
 
     if not dontClose:
       func("</library>")
