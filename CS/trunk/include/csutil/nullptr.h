@@ -62,6 +62,61 @@ namespace std
 using ::std::nullptr_t;
 const nullptr_t nullptr = {};
 
+/*
+  some gcc versions (e.g. 4.5) fail to implicitly perform the above casts
+  in comparisons (e.g. pointer == nullptr) - to reduce the clutter around
+  the engine, overload operator== and operator!=
+*/
+
+// overload operator== for comparison of non-member functions with nullptr
+template<typename T>
+bool operator==(T* const& p, nullptr_t const& n)
+{
+    return p == static_cast<T* const>(n);
+}
+template<typename T>
+bool operator==(nullptr_t const& n, T* const& p)
+{
+    return p == static_cast<T* const>(n);
+}
+
+// overload operator== for comparison of member functions with nullptr
+template<class C, typename T>
+bool operator==(T C::* const& p, nullptr_t const& n)
+{
+    return p == static_cast<T C::* const>(n);
+} 
+template<class C, typename T>
+bool operator==(nullptr_t const& n, T C::* const& p)
+{
+    return p == static_cast<T C::* const>(n);
+}
+
+// overload operator!= for comparison of non-member functions with nullptr
+template<typename T>
+bool operator!=(T* const& p, nullptr_t const& n)
+{
+    return p != static_cast<T* const>(n);
+}
+ 
+template<typename T>
+bool operator!=(nullptr_t const& n, T* const& p)
+{
+    return p != static_cast<T* const>(n);
+}
+
+// overload operator!= for comparison of member functions with nullptr
+template<class C, typename T>
+bool operator!=(T C::* const& p, nullptr_t const& n)
+{
+    return p != static_cast<T C::* const>(n);
+}
+template<class C, typename T>
+bool operator!=(nullptr_t const& n, T C::* const& p)
+{
+    return p != static_cast<T C::* const>(n);
+}
+
 #endif /* !defined(CS_HAS_NULLPTR) \
 	  || (defined(__STRICT_ANSI__) && !defined(CS_HAS_NULLPTR_STRICT_ANSI)) */
 #endif // !defined(CS_NO_PROVIDE_NULLPTR)
