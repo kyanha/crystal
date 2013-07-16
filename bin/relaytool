@@ -124,7 +124,10 @@ function relay() {
         variables=$( grep "^V " "$partial_map" | cut -d' ' -f2 )
     else
         functions=$( nm --extern-only -D "$lib" | awk '{ if (($2 == "T") || ($2 == "W")) print $3; }' | LC_ALL=C grep -v '\(\<_init\>\|\<_fini\>\)' | LC_ALL=C sort -u )
-        variables=$( nm --extern-only -D "$lib" | awk '{ if (($2 == "D") || ($2 == "G") || ($2 == "B") || ($2 == "V")) print $3; }' | LC_ALL=C sort -u )
+        variables=$( nm --extern-only -D "$lib" \
+                    | awk '{ if (($2 == "D") || ($2 == "G") || ($2 == "B") || ($2 == "V")) print $3; }' \
+                    | LC_ALL=C grep -v '\(__bss.*\|_edata\|_end\)' \
+                    | LC_ALL=C sort -u )
     fi
     if $using_minimal_list; then
         functions="$functions
