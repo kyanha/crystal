@@ -25,6 +25,8 @@
  * Crystal Space Version Information
  */
 
+#include "csverdef.h"
+
 // *** NOTE ***
 // Also update CS/configure.ac, CS/docs/texinfo/version.txi, and
 // CS/mk/autoconf/crystal.m4 when updating the version number.
@@ -55,9 +57,9 @@
  *
  * The relative SVN revision is computed by the script `rcsrev`.
  */
-//CS_RCSREV_OFFSET 513
+//CS_RCSREV_OFFSET 3933
 #ifndef CS_VERSION_RCSREV
-#define CS_VERSION_RCSREV	3932
+#define CS_VERSION_RCSREV	3933
 #endif
 
 /**\name Version number definitions (numeric)
@@ -75,9 +77,6 @@
  */
 #define CS_VERSION_NUM_BUILD	CS_VERSION_RCSREV
 
-/// Encode a version into a single number comparable using <, > etc.
-#define CS_VERSION_NUM_COMPARABLE(Major,Minor,Release,Build)  \
-  ((Major)*10000000 + (Minor)*100000 + (Release)*1000 + (Build))
 /// Current version, encode into a single number comparable using <, > etc.
 #define CS_VERSION_NUM_COMPARABLE_CURRENT         			\
   CS_VERSION_NUM_COMPARABLE(CS_VERSION_NUM_MAJOR, CS_VERSION_NUM_MINOR, \
@@ -97,9 +96,6 @@
 /// Date of release
 #define CS_RELEASE_DATE		CS_VER_QUOTE_(Mon 9-Jun-2008)
 /** @} */
-
-#define CS_VER_QUOTE_(X) #X
-#define CS_VER_QUOTE(X) CS_VER_QUOTE_(X)
 
 #if !defined(CS_PLATFORM_NAME)
 /// Name of the platform CS is compiled for (i.e. Win32)
