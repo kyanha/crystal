@@ -1821,6 +1821,14 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
     {
       // Do the quick pre-parse.
       csRef<iDocumentNode> lib_node = doc->GetRoot()->GetNode("library");
+      if (!lib_node)
+      {
+        SyntaxService->ReportError (
+          "crystalspace.maploader.parse.expectedlib",
+          lib_node, "Expected %s token!",
+	  CS::Quote::Single ("library"));
+        return false;
+      }
       ParseAvailableObjects(dynamic_cast<csLoaderContext*>((iLoaderContext*)ldr_context), lib_node, *libs, *libIDs);
 
       // Add info to arrays later.
