@@ -334,8 +334,6 @@ namespace CS
             0, 0, 1, 0,
             0, 0, 0, 1);
 
-          CS::Math::Matrix4 matrix = rview->GetCamera()->GetProjectionMatrix();
-
           CS::Math::Matrix4 Mortho = 
             CS::Math::Projections::Ortho (-1, 1, 1, -1, 1, -1);
 
