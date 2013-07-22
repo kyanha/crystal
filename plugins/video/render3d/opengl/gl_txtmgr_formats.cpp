@@ -45,6 +45,7 @@ void csGLTextureManager::InitFormats ()
   G3D->ext->InitGL_EXT_abgr ();
   G3D->ext->InitGL_EXT_packed_depth_stencil ();
   G3D->ext->InitGL_ARB_depth_texture ();
+  G3D->ext->InitGL_ARB_depth_buffer_float ();
 
   if (G3D->ext->CS_GL_ARB_texture_compression)
   {
@@ -220,12 +221,15 @@ enum
   fmtDepthStencil24_8,
   fmtDepth32,
   
+  fmtDepth32F,
+  
   fmtDepthNum
 };
 
 static const GLenum targetDepth[fmtDepthNum] = {
   GL_DEPTH_COMPONENT16_ARB, GL_DEPTH_COMPONENT24_ARB, 
-  GL_DEPTH24_STENCIL8_EXT, GL_DEPTH_COMPONENT32_ARB
+  GL_DEPTH24_STENCIL8_EXT, GL_DEPTH_COMPONENT32_ARB,
+  GL_DEPTH_COMPONENT32F
 };
 
 static const csGLTextureManager::FormatTemplate formatsDepth[] = {
@@ -241,6 +245,11 @@ static const csGLTextureManager::FormatTemplate formatsDepthJunk[] = {
 
 static const csGLTextureManager::FormatTemplate formatsDepthStencil[] = {
   {{24, 8,  0,  0}, fmtDepthStencil24_8, GL_UNSIGNED_INT_24_8_EXT},
+  {{0, 0, 0, 0}, -1, 0}
+};
+
+static const csGLTextureManager::FormatTemplate formatsDepthFloat[] = {
+  {{32, 0,  0,  0}, fmtDepth32F, GL_FLOAT},
   {{0, 0, 0, 0}, -1, 0}
 };
 
@@ -273,6 +282,9 @@ bool csGLTextureManager::FormatSupported (GLenum srcFormat, GLenum srcType)
       || (srcFormat == GL_DEPTH_COMPONENT24_ARB)
       || (srcFormat == GL_DEPTH_COMPONENT32_ARB))
     && !G3D->ext->CS_GL_ARB_depth_texture)
+    return false;
+  if ((srcFormat == GL_DEPTH_COMPONENT32F)
+    && !G3D->ext->CS_GL_ARB_depth_buffer_float)
     return false;
 
   return true;
@@ -601,6 +613,12 @@ bool csGLTextureManager::DetermineFloatFormat (
       sourceFormat = GL_LUMINANCE_ALPHA;
       compCount = 2;
       targetTable = targetALum;
+      break;
+    case ORDER('d',0,0,0):
+      formats = formatsDepthFloat;
+      sourceFormat = GL_DEPTH_COMPONENT;
+      compCount = 1;
+      targetTable = targetDepth;
       break;
   }
 
