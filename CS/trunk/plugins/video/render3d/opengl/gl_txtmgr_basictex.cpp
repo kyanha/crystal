@@ -592,7 +592,8 @@ void csGLBasicTextureHandle::Load ()
       glTexParameterf (GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAX_ANISOTROPY_EXT,
         txtmgr->texture_filter_anisotropy);
     }
-    if (G3D->ext->CS_GL_AMD_seamless_cubemap_per_texture)
+    if (G3D->ext->CS_GL_ARB_seamless_cubemap_per_texture
+      || G3D->ext->CS_GL_AMD_seamless_cubemap_per_texture)
     {
       bool seamless = !texFlags.Check (CS_TEXTURE_CUBEMAP_DISABLE_SEAMLESS);
       glTexParameteri (GL_TEXTURE_CUBE_MAP, GL_TEXTURE_CUBE_MAP_SEAMLESS,

@@ -888,8 +888,14 @@ bool csGLGraphics3D::Open ()
   ext->InitGL_ARB_occlusion_query ();
   ext->InitGL_ARB_occlusion_query2 ();
   ext->InitGL_GREMEDY_string_marker ();
-  ext->InitGL_ARB_seamless_cube_map ();
-  ext->InitGL_AMD_seamless_cubemap_per_texture ();
+  if (!ext->CS_GL_ARB_seamless_cubemap_per_texture)
+  {
+    ext->InitGL_AMD_seamless_cubemap_per_texture ();
+    if (!ext->CS_GL_AMD_seamless_cubemap_per_texture)
+    {
+      ext->InitGL_ARB_seamless_cube_map ();
+    }
+  }
   ext->InitGL_ARB_half_float_vertex ();
   ext->InitGL_ARB_instanced_arrays ();
   ext->InitGL_ARB_tessellation_shader (); // glPatchParameteri()
@@ -2827,7 +2833,8 @@ void csGLGraphics3D::ApplyBufferChanges()
 
 void csGLGraphics3D::SetSeamlessCubemapFlag ()
 {
-  if (ext->CS_GL_AMD_seamless_cubemap_per_texture
+  if (ext->CS_GL_ARB_seamless_cubemap_per_texture
+      || ext->CS_GL_AMD_seamless_cubemap_per_texture
       || !ext->CS_GL_ARB_seamless_cube_map)
     return;
   
