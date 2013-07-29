@@ -357,6 +357,7 @@ class VfsNode : public CS::Memory::CustomAllocated
 public:
   // The virtual path
   char *VPath;
+  size_t VPath_l;
   // Configuration section key
   char *ConfigKey;
   // The array of real paths/archives bound to this virtual path
@@ -418,7 +419,7 @@ csFile::csFile (int /*Mode*/, VfsNode *ParentNode, size_t RIndex,
   Error = VFS_STATUS_OK;
   csFile::verbosity = verbosity;
 
-  size_t vpl = strlen (Node->VPath);
+  size_t vpl = Node->VPath_l;
   size_t nsl = strlen (NameSuffix);
   Name = (char*)cs_malloc (vpl + nsl + 1);
   memcpy (Name, Node->VPath, vpl);
@@ -1125,6 +1126,7 @@ VfsNode::VfsNode (char *iPath, const char *iConfigKey,
 		  csVFS* vfs, unsigned int verbosity) : vfs (vfs)
 {
   VPath = iPath;
+  VPath_l = strlen (iPath);
   ConfigKey = CS::StrDup (iConfigKey);
   VfsNode::verbosity = verbosity;
 }
@@ -1375,8 +1377,8 @@ void VfsNode::FindFiles (const char *Suffix, const char *Mask,
 	{
 	  vpath << VFS_PATH_SEPARATOR;
 	}
-    if (FileList->Find (vpath) == csArrayItemNotFound)
-      FileList->Push (vpath);
+        if (FileList->Find (vpath) == csArrayItemNotFound)
+          FileList->Push (vpath);
       } /* endwhile */
       closedir (dh);
     }
@@ -1414,7 +1416,7 @@ void VfsNode::FindFiles (const char *Suffix, const char *Mask,
 	  }
 	  if (cur < fnl)
 	    cur++;
-          size_t vpl = strlen (VPath);
+          size_t vpl = VPath_l;
 	  vpath.Clear();
 	  vpath << VPath;
 	  vpath << fname;
@@ -1880,7 +1882,7 @@ VfsNode *csVFS::GetNode (const char *Path, char *NodePrefix,
   for (i = 0; i < NodeList.GetSize (); i++)
   {
     VfsNode *node = (VfsNode *)NodeList [i];
-    size_t vpath_l = strlen (node->VPath);
+    size_t vpath_l = node->VPath_l;
     if ((vpath_l <= path_l) && (strncmp (node->VPath, Path, vpath_l) == 0))
     {
       best_i = i;
@@ -2062,14 +2064,14 @@ csPtr<iStringArray> csVFS::FindFiles (const char *Path)
     for (size_t i = 0; i < NodeList.GetSize (); i++)
     {
       VfsNode *node = (VfsNode *)NodeList [i];
-      if ((memcmp (node->VPath, XPath, sl) == 0) && (node->VPath [sl]))
+      if (node->VPath_l > sl && (memcmp (node->VPath, XPath, sl) == 0) && (node->VPath [sl]))
       {
         const char *pp = node->VPath + sl;
-        while (*pp && *pp == VFS_PATH_SEPARATOR)
+        while (*pp == VFS_PATH_SEPARATOR)
           pp++;
         while (*pp && *pp != VFS_PATH_SEPARATOR)
           pp++;
-        while (*pp && *pp == VFS_PATH_SEPARATOR)
+        while (*pp == VFS_PATH_SEPARATOR)
           pp++;
         news.Clear();
         news.Append (node->VPath);
