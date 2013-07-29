@@ -90,4 +90,6 @@ void csVector2Test::testCond()
   CPPUNIT_ASSERT(temp != v2);
   CPPUNIT_ASSERT(v1 < 3.0);
   CPPUNIT_ASSERT(3.0 > v1);
+  CPPUNIT_ASSERT(v2 > 2.0);
+  CPPUNIT_ASSERT(2.0 < v2);
 }
