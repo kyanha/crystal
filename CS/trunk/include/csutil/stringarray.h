@@ -71,7 +71,7 @@ private:
 public:
   /**
    * Initialize object to hold initially \c limit elements, and increase
-   * storage by \c threshold each time the upper bound is exceeded.
+   * storage by \c CapacityHandler each time the upper bound is exceeded.
    */
   StringArray (size_t limit = 0, const CapacityHandler& ch = CapacityHandler())
   	: superclass(limit, ch)
@@ -176,7 +176,7 @@ public:
     for (size_t i = 0; i < this->GetSize (); i++)
       if (! strcmp (this->Get (i), str))
         return i;
-    return (size_t)-1;
+    return csArrayItemNotFound;
   }
 
   /**
@@ -204,7 +204,7 @@ public:
     for (size_t i = 0; i < this->GetSize (); i++)
       if (!csStrCaseCmp (this->Get (i), str))
         return i;
-    return (size_t)-1;
+    return csArrayItemNotFound;
   }
 
   /**
