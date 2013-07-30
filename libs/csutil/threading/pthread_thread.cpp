@@ -100,6 +100,7 @@ namespace Implementation
       pthread_attr_init(&attr);
       pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_JOINABLE);
       pthread_create(&threadHandle, &attr, proxyFunc, &param); 
+      pthread_attr_destroy(&attr);
             
       startupBarrier.Wait ();
 
