@@ -228,8 +228,8 @@ int main(int argc, char* argv[])
 {
   csInitializer::InitializeSCF(argc, argv);
   iObjectRegistry* objReg = csInitializer::CreateObjectRegistry();
-  csInitializer::CreateEventQueue(objReg);
-  csInitializer::CreateThreadManager(objReg);
+  csRef<iEventQueue> evq = csInitializer::CreateEventQueue(objReg);
+  csRef<iThreadManager> tm = csInitializer::CreateThreadManager(objReg);
 
   csRef<iThreadTest> threadTest;
   threadTest.AttachNew(new csThreadTest(objReg));
@@ -271,7 +271,7 @@ int main(int argc, char* argv[])
   WaitForKey ();
   printf("\n");
 
-  objReg->Clear();
+  csInitializer::DestroyApplication(objReg);
 
   return 0;
 }
