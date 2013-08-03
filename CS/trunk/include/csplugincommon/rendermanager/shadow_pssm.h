@@ -1290,6 +1290,7 @@ namespace RenderManager
 	csRef<iCustomMatrixCamera> shadowCam = rview->GetEngine()->CreateCustomMatrixCamera();
 	shadowCam->SetProjectionMatrix(project);
 	shadowCam->GetCamera()->SetTransform(lightData.light2world);
+	shadowCam->GetCamera()->SetMirrored(true);
 
 	// create render view
 	csRef<CS::RenderManager::RenderView> shadowView;
