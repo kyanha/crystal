@@ -85,8 +85,6 @@ void csCameraBase::MoveWorld (const csVector3 &v, bool cd)
 
   if (sector)
   {
-    csVector3 remember_position = new_position;
-
     // Test if the motion crosses a portal
     iSector *new_sector = sector->FollowSegment (
         *this,
