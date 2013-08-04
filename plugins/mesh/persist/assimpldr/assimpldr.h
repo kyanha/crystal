@@ -35,7 +35,7 @@
 
 // The header files to be included are not the same between Assimp 2.0 and
 // above versions
-#if (CS_ASSIMP_VERSION == 2)
+#ifndef CS_ASSIMP_HPP_HEADERS
 #include "assimp/assimp.hpp"
 #include "assimp/aiScene.h"
 #include "assimp/aiPostProcess.h"
