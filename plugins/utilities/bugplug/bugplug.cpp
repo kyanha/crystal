@@ -2493,7 +2493,6 @@ void csBugPlug::Dump (iSector* sector)
   for (i = 0 ; i < sector->GetMeshes ()->GetCount () ; i++)
   {
     iMeshWrapper* mesh = sector->GetMeshes ()->Get (i);
-    const char* n = mesh->QueryObject ()->GetName ();
     Dump (8, mesh);
   }
 }
