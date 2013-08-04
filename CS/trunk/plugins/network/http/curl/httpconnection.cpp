@@ -289,8 +289,8 @@ int HTTPConnection::ProgressCallback(HTTPConnection* clientp,
                             double ultotal,
                             double ulnow)
 {
-  double val = 0.0;
-  if (dltotal != 0.0) val = (dlnow)/dltotal;
+  //double val = 0.0;
+  //if (dltotal != 0.0) val = (dlnow)/dltotal;
   //if (clientp->onProgress) (*clientp->onProgress)(val);
   return 0;
 }
