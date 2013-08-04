@@ -576,7 +576,6 @@ CS_PLUGIN_NAMESPACE_BEGIN(Particles)
   {
     ParticlesMeshObject* meshObject = dynamic_cast<ParticlesMeshObject*> (system);
     iMovable* meshMovable = meshObject->GetMeshWrapper ()->GetMovable ();
-    iSectorList* meshSectors = meshMovable->GetSectors ();
 
     if (!engine)
       engine = csQueryRegistry<iEngine> (meshObject->factory->objectType->object_reg);
