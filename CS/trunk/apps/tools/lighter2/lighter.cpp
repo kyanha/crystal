@@ -151,7 +151,7 @@ namespace lighter
       if ((maxSwapConfig >= 0) && (maxSwapConfig <= SIZE_MAX / (1024 * 1024)))
         maxSwapSize = maxSwapConfig;
       // maxSwapSize is in megabytes, make sure the byte count fits as well
-      maxSwapSize = csMin (maxSwapSize, SIZE_MAX / (1024 * 1024));
+      maxSwapSize = csMin (maxSwapSize, static_cast<size_t>(SIZE_MAX / (1024 * 1024)));
       swapManager = new SwapManager (maxSwapSize * 1024 * 1024);
     }
 
