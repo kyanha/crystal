@@ -167,13 +167,13 @@ namespace CS
     /// Construct an invalid texture format.
     StructuredTextureFormat ()
     {
-      cd.coded_components = CONST_UINT64 (0);
+      cd.coded_components = 0;
       cd.format = Invalid;
     }
     /// Construct a texture format with the given format but no components.
     StructuredTextureFormat (TextureFormat fmt)
     {
-      cd.coded_components = CONST_UINT64 (0);
+      cd.coded_components = 0;
       cd.format = fmt;
     }
     //@{
@@ -181,7 +181,7 @@ namespace CS
     StructuredTextureFormat (char cmp1, int size1,
       TextureFormat fmt = Integer)
     {
-      cd.coded_components = CONST_UINT64 (0);
+      cd.coded_components = 0;
       cd.format = fmt;
       if (cmp1 != 0) AddComponent (cmp1, size1);
     }
@@ -189,7 +189,7 @@ namespace CS
       char cmp2, int size2,
       TextureFormat fmt = Integer)
     {
-      cd.coded_components = CONST_UINT64 (0);
+      cd.coded_components = 0;
       cd.format = fmt;
       if (cmp1 != 0) AddComponent (cmp1, size1);
       if (cmp2 != 0) AddComponent (cmp2, size2);
@@ -199,7 +199,7 @@ namespace CS
       char cmp3, int size3,
       TextureFormat fmt = Integer)
     {
-      cd.coded_components = CONST_UINT64 (0);
+      cd.coded_components = 0;
       cd.format = fmt;
       if (cmp1 != 0) AddComponent (cmp1, size1);
       if (cmp2 != 0) AddComponent (cmp2, size2);
@@ -211,7 +211,7 @@ namespace CS
       char cmp4, int size4,
       TextureFormat fmt = Integer)
     {
-      cd.coded_components = CONST_UINT64 (0);
+      cd.coded_components = 0;
       cd.format = fmt;
       if (cmp1 != 0) AddComponent (cmp1, size1);
       if (cmp2 != 0) AddComponent (cmp2, size2);
@@ -243,7 +243,7 @@ namespace CS
       uint64 shifted = cd.coded_components << 16;
       if ((shifted >> 16) != cd.coded_components)
         return false;
-      cd.coded_components = shifted + (CONST_UINT64 (256) * cmp) + size;
+      cd.coded_components = shifted + 256U * cmp + size;
       return true;
     }
 
