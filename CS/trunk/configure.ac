@@ -1967,52 +1967,53 @@ CS_NOTABLE([alsa], [audio], [unix], [$cs_cv_libasound],
 
 
 #------------------------------------------------------------------------------
-# Check for Open Asset Import Library (Assimp). Also check whether this is the
-# version 2.0 or 3.0/above that is being used, the header files to be included
-# not being the same.
+# Check for Open Asset Import Library (assimp). Versions 2 & 3 are supported.
+#
+# This check is complicated by the fact that the name of headers and constants
+# change incompatibly between versions.  For instance, version 2 uses .h
+# extension for headers, but version 3 uses .hpp. Version 2 has constants named
+# Assimp::Loger::FOO, but version 3 has Assimp::Logger:Foo.  Worse, some
+# distros seem to ship a mishmash of the two versions. For instance, in Fedora
+# 18, package assimp-devel.x86_64 claims version 2.0.863, and the header
+# extensions are indeed .h, but the constants are from v3 (Assimp::Logger:Foo).
 #------------------------------------------------------------------------------
-CS_CHECK_LIB_WITH([assimp],
-    [AC_LANG_PROGRAM(
-	[[]],
-	[])],
-    [], [C++],
-    [CS_CHECK_BUILD([for Assimp v3], [cs_cv_assimp3],
-        [AC_LANG_PROGRAM(
-	    [[#include <assimp/Logger.hpp>]],
-	    [])],
-	[], [C++],
-	[CS_HEADER_PROPERTY([CS_ASSIMP_VERSION], [3])],
-	[CS_CHECK_BUILD([for Assimp v2], [cs_cv_assimp2],
-            [AC_LANG_PROGRAM(
-                [[#include <assimp/ProgressHandler.h>]],
-	        [])],
-	    [], [C++],
-	    [CS_HEADER_PROPERTY([CS_ASSIMP_VERSION], [2])],
-	    [unset cs_cv_libassimp], [],
-            [$cs_cv_libassimp_cflags $cs_cv_libz_cflags],
-            [$cs_cv_libassimp_lflags $cs_cv_libz_lflags],
-            [$cs_cv_libassimp_libs   $cs_cv_libz_libs])],
-        [],
-        [$cs_cv_libassimp_cflags $cs_cv_libz_cflags],
-        [$cs_cv_libassimp_lflags $cs_cv_libz_lflags],
-        [$cs_cv_libassimp_libs   $cs_cv_libz_libs])],
-    [],
-    [$cs_cv_libz_cflags],
-    [$cs_cv_libz_lflags],
-    [$cs_cv_libz_libs])
+CS_CHECK_LIB_WITH([assimp], [AC_LANG_PROGRAM([], [])], [], [C++], [], [], 
+    [$cs_cv_libz_cflags], [$cs_cv_libz_lflags], [$cs_cv_libz_libs])
 
-unset cs_cv_assimp2
-unset cs_cv_assimp2_cflags
-unset cs_cv_assimp2_lflags
-unset cs_cv_assimp2_libs
-unset cs_cv_assimp3
-unset cs_cv_assimp3_cflags
-unset cs_cv_assimp3_lflags
-unset cs_cv_assimp3_libs
+AS_IF([test $cs_cv_libassimp = yes],
+    [CS_CHECK_BUILD([if assimp uses .hpp headers], [cs_cv_assimp_hpp_headers],
+        [AC_LANG_PROGRAM([[#include <assimp/Logger.hpp>]], [])], [], [C++],
+        [CS_HEADER_PROPERTY([CS_ASSIMP_HPP_HEADERS])
+        cs_assimp_header_ext=.hpp], [cs_assimp_header_ext=.h], [],
+        [$cs_cv_libassimp_cflags],
+        [$cs_cv_libassimp_lflags],
+        [$cs_cv_libassimp_libs])])
+
+AS_IF([test $cs_cv_libassimp = yes],
+    [CS_CHECK_BUILD([if assimp is sufficiently recent], [cs_cv_assimp_recent],
+        [AC_LANG_PROGRAM(
+            [[#include <assimp/ProgressHandler$cs_assimp_header_ext>]], [])],
+        [], [C++],
+        [CS_EMIT_BUILD_RESULT([cs_cv_libassimp], [ASSIMP])],
+        [cs_cv_libassimp=no], [],
+        [$cs_cv_libassimp_cflags],
+        [$cs_cv_libassimp_lflags],
+        [$cs_cv_libassimp_libs])])
+
+AS_IF([test $cs_cv_libassimp = yes],
+    [CS_CHECK_BUILD([for uppercase Assimp::Logger constants],
+        [cs_cv_assimp_logger_uppercase],
+        [AC_LANG_PROGRAM(
+            [[#include <assimp/Logger$cs_assimp_header_ext>]],
+            [Assimp::Logger::ERR])],
+        [], [C++],
+        [CS_HEADER_PROPERTY([CS_ASSIMP_LOGGER_UPPERCASE])], [], [],
+        [$cs_cv_libassimp_cflags],
+        [$cs_cv_libassimp_lflags],
+        [$cs_cv_libassimp_libs])])
 
 CS_NOTABLE([assimp], [models], [], [$cs_cv_libassimp])
-AS_IF([test "$cs_cv_libassimp" = yes],
-    CS_EMIT_BUILD_RESULT([cs_cv_libassimp], [ASSIMP]))
+
 
 
 #------------------------------------------------------------------------------
