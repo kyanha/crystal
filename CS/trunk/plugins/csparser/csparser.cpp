@@ -474,8 +474,6 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
     bool use_light_transf_vector = false;
     csReversibleTransform light_transf;
 
-    float distbright = 1;
-
     float influenceRadius = 0;
 
     csLightAttenuationMode attenuation = CS_ATTN_LINEAR;
@@ -527,9 +525,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
 
     bool typeGiven = false;
     bool radiusGiven = false;
-    bool colorGiven = false;
     bool userSpecular = false;
-    bool dynamicGiven = false;
     bool attenuationGiven = false;
     bool influenceOverride = false;
     bool flagsGiven = false;
@@ -565,7 +561,6 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
           csRef<iDocumentAttribute> attr;
           if (attr = child->GetAttribute ("brightness"))
           {
-            distbright = attr->GetValueAsFloat();
             ReportWarning ("crystalspace.maploader",
               "'brightness' attribute for lights is deprecated!");
           }
@@ -576,7 +571,6 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
           return 0;
         break;
       case XMLTOKEN_COLOR:
-	colorGiven = true;
         if (!SyntaxService->ParseColor (child, color))
           return 0;
         break;
@@ -587,7 +581,6 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
         break;
       case XMLTOKEN_DYNAMIC:
         {
-	  dynamicGiven = true;
           bool d;
           if (!SyntaxService->ParseBool (child, d, true))
             return 0;
