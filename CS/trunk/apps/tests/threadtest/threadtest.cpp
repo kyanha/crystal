@@ -228,8 +228,8 @@ int main(int argc, char* argv[])
 {
   csInitializer::InitializeSCF(argc, argv);
   iObjectRegistry* objReg = csInitializer::CreateObjectRegistry();
-  csRef<iEventQueue> evq = csInitializer::CreateEventQueue(objReg);
-  csRef<iThreadManager> tm = csInitializer::CreateThreadManager(objReg);
+  (void) csInitializer::CreateEventQueue(objReg);
+  (void) csInitializer::CreateThreadManager(objReg);
 
   csRef<iThreadTest> threadTest;
   threadTest.AttachNew(new csThreadTest(objReg));
