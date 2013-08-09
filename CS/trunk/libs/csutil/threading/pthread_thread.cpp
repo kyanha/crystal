@@ -128,7 +128,7 @@ namespace Implementation
 
   bool ThreadBase::SetPriority (ThreadPriority prio)
   {
-    int res = 1;
+    int res = 0;
     
     if (IsRunning ())
     {    
@@ -156,12 +156,12 @@ namespace Implementation
       }
     }
 
-    if (res != 0)
+    if (res == 0)
     {
       priority = prio;
     }
 
-    return res != 0;
+    return res == 0;
   }
 
   void ThreadBase::Wait () const
