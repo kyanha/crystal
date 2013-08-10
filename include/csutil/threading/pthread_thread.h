@@ -41,11 +41,16 @@ namespace Implementation
   public:
     ThreadBase (Runnable* runnable);
 
+    ~ThreadBase ();
+
     void Start ();
 
     void Stop ();
 
-    bool IsRunning () const;
+    bool IsRunning () const
+    {
+      return isRunning;
+    }
 
     bool SetPriority (ThreadPriority prio);
     
@@ -54,6 +59,11 @@ namespace Implementation
     static void Yield ();
 
     static ThreadID GetThreadID ();
+
+    Runnable* GetRunnable () const
+    {
+      return runnable;
+    }
 
     ThreadPriority GetPriority () const
     {
@@ -65,9 +75,8 @@ namespace Implementation
 
     pthread_t threadHandle;
     
-    int32 isRunning;
+    mutable bool isRunning;
     ThreadPriority priority;
-    Barrier startupBarrier;
   };
 
 
