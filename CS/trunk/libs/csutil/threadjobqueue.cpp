@@ -307,6 +307,11 @@ namespace Threading
             if (foreignTS->jobQueue.GetSize() > 0)
             {
               currentJob = foreignTS->jobQueue.PopBottom ();
+
+              // If the foreign queue is now empty, wake up any waiters.
+              if (!foreignTS->currentJob && foreignTS->jobQueue.GetSize() == 0)
+                foreignTS->tsJobFinished.NotifyAll ();
+
               foreignTS->tsMutex.Unlock (); // Unlock foreign object A if success
               break;
             }
