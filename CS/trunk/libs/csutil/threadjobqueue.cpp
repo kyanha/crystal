@@ -48,7 +48,7 @@ namespace Threading
     allThreadState = new csRef<ThreadState>[numWorkerThreads];
 
     // Start up the threads
-    for (unsigned int i = 0; i < numWorkerThreads; ++i)
+    for (size_t i = 0; i < numWorkerThreads; ++i)
     {
       allThreadState[i].AttachNew (new ThreadState (this, i)); 
       allThreadState[i]->threadObject->SetPriority(priority);
