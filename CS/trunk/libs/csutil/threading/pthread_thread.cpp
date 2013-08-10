@@ -42,14 +42,14 @@ namespace Implementation
 
     #ifdef CS_HAVE_PTHREAD_SETNAME_NP
       {
-	// Set the name, for debugging
-	const char* threadName = runnable->GetName ();
-	if (threadName)
-	  pthread_setname_np (pthread_self(), threadName);
+        // Set the name, for debugging
+        const char* threadName = runnable->GetName ();
+        if (threadName)
+          pthread_setname_np (pthread_self(), threadName);
       }
     #endif
-      
-      // Run      
+
+      // Run
       runnable->Run ();
 
       return 0;
@@ -102,9 +102,9 @@ namespace Implementation
   bool ThreadBase::SetPriority (ThreadPriority prio)
   {
     int res = 0;
-    
+
     if (IsRunning ())
-    {    
+    {
       struct sched_param SchedulerProperties;
 
       // Clear the properties initially
@@ -142,11 +142,11 @@ namespace Implementation
     if (IsRunning ())
     {
       isRunning = false;
-      pthread_join (threadHandle,0);
+      pthread_join (threadHandle, 0);
     }
   }
 
-  void ThreadBase::Yield () 
+  void ThreadBase::Yield ()
   {
     sched_yield ();
   }
