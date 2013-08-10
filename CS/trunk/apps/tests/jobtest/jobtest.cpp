@@ -127,6 +127,7 @@ void RunBenchmark (unsigned int numThreads)
     BenchResult[numThreads - 1][i] += endTick - startTick;
 
     csPrintf(".");
+    fflush(stdout);
   }  
 }
 
