@@ -170,7 +170,7 @@ inline csPtr<Interface> csQueryRegistry (iObjectRegistry *Reg)
     scfInterfaceTraits<Interface>::GetID (),
     scfInterfaceTraits<Interface>::GetVersion ());
 
-  if (x) base->DecRef (); //release our base interface
+  base->DecRef (); //release our base interface
   return csPtr<Interface> (x);
 }  
   
