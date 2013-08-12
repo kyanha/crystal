@@ -35,10 +35,6 @@
 #include "iengine/material.h"
 #include "iengine/mesh.h"
 #include "iengine/movable.h"
-#include "iengine/renderloop.h"
-#include "iengine/rendersteps/igeneric.h"
-#include "iengine/rendersteps/irenderstep.h"
-#include "iengine/rendersteps/irsfact.h"
 #include "iengine/sector.h"
 #include "igeom/clip2d.h"
 #include "igraphic/imageio.h"
@@ -428,28 +424,6 @@ bool csWaterDemo::Initialize ()
   csRef<iShaderVarStringSet> stringsSvName =
     csQueryRegistryTagInterface<iShaderVarStringSet>
     (object_reg, "crystalspace.shader.variablenameset");
-
-  //get a custom renderloop
-  csRef<iRenderLoop> rl = engine->GetRenderLoopManager ()->Create ();
-
-  csRef<iRenderStepType> genType = csLoadPlugin<iRenderStepType> (
-    plugin_mgr, "crystalspace.renderloop.step.generic.type");
-
-  csRef<iRenderStepFactory> genFact = genType->NewFactory ();
-
-  csRef<iRenderStep> step;
-  csRef<iGenericRenderStep> genStep;
-
-  step = genFact->Create ();
-  rl->AddStep (step);
-  genStep = scfQueryInterface<iGenericRenderStep> (step);
-
-  genStep->SetShaderType ("general");
-  genStep->SetZBufMode (CS_ZBUF_USE);
-  genStep->SetZOffset (false);
-
-  engine->GetRenderLoopManager ()->Register ("waterdemoRL", rl);
-  engine->SetCurrentDefaultRenderloop (rl);
 
   // Load in lighting shaders
   csRef<iVFS> vfs (csQueryRegistry<iVFS> (object_reg));
