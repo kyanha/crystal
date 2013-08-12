@@ -164,9 +164,11 @@ THREADED_CALLABLE_IMPL4(csThreadedLoader, LoadImage, const char* cwd, const char
 
 THREADED_CALLABLE_IMPL4(csThreadedLoader, LoadImage, const char* cwd, csRef<iDataBuffer> buf, int Format, bool do_verbose)
 {
-  csVfsDirectoryChanger dirChange(vfs);
-  dirChange.ChangeToFull(cwd);
+  return LoadImageTC (ret, sync, buf, Format, do_verbose);
+}
 
+THREADED_CALLABLE_IMPL3(csThreadedLoader, LoadImage, csRef<iDataBuffer> buf, int Format, bool do_verbose)
+{
   csRef<iImage> image = LoadImage (buf, 0, Format, do_verbose);
   if(image.IsValid())
   {

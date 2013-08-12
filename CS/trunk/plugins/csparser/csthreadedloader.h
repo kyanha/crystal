@@ -173,6 +173,9 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
     THREADED_CALLABLE_DECL4(csThreadedLoader, LoadImage, csLoaderReturn, const char*, cwd,
     csRef<iDataBuffer>, buf, int, Format, bool, do_verbose, THREADED, false, false)
 
+    THREADED_CALLABLE_DECL3(csThreadedLoader, LoadImage, csLoaderReturn,
+      csRef<iDataBuffer>, buf, int, Format, bool, do_verbose, THREADED, false, false)
+
     THREADED_CALLABLE_DECL6(csThreadedLoader, LoadTexture, csLoaderReturn, const char*, cwd, const char*, Filename,
     int, Flags, csRef<iTextureManager>, texman, csRef<iImage>*, image, bool, do_verbose, THREADED, false, false)
 

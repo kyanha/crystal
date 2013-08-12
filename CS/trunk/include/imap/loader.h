@@ -373,7 +373,7 @@ struct iSharedVarLoaderIterator : public virtual iBase
 */
 struct iThreadedLoader : public virtual iBase
 {
-  SCF_INTERFACE (iThreadedLoader, 2, 3, 1);
+  SCF_INTERFACE (iThreadedLoader, 2, 3, 2);
 
   /**
    * Get the loader sector list.
@@ -433,7 +433,9 @@ struct iThreadedLoader : public virtual iBase
    * renderer. If no video renderer exists, this function fails. You may also
    * request an alternate format to override the above sequence.
    * This version reads the image from a data buffer.
+   * \deprecated Deprecated in 2.1. Use variant without \a cwd argument.
    */
+  CS_DEPRECATED_METHOD_MSG("Use variant without 'cwd' argument")
   THREADED_INTERFACE4(LoadImage, const char* cwd, csRef<iDataBuffer> buf, int Format = CS_IMGFMT_INVALID,
   bool do_verbose = false);
 
@@ -884,6 +886,17 @@ struct iThreadedLoader : public virtual iBase
   // Get/Set loader flags.
   virtual const int& GetFlags () const = 0;
   virtual void SetFlags (int flags) = 0;
+
+  /**
+   * Load an image file. The image will be loaded in the format requested by
+   * the engine. If no engine exists, the format is taken from the video
+   * renderer. If no video renderer exists, this function fails. You may also
+   * request an alternate format to override the above sequence.
+   * This version reads the image from a data buffer.
+   * \deprecated Deprecated in 2.1. Use variant without \a cwd argument.
+   */
+  THREADED_INTERFACE3(LoadImage, csRef<iDataBuffer> buf, int Format = CS_IMGFMT_INVALID,
+    bool do_verbose = false);
 };
 
 /**
