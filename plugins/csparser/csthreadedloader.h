@@ -761,9 +761,6 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
       iDocumentNode* node, csWeakRefArray<iMaterialWrapper> &materialArray,
       const char* prefix = 0);
 
-    /// Parse a renderloop.
-    iRenderLoop* ParseRenderLoop (iDocumentNode* node, bool& set);
-
     /// Parse a addon.
     THREADED_CALLABLE_DECL6(csThreadedLoader, ParseAddOn, csLoaderReturn,
       csRef<iLoaderPlugin>, plugin, csRef<iDocumentNode>, node, csRef<iStreamSource>, ssource,

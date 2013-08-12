@@ -37,9 +37,6 @@
 #include "csutil/xmltiny.h"
 #include "csutil/event.h"
 #include "iengine/portal.h"
-#include "iengine/rendersteps/igeneric.h"
-#include "iengine/rendersteps/irenderstep.h"
-#include "iengine/rendersteps/irsfact.h"
 #include "igeom/clip2d.h"
 #include "igraphic/image.h"
 #include "igraphic/imageio.h"
@@ -516,7 +513,6 @@ csEngine::csEngine (iBase *iParent) :
   lightAmbientBlue (CS_DEFAULT_LIGHT_LEVEL),
   sectors (this), textures (new csTextureList (this)), 
   materials (new csMaterialList), sharedVariables (new csSharedVariableList),
-  defaultRenderLoopTried (false), renderLoopManager (0),
   topLevelClipper (0),
   worldSaveable (false), defaultKeepImage (false), maxAspectRatio (0),
   nextframePending (0), currentFrameNumber (0), 
@@ -545,7 +541,6 @@ csEngine::~csEngine ()
   delete materials;
   delete textures;
   delete sharedVariables;
-  delete renderLoopManager;
 }
 
 bool csEngine::Initialize (iObjectRegistry *objectRegistry)
@@ -627,9 +622,6 @@ bool csEngine::Initialize (iObjectRegistry *objectRegistry)
 
   csConfigAccess cfg (objectRegistry, "/config/engine.cfg");
   ReadConfig (cfg);
-
-  // Set up the RL manager.
-  renderLoopManager = new csRenderLoopManager (this);
 
   csLightManager* light_mgr = new csLightManager ();
   objectRegistry->Register (light_mgr, "iLightManager");
@@ -848,9 +840,6 @@ THREADED_CALLABLE_IMPL(csEngine, DeleteAll)
     csRef<iMaterialWrapper> portalMaterialWrapper;
     portalMaterialWrapper = materials->NewMaterial (portalMat, 0);
     defaultPortalMaterial = portalMaterialWrapper;
-    
-    defaultRenderLoop.Invalidate ();
-    defaultRenderLoopTried = false;
   }
 
   return true;
@@ -972,9 +961,6 @@ void csEngine::ResetWorldSpecificSettings()
   	defaultAmbientRed / 255.0f,
 	defaultAmbientGreen / 255.0f, 
         defaultAmbientBlue / 255.0f));
-  iRenderLoop* defaultRL = renderLoopManager->Retrieve 
-    (CS_DEFAULT_RENDERLOOP_NAME);
-  SetCurrentDefaultRenderloop (defaultRL);
 }
 
 void csEngine::PrepareTextures ()
@@ -1192,97 +1178,6 @@ void csEngine::StartDraw (iCamera *c, iClipper2D* /*view*/,
   float topy = -sy * ifov;
   float boty = (frameHeight - sy) * ifov;
   rview.SetFrustum (leftx, rightx, topy, boty);
-}
-
-#include "csutil/custom_new_disable.h"
-
-void csEngine::Draw (iCamera *c, iClipper2D *view, iMeshWrapper* mesh)
-{
-  if (bugplug)
-    bugplug->ResetCounter ("Sector Count");
-
-  currentFrameNumber++;
-  c->SetViewportSize (frameWidth, frameHeight);
-  ControlMeshes ();
-  csRef<CS::RenderManager::RenderView> rview;
-  rview.AttachNew (new (rviewPool) CS::RenderManager::RenderView (c, view,
-    G3D));
-  StartDraw (c, view, *rview);
-
-  // First initialize G3D with the right clipper.
-  G3D->SetClipper (view, CS_CLIPPER_TOPLEVEL);  // We are at top-level.
-  G3D->ResetNearPlane ();
-  G3D->SetProjectionMatrix (c->GetProjectionMatrix ());
-
-  FireStartFrame (rview);
-
-  iSector *s = c->GetSector ();
-  if (s) 
-  {
-    csShaderVariableStack& varStack = shaderManager->GetShaderVariableStack ();
-    varStack.Setup (shaderManager->GetSVNameStringset ()->GetSize ());
-
-    iRenderLoop* rl = s->GetRenderLoop ();
-    if (!rl) rl = this->csEngine::GetCurrentDefaultRenderloop ();
-    rl->Draw (rview, s, mesh);
-
-    varStack.Setup (0);
-  }
-
-  // draw all halos on the screen
-  if (halos.GetSize () > 0)
-  {
-    csTicks elapsed = virtualClock->GetElapsedTicks ();
-    size_t halo = halos.GetSize ();
-    while (halo-- > 0)
-      if (!halos[halo]->Process (elapsed, c, this))
-	halos.DeleteIndex (halo);
-  }
-  G3D->SetClipper (0, CS_CLIPPER_NONE);
-}
-
-#include "csutil/custom_new_enable.h"
-
-csPtr<iRenderLoop> csEngine::CreateDefaultRenderLoop ()
-{
-  csRef<iRenderLoop> loop = renderLoopManager->Create ();
-
-  csRef<iPluginManager> plugin_mgr (
-  	csQueryRegistry<iPluginManager> (objectRegistry));
-
-  char const* const stdstep = "crystalspace.renderloop.step.generic.type";
-  csRef<iRenderStepType> genType =
-    csLoadPlugin<iRenderStepType> (plugin_mgr, stdstep);
-
-  if (genType.IsValid())
-  {
-    csRef<iRenderStepFactory> genFact = genType->NewFactory ();
-
-    csRef<iRenderStep> step;
-    csRef<iGenericRenderStep> genStep;
-
-    step = genFact->Create ();
-    loop->AddStep (step);
-    genStep = scfQueryInterface<iGenericRenderStep> (step);
-  
-    genStep->SetShaderType ("standard");
-    genStep->SetDefaultShader (GetDefaultMaterialShader ());
-    genStep->SetZBufMode (CS_ZBUF_MESH);
-    genStep->SetZOffset (false);
-    genStep->SetPortalTraversal (true);
-  }
-  else
-    Error("Failed to load plugin %s; pandemonium will ensue.", stdstep);
-
-  return csPtr<iRenderLoop> (loop);
-}
-
-
-void csEngine::LoadDefaultRenderLoop (const char* fileName)
-{
-  csRef<iRenderLoop> newDefault = renderLoopManager->Load (fileName);
-  if (newDefault != 0)
-    defaultRenderLoop = newDefault;
 }
 
 csRef<iShader> csEngine::LoadShader (iDocumentSystem* docsys,
@@ -3272,68 +3167,6 @@ bool csEngine::DebugCommand (const char* cmd)
   return false;
 }
 
-// ======================================================================
-// Render loop stuff.
-// ======================================================================
-  
-iRenderLoopManager* csEngine::GetRenderLoopManager ()
-{
-  return renderLoopManager;
-}
-
-iRenderLoop* csEngine::GetCurrentDefaultRenderloop ()
-{
-  // Lazily obtain the default render loop
-  if (!defaultRenderLoop && !defaultRenderLoopTried)
-  {
-    csConfigAccess cfg (objectRegistry, "/config/engine.cfg");
-    // Try to load the user-specified default render loop.
-    const char* configLoop = cfg->GetStr ("Engine.RenderLoop.Default", 0);
-    if (!override_renderloop.IsEmpty ())
-    {
-      defaultRenderLoop = renderLoopManager->Load (override_renderloop);
-      if (!defaultRenderLoop)
-      {
-        Warn ("Default renderloop couldn't be created!");
-      }
-    }
-    else if (!configLoop)
-    {
-      defaultRenderLoop = CreateDefaultRenderLoop ();
-    }
-    else
-    {
-      defaultRenderLoop = renderLoopManager->Load (configLoop);
-      if (!defaultRenderLoop)
-      {
-        Warn ("Default renderloop couldn't be created!");
-      }
-    }
-
-    if (defaultRenderLoop)
-    {
-      // Register it.
-      renderLoopManager->Register (CS_DEFAULT_RENDERLOOP_NAME, 
-	defaultRenderLoop);
-    }
-    
-    defaultRenderLoopTried = true;
-  }
-
-  return defaultRenderLoop;
-}
-
-bool csEngine::SetCurrentDefaultRenderloop (iRenderLoop* loop)
-{
-  if (loop == 0) return false;
-  
-  // Hack: ensure that a config-set loop is registered as CS_DEFAULT_RENDERLOOP_NAME
-  csEngine::GetCurrentDefaultRenderloop ();
-  
-  defaultRenderLoop = loop;
-  return true;
-}
-
 void csEngine::UpdateAdaptiveLODs()
 {
   virtualClockBuffer.Add(virtualClock->GetElapsedTicks() / 1000.0f);
@@ -3354,7 +3187,6 @@ static const csOptionDescription
   config_options[] =
 {
   csOptionDescription( 0, "fov", "Field of Vision", CSVAR_LONG ),
-  csOptionDescription( 1, "renderloop", "Override the default render loop", CSVAR_STRING )
 };
 const int NUM_OPTIONS =
 (
@@ -3370,10 +3202,6 @@ bool csEngine::SetOption (int id, csVariant *value)
     case 0:
       PerspectiveImpl::SetDefaultFOV ((float)value->GetLong (), G3D->GetWidth ());
       break;
-    case 1:
-      override_renderloop = value->GetString ();
-      LoadDefaultRenderLoop (value->GetString ());
-      break;
     default:
       return false;
   }
@@ -3388,9 +3216,6 @@ bool csEngine::GetOption (int id, csVariant *value)
     case 0:
       value->SetLong ((long)PerspectiveImpl::GetDefaultFOV ());
       break;
-    case 1:
-      value->SetString ("");
-      break; // @@@
     default:  return false;
   }
 

@@ -39,8 +39,6 @@
   INTERFACE_APPLY(iPortal)
   INTERFACE_APPLY(iPortalContainer)
   INTERFACE_APPLY(iProcTexture)
-  INTERFACE_APPLY(iRenderLoop)
-  INTERFACE_APPLY(iRenderLoopManager)
   INTERFACE_APPLY(iRenderManager)
   INTERFACE_APPLY(iRenderManagerPostEffects)
   INTERFACE_APPLY(iRenderManagerTargets)

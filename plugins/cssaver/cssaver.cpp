@@ -33,7 +33,6 @@
 #include "iengine/portal.h"
 #include "iengine/portalcontainer.h"
 #include "iengine/scenenode.h"
-#include "iengine/renderloop.h"
 #include "iengine/sector.h"
 #include "iengine/sharevar.h"
 #include "iengine/texture.h"
@@ -629,7 +628,6 @@ bool csSaver::SaveLightFactories(iCollection* collection,
                                 iDocumentNode *parent)
 {
   iLightFactoryList* factList = engine->GetLightFactories ();
-  csStringID base_id = strings->Request ("base");
   for (int i=0; i<factList->GetCount(); i++)
   {
     csRef<iLightFactory> lightfact = factList->Get(i);
@@ -840,15 +838,6 @@ bool csSaver::SaveSectors(iDocumentNode *parent)
     csRef<iDocumentNode> sectorNode = CreateNode(parent, "sector");
     const char* name = sector->QueryObject()->GetName();
     if (name && *name) sectorNode->SetAttribute("name", name);
-    
-    iRenderLoop* renderloop = sector->GetRenderLoop ();
-    if (renderloop)
-    {
-      const char* loopName = engine->GetRenderLoopManager()->GetName(renderloop);
-      if (strcmp (loopName, CS_DEFAULT_RENDERLOOP_NAME))
-        CreateNode(sectorNode, "renderloop")
-          ->CreateNodeBefore(CS_NODE_TEXT, 0)->SetValue(loopName);
-    }
 
     csColor ambient = sector->GetDynamicAmbientLight ();
     csColor defaultAmbient;
@@ -1389,12 +1378,6 @@ bool csSaver::SaveSettings (iDocumentNode* node)
   csColor c;
   engine->GetAmbientLight(c);
   synldr->WriteColor(ambientNode, c);
-
-  iRenderLoop* renderloop = engine->GetCurrentDefaultRenderloop();
-  const char* loopName = engine->GetRenderLoopManager()->GetName(renderloop);
-  if (strcmp (loopName, CS_DEFAULT_RENDERLOOP_NAME))
-    CreateNode(settingsNode, "renderloop")
-      ->CreateNodeBefore(CS_NODE_TEXT, 0)->SetValue(loopName);
 
   return true;
 }

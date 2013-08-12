@@ -50,7 +50,7 @@ class csVector2;
  */
 struct iPortalContainer : public virtual iBase
 {
-  SCF_INTERFACE(iPortalContainer, 3,0,0);
+  SCF_INTERFACE(iPortalContainer, 4,0,0);
   /// Get the number of portals in this contain.
   virtual int GetPortalCount () const = 0;
 
@@ -63,9 +63,6 @@ struct iPortalContainer : public virtual iBase
   /// Remove a portal.
   virtual void RemovePortal (iPortal* portal) = 0;
 
-  /// Render the portal container
-  virtual void Draw (iRenderView* rview) = 0;
-  
   /**
    * Compute the normalized screen-space and camera-space polygons for all 
    * portals.
