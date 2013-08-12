@@ -63,7 +63,7 @@ public:
   }
 
   /**
-   * As above, except that the full path is treated as the directory to
+   * As ChangeTo(), except that the full path is treated as the directory to
    * change to.
    */
   bool ChangeToFull (const char* filename)
