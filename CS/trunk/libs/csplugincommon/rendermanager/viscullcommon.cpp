@@ -52,7 +52,8 @@ namespace CS
 
         csRef<iVFS> vfs = csQueryRegistry<iVFS> (objReg);
         csRef<iThreadedLoader> loader = csQueryRegistry<iThreadedLoader> (objReg);
-        loader->LoadShaderWait (vfs->GetCwd (), defaultShaderPath);
+        if (vfs && loader)
+          loader->LoadShaderWait (vfs->GetCwd (), defaultShaderPath);
 
         cfgkey = prefix;
         cfgkey.Append (".DefaultOcclusionShaderName");
