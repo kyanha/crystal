@@ -119,31 +119,7 @@ csPtr<iImage> csThreadedLoader::LoadImage (iDataBuffer* buf, const char* fname,
       Format = CS_IMGFMT_TRUECOLOR;
   }
 
-  if (!buf || !buf->GetSize ())
-  {
-    ReportWarning (
-      "crystalspace.maploader.parse.image",
-      "Could not open image file %s on VFS!", CS::Quote::Single (fname ? fname : "<unknown>"));
-    return 0;
-  }
-
-  // we don't use csRef because we need to return an Increfed object later
   csRef<iImage> image (ImageLoader->Load (buf, Format));
-  if (!image)
-  {
-    ReportWarning (
-      "crystalspace.maploader.parse.image",
-      "Could not load image %s. Unknown format!",
-      CS::Quote::Single (fname ? fname : "<unknown>"));
-    return 0;
-  }
-
-  if (fname)
-  {
-    csRef<iDataBuffer> xname = vfs->ExpandPath (fname);
-    image->SetName (**xname);
-  }
-
   return csPtr<iImage> (image);
 }
 
@@ -153,12 +129,31 @@ THREADED_CALLABLE_IMPL4(csThreadedLoader, LoadImage, const char* cwd, const char
   dirChange.ChangeToFull(cwd);
 
   csRef<iDataBuffer> buf = vfs->ReadFile (fname, false);
+  if (!buf || !buf->GetSize ())
+  {
+    ReportWarning (
+      "crystalspace.maploader.parse.image",
+      "Could not open image file %s on VFS!", CS::Quote::Single (fname ? fname : "<unknown>"));
+    return 0;
+  }
+
   csRef<iImage> image = LoadImage (buf, fname, Format, do_verbose);
   if(image.IsValid())
   {
+    csRef<iDataBuffer> xname = vfs->ExpandPath (fname);
+    image->SetName (**xname);
     ret->SetResult(csRef<iBase>(image));
     return true;
   }
+  else
+  {
+    ReportWarning (
+      "crystalspace.maploader.parse.image",
+      "Could not load image %s. Unknown format!",
+      CS::Quote::Single (fname));
+    return 0;
+  }
+
   return false;
 }
 
@@ -169,11 +164,17 @@ THREADED_CALLABLE_IMPL4(csThreadedLoader, LoadImage, const char* cwd, csRef<iDat
 
 THREADED_CALLABLE_IMPL3(csThreadedLoader, LoadImage, csRef<iDataBuffer> buf, int Format, bool do_verbose)
 {
-  csRef<iImage> image = LoadImage (buf, 0, Format, do_verbose);
+  csRef<iImage> image = LoadImage (buf, nullptr, Format, do_verbose);
   if(image.IsValid())
   {
     ret->SetResult(csRef<iBase>(image));
     return true;
+  }
+  else
+  {
+    ReportWarning (
+      "crystalspace.maploader.parse.image",
+      "Could not load image. Unknown format!");
   }
   return false;
 }
