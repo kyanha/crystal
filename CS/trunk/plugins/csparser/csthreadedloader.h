@@ -182,9 +182,16 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
     THREADED_CALLABLE_DECL6(csThreadedLoader, LoadTexture, csLoaderReturn, const char*, cwd, csRef<iDataBuffer>, buf,
     int, Flags, csRef<iTextureManager>, texman, csRef<iImage>*, image, bool, do_verbose, THREADED, false, false)
 
+    THREADED_CALLABLE_DECL5(csThreadedLoader, LoadTexture, csLoaderReturn, csRef<iDataBuffer>, buf,
+    int, Flags, csRef<iTextureManager>, texman, csRef<iImage>*, image, bool, do_verbose, THREADED, false, false)
+
     THREADED_CALLABLE_DECL9(csThreadedLoader, LoadTexture, csLoaderReturn, const char*, cwd, const char*, Name,
     csRef<iDataBuffer>, buf, int, Flags, csRef<iTextureManager>, texman, bool, reg, bool, create_material, bool,
     free_image, bool, do_verbose, THREADED, false, false)
+
+    THREADED_CALLABLE_DECL8(csThreadedLoader, LoadTexture, csLoaderReturn, csRef<iDataBuffer>, buf, 
+      const char*, Name, int, Flags, csRef<iTextureManager>, texman, bool, reg, bool, create_material, bool,
+      free_image, bool, do_verbose, THREADED, false, false)
 
     THREADED_CALLABLE_DECL11(csThreadedLoader, LoadTexture, csLoaderReturn, const char*, cwd, const char*, Name,
     const char*, FileName, int, Flags, csRef<iTextureManager>, texman, bool, reg, bool, create_material,

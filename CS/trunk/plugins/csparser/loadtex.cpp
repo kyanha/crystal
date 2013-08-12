@@ -244,6 +244,12 @@ THREADED_CALLABLE_IMPL6(csThreadedLoader, LoadTexture, const char* cwd, csRef<iD
   csVfsDirectoryChanger dirChange(vfs);
   dirChange.ChangeToFull(cwd);
 
+  return LoadTextureTC (ret, sync, buf, Flags, texman, image, do_verbose);
+}
+
+THREADED_CALLABLE_IMPL5(csThreadedLoader, LoadTexture, csRef<iDataBuffer> buf, int Flags,
+                        csRef<iTextureManager> texman, csRef<iImage>* image, bool do_verbose)
+{
   if (!texman && g3d)
   {
     texman = g3d->GetTextureManager();
@@ -308,6 +314,14 @@ THREADED_CALLABLE_IMPL9(csThreadedLoader, LoadTexture, const char* cwd, const ch
   csVfsDirectoryChanger dirChange(vfs);
   dirChange.ChangeToFull(cwd);
 
+  return LoadTextureTC (ret, sync, buf, Name, Flags, texman, reg, create_material, free_image, do_verbose);
+}
+
+THREADED_CALLABLE_IMPL8(csThreadedLoader, LoadTexture, csRef<iDataBuffer> buf, 
+                        const char* Name, int Flags, csRef<iTextureManager> texman,
+                        bool reg, bool create_material,
+                        bool free_image, bool do_verbose)
+{
   if (!texman && g3d)
   {
     texman = g3d->GetTextureManager();
@@ -315,7 +329,7 @@ THREADED_CALLABLE_IMPL9(csThreadedLoader, LoadTexture, const char* cwd, const ch
 
   csRef<iImage> img;
   csRef<iThreadReturn> itr = csPtr<iThreadReturn>(new csLoaderReturn(threadman));
-  if (!LoadTextureTC (itr, false, cwd, buf, Flags, texman, &img, do_verbose))
+  if (!LoadTextureTC (itr, false, buf, Flags, texman, &img, do_verbose))
   {
     return false;
   }
