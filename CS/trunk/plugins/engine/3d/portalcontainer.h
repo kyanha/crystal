@@ -142,9 +142,6 @@ private:
   /*bool DoPerspective (csVector3 *source, int num_verts,
 	csPoly2D *dest, bool mirror, int fov,
 	float shift_x, float shift_y, const csPlane3& plane_cam);*/
-  void DrawOnePortal (csPortal* po, const csPoly2D& poly,
-	const csReversibleTransform& movtrans, iRenderView *rview,
-	const csPlane3& camera_plane);
 
   csRenderMeshHolder rmHolder;
 
@@ -192,10 +189,6 @@ public:
   virtual void RemovePortal (iPortal* portal);
   virtual int GetPortalCount () const { return (int)portals.GetSize () ; }
   virtual iPortal* GetPortal (int idx) const { return (iPortal*)portals[idx]; }
-  virtual void Draw (iRenderView* rview)
-  {
-    Draw (rview, 0, CS_ZBUF_NONE);
-  }
 
   //--------------------- For iMeshObject ------------------------------//
   virtual iMeshObjectFactory* GetFactory () const { return 0; }

@@ -40,7 +40,6 @@
 #include "csutil/eventhandlers.h"
 #include "iengine/campos.h"
 #include "iengine/engine.h"
-#include "iengine/renderloop.h"
 #include "iengine/rendermanager.h"
 #include "igraphic/imageio.h"
 #include "iutil/cache.h"
@@ -61,7 +60,6 @@
 #include "plugins/engine/3d/halo.h"
 #include "plugins/engine/3d/meshobj.h"
 #include "plugins/engine/3d/meshfact.h"
-#include "plugins/engine/3d/renderloop.h"
 #include "plugins/engine/3d/sector.h"
 #include "plugins/engine/3d/sharevar.h"
 
@@ -539,14 +537,9 @@ public:
 
   virtual void PrecacheMesh (iMeshWrapper* s);
   virtual void PrecacheDraw (iCollection* collection = 0);
-  virtual void Draw (iCamera* c, iClipper2D* clipper, iMeshWrapper* mesh = 0);
 
   virtual void SetContext (iTextureHandle* ctxt);
   virtual iTextureHandle *GetContext () const;
-
-  virtual iRenderLoopManager* GetRenderLoopManager ();
-  virtual iRenderLoop* GetCurrentDefaultRenderloop ();
-  virtual bool SetCurrentDefaultRenderloop (iRenderLoop* loop);
 
   virtual uint GetCurrentFrameNumber () const
   { return currentFrameNumber; }
@@ -688,12 +681,6 @@ public:
    */
   csSharedVariableList* GetVariables () const { return sharedVariables; }
 
-  /// Get the renderloop manager.
-  csRenderLoopManager* GetRenderLoopManager () const
-  {
-    return renderLoopManager;
-  }
-
   iMaterialWrapper* GetDefaultPortalMaterial () const
   { return defaultPortalMaterial; }
 
@@ -722,9 +709,6 @@ private:
    */
   bool CheckConsistency ();
 
-  // Renderloop loading/creation
-  csPtr<iRenderLoop> CreateDefaultRenderLoop ();
-  void LoadDefaultRenderLoop (const char* fileName);
   csRef<iShader> LoadShader (iDocumentSystem* docsys, const char* filename);
 
   /**
@@ -980,12 +964,6 @@ private:
    */
   csRef<iReporter> reporter;
 
-  /// Default render loop
-  csRef<iRenderLoop> defaultRenderLoop;
-  bool defaultRenderLoopTried;
-  csString override_renderloop;
-  /// Render loop manager
-  csRenderLoopManager* renderLoopManager;
   /// The graphics loader
   csRef<iImageIO> imageLoader;
   /// The 2D driver

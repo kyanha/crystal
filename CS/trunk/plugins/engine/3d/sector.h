@@ -221,8 +221,6 @@ public:
 
   /**\name Drawing related
    * @{ */
-  virtual void Draw (iRenderView* rview);
-
   virtual void PrepareDraw (iRenderView* rview);
 
   virtual int GetRecLevel () const

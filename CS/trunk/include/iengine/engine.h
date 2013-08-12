@@ -69,8 +69,6 @@ struct iObjectWatcher;
 struct iPerspectiveCamera;
 struct iPortal;
 struct iProgressMeter;
-struct iRenderLoop;
-struct iRenderLoopManager;
 struct iRenderManager;
 struct iRenderView;
 struct iSector;
@@ -181,7 +179,7 @@ struct iEngineSectorCallback : public virtual iBase
  */
 struct iEngine : public virtual iBase
 {
-  SCF_INTERFACE(iEngine, 8, 0, 1);
+  SCF_INTERFACE(iEngine, 9, 0, 0);
   
   /// Get the iObject for the engine.
   virtual iObject *QueryObject() = 0;
@@ -1076,20 +1074,6 @@ struct iEngine : public virtual iBase
   virtual void PrecacheDraw (iCollection* collection = 0) = 0;
 
   /**
-   * Draw the 3D world given a camera and a clipper. Note that
-   * in order to be able to draw using the given 3D driver
-   * all textures must have been registered to that driver (using
-   * Prepare()). Note that you need to call Prepare() again if
-   * you switch to another 3D driver.
-   * <p>
-   * If a mesh is given then only that single mesh is rendered.
-   * Note that in that case the mesh will only be rendered if it
-   * is in the same sector as the camera!
-   */
-  virtual void Draw (iCamera* c, iClipper2D* clipper,
-      iMeshWrapper* mesh = 0) = 0;
-
-  /**
    * Set the drawing context. This is a texture handle that is used
    * as the procedural texture to render on. If this is 0 then the
    * screen is assumed.
@@ -1097,33 +1081,6 @@ struct iEngine : public virtual iBase
   virtual void SetContext (iTextureHandle* ctxt) = 0;
   /// Return the current drawing context.
   virtual iTextureHandle *GetContext () const = 0;
-
-  /**
-   * Retrieve the render loop manager.
-   */
-  virtual iRenderLoopManager* GetRenderLoopManager () = 0;
-  
-  /**
-   * Returns the current render loop.
-   * \remark This will the loop that is set to be the current default
-   *  with SetCurrentDefaultRenderloop(). This doesn't have to be the engine's
-   *  default render loop (note the difference between the "current" and 
-   *  "default" render loop - former one is the loop used currently for 
-   *  drawing, latter one is a default loop created at engine initialization 
-   *  time.) To retrieve the default loop, use 
-   * \code
-   *  GetRenderLoopManager()->Retrieve (#CS_DEFAULT_RENDERLOOP_NAME);
-   * \endcode
-   */
-  virtual iRenderLoop* GetCurrentDefaultRenderloop () = 0;
-
-  /**
-   * Set the current render loop.
-   * \param loop The loop to be made the current render loop.
-   * \return Whether the change was successful (a value of 0 for \p will 
-   *   let the method fail.)
-   */
-  virtual bool SetCurrentDefaultRenderloop (iRenderLoop* loop) = 0;
 
   /**
    * Get the current framenumber. This should be incremented once every Draw

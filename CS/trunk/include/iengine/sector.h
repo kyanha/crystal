@@ -253,7 +253,7 @@ struct csSectorVisibleRenderMeshes
  */
 struct iSector : public virtual iBase
 {
-  SCF_INTERFACE(iSector,4,1,1);
+  SCF_INTERFACE(iSector,5,0,0);
   /// Get the iObject for this sector.
   virtual iObject *QueryObject () = 0;
 
@@ -300,9 +300,6 @@ struct iSector : public virtual iBase
 
   /**\name Drawing related
    * @{ */
-  /// Draw the sector with the given render view
-  virtual void Draw (iRenderView* rview) = 0;
-
   /**
    * Prepare the sector to draw.
    * Must be called before any rendermesh is requested.
@@ -323,19 +320,6 @@ struct iSector : public virtual iBase
    * Remove one draw recursion level.
    */
   virtual void DecRecLevel () = 0;
-
-  /**
-   * Set the renderloop to use for this sector. If this is not set then
-   * the default engine renderloop will be used.
-   */
-  THREADED_INTERFACE1(SetRenderLoop, iRenderLoop* rl);
-
-  /**
-   * Get the renderloop for this sector. If this returns 0 then it
-   * means there is no specific renderloop for this sector. In that case
-   * the default renderloop in the engine will be used.
-   */
-  virtual iRenderLoop* GetRenderLoop () = 0;
   /** @} */
 
   /**\name Mesh generator handling

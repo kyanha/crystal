@@ -4576,18 +4576,9 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
         }
         break;
       case XMLTOKEN_RENDERLOOP:
-        {
-          bool set;
-          iRenderLoop* loop = ParseRenderLoop (child, set);
-          if (!loop)
-          {
-            return false;
-          }
-          if (set)
-          {
-            Engine->SetCurrentDefaultRenderloop (loop);
-          }
-        }
+        ReportWarning (
+          "crystalspace.maploader.parse.settings",
+          child, "Renderloops are not supported any more.");
         break;
       default:
         SyntaxService->ReportBadToken (child);

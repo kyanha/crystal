@@ -256,27 +256,6 @@ public:
   //-------------------------------------------------------------------------
 
   /**
-   * Draw the sector that is visible through this portal.
-   * This function can be overriden by a subclass of Portal
-   * to support portals to other types of engines.
-   * This function also takes care of space warping.<p>
-   *
-   * 'new_clipper' is the new 2D polygon to which all things drawn
-   * should be clipped.<br>
-   * 't' is the transform from object to world (this2other).
-   * 'rview' is the current iRenderView.<p>
-   *
-   * Return true if succesful, false otherwise.
-   * Failure to draw through a portal does not need to
-   * be harmful. It can just mean that some maximum number is
-   * reached (like the maximum number of times a certain sector
-   * can be drawn through a mirror).
-   */
-  bool Draw (const csPoly2D& new_clipper,
-	const csReversibleTransform& t,
-  	iRenderView* rview, const csPlane3& camera_plane);
-
-  /**
    * Follow a beam through this portal and return the polygon
    * that it hits with. This function properly acounts for space
    * warping portals and also checks for infinite recursion (does
