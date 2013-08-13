@@ -232,10 +232,6 @@ class iThreadedLoader(core.iBase):
     def GetLoaderTextures(*args): return _imap.iThreadedLoader_GetLoaderTextures(*args)
     def GetLoaderMaterials(*args): return _imap.iThreadedLoader_GetLoaderMaterials(*args)
     def GetLoaderSharedVariables(*args): return _imap.iThreadedLoader_GetLoaderSharedVariables(*args)
-    def LoadImage(*args): return _imap.iThreadedLoader_LoadImage(*args)
-    def LoadImageWait(*args): return _imap.iThreadedLoader_LoadImageWait(*args)
-    def LoadTexture(*args): return _imap.iThreadedLoader_LoadTexture(*args)
-    def LoadTextureWait(*args): return _imap.iThreadedLoader_LoadTextureWait(*args)
     def LoadSoundSysData(*args): return _imap.iThreadedLoader_LoadSoundSysData(*args)
     def LoadSoundSysDataWait(*args): return _imap.iThreadedLoader_LoadSoundSysDataWait(*args)
     def LoadSoundStream(*args): return _imap.iThreadedLoader_LoadSoundStream(*args)
@@ -275,6 +271,10 @@ class iThreadedLoader(core.iBase):
     def MarkSyncDone(*args): return _imap.iThreadedLoader_MarkSyncDone(*args)
     def GetFlags(*args): return _imap.iThreadedLoader_GetFlags(*args)
     def SetFlags(*args): return _imap.iThreadedLoader_SetFlags(*args)
+    def LoadImage(*args): return _imap.iThreadedLoader_LoadImage(*args)
+    def LoadImageWait(*args): return _imap.iThreadedLoader_LoadImageWait(*args)
+    def LoadTexture(*args): return _imap.iThreadedLoader_LoadTexture(*args)
+    def LoadTextureWait(*args): return _imap.iThreadedLoader_LoadTextureWait(*args)
     __swig_destroy__ = _imap.delete_iThreadedLoader
     __del__ = lambda self : None;
 iThreadedLoader_swigregister = _imap.iThreadedLoader_swigregister

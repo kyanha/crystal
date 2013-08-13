@@ -343,14 +343,10 @@ class iSector(core.iBase):
     def UnlinkObjects(*args): return _iengine.iSector_UnlinkObjects(*args)
     def AddSectorMeshCallback(*args): return _iengine.iSector_AddSectorMeshCallback(*args)
     def RemoveSectorMeshCallback(*args): return _iengine.iSector_RemoveSectorMeshCallback(*args)
-    def Draw(*args): return _iengine.iSector_Draw(*args)
     def PrepareDraw(*args): return _iengine.iSector_PrepareDraw(*args)
     def GetRecLevel(*args): return _iengine.iSector_GetRecLevel(*args)
     def IncRecLevel(*args): return _iengine.iSector_IncRecLevel(*args)
     def DecRecLevel(*args): return _iengine.iSector_DecRecLevel(*args)
-    def SetRenderLoop(*args): return _iengine.iSector_SetRenderLoop(*args)
-    def SetRenderLoopWait(*args): return _iengine.iSector_SetRenderLoopWait(*args)
-    def GetRenderLoop(*args): return _iengine.iSector_GetRenderLoop(*args)
     def CreateMeshGenerator(*args): return _iengine.iSector_CreateMeshGenerator(*args)
     def GetMeshGeneratorCount(*args): return _iengine.iSector_GetMeshGeneratorCount(*args)
     def GetMeshGenerator(*args): return _iengine.iSector_GetMeshGenerator(*args)
@@ -557,12 +553,8 @@ class iEngine(core.iBase):
     def GetTopLevelClipper(*args): return _iengine.iEngine_GetTopLevelClipper(*args)
     def PrecacheMesh(*args): return _iengine.iEngine_PrecacheMesh(*args)
     def PrecacheDraw(*args): return _iengine.iEngine_PrecacheDraw(*args)
-    def Draw(*args): return _iengine.iEngine_Draw(*args)
     def SetContext(*args): return _iengine.iEngine_SetContext(*args)
     def GetContext(*args): return _iengine.iEngine_GetContext(*args)
-    def GetRenderLoopManager(*args): return _iengine.iEngine_GetRenderLoopManager(*args)
-    def GetCurrentDefaultRenderloop(*args): return _iengine.iEngine_GetCurrentDefaultRenderloop(*args)
-    def SetCurrentDefaultRenderloop(*args): return _iengine.iEngine_SetCurrentDefaultRenderloop(*args)
     def GetCurrentFrameNumber(*args): return _iengine.iEngine_GetCurrentFrameNumber(*args)
     def UpdateNewFrame(*args): return _iengine.iEngine_UpdateNewFrame(*args)
     def EnableAdaptiveLODs(*args): return _iengine.iEngine_EnableAdaptiveLODs(*args)
@@ -1403,7 +1395,6 @@ class iPortalContainer(core.iBase):
     def GetPortal(*args): return _iengine.iPortalContainer_GetPortal(*args)
     def CreatePortal(*args): return _iengine.iPortalContainer_CreatePortal(*args)
     def RemovePortal(*args): return _iengine.iPortalContainer_RemovePortal(*args)
-    def Draw(*args): return _iengine.iPortalContainer_Draw(*args)
     def ComputeScreenPolygons(*args): return _iengine.iPortalContainer_ComputeScreenPolygons(*args)
     def GetTotalVertexCount(*args): return _iengine.iPortalContainer_GetTotalVertexCount(*args)
     scfGetVersion = staticmethod(_iengine.iPortalContainer_scfGetVersion)
@@ -1414,55 +1405,6 @@ iPortalContainer_swigregister = _iengine.iPortalContainer_swigregister
 iPortalContainer_swigregister(iPortalContainer)
 iPortalContainer_scfGetVersion = _iengine.iPortalContainer_scfGetVersion
 iPortalContainer_scfGetName = _iengine.iPortalContainer_scfGetName
-
-class iRenderStepContainer(core.iBase):
-    thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
-    def __init__(self, *args, **kwargs): raise AttributeError, "No constructor defined"
-    __repr__ = _swig_repr
-    def AddStep(*args): return _iengine.iRenderStepContainer_AddStep(*args)
-    def DeleteStep(*args): return _iengine.iRenderStepContainer_DeleteStep(*args)
-    def GetStep(*args): return _iengine.iRenderStepContainer_GetStep(*args)
-    def Find(*args): return _iengine.iRenderStepContainer_Find(*args)
-    def GetStepCount(*args): return _iengine.iRenderStepContainer_GetStepCount(*args)
-    __swig_destroy__ = _iengine.delete_iRenderStepContainer
-    __del__ = lambda self : None;
-iRenderStepContainer_swigregister = _iengine.iRenderStepContainer_swigregister
-iRenderStepContainer_swigregister(iRenderStepContainer)
-
-CS_DEFAULT_RENDERLOOP_NAME = _iengine.CS_DEFAULT_RENDERLOOP_NAME
-class iRenderLoop(iRenderStepContainer):
-    thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
-    def __init__(self, *args, **kwargs): raise AttributeError, "No constructor defined"
-    __repr__ = _swig_repr
-    def Draw(*args): return _iengine.iRenderLoop_Draw(*args)
-    scfGetVersion = staticmethod(_iengine.iRenderLoop_scfGetVersion)
-    scfGetName = staticmethod(_iengine.iRenderLoop_scfGetName)
-    __swig_destroy__ = _iengine.delete_iRenderLoop
-    __del__ = lambda self : None;
-iRenderLoop_swigregister = _iengine.iRenderLoop_swigregister
-iRenderLoop_swigregister(iRenderLoop)
-iRenderLoop_scfGetVersion = _iengine.iRenderLoop_scfGetVersion
-iRenderLoop_scfGetName = _iengine.iRenderLoop_scfGetName
-
-class iRenderLoopManager(core.iBase):
-    thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
-    def __init__(self, *args, **kwargs): raise AttributeError, "No constructor defined"
-    __repr__ = _swig_repr
-    def Create(*args): return _iengine.iRenderLoopManager_Create(*args)
-    def Register(*args): return _iengine.iRenderLoopManager_Register(*args)
-    def Retrieve(*args): return _iengine.iRenderLoopManager_Retrieve(*args)
-    def GetName(*args): return _iengine.iRenderLoopManager_GetName(*args)
-    def Unregister(*args): return _iengine.iRenderLoopManager_Unregister(*args)
-    def Load(*args): return _iengine.iRenderLoopManager_Load(*args)
-    def UnregisterAll(*args): return _iengine.iRenderLoopManager_UnregisterAll(*args)
-    scfGetVersion = staticmethod(_iengine.iRenderLoopManager_scfGetVersion)
-    scfGetName = staticmethod(_iengine.iRenderLoopManager_scfGetName)
-    __swig_destroy__ = _iengine.delete_iRenderLoopManager
-    __del__ = lambda self : None;
-iRenderLoopManager_swigregister = _iengine.iRenderLoopManager_swigregister
-iRenderLoopManager_swigregister(iRenderLoopManager)
-iRenderLoopManager_scfGetVersion = _iengine.iRenderLoopManager_scfGetVersion
-iRenderLoopManager_scfGetName = _iengine.iRenderLoopManager_scfGetName
 
 class iRenderManager(core.iBase):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
