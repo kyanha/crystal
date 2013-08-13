@@ -5569,10 +5569,6 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *GetLoaderTextures = *cspacec::iThreadedLoader_GetLoaderTextures;
 *GetLoaderMaterials = *cspacec::iThreadedLoader_GetLoaderMaterials;
 *GetLoaderSharedVariables = *cspacec::iThreadedLoader_GetLoaderSharedVariables;
-*LoadImage = *cspacec::iThreadedLoader_LoadImage;
-*LoadImageWait = *cspacec::iThreadedLoader_LoadImageWait;
-*LoadTexture = *cspacec::iThreadedLoader_LoadTexture;
-*LoadTextureWait = *cspacec::iThreadedLoader_LoadTextureWait;
 *LoadSoundSysData = *cspacec::iThreadedLoader_LoadSoundSysData;
 *LoadSoundSysDataWait = *cspacec::iThreadedLoader_LoadSoundSysDataWait;
 *LoadSoundStream = *cspacec::iThreadedLoader_LoadSoundStream;
@@ -5612,6 +5608,10 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *MarkSyncDone = *cspacec::iThreadedLoader_MarkSyncDone;
 *GetFlags = *cspacec::iThreadedLoader_GetFlags;
 *SetFlags = *cspacec::iThreadedLoader_SetFlags;
+*LoadImage = *cspacec::iThreadedLoader_LoadImage;
+*LoadImageWait = *cspacec::iThreadedLoader_LoadImageWait;
+*LoadTexture = *cspacec::iThreadedLoader_LoadTexture;
+*LoadTextureWait = *cspacec::iThreadedLoader_LoadTextureWait;
 sub DESTROY {
     return unless $_[0]->isa('HASH');
     my $self = tied(%{$_[0]});
@@ -20098,14 +20098,10 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *UnlinkObjects = *cspacec::iSector_UnlinkObjects;
 *AddSectorMeshCallback = *cspacec::iSector_AddSectorMeshCallback;
 *RemoveSectorMeshCallback = *cspacec::iSector_RemoveSectorMeshCallback;
-*Draw = *cspacec::iSector_Draw;
 *PrepareDraw = *cspacec::iSector_PrepareDraw;
 *GetRecLevel = *cspacec::iSector_GetRecLevel;
 *IncRecLevel = *cspacec::iSector_IncRecLevel;
 *DecRecLevel = *cspacec::iSector_DecRecLevel;
-*SetRenderLoop = *cspacec::iSector_SetRenderLoop;
-*SetRenderLoopWait = *cspacec::iSector_SetRenderLoopWait;
-*GetRenderLoop = *cspacec::iSector_GetRenderLoop;
 *CreateMeshGenerator = *cspacec::iSector_CreateMeshGenerator;
 *GetMeshGeneratorCount = *cspacec::iSector_GetMeshGeneratorCount;
 *GetMeshGenerator = *cspacec::iSector_GetMeshGenerator;
@@ -20399,12 +20395,8 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *GetTopLevelClipper = *cspacec::iEngine_GetTopLevelClipper;
 *PrecacheMesh = *cspacec::iEngine_PrecacheMesh;
 *PrecacheDraw = *cspacec::iEngine_PrecacheDraw;
-*Draw = *cspacec::iEngine_Draw;
 *SetContext = *cspacec::iEngine_SetContext;
 *GetContext = *cspacec::iEngine_GetContext;
-*GetRenderLoopManager = *cspacec::iEngine_GetRenderLoopManager;
-*GetCurrentDefaultRenderloop = *cspacec::iEngine_GetCurrentDefaultRenderloop;
-*SetCurrentDefaultRenderloop = *cspacec::iEngine_SetCurrentDefaultRenderloop;
 *GetCurrentFrameNumber = *cspacec::iEngine_GetCurrentFrameNumber;
 *UpdateNewFrame = *cspacec::iEngine_UpdateNewFrame;
 *EnableAdaptiveLODs = *cspacec::iEngine_EnableAdaptiveLODs;
@@ -21923,7 +21915,6 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *GetPortal = *cspacec::iPortalContainer_GetPortal;
 *CreatePortal = *cspacec::iPortalContainer_CreatePortal;
 *RemovePortal = *cspacec::iPortalContainer_RemovePortal;
-*Draw = *cspacec::iPortalContainer_Draw;
 *ComputeScreenPolygons = *cspacec::iPortalContainer_ComputeScreenPolygons;
 *GetTotalVertexCount = *cspacec::iPortalContainer_GetTotalVertexCount;
 *scfGetVersion = *cspacec::iPortalContainer_scfGetVersion;
@@ -21935,116 +21926,6 @@ sub DESTROY {
     delete $ITERATORS{$self};
     if (exists $OWNER{$self}) {
         cspacec::delete_iPortalContainer($self);
-        delete $OWNER{$self};
-    }
-}
-
-sub DISOWN {
-    my $self = shift;
-    my $ptr = tied(%$self);
-    delete $OWNER{$ptr};
-}
-
-sub ACQUIRE {
-    my $self = shift;
-    my $ptr = tied(%$self);
-    $OWNER{$ptr} = 1;
-}
-
-
-############# Class : cspace::iRenderStepContainer ##############
-
-package cspace::iRenderStepContainer;
-use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
-@ISA = qw( cspace::iBase cspace );
-%OWNER = ();
-%ITERATORS = ();
-*AddStep = *cspacec::iRenderStepContainer_AddStep;
-*DeleteStep = *cspacec::iRenderStepContainer_DeleteStep;
-*GetStep = *cspacec::iRenderStepContainer_GetStep;
-*Find = *cspacec::iRenderStepContainer_Find;
-*GetStepCount = *cspacec::iRenderStepContainer_GetStepCount;
-sub DESTROY {
-    return unless $_[0]->isa('HASH');
-    my $self = tied(%{$_[0]});
-    return unless defined $self;
-    delete $ITERATORS{$self};
-    if (exists $OWNER{$self}) {
-        cspacec::delete_iRenderStepContainer($self);
-        delete $OWNER{$self};
-    }
-}
-
-sub DISOWN {
-    my $self = shift;
-    my $ptr = tied(%$self);
-    delete $OWNER{$ptr};
-}
-
-sub ACQUIRE {
-    my $self = shift;
-    my $ptr = tied(%$self);
-    $OWNER{$ptr} = 1;
-}
-
-
-############# Class : cspace::iRenderLoop ##############
-
-package cspace::iRenderLoop;
-use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
-@ISA = qw( cspace::iRenderStepContainer cspace );
-%OWNER = ();
-%ITERATORS = ();
-*Draw = *cspacec::iRenderLoop_Draw;
-*scfGetVersion = *cspacec::iRenderLoop_scfGetVersion;
-*scfGetName = *cspacec::iRenderLoop_scfGetName;
-sub DESTROY {
-    return unless $_[0]->isa('HASH');
-    my $self = tied(%{$_[0]});
-    return unless defined $self;
-    delete $ITERATORS{$self};
-    if (exists $OWNER{$self}) {
-        cspacec::delete_iRenderLoop($self);
-        delete $OWNER{$self};
-    }
-}
-
-sub DISOWN {
-    my $self = shift;
-    my $ptr = tied(%$self);
-    delete $OWNER{$ptr};
-}
-
-sub ACQUIRE {
-    my $self = shift;
-    my $ptr = tied(%$self);
-    $OWNER{$ptr} = 1;
-}
-
-
-############# Class : cspace::iRenderLoopManager ##############
-
-package cspace::iRenderLoopManager;
-use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
-@ISA = qw( cspace::iBase cspace );
-%OWNER = ();
-%ITERATORS = ();
-*Create = *cspacec::iRenderLoopManager_Create;
-*Register = *cspacec::iRenderLoopManager_Register;
-*Retrieve = *cspacec::iRenderLoopManager_Retrieve;
-*GetName = *cspacec::iRenderLoopManager_GetName;
-*Unregister = *cspacec::iRenderLoopManager_Unregister;
-*Load = *cspacec::iRenderLoopManager_Load;
-*UnregisterAll = *cspacec::iRenderLoopManager_UnregisterAll;
-*scfGetVersion = *cspacec::iRenderLoopManager_scfGetVersion;
-*scfGetName = *cspacec::iRenderLoopManager_scfGetName;
-sub DESTROY {
-    return unless $_[0]->isa('HASH');
-    my $self = tied(%{$_[0]});
-    return unless defined $self;
-    delete $ITERATORS{$self};
-    if (exists $OWNER{$self}) {
-        cspacec::delete_iRenderLoopManager($self);
         delete $OWNER{$self};
     }
 }
@@ -24504,7 +24385,6 @@ sub CS_PORTAL_STATICDEST () { $cspacec::CS_PORTAL_STATICDEST }
 sub CS_PORTAL_FLOAT () { $cspacec::CS_PORTAL_FLOAT }
 sub CS_PORTAL_COLLDET () { $cspacec::CS_PORTAL_COLLDET }
 sub CS_PORTAL_VISCULL () { $cspacec::CS_PORTAL_VISCULL }
-sub CS_DEFAULT_RENDERLOOP_NAME () { $cspacec::CS_DEFAULT_RENDERLOOP_NAME }
 sub CS_PEN_TA_TOP () { $cspacec::CS_PEN_TA_TOP }
 sub CS_PEN_TA_BOT () { $cspacec::CS_PEN_TA_BOT }
 sub CS_PEN_TA_LEFT () { $cspacec::CS_PEN_TA_LEFT }
