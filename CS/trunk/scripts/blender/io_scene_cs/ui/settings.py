@@ -53,15 +53,21 @@ def WalkTestPath():
     walktest = "walktest.exe"
   else:
     walktest = "walktest"
-
+    
+  crystal_env = os.environ.get("CRYSTAL")
+  if not crystal_env:
+    print("Warning: CRYSTAL environment variable not set!")
+    return None
+  
   # Look either in the 'CRYSTAL' and 'CRYSTAL/bin' paths
-  path = os.path.join(os.environ.get("CRYSTAL"), walktest).replace('\\', '/')
+  path = os.path.join(crystal_env, walktest).replace('\\', '/')
   if os.path.exists(path):
     return path
-  return os.path.join(os.environ.get("CRYSTAL"), "bin", walktest).replace('\\', '/')
+  return os.path.join(crystal_env, "bin", walktest).replace('\\', '/')
             
-def HasCrystalSpace():    
-  return os.path.exists(WalkTestPath())
+def HasCrystalSpace():
+  path = WalkTestPath()    
+  return path and os.path.exists(path)
 
 
 @rnaType    
@@ -108,6 +114,9 @@ class RENDER_PT_csSettingsPanel(csSettingsPanel, bpy.types.Panel):
   
   def draw(self, context):
     layout = self.layout
+    
+    row = layout.row()
+    row.prop(B2CS.properties, "exportOnlyCurrentScene")
     
     row = layout.row()
     row.prop(B2CS.properties, "library")
@@ -309,3 +318,9 @@ B2CS.CollectionProperty( attr="MaterialRefs",
         name="Collection of Crystal Space material references",
         type=csMaterialRef,
         description="Define references to existing Crystal Space materials")
+        
+        
+B2CS.BoolProperty( attr="exportOnlyCurrentScene",
+        name="Export only current scene",
+        description="Export only current scene", 
+        default=False)

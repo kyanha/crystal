@@ -16,7 +16,7 @@ def ObjectRelativeMatrix(self):
 bpy.types.Object.relative_matrix = property(ObjectRelativeMatrix)
 
 
-def MatrixAsCS(matrix, func, depth=0, noMove=False, noScale=True):
+def MatrixAsCS(matrix, func, depth=0, noMove=False, noScale=True, noTranslation=False):
   ''' unique() is not defined in the new mathutils API '''
 
   loc, mat, scale = DecomposeMatrix(matrix)
@@ -24,7 +24,8 @@ def MatrixAsCS(matrix, func, depth=0, noMove=False, noScale=True):
   if not noMove:
     func(' '*depth +'<move>')
   # Flip Y and Z axis.
-  func(' '*depth +'  <v x="%s" z="%s" y="%s" />' % tuple(loc))
+  if not noTranslation:
+    func(' '*depth +'  <v x="%s" z="%s" y="%s" />' % tuple(loc))
   if rot[0] or rot[1] or rot[2] or scale[0]!=1.0 or scale[1]!=1.0 or scale[2]!=1.0:
     func(' '*depth +'  <matrix>')
     # Order 'YZX' is important!

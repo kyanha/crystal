@@ -64,11 +64,13 @@ def ExportWorld(path):
   # Create the export directory for factories
   if not os.path.exists(Join(path, 'factories/')):
     os.makedirs(Join(path, 'factories/'))
+    
+  scenes = [bpy.context.scene] if B2CS.properties.exportOnlyCurrentScene else [scene for scene in bpy.data.scenes if scene.export]
 
   # Get data about all objects composing this world
   deps = util.EmptyDependencies()
   cameras = {}
-  for scene in bpy.data.scenes:
+  for scene in scenes:
     MergeDependencies(deps, scene.GetDependencies())
     cameras.update(scene.GetCameras())
 
@@ -123,7 +125,7 @@ def ExportWorld(path):
   # Export shared materials and textures in world file
   if B2CS.properties.sharedMaterial:
     use_imposter = False
-    for scene in bpy.data.scenes:
+    for scene in scenes:
       for ob in scene.objects:
         if ob.HasImposter():
           use_imposter = True
@@ -132,7 +134,7 @@ def ExportWorld(path):
 
   # Export scenes as CS sectors in the 'world' file
   print("\nEXPORT SCENES:")
-  for scene in bpy.data.scenes:
+  for scene in scenes:
     scene.AsCS(Write(f), 2)
 
   Write(f)('</world>')

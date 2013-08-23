@@ -46,7 +46,8 @@ def SceneAsCS(self, func, depth=0):
 
   # Export lamps and objects (as instancies of factories)
   for ob in [o for o in self.objects \
-               if o.type!='CAMERA' and o.parent_type!='BONE']:
+               if o.type!='CAMERA' and o.parent_type!='BONE' and (o.parent is None or o.parent.type!='LAMP')]:
+    print("- '%s' (%s)"%(ob.uname, ob.parent.type if ob.parent else None))
     if ob.IsExportable():
       if ob not in objects:
         group = ob.hasMergingGroup()
