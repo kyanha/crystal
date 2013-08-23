@@ -2,7 +2,7 @@
 import bpy
 import operator
 
-from io_scene_cs.utilities import rnaType, B2CS, EnumProperty, StringProperty, BoolProperty, FloatProperty, CollectionProperty, SHADERS, GetShaderName
+from io_scene_cs.utilities import rnaType, B2CS, EnumProperty, StringProperty, BoolProperty, FloatProperty, CollectionProperty, SHADERSETS, GetShaderSetName
 
 
 class csMaterialPanel():
@@ -79,16 +79,11 @@ class MATERIAL_PT_B2CS__context_material(csMaterialPanel, bpy.types.Panel):
             # CS material properties (used if this material is not replaced by
             # a reference to an existing CS material)
             layout.separator()
+            
             row = layout.row()
-            row.prop(mat, "depthwrite_step")
-            row = layout.row()
-            row.prop(mat, "ambient_step")
-            row = layout.row()
-            row.prop(mat, "diffuse_step")
-            name1 = GetShaderName(mat.ambient_step)
-            name2 = GetShaderName(mat.diffuse_step)
-            if name1 == 'reflect_water_plane' or \
-                  name2 == 'reflect_water_plane':
+            row.prop(mat, "shaderset")
+            name = GetShaderSetName(mat.shaderset)
+            if name == 'water_plane':
               row = layout.row()
               row.prop(mat, "water_fog_color")
               row = layout.row()
@@ -96,20 +91,11 @@ class MATERIAL_PT_B2CS__context_material(csMaterialPanel, bpy.types.Panel):
               row = layout.row()
               row.prop(mat, "water_fog_density")
 
-       
-        
-EnumProperty(['Material'], attr="depthwrite_step", name="Depthwrite", description="",
-  items=(("DEFAULT", "Default", "Default"),
-        ("*null", "*null", "Shader with no effect.")),
+
+EnumProperty(['Material'], attr="shaderset", name="ShaderSet", description="",
+  items=SHADERSETS,
   default="DEFAULT")
-  
-EnumProperty(['Material'], attr="ambient_step", name="Ambient", description="",
-  items=SHADERS,
-  default="DEFAULT")
-  
-EnumProperty(['Material'], attr="diffuse_step", name="Diffuse", description="",
-  items=SHADERS,
-  default="DEFAULT")
+
 
 EnumProperty(['Material'], attr="priority", name="Render priority",
      description="Priority level in which the object will be renderered", 

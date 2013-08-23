@@ -538,7 +538,7 @@ def ObjectAsCS(self, func, depth=0, **kwargs):
       MatrixAsCS(matrix, func, depth, noScale=True, noTranslation=True)
       
       import math #math.radians(90), math.degrees(1.5707963)
-      outer = math.degrees(self.data.spot_size)
+      outer = math.degrees(self.data.spot_size) / 2 #Blender specifies the lit angle, CS has outer to center as angle
       inner =  outer - (outer * self.data.spot_blend)
       func(' '*depth +' <spotlightfalloff inner="%f" outer="%f" />'%(inner, outer))
     
