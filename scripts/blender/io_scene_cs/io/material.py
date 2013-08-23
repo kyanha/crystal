@@ -1,7 +1,7 @@
 import bpy
 
 from .util import *
-from io_scene_cs.utilities import GetShaderName
+from io_scene_cs.utilities import GetShaderSetName
 from io_scene_cs.utilities import StringProperty
 from io_scene_cs.utilities import GetExportPath
 
@@ -50,15 +50,23 @@ def MaterialAsCS(self, func, depth=0, **kwargs):
   
     haswater = False
 
+    if self.shaderset != 'DEFAULT':
+      name = GetShaderSetName(self.shaderset)
+      if name == 'reflect_water_plane':
+        haswater = True
+      func(' '*depth +'  <shaderset>%s</shaderset>'%(name)) 
+
+    '''
     for step in ['depthwrite', 'ambient', 'diffuse']:
       if getattr(self, step+'_step') != 'DEFAULT':
         name = GetShaderName(getattr(self, step+'_step'))
-        if name == 'reflect_water_plane':
+        if name == 'water_plane':
           haswater = True
           if step == 'ambient':
             step = 'base'     # Hacky@@@
         func(' '*depth +'  <shader type="%s">%s</shader>'%(step, name))   
-
+    '''
+    
     if haswater:
       func(' '*depth +'  <shadervar type="vector4" name="water fog color">%s</shadervar>'%(self.water_fog_color,))
       func(' '*depth +'  <shadervar type="vector4" name="water perturb scale">%s</shadervar>'%(self.water_perturb_scale,))
@@ -68,7 +76,7 @@ def MaterialAsCS(self, func, depth=0, **kwargs):
 
 bpy.types.Material.AsCS = MaterialAsCS
 
-
+'''
 def MaterialGetShaders(self):
   shaders = {}
   for step in ['depthwrite', 'ambient', 'diffuse']:
@@ -78,7 +86,7 @@ def MaterialGetShaders(self):
   return shaders
   
 bpy.types.Material.GetShaders = MaterialGetShaders
-
+'''
 
 def MaterialDependencies(self):
   dependencies = EmptyDependencies()
@@ -115,7 +123,7 @@ def ExportMaterials(func, depth, dependencies, use_imposter):
     func(' '*depth +"<materials>")
     for name, mat in dependencies['M'].items():
       mat.AsCS(func, depth+2)
-      shaders.update(mat.GetShaders())
+      #shaders.update(mat.GetShaders())
     # Export missing materials
     for name, image in dependencies['TM'].items():
       func(' '*depth +'  <material name="%s">'%(name))      

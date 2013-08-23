@@ -71,16 +71,22 @@ class B2CS:
   properties = property(B2CSGetProperties) 
 
 B2CS = B2CS()
+         
+          
+SHADERSETS = (
+  ("DEFAULT", "Default", "Default"),
+  ("binalpha", "binalpha", ""),
+  ("instanced", "instanced", ""),
+  ("instanced_binalpha", "instanced_binalpha", ""),
+  ("foliage_grass_fullbright", "foliage_grass_fullbright", ""),
+  ("fullbright", "fullbright", ""),
+  ("multisplat", "multisplat", ""),
+  ("water_plane", "water_plane", ""),
+)
 
-SHADERS =(("DEFAULT", "Default", "Default"),
-          ("*null", "*null", "Shader with no effect."),
-          ("/shader/lighting/lighting_default_binalpha.xml", "lighting_default_binalpha", "Use when using a texture with binary alpha."),
-          ("/shader/lighting/fullbright.xml", "lighting_fullbright", "Use when you want a material to be full bright."),
-          ("/shader/reflect/water_plane.xml", "reflect_water_plane", "A reflecting water-like material.."),
-          ("/shader/reflect/glass.xml", "glass", "A glass-like material.."),)
-
-def GetShaderName(f):
-  i = [l[0] for l in SHADERS].index(f)
+def GetShaderSetName(f):
+  i = [l[0] for l in SHADERSETS].index(f)
   if i >=0:
-    return SHADERS[i][1]
+    return SHADERSETS[i][1]
   return None
+
