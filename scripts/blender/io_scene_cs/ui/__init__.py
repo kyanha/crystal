@@ -10,3 +10,4 @@ from . import material
 from . import portal
 from . import lamp
 from . import modifier
+from . import scene

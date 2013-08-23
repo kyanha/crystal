@@ -514,15 +514,61 @@ def ObjectAsCS(self, func, depth=0, **kwargs):
     matrix = self.relative_matrix
     if 'transform' in kwargs:
       matrix = kwargs['transform'] * matrix
+      
+    
 
     func(' '*depth +'<light name="%s">'%(name))
     # Flip Y and Z axis.
     func(' '*depth +'  <center x="%f" z="%f" y="%f" />'% tuple(matrix.to_translation()))
     func(' '*depth +'  <color red="%f" green="%f" blue="%f" />'% tuple(self.data.color))
-    func(' '*depth +'  <radius>%f</radius>'%(self.data.distance))
-    func(' '*depth +'  <attenuation>linear</attenuation>')
+    func(' '*depth +'  <radius>%f</radius>'%(self.data.distance*2))
+    func(' '*depth +'  <attenuation>linear</attenuation>') #TODO
+    
+    import mathutils
+    eul = mathutils.Euler((1.57, 0.0, 0.0), 'XYZ')
+    matrix = matrix.to_3x3()
+    matrix.rotate(eul)
+    
     if self.data.no_shadows:
       func(' '*depth +'  <noshadows />')
+      
+    if self.data.type=='SPOT':
+      func(' '*depth +' <type>spot</type>')
+      
+      MatrixAsCS(matrix, func, depth, noScale=True, noTranslation=True)
+      
+      import math #math.radians(90), math.degrees(1.5707963)
+      outer = math.degrees(self.data.spot_size)
+      inner =  outer - (outer * self.data.spot_blend)
+      func(' '*depth +' <spotlightfalloff inner="%f" outer="%f" />'%(inner, outer))
+    
+    elif self.data.type=='SUN':
+      func(' '*depth +' <type>directional</type>')
+      MatrixAsCS(matrix, func, depth, noScale=True, noTranslation=True)
+     
+    if len(self.children):  #TODO: only support first child, perhaps merge the meshes?
+      data = self.children[0].data
+      data.calc_tessface() # Compute and update the list of tessellated faces (faces of 3 or 4 vertices) 
+      func(' '*depth +'<trimesh>')
+      func(' '*depth +' <id>clip</id>')
+      func(' '*depth +' <mesh>')
+      for v in data.vertices:
+        pos = v.co
+        # Flip Y and Z axis.
+        func(' '*depth +'   <v x="%f" y="%f" z="%f" />'%(pos.x, pos.z, pos.y))
+        
+      for face_num, face in enumerate(data.tessfaces):
+        indices = [v for v in face.vertices]
+        if len(indices)==3:
+          func(' '*depth +'   <t v1="%d" v2="%d" v3="%d" />'%(indices[2], indices[1],indices[0],))
+        else:
+          func(' '*depth +'   <t v1="%d" v2="%d" v3="%d" />'%(indices[2], indices[1],indices[0],))
+          func(' '*depth +'   <t v1="%d" v2="%d" v3="%d" />'%(indices[3], indices[2],indices[0],))
+           
+           
+      func(' '*depth +' </mesh>')
+      func(' '*depth +'</trimesh>')
+        
     func(' '*depth +'</light>')
 
   elif self.type == 'EMPTY':
