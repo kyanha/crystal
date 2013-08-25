@@ -19,6 +19,10 @@
 #ifndef __CS_CSUTIL_FIXEDSIZECACHE_H__
 #define __CS_CSUTIL_FIXEDSIZECACHE_H__
 
+/**\file
+ * Templated fixed size cache class
+ */
+
 #include "csutil/metautils.h"
 #include "csutil/compileassert.h"
 #include "csutil/hashcomputer.h"
