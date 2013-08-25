@@ -22,6 +22,7 @@
     <snippet id="basemapscale">
       <technique priority="50">
 	<combiner name="cg" plugin="crystalspace.graphics3d.shader.combiner.glcg" />
+	<combiner name="glsl" plugin="crystalspace.graphics3d.shader.combiner.glsl" />
 
 	<input name="basemapscale" type="translateScale2" default="complex" private="yes">
 	  <block location="shadervars">
@@ -31,18 +32,31 @@
 	  <block location="cg:fragmentIn">
 	    <uniform type="float4" name="basemapscale" />
 	  </block>
+	  <block location="glsl:inputs">
+	    <uniform type="float4" name="in_basemapscale" />
+	  </block>
 	  
 	  <block location="cg:fragmentMain">
 	    basemapscale = fragmentIn.basemapscale;
+	  </block>
+	  <block location="glsl:fragmentMain">
+	    basemapscale = in_basemapscale;
 	  </block>
 
 	  <block location="cg:variablemap">
 	    <variablemap variable="basemap scale" 
 	      destination="fragmentIn.basemapscale" />
 	  </block>
+	  <block location="glsl:variablemap">
+	    <variablemap variable="basemap scale" 
+	      destination="in_basemapscale" />
+	  </block>
 	</input>
 	
 	<block location="cg:fragmentMain">
+	  scale = basemapscale;
+	</block>
+	<block location="glsl:fragmentMain">
 	  scale = basemapscale;
 	</block>
 	<output name="scale" type="float4" />
