@@ -253,8 +253,8 @@ void csShaderGLCGCommon::WriteClipApplications (csString& str)
     switch (clip.space)
     {
       case ShaderProgramPluginGL::ClipPlanes::Eye:    posStr = "P_Eye"; break;
-      case ShaderProgramPluginGL::ClipPlanes::Object: posStr = "P_World"; break;
-      case ShaderProgramPluginGL::ClipPlanes::World:  posStr = "P_Object"; break;
+      case ShaderProgramPluginGL::ClipPlanes::Object: posStr = "P_Object"; break;
+      case ShaderProgramPluginGL::ClipPlanes::World:  posStr = "P_World"; break;
     }
     
     if (clip.distance.IsConstant())
