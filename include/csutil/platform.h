@@ -19,6 +19,10 @@
 #ifndef __CSUTIL_PLATFORM_H__
 #define __CSUTIL_PLATFORM_H__
 
+/**\file
+ * Platform-specific functions.
+ */
+
 #include "cssysdef.h"
 #include "csextern.h"
 

@@ -20,6 +20,10 @@ Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 #ifndef __CS_UTIL_HASHCOMPUTER_H__
 #define __CS_UTIL_HASHCOMPUTER_H__
 
+/**\file
+ * Hash computation functions and templates.
+ */
+
 /**\addtogroup util_containers
 * @{ */
 

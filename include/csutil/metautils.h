@@ -20,6 +20,10 @@
 #ifndef __CS_CSUTIL_METAUTILS_H__
 #define __CS_CSUTIL_METAUTILS_H__
 
+/**\file
+ * Templated metaprogramming utilities
+ */
+
 namespace CS
 {
   namespace Meta
