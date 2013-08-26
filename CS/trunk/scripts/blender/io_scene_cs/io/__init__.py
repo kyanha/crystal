@@ -11,6 +11,7 @@ from .data import *
 from .object import *
 from .group import *
 from .scene import *
+#from .world import *
 from .material import ExportMaterials
 from io_scene_cs.utilities import B2CS
 
@@ -22,6 +23,9 @@ def Write(fi):
 
 
 def Export(path):
+  
+  # Clean cached data
+  Hierarchy.exportedFactories = []
 
   # Set interaction mode to 'OBJECT' mode
   editMode = False
@@ -78,6 +82,8 @@ def ExportWorld(path):
   f = open(Join(path, 'world'), 'w')
   Write(f)('<?xml version="1.0" encoding="UTF-8"?>')
   Write(f)('<world xmlns=\"http://crystalspace3d.org/xml/library\">')
+  
+  #bpy.context.scene.world.AsCS(Write(f), 2)
 
   # Export the objects composing the world
   for typ in deps:
