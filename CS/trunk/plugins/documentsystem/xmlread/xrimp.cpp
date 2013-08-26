@@ -365,8 +365,8 @@ const char* csXmlReadNode::GetAttributeValue (const char* name, const char* defa
 {
   if (use_contents_value) return 0;
   TrXmlElement* el = node->ToElement ();
-  if (el) return el->Attribute (name);
-  else return defaultValue;
+  const char* s (el ? el->Attribute (name) : nullptr);
+  return s ? s : defaultValue;
 }
 
 int csXmlReadNode::GetAttributeValueAsInt (const char* name, int defaultValue)
