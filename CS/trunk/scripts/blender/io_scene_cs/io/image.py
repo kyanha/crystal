@@ -1,12 +1,6 @@
 import bpy
 
 from .util import *
-from io_scene_cs.utilities import BoolProperty
-
-
-# Property indicating if a texture ('Image' type) is a normal map
-BoolProperty(['Image'], attr="isNormalMap", name="isNormalMap", default=False)
-
 
 def IdentifyNormalMap(self, material):
   """ Test if this texture is a normal map

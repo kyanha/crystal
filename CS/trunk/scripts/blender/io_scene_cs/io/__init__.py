@@ -11,9 +11,9 @@ from .data import *
 from .object import *
 from .group import *
 from .scene import *
-#from .world import *
+from .world import *
 from .material import ExportMaterials
-from io_scene_cs.utilities import B2CS
+from io_scene_cs.utilities import GetPreferences
 
 
 def Write(fi):
@@ -37,7 +37,7 @@ def Export(path):
         break
 
   # Export Blender data to Crystal Space format
-  exportAsLibrary = B2CS.properties.library
+  exportAsLibrary = GetPreferences().library
   if exportAsLibrary:
     print("\nEXPORTING: "+Join(path, 'library')+" ====================================")
     print("  All objects of the world are exported as factories in 'library' file.\n")
@@ -69,7 +69,7 @@ def ExportWorld(path):
   if not os.path.exists(Join(path, 'factories/')):
     os.makedirs(Join(path, 'factories/'))
     
-  scenes = [bpy.context.scene] if B2CS.properties.exportOnlyCurrentScene else [scene for scene in bpy.data.scenes if scene.export]
+  scenes = [bpy.context.scene] if GetPreferences().exportOnlyCurrentScene else [scene for scene in bpy.data.scenes if scene.b2cs.export]
 
   # Get data about all objects composing this world
   deps = util.EmptyDependencies()
@@ -83,7 +83,7 @@ def ExportWorld(path):
   Write(f)('<?xml version="1.0" encoding="UTF-8"?>')
   Write(f)('<world xmlns=\"http://crystalspace3d.org/xml/library\">')
   
-  #bpy.context.scene.world.AsCS(Write(f), 2)
+  bpy.context.scene.world.AsCS(Write(f), 2)
 
   # Export the objects composing the world
   for typ in deps:
@@ -129,7 +129,7 @@ def ExportWorld(path):
     bpy.context.scene.CameraAsCS(Write(f), 2)
 
   # Export shared materials and textures in world file
-  if B2CS.properties.sharedMaterial:
+  if GetPreferences().sharedMaterial:
     use_imposter = False
     for scene in scenes:
       for ob in scene.objects:

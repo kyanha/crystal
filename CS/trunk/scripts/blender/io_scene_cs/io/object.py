@@ -6,7 +6,7 @@ from .transform import *
 from .renderbuffer import *
 from .morphtarget import *
 from .material import *
-from io_scene_cs.utilities import B2CS
+from io_scene_cs.utilities import GetPreferences
 
 
 class Hierarchy:
@@ -149,7 +149,7 @@ class Hierarchy:
     else:
       fa = open(Join(path, 'factories/', self.object.data.uname), 'w')
     self.WriteCSLibHeader(Write(fa), animesh)
-    if not B2CS.properties.sharedMaterial:
+    if not GetPreferences().sharedMaterial:
       objectDeps = self.object.GetDependencies()
       use_imposter = not animesh and self.object.data.use_imposter
       ExportMaterials(Write(fa), 2, objectDeps, use_imposter)
@@ -220,7 +220,7 @@ class Hierarchy:
             # Generate mapping buffers
             mapVert, mapBuf, norBuf = obCpy.data.GetCSMappingBuffers()
             numCSVertices = len(mapVert)
-            if B2CS.properties.enableDoublesided and obCpy.data.show_double_sided:
+            if GetPreferences().enableDoublesided and obCpy.data.show_double_sided:
               numCSVertices = 2*len(mapVert)
             # Generate submeshes
             subMeshess.append(obCpy.data.GetSubMeshes(obCpy.name,mapBuf,indexV))
@@ -231,7 +231,7 @@ class Hierarchy:
               indexV += numCSVertices
 
             warning = "(WARNING: double sided mesh implies duplication of its vertices)" \
-                if B2CS.properties.enableDoublesided and obCpy.data.show_double_sided else ""
+                if GetPreferences().enableDoublesided and obCpy.data.show_double_sided else ""
             print('number of CS vertices for mesh "%s" = %s  %s'%(obCpy.name,numCSVertices,warning))
 
         total += numCSVertices + Gets(children, indexV)
@@ -424,6 +424,29 @@ def AsCSGenmeshLib(self, func, depth=0, **kwargs):
       func(" "*depth + "    <autonormals/>")
 
   func(' '*depth + '  </params>')
+  
+  #physics
+  print("physics %s"%(self.game.physics_type))
+  if self.game.physics_type in ['RIGID_BODY', 'SOFT_BODY']:
+    func(' '*depth + ' <addon plugin="crystalspace.physics.loader">')
+    if self.game.physics_type=='RIGID_BODY':
+      mass = self.game.mass
+      func(' '*depth + '   <rigidbody mass="%f" friction="1.0" elasticity="0.8">'%(mass)) #TODO
+      func(' '*depth + '     <collider>')
+      func(' '*depth + '       <convexmesh />')
+      func(' '*depth + '     </collider>')
+      func(' '*depth + '   </rigidbody>')
+      
+    elif self.game.physics_type=='SOFT_BODY':
+      mass = self.game.mass
+      friction = self.game.soft_body.dynamic_friction
+      stiffness = self.game.soft_body.linear_stiffness
+      func(' '*depth + '   <softbody mass="%f" friction="%f">'%(mass, friction))
+      func(' '*depth + '     <meshfact duplication="none" />')
+      func(' '*depth + '     <stiffness linear="%f" angular="1.0" volume="1.0" />'%(stiffness)) #TODO
+      func(' '*depth + '   </softbody>')
+      
+    func(' '*depth + ' </addon>')
 
   # Don't close 'meshfact' flag if another mesh object is defined as 
   # an imbricated genmesh factory of this factory
@@ -436,7 +459,7 @@ bpy.types.Object.AsCSGenmeshLib = AsCSGenmeshLib
 #======== Object ====================================================================
 
 # Property defining an UV texture's name for a mesh ('None' if not defined)
-StringProperty(['Object'], attr="uv_texture", name="UV texture", default='None')
+bpy.types.Object.uv_texture = 'None'
 
 
 def ObjectAsCS(self, func, depth=0, **kwargs):
@@ -529,7 +552,7 @@ def ObjectAsCS(self, func, depth=0, **kwargs):
     matrix = matrix.to_3x3()
     matrix.rotate(eul)
     
-    if self.data.no_shadows:
+    if not self.data.use_shadow:
       func(' '*depth +'  <noshadows />')
       
     if self.data.type=='SPOT':
@@ -792,7 +815,7 @@ def HasImposter(self):
   """ Indicates if this object uses an imposter
   """
   if self.type == 'MESH':
-    if self.data and self.data.use_imposter:
+    if self.data and self.data.b2cs.use_imposter:
       return True
   elif self.type == 'EMPTY':
     if self.dupli_type=='GROUP' and self.dupli_group:
