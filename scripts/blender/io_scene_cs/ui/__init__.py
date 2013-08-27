@@ -1,13 +1,14 @@
-__all__ = ["data", "group", "object", "settings", "image", "material", "portal", "lamp", "modifier"]
+__all__ = ["data", "group", "object", "image", "material", "portal", "lamp", "modifier", "scene", "render", "renderlayer"]
 
 
 from . import data
 from . import group
 from . import object
-from . import settings
 from . import image
 from . import material
 from . import portal
 from . import lamp
 from . import modifier
 from . import scene
+from . import render
+from . import renderlayer

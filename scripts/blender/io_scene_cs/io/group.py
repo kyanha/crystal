@@ -5,7 +5,7 @@ from .util import *
 from .transform import *
 from .submesh import *
 from .material import *
-from io_scene_cs.utilities import B2CS
+from io_scene_cs.utilities import GetPreferences
 
 
 def GroupallObjects(self, matrix=None):
@@ -70,7 +70,7 @@ def GroupAsCSLib(self, path=''):
   fa = open(Join(path, 'factories/', self.uname), 'w')
   self.WriteCSLibHeader(Write(fa))
   use_imposter = self.HasImposter()
-  if not B2CS.properties.sharedMaterial:
+  if not GetPreferences().sharedMaterial:
     groupDeps = self.GetDependencies()
     ExportMaterials(Write(fa), 2, groupDeps, use_imposter)
   self.WriteCSGroup(Write(fa), 2, use_imposter, dontClose=False)
@@ -114,7 +114,7 @@ def WriteCSGroup(self, func, depth=0, use_imposter=False, dontClose=False):
       # Generate mapping buffers
       mapVert, mapBuf, norBuf = obCpy.data.GetCSMappingBuffers()
       numCSVertices = len(mapVert)
-      if B2CS.properties.enableDoublesided and obCpy.data.show_double_sided:
+      if GetPreferences().enableDoublesided and obCpy.data.show_double_sided:
         numCSVertices = 2*len(mapVert)
       # Generate submeshes
       subMeshess.append(obCpy.data.GetSubMeshes(obCpy.name,mapBuf,indexV))
@@ -124,7 +124,7 @@ def WriteCSGroup(self, func, depth=0, use_imposter=False, dontClose=False):
       indexV += numCSVertices
 
       warning = "(WARNING: double sided mesh implies duplication of its vertices)" \
-          if B2CS.properties.enableDoublesided and obCpy.data.show_double_sided else ""
+          if GetPreferences().enableDoublesided and obCpy.data.show_double_sided else ""
       print('number of CS vertices for mesh "%s" = %s  %s'%(obCpy.name,numCSVertices,warning))
 
   # Export the group of objects as a general mesh factory

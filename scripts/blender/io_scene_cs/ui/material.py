@@ -2,19 +2,20 @@
 import bpy
 import operator
 
-from io_scene_cs.utilities import rnaType, B2CS, EnumProperty, StringProperty, BoolProperty, FloatProperty, CollectionProperty, SHADERSETS, GetShaderSetName
-
+from io_scene_cs.utilities import rnaType, GetPreferences, SHADERSETS, GetShaderSetName, settings, RENDERPRIORITIES, ZBUFFERMODES
+from bpy.types import PropertyGroup
 
 class csMaterialPanel():
   bl_space_type = 'PROPERTIES'
   bl_region_type = 'WINDOW'
-  bl_context = "material"
-  b2cs_context = "material"
+  bl_context = "material" 
+  # COMPAT_ENGINES must be defined in each subclass, external engines can add themselves here
   
   @classmethod
   def poll(cls, context):
-    r = (context.material or context.object)
-    return r    
+      rd = context.scene.render
+      r = (context.material or context.object)
+      return r and (rd.engine in cls.COMPAT_ENGINES)
 
 
 class SelectMaterialRef(bpy.types.Operator):
@@ -22,7 +23,7 @@ class SelectMaterialRef(bpy.types.Operator):
     bl_label = "Select CS material"
 
     def avail_materials(self,context):
-        items = [(str(i),m.name,m.vfs) for i,m in enumerate(B2CS.properties.MaterialRefs)]
+        items = [(str(i),m.name,m.vfs) for i,m in enumerate(GetPreferences().MaterialRefs)]
         items.append((str(-1),' NONE','None'))
         return sorted(items, key=operator.itemgetter(1))
     select_material = bpy.props.EnumProperty(items = avail_materials, name = "Available CS materials")
@@ -34,8 +35,8 @@ class SelectMaterialRef(bpy.types.Operator):
     def execute(self,context):
         mat = context.material
         if int(self.select_material) != -1:
-          mat.csMaterialName = B2CS.properties.MaterialRefs[int(self.select_material)].name
-          mat.csMaterialVfs = B2CS.properties.MaterialRefs[int(self.select_material)].vfs
+          mat.csMaterialName = GetPreferences().MaterialRefs[int(self.select_material)].name
+          mat.csMaterialVfs = GetPreferences().MaterialRefs[int(self.select_material)].vfs
         else:
           mat.csMaterialName = 'None'
           mat.csMaterialVfs = ''
@@ -44,6 +45,7 @@ class SelectMaterialRef(bpy.types.Operator):
 @rnaType
 class MATERIAL_PT_B2CS__context_material(csMaterialPanel, bpy.types.Panel):
     bl_label = "Crystal Space Material"
+    COMPAT_ENGINES = {'CRYSTALSPACE'}
 
     def draw(self, context):
         layout = self.layout
@@ -70,7 +72,7 @@ class MATERIAL_PT_B2CS__context_material(csMaterialPanel, bpy.types.Panel):
             else:
               row.operator_menu_enum("material.select_mat_ref", "select_material", text=mat.csMaterialName)
               # Verify that factory reference still exists
-              materials = [m.name for m in B2CS.properties.MaterialRefs]
+              materials = [m.name for m in GetPreferences().MaterialRefs]
               if not mat.csMaterialName in materials:
                 row = layout.row()
                 row.label(text="WARNING: this material reference has been deleted!", icon='ERROR')
@@ -81,66 +83,72 @@ class MATERIAL_PT_B2CS__context_material(csMaterialPanel, bpy.types.Panel):
             layout.separator()
             
             row = layout.row()
-            row.prop(mat, "shaderset")
-            name = GetShaderSetName(mat.shaderset)
+            row.prop(mat.b2cs, "shaderset")
+            name = GetShaderSetName(mat.b2cs.shaderset)
             if name == 'water_plane':
               row = layout.row()
-              row.prop(mat, "water_fog_color")
+              row.prop(mat.water, "water_fog_color")
               row = layout.row()
-              row.prop(mat, "water_perturb_scale")
+              row.prop(mat.water, "water_perturb_scale")
               row = layout.row()
-              row.prop(mat, "water_fog_density")
+              row.prop(mat.water, "water_fog_density")
 
 
-EnumProperty(['Material'], attr="shaderset", name="ShaderSet", description="",
-  items=SHADERSETS,
-  default="DEFAULT")
 
 
-EnumProperty(['Material'], attr="priority", name="Render priority",
-     description="Priority level in which the object will be renderered", 
-     items=[('init','init',''),('sky','sky',''),('sky2','sky2',''),
-            ('portal','portal',''),('wall','wall',''),('wall2','wall2',''),('object','object',''),
-            ('object2','object2',''),('transp','transp',''),('alpha','alpha',''),('final','final','')],
-     default='object')
+@settings(type='Material')
+class CrystalSpaceSettingsMaterial(PropertyGroup):
+  shaderset = bpy.props.EnumProperty(
+            name="ShaderSet",
+            description="",
+            items=SHADERSETS,
+            default="DEFAULT")
+            
+  priority = bpy.props.EnumProperty(
+            name="Render priority",
+            description="Priority level in which the object will be renderered",
+            items=RENDERPRIORITIES,
+            default="object")
+            
+  zbuf_mode = bpy.props.EnumProperty(
+            name="Z-buffer mode",
+            description="Behavior of the rendering of the object regarding the Z-Buffer",
+            items=ZBUFFERMODES,
+            default="zuse")
+            
+            
+  csMatRef = bpy.props.BoolProperty(
+            name="Material replaced by a CS material",
+            description="Replace this material by a Crystal Space material",
+            default=False)
 
-EnumProperty(['Material'], attr="zbuf_mode", name="Z-buffer mode",
-     description="Behavior of the rendering of the object regarding the Z-Buffer",
-     items=[('znone','Z-None',"Don't test or write"),
-            ('zfill','Z-Fill',"Write unconditionally"),
-            ('ztest','Z-Test',"Test only"),
-            ('zuse','Z-Use',"Test, write if successful")],
-     default='zuse')
+  csMaterialName = bpy.props.StringProperty(
+            name="Reference of CS material",
+            description="Name of an existing Crystal Space material",
+            default="None")
 
-StringProperty(['Material'], attr="water_fog_color",
-        name="Water Fog Color",
-        description="Fog color inside the water surface", 
-        default='0,0.1,0.15,1')
+  csMaterialVfs = bpy.props.StringProperty(
+            name="VFS path of CS material",
+            description="VFS path of a Crystal Space library file",
+            default="")
 
-FloatProperty(['Material'], attr="water_fog_density",
-        name="Water Fog Density",
-        description="Fog density inside the water surface", 
-        default=3.0)
 
-StringProperty(['Material'], attr="water_perturb_scale",
-        name="Water Perturb Scale",
-        description="Fog perturb scale", 
-        default='0.9,0.9,0,0')
+@settings(type='Material', attribute='water')
+class CrystalSpaceSettingsMaterial(PropertyGroup):            
+  water_fog_color = bpy.props.StringProperty(
+            name="Water Fog Color",
+            description="Fog color inside the water surface",
+            default='0,0.1,0.15,1')
+            
+  water_fog_density = bpy.props.FloatProperty(
+            name="Water Fog Density",
+            description="Fog density inside the water surface",
+            default=3.0)
+            
+  water_perturb_scale = bpy.props.StringProperty(
+            name="Water Perturb Scale",
+            description="Fog perturb scale",
+            default='0.9,0.9,0,0')
+        
 
-BoolProperty(['Material'], 
-             attr="csMatRef", 
-             name="Material replaced by a CS material", 
-             description="Replace this material by a Crystal Space material", 
-             default=False)
 
-StringProperty(['Material'], 
-               attr="csMaterialName", 
-               name="Reference of CS material", 
-               description="Name of an existing Crystal Space material",
-               default='None')
-
-StringProperty(['Material'], 
-               attr="csMaterialVfs", 
-               name="VFS path of CS material", 
-               description="VFS path of a Crystal Space library file",
-               default='')

@@ -40,7 +40,10 @@ def SceneAsCS(self, func, depth=0):
   """
   print("- sector '%s'"%self.uname)
   func(' '*depth +'<sector name="%s">'%(self.uname))
-
+  
+  # Export physics
+  self.ScenePhysicsAsCS(func, depth+1)
+  
   # Export portals
   objects = self.PortalsAsCS(func, depth)
 
@@ -63,13 +66,35 @@ def SceneAsCS(self, func, depth=0):
 bpy.types.Scene.AsCS = SceneAsCS
 
 
+def ScenePhysicsAsCS(self, func, depth=0):
+  
+  engine = None
+  if self.game_settings.physics_engine=='BULLET':
+    engine = 'crystalspace.physics.bullet'
+      
+  if engine:
+    gravity = -1 * self.game_settings.physics_gravity
+    
+    func(' '*depth +'<addon plugin="crystalspace.physics.loader">')
+    func(' '*depth +'  <collisionsector>')
+    func(' '*depth +'    <gravity x="0" y="%f" z="0" />'%(gravity))
+    func(' '*depth +'    <damping linear="0.1" angular="0.1" />')  #TODO
+    func(' '*depth +'    <autodisabling linear="0.8" angular="1.0" time="0" />')  #TODO
+    func(' '*depth +'  </collisionsector>')
+    func(' '*depth +'</addon>')
+  
+
+bpy.types.Scene.ScenePhysicsAsCS = ScenePhysicsAsCS
+
+
+
 def PortalsAsCS(self, func, depth=0):
   """ Export portals defined in the current scene and
       return them as a list of objects
   """
   epsilon = 1e-7
   portals = []
-  for ob in [o for o in self.objects if o.type=='MESH' and o.portal]:
+  for ob in [o for o in self.objects if o.type=='MESH' and o.portal.enabled]:
     portals.append(ob)
     # Check if the portal is visible
     if ob.hide:
@@ -82,7 +107,7 @@ def PortalsAsCS(self, func, depth=0):
 
     # Find the destination scene
     source = ob
-    destScName = source.portalDestScene
+    destScName = source.portal.portalDestScene
     scenes = [s.name for s in bpy.data.scenes]
     if destScName == '' or not destScName in scenes:
       print("WARNING: portal '%s' not exported: target scene '%s' " \
@@ -91,7 +116,7 @@ def PortalsAsCS(self, func, depth=0):
     destScene = bpy.data.scenes[destScName]
 
     # Find the destination mesh object
-    destObjName = source.portalDestObject
+    destObjName = source.portal.portalDestObject
     objects = [o.name for o in destScene.objects]
     if destObjName == '' or not destObjName in objects:
       print("WARNING: portal '%s' not exported: target mesh '%s' " \

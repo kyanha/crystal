@@ -1,6 +1,7 @@
 import bpy
 
-from io_scene_cs.utilities import rnaType, B2CS, BoolProperty
+from io_scene_cs.utilities import rnaType, settings
+from bpy.types import PropertyGroup
 
 
 def active_node_mat(mat):
@@ -12,6 +13,7 @@ def active_node_mat(mat):
           return mat
 
   return None
+
 
 def context_tex_datablock(context):
   idblock = context.material
@@ -29,22 +31,25 @@ def context_tex_datablock(context):
   idblock = context.brush
   return idblock
 
+
 class csTexturePanel():
   bl_space_type = 'PROPERTIES'
   bl_region_type = 'WINDOW'
   bl_context = "texture"
-  b2cs_context = "texture"
+  # COMPAT_ENGINES must be defined in each subclass, external engines can add themselves here
   
   @classmethod
   def poll(cls, context):
     tex = context.texture
     r = (tex and tex.type == 'IMAGE')
-    return r    
+    rd = context.scene.render
+    return r and (rd.engine in cls.COMPAT_ENGINES)   
 
             
 @rnaType
 class TEXTURE_PT_B2CS_texture(csTexturePanel, bpy.types.Panel):
   bl_label = "Crystal Space Texture"
+  COMPAT_ENGINES = {'CRYSTALSPACE'}
 
 
   def draw(self, context):
@@ -70,8 +75,13 @@ class TEXTURE_PT_B2CS_texture(csTexturePanel, bpy.types.Panel):
         layout.label(text="Properties:")
         row = layout.row(align=True)
         if tex.texture.image:
-          row.prop(tex.texture.image, "binAlpha")
+          row.prop(tex.texture.image.b2cs, "binAlpha")
 
 
+@settings(type='Image')
+class CrystalSpaceSettingsGroup(PropertyGroup):
+  binAlpha = bpy.props.BoolProperty(
+            name="Binary Alpha",
+            description="Use binary alpha for this texture",
+            default=False)
 
-BoolProperty(['Image'], attr="binAlpha", name="Binary Alpha", description="Use binary alpha for this texture")

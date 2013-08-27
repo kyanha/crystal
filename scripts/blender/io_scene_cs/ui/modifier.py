@@ -1,14 +1,13 @@
 import bpy
 
-from io_scene_cs.utilities import rnaType, B2CS, BoolProperty
+from io_scene_cs.utilities import rnaType
 
 
 class csModifierPanel():
   bl_space_type = "PROPERTIES"
   bl_region_type = "WINDOW"
   bl_context = "modifier"
-  b2cs_context = "modifiers"
-  bl_label = ""
+  # COMPAT_ENGINES must be defined in each subclass, external engines can add themselves here
 
   @classmethod
   def poll(cls, context):
@@ -17,12 +16,14 @@ class csModifierPanel():
                 if mod.type=='ARRAY' and mod.fit_type=='FIXED_COUNT'] 
     r = (ob and ob.type == 'MESH' and ob.data and \
            len(ob.modifiers)!=0 and len(arrays) == len(ob.modifiers))
-    return r
+    rd = context.scene.render
+    return r and (rd.engine in cls.COMPAT_ENGINES)   
 
 
 @rnaType
 class MESH_PT_csModifier(csModifierPanel, bpy.types.Panel):
   bl_label = "Crystal Space Modifiers"
+  COMPAT_ENGINES = {'CRYSTALSPACE'}
 
   def draw(self, context):
     ob = context.active_object
@@ -31,12 +32,5 @@ class MESH_PT_csModifier(csModifierPanel, bpy.types.Panel):
       # Draw a checkbox to decide how to export object's modifiers
       layout = self.layout
       row = layout.row()
-      row.prop(ob.data, "array_as_meshobj")
+      row.prop(ob.data.b2cs, "array_as_meshobj")
 
-
-BoolProperty(['Mesh'], 
-             attr="array_as_meshobj", 
-             name="Export arrays as mesh factory instances",
-             description="Export fixed count array copies as instances" + \
-               " of object factory ('meshobj') in world file",
-             default=True)

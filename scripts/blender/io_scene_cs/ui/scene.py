@@ -1,23 +1,24 @@
 import bpy
 
-from io_scene_cs.utilities import rnaType, B2CS, BoolProperty
-from io_scene_cs.utilities import FloatProperty
+from io_scene_cs.utilities import rnaType, settings, GetPreferences
+from bpy.types import PropertyGroup
 
 class csSectorPanel():
   bl_space_type = "PROPERTIES"
   bl_region_type = "WINDOW"
   bl_context = "scene"
-  b2cs_context = "data"
-  bl_label = ""
+  # COMPAT_ENGINES must be defined in each subclass, external engines can add themselves here
 
   @classmethod
   def poll(cls, context):
-    return True
+    rd = context.scene.render
+    return (rd.engine in cls.COMPAT_ENGINES)
 
 
 @rnaType
 class SCENE_PT_csSector(csSectorPanel, bpy.types.Panel):
   bl_label = "Crystal Space Sector"
+  COMPAT_ENGINES = {'CRYSTALSPACE'}
 
   def draw(self, context):
     layout = self.layout
@@ -29,17 +30,16 @@ class SCENE_PT_csSector(csSectorPanel, bpy.types.Panel):
     box1 = col1.box()
 
     row = box1.row()
-    row.prop(ob, "export")
+    row.prop(ob.b2cs, "export")
     
-    if B2CS.properties.exportOnlyCurrentScene:
+    if GetPreferences().exportOnlyCurrentScene:
       row = box1.row()
       row.label(text="exportOnlyCurrentScene enabled so this won't have any effect.")
 
 
-
-
-BoolProperty(['Scene'], 
-     attr="export", 
-     name="Export this scene", 
-     description="Whether to export this scene",
-     default=True)
+@settings(type='Scene')
+class CrystalSpaceSettingsScene(PropertyGroup):
+  export = bpy.props.BoolProperty(
+            name="Export this scene",
+            description="Whether to export this scene",
+            default=True)

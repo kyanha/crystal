@@ -1,5 +1,5 @@
 from .renderbuffer import *
-from io_scene_cs.utilities import B2CS
+from io_scene_cs.utilities import GetPreferences
 
 
 class MorphTarget:
@@ -106,7 +106,7 @@ def GetMorphTargets(numVertices, **kwargs):
             offsets.append(offset)
             # Duplicate vertex offset if the mesh is double sided
             # and 'double sided' option is enable
-            if B2CS.properties.enableDoublesided and ob.data.show_double_sided:
+            if GetPreferences().enableDoublesided and ob.data.show_double_sided:
               offsets.append(offset)              
           # Add the morph target to the list if it contains non null offsets
           if nonNullOffset:

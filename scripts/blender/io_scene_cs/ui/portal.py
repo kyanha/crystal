@@ -1,21 +1,22 @@
 import bpy
 import operator
 
-from io_scene_cs.utilities import rnaType, rnaOperator, B2CS, BoolProperty, EnumProperty, StringProperty
+from io_scene_cs.utilities import rnaType, settings
+from bpy.types import PropertyGroup
   
 
 class csPortalPanel():
   bl_space_type = "PROPERTIES"
   bl_region_type = "WINDOW"
   bl_context = "object"
-  b2cs_context = "object"
-  bl_label = ""
+  # COMPAT_ENGINES must be defined in each subclass, external engines can add themselves here
 
   @classmethod
   def poll(cls, context):
     ob = bpy.context.active_object
-    r = (ob and ob.type == 'MESH' and ob.data and not ob.csFactRef)
-    return r
+    r = (ob and ob.type == 'MESH' and ob.data and not ob.b2cs.csFactRef)
+    rd = context.scene.render
+    return r and (rd.engine in cls.COMPAT_ENGINES)
 
 
 class SelectDestScene(bpy.types.Operator):
@@ -35,10 +36,10 @@ class SelectDestScene(bpy.types.Operator):
     def execute(self,context):
         ob = context.scene.objects.active
         if int(self.select_scenes) != -1:
-          ob.portalDestScene = bpy.data.scenes[int(self.select_scenes)].name
+          ob.portal.portalDestScene = bpy.data.scenes[int(self.select_scenes)].name
         else:
-          ob.portalDestScene = ''
-        ob.portalDestObject = ''
+          ob.portal.portalDestScene = ''
+        ob.portal.portalDestObject = ''
         return {'FINISHED'}
 
 class SelectDestObject(bpy.types.Operator):
@@ -48,8 +49,8 @@ class SelectDestObject(bpy.types.Operator):
     def avail_objects(self,context):
         items = []
         ob = context.scene.objects.active
-        if ob.portalDestScene != '':
-          scene = bpy.data.scenes[ob.portalDestScene]
+        if ob.portal.portalDestScene != '':
+          scene = bpy.data.scenes[ob.portal.portalDestScene]
           items = [(str(i),o.name,o.name) for i,o in enumerate(scene.objects) if o.type=='MESH']
           items.append((str(-1),' NONE','None'))
         return sorted(items, key=operator.itemgetter(1))
@@ -62,15 +63,14 @@ class SelectDestObject(bpy.types.Operator):
     
     def execute(self,context):
         ob = context.scene.objects.active
-        scene = bpy.data.scenes[ob.portalDestScene]
+        scene = bpy.data.scenes[ob.portal.portalDestScene]
         if int(self.select_objects) != -1:
-          ob.portalDestObject = scene.objects[int(self.select_objects)].name
+          ob.portal.portalDestObject = scene.objects[int(self.select_objects)].name
         else:
-          ob.portalDestObject = ''
+          ob.portal.portalDestObject = ''
         return {'FINISHED'}
         
 
-@rnaOperator
 class OBJECT_OT_csCreatePortal(bpy.types.Operator):
   bl_idname = "object.createportal"
   bl_label = "Create portal operator"
@@ -78,7 +78,7 @@ class OBJECT_OT_csCreatePortal(bpy.types.Operator):
 
   def invoke(self, context, event):
     source = bpy.context.active_object
-    destScene = bpy.data.scenes[source.portalDestScene]
+    destScene = bpy.data.scenes[source.portal.portalDestScene]
     currScene = bpy.context.scene
 
     # Generate portal name
@@ -131,12 +131,12 @@ class OBJECT_OT_csCreatePortal(bpy.types.Operator):
     destScene.objects.link(new_obj)              # link the object into the scene
 
     # Define object as destination mesh of current portal
-    source.portalDestObject = name
+    source.portal.portalDestObject = name
 
     # Define destination mesh as mirror portal
-    new_obj.portal = True
-    new_obj.portalDestScene = currScene.name
-    new_obj.portalDestObject = source.name
+    new_obj.portal.enabled = True
+    new_obj.portal.portalDestScene = currScene.name
+    new_obj.portal.portalDestObject = source.name
 
     return{'FINISHED'}
 
@@ -144,6 +144,7 @@ class OBJECT_OT_csCreatePortal(bpy.types.Operator):
 @rnaType
 class OBJECT_PT_csPortal(csPortalPanel, bpy.types.Panel):
   bl_label = "Crystal Space Portal"
+  COMPAT_ENGINES = {'CRYSTALSPACE'}
 
   def draw(self, context):    
     ob = context.active_object
@@ -152,19 +153,19 @@ class OBJECT_PT_csPortal(csPortalPanel, bpy.types.Panel):
       # Draw a checkbox to define current mesh object as a portal
       layout = self.layout
       row = layout.row()
-      row.prop(ob, "portal")
+      row.prop(ob.portal, "enabled")
 
-      if ob.portal:
+      if ob.portal.enabled:
           # Let the user select a target scene for portal
           row = layout.row()
           split = row.split(percentage=0.5)
           colL = split.column()
           colR = split.column()
           colL.label(text='Destination scene:', icon='SCENE_DATA')
-          if ob.portalDestScene == '':
+          if ob.portal.portalDestScene == '':
             colR.operator_menu_enum("object.select_dest_scene", "select_scenes", text=SelectDestScene.bl_label)
           else:
-            colR.operator_menu_enum("object.select_dest_scene", "select_scenes", text=ob.portalDestScene)
+            colR.operator_menu_enum("object.select_dest_scene", "select_scenes", text=ob.portal.portalDestScene)
 
             # Let the user select a target mesh for portal
             row = layout.row()
@@ -172,38 +173,35 @@ class OBJECT_PT_csPortal(csPortalPanel, bpy.types.Panel):
             colL = split.column()
             colR = split.column()
             colL.label(text='Destination object:', icon='OBJECT_DATA')
-            if ob.portalDestObject == '':
+            if ob.portal.portalDestObject == '':
               colR.operator_menu_enum("object.select_dest_object", "select_objects", text=SelectDestObject.bl_label)
 
               # Create a "Create portal" button
               layout.operator(OBJECT_OT_csCreatePortal.bl_idname, text="Create destination portal")
             else:
-              colR.operator_menu_enum("object.select_dest_object", "select_objects", text=ob.portalDestObject)
+              colR.operator_menu_enum("object.select_dest_object", "select_objects", text=ob.portal.portalDestObject)
               
               # Verify that destination object still exists
-              scene = bpy.data.scenes[ob.portalDestScene]
+              scene = bpy.data.scenes[ob.portal.portalDestScene]
               objects = [o.name for o in scene.objects]
-              if not ob.portalDestObject in objects:
+              if not ob.portal.portalDestObject in objects:
                 row = layout.row()
                 row.label(text="WARNING: destination objet has been deleted!", icon='ERROR')
 
 
+@settings(type='Object', attribute='portal')
+class CrystalSpaceSettingsPortal(PropertyGroup):
+  enabled = bpy.props.BoolProperty(
+            name="Portal",
+            description="Whether or not this mesh object is defined as a CS portal",
+            default=False)
+  portalDestObject = bpy.props.StringProperty(
+            name="Destination portal",
+            description="Name of the destination mesh object for this portal",
+            default="")
+  portalDestScene = bpy.props.StringProperty(
+            name="Destination scene",
+            description="Name of the destination scene of this portal",
+            default="")
 
-BoolProperty(['Object'], 
-             attr="portal", 
-             name="Portal", 
-             description="Whether or not this mesh object is defined as a CS portal", 
-             default=False)
-
-StringProperty(['Object'], 
-               attr="portalDestObject", 
-               name="Destination portal", 
-               description="Name of the destination mesh object for this portal",
-               default='')
-
-StringProperty(['Object'], 
-               attr="portalDestScene", 
-               name="Destination scene", 
-               description="Name of the destination scene of this portal",
-               default='')
 

@@ -1,4 +1,4 @@
-from io_scene_cs.utilities import B2CS
+from io_scene_cs.utilities import GetPreferences
 
 
 class RenderBuffer:
@@ -128,7 +128,7 @@ class RenderBuffers:
     """
     # For each mesh composing the object
     for i, ob in enumerate(self.meshData):
-      doubleSided = B2CS.properties.enableDoublesided and ob.data.show_double_sided
+      doubleSided = GetPreferences().enableDoublesided and ob.data.show_double_sided
 
       # Get the active UV texture and vertex colors
       tface = ob.data.all_uv_textures.active.data if ob.data.all_uv_textures.active else None
