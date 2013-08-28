@@ -5,14 +5,16 @@ from .util import *
 def IdentifyNormalMap(self, material):
   """ Test if this texture is a normal map
   """
-  self.isNormalMap = False
+  self["isNormalMap"] = False
   for slot in material.texture_slots:
     if slot and slot.use_map_normal and slot.texture and slot.texture.type =='IMAGE' \
           and slot.texture.image and slot.texture.image.uname == self.uname :
-      self.isNormalMap = True   
-  return self.isNormalMap
+      self["isNormalMap"] = True   
+  return self["isNormalMap"]
 
 bpy.types.Image.IdentifyNormalMap = IdentifyNormalMap
+
+bpy.types.Image.isNormalMap = property(lambda self: self.get("isNormalMap", False))
 
 
 def TextureIsBinAlpha(self):
