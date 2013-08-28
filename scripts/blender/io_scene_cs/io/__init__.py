@@ -85,6 +85,16 @@ def ExportWorld(path):
   Write(f)('<world xmlns=\"http://crystalspace3d.org/xml/library\">')
   
   bpy.context.scene.world.AsCS(Write(f), 2)
+  
+  # Export shared materials and textures in world file
+  if GetPreferences().sharedMaterial:
+    use_imposter = False
+    for scene in scenes:
+      for ob in scene.objects:
+        if ob.HasImposter():
+          use_imposter = True
+          break
+    ExportMaterials(Write(f), 2, deps, use_imposter)
 
   # Export the objects composing the world
   for typ in deps:
@@ -128,16 +138,6 @@ def ExportWorld(path):
   else:
     # Set a default camera if none is defined
     bpy.context.scene.CameraAsCS(Write(f), 2)
-
-  # Export shared materials and textures in world file
-  if GetPreferences().sharedMaterial:
-    use_imposter = False
-    for scene in scenes:
-      for ob in scene.objects:
-        if ob.HasImposter():
-          use_imposter = True
-          break
-    ExportMaterials(Write(f), 2, deps, use_imposter)
 
   # Export scenes as CS sectors in the 'world' file
   print("\nEXPORT SCENES:")
