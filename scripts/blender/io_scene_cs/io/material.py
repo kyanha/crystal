@@ -67,9 +67,9 @@ def MaterialAsCS(self, func, depth=0, **kwargs):
     '''
     
     if haswater:
-      func(' '*depth +'  <shadervar type="vector4" name="water fog color">%s</shadervar>'%(self.water_fog_color,))
-      func(' '*depth +'  <shadervar type="vector4" name="water perturb scale">%s</shadervar>'%(self.water_perturb_scale,))
-      func(' '*depth +'  <shadervar type="float" name="water fog density">%s</shadervar>'%(self.water_fog_density,))
+      func(' '*depth +'  <shadervar type="vector4" name="water fog color">%s</shadervar>'%(self.water.water_fog_color,))
+      func(' '*depth +'  <shadervar type="vector4" name="water perturb scale">%s</shadervar>'%(self.water.water_perturb_scale,))
+      func(' '*depth +'  <shadervar type="float" name="water fog density">%s</shadervar>'%(self.water.water_fog_density,))
 
     func(' '*depth +'</material>')
 

@@ -97,7 +97,7 @@ def WriteCSGroup(self, func, depth=0, use_imposter=False, dontClose=False):
     indexObject = find(lambda obCpy: obCpy.name[:-4] == ob.name[:len(obCpy.name[:-4])], meshData)
     if indexObject == None:
       # Export group objects as instances of the general mesh
-      if self.groupedInstances:
+      if self.b2cs.groupedInstances:
         # Get a deep copy of the object
         obCpy = ob.GetTransformedCopy()
       # Export group objects as submeshes of the general mesh
@@ -130,7 +130,7 @@ def WriteCSGroup(self, func, depth=0, use_imposter=False, dontClose=False):
   # Export the group of objects as a general mesh factory
   func(' '*depth + '<meshfact name=\"%s\">'%(self.uname))
 
-  if self.groupedInstances:
+  if self.b2cs.groupedInstances:
     # EXPORT OBJECTS AS INSTANCES OF THE GENERAL MESH
     print("The objects composing group '%s' are exported as instances of a general mesh"%(self.uname))
     func(' '*depth + '  <instances>')
@@ -143,22 +143,22 @@ def WriteCSGroup(self, func, depth=0, use_imposter=False, dontClose=False):
     #if use_imposter:
     #  func(' '*depth + '      <imposter range="10.0" tolerance="45.0" camera_tolerance="45.0" shader="lighting_imposter"/>')
     mat = ob.GetDefaultMaterial()
-    if mat != None and mat.priority != 'object':
-      func(' '*depth + '      <priority>%s</priority>'%(mat.priority))
-    if mat != None and mat.zbuf_mode != 'zuse':
-      func(' '*depth + '      <%s/>'%(mat.zbuf_mode))
-    if ob.data and ob.data.no_shadow_receive:
+    if mat != None and mat.b2cs.priority != 'object':
+      func(' '*depth + '      <priority>%s</priority>'%(mat.b2cs.priority))
+    if mat != None and mat.b2cs.zbuf_mode != 'zuse':
+      func(' '*depth + '      <%s/>'%(mat.b2cs.zbuf_mode))
+    if ob.data and ob.data.b2cs.no_shadow_receive:
       func(' '*depth + '      <noshadowreceive />')
-    if ob.data and ob.data.no_shadow_cast:
+    if ob.data and ob.data.b2cs.no_shadow_cast:
       func(' '*depth + '      <noshadowcast />')
-    if ob.data and ob.data.limited_shadow_cast:
+    if ob.data and ob.data.b2cs.limited_shadow_cast:
       func(' '*depth + '      <limitedshadowcast />')
-    if ob.data.lighter2_vertexlight:
+    if ob.data.b2cs.lighter2_vertexlight:
       func(' '*depth + '      <key name="lighter2" editoronly="yes" vertexlight="yes" />')
-    if ob.data.lighter2_selfshadow:
+    if ob.data.b2cs.lighter2_selfshadow:
       func(' '*depth + '      <key name="lighter2" editoronly="yes" noselfshadow="yes" />')
-    if ob.data.lighter2_lmscale > 0.0:
-      func(' '*depth + '      <key name="lighter2" editoronly="yes" lmscale="%f" />'%(ob.data.lighter2_lmscale))
+    if ob.data.b2cs.lighter2_lmscale > 0.0:
+      func(' '*depth + '      <key name="lighter2" editoronly="yes" lmscale="%f" />'%(ob.data.b2cs.lighter2_lmscale))
     func(' '*depth + '      <params>')
 
     # Export render buffers
@@ -217,22 +217,22 @@ def WriteCSGroup(self, func, depth=0, use_imposter=False, dontClose=False):
     #  func(' '*depth + '  <imposter range="10.0" tolerance="45.0" camera_tolerance="45.0" shader="lighting_imposter"/>')
     for m, ob in self.allObjects():
       mat = ob.GetDefaultMaterial(notifications = False)
-      if mat != None and mat.priority != 'object':
-        func(' '*depth + '  <priority>%s</priority>'%(mat.priority))
-      if mat != None and mat.zbuf_mode != 'zuse':
-        func(' '*depth + '  <%s/>'%(mat.zbuf_mode))
-      if ob.data and ob.data.no_shadow_receive:
+      if mat != None and mat.b2cs.priority != 'object':
+        func(' '*depth + '  <priority>%s</priority>'%(mat.b2cs.priority))
+      if mat != None and mat.b2cs.zbuf_mode != 'zuse':
+        func(' '*depth + '  <%s/>'%(mat.b2cs.zbuf_mode))
+      if ob.data and ob.data.b2cs.no_shadow_receive:
         func(' '*depth + '  <noshadowreceive />')
-      if ob.data and ob.data.no_shadow_cast:
+      if ob.data and ob.data.b2cs.no_shadow_cast:
         func(' '*depth + '  <noshadowcast />')
-      if ob.data and ob.data.limited_shadow_cast:
+      if ob.data and ob.data.b2cs.limited_shadow_cast:
         func(' '*depth + '  <limitedshadowcast />')
-      if ob.data.lighter2_vertexlight:
+      if ob.data.b2cs.lighter2_vertexlight:
         func(' '*depth + '  <key name="lighter2" editoronly="yes" vertexlight="yes" />')
-      if ob.data.lighter2_selfshadow:
+      if ob.data.b2cs.lighter2_selfshadow:
         func(' '*depth + '  <key name="lighter2" editoronly="yes" noselfshadow="yes" />')
-      if ob.data.lighter2_lmscale > 0.0:
-        func(' '*depth + '  <key name="lighter2" editoronly="yes" lmscale="%f" />'%(ob.data.lighter2_lmscale))
+      if ob.data.b2cs.lighter2_lmscale > 0.0:
+        func(' '*depth + '  <key name="lighter2" editoronly="yes" lmscale="%f" />'%(ob.data.b2cs.lighter2_lmscale))
     func(' '*depth + '  <params>')
     
     def SubmeshesLackMaterial(subMeshess):

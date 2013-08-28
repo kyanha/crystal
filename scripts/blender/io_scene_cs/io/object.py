@@ -36,11 +36,11 @@ class Hierarchy:
     return "hier" + str(self.id)
 
   def AsCSRef(self, func, depth=0, dirName='factories/', animesh=False):
-    if self.object.csFactRef:
-      if self.object.csFactoryName != '' and self.object.csFactoryVfs != '':
-        if self.object.csFactoryVfs not in Hierarchy.libraryReferences:
-          Hierarchy.libraryReferences.append(self.object.csFactoryVfs)
-          func(' '*depth +'<library>%s</library>'%(self.object.csFactoryVfs))
+    if self.object.b2cs.csFactRef:
+      if self.object.b2cs.csFactoryName != '' and self.object.b2cs.csFactoryVfs != '':
+        if self.object.b2cs.csFactoryVfs not in Hierarchy.libraryReferences:
+          Hierarchy.libraryReferences.append(self.object.b2cs.csFactoryVfs)
+          func(' '*depth +'<library>%s</library>'%(self.object.b2cs.csFactoryVfs))
       else:
         print("WARNING: Object '%s' references an invalid CS factory"%(self.object.uname))
     elif self.object.parent_type != 'BONE' \
@@ -103,20 +103,20 @@ class Hierarchy:
     # Render priority and Z-mode properties
     mat = self.object.GetDefaultMaterial()
     if mat != None:
-      if mat.priority != 'object':
-        func(' '*depth + '  <priority>%s</priority>'%(mat.priority))
-      if mat.zbuf_mode != 'zuse':
-        func(' '*depth + '  <%s/>'%(mat.zbuf_mode))
+      if mat.b2cs.priority != 'object':
+        func(' '*depth + '  <priority>%s</priority>'%(mat.b2cs.priority))
+      if mat.b2cs.zbuf_mode != 'zuse':
+        func(' '*depth + '  <%s/>'%(mat.b2cs.zbuf_mode))
 
     # Shadow properties
     noshadowreceive = noshadowcast = limitedshadowcast = False
     for child in self.object.children:
       if child.type == 'MESH' and child.parent_type != 'BONE':
-        if child.data.no_shadow_receive:
+        if child.data.b2cs.no_shadow_receive:
           noshadowreceive = True
-        if child.data.no_shadow_cast:
+        if child.data.b2cs.no_shadow_cast:
           noshadowcast = True
-        if child.data.limited_shadow_cast:
+        if child.data.b2cs.limited_shadow_cast:
           limitedshadowcast = True
     if noshadowreceive:
       func(' '*depth + '  <noshadowreceive />')
@@ -151,7 +151,7 @@ class Hierarchy:
     self.WriteCSLibHeader(Write(fa), animesh)
     if not GetPreferences().sharedMaterial:
       objectDeps = self.object.GetDependencies()
-      use_imposter = not animesh and self.object.data.use_imposter
+      use_imposter = not animesh and self.object.data.b2cs.use_imposter
       ExportMaterials(Write(fa), 2, objectDeps, use_imposter)
     if animesh:
       self.WriteCSAnimeshHeader(Write(fa), 2)
@@ -306,7 +306,7 @@ class Hierarchy:
     # Take the first found material as default object material
     mat = self.object.GetDefaultMaterial()
     if mat != None:
-      mat_name = mat.csMaterialName if mat.csMatRef else mat.uname
+      mat_name = mat.b2cs.csMaterialName if mat.b2cs.csMatRef else mat.uname
       func(" "*depth + "    <material>%s</material>"%(mat_name))
     else:
       func(" "*depth + "    <material>%s</material>"%(self.uv_texture if self.uv_texture!=None else 'None'))
@@ -368,26 +368,26 @@ def AsCSGenmeshLib(self, func, depth=0, **kwargs):
   # Write genmesh header
   func(' '*depth + '<meshfact name=\"%s\">'%(self.data.uname))
   func(' '*depth + '  <plugin>crystalspace.mesh.loader.factory.genmesh</plugin>')
-  if self.data.use_imposter:
+  if self.data.b2cs.use_imposter:
     func(' '*depth + '  <imposter range="100.0" tolerance="0.4" camera_tolerance="0.4" shader="lighting_imposter"/>')
   mat = self.GetDefaultMaterial()
   if mat != None:
-    if mat.priority != 'object':
+    if mat.b2cs.priority != 'object':
       func(' '*depth + '  <priority>%s</priority>'%(mat.priority))
-    if mat.zbuf_mode != 'zuse':
+    if mat.b2cs.zbuf_mode != 'zuse':
       func(' '*depth + '  <%s/>'%(mat.zbuf_mode))
-  if self.data.no_shadow_receive:
+  if self.data.b2cs.no_shadow_receive:
     func(' '*depth + '  <noshadowreceive />')
-  if self.data.no_shadow_cast:
+  if self.data.b2cs.no_shadow_cast:
     func(' '*depth + '  <noshadowcast />')
-  if self.data.limited_shadow_cast:
+  if self.data.b2cs.limited_shadow_cast:
     func(' '*depth + '  <limitedshadowcast />')
-  if self.data.lighter2_vertexlight:
+  if self.data.b2cs.lighter2_vertexlight:
     func(' '*depth + '  <key name="lighter2" editoronly="yes" vertexlight="yes" />')
-  if not self.data.lighter2_selfshadow:
+  if not self.data.b2cs.lighter2_selfshadow:
     func(' '*depth + '  <key name="lighter2" editoronly="yes" noselfshadow="yes" />')
-  if self.data.lighter2_lmscale > 0.0:
-    func(' '*depth + '  <key name="lighter2" editoronly="yes" lmscale="%f" />'%(self.data.lighter2_lmscale))
+  if self.data.b2cs.lighter2_lmscale > 0.0:
+    func(' '*depth + '  <key name="lighter2" editoronly="yes" lmscale="%f" />'%(self.data.b2cs.lighter2_lmscale))
   func(' '*depth + '  <params>')
 
   # Recover submeshes from kwargs
@@ -395,8 +395,8 @@ def AsCSGenmeshLib(self, func, depth=0, **kwargs):
 
   # Take the first found material as default object material
   if mat != None:
-    if mat.csMatRef:
-      func(" "*depth + "    <material>%s</material>"%(mat.csMaterialName))
+    if mat.b2cs.csMatRef:
+      func(" "*depth + "    <material>%s</material>"%(mat.b2cs.csMaterialName))
     else:
       func(" "*depth + "    <material>%s</material>"%(mat.uname))
 
@@ -471,8 +471,8 @@ def ObjectAsCS(self, func, depth=0, **kwargs):
     name = kwargs['name']+':'+name
 
   if self.type == 'MESH':
-    isValidRef = self.csFactRef and self.csFactoryName != '' and self.csFactoryVfs != ''
-    if self.csFactRef and not isValidRef:
+    isValidRef = self.b2cs.csFactRef and self.b2cs.csFactoryName != '' and self.b2cs.csFactoryVfs != ''
+    if self.b2cs.csFactRef and not isValidRef:
       return
 
     if isValidRef or (len(self.data.vertices)!=0 and len(self.data.all_faces)!=0):
@@ -484,7 +484,7 @@ def ObjectAsCS(self, func, depth=0, **kwargs):
       if isValidRef:
         # Only use meshref when object is defined as a reference to a CS factory
         func(' '*depth +'<meshref name="%s_object">'%(name))
-        func(' '*depth +'  <factory>%s</factory>'%(self.csFactoryName))
+        func(' '*depth +'  <factory>%s</factory>'%(self.b2cs.csFactoryName))
       else:
         func(' '*depth +'<meshobj name="%s_object">'%(name))
         if self.parent and self.parent.type == 'ARMATURE':
@@ -596,7 +596,7 @@ def ObjectAsCS(self, func, depth=0, **kwargs):
 
   elif self.type == 'EMPTY':
     if self.dupli_type=='GROUP' and self.dupli_group:
-      if self.dupli_group.doMerge:
+      if self.dupli_group.b2cs.doMerge:
         self.dupli_group.AsCS(func, depth, transform=self.relative_matrix)
       else:
         for ob in self.dupli_group.objects:
@@ -721,7 +721,7 @@ def ObjectDependencies(self, empty=None):
   elif self.type == 'EMPTY':
     if self.dupli_type=='GROUP' and self.dupli_group:
       # Group of objects ==> 'G' type
-      if self.dupli_group.doMerge:
+      if self.dupli_group.b2cs.doMerge:
         dependencies['G'][self.dupli_group.uname] = self.dupli_group
         MergeDependencies(dependencies, self.dupli_group.GetDependencies())
       else:
@@ -863,7 +863,7 @@ def GetTransformedCopy(self, matrix = None, animesh = False):
   # the object contains only 'FIXED_COUNT' array modifiers:
   # this type of modifier is exported as instances of object factory in 'world' file
   # (cfr. ExportArrayModifier() )
-  if self.data.array_as_meshobj:
+  if self.data.b2cs.array_as_meshobj:
     arrays = [mod for mod in obCpy.modifiers \
                 if mod.type=='ARRAY' and mod.fit_type=='FIXED_COUNT'] 
     if len(arrays) == len(obCpy.modifiers):
@@ -884,7 +884,7 @@ def ExportArrayModifier(self, func, depth, **kwargs):
       export each object copy as a factory instance ('meshobj')
   """
   # Don't export array copies of this mesh if CS property 'array_as_meshobj' is not set
-  if not self.data.array_as_meshobj:
+  if not self.data.b2cs.array_as_meshobj:
     return
 
   # If stack contains other modifiers than arrays with fixed number of copies,

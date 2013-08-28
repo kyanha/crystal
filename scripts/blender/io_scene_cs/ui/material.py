@@ -35,11 +35,11 @@ class SelectMaterialRef(bpy.types.Operator):
     def execute(self,context):
         mat = context.material
         if int(self.select_material) != -1:
-          mat.csMaterialName = GetPreferences().MaterialRefs[int(self.select_material)].name
-          mat.csMaterialVfs = GetPreferences().MaterialRefs[int(self.select_material)].vfs
+          mat.b2cs.csMaterialName = GetPreferences().MaterialRefs[int(self.select_material)].name
+          mat.b2cs.csMaterialVfs = GetPreferences().MaterialRefs[int(self.select_material)].vfs
         else:
-          mat.csMaterialName = 'None'
-          mat.csMaterialVfs = ''
+          mat.b2cs.csMaterialName = 'None'
+          mat.b2cs.csMaterialVfs = ''
         return {'FINISHED'}
 
 @rnaType
@@ -55,25 +55,25 @@ class MATERIAL_PT_B2CS__context_material(csMaterialPanel, bpy.types.Panel):
         if mat:
           layout = self.layout
           row = layout.row()
-          row.prop(mat, "priority")
+          row.prop(mat.b2cs, "priority")
           row = layout.row()
-          row.prop(mat, "zbuf_mode")
+          row.prop(mat.b2cs, "zbuf_mode")
 
           # Draw a checkbox to define current material as a CS material reference
           layout.separator()
           row = layout.row()
-          row.prop(mat, "csMatRef")
+          row.prop(mat.b2cs, "csMatRef")
 
           if mat.csMatRef:
             # Let the user select a CS material
             row = layout.row()
-            if mat.csMaterialName == 'None':
+            if mat.b2cs.csMaterialName == 'None':
               row.operator_menu_enum("material.select_mat_ref", "select_material", text=SelectMaterialRef.bl_label)
             else:
-              row.operator_menu_enum("material.select_mat_ref", "select_material", text=mat.csMaterialName)
+              row.operator_menu_enum("material.select_mat_ref", "select_material", text=mat.b2cs.csMaterialName)
               # Verify that factory reference still exists
               materials = [m.name for m in GetPreferences().MaterialRefs]
-              if not mat.csMaterialName in materials:
+              if not mat.b2cs.csMaterialName in materials:
                 row = layout.row()
                 row.label(text="WARNING: this material reference has been deleted!", icon='ERROR')
 

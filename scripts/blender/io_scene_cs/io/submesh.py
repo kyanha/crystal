@@ -46,7 +46,7 @@ class SubMesh:
   def AsCS(self, func, depth=0, animesh=False):
     if self.name:
       if self.material:
-        mat_name = self.material.csMaterialName if self.material.csMatRef \
+        mat_name = self.material.b2cs.csMaterialName if self.material.b2cs.csMatRef \
             else self.material.uname
         self.name = '%s-%s'%(self.name,mat_name)
       if self.image:
@@ -57,7 +57,7 @@ class SubMesh:
 
     if self.material:
       if self.material.csMatRef:
-        func(' '*depth +'  <material>'+self.material.csMaterialName+'</material>')
+        func(' '*depth +'  <material>'+self.material.b2cs.csMaterialName+'</material>')
       else:
         func(' '*depth +'  <material>'+self.material.uname+'</material>')
 
@@ -68,10 +68,10 @@ class SubMesh:
         if not self.material.HasDiffuseTexture() or \
               (self.material.HasDiffuseTexture() and self.image.name not in diffusetexnames):
           func(' '*depth +'  <shadervar type="texture" name="tex diffuse">%s</shadervar>'%(self.image.uname))
-      if self.material.priority != 'object':
-        func(' '*depth + '  <priority>%s</priority>'%(self.material.priority))
-      if self.material.zbuf_mode != 'zuse':
-        func(' '*depth + '  <%s/>'%(self.material.zbuf_mode))
+      if self.material.b2cs.priority != 'object':
+        func(' '*depth + '  <priority>%s</priority>'%(self.material.b2cs.priority))
+      if self.material.b2cs.zbuf_mode != 'zuse':
+        func(' '*depth + '  <%s/>'%(self.material.b2cs.zbuf_mode))
     else:
       func(' '*depth +'  <material>%s</material>'%(self.image.uname if self.image else 'None'))
 
