@@ -36,7 +36,7 @@ MAP = {'use_map_color_diffuse': 'tex diffuse',
 def MaterialAsCS(self, func, depth=0, **kwargs):
   """ Write an xml decription of this material
   """
-  if not self.csMatRef:
+  if not self.b2cs.csMatRef:
     func(' '*depth +'<material name="%s">'%(self.uname))
     dic = {}
     for slot in self.texture_slots:
@@ -49,8 +49,8 @@ def MaterialAsCS(self, func, depth=0, **kwargs):
   
     haswater = False
 
-    if self.shaderset != 'DEFAULT':
-      name = GetShaderSetName(self.shaderset)
+    if self.b2cs.shaderset != 'DEFAULT':
+      name = GetShaderSetName(self.b2cs.shaderset)
       if name == 'reflect_water_plane':
         haswater = True
       func(' '*depth +'  <shaderset>%s</shaderset>'%(name)) 
@@ -90,10 +90,9 @@ bpy.types.Material.GetShaders = MaterialGetShaders
 def MaterialDependencies(self):
   dependencies = EmptyDependencies()
 
-  if not self.csMatRef:    # skip materials replaced by references to CS materials
+  if not self.b2cs.csMatRef:    # skip materials replaced by references to CS materials
     for tex in self.textures:
       if tex.type=='IMAGE' and tex.image:
-        tex.image.IdentifyNormalMap(self)
         dependencies['T'][tex.image.uname] = tex.image
   return dependencies
   

@@ -626,6 +626,7 @@ def IsExportable(self):
   if self.hide and self.type != 'EMPTY':
     return False
 
+
   # Armature objects are exported if at least one of 
   # its child meshes is visible
   if self.type == 'ARMATURE':
@@ -652,10 +653,12 @@ def IsExportable(self):
                (ob.parent.type=='MESH' and not ob.parent.hide)
       return False
 
-    if not IsChildOfExportedFactory(self) and not self.portal \
+    if not IsChildOfExportedFactory(self) and not self.portal.enabled \
+          and not self.IsVisCullMesh() \
           and len(self.data.vertices)!=0 and len(self.data.all_faces)!=0:
       return True
     return False      
+    
 
   # The export of Empty objects depends of their components
   if self.type == 'EMPTY':
@@ -680,6 +683,7 @@ def IsExportable(self):
       # Empty objects which are not groups are exported as map nodes
       # (notice that each of their components can be individually exported)
       return True
+
 
   # All other types of objects are always exportable (if they are visible)
   return True
