@@ -8,6 +8,7 @@ from . import image
 from . import material
 from . import portal
 from . import lamp
+from . import layout
 from . import modifier
 from . import scene
 from . import render

@@ -14,7 +14,7 @@ class csObjectPanel():
   @classmethod
   def poll(cls, context):
     ob = bpy.context.active_object
-    r = (ob and ob.type == 'MESH' and not ob.portal.enabled)
+    r = (ob and ob.type == 'MESH' and not ob.portal.enabled and not ob.IsVisCullMesh())
     rd = context.scene.render
     return r and (rd.engine in cls.COMPAT_ENGINES)
 
@@ -44,6 +44,47 @@ class SelectFactoryRef(bpy.types.Operator):
         return {'FINISHED'}
 
 
+
+class SelectObjectRef(bpy.types.Operator):
+    bl_idname = "object.select_object_ref"
+    bl_label = "Select Object"
+
+    def avail_objects(self,context):
+        ob = context.active_object
+        items = [(str(i),o.name,o.name) for i,o in enumerate(bpy.data.objects) if not o.IsVisCullMesh() and o.GetVisCullMesh() is None and o != ob]
+        items.append((str(-1),' NONE','None'))
+        return sorted(items, key=operator.itemgetter(1))
+    select_object = bpy.props.EnumProperty(items = avail_objects, name = "Available Objects")
+
+    @classmethod
+    def poll(cls, context):
+        return context.mode == 'OBJECT'
+    
+    def execute(self,context):
+        ob = context.active_object
+        mesh = ob.GetVisCullMesh()
+        if mesh:
+          mesh.UnMakeThisAVisCullMesh()
+        
+        index = int(self.select_object)
+        if int(self.select_object) != -1:
+          mesh = bpy.data.objects[index]
+          mesh.MakeThisAVisCullMesh(ob)
+          
+        return {'FINISHED'}
+
+
+class B2CS_OT_RemoveObjectRef(bpy.types.Operator):
+  bl_idname = "object.remove_object_ref"
+  bl_label = "Remove material reference"
+  bl_description = "Remove a reference to existing Crystal Space material"
+
+  def execute(self, context): 
+    if context.current_viscullmesh:
+      context.current_viscullmesh.UnMakeThisAVisCullMesh()
+    return {'FINISHED'}
+
+
 @rnaType
 class OBJECT_PT_csFactoryRef(csObjectPanel, bpy.types.Panel):
   bl_label = "Crystal Space Factories"
@@ -55,6 +96,11 @@ class OBJECT_PT_csFactoryRef(csObjectPanel, bpy.types.Panel):
     if ob.type == 'MESH':
       # Draw a checkbox to define current mesh object as a CS factory reference
       layout = self.layout
+      
+      
+      mesh = ob.GetVisCullMesh()
+      layout.template_object_ref(mesh, "Viscull mesh")
+      
       row = layout.row()
       row.prop(ob.b2cs, "csFactRef")
 
