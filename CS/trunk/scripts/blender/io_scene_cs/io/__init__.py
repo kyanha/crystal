@@ -12,6 +12,7 @@ from .object import *
 from .group import *
 from .scene import *
 from .world import *
+from .constraint import *
 from .material import ExportMaterials
 from io_scene_cs.utilities import GetPreferences
 

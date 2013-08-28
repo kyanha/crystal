@@ -978,3 +978,46 @@ def GetBBoxSize (self):
   return BBsize
 
 bpy.types.Object.GetBBoxSize = GetBBoxSize
+
+
+
+
+def GetVisCullMesh (self):
+  for ob in bpy.data.objects:
+    for contraint in ob.constraints:
+      if contraint.IsVisCullConstraint() and contraint.target==self:
+        return ob
+        
+  return None
+
+bpy.types.Object.GetVisCullMesh = GetVisCullMesh
+
+
+def IsVisCullMesh (self):
+  for contraint in self.constraints:
+    if contraint.IsVisCullConstraint():
+      return True
+  return False
+  
+bpy.types.Object.IsVisCullMesh = IsVisCullMesh
+
+
+def MakeThisAVisCullMesh (self, target):
+  constraint = self.constraints.new('COPY_TRANSFORMS')
+  constraint.name = 'viscull'
+  constraint.target = target
+  self.draw_type = 'WIRE'
+        
+  return None
+
+bpy.types.Object.MakeThisAVisCullMesh = MakeThisAVisCullMesh
+
+def UnMakeThisAVisCullMesh (self):
+  for constraint in self.constraints:
+    if constraint.IsVisCullConstraint():
+      self.constraints.remove(constraint)
+  self.draw_type = 'TEXTURED'
+        
+  return None
+
+bpy.types.Object.UnMakeThisAVisCullMesh = UnMakeThisAVisCullMesh
