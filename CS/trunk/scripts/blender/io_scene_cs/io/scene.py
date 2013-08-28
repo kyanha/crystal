@@ -5,7 +5,7 @@ from .util import *
 
 def ObjectHasMergingGroup(self):
   for group in self.users_group:
-    if group.doMerge:
+    if group.b2cs.doMerge:
       return group
   return None
 
@@ -20,7 +20,7 @@ def SceneDependencies(self):
       continue
     merge = False
     for group in ob.users_group:
-      if group.doMerge:
+      if group.b2cs.doMerge:
         dependencies['G'][group.uname] = group
         MergeDependencies(dependencies, group.GetDependencies())
         merge = True

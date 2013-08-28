@@ -16,7 +16,7 @@ bpy.types.Image.IdentifyNormalMap = IdentifyNormalMap
 
 
 def TextureIsBinAlpha(self):
-  return self.type == 'IMAGE' and self.binAlpha
+  return self.type == 'IMAGE' and self.b2cs.binAlpha
  
 bpy.types.Image.IsBinAlpha = TextureIsBinAlpha
 

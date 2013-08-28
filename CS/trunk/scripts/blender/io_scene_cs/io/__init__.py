@@ -102,7 +102,7 @@ def ExportWorld(path):
         print('Writing fact',fact.uname,':', Join(path, 'factories/', fact.object.uname))
         fact.AsCSRef(Write(f), 2, 'factories/', animesh=False)
         # Export genmesh factory
-        if not fact.object.csFactRef:
+        if not fact.object.b2cs.csFactRef:
           fact.AsCSLib(path, animesh=False)
     elif typ == 'G':
       # Groups of objects
@@ -115,11 +115,11 @@ def ExportWorld(path):
     elif typ == 'M':
       # Materials
       for name, mat in deps[typ].items():
-        if mat.csMatRef and mat.csMaterialName != 'None' and mat.csMaterialVfs != '':
-          if mat.csMaterialVfs not in Hierarchy.libraryReferences:
+        if mat.b2cs.csMatRef and mat.b2cs.csMaterialName != 'None' and mat.b2cs.csMaterialVfs != '':
+          if mat.b2cs.csMaterialVfs not in Hierarchy.libraryReferences:
             # Export references to CS libraries defining materials
-            Hierarchy.libraryReferences.append(mat.csMaterialVfs)
-            Write(f)(' '*2 +'<library>%s</library>'%(mat.csMaterialVfs))
+            Hierarchy.libraryReferences.append(mat.b2cs.csMaterialVfs)
+            Write(f)(' '*2 +'<library>%s</library>'%(mat.b2cs.csMaterialVfs))
 
   # Export cameras
   if cameras:
@@ -173,10 +173,10 @@ def ExportLibrary(path):
 
   # Export references to CS libraries defining materials
   for name, mat in deps['M'].items():
-    if mat.csMatRef and mat.csMaterialName != 'None' and mat.csMaterialVfs != '':
-      if mat.csMaterialVfs not in Hierarchy.libraryReferences:
-        Hierarchy.libraryReferences.append(mat.csMaterialVfs)
-        Write(f)(' '*2 +'<library>%s</library>'%(mat.csMaterialVfs))
+    if mat.b2cs.csMatRef and mat.b2cs.csMaterialName != 'None' and mat.b2cs.csMaterialVfs != '':
+      if mat.b2cs.csMaterialVfs not in Hierarchy.libraryReferences:
+        Hierarchy.libraryReferences.append(mat.b2cs.csMaterialVfs)
+        Write(f)(' '*2 +'<library>%s</library>'%(mat.b2cs.csMaterialVfs))
 
   # Export the textures/materials/shaders of the objects
   use_imposter = False
@@ -211,7 +211,7 @@ def ExportLibrary(path):
         print('\nEXPORT OBJECT "%s" AS A CS GENERAL MESH\n'%(ob.name))
         print('Writing fact',fact.uname,'in', Join(path, 'library'))
         # Export genmesh factory
-        if not fact.object.csFactRef:
+        if not fact.object.b2cs.csFactRef:
           fact.WriteCSMeshBuffers(Write(f), 2, path, animesh=False, dontClose=True)
     elif typ == 'G':
       # Groups of objects
