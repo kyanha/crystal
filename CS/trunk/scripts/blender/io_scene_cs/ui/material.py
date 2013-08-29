@@ -64,7 +64,7 @@ class MATERIAL_PT_B2CS__context_material(csMaterialPanel, bpy.types.Panel):
           row = layout.row()
           row.prop(mat.b2cs, "csMatRef")
 
-          if mat.csMatRef:
+          if mat.b2cs.csMatRef:
             # Let the user select a CS material
             row = layout.row()
             if mat.b2cs.csMaterialName == 'None':
