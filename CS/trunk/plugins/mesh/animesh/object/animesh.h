@@ -189,6 +189,9 @@ CS_PLUGIN_NAMESPACE_BEGIN(Animesh)
     csFlags factoryFlags;
     uint mixMode;
 
+    // Version of this factory
+    unsigned int version;
+
     // Main data storage...
     uint vertexCount;
     csRef<iRenderBuffer> vertexBuffer;
@@ -558,6 +561,9 @@ CS_PLUGIN_NAMESPACE_BEGIN(Animesh)
     csRef<iMaterialWrapper> material;
     uint mixMode;
     csFlags meshObjectFlags;
+
+    // Last version of the factory
+    unsigned int factoryVersion;
 
     csRef<CS::Animation::iSkeleton> skeleton;
     unsigned int skeletonVersion;
