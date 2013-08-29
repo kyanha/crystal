@@ -74,6 +74,8 @@ if $(DEBUGINFOTOOLS.SYMBOLSTORE) && $(DEBUGINFOTOOLS.DUMP_SYMS)
       "$(DEBUGINFOTOOLS.DUMP_SYMS)" "$(OUTDIR)" "$(SRCDIR)"      
   }
   
+  COMPRESS_JOBS ?= 1 ;
+  
   ##  CompressSymbols target : dir
   ##    Compress symbol files in 'dir'.
   rule CompressSymbols
@@ -85,6 +87,7 @@ if $(DEBUGINFOTOOLS.SYMBOLSTORE) && $(DEBUGINFOTOOLS.DUMP_SYMS)
     {
       JAMARG on $(target) = "-dx" ;
     }
+    JAMARG on $(target) += "-j$(COMPRESS_JOBS)" ;
     CompressSymbols1 $(target) ;
   }
   
@@ -135,7 +138,7 @@ if $(DEBUGINFOTOOLS.SYMBOLSTORE) && $(DEBUGINFOTOOLS.DUMP_SYMS)
     actions CabCompressAndRemove
     {
       cd $(SUBDIR)
-      makecab //D CompressionType=LZX //D CompressionMemory=21 $(>) $(<) 
+      makecab //D CompressionType=LZX //D CompressionMemory=21 $(>) $(<) > /dev/null
       if test $? -eq 0 ; then rm $(>) ; fi
       cd -
     }
