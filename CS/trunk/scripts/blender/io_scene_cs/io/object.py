@@ -540,28 +540,32 @@ def ObjectAsCS(self, func, depth=0, **kwargs):
     matrix = self.relative_matrix
     if 'transform' in kwargs:
       matrix = kwargs['transform'] * matrix
-      
-    
 
     func(' '*depth +'<light name="%s">'%(name))
-    # Flip Y and Z axis.
-    func(' '*depth +'  <center x="%f" z="%f" y="%f" />'% tuple(matrix.to_translation()))
     func(' '*depth +'  <color red="%f" green="%f" blue="%f" />'% tuple(self.data.color))
     func(' '*depth +'  <radius>%f</radius>'%(self.data.distance*2))
     func(' '*depth +'  <attenuation>linear</attenuation>') #TODO
     
+    # Conversion of the light transform from Blender to CS:
+    # - In Blender, a light with an identity transform will look down although
+    #   it will look backward in CS (hence a rotation of 90 degree).
+    # - In Blender, the rotation part of the transform appears to be from lamp to
+    #   world, although the translation is from world to lamp. Hence an inversion
+    #   of the rotation part.
     import mathutils
-    eul = mathutils.Euler((1.57, 0.0, 0.0), 'XYZ')
-    matrix = matrix.to_3x3()
-    matrix.rotate(eul)
-    
+    import math
+    rotationX = mathutils.Matrix.Rotation(math.radians(90.0), 4, 'X')
+    origin = matrix.to_translation()
+    matrix = rotationX * matrix.inverted()
+    matrix.translation = origin
+
     if not self.data.use_shadow:
       func(' '*depth +'  <noshadows />')
       
     if self.data.type=='SPOT':
-      func(' '*depth +' <type>spot</type>')
+      func(' '*depth +'  <type>spot</type>')
       
-      MatrixAsCS(matrix, func, depth, noScale=True, noTranslation=True)
+      MatrixAsCS(matrix, func, depth+2, noScale=True, noTranslation=False)
       
       import math #math.radians(90), math.degrees(1.5707963)
       outer = math.degrees(self.data.spot_size) / 2 #Blender specifies the lit angle, CS has outer to center as angle
@@ -569,8 +573,12 @@ def ObjectAsCS(self, func, depth=0, **kwargs):
       func(' '*depth +' <spotlightfalloff inner="%f" outer="%f" />'%(inner, outer))
     
     elif self.data.type=='SUN':
-      func(' '*depth +' <type>directional</type>')
-      MatrixAsCS(matrix, func, depth, noScale=True, noTranslation=True)
+      func(' '*depth +'  <type>directional</type>')
+      MatrixAsCS(matrix, func, depth+2, noScale=True, noTranslation=False)
+
+    else:
+      # Flip Y and Z axis.
+      func(' '*depth +'  <center x="%f" z="%f" y="%f" />'% tuple(matrix.to_translation()))
      
     if len(self.children):  #TODO: only support first child, perhaps merge the meshes?
       data = self.children[0].data
