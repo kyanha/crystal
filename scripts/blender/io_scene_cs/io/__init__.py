@@ -92,13 +92,19 @@ def ExportWorld(path):
   
   # Export shared materials and textures in world file
   if GetPreferences().sharedMaterial:
+    fmt = open(Join(path, 'materials'), 'w')
+    Write(fmt)('<?xml version="1.0" encoding="UTF-8"?>')
+    Write(fmt)('<library xmlns=\"http://crystalspace3d.org/xml/library\">')
     use_imposter = False
     for scene in scenes:
       for ob in scene.objects:
         if ob.HasImposter():
           use_imposter = True
           break
-    ExportMaterials(Write(f), 2, deps, use_imposter)
+    ExportMaterials(Write(fmt), 2, deps, use_imposter)
+    Write(fmt)('</library>')
+    fmt.close()
+    Write(f)(' '*2 +'<library>%s</library>'%('materials'))
 
   # Export the objects composing the world
   for typ in deps:

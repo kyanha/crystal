@@ -89,7 +89,7 @@ class ViewMesh : public CS::Utility::DemoApplication
   void AttachMesh (const char* file);
   void ScaleSprite (float newScale);
   void MoveLights (const csVector3 &a, const csVector3 &b, const csVector3 &c);
-
+  
   // Tabs
   csRef<GeneralTab> generalTab;
   friend class GeneralTab;
@@ -114,6 +114,8 @@ class ViewMesh : public CS::Utility::DemoApplication
 
   bool OnInitialize (int argc, char* argv[]);
   bool Application ();
+  
+  void Reload();
 
 private:
 

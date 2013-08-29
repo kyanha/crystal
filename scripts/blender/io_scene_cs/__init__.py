@@ -21,6 +21,7 @@ if "bpy" in locals():
   imp.reload(io)
   imp.reload(engine)
   imp.reload(preferences)
+  imp.reload(handlers)
 else:
   import os
   import bpy
@@ -30,6 +31,7 @@ else:
   from . import io
   from . import engine
   from . import preferences
+  from . import handlers
 
 
 # Registration

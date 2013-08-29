@@ -276,18 +276,7 @@ bool GeneralTab::ResetCameraButton (const CEGUI::EventArgs& e)
 
 bool GeneralTab::ReloadButton (const CEGUI::EventArgs& e)
 {
-  if (viewmesh->reloadFilename == "")
-      return true;
-
-  viewmesh->collection->ReleaseAllObjects();
-
-  size_t reloadLibraryCount = viewmesh->reloadLibraryFilenames.GetSize();
-  for(size_t i=0; i < reloadLibraryCount; ++i)
-  {
-    viewmesh->LoadLibrary(viewmesh->reloadLibraryFilenames[i], false);
-  }
-
-  viewmesh->LoadSprite(viewmesh->reloadFilename, viewmesh->reloadFilePath, 0);
+  viewmesh->Reload();
 
   return true;
 }

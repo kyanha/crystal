@@ -33,6 +33,8 @@ class RENDER_PT_csSettingsPanel(csSettingsPanel, bpy.types.Panel):
     if not GetPreferences().library:
       if HasCrystalSpace():
         row.operator("io_scene_cs.export_run", text="Play", icon='GAME')
+        if context.active_object.type == 'MESH':
+          row.operator("io_scene_cs.export_view", text="View", icon='RENDER_STILL')
         row = layout.row()
         row.prop(GetPreferences(), "console")
         row.prop(GetPreferences(), "verbose")
@@ -101,5 +103,43 @@ class B2CS_OT_export_run(bpy.types.Operator):
     print(args)
     output = subprocess.call(args)
     print(output)
+
+    return {'FINISHED'}
+
+VIEWMESH_INSTANCE = None
+
+#@rnaType    
+class B2CS_OT_export_view(bpy.types.Operator):
+  "View selected mesh in Viewmesh"
+  bl_idname = "io_scene_cs.export_view"
+  bl_label = "View selected mesh in Viewmesh"
+
+  def execute(self, context): 
+    exportPath = GetExportPath()
+    Export(exportPath)
+    
+    global VIEWMESH_INSTANCE
+    
+    if VIEWMESH_INSTANCE and VIEWMESH_INSTANCE.poll() is None:
+      print('Reloading...')
+      import signal
+      VIEWMESH_INSTANCE.send_signal(signal.SIGINT)
+    else:
+      
+      #TODO: damnit why isn't it loading the materials library??!!
+      options = ' -R="'+exportPath+'"'
+      options += ' -L="materials"'
+      options += ' -factory="'+bpy.context.active_object.data.uname+'"'
+      options += ' "/tmp/viewmesh/factories/'+bpy.context.active_object.data.uname+'"'
+      
+      exe = WalkTestPath().replace('walktest', 'viewmesh')
+      
+      import shlex, subprocess
+      print(exe)
+      args = shlex.split(exe + options)
+      print(args)
+      process = subprocess.Popen(args)
+      print(process.pid)
+      VIEWMESH_INSTANCE = process
 
     return {'FINISHED'}

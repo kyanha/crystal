@@ -823,6 +823,22 @@ void ViewMesh::MoveLights (const csVector3 &a, const csVector3 &b,
 
 }
 
+void ViewMesh::Reload ()
+{
+  if (reloadFilename == "")
+      return;
+
+  collection->ReleaseAllObjects();
+
+  size_t reloadLibraryCount = reloadLibraryFilenames.GetSize();
+  for(size_t i=0; i < reloadLibraryCount; ++i)
+  {
+    LoadLibrary(reloadLibraryFilenames[i], false);
+  }
+
+  LoadSprite(reloadFilename, reloadFilePath, 0);
+}
+
 //---------------------------------------------------------------------------
 
 void ViewMesh::StdDlgUpdateLists(const char* filename)
@@ -1000,8 +1016,22 @@ bool ViewMesh::StdDlgDirChange (const CEGUI::EventArgs& e)
 }
 
 //---------------------------------------------------------------------------
+#include <signal.h> 
+
+ViewMesh viewmesh;
+
+void signalHandler (int param)
+{
+  printf ("Reloading content...\n");
+  viewmesh.Reload();
+}
 
 int main(int argc, char** argv)
 {
-  return ViewMesh().Main(argc, argv);
+  void (*prev_fn)(int);
+
+  prev_fn = signal (SIGINT,signalHandler);
+  if (prev_fn==SIG_IGN) signal (SIGINT,SIG_IGN);
+  
+  return viewmesh.Main(argc, argv);
 }
