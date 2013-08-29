@@ -16,6 +16,10 @@ from .constraint import *
 from .material import ExportMaterials
 from io_scene_cs.utilities import GetPreferences
 
+from . import blenddata
+from . import object_portal
+from . import object_camera
+
 
 def Write(fi):
   def write(data):
@@ -70,7 +74,7 @@ def ExportWorld(path):
   if not os.path.exists(Join(path, 'factories/')):
     os.makedirs(Join(path, 'factories/'))
     
-  scenes = [bpy.context.scene] if GetPreferences().exportOnlyCurrentScene else [scene for scene in bpy.data.scenes if scene.b2cs.export]
+  scenes = bpy.data.exportable_scenes
 
   # Get data about all objects composing this world
   deps = util.EmptyDependencies()
@@ -137,7 +141,7 @@ def ExportWorld(path):
     ExportCameras(Write(f), 2, cameras)
   else:
     # Set a default camera if none is defined
-    bpy.context.scene.CameraAsCS(Write(f), 2)
+    bpy.types.Object.CameraAsCS(Write(f), 2)
 
   # Export scenes as CS sectors in the 'world' file
   print("\nEXPORT SCENES:")
@@ -181,7 +185,7 @@ def ExportLibrary(path):
 
   # Export the textures/materials/shaders of the objects
   use_imposter = False
-  for scene in bpy.data.scenes:
+  for scene in bpy.data.exportable_scenes:
     for ob in scene.objects:
       if ob.HasImposter():
         use_imposter = True
@@ -229,3 +233,16 @@ def ExportLibrary(path):
   Hierarchy.libraryReferences = []
 
   print("\nEXPORTING complete ==================================================")
+  
+  
+#===== static method ExportCameras ==============================
+
+def ExportCameras (func, depth, cameras):
+  """ Export cameras sorted by names; each camera is described 
+      as a CS start location for the scene it belongs to
+      param cameras: list of cameras and their associated scene
+  """
+  keylist = cameras.keys()
+  for camName in sorted(keylist, key=str.lower):
+    cam = cameras[camName]
+    cam['camera'].CameraAsCS(func, depth, cam['scene'])
