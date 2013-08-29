@@ -36,7 +36,12 @@ CS_PLUGIN_NAMESPACE_BEGIN(Animesh)
   {
     // Don't do anything if the morph weights haven't be changed
     if (!morphStateChanged)
+    {
+      if (factoryVersion != factory->version)
+	postMorphVertices = factory->vertexBuffer;
+
       return;
+    }
 
     // Flag the new morphing version
     morphStateChanged = false;
@@ -88,12 +93,9 @@ CS_PLUGIN_NAMESPACE_BEGIN(Animesh)
 	    dstVerts[vertIndex] += (*offsets) * morphTargetWeights[mti];
 	    ++offsets;
 	  }
-
 	}
-
       }
     }
-
   }
 
 #include "csutil/custom_new_enable.h"

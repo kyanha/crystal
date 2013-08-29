@@ -108,7 +108,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(Animesh)
 
   AnimeshObjectFactory::AnimeshObjectFactory (AnimeshObjectType* objType)
     : scfImplementationType (this), objectType (objType), logParent (0), material (0),
-    vertexCount (0), userBoneBBoxes (false), userSubsets (false)
+    version (0), vertexCount (0), userBoneBBoxes (false), userSubsets (false)
   {}
 
   CS::Mesh::iAnimatedMeshSubMeshFactory* AnimeshObjectFactory::CreateSubMesh (iRenderBuffer* indices,
@@ -298,6 +298,9 @@ CS_PLUGIN_NAMESPACE_BEGIN(Animesh)
 
   void AnimeshObjectFactory::Invalidate ()
   {
+    // Update the version number of this factory
+    version++;
+
     // Create the weight & influence renderbuffers
     static csInterleavedSubBufferOptions bufSettings[] = 
     {
@@ -1053,7 +1056,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(Animesh)
 
   AnimeshObject::AnimeshObject (AnimeshObjectFactory* factory)
     : scfImplementationType (this), factory (factory), logParent (0),
-    material (0), mixMode (0), skeleton (0), animationInitialized (false),
+    material (0), mixMode (0), factoryVersion (factory->version), skeleton (0), animationInitialized (false),
     userGlobalBBox (false), globalBBox (factory->globalBBox), morphVersion (0), morphStateChanged (false),
     skinVertexVersion (~0), skinNormalVersion (~0), skinTangentBinormalVersion (~0),
     morphVertexVersion (0), skinVertexLF (false), skinNormalLF (false), skinTangentBinormalLF (false)
@@ -1952,7 +1955,8 @@ CS_PLUGIN_NAMESPACE_BEGIN(Animesh)
 
 	// Update the skinning of the vertices if needed
 	if (skeletonVersion != skinVertexVersion
-	    || morphVersion != morphVertexVersion)
+	    || morphVersion != morphVertexVersion
+	    || factoryVersion != factory->version)
 	{
 	  SkinVertices ();
 	  skinVertexVersion = skeletonVersion;
@@ -1985,7 +1989,8 @@ CS_PLUGIN_NAMESPACE_BEGIN(Animesh)
         holder->SetRenderBuffer (CS_BUFFER_NORMAL, skinnedNormals);
 
 	// Update the skinning of the normals if needed
-        if (skeletonVersion != skinNormalVersion)
+        if (skeletonVersion != skinNormalVersion
+	    || factoryVersion != factory->version)
         {
 	  SkinNormals ();
           skinNormalVersion = skeletonVersion;
@@ -2033,7 +2038,8 @@ CS_PLUGIN_NAMESPACE_BEGIN(Animesh)
         holder->SetRenderBuffer (CS_BUFFER_BINORMAL, skinnedBinormals);
 
 	// Update the skinning of the buffers if needed
-        if (skeletonVersion != skinTangentBinormalVersion)
+        if (skeletonVersion != skinTangentBinormalVersion
+	    || factoryVersion != factory->version)
         {
 	  SkinTangentAndBinormal ();
           skinTangentBinormalVersion = skeletonVersion;
@@ -2045,6 +2051,8 @@ CS_PLUGIN_NAMESPACE_BEGIN(Animesh)
     default: //Empty..
       break;
     }
+
+    factoryVersion = factory->version;
   }
 
   void AnimeshObject::PreskinLF ()
