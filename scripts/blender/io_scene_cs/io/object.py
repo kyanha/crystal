@@ -477,7 +477,7 @@ bpy.types.Object.AsCSGenmeshLib = AsCSGenmeshLib
 #======== Object ====================================================================
 
 # Property defining an UV texture's name for a mesh ('None' if not defined)
-bpy.types.Object.uv_texture = 'None'
+bpy.types.Object.uv_texture = bpy.props.StringProperty(default='None')
 
 
 def ObjectAsCS(self, func, depth=0, **kwargs):
