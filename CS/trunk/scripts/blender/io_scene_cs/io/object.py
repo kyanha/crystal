@@ -1,6 +1,8 @@
 import bpy
 from mathutils import *
 
+import os
+
 from .util import *
 from .transform import *
 from .renderbuffer import *
@@ -77,7 +79,7 @@ class Hierarchy:
         param animesh: indicates if the library decribes an animesh
     """
     func('<?xml version="1.0" encoding="UTF-8"?>')
-    func("<library xmlns=\"http://crystalspace3d.org/xml/library\">")
+    func("<library xmlns=\"http://crystalspace3d.org/xml/library\" changeToken=\"%s\">"%(self.object.data.get('changeToken', 0)))
 
     if animesh:
       func('  <plugins>')
@@ -142,12 +144,28 @@ class Hierarchy:
     if self.object.data.name in Hierarchy.exportedFactories:
       print('Skipping "%s" factory export, already done' % (self.object.data.uname))
       return
+    
+    if animesh:
+      filePath = Join(path, 'factories/', self.object.uname)
+    else:
+      filePath = Join(path, 'factories/', self.object.data.uname)
+      
+    if os.path.exists(filePath):
+      print('Export exists %s (%s)'%(self.object.uname, filePath))
+      fafi = open(filePath, 'r')
+      fafi.readline() #Discard first line
+      line = fafi.readline().strip()
+      fafi.close()
+      if line == "<library xmlns=\"http://crystalspace3d.org/xml/library\" changeToken=\"%s\">"%(self.object.data.get('changeToken', 0)):
+        print(' No change')
+        return
+      else:
+        print(' Updating')
+      
 
     # Export mesh
-    if animesh:
-      fa = open(Join(path, 'factories/', self.object.uname), 'w')
-    else:
-      fa = open(Join(path, 'factories/', self.object.data.uname), 'w')
+    fa = open(filePath, 'w')
+    
     self.WriteCSLibHeader(Write(fa), animesh)
     if not GetPreferences().sharedMaterial:
       objectDeps = self.object.GetDependencies()
