@@ -5,7 +5,7 @@ from io_scene_cs.utilities import GetShaderSetName
 from io_scene_cs.utilities import GetExportPath
 
 # Property defining an UV texture's name for a material ('None' if not defined)
-bpy.types.Material.uv_texture = 'None'
+bpy.types.Material.uv_texture = bpy.props.StringProperty(default='None')
 
 
 def GetName(name, dic):
