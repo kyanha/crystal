@@ -33,7 +33,7 @@ rule ListFile
     return $(listfile) ;
 }
 
-##  DoFileListEntries sourcenames : directory : list
+##  DoFileListEntries sourcenames : directory : list [: destnames]
 ##    Creates a new target adding the given sources named by
 ##    `sourcenames' to the file list `list`.  `directory' is a list of 
 ##    directory components indicating the directory part for entries of
@@ -42,11 +42,15 @@ rule ListFile
 ##    the file list targets.
 rule DoFileListEntries
 {
-    local targets i ;
+    local targets i destnames ;
+    destnames = $(4) ;
 
     for i in $(1)
     {
-        targets += [ DoFileListEntry $(i) : $(2) : $(i) : $(3) ] ;
+        local destname = $(destnames[1]) ;
+        if ! $(destname) { destname = $(i) ; }
+        targets += [ DoFileListEntry $(i) : $(2) : $(destname) : $(3) ] ;
+        destnames = $(destnames[2-]) ;
     }
 
     return $(targets) ;
@@ -54,11 +58,12 @@ rule DoFileListEntries
 
 ##  DoFileListEntry sourcename : directory : destname : list
 ##    Creates a new target adding the given source named by
-##    `sourcename' to the file list `list`.  `directory' is a list of 
-##    directory components indicating the directory part for `sourcename'
-##    written to the file list - it is relative to a file list dependent
-##    directory.  The DoFileListEntries rule returns the names of the file
-##    list targets.
+##    `sourcename' to the file list `list`.  `destname` is the filename
+##    used in the destination part of the file list entry.  `directory' 
+##    is a list of directory components indicating the directory part for
+##    `destname' written to the file list - it is relative to a file list
+##    dependent directory.  The DoFileListEntry rule returns the names of
+##    the file list target.
 rule DoFileListEntry
 {
     local target destdir srcdir listfile list ;
@@ -76,19 +81,22 @@ rule DoFileListEntry
     SEARCH on $(target) = [ on $(1) GetVar SEARCH ] ;
     NoCare $(target) ;
     NoUpdate $(target) ;
-    WriteFileListEntry $(listfile) : $(target) : $(dir) : $(1) ;
+    WriteFileListEntry $(listfile) : $(target) : $(dir) : $(3) ;
 
     LIST_ENTRIES_$(list) += $(target) ;
     
     return $(listfile) ;
 }
 
-##  FileListEntriesData sourcenames : directories : list
+##  FileListEntriesData sourcenames : directories : list [: destnames]
 ##    Add plain files to a file list.
+##    ´destnames` is an optional list of file names to use on the destination
+##    side of the file list entry. If given, must have the same number of
+##    items as `sourcenames`.
 rule FileListEntriesData
 {
     SEARCH on $(<) = $(SUBDIR) ;
-    Depends filelists : [ DoFileListEntries $(<) : $(2) : $(3) ] ;
+    Depends filelists : [ DoFileListEntries $(<) : $(2) : $(3) : $(4) ] ;
 }
 
 ##  FileListEntryApplications app : list
