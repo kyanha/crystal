@@ -469,8 +469,11 @@ def ObjectAsCS(self, func, depth=0, **kwargs):
   name = self.uname
   if 'name' in kwargs:
     name = kwargs['name']+':'+name
+    
+  if self.type == 'MESH' and self.portal.enabled:
+    self.PortalsAsCS(func, depth)
 
-  if self.type == 'MESH':
+  elif self.type == 'MESH':
     isValidRef = self.b2cs.csFactRef and self.b2cs.csFactoryName != '' and self.b2cs.csFactoryVfs != ''
     if self.b2cs.csFactRef and not isValidRef:
       return
@@ -607,9 +610,10 @@ def ObjectAsCS(self, func, depth=0, **kwargs):
       func(' '*depth +'  <position x="%f" z="%f" y="%f" />'% tuple(self.relative_matrix.to_translation()))
       func(' '*depth +'</node>')
 
+    #TODO: really put everything on the top level??
     #Handle children: translate to top level.
     for obj in self.children:
-      if not obj.hide:
+      if obj.IsExportable():
         obj.AsCS(func, depth, transform=self.relative_matrix, name=self.uname)
 
   elif self.type != 'CAMERA' and self.type != 'CURVE':
@@ -638,7 +642,7 @@ def IsExportable(self):
   # Mesh objects are exported as individual mesh factories if 
   # - they are not submeshes of a visible armature,
   # - they are not submeshes of a visible mesh,
-  # - they are not portals, 
+  # - they are not a special mesh (viscull, shadow, collission)
   # - they have a non null number of vertices and faces,
   # - they are socket objects
   if self.type == 'MESH':
@@ -653,8 +657,7 @@ def IsExportable(self):
                (ob.parent.type=='MESH' and not ob.parent.hide)
       return False
 
-    if not IsChildOfExportedFactory(self) and not self.portal.enabled \
-          and not self.IsVisCullMesh() \
+    if not IsChildOfExportedFactory(self) and not self.IsVisCullMesh() \
           and len(self.data.vertices)!=0 and len(self.data.all_faces)!=0:
       return True
     return False      
