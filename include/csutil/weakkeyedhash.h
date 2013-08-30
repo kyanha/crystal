@@ -181,6 +181,8 @@ namespace CS
           if (!v.GetKey())
           {
             values.DeleteIndexFast (i);
+            this->Size--;
+            i--;
             continue;
           }
           if (csComparator<K, K>::Compare (v.GetKey(), key) == 0)
