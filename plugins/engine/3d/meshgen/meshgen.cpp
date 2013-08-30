@@ -972,7 +972,7 @@ void csMeshGenerator::GeneratePositions (int cidx, csMGCell& cell,
 
 void csMeshGenerator::AllocateBlock (iCamera* cam, int cidx, csMGCell& cell)
 {
-  csRef<csMGPositionBlock>& block (cell.blocks.GetOrCreate (cam));
+  csRef<csMGPositionBlock> block (cell.blocks.Get (cam, csRef<csMGPositionBlock>()));
   if (block)
   {
     // Our block is already there. We just push it back to the
@@ -1003,6 +1003,7 @@ void csMeshGenerator::AllocateBlock (iCamera* cam, int cidx, csMGCell& cell)
     block = cache_blocks.Pop ();
     CS_ASSERT (block->parent_cell == csArrayItemNotFound);
     CS_ASSERT (block->next == 0 && block->prev == 0);
+    cell.blocks.Put (cam, block);
     block->parent_cell = cidx;
     // Link block to the front.
     block->next = inuse_blocks;
@@ -1021,6 +1022,7 @@ void csMeshGenerator::AllocateBlock (iCamera* cam, int cidx, csMGCell& cell)
     CS_ASSERT (block->parent_cell != csArrayItemNotFound);
     FreeMeshesInBlock (cells[block->parent_cell], block);
     cells[block->parent_cell].DisownBlock (block);
+    cell.blocks.Put (cam, block);
     block->parent_cell = cidx;
 
     // Unlink first.
