@@ -620,7 +620,8 @@ public:
   {
     matrix = m;
     clipPlanesDirty = true;
-    invMatrixDirty = true; 
+    invMatrixDirty = true;
+    BumpCamera();
   }
   const CS::Math::Matrix4& GetInvProjectionMatrix ()
   { 
