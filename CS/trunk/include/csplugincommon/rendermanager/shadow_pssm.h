@@ -552,7 +552,7 @@ namespace RenderManager
 	}
 
 	// initialize persistent context setup data
-	portalPersist.Initialize(shaderManager, graphics3D, dbgPersist);
+	portalPersist.Initialize(objectReg, dbgPersist);
 	layerConfig = SingleRenderLayer(settings.shadowShaderType, settings.shadowDefaultShader);
 
 	// now set up our splitting scheme
