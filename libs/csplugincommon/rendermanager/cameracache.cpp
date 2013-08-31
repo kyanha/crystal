@@ -39,9 +39,10 @@ namespace CS
       if (prevClone)
       {
         iCamera* cam (prevClone->cam->GetCamera());
-        if (prevClone->camNum != originalCam->GetCameraNumber())
+        if ((prevClone->origCamNum != originalCam->GetCameraNumber())
+          || (prevClone->cloneCamNum != cam->GetCameraNumber()))
         {
-          prevClone->camNum = originalCam->GetCameraNumber();
+          prevClone->origCamNum = originalCam->GetCameraNumber();
           if ((syncFlags & syncTransform) != 0)
             cam->SetTransform (originalCam->GetTransform());
           if ((syncFlags & syncSector) != 0)
@@ -54,6 +55,7 @@ namespace CS
             cam->OnlyPortals (originalCam->GetOnlyPortals());
           if ((syncFlags & syncProjection) != 0)
             prevClone->cam->SetProjectionMatrix (originalCam->GetProjectionMatrix());
+          prevClone->cloneCamNum = cam->GetCameraNumber();
         }
         return cam;
       }

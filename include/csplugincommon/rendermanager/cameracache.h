@@ -42,11 +42,16 @@ namespace CS
        */
       struct CameraClone
       {
-        long camNum;
+        /// Camera number of the original cam when the clone was taken
+        long origCamNum;
+        /// Camera of the clone after the last sync
+        long cloneCamNum;
         csRef<iCustomMatrixCamera> cam;
 
         CameraClone (iCamera* oldCam, iCustomMatrixCamera* newCam)
-          : camNum (oldCam->GetCameraNumber()), cam (newCam) {}
+          : origCamNum (oldCam->GetCameraNumber()),
+            cloneCamNum (newCam->GetCamera()->GetCameraNumber()),
+            cam (newCam) {}
       };
       typedef CS::Container::WeakKeyedHash<CameraClone, csWeakRef<iCamera> > ClonesHash;
       ClonesHash clones;
