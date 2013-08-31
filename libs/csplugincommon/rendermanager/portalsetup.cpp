@@ -133,6 +133,9 @@ namespace CS
         dbgPersist.RegisterDebugFlag ("draw.portals.planes");
       dbgShowPortalTextures =
         dbgPersist.RegisterDebugFlag ("textures.portals");
+
+      csRef<iEngine> engine (csQueryRegistry<iEngine> (object_reg));
+      cameras.Initialize (engine);
     }
     
     //-----------------------------------------------------------------------
@@ -292,9 +295,11 @@ namespace CS
           portalDir = portal->GetWorldPlane().Normal();
         /* - Offset target camera into portal direction in target sector,
              amount of offset 'd' */
-        csVector3 camorg (inewcam->GetTransform().GetOrigin());
+        csOrthoTransform camTrans (inewcam->GetTransform());
+        csVector3 camorg (camTrans.GetOrigin());
         camorg += d * portalDir;
-        inewcam->GetTransform().SetOrigin (camorg);
+        camTrans.SetOrigin (camorg);
+        inewcam->SetTransform (camTrans);
       }
     }
     

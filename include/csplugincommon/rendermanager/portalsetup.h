@@ -33,6 +33,7 @@
 #include "csgfx/shadervarcontext.h"
 #include "cstool/rbuflock.h"
 
+#include "csplugincommon/rendermanager/cameracache.h"
 #include "csplugincommon/rendermanager/renderview.h"
 #include "csplugincommon/rendermanager/svsetup.h"
 #include "csplugincommon/rendermanager/texturecache.h"
@@ -159,6 +160,9 @@ namespace RenderManager
       uint dbgDrawPortalOutlines;
       uint dbgDrawPortalPlanes;
       uint dbgShowPortalTextures;
+
+      /// Cache for cameras created for looking through portals
+      CameraCache cameras;
 
       /// Construct helper
       PersistentData(int textCachOptions = TextureCache::tcachePowerOfTwo);
@@ -418,7 +422,11 @@ namespace RenderManager
       bool mirror = inewcam->IsMirrored ();
       csReversibleTransform warp_wor;
       portal->ObjectToWorld (movtrans, warp_wor);
-      portal->WarpSpace (warp_wor, inewcam->GetTransform (), mirror);
+      /* Manually get/set transform from camera so changes to it are reflected
+       * in the camera number */
+      csOrthoTransform camTrans (inewcam->GetTransform ());
+      portal->WarpSpace (warp_wor, camTrans, mirror);
+      inewcam->SetTransform (camTrans);
       inewcam->SetMirrored (mirror);
     }
 
@@ -444,7 +452,9 @@ namespace RenderManager
 
       if (portalFlags.Check (CS_PORTAL_WARP))
       {
-	iCamera *inewcam = rview->CreateNewCamera ();
+        iCamera *inewcam = persistentData.cameras.GetClone (rview->GetCamera(),
+          CameraCache::syncAll);
+        rview->SetCamera (inewcam);
         SetupWarp (inewcam, holder.meshWrapper->GetMovable(), portal);
       }
 	
@@ -514,7 +524,8 @@ namespace RenderManager
       iCamera* cam = rview->GetCamera();
       // Create a new view
       csRef<CS::RenderManager::RenderView> newRenderView;
-      csRef<iCustomMatrixCamera> newCam (rview->GetEngine()->CreateCustomMatrixCamera (cam));
+      csRef<iCustomMatrixCamera> newCam (scfQueryInterface<iCustomMatrixCamera> (
+        persistentData.cameras.GetClone (cam, CameraCache::syncAll)));
       iCamera* inewcam = newCam->GetCamera();
       newRenderView = renderTree.GetPersistentData().renderViews.GetRenderView (rview, portal, inewcam);
       newRenderView->SetEngine (rview->GetEngine ());
