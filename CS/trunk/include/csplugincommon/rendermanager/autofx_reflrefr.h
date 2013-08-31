@@ -236,6 +236,21 @@ namespace CS
 	  
 	  csShaderVariableStack localStack;
 	  context.svArrays.SetupSVStack (localStack, layer, mesh.contextLocalId);
+
+	  bool usesReflTex = names.IsBitSetTolerant (persist.svTexPlaneRefl);
+	  bool usesReflDepthTex = names.IsBitSetTolerant (persist.svTexPlaneReflDepth);
+	  bool usesRefrTex = names.IsBitSetTolerant (persist.svTexPlaneRefr);
+	  bool usesRefrDepthTex = names.IsBitSetTolerant (persist.svTexPlaneRefrDepth);
+          // User-specified reflection textures take precedence
+          usesReflTex &= localStack[persist.svTexPlaneRefl] == nullptr;
+          usesReflDepthTex &= localStack[persist.svTexPlaneReflDepth] == nullptr;
+          usesRefrTex &= localStack[persist.svTexPlaneRefr] == nullptr;
+          usesRefrDepthTex &= localStack[persist.svTexPlaneRefrDepth] == nullptr;
+          if (!usesReflTex && !usesReflDepthTex
+            && !usesRefrTex && !usesRefrDepthTex)
+          {
+            return;
+          }
 	  
 	  csTicks currentTicks = csGetTicks ();
 	  bool forceUpdate = (persist.texUpdateInterval == 0)
@@ -294,15 +309,11 @@ namespace CS
 	  // But never force an update if we already rendered in this frame
 	  forceUpdate &= (persist.currentFrame != meshReflectRefract.lastUpdateFrame);
   
-	  bool usesReflTex = names.IsBitSetTolerant (persist.svTexPlaneRefl);
-	  bool usesReflDepthTex = names.IsBitSetTolerant (persist.svTexPlaneReflDepth);
 	  bool needReflTex = (usesReflTex
 	      && (!meshReflectRefract.reflectSV.IsValid() || forceUpdate))
 	    || (usesReflDepthTex
 	      && (!meshReflectRefract.reflectDepthSV.IsValid() || forceUpdate));
 	    
-	  bool usesRefrTex = names.IsBitSetTolerant (persist.svTexPlaneRefr);
-	  bool usesRefrDepthTex = names.IsBitSetTolerant (persist.svTexPlaneRefrDepth);
 	  bool needRefrTex = (usesRefrTex 
 	      && (!meshReflectRefract.refractSV.IsValid() || forceUpdate))
 	    || (usesRefrDepthTex 
