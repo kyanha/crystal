@@ -434,7 +434,7 @@ bool RMDeferred::Initialize(iObjectRegistry *registry)
   }
 
   treePersistent.Initialize (shaderManager);
-  portalPersistent.Initialize (shaderManager, graphics3D, treePersistent.debugPersist);
+  portalPersistent.Initialize (objRegistry, treePersistent.debugPersist);
   lightPersistent.shadowPersist.SetConfigPrefix ("RenderManager.Deferred");
   lightPersistent.Initialize (registry, treePersistent.debugPersist);
   if(!lightRenderPersistent.Initialize (registry, lightPersistent.shadowPersist, doShadows, deferredFull))

@@ -592,8 +592,7 @@ bool RMShadowedPSSM::Initialize(iObjectRegistry* objectReg)
     hdrExposure.Initialize (objectReg, hdr, hdrSettings);
   }
   
-  portalPersistent.Initialize (shaderManager, g3d,
-    treePersistent.debugPersist);
+  portalPersistent.Initialize (objectReg, treePersistent.debugPersist);
   lightPersistent.shadowPersist.SetConfigPrefix ("RenderManager.ShadowPSSM");
   lightPersistent.Initialize (objectReg, treePersistent.debugPersist);
   lightPersistent_unshadowed.Initialize (objectReg, treePersistent.debugPersist);

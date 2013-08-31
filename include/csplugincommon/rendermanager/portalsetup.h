@@ -167,7 +167,7 @@ namespace RenderManager
        * Initialize helper. Fetches various required values from objects in
        * the object registry.
        */
-      void Initialize (iShaderManager* shmgr, iGraphics3D* g3d,
+      void Initialize (iObjectRegistry* object_reg,
                        RenderTreeBase::DebugPersistent& dbgPersist);
 
       /**
