@@ -1054,6 +1054,9 @@ bool csGLGraphics3D::Open ()
 
   statecache->SetStencilMask (stencil_shadow_mask);
 
+  numPendingBufferChanges = CS_VATTRIB_GENERIC_NUM + CS_VATTRIB_SPECIFIC_NUM;
+  pendingBufferChanges.Reset (new PendingBufferChange[numPendingBufferChanges]);
+
   numImageUnits = statecache->GetNumImageUnits();
   numTCUnits = statecache->GetNumTexCoords();
   imageUnits.Reset (new ImageUnit[numImageUnits]);
@@ -1342,6 +1345,7 @@ void csGLGraphics3D::Close ()
   txtmgr = 0;
   shadermgr = 0;
   imageUnits.Reset ();
+  pendingBufferChanges.Reset ();
   delete r2tbackend; r2tbackend = 0;
   for (size_t h = 0; h < halos.GetSize (); h++)
   {
@@ -1621,6 +1625,7 @@ bool csGLGraphics3D::BeginDraw (int drawflags)
 	cause visual glitches.)
       */
       DeactivateBuffers (0, 0);
+      ApplyBufferChanges();
       statecache->Disable_GL_ALPHA_TEST ();
       if (ext->CS_GL_ARB_multitexture)
       {
@@ -1671,6 +1676,7 @@ void csGLGraphics3D::FinishDraw ()
     G2D->FinishDraw ();
 
   DeactivateBuffers (0, 0);
+  ApplyBufferChanges();
   
   if (currentAttachments != 0)
   {
@@ -1727,30 +1733,16 @@ bool csGLGraphics3D::ActivateBuffers (csRenderBufferHolder *holder,
 {
   if (!holder) return false;
 
-  BufferChange queueEntry;
-
-  queueEntry.buffer = holder->GetRenderBuffer (mapping[CS_VATTRIB_POSITION]);
-  queueEntry.attrib = CS_VATTRIB_POSITION;
-  changeQueue.Push (queueEntry);
-  
-  queueEntry.buffer = holder->GetRenderBuffer (mapping[CS_VATTRIB_NORMAL]);
-  queueEntry.attrib = CS_VATTRIB_NORMAL;
-  changeQueue.Push (queueEntry);
-  
-  queueEntry.buffer = holder->GetRenderBuffer (mapping[CS_VATTRIB_COLOR]);
-  queueEntry.attrib = CS_VATTRIB_COLOR;
-  changeQueue.Push (queueEntry);
-  
-  queueEntry.buffer = holder->GetRenderBuffer (mapping[CS_VATTRIB_SECONDARY_COLOR]);
-  queueEntry.attrib = CS_VATTRIB_SECONDARY_COLOR;
-  changeQueue.Push (queueEntry);
+  SetPendingBuffer (CS_VATTRIB_POSITION,        holder->GetRenderBuffer (mapping[CS_VATTRIB_POSITION]));
+  SetPendingBuffer (CS_VATTRIB_NORMAL,          holder->GetRenderBuffer (mapping[CS_VATTRIB_NORMAL]));
+  SetPendingBuffer (CS_VATTRIB_COLOR,           holder->GetRenderBuffer (mapping[CS_VATTRIB_COLOR]));
+  SetPendingBuffer (CS_VATTRIB_SECONDARY_COLOR, holder->GetRenderBuffer (mapping[CS_VATTRIB_SECONDARY_COLOR]));
   
   const int n = ( numTCUnits < 8 ) ? numTCUnits : 8 ;
   for (int i = 0; i < n; i++)
   {
-    queueEntry.buffer = holder->GetRenderBuffer (mapping[CS_VATTRIB_TEXCOORD0+i]);
-    queueEntry.attrib = (csVertexAttrib)(CS_VATTRIB_TEXCOORD0+i);
-    changeQueue.Push (queueEntry);
+    SetPendingBuffer ((csVertexAttrib)(CS_VATTRIB_TEXCOORD0+i),
+                      holder->GetRenderBuffer (mapping[CS_VATTRIB_TEXCOORD0+i]));
   }
   return true;
 }
@@ -1764,10 +1756,7 @@ bool csGLGraphics3D::ActivateBuffers (csVertexAttrib *attribs,
     iRenderBuffer *buffer = buffers[i];
     if (!buffer) continue;
 
-    BufferChange queueEntry;
-    queueEntry.buffer = buffer;
-    queueEntry.attrib = att;
-    changeQueue.Push (queueEntry);
+    SetPendingBuffer (att, buffer);
   }
   return true;
 }
@@ -1781,50 +1770,25 @@ void csGLGraphics3D::DeactivateBuffers (csVertexAttrib *attribs, unsigned int co
   if (!attribs)
   {
     //disable all
-    statecache->Disable_GL_VERTEX_ARRAY ();
-    statecache->Disable_GL_NORMAL_ARRAY ();
-    statecache->Disable_GL_COLOR_ARRAY ();
-    if (ext->CS_GL_EXT_secondary_color)
-      statecache->Disable_GL_SECONDARY_COLOR_ARRAY_EXT ();
-    for (i = numTCUnits; i-- > 0;)
+    for (size_t i = 0; i < CS_VATTRIB_GENERIC_NUM; i++)
     {
-      statecache->SetCurrentTCUnit (i);
-      statecache->Disable_GL_TEXTURE_COORD_ARRAY ();
+      csVertexAttrib a ((csVertexAttrib)(CS_VATTRIB_GENERIC_FIRST+i));
+      if (!pendingBufferChanges[AttribToPendingIndex(a)].pending) continue;
+      SetPendingBuffer (a, nullptr);
     }
-    if (ext->glDisableVertexAttribArrayARB)
+    for (size_t i = 0; i < CS_VATTRIB_SPECIFIC_NUM; i++)
     {
-      for (i = 0; i < CS_VATTRIB_GENERIC_LAST-CS_VATTRIB_GENERIC_FIRST+1; i++)
-      {
-	if (activeVertexAttribs & (1 << i))
-	{
-	  ext->glDisableVertexAttribArrayARB (i);
-	  activeVertexAttribs &= ~(1 << i);
-	}
-      }
+      csVertexAttrib a ((csVertexAttrib)(CS_VATTRIB_SPECIFIC_FIRST+i));
+      if (!pendingBufferChanges[AttribToPendingIndex(a)].pending) continue;
+      SetPendingBuffer (a, nullptr);
     }
-
-    for (i = 0; i < CS_VATTRIB_SPECIFIC_LAST-CS_VATTRIB_SPECIFIC_FIRST+1; i++)
-    {
-      iRenderBuffer *b = spec_renderBuffers[i];
-      if (b) RenderRelease (b);// b->RenderRelease ();
-    }
-    for (i = 0; i < CS_VATTRIB_GENERIC_LAST-CS_VATTRIB_GENERIC_FIRST+1; i++)
-    {
-      iRenderBuffer *b = gen_renderBuffers[i];
-      if (b) RenderRelease (b);// b->RenderRelease ();
-      gen_renderBuffers[i] = 0;
-    }
-    changeQueue.Empty();
   }
   else
   {
     for (i = 0; i < count; i++)
     {
       csVertexAttrib att = attribs[i];
-      BufferChange queueEntry;
-      queueEntry.buffer = 0;
-      queueEntry.attrib = att;
-      changeQueue.Push (queueEntry);
+      SetPendingBuffer (att, nullptr);
     }
   }
 }
@@ -2317,7 +2281,10 @@ void csGLGraphics3D::DrawPixmap (iTextureHandle *hTex,
   G2D->PerformExtension ("glflushtext");
 
   if (current_drawflags & CSDRAW_3DGRAPHICS)
+  {
     DeactivateBuffers (0, 0);
+    ApplyBufferChanges();
+  }
 
   if (drawPixmapAFP)
   {
@@ -2626,18 +2593,54 @@ void csGLGraphics3D::RenderRelease (iRenderBuffer* buffer)
   }
 }
 
+void csGLGraphics3D::SetPendingBuffer (csVertexAttrib attr, iRenderBuffer* buffer)
+{
+  size_t index (AttribToPendingIndex (attr));
+  if (index == csArrayItemNotFound) return;
+  pendingBufferChanges[index].buffer = buffer;
+  pendingBufferChanges[index].pending = true;
+}
+
+size_t csGLGraphics3D::AttribToPendingIndex (csVertexAttrib attr)
+{
+  if (CS_VATTRIB_IS_GENERIC(attr))
+  {
+    return attr - CS_VATTRIB_GENERIC_FIRST;
+  }
+  else if (CS_VATTRIB_IS_SPECIFIC(attr))
+  {
+    return (attr - CS_VATTRIB_SPECIFIC_FIRST) + CS_VATTRIB_GENERIC_NUM;
+  }
+  else
+    return csInvalidStringID;
+}
+
+csVertexAttrib csGLGraphics3D::PendingIndexToAttrib (size_t index)
+{
+  if (index < CS_VATTRIB_GENERIC_NUM)
+  {
+    return (csVertexAttrib)(CS_VATTRIB_GENERIC_FIRST + index);
+  }
+  else if (index < CS_VATTRIB_GENERIC_NUM + CS_VATTRIB_SPECIFIC_NUM)
+  {
+    return (csVertexAttrib)(CS_VATTRIB_SPECIFIC_FIRST + (index - CS_VATTRIB_GENERIC_NUM));
+  }
+  CS_ASSERT_MSG("Invalid pending buffer index", 0);
+  return CS_VATTRIB_INVALID;
+}
+
 void csGLGraphics3D::ApplyBufferChanges()
 {
   GLRENDER3D_OUTPUT_LOCATION_MARKER;
-  
-  for (size_t i = 0; i < changeQueue.GetSize (); i++)
-  {
-    const BufferChange& changeEntry = changeQueue[i];
-    csVertexAttrib att = changeEntry.attrib;
 
-    if (changeEntry.buffer.IsValid())
+  for (size_t i = 0; i < numPendingBufferChanges; i++)
+  {
+    if (!pendingBufferChanges[i].pending) continue;
+    csVertexAttrib att = PendingIndexToAttrib (i);
+    iRenderBuffer *buffer = pendingBufferChanges[i].buffer;
+
+    if (buffer)
     {
-      iRenderBuffer *buffer = changeEntry.buffer;
 
       if (CS_VATTRIB_IS_GENERIC (att)) 
         AssignGenericBuffer (att-CS_VATTRIB_GENERIC_FIRST, buffer);
@@ -2827,8 +2830,8 @@ void csGLGraphics3D::ApplyBufferChanges()
         }
       }
     }
+    pendingBufferChanges[i] = PendingBufferChange();
   }
-  changeQueue.Empty();
 }
 
 void csGLGraphics3D::SetSeamlessCubemapFlag ()
@@ -3596,7 +3599,10 @@ void csGLGraphics3D::DrawSimpleMeshes (const csSimpleRenderMesh* meshes,
   if (needDisableTexture)
     DeactivateTexture ();
   if (needDisableBuffers)
+  {
     DeactivateBuffers (0,0);
+    ApplyBufferChanges();
+  }
 
   SetZMode (old_zbufmode);
   
