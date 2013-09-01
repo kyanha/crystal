@@ -455,12 +455,18 @@ private:
    * Changes to buffer bindings are not immediate but queued and set from 
    * within DrawMesh().
    */
-  struct BufferChange
+  struct PendingBufferChange : public CS::Memory::CustomAllocated
   {
-    csVertexAttrib attrib;
+    bool pending;
     csRef<iRenderBuffer> buffer;
+
+    PendingBufferChange() : pending (false) {}
   };
-  csArray<BufferChange> changeQueue;
+  CS::Utility::ScopedArrayPointer<PendingBufferChange> pendingBufferChanges;
+  size_t numPendingBufferChanges;
+  void SetPendingBuffer (csVertexAttrib attr, iRenderBuffer* buffer);
+  inline size_t AttribToPendingIndex (csVertexAttrib attr);
+  inline csVertexAttrib PendingIndexToAttrib (size_t index);
   uint activeVertexAttribs;
   void ApplyBufferChanges();
   //@}

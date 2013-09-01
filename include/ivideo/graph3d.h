@@ -237,6 +237,8 @@ enum csVertexAttrib
   CS_VATTRIB_14 = CS_VATTRIB_GENERIC_FIRST + 14,
   CS_VATTRIB_15 = CS_VATTRIB_GENERIC_FIRST + 15,
   //@}
+  /* Note: gl3d currently assumes there are at most 32 attributes,
+   * keep that in mind if bumping up the number above */
 
   /// Pseudo-instancing attribute: object-to-world matrix 
   CS_IATTRIB_OBJECT2WORLD = CS_IATTRIB_FIRST + 0
