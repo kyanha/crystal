@@ -417,7 +417,8 @@ RenderView* RenderViewCache::GetRenderView (RenderView* view, iPortal* portal, i
     if (!rViewPortal2RenderViews[i]->view.IsValid () ||
         !rViewPortal2RenderViews[i]->portal.IsValid ())
     {
-      rViewPortal2RenderViews.DeleteIndex (i);
+      rViewPortal2RenderViews.DeleteIndexFast (i);
+      i--;
       continue;
     }
 
