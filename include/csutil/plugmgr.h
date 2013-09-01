@@ -90,7 +90,7 @@ private:
   /**
    * This is a superset of csArray that can find by pointer a plugin.
    */
-  class CS_CRYSTALSPACE_EXPORT csPluginsVector :
+  class csPluginsVector :
     public csArray<csPlugin, 
                    csArraySafeCopyElementHandler<csPlugin>,
                    CS::Container::ArrayAllocDefault,
