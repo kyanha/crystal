@@ -41,6 +41,7 @@
 #include "csutil/formatter.h"
 #include "csutil/parray.h"
 #include "csutil/scf_implementation.h"
+#include "csutil/scopedpointer.h"
 #include "csutil/weakref.h"
 #include "csutil/weakrefarr.h"
 
@@ -445,7 +446,7 @@ private:
     ImageUnit (): texture (0) {}
   };
   GLint numImageUnits;
-  ImageUnit* imageUnits;
+  CS::Utility::ScopedArrayPointer<ImageUnit> imageUnits;
   GLint numTCUnits;
   void SetSeamlessCubemapFlag ();
 

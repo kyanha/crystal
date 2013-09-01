@@ -88,7 +88,7 @@ csGLGraphics3D::csGLGraphics3D (iBase *parent) :
   scfImplementationType (this, parent), isOpen (false), frameNum (0), 
   glProfiling (false), explicitProjection (false), needMatrixUpdate (true),
   multisampleEnabled (false),
-  imageUnits (0), activeVertexAttribs (0), wantToSwap (false),
+  activeVertexAttribs (0), wantToSwap (false),
   delayClearFlags (0), use_patches (false), currentAttachments (0)
 {
   verbose = false;
@@ -1056,7 +1056,7 @@ bool csGLGraphics3D::Open ()
 
   numImageUnits = statecache->GetNumImageUnits();
   numTCUnits = statecache->GetNumTexCoords();
-  imageUnits = new ImageUnit[numImageUnits];
+  imageUnits.Reset (new ImageUnit[numImageUnits]);
   if (verbose)
     Report (CS_REPORTER_SEVERITY_NOTIFY, 
       "Available texture image units: %d texture coordinate units: %d",
@@ -1341,7 +1341,7 @@ void csGLGraphics3D::Close ()
 
   txtmgr = 0;
   shadermgr = 0;
-  delete[] imageUnits;
+  imageUnits.Reset ();
   delete r2tbackend; r2tbackend = 0;
   for (size_t h = 0; h < halos.GetSize (); h++)
   {
