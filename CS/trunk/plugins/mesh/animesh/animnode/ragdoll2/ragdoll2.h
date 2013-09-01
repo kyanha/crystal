@@ -31,10 +31,10 @@
 #include "iutil/comp.h"
 #include "ivaria/physics.h"
 
-CS_PLUGIN_NAMESPACE_BEGIN (Ragdoll)
+CS_PLUGIN_NAMESPACE_BEGIN (Ragdoll2)
 {
 
-  class RagdollNodeManager;
+  class Ragdoll2NodeManager;
 
   struct ChainData
   {
@@ -51,7 +51,7 @@ CS_PLUGIN_NAMESPACE_BEGIN (Ragdoll)
   public:
     CS_LEAKGUARD_DECLARE (RagdollNodeFactory);
 
-    RagdollNodeFactory (RagdollNodeManager* manager, const char *name);
+    RagdollNodeFactory (Ragdoll2NodeManager* manager, const char *name);
 
     //-- CS::Animation::iSkeletonRagdollNodeFactory2
     virtual void AddChain (CS::Animation::iSkeletonChain* chain,
@@ -69,7 +69,7 @@ CS_PLUGIN_NAMESPACE_BEGIN (Ragdoll)
       CS::Animation::iSkeletonAnimPacket* packet, CS::Animation::iSkeleton* skeleton);
 
   protected:
-    RagdollNodeManager* manager;
+    Ragdoll2NodeManager* manager;
     csWeakRef<CS::Physics::iPhysicalSystem> physicalSystem;
     csArray<ChainData> chains;
     CS::Animation::BoneID ragdollRoot;
@@ -160,8 +160,8 @@ CS_PLUGIN_NAMESPACE_BEGIN (Ragdoll)
     CS::Animation::BoneID boneID;
   };
 
-  class RagdollNodeManager
-    : public CS::Animation::AnimNodeManagerCommon<RagdollNodeManager,
+  class Ragdoll2NodeManager
+    : public CS::Animation::AnimNodeManagerCommon<Ragdoll2NodeManager,
 						  CS::Animation::iSkeletonRagdollNodeManager2,
 						  RagdollNodeFactory>
   {
@@ -169,7 +169,7 @@ CS_PLUGIN_NAMESPACE_BEGIN (Ragdoll)
     friend class RagdollNodeFactory;
 
   public:
-    RagdollNodeManager (iBase* parent)
+    Ragdoll2NodeManager (iBase* parent)
      : AnimNodeManagerCommonType (parent) {}
      
     void Report (int severity, const char* msg, ...) const;
