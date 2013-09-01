@@ -381,6 +381,7 @@ void csGLBasicTextureHandle::Blit (int x, int y, int width,
   // Activate the texture.
   Precache ();
   G3D->ActivateTexture (this);
+  G3D->ApplyTextureChange (0);
   GLuint textureFormat = (format == RGBA8888) ? GL_RGBA : GL_BGRA;
   // Make sure mipmapping is ok.
   if (!IsWasRenderTarget() || (texFormat != format))
@@ -449,6 +450,7 @@ void csGLBasicTextureHandle::RegenerateMipmaps()
     && !txtmgr->tweaks.disableGenerateMipmap)
   {
     G3D->ActivateTexture (this);
+    G3D->ApplyTextureChange (0);
     G3D->ext->glGenerateMipmapEXT (GetGLTextureTarget());
   }
 }
@@ -901,6 +903,7 @@ uint8* csGLBasicTextureHandle::QueryBlitBufferPBO (int x, int y,
     csGLGraphics3D::statecache->SetBufferARB (GL_PIXEL_UNPACK_BUFFER_ARB, 0, true);
     Precache ();
     G3D->ActivateTexture (this);
+    G3D->ApplyTextureChange (0);
 
     G3D->ext->glGenBuffersARB (1, &pbo);
     csGLGraphics3D::statecache->SetBufferARB (GL_PIXEL_UNPACK_BUFFER_ARB, pbo, true);
@@ -943,6 +946,7 @@ void csGLBasicTextureHandle::ApplyBlitBufferPBO (uint8* buf)
     csGLGraphics3D::statecache->SetBufferARB (GL_PIXEL_UNPACK_BUFFER_ARB, pbo, true);
     G3D->ext->glUnmapBufferARB (GL_PIXEL_UNPACK_BUFFER_ARB);
     G3D->ActivateTexture (this);
+    G3D->ApplyTextureChange (0);
     if (!IsWasRenderTarget())
     {
       SetWasRenderTarget (true);
