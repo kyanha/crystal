@@ -403,6 +403,10 @@ public:
   operator T* () const
   { return obj; }
   
+  /// Cast smart pointer to a pointer to the underlying object.
+  T* Get() const
+  { return obj; }
+
   /// Dereference underlying object.
   T& operator* () const
   { return *obj; }
