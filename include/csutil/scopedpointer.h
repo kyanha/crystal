@@ -74,6 +74,56 @@ namespace Utility
   
   };
 
+  /**
+   * Smart pointer that delete[]s the contained pointer when the scope is exited.
+   * \tparam T is the type pointed to.
+   */
+  template<class T>
+  class ScopedArrayPointer : private NonCopyable
+  {
+    T* ptr;
+  public:
+    /**
+     * Construct from given pointer to an array.
+     * \remarks Takes ownership of \a ptr!
+     */
+    ScopedArrayPointer (T* ptr = nullptr) : ptr (ptr) {}
+    /// Destruct. Deletes the given pointer!
+    ~ScopedArrayPointer() { delete[] ptr; }
+
+    /**
+     * Replace the contained pointer to an array with another.
+     * \remarks Takes ownership of \a ptr!
+     */
+    void Reset (T* ptr = nullptr)
+    {
+      delete[] this->ptr;
+      this->ptr = ptr;
+    }
+    /// Invalidate (delete) the contained pointer
+    void Invalidate() { Reset(); }
+    /// Check if the contained pointer is valid.
+    bool IsValid() const { return ptr != (T*)nullptr; }
+  
+    /// Dereference underlying pointer.
+    T* operator -> () const
+    { return ptr; }
+    
+    /// Cast to a pointer.
+    operator T* () const
+    { return ptr; }
+    
+    /// Dereference underlying pointer.
+    T& operator* () const
+    { return *ptr; }
+
+    /// Access an array item
+    T& operator[] (size_t index) const
+    {
+      return ptr[index];
+    }
+  };
+
 } // namespace Utility
 } // namespace CS
 
