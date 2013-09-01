@@ -32,11 +32,11 @@
 
 #include "ragdoll2.h"
 
-CS_PLUGIN_NAMESPACE_BEGIN (Ragdoll)
+CS_PLUGIN_NAMESPACE_BEGIN (Ragdoll2)
 {
-  SCF_IMPLEMENT_FACTORY (RagdollNodeManager);
+  SCF_IMPLEMENT_FACTORY (Ragdoll2NodeManager);
 
-  void RagdollNodeManager::Report (int severity, const char* msg, ...) const
+  void Ragdoll2NodeManager::Report (int severity, const char* msg, ...) const
   {
     va_list arg;
     va_start (arg, msg);
@@ -76,7 +76,7 @@ CS_PLUGIN_NAMESPACE_BEGIN (Ragdoll)
 
   CS_LEAKGUARD_IMPLEMENT (RagdollNodeFactory);
 
-  RagdollNodeFactory::RagdollNodeFactory (RagdollNodeManager* manager, const char *name)
+  RagdollNodeFactory::RagdollNodeFactory (Ragdoll2NodeManager* manager, const char *name)
     : scfImplementationType (this), CS::Animation::SkeletonAnimNodeFactorySingle (name),
     manager (manager)
   {
