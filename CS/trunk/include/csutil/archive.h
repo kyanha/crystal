@@ -90,7 +90,7 @@ private:
   friend class ArchiveEntry;
 
   /// A vector of ArchiveEntries
-  class CS_CRYSTALSPACE_EXPORT ArchiveEntryVector
+  class ArchiveEntryVector
   	: public csPDelArray<ArchiveEntry, CS::Container::ArrayAllocDefault,
   	                     csArrayCapacityFixedGrow<256> >
   {
