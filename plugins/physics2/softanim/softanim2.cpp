@@ -34,25 +34,25 @@
 CS_PLUGIN_NAMESPACE_BEGIN (SoftAnim2)
 {
 
-  //-------------------------- SoftBodyControlType --------------------------
+  //-------------------------- SoftBody2ControlType --------------------------
 
-  SCF_IMPLEMENT_FACTORY(SoftBodyControlType);
+  SCF_IMPLEMENT_FACTORY(SoftBody2ControlType);
 
-  CS_LEAKGUARD_IMPLEMENT(SoftBodyControlType);
+  CS_LEAKGUARD_IMPLEMENT(SoftBody2ControlType);
 
-  SoftBodyControlType::SoftBodyControlType (iBase* parent)
+  SoftBody2ControlType::SoftBody2ControlType (iBase* parent)
     : scfImplementationType (this, parent)
   {
   }
 
   csPtr<iGenMeshAnimationControlFactory>
-    SoftBodyControlType::CreateAnimationControlFactory ()
+    SoftBody2ControlType::CreateAnimationControlFactory ()
   {
     SoftBodyControlFactory* control = new SoftBodyControlFactory (this);
     return csPtr<iGenMeshAnimationControlFactory> (control);
   }
 
-  bool SoftBodyControlType::Initialize (iObjectRegistry* object_reg)
+  bool SoftBody2ControlType::Initialize (iObjectRegistry* object_reg)
   {
     this->object_reg = object_reg;
     return true;
@@ -62,7 +62,7 @@ CS_PLUGIN_NAMESPACE_BEGIN (SoftAnim2)
 
   CS_LEAKGUARD_IMPLEMENT(SoftBodyControlFactory);
 
-  SoftBodyControlFactory::SoftBodyControlFactory (SoftBodyControlType* type)
+  SoftBodyControlFactory::SoftBodyControlFactory (SoftBody2ControlType* type)
     : scfImplementationType (this), type (type)
   {
   }

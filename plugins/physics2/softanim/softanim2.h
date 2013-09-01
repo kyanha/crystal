@@ -32,13 +32,13 @@
 CS_PLUGIN_NAMESPACE_BEGIN (SoftAnim2)
 {
 
-class SoftBodyControlType : public scfImplementation2<SoftBodyControlType,
+class SoftBody2ControlType : public scfImplementation2<SoftBody2ControlType,
     CS::Animation::iSoftBodyAnimationControl2Type, iComponent>
 {
   public:
-    CS_LEAKGUARD_DECLARE(SoftBodyControlType);
+    CS_LEAKGUARD_DECLARE(SoftBody2ControlType);
 
-    SoftBodyControlType (iBase* parent);
+    SoftBody2ControlType (iBase* parent);
 
     //-- iGenMeshAnimationControlType
     virtual csPtr<iGenMeshAnimationControlFactory> CreateAnimationControlFactory ();
@@ -63,7 +63,7 @@ class SoftBodyControlFactory : public scfImplementation2<SoftBodyControlFactory,
   public:
     CS_LEAKGUARD_DECLARE(CS::Animation::iSoftBodyAnimationControl2Factory);
 
-    SoftBodyControlFactory (SoftBodyControlType* type);
+    SoftBodyControlFactory (SoftBody2ControlType* type);
 
     //-- iGenMeshAnimationControlFactory
     virtual csPtr<iGenMeshAnimationControl> CreateAnimationControl (iMeshObject* mesh);
@@ -71,7 +71,7 @@ class SoftBodyControlFactory : public scfImplementation2<SoftBodyControlFactory,
     virtual const char* Save (iDocumentNode* parent);
 
  private:
-    csRef<SoftBodyControlType> type;
+    csRef<SoftBody2ControlType> type;
 
     friend class SoftBodyControl;
 };
