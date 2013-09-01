@@ -25,6 +25,7 @@
 
 #include "iengine/camera.h"
 
+#include "csutil/priorityqueue.h"
 #include "csutil/weakkeyedhash.h"
 #include "csutil/weakref.h"
 
@@ -34,26 +35,37 @@ namespace CS
 {
   namespace RenderManager
   {
+    /**
+     * Helper class to cache clones of cameras.
+     * Either clones a camera, or returns a previously created clone of the same camera.
+     */
     class CS_CRYSTALSPACE_EXPORT CameraCache
     {
-      /**
-       * Helper class to cache clones of cameras.
-       * Either clones a camera, or returns a previously created clone of the same camera.
-       */
       struct CameraClone
       {
+        /// Frame number this camera was last used
+        uint lastFrame;
         /// Camera number of the original cam when the clone was taken
         long origCamNum;
         /// Camera of the clone after the last sync
         long cloneCamNum;
         csRef<iCustomMatrixCamera> cam;
 
-        CameraClone (iCamera* oldCam, iCustomMatrixCamera* newCam)
-          : origCamNum (oldCam->GetCameraNumber()),
+        CameraClone (uint lastFrame, iCamera* oldCam, iCustomMatrixCamera* newCam)
+          : lastFrame (lastFrame),
+            origCamNum (oldCam->GetCameraNumber()),
             cloneCamNum (newCam->GetCamera()->GetCameraNumber()),
             cam (newCam) {}
+
+        // Used by PriorityQueue
+        bool operator< (const CameraClone& other) const
+        {
+          // Return clones with the lowest frame number first
+          return lastFrame > other.lastFrame;
+        }
       };
-      typedef CS::Container::WeakKeyedHash<CameraClone, csWeakRef<iCamera> > ClonesHash;
+      typedef CS::Utility::PriorityQueue<CameraClone> CameraCloneQueue;
+      typedef CS::Container::WeakKeyedHash<CameraCloneQueue, csWeakRef<iCamera> > ClonesHash;
       ClonesHash clones;
       csWeakRef<iEngine> engine;
     public:
