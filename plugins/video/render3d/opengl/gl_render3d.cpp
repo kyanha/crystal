@@ -1060,6 +1060,7 @@ bool csGLGraphics3D::Open ()
   numImageUnits = statecache->GetNumImageUnits();
   numTCUnits = statecache->GetNumTexCoords();
   imageUnits.Reset (new ImageUnit[numImageUnits]);
+  pendingTextureChanges.Reset (new PendingTextureChange[numImageUnits]);
   if (verbose)
     Report (CS_REPORTER_SEVERITY_NOTIFY, 
       "Available texture image units: %d texture coordinate units: %d",
@@ -1446,6 +1447,7 @@ void csGLGraphics3D::CopyFromRenderTargets (size_t num,
     tex_mm->Precache ();
     // Texture is in tha cache, update texture directly.
     ActivateTexture (tex_mm);
+    ApplyTextureChanges ();
   
     GLenum internalFormat = 0;
   
@@ -1533,6 +1535,7 @@ bool csGLGraphics3D::BeginDraw (int drawflags)
   int i = 0;
   for (i = numImageUnits; i-- > 0;)
     DeactivateTexture (i);
+  ApplyTextureChanges ();
 
   /* If render attachments are set, but no depth attachment is given
    * (ie default depth is used), implicitly clear the depth buffer. */
@@ -1795,84 +1798,15 @@ void csGLGraphics3D::DeactivateBuffers (csVertexAttrib *attribs, unsigned int co
 
 bool csGLGraphics3D::ActivateTexture (iTextureHandle *txthandle, int unit)
 {
-  if (ext->CS_GL_ARB_multitexture)
-  {
-    statecache->SetCurrentImageUnit (unit);
-  }
-  else if (unit != 0) return false;
-
-  csGLBasicTextureHandle* gltxthandle = 
-    static_cast<csGLBasicTextureHandle*> (txthandle);
-  GLuint texHandle = gltxthandle->GetHandle ();
-
-  switch (gltxthandle->texType)
-  {
-    case iTextureHandle::texType1D:
-      statecache->Enable_GL_TEXTURE_1D ();
-      statecache->SetTexture (GL_TEXTURE_1D, texHandle);
-      break;
-    case iTextureHandle::texType2D:
-      statecache->Enable_GL_TEXTURE_2D ();
-      statecache->SetTexture (GL_TEXTURE_2D, texHandle);
-      break;
-    case iTextureHandle::texType3D:
-      statecache->Enable_GL_TEXTURE_3D ();
-      statecache->SetTexture (GL_TEXTURE_3D, texHandle);
-      break;
-    case iTextureHandle::texTypeCube:
-      statecache->Enable_GL_TEXTURE_CUBE_MAP ();
-      statecache->SetTexture (GL_TEXTURE_CUBE_MAP, texHandle);
-      break;
-    case iTextureHandle::texTypeRect:
-      statecache->Enable_GL_TEXTURE_RECTANGLE_ARB ();
-      statecache->SetTexture (GL_TEXTURE_RECTANGLE_ARB, texHandle);
-      break;
-    default:
-      DeactivateTexture (unit);
-      return false;
-  }
-  imageUnits[unit].texture = gltxthandle;
-  
+  pendingTextureChanges[unit].pending = true;
+  pendingTextureChanges[unit].texture = txthandle;
   return true;
 }
 
 void csGLGraphics3D::DeactivateTexture (int unit)
 {
-  if (ext->CS_GL_ARB_multitexture)
-  {
-    statecache->SetCurrentImageUnit (unit);
-  }
-  else if (unit != 0) return;
-
-  if (imageUnits[unit].texture == 0) return;
-
-  switch (imageUnits[unit].texture->texType)
-  {
-    case iTextureHandle::texType1D:
-      statecache->Disable_GL_TEXTURE_1D ();
-      statecache->SetTexture (GL_TEXTURE_1D, 0);
-      break;
-    case iTextureHandle::texType2D:
-      statecache->Disable_GL_TEXTURE_2D ();
-      statecache->SetTexture (GL_TEXTURE_2D, 0);
-      break;
-    case iTextureHandle::texType3D:
-      statecache->Disable_GL_TEXTURE_3D ();
-      statecache->SetTexture (GL_TEXTURE_3D, 0);
-      break;
-    case iTextureHandle::texTypeCube:
-      statecache->Disable_GL_TEXTURE_CUBE_MAP ();
-      statecache->SetTexture (GL_TEXTURE_CUBE_MAP, 0);
-      break;
-    case iTextureHandle::texTypeRect:
-      statecache->Disable_GL_TEXTURE_RECTANGLE_ARB ();
-      statecache->SetTexture (GL_TEXTURE_RECTANGLE_ARB, 0);
-      break;
-    default:
-      break;
-  }
-
-  imageUnits[unit].texture = 0;
+  pendingTextureChanges[unit].pending = true;
+  pendingTextureChanges[unit].texture = nullptr;
 }
 
 void csGLGraphics3D::SetTextureState (int* units, iTextureHandle** textures,
@@ -1883,6 +1817,7 @@ void csGLGraphics3D::SetTextureState (int* units, iTextureHandle** textures,
     for (int i = 0 ; i < count ; i++)
     {
       int unit = units[i];
+      if ((unit < 0) || (unit >= numImageUnits)) continue;
       DeactivateTexture (unit);
     }
   }
@@ -1891,6 +1826,7 @@ void csGLGraphics3D::SetTextureState (int* units, iTextureHandle** textures,
     for (int i = 0 ; i < count ; i++)
     {
       int unit = units[i];
+      if ((unit < 0) || (unit >= numImageUnits)) continue;
       iTextureHandle* txt = textures[i];
       if (txt)
 	ActivateTexture (txt, unit);
@@ -1909,16 +1845,24 @@ void csGLGraphics3D::SetTextureComparisonModes (int* units,
     for (int i = 0 ; i < count ; i++)
     {
       int unit = units[i];
-      
-      if (imageUnits[unit].texture == 0) continue;
-      
-      if (ext->CS_GL_ARB_multitexture)
+      if ((unit < 0) || (unit >= numImageUnits)) continue;
+      if (pendingTextureChanges[unit].pending)
       {
-	statecache->SetCurrentImageUnit (unit);
+        pendingTextureChanges[unit].comparisonPending = true;
+        pendingTextureChanges[unit].compMode = modeDisabled;
       }
-      else if (unit != 0) continue;
+      else
+      {
+        if (imageUnits[unit].texture == 0) continue;
       
-      imageUnits[unit].texture->ChangeTextureCompareMode (modeDisabled);
+        if (ext->CS_GL_ARB_multitexture)
+        {
+	  statecache->SetCurrentImageUnit (unit);
+        }
+        else if (unit != 0) continue;
+      
+        imageUnits[unit].texture->ChangeTextureCompareMode (modeDisabled);
+      }
     }
   }
   else
@@ -1926,17 +1870,116 @@ void csGLGraphics3D::SetTextureComparisonModes (int* units,
     for (int i = 0 ; i < count ; i++)
     {
       int unit = units[i];
-      if (imageUnits[unit].texture == 0) continue;
-      
-      if (ext->CS_GL_ARB_multitexture)
+      if ((unit < 0) || (unit >= numImageUnits)) continue;
+      if (pendingTextureChanges[unit].pending)
       {
-	statecache->SetCurrentImageUnit (unit);
+        pendingTextureChanges[unit].comparisonPending = true;
+        pendingTextureChanges[unit].compMode = modes[i];
       }
-      else if (unit != 0) continue;
+      else
+      {
+        if (imageUnits[unit].texture == 0) continue;
       
-      imageUnits[unit].texture->ChangeTextureCompareMode (modes[i]);
+        if (ext->CS_GL_ARB_multitexture)
+        {
+	  statecache->SetCurrentImageUnit (unit);
+        }
+        else if (unit != 0) continue;
+      
+        imageUnits[unit].texture->ChangeTextureCompareMode (modes[i]);
+      }
     }
   }
+}
+
+void csGLGraphics3D::ApplyTextureChanges()
+{
+  if (!ext->CS_GL_ARB_multitexture)
+  {
+    ApplyTextureChange (0);
+    return;
+  }
+
+  for (int i = numImageUnits; i-- > 0; )
+  {
+    ApplyTextureChange (i);
+  }
+}
+
+void csGLGraphics3D::ApplyTextureChange (int unit)
+{
+  if (!pendingTextureChanges[unit].pending) return;
+  statecache->SetCurrentImageUnit (unit);
+
+  csGLBasicTextureHandle* gltxthandle = 
+    static_cast<csGLBasicTextureHandle*> (pendingTextureChanges[unit].texture.Get());
+
+  // Deactivate any previously bound texture
+  if (imageUnits[unit].texture
+    && (!gltxthandle
+      || (imageUnits[unit].texture->texType != gltxthandle->texType)))
+  {
+    switch (imageUnits[unit].texture->texType)
+    {
+      case iTextureHandle::texType1D:
+        statecache->Disable_GL_TEXTURE_1D ();
+        statecache->SetTexture (GL_TEXTURE_1D, 0);
+        break;
+      case iTextureHandle::texType2D:
+        statecache->Disable_GL_TEXTURE_2D ();
+        statecache->SetTexture (GL_TEXTURE_2D, 0);
+        break;
+      case iTextureHandle::texType3D:
+        statecache->Disable_GL_TEXTURE_3D ();
+        statecache->SetTexture (GL_TEXTURE_3D, 0);
+        break;
+      case iTextureHandle::texTypeCube:
+        statecache->Disable_GL_TEXTURE_CUBE_MAP ();
+        statecache->SetTexture (GL_TEXTURE_CUBE_MAP, 0);
+        break;
+      case iTextureHandle::texTypeRect:
+        statecache->Disable_GL_TEXTURE_RECTANGLE_ARB ();
+        statecache->SetTexture (GL_TEXTURE_RECTANGLE_ARB, 0);
+        break;
+    }
+  }
+
+  // Activate new texture
+  if (gltxthandle)
+  {
+    GLuint texHandle = gltxthandle->GetHandle ();
+
+    switch (gltxthandle->texType)
+    {
+      case iTextureHandle::texType1D:
+        statecache->Enable_GL_TEXTURE_1D ();
+        statecache->SetTexture (GL_TEXTURE_1D, texHandle);
+        break;
+      case iTextureHandle::texType2D:
+        statecache->Enable_GL_TEXTURE_2D ();
+        statecache->SetTexture (GL_TEXTURE_2D, texHandle);
+        break;
+      case iTextureHandle::texType3D:
+        statecache->Enable_GL_TEXTURE_3D ();
+        statecache->SetTexture (GL_TEXTURE_3D, texHandle);
+        break;
+      case iTextureHandle::texTypeCube:
+        statecache->Enable_GL_TEXTURE_CUBE_MAP ();
+        statecache->SetTexture (GL_TEXTURE_CUBE_MAP, texHandle);
+        break;
+      case iTextureHandle::texTypeRect:
+        statecache->Enable_GL_TEXTURE_RECTANGLE_ARB ();
+        statecache->SetTexture (GL_TEXTURE_RECTANGLE_ARB, texHandle);
+        break;
+    }
+
+    if (pendingTextureChanges[unit].comparisonPending)
+      gltxthandle->ChangeTextureCompareMode (pendingTextureChanges[unit].compMode);
+  }
+
+  imageUnits[unit].texture = gltxthandle;
+  pendingTextureChanges[unit].pending = false;
+  pendingTextureChanges[unit].comparisonPending = false;
 }
 
 GLvoid csGLGraphics3D::myDrawRangeElements (GLenum mode, GLuint /*start*/, 
@@ -1993,6 +2036,7 @@ void csGLGraphics3D::DrawMesh (const csCoreRenderMesh* mymesh,
     glMultMatrixf (matrix);
   }
 
+  ApplyTextureChanges();
   ApplyBufferChanges();
   SetSeamlessCubemapFlag ();
 
@@ -2330,6 +2374,7 @@ void csGLGraphics3D::DrawPixmap (iTextureHandle *hTex,
 
   glColor4f (1.0, 1.0, 1.0, Alpha ? (1.0 - BYTE_TO_FLOAT (Alpha)) : 1.0);
   ActivateTexture (hTex);
+  ApplyTextureChanges();
 
   // convert texture coords given above to normalized (0-1.0) texture
   // coordinates
@@ -2375,6 +2420,7 @@ void csGLGraphics3D::DrawPixmap (iTextureHandle *hTex,
   // Restore.
   SetZModeInternal (current_zmode);
   DeactivateTexture ();
+  ApplyTextureChanges();
   if (drawPixmapAFP)
     glDisable (GL_FRAGMENT_PROGRAM_ARB);
 }
@@ -3472,14 +3518,16 @@ void csGLGraphics3D::DrawSimpleMeshes (const csSimpleRenderMesh* meshes,
       if (mesh.texture)
       {
 	ActivateTexture (mesh.texture);
-	imageUnits[0].texture->ChangeTextureCompareMode (
-	  CS::Graphics::TextureComparisonMode ());
+        int unit (0);
+        CS::Graphics::TextureComparisonMode compMode;
+        SetTextureComparisonModes (&unit, &compMode, 1);
       }
       else
       {
 	DeactivateTexture ();
 	needDisableTexture = false;
       }
+      ApplyTextureChanges ();
     }
 
     csRenderMesh rmesh;
@@ -3597,7 +3645,10 @@ void csGLGraphics3D::DrawSimpleMeshes (const csSimpleRenderMesh* meshes,
   }
 
   if (needDisableTexture)
+  {
     DeactivateTexture ();
+    ApplyTextureChanges ();
+  }
   if (needDisableBuffers)
   {
     DeactivateBuffers (0,0);
@@ -4244,6 +4295,7 @@ void csGLGraphics3D::DrawMeshBasic(const csCoreRenderMesh* mymesh,
     glMultMatrixf (matrix);
   }
 
+  ApplyTextureChanges();
   ApplyBufferChanges();
 
   iRenderBuffer* iIndexbuf = (modes.buffers

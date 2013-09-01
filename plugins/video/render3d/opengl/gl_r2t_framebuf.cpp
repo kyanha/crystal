@@ -164,7 +164,12 @@ void csGLRender2TextureFramebuf::BeginDraw (int drawflags)
   {
     G3D->statecache->SetShadeModel (GL_FLAT);
     glColor4f (1.0f, 1.0f, 1.0f, 1.0f);
-    G3D->ActivateTexture (colorTarget.texture);
+    {
+      int u (0);
+      iTextureHandle* t (colorTarget.texture);
+      G3D->SetTextureState (&u, &t, 1);
+    }
+    G3D->ApplyTextureChange (0);
     G3D->statecache->Disable_GL_BLEND ();
     G3D->SetZMode (CS_ZBUF_NONE);
 
@@ -449,7 +454,12 @@ void csGLRender2TextureFramebuf::GrabFramebuffer (const RTAttachment<>& target,
     static_cast<csGLBasicTextureHandle*> ((iTextureHandle*)target.texture);
   tex_mm->Precache ();
   // Texture is in tha cache, update texture directly.
-  G3D->ActivateTexture (tex_mm);
+  {
+    int u (0);
+    iTextureHandle* t (tex_mm);
+    G3D->SetTextureState (&u, &t, 1);
+  }
+  G3D->ApplyTextureChange (0);
 
   GLenum internalFormat = 0;
 

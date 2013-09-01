@@ -447,6 +447,20 @@ private:
   };
   GLint numImageUnits;
   CS::Utility::ScopedArrayPointer<ImageUnit> imageUnits;
+  struct PendingTextureChange : public CS::Memory::CustomAllocated
+  {
+    csRef<iTextureHandle> texture;
+    bool pending;
+    bool comparisonPending;
+    CS::Graphics::TextureComparisonMode compMode;
+
+    PendingTextureChange() : pending (false), comparisonPending (false) {}
+  };
+  CS::Utility::ScopedArrayPointer<PendingTextureChange> pendingTextureChanges;
+  /// Activate a texture
+  bool ActivateTexture (iTextureHandle *txthandle, int unit = 0);
+  /// Activate a texture (Should probably handled some better way)
+  void DeactivateTexture (int unit = 0);
   GLint numTCUnits;
   void SetSeamlessCubemapFlag ();
 
@@ -576,10 +590,10 @@ public:
     iRenderBuffer **buffers, unsigned int count);
   void DeactivateBuffers (csVertexAttrib *attribs, unsigned int count);
 
-  /// Activate a texture
-  bool ActivateTexture (iTextureHandle *txthandle, int unit = 0);
-  /// Activate a texture (Should probably handled some better way)
-  void DeactivateTexture (int unit = 0);
+  /// Apply all pending texture state changes
+  void ApplyTextureChanges();
+  /// Apply pending texture state change for given image unit
+  void ApplyTextureChange (int unit);
   virtual void SetTextureState (int* units, iTextureHandle** textures,
   	int count);
   void SetTextureComparisonModes (int*, CS::Graphics::TextureComparisonMode*,
