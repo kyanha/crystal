@@ -497,6 +497,8 @@ void csGLBasicTextureHandle::Load ()
     }
 
     // @@@ Implement upload!
+
+    csGLTextureManager::UnsetTexture (GL_TEXTURE_1D, Handle);
   }
   else if (texType == texType2D)
   {
@@ -532,6 +534,8 @@ void csGLBasicTextureHandle::Load ()
 	  uploadData.sourceFormat.type, uploadData.image_data);
       }
     }
+
+    csGLTextureManager::UnsetTexture (GL_TEXTURE_2D, Handle);
   }
   else if (texType == texType3D)
   {
@@ -571,6 +575,8 @@ void csGLBasicTextureHandle::Load ()
           uploadData.sourceFormat.type, uploadData.image_data);
       }
     }
+
+    csGLTextureManager::UnsetTexture (GL_TEXTURE_3D, Handle);
   }
   else if (texType == texTypeCube)
   {
@@ -624,6 +630,8 @@ void csGLBasicTextureHandle::Load ()
 	  uploadData.image_data);
       }
     }
+
+    csGLTextureManager::UnsetTexture (GL_TEXTURE_CUBE_MAP, Handle);
   }
   else if (texType == texTypeRect)
   {
@@ -660,6 +668,7 @@ void csGLBasicTextureHandle::Load ()
 	  uploadData.sourceFormat.type, uploadData.image_data);
       }
     }
+    csGLTextureManager::UnsetTexture (GL_TEXTURE_RECTANGLE_ARB, Handle);
   }
 
   uploadData.Reset();
