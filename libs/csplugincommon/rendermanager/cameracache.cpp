@@ -35,14 +35,19 @@ namespace CS
     {
       if (!engine) return nullptr;
 
-      CameraClone* prevClone (clones.GetElementPointer (originalCam));
-      if (prevClone)
+      uint currentFrame (engine->GetCurrentFrameNumber());
+      CameraCloneQueue* prevCloneQueue (clones.GetElementPointer (originalCam));
+      if (prevCloneQueue
+        // Only return a camera if it hasn't been used this frame
+        && !prevCloneQueue->IsEmpty()
+        && prevCloneQueue->Top().lastFrame != currentFrame)
       {
-        iCamera* cam (prevClone->cam->GetCamera());
-        if ((prevClone->origCamNum != originalCam->GetCameraNumber())
-          || (prevClone->cloneCamNum != cam->GetCameraNumber()))
+        CameraClone prevClone (prevCloneQueue->Pop());
+        iCamera* cam (prevClone.cam->GetCamera());
+        if ((prevClone.origCamNum != originalCam->GetCameraNumber())
+          || (prevClone.cloneCamNum != cam->GetCameraNumber()))
         {
-          prevClone->origCamNum = originalCam->GetCameraNumber();
+          prevClone.origCamNum = originalCam->GetCameraNumber();
           if ((syncFlags & syncTransform) != 0)
             cam->SetTransform (originalCam->GetTransform());
           if ((syncFlags & syncSector) != 0)
@@ -54,15 +59,22 @@ namespace CS
           if ((syncFlags & syncOnlyPortals) != 0)
             cam->OnlyPortals (originalCam->GetOnlyPortals());
           if ((syncFlags & syncProjection) != 0)
-            prevClone->cam->SetProjectionMatrix (originalCam->GetProjectionMatrix());
-          prevClone->cloneCamNum = cam->GetCameraNumber();
+            prevClone.cam->SetProjectionMatrix (originalCam->GetProjectionMatrix());
+          prevClone.cloneCamNum = cam->GetCameraNumber();
         }
+        prevClone.lastFrame = currentFrame;
+        prevCloneQueue->Insert (prevClone);
         return cam;
       }
 
+      if (!prevCloneQueue)
+      {
+        prevCloneQueue = &clones.PutUnique (originalCam, CameraCloneQueue ());
+      }
+
       csRef<iCustomMatrixCamera> newcam (engine->CreateCustomMatrixCamera (originalCam));
-      CameraClone newClone (originalCam, newcam);
-      clones.PutUnique (originalCam, newClone);
+      CameraClone newClone (currentFrame, originalCam, newcam);
+      prevCloneQueue->Insert (newClone);
       return newcam->GetCamera();
     }
 
