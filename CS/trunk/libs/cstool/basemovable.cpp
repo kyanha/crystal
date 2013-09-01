@@ -38,7 +38,7 @@ MovableSectorList::MovableSectorList ()
 
 MovableSectorList::~MovableSectorList ()
 {
-  DeleteAll ();
+  sectors.DeleteAll ();
 }
 
 bool MovableSectorList::PrepareSector (iSector* sector)
@@ -49,8 +49,8 @@ bool MovableSectorList::PrepareSector (iSector* sector)
   bool rc = sector->PrepareMovable (movable);
 
   // Make sure camera and light only is in one sector
-  CS_ASSERT (!(movable->GetLight () && GetSize () > 0));
-  CS_ASSERT (!(movable->GetCamera () && GetSize () > 0));
+  CS_ASSERT (!(movable->GetLight () && sectors.GetSize () > 0));
+  CS_ASSERT (!(movable->GetCamera () && sectors.GetSize () > 0));
 
   return rc;
 }
@@ -58,14 +58,14 @@ bool MovableSectorList::PrepareSector (iSector* sector)
 int MovableSectorList::Add (iSector *obj)
 {
   if (!PrepareSector (obj)) return -1;
-  return (int)Push (obj);
+  return (int)sectors.Push (obj);
 }
 
 bool MovableSectorList::Remove (iSector *obj)
 {
   iMeshWrapper* object = movable->GetMeshWrapper ();
   if (object) object->RemoveFromSectors (obj);
-  return Delete (obj);
+  return sectors.Delete (obj);
 }
 
 bool MovableSectorList::Remove (int n)
@@ -73,7 +73,7 @@ bool MovableSectorList::Remove (int n)
   iSector* obj = Get (n);
   iMeshWrapper* object = movable->GetMeshWrapper ();
   if (object) object->RemoveFromSectors (obj);
-  return DeleteIndex (n);
+  return sectors.DeleteIndex (n);
 }
 
 void MovableSectorList::RemoveAll ()
@@ -83,12 +83,12 @@ void MovableSectorList::RemoveAll ()
 
 int MovableSectorList::Find (iSector *obj) const
 {
-  return (int)csRefArrayObject<iSector>::Find (obj);
+  return (int)sectors.Find (obj);
 }
 
 iSector *MovableSectorList::FindByName (const char *Name) const
 {
-  return csRefArrayObject<iSector>::FindByName (Name);
+  return sectors.FindByName (Name);
 }
 
 //---------------------------------------------------------------------------

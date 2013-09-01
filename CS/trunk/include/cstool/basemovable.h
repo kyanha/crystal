@@ -40,10 +40,10 @@ class BaseMovable;
 
 /// A list of sectors as the movable uses it
 class CS_CRYSTALSPACE_EXPORT MovableSectorList : public scfImplementation1<MovableSectorList,
-				iSectorList>,
-                            public csRefArrayObject<iSector>
+				iSectorList>
 {
 private:
+  csRefArrayObject<iSector> sectors;
   BaseMovable* movable;
 
 public:
@@ -53,8 +53,13 @@ public:
 
   bool PrepareSector (iSector* item);
 
-  virtual int GetCount () const { return (int)GetSize (); }
-  virtual iSector *Get (int n) const { return (*this)[n]; }
+  size_t GetSize() const { return sectors.GetSize(); }
+  size_t Push (iSector* sector) { return sectors.Push (sector); }
+  void Empty() { sectors.Empty(); }
+  iSector* operator[] (size_t index) const { return sectors[index]; }
+
+  virtual int GetCount () const { return (int)sectors.GetSize (); }
+  virtual iSector *Get (int n) const { return sectors[n]; }
   virtual int Add (iSector *obj);
   virtual bool Remove (iSector *obj);
   virtual bool Remove (int n);
