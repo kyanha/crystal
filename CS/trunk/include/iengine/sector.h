@@ -50,7 +50,6 @@ struct iMovable;
 struct iObject;
 
 struct iRenderView;
-struct iRenderLoop;
 struct iSector;
 struct iDocumentNode;
 

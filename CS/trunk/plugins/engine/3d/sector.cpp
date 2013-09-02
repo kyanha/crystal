@@ -112,7 +112,6 @@ csSector::csSector (csEngine *engine) :
   meshes.SetSector (this);
   //portal_containers.SetSector (this);
   currentVisibilityNumber = 0;
-  renderloop = 0;
 
   single_mesh = 0;
 
@@ -823,12 +822,6 @@ int csSector::IntersectSegment (
 
   if (pr) *pr = best_r;
   return best_p;
-}
-
-THREADED_CALLABLE_IMPL1(csSector, SetRenderLoop, iRenderLoop* rl)
-{
-  renderloop = rl;
-  return true;
 }
 
 iSector *csSector::FollowSegment (
