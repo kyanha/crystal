@@ -1,9 +1,11 @@
 import bpy
 import operator
 
-from io_scene_cs.utilities import rnaType, settings, GetPreferences, prepend_draw
+from io_scene_cs.utilities import rnaType, settings, GetPreferences, prepend_draw, append_draw
 from bpy.types import PropertyGroup
-  
+
+from io_scene_cs.ui.idref import IDRefContainer, IDRefProperty
+
 
 class csObjectPanel():
   bl_space_type = "PROPERTIES"
@@ -13,8 +15,8 @@ class csObjectPanel():
 
   @classmethod
   def poll(cls, context):
-    ob = bpy.context.active_object
-    r = (ob and ob.type == 'MESH' and not ob.portal.enabled and not ob.IsVisCullMesh())
+    ob = context.active_object
+    r = (ob and ob.type == 'MESH' and not ob.portal.enabled and not ob.IsTriangleMesh())
     rd = context.scene.render
     return r and (rd.engine in cls.COMPAT_ENGINES)
 
@@ -43,48 +45,6 @@ class SelectFactoryRef(bpy.types.Operator):
           ob.b2cs.csFactoryVfs = ''
         return {'FINISHED'}
 
-
-
-class SelectObjectRef(bpy.types.Operator):
-    bl_idname = "object.select_object_ref"
-    bl_label = "Select Object"
-
-    def avail_objects(self,context):
-        ob = context.active_object
-        items = [(str(i),o.name,o.name) for i,o in enumerate(bpy.data.objects) if not o.IsVisCullMesh() and o.GetVisCullMesh() is None and o != ob]
-        items.append((str(-1),' NONE','None'))
-        return sorted(items, key=operator.itemgetter(1))
-    select_object = bpy.props.EnumProperty(items = avail_objects, name = "Available Objects")
-
-    @classmethod
-    def poll(cls, context):
-        return context.mode == 'OBJECT'
-    
-    def execute(self,context):
-        ob = context.active_object
-        mesh = ob.GetVisCullMesh()
-        if mesh:
-          mesh.UnMakeThisAVisCullMesh()
-        
-        index = int(self.select_object)
-        if int(self.select_object) != -1:
-          mesh = bpy.data.objects[index]
-          mesh.MakeThisAVisCullMesh(ob)
-          
-        return {'FINISHED'}
-
-
-class B2CS_OT_RemoveObjectRef(bpy.types.Operator):
-  bl_idname = "object.remove_object_ref"
-  bl_label = "Remove material reference"
-  bl_description = "Remove a reference to existing Crystal Space material"
-
-  def execute(self, context): 
-    if context.current_viscullmesh:
-      context.current_viscullmesh.UnMakeThisAVisCullMesh()
-    return {'FINISHED'}
-
-
 @rnaType
 class OBJECT_PT_csFactoryRef(csObjectPanel, bpy.types.Panel):
   bl_label = "Crystal Space Factories"
@@ -97,10 +57,15 @@ class OBJECT_PT_csFactoryRef(csObjectPanel, bpy.types.Panel):
       # Draw a checkbox to define current mesh object as a CS factory reference
       layout = self.layout
       
+      layout.template_object_ref(ob.b2cs, 'viscull_mesh', name='Viscull mesh')
       
-      mesh = ob.GetVisCullMesh()
-      layout.template_object_ref(mesh, "Viscull mesh")
-      
+      if ob.game.use_collision_bounds and ob.game.collision_bounds_type=='TRIANGLE_MESH':
+        layout.template_object_ref(ob.b2cs, 'collission_mesh', name='Collision mesh')
+        
+      if not ob.data.b2cs.no_shadow_cast:
+        layout.template_object_ref(ob.b2cs, 'shadow_mesh', name='Shadow mesh')
+
+
       row = layout.row()
       row.prop(ob.b2cs, "csFactRef")
 
@@ -130,6 +95,15 @@ def PHYSICS_PT_game_physics_prepend_draw(self, context):
       row.label(text="Physics type not supported in CS", icon='ERROR')
 
 
+@append_draw(type='PHYSICS_PT_game_collision_bounds')
+def PHYSICS_PT_game_collision_bounds_prepend_draw(self, context):  
+  ob = context.active_object
+  layout = self.layout
+  if ob.game.use_collision_bounds and ob.game.collision_bounds_type=='TRIANGLE_MESH':
+    layout.template_object_ref(ob.b2cs, 'collission_mesh', name='Collision mesh')
+
+
+@IDRefContainer
 @settings(type='Object')
 class CrystalSpaceSettingsObject(PropertyGroup):
   csFactRef = bpy.props.BoolProperty(
@@ -144,4 +118,25 @@ class CrystalSpaceSettingsObject(PropertyGroup):
             name="VFS path of CS factory",
             description="VFS path of a Crystal Space library file",
             default="")
+   
+  def make_poll(id):
+    def poll(prop, o):
+      return o.type=='MESH' and not o.IsTriangleMesh() and o.GetTriangleMesh(id) is None and o != bpy.context.object and o.parent is None
+    return poll
+  def make_select(id):  
+    def select(prop, value):
+      print('select', id,value)
+      value.MakeThisATriangleMesh(id, bpy.context.object)
+    return select
+  def make_unselect(id):  
+    def unselect(prop, value):
+      print('unselect', id,value)
+      value.UnMakeThisATriangleMesh(id)
+    return unselect
+
+    
+  viscull_mesh = IDRefProperty(name="Viscull Mesh", idtype='OBJECT', poll=make_poll('viscull'), select=make_select('viscull'), unselect=make_unselect('viscull'))
+  collission_mesh = IDRefProperty(name="Collission Mesh", idtype='OBJECT', poll=make_poll('collission'), select=make_select('collission'), unselect=make_unselect('collission'))
+  shadow_mesh = IDRefProperty(name="Shadow Mesh", idtype='OBJECT', poll=make_poll('shadow'), select=make_select('shadow'), unselect=make_unselect('shadow'))
+
 

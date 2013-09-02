@@ -1015,42 +1015,48 @@ bpy.types.Object.GetBBoxSize = GetBBoxSize
 
 
 
-def GetVisCullMesh (self):
+def GetTriangleMesh (self, id):
+  '''
+  id is one of
+  - viscull
+  - collission
+  - shadow
+  '''
   for ob in bpy.data.objects:
     for contraint in ob.constraints:
-      if contraint.IsVisCullConstraint() and contraint.target==self:
+      if contraint.GetConstraintType() == id and contraint.target==self:
         return ob
         
   return None
 
-bpy.types.Object.GetVisCullMesh = GetVisCullMesh
+bpy.types.Object.GetTriangleMesh = GetTriangleMesh
 
 
-def IsVisCullMesh (self):
+def IsTriangleMesh (self):
   for contraint in self.constraints:
-    if contraint.IsVisCullConstraint():
+    if contraint.GetConstraintType():
       return True
   return False
   
-bpy.types.Object.IsVisCullMesh = IsVisCullMesh
+bpy.types.Object.IsTriangleMesh = IsTriangleMesh
 
 
-def MakeThisAVisCullMesh (self, target):
+def MakeThisATriangleMesh (self, id, target):
   constraint = self.constraints.new('COPY_TRANSFORMS')
-  constraint.name = 'viscull'
+  constraint.name = id
   constraint.target = target
   self.draw_type = 'WIRE'
         
   return None
 
-bpy.types.Object.MakeThisAVisCullMesh = MakeThisAVisCullMesh
+bpy.types.Object.MakeThisATriangleMesh = MakeThisATriangleMesh
 
-def UnMakeThisAVisCullMesh (self):
+def UnMakeThisATriangleMesh (self, id):
   for constraint in self.constraints:
-    if constraint.IsVisCullConstraint():
+    if constraint.GetConstraintType() == id:
       self.constraints.remove(constraint)
   self.draw_type = 'TEXTURED'
         
   return None
 
-bpy.types.Object.UnMakeThisAVisCullMesh = UnMakeThisAVisCullMesh
+bpy.types.Object.UnMakeThisATriangleMesh = UnMakeThisATriangleMesh

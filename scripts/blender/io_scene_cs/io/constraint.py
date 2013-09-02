@@ -1,9 +1,12 @@
 import bpy
 
-def IsVisCullConstraint (self):
-  return self.type=='COPY_TRANSFORMS' and self.name.startswith('viscull')
+def GetConstraintType (self):
+  if self.type=='COPY_TRANSFORMS':
+    return self.name.split('.')[0]
+  else:
+    return None
 
-bpy.types.Constraint.IsVisCullConstraint = IsVisCullConstraint
+bpy.types.Constraint.GetConstraintType = GetConstraintType
 
 
 
