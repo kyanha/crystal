@@ -253,15 +253,28 @@ void RenderView::SetFrustumFromBox (const csBox2& box)
   float rx_n = csClamp (box.MaxX() * iw - 1.0f, 1.0f, -1.0f);
   float ty_n = csClamp (box.MinY() * ih - 1.0f, 1.0f, -1.0f);
   float by_n = csClamp (box.MaxY() * ih - 1.0f, 1.0f, -1.0f);
- 
+
   CS::Math::Matrix4 invMatrix_inv_t =
     ctxt->icamera->GetProjectionMatrix().GetTranspose();
+
+  // Try to extract 'farz' parameter from matrix
+  /* @@@ It works for CS projections (it's actually the _near_ clipping
+   * distance there)... but also for ortho projections? */
+  float farz;
+  {
+    float aspect = (invMatrix_inv_t * csVector4 (0, 0, 0, 1)) * csVector4 (1);
+    csVector4 z = (invMatrix_inv_t * csVector4 (0, 0, 1, 0));
+    z /= aspect;
+    float f1 = 1/z.w;
+    float f2 = z.z/z.w;
+    farz = f1-f2;
+  }
 
   int n = 0;
   csPlane3 *frustum = ctxt->frustum;
   csPlane3 p;
   // Back plane
-  p.Set (0, 0, -1, 1);
+  p.Set (0, 0, -1, farz);
   frustum[n] = invMatrix_inv_t * p;
   frustum[n].Normalize();
 
