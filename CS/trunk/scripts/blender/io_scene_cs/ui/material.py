@@ -135,20 +135,25 @@ class CrystalSpaceSettingsMaterial(PropertyGroup):
 
 @settings(type='Material', attribute='water')
 class CrystalSpaceSettingsMaterial(PropertyGroup):            
-  water_fog_color = bpy.props.StringProperty(
+  water_fog_color = bpy.props.FloatVectorProperty(
             name="Water Fog Color",
             description="Fog color inside the water surface",
-            default='0,0.1,0.15,1')
+            subtype='COLOR',
+            size=4,
+            default=(0,0.1,0.15,1)
+            )
             
   water_fog_density = bpy.props.FloatProperty(
             name="Water Fog Density",
             description="Fog density inside the water surface",
             default=3.0)
-            
-  water_perturb_scale = bpy.props.StringProperty(
+           
+  water_perturb_scale = bpy.props.FloatVectorProperty(
             name="Water Perturb Scale",
             description="Fog perturb scale",
-            default='0.9,0.9,0,0')
-        
+            subtype='TRANSLATION',
+            size=4,
+            default=(0.9,0.9,0,0))
+    
 
 

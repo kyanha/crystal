@@ -25,6 +25,15 @@ def settings(type, attribute="b2cs"):
     return klass
   return decorator
 
+def append_draw(type):
+  '''
+  Decorator for appending drawing custom layouts on panel
+  Automatically (un)registers in blender
+  '''
+  def decorator(func):
+    PEND_DRAWS.append(('append', func, type))
+    return func
+  return decorator
 
 def prepend_draw(type):
   '''
@@ -32,14 +41,14 @@ def prepend_draw(type):
   Automatically (un)registers in blender
   '''
   def decorator(func):
-    PREPEND_DRAWS.append((func, type))
+    PEND_DRAWS.append(('prepend', func, type))
     return func
   return decorator
 
 
 
 PROPERTYGROUPS = []
-PREPEND_DRAWS = []
+PEND_DRAWS = []
   
 def _register():
   for klass, type, attribute in PROPERTYGROUPS:
@@ -49,9 +58,9 @@ def _register():
     p = bpy.props.PointerProperty(type=klass)
     setattr(t, attribute, p)
     
-  for func, type in PREPEND_DRAWS:
+  for pend, func, type in PEND_DRAWS:
     t = getattr(bpy.types, type)
-    t.prepend(func)
+    getattr(t, pend)(func)
     
 
 def _unregister():

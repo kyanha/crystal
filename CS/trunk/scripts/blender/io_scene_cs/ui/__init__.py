@@ -1,6 +1,6 @@
 __all__ = ["data", "group", "object", "image", "material", "portal", "lamp", "modifier", "scene", "render", "renderlayer"]
 
-
+from . import idref
 from . import data
 from . import group
 from . import object

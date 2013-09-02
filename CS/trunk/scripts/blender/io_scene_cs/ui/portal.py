@@ -14,7 +14,7 @@ class csPortalPanel():
   @classmethod
   def poll(cls, context):
     ob = bpy.context.active_object
-    r = (ob and ob.type == 'MESH' and ob.data and not ob.b2cs.csFactRef and not ob.IsVisCullMesh())
+    r = (ob and ob.type == 'MESH' and ob.data and not ob.b2cs.csFactRef and not ob.IsTriangleMesh())
     rd = context.scene.render
     return r and (rd.engine in cls.COMPAT_ENGINES)
 
