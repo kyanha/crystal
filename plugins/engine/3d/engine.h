@@ -238,7 +238,6 @@ class csEngine : public ThreadedCallable<csEngine>,
   // friends
   friend class CS_PLUGIN_NAMESPACE_NAME(Engine)::csLight;
   friend class csLightIt;
-  friend class csRenderLoop;
   friend class csSectorList;
 
 public:
