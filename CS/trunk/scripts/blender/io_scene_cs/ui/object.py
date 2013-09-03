@@ -59,8 +59,8 @@ class OBJECT_PT_csFactoryRef(csObjectPanel, bpy.types.Panel):
       
       layout.template_object_ref(ob.b2cs, 'viscull_mesh', name='Viscull mesh')
       
-      if ob.game.use_collision_bounds and ob.game.collision_bounds_type=='TRIANGLE_MESH':
-        layout.template_object_ref(ob.b2cs, 'collission_mesh', name='Collision mesh')
+      #if ob.game.use_collision_bounds and ob.game.collision_bounds_type=='TRIANGLE_MESH':
+      #  layout.template_object_ref(ob.b2cs, 'collission_mesh', name='Collision mesh')
         
       if not ob.data.b2cs.no_shadow_cast:
         layout.template_object_ref(ob.b2cs, 'shadow_mesh', name='Shadow mesh')
@@ -99,8 +99,8 @@ def PHYSICS_PT_game_physics_prepend_draw(self, context):
 def PHYSICS_PT_game_collision_bounds_prepend_draw(self, context):  
   ob = context.active_object
   layout = self.layout
-  if ob.game.use_collision_bounds and ob.game.collision_bounds_type=='TRIANGLE_MESH':
-    layout.template_object_ref(ob.b2cs, 'collission_mesh', name='Collision mesh')
+  #if ob.game.use_collision_bounds and ob.game.collision_bounds_type=='TRIANGLE_MESH':
+  #  layout.template_object_ref(ob.b2cs, 'collission_mesh', name='Collision mesh')
 
 
 @IDRefContainer
@@ -136,7 +136,7 @@ class CrystalSpaceSettingsObject(PropertyGroup):
 
     
   viscull_mesh = IDRefProperty(name="Viscull Mesh", idtype='OBJECT', poll=make_poll('viscull'), select=make_select('viscull'), unselect=make_unselect('viscull'))
-  collission_mesh = IDRefProperty(name="Collission Mesh", idtype='OBJECT', poll=make_poll('collission'), select=make_select('collission'), unselect=make_unselect('collission'))
   shadow_mesh = IDRefProperty(name="Shadow Mesh", idtype='OBJECT', poll=make_poll('shadow'), select=make_select('shadow'), unselect=make_unselect('shadow'))
+  #collission_mesh = IDRefProperty(name="Collission Mesh", idtype='OBJECT', poll=make_poll('collission'), select=make_select('collission'), unselect=make_unselect('collission'))
 
 

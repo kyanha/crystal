@@ -377,6 +377,112 @@ class Hierarchy:
 
 
 #======== Genmesh ==============================================================
+def ExportCollisionBoundTransform(object, func, depth=0):
+  #func(' '*depth + '<move x="0.0" y="0.065" z="0.0" />')
+  #func(' '*depth + '<rotate rotx="0.44879896" />')
+  pass
+
+def ExportCollisionBounds(object, func, depth=0):
+  '''
+  #http://wiki.blender.org/index.php/User:Sculptorjim/Game_Engine/Physics/Collision_Bounds
+  (Default)
+    For Dynamic and Static objects, it is a Triangle Mesh (see below).
+    For everything else, it is a Sphere (see below).
+  Capsule - A cylinder with hemispherical caps, like a pill.
+    Radius of the hemispheres is the greater of the x or y extent.
+    Height is the z bounds
+  Box - The x,y,z bounding box, as defined above.
+  Sphere -
+    Radius is defined by the object's scale (visible in the N properties panel) times the physics radius (can be found in Physics » Attributes » Radius.
+    Note: This is the only bounds that respects the Radius option.
+  Cylinder
+    Radius is the greater of the x or y extent.
+    Height is the z bounds.
+  Cone
+    Base radius is the greater of the x or y extent.
+    Height is the z bounds.
+  Convex Hull - Forms a shrink-wrapped, simplified geometry around the object.
+    For the math, see Wikipedia's entry on Convex Hull or Wolfram's entry on Convex Hull.
+    For a demo, see the image to the right, where we have sketched a hull around Suzanne's profile:
+  Triangle mesh - Most expensive, but most precise. Collision will happen with all of triangulated polygons, instead of using a virtual mesh to approximate that collision.
+  '''
+  
+  TYPE = 'TRIANGLE_MESH' if object.game.physics_type in ['DYNAMIC', 'STATIC'] else 'SPHERE'
+  if object.game.use_collision_bounds:
+    TYPE = object.game.collision_bounds_type
+  
+  bbox = [Vector(b) for b in object.bound_box] 
+  max_x = max_y = max_z = -9999999
+  min_x = min_y = min_z = 99999999
+  for v in bbox:
+    if max_x < v.x:
+      max_x = v.x
+    if max_y < v.y:
+      max_y = v.y
+    if max_z < v.z:
+      max_z = v.z
+    
+    if min_x > v.x:
+      min_x = v.x
+    if min_y > v.y:
+      min_y = v.y
+    if min_z > v.z:
+      min_z = v.z
+  
+  #TODO: why do i suck at math!?
+  #cone and cylinder bottoms do not align with actual object bottoms in CS
+  #needs some offset, min_z - object_origin??
+  old = object.location
+  offset = [0, 0, (old.z+min_z)]
+  
+  dimensions = [max_x-min_x, max_y-min_y, max_z-min_z]
+  print(dimensions)
+  print(old)
+  print(offset)
+  print(min_z)
+  #dimensions = object.dimensions
+  
+  func(' '*depth + '<collider>')  
+  depth = depth +2
+  func(' '*depth + '<!-- dimensions: %s %s  %s -->'%(TYPE, str(dimensions), str(offset)))
+  if TYPE == 'CAPSULE':
+    rad = max(dimensions[0], dimensions[1])/2.0
+    height = dimensions[2]
+    func(' '*depth + '<capsule length="%f" radius="%f">'%(height, rad))
+    #ExportCollisionBoundTransform(object, func, depth+1)
+    func(' '*depth + '</capsule>')
+  elif TYPE == 'BOX':
+    func(' '*depth + '<box x="%f" y="%f" z="%f">'%(dimensions[0], dimensions[2], dimensions[1]))
+    #ExportCollisionBoundTransform(object, func, depth+1)
+    func(' '*depth + '</box>')
+  elif TYPE == 'SPHERE':
+    #TODO: does not do what it says above
+    rad = max(max(dimensions[0], dimensions[1]), dimensions[2])/2.0
+    func(' '*depth + '<sphere radius="%f">'%(rad))
+    #ExportCollisionBoundTransform(object, func, depth+1)
+    func(' '*depth + '</sphere>')
+  elif TYPE == 'CYLINDER':
+    rad = max(dimensions[0], dimensions[1])/2.0
+    height = dimensions[2]
+    func(' '*depth + '<cylinder length="%f" radius="%f">'%(height, rad))
+    ExportCollisionBoundTransform(object, func, depth+1)
+    func(' '*depth + '</cylinder>')
+  elif TYPE == 'CONE':
+    rad = max(dimensions[0], dimensions[1])/2.0
+    height = dimensions[2]
+    func(' '*depth + '<cone length="%f" radius="%f">'%(height, rad))
+    ExportCollisionBoundTransform(object, func, depth+1)
+    func(' '*depth + '<move x="%f" y="%f" z="%f" />'%(offset[0], offset[2], offset[1]))
+    func(' '*depth + '<rotate><rotx>1.57</rotx></rotate>')
+    func(' '*depth + '</cone>')
+  elif TYPE == 'CONVEX_HULL':
+    func(' '*depth + '<convexmesh />')
+  elif TYPE == 'TRIANGLE_MESH':
+    func(' '*depth + '<concave />')
+
+  depth = depth -2
+  func(' '*depth + '</collider>')
+
 
 def AsCSGenmeshLib(self, func, depth=0, **kwargs):
   """ Write an xml description of this mesh as a CS general mesh factory
@@ -450,9 +556,7 @@ def AsCSGenmeshLib(self, func, depth=0, **kwargs):
     if self.game.physics_type=='RIGID_BODY':
       mass = self.game.mass
       func(' '*depth + '   <rigidbody mass="%f" friction="1.0" elasticity="0.8">'%(mass)) #TODO
-      func(' '*depth + '     <collider>')
-      func(' '*depth + '       <convexmesh />')
-      func(' '*depth + '     </collider>')
+      ExportCollisionBounds(self, func, depth+5)
       func(' '*depth + '   </rigidbody>')
       
     elif self.game.physics_type=='SOFT_BODY':
@@ -683,7 +787,7 @@ def IsExportable(self):
                (ob.parent.type=='MESH' and not ob.parent.hide)
       return False
 
-    if not IsChildOfExportedFactory(self) and not self.IsVisCullMesh() \
+    if not IsChildOfExportedFactory(self) and not self.IsTriangleMesh() \
           and len(self.data.vertices)!=0 and len(self.data.all_faces)!=0:
       return True
     return False      
