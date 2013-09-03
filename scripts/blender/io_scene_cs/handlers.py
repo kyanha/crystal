@@ -12,8 +12,11 @@ def post_ob_updated(scene):
     - material editting
     '''
     ob = scene.objects.active 
+    if ob is not None and not ob.is_updated:
+      ob.data['changeToken'] = getCurrentMilliSeconds() #Constantly update changeToken of selected object, no cb when certain properties change :/
+ 
     if ob is not None and ob.is_updated: 
-        ob.data['changeToken'] = getCurrentMilliSeconds() #Flag data as changed so material changes get re-exported
+        #ob.data['changeToken'] = getCurrentMilliSeconds() #Flag data as changed so material changes get re-exported
         print("%s - Object is_updated (post)" % ob.name) 
 
 @persistent        
