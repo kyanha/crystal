@@ -433,7 +433,7 @@ def ExportCollisionBounds(object, func, depth=0):
   #cone and cylinder bottoms do not align with actual object bottoms in CS
   #needs some offset, min_z - object_origin??
   old = object.location
-  offset = [0, 0, (old.z+min_z)]
+  offset = [(min_x+max_x)*0.5, (min_y+max_y)*0.5, (min_z+max_z)*0.5]
   
   dimensions = [max_x-min_x, max_y-min_y, max_z-min_z]
   print(dimensions)
@@ -450,28 +450,32 @@ def ExportCollisionBounds(object, func, depth=0):
     height = dimensions[2]
     func(' '*depth + '<capsule length="%f" radius="%f">'%(height, rad))
     #ExportCollisionBoundTransform(object, func, depth+1)
+    func(' '*depth + '<move x="%f" y="%f" z="%f" />'%(offset[0], offset[2], offset[1]))
     func(' '*depth + '</capsule>')
   elif TYPE == 'BOX':
     func(' '*depth + '<box x="%f" y="%f" z="%f">'%(dimensions[0], dimensions[2], dimensions[1]))
     #ExportCollisionBoundTransform(object, func, depth+1)
+    func(' '*depth + '<move x="%f" y="%f" z="%f" />'%(offset[0], offset[2], offset[1]))
     func(' '*depth + '</box>')
   elif TYPE == 'SPHERE':
     #TODO: does not do what it says above
     rad = max(max(dimensions[0], dimensions[1]), dimensions[2])/2.0
     func(' '*depth + '<sphere radius="%f">'%(rad))
     #ExportCollisionBoundTransform(object, func, depth+1)
+    func(' '*depth + '<move x="%f" y="%f" z="%f" />'%(offset[0], offset[2], offset[1]))
     func(' '*depth + '</sphere>')
   elif TYPE == 'CYLINDER':
     rad = max(dimensions[0], dimensions[1])/2.0
     height = dimensions[2]
     func(' '*depth + '<cylinder length="%f" radius="%f">'%(height, rad))
-    ExportCollisionBoundTransform(object, func, depth+1)
+    #ExportCollisionBoundTransform(object, func, depth+1)
+    func(' '*depth + '<move x="%f" y="%f" z="%f" />'%(offset[0], offset[2], offset[1]))
     func(' '*depth + '</cylinder>')
   elif TYPE == 'CONE':
     rad = max(dimensions[0], dimensions[1])/2.0
     height = dimensions[2]
     func(' '*depth + '<cone length="%f" radius="%f">'%(height, rad))
-    ExportCollisionBoundTransform(object, func, depth+1)
+    #ExportCollisionBoundTransform(object, func, depth+1)
     func(' '*depth + '<move x="%f" y="%f" z="%f" />'%(offset[0], offset[2], offset[1]))
     func(' '*depth + '<rotate><rotx>1.57</rotx></rotate>')
     func(' '*depth + '</cone>')
