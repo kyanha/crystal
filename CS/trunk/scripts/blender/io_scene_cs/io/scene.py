@@ -78,12 +78,15 @@ def GetExportableTopLevelObjects(scene):
       
 bpy.types.Scene.exportable_toplevel_objects = property(GetExportableTopLevelObjects)
 
+def HasBulletPhysicsEnabled(self):
+  return self.game_settings.physics_engine=='BULLET'
 
+bpy.types.Scene.HasBulletPhysicsEnabled = HasBulletPhysicsEnabled
 
 def ScenePhysicsAsCS(self, func, depth=0):
   
   engine = None
-  if self.game_settings.physics_engine=='BULLET':
+  if self.HasBulletPhysicsEnabled():
     engine = 'crystalspace.physics.bullet'
       
   if engine:

@@ -6,7 +6,7 @@ def CameraAsCS (self, func, depth, scene):
   """ Export camera as a CS start location of current scene;
       if no camera is defined, set a default start position
   """
-  if self == bpy.types.Object:
+  if self == None:
     # Set a default camera if none was found in current scene
     func(' '*depth +'<start name="Camera">')
     func(' '*depth +'  <sector>%s</sector>'%(scene.uname))

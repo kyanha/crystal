@@ -89,7 +89,7 @@ def PHYSICS_PT_game_physics_prepend_draw(self, context):
     ob = context.active_object
     layout = self.layout
     row = layout.row()
-    if ob.game.physics_type in ['RIGID_BODY', 'SOFT_BODY']:
+    if ob.hasSupportedPhysicsEnabled():
       row.label(text="Physics type supported in CS", icon='INFO')
     else:
       row.label(text="Physics type not supported in CS", icon='ERROR')

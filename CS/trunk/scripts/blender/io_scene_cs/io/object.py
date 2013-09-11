@@ -555,7 +555,7 @@ def AsCSGenmeshLib(self, func, depth=0, **kwargs):
   
   #physics
   print("physics %s"%(self.game.physics_type))
-  if self.game.physics_type in ['RIGID_BODY', 'SOFT_BODY']:
+  if self.hasSupportedPhysicsEnabled(): #and bpy.context.scene.HasBulletPhysicsEnabled():
     func(' '*depth + ' <addon plugin="crystalspace.physics.loader">')
     if self.game.physics_type=='RIGID_BODY':
       mass = self.game.mass
@@ -1168,3 +1168,11 @@ def UnMakeThisATriangleMesh (self, id):
   return None
 
 bpy.types.Object.UnMakeThisATriangleMesh = UnMakeThisATriangleMesh
+
+
+
+
+def hasSupportedPhysicsEnabled (self):
+  return self.game.physics_type in ['RIGID_BODY', 'SOFT_BODY']
+
+bpy.types.Object.hasSupportedPhysicsEnabled = hasSupportedPhysicsEnabled
