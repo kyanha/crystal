@@ -15,7 +15,35 @@ other contexts of the @samp{Properties} window, they will be presented later.
 
 The panel is composed of several buttons and controls to configure and run the exporter:
 
+
+@subsubheading The buttons
 @itemize @bullet
+@item
+@strong{Export}: Exports the current file
+@item
+@strong{Play}: Exports the current file and run it with @samp{walktest}
+@item
+@strong{View}: Export the active object and view it with @samp{viewmesh}, pressing the button again will refresh the viewmesh view,
+so leave it open and running on a second monitor or something.
+@end itemize
+
+@subsubheading The checkboxes
+@itemize @bullet
+@item
+@strong{Console}: enable the @code{-console} flag of @samp{walktest}
+@item
+@strong{Verbose}: enable the @code{-verbose=-scf} flag of @samp{walktest}
+@item
+@strong{Silent}: enable the @code{-silent} flag of @samp{walktest}
+@item
+@strong{Bugplug}: enable the @code{-plugin=bugplug} flag of @samp{walktest}
+@end itemize
+
+@subsubheading Further options
+@itemize @bullet
+@item
+@strong{Export only current scene}: Export only the current scene, handy if you have many scenes
+and want to keep export time low for quick test runs.
 @item
 @strong{Export as a CS library}: whether the scene should be exported as a @samp{library}
 or a @samp{world} file.
@@ -30,19 +58,8 @@ whatever their specific setting.
 @strong{Default Export Path}: path to the folder where the generated files will be put.
 Its default value is defined by the user preferences associated with the add-on
 (cf. section @ref{io_scene_cs Installing, Enabling the add-on})
-@item
-@strong{Export}: export the scene to the specified path.
-@item
-@strong{Export and Run}: export the scene then run it in Crystal Space's @samp{walktest}.
-@item
-@strong{Console}: enable the @code{-console} flag of @samp{walktest}
-@item
-@strong{Verbose}: enable the @code{-verbose=-scf} flag of @samp{walktest}
-@item
-@strong{Silent}: enable the @code{-silent} flag of @samp{walktest}
-@item
-@strong{Bugplug}: enable the @code{-plugin=bugplug} flag of @samp{walktest}
 @end itemize
+
 
 If the @samp{CRYSTAL} environment variable is not defined or pointing to a directory
 containing the @samp{walktest} application, then most of these controls are not present and
@@ -64,6 +81,9 @@ following:
 @itemize @bullet
 @item
 a @file{world} file containing your scene (i.e. all sectors) is created at the root
+of the export directory
+@item
+a @file{materials} file containing all shared material and texture references is created at the root
 of the export directory
 @item
 a @file{textures} directory is created in the export directory, and all texture files are
@@ -96,9 +116,9 @@ viewmesh -R=<export_path> factories/<library_file>
 @end example
 
 
-@heading The 'Export and Run' button
+@heading The 'Play' button
 
-This button allows the user to either launch the export process and view the result in
+This button allows the user to launch the export process and view the result in
 the @ref{Walktest, @samp{walktest}} application.
 
 In order to work correctly, your scene needs:
@@ -113,7 +133,7 @@ some visible objects below the camera, to be used as a floor and in order for th
 camera to not fall into the void as soon as you start the map.
 @end itemize
 
-Once clicked on the @strong{Export and Run} button, the export process will start until
+Once clicked on the @strong{Play} button, the export process will start until
 the status message: @strong{EXPORTING complete} appears on the Blender console. Shortly
 after that, the @samp{walktest} window should appear (otherwise, check the Blender console
 for some output message).
@@ -149,6 +169,15 @@ If you made a cube surrounding the player this usually means you need to reverse
 normals (in Blender and in Edit mode, press the hotkey @samp{W} then select 
 @samp{Flip Normals}).
 @end itemize
+
+
+@heading The 'View' button
+
+This button allows the user to launch the export process for a single object( 
+the active object in blender) and preview the result in the @ref{ViewMesh, @samp{viewmesh}} application.
+Reclicking this button will refresh the preview in viewmesh. So you don't have to relaunch viewmesh
+and can leave it open on a second monitor or so.
+
 
 
 @node io_scene_cs Export Scenes, io_scene_cs Export Genmesh, io_scene_cs First Steps, Blender
@@ -189,12 +218,23 @@ as the starting position in the Crystal Space scene.
 
 @subsubheading Lights
 
-All visible lamps in Blender will be exported as lights in Crystal Space. Whatever the lamp 
-type used in Blender, the lamp will be exported as a point light.
+All visible lamps in Blender will be exported as lights in Crystal Space. 
+The following types are supported:
 
-The parameters that get exported from a lamp are the distance (radius), the colour (RGB
-components) and the energy (brightness). The attenuation type and the other lamp properties
-are ignored.
+@itemize @bullet
+@item
+@strong{Point}: Exported as point light.
+Supported parameters: distance and light color
+@item
+@strong{Sun}: Exported as directional light
+Supported parameters: light color
+@item
+@strong{Spot}: Exported as spot light.
+Supported parameters: distance and light color, Spot shape: size, blend
+@end itemize
+
+All others are exported as point lights and the other lamp properties
+are ignored. 
 
 A Crystal Space panel is accessible in the @samp{Object Data} context of the @samp{Properties} window.
 A single option, @samp{No shadows}, is available: it determines whether or not this lamp can 
@@ -224,8 +264,7 @@ In addition to these Blender material properties, a dedicated panel is accessibl
 
 @picturess{content,blender,materials}
 
-Some additional options are displayed if properties @samp{Ambient} or @samp{Diffuse}
-are set to @samp{reflect_water_plane}.
+Some additional options are displayed if @samp{Shaderset} is set to @samp{water_plane}.
 
 Note the last two options in the panel, @samp{Render priority} and @samp{Z-buffer mode},
 that allows to define the @ref{HOWTO Render Priorities, rendering behavior} of the submeshes
@@ -236,6 +275,8 @@ Most other Blender material properties are not exported, such as the mirror prop
 the subsurface scattering, the shadows, etc. Also, materials using the
 @url{http://wiki.blender.org/index.php/Doc:2.6/Manual/Composite_Nodes, node composition system}
 of Blender are not supported at all.
+
+
 
 @node io_scene_cs Export Genmesh, io_scene_cs Export Animesh, io_scene_cs Export Scenes, Blender
 @subsection Exporting Static Meshes
