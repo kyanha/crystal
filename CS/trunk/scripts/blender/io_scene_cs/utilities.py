@@ -70,7 +70,7 @@ def _unregister():
     t = getattr(bpy.types, type)
     delattr(t, attribute)
     
-  for func, type in PREPEND_DRAWS:
+  for pend, func, type in PEND_DRAWS:
     t = getattr(bpy.types, type)
     t.remove(func)
 
