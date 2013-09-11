@@ -147,7 +147,7 @@ def ExportWorld(path):
     ExportCameras(Write(f), 2, cameras)
   else:
     # Set a default camera if none is defined
-    bpy.types.Object.CameraAsCS(Write(f), 2)
+    bpy.types.Object.CameraAsCS(None, Write(f), 2, bpy.context.scene)
 
   # Export scenes as CS sectors in the 'world' file
   print("\nEXPORT SCENES:")

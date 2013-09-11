@@ -26,6 +26,12 @@ class RENDER_PT_csSettingsPanel(csSettingsPanel, bpy.types.Panel):
   def draw(self, context):
     layout = self.layout
     
+    physics = False
+    for object in bpy.data.objects:
+      if object.hasSupportedPhysicsEnabled():
+        physics = True
+        break
+    
     
     rd = context.scene.render
     row = layout.row(align=True)
@@ -40,6 +46,9 @@ class RENDER_PT_csSettingsPanel(csSettingsPanel, bpy.types.Panel):
         row.prop(GetPreferences(), "verbose")
         row.prop(GetPreferences(), "silent")
         row.prop(GetPreferences(), "bugplug")
+        if physics:
+          gs = context.scene.game_settings
+          layout.prop(gs, "physics_engine", text="Physics Engine")
       else:
         row.label(text="'walktest' isn't available!")
     
@@ -98,11 +107,20 @@ class B2CS_OT_export_run(bpy.types.Operator):
     #print(output)
     
     import shlex, subprocess
-    print(WalkTestPath())
-    args = shlex.split(WalkTestPath() + options + exportPath)
-    print(args)
-    output = subprocess.call(args)
-    print(output)
+    
+    if not context.scene.HasBulletPhysicsEnabled():
+      print(WalkTestPath())
+      args = shlex.split(WalkTestPath() + options + exportPath)
+      print(args)
+      output = subprocess.call(args)
+      print(output)
+    else:
+      exe = WalkTestPath().replace('walktest', 'phystut2')
+      
+      args = shlex.split(exe + options + '--mapfile='+exportPath+'world')
+      print(args)
+      output = subprocess.call(args)
+      print(output)
 
     return {'FINISHED'}
 
