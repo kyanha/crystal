@@ -187,8 +187,6 @@ csPtr<iVehicle> PhysDemo::CreateVehicle ()
 
 void PhysDemo::MoveActorVehicle ()
 {
-  // actorVehicle != nullptr
-
   // Steering
   float steering = 0.0f;
 
@@ -198,74 +196,61 @@ void PhysDemo::MoveActorVehicle ()
   if (kbd->GetKeyState (KeyRight) || kbd->GetKeyState (CSKEY_RIGHT))
     steering += steeringIncrement;
 
-  actorVehicle->Steer (0, steering);
+  vehicle->Steer (0, steering);
 
   // Acceleration
   if (kbd->GetKeyState (KeyForward) || kbd->GetKeyState (CSKEY_UP))
-    actorVehicle->SetEngineForce (engineForce);
+    vehicle->SetEngineForce (engineForce);
 
   else 
   {
     // do nothing because engine force is resetted automatically
-    //actorVehicle->SetEngineForce (actorVehicle->GetEngineForce () * .99);
+    //vehicle->SetEngineForce (vehicle->GetEngineForce () * .99);
   }
 
   if (kbd->GetKeyState (KeyBackward) || kbd->GetKeyState (CSKEY_DOWN))
   {
     // Backward
-    actorVehicle->SetEngineForce (-engineForce / 10);
+    vehicle->SetEngineForce (-engineForce / 10);
   }
 
   if (kbd->GetKeyState (KeyHandbrake))
   {
     // Apply the handbrake (which is the first brake that has been added to the vehicle).
-    actorVehicle->Brake (0);
-  }
-}
-
-void PhysDemo::UpdateVehiclePassengers ()
-{
-  if (actorVehicle)
-  {
-    csOrthoTransform trans (player.GetObject ()->GetTransform ());
-    trans.SetOrigin (actorVehicle->GetTransform ().GetOrigin () + VehicleActorPos);
-    player.GetObject ()->SetTransform (trans);
+    vehicle->Brake (0);
   }
 }
 
 void PhysDemo::EnterTargetVehicle ()
 {
-  iVehicle* vehicle = GetTargetVehicle ();
+  vehicle = GetTargetVehicle ();
   if (!vehicle) return;
-
+/*
   // actor should not physically interact anymore, since in this simple scene, it penetrates the chassis
   if (player.GetObject ()->QueryPhysicalBody () && player.GetObject ()->QueryPhysicalBody ()->QueryRigidBody ())
   {
     player.GetObject ()->QueryPhysicalBody ()->QueryRigidBody ()->SetState (STATE_KINEMATIC);
   }
-  //player.GetObject ()->SetCollisionGroup ("None");
-
-  // switch to 3rd person mode
-  cameraMode = CameraMode3rdPersonFar;
-
-  // set vehicle
-  actorVehicle = vehicle; 
+*/
+  // Attach the camera to the vehicle's body
+  UpdateActorMode (ActorModeNone);
+  vehicle->SetAttachedCamera (view->GetCamera ());
 }
 
 void PhysDemo::LeaveCurrentVehicle ()
 {
-  iVehicle* vehicle = actorVehicle;
   if (!vehicle) return;
-
+/*
   // reset actor
   if (player.GetObject ()->QueryPhysicalBody () && player.GetObject ()->QueryPhysicalBody ()->QueryRigidBody ())
   {
     player.GetObject ()->QueryPhysicalBody ()->QueryRigidBody ()->SetState (STATE_DYNAMIC);
   }
   //player.GetObject ()->SetCollisionGroup ("Default");
-  
-  // unset vehicle
-  actorVehicle = nullptr;
+  */
+
+  vehicle->SetAttachedCamera (nullptr);
+  UpdateActorMode (ActorModePhysical);
   
   // Move and accelerate actor:
   iCollisionObject* actorObj = player.GetObject ();
@@ -299,6 +284,8 @@ void PhysDemo::LeaveCurrentVehicle ()
     // nothing happens
   }
 
+  // Unset the current vehicle
+  vehicle = nullptr;
 }
 
 void PhysDemo::SpawnVehicle ()
@@ -324,7 +311,7 @@ void PhysDemo::DeleteTargetVehicle ()
   if (!vehicle) return;
 
   // Remove from world
-  if (vehicle == actorVehicle)
+  if (vehicle == this->vehicle)
   {
     LeaveCurrentVehicle ();
   }

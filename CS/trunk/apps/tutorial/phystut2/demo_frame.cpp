@@ -60,14 +60,12 @@ void PhysDemo::Frame ()
   // Update the demo's state information
   UpdateHUD ();
 
-  // Simulate one step
-  physicalSystem->Step (vc->GetElapsedSeconds ());
-
+  // Update the actor
   if (actorMode != ActorModeNoclip)
   {
     if (!paused)
     {
-      if (actorVehicle)
+      if (vehicle)
       {
 	// Update vehicle
 	MoveActorVehicle ();
@@ -78,16 +76,10 @@ void PhysDemo::Frame ()
 	MoveActor ();
       }
     }
-
-    // Update passengers of all vehicles (this should probably be assisted by the physics plugin)
-    UpdateVehiclePassengers ();
   }
 
-  // Update position of an object currently dragged by the mouse
+  // Update the position of the object currently dragged by the mouse
   UpdateDragging ();
-
-  // Weird and irritating stuff...
-  ApplyGhostSlowEffect ();
 
   // Default behavior from DemoApplication
   DemoApplication::Frame ();
@@ -179,13 +171,13 @@ void PhysDemo::UpdateHUD ()
   hudManager->GetStateDescriptions ()->Empty ();
   csString txt;
 
-  if (actorVehicle
+  if (vehicle
       || (player.GetObject () && player.GetObject ()->QueryPhysicalBody ()))
   {
     float speed;
-    if (actorVehicle)
+    if (vehicle)
     {
-      speed = actorVehicle->GetSpeedKMH ();
+      speed = vehicle->GetSpeedKMH ();
     }
     else
     {
