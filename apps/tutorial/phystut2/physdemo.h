@@ -16,7 +16,6 @@
     License along with this library; if not, write to the Free
     Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
-
 #ifndef __PHYSTUT2_H__
 #define __PHYSTUT2_H__
 
@@ -67,14 +66,6 @@ enum PhysDemoLevel
   PhysDemoLevelPortals,
   PhysDemoLevelTerrain,
   PhysDemoLevelCastle
-};
-
-enum CameraMode
-{
-  CameraMode1stPerson,
-  CameraMode3rdPerson,
-  CameraMode3rdPersonFar,
-  CameraModeCount
 };
 
 // Navigation input keys
@@ -174,7 +165,6 @@ public:
   CS::Physics::DebugMode debugMode;
   float moveSpeed, turnSpeed;
   ActorMode actorMode;
-  CameraMode cameraMode;
 
   Agent player;
   Item* selectedItem;
@@ -200,7 +190,7 @@ public:
   csRef<iTerrainModifier> terrainMod;
 
   // Vehicles
-  csRef<CS::Physics::iVehicle> actorVehicle;
+  csRef<CS::Physics::iVehicle> vehicle;
 
   // Static environment
   csString currentMap;
@@ -290,47 +280,56 @@ public:
   /**
    * The location of the actor's head, i.e. the location of the camera
    */
-  csVector3 GetActorPos () const { return player.GetObject ()->GetTransform ().GetOrigin (); }
+  csVector3 GetActorPos () const
+  { return player.GetObject ()->GetTransform ().GetOrigin (); }
 
   /**
    * The location where the actor stands
    */
-  csVector3 GetActorFeetPos () const { return GetActorPos () - csVector3 (0, .5f * ActorDimensions.y, 0); }
+  csVector3 GetActorFeetPos () const
+  { return GetActorPos () - csVector3 (0, .5f * ActorDimensions.y, 0); }
 
   /**
    * Position of the camera
    */
-  csVector3 GetCameraPosition () const { return view->GetCamera ()->GetTransform ().GetOrigin (); }
+  csVector3 GetCameraPosition () const
+  { return view->GetCamera ()->GetTransform ().GetOrigin (); }
 
   /**
    * Normalized direction of the camera
    */
-  csVector3 GetCameraDirection () const { return view->GetCamera ()->GetTransform ().GetT2O () * csVector3 (0, 0, 1); }
+  csVector3 GetCameraDirection () const
+  { return view->GetCamera ()->GetTransform ().GetT2O () * csVector3 (0, 0, 1); }
 
   /**
    * Normalized direction of the camera, but in the same XZ plane (ignoring vertical direction of the camera)
    */
-  csVector3 GetCameraDirectionXZ () const { csVector3 dist = view->GetCamera ()->GetTransform ().GetT2O () * csVector3 (0, 0, 1); dist.y = 0; dist.Normalize (); return dist; }
+  csVector3 GetCameraDirectionXZ () const
+  { csVector3 dist = view->GetCamera ()->GetTransform ().GetT2O () * csVector3 (0, 0, 1); dist.y = 0; dist.Normalize (); return dist; }
 
   /**
    * Point in the given distance in front of the camera
    */
-  csVector3 GetPointInFront (float distance) const { return GetActorPos () + (GetCameraDirection () * distance); }
+  csVector3 GetPointInFront (float distance) const
+  { return GetActorPos () + (GetCameraDirection () * distance); }
 
   /**
    * Point in the given distance in front of the actor's feet
    */
-  csVector3 GetPointInFrontOfFeet (float distance) const { return GetActorFeetPos () + (GetCameraDirection () * distance); }
+  csVector3 GetPointInFrontOfFeet (float distance) const
+  { return GetActorFeetPos () + (GetCameraDirection () * distance); }
 
   /**
    * Point in the given distance in front of the camera, but in the same XZ plane (ignoring vertical direction of the camera)
    */
-  csVector3 GetPointInFrontXZ (float distance) const { return GetActorPos () + (GetCameraDirectionXZ () * distance); }
+  csVector3 GetPointInFrontXZ (float distance) const
+  { return GetActorPos () + (GetCameraDirectionXZ () * distance); }
 
   /**
    * Point in the given distance in front of the camera, but in the same XZ plane (ignoring vertical direction of the camera)
    */
-  csVector3 GetPointInFrontOfFeetXZ (float distance) const { return GetActorFeetPos () + (GetCameraDirectionXZ () * distance); }
+  csVector3 GetPointInFrontOfFeetXZ (float distance) const
+  { return GetActorFeetPos () + (GetCameraDirectionXZ () * distance); }
 
   /// Find the ground contact point beneath pos
   bool GetPointOnGroundBeneathPos (const csVector3& pos, csVector3& groundPos) const;
@@ -404,8 +403,6 @@ public:
 
   void MoveActor ();
   void MoveActorVehicle ();
-
-  void UpdateVehiclePassengers ();
 
   void UpdateDragging ();
 

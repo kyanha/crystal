@@ -15,7 +15,6 @@
     License along with this library; if not, write to the Free
     Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
-
 #include "cssysdef.h"
 #include "csgeom/poly3d.h"
 #include "csgeom/sphere.h"
@@ -46,7 +45,6 @@ PhysDemo::PhysDemo ()
   turnSpeed (1.6f),
   actorMode (ActorModePhysical),
   //actorMode (ActorModeNoclip),
-  cameraMode (CameraMode1stPerson),
   selectedItem (nullptr)
 {
 }
@@ -177,8 +175,6 @@ void PhysDemo::Reset ()
 
   moddedTerrainFeeder = nullptr;
   terrainMod = nullptr;
-
-  actorVehicle = nullptr;
 
   walls = nullptr;
 
@@ -321,7 +317,6 @@ void PhysDemo::SetupHUD ()
   desc.Push ("CTRL-v: paste object");
   
   desc.Push ("C: switch between actor modes (dynamic, kinematic, noclip)");
-  desc.Push ("V: switch between camera follow modes (1st person, 3rd person)");
   desc.Push ("P: pause the simulation");
   desc.Push ("O: toggle speed of simulation");
   desc.Push ("L: toggle Bullet debug display");
@@ -367,35 +362,6 @@ void PhysDemo::SetupHUD ()
 // ####################################################################################################################
 // Misc stuff
 
-
-void PhysDemo::ApplyGhostSlowEffect ()
-{
-  if (!ghostObject) return;
-
-  size_t count = ghostObject->GetContactObjectsCount ();
-  for (size_t i = 0; i < count; i++)
-  {
-    iPhysicalBody* pb = ghostObject->GetContactObject (i)->QueryPhysicalBody ();
-    if (pb && IsDynamic (pb))
-    {
-      if (pb->QueryRigidBody ())
-      {
-        CS::Physics::iRigidBody* rb = pb->QueryRigidBody ();
-        csVector3 velo = pb->GetLinearVelocity ();
-        velo = - velo;
-        //rb->Disable ();
-        rb->SetLinearVelocity (csVector3 (.0f,.0f,.0f));
-        rb->SetAngularVelocity (csVector3 (.0f,.0f,.0f));
-      }
-      else
-      {
-        iSoftBody* sb = pb->QuerySoftBody ();
-        sb->QueryPhysicalBody ()->SetLinearVelocity (csVector3 (.0f,.0f,.0f));
-        //sb->SetLinearVelocity (csVector3 (0,0,-1.0f));
-      }
-    }
-  }
-}
 
 void PhysDemo::UpdateActorMode (ActorMode newActorMode)
 {
