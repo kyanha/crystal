@@ -23,8 +23,8 @@
 #ifndef __CS_BULLET_PHYSICS_H__
 #define __CS_BULLET_PHYSICS_H__
 
-#include "iutil/comp.h"
 #include "csutil/csobject.h"
+#include "csutil/eventhandlers.h"
 #include "csutil/hash.h"
 #include "csutil/nobjvec.h"
 #include "csutil/scf.h"
@@ -32,12 +32,18 @@
 #include "iengine/movable.h"
 #include "iengine/portal.h"
 #include "iengine/sector.h"
+#include "iutil/comp.h"
+#include "iutil/eventh.h"
+#include "iutil/eventq.h"
+#include "iutil/virtclk.h"
 #include "ivaria/collisions.h"
 #include "ivaria/reporter.h"
 #include "ivaria/physics.h"
 #include "ivaria/view.h"
 
 #include "physicsfactories.h"
+
+static const char* msgid = "crystalspace.physics.bullet";
 
 struct iSector;
 class btCollisionObject;
@@ -87,10 +93,11 @@ public:
    virtual bool GetCollisionEnabled (iCollisionGroup* other);
 };
 
-class csBulletSystem : public scfImplementationExt3<
+class csBulletSystem : public scfImplementationExt4<
   csBulletSystem, csObject,
   scfFakeInterface<CS::Collisions::iCollisionSystem>,
   CS::Physics::iPhysicalSystem, 
+  iEventHandler,
   iComponent>
 {
   friend class csBulletColliderConvexMesh;
@@ -102,6 +109,10 @@ class csBulletSystem : public scfImplementationExt3<
 
 private:
   iObjectRegistry* object_reg;
+
+  csRef<iEventQueue> eventQueue;
+  csRef<iVirtualClock> vc;
+
   btSoftBodyWorldInfo* defaultInfo;
 
   float internalScale;
@@ -134,6 +145,9 @@ public:
 
   //-- iComponent
   virtual bool Initialize (iObjectRegistry* object_reg);
+
+  //-- iEventHandler
+  bool HandleEvent (iEvent& event);
 
   //-- iCollisionSystem
   virtual CS::Physics::iPhysicalSystem* QueryPhysicalSystem ()
@@ -256,7 +270,11 @@ public:
 
   btTriangleMesh* CreateBulletTriMesh (iTriangleMesh* triMesh);
 
+  bool ReportError (const char* msg, ...);
   void ReportWarning (const char* msg, ...);
+
+  // Declare this event handler as listening to the 'LOGIC' frame phase
+  CS_EVENTHANDLER_PHASE_LOGIC (msgid);
 };
 
 }

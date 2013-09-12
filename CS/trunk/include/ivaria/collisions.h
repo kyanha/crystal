@@ -713,6 +713,10 @@ struct iCollisionSystem : public virtual iBase
   /**
    * Set the speed of the simulation, that is the time ratio that is applied
    * when updating the motion of the objects. The default value is 1.0f.
+   *
+   * If the speed is equal or lower than zero, then the simulation will not be
+   * updated anymore (unless you call manually the method
+   * CS::Physics::iPhysicalSystem::Step()).
    */
   virtual void SetSimulationSpeed (float speed) = 0;
 
