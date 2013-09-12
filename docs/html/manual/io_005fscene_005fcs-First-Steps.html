@@ -75,8 +75,39 @@ other contexts of the <samp>&lsquo;Properties&rsquo;</samp> window, they will be
 </p>
 <p>The panel is composed of several buttons and controls to configure and run the exporter:
 </p>
+
+<a name="2"></a>
+<h4 class="subsubheading"> The buttons </h4>
 <ul>
 <li>
+<strong>Export</strong>: Exports the current file
+</li><li>
+<strong>Play</strong>: Exports the current file and run it with <samp>&lsquo;walktest&rsquo;</samp>
+</li><li>
+<strong>View</strong>: Export the active object and view it with <samp>&lsquo;viewmesh&rsquo;</samp>, pressing the button again will refresh the viewmesh view,
+so leave it open and running on a second monitor or something.
+</li></ul>
+
+<a name="3"></a>
+<h4 class="subsubheading"> The checkboxes </h4>
+<ul>
+<li>
+<strong>Console</strong>: enable the <code>-console</code> flag of <samp>&lsquo;walktest&rsquo;</samp>
+</li><li>
+<strong>Verbose</strong>: enable the <code>-verbose=-scf</code> flag of <samp>&lsquo;walktest&rsquo;</samp>
+</li><li>
+<strong>Silent</strong>: enable the <code>-silent</code> flag of <samp>&lsquo;walktest&rsquo;</samp>
+</li><li>
+<strong>Bugplug</strong>: enable the <code>-plugin=bugplug</code> flag of <samp>&lsquo;walktest&rsquo;</samp>
+</li></ul>
+
+<a name="4"></a>
+<h4 class="subsubheading"> Further options </h4>
+<ul>
+<li>
+<strong>Export only current scene</strong>: Export only the current scene, handy if you have many scenes
+and want to keep export time low for quick test runs.
+</li><li>
 <strong>Export as a CS library</strong>: whether the scene should be exported as a <samp>&lsquo;library&rsquo;</samp>
 or a <samp>&lsquo;world&rsquo;</samp> file.
 </li><li>
@@ -90,26 +121,15 @@ whatever their specific setting.
 <strong>Default Export Path</strong>: path to the folder where the generated files will be put.
 Its default value is defined by the user preferences associated with the add-on
 (cf. section <a href="io_005fscene_005fcs-Installing.html#0">Enabling the add-on</a>)
-</li><li>
-<strong>Export</strong>: export the scene to the specified path.
-</li><li>
-<strong>Export and Run</strong>: export the scene then run it in Crystal Space's <samp>&lsquo;walktest&rsquo;</samp>.
-</li><li>
-<strong>Console</strong>: enable the <code>-console</code> flag of <samp>&lsquo;walktest&rsquo;</samp>
-</li><li>
-<strong>Verbose</strong>: enable the <code>-verbose=-scf</code> flag of <samp>&lsquo;walktest&rsquo;</samp>
-</li><li>
-<strong>Silent</strong>: enable the <code>-silent</code> flag of <samp>&lsquo;walktest&rsquo;</samp>
-</li><li>
-<strong>Bugplug</strong>: enable the <code>-plugin=bugplug</code> flag of <samp>&lsquo;walktest&rsquo;</samp>
 </li></ul>
+
 
 <p>If the <samp>&lsquo;CRYSTAL&rsquo;</samp> environment variable is not defined or pointing to a directory
 containing the <samp>&lsquo;walktest&rsquo;</samp> application, then most of these controls are not present and
 are replaced instead by the comment <samp>&lsquo;'walktest' isn't available!&rsquo;</samp>. See the
 <a href="HOWTO-Setting-the-CRYSTAL-environment-variable.html#0">dedicated section</a> in order to solve this.
 </p>
-<a name="2"></a>
+<a name="5"></a>
 <h2 class="heading"> The 'Export' button </h2>
 
 <p>When you click on the <strong>Export</strong> button, Blender will start working and writing
@@ -125,6 +145,9 @@ following:
 <ul>
 <li>
 a <tt>&lsquo;world&rsquo;</tt> file containing your scene (i.e. all sectors) is created at the root
+of the export directory
+</li><li>
+a <tt>&lsquo;materials&rsquo;</tt> file containing all shared material and texture references is created at the root
 of the export directory
 </li><li>
 a <tt>&lsquo;textures&rsquo;</tt> directory is created in the export directory, and all texture files are
@@ -155,10 +178,10 @@ correctly in the <a href="VFS.html#0">Virtual File System</a> of Crystal Space (
 <table><tr><td>&nbsp;</td><td><pre class="example">viewmesh -R=&lt;export_path&gt; factories/&lt;library_file&gt;
 </pre></td></tr></table>
 
-<a name="3"></a>
-<h2 class="heading"> The 'Export and Run' button </h2>
+<a name="6"></a>
+<h2 class="heading"> The 'Play' button </h2>
 
-<p>This button allows the user to either launch the export process and view the result in
+<p>This button allows the user to launch the export process and view the result in
 the <a href="Walktest.html#0"><samp>&lsquo;walktest&rsquo;</samp></a> application.
 </p>
 <p>In order to work correctly, your scene needs:
@@ -173,7 +196,7 @@ some visible objects below the camera, to be used as a floor and in order for th
 camera to not fall into the void as soon as you start the map.
 </li></ul>
 
-<p>Once clicked on the <strong>Export and Run</strong> button, the export process will start until
+<p>Once clicked on the <strong>Play</strong> button, the export process will start until
 the status message: <strong>EXPORTING complete</strong> appears on the Blender console. Shortly
 after that, the <samp>&lsquo;walktest&rsquo;</samp> window should appear (otherwise, check the Blender console
 for some output message).
@@ -182,7 +205,7 @@ for some output message).
 has a lot of different keys and options, so you may want to have a look at the
 <a href="Walktest.html#0">dedicated manual page</a> for that.
 </p>
-<a name="4"></a>
+<a name="7"></a>
 <h4 class="subsubheading"> If the 'walktest' window fails to open </h4>
 
 <ul>
@@ -191,7 +214,7 @@ Check that there are no errors in the
 <a href="http://wiki.blender.org/index.php/Doc:2.6/Manual/Interface/Window_system/Console_window">Blender console window</a>.
 </li></ul>
 
-<a name="5"></a>
+<a name="8"></a>
 <h4 class="subsubheading"> If the 'walktest' screen is kept black </h4>
 
 <ul>
@@ -211,6 +234,16 @@ If you made a cube surrounding the player this usually means you need to reverse
 normals (in Blender and in Edit mode, press the hotkey <samp>&lsquo;W&rsquo;</samp> then select 
 <samp>&lsquo;Flip Normals&rsquo;</samp>).
 </li></ul>
+
+
+<a name="9"></a>
+<h2 class="heading"> The 'View' button </h2>
+
+<p>This button allows the user to launch the export process for a single object( 
+the active object in blender) and preview the result in the <a href="ViewMesh.html#0"><samp>&lsquo;viewmesh&rsquo;</samp></a> application.
+Reclicking this button will refresh the preview in viewmesh. So you don't have to relaunch viewmesh
+and can leave it open on a second monitor or so.
+</p>
 
 
 <hr size="1">
