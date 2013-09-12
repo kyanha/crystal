@@ -33,6 +33,12 @@ struct iReporter;
 struct iSyntaxService;
 struct iEngine;
 
+class DummyBase : public scfImplementation0<DummyBase>
+{
+public:
+  DummyBase () : scfImplementationType (this) {}
+};
+
 class csPhysicsLoader2 :
   public scfImplementation2<csPhysicsLoader2, iLoaderPlugin, iComponent>
 {

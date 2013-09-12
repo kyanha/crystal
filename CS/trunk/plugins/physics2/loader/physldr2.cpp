@@ -107,12 +107,22 @@ csPtr<iBase> csPhysicsLoader2::Parse (iDocumentNode *node,
 */
     case XMLTOKEN_COLLISIONSECTOR:
     {
+      if (!collisionSystem)
+      {
+	synldr->Report (msgid, CS_REPORTER_SEVERITY_WARNING,
+			child, "No collision system while creating a collision sector");
+
+	// Ignore this collision tag and return a dummy valid result
+	csRef<iBase> base;
+	base.AttachNew (new DummyBase ());
+	return csPtr<iBase> (base);
+      }
+
       csRef<iSector> sector = scfQueryInterface<iSector> (context);
       if (!sector) 
       {
-	synldr->Report (msgid, CS_REPORTER_SEVERITY_WARNING,
-			child, "Could not create the collision sector"
-			"because the parent object is not an engine sector");
+	synldr->ReportError (msgid, child, "Could not create the collision sector"
+			     " because the parent object is not an engine sector");
 	break;
       }
 
@@ -149,9 +159,10 @@ csPtr<iBase> csPhysicsLoader2::Parse (iDocumentNode *node,
     {
       if (!collisionSystem)
       {
-	synldr->ReportError
-	  (msgid, node, "No collision system while creating a collision object factory");
-	break;
+	// Ignore this collision tag and return a dummy valid result
+	csRef<iBase> base;
+	base.AttachNew (new DummyBase ());
+	return csPtr<iBase> (base);
       }
 
       csRef<CS::Collisions::iCollisionObjectFactory> factory =
@@ -163,9 +174,10 @@ csPtr<iBase> csPhysicsLoader2::Parse (iDocumentNode *node,
     {
       if (!collisionSystem)
       {
-	synldr->ReportError
-	  (msgid, node, "No collision system while creating a ghost collision object factory");
-	break;
+	// Ignore this collision tag and return a dummy valid result
+	csRef<iBase> base;
+	base.AttachNew (new DummyBase ());
+	return csPtr<iBase> (base);
       }
 
       csRef<CS::Collisions::iCollisionObjectFactory> factory =
@@ -176,9 +188,10 @@ csPtr<iBase> csPhysicsLoader2::Parse (iDocumentNode *node,
     {
       if (!physicalSystem)
       {
-	synldr->ReportError
-	  (msgid, node, "No physical system while creating a rigid body factory");
-	break;
+	// Ignore this collision tag and return a dummy valid result
+	csRef<iBase> base;
+	base.AttachNew (new DummyBase ());
+	return csPtr<iBase> (base);
       }
 
       csRef<CS::Physics::iRigidBodyFactory> factory =
@@ -189,9 +202,10 @@ csPtr<iBase> csPhysicsLoader2::Parse (iDocumentNode *node,
     {
       if (!physicalSystem)
       {
-	synldr->ReportError
-	  (msgid, node, "No physical system while creating a soft body factory");
-	break;
+	// Ignore this collision tag and return a dummy valid result
+	csRef<iBase> base;
+	base.AttachNew (new DummyBase ());
+	return csPtr<iBase> (base);
       }
 
       csRef<CS::Physics::iSoftBodyFactory> factory =
