@@ -19,6 +19,7 @@ from io_scene_cs.utilities import GetPreferences
 from . import blenddata
 from . import object_portal
 from . import object_camera
+from . import object_terrain
 
 
 def Write(fi):

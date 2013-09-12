@@ -1,4 +1,4 @@
-__all__ = ["ui", "oi", "utilities", "engine"]
+__all__ = ["ui", "oi", "utilities", "engine", "xml"]
 
 bl_info = {
     "name": "Export Crystal Space 3D format",
@@ -22,6 +22,7 @@ if "bpy" in locals():
   imp.reload(engine)
   imp.reload(preferences)
   imp.reload(handlers)
+  imp.reload(xml)
 else:
   import os
   import bpy
@@ -32,7 +33,7 @@ else:
   from . import engine
   from . import preferences
   from . import handlers
-
+  from . import xml
 
 # Registration
 def register():

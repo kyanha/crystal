@@ -57,6 +57,9 @@ class OBJECT_PT_csFactoryRef(csObjectPanel, bpy.types.Panel):
       # Draw a checkbox to define current mesh object as a CS factory reference
       layout = self.layout
       
+      row = layout.row()
+      row.prop(ob.b2cs, "type")
+      
       layout.template_object_ref(ob.b2cs, 'viscull_mesh', name='Viscull mesh')
       
       #if ob.game.use_collision_bounds and ob.game.collision_bounds_type=='TRIANGLE_MESH':
@@ -106,6 +109,15 @@ def PHYSICS_PT_game_collision_bounds_prepend_draw(self, context):
 @IDRefContainer
 @settings(type='Object')
 class CrystalSpaceSettingsObject(PropertyGroup):
+  type = bpy.props.EnumProperty(
+            name="Object Type",
+            description="",
+            items=(
+                    ('DEFAULT', "Default", "Default"),
+                    ('TERRAIN', "Terrain", "Terrain")
+                  ),
+            default='DEFAULT')
+            
   csFactRef = bpy.props.BoolProperty(
             name="Object replaced by a CS factory object",
             description="Replace this object by a Crystal Space factory",

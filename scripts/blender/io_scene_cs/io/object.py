@@ -171,9 +171,16 @@ class Hierarchy:
       objectDeps = self.object.GetDependencies()
       use_imposter = not animesh and self.object.data.b2cs.use_imposter
       ExportMaterials(Write(fa), 2, objectDeps, use_imposter)
-    if animesh:
-      self.WriteCSAnimeshHeader(Write(fa), 2)
-    self.WriteCSMeshBuffers(Write(fa), 2, path, animesh, dontClose=False)
+
+    
+    if self.object.b2cs.type=='DEFAULT':
+      if animesh:
+        self.WriteCSAnimeshHeader(Write(fa), 2)
+      self.WriteCSMeshBuffers(Write(fa), 2, path, animesh, dontClose=False)
+    elif self.object.b2cs.type=='TERRAIN':
+      self.object.WriteCSTerrain(Write(fa), 2, path)
+    
+      
     fa.close()
     Hierarchy.exportedFactories.append(self.object.data.name)
 
