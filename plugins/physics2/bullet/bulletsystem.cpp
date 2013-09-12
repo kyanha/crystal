@@ -33,6 +33,7 @@
 #include "imesh/genmesh.h"
 #include "imesh/object.h"
 #include "imesh/objmodel.h"
+#include "iutil/evdefs.h"
 #include "iutil/objreg.h"
 #include "ivaria/view.h"
 
@@ -121,6 +122,10 @@ csBulletSystem::~csBulletSystem ()
   collisionGroups.DeleteAll ();
   delete debugDraw;
   // TODO: unregister
+
+  // Unregister from the event queue
+  if (eventQueue)
+    eventQueue->RemoveListener (this);
 }
 
 bool csBulletSystem::Initialize (iObjectRegistry* object_reg)
@@ -134,7 +139,26 @@ bool csBulletSystem::Initialize (iObjectRegistry* object_reg)
   if (!collisionSystem)
     object_reg->Register (this, "CS::Collisions::iCollisionSystem");
 
+  // Find references to the engine objects
+  vc = csQueryRegistry<iVirtualClock> (object_reg);
+  if (!vc) return ReportError ("Failed to locate virtual clock!");
+
+  eventQueue = csQueryRegistry<iEventQueue> (object_reg);
+  if (!eventQueue) return ReportError ("Failed to locate event queue!");
+
+  // Register to the event queue
+  csEventID events[2] = { csevFrame (object_reg), CS_EVENTLIST_END };
+  eventQueue->RegisterListener (this, events);
+
   return true;
+}
+
+bool csBulletSystem::HandleEvent (iEvent& event)
+{
+  if (simulationSpeed > SMALL_EPSILON)
+    Step (vc->GetElapsedSeconds ());
+
+  return false;
 }
 
 void csBulletSystem::SetSimulationSpeed (float speed)
@@ -159,7 +183,9 @@ void csBulletSystem::SetStepParameters (float timeStep,
 
 void csBulletSystem::Step (float duration)
 {
-  duration *= simulationSpeed;
+  if (simulationSpeed > SMALL_EPSILON)
+    duration *= simulationSpeed;
+
   for (size_t i = 0; i < collSectors.GetSize (); i++)
     collSectors[i]->Step (duration);
 }
@@ -648,13 +674,20 @@ btTriangleMesh* csBulletSystem::CreateBulletTriMesh (iTriangleMesh* triMesh)
   return btMesh;
 }
 
+bool csBulletSystem::ReportError (const char* msg, ...)
+{
+  va_list arg;
+  va_start (arg, msg);
+  csReportV (object_reg, CS_REPORTER_SEVERITY_ERROR, msgid, msg, arg);
+  va_end (arg);
+  return false;
+}
+
 void csBulletSystem::ReportWarning (const char* msg, ...)
 {
   va_list arg;
   va_start (arg, msg);
-  csReportV (object_reg, CS_REPORTER_SEVERITY_WARNING,
-	     "crystalspace.physics.bullet",
-	     msg, arg);
+  csReportV (object_reg, CS_REPORTER_SEVERITY_WARNING, msgid, msg, arg);
   va_end (arg);
 }
 

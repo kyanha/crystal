@@ -286,7 +286,7 @@ CS_PLUGIN_NAMESPACE_BEGIN (Bullet2)
         csPrintf (">>>> Obj setup at portal 0x%lx: 0x%lx\n", this, obj);
 #endif
 
-        // Add mesh to other sector
+        // Add the scene node to the engine sector on the other side of the portal
         iSceneNode* node = obj->GetAttachedSceneNode ();
         if (node)
         {
@@ -521,6 +521,7 @@ CS_PLUGIN_NAMESPACE_BEGIN (Bullet2)
             }
           }
         }
+
         // Remove clone from CollisionSector
         targetSector->RemoveCollisionObject (obj->portalData->OtherObject);
         obj->portalData->OtherObject = nullptr;

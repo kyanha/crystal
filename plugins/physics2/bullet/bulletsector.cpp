@@ -324,6 +324,8 @@ CS_PLUGIN_NAMESPACE_BEGIN (Bullet2)
 
   void csBulletSector::Step (float duration)
   {
+    // TODO: notify some stepping callback
+
     // Call updatable pre-steps
     for (size_t i = 0; i < updatables.GetSize (); i++)
       updatables[i]->PreStep (duration);
