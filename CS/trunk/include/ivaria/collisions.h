@@ -716,7 +716,7 @@ struct iCollisionSystem : public virtual iBase
    *
    * If the speed is equal or lower than zero, then the simulation will not be
    * updated anymore (unless you call manually the method
-   * CS::Physics::iPhysicalSystem::Step()).
+   * CS::Physics::iPhysicalSystem::StepSimulation()).
    */
   virtual void SetSimulationSpeed (float speed) = 0;
 

@@ -191,7 +191,7 @@ public:
 
   //-- iPhysicalSystem
   virtual void SetStepParameters (float timeStep, size_t maxSteps, size_t iterations);
-  virtual void Step (float duration);
+  virtual void StepSimulation (float duration);
 
   virtual void SetSoftBodyEnabled (bool enabled);
   virtual bool GetSoftBodyEnabled () const { return isSoftWorld; }
