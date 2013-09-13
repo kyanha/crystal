@@ -1398,7 +1398,7 @@ struct iPhysicalSystem : public virtual CS::Collisions::iCollisionSystem
    * is stepped automatically (unless you specified specifically to not do it through the
    * method CS::Collisions::iCollisionSystem::SetSimulationSpeed()).
    */
-  virtual void Step (float duration) = 0;
+  virtual void StepSimulation (float duration) = 0;
 
   /**
    * Set whether or not this physical system can handle soft bodies. The default

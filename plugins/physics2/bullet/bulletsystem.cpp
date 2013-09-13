@@ -156,7 +156,7 @@ bool csBulletSystem::Initialize (iObjectRegistry* object_reg)
 bool csBulletSystem::HandleEvent (iEvent& event)
 {
   if (simulationSpeed > SMALL_EPSILON)
-    Step (vc->GetElapsedSeconds ());
+    StepSimulation (vc->GetElapsedSeconds ());
 
   return false;
 }
@@ -181,7 +181,7 @@ void csBulletSystem::SetStepParameters (float timeStep,
   }
 }
 
-void csBulletSystem::Step (float duration)
+void csBulletSystem::StepSimulation (float duration)
 {
   if (simulationSpeed > SMALL_EPSILON)
     duration *= simulationSpeed;
