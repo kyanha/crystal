@@ -104,6 +104,9 @@ class CsAppBase(csPyEventHandler,CsReporterApp):
         self.g2d = self.g3d.GetDriver2D()
         self.view.SetRectangle(0, 0, self.g2d.GetWidth(), self.g2d.GetHeight ())
 	self.KeyboardDown = csevKeyboardDown(self.oreg)
+        self.MouseDown = csevMouseDown(self.oreg,0)
+        self.MouseUp = csevMouseUp(self.oreg,0)
+        self.MouseMove = csevMouseMove(self.oreg,0)
 	self.Frame = csevFrame(self.oreg)
 
     def InitEventHandler(self):
