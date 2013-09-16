@@ -605,7 +605,10 @@ def ObjectAsCS(self, func, depth=0, **kwargs):
     
   if self.type == 'MESH' and self.portal.enabled:
     self.PortalsAsCS(func, depth)
-
+    
+  elif self.type == 'MESH' and self.b2cs.type == 'TERRAIN':
+    self.TerrainAsCS(func, depth, **kwargs)
+    
   elif self.type == 'MESH':
     isValidRef = self.b2cs.csFactRef and self.b2cs.csFactoryName != '' and self.b2cs.csFactoryVfs != ''
     if self.b2cs.csFactRef and not isValidRef:
@@ -840,7 +843,6 @@ def ObjectDependencies(self, empty=None):
       materials, armatures, meshes and groups associated with it
   """
   dependencies = EmptyDependencies()  
-
   if self.type == 'ARMATURE':
     # Object with skeleton ==> 'A' type (animesh)
     if self.children:
@@ -850,21 +852,27 @@ def ObjectDependencies(self, empty=None):
       MergeDependencies(dependencies, self.GetMaterialDependencies())
 
   elif self.type == 'MESH':
-    if self.data.shape_keys:
+    if self.b2cs.type=='TERRAIN':
+      hier = Hierarchy(self, empty)
+      dependencies['F'][hier.uname] = hier
+      MergeDependencies(dependencies, self.GetTerrainMaterialDependencies())
+    elif self.data.shape_keys:
       # Mesh with morph targets ==> 'A' type (animesh)
       hier = Hierarchy(self, empty)
       print('ObjectDependencies: ', hier.uname, '-', self.uname)
       dependencies['A'][hier.uname] = hier
+      # Material of the mesh ==> 'M' type
+      # Associated textures  ==> 'T' type
+      MergeDependencies(dependencies, self.GetMaterialDependencies())
     else:
       # Mesh without skeleton neither morph target 
       # or child of a bone (attached by socket) ==> 'F' type (genmesh)
       hier = Hierarchy(self, empty)
       print('ObjectDependencies: ', hier.uname, '-', self.uname)
       dependencies['F'][hier.uname] = hier
-
-    # Material of the mesh ==> 'M' type
-    # Associated textures  ==> 'T' type
-    MergeDependencies(dependencies, self.GetMaterialDependencies())
+      # Material of the mesh ==> 'M' type
+      # Associated textures  ==> 'T' type
+      MergeDependencies(dependencies, self.GetMaterialDependencies())
 
   elif self.type == 'EMPTY':
     if self.dupli_type=='GROUP' and self.dupli_group:
