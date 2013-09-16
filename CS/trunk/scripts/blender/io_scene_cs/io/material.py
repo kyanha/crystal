@@ -116,12 +116,10 @@ def ExportMaterials(func, depth, dependencies, use_imposter):
     func(' '*depth +"</textures>")
 
   # Export materials
-  shaders = {}
   if len(dependencies['M'].keys()) > 0 or len(dependencies['TM'].keys()) > 0:
     func(' '*depth +"<materials>")
     for name, mat in dependencies['M'].items():
       mat.AsCS(func, depth+2)
-      #shaders.update(mat.GetShaders())
     # Export missing materials
     for name, image in dependencies['TM'].items():
       func(' '*depth +'  <material name="%s">'%(name))      
@@ -135,8 +133,8 @@ def ExportMaterials(func, depth, dependencies, use_imposter):
     func(' '*depth +"  <shader><file>/shader/lighting/lighting_imposter.xml</file></shader>")
     func(' '*depth +"</shaders>")
   else:
-    if len(shaders) > 0:
+    if len(dependencies['S'].keys()) > 0:
       func(' '*depth +"<shaders>")
-      for shader in shaders:
-        func(' '*depth +"  <shader><file>"+shader+"</file></shader>")
+      for name, file in dependencies['S'].items():
+        func(' '*depth +"  <shader><file>"+file+"</file></shader>")
       func(' '*depth +"</shaders>")

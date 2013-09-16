@@ -29,7 +29,6 @@ def Write(fi):
 
 
 def Export(path):
-  
   # Clean cached data
   Hierarchy.exportedFactories = []
 
@@ -120,7 +119,7 @@ def ExportWorld(path):
     elif typ == 'F':
       # General meshes
       for name, fact in deps[typ].items():
-        print('\nEXPORT OBJECT "%s" AS A CS GENERAL MESH\n'%(fact.object.uname))
+        print('\nEXPORT OBJECT "%s" AS A CS %s\n'%(fact.object.uname, fact.object.b2cs.type))
         print('Writing fact',fact.uname,':', Join(path, 'factories/', fact.object.uname))
         fact.AsCSRef(Write(f), 2, 'factories/', animesh=False)
         # Export genmesh factory

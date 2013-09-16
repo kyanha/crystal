@@ -31,6 +31,10 @@ class XML(object):
         self.func = func
         self.depth = depth
         
+    def __del__(self):
+        while len(self.names):
+          self.close()
+          
     def __getattr__(self, name):
         if len(self.names):
             self.names[-1][1] = True
@@ -82,7 +86,7 @@ class XML(object):
             self._write('>')
             self._write(content)
         else:
-            self._write('\n')
+            self._write('>\n')
 
         return self
     
@@ -94,3 +98,39 @@ class XML(object):
     def _write(self, data): 
         self.func(data)
         return self
+
+
+
+
+if __name__ == '__main__':
+  import sys
+  def Write():
+    def write(data):
+      sys.stdout.write(data)
+    return write
+    
+  xml = XML(Write())
+
+  xml.meshfact({'name': 'fff'})\
+      .plugin('crystalspace.mesh.loader.factory.terrain2').close()\
+      .shadows(close=True)\
+      .params()\
+          .renderer('crystalspace.mesh.object.terrain2.bruteblockrenderer').close()\
+          .collider('crystalspace.mesh.object.terrain2.collider').close()\
+          .feeder('crystalspace.mesh.object.terrain2.simpledatafeeder', close=True)\
+          .cells()\
+              .celldefault()\
+                  .gridsize({'width': 257, 'height': 257}, close=True)\
+                  .size({'x': 256, 'y': 32, 'z': 256}, close=True)\
+              .close()\
+              \
+              .cell()\
+                  .name(0, close=True)\
+                  .position({'x': -127, 'y': -127}, close=True)\
+                  .basematerial('Base', close=True)\
+                  .feederproperties()\
+                      .param('/lev/terrain/heightmap_257x257.png', {'name': 'heightmap source'}, close=True)\
+                      .alphamap('alpha_marble.png', {'material': 'Marble'}).close()\
+                      .alphamap('alpha_stone.png', {'material': 'Stone'}).close()\
+
+  del xml

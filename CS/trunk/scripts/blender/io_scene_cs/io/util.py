@@ -11,7 +11,8 @@ def EmptyDependencies():
   # 'A'  -> armatures
   # 'F'  -> meshes
   # 'G'  -> groups of objects
-  return {'T':{}, 'M':{}, 'TM':{}, 'A':{}, 'F':{}, 'G':{}, }
+  # 'S'  -> shaders
+  return {'T':{}, 'M':{}, 'TM':{}, 'A':{}, 'F':{}, 'G':{}, 'S': {}}
 
   
 def MergeDependencies(dep1, dep2):
