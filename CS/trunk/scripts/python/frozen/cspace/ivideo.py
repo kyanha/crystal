@@ -66,6 +66,32 @@ if not "core" in dir():
 core.AddSCFLink(_SetSCFPointer)
 CSMutableArrayHelper = core.CSMutableArrayHelper
 
+class iGraphicsCanvas(core.iBase):
+    thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    def __init__(self, *args, **kwargs): raise AttributeError, "No constructor defined"
+    __repr__ = _swig_repr
+    def CanvasOpen(*args): return _ivideo.iGraphicsCanvas_CanvasOpen(*args)
+    def CanvasClose(*args): return _ivideo.iGraphicsCanvas_CanvasClose(*args)
+    def GetColorDepth(*args): return _ivideo.iGraphicsCanvas_GetColorDepth(*args)
+    def Print(*args): return _ivideo.iGraphicsCanvas_Print(*args)
+    def AllowResize(*args): return _ivideo.iGraphicsCanvas_AllowResize(*args)
+    def CanvasResize(*args): return _ivideo.iGraphicsCanvas_CanvasResize(*args)
+    def GetNativeWindow(*args): return _ivideo.iGraphicsCanvas_GetNativeWindow(*args)
+    def GetFullScreen(*args): return _ivideo.iGraphicsCanvas_GetFullScreen(*args)
+    def SetFullScreen(*args): return _ivideo.iGraphicsCanvas_SetFullScreen(*args)
+    def SetMousePosition(*args): return _ivideo.iGraphicsCanvas_SetMousePosition(*args)
+    def SetMouseCursor(*args): return _ivideo.iGraphicsCanvas_SetMouseCursor(*args)
+    def SetGamma(*args): return _ivideo.iGraphicsCanvas_SetGamma(*args)
+    def GetGamma(*args): return _ivideo.iGraphicsCanvas_GetGamma(*args)
+    def GetName(*args): return _ivideo.iGraphicsCanvas_GetName(*args)
+    def GetFramebufferDimensions(*args): return _ivideo.iGraphicsCanvas_GetFramebufferDimensions(*args)
+    def ForceCanvasResize(*args): return _ivideo.iGraphicsCanvas_ForceCanvasResize(*args)
+    def CanResize(*args): return _ivideo.iGraphicsCanvas_CanResize(*args)
+    __swig_destroy__ = _ivideo.delete_iGraphicsCanvas
+    __del__ = lambda self : None;
+iGraphicsCanvas_swigregister = _ivideo.iGraphicsCanvas_swigregister
+iGraphicsCanvas_swigregister(iGraphicsCanvas)
+
 CS_WRITE_BASELINE = _ivideo.CS_WRITE_BASELINE
 CS_WRITE_NOANTIALIAS = _ivideo.CS_WRITE_NOANTIALIAS
 class csPixelCoord(object):
@@ -82,7 +108,7 @@ class csPixelCoord(object):
 csPixelCoord_swigregister = _ivideo.csPixelCoord_swigregister
 csPixelCoord_swigregister(csPixelCoord)
 
-class iGraphics2D(object):
+class iGraphics2D(iGraphicsCanvas):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
     def __init__(self, *args, **kwargs): raise AttributeError, "No constructor defined"
     __repr__ = _swig_repr

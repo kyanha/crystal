@@ -10602,6 +10602,54 @@ sub ACQUIRE {
 }
 
 
+############# Class : cspace::iGraphicsCanvas ##############
+
+package cspace::iGraphicsCanvas;
+use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
+@ISA = qw( cspace::iBase cspace );
+%OWNER = ();
+%ITERATORS = ();
+*CanvasOpen = *cspacec::iGraphicsCanvas_CanvasOpen;
+*CanvasClose = *cspacec::iGraphicsCanvas_CanvasClose;
+*GetColorDepth = *cspacec::iGraphicsCanvas_GetColorDepth;
+*Print = *cspacec::iGraphicsCanvas_Print;
+*AllowResize = *cspacec::iGraphicsCanvas_AllowResize;
+*CanvasResize = *cspacec::iGraphicsCanvas_CanvasResize;
+*GetNativeWindow = *cspacec::iGraphicsCanvas_GetNativeWindow;
+*GetFullScreen = *cspacec::iGraphicsCanvas_GetFullScreen;
+*SetFullScreen = *cspacec::iGraphicsCanvas_SetFullScreen;
+*SetMousePosition = *cspacec::iGraphicsCanvas_SetMousePosition;
+*SetMouseCursor = *cspacec::iGraphicsCanvas_SetMouseCursor;
+*SetGamma = *cspacec::iGraphicsCanvas_SetGamma;
+*GetGamma = *cspacec::iGraphicsCanvas_GetGamma;
+*GetName = *cspacec::iGraphicsCanvas_GetName;
+*GetFramebufferDimensions = *cspacec::iGraphicsCanvas_GetFramebufferDimensions;
+*ForceCanvasResize = *cspacec::iGraphicsCanvas_ForceCanvasResize;
+*CanResize = *cspacec::iGraphicsCanvas_CanResize;
+sub DESTROY {
+    return unless $_[0]->isa('HASH');
+    my $self = tied(%{$_[0]});
+    return unless defined $self;
+    delete $ITERATORS{$self};
+    if (exists $OWNER{$self}) {
+        cspacec::delete_iGraphicsCanvas($self);
+        delete $OWNER{$self};
+    }
+}
+
+sub DISOWN {
+    my $self = shift;
+    my $ptr = tied(%$self);
+    delete $OWNER{$ptr};
+}
+
+sub ACQUIRE {
+    my $self = shift;
+    my $ptr = tied(%$self);
+    $OWNER{$ptr} = 1;
+}
+
+
 ############# Class : cspace::csPixelCoord ##############
 
 package cspace::csPixelCoord;
@@ -10647,7 +10695,7 @@ sub ACQUIRE {
 
 package cspace::iGraphics2D;
 use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
-@ISA = qw( cspace );
+@ISA = qw( cspace::iGraphicsCanvas cspace );
 %OWNER = ();
 %ITERATORS = ();
 *Open = *cspacec::iGraphics2D_Open;
