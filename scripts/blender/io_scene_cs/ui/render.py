@@ -39,7 +39,7 @@ class RENDER_PT_csSettingsPanel(csSettingsPanel, bpy.types.Panel):
     if not GetPreferences().library:
       if HasCrystalSpace():
         row.operator("io_scene_cs.export_run", text="Play", icon='GAME')
-        if context.active_object.type == 'MESH':
+        if context.active_object.type in ['MESH', 'ARMATURE'] and context.active_object.parent is None:
           row.operator("io_scene_cs.export_view", text="View", icon='RENDER_STILL')
         row = layout.row()
         row.prop(GetPreferences(), "console")
@@ -144,11 +144,15 @@ class B2CS_OT_export_view(bpy.types.Operator):
       VIEWMESH_INSTANCE.send_signal(signal.SIGINT)
     else:
       
-      #TODO: damnit why isn't it loading the materials library??!!
+      if bpy.context.active_object.type == 'ARMATURE':
+        fact_name = bpy.context.active_object.uname
+      else:
+        fact_name = bpy.context.active_object.data.uname
+        
       options = ' -R="'+exportPath+'"'
       options += ' -L="materials"'
-      options += ' -factory="'+bpy.context.active_object.data.uname+'"'
-      options += ' "/tmp/viewmesh/factories/'+bpy.context.active_object.data.uname+'"'
+      options += ' -factory="'+fact_name+'"'
+      options += ' "/tmp/viewmesh/factories/'+fact_name+'"'
       
       exe = WalkTestPath().replace('walktest', 'viewmesh')
       

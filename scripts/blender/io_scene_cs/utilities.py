@@ -100,8 +100,10 @@ def GetDefaultPath ():
   return default_path
 
 def GetExportPath ():
-  return GetPreferences().exportPath
-  
+  path =  GetPreferences().exportPath
+  if not path.endswith('/'):
+    path += '/'
+  return path
 
 def WalkTestPath():
   if os.name == 'nt':
