@@ -67,6 +67,9 @@ class CsAppBase(csPyEventHandler,CsReporterApp):
 	self.InitEventHandler()
 	self.SetupApp()
         self._initialized = True
+        self.printer = FramePrinter(self.oreg)
+        self.rm = self.engine.GetRenderManager()
+
     def CheckHelp(self):
         if csCommandLineHelper.CheckHelp(self.oreg):
             csCommandLineHelper.Help(self.oreg)
@@ -126,7 +129,6 @@ class CsAppBase(csPyEventHandler,CsReporterApp):
 	        return 1
 	elif ev.Name == self.Frame:
 	    self.SetupFrame()
-	    self.FinishFrame()
 	    return 1
 	return 0
 
@@ -180,14 +182,8 @@ class CsAppBase(csPyEventHandler,CsReporterApp):
             self.view.GetCamera().Move(CS_VEC_FORWARD * 4 * speed)
         if self.keybd.GetKeyState(CSKEY_DOWN):
             self.view.GetCamera().Move(CS_VEC_BACKWARD * 4 * speed)
-        # Tell 3D driver we're going to display 3D things.
-        if not self.g3d.BeginDraw(self.engine.GetBeginDrawFlags() | CSDRAW_3DGRAPHICS):
-            self.FatalError()
-        self.view.Draw()
 
-    def FinishFrame(self):
-        self.g3d.FinishDraw()
-        self.g3d.Print(None)
+        self.rm.RenderView(self.view)
 
 # startup code
 #############################
