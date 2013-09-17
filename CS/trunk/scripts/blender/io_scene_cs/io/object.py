@@ -334,7 +334,7 @@ class Hierarchy:
       mat_name = mat.b2cs.csMaterialName if mat.b2cs.csMatRef else mat.uname
       func(" "*depth + "    <material>%s</material>"%(mat_name))
     else:
-      func(" "*depth + "    <material>%s</material>"%(self.uv_texture if self.uv_texture!=None else 'None'))
+      func(" "*depth + "    <material>%s</material>"%(self.object.uv_texture if self.object.uv_texture!=None else 'None'))
 
     # Export object's render buffers
     print('EXPORT factory "%s"' % (self.object.uname))

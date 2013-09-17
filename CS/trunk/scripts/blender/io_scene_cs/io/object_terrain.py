@@ -143,6 +143,9 @@ bpy.types.Object.GetTerrainMaterialDependencies = GetTerrainMaterialDependencies
 def WriteCSTerrain (self, func, depth, path):
     xml = XML(NoNewLineWriter(func), depth)
     mat = self.materials[0] #Should only have one material, TODO handle 'oblivious' users
+    
+    #TODO: export the actual heightmap
+    heightmap = '/lev/terrain/heightmap_257x257.png'
 
     xml.meshfact({'name': self.data.uname})\
         .plugin('crystalspace.mesh.loader.factory.terrain2').close()\
@@ -161,7 +164,7 @@ def WriteCSTerrain (self, func, depth, path):
                     .position({'x': -127, 'y': -127}, close=True)\
                     .basematerial(mat.uname, close=True)\
                     .feederproperties()\
-                        .param('/lev/terrain/heightmap_257x257.png', {'name': 'heightmap source'}, close=True)\ #TODO: export the actual heightmap
+                        .param(heightmap, {'name': 'heightmap source'}, close=True)\
                     .close()\
                 .close()\
                 \
