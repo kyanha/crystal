@@ -73,7 +73,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
     if (!set)
     {
       parent->ReportWarning ("crystalspace.level.threadedloader.shadersets",
-                             "Shader set %s does note exist",
+                             "Shader set %s does not exist",
                              CS::Quote::Double (setName));
       return false;
     }
