@@ -119,43 +119,172 @@ namespace RenderManager
     iShaderManager* shaderMgr;
     size_t currentLayer;
 
+    /// Helper to manage shader pass activation/setup/teardown/deactivation.
+    struct ShaderActivator
+    {
+      /// Currently used shader
+      iShader* currentShader;
+      /// Current shader ticket
+      size_t currentTicket;
+
+      /// Whether a shader pass was setup
+      bool passSetup;
+      /// Whether a shader pass activated
+      bool passActivated;
+
+      /// Number of passes in the shader
+      size_t numPasses;
+      /// Currently setup pass
+      size_t currentPass;
+
+      /// Tear down the current pass (if it was set up)
+      void TeardownPass()
+      {
+        if (passSetup)
+        {
+          currentShader->TeardownPass (currentTicket);
+          passSetup = false;
+        }
+      }
+      /// Deactivate the current pass (if it was activated)
+      void DeactivatePass()
+      {
+        if (passActivated)
+        {
+          currentShader->DeactivatePass (currentTicket);
+          passActivated = false;
+        }
+      }
+    public:
+      ShaderActivator() : currentShader (nullptr), currentTicket (~size_t(0)),
+        passSetup (false), passActivated (false),
+        numPasses (0), currentPass (0)
+      {}
+      ~ShaderActivator()
+      {
+        UnsetShader ();
+      }
+
+      /// Returns whether the given shader/ticket combo differs from the current
+      bool IsNewShader (iShader* shader, size_t ticket) const
+      {
+        return (shader != currentShader) || (ticket != currentTicket);
+      }
+
+      /// Get the currently active shader
+      iShader* GetShader() const { return currentShader; }
+      /// Get the currently active ticket
+      size_t GetTicket() const { return currentTicket; }
+
+      /// Change the currently active shader&ticket
+      void SetShader (iShader* shader, size_t ticket)
+      {
+        if (!IsNewShader (shader, ticket)) return;
+        if (currentShader)
+        {
+          EndPassIteration();
+        }
+        currentShader = shader;
+        currentTicket = ticket;
+      }
+
+      /**
+       * Unset the currently active shader.
+       * \note Called implicitly.
+       */
+      void UnsetShader ()
+      {
+        SetShader (nullptr, ~size_t(0));
+      }
+
+      /// Start an iteration over the passes of the currently active shader
+      void BeginPassIteration ()
+      {
+        TeardownPass();
+        DeactivatePass();
+        numPasses = currentShader->GetNumberOfPasses (currentTicket);
+      }
+      /**
+       * End the currently active shader pass iteration.
+       * \note Called implicitly.
+       */
+      void EndPassIteration ()
+      {
+        TeardownPass();
+        DeactivatePass();
+        currentPass = 0;
+        numPasses = 0;
+      }
+      /**
+       * Activate the next pass in the shader.
+       * \returns Whether the activation was successful (and rendering should proceed).
+       * \note Also handles deactivation/teardown of a previous pass.
+       */
+      bool ActivateNextPass()
+      {
+        TeardownPass();
+        DeactivatePass();
+        while (currentPass < numPasses)
+        {
+          if (currentShader->ActivatePass (currentTicket, currentPass++))
+          {
+            passActivated = true;
+            return true;
+          }
+        }
+        return false;
+      }
+      /**
+       * Setup the current pass in the shader.
+       * \returns Whether the setup was successful (and rendering should proceed).
+       * \note Also handles teardown of a previous pass.
+       */
+      bool SetupPass (const CS::Graphics::RenderMesh *mesh,
+                      CS::Graphics::RenderMeshModes& modes,
+                      const csShaderVariableStack& stack)
+      {
+        TeardownPass();
+        if (currentShader->SetupPass (currentTicket, mesh, modes, stack))
+        {
+          passSetup = true;
+          return true;
+        }
+        return false;
+      }
+    };
+
     RenderCommon (iGraphics3D* g3d, iShaderManager* shaderMgr)
      : g3d (g3d), shaderMgr (shaderMgr), currentLayer (0) {}
 
     void RenderMeshes (typename RenderTree::ContextNode& context, 
 		       const typename RenderTree::MeshNode::MeshArrayType& meshes,
-		       iShader* shader, size_t ticket,
+                       ShaderActivator& activator,
 		       size_t firstMesh, size_t lastMesh)
     {
       if (firstMesh == lastMesh)
         return;
       
       // Skip meshes without shader (for current layer)
-      if (!shader)
+      if (!activator.GetShader())
         return;
 
       csShaderVariableStack& svStack = shaderMgr->GetShaderVariableStack ();
 
-      const size_t numPasses = shader->GetNumberOfPasses (ticket);
+      activator.BeginPassIteration();
 
-      for (size_t p = 0; p < numPasses; ++p)
+      while (activator.ActivateNextPass())
       {
-        if (!shader->ActivatePass (ticket, p)) continue;
-
         for (size_t m = firstMesh; m < lastMesh; ++m)
         {
           const typename RenderTree::MeshNode::SingleMesh& mesh = meshes.Get (m);
           context.svArrays.SetupSVStack (svStack, currentLayer, mesh.contextLocalId);
 
           csRenderMeshModes modes (*mesh.renderMesh);
-          if (!shader->SetupPass (ticket, mesh.renderMesh, modes, svStack)) continue;
+          if (!activator.SetupPass (mesh.renderMesh, modes, svStack)) continue;
           modes.z_buf_mode = mesh.zmode;
 
           g3d->DrawMesh (mesh.renderMesh, modes, svStack);
-
-          shader->TeardownPass (ticket);
         }
-        shader->DeactivatePass (ticket);
       }
     }
   };
@@ -179,8 +308,7 @@ namespace RenderManager
       typename RenderTree::ContextNode& context = node->GetOwner();
       const size_t layerOffset = context.totalRenderMeshes*this->currentLayer;
 
-      iShader* lastShader = 0;
-      size_t lastTicket = ~0;
+      typename RenderCommon<RenderTree>::ShaderActivator activator;
       size_t lastRenderedMesh = 0;
 
       for (size_t m = 0; m < node->meshes.GetSize (); ++m)
@@ -190,15 +318,13 @@ namespace RenderManager
         
         size_t ticket = context.ticketArray[mesh.contextLocalId+layerOffset];
 
-        if (shader != lastShader || ticket != lastTicket
-            || (mesh.preCopyNum != 0))
+        if (activator.IsNewShader (shader, ticket) || (mesh.preCopyNum != 0))
         {
           // Render the latest batch of meshes
-          this->RenderMeshes (context, node->meshes, lastShader, lastTicket, lastRenderedMesh, m);
+          this->RenderMeshes (context, node->meshes, activator, lastRenderedMesh, m);
           lastRenderedMesh = m;
 
-          lastShader = shader;
-          lastTicket = ticket;
+          activator.SetShader (shader, ticket);
         }
         
         if (mesh.preCopyNum != 0)
@@ -208,7 +334,7 @@ namespace RenderManager
         }
       }
 
-      this->RenderMeshes (context, node->meshes, lastShader, lastTicket, lastRenderedMesh, node->meshes.GetSize ());
+      this->RenderMeshes (context, node->meshes, activator, lastRenderedMesh, node->meshes.GetSize ());
     }
   };
 
@@ -225,6 +351,7 @@ namespace RenderManager
     
     void operator() (typename RenderTree::MeshNode* node)
     {
+      typename RenderCommon<RenderTree>::ShaderActivator activator;
       typename RenderTree::ContextNode& context = node->GetOwner();
       for (size_t m = 0; m < node->meshes.GetSize (); ++m)
       {
@@ -242,7 +369,8 @@ namespace RenderManager
 	  iShader* shader = context.shaderArray[mesh.contextLocalId+layerOffset];
         
 	  size_t ticket = context.ticketArray[mesh.contextLocalId+layerOffset];
-          this->RenderMeshes (context, node->meshes, shader, ticket, m, m+1);
+          activator.SetShader (shader, ticket);
+          this->RenderMeshes (context, node->meshes, activator, m, m+1);
 	}
       }
     }
