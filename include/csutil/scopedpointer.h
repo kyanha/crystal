@@ -116,12 +116,6 @@ namespace Utility
     /// Dereference underlying pointer.
     T& operator* () const
     { return *ptr; }
-
-    /// Access an array item
-    T& operator[] (size_t index) const
-    {
-      return ptr[index];
-    }
   };
 
 } // namespace Utility
