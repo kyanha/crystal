@@ -1837,7 +1837,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(XMLShader)
     CS_ASSERT_MSG ("ActivatePass() has already been called.",
       activeTech == 0);
     activeTech = (ticket != csArrayItemNotFound) ? TechForTicket (ticket) : 0;
-    return activeTech ? activeTech->ActivatePass (number) : false;
+    return activeTech ? activeTech->ActivatePass (activationState, number) : false;
   }
 
   bool csXMLShader::DeactivatePass (size_t ticket)
@@ -1851,7 +1851,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(XMLShader)
       return fallback->DeactivatePass (GetFallbackTicket (ticket));
     }
 
-    bool ret = activeTech ? activeTech->DeactivatePass() : false; 
+    bool ret = activeTech ? activeTech->DeactivatePass (activationState) : false; 
     activeTech = 0;
     return ret;
   }
@@ -1948,8 +1948,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(XMLShader)
   csXMLShader::Activator::Activator (csXMLShader* parent, size_t ticket) :
     scfPooledImplementationType (this), parent (parent),
     activeTech ((ticket != csArrayItemNotFound) ? parent->TechForTicket (ticket) : nullptr),
-    currentPass (0), numPasses (activeTech ? activeTech->GetNumberOfPasses() : 0),
-    passActive (false), passSetup (false)
+    currentPass (0), numPasses (activeTech ? activeTech->GetNumberOfPasses() : 0)
   {
   }
 
@@ -1967,9 +1966,8 @@ CS_PLUGIN_NAMESPACE_BEGIN(XMLShader)
 
     while (currentPass < numPasses)
     {
-      if (activeTech->ActivatePass (currentPass++))
+      if (activeTech->ActivatePass (activationState, currentPass++))
       {
-        passActive = true;
         return true;
       }
     }
@@ -1981,26 +1979,17 @@ CS_PLUGIN_NAMESPACE_BEGIN(XMLShader)
     const csShaderVariableStack& stack)
   {
     Activator::TeardownPass ();
-    if (activeTech->SetupPass (mesh, modes, stack))
-    {
-      passActive = true;
-      return true;
-    }
-    return false;
+    return (activeTech->SetupPass (activationState, mesh, modes, stack));
   }
 
   void csXMLShader::Activator::TeardownPass ()
   {
-    if (activeTech && passSetup)
-      activeTech->TeardownPass();
-    passSetup = false;
+    activeTech->TeardownPass (activationState);
   }
 
   void csXMLShader::Activator::DeactivatePass ()
   {
-    if (activeTech && passActive)
-      activeTech->DeactivatePass();
-    passActive = false;
+    activeTech->DeactivatePass (activationState);
   }
 
   //-------------------------------------------------------------------------

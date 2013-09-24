@@ -69,7 +69,7 @@ CS_IMPLEMENT_STATIC_CLASSVAR_REF (csXMLShaderTech, instParamBuffers,
                                   GetInstParamBuffers, csDirtyAccessArray<iRenderBuffer*>, ()); 
 
 csXMLShaderTech::csXMLShaderTech (csXMLShader* parent) : 
-passes(0), passesCount(0), currentPass((size_t)~0),
+passes(0), passesCount(0),
 xmltokens (parent->compiler->xmltokens)
 {
   csXMLShaderTech::parent = parent;
@@ -1493,37 +1493,46 @@ iShaderProgram::CacheLoadResult csXMLShaderTech::LoadFromCache (
   return iShaderProgram::loadSuccessShaderValid;
 }
 
-bool csXMLShaderTech::ActivatePass (size_t number)
+bool csXMLShaderTech::ActivatePass (ActivationState& state, size_t number)
 {
   if(number>=passesCount)
     return false;
 
-  currentPass = number;
-
-  ShaderPass* thispass = &passes[currentPass];
+  ShaderPass* thispass = &passes[number];
   if(thispass->vproc) thispass->vproc->Activate ();
   if(thispass->program) thispass->program->Activate ();
-  
+
+  bool wasActive (state.fields.Check (ActivationState::asPassActive));
+  state.pass = thispass;
+  state.fields.Set (ActivationState::asPassActive);
+  state.fields.Reset (ActivationState::asPassSetup);
+
   iGraphics3D* g3d = parent->g3d;
+  if (!wasActive)
+  {
+    state.oldZmode = g3d->GetZMode ();
+    g3d->GetWriteMask (state.orig_wmRed, state.orig_wmGreen, state.orig_wmBlue, state.orig_wmAlpha);
+  }
   if (thispass->overrideZmode)
   {
-    oldZmode = g3d->GetZMode ();
     g3d->SetZMode (thispass->zMode);
   }
-
-  g3d->GetWriteMask (orig_wmRed, orig_wmGreen, orig_wmBlue, orig_wmAlpha);
   g3d->SetWriteMask (thispass->wmRed, thispass->wmGreen, thispass->wmBlue,
     thispass->wmAlpha);
 
   return true;
 }
 
-bool csXMLShaderTech::DeactivatePass ()
+bool csXMLShaderTech::DeactivatePass (ActivationState& state)
 {
-  if(currentPass>=passesCount)
-    return false;
-  ShaderPass* thispass = &passes[currentPass];
-  currentPass = (size_t)~0;
+  if (!state.fields.Check (ActivationState::asPassActive)) return false;
+
+  if (state.fields.Check (ActivationState::asPassSetup))
+  {
+    TeardownPass (state);
+  }
+
+  ShaderPass* thispass = state.pass;
 
   if(thispass->vproc) thispass->vproc->Deactivate ();
   if(thispass->program) thispass->program->Deactivate ();
@@ -1540,22 +1549,23 @@ bool csXMLShaderTech::DeactivatePass ()
   g3d->SetTextureComparisonModes (textureUnits, 0, texturesCount);
   
   if (thispass->overrideZmode)
-    g3d->SetZMode (oldZmode);
+    g3d->SetZMode (state.oldZmode);
+  g3d->SetWriteMask (state.orig_wmRed, state.orig_wmGreen, state.orig_wmBlue, state.orig_wmAlpha);
 
-  g3d->SetWriteMask (orig_wmRed, orig_wmGreen, orig_wmBlue, orig_wmAlpha);
+  state.fields.Reset (ActivationState::asPassActive);
 
   return true;
 }
 
-bool csXMLShaderTech::SetupPass (const csRenderMesh *mesh, 
+bool csXMLShaderTech::SetupPass (ActivationState& state, 
+                                 const csRenderMesh *mesh, 
 			         csRenderMeshModes& modes,
 			         const csShaderVariableStack& stack)
 {
-  if(currentPass>=passesCount)
-    return false;
+  if (!state.fields.Check (ActivationState::asPassActive)) return false;
 
   iGraphics3D* g3d = parent->g3d;
-  ShaderPass* thispass = &passes[currentPass];
+  ShaderPass* thispass = state.pass;
 
   int lightCount = 0;
   if (stack.GetSize() > parent->compiler->stringLightCount)
@@ -1694,15 +1704,20 @@ bool csXMLShaderTech::SetupPass (const csRenderMesh *mesh,
   // pseudo instancing setup
   SetupInstances (modes, thispass, stack);
 
+  state.fields.Set (ActivationState::asPassSetup);
+
   return true;
 }
 
-bool csXMLShaderTech::TeardownPass ()
+bool csXMLShaderTech::TeardownPass (ActivationState& state)
 {
-  ShaderPass* thispass = &passes[currentPass];
+  if (!state.fields.Check (ActivationState::asPassSetup)) return false;
+  ShaderPass* thispass = state.pass;
 
   if(thispass->vproc) thispass->vproc->ResetState ();
   if(thispass->program) thispass->program->ResetState ();
+
+  state.fields.Reset (ActivationState::asPassSetup);
 
   return true;
 }

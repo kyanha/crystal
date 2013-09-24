@@ -207,6 +207,7 @@ class csXMLShader : public scfImplementationExt4<csXMLShader,
 				     TechniqueKeeper const&);
 				     
   csXMLShaderTech* activeTech;
+  csXMLShaderTech::ActivationState activationState;
   csShaderConditionResolver* techsResolver;
   /* Technique variants
      These are 'lightweight' and only store which techniques (from
@@ -338,11 +339,9 @@ class csXMLShader : public scfImplementationExt4<csXMLShader,
     csXMLShader* parent;
 
     csXMLShaderTech* activeTech;
+    csXMLShaderTech::ActivationState activationState;
     size_t currentPass;
     size_t numPasses;
-
-    bool passActive;
-    bool passSetup;
   public:
     Activator (csXMLShader* parent, size_t ticket);
     ~Activator();
@@ -449,7 +448,7 @@ public:
 
     CS_ASSERT_MSG ("A pass must be activated prior calling SetupPass()",
       activeTech);
-    return activeTech->SetupPass (mesh, modes, stack); 
+    return activeTech->SetupPass (activationState, mesh, modes, stack); 
   }
 
   /**
@@ -468,7 +467,7 @@ public:
 
     CS_ASSERT_MSG ("A pass must be activated prior calling TeardownPass()",
       activeTech);
-    return activeTech->TeardownPass(); 
+    return activeTech->TeardownPass (activationState); 
   }
 
   /// Completely deactivate a pass
