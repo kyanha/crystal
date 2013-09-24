@@ -138,5 +138,11 @@ CS_PLUGIN_NAMESPACE_BEGIN(XMLShader)
   { return 0; }
   csPtr<iShader> ForcedPriorityShader::ForceTechnique (int priority)
   { return 0; }
+
+  csPtr<iShaderPassesActivator> ForcedPriorityShader::BeginShaderActivation (size_t ticket,
+      iShaderPassesActivator* previous_activator)
+  {
+    return parentShader->BeginShaderActivation (ticket, previous_activator);
+  }
 }
 CS_PLUGIN_NAMESPACE_END(XMLShader)

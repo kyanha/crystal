@@ -1173,7 +1173,30 @@ CS_PLUGIN_NAMESPACE_BEGIN(XMLShader)
     }
     return 0;
   }
-  
+
+  csPtr<iShaderPassesActivator> csXMLShader::BeginShaderActivation (size_t ticket,
+    iShaderPassesActivator* previous_activator)
+  {
+    if (IsFallbackTicket (ticket))
+    {
+      // @@@ FIXME Check if we need to worry about: useFallbackContext = true;
+      iShader* fallback;
+      iXMLShaderInternal* fallbackXML;
+      GetFallbackShader (fallback, fallbackXML);
+      return fallback->BeginShaderActivation (GetFallbackTicket (ticket), previous_activator);
+    }
+
+    csRef<iShaderPassesActivatorXML> previous (
+      scfQueryInterfaceSafe<iShaderPassesActivatorXML> (previous_activator));
+    Activator* my_previous_activator (static_cast<Activator*> ((iShaderPassesActivatorXML*)previous));
+    if (my_previous_activator)
+    {
+      // TODO: Use less state changes
+    }
+
+    return csPtr<iShaderPassesActivator> (new (activators) Activator (this, ticket));
+  }
+
   void csXMLShader::SelfDestruct ()
   {
     if (shadermgr)
@@ -1918,6 +1941,66 @@ CS_PLUGIN_NAMESPACE_BEGIN(XMLShader)
         dumpFN.GetData(), variant));
     }
     return programNode;
+  }
+
+  //-------------------------------------------------------------------------
+
+  csXMLShader::Activator::Activator (csXMLShader* parent, size_t ticket) :
+    scfPooledImplementationType (this), parent (parent),
+    activeTech ((ticket != csArrayItemNotFound) ? parent->TechForTicket (ticket) : nullptr),
+    currentPass (0), numPasses (activeTech ? activeTech->GetNumberOfPasses() : 0),
+    passActive (false), passSetup (false)
+  {
+  }
+
+  csXMLShader::Activator::~Activator()
+  {
+    Activator::TeardownPass ();
+    Activator::DeactivatePass ();
+  }
+
+  bool csXMLShader::Activator::ActivateNextPass()
+  {
+    if (!activeTech) return false;
+    Activator::TeardownPass ();
+    Activator::DeactivatePass ();
+
+    while (currentPass < numPasses)
+    {
+      if (activeTech->ActivatePass (currentPass++))
+      {
+        passActive = true;
+        return true;
+      }
+    }
+    return false;
+  }
+
+  bool csXMLShader::Activator::SetupPass (const CS::Graphics::RenderMesh *mesh,
+    CS::Graphics::RenderMeshModes& modes,
+    const csShaderVariableStack& stack)
+  {
+    Activator::TeardownPass ();
+    if (activeTech->SetupPass (mesh, modes, stack))
+    {
+      passActive = true;
+      return true;
+    }
+    return false;
+  }
+
+  void csXMLShader::Activator::TeardownPass ()
+  {
+    if (activeTech && passSetup)
+      activeTech->TeardownPass();
+    passSetup = false;
+  }
+
+  void csXMLShader::Activator::DeactivatePass ()
+  {
+    if (activeTech && passActive)
+      activeTech->DeactivatePass();
+    passActive = false;
   }
 
   //-------------------------------------------------------------------------

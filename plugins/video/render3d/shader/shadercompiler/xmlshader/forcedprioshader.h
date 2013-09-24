@@ -68,6 +68,9 @@ CS_PLUGIN_NAMESPACE_BEGIN(XMLShader)
     csPtr<iShaderPriorityList> GetAvailablePriorities (size_t prioTicket) const;
     csPtr<iString> GetTechniqueMetadata (int priority, const char* dataKey) const;
     csPtr<iShader> ForceTechnique (int priority);
+
+    csPtr<iShaderPassesActivator> BeginShaderActivation (size_t ticket,
+      iShaderPassesActivator* previous_activator);
   };
 }
 CS_PLUGIN_NAMESPACE_END(XMLShader)

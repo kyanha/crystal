@@ -482,12 +482,46 @@ struct iShaderPriorityList : public virtual iBase
 };
 
 /**
+ * Interface to perform shader pass activation.
+ */
+struct iShaderPassesActivator : public virtual iBase
+{
+  SCF_INTERFACE(iShaderPassesActivator, 0, 0, 1);
+
+  /**
+   * Activates the next pass.
+   * \returns Whether activation succeeded (a pass with a valid technique was
+   *   available).
+   */
+  virtual bool ActivateNextPass () = 0;
+  /**
+   * Perform per-mesh specific setup for the current pass.
+   * \returns Whether the setup proceeded and the mesh can be rendered.
+   */
+  virtual bool SetupPass (const CS::Graphics::RenderMesh *mesh,
+    CS::Graphics::RenderMeshModes& modes,
+    const csShaderVariableStack& stack) = 0;
+  /**
+   * Manually tear down the current pass setup.
+   * \remarks This is usually called implicitly when needed, i.e. manually
+   *   calling it should be avoided.
+   */
+  virtual void TeardownPass () = 0;
+  /**
+   * Manually deactivate the current pass.
+   * \remarks This is usually called implicitly when needed, i.e. manually
+   *   calling it should be avoided.
+   */
+  virtual void DeactivatePass () = 0;
+};
+
+/**
  * Specific shader. Can/will be either render-specific or general
  * The shader in this form is "compiled" and cannot be modified.
  */
 struct iShader : public virtual iShaderVariableContext
 {
-  SCF_INTERFACE(iShader, 5, 0, 0);
+  SCF_INTERFACE(iShader, 5, 0, 1);
 
   /// Query the object.
   virtual iObject* QueryObject () = 0;
@@ -602,6 +636,13 @@ struct iShader : public virtual iShaderVariableContext
    */
   virtual csPtr<iShader> ForceTechnique (int priority) = 0;
   /** @} */
+
+  /**
+   * Start a &ldquo;shader activation&rdquo;, that is, the shader's passes
+   * will be activated one after another.
+   */
+  virtual csPtr<iShaderPassesActivator> BeginShaderActivation (size_t ticket,
+    iShaderPassesActivator* previous_activator) = 0;
 };
 
 
