@@ -145,15 +145,25 @@ CS_PLUGIN_NAMESPACE_BEGIN(XMLShader)
     //variable context
     csShaderVariableContext svcontext;
 
-    //keep this so we can reset in deactivate
-    bool orig_wmRed, orig_wmGreen, orig_wmBlue, orig_wmAlpha;
-    csZBufMode oldZmode;
+    struct ActivationState
+    {
+      enum
+      {
+        asPassActive = 1 << 0,
+        asPassSetup = 1 << 1
+      };
+      csFlags fields;
+
+      ShaderPass* pass;
+
+      //keep this so we can reset in deactivate
+      bool orig_wmRed, orig_wmGreen, orig_wmBlue, orig_wmAlpha;
+      csZBufMode oldZmode;
+    };
 
     //Array of passes
     ShaderPass* passes;
     size_t passesCount;
-
-    size_t currentPass;
 
     csXMLShader* parent;
     const csStringHash& xmltokens;
@@ -238,12 +248,12 @@ CS_PLUGIN_NAMESPACE_BEGIN(XMLShader)
 
     size_t GetNumberOfPasses()
     { return passesCount; }
-    bool ActivatePass (size_t number);
-    bool SetupPass  (const CS::Graphics::RenderMesh *mesh,
+    bool ActivatePass (ActivationState& state, size_t number);
+    bool SetupPass  (ActivationState& state, const CS::Graphics::RenderMesh *mesh,
       CS::Graphics::RenderMeshModes& modes,
       const csShaderVariableStack& stack);
-    bool TeardownPass();
-    bool DeactivatePass();
+    bool TeardownPass(ActivationState& state);
+    bool DeactivatePass(ActivationState& state);
     void GetUsedShaderVars (csBitArray& bits, uint userFlags) const;
 
     bool Load (iLoaderContext* ldr_context, iDocumentNode* node,
