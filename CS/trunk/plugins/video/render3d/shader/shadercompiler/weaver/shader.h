@@ -198,6 +198,12 @@ public:
     return realShader->ForceTechnique (priority);
   }
 
+  csPtr<iShaderPassesActivator> BeginShaderActivation (size_t ticket,
+    iShaderPassesActivator* previous_activator)
+  {
+    return realShader->BeginShaderActivation (ticket, previous_activator);
+  }
+
   /**\name iSelfDestruct implementation
    * @{ */
   virtual void SelfDestruct ();

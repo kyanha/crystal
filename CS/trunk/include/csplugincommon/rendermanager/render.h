@@ -126,39 +126,21 @@ namespace RenderManager
       iShader* currentShader;
       /// Current shader ticket
       size_t currentTicket;
-
-      /// Whether a shader pass was setup
-      bool passSetup;
-      /// Whether a shader pass activated
-      bool passActivated;
-
-      /// Number of passes in the shader
-      size_t numPasses;
-      /// Currently setup pass
-      size_t currentPass;
+      /// The used shader activator, if an activation is in progress
+      csRef<iShaderPassesActivator> shaderActivator;
 
       /// Tear down the current pass (if it was set up)
       void TeardownPass()
       {
-        if (passSetup)
-        {
-          currentShader->TeardownPass (currentTicket);
-          passSetup = false;
-        }
+        if (shaderActivator) shaderActivator->TeardownPass();
       }
       /// Deactivate the current pass (if it was activated)
       void DeactivatePass()
       {
-        if (passActivated)
-        {
-          currentShader->DeactivatePass (currentTicket);
-          passActivated = false;
-        }
+        if (shaderActivator) shaderActivator->DeactivatePass();
       }
     public:
-      ShaderActivator() : currentShader (nullptr), currentTicket (~size_t(0)),
-        passSetup (false), passActivated (false),
-        numPasses (0), currentPass (0)
+      ShaderActivator() : currentShader (nullptr), currentTicket (~size_t(0))
       {}
       ~ShaderActivator()
       {
@@ -200,9 +182,7 @@ namespace RenderManager
       /// Start an iteration over the passes of the currently active shader
       void BeginPassIteration ()
       {
-        TeardownPass();
-        DeactivatePass();
-        numPasses = currentShader->GetNumberOfPasses (currentTicket);
+        shaderActivator = currentShader->BeginShaderActivation (currentTicket, shaderActivator);
       }
       /**
        * End the currently active shader pass iteration.
@@ -210,10 +190,7 @@ namespace RenderManager
        */
       void EndPassIteration ()
       {
-        TeardownPass();
-        DeactivatePass();
-        currentPass = 0;
-        numPasses = 0;
+        shaderActivator.Invalidate();
       }
       /**
        * Activate the next pass in the shader.
@@ -222,17 +199,7 @@ namespace RenderManager
        */
       bool ActivateNextPass()
       {
-        TeardownPass();
-        DeactivatePass();
-        while (currentPass < numPasses)
-        {
-          if (currentShader->ActivatePass (currentTicket, currentPass++))
-          {
-            passActivated = true;
-            return true;
-          }
-        }
-        return false;
+        return shaderActivator->ActivateNextPass ();
       }
       /**
        * Setup the current pass in the shader.
@@ -243,13 +210,7 @@ namespace RenderManager
                       CS::Graphics::RenderMeshModes& modes,
                       const csShaderVariableStack& stack)
       {
-        TeardownPass();
-        if (currentShader->SetupPass (currentTicket, mesh, modes, stack))
-        {
-          passSetup = true;
-          return true;
-        }
-        return false;
+        return shaderActivator->SetupPass (mesh, modes, stack);
       }
     };
 

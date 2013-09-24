@@ -162,6 +162,12 @@ public:
   { CollectUsedConditions (rootNode, condWrite); }
 };
 
+// Dummy interface to 'tag' activators from XMLShader
+struct iShaderPassesActivatorXML : public virtual iBase
+{
+  SCF_INTERFACE(iShaderPassesActivatorXML, 0, 0, 1);
+};
+
 class ForcedPriorityShader;
 
 class csXMLShader : public scfImplementationExt4<csXMLShader,
@@ -324,6 +330,31 @@ class csXMLShader : public scfImplementationExt4<csXMLShader,
     return activeTech ? activeTech->svcontext : globalSVContext;
   }
 
+  class Activator :
+    public scfImplementationPooled<scfImplementation2<Activator,
+                                                      iShaderPassesActivatorXML,
+                                                      iShaderPassesActivator> >
+  {
+    csXMLShader* parent;
+
+    csXMLShaderTech* activeTech;
+    size_t currentPass;
+    size_t numPasses;
+
+    bool passActive;
+    bool passSetup;
+  public:
+    Activator (csXMLShader* parent, size_t ticket);
+    ~Activator();
+
+    bool ActivateNextPass ();
+    bool SetupPass (const CS::Graphics::RenderMesh *mesh,
+      CS::Graphics::RenderMeshModes& modes,
+      const csShaderVariableStack& stack);
+    void TeardownPass ();
+    void DeactivatePass ();
+  };
+  Activator::Pool activators;
 protected:
   void InternalRemove() { SelfDestruct(); }
 
@@ -470,6 +501,9 @@ public:
   csPtr<iShaderPriorityList> GetAvailablePriorities (size_t prioTicket) const;
   csPtr<iString> GetTechniqueMetadata (int priority, const char* dataKey) const;
   csPtr<iShader> ForceTechnique (int priority);
+
+  csPtr<iShaderPassesActivator> BeginShaderActivation (size_t ticket,
+    iShaderPassesActivator* previous_activator);
 
   friend class csXMLShaderCompiler;
 

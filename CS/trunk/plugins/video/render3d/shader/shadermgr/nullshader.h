@@ -22,6 +22,7 @@
 #define __CS_NULLSHADER_H__
 
 #include "csutil/csobject.h"
+#include "csutil/pooledscfclass.h"
 #include "ivideo/shader/shader.h"
 #include "iutil/selfdestruct.h"
 
@@ -39,6 +40,22 @@ private:
   csShaderMetadata allShaderMeta;
   csRefArray<csShaderVariable> dummySVs;
   csShaderManager* mgr;
+
+  class Activator :
+    public scfImplementationPooled<scfImplementation1<Activator,
+                                                      iShaderPassesActivator> >
+  {
+  public:
+    Activator() : scfPooledImplementationType (this) {}
+
+    bool ActivateNextPass () { return false; }
+    bool SetupPass (const CS::Graphics::RenderMesh *mesh,
+      CS::Graphics::RenderMeshModes& modes,
+      const csShaderVariableStack& stack) { return false; }
+    void TeardownPass () { }
+    void DeactivatePass () { }
+  };
+  Activator::Pool activators;
 
 protected:
   void InternalRemove() { SelfDestruct(); }
@@ -84,6 +101,12 @@ public:
 				  uint userFlags) const
   { }
   void PushShaderVariables (csShaderVariableStack&, size_t) const { }
+
+  csPtr<iShaderPassesActivator> BeginShaderActivation (size_t ticket,
+    iShaderPassesActivator* previous_activator)
+  {
+    return csPtr<iShaderPassesActivator> (new (activators) Activator);
+  }
 
   /**\name iShaderVariableContext implementation
    * @{ */
