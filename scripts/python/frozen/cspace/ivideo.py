@@ -829,6 +829,19 @@ class iShaderPriorityList(core.iBase):
 iShaderPriorityList_swigregister = _ivideo.iShaderPriorityList_swigregister
 iShaderPriorityList_swigregister(iShaderPriorityList)
 
+class iShaderPassesActivator(core.iBase):
+    thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    def __init__(self, *args, **kwargs): raise AttributeError, "No constructor defined"
+    __repr__ = _swig_repr
+    def ActivateNextPass(*args): return _ivideo.iShaderPassesActivator_ActivateNextPass(*args)
+    def SetupPass(*args): return _ivideo.iShaderPassesActivator_SetupPass(*args)
+    def TeardownPass(*args): return _ivideo.iShaderPassesActivator_TeardownPass(*args)
+    def DeactivatePass(*args): return _ivideo.iShaderPassesActivator_DeactivatePass(*args)
+    __swig_destroy__ = _ivideo.delete_iShaderPassesActivator
+    __del__ = lambda self : None;
+iShaderPassesActivator_swigregister = _ivideo.iShaderPassesActivator_swigregister
+iShaderPassesActivator_swigregister(iShaderPassesActivator)
+
 class iShader(iShaderVariableContext):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
     def __init__(self, *args, **kwargs): raise AttributeError, "No constructor defined"
@@ -855,6 +868,7 @@ class iShader(iShaderVariableContext):
     def GetAvailablePriorities(*args): return _ivideo.iShader_GetAvailablePriorities(*args)
     def GetTechniqueMetadata(*args): return _ivideo.iShader_GetTechniqueMetadata(*args)
     def ForceTechnique(*args): return _ivideo.iShader_ForceTechnique(*args)
+    def BeginShaderActivation(*args): return _ivideo.iShader_BeginShaderActivation(*args)
     scfGetVersion = staticmethod(_ivideo.iShader_scfGetVersion)
     scfGetName = staticmethod(_ivideo.iShader_scfGetName)
     __swig_destroy__ = _ivideo.delete_iShader
