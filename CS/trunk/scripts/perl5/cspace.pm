@@ -11895,6 +11895,41 @@ sub ACQUIRE {
 }
 
 
+############# Class : cspace::iShaderPassesActivator ##############
+
+package cspace::iShaderPassesActivator;
+use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
+@ISA = qw( cspace::iBase cspace );
+%OWNER = ();
+%ITERATORS = ();
+*ActivateNextPass = *cspacec::iShaderPassesActivator_ActivateNextPass;
+*SetupPass = *cspacec::iShaderPassesActivator_SetupPass;
+*TeardownPass = *cspacec::iShaderPassesActivator_TeardownPass;
+*DeactivatePass = *cspacec::iShaderPassesActivator_DeactivatePass;
+sub DESTROY {
+    return unless $_[0]->isa('HASH');
+    my $self = tied(%{$_[0]});
+    return unless defined $self;
+    delete $ITERATORS{$self};
+    if (exists $OWNER{$self}) {
+        cspacec::delete_iShaderPassesActivator($self);
+        delete $OWNER{$self};
+    }
+}
+
+sub DISOWN {
+    my $self = shift;
+    my $ptr = tied(%$self);
+    delete $OWNER{$ptr};
+}
+
+sub ACQUIRE {
+    my $self = shift;
+    my $ptr = tied(%$self);
+    $OWNER{$ptr} = 1;
+}
+
+
 ############# Class : cspace::iShader ##############
 
 package cspace::iShader;
@@ -11924,6 +11959,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *GetAvailablePriorities = *cspacec::iShader_GetAvailablePriorities;
 *GetTechniqueMetadata = *cspacec::iShader_GetTechniqueMetadata;
 *ForceTechnique = *cspacec::iShader_ForceTechnique;
+*BeginShaderActivation = *cspacec::iShader_BeginShaderActivation;
 *scfGetVersion = *cspacec::iShader_scfGetVersion;
 *scfGetName = *cspacec::iShader_scfGetName;
 sub DESTROY {
