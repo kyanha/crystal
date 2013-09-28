@@ -1,5 +1,6 @@
 /*
   Copyright (C) 2010 by Mike Gist and Claudiu Mihail
+  Copyright (C) 2013 by Matthieu Kraus
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -24,9 +25,9 @@
 #include "csplugincommon/rendermanager/occluvis.h"
 #include "cstool/rbuflock.h"
 #include "cstool/rendermeshholder.h"
+#include "csutil/cfgacc.h"
 #include "iengine/camera.h"
 #include "iengine/engine.h"
-#include "iengine/mesh.h"
 #include "iengine/portal.h"
 #include "iengine/portalcontainer.h"
 #include "iengine/rview.h"
@@ -34,584 +35,869 @@
 #include "iutil/objreg.h"
 #include "ivideo/material.h"
 
+#include <limits>
+
 namespace CS
 {
   namespace RenderManager
   {
-    csOccluvis::csVisibilityObjectWrapper::csVisibilityObjectWrapper (csOccluvis* culler, iVisibilityObject* vis_obj)
-      : scfImplementationType (this), culler (culler), vis_obj (vis_obj)
+    void csOccluvis::FinishQueries()
     {
-      // Recalculate the world bounding box.
-      vis_obj->GetMeshWrapper ()->GetWorldBoundingBox ();
+      // check whether there are any queries to finish
+      if(queries.IsEmpty())
+      {
+	// nothing to be done
+	return;
+      }
 
-      // Get the current culling bbox.
-      oldBBox = vis_obj->GetBBox ();
-    }
+      // allocate array for query results
+      CS_ALLOC_STACK_ARRAY_FALLBACK(bool, visibility, queries.GetSize(), 50000);
+      CS_ALLOC_STACK_ARRAY_FALLBACK(unsigned, query, queries.GetSize(), 50000);
 
-    void csOccluvis::csVisibilityObjectWrapper::ObjectModelChanged (iObjectModel* model)
-    {
-      // Recalculate the world bounding box.
-      vis_obj->GetMeshWrapper ()->GetWorldBoundingBox ();
+      // check for allocation failure
+      CS_ASSERT(visibility);
+      CS_ASSERT(query);
 
-      // Get the current culling bbox.
-      const csBox3& newBBox = vis_obj->GetBBox ();
-      culler->MoveObject (vis_obj, oldBBox);
-      oldBBox = newBBox;
-    }
+      for(size_t i = 0; i < queries.GetSize(); ++i)
+      {
+	query[i] = queries[i]->uOQuery;
+      }
 
-    void csOccluvis::csVisibilityObjectWrapper::MovableChanged (iMovable* movable)
-    {
-      // Recalculate the world bounding box.
-      vis_obj->GetMeshWrapper ()->GetWorldBoundingBox ();
+      // get query results
+      g3d->OQVisibleQueries(query, visibility, static_cast<int>(queries.GetSize()));
 
-      // Get the current culling bbox.
-      const csBox3& newBBox = vis_obj->GetBBox ();
-      culler->MoveObject (vis_obj, oldBBox);
-      oldBBox = newBBox;
-    }
+      // get current frame number
+      uint32 uNextCheck = engine->GetCurrentFrameNumber() + visibilityFrameSkip;
 
-    void csOccluvis::csVisibilityObjectWrapper::MovableDestroyed (iMovable*)
-    {
+      // write results back
+      for(size_t i = 0; i < queries.GetSize(); ++i)
+      {
+	// convenience variable
+	QueryData* queryData = queries[i];
+
+	// write back query result
+	queryData->eResult = visibility[i] ? VISIBLE : INVISIBLE;
+
+	// assume visible nodes will stay visible for a specified amount of time
+	if(queryData->eResult == VISIBLE)
+	{
+	  queryData->uNextCheck = uNextCheck;
+
+	  // add random delay when nodes first become visible to prevent synchronization
+	  if(queryData->eLastResult != VISIBLE)
+	  {
+	    queryData->uNextCheck += RNG.Get(visibilityFrameSkip);
+	  }
+	}
+      }
+
+      // clear active queries
+      queries.Empty();
     }
 
     template<bool bQueryVisibility>
-    void csOccluvis::RenderMeshes(AABBVisTreeNode* node,
+    void csOccluvis::RenderMeshes(VisTreeNode* node,
                                   iRenderView* rview,
                                   size_t& lastTicket,
                                   iShader*& lastShader,
                                   iShaderVariableContext* shadervars,
                                   NodeMeshList*& nodeMeshList)
     {
-      if (bQueryVisibility)
+      // start occlusion query
+      if(bQueryVisibility)
       {
-        BeginNodeQuery (node, rview);
+        BeginNodeQuery(node, rview);
       }
 
-      // Save the current zmode.
-      csZBufMode oldZMode = g3d->GetZMode ();
-      // Also, make sure wireframe is off.
-      bool wireframe = g3d->GetEdgeDrawing();
-      if (wireframe)
-	g3d->SetEdgeDrawing (false);
-
-      for (int iCurrRenderMesh = 0, m = 0; m < nodeMeshList->numMeshes; ++m)
+      // draw all meshes in this node
+      for(int currRenderMesh = 0, m = 0; m < nodeMeshList->numMeshes; ++m)
       {
+	// get mesh wrapper for current mesh
         iMeshWrapper* mw = nodeMeshList->meshList[m].imesh;
 
-        for (int i = 0; i < nodeMeshList->meshList[m].num; ++i, ++iCurrRenderMesh)
+	// draw all render meshes in this mesh wrapper
+        for(int i = 0; i < nodeMeshList->meshList[m].num; ++i, ++currRenderMesh)
         {
+	  // get current render mesh
           csRenderMesh* rm = nodeMeshList->meshList[m].rmeshes[i];
 
-          // Check whether to draw this RM to the z-buffer or just test against it.
-          if (bQueryVisibility)
-          {
-            g3d->SetZMode (nodeMeshList->onlyTestZ[iCurrRenderMesh] ? CS_ZBUF_TEST : CS_ZBUF_USE);
-          }
-          else
-          {
-            // If we're not writing, skip.
-            if (nodeMeshList->onlyTestZ[iCurrRenderMesh])
-              continue;
+	  // get z-buffer mode for this render mesh
+	  csZBufMode zMode = nodeMeshList->onlyTestZ[currRenderMesh] ? CS_ZBUF_TEST : CS_ZBUF_USE;
 
-            // Else test against and write to the z-buffer.
-            g3d->SetZMode (CS_ZBUF_USE);
-          }
+	  // skip this mesh if it's testing and we aren't querying visibility
+	  if(!bQueryVisibility && zMode == CS_ZBUF_TEST)
+	  {
+	    continue;
+	  }
 
-          // Check for a depth shader to execute.
+          // set z-buffer mode for this render mesh
+          g3d->SetZMode(zMode);
+
+          // find the according shader - if any - to use for this render mesh
           iShader* depthShader = nullptr;
-          if (rm->material)
-          {
-            iMaterial* mat = rm->material->GetMaterial ();
 
-            if (nodeMeshList->onlyTestZ[iCurrRenderMesh])
+	  // check whether we have a material - else we use default behaviour
+          if(rm->material != nullptr)
+          {
+	    // get material
+            iMaterial* mat = rm->material->GetMaterial();
+
+	    // check whether we're only testing against the z-buffer
+            if(zMode == CS_ZBUF_TEST)
             {
-              depthShader = mat->GetShader (depthTestID);
+	      // get occlusion specific depth test shader if any
+              depthShader = mat->GetShader(depthTestID);
             }
+	    // we're writing to the depth buffer
             else
             {
-              depthShader = mat->GetShader (depthWriteID);
+	      // get occlusion specific depth write shader if any
+              depthShader = mat->GetShader(depthWriteID);
 
-              if (!depthShader)
+	      // if none was found, try the generic depth write shader
+              if(depthShader == nullptr)
               {
-                depthShader = mat->GetShader (fbDepthWriteID);
+		// get generic depth write shader if any
+                depthShader = mat->GetShader(fbDepthWriteID);
               }
             }
 
-            if (!depthShader)
+	    // if none of the above could be used, try the default shader
+            if(depthShader == nullptr)
             {
-              // TODO: Come up with some better check or remove check when shader setup perf is better.
-              if (shadervars)
+              // @@@TODO: Come up with some better check or remove check when shader setup perf is better.
+              if(shadervars != nullptr)
               {
-                depthShader = shaderMgr->GetShader (defaultShader);
+                depthShader = shaderMgr->GetShader(defaultShader);
               }
             }
           }
 
-          // Disable the alpha test (since alpha test disables fast GPU depth writing paths).
-          // If the alpha mode is smooth, ztest must be set on the mesh.
-          // If the alpha mode is binary, the *null depthwrite shader must be used.
-          CS::Graphics::RenderMeshModes modes (*rm);
+          // disable the alpha test as it disables fast depth writing paths
+          // test against z-buffer for smooth alpha mode
+          // binary alpha mode must use *null depth write shader
+          CS::Graphics::RenderMeshModes modes(*rm);
           modes.mixmode &= ~CS_MIXMODE_ALPHATEST_MASK;
           modes.mixmode |= CS_MIXMODE_ALPHATEST_DISABLE;
 
-          if(!rm->portal)
+	  // check whether this render mesh is not a portal
+          if(rm->portal == nullptr)
           {
-            if (!depthShader)
+	    // if we don't have a depth shader to use, use basic mesh setup
+            if(depthShader == nullptr)
             {
+	      // setup vertex attributes
               csVertexAttrib vA = CS_VATTRIB_POSITION;
-              iRenderBuffer *rB = rm->buffers->GetRenderBuffer (CS_BUFFER_POSITION);
-              g3d->ActivateBuffers (&vA, &rB, 1);
-              g3d->DrawMeshBasic (rm, modes);
-              g3d->DeactivateBuffers (&vA, 1);
+
+	      // setup render buffers
+              iRenderBuffer *rB = rm->buffers->GetRenderBuffer(CS_BUFFER_POSITION);
+
+	      // activate render buffers for vertex atributes
+              g3d->ActivateBuffers(&vA, &rB, 1);
+
+	      // draw this render mesh
+              g3d->DrawMeshBasic(rm, modes);
+
+	      // deactivate render buffers for vertex attributes
+              g3d->DeactivateBuffers(&vA, 1);
             }
+	    // we have a depth shader
             else
             {
-              // Set up the shadervar stack.
-              mw->GetSVContext ()->PushVariables (shaderVarStack);
-              if (shadervars) shadervars->PushVariables (shaderVarStack);
+	      // clear shader variable stack
+	      shaderVarStack.Clear();
 
-              // Get the shader ticket.
-              size_t ticket = depthShader->GetTicket (modes, shaderVarStack);
+              // add shader variables from the mesh wrapper
+              mw->GetSVContext()->PushVariables(shaderVarStack);
 
-              // Check whether we need to change the shader.
-              if (depthShader != lastShader || ticket != lastTicket)
+	      // add shader variables from specific context if any
+              if(shadervars != nullptr)
+	      {
+		shadervars->PushVariables(shaderVarStack);
+	      }
+
+              // get a ticker for our shader
+              size_t ticket = depthShader->GetTicket(modes, shaderVarStack);
+
+              // switch shader as necessary
+              if(depthShader != lastShader || ticket != lastTicket)
               {
-                if (lastShader)
-                  lastShader->DeactivatePass (lastTicket);
+		// check whether we have a previous shader
+                if(lastShader)
+		{
+		  // deactivate it
+                  lastShader->DeactivatePass(lastTicket);
+		}
 
-                // We only support single-pass here (hence the 0).
-                if (!depthShader->ActivatePass (ticket, 0))
+                // @@@NOTE: depth shaders mustn't use more than one pass
+		CS_ASSERT(depthShader->GetNumberOfPasses(ticket) == 1);
+
+		// activate the pass for our new shader
+                if(!depthShader->ActivatePass(ticket, 0))
+		{ // failed
+		  // clear previous shader as we already deactivated it
+		  lastShader = nullptr;
+
+		  // continue with next render mesh
                   continue;
+		}
 
+		// set our new shader and ticket responsibly
                 lastShader = depthShader;
                 lastTicket = ticket;
               }
 
-              // Set up the pass for this mesh.
-              if (!depthShader->SetupPass (ticket, rm, modes, shaderVarStack))
+              // setup the pass for this render mesh
+              if(!depthShader->SetupPass(ticket, rm, modes, shaderVarStack))
+	      { // pass setup failed
+		// continue with next render mesh
                 continue;
+	      }
 
-              // Draw the mesh.
-              g3d->DrawMesh (rm, modes, shaderVarStack);
+              // draw the mesh using the shader
+              g3d->DrawMesh(rm, modes, shaderVarStack);
 
-              // Prepare for the next mesh.
-              depthShader->TeardownPass (ticket);
-              shaderVarStack.Clear ();
+              // tear down pass setup for this render mesh
+              depthShader->TeardownPass(ticket);
             }
           }
+	  // this render mesh is a portal
           else
           {
-            // TODO: We're recalculating the rendermesh here, it would
-            // be better to reuse the existing portal rendermesh.. but how?? o.0
+            // @@@TODO: We're recalculating the rendermesh here, it would
+            // be better to reuse the existing portal rendermesh.. but how?
+
+	    // get vertex count 
+	    size_t vertexCount = rm->portal->GetTotalVertexCount();
+
+	    // maximum amount of vertices for the clipped result is
+	    // 3 times the total amount of vertices
+	    size_t vertexCountClipped = vertexCount * 3;
+
+	    // get portal count
+	    size_t portalCount = rm->portal->GetPortalCount();
+
+	    // setup arrays for our vertices and vertex count per polygon
+	    // we'll get one polygon per portal
+
+	    // screeen space vertices
+            csDirtyAccessArray<csVector2> allPortalVerts2d(vertexCountClipped);
+	    allPortalVerts2d.SetSize(vertexCountClipped);
+
+	    // camera space vertices
+            csDirtyAccessArray<csVector3> allPortalVerts3d(vertexCountClipped);
+	    allPortalVerts3d.SetSize(vertexCountClipped);
+
+	    // number of vertices per polygon
+            csDirtyAccessArray<size_t> allPortalVertsNums(portalCount);
+	    allPortalVertsNums.SetSize(portalCount);
+
+	    // compute our screen and camera space polygons
+            rm->portal->ComputeScreenPolygons(rview, 
+	      allPortalVerts2d.GetArray(), allPortalVerts3d.GetArray(),
+	      vertexCountClipped, allPortalVertsNums.GetArray(),
+              rview->GetGraphics3D()->GetWidth(), rview->GetGraphics3D()->GetHeight());
+
+	    // get a renderbuffer holder
             csRenderBufferHolder holder;
-            csDirtyAccessArray<csVector2> allPortalVerts2d (64);
-            csDirtyAccessArray<csVector3> allPortalVerts3d (64);
-            csDirtyAccessArray<size_t> allPortalVertsNums;
 
-            allPortalVerts2d.SetSize (rm->portal->GetTotalVertexCount () * 3);
-            allPortalVerts3d.SetSize (rm->portal->GetTotalVertexCount () * 3);
-            allPortalVertsNums.SetSize (rm->portal->GetPortalCount ());
+	    // create a scrap rendermesh we'll use for our portals
+	    csRenderMesh portalRM;
 
-            csVector3* portalVerts3d = allPortalVerts3d.GetArray ();
-            rm->portal->ComputeScreenPolygons (rview, allPortalVerts2d.GetArray (),
-              allPortalVerts3d.GetArray (), rm->portal->GetTotalVertexCount () * 3,
-              allPortalVertsNums.GetArray (), rview->GetGraphics3D()->GetWidth (),
-              rview->GetGraphics3D()->GetHeight ());
+	    // set our render buffer holder
+            portalRM.buffers = &holder;
 
-            csRenderMeshHolder rmHolder;
-            for (int p = 0; p < rm->portal->GetPortalCount (); ++p)
+	    // set index start as it's constant among our meshes
+            portalRM.indexstart = 0;
+
+	    // set mesh type to triangle fan (used for portals)
+            portalRM.meshtype = CS_MESHTYPE_TRIANGLEFAN;
+
+	    // set z-buffer mode to test only
+            portalRM.z_buf_mode = CS_ZBUF_TEST;
+
+	    // set our camera transform
+            portalRM.object2world = rview->GetCamera()->GetTransform();
+
+	    // set mixmode to transparent (don't touch frame buffer, only modify z-buffer)
+            portalRM.mixmode = CS_FX_TRANSPARENT;
+
+	    // create our vertex attribute
+            csVertexAttrib vA = CS_VATTRIB_POSITION;
+
+	    // get our flat vertex data
+	    csVector3* portalVerts = allPortalVerts3d.GetArray();
+
+	    // go over all portals to create their render meshes and draw them
+            for(int p = 0; p < portalCount; ++p)
             {
+	      // get vertex count for this portal
               size_t count = allPortalVertsNums[p];
 
-              csRef<csRenderBuffer> vertBuffer, indexBuffer;
-              vertBuffer = csRenderBuffer::CreateRenderBuffer (count, CS_BUF_STREAM, CS_BUFCOMP_FLOAT, 3);
-              indexBuffer = csRenderBuffer::CreateIndexRenderBuffer(count, CS_BUF_STREAM, CS_BUFCOMP_UNSIGNED_INT, 0, 4);
-              holder.SetRenderBuffer (CS_BUFFER_POSITION, vertBuffer);
-              holder.SetRenderBuffer (CS_BUFFER_INDEX, indexBuffer);
+	      // copy position buffer
+	      {
+		// create buffer
+		csRef<csRenderBuffer> buffer = csRenderBuffer::CreateRenderBuffer(count, CS_BUF_STREAM, CS_BUFCOMP_FLOAT, 3);
 
-              {
-                csRenderBufferLock<csVector3> coords (vertBuffer);
-                for (size_t c = 0; c < count; c++)
-                  coords[c].Set (portalVerts3d[c]);
+		// copy from our source
+		buffer->CopyInto(portalVerts, count);
 
-                csRenderBufferLock<uint> indices (indexBuffer);
-                for (size_t c = 0; c < count; c++)
-                  *indices++ = uint (c);
-              }
+		// attach buffer
+		holder.SetRenderBuffer(CS_BUFFER_POSITION, buffer);
+	      }
 
-              bool meshCreated;
-              csRenderMesh* pViscullRM = rmHolder.GetUnusedMesh (meshCreated, rview->GetCurrentFrameNumber());
-              pViscullRM->meshtype = CS_MESHTYPE_TRIANGLEFAN;
-              pViscullRM->buffers = &holder;
-              pViscullRM->z_buf_mode = CS_ZBUF_TEST;
-              pViscullRM->object2world = rview->GetCamera()->GetTransform();
-              pViscullRM->indexstart = 0;
-              pViscullRM->indexend = uint (count);
-              pViscullRM->mixmode &= ~CS_MIXMODE_ALPHATEST_MASK;
-              pViscullRM->mixmode |= CS_MIXMODE_ALPHATEST_DISABLE;
+	      // create index buffer
+	      {
+		// create buffer
+		csRef<csRenderBuffer> buffer = csRenderBuffer::CreateIndexRenderBuffer(count, CS_BUF_STREAM, CS_BUFCOMP_UNSIGNED_INT, 0, 4);
 
-              csVertexAttrib vA = CS_VATTRIB_POSITION;
-              iRenderBuffer *rB = pViscullRM->buffers->GetRenderBuffer (CS_BUFFER_POSITION);
-              g3d->ActivateBuffers (&vA, &rB, 1);
-              g3d->DrawMeshBasic (pViscullRM, *pViscullRM);
-              g3d->DeactivateBuffers (&vA, 1);
+		// fill it
+		{
+		  csRenderBufferLock<uint> lock(buffer);
+		  for(size_t i = 0; i < count; ++i)
+		    *lock++ = uint(i);
+		}
 
-              portalVerts3d += count;
+		// set buffer
+		holder.SetRenderBuffer(CS_BUFFER_INDEX, buffer);
+	      }
+
+	      // set index end for this mesh
+              portalRM.indexend = uint(count);
+
+	      // get our position buffer for this mesh
+              iRenderBuffer* rB = holder.GetRenderBuffer(CS_BUFFER_POSITION);
+
+	      // activate the buffer for the position attribute
+              g3d->ActivateBuffers(&vA, &rB, 1);
+
+	      // draw this render mesh
+              g3d->DrawMeshBasic(&portalRM, portalRM);
+
+	      // deactivate our position buffer
+              g3d->DeactivateBuffers(&vA, 1);
+
+	      // offset our vertex buffer for the next portal
+              portalVerts += count;
             }
           }
         }
       }
 
-      // Restore the zmode.
-      g3d->SetZMode (oldZMode);
-      // And wireframe.
-      if (wireframe)
-	g3d->SetEdgeDrawing (true);
-
-      if (bQueryVisibility)
+      // finish occlusion query
+      if(bQueryVisibility)
       {
-        g3d->OQEndQuery ();
+        g3d->OQEndQuery();
       }
     }
 
     template<bool bDoFrustumCulling>
-    void csOccluvis::TraverseTreeF2B(AABBVisTreeNode* node,
-                                     uint32 frustum_mask,
+    bool csOccluvis::TraverseTreeF2B(VisTree* node,
                                      Front2BackData& f2bData,
-                                     csRefArray<NodeMeshList>& meshList)
+#				    if (OCCLUVIS_TREETYPE == 0)
+				    uint32 timestamp,
+#				    endif
+				    uint32& frustumMask)
     {
-      if (bDoFrustumCulling)
+      // check whether we should perform frustum culling
+      if(bDoFrustumCulling)
       {
-        NodeVisibility nodevis = TestNodeVisibility (node, f2bData, frustum_mask);
+	// get bbox for this node
+	csBox3 bbox = node->GetNodeBBox();
 
-        if (nodevis == NODE_INVISIBLE)
-          return;
+	// check whether we're not inside the box
+	if(!bbox.Contains(f2bData.pos))
+	{
+	  uint32 newMask;
+	  // check whether this node is completely invisible
+	  if(!csIntersect3::BoxFrustum(bbox, f2bData.frustum, frustumMask, newMask))
+	  {
+	    // this node is completely invisible - stop traversal
+	    return false;
+	  }
+	  // check whether this node is completely visible - i.e. there are no active clipping planes
+	  else if(newMask == 0)
+	  {
+	    // continue traversal without frustum culling as this node (and by
+	    // extension all child nodes) are completely contained in the frustum
+	    // hack around gcc 4.4 being unwilling to do a cast
+            bool (*func)(VisTree*,
+                   Front2BackData&,
+#                  if (OCCLUVIS_TREETYPE == 0)
+                   uint32,
+#                  endif
+                   uint32&) = &TraverseTreeF2B<false>;
+	    node->Front2Back(f2bData.pos, (VisTree::VisitFunc*)func, &f2bData, frustumMask);
+	    return false;
+	  }
 
-        if (nodevis == NODE_VISIBLE && frustum_mask == 0)
+	  // update frustum mask
+	  frustumMask = newMask;
+	}
+
+	// node is partially visible
+      }
+
+      // we're continuing traversal - make sure objects are distributed
+      node->Distribute();
+
+      // test objects in this node
+      VisTreeNode** objects = node->GetObjects();
+      for(int i = 0; i < node->GetObjectCount(); ++i)
+      {
+        // get visibility object for this tree object
+        iVisibilityObject* visobj = GetNodeVisObject(objects[i]);
+
+#	if (OCCLUVIS_TREETYPE == 0)
+	// test whether we already visited this node
+	if(objects[i]->timestamp == timestamp)
+	{
+	  // skip this object
+	  continue;
+	}
+
+	// update object timestamp
+	objects[i]->timestamp = timestamp;
+#	endif
+
+        // skip this object if it's marked invisible
+        if(visobj->GetMeshWrapper()->GetFlags().Check(CS_ENTITY_INVISIBLEMESH))
         {
-          TraverseTreeF2B<false> (node, frustum_mask, f2bData, meshList);
-          return;
+	  continue;
+	}
+
+	// get visible meshes in this object
+        csSectorVisibleRenderMeshes* sectorMeshList;
+        int const numMeshes = f2bData.viscallback->GetVisibleMeshes(visobj->GetMeshWrapper(), frustumMask, sectorMeshList);
+
+	// check whether there are any visible ones
+        bool hasMeshes = false;
+        for(int j = 0; j < numMeshes; ++j)
+        {
+          hasMeshes |= (sectorMeshList[j].num > 0);
         }
-      }
 
-      if (!node->IsLeaf())
-      {
-        AABBVisTreeNode* frontNode, *backNode;
-        GetF2BChildren (node, f2bData, frontNode, backNode);
-        TraverseTreeF2B<bDoFrustumCulling> (frontNode, frustum_mask, f2bData, meshList);
-        TraverseTreeF2B<bDoFrustumCulling> (backNode, frustum_mask, f2bData, meshList);
-      }
-      else
-      {
-        // One object only in this AABBTree
-        iVisibilityObject* visobj = node->GetLeafData (0);
+	// continue with the next object if this one has no visible meshes
+	if(!hasMeshes)
+	{
+	  continue;
+	}
 
-        // Only test an object via occlusion if it's not flagged invisible.
-        if(!visobj->GetMeshWrapper ()->GetFlags ().Check (CS_ENTITY_INVISIBLEMESH))
+	// get a mesh hash for this object in this render view
+        VisObjMeshHash& visobjMeshHash = f2bData.parent->visobjMeshHashHash.GetOrCreate(f2bData.rview);
+
+	// get a mesh list from the hash
+        csRef<NodeMeshList> meshes = visobjMeshHash.Get(csPtrKey<iVisibilityObject>(visobj), csRef<NodeMeshList>());
+
+	// if there's none, yet, create one
+        if(!meshes.IsValid())
         {
-          csSectorVisibleRenderMeshes* sectorMeshList;
-          const int numMeshes = f2bData.viscallback->GetVisibleMeshes (visobj->GetMeshWrapper (), frustum_mask, sectorMeshList);
+          meshes.AttachNew(new NodeMeshList());
+          visobjMeshHash.Put(visobj, meshes);
+        }
 
-          bool hasMeshes = false;
-          for (int i = 0; i < numMeshes; ++i)
+        // update the mesh list data
+        meshes->node = objects[i];
+        meshes->framePassed = f2bData.parent->engine->GetCurrentFrameNumber();
+
+	// backup old mesh count
+	int const oldNumMeshes = meshes->numMeshes;
+
+        // resize mesh list if needed
+	if(meshes->meshList == nullptr || oldNumMeshes != numMeshes)
+	{
+	  // we mustn't have meshes without a storage
+	  CS_ASSERT(!(meshes->meshList == nullptr && oldNumMeshes != 0));
+
+	  // iterate over to-be-freed mesh lists
+	  for(int m = numMeshes; m < oldNumMeshes; ++m)
+	  {
+	    // free no longer needed render mesh storage
+	    cs_free(meshes->meshList[m].rmeshes);
+	  }
+
+	  // relocate storage
+	  // @@@TODO: maybe we should check for numMeshes == 0 here and free in that case
+	  meshes->meshList = (csSectorVisibleRenderMeshes*)cs_realloc(
+	    meshes->meshList, sizeof(csSectorVisibleRenderMeshes) * numMeshes);
+
+	  // check for allocation failure
+	  CS_ASSERT(meshes->meshList);
+
+	  // clear storage for uninit lists
+	  for(int m = oldNumMeshes; m < numMeshes; ++m)
+	  {
+	    meshes->meshList[m].num = 0;
+	    meshes->meshList[m].rmeshes = nullptr;
+	  }
+
+	  // update number of meshes
+	  meshes->numMeshes = numMeshes;
+	}
+
+	// perform a semi-deep copy of the original list and get the total number of
+	// render meshes
+	size_t numRenderMeshes = 0;
+	for(int m = 0; m < numMeshes; ++m)
+	{
+	  // get number of render meshes in this mesh
+	  int num = sectorMeshList[m].num;
+
+	  // copy mesh reference
+	  meshes->meshList[m].imesh = sectorMeshList[m].imesh;
+
+	  // resize render mesh storage if needed
+	  if(meshes->meshList[m].rmeshes == nullptr || meshes->meshList[m].num != num)
+	  {
+	    // relocate storage
+	    meshes->meshList[m].rmeshes = (csRenderMesh**)cs_realloc(
+	      meshes->meshList[m].rmeshes,
+	      sizeof(csRenderMesh*) * num);
+
+	    // check for allocation failure
+	    CS_ASSERT(meshes->meshList[m].rmeshes);
+
+	    // update number of render meshes
+	    meshes->meshList[m].num = num;
+	  }
+
+	  // copy render mesh references
+	  memcpy(meshes->meshList[m].rmeshes, sectorMeshList[m].rmeshes, sizeof(csRenderMesh*) * num);
+
+	  // update total number of render meshes
+	  numRenderMeshes += num;
+	}
+
+        // check for 'always visible'
+        switch(visobj->GetMeshWrapper()->GetZBufMode())
+        {
+        case CS_ZBUF_NONE:
+        case CS_ZBUF_INVERT: // @@@TODO: why is INVERT always visible? it's just an inverted TEST
+        case CS_ZBUF_FILL:
           {
-            hasMeshes |= (sectorMeshList->num > 0);
+            meshes->alwaysVisible = true;
+            break;
           }
-
-          if (hasMeshes)
+        default:
           {
-            VisObjMeshHash& visobjMeshHash = visobjMeshHashes.GetOrCreate (f2bData.rview);
-            csRef<NodeMeshList> meshes = visobjMeshHash.Get (csPtrKey<iVisibilityObject> (visobj), csRef<NodeMeshList> ());
-            if (!meshes.IsValid ())
-            {
-              meshes.AttachNew (new NodeMeshList ());
-              visobjMeshHash.Put (visobj, meshes);
-            }
+            meshes->alwaysVisible = visobj->GetMeshWrapper()->GetFlags().Check(CS_ENTITY_ALWAYSVISIBLE);
+            break;
+          }
+        }
 
-            // Update the meshes data.
-            meshes->node = node;
-            meshes->framePassed = engine->GetCurrentFrameNumber ();
+        // Check for 'test only'
+        bool bNeverDrawAny = false;
 
-            // Resize the meshlist if needed.
-            if (!meshes->meshList || meshes->numMeshes != numMeshes)
-            {
-              for (int m = 0; m < meshes->numMeshes; ++m)
-              {
-                delete[] meshes->meshList[m].rmeshes;
-              }
-
-              delete[] meshes->meshList;
-              meshes->meshList = new csSectorVisibleRenderMeshes[numMeshes];
-              meshes->numMeshes = numMeshes;
-
-              for (int m = 0; m < numMeshes; ++m)
-              {
-                // Do a semi-deep copy.
-                meshes->meshList[m].imesh = sectorMeshList[m].imesh;
-                meshes->meshList[m].num = sectorMeshList[m].num;
-                meshes->meshList[m].rmeshes = new csRenderMesh*[sectorMeshList[m].num];
-                memcpy (meshes->meshList[m].rmeshes, sectorMeshList[m].rmeshes, sizeof (csRenderMesh*) * sectorMeshList[m].num);
-              }
-            }
-            else
-            {
-              // Resize the rendermeshes if needed, else just copy.
-              for (int m = 0; m < numMeshes; ++m)
-              {
-                // Do a semi-deep copy.
-                if (meshes->meshList[m].num != sectorMeshList[m].num)
-                {
-                  meshes->meshList[m].num = sectorMeshList[m].num;
-                  delete[] meshes->meshList[m].rmeshes;
-                  meshes->meshList[m].rmeshes = new csRenderMesh*[sectorMeshList[m].num];
-                }
-
-                meshes->meshList[m].imesh = sectorMeshList[m].imesh;
-                memcpy (meshes->meshList[m].rmeshes, sectorMeshList[m].rmeshes, sizeof (csRenderMesh*) * sectorMeshList[m].num);
-              }
-            }
-
-            // We will store per-rendermesh data.
-            size_t numRenderMeshes = 0;
-            for (int i = 0; i < numMeshes; ++i)
-              numRenderMeshes += sectorMeshList[i].num;
-
-            meshes->onlyTestZ.SetSize (numRenderMeshes);
-
-            // Check for the 'always visible' state.
-            switch (visobj->GetMeshWrapper ()->GetZBufMode ())
-            {
-            case CS_ZBUF_NONE:
-            case CS_ZBUF_INVERT:
-            case CS_ZBUF_FILL:
-              {
-                meshes->alwaysVisible = true;
-                break;
-              }
-            default:
-              {
-                meshes->alwaysVisible = visobj->GetMeshWrapper ()->GetFlags ().Check (CS_ENTITY_ALWAYSVISIBLE);
-                break;
-              }
-            }
-
-            // Check for a mesh 'never draw' Z state.
-            bool bNeverDrawAny = false;
-
-            // Portals are never drawn to Z.
-            if (visobj->GetMeshWrapper ()->GetPortalContainer ())
+        // portals never perform depth writes
+        if(visobj->GetMeshWrapper()->GetPortalContainer())
+        {
+          bNeverDrawAny = true;
+        }
+        else
+        {
+          // check the z-buffer mode
+          switch(visobj->GetMeshWrapper()->GetZBufMode())
+          {
+          case CS_ZBUF_NONE:
+          case CS_ZBUF_INVERT:
+          case CS_ZBUF_TEST:
+          case CS_ZBUF_EQUAL:
             {
               bNeverDrawAny = true;
+              break;
             }
-            else
-            {
-              // Check the z buffer mode of the mesh.
-              switch (visobj->GetMeshWrapper ()->GetZBufMode ())
-              {
-              case CS_ZBUF_NONE:
-              case CS_ZBUF_INVERT:
-              case CS_ZBUF_TEST:
-              case CS_ZBUF_EQUAL:
-                {
-                  bNeverDrawAny = true;
-                  break;
-                }
-              default:
-                break;
-              }
-            }
-
-            // Check the 'never draw' state of each render mesh.
-            for (int iCurrRenderMesh = 0, m = 0; m < numMeshes; ++m)
-            {
-              // For each render mesh; check if there is a depth-test shader - only test the z-buffer.
-              for (int r = 0; r < sectorMeshList[m].num; ++r, ++iCurrRenderMesh)
-              {
-                bool bOnlyTestZ = bNeverDrawAny;
-                if (!bOnlyTestZ)
-                {
-                  switch (sectorMeshList[m].rmeshes[r]->z_buf_mode)
-                  {
-                  case CS_ZBUF_NONE:
-                  case CS_ZBUF_INVERT:
-                  case CS_ZBUF_TEST:
-                  case CS_ZBUF_EQUAL:
-                    {
-                      bOnlyTestZ = true;
-                      break;
-                    }
-                  default:
-                    break;
-                  }
-
-                  if (!bOnlyTestZ && sectorMeshList[m].rmeshes[r]->material)
-                  {
-                    iMaterial* mat = sectorMeshList[m].rmeshes[r]->material->GetMaterial ();
-                    iShader* depthShader = mat->GetShader (depthWriteID);
-                    if (!depthShader)
-                    {
-                      depthShader = mat->GetShader (fbDepthWriteID);
-                    }
-
-                    if (depthShader == shaderMgr->GetShader ("*null"))
-                    {
-                      bOnlyTestZ = true;
-                    }
-                  }
-                }
-
-                meshes->onlyTestZ.Set (iCurrRenderMesh, bOnlyTestZ);
-              }
-            }
-
-            meshList.PushSmart (meshes);
+          default:
+            break;
           }
         }
+
+	// relocate our per-mesh data storage
+        meshes->onlyTestZ.SetSize(numRenderMeshes);
+
+	// if the mesh has a 'test only' z-mode, just update it for all render meshes
+	if(bNeverDrawAny)
+	{
+	  meshes->onlyTestZ.SetAll();
+	}
+	// if the mesh performs depth writes we have to check individual meshes for their modes
+	else
+	{
+	  // check 'test only' state of each render mesh
+	  for(int currRenderMesh = 0, m = 0; m < numMeshes; ++m)
+	  {
+	    // go through all render meshes
+	    for(int r = 0; r < sectorMeshList[m].num; ++r, ++currRenderMesh)
+	    {
+	      // the mesh wrapper uses depth writes
+	      bool bOnlyTestZ = false;
+
+	      // check the render mesh for a test only depth-buffer mode
+	      switch(sectorMeshList[m].rmeshes[r]->z_buf_mode)
+	      {
+	      case CS_ZBUF_NONE:
+	      case CS_ZBUF_INVERT:
+	      case CS_ZBUF_TEST:
+	      case CS_ZBUF_EQUAL:
+		{
+		  bOnlyTestZ = true;
+		  break;
+		}
+	      default:
+		break;
+	      }
+
+	      // if the render mesh doesn't use such a mode, it's material may still prohibit
+	      // depth writes - check whether it has a material
+	      if(!bOnlyTestZ && sectorMeshList[m].rmeshes[r]->material)
+	      {
+		// get the material
+		iMaterial* mat = sectorMeshList[m].rmeshes[r]->material->GetMaterial();
+
+		// get the occlusion specific depth write shader
+		iShader* depthShader = mat->GetShader(f2bData.parent->depthWriteID);
+
+		// check whether it's null
+		if(depthShader == nullptr)
+		{
+		  // get the default depth write shader
+		  depthShader = mat->GetShader(f2bData.parent->fbDepthWriteID);
+		}
+
+		// check whether it's the "*null" shader which prohibits depth writes
+		if(depthShader == f2bData.parent->shaderMgr->GetShader("*null"))
+		{
+		  bOnlyTestZ = true;
+		}
+	      }
+
+	      meshes->onlyTestZ.Set(currRenderMesh, bOnlyTestZ);
+	    }
+          }
+        }
+
+        f2bData.meshList->PushSmart(meshes);
       }
+
+      return true;
     }
 
-    OcclusionVisibility csOccluvis::GetNodeVisibility (AABBVisTreeNode* node, iRenderView* rview)
+    OcclusionVisibility csOccluvis::GetNodeVisibility(VisTreeNode* node, iRenderView* rview)
     {
-      uint32 uFrame = engine->GetCurrentFrameNumber ();
-      QueryData* queryData = GetNodeVisData (node).GetQueryData (g3d, rview);
+      // get query data for our node
+      QueryData* queryData = GetNodeVisData(node).GetQueryData(g3d, rview);
 
-      if (uFrame >= queryData->uNextCheck)
-      {
-        queryData->uNextCheck = uFrame;
-      }
-
-      if (queryData->eResult == INVALID || uFrame != queryData->uQueryFrame + 1)
+      // mark node visible if we don't have a valid result
+      if(queryData->eResult == INVALID)
       {
         return VISIBLE;
       }
 
-      if (queryData->eResult != UNKNOWN)
-      {
-        return queryData->eResult;
-      }
-
-      queryData->eResult = g3d->OQIsVisible (queryData->uOQuery) ? VISIBLE : INVISIBLE;
-
-      if (queryData->eResult == VISIBLE)
-      {
-        queryData->uNextCheck += visibilityFrameSkip * (uint32)nodeMeshHash.GetSize ();
-      }
-
+      // mark node visibility according to cached result
       return queryData->eResult;
     }
 
-    bool csOccluvis::CheckNodeVisibility (AABBVisTreeNode* node, iRenderView* rview)
+    bool csOccluvis::CheckNodeVisibility(VisTreeNode* node, iRenderView* rview)
     {
-      QueryData* queryData = GetNodeVisData (node).GetQueryData (g3d, rview);
+      // get current frame number
+      uint32 uFrame = engine->GetCurrentFrameNumber();
 
-      if (engine->GetCurrentFrameNumber () >= queryData->uNextCheck)
-      {
-        return true;
-      }
+      // get query data for our node
+      QueryData* queryData = GetNodeVisData(node).GetQueryData(g3d, rview);
 
-      return false;
+      // check whether it's time to perform a new test, yet
+      return uFrame >= queryData->uNextCheck;
     }
 
-    void csOccluvis::BeginNodeQuery (AABBVisTreeNode* node, iRenderView* rview)
+    void csOccluvis::BeginNodeQuery(VisTreeNode* node, iRenderView* rview)
     {
-      QueryData* queryData = GetNodeVisData (node).GetQueryData (g3d, rview);
+      // get query data for our node
+      QueryData* queryData = GetNodeVisData(node).GetQueryData(g3d, rview);
 
+      // backup old result
+      queryData->eLastResult = queryData->eResult;
+
+      // clear cached result
       queryData->eResult = UNKNOWN;
-      queryData->uQueryFrame = engine->GetCurrentFrameNumber ();
 
-      g3d->OQBeginQuery (queryData->uOQuery);
+      // add query to active query list
+      queries.Push(queryData);
+
+      // start query
+      g3d->OQBeginQuery(queryData->uOQuery);
     }
 
-    void csOccluvis::GetF2BChildren (AABBVisTreeNode* node, Front2BackData& data,
-      AABBVisTreeNode*& fChild, AABBVisTreeNode*& bChild)
+    csOccluvis::csOccluvis(iObjectRegistry* object_reg)
+      : scfImplementationType(this), object_reg(object_reg),
+        shaderVarStack(0,0)
     {
-      csVector3 direction = data.rview->GetCamera ()->GetTransform ().GetFront ();
-      const csVector3 centerDiff = node->GetChild2 ()->GetBBox ().GetCenter () -
-        node->GetChild1 ()->GetBBox ().GetCenter ();
+      // get config to read settings
+      csConfigAccess config(object_reg);
 
-      const size_t firstIdx = (centerDiff * direction > 0) ? 0 : 1;
+      // get iGraphics3D ref
+      g3d = csQueryRegistry<iGraphics3D>(object_reg);
 
-      fChild = node->GetChild (firstIdx);
-      bChild = node->GetChild (1 - firstIdx);
-    }
+      // get iEngine ref
+      engine = csQueryRegistry<iEngine>(object_reg);
 
-    csOccluvis::csOccluvis (iObjectRegistry* object_reg)
-      : scfImplementationType (this), object_reg (object_reg),
-        shaderVarStack (0,0)
-    {
-      g3d = csQueryRegistry<iGraphics3D> (object_reg);
-      engine = csQueryRegistry<iEngine> (object_reg);
-      shaderMgr = csQueryRegistry<iShaderManager> (object_reg);
-      stringSet = csQueryRegistryTagInterface<iStringSet> (
+      // get iShaderManager ref
+      shaderMgr = csQueryRegistry<iShaderManager>(object_reg);
+
+      // get iStringSet ref
+      stringSet = csQueryRegistryTagInterface<iStringSet>(
         object_reg, "crystalspace.shared.stringset");
-      svStrings = csQueryRegistryTagInterface<iShaderVarStringSet> (
+
+      // get iShaderVarStringSet ref
+      svStrings = csQueryRegistryTagInterface<iShaderVarStringSet>(
         object_reg, "crystalspace.shader.variablenameset");
 
+      // disable precaching
       bAllVisible = false;
-      vistest_objects_inuse = false;
+
+      // disable extern object list
+      vistestObjectsInuse = false;
+
+      // get frame skip parameter from config
+      visibilityFrameSkip = config->GetInt("Engine.Occluvis.FrameSkip", 10);
     }
 
-    csOccluvis::~csOccluvis ()
+    csOccluvis::~csOccluvis()
     {
-      csArray<csRefArray<NodeMeshList>*> nodeMeshLists = nodeMeshHash.GetAll ();
-      for (size_t i = 0; i < nodeMeshLists.GetSize (); ++i)
+      // get all mesh lists
+      csArray<csRefArray<NodeMeshList>*> nodeMeshLists = nodeMeshHash.GetAll();
+
+      // iterate over all mesh lists and delete them
+      for(size_t i = 0; i < nodeMeshLists.GetSize(); ++i)
       {
         delete nodeMeshLists[i];
       }
     }
 
-    void csOccluvis::Setup (const char* defaultShaderName)
+    void csOccluvis::Setup(char const* defaultShaderName)
     {
+      // set name of default shader
       defaultShader = defaultShaderName;
-      depthWriteID = stringSet->Request ("oc_depthwrite");
-      depthTestID = stringSet->Request ("oc_depthtest");
-      fbDepthWriteID = stringSet->Request ("depthwrite");
+
+      // get id for occlusion specific depth write shader
+      depthWriteID = stringSet->Request("oc_depthwrite");
+
+      // get id for occlusion specific depth test shader
+      depthTestID = stringSet->Request("oc_depthtest");
+
+      // get id for generic depth write shader
+      fbDepthWriteID = stringSet->Request("depthwrite");
     }
 
-    void csOccluvis::RegisterVisObject (iVisibilityObject* visobj)
+    void csOccluvis::RegisterVisObject(iVisibilityObject* visobj)
     {
-      csRef<csVisibilityObjectWrapper> visobj_wrap;
-      visobj_wrap.AttachNew (new csVisibilityObjectWrapper (this, visobj));
-
-      AddObject (visobj);
-
-      iMovable* movable = visobj->GetMovable ();
-      movable->AddListener (visobj_wrap);
-
-      iObjectModel* objmodel = visobj->GetObjectModel ();
-      objmodel->AddListener (visobj_wrap);
-
-      visObjects.Push (visobj_wrap);
-    }
-
-    void csOccluvis::UnregisterVisObject (iVisibilityObject* visobj)
-    {
+      // ensure the object is valid
       CS_ASSERT(visobj);
 
-      for (size_t i = 0 ; i < visObjects.GetSize () ; i++)
+      // get the moveable
+      iMovable* movable = visobj->GetMovable();
+      CS_ASSERT(movable);
+
+      // get the object model
+      iObjectModel* objModel = visobj->GetObjectModel();
+      CS_ASSERT(objModel);
+
+      // update the bbox
+      visobj->GetMeshWrapper()->GetWorldBoundingBox();
+
+      // create tree node data
+      TreeNodeData* data = new TreeNodeData;
+
+      // set it's visibility object
+      data->visobj = visobj;
+
+      // add the object to the tree
+      VisTreeNode* node = AddObject(visobj->GetBBox(), data);
+
+      // create our wrapper for it
+      csRef<csVisibilityObjectWrapper> visobjWrap;
+      visobjWrap.AttachNew(new csVisibilityObjectWrapper(this, node, visobj));
+
+      // add the wrapper as movable listener
+      movable->AddListener(visobjWrap);
+
+      // add the wrapper as object model listener
+      objModel->AddListener(visobjWrap);
+
+      // add the wrapper to our own list
+      visObjects.Push(visobjWrap);
+    }
+
+    void csOccluvis::UnregisterVisObject(iVisibilityObject* visobj)
+    {
+      // ensure the object is valid
+      CS_ASSERT(visobj);
+
+#     ifdef CS_DEBUG
+      // keep track whether this object belongs to us
+      bool found = false;
+#     endif
+
+      // find the wrapper for this object and delete it
+      for(size_t i = 0; i < visObjects.GetSize(); ++i)
       {
-        csVisibilityObjectWrapper* visobj_wrap = visObjects[i];
+	// get our wrapper
+        csVisibilityObjectWrapper* visobjWrap = visObjects[i];
+	CS_ASSERT(visobjWrap);
 
-        if (visobj_wrap->GetVisObject () == visobj)
+	// check whether it belongs to our object
+        if(visobjWrap->GetVisObject() == visobj)
         {
-          iMovable* movable = visobj->GetMovable ();
-          movable->RemoveListener (visobj_wrap);
+#	  ifdef CS_DEBUG
+	  // found it
+	  found = true;
+#	  endif
 
-          iObjectModel* objmodel = visobj->GetObjectModel ();
-          objmodel->RemoveListener (visobj_wrap);
+	  // get the tree node
+	  VisTreeNode* node = visobjWrap->GetNode();
+	  CS_ASSERT(node);
 
-          visObjects.DeleteIndexFast (i);
+	  // get movable
+          iMovable* movable = visobj->GetMovable();
+	  CS_ASSERT(movable);
+
+	  // get object model
+	  iObjectModel* objModel = visobj->GetObjectModel();
+	  CS_ASSERT(objModel);
+
+	  // remove movable listener
+          movable->RemoveListener(visobjWrap);
+
+	  // remove object model listener
+          objModel->RemoveListener(visobjWrap);
+
+	  // free node data
+	  delete static_cast<TreeNodeData*>(node->GetObject());
+
+	  // remove object from tree
+	  RemoveObject(node);
+
+	  // delete object
+          visObjects.DeleteIndexFast(i);
           break;
         }
       }
 
-      csArray<csRefArray<NodeMeshList>*> nodeMeshLists = nodeMeshHash.GetAll ();
+      // ensure the object was found
+      CS_ASSERT(found);
 
-      VisObjMeshHashes::GlobalIterator itr = visobjMeshHashes.GetIterator ();
-      while (itr.HasNext ())
+      // get all mesh lists for the various render views
+      csArray<csRefArray<NodeMeshList>*> nodeMeshLists = nodeMeshHash.GetAll();
+
+      // go over the hash of hashes so we can delete our object from all lists
+      VisObjMeshHashHash::GlobalIterator itr = visobjMeshHashHash.GetIterator();
+      while(itr.HasNext())
       {
-        VisObjMeshHash& visobjMeshHash = itr.Next ();
-        csArray<NodeMeshList*> meshLists = visobjMeshHash.GetAll(csPtrKey<iVisibilityObject> (visobj));
+	// get the current hash
+        VisObjMeshHash& visobjMeshHash = itr.Next();
+
+	// get all lists in this hash that belong to our object
+        csArray<NodeMeshList*> meshLists = visobjMeshHash.GetAll(csPtrKey<iVisibilityObject>(visobj));
+
+	// go over the list of lists to delete the ones belonging to our object
         for(size_t i = 0; i < nodeMeshLists.GetSize(); ++i)
         {
           for(size_t j = 0; j < meshLists.GetSize(); ++j)
@@ -620,138 +906,131 @@ namespace CS
           }
         }
 
-        visobjMeshHash.DeleteAll (csPtrKey<iVisibilityObject> (visobj));
+	// clear the lists we just removed from our hash
+        visobjMeshHash.DeleteAll(csPtrKey<iVisibilityObject>(visobj));
       }
-
-      RemoveObject (visobj);
-    }
-
-    /*--------------------------------------------------------------------*/
-    /*        IMPORTANT...does the essence of the frustum culling         */
-    /*--------------------------------------------------------------------*/
-    NodeVisibility csOccluvis::TestNodeVisibility (AABBVisTreeNode* node,
-      Front2BackData& data, uint32& frustum_mask)
-    {
-      csBox3 node_bbox = node->GetBBox ();
-
-      if (node_bbox.Contains (data.pos))
-      {
-        return NODE_INSIDE;
-      }
-
-      uint32 new_mask;
-      if (!csIntersect3::BoxFrustum (node_bbox, data.frustum, frustum_mask,
-        new_mask))
-      {
-        return NODE_INVISIBLE;
-      }
-
-      frustum_mask = new_mask;
-      return NODE_VISIBLE;
     }
 
     //======== VisTest =========================================================
 
-    void csOccluvis::MarkAllVisible (AABBVisTreeNode* node, Front2BackData& f2bData)
+    void csOccluvis::MarkAllVisible(VisTree* node, Front2BackData& f2bData)
     {
-      if (node->IsLeaf ())
+      // get objects in the node itself (no need to distribute here)
+      VisTreeNode** objects = node->GetObjects();
+
+      // go over all objects and mark them visible
+      for(int i = 0; i < node->GetObjectCount(); ++i)
       {
-        const int num_objects = node->GetObjectCount ();
-        iVisibilityObject** objects = node->GetLeafObjects ();
-
-        // Continue with frustum and other checks.
-        for (int i = 0 ; i < num_objects ; i++)
-        {
-          iVisibilityObject* obj = objects[i];
-          f2bData.viscallback->ObjectVisible (obj, obj->GetMeshWrapper (), 0);
-        }
+	iVisibilityObject* object = GetNodeVisObject(objects[i]);
+	f2bData.viscallback->ObjectVisible(object, object->GetMeshWrapper(), 0);
       }
-      else
+
+      // traverse tree
+      VisTree* child1 = node->GetChild1();
+      VisTree* child2 = node->GetChild2();
+      if(child1)
       {
-        AABBVisTreeNode* child1 = node->GetChild1 ();
-        AABBVisTreeNode* child2 = node->GetChild2 ();
-
-        if (child1) MarkAllVisible (child1, f2bData);
-        if (child2) MarkAllVisible (child2, f2bData);
+	MarkAllVisible(child1, f2bData);
+	MarkAllVisible(child2, f2bData);
       }
-    }
-
-    int csOccluvis::NodeMeshListCompare (NodeMeshList* const& object, AABBVisTreeNode* const& key)
-    {
-      if (object->node == key)
-        return 0;
-
-      return 1;
     }
 
     /*------------------------------------------------------------------*/
     /*--------------------------- MAIN DADDY ---------------------------*/
     /*------------------------------------------------------------------*/
-    bool csOccluvis::VisTest (iRenderView* rview, iVisibilityCullerListener* viscallback, int, int)
+
+    bool csOccluvis::VisTest(iRenderView* rview, iVisibilityCullerListener* viscallback, int, int)
     {
-      csRenderContext* ctxt = rview->GetRenderContext ();
-      uint32 frustum_mask = ctxt->clip_planes_mask;
+      // make sure query results are read back
+      FinishQueries();
 
+      // get the render context of this few
+      csRenderContext* ctxt = rview->GetRenderContext();
+
+      // get the frustum mask for that context
+      uint32 frustumMask = ctxt->clip_planes_mask;
+
+      // allocate front to back data
       Front2BackData f2bData;
+
+      // set us as parent
+      f2bData.parent = this;
+
+      // set render view
       f2bData.rview = rview;
+
+      // set render view
       f2bData.viscallback = viscallback;
+
+      // set frustum planes
       f2bData.frustum = ctxt->clip_planes;
-      f2bData.pos = rview->GetCamera ()->GetTransform ().GetOrigin ();
 
-      // Set up the shader variable stack and IDs
-      shaderVarStack.Setup (svStrings->GetSize ());
+      // set camera position
+      f2bData.pos = rview->GetCamera()->GetTransform().GetOrigin();
 
-      /**
-       * If the 'all visible' flag is set, render everything without any culling.
-       */
-      if (bAllVisible)
+      // setup shader variable stack
+      shaderVarStack.Setup(svStrings->GetSize());
+
+      // render everything without culling if all meshes are to be marked visible
+      if(bAllVisible)
       {
-        // Mark all visible.
-        MarkAllVisible (rootNode, f2bData);
+        // mark all visible
+        MarkAllVisible(this, f2bData);
+
+	// we're done
         return false;
       }
 
-      /**
-       * Look up the node mesh lists array for this render view.
-       * Create a new one if needed.
-       */
-      csRefArray<NodeMeshList>* nodeMeshListsPtr = nodeMeshHash.Get (csPtrKey<iRenderView> (rview), nullptr);
-      if (nodeMeshListsPtr == static_cast<csRefArray<NodeMeshList>*>(nullptr))
+      // get node mesh lists array for this view
+      csRefArray<NodeMeshList>* nodeMeshLists = nodeMeshHash.Get(csPtrKey<iRenderView>(rview), nullptr);
+
+      // check whether we found one
+      if(nodeMeshLists == nullptr)
       {
-        nodeMeshListsPtr = new csRefArray<NodeMeshList> ();
-        nodeMeshHash.Put (csPtrKey<iRenderView> (rview), nodeMeshListsPtr);
+	// nope, allocate a new one
+        nodeMeshLists = new csRefArray<NodeMeshList>();
+        nodeMeshHash.Put(csPtrKey<iRenderView>(rview), nodeMeshLists);
+
+	// check for allocation failure
+	CS_ASSERT(nodeMeshLists);
       }
 
-      /**
-       * Traverse the tree approximately front to back and fill the array of visible nodes.
-       */
-      csRefArray<NodeMeshList>& nodeMeshLists = *nodeMeshListsPtr;
-      TraverseTreeF2B<true> (rootNode, frustum_mask, f2bData, nodeMeshLists);
+      // set it in the data
+      f2bData.meshList = nodeMeshLists;
 
-      /**
-       * Sort the array F2B.
-       */
-      F2BSorter sorter (engine, f2bData.pos);
-      nodeMeshLists.Sort (sorter);
+      // traverse tree in approximate front to back order and fill array of visible nodes
+      // hack around gcc 4.4 being unwilling to do a cast
+      bool (*func)(VisTree*,
+                   Front2BackData&,
+#                  if (OCCLUVIS_TREETYPE == 0)
+                   uint32,
+#                  endif
+                   uint32&) = &TraverseTreeF2B<true>;
+      Front2Back(f2bData.pos, (VisTree::VisitFunc*)func, &f2bData, frustumMask);
 
-      /**
-       * Iterate in reverse (B2F) over the node list marking visibility.
-       */
-      for(size_t n = nodeMeshLists.GetSize (); n > 0; --n)
+      // sort it front to back
+      F2BSorter sorter(engine, f2bData.pos);
+      nodeMeshLists->Sort(sorter);
+
+      // iterate over node lists in reverse Front to Back order
+      for(size_t n = nodeMeshLists->GetSize(); n > 0; --n)
       {
-        NodeMeshList*& nodeMeshList = nodeMeshLists[n-1];
+        NodeMeshList*& nodeMeshList = nodeMeshLists->Get(n-1);
 
-        // If frustum checks passed...
-        if (nodeMeshList->framePassed == engine->GetCurrentFrameNumber ())
+        // check whether frustum checks passed
+        if(nodeMeshList->framePassed == engine->GetCurrentFrameNumber())
         {
-          // If occlusion checks passed...
-          if (nodeMeshList->alwaysVisible ||
-              GetNodeVisibility (nodeMeshList->node, rview) == VISIBLE)
+          // check whether this node is marked visibile
+          if(nodeMeshList->alwaysVisible || GetNodeVisibility(nodeMeshList->node, rview) == VISIBLE)
           {
-            // mark the mesh visible.
-            iMeshWrapper* mw = nodeMeshList->node->GetLeafData (0)->GetMeshWrapper ();
-            f2bData.viscallback->MarkVisible(mw, nodeMeshList->numMeshes,
-              nodeMeshList->meshList);
+            // get visibility object for this node
+	    iVisibilityObject* visobj = GetNodeVisObject(nodeMeshList->node);
+
+	    // get it's mesh wrapper
+            iMeshWrapper* mesh = visobj->GetMeshWrapper();
+
+	    // mark this mesh visible
+            f2bData.viscallback->MarkVisible(mesh, nodeMeshList->numMeshes, nodeMeshList->meshList);
           }
         }
       }
@@ -759,563 +1038,727 @@ namespace CS
       return true;
     }
 
-    void csOccluvis::RenderViscull (iRenderView* rview, iShaderVariableContext* shadervars)
+    bool csOccluvis::RenderViscull(iRenderView* rview, iShaderVariableContext* shadervars)
     {
-      // If we're marking all visible this frame, just return.
-      if (bAllVisible)
-        return;
+      // if we're marking all visible this frame, just return
+      if(bAllVisible)
+        return false;
 
-      /**
-       * Look up the node mesh lists array for this render view.
-       * Create a new one if needed.
-       */
-      csRefArray<NodeMeshList>* nodeMeshListsPtr = nodeMeshHash.Get (csPtrKey<iRenderView> (rview), nullptr);
-      if (nodeMeshListsPtr == static_cast<csRefArray<NodeMeshList>*>(nullptr))
+      // look up node mesh lists array for this render view
+      csRefArray<NodeMeshList>* nodeMeshLists = nodeMeshHash.Get(csPtrKey<iRenderView>(rview), nullptr);
+
+      // we cannot render without a mesh list
+      // @@@RlyDontKnow: how does this happen if it does at all?
+      CS_ASSERT(nodeMeshLists);
+
+      // disable frame buffer writes
+      // @@@NOTE: this may be overwritten by shaders
+      g3d->SetWriteMask(false, false, false, false);
+
+      // initialize last shader used to none
+      iShader* lastShader = nullptr;
+
+      // we'll keep track of the last used ticket
+      size_t lastTicket;
+
+      // backup current z-buffer mode
+      csZBufMode oldZMode = g3d->GetZMode();
+
+      // backup current wireframe drawing seting
+      bool wireframe = g3d->GetEdgeDrawing();
+
+      // disable wireframe drawing if necessary
+      if(wireframe)
+	g3d->SetEdgeDrawing(false);
+
+      // go over the node list performing a depth only pass and occlusion queries as needed
+      for(size_t n = 0; n < nodeMeshLists->GetSize(); ++n)
       {
-        nodeMeshListsPtr = new csRefArray<NodeMeshList> ();
-        nodeMeshHash.Put (csPtrKey<iRenderView> (rview), nodeMeshListsPtr);
-      }
-
-      // Set up g3d for rendering a z-only pass.
-      g3d->SetWriteMask (false, false, false, false);
-
-      // The last shader used for occlusion rendering
-      iShader* lastShader = 0;
-
-      // The last ticket used for occlusion rendering.
-      size_t lastTicket = 0;
-
-      /**
-       * Iterate over the node list (F2B) rendering the z-only pass
-       * and any occlusion queries.
-       */
-      csRefArray<NodeMeshList>& nodeMeshLists = *nodeMeshListsPtr;
-      for(size_t n = 0; n < nodeMeshLists.GetSize (); ++n)
-      {
-        NodeMeshList*& nodeMeshList = nodeMeshLists[n];
+	// get next mesh list
+        NodeMeshList*& nodeMeshList = (*nodeMeshLists)[n];
        
-        // If frustum checks passed...
-        if (nodeMeshList->framePassed == engine->GetCurrentFrameNumber ())
+        // check whether frustum checks passed
+        if(nodeMeshList->framePassed == engine->GetCurrentFrameNumber())
         {
-          if (!nodeMeshList->alwaysVisible &&
-              CheckNodeVisibility (nodeMeshList->node, rview))
+	  // check whether the visibility of this node needs to be checked
+          if(nodeMeshList->alwaysVisible || !CheckNodeVisibility(nodeMeshList->node, rview))
           {
-            // Render with occlusion queries.
-            RenderMeshes<true> (nodeMeshList->node, rview, lastTicket, lastShader, shadervars, nodeMeshList);
+            // no, the visibility of this list is already marked, render without queries
+            RenderMeshes<false>(nodeMeshList->node, rview, lastTicket, lastShader, shadervars, nodeMeshList);
           }
           else
           {
-            // Render without occlusion queries.
-            RenderMeshes<false> (nodeMeshList->node, rview, lastTicket, lastShader, shadervars, nodeMeshList);
+            // yes, we don't know the visibility of this node, yet - render with queries
+            RenderMeshes<true>(nodeMeshList->node, rview, lastTicket, lastShader, shadervars, nodeMeshList);
           }
         }
       }
 
-      // Deactivate the last shader+ticket.
-      if (lastShader)
-        lastShader->DeactivatePass (lastTicket);
+      // Deactivate the last shader if there is any
+      if(lastShader != nullptr)
+      {
+        lastShader->DeactivatePass(lastTicket);
+      }
 
-      // Reset rendering settings.
-      g3d->SetWriteMask (true, true, true, true);
-      
-      // In wireframe mode force a depth clear, for the Authentic Wireframe Experience
-      if (g3d->GetEdgeDrawing())
-	g3d->BeginDraw (g3d->GetCurrentDrawFlags() | CSDRAW_CLEARZBUFFER);
+      // restore wireframe drawing mode
+      if(wireframe)
+	g3d->SetEdgeDrawing(true);
+
+      // restore z-buffer mode
+      g3d->SetZMode(oldZMode);
+
+      // enable framebuffer writes again
+      g3d->SetWriteMask(true, true, true, true);
+
+      // force a depth clear in wireframe mode
+      // @@@TODO: is this really needed? does it even work like it's done here?
+      if(wireframe)
+      {
+	g3d->BeginDraw(g3d->GetCurrentDrawFlags() | CSDRAW_CLEARZBUFFER);
+      }
+
+      return true;
     }
 
-    bool F2BSorter::operator() (csOccluvis::NodeMeshList* const& m1,
-                                csOccluvis::NodeMeshList* const& m2)
+    bool F2BSorter::operator()(csOccluvis::NodeMeshList* const& m1,
+                               csOccluvis::NodeMeshList* const& m2)
     {
+      // get mesh wrappers from mesh lists
       iMeshWrapper* mw1 = m1->meshList->imesh;
       iMeshWrapper* mw2 = m2->meshList->imesh;
 
-      // Equal priorities - check distance.
-      if (mw1->GetRenderPriority () == mw2->GetRenderPriority ())
-      {
-        csBox3& m1box = m1->node->GetBBox ();
-        csBox3& m2box = m2->node->GetBBox ();
+      // check whether they have the same rander priority
+      if(mw1->GetRenderPriority() == mw2->GetRenderPriority())
+      { // nope, order by distance
+	// get node bounding boxes
+        csBox3 const& m1box = m1->node->GetBBox();
+        csBox3 const& m2box = m2->node->GetBBox();
 
-        const float distSqRm1 = m1box.SquaredPosDist (cameraOrigin);
-        const float distSqRm2 = m2box.SquaredPosDist (cameraOrigin);
+	// get distance of the bounding boxes to the origin
+        float const distSqRm1 = m1box.SquaredPosDist(cameraOrigin);
+        float const distSqRm2 = m2box.SquaredPosDist(cameraOrigin);
 
+	// nearest first
         return distSqRm1 < distSqRm2;
       }
 
-      // Portals get special treatment - always rendered last.
-      if (mw1->GetRenderPriority () == portalPriority)
+      // portals are always rendered last
+      if(mw1->GetRenderPriority() == portalPriority)
         return false;
-      if (mw2->GetRenderPriority () == portalPriority)
+      if(mw2->GetRenderPriority() == portalPriority)
         return true;
 
-      // Else order by priority.
-      return (mw1->GetRenderPriority () < mw2->GetRenderPriority ());
+      // finally sort by priority
+      return mw1->GetRenderPriority() < mw2->GetRenderPriority();
     }
 
     //======== VisTest box =====================================================
-    void csOccluvis::TraverseTreeBox (AABBVisTreeNode* node,
-                                      VistestObjectsArray* voArray,
-                                      const csBox3& box)
+    void csOccluvis::TraverseTreeBox(VisTree* node,
+                                     VistestObjectsArray* voArray,
+                                     csBox3 const& box)
     {
-      if (!box.TestIntersect (node->GetBBox ()))
+      // check whether the node's bbox intersects with the target one
+      if(!box.TestIntersect(node->GetNodeBBox()))
         return;
 
-      if (!node->IsLeaf())
+      // get all objects in this node
+      VisTreeNode** objects = node->GetObjects();
+
+      // go over all of them
+      for(int i = 0; i < node->GetObjectCount(); ++i)
       {
-        TraverseTreeBox (node->GetChild (0), voArray, box);
-        TraverseTreeBox (node->GetChild (1), voArray, box);
+	// get object
+	VisTreeNode* object = objects[i];
+
+	// check wheter it intersects with the box
+	if(box.TestIntersect(object->GetBBox()))
+	{
+	  // add it to the list
+	  voArray->Push(GetNodeVisObject(object));
+	}
       }
-      else
+
+      // check whether this node has childs
+      if(node->GetChild1())
       {
-        voArray->Push (node->GetLeafData (0));
+	// continue traversal
+        TraverseTreeBox(node->GetChild1(), voArray, box);
+        TraverseTreeBox(node->GetChild2(), voArray, box);
       }
     }
 
-    csPtr<iVisibilityObjectIterator> csOccluvis::VisTest (const csBox3& box)
+    csPtr<iVisibilityObjectIterator> csOccluvis::VisTest(csBox3 const& box)
     {
-      VistestObjectsArray* v;
-      if (vistest_objects_inuse)
+      // visbility test object array
+      VistestObjectsArray* v = nullptr;
+
+      // check whether our objects array is already in use
+      if(vistestObjectsInuse)
       {
-        // Vector is already in use by another iterator. Allocate a new vector.
-        v = new VistestObjectsArray ();
+        // it is, allocate a new one
+        v = new VistestObjectsArray();
+
+	// check for allocation failure
+	CS_ASSERT(v);
       }
+      // nope, it's free
       else
       {
-        v = &vistest_objects;
-        vistest_objects.Empty ();
+	// set it
+        v = &vistestObjects;
+
+	// clear it
+        vistestObjects.Empty();
       }
 
-      TraverseTreeBox (rootNode, v, box);
+      // traverse tree performing the box visibility test
+      TraverseTreeBox(this, v, box);
 
-      csOccluvisObjIt* vobjit = new csOccluvisObjIt (v,
-        vistest_objects_inuse ? 0 : &vistest_objects_inuse);
+      // create an object iterator for the results
+      csOccluvisObjIt* vobjit = new csOccluvisObjIt(v,
+        vistestObjectsInuse ? nullptr : &vistestObjectsInuse);
 
-      return csPtr<iVisibilityObjectIterator> (vobjit);
+      // return it
+      return csPtr<iVisibilityObjectIterator>(vobjit);
     }
 
     //======== VisTest sphere ==================================================
-    void csOccluvis::TraverseTreeSphere (AABBVisTreeNode* node,
-                                         VistestObjectsArray* voArray,
-                                         const csVector3& centre,
-                                         const float sqradius)
+    void csOccluvis::TraverseTreeSphere(VisTree* node,
+                                        VistestObjectsArray* voArray,
+                                        csVector3 const& centre,
+                                        float const sqradius)
     {
-      if (!csIntersect3::BoxSphere (node->GetBBox (), centre, sqradius))
+      // check whether the node's bbox intersects with the target sphere
+      if(!csIntersect3::BoxSphere(node->GetNodeBBox(), centre, sqradius))
         return;
 
-      if (!node->IsLeaf())
+      // get all objects in this node
+      VisTreeNode** objects = node->GetObjects();
+
+      // go over all of them
+      for(int i = 0; i < node->GetObjectCount(); ++i)
       {
-        TraverseTreeSphere (node->GetChild (0), voArray, centre, sqradius);
-        TraverseTreeSphere (node->GetChild (1), voArray, centre, sqradius);
+	// get object
+	VisTreeNode* object = objects[i];
+
+	// check wheter it intersects with the box
+	if(csIntersect3::BoxSphere(object->GetBBox(), centre, sqradius))
+	{
+	  // add it to the list
+	  voArray->Push(GetNodeVisObject(object));
+	}
       }
-      else
+
+      // check whether this node has childs
+      if(node->GetChild1())
       {
-        voArray->Push (node->GetLeafData (0));
+	// continue traversal
+        TraverseTreeSphere(node->GetChild1(), voArray, centre, sqradius);
+        TraverseTreeSphere(node->GetChild2(), voArray, centre, sqradius);
       }
     }
 
-    csPtr<iVisibilityObjectIterator> csOccluvis::VisTest (const csSphere& sphere)
+    csPtr<iVisibilityObjectIterator> csOccluvis::VisTest(csSphere const& sphere)
     {
-      VistestObjectsArray* v;
-      if (vistest_objects_inuse)
+      // visbility test object array
+      VistestObjectsArray* v = nullptr;
+
+      // check whether our objects array is already in use
+      if(vistestObjectsInuse)
       {
-        // Vector is already in use by another iterator. Allocate a new vector.
-        v = new VistestObjectsArray ();
+        // it is, allocate a new one
+        v = new VistestObjectsArray();
+
+	// check for allocation failure
+	CS_ASSERT(v);
       }
+      // nope, it's free
       else
       {
-        v = &vistest_objects;
-        vistest_objects.Empty ();
+	// set it
+        v = &vistestObjects;
+
+	// clear it
+        vistestObjects.Empty();
       }
 
-      TraverseTreeSphere (rootNode, v, sphere.GetCenter (),
-        sphere.GetRadius () * sphere.GetRadius ());
+      // traverse tree performing the sphere visibility test
+      TraverseTreeSphere(this, v, sphere.GetCenter(),
+        sphere.GetRadius() * sphere.GetRadius());
 
-      csOccluvisObjIt* vobjit = new csOccluvisObjIt (v,
-        vistest_objects_inuse ? 0 : &vistest_objects_inuse);
+      // create an object iterator for the results
+      csOccluvisObjIt* vobjit = new csOccluvisObjIt(v,
+        vistestObjectsInuse ? nullptr : &vistestObjectsInuse);
 
-      return csPtr<iVisibilityObjectIterator> (vobjit);
+      // return it
+      return csPtr<iVisibilityObjectIterator>(vobjit);
     }
 
-    void csOccluvis::TraverseTreeSphere (AABBVisTreeNode* node,
-                                         iVisibilityCullerListener* viscallback,
-                                         const csVector3& centre,
-                                         const float sqradius)
+    void csOccluvis::TraverseTreeSphere(VisTree* node,
+                                        iVisibilityCullerListener* viscallback,
+                                        csVector3 const& centre,
+                                        float const sqradius)
     {
-      if (!csIntersect3::BoxSphere (node->GetBBox (), centre, sqradius))
+      // check whether the node's bbox intersects with the target sphere
+      if(!csIntersect3::BoxSphere(node->GetNodeBBox(), centre, sqradius))
         return;
 
-      if (!node->IsLeaf())
+      // get all objects in this node
+      VisTreeNode** objects = node->GetObjects();
+
+      // go over all of them
+      for(int i = 0; i < node->GetObjectCount(); ++i)
       {
-        TraverseTreeSphere (node->GetChild (0), viscallback, centre, sqradius);
-        TraverseTreeSphere (node->GetChild (1), viscallback, centre, sqradius);
+	// get object
+	VisTreeNode* object = objects[i];
+
+	// check wheter it intersects with the box
+	if(csIntersect3::BoxSphere(object->GetBBox(), centre, sqradius))
+	{
+	  // get visibility object
+	  iVisibilityObject* visobj = GetNodeVisObject(object);
+
+	  // ensure it's valid
+	  CS_ASSERT(visobj);
+
+	  // notify listener about the visibility object
+	  viscallback->ObjectVisible(visobj, visobj->GetMeshWrapper(), 0);
+	}
       }
-      else
+
+      // check whether this node has childs
+      if(node->GetChild1())
       {
-        iVisibilityObject* visobj = node->GetLeafData (0);
-        viscallback->ObjectVisible (visobj, visobj->GetMeshWrapper (), 0);
+	// continue traversal
+        TraverseTreeSphere(node->GetChild1(), viscallback, centre, sqradius);
+        TraverseTreeSphere(node->GetChild2(), viscallback, centre, sqradius);
       }
     }
 
-    void csOccluvis::VisTest (const csSphere& sphere, 
-                              iVisibilityCullerListener* viscallback)
+    void csOccluvis::VisTest(csSphere const& sphere, 
+                             iVisibilityCullerListener* viscallback)
     {
-      TraverseTreeSphere (rootNode, viscallback, sphere.GetCenter (),
-        sphere.GetRadius () * sphere.GetRadius ());
+      TraverseTreeSphere(this, viscallback, sphere.GetCenter(),
+        sphere.GetRadius() * sphere.GetRadius());
     }
 
     //======== VisTest planes ==================================================
-    void csOccluvis::TraverseTreePlanes (AABBVisTreeNode* node,
-                                         VistestObjectsArray* voArray,
-                                         csPlane3* planes,
-                                         uint32 frustum_mask)
+    void csOccluvis::TraverseTreePlanes(VisTree* node,
+                                        VistestObjectsArray* voArray,
+                                        csPlane3* planes,
+                                        uint32 frustumMask)
     {
-      uint32 new_mask;
-      if (!csIntersect3::BoxFrustum (node->GetBBox (), planes, frustum_mask, new_mask))
+      // check whether the node's bbox intersects with the target frustum
+      uint32 newMask;
+      if(!csIntersect3::BoxFrustum(node->GetNodeBBox(), planes, frustumMask, newMask))
         return;
 
-      if (!node->IsLeaf())
+      // get all objects in this node
+      VisTreeNode** objects = node->GetObjects();
+
+      // go over all of them
+      for(int i = 0; i < node->GetObjectCount(); ++i)
       {
-        TraverseTreePlanes (node->GetChild (0), voArray, planes, new_mask);
-        TraverseTreePlanes (node->GetChild (1), voArray, planes, new_mask);
+	// get object
+	VisTreeNode* object = objects[i];
+
+	// check wheter it intersects with the frustum
+	if(csIntersect3::BoxFrustum(node->GetNodeBBox(), planes, frustumMask, newMask))
+	{
+	  // add it to the list
+	  voArray->Push(GetNodeVisObject(object));
+	}
       }
-      else
+
+      // check whether this node has childs
+      if(node->GetChild1())
       {
-        voArray->Push (node->GetLeafData (0));
+	// continue traversal
+        TraverseTreePlanes(node->GetChild1(), voArray, planes, frustumMask);
+        TraverseTreePlanes(node->GetChild2(), voArray, planes, frustumMask);
       }
     }
 
-    csPtr<iVisibilityObjectIterator> csOccluvis::VisTest (csPlane3* planes, int num_planes)
+    csPtr<iVisibilityObjectIterator> csOccluvis::VisTest(csPlane3* planes, int numPlanes)
     {
-      VistestObjectsArray* v;
-      if (vistest_objects_inuse)
+      // visbility test object array
+      VistestObjectsArray* v = nullptr;
+
+      // check whether our objects array is already in use
+      if(vistestObjectsInuse)
       {
-        // Vector is already in use by another iterator. Allocate a new vector.
-        v = new VistestObjectsArray ();
+        // it is, allocate a new one
+        v = new VistestObjectsArray();
+
+	// check for allocation failure
+	CS_ASSERT(v);
       }
+      // nope, it's free
       else
       {
-        v = &vistest_objects;
-        vistest_objects.Empty ();
+	// set it
+        v = &vistestObjects;
+
+	// clear it
+        vistestObjects.Empty();
       }
 
-      TraverseTreePlanes (rootNode, v, planes, (1 << num_planes) - 1);
+      // traverse tree performing the sphere visibility test
+      TraverseTreePlanes(this, v, planes, numPlanes);
 
-      csOccluvisObjIt* vobjit = new csOccluvisObjIt (v,
-        vistest_objects_inuse ? 0 : &vistest_objects_inuse);
+      // create an object iterator for the results
+      csOccluvisObjIt* vobjit = new csOccluvisObjIt(v,
+        vistestObjectsInuse ? nullptr : &vistestObjectsInuse);
 
-      return csPtr<iVisibilityObjectIterator> (vobjit);
+      // return it
+      return csPtr<iVisibilityObjectIterator>(vobjit);
     }
 
-    void csOccluvis::TraverseTreePlanes (AABBVisTreeNode* node,
-                                         iVisibilityCullerListener* viscallback,
-                                         csPlane3* planes,
-                                         uint32 frustum_mask)
+    void csOccluvis::TraverseTreePlanes(VisTree* node,
+                                        iVisibilityCullerListener* viscallback,
+                                        csPlane3* planes,
+                                        uint32 frustumMask)
     {
-      uint32 new_mask;
-      if (!csIntersect3::BoxFrustum (node->GetBBox (), planes, frustum_mask, new_mask))
+      // check whether the node's bbox intersects with the target frustum
+      uint32 newMask;
+      if(!csIntersect3::BoxFrustum(node->GetNodeBBox(), planes, frustumMask, newMask))
         return;
 
-      if (!node->IsLeaf())
+      // get all objects in this node
+      VisTreeNode** objects = node->GetObjects();
+
+      // go over all of them
+      for(int i = 0; i < node->GetObjectCount(); ++i)
       {
-        TraverseTreePlanes (node->GetChild (0), viscallback, planes, new_mask);
-        TraverseTreePlanes (node->GetChild (1), viscallback, planes, new_mask);
+	// get object
+	VisTreeNode* object = objects[i];
+
+	// check wheter it intersects with the frustum
+	if(csIntersect3::BoxFrustum(node->GetNodeBBox(), planes, frustumMask, newMask))
+	{
+	  // get visibility object
+	  iVisibilityObject* visobj = GetNodeVisObject(object);
+
+	  // ensure it's valid
+	  CS_ASSERT(visobj);
+
+	  // notify listener about the visbility object
+	  viscallback->ObjectVisible(visobj, visobj->GetMeshWrapper(), 0);
+	}
       }
-      else
+
+      // check whether this node has childs
+      if(node->GetChild1())
       {
-        iVisibilityObject* visobj = node->GetLeafData (0);
-        viscallback->ObjectVisible (visobj, visobj->GetMeshWrapper (), 0);
+	// continue traversal
+        TraverseTreePlanes(node->GetChild1(), viscallback, planes, frustumMask);
+        TraverseTreePlanes(node->GetChild2(), viscallback, planes, frustumMask);
       }
     }
 
-    void csOccluvis::VisTest (csPlane3* planes, int num_planes,
+    void csOccluvis::VisTest(csPlane3* planes, int num_planes,
                               iVisibilityCullerListener* viscallback)
     {
-      TraverseTreePlanes (rootNode, viscallback, planes, (1 << num_planes) - 1);
+      TraverseTreePlanes(this, viscallback, planes, (1 << num_planes) - 1);
     }
 
     //======== IntersectSegment ================================================
 
-    struct Common
+    // hitbeam tracing for objects, if sloppy is true, add all objects that may intersect
+    // to the vector of possible hits, else find closest hit
+    template<bool sloppy>
+    bool csOccluvis::TraverseIntersectSegment(VisTree* node,
+			  IntersectSegmentFront2BackData& data,
+#			  if (OCCLUVIS_TREETYPE == 0)
+			  uint32 timestamp,
+#			  endif
+			  uint32& frustumMask)
     {
-      IntersectSegmentFront2BackData *data;
-    };
+      // distribute objects if necessary
+      node->Distribute();
 
-    struct InnerNodeIntersectSegmentSloppy : public Common
-    {
-      bool operator() (AABBVisTreeNode* n)
+      // holder for intersection point
+      csVector3 isect;
+
+      // check whether node bounding box intersects with segment
+      if(csIntersect3::BoxSegment(node->GetNodeBBox(), data.seg, isect) == -1)
       {
-        const csBox3& node_bbox = n->GetBBox ();
-
-        // In the first part of this test we are going to test if the
-        // start-end vector intersects with the node. If not then we don't
-        // need to continue.
-        csVector3 box_isect;
-        if (csIntersect3::BoxSegment (node_bbox, data->seg, box_isect) == -1)
-        {
-          return false;
-        }
-        return true;
+	// didn't intersect, abort
+	return false;
       }
-    };
 
-    struct LeafNodeIntersectSegmentSloppy : public InnerNodeIntersectSegmentSloppy
-    {
-      uint32 cur_timestamp;
-      bool operator() (AABBVisTreeNode* n)
+      // check whether we already have a hit
+      if(!sloppy && data.mesh != nullptr)
       {
-        // first test node intersection
-        if(!InnerNodeIntersectSegmentSloppy::operator()(n))
-        {
-          return true;
-        }
-
-        int num_objects = n->GetObjectCount ();
-        iVisibilityObject** objects = n->GetLeafObjects();
-        csVector3 box_isect;
-
-        bool hit = false;
-        for (int i = 0 ; i < num_objects ; i++)
-        {
-          //if (objects[i]->timestamp != cur_timestamp)
-          {
-            //objects[i]->timestamp = cur_timestamp;
-
-            // validate this is a proper mesh
-            iMeshWrapper* mesh = objects[i]->GetMeshWrapper();
-            if (!mesh || mesh->GetFlags().Check(CS_ENTITY_NOHITBEAM))
-            {
-              continue;
-            }
-
-            // First test the bounding box of the object.
-            const csBox3& obj_bbox = objects[i]->GetBBox();
-
-            if (csIntersect3::BoxSegment(obj_bbox, data->seg, box_isect) != -1)
-            {
-              // This object is possibly intersected by this beam.
-	      data->vector->Push (objects[i]);
-	      hit = true;
-            }
-          }
-        }
-        return !hit;
+	// we do, check whether it's further than our box hit
+	if(csSquaredDist::PointPoint(data.seg.Start(), isect) < data.sqdist)
+	{
+	  // it is, abort
+	  return false;
+	}
       }
-    };
 
-    struct InnerNodeIntersectSegment : public Common
-    {
-      bool operator() (AABBVisTreeNode* n)
+      // get object count
+      int const numObjects = node->GetObjectCount();
+
+      // get objects
+      VisTreeNode** objects = node->GetObjects();
+
+      // go over all objects - keep track whether we got a hit
+      bool hit = false;
+      for(int i = 0; i < numObjects; ++i)
       {
-        const csBox3& node_bbox = n->GetBBox ();
+	// get object
+	iVisibilityObject* visobj = GetNodeVisObject(objects[i]);
 
-        // In the first part of this test we are going to test if the
-        // start-end vector intersects with the node. If not then we don't
-        // need to continue.
-        csVector3 box_isect;
-        if (csIntersect3::BoxSegment (node_bbox, data->seg, box_isect) == -1)
-        {
-          return false;
-        }
+#	if (OCCLUVIS_TREETYPE == 0)
+	// test whether we already visited this object
+	if(objects[i]->timestamp == timestamp)
+	{
+	  // skip this object
+	  continue;
+	}
 
-        // If mesh != 0 then we have already found our mesh. In that
-        // case we will compare the distance of the origin with the the
-        // box of the treenode and the already found shortest distance to
-        // see if we have to proceed.
-        if (data->mesh)
-        {
-          float sqdist = csSquaredDist::PointPoint(data->seg.Start(), box_isect);
-          if (sqdist > data->sqdist)
-          {
-            return false;
-          }
-        }
+	// update object timestamp
+	objects[i]->timestamp = timestamp;
+#	endif
 
-        return true;
+	// get mesh for this object
+	iMeshWrapper* mesh = visobj->GetMeshWrapper();
+
+	// check if mesh is valid and whether it shall be hit be hitbeams
+	if(mesh == nullptr || mesh->GetFlags().Check(CS_ENTITY_NOHITBEAM))
+	{
+	  // nope, continue with next one
+	  continue;
+	}
+
+	// get object bounding box and test whether it intersects
+	if(csIntersect3::BoxSegment(objects[i]->GetBBox(), data.seg, isect) != -1)
+	{ // we got a possible intersection
+	  // if this is a sloppy trace, just add it to the list and continue with the next one
+	  if(sloppy)
+	  {
+	    data.vector->Push(visobj);
+	    hit = true;
+	    continue;
+	  }
+
+	  // this is not a sloppy trace, perform hit detection in object space
+
+	  // get movable interface
+	  iMovable* movable = visobj->GetMovable();
+
+	  // validate it's present
+	  CS_ASSERT(movable);
+
+	  // check whether we have to perform any transformation of our segment
+	  bool identity = movable->IsFullTransformIdentity();
+
+	  // allocate our transformed segment
+	  csSegment3 segObj;
+
+	  // allocate transform placeholder (only used if a transform is necessary)
+	  csReversibleTransform object2world;
+
+	  // check whether a transform is needed
+	  if(identity)
+	  {
+	    // no, just copy it over
+	    segObj.Set(data.seg.Start(), data.seg.End());
+	  }
+	  // we do need one
+	  else
+	  {
+	    // get full transform - This == Object, Other == World
+	    object2world = movable->GetFullTransform();
+
+	    // transform our segment to object space
+	    segObj.Set(
+	      object2world.Other2This(data.seg.Start()),
+	      object2world.Other2This(data.seg.End())
+	      );
+	  }
+
+	  // get mesh object (required for non-sloppy hit detection)
+	  iMeshObject* meshObj = mesh->GetMeshObject();
+
+	  // validate it's present
+	  CS_ASSERT(meshObj);
+
+	  // hit data
+	  // whether the beam hit
+	  bool hitObj;
+	  // distance in segment space
+	  float dist;
+	  // index of the polygon that was hit if supported, else -1
+	  int polyIndex = -1;
+
+	  // check whether we are supposed to perform an accurate hit detection
+	  if(data.accurate)
+	  {
+	    // an accurate hitbeam was requested, perform it
+	    hitObj = meshObj->HitBeamObject(segObj.Start(), segObj.End(), isect,
+					    &dist, &polyIndex, nullptr, data.bf);
+	  }
+	  // check failed
+	  else
+	  {
+	    // we can get away with an inaccurate hit
+	    hitObj = meshObj->HitBeamOutline(segObj.Start(), segObj.End(), isect, &dist);
+	  }
+
+	  // check whether we got a hit
+	  if(hitObj)
+	  {
+	    // yep, we got a hit - check whether we should just collect them all
+	    if(data.vector != nullptr)
+	    {
+	      // we should, add it
+	      data.vector->Push(visobj);
+
+	      // mark we got a hit
+	      bool hitObj = true;
+	    }
+	    // no, we only want the closest hit - check whether our hit is closer
+	    else if(dist < data.r)
+	    {
+	      // yes, update closest hit in segment coordinates
+	      data.r = dist;
+
+	      // update mesh with closest hit
+	      data.mesh = mesh;
+
+	      // update polygon index for the hit
+	      data.polygon_idx = polyIndex;
+
+	      // check whether the itnersection point has to be transformed
+	      if(identity)
+	      {
+		// no, just update it
+		data.isect = isect;
+	      }
+	      // it needs transformation
+	      else
+	      {
+		// transform and set
+		data.isect = object2world.This2Other(isect);
+	      }
+
+	      // update smallest distance in world space
+	      data.sqdist = csSquaredDist::PointPoint(data.seg.Start(), data.isect);
+	    }
+	  }
+	}
       }
-    };
 
-    struct LeafNodeIntersectSegment : public InnerNodeIntersectSegment
-    {
-      uint32 cur_timestamp;
-      iGraphics3D *g3d;
-      bool operator() (AABBVisTreeNode* n)
-      {
-        // test node intersection and distance to best found match
-        if(!InnerNodeIntersectSegment::operator()(n))
-        {
-            return true;
-        }
+      // continue traversal if we didn't get a hit
+      return !hit;
+    }
 
-        int num_objects = n->GetObjectCount();
-        iVisibilityObject** objects = n->GetLeafObjects ();
-
-        bool hit = false;
-        csVector3 obj_isect;
-        for (int i = 0 ; i < num_objects ; i++)
-        {
-          //if (objects[i]->timestamp != cur_timestamp)
-          //if( n->GetQueryData()->uQueryFrame != cur_timestamp )
-          {
-            //objects[i]->timestamp = cur_timestamp
-
-            // check whether we have a proper mesh here
-            iMeshWrapper *mesh = objects[i]->GetMeshWrapper();
-            if(!mesh || mesh->GetFlags ().Check (CS_ENTITY_NOHITBEAM))
-            {
-              continue;
-            }
-
-            // First test the bounding box of the object.
-            const csBox3& obj_bbox = objects[i]->GetBBox ();
-
-            if (csIntersect3::BoxSegment (obj_bbox, data->seg, obj_isect) != -1)
-            {
-              // This object is possibly intersected by this beam.
-
-              // Transform our vector to object space.
-              csVector3 obj_start;
-              csVector3 obj_end;
-              iMovable* movable = n->GetLeafData(i)->GetMovable ();
-              bool identity = movable->IsFullTransformIdentity ();
-              csReversibleTransform movtrans;
-              if (identity)
-              {
-                obj_start = data->seg.Start ();
-                obj_end = data->seg.End ();
-              }
-              else
-              {
-                movtrans = movable->GetFullTransform ();
-                obj_start = movtrans.Other2This (data->seg.Start ());
-                obj_end = movtrans.Other2This (data->seg.End ());
-              }
-              float r;
-
-              bool rc;
-              int pidx = -1;
-              if (data->accurate)
-              {
-                rc = mesh->GetMeshObject ()->HitBeamObject (
-                     obj_start, obj_end, obj_isect, &r, &pidx,
-		     0, data->bf);
-              }
-              else
-              {
-                rc = mesh->GetMeshObject ()->HitBeamOutline (
-                     obj_start, obj_end, obj_isect, &r);
-              }
-
-              if (rc)
-              {
-                if (data->vector)
-                {
-                  hit = true;
-                  data->vector->Push (objects[i]);
-                }
-                else if (r < data->r)
-                {
-                  hit = true;
-                  data->r = r;
-                  data->polygon_idx = pidx;
-                  if (identity)
-                  {
-                    data->isect = obj_isect;
-                  }
-                  else
-                  {
-                    data->isect = movtrans.This2Other(obj_isect);
-                  }
-
-                  data->sqdist = csSquaredDist::PointPoint (data->seg.Start(),
-                                                            data->isect);
-                  data->mesh = mesh;
-                }
-              }
-            }
-          }
-        }
-        return !hit;
-      }
-    };
-
-    csPtr<iVisibilityObjectIterator> csOccluvis::IntersectSegment (
-        const csVector3& start, const csVector3& end, bool accurate,
+    csPtr<iVisibilityObjectIterator> csOccluvis::IntersectSegment(
+        csVector3 const& start, csVector3 const& end, bool accurate,
 	bool bf)
     {
+      // allocate intersection data
       IntersectSegmentFront2BackData data;
-      data.seg.Set (start, end);
-      data.sqdist = 10000000000.0;
-      data.r = 10000000000.;
-      data.mesh = 0;
-      data.polygon_idx = -1;
-      data.vector = new VistestObjectsArray ();
-      data.accurate = accurate;
-      data.bf = bf;
 
-      const csVector3 dir = end-start;
-      LeafNodeIntersectSegment leaf;
-      InnerNodeIntersectSegment inner;
-      leaf.data=&data;
-      leaf.cur_timestamp=engine->GetCurrentFrameNumber();
-      inner.data=&data;
+      // set segment to be traced
+      data.seg.Set(start, end);
 
-      TraverseF2B(inner, leaf, dir);
+      // set hit to invalid
+      data.sqdist = std::numeric_limits<float>::max(); // maximum distance
+      data.r = std::numeric_limits<float>::max(); // maximum segment space distance
+      data.mesh = nullptr; // no mesh hit
+      data.polygon_idx = -1; // no poly hit
+      data.vector = new VistestObjectsArray(); // empty array
+      data.accurate = accurate; // forward accuracy setting
+      data.bf = bf; // forward culling setting
 
-      csOccluvisObjIt* vobjit = new csOccluvisObjIt (data.vector, 0);
-      return csPtr<iVisibilityObjectIterator> (vobjit);
+      // trace segment
+      // hack around gcc 4.4 being unwilling to do a cast
+      bool (*func)(VisTree*,
+                   IntersectSegmentFront2BackData&,
+#                  if (OCCLUVIS_TREETYPE == 0)
+                   uint32,
+#                  endif
+                   uint32&) = &TraverseIntersectSegment<false>;
+      Front2Back(end-start, (VisTree::VisitFunc*)func, &data, 0);
+
+      // create object iterator for results and return it
+      return csPtr<iVisibilityObjectIterator>(new csOccluvisObjIt(data.vector, 0));
     }
 
-    bool csOccluvis::IntersectSegment (const csVector3& start,
-        const csVector3& end, csVector3& isect, float* pr,
-        iMeshWrapper** p_mesh, int* poly_idx,
+    bool csOccluvis::IntersectSegment(csVector3 const& start,
+        csVector3 const& end, csVector3& isect, float* pr,
+        iMeshWrapper** mesh, int* polyIndex,
         bool accurate, bool bf)
     {
+      // allocate intersection data
       IntersectSegmentFront2BackData data;
-      data.seg.Set (start, end);
-      data.sqdist = 10000000000.0;
-      data.isect.Set (0, 0, 0);
-      data.r = 10000000000.;
-      data.mesh = 0;
-      data.polygon_idx = -1;
-      data.vector = 0;
-      data.accurate = accurate;
-      data.bf = bf;
-      data.isect = 0;
 
-      const csVector3 dir = end-start;
-      LeafNodeIntersectSegment leaf;
-      InnerNodeIntersectSegment inner;
-      leaf.data=&data;
-      leaf.cur_timestamp=engine->GetCurrentFrameNumber();
-      inner.data=&data;
+      // set segment to be traced
+      data.seg.Set(start, end);
 
-      TraverseF2B(inner, leaf, dir);
+      // set hit to invalid
+      data.sqdist = std::numeric_limits<float>::max(); // maximum distance
+      data.r = std::numeric_limits<float>::max(); // maximum segment space distance
+      data.mesh = nullptr; // no mesh hit
+      data.polygon_idx = -1; // no poly hit
+      data.vector = new VistestObjectsArray(); // empty array
+      data.accurate = accurate; // forward accuracy setting
+      data.bf = bf; // forward culling setting
 
-      if (p_mesh) *p_mesh = data.mesh;
-      if (pr) *pr = data.r;
-      if (poly_idx) *poly_idx = data.polygon_idx;
+      // trace segment
+      // hack around gcc 4.4 being unwilling to do a cast
+      bool (*func)(VisTree*,
+                   IntersectSegmentFront2BackData&,
+#                  if (OCCLUVIS_TREETYPE == 0)
+                   uint32,
+#                  endif
+                   uint32&) = &TraverseIntersectSegment<false>;
+      Front2Back(end-start, (VisTree::VisitFunc*)func, &data, 0);
+
+      // set intersection
       isect = data.isect;
 
-      return data.mesh != 0;
+      // set mesh if the caller requested it
+      if(mesh != nullptr) *mesh = data.mesh;
+
+      // set segment space distance if caller requested it
+      if(pr != nullptr) *pr = data.r;
+
+      // set the index of the polygon that was hit if request
+      if(polyIndex != nullptr) *polyIndex = data.polygon_idx;
+
+      // we got a result if we hit a mesh
+      return data.mesh != nullptr;
     }
 
-    csPtr<iVisibilityObjectIterator> csOccluvis::IntersectSegmentSloppy (
-        const csVector3& start, const csVector3& end)
+    csPtr<iVisibilityObjectIterator> csOccluvis::IntersectSegmentSloppy(
+        csVector3 const& start, csVector3 const& end)
     {
+      // allocate intersection data
       IntersectSegmentFront2BackData data;
-      data.seg.Set (start, end);
-      data.vector = new VistestObjectsArray ();
+
+      // set segment to be traced
+      data.seg.Set(start, end);
+
+      // allocate storage for results
+      data.vector = new VistestObjectsArray();
       
-      const csVector3 dir = end-start;
-      LeafNodeIntersectSegmentSloppy leaf;
-      InnerNodeIntersectSegmentSloppy inner;
-      leaf.data=&data;
-      leaf.cur_timestamp=engine->GetCurrentFrameNumber();
-      inner.data=&data;
+      // trace segment sloppily
+      // hack around gcc 4.4 being unwilling to do a cast
+      bool (*func)(VisTree*,
+                   IntersectSegmentFront2BackData&,
+#                  if (OCCLUVIS_TREETYPE == 0)
+                   uint32,
+#                  endif
+                   uint32&) = &TraverseIntersectSegment<true>;
+      Front2Back(end-start, (VisTree::VisitFunc*)func, &data, 0);
 
-      TraverseF2B(inner, leaf, dir);
-
-      csOccluvisObjIt* vobjit = new csOccluvisObjIt (data.vector, 0);
-      return csPtr<iVisibilityObjectIterator> (vobjit);
+      // create object iterator for results and return it
+      return csPtr<iVisibilityObjectIterator>(new csOccluvisObjIt(data.vector, 0));
     }
-  }
-}
+  } // namespace Rendermanager
+} // namespace CS

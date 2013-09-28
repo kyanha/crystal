@@ -177,6 +177,7 @@ csFrustumVis::~csFrustumVis ()
     kdtree->RemoveObject (visobj_wrap->child);
   }
   delete kdtree;
+  kdtree = 0;
 }
 
 bool csFrustumVis::HandleEvent (iEvent& ev)
@@ -196,6 +197,7 @@ bool csFrustumVis::Initialize (iObjectRegistry *object_reg)
   csFrustumVis::object_reg = object_reg;
 
   delete kdtree;
+  kdtree = 0;
 
   csRef<iGraphics3D> g3d = csQueryRegistry<iGraphics3D> (object_reg);
   if (g3d)

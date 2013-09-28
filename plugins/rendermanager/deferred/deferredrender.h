@@ -150,8 +150,11 @@ CS_PLUGIN_NAMESPACE_BEGIN(RMDeferred)
     }
 
     // renders for visibility culling
-    void RenderVisibilityCulling()
+    bool RenderVisibilityCulling()
     {
+      // keep track whether the visibility culling for all sectors did a depth pass
+      bool rendered = true;
+
       // visculling only needs to be rendered once per sector.
       csSet<iSector*> sectors;
       for(size_t c = 0; c < contextStack.GetSize(); ++c)
@@ -168,9 +171,11 @@ CS_PLUGIN_NAMESPACE_BEGIN(RMDeferred)
           graphics3D->SetWorldToCamera(ctx->cameraTransform.GetInverse());
 
 	  // render for visibility culling if required by culler
-	  ctx->sector->GetVisibilityCuller()->RenderViscull(rview, ctx->shadervars);
+	  rendered &= ctx->sector->GetVisibilityCuller()->RenderViscull(rview, ctx->shadervars);
 	}
       }
+
+      return rendered;
     }
 
     void RenderContextStack()
@@ -263,8 +268,9 @@ CS_PLUGIN_NAMESPACE_BEGIN(RMDeferred)
 	// we want to fill the depth buffer, use pass 1 modes
         graphics3D->SetZMode(CS_ZBUF_MESH);
 
-        // z only pass - maybe we shouldn't allow disabling it.
-	if(zonlyLayer != (size_t)-1)
+        // z only pass - skipped if already performed by visiblity culling
+	// @@@NOTE: maybe we shouldn't allow disabling it.
+	if(!RenderVisibilityCulling() && zonlyLayer != (size_t)-1)
         {
 	  RenderLayer<false>(zonlyLayer, ctxCount);
         }
@@ -332,9 +338,6 @@ CS_PLUGIN_NAMESPACE_BEGIN(RMDeferred)
 	// we want to re-populate the depth buffer, use pass 1 modes.
 	graphics3D->SetZMode(CS_ZBUF_MESH);
 
-	// Visibility Culling
-	RenderVisibilityCulling();
-
 	// set tex scale for lookups.
 	lightRenderPersistent.scale->SetValue(context->texScale);
 
@@ -392,7 +395,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(RMDeferred)
     void RenderForwardMeshes(size_t layerCount, const size_t ctxCount)
     {
       // iterate over all layers
-      for (size_t layer = 0; layer < layerCount; ++layer)
+      for(size_t layer = 0; layer < layerCount; ++layer)
       {
 	// set layer
 	meshRender.SetLayer(layer);
@@ -415,7 +418,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(RMDeferred)
 	  continue;
 
 	// set camera transform
-        graphics3D->SetWorldToCamera(ctx->cameraTransform.GetInverse ());
+        graphics3D->SetWorldToCamera(ctx->cameraTransform.GetInverse());
 
 	// render all objects given a render
 	fn(*ctx, render);

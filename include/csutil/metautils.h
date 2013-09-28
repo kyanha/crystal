@@ -153,6 +153,22 @@ namespace CS
     template<>
     struct EBOptHelper<void>
     {};
+
+    /// Helper class to select one of two types based on a bool
+    template<bool, typename TrueType, typename FalseType>
+    struct TypeSelect;
+
+    template<typename TrueType, typename FalseType>
+    struct TypeSelect<true, TrueType, FalseType>
+    {
+      typedef TrueType Type;
+    };
+
+    template<typename TrueType, typename FalseType>
+    struct TypeSelect<false, TrueType, FalseType>
+    {
+      typedef FalseType Type;
+    };
   }
 }
 

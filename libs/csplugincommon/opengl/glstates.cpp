@@ -220,20 +220,22 @@ void csGLStateCacheContext::InitCache()
   
   memset (currentBufferID, 0, sizeof (currentBufferID));
   {
-    enum { extVBO = 1, extPBO = 2 };
+    enum { extVBO = 1, extPBO = 2, extQBO = 4 };
     static const GLenum requiredExt[boCount] =
-    { extVBO, extVBO, extPBO, extPBO };
+    { extVBO, extVBO, extPBO, extPBO, extQBO };
     
     int boExt = 0;
     if (extmgr->CS_GL_ARB_vertex_buffer_object) boExt |= extVBO;
     if (extmgr->CS_GL_ARB_pixel_buffer_object) boExt |= extPBO;
+    if (extmgr->CS_GL_ARB_query_buffer_object || extmgr->CS_GL_AMD_query_buffer_object) boExt |= extQBO;
     for (int b = 0; b < boCount; b++)
     {
 	if (requiredExt[b] & boExt)
 	{
 	  static const GLenum localIndexToGLBufferBinding[boCount] =
 	  { GL_ARRAY_BUFFER_BINDING_ARB, GL_ELEMENT_ARRAY_BUFFER_BINDING_ARB, 
-	    GL_PIXEL_PACK_BUFFER_BINDING_ARB, GL_PIXEL_UNPACK_BUFFER_BINDING_ARB };
+	    GL_PIXEL_PACK_BUFFER_BINDING_ARB, GL_PIXEL_UNPACK_BUFFER_BINDING_ARB,
+	    GL_QUERY_BUFFER_BINDING_ARB };
 	  glGetIntegerv (localIndexToGLBufferBinding[b], 
 	    (GLint*)&activeBufferID[b]);
 	}
@@ -244,15 +246,17 @@ void csGLStateCacheContext::InitCache()
   {
     static const GLenum localIndexToGLBufferBinding[boCount] =
     { GL_ELEMENT_ARRAY_BUFFER_BINDING_ARB, GL_ARRAY_BUFFER_BINDING_ARB, 
-	GL_PIXEL_PACK_BUFFER_BINDING_ARB, GL_PIXEL_UNPACK_BUFFER_BINDING_ARB };
+	GL_PIXEL_PACK_BUFFER_BINDING_ARB, GL_PIXEL_UNPACK_BUFFER_BINDING_ARB,
+	GL_QUERY_BUFFER_BINDING_ARB };
 
-    enum { extVBO = 1, extPBO = 2 };
+    enum { extVBO = 1, extPBO = 2, extQBO = 4 };
     static const GLenum requiredExt[boCount] =
-    { extVBO, extVBO, extPBO, extPBO };
+    { extVBO, extVBO, extPBO, extPBO, extQBO };
     
     int boExt = 0;
     if (extmgr->CS_GL_ARB_vertex_buffer_object) boExt |= extVBO;
     if (extmgr->CS_GL_ARB_pixel_buffer_object) boExt |= extPBO;
+    if (extmgr->CS_GL_ARB_query_buffer_object || extmgr->CS_GL_AMD_query_buffer_object) boExt |= extQBO;
     for (int b = 0; b < boCount; b++)
     {
 	if (requiredExt[b] & boExt)

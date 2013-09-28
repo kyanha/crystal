@@ -198,6 +198,7 @@ public:
   bool OQIsVisible (unsigned int occlusion_query, unsigned int sampleLimit) { return true; }
   void OQBeginQuery (unsigned int occlusion_query) {}
   void OQEndQuery () {}
+  virtual void OQVisibleQueries (unsigned int* queries, bool* results, int num_queries) {};
 
   void DrawMeshBasic(const CS::Graphics::CoreRenderMesh* mymesh,
     const CS::Graphics::RenderMeshModes& modes) {}

@@ -490,7 +490,7 @@ public:
   int activeUnit[2];
   enum
   {
-    boElementArray = 0, boIndexArray, boPixelPack, boPixelUnpack,
+    boElementArray = 0, boIndexArray, boPixelPack, boPixelUnpack, boQuery,
     
     boCount
   };
@@ -504,6 +504,7 @@ public:
     case GL_ELEMENT_ARRAY_BUFFER_ARB: return boIndexArray;
     case GL_PIXEL_PACK_BUFFER_ARB:    return boPixelPack;
     case GL_PIXEL_UNPACK_BUFFER_ARB:  return boPixelUnpack;
+    case GL_QUERY_BUFFER_ARB:         return boQuery;
     default: return -1;      
     }
   }
@@ -511,7 +512,8 @@ public:
   {
     static const GLenum localIndexToGLBufferTarget[boCount] =
     { GL_ARRAY_BUFFER_ARB, GL_ELEMENT_ARRAY_BUFFER_ARB, 
-      GL_PIXEL_PACK_BUFFER_ARB, GL_PIXEL_UNPACK_BUFFER_ARB };
+      GL_PIXEL_PACK_BUFFER_ARB, GL_PIXEL_UNPACK_BUFFER_ARB,
+      GL_QUERY_BUFFER_ARB };
     return localIndexToGLBufferTarget[index];
   }
 
