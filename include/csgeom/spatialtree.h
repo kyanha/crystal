@@ -609,18 +609,18 @@ namespace Geometry
       // allocator initialization
       childAlloc(nullptr), treeAlloc(nullptr),
 
+      // child-parent initialization
+      child1(nullptr), child2(nullptr), parent(nullptr),
+
       // box initialization
       box(-std::numeric_limits<float>::max(),-std::numeric_limits<float>::max(),-std::numeric_limits<float>::max(),
 	  std::numeric_limits<float>::max(),std::numeric_limits<float>::max(),std::numeric_limits<float>::max()),
 
-      // child-parent initialization
-      child1(nullptr), child2(nullptr), parent(nullptr),
+      // objects initialization
+      objects(nullptr), numObjects(0), maxObjects(0), estimateObjects(0),
 
       // split initialization
-      block(0), minSplitObjects(10),
-
-      // objects initialization
-      objects(nullptr), numObjects(0), maxObjects(0), estimateObjects(0)
+      minSplitObjects(10), block(0)
     {
     }
 
