@@ -87,69 +87,70 @@ CS_PLUGIN_NAMESPACE_BEGIN(BugPlug)
 #define DEBUGCMD_MOUSE3 	7	// Mouse button 3
 
 // Commands for debugging.
-#define DEBUGCMD_DUMPENG	1000	// Dump structure of world
-#define DEBUGCMD_DUMPSEC	1001	// Dump structure of current sector
-#define DEBUGCMD_EDGES		1002	// Enable edge drawing
-#define DEBUGCMD_CACHEDUMP	1004	// Dump texture cache
-#define DEBUGCMD_CACHECLEAR	1005	// Clear texture cache
-#define DEBUGCMD_GAMMA		1016	// Set gamma
-#define DEBUGCMD_DUMPCAM	1018	// Dump the camera
-#define DEBUGCMD_FOV		1019	// Set fov
-#define DEBUGCMD_FOVANGLE	1020	// Set fov in angles
-#define DEBUGCMD_TERRVIS	1021	// Enable/disable terrain visibility
-#define DEBUGCMD_MESHBBOX	1022	// Show BBOX of selected mesh
-#define DEBUGCMD_MESHRAD	1023	// SHow RADIUS of selected mesh
-#define DEBUGCMD_DEBUGGRAPH	1024	// Do a dump of the debug graph
-#define DEBUGCMD_ENGINECMD	1025	// General engine DebugCommand() (arg)
-#define DEBUGCMD_ENGINESTATE	1026	// Test engine state.
-#define DEBUGCMD_VISCULVIEW	1027	// Call viscull->Dump(g3d)
-#define DEBUGCMD_VISCULCMD	1028	// Call viscull->DebugCommand()
-#define DEBUGCMD_DEBUGSECTOR	1029	// Toggle debug sector
-#define DEBUGCMD_DS_FORWARD	1030	// Move forward in debug sector
-#define DEBUGCMD_DS_BACKWARD	1031	// Move backward in debug sector
-#define DEBUGCMD_DS_TURNLEFT	1032	// Rotate left in debug sector
-#define DEBUGCMD_DS_TURNRIGHT	1033	// Rotate right in debug sector
-#define DEBUGCMD_DS_UP		1034	// Move up in debug sector
-#define DEBUGCMD_DS_DOWN	1035	// Move down in debug sector
-#define DEBUGCMD_DS_LEFT	1036	// Move left in debug sector
-#define DEBUGCMD_DS_RIGHT	1037	// Move right in debug sector
-#define DEBUGCMD_DEBUGVIEW	1038	// Toggle debug view
-#define DEBUGCMD_SCRSHOT	1039	// Screenshot
-#define DEBUGCMD_FPS		1040	// Toggle fps (default on)
-#define DEBUGCMD_HIDESELECTED	1041	// Remove selected obj from sectors.
-#define DEBUGCMD_UNDOHIDE	1042	// Undo last hide.
-#define DEBUGCMD_COUNTERRESET	1043	// Reset all counters.
-#define DEBUGCMD_COUNTERREMOVE	1044	// Remove all counters.
-#define DEBUGCMD_COUNTERFREEZE	1045	// Freeze all counters.
-#define DEBUGCMD_SHADOWDEBUG	1046	// Toggle shadow debugging
-#define DEBUGCMD_DEBUGCMD   	1047	// Send a debug command to a plugin
-#define DEBUGCMD_MEMORYDUMP   	1048	// Memory dump
-//#define DEBUGCMD_UNPREPARE   	1049	// Unprepare all things
-#define DEBUGCMD_COLORSECTORS  	1050	// Give all sectors a different color
-#define DEBUGCMD_SWITCHCULLER  	1051	// Switch to culler
-#define DEBUGCMD_SELECTMESH  	1052	// Select a mesh by name
-#define DEBUGCMD_MESHCDMESH	1053	// Show CD polymesh of selected mesh
-#define DEBUGCMD_MESHVISMESH	1054	// Show viscul polymesh of selected mesh
-#define DEBUGCMD_MESHSHADMESH	1055	// Show shadow polymesh of selected mesh
-#define DEBUGCMD_MESHBASEMESH	1056	// Show base polymesh of selected mesh
-#define DEBUGCMD_ONESECTOR	1057	// Merge all in one sector
-#define DEBUGCMD_MESH_XMIN	1058	// Move mesh
-#define DEBUGCMD_MESH_XPLUS	1059	// Move mesh
-#define DEBUGCMD_MESH_YMIN	1060	// Move mesh
-#define DEBUGCMD_MESH_YPLUS	1061	// Move mesh
-#define DEBUGCMD_MESH_ZMIN	1062	// Move mesh
-#define DEBUGCMD_MESH_ZPLUS	1063	// Move mesh
-#define DEBUGCMD_SAVEMAP	1064	// SaveMap
-#define DEBUGCMD_LISTPLUGINS	1065	// List all loaded plugins
-#define DEBUGCMD_PROFTOGGLELOG	1066	// Start/stop profiler logging
-#define DEBUGCMD_PROFAUTORESET	1067	// Reset profiler automagically at end of every frame
-#define DEBUGCMD_UBERSCREENSHOT 1068    // Create an "uberscreenshot"
-#define DEBUGCMD_MESHNORM       1069    // Draw normals of selected mesh
-#define DEBUGCMD_TOGGLEFPSTIME  1070    // Toggle between fps and frame time display
-#define DEBUGCMD_MESHSKEL       1080    // Draw skeleton of selected mesh
-#define DEBUGCMD_PRINTPORTALS   1090    // Print portal info for the current sector
-#define DEBUGCMD_PRINTPOSITION  1091    // Print current camera position in CS format
-#define DEBUGCMD_PHYSICS        1092    // Display the models and positions of all physical objects
+#define DEBUGCMD_DUMPENG	 1000	// Dump structure of world
+#define DEBUGCMD_DUMPSEC	 1001	// Dump structure of current sector
+#define DEBUGCMD_EDGES		 1002	// Enable edge drawing
+#define DEBUGCMD_CACHEDUMP	 1004	// Dump texture cache
+#define DEBUGCMD_CACHECLEAR	 1005	// Clear texture cache
+#define DEBUGCMD_GAMMA		 1016	// Set gamma
+#define DEBUGCMD_DUMPCAM	 1018	// Dump the camera
+#define DEBUGCMD_FOV		 1019	// Set fov
+#define DEBUGCMD_FOVANGLE	 1020	// Set fov in angles
+#define DEBUGCMD_TERRVIS	 1021	// Enable/disable terrain visibility
+#define DEBUGCMD_MESHBBOX	 1022	// Show BBOX of selected mesh
+#define DEBUGCMD_MESHRAD	 1023	// SHow RADIUS of selected mesh
+#define DEBUGCMD_DEBUGGRAPH	 1024	// Do a dump of the debug graph
+#define DEBUGCMD_ENGINECMD	 1025	// General engine DebugCommand() (arg)
+#define DEBUGCMD_ENGINESTATE	 1026	// Test engine state.
+#define DEBUGCMD_VISCULVIEW	 1027	// Call viscull->Dump(g3d)
+#define DEBUGCMD_VISCULCMD	 1028	// Call viscull->DebugCommand()
+#define DEBUGCMD_DEBUGSECTOR	 1029	// Toggle debug sector
+#define DEBUGCMD_DS_FORWARD	 1030	// Move forward in debug sector
+#define DEBUGCMD_DS_BACKWARD	 1031	// Move backward in debug sector
+#define DEBUGCMD_DS_TURNLEFT	 1032	// Rotate left in debug sector
+#define DEBUGCMD_DS_TURNRIGHT	 1033	// Rotate right in debug sector
+#define DEBUGCMD_DS_UP		 1034	// Move up in debug sector
+#define DEBUGCMD_DS_DOWN	 1035	// Move down in debug sector
+#define DEBUGCMD_DS_LEFT	 1036	// Move left in debug sector
+#define DEBUGCMD_DS_RIGHT	 1037	// Move right in debug sector
+#define DEBUGCMD_DEBUGVIEW	 1038	// Toggle debug view
+#define DEBUGCMD_SCRSHOT	 1039	// Screenshot
+#define DEBUGCMD_FPS		 1040	// Toggle fps (default on)
+#define DEBUGCMD_HIDESELECTED	 1041	// Remove selected obj from sectors.
+#define DEBUGCMD_UNDOHIDE	 1042	// Undo last hide.
+#define DEBUGCMD_COUNTERRESET	 1043	// Reset all counters.
+#define DEBUGCMD_COUNTERREMOVE	 1044	// Remove all counters.
+#define DEBUGCMD_COUNTERFREEZE	 1045	// Freeze all counters.
+#define DEBUGCMD_SHADOWDEBUG	 1046	// Toggle shadow debugging
+#define DEBUGCMD_DEBUGCMD   	 1047	// Send a debug command to a plugin
+#define DEBUGCMD_MEMORYDUMP   	 1048	// Memory dump
+//#define DEBUGCMD_UNPREPARE   	 1049	// Unprepare all things
+#define DEBUGCMD_COLORSECTORS  	 1050	// Give all sectors a different color
+#define DEBUGCMD_SWITCHCULLER  	 1051	// Switch to culler for curent sector
+#define DEBUGCMD_SELECTMESH  	 1052	// Select a mesh by name
+#define DEBUGCMD_MESHCDMESH	 1053	// Show CD polymesh of selected mesh
+#define DEBUGCMD_MESHVISMESH	 1054	// Show viscul polymesh of selected mesh
+#define DEBUGCMD_MESHSHADMESH	 1055	// Show shadow polymesh of selected mesh
+#define DEBUGCMD_MESHBASEMESH	 1056	// Show base polymesh of selected mesh
+#define DEBUGCMD_ONESECTOR	 1057	// Merge all in one sector
+#define DEBUGCMD_MESH_XMIN	 1058	// Move mesh
+#define DEBUGCMD_MESH_XPLUS	 1059	// Move mesh
+#define DEBUGCMD_MESH_YMIN	 1060	// Move mesh
+#define DEBUGCMD_MESH_YPLUS	 1061	// Move mesh
+#define DEBUGCMD_MESH_ZMIN	 1062	// Move mesh
+#define DEBUGCMD_MESH_ZPLUS	 1063	// Move mesh
+#define DEBUGCMD_SAVEMAP	 1064	// SaveMap
+#define DEBUGCMD_LISTPLUGINS	 1065	// List all loaded plugins
+#define DEBUGCMD_PROFTOGGLELOG	 1066	// Start/stop profiler logging
+#define DEBUGCMD_PROFAUTORESET	 1067	// Reset profiler automagically at end of every frame
+#define DEBUGCMD_UBERSCREENSHOT  1068    // Create an "uberscreenshot"
+#define DEBUGCMD_MESHNORM        1069    // Draw normals of selected mesh
+#define DEBUGCMD_TOGGLEFPSTIME   1070    // Toggle between fps and frame time display
+#define DEBUGCMD_MESHSKEL        1080    // Draw skeleton of selected mesh
+#define DEBUGCMD_PRINTPORTALS    1090    // Print portal info for the current sector
+#define DEBUGCMD_PRINTPOSITION   1091    // Print current camera position in CS format
+#define DEBUGCMD_PHYSICS         1092    // Display the models and positions of all physical objects
+#define DEBUGCMD_SWITCHCULLERALL 1093	// Switch to culler for all sector
 
 // For showing of polygon meshes.
 #define BUGPLUG_POLYMESH_NO	0

@@ -23,5 +23,6 @@
  */
 #include "cssysdef.h"
 #include "inetwork/http.h"
+#include "inetwork/socket.h"
 #endif /* __INETWORK_H__ */
 

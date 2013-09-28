@@ -1,5 +1,6 @@
 /*
   Copyright (C) 2010 by Mike Gist and Claudiu Mihail
+  Copyright (C) 2013 by Matthieu Kraus
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -19,12 +20,28 @@
 #ifndef __CS_RENDERMANAGER_OCCLUVIS_H__
 #define __CS_RENDERMANAGER_OCCLUVIS_H__
 
-#include "csgeom/aabbtree.h"
+// set acceleration structure to use:
+// csKDTree: 0
+// csBIH: 1
+// csBVH: 2
+#define OCCLUVIS_TREETYPE 1
+
+#if (OCCLUVIS_TREETYPE == 0)
+#  include "csgeom/kdtree.h"
+#elif (OCCLUVIS_TREETYPE == 1)
+#  include "csgeom/bih.h"
+#elif (OCCLUVIS_TREETYPE == 2)
+#  include "csgeom/bvh.h"
+#else
+#  error Unknown occluvis tree type
+#endif
 #include "csutil/hash.h"
 #include "csutil/refarr.h"
+#include "csutil/randomgen.h"
 #include "csutil/scf_implementation.h"
 #include "iengine/engine.h"
 #include "iengine/movable.h"
+#include "iengine/mesh.h"
 #include "iengine/sector.h"
 #include "iengine/viscull.h"
 #include "imesh/objmodel.h"
@@ -32,6 +49,7 @@
 struct iGraphics3D;
 struct iMeshWrapper;
 struct iObjectRegistry;
+class csOccluvis;
 
 #include "csutil/deprecated_warn_off.h"
 
@@ -76,105 +94,126 @@ namespace CS
     struct QueryData : public csRefCount
     {
       unsigned int uOQuery;
-      uint32 uQueryFrame;
       uint32 uNextCheck;
       OcclusionVisibility eResult;
+      OcclusionVisibility eLastResult;
 
-      QueryData ()
-        : uOQuery (0), uQueryFrame (0),
-          uNextCheck (0), eResult (INVALID)
+      QueryData()
+        : uOQuery(0), uNextCheck(0),
+	  eResult(INVALID), eLastResult(INVALID)
       {}
     };
 
-    struct AABBTreeNodeVisibilityData
+    struct TreeNodeVisibilityData
     {
-      AABBTreeNodeVisibilityData ()
+      TreeNodeVisibilityData() : g3d(nullptr)
       {
-        g3d = 0;
       }
 
-      ~AABBTreeNodeVisibilityData ()
+      ~TreeNodeVisibilityData()
       {
-        if (g3d)
+	// we cannot free anything without a backend
+        if(g3d)
         {
-          FreeQueryData ();
+	  // free query data for all render views
+          FreeQueryData();
         }
       }
 
-      void LeafAddObject (iVisibilityObject*)
+      QueryData* GetQueryData(iGraphics3D* ig3d, iRenderView* rview)
       {
-        RViewQueryHash::GlobalIterator itr = RViewQueries.GetIterator ();
-        while (itr.HasNext ())
-        {
-          itr.Next ()->eResult = INVALID;
-        }
-      }
+	// get the query data for this render view if we already have some
+        csRef<QueryData> queryData = RViewQueries.Get(csPtrKey<iRenderView>(rview), csRef<QueryData>());
 
-      void LeafUpdateObjects (iVisibilityObject**, uint)
-      {
-        RViewQueryHash::GlobalIterator itr = RViewQueries.GetIterator ();
-        while (itr.HasNext ())
-        {
-          itr.Next ()->eResult = INVALID;
-        }
-      }
-
-      void NodeUpdate (const AABBTreeNodeVisibilityData& child1,
-        const AABBTreeNodeVisibilityData& child2)
-      {
-        RViewQueryHash::GlobalIterator itr = RViewQueries.GetIterator ();
-        while (itr.HasNext ())
-        {
-          itr.Next ()->eResult = INVALID;
-        }
-      }
-
-      QueryData* GetQueryData (iGraphics3D* ig3d, iRenderView* rview)
-      {
-        csRef<QueryData> queryData = RViewQueries.Get (csPtrKey<iRenderView> (rview), csRef<QueryData> ());
-
-        if (!queryData.IsValid ())
-        {
+	// check whether we already have data
+        if(!queryData.IsValid())
+        { // no, create it
+	  // cache our graphics backend as we'll need it to delete our queries
           g3d = ig3d;
-          queryData.AttachNew (new QueryData);
-          g3d->OQInitQueries (&queryData->uOQuery, 1);
-          RViewQueries.Put (csPtrKey<iRenderView> (rview), queryData);
+
+	  // create new query data
+          queryData.AttachNew(new QueryData);
+
+	  // create a query object
+          g3d->OQInitQueries(&queryData->uOQuery, 1);
+
+	  // add it to our query list
+	  queries.Push(queryData->uOQuery);
+
+	  // add the new data to our lookup hash for this rview
+          RViewQueries.Put(csPtrKey<iRenderView>(rview), queryData);
         }
 
+	// return obtained data
         return queryData;
       }
 
-      void FreeQueryData ()
+      void FreeQueryData()
       {
-        RViewQueryHash::GlobalIterator itr = RViewQueries.GetIterator ();
-        while (itr.HasNext ())
-        {
-          g3d->OQDelQueries (&itr.Next ()->uOQuery, 1);
-        }
+	// delete queries
+	g3d->OQDelQueries(queries.GetArray(), static_cast<int>(queries.GetSize()));
+	queries.Empty();
 
-        RViewQueries.DeleteAll ();
+	// clear hash
+        RViewQueries.DeleteAll();
       }
 
     private:
+      // graphics backend - required to free data on destruction
       iGraphics3D* g3d;
 
+      // convenience typedef for hash type
       typedef csHash<csRef<QueryData>, csPtrKey<iRenderView> > RViewQueryHash;
+
+      // hash that holds query data for each render view
       RViewQueryHash RViewQueries;
+
+      // housekeeping array with all queries for this node
+      csDirtyAccessArray<unsigned> queries;
     };
 
-    typedef CS::Geometry::AABBTree<iVisibilityObject, 1, AABBTreeNodeVisibilityData> AABBVisTree;
-    typedef AABBVisTree::Node AABBVisTreeNode;
+#if (OCCLUVIS_TREETYPE == 0)
+    typedef csKDTree VisTree;
+#elif (OCCLUVIS_TREETYPE == 1)
+    typedef csBIH VisTree;
+#elif (OCCLUVIS_TREETYPE == 2)
+    typedef csBVH VisTree;
+#endif
+    typedef VisTree::Child VisTreeNode;
 
-    class CS_CRYSTALSPACE_EXPORT csOccluvis : public AABBVisTree,
-      public scfImplementation1<csOccluvis, iVisibilityCuller>
+    class CS_CRYSTALSPACE_EXPORT csOccluvis :
+      public scfImplementationExt1<csOccluvis, VisTree, iVisibilityCuller>
     {
     private:
-      iObjectRegistry *object_reg;
+      iObjectRegistry* object_reg;
       csRef<iGraphics3D> g3d;
       csRef<iEngine> engine;
       csRef<iShaderManager> shaderMgr;
       csRef<iStringSet> stringSet;
       csRef<iShaderVarStringSet> svStrings;
+
+      struct NodeMeshList : public csRefCount
+      {
+        NodeMeshList() : numMeshes(0), meshList(nullptr)
+        {
+        }
+
+        ~NodeMeshList()
+        {
+          for(int i = 0; i < numMeshes; ++i)
+	  {
+	    cs_free(meshList[i].rmeshes);
+	  }
+	  cs_free(meshList);
+        }
+
+        int numMeshes;
+        uint framePassed;
+        csBitArray onlyTestZ;
+        bool alwaysVisible;
+        VisTreeNode* node;
+        csSectorVisibleRenderMeshes* meshList;
+      };
 
       // Structure of common f2b data.
       struct Front2BackData
@@ -183,77 +222,98 @@ namespace CS
         iRenderView* rview;
         csPlane3* frustum;
         iVisibilityCullerListener* viscallback;
-      };
-
-      struct NodeMeshList : public csRefCount
-      {
-        NodeMeshList () : numMeshes (0), meshList (nullptr)
-        {
-        }
-
-        ~NodeMeshList ()
-        {
-          for (int m = 0; m < numMeshes; ++m)
-          {
-            delete[] meshList[m].rmeshes;
-          }
-          delete[] meshList;
-        }
-
-        int numMeshes;
-        uint framePassed;
-        csBitArray onlyTestZ;
-        bool alwaysVisible;
-        AABBVisTreeNode* node;
-        csSectorVisibleRenderMeshes* meshList;
+	csRefArray<NodeMeshList>* meshList;
+	csOccluvis* parent;
       };
 
       class csVisibilityObjectWrapper
         : public scfImplementation2<csVisibilityObjectWrapper, iMovableListener, iObjectModelListener>
       {
+      private:
+	// Updating method issued by listeners.
+	void Update()
+	{
+	  // recalculate bounding box
+	  visobj->GetMeshWrapper()->GetWorldBoundingBox();
+
+	  // move object in the tree
+	  culler->MoveObject(node, visobj->GetBBox());
+	}
+
       public:
-        csVisibilityObjectWrapper (csOccluvis* culler, iVisibilityObject* vis_obj);
+        csVisibilityObjectWrapper(csOccluvis* culler, VisTreeNode* node, iVisibilityObject* visobj)
+	  : scfImplementationType(this), culler(culler), node(node), visobj(visobj)
+	{
+	}
 
         /// The object model has changed.
-        virtual void ObjectModelChanged (iObjectModel* model);
+        virtual void ObjectModelChanged(iObjectModel* model)
+	{
+	  Update();
+	}
 
         /// The movable has changed.
-        virtual void MovableChanged (iMovable* movable);
+        virtual void MovableChanged(iMovable* movable)
+	{
+	  Update();
+	}
 
         /// The movable is about to be destroyed.
-        virtual void MovableDestroyed (iMovable*);
+        virtual void MovableDestroyed(iMovable*)
+	{
+	}
 
-        inline iVisibilityObject* GetVisObject () const
+	/// Getter for the associated object.
+        inline iVisibilityObject* GetVisObject() const
         {
-          return vis_obj;
+          return visobj;
         }
+
+	/// Getter for the associated tree node.
+	inline VisTreeNode* GetNode() const
+	{
+	  return node;
+	}
 
       private:
         csOccluvis* culler;
-        iVisibilityObject* vis_obj;
-        csBox3 oldBBox;
+	VisTreeNode* node;
+        iVisibilityObject* visobj;
+      };
+
+      struct TreeNodeData
+      {
+	iVisibilityObject* visobj;
+	TreeNodeVisibilityData data;
       };
 
       // Array of visibility objects.
+      // @@@TODO: this is only a housekeeping thing - a hash may be better suited for faster deletion
       csRefArray<csVisibilityObjectWrapper> visObjects;
+
+      // RNG for offsetting first query for visible nodes
+      csRandomGen RNG;
 
       // Set to true to pass all objects regardless of visibility next VisCull.
       bool bAllVisible;
 
       // Frame skip parameter
-      static const unsigned int visibilityFrameSkip = 10;
+      unsigned visibilityFrameSkip;
 
       // Hash of mesh nodes for a render view.
       csHash<csRefArray<NodeMeshList>*, csPtrKey<iRenderView> > nodeMeshHash;
 
       // Hashes of MeshList objects for visibility objects.
       typedef csHash<NodeMeshList*, csPtrKey<iVisibilityObject> > VisObjMeshHash;
-      typedef csHash<VisObjMeshHash, csPtrKey<iRenderView> > VisObjMeshHashes;
-      VisObjMeshHashes visobjMeshHashes;
+      typedef csHash<VisObjMeshHash, csPtrKey<iRenderView> > VisObjMeshHashHash;
+      VisObjMeshHashHash visobjMeshHashHash;
 
-      // Vector of vistest objects (used in the box/sphere/etc. tests).
-      VistestObjectsArray vistest_objects;
-      bool vistest_objects_inuse;
+      // Array of vistest objects (used in the box/sphere/etc. tests).
+      VistestObjectsArray vistestObjects;
+      bool vistestObjectsInuse;
+
+      // currently active queries
+      csArray<QueryData*> queries;
 
       // Depth test shader type ID.
       csStringID depthTestID;
@@ -274,157 +334,194 @@ namespace CS
 
     protected:
       /**
+       * Reads back the results of all currently active queries.
+       */
+      void FinishQueries();
+
+      /**
        * Renders the meshes in the given list.
        */
       template<bool bQueryVisibility>
-      void RenderMeshes (AABBVisTreeNode* node,
-                         iRenderView* rview,
-                         size_t& lastTicket,
-                         iShader*& lastShader,
-                         iShaderVariableContext* shadervars,
-                         NodeMeshList*& nodeMeshList);
+      void RenderMeshes(VisTreeNode* node,
+                        iRenderView* rview,
+                        size_t& lastTicket,
+                        iShader*& lastShader,
+                        iShaderVariableContext* shadervars,
+                        NodeMeshList*& nodeMeshList);
 
       /**
-       * Transverses the tree from F2B.
+       * Trasverses the tree from Front to Back.
        */
       template<bool bDoFrustumCulling>
-      void TraverseTreeF2B(AABBVisTreeNode* node, uint32 frustum_mask,
-        Front2BackData& f2bData, csRefArray<NodeMeshList>& meshList);
+      static bool TraverseTreeF2B(VisTree* node, Front2BackData& f2bData,
+#	if (OCCLUVIS_TREETYPE == 0)
+	uint32 timestamp,
+#	endif
+	uint32& frustum_mask);
+
+      /**
+       * Traverses the tree from Front to Back checking for intersections with a segment.
+       */
+      template<bool sloppy>
+      static bool TraverseIntersectSegment(VisTree* node, IntersectSegmentFront2BackData& data,
+#	if (OCCLUVIS_TREETYPE == 0)
+	uint32 timestamp,
+#	endif
+	uint32& frustumMask);
 
       /**
        * Returns the visibility data of a node.
        */
-      inline AABBTreeNodeVisibilityData& GetNodeVisData (AABBVisTreeNode* node)
+      inline static TreeNodeVisibilityData& GetNodeVisData(VisTreeNode* node)
       {
-        return static_cast<AABBTreeNodeVisibilityData&> (*node);
+	return static_cast<TreeNodeData*>(node->GetObject())->data;
+      }
+
+      inline static iVisibilityObject* GetNodeVisObject(VisTreeNode* node)
+      {
+	return static_cast<TreeNodeData*>(node->GetObject())->visobj;
       }
 
       /**
        * Returns the visibility of a view-node pair.
        */
-      OcclusionVisibility GetNodeVisibility (AABBVisTreeNode* node, iRenderView* rview);
+      OcclusionVisibility GetNodeVisibility(VisTreeNode* node, iRenderView* rview);
 
       /**
        * Returns whether to check the visibility of a view-node pair.
        */
-      bool CheckNodeVisibility (AABBVisTreeNode* node, iRenderView* rview);
+      bool CheckNodeVisibility(VisTreeNode* node, iRenderView* rview);
 
       /**
        * Begin a occlusion query of a view-node pair.
        */
-      void BeginNodeQuery (AABBVisTreeNode* node, iRenderView* rview);
-
-      /**
-       * Get the front and back children of a node.
-       */
-      void GetF2BChildren (AABBVisTreeNode* node, Front2BackData& data,
-        AABBVisTreeNode*& fChild, AABBVisTreeNode*& bChild);
-
-      /**
-       * Perform frustum culling on a node.
-       */
-      NodeVisibility TestNodeVisibility (AABBVisTreeNode* node, Front2BackData& data, uint32& frustum_mask);
+      void BeginNodeQuery(VisTreeNode* node, iRenderView* rview);
 
       /**
        * Mark all meshes as visible.
        */
-      void MarkAllVisible (AABBVisTreeNode* node, Front2BackData& f2bData);
+      void MarkAllVisible(VisTree* node, Front2BackData& f2bData);
 
       /**
-       * Mesh list comparison function.
+       * Traverses the tree checking for objects that intersect with the given box.
        */
-      static int NodeMeshListCompare (NodeMeshList* const& object, AABBVisTreeNode* const& key);
+      void TraverseTreeBox(VisTree* node, VistestObjectsArray* voArray, csBox3 const& box);
 
       /**
-       * Transverses the tree checking for objects that intersect with the given box.
+       * Traverses the tree checking for objects that intersect with the given sphere.
        */
-      void TraverseTreeBox(AABBVisTreeNode* node,
-        VistestObjectsArray* voArray, const csBox3& box);
+      void TraverseTreeSphere(VisTree* node, VistestObjectsArray* voArray,
+        csVector3 const& centre, float const sqradius);
 
       /**
-       * Transverses the tree checking for objects that intersect with the given sphere.
+       * Traverses the tree checking for objects that intersect with the given sphere.
        */
-      void TraverseTreeSphere(AABBVisTreeNode* node,
-        VistestObjectsArray* voArray, const csVector3& centre,
-        const float sqradius);
-
-      /**
-       * Transverses the tree checking for objects that intersect with the given sphere.
-       */
-      void TraverseTreeSphere(AABBVisTreeNode* node,
-        iVisibilityCullerListener* viscallback,
-        const csVector3& centre, const float sqradius);
+      void TraverseTreeSphere(VisTree* node, iVisibilityCullerListener* viscallback,
+        csVector3 const& centre, float const sqradius);
 
       /**
        * Transverses the tree checking for objects that are in the volume 
        * formed by the set of planes.
        */
-      void TraverseTreePlanes (AABBVisTreeNode* node,
-        VistestObjectsArray* voArray, csPlane3* planes,
-        uint32 frustum_mask);
+      void TraverseTreePlanes(VisTree* node, VistestObjectsArray* voArray,
+	csPlane3* planes, uint32 frustum_mask);
 
       /**
       * Transverses the tree checking for objects that are in the volume 
       * formed by the set of planes.
        */
-      void TraverseTreePlanes (AABBVisTreeNode* node,
-        iVisibilityCullerListener* viscallback,
+      void TraverseTreePlanes(VisTree* node, iVisibilityCullerListener* viscallback,
         csPlane3* planes, uint32 frustum_mask);
 
     public:
-      csOccluvis (iObjectRegistry *object_reg);
-      virtual ~csOccluvis ();
+      csOccluvis(iObjectRegistry* object_reg);
+      virtual ~csOccluvis();
 
-      virtual void Setup (const char* defaultShaderName);
+      // iVisibilityCuller
 
-     /**
-      * Register a visibility object with this culler.
-      */
-      virtual void RegisterVisObject (iVisibilityObject* visobj);
+      /**
+       * Initial setup executed before first usage.
+       */
+      virtual void Setup(char const* defaultShaderName);
 
-     /**
-      * Unregister a visibility object with this culler.
-      */
-      virtual void UnregisterVisObject (iVisibilityObject* visobj);
+      /**
+       * Register a visibility object with this culler.
+       */
+      virtual void RegisterVisObject(iVisibilityObject* visobj);
 
-     /**
-      * Do a visibility test from a given viewpoint.
-      */
-      virtual bool VisTest (iRenderView* rview, iVisibilityCullerListener* viscallback, int, int);
+      /**
+       * Unregister a visibility object with this culler.
+       */
+      virtual void UnregisterVisObject(iVisibilityObject* visobj);
 
-      virtual csPtr<iVisibilityObjectIterator> VisTest (const csBox3& box);
+      /**
+       * Do a visibility test from a given viewpoint.
+       */
+      virtual bool VisTest(iRenderView* rview, iVisibilityCullerListener* viscallback, int, int);
 
-      virtual csPtr<iVisibilityObjectIterator> VisTest (const csSphere& sphere);
+      /**
+       * Mark all objects intersecting the box as visible.
+       */
+      virtual csPtr<iVisibilityObjectIterator> VisTest(csBox3 const& box);
 
-      virtual void VisTest (const csSphere& sphere, 
-        iVisibilityCullerListener* viscallback);
+      /**
+       * Mark all objects intersecting the sphere as visible.
+       */
+      virtual csPtr<iVisibilityObjectIterator> VisTest(csSphere const& sphere);
 
-      virtual csPtr<iVisibilityObjectIterator> VisTest (csPlane3* planes, int num_planes);
+      /**
+       * Mark all objects contained in the polyhedron formed by the planes as visible.
+       */
+      virtual csPtr<iVisibilityObjectIterator> VisTest(csPlane3* planes, int num_planes);
 
-      virtual void VisTest (csPlane3* planes,
-        int num_planes, iVisibilityCullerListener* viscallback);
+      /**
+       * Notify the callback about all objects intersecting the sphere.
+       */
+      virtual void VisTest(csSphere const& sphere, iVisibilityCullerListener* viscallback);
 
-      virtual csPtr<iVisibilityObjectIterator> IntersectSegmentSloppy (
-        const csVector3& start, const csVector3& end);
+      /**
+       * Notify the callback about all objects contained in the polyhedron formed by the planes.
+       */
+      virtual void VisTest(csPlane3* planes, int num_planes, iVisibilityCullerListener* viscallback);
 
-      virtual csPtr<iVisibilityObjectIterator> IntersectSegment (
-        const csVector3& start, const csVector3& end, bool accurate = false,
-	bool bf = false);
+      /**
+       * Return all objects hit by the beam. May include objects that aren't hit, but are close to the beam.
+       */
+      virtual csPtr<iVisibilityObjectIterator> IntersectSegmentSloppy(csVector3 const& start, csVector3 const& end);
 
-      virtual bool IntersectSegment (const csVector3& start,
-        const csVector3& end, csVector3& isect, float* pr = 0,
-        iMeshWrapper** p_mesh = 0, int* poly_idx = 0,
+      /**
+       * Return all objects hit by the beam.
+       * If bf is true backface culling is done (only valid if accurate is true).
+       */
+      virtual csPtr<iVisibilityObjectIterator> IntersectSegment(
+        csVector3 const& start, csVector3 const& end,
+	bool accurate = false, bool bf = false);
+
+      /**
+       * Intersect a beam using this culler and return the intersection
+       * point, the mesh and optional polygon index. If the returned mesh is 0
+       * then this means that the object belonging to the culler itself was
+       * hit. Some meshes don't support returning polygon indices in which case
+       * that field will always be -1.
+       * If accurate is false then a less accurate (and faster) method is used.
+       * In that case the polygon index will never be filled.
+       * If bf is true then backface culling is used. This only works if 'accurate'
+       * is set to true.
+       */
+      virtual bool IntersectSegment(csVector3 const& start,
+        csVector3 const& end, csVector3& isect, float* pr = nullptr,
+        iMeshWrapper** p_mesh = nullptr, int* poly_idx = nullptr,
         bool accurate = true, bool bf = false);
 
       /**
        * Prepare culling for the next frame.
        */
-      virtual void RenderViscull (iRenderView* rview, iShaderVariableContext* shadervars);
+      virtual bool RenderViscull(iRenderView* rview, iShaderVariableContext* shadervars);
 
      /**
       * Mark that we're about to perform precaching.
       */
-      virtual void BeginPrecacheCulling ()
+      virtual void BeginPrecacheCulling()
       {
         bAllVisible = true;
       }
@@ -432,29 +529,40 @@ namespace CS
       /**
        * Mark that we've finished precaching.
        */
-      virtual void EndPrecacheCulling ()
+      virtual void EndPrecacheCulling()
       {
         bAllVisible = false;
       }
 
-      virtual void PrecacheCulling () { CS_ASSERT ("Call (Begin/End)PrecacheCulling!\n"); }
-      virtual const char* ParseCullerParameters (iDocumentNode* node) { return 0; }
+      // deprecated method
+      virtual void PrecacheCulling()
+      {
+	CS_ASSERT_MSG("Call (Begin/End)PrecacheCulling!", false);
+      }
+
+      /**
+       * Parse additional parameters - returns error message on error, else nullptr.
+       */
+      virtual char const* ParseCullerParameters(iDocumentNode* node)
+      {
+	return 0;
+      }
     };
 
     class F2BSorter
     {
     public:
-      F2BSorter (iEngine* engine, const csVector3& cameraOrigin)
-        : cameraOrigin (cameraOrigin)
+      F2BSorter(iEngine* engine, csVector3 const& cameraOrigin)
+        : cameraOrigin(cameraOrigin)
       {
-        portalPriority = engine->GetRenderPriority ("portal");
+        portalPriority = engine->GetRenderPriority("portal");
       }
 
-      bool operator() (csOccluvis::NodeMeshList* const& m1,
-                       csOccluvis::NodeMeshList* const& m2);
+      bool operator()(csOccluvis::NodeMeshList* const& m1,
+                      csOccluvis::NodeMeshList* const& m2);
 
     private:
-      const csVector3& cameraOrigin;
+      csVector3 const& cameraOrigin;
       CS::Graphics::RenderPriority portalPriority;
     };
 
@@ -464,50 +572,69 @@ namespace CS
     private:
       VistestObjectsArray* vector;
       size_t position;
-      bool* vistest_objects_inuse;
+      bool* vistestObjectsInUse;
 
     public:
-      csOccluvisObjIt (VistestObjectsArray* vector,
-        bool* vistest_objects_inuse) :
-        scfImplementationType(this)
+      csOccluvisObjIt(VistestObjectsArray* vector,
+        bool* vistestObjectsInUse) :
+        scfImplementationType(this),
+	vector(vector), vistestObjectsInUse(vistestObjectsInUse)
       {
-        csOccluvisObjIt::vector = vector;
-        csOccluvisObjIt::vistest_objects_inuse = vistest_objects_inuse;
-        if (vistest_objects_inuse) *vistest_objects_inuse = true;
-        Reset ();
+        if(vistestObjectsInUse != nullptr)
+	{
+	  *vistestObjectsInUse = true;
+	}
+
+        Reset();
       }
-      virtual ~csOccluvisObjIt ()
+      virtual ~csOccluvisObjIt()
       {
-        // If the vistest_objects_inuse pointer is not 0 we set the
+        // If the vistest_objects_inuse pointer is not null we set the
         // bool to false to indicate we're no longer using the base
         // vector. Otherwise we delete the vector.
-        if (vistest_objects_inuse)
-          *vistest_objects_inuse = false;
+        if(vistestObjectsInUse != nullptr)
+	{
+          *vistestObjectsInUse = false;
+	}
         else
+	{
           delete vector;
+	}
       }
 
       virtual iVisibilityObject* Next()
       {
-        if (position == (size_t)-1) return 0;
-        iVisibilityObject* vo = vector->Get (position);
-        position++;
-        if (position == vector->GetSize ())
-          position = (size_t)-1;
+        if(position == csArrayItemNotFound)
+	{
+	  return 0;
+	}
+
+        iVisibilityObject* vo = vector->Get(position);
+        ++position;
+
+        if(position == vector->GetSize())
+	{
+          position = csArrayItemNotFound;
+	}
+
         return vo;
       }
 
       virtual void Reset()
       {
-        if (vector == 0 || vector->GetSize () < 1)
-          position = (size_t)-1;
+        if(vector == nullptr || vector->IsEmpty())
+	{
+          position = csArrayItemNotFound;
+	}
         else
+	{
           position = 0;
+	}
       }
 
-      virtual bool HasNext () const
+      virtual bool HasNext() const
       {
-        return ((position != (size_t)-1) && position <= vector->GetSize ());
+        return ((position != csArrayItemNotFound) && position <= vector->GetSize());
       }
     };
   }

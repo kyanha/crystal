@@ -884,6 +884,15 @@ bool csBugPlug::ExecCommand (int cmd, const csString& args)
 	if (catcher->camera)
         SwitchCuller (catcher->camera->GetSector (), args);
       break;
+    case DEBUGCMD_SWITCHCULLERALL:
+      {
+      Report (CS_REPORTER_SEVERITY_DEBUG,
+	"Switching to visibility culler %s for all sectors.", CS::Quote::Single (args));
+	iSectorList* list = Engine->GetSectors();
+	for(int i = 0; i < list->GetCount(); ++i)
+	  list->Get(i)->SetVisibilityCullerPlugin(args);
+      }
+      break;
     case DEBUGCMD_ONESECTOR:
 	if (catcher->camera)
         OneSector (catcher->camera);
@@ -2303,6 +2312,7 @@ int csBugPlug::GetCommandCode (const char* cmdstr, csString& args)
   if (!strcmp (cmd, "memorydump"))	return DEBUGCMD_MEMORYDUMP;
   if (!strcmp (cmd, "colorsectors"))	return DEBUGCMD_COLORSECTORS;
   if (!strcmp (cmd, "switchculler"))	return DEBUGCMD_SWITCHCULLER;
+  if (!strcmp (cmd, "switchcullerall"))	return DEBUGCMD_SWITCHCULLERALL;
   if (!strcmp (cmd, "selectmesh"))	return DEBUGCMD_SELECTMESH;
   if (!strcmp (cmd, "onesector"))	return DEBUGCMD_ONESECTOR;
   if (!strcmp (cmd, "mesh_xmin"))	return DEBUGCMD_MESH_XMIN;

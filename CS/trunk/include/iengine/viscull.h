@@ -112,7 +112,7 @@ struct iVisibilityCullerListener : public virtual iBase
  */
 struct iVisibilityCuller : public virtual iBase
 {
-  SCF_INTERFACE (iVisibilityCuller, 5, 0, 0);
+  SCF_INTERFACE (iVisibilityCuller, 5, 1, 0);
 
   /**
    * Setup all data for this visibility culler. This needs
@@ -228,7 +228,7 @@ struct iVisibilityCuller : public virtual iBase
   /**
    * Perform any rendering required by this culler.
    */
-  virtual void RenderViscull (iRenderView* rview, iShaderVariableContext* shadervars) = 0;
+  virtual bool RenderViscull (iRenderView* rview, iShaderVariableContext* shadervars) = 0;
 
   /**
    * Begins precache culling.

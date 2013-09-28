@@ -29,13 +29,12 @@
 #include "csutil/set.h"
 #include "csutil/weakref.h"
 #include "csgeom/plane3.h"
+#include "csgeom/kdtree.h"
 #include "imesh/objmodel.h"
 #include "iengine/viscull.h"
 #include "iengine/movable.h"
 #include "iengine/mesh.h"
 
-class csKDTree;
-class csKDTreeChild;
 class csFrustumVis;
 struct iMovable;
 struct iMeshWrapper;
@@ -172,7 +171,7 @@ public:
     iMeshWrapper** p_mesh = 0, int* poly_idx = 0,
     bool accurate = true, bool bf = false);
   virtual const char* ParseCullerParameters (iDocumentNode*) { return 0; }
-  virtual void RenderViscull (iRenderView* rview, iShaderVariableContext* shaders) {}
+  virtual bool RenderViscull (iRenderView* rview, iShaderVariableContext* shaders) { return false; }
   virtual void BeginPrecacheCulling () { VisTest ((iRenderView*)0, 0); }
   virtual void EndPrecacheCulling () {}
 

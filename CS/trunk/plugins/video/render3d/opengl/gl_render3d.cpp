@@ -887,6 +887,8 @@ bool csGLGraphics3D::Open ()
   ext->InitGL_EXT_blend_func_separate ();
   ext->InitGL_ARB_occlusion_query ();
   ext->InitGL_ARB_occlusion_query2 ();
+  ext->InitGL_ARB_query_buffer_object ();
+  ext->InitGL_AMD_query_buffer_object ();
   ext->InitGL_GREMEDY_string_marker ();
   if (!ext->CS_GL_ARB_seamless_cubemap_per_texture)
   {
@@ -1084,6 +1086,14 @@ bool csGLGraphics3D::Open ()
       glTexEnvf (GL_TEXTURE_FILTER_CONTROL_EXT, 
 	      GL_TEXTURE_LOD_BIAS_EXT, textureLodBias); 
     }
+  }
+
+  // setup occlusion query buffer
+  if (ext->CS_GL_ARB_query_buffer_object || ext->CS_GL_AMD_query_buffer_object)
+  {
+    // generate occlusion query buffer
+    ext->glGenBuffers(1, &queryBuffer);
+    queryBufferSize = 0;
   }
 
   string_vertices = strings->Request ("vertices");
@@ -1342,6 +1352,12 @@ void csGLGraphics3D::Close ()
 
   if (drawPixmapAFP)
     ext->glDeleteProgramsARB (1, &drawPixmapProgram);
+
+  if (ext->CS_GL_ARB_query_buffer_object || ext->CS_GL_AMD_query_buffer_object)
+  {
+    ext->glDeleteBuffers(1, &queryBuffer);
+    queryBufferSize = 0;
+  }
 
   txtmgr = 0;
   shadermgr = 0;
@@ -3678,18 +3694,12 @@ bool csGLGraphics3D::PerformExtensionV (char const* command, va_list /*args*/)
 
 void csGLGraphics3D::OQInitQueries(unsigned int* queries,int num_queries)
 {
-  if (num_queries != 0)
-  {
-    ext->glGenQueriesARB((GLsizei)num_queries, (GLuint*)queries);
-  }
+  ext->glGenQueriesARB((GLsizei)num_queries, (GLuint*)queries);
 }
 
 void csGLGraphics3D::OQDelQueries(unsigned int* queries, int num_queries)
 {
-  if(num_queries != 0 && queries != 0)
-  {
-    ext->glDeleteQueriesARB(num_queries, (GLuint*)queries);
-  }
+  ext->glDeleteQueriesARB(num_queries, (GLuint*)queries);
 }
 
 bool csGLGraphics3D::OQueryFinished(unsigned int occlusion_query)
@@ -3701,6 +3711,12 @@ bool csGLGraphics3D::OQueryFinished(unsigned int occlusion_query)
 
 bool csGLGraphics3D::OQIsVisible(unsigned int occlusion_query, unsigned int sampleLimit)
 {
+  // unbind query buffer
+  if (ext->CS_GL_ARB_query_buffer_object || ext->CS_GL_AMD_query_buffer_object)
+  {
+    statecache->SetBufferARB(GL_QUERY_BUFFER_ARB, 0, true);
+  }
+
   if (ext->CS_GL_ARB_occlusion_query2)
   {
     GLuint sampleBoolean;
@@ -3712,6 +3728,59 @@ bool csGLGraphics3D::OQIsVisible(unsigned int occlusion_query, unsigned int samp
     GLuint sampleCount;
     ext->glGetQueryObjectuivARB((GLuint)occlusion_query, GL_QUERY_RESULT_ARB, &sampleCount);
     return (sampleCount > (GLuint)sampleLimit);
+  }
+}
+
+void csGLGraphics3D::OQVisibleQueries(unsigned int* queries, bool* results, int num_queries)
+{
+  // check for query buffer support and query all results at once if present
+  // @@@TODO: while using a buffer works it's making everything slower instead of speeding
+  //          it up, so there's no point in using it for now
+  //if (ext->CS_GL_ARB_query_buffer_object || ext->CS_GL_AMD_query_buffer_object)
+  if (false)
+  {
+    // bind query buffer
+    statecache->SetBufferARB(GL_QUERY_BUFFER_ARB, queryBuffer, true);
+
+    // grow storage if needed
+    if (num_queries > queryBufferSize)
+    {
+      ext->glBufferData(GL_QUERY_BUFFER_ARB, num_queries*sizeof(GLuint), NULL, GL_DYNAMIC_READ);
+      queryBufferSize = num_queries;
+    }
+
+    // query results
+    for(int i = 0; i < num_queries; ++i)
+    {
+      // read result for ith query into the buffer
+      ext->glGetQueryObjectuivARB(queries[i], GL_QUERY_RESULT_ARB, (GLuint*)(0 + i*sizeof(GLuint)));
+    }
+
+    // map buffer
+    GLuint* bufferData = (GLuint*)ext->glMapBuffer(GL_QUERY_BUFFER_ARB, GL_READ_ONLY);
+
+    // copy results
+    for(int i = 0; i < num_queries; ++i)
+    {
+      // we assume sample count is 0, so we don't have to differentiate between the query and query2
+      results[i] = bufferData[i] > 0;
+    }
+
+    // unmap buffer
+    ext->glUnmapBuffer(GL_QUERY_BUFFER_ARB);
+  }
+  // no query buffer support available
+  else
+  {
+    // query result holder
+    GLuint sampleCount;
+
+    // query each result individually
+    for(int i = 0; i < num_queries; ++i)
+    {
+      ext->glGetQueryObjectuivARB((GLuint)queries[i], GL_QUERY_RESULT_ARB, &sampleCount);
+      results[i] = sampleCount > 0;
+    }
   }
 }
 
