@@ -12159,6 +12159,54 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_iGraphics3D_OQVisibleQueries(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  iGraphics3D *arg1 = (iGraphics3D *) 0 ;
+  unsigned int *arg2 = (unsigned int *) 0 ;
+  bool *arg3 = (bool *) 0 ;
+  int arg4 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  void *argp3 = 0 ;
+  int res3 = 0 ;
+  int val4 ;
+  int ecode4 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  PyObject * obj3 = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"iGraphics3D_OQVisibleQueries",4,4,&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_iGraphics3D, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "iGraphics3D_OQVisibleQueries" "', argument " "1"" of type '" "iGraphics3D *""'"); 
+  }
+  arg1 = reinterpret_cast< iGraphics3D * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_unsigned_int, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "iGraphics3D_OQVisibleQueries" "', argument " "2"" of type '" "unsigned int *""'"); 
+  }
+  arg2 = reinterpret_cast< unsigned int * >(argp2);
+  res3 = SWIG_ConvertPtr(obj2, &argp3,SWIGTYPE_p_bool, 0 |  0 );
+  if (!SWIG_IsOK(res3)) {
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "iGraphics3D_OQVisibleQueries" "', argument " "3"" of type '" "bool *""'"); 
+  }
+  arg3 = reinterpret_cast< bool * >(argp3);
+  ecode4 = SWIG_AsVal_int(obj3, &val4);
+  if (!SWIG_IsOK(ecode4)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "iGraphics3D_OQVisibleQueries" "', argument " "4"" of type '" "int""'");
+  } 
+  arg4 = static_cast< int >(val4);
+  (arg1)->OQVisibleQueries(arg2,arg3,arg4);
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_iGraphics3D_OQBeginQuery(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   iGraphics3D *arg1 = (iGraphics3D *) 0 ;
@@ -26016,6 +26064,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"iGraphics3D_OQDelQueries", _wrap_iGraphics3D_OQDelQueries, METH_VARARGS, NULL},
 	 { (char *)"iGraphics3D_OQueryFinished", _wrap_iGraphics3D_OQueryFinished, METH_VARARGS, NULL},
 	 { (char *)"iGraphics3D_OQIsVisible", _wrap_iGraphics3D_OQIsVisible, METH_VARARGS, NULL},
+	 { (char *)"iGraphics3D_OQVisibleQueries", _wrap_iGraphics3D_OQVisibleQueries, METH_VARARGS, NULL},
 	 { (char *)"iGraphics3D_OQBeginQuery", _wrap_iGraphics3D_OQBeginQuery, METH_VARARGS, NULL},
 	 { (char *)"iGraphics3D_OQEndQuery", _wrap_iGraphics3D_OQEndQuery, METH_VARARGS, NULL},
 	 { (char *)"iGraphics3D_DrawMeshBasic", _wrap_iGraphics3D_DrawMeshBasic, METH_VARARGS, NULL},
