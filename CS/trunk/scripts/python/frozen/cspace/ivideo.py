@@ -435,6 +435,7 @@ class iGraphics3D(core.iBase):
     def OQDelQueries(*args): return _ivideo.iGraphics3D_OQDelQueries(*args)
     def OQueryFinished(*args): return _ivideo.iGraphics3D_OQueryFinished(*args)
     def OQIsVisible(*args): return _ivideo.iGraphics3D_OQIsVisible(*args)
+    def OQVisibleQueries(*args): return _ivideo.iGraphics3D_OQVisibleQueries(*args)
     def OQBeginQuery(*args): return _ivideo.iGraphics3D_OQBeginQuery(*args)
     def OQEndQuery(*args): return _ivideo.iGraphics3D_OQEndQuery(*args)
     def DrawMeshBasic(*args): return _ivideo.iGraphics3D_DrawMeshBasic(*args)

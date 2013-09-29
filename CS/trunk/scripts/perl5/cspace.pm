@@ -11035,6 +11035,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *OQDelQueries = *cspacec::iGraphics3D_OQDelQueries;
 *OQueryFinished = *cspacec::iGraphics3D_OQueryFinished;
 *OQIsVisible = *cspacec::iGraphics3D_OQIsVisible;
+*OQVisibleQueries = *cspacec::iGraphics3D_OQVisibleQueries;
 *OQBeginQuery = *cspacec::iGraphics3D_OQBeginQuery;
 *OQEndQuery = *cspacec::iGraphics3D_OQEndQuery;
 *DrawMeshBasic = *cspacec::iGraphics3D_DrawMeshBasic;

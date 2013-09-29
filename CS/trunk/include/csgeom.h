@@ -23,8 +23,10 @@
  */
 #include "cssysdef.h"
 #include "csgeom/aabbtree.h"
+#include "csgeom/bih.h"
 #include "csgeom/box.h"
 #include "csgeom/bsptree.h"
+#include "csgeom/bvh.h"
 #include "csgeom/chainhull2d.h"
 #include "csgeom/csrect.h"
 #include "csgeom/csrectrg.h"
@@ -53,6 +55,7 @@
 #include "csgeom/quaternion.h"
 #include "csgeom/segment.h"
 #include "csgeom/solidspace.h"
+#include "csgeom/spatialtree.h"
 #include "csgeom/sphere.h"
 #include "csgeom/spline.h"
 #include "csgeom/subrec.h"

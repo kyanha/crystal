@@ -35066,6 +35066,7 @@ SWIGINTERN PyObject *_wrap_iVisibilityCuller_RenderViscull(PyObject *SWIGUNUSEDP
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   PyObject * obj2 = 0 ;
+  bool result;
   
   if(!PyArg_UnpackTuple(args,(char *)"iVisibilityCuller_RenderViscull",3,3,&obj0,&obj1,&obj2)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_iVisibilityCuller, 0 |  0 );
@@ -35083,8 +35084,8 @@ SWIGINTERN PyObject *_wrap_iVisibilityCuller_RenderViscull(PyObject *SWIGUNUSEDP
     SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "iVisibilityCuller_RenderViscull" "', argument " "3"" of type '" "iShaderVariableContext *""'"); 
   }
   arg3 = reinterpret_cast< iShaderVariableContext * >(argp3);
-  (arg1)->RenderViscull(arg2,arg3);
-  resultobj = SWIG_Py_Void();
+  result = (bool)(arg1)->RenderViscull(arg2,arg3);
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
   return NULL;
