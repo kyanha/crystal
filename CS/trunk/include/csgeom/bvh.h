@@ -140,24 +140,24 @@ private:
   void DistributeLeafObjects()
   {
     // we shouldn't be in blocking mode
-    CS_ASSERT(block == 0);
+    CS_ASSERT(this->block == 0);
 
     // we have to have children
-    CS_ASSERT(child1 != nullptr && child2 != nullptr);
+    CS_ASSERT(this->child1 != nullptr && this->child2 != nullptr);
 
     // keep track how many objects couldn't be distributed
     int failed = 0;
 
     // get center and split axis as we sort objects
     // into children based on it
-    int const split = box.GetSize().DominantAxis();
-    float const center = box.GetCenter()[split];
+    int const split = this->box.GetSize().DominantAxis();
+    float const center = this->box.GetCenter()[split];
 
     // distribute objects
-    for(int i = 0; i < numObjects; ++i)
+    for(int i = 0; i < this->numObjects; ++i)
     {
       // get object to distribute
-      Child* obj = objects[i];
+      Child* obj = this->objects[i];
 
       // get object box
       csBox3 const& objBox = obj->GetBBox();
@@ -165,24 +165,24 @@ private:
       // check whether it belongs to child1
       if(objBox.GetCenter()[split] < center)
       {
-	child1->AddObject(obj);
-	child1->box += objBox;
+	this->child1->AddObject(obj);
+	this->child1->box += objBox;
       }
       // else it belongs to child2
       else
       {
 	// add object to child2
-	child2->AddObject(obj);
-	child2->box += objBox;
+	this->child2->AddObject(obj);
+	this->child2->box += objBox;
       }
     }
 
     // update our bounding box
-    box = child1->box + child2->box;
+    this->box = this->child1->box + this->child2->box;
 
     // update object count for our node (this is equivalent
     // to a truncation of our array)
-    numObjects = 0;
+    this->numObjects = 0;
   }
 
   /// Make the tree empty.
@@ -201,7 +201,7 @@ public:
   /// Destroy the tree.
   virtual ~BVH()
   {
-    Clear();
+    this->Clear();
   }
 
   /**
@@ -278,32 +278,33 @@ public:
   void Distribute()
   {
     // check our distribution state is consistent
-    CS_ASSERT((child1 == nullptr) == (child2 == nullptr));
+    CS_ASSERT((this->child1 == nullptr) == (this->child2 == nullptr));
 
     // ensure our storage is valid
-    CS_ASSERT(objects != nullptr && maxObjects >= numObjects);
+    CS_ASSERT(this->objects != nullptr && this->maxObjects >= this->numObjects);
 
     // check for distribution block due to failed attempts
-    if(block > 0)
+    if(this->block > 0)
     {
       // we don't want to try again, yet
       return;
     }
 
     // check whether there is anything to distribute
-    if(numObjects == 0)
+    if(this->numObjects == 0)
     {
       // nothing to distribute
-      // check that we are a leaf - leaves must have objects
-      CS_ASSERT(child1 != nullptr);
+      // check that we are not a leaf - leaves must have objects
+      CS_ASSERT(this->child1 != nullptr);
+      CS_ASSERT(this->child2 != nullptr);
       return;
     }
 
     // check whether we already have a split for this node
-    if(child1 == nullptr) // nope
+    if(this->child1 == nullptr) // nope
     {
       // do we have enough objects for a new split?
-      if(numObjects < minSplitObjects)
+      if(this->numObjects < this->minSplitObjects)
       {
 	// nope, nothing to be done
 	return;
@@ -324,7 +325,7 @@ public:
 	for(int i = 0; i < numObjects; ++i)
 	{
 	  SortElement& s = buffer[i];
-	  s.box = objects[i]->GetBBox();
+	  s.box = this->objects[i]->GetBBox();
 	  s.center = s.box.GetCenter()[axis];
 	  s.idx = i;
 	}
@@ -334,64 +335,64 @@ public:
 
 	// calculate child boxes
 	csBox3 leftBox;
-	for(int i = 0; i < (numObjects >> 1); ++i)
+	for(int i = 0; i < (this->numObjects >> 1); ++i)
 	{
 	  leftBox += buffer[i].box;
 	}
 	csBox3 rightBox;
-	for(int i = numObjects >> 1; i < numObjects; ++i)
+	for(int i = this->numObjects >> 1; i < this->numObjects; ++i)
 	{
 	  rightBox += buffer[i].box;
 	}
 
 	// evaluate quality
-	float quality = box.Volume() - leftBox.Volume() - rightBox.Volume();
+	float quality = this->box.Volume() - leftBox.Volume() - rightBox.Volume();
 
 	// check whether the best split is actually good enough
 	if(quality > blockThreshold)
 	{
 	  // allocate childs
-	  child1 = TreeAlloc().Alloc();
-	  child2 = TreeAlloc().Alloc();
+	  this->child1 = TreeAlloc().Alloc();
+	  this->child2 = TreeAlloc().Alloc();
 
 	  // verify allocations
-	  CS_ASSERT(child1);
-	  CS_ASSERT(child2);
+	  CS_ASSERT(this->child1);
+	  CS_ASSERT(this->child2);
 
 	  // set us as their parent
-	  child1->SetParent(this);
-	  child2->SetParent(this);
+	  this->child1->SetParent(this);
+	  this->child2->SetParent(this);
 
 	  // distribute objects according to the split we found
 	  // first child gets lower half
-	  for(int i = 0; i < (numObjects >> 1); ++i)
+	  for(int i = 0; i < (this->numObjects >> 1); ++i)
 	  {
-	    child1->AddObject(objects[buffer[i].idx]);
+	    this->child1->AddObject(this->objects[buffer[i].idx]);
 	  }
 
 	  // second child gets upper half
-	  for(int i = numObjects >> 1; i < numObjects; ++i)
+	  for(int i = this->numObjects >> 1; i < this->numObjects; ++i)
 	  {
-	    child2->AddObject(objects[buffer[i].idx]);
+	    this->child2->AddObject(this->objects[buffer[i].idx]);
 	  }
 
 	  // free our buffer as we don't need it anymore
 	  cs_free(buffer);
 
 	  // truncate our object list as we distributed all childs
-	  numObjects = 0;
+	  this->numObjects = 0;
 
 	  // update their boxes so they know where they belong
-	  child1->box = leftBox;
-	  child2->box = rightBox;
+	  this->child1->box = leftBox;
+	  this->child2->box = rightBox;
 
 	  // update our estimated object count
-	  estimateObjects = child1->numObjects + child2->numObjects;
+	  this->estimateObjects = this->child1->numObjects + this->child2->numObjects;
 	}
 	else
 	{
 	  // bad split - let's wait a bit before we try again
-	  block = blockTime;
+	  this->block = this->blockTime;
 	}
       }
     }
@@ -401,11 +402,11 @@ public:
       DistributeLeafObjects();
 
       // check whether it worked
-      if(numObjects != 0)
+      if(this->numObjects != 0)
       {
 	// nope... any ideas? no? time to start from scratch I guess
 	// @@@RlyDontKnow: TODO: we should try to fit them in somehow
-	Flatten();
+	this->Flatten();
 	Distribute();
       }
     }
@@ -428,14 +429,14 @@ public:
     }
 
     // ensure child state is consistent
-    CS_ASSERT((child1 == nullptr) == (child2 == nullptr));
+    CS_ASSERT((this->child1 == nullptr) == (this->child2 == nullptr));
 
     // check whether we have children to traverse
-    if(child1)
+    if(this->child1)
     {
       // traverse children
-      child1->TraverseRandom(func, data, frustumMask);
-      child2->TraverseRandom(func, data, frustumMask);
+      this->child1->TraverseRandom(func, data, frustumMask);
+      this->child2->TraverseRandom(func, data, frustumMask);
     }
   }
 
@@ -463,23 +464,23 @@ public:
     CS_ASSERT((child1 == nullptr) == (child2 == nullptr));
 
     // continue with children if we have any
-    if(child1)
+    if(this->child1)
     {
       // check which child should be visited first based on the angle between
       // our direction and the difference between the centers of the children
       // get center difference vector
-      csVector3 const centerDiff = child2->box.GetCenter() - child1->box.GetCenter();
+      csVector3 const centerDiff = this->child2->box.GetCenter() - this->child1->box.GetCenter();
       if(centerDiff * pos > 0)
       {
 	// left child goes first
-	child1->Front2Back(pos, func, data, frustumMask);
-	child2->Front2Back(pos, func, data, frustumMask);
+	this->child1->Front2Back(pos, func, data, frustumMask);
+	this->child2->Front2Back(pos, func, data, frustumMask);
       }
       else
       {
 	// right child goes first
-	child2->Front2Back(pos, func, data, frustumMask);
-	child1->Front2Back(pos, func, data, frustumMask);
+	this->child2->Front2Back(pos, func, data, frustumMask);
+	this->child1->Front2Back(pos, func, data, frustumMask);
       }
     }
   }

@@ -138,7 +138,7 @@ private:
   void FindBestSplitLocation(float& bestQuality, SortElement* (&buffers)[2])
   {
     // validate storage
-    CS_ASSERT(objects && numObjects <= maxObjects);
+    CS_ASSERT(this->objects && this->numObjects <= this->maxObjects);
 
     // get our working buffer
     SortElement* set = buffers[0];
@@ -252,7 +252,7 @@ private:
   void DistributeLeafObjects()
   {
     // we shouldn't be in blocking mode
-    CS_ASSERT(block == 0);
+    CS_ASSERT(this->block == 0);
 
     // split axis must be valid
     CS_ASSERT(splitAxis == CS_BIH_AXISX || splitAxis == CS_BIH_AXISY || splitAxis == CS_BIH_AXISZ);
@@ -438,8 +438,8 @@ public:
   {
     // check our distribution state is consistent
     CS_ASSERT(
-	 ((child1 == nullptr) && (child2 == nullptr) && (splitAxis == CS_BIH_AXISINVALID))
-      || ((child1 != nullptr) && (child2 != nullptr) && (splitAxis != CS_BIH_AXISINVALID))
+	 ((this->child1 == nullptr) && (this->child2 == nullptr) && (splitAxis == CS_BIH_AXISINVALID))
+      || ((this->child1 != nullptr) && (this->child2 != nullptr) && (splitAxis != CS_BIH_AXISINVALID))
       );
 
     // check for distribution block due to failed attempts
@@ -578,7 +578,7 @@ public:
     }
 
     // ensure our storage is valid
-    CS_ASSERT(objects != nullptr && maxObjects >= numObjects);
+    CS_ASSERT(this->objects != nullptr && this->maxObjects >= this->numObjects);
   }
 
   /**
@@ -601,8 +601,8 @@ public:
     if(splitAxis != CS_BIH_AXISINVALID)
     {
       // ensure childs exist
-      CS_ASSERT(child1);
-      CS_ASSERT(child2);
+      CS_ASSERT(this->child1);
+      CS_ASSERT(this->child2);
 
       // traverse childs
       this->child1->TraverseRandom(func, data, frustumMask);
@@ -634,8 +634,8 @@ public:
     if(splitAxis != CS_BIH_AXISINVALID)
     {
       // ensure childs exist
-      CS_ASSERT(child1);
-      CS_ASSERT(child2);
+      CS_ASSERT(this->child1);
+      CS_ASSERT(this->child2);
 
       // traverse first child first if it is part of the interval
       if(pos[splitAxis] < split[1])
