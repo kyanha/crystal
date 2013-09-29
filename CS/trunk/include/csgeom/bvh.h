@@ -311,18 +311,18 @@ public:
       }
       else
       {
-	// allocate buffer to hold the split
-	SortElement* buffer = static_cast<SortElement*>(cs_malloc(sizeof(SortElement)*numObjects));
+	// allocate buffer to hold the splitalloc
+	SortElement* buffer = static_cast<SortElement*>(cs_m(sizeof(SortElement)*this->numObjects));
 
 	// validate allocation
 	CS_ASSERT(buffer);
 
 	// get split
 	// split along longest axis
-	int axis = box.GetSize().DominantAxis();
+	int axis = this->box.GetSize().DominantAxis();
 
 	// fill sort array
-	for(int i = 0; i < numObjects; ++i)
+	for(int i = 0; i < this->numObjects; ++i)
 	{
 	  SortElement& s = buffer[i];
 	  s.box = this->objects[i]->GetBBox();
@@ -331,7 +331,7 @@ public:
 	}
 
 	// sort by center
-	qsort(buffer, numObjects, sizeof(SortElement), (int (*)(void const*, void const*))SortElement::compare);
+	qsort(buffer, this->numObjects, sizeof(SortElement), (int (*)(void const*, void const*))SortElement::compare);
 
 	// calculate child boxes
 	csBox3 leftBox;
@@ -352,8 +352,8 @@ public:
 	if(quality > blockThreshold)
 	{
 	  // allocate childs
-	  this->child1 = TreeAlloc().Alloc();
-	  this->child2 = TreeAlloc().Alloc();
+	  this->child1 = this->TreeAlloc().Alloc();
+	  this->child2 = this->TreeAlloc().Alloc();
 
 	  // verify allocations
 	  CS_ASSERT(this->child1);
