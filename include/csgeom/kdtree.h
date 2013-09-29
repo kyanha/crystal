@@ -399,7 +399,7 @@ private:
     }
 
     // ensure we have either two or no children
-    CS_ASSERT((child1 == nullptr) == (child2 == nullptr));
+    CS_ASSERT((this->child1 == nullptr) == (this->child2 == nullptr));
 
     // check whether we have children
     if(this->child1)
@@ -437,7 +437,7 @@ private:
     }
 
     // ensure we have either two or no children
-    CS_ASSERT((child1 == nullptr) == (child2 == nullptr));
+    CS_ASSERT((this->child1 == nullptr) == (this->child2 == nullptr));
 
     // check whether we have children
     if(this->child1)
@@ -460,7 +460,7 @@ private:
     }
 
     // ensure we have either two or no children
-    CS_ASSERT((child1 == nullptr) == (child2 == nullptr));
+    CS_ASSERT((this->child1 == nullptr) == (this->child2 == nullptr));
 
     // check whether we have children
     if(this->child1)
@@ -564,7 +564,7 @@ public:
     }
 
     // ensure we have either no childs or two childs
-    CS_ASSERT((child1 == nullptr) == (child2 == nullptr));
+    CS_ASSERT((this->child1 == nullptr) == (this->child2 == nullptr));
 
     // if we already have childs simply distribute the objects among
     // our children
@@ -574,7 +574,7 @@ public:
       DistributeLeafObjects();
 
       // ensure nothing is left
-      CS_ASSERT(numObjects == 0);
+      CS_ASSERT(this->numObjects == 0);
 
       // update the estimated object count
       this->estimateObjects = this->child1->GetEstimatedObjectCount()
@@ -629,8 +629,8 @@ public:
 	this->child2 = this->TreeAlloc().Alloc();
 
 	// validate allocations
-	CS_ASSERT (child1);
-	CS_ASSERT (child2);
+	CS_ASSERT(this->child1);
+	CS_ASSERT(this->child2);
 
 	// set us as parent
 	this->child1->SetParent(this);
@@ -650,7 +650,7 @@ public:
 	DistributeLeafObjects();
 
 	// ensure all objects are distributed
-	CS_ASSERT(numObjects == 0);
+	CS_ASSERT(this->numObjects == 0);
 
 	// update estimated object count
 	this->estimateObjects = this->child1->GetEstimatedObjectCount()
