@@ -258,7 +258,7 @@ private:
     CS_ASSERT(splitAxis == CS_BIH_AXISX || splitAxis == CS_BIH_AXISY || splitAxis == CS_BIH_AXISZ);
 
     // split values must be normal
-    for(int i = 0; i < 0; ++i)
+    for(int i = 0; i < 4; ++i)
       CS_ASSERT(CS::IsFinite(split[i]) && !CS::IsNaN(split[i]));
 
     // lower and upper split must both contain something
