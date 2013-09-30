@@ -224,7 +224,7 @@ THREADED_CALLABLE_IMPL(UDPTest, TestClient)
   size_t sent = client->Send(sendTest.GetData(), sendTest.Length());
   if(sent != sendTest.Length())
   {
-    csPrintf("udp client: failed to send data(%u): %s\n", sent, client->GetLastError());
+    csPrintf("udp client: failed to send data(%zu): %s\n", sent, client->GetLastError());
     client.Invalidate();
     return false;
   }
@@ -265,7 +265,7 @@ THREADED_CALLABLE_IMPL(UDPTest, TestServer)
   size_t sent = server->Send(sendTest.GetData(), sendTest.Length(), clientAddress);
   if(sent != sendTest.Length())
   {
-    csPrintf("udp server: failed to send data %u: %s\n", sent, server->GetLastError());
+    csPrintf("udp server: failed to send data %zu: %s\n", sent, server->GetLastError());
     client.Invalidate();
     return false;
   }
@@ -355,7 +355,7 @@ int main(int argc, char* argv[])
 
     threadManager->Wait(returns);
 
-    for(int i = 0; i < returns.GetSize(); ++i)
+    for(size_t i = 0; i < returns.GetSize(); ++i)
     {
       if(!returns[i]->IsFinished() || !returns[i]->WasSuccessful())
       {
@@ -389,7 +389,7 @@ int main(int argc, char* argv[])
 
     threadManager->Wait(returns);
 
-    for(int i = 0; i < returns.GetSize(); ++i)
+    for(size_t i = 0; i < returns.GetSize(); ++i)
     {
       if(!returns[i]->IsFinished() || !returns[i]->WasSuccessful())
       {
@@ -423,7 +423,7 @@ int main(int argc, char* argv[])
 
     threadManager->Wait(returns);
 
-    for(int i = 0; i < returns.GetSize(); ++i)
+    for(size_t i = 0; i < returns.GetSize(); ++i)
     {
       if(!returns[i]->IsFinished() || !returns[i]->WasSuccessful())
       {
@@ -457,7 +457,7 @@ int main(int argc, char* argv[])
 
     threadManager->Wait(returns);
 
-    for(int i = 0; i < returns.GetSize(); ++i)
+    for(size_t i = 0; i < returns.GetSize(); ++i)
     {
       if(!returns[i]->IsFinished() || !returns[i]->WasSuccessful())
       {
