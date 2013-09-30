@@ -461,7 +461,7 @@ public:
     }
 
     // ensure child state is consistent
-    CS_ASSERT((child1 == nullptr) == (child2 == nullptr));
+    CS_ASSERT((this->child1 == nullptr) == (this->child2 == nullptr));
 
     // continue with children if we have any
     if(this->child1)
