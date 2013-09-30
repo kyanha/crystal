@@ -1616,9 +1616,6 @@ namespace CS
 	    {
 	      // we should, add it
 	      data.vector->Push(visobj);
-
-	      // mark we got a hit
-	      bool hitObj = true;
 	    }
 	    // no, we only want the closest hit - check whether our hit is closer
 	    else if(dist < data.r)
