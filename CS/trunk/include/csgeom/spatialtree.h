@@ -415,7 +415,6 @@ namespace Geometry
     int numObjects;      // current storage used
     int maxObjects;      // current storage capacity
     int estimateObjects; // estimated number of objects in whole tree
-    static int const objectGrowth = 80; // storage growth minimum
 
     // Minimum amount of objects in this tree before we consider splitting.
     int minSplitObjects;
@@ -497,7 +496,7 @@ namespace Geometry
       if(numObjects >= maxObjects)
       {
 	// get new storage size
-	maxObjects += csMin(maxObjects+2, objectGrowth);
+	maxObjects += csMin(maxObjects+2, 80);
 
 	// relocate storage
 	Child** relocation = static_cast<Child**>(cs_realloc(objects, sizeof(Child*)*maxObjects));
