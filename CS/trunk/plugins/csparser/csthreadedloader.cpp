@@ -1210,7 +1210,10 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
               // fail on duplicate load
               return false;
           }
-          LoadSequence(ldr_context, sequencenode);
+          if(!LoadSequence(ldr_context, sequencenode))
+          {
+              return false;
+          }
           ret->SetResult(csRef<iBase>(sw));
           if(sync)
           {
@@ -1232,6 +1235,10 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
       if (triggernode)
       {
           iSequenceTrigger* st = LoadTrigger(ldr_context, triggernode);
+          if(!st)
+          {
+              return false;
+          }
           ret->SetResult(csRef<iBase>(st));
           if(sync)
           {
