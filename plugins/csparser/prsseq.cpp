@@ -55,11 +55,9 @@ CS_PLUGIN_NAMESPACE_BEGIN(csparser)
   static iSequenceTrigger* CreateTrigger (iEngineSequenceManager* eseqmgr,
     const char* name)
   {
-    iSequenceTrigger* trigger = eseqmgr->FindTriggerByName (name);
-    if (trigger) return 0;	// Error! Already exists!
     // We don't need the ref returned by CreateTrigger().
     csRef<iSequenceTrigger> trigwrap = eseqmgr->CreateTrigger (name);
-    trigger = trigwrap;
+    iSequenceTrigger* trigger = trigwrap;
     return trigger;
   }
 
