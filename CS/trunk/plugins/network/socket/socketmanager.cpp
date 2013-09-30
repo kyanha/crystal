@@ -194,7 +194,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(Socket)
     CS_ALLOC_STACK_ARRAY(Platform::Socket,readFDs,read->GetSize());
 
     // fill reading set and cache array
-    for(int i = 0; i < read->GetSize(); ++i)
+    for(size_t i = 0; i < read->GetSize(); ++i)
     {
       // get file descriptor
       readFDs[i] = GetHandle(read->Get(i));
@@ -211,7 +211,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(Socket)
     CS_ALLOC_STACK_ARRAY(Platform::Socket,writeFDs,write->GetSize());
 
     // fill writing set and cache array
-    for(int i = 0; i < write->GetSize(); ++i)
+    for(size_t i = 0; i < write->GetSize(); ++i)
     {
       // get file descriptor
       writeFDs[i] = GetHandle(write->Get(i));
