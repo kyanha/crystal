@@ -37,7 +37,7 @@
  * @{ */
 
 template <typename K, typename Allocator,
-  template<typename K, typename K2> class Ordering>
+  template<typename _K, typename K2> class Ordering>
 class csRedBlackTree;
 
 template <typename K, typename T>
@@ -237,7 +237,7 @@ namespace CS
 template <typename K,
           typename Allocator =
 	    CS::Container::DefaultRedBlackTreeAllocator<K>,
-	  template<typename K, typename K2> class Ordering =
+	  template<typename _K, typename K2> class Ordering =
 	    CS::Container::RedBlackTreeOrderingTotal>
 class csRedBlackTree
 {
