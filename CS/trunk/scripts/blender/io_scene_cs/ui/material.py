@@ -53,6 +53,59 @@ class MATERIAL_PT_B2CS__context_material(csMaterialPanel, bpy.types.Panel):
         mat = context.material
 
         if mat:
+          #---------------------------------------------------------------------
+          textures = {}
+          names = {'use_map_color_diffuse':'tex diffuse', 'use_map_normal':'tex normal', 'use_map_displacement':'tex heightmap', 'use_map_specular':'tex specular',}
+          props = ['use_map_color_diffuse', 'use_map_normal', 'use_map_displacement', 'use_map_specular',]
+          
+          for i, tex in enumerate(mat.textures):
+            for p in props:
+              if getattr(mat.texture_slots[i], p):
+                if tex.type == 'IMAGE':
+                  textures[p] = (i, tex)
+          
+          box = layout.box()
+          for p in props:
+            i, tex = textures.get(p, (None, None))
+            if tex:
+              row = box.row()
+              col1 = row.column(align=True)
+              col1.label('', icon_value=layout.icon(tex))
+              col2 = row.column(align=True).row()
+              #col2.alignment = 'RIGHT'
+              c = col2.column(align=True)
+              c.prop(tex, 'image', text=names[p])
+              #c = col2.column(align=True)
+              #c.menu("MESH_MT_shape_key_specials", icon='DOWNARROW_HLT', text="")
+          
+          #---------------------------------------------------------------------
+          box = layout.box()
+          row = box.row()
+          for prop in ['diffuse_color', 'specular_color']:
+            row = box.row()
+            col1 = row.column(align=True)
+            col1.label(prop)
+            col2 = row.column(align=True).row()
+            col2.prop(mat, prop, text='')
+          #---------------------------------------------------------------------
+          box = layout.box()
+          row = box.row()
+          row.label("Custom shader variables")
+          
+          row.menu('MATERIAL_OT_shadervars_menu', text="", icon='DOWNARROW_HLT')
+
+          for sv in mat.b2cs.shadervars:
+            row = box.row()
+            col1 = row.column(align=True)
+            col1.prop(sv, 'name', text='')
+            col2 = row.column(align=True).row()
+            col2.prop(sv, 'value', text='')
+            i = list(getattr(mat.b2cs.shadervars, sv.type)).index(sv)
+            op = col2.operator('material.shadervar_remove', text="", icon='ZOOMOUT')
+            op.index = i
+            op.type = sv.type
+          #---------------------------------------------------------------------  
+            
           layout = self.layout
           row = layout.row()
           row.prop(mat.b2cs, "priority")
@@ -94,10 +147,113 @@ class MATERIAL_PT_B2CS__context_material(csMaterialPanel, bpy.types.Panel):
               row.prop(mat.water, "water_fog_density")
 
 
+class MATERIAL_OT_shadervars_menu(bpy.types.Menu):
+    bl_idname = "MATERIAL_OT_shadervars_menu"
+    bl_label = "Create"
+
+    def draw(self, context):
+      mat = context.material
+      for type in mat.b2cs.shadervars.getNames():
+        self.layout.operator("material.shadervar_add", text="Create "+type[:-1]).type = type
+
+
+class MATERIAL_OT_shadervar_add(bpy.types.Operator):
+  bl_idname = "material.shadervar_add"
+  bl_label = "Add shadervar"
+  
+  type = bpy.props.StringProperty()
+
+  @classmethod
+  def poll(cls, context):
+      return context.material is not None
+
+  def execute(self, context):
+    mat = context.material
+    
+    svs = getattr(mat.b2cs.shadervars, self.type)
+    sv = svs.add()
+    sv.name = 'Unnamed'
+
+    return {'FINISHED'}
+
+  def invoke(self, context, event):
+      return self.execute(context)
+
+class MATERIAL_OT_shadervar_remove(bpy.types.Operator):
+  bl_idname = "material.shadervar_remove"
+  bl_label = "Remove shadervar"
+  
+  type = bpy.props.StringProperty()
+  index = bpy.props.IntProperty()
+
+  @classmethod
+  def poll(cls, context):
+      return context.material is not None
+
+  def execute(self, context):
+    mat = context.material
+    
+    svs = getattr(mat.b2cs.shadervars, self.type)
+    svs.remove(self.index)
+
+    return {'FINISHED'}
+
+  def invoke(self, context, event):
+      return self.execute(context)
+
+class ExpressionShaderVariable(bpy.types.PropertyGroup):
+  type = 'expressions'
+  name = bpy.props.StringProperty()
+  value = bpy.props.StringProperty()
+
+class FloatShaderVariable(bpy.types.PropertyGroup):
+  type = 'floats'
+  name = bpy.props.StringProperty()
+  value = bpy.props.FloatProperty()
+  
+class Vector2ShaderVariable(bpy.types.PropertyGroup):
+  type = 'vector2s'
+  name = bpy.props.StringProperty()
+  value = bpy.props.FloatVectorProperty(size=2)
+
+
+class ShaderVariables(bpy.types.PropertyGroup):
+  expressions = bpy.props.CollectionProperty(type=ExpressionShaderVariable)
+  floats = bpy.props.CollectionProperty(type=FloatShaderVariable)
+  vector2s = bpy.props.CollectionProperty(type=Vector2ShaderVariable)
+
+  @property
+  def all(self):
+    names = self.getNames()
+    shadervars = []
+    for name in names:
+      shadervars.extend(list(getattr(self, name)))
+    return shadervars
+  
+  def getNames(self):
+    names = []
+    for e in dir(self):
+      if not e.startswith('__') and not e == 'all' and not e == 'getNames':
+        if getattr(self, e).__class__.__name__ == 'bpy_prop_collection_idprop':
+          names.append(e)
+    return names
+    
+  def __iter__(self):
+    from collections import Iterator
+    class Iter(Iterator):
+      def __init__(self, data):
+        self.data = list(data)
+      def __next__(self):
+        if not self.data:
+          raise StopIteration
+        return self.data.pop()
+    return Iter(self.all)
 
 
 @settings(type='Material')
 class CrystalSpaceSettingsMaterial(PropertyGroup):
+  shadervars = bpy.props.PointerProperty(type=ShaderVariables)
+  
   shaderset = bpy.props.EnumProperty(
             name="ShaderSet",
             description="",

@@ -40,6 +40,7 @@ def register():
   bpy.utils.register_class(preferences.ExportCSPreferences)
   bpy.utils.register_module(__name__)
   utilities._register()
+  engine.register()
     
 
 def unregister():
