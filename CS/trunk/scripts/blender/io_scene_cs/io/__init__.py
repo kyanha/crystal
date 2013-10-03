@@ -58,6 +58,17 @@ def Export(path):
   if editMode:
     if bpy.ops.object.mode_set.poll():
       bpy.ops.object.mode_set(mode='EDIT')
+      
+  # Launch post export scripts
+  import shlex, subprocess
+  for script in GetPreferences().postExportScripts:
+    if script.valid and script.enabled:
+      exportPath = GetExportPath()
+
+      args = shlex.split(script.abspath + ' ' + exportPath)
+      print(args)
+      output = subprocess.call(args)
+      print(output)
 
 
 def ExportWorld(path):

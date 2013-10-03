@@ -68,7 +68,7 @@ class RENDER_PT_csSettingsPanel(csSettingsPanel, bpy.types.Panel):
     row.prop(GetPreferences(), "enableDoublesided")
     row = box.row()
     row.prop(GetPreferences(), "exportPath")
-      
+    
 
 #@rnaType    
 class B2CS_OT_export(bpy.types.Operator):
@@ -81,6 +81,7 @@ class B2CS_OT_export(bpy.types.Operator):
     Export(exportPath)
 
     return {'FINISHED'}
+
 
 #@rnaType    
 class B2CS_OT_export_run(bpy.types.Operator):

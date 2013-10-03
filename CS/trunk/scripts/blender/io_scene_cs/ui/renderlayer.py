@@ -138,3 +138,135 @@ class B2CS_OT_csRemoveMaterial(bpy.types.Operator):
 
     return {'FINISHED'}
 
+
+#============= Crystal Space Script panel ====================
+
+def PostExportScript_name_update_func(self, context):
+  self.name = bpy.path.display_name_from_filepath(self.path)
+
+class PostExportScript(bpy.types.PropertyGroup):
+  name = bpy.props.StringProperty(name="Name")
+  path = bpy.props.StringProperty(name="Path", subtype='FILE_PATH', update=PostExportScript_name_update_func)
+  enabled = bpy.props.BoolProperty(
+          name = "Enable this script to run",
+          default = True,
+          )
+          
+  @property
+  def abspath(self):
+    return bpy.path.abspath(self.path)
+    
+  @property
+  def valid(self):
+    return os.path.isfile(self.abspath) and os.access(self.abspath, os.X_OK)
+
+
+@rnaType
+class RENDER_PT_csPostExportScriptsPanel(csReferencesPanel, bpy.types.Panel):
+  bl_label = "Post Export scripts"
+  bl_options = {'DEFAULT_CLOSED'}
+  COMPAT_ENGINES = {'CRYSTALSPACE'}
+
+  def draw(self, context):
+    layout = self.layout
+    
+    row = layout.row(align=True)
+    row.template_list("UI_UL_list", "scripts", GetPreferences(), "postExportScripts", GetPreferences(), "active_postExportScripts_index", rows=5, maxrows=5, type='DEFAULT')
+    sub = row.column(align=True)
+    sub.operator("preferences.post_export_script_add", icon='ZOOMIN', text="")
+    sub.operator("preferences.post_export_script_remove", icon='ZOOMOUT', text="")
+    sub.operator("preferences.post_export_script_move", text="", icon='TRIA_UP').type = 'UP'
+    sub.operator("preferences.post_export_script_move", text="", icon='TRIA_DOWN').type = 'DOWN'
+    
+    if len(GetPreferences().postExportScripts) > GetPreferences().active_postExportScripts_index >= 0: 
+      slave = GetPreferences().postExportScripts[GetPreferences().active_postExportScripts_index]
+      row = layout.row(align=True)
+      box = row.box()
+      row = box.row()
+      row.label('Name: '+slave.name)
+      row = box.row()
+      if not slave.valid:
+        row.alert = True
+      row.prop(slave, 'path')
+      row = box.row()
+      row.prop(slave, 'enabled')
+      if not slave.valid:
+        row = box.row()
+        row.label('Script file does not exist or is not executable!')
+        
+    row = layout.row(align=True)
+    row.label('Scripts are executed with the first argument the set export directory path.')
+
+class RENDER_OT_post_export_script_add(bpy.types.Operator):
+  """Exclude from rendering, by adding slave to the blacklist"""
+  bl_idname = "preferences.post_export_script_add"
+  bl_label = "Remove script"
+
+  @classmethod
+  def poll(cls, context):
+      return True
+
+  def execute(self, context):
+      prefs = GetPreferences()
+
+      script = prefs.postExportScripts.add()
+      script.name = "Unnamed_"+str(len(prefs.postExportScripts))
+      prefs.active_postExportScripts_index = len(prefs.postExportScripts)-1
+
+      return {'FINISHED'}
+
+  def invoke(self, context, event):
+      return self.execute(context)
+
+
+class RENDER_OT_post_export_script_remove(bpy.types.Operator):
+  """Exclude from rendering, by adding slave to the blacklist"""
+  bl_idname = "preferences.post_export_script_remove"
+  bl_label = "Remove script"
+
+  @classmethod
+  def poll(cls, context):
+      return True
+
+  def execute(self, context):
+      prefs = GetPreferences()
+
+      if prefs.active_postExportScripts_index >= 0:
+        prefs.postExportScripts.remove(prefs.active_postExportScripts_index)
+        prefs.active_postExportScripts_index = len(prefs.postExportScripts)-1
+
+      return {'FINISHED'}
+
+  def invoke(self, context, event):
+      return self.execute(context)
+
+
+class RENDER_OT_post_export_script_move(bpy.types.Operator):
+  """Exclude from rendering, by adding slave to the blacklist"""
+  bl_idname = "preferences.post_export_script_move"
+  bl_label = "Order script"
+  
+  type = bpy.props.StringProperty(name="Name")
+
+  @classmethod
+  def poll(cls, context):
+      return True
+
+  def execute(self, context):
+    
+    prefs = GetPreferences()
+    print(self.type)
+    print(prefs.active_postExportScripts_index)
+    
+    direction = 1 if self.type=='DOWN' else -1
+    
+    if prefs.active_postExportScripts_index >= 0:
+      newpos = prefs.active_postExportScripts_index + direction
+      if newpos < len(prefs.postExportScripts) and newpos > -1:
+        prefs.postExportScripts.move(prefs.active_postExportScripts_index, newpos)
+        prefs.active_postExportScripts_index = newpos
+
+    return {'FINISHED'}
+
+  def invoke(self, context, event):
+      return self.execute(context)

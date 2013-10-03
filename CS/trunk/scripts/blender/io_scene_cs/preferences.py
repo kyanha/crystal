@@ -1,8 +1,9 @@
 import bpy
-from bpy.props import StringProperty, BoolProperty, CollectionProperty
+import os
+from bpy.props import StringProperty, BoolProperty, CollectionProperty, IntProperty
 from bpy.types import AddonPreferences
 from .utilities import rnaType, GetDefaultPath, GetDefaultPath, settings, GetPreferences
-from .ui.renderlayer import csFactoryRef, csMaterialRef
+from .ui.renderlayer import csFactoryRef, csMaterialRef, PostExportScript
 from bpy.types import PropertyGroup
 
 
@@ -83,6 +84,18 @@ class CrystalSpaceSettingsGlobal(PropertyGroup):
           type=csMaterialRef,
           )
 
+  postExportScripts = CollectionProperty(
+          name = "Post Export Scripts",
+          description="Collection of scripts to be executed when exporting has finished", 
+          type=PostExportScript
+          )
+  active_postExportScripts_index = IntProperty(
+           name="Index of the active slave",
+            description="",
+            default = -1,
+            min= -1,
+            max=65535
+          )
   
 
 
