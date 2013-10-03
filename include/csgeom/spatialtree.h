@@ -44,6 +44,8 @@ namespace Geometry
       void* object;
 
     public:
+      uint32 timestamp;
+
       // create new child base with no object
       ChildBase() : object(nullptr)
       {
@@ -115,8 +117,6 @@ namespace Geometry
       int maxLeafCount;
 
     public:
-      uint32 timestamp;
-
       MultiLeafChild() :
 	leaves(nullptr), leafCount(0), maxLeafCount(0)
       {
