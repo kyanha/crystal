@@ -315,6 +315,10 @@ class Vector3ShaderVariable(ShaderVariable):
 class Vector4ShaderVariable(ShaderVariable):
   __type__ = 'vector4s'
   value = bpy.props.FloatVectorProperty(size=4)
+  
+class ColorShaderVariable(ShaderVariable):
+  __type__ = 'colors'
+  value = bpy.props.FloatVectorProperty(size=4, subtype='COLOR', default=(1,1,1,1))
 
 @IDRefContainer  
 class TextureShaderVariable(ShaderVariable):
@@ -329,6 +333,7 @@ class ShaderVariables(bpy.types.PropertyGroup):
   vector2s = bpy.props.CollectionProperty(type=Vector2ShaderVariable)
   vector3s = bpy.props.CollectionProperty(type=Vector3ShaderVariable)
   vector4s = bpy.props.CollectionProperty(type=Vector4ShaderVariable)
+  colors = bpy.props.CollectionProperty(type=ColorShaderVariable)
   textures = bpy.props.CollectionProperty(type=TextureShaderVariable)
 
 
@@ -368,7 +373,8 @@ class CrystalSpaceSettingsMaterial(PropertyGroup):
             name="ShaderSet",
             description="",
             items=SHADERSETS,
-            default="DEFAULT")
+            #default="DEFAULT")
+            )
             
   priority = bpy.props.EnumProperty(
             name="Render priority",

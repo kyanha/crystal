@@ -197,8 +197,8 @@ class RENDER_PT_csPostExportScriptsPanel(csReferencesPanel, bpy.types.Panel):
     row = layout.row(align=True)
     row.label('Scripts are executed with the first argument the set export directory path.')
 
+
 class RENDER_OT_post_export_script_add(bpy.types.Operator):
-  """Exclude from rendering, by adding slave to the blacklist"""
   bl_idname = "preferences.post_export_script_add"
   bl_label = "Remove script"
 
@@ -220,7 +220,6 @@ class RENDER_OT_post_export_script_add(bpy.types.Operator):
 
 
 class RENDER_OT_post_export_script_remove(bpy.types.Operator):
-  """Exclude from rendering, by adding slave to the blacklist"""
   bl_idname = "preferences.post_export_script_remove"
   bl_label = "Remove script"
 
@@ -242,7 +241,6 @@ class RENDER_OT_post_export_script_remove(bpy.types.Operator):
 
 
 class RENDER_OT_post_export_script_move(bpy.types.Operator):
-  """Exclude from rendering, by adding slave to the blacklist"""
   bl_idname = "preferences.post_export_script_move"
   bl_label = "Order script"
   
