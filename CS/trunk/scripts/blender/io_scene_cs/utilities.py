@@ -1,6 +1,8 @@
 import os
 import bpy
 
+import xml.etree.ElementTree as etree
+
 try:
   from bpy.types import AddonPreferences
 except:
@@ -81,14 +83,15 @@ def GetPreferences ():
   else:
     text = bpy.data.texts["io_scene_cs.settings"]
   return text.preferences
-  #Addon properties don't seem to be saved?
-  #return bpy.context.user_preferences.addons[__package__].preferences
 
+def GetAddonPreferences (): 
+  return bpy.context.user_preferences.addons[__package__].preferences
 
-def GetDefaultPath ():   
-  try:
-    default_path = GetPreferences().exportPath
-  except:
+def GetDefaultPath (checkAddon=True): 
+  default_path = None
+  if checkAddon:
+    default_path = GetAddonPreferences().exportPath
+  if not default_path or default_path=='':
     default_path = os.environ.get("TEMP")
     if not default_path:
       if os.name == 'nt':
@@ -101,6 +104,8 @@ def GetDefaultPath ():
 
 def GetExportPath ():
   path =  GetPreferences().exportPath
+  if not path or path =='':
+    path = GetPreferences().exportPath = GetDefaultPath ()
   if not path.endswith('/'):
     path += '/'
   return path
@@ -128,21 +133,64 @@ def HasCrystalSpace():
   return path and os.path.exists(path)
 
 
-SHADERSETS = (
+DEFAULT_SHADERSETS = (
   ("DEFAULT", "Default", "Default"),
   ("binalpha", "binalpha", ""),
   ("instanced", "instanced", ""),
-  ("instanced_binalpha", "instanced_binalpha", ""),
-  ("foliage_grass_fullbright", "foliage_grass_fullbright", ""),
+  #("instanced_binalpha", "instanced_binalpha", ""),
+  #("foliage_grass_fullbright", "foliage_grass_fullbright", ""),
   ("fullbright", "fullbright", ""),
   ("multisplat", "multisplat", ""),
   ("water_plane", "water_plane", ""),
 )
 
+__SHADERSETS__ = None
+
+def reloadShadersets(prop, context):
+  print('Reset __SHADERSETS__')
+  global __SHADERSETS__
+  __SHADERSETS__ = None
+
+
+def SHADERSETS(prop, context):
+  global __SHADERSETS__
+  
+  crystal_env = os.environ.get("CRYSTAL")
+  if not crystal_env:
+    return DEFAULT_SHADERSETS
+    
+  path = os.path.join(crystal_env, 'data/config-plugins/shadersets-default.xml').replace('\\', '/')
+  if not os.path.exists(path):
+    return DEFAULT_SHADERSETS
+    
+  if __SHADERSETS__:
+    return __SHADERSETS__
+    
+  files = [f.name for f in GetAddonPreferences().shaderSetFiles if f.valid]
+  files.append(path)
+  
+  shadersets = [("DEFAULT", "Default", "Default")]
+  
+  for file in files:
+    try:
+      tree = etree.parse(file)
+      root = tree.getroot()
+      
+      for shaderset in root.findall('shaderset'):
+        name = shaderset.attrib['name']
+        shadersets.append((name, name, name))
+    except etree.ParseError as e:
+      print(e)
+    
+  __SHADERSETS__ = shadersets
+  return __SHADERSETS__
+
+
 def GetShaderSetName(f):
-  i = [l[0] for l in SHADERSETS].index(f)
+  ss = SHADERSETS(None, None)
+  i = [l[0] for l in ss].index(f)
   if i >=0:
-    return SHADERSETS[i][1]
+    return ss[i][1]
   return None
 
 RENDERPRIORITIES = [

@@ -17,10 +17,11 @@ bl_info = {
 if "bpy" in locals():
   import imp
   imp.reload(utilities)
+  imp.reload(preferences)
   imp.reload(ui)
   imp.reload(io)
   imp.reload(engine)
-  imp.reload(preferences)
+  
   imp.reload(handlers)
   imp.reload(xml)
 else:
@@ -28,16 +29,16 @@ else:
   import bpy
 
   from . import utilities
+  from . import preferences
   from . import ui
   from . import io
   from . import engine
-  from . import preferences
+  
   from . import handlers
   from . import xml
 
 # Registration
 def register():
-  bpy.utils.register_class(preferences.ExportCSPreferences)
   bpy.utils.register_module(__name__)
   utilities._register()
   engine.register()

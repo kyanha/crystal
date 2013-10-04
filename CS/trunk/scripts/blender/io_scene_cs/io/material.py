@@ -49,7 +49,8 @@ def MaterialAsCS(self, func, depth=0, **kwargs):
     func(' '*depth +'  <shadervar type="vector4" name="diffuse">%f, %f, %f, 1</shadervar>'% tuple(self.diffuse_color))
     
     for sv in self.b2cs.shadervars:
-      if sv.type in ['vector2', 'vector3', 'vector4']:
+      type = sv.type if sv.type!='color' else 'vector4'
+      if sv.type in ['vector2', 'vector3', 'vector4', 'color']:
         value = str(list(sv.value))[1:-1]
       elif sv.type in ['texture']:
         if not sv.value:
@@ -57,7 +58,7 @@ def MaterialAsCS(self, func, depth=0, **kwargs):
         value = sv.value.uname
       else:
         value = sv.value
-      func(' '*depth +'  <shadervar type="%s" name="%s">%s</shadervar>'%(sv.type,sv.name,value))
+      func(' '*depth +'  <shadervar type="%s" name="%s">%s</shadervar>'%(type,sv.name,value))
   
     haswater = False
 
