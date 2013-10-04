@@ -40,12 +40,24 @@ def MaterialAsCS(self, func, depth=0, **kwargs):
     func(' '*depth +'<material name="%s">'%(self.uname))
     dic = {}
     for slot in self.texture_slots:
-      if slot and slot.texture and slot.texture.type =='IMAGE':
+      if slot and slot.texture and slot.texture.type =='IMAGE' and slot.texture.image:
         for type, name in MAP.items():
           if getattr(slot, type, False):
             func(' '*depth +'  <shadervar type="texture" name="%s">%s</shadervar>'%(GetName(name, dic), slot.texture.image.uname))
 
     func(' '*depth +'  <shadervar type="vector4" name="specular">%f, %f, %f, 1</shadervar>'% tuple(self.specular_color))
+    func(' '*depth +'  <shadervar type="vector4" name="diffuse">%f, %f, %f, 1</shadervar>'% tuple(self.diffuse_color))
+    
+    for sv in self.b2cs.shadervars:
+      if sv.type in ['vector2', 'vector3', 'vector4']:
+        value = str(list(sv.value))[1:-1]
+      elif sv.type in ['texture']:
+        if not sv.value:
+          continue
+        value = sv.value.uname
+      else:
+        value = sv.value
+      func(' '*depth +'  <shadervar type="%s" name="%s">%s</shadervar>'%(sv.type,sv.name,value))
   
     haswater = False
 
@@ -94,6 +106,10 @@ def MaterialDependencies(self):
     for tex in self.textures:
       if tex.type=='IMAGE' and tex.image:
         dependencies['T'][tex.image.uname] = tex.image
+    for sv in self.b2cs.shadervars:
+      if sv.type == 'texture':
+        if sv.value:
+          dependencies['T'][sv.value.uname] = sv.value
   return dependencies
   
 bpy.types.Material.GetDependencies = MaterialDependencies

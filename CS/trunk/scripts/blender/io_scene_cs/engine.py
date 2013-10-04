@@ -49,7 +49,12 @@ def register():
       except:
           pass
     del module
-
+  
+  
+  from bl_ui import properties_material
+  properties_material.MATERIAL_PT_context_material.COMPAT_ENGINES.add('CRYSTALSPACE')
+  properties_material.MATERIAL_PT_preview.COMPAT_ENGINES.add('CRYSTALSPACE')
+  del properties_material
 
 
   from bl_ui import properties_game

@@ -85,8 +85,9 @@ def bpy_register_idref(cls, attr, idrefprop):
         value = idlist().get(name, None)
         # Reset the name idproperty if invalid
         # XXX this is not 100% reliable, but better than keeping invalid names around
-        if value is None:
-            self[name_attr] = ""
+        if value is None and name_attr in self:
+            s = getattr(self, name_attr)
+            s = ""
         return value
 
     def prop_set(self, value):
