@@ -56,7 +56,7 @@ class SubMesh:
       func(' '*depth +'<submesh>')
 
     if self.material:
-      if self.material.csMatRef:
+      if self.material.b2cs.csMatRef:
         func(' '*depth +'  <material>'+self.material.b2cs.csMaterialName+'</material>')
       else:
         func(' '*depth +'  <material>'+self.material.uname+'</material>')

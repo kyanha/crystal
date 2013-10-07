@@ -39,7 +39,7 @@ class RENDER_PT_csSettingsPanel(csSettingsPanel, bpy.types.Panel):
     if not GetPreferences().library:
       if HasCrystalSpace():
         row.operator("io_scene_cs.export_run", text="Play", icon='GAME')
-        if context.active_object.type in ['MESH', 'ARMATURE'] and context.active_object.parent is None:
+        if context.active_object and context.active_object.type in ['MESH', 'ARMATURE'] and context.active_object.parent is None:
           row.operator("io_scene_cs.export_view", text="View", icon='RENDER_STILL')
         row = layout.row()
         row.prop(GetPreferences(), "console")
@@ -109,7 +109,13 @@ class B2CS_OT_export_run(bpy.types.Operator):
     
     import shlex, subprocess
     
-    if not context.scene.HasBulletPhysicsEnabled():
+    physics = False
+    for object in bpy.data.objects:
+      if object.hasSupportedPhysicsEnabled():
+        physics = True
+        break
+    
+    if not physics or not context.scene.HasBulletPhysicsEnabled():
       print(WalkTestPath())
       args = shlex.split(WalkTestPath() + options + exportPath)
       print(args)
