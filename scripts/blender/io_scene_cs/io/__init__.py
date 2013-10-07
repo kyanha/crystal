@@ -99,7 +99,8 @@ def ExportWorld(path):
   Write(f)('<?xml version="1.0" encoding="UTF-8"?>')
   Write(f)('<world xmlns=\"http://crystalspace3d.org/xml/library\">')
   
-  bpy.context.scene.world.AsCS(Write(f), 2)
+  if bpy.context.scene and bpy.context.scene.world:
+    bpy.context.scene.world.AsCS(Write(f), 2)
   
   # Export shared materials and textures in world file
   if GetPreferences().sharedMaterial:
