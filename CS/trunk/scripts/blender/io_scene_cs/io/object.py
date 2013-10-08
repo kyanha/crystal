@@ -141,7 +141,7 @@ class Hierarchy:
         fi.write(data+'\n')
       return write
 
-    if self.object.data.name in Hierarchy.exportedFactories:
+    if self.object.data.uname in Hierarchy.exportedFactories:
       print('Skipping "%s" factory export, already done' % (self.object.data.uname))
       return
     
