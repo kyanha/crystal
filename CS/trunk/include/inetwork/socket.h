@@ -19,9 +19,11 @@
 #ifndef __INETWORK_SOCKET_H__
 #define __INETWORK_SOCKET_H__
 
-#include <csutil/scf.h>
-#include <csutil/scf_implementation.h>
-#include <iutil/array.h>
+#include "cssysdef.h"
+
+#include "iutil/array.h"
+#include "csutil/scf.h"
+#include "csutil/scf_implementation.h"
 
 namespace CS
 {
@@ -56,6 +58,10 @@ struct iAddress : public virtual iBase
   virtual int GetPort() const = 0;
 
   virtual Family GetFamily() const = 0;
+
+  virtual bool IsSame(iAddress const *other) const = 0;
+
+  virtual uint GetHash() const = 0;
 };
 
 /**
