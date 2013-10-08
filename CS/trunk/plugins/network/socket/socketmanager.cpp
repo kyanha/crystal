@@ -240,10 +240,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(Socket)
       {
 	if(!FD_ISSET(readFDs[i],&readSet))
 	{
-	  // @@@NOTE: This is only safe with the current implementation of DeleteIndexFast
-	  //          as that implementation only breaks ordering for elements past the
-	  //		current one. Shall this change DeleteIndex has to be used instead.
-	  read->DeleteIndexFast(i);
+	  read->DeleteIndex(i);
 	}
       }
 
@@ -252,10 +249,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(Socket)
       {
 	if(!FD_ISSET(writeFDs[i],&writeSet))
 	{
-	  // @@@NOTE: This is only safe with the current implementation of DeleteIndexFast
-	  //          as that implementation only breaks ordering for elements past the
-	  //		current one. Shall this change DeleteIndex has to be used instead.
-	  write->DeleteIndexFast(i);
+	  write->DeleteIndex(i);
 	}
       }
     }
