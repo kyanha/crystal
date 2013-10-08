@@ -21,6 +21,7 @@
 
 #include "socketbase.h"
 #include "inetwork/socket.h"
+#include "csutil/hashcomputer.h"
 #include <cstring>
 
 using namespace CS::Network::Socket;
@@ -82,6 +83,33 @@ CS_PLUGIN_NAMESPACE_BEGIN(Socket)
       return CS_SOCKET_FAMILY_IP4;
     }
 
+    bool IsSame(iAddress const *other) const
+    {
+      // compare family
+      if(other->GetFamily() != CS_SOCKET_FAMILY_IP4)
+      {
+	return false;
+      }
+
+      // cast to our type
+      Address<CS_SOCKET_FAMILY_IP4> const* handle = static_cast<Address<CS_SOCKET_FAMILY_IP4> const *>(other);
+
+      // compare port
+      if(handle->port != port)
+      {
+	return false;
+      }
+
+      // compare address
+      if(handle->socketAddress.sin_addr.s_addr != socketAddress.sin_addr.s_addr)
+      {
+	return false;
+      }
+
+      // same address
+      return true;
+    }
+
     sockaddr const *GetStruct() const
     {
       return reinterpret_cast<sockaddr const *>(&socketAddress);
@@ -136,6 +164,40 @@ CS_PLUGIN_NAMESPACE_BEGIN(Socket)
     Family GetFamily() const
     {
       return CS_SOCKET_FAMILY_IP6;
+    }
+
+    bool IsSame(iAddress const *other) const
+    {
+      // compare family
+      if(other->GetFamily() != CS_SOCKET_FAMILY_IP4)
+      {
+	return false;
+      }
+
+      // cast to our type
+      Address<CS_SOCKET_FAMILY_IP6> const* handle = static_cast<Address<CS_SOCKET_FAMILY_IP6> const *>(other);
+
+      // compare port
+      if(handle->port != port)
+      {
+	return false;
+      }
+
+      // compare address
+      if(memcmp(&handle->socketAddress.sin6_addr, &socketAddress.sin6_addr, sizeof(in6_addr)) != 0)
+      {
+	return false;
+      }
+
+      // same address
+      return true;
+    }
+
+    uint GetHash() const
+    {
+      uint hash = csHashComputerStruct<in6_addr>::ComputeHash(socketAddress.sin6_addr);
+      HashCombine(hash, port);
+      return hash;
     }
 
     sockaddr const *GetStruct() const
