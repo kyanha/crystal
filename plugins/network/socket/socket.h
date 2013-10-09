@@ -109,6 +109,13 @@ CS_PLUGIN_NAMESPACE_BEGIN(Socket)
       // same address
       return true;
     }
+    
+    uint GetHash() const
+    {
+      uint hash = csHashComputerStruct<in_addr>::ComputeHash(socketAddress.sin_addr);
+      HashCombine(hash, port);
+      return hash;
+    }
 
     sockaddr const *GetStruct() const
     {

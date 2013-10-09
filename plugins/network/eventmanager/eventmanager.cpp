@@ -71,7 +71,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(EventManager)
     socketManager = csQueryRegistry<iSocketManager>(registry);
 
     // networking without sockets... not really
-    if(socketManager.IsValid())
+    if(!socketManager.IsValid())
     {
       return false;
     }
