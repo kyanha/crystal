@@ -236,7 +236,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(Socket)
     {
       // select succeeded
       // remove sockets that can't be read from read array
-      for(size_t i = read->GetSize() - 1; i >= 0; --i)
+      for(size_t i = 0; i < read->GetSize(); ++i)
       {
 	if(!FD_ISSET(readFDs[i],&readSet))
 	{
@@ -245,7 +245,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(Socket)
       }
 
       // remove sockets that can't be written from write array
-      for(size_t i = write->GetSize() - 1; i >= 0; --i)
+      for(size_t i = 0; i < write->GetSize(); ++i)
       {
 	if(!FD_ISSET(writeFDs[i],&writeSet))
 	{
