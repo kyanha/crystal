@@ -316,6 +316,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(EventManager)
 	      }
 	    }
 	  }
+	  delete [] buffer;
 	}
 
 	// check whether this socket is ready for writing
