@@ -252,6 +252,7 @@ bool NetworkEventServerTest::SetupModules ()
   eventManager->Listen(address, CS_SOCKET_PROTOCOL_TCP);
   
   eventManager->Subscribe(csevKeyboardEvent(GetObjectRegistry()), BIDIRECTIONAL);
+  //eventManager->Subscribe(csevAllEvents(GetObjectRegistry()), BIDIRECTIONAL);
   
   //eventManager->SetProcessEvent(csevFrame (GetObjectRegistry ()));
 
