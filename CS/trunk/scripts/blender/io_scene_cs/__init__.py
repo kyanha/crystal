@@ -15,40 +15,40 @@ bl_info = {
 
 
 if "bpy" in locals():
-  import imp
-  imp.reload(utilities)
-  imp.reload(preferences)
-  imp.reload(ui)
-  imp.reload(io)
-  imp.reload(engine)
-  
-  imp.reload(handlers)
-  imp.reload(xml)
-else:
-  import os
-  import bpy
+    import imp
+    imp.reload(utilities)
+    imp.reload(preferences)
+    imp.reload(ui)
+    imp.reload(io)
+    imp.reload(engine)
 
-  from . import utilities
-  from . import preferences
-  from . import ui
-  from . import io
-  from . import engine
-  
-  from . import handlers
-  from . import xml
+    imp.reload(handlers)
+    imp.reload(xml)
+else:
+    import os
+    import bpy
+
+    from . import utilities
+    from . import preferences
+    from . import ui
+    from . import io
+    from . import engine
+
+    from . import handlers
+    from . import xml
 
 # Registration
+
+
 def register():
-  bpy.utils.register_module(__name__)
-  utilities._register()
-  engine.register()
-    
+    bpy.utils.register_module(__name__)
+    utilities._register()
+    engine.register()
+
 
 def unregister():
-  bpy.utils.unregister_module(__name__)
-  utilities._unregister()
+    bpy.utils.unregister_module(__name__)
+    utilities._unregister()
 
 if __name__ == "__main__":
-  register()
-
-
+    register()
