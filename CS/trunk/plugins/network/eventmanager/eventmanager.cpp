@@ -235,6 +235,12 @@ CS_PLUGIN_NAMESPACE_BEGIN(EventManager)
 	  received = socket->Receive(buffer, bufferSize);
 
 	  // check for error
+          if(received == static_cast<size_t>(-1))
+          {
+            // read error - disconnect client and continue
+            Disconnect(data.address);
+            continue;
+          }
 	  if(received > 0)
 	  {
 	    // no error, continue
@@ -304,6 +310,9 @@ CS_PLUGIN_NAMESPACE_BEGIN(EventManager)
 		memcpy(*request->buffer, buffer + processed, left);
 		request->processed = left;
 		left = 0;
+
+                // set as pending request
+                data.incoming = request;
 	      }
 	      else
 	      {
@@ -337,6 +346,13 @@ CS_PLUGIN_NAMESPACE_BEGIN(EventManager)
 	    // transmit data
 	    size_t sent = socket->Send(reqBuffer, missing);
 
+            // check for error
+            if(sent == static_cast<size_t>(-1))
+            {
+              // write error - disconnect client and continue
+              Disconnect(data.address);
+              continue;
+            }
 	    // check whether we could send all
 	    if(sent == missing)
 	    {
