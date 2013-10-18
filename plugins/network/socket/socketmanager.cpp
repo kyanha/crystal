@@ -56,7 +56,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(Socket)
     return Platform::invalidSocket;
   }
 
-  SocketManager::SocketManager(iBase* parent) : scfImplementationType(this, parent)
+  SocketManager::SocketManager(iBase *parent) : scfImplementationType(this, parent)
   {
     // perform one-time platform dependent socket library initialization
     Platform::Initialize();
