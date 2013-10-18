@@ -137,7 +137,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(EventManager)
     void CreateEvent(char *buffer, size_t size, iAddress *source);
 
   public:
-    EventManager(iBase *) : scfImplementationType(this), processType(CS_EVENT_INVALID)
+    EventManager(iBase *parent) : scfImplementationType(this, parent), processType(CS_EVENT_INVALID)
     {
     }
 
