@@ -154,6 +154,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(EventManager)
 	// put into our client hash
 	ClientData &data = clients.GetOrCreate(socket);
 	data.address = address;
+        data.incoming = nullptr;
 
 	// add to lookup table
 	lookup.Put(address, socket);
@@ -633,6 +634,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(EventManager)
     // add socket to our client list and create packet queues
     ClientData &data = clients.GetOrCreate(socket);
     data.address = address;
+    data.incoming = nullptr;
 
     // add socket to our address lookup table
     lookup.Put(address, socket);
