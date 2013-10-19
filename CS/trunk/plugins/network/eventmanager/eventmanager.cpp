@@ -64,6 +64,14 @@ CS_PLUGIN_NAMESPACE_BEGIN(EventManager)
       return false;
     }
 
+    nameRegistry = csQueryRegistry<iEventNameRegistry>(registry);
+
+    // we cannot lookup event relations without a name registry
+    if(!nameRegistry.IsValid())
+    {
+      return false;
+    }
+
     // register us as event listener
     queue->RegisterListener(this);
 
@@ -102,12 +110,16 @@ CS_PLUGIN_NAMESPACE_BEGIN(EventManager)
     }
 
     // check whether this event belongs to a subcribed type
-    if(remoteEvents.Contains(e->Name))
+    for(csEventID id = e->Name; id != CS_EVENT_INVALID; id = nameRegistry->GetParentID(id))
     {
-      // yes, post it
-      outlet->Post(e);
+      if(remoteEvents.Contains(id))
+      {
+        // yes, post it
+        outlet->Post(e);
+      }
     }
-    else if(callback.IsValid())
+
+    if(callback.IsValid())
     {
       // we aren't supposed to post those
       // let the callback know about it, anyway

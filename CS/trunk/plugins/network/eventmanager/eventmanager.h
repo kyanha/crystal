@@ -103,6 +103,9 @@ CS_PLUGIN_NAMESPACE_BEGIN(EventManager)
     // our outlet to post events
     csRef<iEventOutlet> outlet;
 
+    // event name registry for name lookups
+    csRef<iEventNameRegistry> nameRegistry;
+
     // callback if there is any
     csRef<iEventCallback> callback;
 
