@@ -1388,6 +1388,8 @@ const char* csEngine::SplitCollectionName(const char* name, iCollection*& collec
   collection = 0;
   global = false;
 
+  if (!name) return name;
+  
   const char* p = strchr (name, '/');
   if (!p) return name;
   if (*name == '*' && *(name+1) == '/')
