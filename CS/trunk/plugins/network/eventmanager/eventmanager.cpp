@@ -288,7 +288,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(EventManager)
 	      if(missing == toProcess)
 	      {
 		// create event
-		CreateEvent(reqBuffer, request->buffer->GetSize(), data.address);
+                CreateEvent(*request->buffer, request->buffer->GetSize(), data.address);
 
 		// we're done with the request
 		delete request;
@@ -553,7 +553,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(EventManager)
     buffer.AttachNew(new Buffer(new char[packetSize], packetSize));
 
     // set meta-data
-    *reinterpret_cast<uint16 *>(static_cast<char*>(*buffer)) = csLittleEndian::Convert(eventSize); // event size
+    *reinterpret_cast<uint16 *>(static_cast<char *>(*buffer)) = csLittleEndian::Convert(static_cast<uint16>(eventSize)); // event size
 
     // flatten it
     error = csEventFlattener::Flatten(objectRegistry, e, *buffer + metaSize);
