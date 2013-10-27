@@ -105,6 +105,8 @@ class Hierarchy:
         if skelRef and self.object.type == 'ARMATURE':
             func(" " * depth + "<library>factories/%s_rig</library>" %
                  (self.object.uname))
+            func(" " * depth + "<library>factories/%s_model</library>" %
+                 (self.object.uname))
 
         # Animesh factory header
         func(" " * depth + "<meshfact name=\"%s\">" % (self.object.uname))
@@ -150,9 +152,9 @@ class Hierarchy:
                 fi.write(data + '\n')
             return write
 
-        if self.object.data.uname in Hierarchy.exportedFactories:
+        if self.uname in Hierarchy.exportedFactories:
             print('Skipping "%s" factory export, already done' %
-                  (self.object.data.uname))
+                  (self.uname))
             return
 
         if animesh:
@@ -199,6 +201,10 @@ class Hierarchy:
                   Join(path, 'factories/', '%s_rig' % (skel.name)))
             fb = open(Join(path, 'factories/', '%s_rig' % (skel.name)), 'w')
             skel.data.AsCSSkelAnim(Write(fb), 2, skel, dontClose=False)
+            fb.close()
+            
+            fb = open(Join(path, 'factories/', '%s_model' % (skel.name)), 'w')
+            skel.data.AsCSSkelModel(Write(fb), 2, skel)
             fb.close()
 
     def WriteCSMeshBuffers(self, func, depth=0, path='', animesh=False, dontClose=False, **kwargs):
@@ -383,7 +389,7 @@ class Hierarchy:
         if self.object.type == 'ARMATURE':
             socketList = {}
             for ob in bpy.data.objects:
-                if ob.parent == self.object and ob.parent_type == 'BONE' and ob.parent_bone:
+                if ob.parent == self.object and ob.parent_type == 'BONE' and ob.parent_bone and not ob.game.use_collision_bounds:
                     if ob.parent_bone not in socketList.keys():
                         socketList[ob.parent_bone] = []
                     socketList[ob.parent_bone].append(ob)

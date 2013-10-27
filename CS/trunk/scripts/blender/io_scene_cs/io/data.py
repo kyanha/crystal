@@ -311,6 +311,9 @@ def AsCSSkeletonAnimations(self, func, depth, armatureObject, dontClose=False):
     # EXPORT ANIMATIONS
     boneNames = GetBoneNames(self.bones)
     armatureName = armatureObject.name
+    
+    for ob in bpy.data.objects:
+        ob['temporal'] = False
 
     # Create scene for baking faster
     # and link a copy of the armature to this new scene
@@ -427,6 +430,12 @@ def AsCSSkeletonAnimations(self, func, depth, armatureObject, dontClose=False):
     bakingScene.objects.unlink(armatureObjectCpy)
     bpy.data.objects.remove(armatureObjectCpy)
     bpy.data.scenes.remove(bakingScene)
+    
+    for ob in bpy.data.objects:
+        print('REMOVE', ob.name, ob.get('temporal', True))
+        if ob.get('temporal', True):
+            print('REMOVED', ob.name)
+            bpy.data.objects.remove(ob)
 
     # EXPORT SKELETON
     func(' ' * depth + '<skeleton name="%s_rig">' % (armatureName))
@@ -443,8 +452,81 @@ def AsCSSkeletonAnimations(self, func, depth, armatureObject, dontClose=False):
     func(' ' * depth + '</addon>')
     if not dontClose:
         func('</library>')
+        
 
 bpy.types.Armature.AsCSSkelAnim = AsCSSkeletonAnimations
+
+
+def AsCSSkeletonModel(self, func, depth, skel):
+    """ Export Blender skeleton and colliders
+    """
+    func('<?xml version="1.0" encoding="UTF-8"?>')
+    func('<library xmlns=\"http://crystalspace3d.org/xml/library\">')
+    func(' ' * depth +'<addon plugin="crystalspace.mesh.loader.skeleton.model">')
+    
+    func(' ' * depth +'<model skeletonfact="%s_rig">'%(skel.name))
+         
+    # Collect children of bones
+    childrenList = {}
+    for ob in bpy.data.objects:
+        if ob.parent_type == 'BONE' and ob.parent_bone and ob.game.use_collision_bounds:
+            if ob.parent_bone not in childrenList.keys():
+                childrenList[ob.parent_bone] = []
+            childrenList[ob.parent_bone].append(ob)
+    
+    for bone in self.bones:        
+        if bone.name in childrenList and len(childrenList[bone.name]):
+            depth = depth +2
+            func(' ' * depth + '<bone name="%s">'%(bone.name))
+            depth = depth +2
+            func(' ' * depth + '<rigidbody mass="0.5" friction="10.0" elasticity="0.8">')
+            for child in childrenList[bone.name]:
+                ExportCollisionBounds(bone, child, func, depth+4)
+            func(' ' * depth + '</rigidbody>')
+        else:
+            depth = depth +2
+            func(' ' * depth + '<bone name="%s">'%(bone.name))
+            depth = depth +2
+            func(' ' * depth + '<rigidbody mass="0.5" friction="10.0" elasticity="0.8">')
+            func(' ' * depth + '  <collider>')
+            func(' ' * depth + '    <cylinder length="%f" radius="%f">' %(bone.length, 0.1))
+            func(' ' * depth + '       <rotate><rotx>1.57</rotx></rotate>')
+            func(' ' * depth + '    </cylinder>')
+            func(' ' * depth + '  </collider>')
+            func(' ' * depth + '</rigidbody>')
+            
+        #TODO: Export proper joint constraints    
+        #Use blender's limit rotation bone constraint
+        func(' ' * depth +'''
+            <joint>
+              <bounce x="0.2" y="0.2" z="0.2" />
+              <constraints>
+                <distance x="true" y="true" z="true" />
+                <angle x="false" y="false" z="false">
+                  <min x="-0.83" y="-0.83" z="-0.83" />
+                  <max x="0.83" y="0.83" z="0.83" />
+                </angle>
+              </constraints>
+            </joint>
+        ''')
+            
+        depth = depth -2
+        func(' ' * depth + '</bone>')
+        depth = depth -2
+    
+    #TODO
+    func(' ' * depth +'''    
+    <chain name="all" root="gen">
+        <child name="antebrazo.L"/>
+        <child name="antebrazo.R"/>
+    </chain>
+    ''')
+    
+    func(' ' * depth +'</model>')
+    func(' ' * depth +'</addon>')
+    func('</library>')
+    
+bpy.types.Armature.AsCSSkelModel = AsCSSkeletonModel
 
 
 def GetBoneInfluences(self, **kwargs):
@@ -576,6 +658,82 @@ def GetBoneCurrentMatrix(self, armatureObject):
 bpy.types.Bone.GetBoneCurrentMatrix = GetBoneCurrentMatrix
 
 
+def ExportCollisionBounds(bone, object, func, depth=0):
+    '''
+    #http://wiki.blender.org/index.php/User:Sculptorjim/Game_Engine/Physics/Collision_Bounds
+    (Default)
+      For Dynamic and Static objects, it is a Triangle Mesh (see below).
+      For everything else, it is a Sphere (see below).
+    Capsule - A cylinder with hemispherical caps, like a pill.
+      Radius of the hemispheres is the greater of the x or y extent.
+      Height is the z bounds
+    Box - The x,y,z bounding box, as defined above.
+    Sphere -
+      Radius is defined by the object's scale (visible in the N properties panel) times the physics radius (can be found in Physics » Attributes » Radius.
+      Note: This is the only bounds that respects the Radius option.
+    Cylinder
+      Radius is the greater of the x or y extent.
+      Height is the z bounds.
+    Cone
+      Base radius is the greater of the x or y extent.
+      Height is the z bounds.
+    '''
+
+    TYPE = 'CYLINDER' #object.game.collision_bounds_type
+
+    bbox = [Vector(b) for b in object.bound_box]
+    max_x = max_y = max_z = -9999999
+    min_x = min_y = min_z = 99999999
+    for v in bbox:
+        if max_x < v.x:
+            max_x = v.x
+        if max_y < v.y:
+            max_y = v.y
+        if max_z < v.z:
+            max_z = v.z
+
+        if min_x > v.x:
+            min_x = v.x
+        if min_y > v.y:
+            min_y = v.y
+        if min_z > v.z:
+            min_z = v.z
+
+    # TODO: why do i suck at math!?
+    # cone and cylinder bottoms do not align with actual object bottoms in CS
+    # needs some offset, min_z - object_origin??
+    rot, loc = bone.GetSocketMatrix(object, object.parent)
+    offset = [(min_x + max_x) * 0.5,
+              (min_y + max_y) * 0.5, (min_z + max_z) * 0.5]
+              
+    offset[0] += loc.x
+    offset[1] += loc.y
+    offset[2] += loc.z
+
+    dimensions = [max_x - min_x, max_y - min_y, max_z - min_z]
+    print(dimensions)
+    print(old)
+    print(offset)
+    print(min_z)
+    # dimensions = object.dimensions
+    
+    
+
+    func(' ' * depth + '<collider>')
+    depth = depth + 2
+    func(' ' * depth + '<!-- %s dimensions: %s %s  %s -->' %(object.name, TYPE, str(dimensions), str(offset)))
+    if TYPE == 'CYLINDER':
+        rad = max(dimensions[0], dimensions[1]) / 2.0
+        height = dimensions[2]
+        func(' ' * depth + '<cylinder length="%f" radius="%f">' %(height, rad))
+        func(' ' * depth + '  <move x="%f" y="%f" z="%f" />' %(offset[0], offset[2], offset[1]))
+        func(' ' * depth + '  <rotate><rotx>1.57</rotx></rotate>')
+        func(' ' * depth + '</cylinder>')
+
+    depth = depth - 2
+    func(' ' * depth + '</collider>')
+    
+
 def AsCSBone(self, func, depth, worldTransform):
     """ Write an xml description (name and local transformation) of this bone
     """
@@ -586,6 +744,7 @@ def AsCSBone(self, func, depth, worldTransform):
     scale = worldTransform.to_scale()
     func(' ' * depth + '  <transform x="%s" y="%s" z="%s" qx="%s" qy="%s" qz="%s" qw="%s" />' %
         (scale[0] * pos[0], scale[2] * pos[2], scale[1] * pos[1], quat.x, quat.z, quat.y, -quat.w))
+
     for childBone in self.children:
         childBone.AsCS(func, depth + 2, worldTransform)
 
