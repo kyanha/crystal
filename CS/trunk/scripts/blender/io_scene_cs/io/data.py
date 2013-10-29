@@ -497,15 +497,28 @@ def AsCSSkeletonModel(self, func, depth, skel):
             
         #TODO: Export proper joint constraints    
         #Use blender's limit rotation bone constraint
+        angles = [x for x in skel.pose.bones[bone.name].constraints if x.type=='LIMIT_ROTATION']
+        
+        if len(angles):
+            angle = angles[0]
+            xyz = [angle.use_limit_x, angle.use_limit_y, angle.use_limit_z]
+            x,y,z = map(lambda x: 'true' if x else 'false', xyz)
+            min = [angle.min_x,angle.min_z,angle.min_y]
+            max = [angle.max_x,angle.max_z,angle.max_y]
+        else:
+            x,y,z = 'false', 'false','false'
+            min = [0.0,0.0,0.0]
+            max = [0.0,0.0,0.0]
         func(' ' * depth +'''
             <joint>
               <bounce x="0.2" y="0.2" z="0.2" />
               <constraints>
                 <distance x="true" y="true" z="true" />
-                <angle x="false" y="false" z="false">
-                  <min x="-0.83" y="-0.83" z="-0.83" />
-                  <max x="0.83" y="0.83" z="0.83" />
-                </angle>
+                ''')
+        func(' ' * depth +'<angle x="%s" y="%s" z="%s">'%(x,z,y))
+        func(' ' * depth +'<min x="%f" y="%f" z="%f" />'%(min[0],min[2],min[1]))
+        func(' ' * depth +'<max x="%f" y="%f" z="%f" />'%(max[0],max[2],max[1]))
+        func('''</angle>
               </constraints>
             </joint>
         ''')
@@ -515,12 +528,16 @@ def AsCSSkeletonModel(self, func, depth, skel):
         depth = depth -2
     
     #TODO
-    func(' ' * depth +'''    
-    <chain name="all" root="gen">
-        <child name="antebrazo.L"/>
-        <child name="antebrazo.R"/>
-    </chain>
-    ''')
+    func(' ' * depth +'<chain name="all" root="gen">')
+    found = False
+    for bone in skel.pose.bones:
+        if bone.b2cs.endOfChain:
+            found = True
+            func(' ' * depth +'  <child name="%s"/>'%(bone.name))
+    if not found:
+        func(' ' * depth +'  <childall/>')
+    func(' ' * depth +'</chain>')
+
     
     func(' ' * depth +'</model>')
     func(' ' * depth +'</addon>')
@@ -712,16 +729,20 @@ def ExportCollisionBounds(bone, object, func, depth=0):
 
     dimensions = [max_x - min_x, max_y - min_y, max_z - min_z]
     print(dimensions)
-    print(old)
     print(offset)
     print(min_z)
     # dimensions = object.dimensions
     
+    offset = bone.center
     
 
     func(' ' * depth + '<collider>')
     depth = depth + 2
-    func(' ' * depth + '<!-- %s dimensions: %s %s  %s -->' %(object.name, TYPE, str(dimensions), str(offset)))
+    func(' ' * depth + '<!-- %s dimensions: %s -->' %(object.name, TYPE))
+    func(' ' * depth + '<!-- %s dimensions: %s -->' %(object.name, str(dimensions)))
+    func(' ' * depth + '<!-- %s dimensions: %s -->' %(object.name, str(loc)))
+    func(' ' * depth + '<!-- %s dimensions: %s -->' %(object.name, str(offset)))
+    func(' ' * depth + '<!-- %s dimensions: %s -->' %(object.name, str(bone.center)))
     if TYPE == 'CYLINDER':
         rad = max(dimensions[0], dimensions[1]) / 2.0
         height = dimensions[2]
