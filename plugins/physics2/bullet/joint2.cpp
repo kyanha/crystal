@@ -186,7 +186,7 @@ void csBulletJoint::SetPosition (const csVector3& position, bool forceUpdate)
     this->transform = bodies[0]->GetTransform ();
     transform.SetOrigin (position);
    
-    csBulletRigidBody* body1 = dynamic_cast<csBulletRigidBody*> (bodies[0]);
+    csBulletRigidBody* body1 = dynamic_cast<csBulletRigidBody*> (&*bodies[0]);
 
     btTransform jointTransform = CSToBullet (transform , system->GetInternalScale ());
 
@@ -294,7 +294,7 @@ bool csBulletJoint::RebuildJoint ()
   if (!(jointFlag & JOINT_SOFT))
   {
     csBulletRigidBody* body1, *body2 = nullptr;
-    body1 = dynamic_cast<csBulletRigidBody*> (bodies[0]);
+    body1 = dynamic_cast<csBulletRigidBody*> (&*bodies[0]);
 
     if (type == RIGID_PIVOT_JOINT)
       bodies[1] = nullptr;
@@ -311,7 +311,7 @@ bool csBulletJoint::RebuildJoint ()
       frA = body1->btBody->getCenterOfMassTransform ().inverse () * jointTransform;
       if (bodies[1])
       {
-        body2 = dynamic_cast<csBulletRigidBody*> (bodies[1]);
+        body2 = dynamic_cast<csBulletRigidBody*> (&*bodies[1]);
         if (!body2 || !body2->btBody)
           return false;
         frB = body2->btBody->getCenterOfMassTransform ().inverse () * jointTransform;
@@ -329,7 +329,7 @@ bool csBulletJoint::RebuildJoint ()
       btAxisA[axis] = 1.0f;
       if (bodies[1])
       {
-        body2 = dynamic_cast<csBulletRigidBody*> (bodies[1]);
+        body2 = dynamic_cast<csBulletRigidBody*> (&*bodies[1]);
         if (!body2 || !body2->btBody)
           return false;
         btVector3 btPivotB = frB.getOrigin ();
@@ -348,7 +348,7 @@ bool csBulletJoint::RebuildJoint ()
       btGeneric6DofConstraint* dofJoint;
       if (bodies[1])
       {
-        body2 = dynamic_cast<csBulletRigidBody*> (bodies[1]);
+        body2 = dynamic_cast<csBulletRigidBody*> (&*bodies[1]);
         if (!body2 || !body2->btBody)
           return false;
 
@@ -592,10 +592,10 @@ void csBulletJoint::AddBulletJoint ()
   if (jointFlag & JOINT_INSIDE_WORLD)
     RemoveBulletJoint ();
 
-  csBulletCollisionObject *collBody1 = dynamic_cast<csBulletCollisionObject*> (bodies[0]);
+  csBulletCollisionObject *collBody1 = dynamic_cast<csBulletCollisionObject*> (&*bodies[0]);
   csBulletCollisionObject* collBody2 = nullptr;
   if (bodies[1])
-    collBody2 = dynamic_cast<csBulletCollisionObject*> (bodies[1]);
+    collBody2 = dynamic_cast<csBulletCollisionObject*> (&*bodies[1]);
   if (collBody1->sector != sector)
     system->ReportWarning ("Can not attach a joint to bodies in different sectors.");
   else if (collBody2 && (collBody2->sector != sector))
@@ -612,7 +612,7 @@ void csBulletJoint::AddBulletJoint ()
   }
   else
   {
-    csBulletSoftBody* body = dynamic_cast<csBulletSoftBody*> (bodies[0]);
+    csBulletSoftBody* body = dynamic_cast<csBulletSoftBody*> (&*bodies[0]);
     if (!body->GetClusterCollisionRS () && !body->GetClusterCollisionSS ())
       return;
 
@@ -624,12 +624,12 @@ void csBulletJoint::AddBulletJoint ()
       lspecs.position = CSToBullet (position, system->GetInternalScale ());
       if (bodies[1]->QueryRigidBody ())
       {  
-        csBulletRigidBody* body2 = dynamic_cast<csBulletRigidBody*> (bodies[1]);
+        csBulletRigidBody* body2 = dynamic_cast<csBulletRigidBody*> (&*bodies[1]);
         body->btBody->appendLinearJoint (lspecs, body2->btBody);
       }
       else
       {
-        csBulletSoftBody* body2 = dynamic_cast<csBulletSoftBody*> (bodies[1]);
+        csBulletSoftBody* body2 = dynamic_cast<csBulletSoftBody*> (&*bodies[1]);
         if (!body2->GetClusterCollisionRS () && !body2->GetClusterCollisionSS ())
           return;
         body->btBody->appendLinearJoint (lspecs, body2->btBody);
@@ -650,12 +650,12 @@ void csBulletJoint::AddBulletJoint ()
 
       if (bodies[1]->QueryRigidBody ())
       {  
-        csBulletRigidBody* body2 = dynamic_cast<csBulletRigidBody*> (bodies[1]);
+        csBulletRigidBody* body2 = dynamic_cast<csBulletRigidBody*> (&*bodies[1]);
         body->btBody->appendAngularJoint (aspecs, body2->btBody);
       }
       else
       {
-        csBulletSoftBody* body2 = dynamic_cast<csBulletSoftBody*> (bodies[1]);
+        csBulletSoftBody* body2 = dynamic_cast<csBulletSoftBody*> (&*bodies[1]);
         if (!body2->GetClusterCollisionRS () && !body2->GetClusterCollisionSS ())
           return;
         body->btBody->appendAngularJoint (aspecs, body2->btBody);
@@ -682,7 +682,7 @@ void csBulletJoint::RemoveBulletJoint ()
     }
     if (softJoint)
     {
-      csBulletSoftBody* body = dynamic_cast<csBulletSoftBody*> (bodies[0]);
+      csBulletSoftBody* body = dynamic_cast<csBulletSoftBody*> (&*bodies[0]);
       body->btBody->m_joints.remove (softJoint);
       softJoint = nullptr;
     }
@@ -690,11 +690,11 @@ void csBulletJoint::RemoveBulletJoint ()
     jointFlag &= ~(JOINT_INSIDE_WORLD | JOINT_POSITION | JOINT_TRANSFORM);
     sector = nullptr;
 
-    csBulletCollisionObject *collBody1 = dynamic_cast<csBulletCollisionObject*> (bodies[0]);
+    csBulletCollisionObject *collBody1 = dynamic_cast<csBulletCollisionObject*> (&*bodies[0]);
     collBody1->joints.Delete (this);
     if (bodies[1])
     {  
-      csBulletCollisionObject* collBody2 = dynamic_cast<csBulletCollisionObject*> (bodies[1]);
+      csBulletCollisionObject* collBody2 = dynamic_cast<csBulletCollisionObject*> (&*bodies[1]);
       collBody2->joints.Delete (this);
     }
   }

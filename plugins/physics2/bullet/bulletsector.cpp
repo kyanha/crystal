@@ -450,11 +450,11 @@ CS_PLUGIN_NAMESPACE_BEGIN (Bullet2)
     // re-activate the now free bodies
     if (csJoint->bodies[0])
     {
-      dynamic_cast<csBulletCollisionObject*> (csJoint->bodies[0])->btObject->activate (true);
+      dynamic_cast<csBulletCollisionObject*> (&*csJoint->bodies[0])->btObject->activate (true);
     }
     if (csJoint->bodies[1])
     {
-      dynamic_cast<csBulletCollisionObject*> (csJoint->bodies[1])->btObject->activate (true);
+      dynamic_cast<csBulletCollisionObject*> (&*csJoint->bodies[1])->btObject->activate (true);
     }
 
     csJoint->RemoveBulletJoint ();
