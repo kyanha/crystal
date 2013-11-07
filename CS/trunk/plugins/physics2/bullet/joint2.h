@@ -229,7 +229,7 @@ private:
   csJointType type;
   btTypedConstraint* rigidJoint;
   btSoftBody::Joint* softJoint;
-  CS::Physics::iPhysicalBody* bodies[2];
+  csRef<CS::Physics::iPhysicalBody> bodies[2];
   float threshold;
   int axis;
 
