@@ -736,11 +736,11 @@ namespace Geometry
       for(int i = 0; i < 3; ++i)
       {
 	// validate minimum is normal
-	float min = obj->GetMin(i);
+	float min = obj->GetBBox().GetMin(i);
 	CS_ASSERT(CS::IsFinite(min) && !CS::IsNaN(min));
 
 	// validate maximum is normal
-	float max = obj->GetMax(i);
+	float max = obj->GetBBox().GetMax(i);
 	CS_ASSERT(CS::IsFinite(max) && !CS::IsNaN(max));
 
 	// validate minimum is smaller than maximum
