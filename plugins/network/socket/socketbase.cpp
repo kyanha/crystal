@@ -23,7 +23,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(Socket)
   namespace Platform
   {
 #   ifdef CS_PLATFORM_WIN32
-    static Socket const invalidSocket = INVALID_SOCKET;
+    extern Socket const invalidSocket = INVALID_SOCKET;
 
     // initialize winsocks version 2.2
     bool Initialize()

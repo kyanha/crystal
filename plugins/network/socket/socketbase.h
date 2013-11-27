@@ -24,6 +24,7 @@
 #ifdef CS_PLATFORM_WIN32
 // only include winsocks, not whole windows.h
 # define _INC_WINDOWS
+#define _WIN32_WINNT 0x0501
 // include winsocks
 # include <winsock2.h>
 # include <ws2tcpip.h>
