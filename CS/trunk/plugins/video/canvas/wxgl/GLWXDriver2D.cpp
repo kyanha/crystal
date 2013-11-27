@@ -87,16 +87,16 @@ void csGraphics2DWX::AlertV (int type, const char* title,
   {
     case CS_ALERT_ERROR:
       wxMessageBox (wxString::FromUTF8 (message), wxT("Error!"),
-	  wxICON_ERROR, myParent);
+	  wxICON_ERROR | wxOK, myParent);
       break;
     case CS_ALERT_WARNING:
       wxMessageBox (wxString::FromUTF8 (message), wxT("Warning!"),
-	  wxICON_EXCLAMATION, myParent);
+	  wxICON_EXCLAMATION | wxOK, myParent);
       break;
     default:
     case CS_ALERT_NOTE:
       wxMessageBox (wxString::FromUTF8 (message), wxT("Note!"),
-	  wxICON_INFORMATION, myParent);
+	  wxICON_INFORMATION | wxOK, myParent);
       break;
   }
 }
