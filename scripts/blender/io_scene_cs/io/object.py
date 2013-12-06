@@ -730,12 +730,69 @@ def ObjectAsCS(self, func, depth=0, **kwargs):
         if 'transform' in kwargs:
             matrix = kwargs['transform'] * matrix
 
+        color = self.data.color
         func(' ' * depth + '<light name="%s">' % (name))
-        func(' ' * depth + '  <color red="%f" green="%f" blue="%f" />' %
-             tuple(self.data.color))
-        func(' ' * depth + '  <radius>%f</radius>' % (self.data.distance * 2))
-        func(' ' * depth + '  <attenuation>linear</attenuation>')  # TODO
 
+        # Attenuations types
+        if self.data.type == 'POINT' or self.data.type == 'SPOT' :
+
+            if self.data.falloff_type == 'LINEAR_QUADRATIC_WEIGHTED':
+                if self.data.quadratic_attenuation < 0.000001:
+                    color *= self.data.energy
+                    color *= self.data.distance
+                    func(' ' * depth + '  <attenuation c="%f" l="%f" q="%f">clq</attenuation>' %
+                         (self.data.distance, self.data.linear_attenuation, 0))
+
+                elif self.data.linear_attenuation < 0.000001:
+                    color *= self.data.energy
+                    color *= self.data.distance * self.data.distance
+                    func(' ' * depth + '  <attenuation c="%f" l="%f" q="%f">clq</attenuation>' %
+                         (self.data.distance * self.data.distance, 0, self.data.quadratic_attenuation))
+
+                else:
+                    print("WARNING: Composition of linear and quadratic terms are not allowed for the falloff type of the light '%s'" %
+                          (name))
+
+                # Fallback on either linear or quadratic
+                    if self.data.linear_attenuation > self.data.quadratic_attenuation:
+                        color *= self.data.energy
+                        color *= self.data.distance
+                        func(' ' * depth + '  <attenuation c="%f" l="%f" q="%f">clq</attenuation>' %
+                             (self.data.distance, self.data.linear_attenuation, 0))
+
+                    else:
+                        color *= self.data.energy
+                        color *= self.data.distance * self.data.distance
+                        func(' ' * depth + '  <attenuation c="%f" l="%f" q="%f">clq</attenuation>' %
+                             (self.data.distance * self.data.distance, 0, self.data.quadratic_attenuation))
+
+            elif self.data.falloff_type == 'INVERSE_LINEAR':
+                color *= self.data.energy
+                color *= self.data.distance
+                func(' ' * depth + '  <attenuation c="%f" l="%f" q="%f">clq</attenuation>' %
+                     (self.data.distance, self.data.linear_attenuation, 0))
+
+            elif self.data.falloff_type == 'INVERSE_SQUARE':
+                color *= self.data.energy
+                color *= self.data.distance * self.data.distance
+                func(' ' * depth + '  <attenuation c="%f" l="%f" q="%f">clq</attenuation>' %
+                     (self.data.distance * self.data.distance, 0, self.data.quadratic_attenuation))
+
+            elif self.data.falloff_type == 'CONSTANT':
+                func(' ' * depth + '  <attenuation>none</attenuation>')
+
+            else:
+                print("WARNING: The falloff type of the light '%s' is not supported" % (name))
+
+            if self.data.use_sphere:
+                func(' ' * depth + '  <radius>%f</radius>' % (self.data.distance))
+
+            else:
+                func(' ' * depth + '  <radius>%f</radius>' % (self.data.distance * 4))
+
+        # Other light parameters
+        func(' ' * depth + '  <color red="%f" green="%f" blue="%f" />' % tuple(color))
+        
         # Conversion of the light transform from Blender to CS:
         # - In Blender, a light with an identity transform will look down although
         #   it will look backward in CS (hence a rotation of 90 degree).
@@ -749,7 +806,8 @@ def ObjectAsCS(self, func, depth=0, **kwargs):
         matrix = rotationX * matrix.inverted()
         matrix.translation = origin
 
-        if not self.data.use_shadow:
+        # For some reason, the 'use_shadow' property does not appear for the 'HEMI' lamp type
+        if self.data.type != 'HEMI' and not self.data.use_shadow:
             func(' ' * depth + '  <noshadows />')
 
         if self.data.type == 'SPOT':
@@ -770,10 +828,13 @@ def ObjectAsCS(self, func, depth=0, **kwargs):
             MatrixAsCS(matrix, func, depth + 2,
                        noScale=True, noTranslation=False)
 
-        else:
+        elif self.data.type == 'POINT':
             # Flip Y and Z axis.
             func(' ' * depth + '  <center x="%f" z="%f" y="%f" />' %
                  tuple(matrix.to_translation()))
+
+        else:
+            print("WARNING: The type of the light '%s' is not supported" % (name))
 
         if len(self.children):  # TODO: only support first child, perhaps merge the meshes?
             data = self.children[0].data
