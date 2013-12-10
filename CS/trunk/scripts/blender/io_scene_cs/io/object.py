@@ -730,7 +730,7 @@ def ObjectAsCS(self, func, depth=0, **kwargs):
         if 'transform' in kwargs:
             matrix = kwargs['transform'] * matrix
 
-        color = self.data.color
+        color = Color (self.data.color)
         func(' ' * depth + '<light name="%s">' % (name))
 
         # Attenuations types
@@ -741,13 +741,13 @@ def ObjectAsCS(self, func, depth=0, **kwargs):
                     color *= self.data.energy
                     color *= self.data.distance
                     func(' ' * depth + '  <attenuation c="%f" l="%f" q="%f">clq</attenuation>' %
-                         (self.data.distance, self.data.linear_attenuation, 0))
+                         (self.data.distance, self.data.linear_attenuation, 0.0))
 
                 elif self.data.linear_attenuation < 0.000001:
                     color *= self.data.energy
                     color *= self.data.distance * self.data.distance
                     func(' ' * depth + '  <attenuation c="%f" l="%f" q="%f">clq</attenuation>' %
-                         (self.data.distance * self.data.distance, 0, self.data.quadratic_attenuation))
+                         (self.data.distance * self.data.distance, 0.0, self.data.quadratic_attenuation))
 
                 else:
                     print("WARNING: Composition of linear and quadratic terms are not allowed for the falloff type of the light '%s'" %
@@ -758,25 +758,25 @@ def ObjectAsCS(self, func, depth=0, **kwargs):
                         color *= self.data.energy
                         color *= self.data.distance
                         func(' ' * depth + '  <attenuation c="%f" l="%f" q="%f">clq</attenuation>' %
-                             (self.data.distance, self.data.linear_attenuation, 0))
+                             (self.data.distance, self.data.linear_attenuation, 0.0))
 
                     else:
                         color *= self.data.energy
                         color *= self.data.distance * self.data.distance
                         func(' ' * depth + '  <attenuation c="%f" l="%f" q="%f">clq</attenuation>' %
-                             (self.data.distance * self.data.distance, 0, self.data.quadratic_attenuation))
+                             (self.data.distance * self.data.distance, 0.0, self.data.quadratic_attenuation))
 
             elif self.data.falloff_type == 'INVERSE_LINEAR':
                 color *= self.data.energy
                 color *= self.data.distance
                 func(' ' * depth + '  <attenuation c="%f" l="%f" q="%f">clq</attenuation>' %
-                     (self.data.distance, self.data.linear_attenuation, 0))
+                     (self.data.distance, 1.0, 0.0))
 
             elif self.data.falloff_type == 'INVERSE_SQUARE':
                 color *= self.data.energy
                 color *= self.data.distance * self.data.distance
                 func(' ' * depth + '  <attenuation c="%f" l="%f" q="%f">clq</attenuation>' %
-                     (self.data.distance * self.data.distance, 0, self.data.quadratic_attenuation))
+                     (self.data.distance * self.data.distance, 0.0, 1.0))
 
             elif self.data.falloff_type == 'CONSTANT':
                 func(' ' * depth + '  <attenuation>none</attenuation>')
@@ -790,9 +790,6 @@ def ObjectAsCS(self, func, depth=0, **kwargs):
             else:
                 func(' ' * depth + '  <radius>%f</radius>' % (self.data.distance * 4))
 
-        # Other light parameters
-        func(' ' * depth + '  <color red="%f" green="%f" blue="%f" />' % tuple(color))
-        
         # Conversion of the light transform from Blender to CS:
         # - In Blender, a light with an identity transform will look down although
         #   it will look backward in CS (hence a rotation of 90 degree).
@@ -824,7 +821,10 @@ def ObjectAsCS(self, func, depth=0, **kwargs):
                  (inner, outer))
 
         elif self.data.type == 'SUN':
+            color *= self.data.energy
             func(' ' * depth + '  <type>directional</type>')
+            # TODO: A radius of 10 000 is not always suited
+            func(' ' * depth + '  <radius>10000.0</radius>')
             MatrixAsCS(matrix, func, depth + 2,
                        noScale=True, noTranslation=False)
 
@@ -836,6 +836,8 @@ def ObjectAsCS(self, func, depth=0, **kwargs):
         else:
             print("WARNING: The type of the light '%s' is not supported" % (name))
 
+        func(' ' * depth + '  <color red="%f" green="%f" blue="%f" />' % tuple(color))
+        
         if len(self.children):  # TODO: only support first child, perhaps merge the meshes?
             data = self.children[0].data
             data.calc_tessface()
