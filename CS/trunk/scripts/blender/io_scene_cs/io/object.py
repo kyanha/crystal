@@ -1,5 +1,6 @@
 import bpy
 from mathutils import *
+import math
 
 import os
 
@@ -726,11 +727,14 @@ def ObjectAsCS(self, func, depth=0, **kwargs):
 
     elif self.type == 'LAMP':
 
-        matrix = self.relative_matrix
-        if 'transform' in kwargs:
-            matrix = kwargs['transform'] * matrix
-
         color = Color (self.data.color)
+
+        # Removal of the gamma color correction made by Blender
+        import math
+        color[0] = math.sqrt(color[0]);
+        color[1] = math.sqrt(color[1]);
+        color[2] = math.sqrt(color[2]);
+
         func(' ' * depth + '<light name="%s">' % (name))
 
         # Attenuations types
@@ -753,14 +757,16 @@ def ObjectAsCS(self, func, depth=0, **kwargs):
                     print("WARNING: Composition of linear and quadratic terms are not allowed for the falloff type of the light '%s'" %
                           (name))
 
-                # Fallback on either linear or quadratic
+                    # Fallback on either linear or quadratic
                     if self.data.linear_attenuation > self.data.quadratic_attenuation:
+                        print("Falling back to linear attenuation")
                         color *= self.data.energy
                         color *= self.data.distance
                         func(' ' * depth + '  <attenuation c="%f" l="%f" q="%f">clq</attenuation>' %
                              (self.data.distance, self.data.linear_attenuation, 0.0))
 
                     else:
+                        print("Falling back to quadratic attenuation")
                         color *= self.data.energy
                         color *= self.data.distance * self.data.distance
                         func(' ' * depth + '  <attenuation c="%f" l="%f" q="%f">clq</attenuation>' %
@@ -796,6 +802,10 @@ def ObjectAsCS(self, func, depth=0, **kwargs):
         # - In Blender, the rotation part of the transform appears to be from lamp to
         #   world, although the translation is from world to lamp. Hence an inversion
         #   of the rotation part.
+        matrix = self.relative_matrix
+        if 'transform' in kwargs:
+            matrix = kwargs['transform'] * matrix
+
         import mathutils
         import math
         rotationX = mathutils.Matrix.Rotation(math.radians(90.0), 4, 'X')
@@ -825,6 +835,7 @@ def ObjectAsCS(self, func, depth=0, **kwargs):
             func(' ' * depth + '  <type>directional</type>')
             # TODO: A radius of 10 000 is not always suited
             func(' ' * depth + '  <radius>10000.0</radius>')
+            func(' ' * depth + '  <attenuation>none</attenuation>')
             MatrixAsCS(matrix, func, depth + 2,
                        noScale=True, noTranslation=False)
 
