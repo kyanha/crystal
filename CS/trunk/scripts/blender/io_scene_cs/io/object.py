@@ -690,9 +690,11 @@ def ObjectAsCS(self, func, depth=0, **kwargs):
             if self.parent and self.parent_type == 'BONE':
                 matrix = self.matrix_world
             else:
-                matrix = self.relative_matrix
                 if 'transform' in kwargs:
-                    matrix = kwargs['transform'] * matrix
+                    matrix = kwargs['transform']
+                else:
+                    matrix = self.relative_matrix
+
             MatrixAsCS(matrix, func, depth + 2, noScale=not isValidRef)
 
             if isValidRef:
@@ -883,16 +885,16 @@ def ObjectAsCS(self, func, depth=0, **kwargs):
         if self.dupli_type == 'GROUP' and self.dupli_group:
             if self.dupli_group.b2cs.doMerge:
                 self.dupli_group.AsCS(
-                    func, depth, transform=self.relative_matrix)
+                    func, depth, transform=self.matrix_world)
             else:
                 for ob in self.dupli_group.objects:
                     if not ob.parent:
                         ob.AsCS(
-                            func, depth, transform=self.relative_matrix, name=self.uname)
+                            func, depth, transform=self.matrix_world, name=self.uname)
         else:
             func(' ' * depth + '<node name="%s">' % (name))
             func(' ' * depth + '  <position x="%f" z="%f" y="%f" />' %
-                 tuple(self.relative_matrix.to_translation()))
+                 tuple(self.matrix_world.to_translation()))
             func(' ' * depth + '</node>')
 
         # TODO: really put everything on the top level??
@@ -900,7 +902,7 @@ def ObjectAsCS(self, func, depth=0, **kwargs):
         for obj in self.children:
             if obj.IsExportable():
                 obj.AsCS(
-                    func, depth, transform=self.relative_matrix, name=self.uname)
+                    func, depth, transform=self.matrix_world, name=self.uname)
 
     elif self.type != 'CAMERA' and self.type != 'CURVE':
         print("WARNING: Object '%s' of type '%s' is not supported!" %
