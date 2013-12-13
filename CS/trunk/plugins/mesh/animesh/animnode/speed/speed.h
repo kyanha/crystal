@@ -53,7 +53,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(SpeedNode)
     virtual CS::Animation::iSkeletonAnimNodeFactory* FindNode (const char* name);
 
   private:
-    SpeedNodeManager* manager;
+    csRef<SpeedNodeManager> manager;
     csString name;
     csRefArray<CS::Animation::iSkeletonAnimNodeFactory> subFactories;
     csArray<float> speedList;

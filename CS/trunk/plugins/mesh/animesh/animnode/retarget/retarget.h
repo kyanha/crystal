@@ -65,7 +65,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(Retarget)
     virtual CS::Animation::iSkeletonAnimNodeFactory* FindNode (const char* name);
 
   protected:
-    RetargetNodeManager* manager;
+    csRef<RetargetNodeManager> manager;
     csString name;
     csRef<CS::Animation::iSkeletonAnimNodeFactory> childNode;
     csRef<CS::Animation::iSkeletonFactory> sourceSkeleton;

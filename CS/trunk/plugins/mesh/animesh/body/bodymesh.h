@@ -224,7 +224,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(Bodymesh)
 				       size_t index);
 
     csString name;
-    BodyManager* manager;
+    csRef<BodyManager> manager;
     // This is a weakref to avoid circular references between animesh,
     // body skeleton and animation nodes
     csWeakRef<CS::Animation::iSkeletonFactory> skeletonFactory;

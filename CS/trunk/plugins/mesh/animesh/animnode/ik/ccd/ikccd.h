@@ -85,7 +85,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(IKCCD)
       CS::Animation::iSkeletonAnimPacket* packet, CS::Animation::iSkeleton* skeleton);
 
   protected:
-    IKCCDNodeManager* manager;
+    csRef<IKCCDNodeManager> manager;
     csRef<CS::Animation::iBodySkeleton> bodySkeleton;
     csHash<EffectorData, CS::Animation::EffectorID> effectors;
     CS::Animation::EffectorID maxEffectorID;

@@ -71,7 +71,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(LookAt)
     csPtr<CS::Animation::SkeletonAnimNodeSingleBase> ActualCreateInstance (
       CS::Animation::iSkeletonAnimPacket* packet, CS::Animation::iSkeleton* skeleton);
   protected:
-    LookAtNodeManager* manager;
+    csRef<LookAtNodeManager> manager;
     csRef<CS::Animation::iBodySkeleton> skeleton;
     CS::Animation::BoneID boneID;
     csRef<CS::Animation::iBodyBoneJoint> bodyJoint;

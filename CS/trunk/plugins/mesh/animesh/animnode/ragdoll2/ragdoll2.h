@@ -69,7 +69,7 @@ CS_PLUGIN_NAMESPACE_BEGIN (Ragdoll2)
       CS::Animation::iSkeletonAnimPacket* packet, CS::Animation::iSkeleton* skeleton);
 
   protected:
-    Ragdoll2NodeManager* manager;
+    csRef<Ragdoll2NodeManager> manager;
     csWeakRef<CS::Physics::iPhysicalSystem> physicalSystem;
     csArray<ChainData> chains;
     CS::Animation::BoneID ragdollRoot;
