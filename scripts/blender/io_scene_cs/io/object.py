@@ -605,7 +605,7 @@ def AsCSGenmeshLib(self, func, depth=0, **kwargs):
 
     func(' ' * depth + '  </params>')
 
-    # physics
+    # Physics
     print("physics %s" % (self.game.physics_type))
     if self.hasSupportedPhysicsEnabled():  # and bpy.context.scene.HasBulletPhysicsEnabled():
         func(' ' * depth + ' <addon plugin="crystalspace.physics.loader">')
@@ -815,10 +815,12 @@ def ObjectAsCS(self, func, depth=0, **kwargs):
         matrix = rotationX * matrix.inverted()
         matrix.translation = origin
 
+        # Shadow properties
         # For some reason, the 'use_shadow' property does not appear for the 'HEMI' lamp type
         if self.data.type != 'HEMI' and not self.data.use_shadow:
             func(' ' * depth + '  <noshadows />')
 
+        # Other specific light type properties
         if self.data.type == 'SPOT':
             func(' ' * depth + '  <type>spot</type>')
 
@@ -829,7 +831,7 @@ def ObjectAsCS(self, func, depth=0, **kwargs):
             outer = math.degrees(self.data.spot_size) / \
                 2  # Blender specifies the lit angle, CS has outer to center as angle
             inner = outer - (outer * self.data.spot_blend)
-            func(' ' * depth + ' <spotlightfalloff inner="%f" outer="%f" />' %
+            func(' ' * depth + '  <spotlightfalloff inner="%f" outer="%f" />' %
                  (inner, outer))
 
         elif self.data.type == 'SUN':
@@ -837,7 +839,6 @@ def ObjectAsCS(self, func, depth=0, **kwargs):
             func(' ' * depth + '  <type>directional</type>')
             # TODO: A radius of 10 000 is not always suited
             func(' ' * depth + '  <radius>10000.0</radius>')
-            func(' ' * depth + '  <attenuation>none</attenuation>')
             MatrixAsCS(matrix, func, depth + 2,
                        noScale=True, noTranslation=False)
 
@@ -848,9 +849,10 @@ def ObjectAsCS(self, func, depth=0, **kwargs):
 
         else:
             print("WARNING: The type of the light '%s' is not supported" % (name))
-
-        func(' ' * depth + '  <color red="%f" green="%f" blue="%f" />' % tuple(color))
         
+        func(' ' * depth + '  <color red="%f" green="%f" blue="%f" />' % tuple(color))
+
+        # Trimesh data of the light
         if len(self.children):  # TODO: only support first child, perhaps merge the meshes?
             data = self.children[0].data
             data.calc_tessface()
