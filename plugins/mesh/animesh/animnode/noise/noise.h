@@ -73,7 +73,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(NoiseNode)
       CS::Animation::iSkeletonAnimPacket* packet, CS::Animation::iSkeleton* skeleton);
 
   private:
-    NoiseNodeManager* manager;
+    csRef<NoiseNodeManager> manager;
     csRefArray<CS::Animation::SkeletonNoise> skeletonNoises;
     csArray<BoneNoise> boneNoises;
 

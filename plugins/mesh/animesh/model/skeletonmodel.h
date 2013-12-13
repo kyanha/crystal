@@ -102,7 +102,7 @@ CS_PLUGIN_NAMESPACE_BEGIN (SkeletonModel)
 				   const csArray<CS::Animation::BoneID> &bones,
 				   size_t index);
 
-    ModelManager* manager;
+    csRef<ModelManager> manager;
     // This is a weakref in order to avoid circular references between animesh,
     // skeleton model and animation nodes
     csWeakRef<CS::Animation::iSkeletonFactory> skeletonFactory;

@@ -77,7 +77,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(IKPhysical)
     csPtr<CS::Animation::SkeletonAnimNodeSingleBase> ActualCreateInstance (
       CS::Animation::iSkeletonAnimPacket* packet, CS::Animation::iSkeleton* skeleton);
   protected:
-    IKPhysicalNodeManager* manager;
+    csRef<IKPhysicalNodeManager> manager;
     csRef<CS::Animation::iBodySkeleton> bodySkeleton;
     csHash<EffectorData, CS::Animation::EffectorID> effectors;
     CS::Animation::EffectorID maxEffectorID;

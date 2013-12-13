@@ -75,7 +75,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(DebugNode)
     csPtr<CS::Animation::SkeletonAnimNodeSingleBase> ActualCreateInstance (
       CS::Animation::iSkeletonAnimPacket* packet, CS::Animation::iSkeleton* skeleton);
   private:
-    DebugNodeManager* manager;
+    csRef<DebugNodeManager> manager;
     CS::Animation::SkeletonDebugMode modes;
     csPixmap* image;
     bool boneMaskUsed;

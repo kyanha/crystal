@@ -125,7 +125,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(DebugDynamics)
       csRef<BoneKinematicCallback> callback;
     };
 
-    DebuggerManager* manager;
+    csRef<DebuggerManager> manager;
     csRef<iDynamicSystem> system;
     csRef<iSector> sector;
     csRef<iMaterialWrapper> materials[3];

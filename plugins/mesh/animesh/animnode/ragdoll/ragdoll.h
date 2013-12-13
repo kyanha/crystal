@@ -73,7 +73,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(Ragdoll)
     csPtr<CS::Animation::SkeletonAnimNodeSingleBase> ActualCreateInstance (
       CS::Animation::iSkeletonAnimPacket* packet, CS::Animation::iSkeleton* skeleton);
   protected:
-    RagdollNodeManager* manager;
+    csRef<RagdollNodeManager> manager;
     csRef<CS::Animation::iBodySkeleton> bodySkeleton;
     csArray<ChainData> chains;
     CS::Animation::BoneID ragdollRoot;
