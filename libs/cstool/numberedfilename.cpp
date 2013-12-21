@@ -37,48 +37,51 @@ namespace CS
       const char* pos = mask;
       while (pos)
       {
-	const char* percent = strchr (pos, '%');
-	if (percent)
-	{
-	  sanitizedMask.Append (pos, percent-pos);
-	  sanitizedMask.Append ("%%");
-	  pos = percent + 1;
-	}
-	else
-	{
-	  sanitizedMask.Append (pos);
-	  pos = 0;
-	}
+        const char* percent = strchr (pos, '%');
+        if (percent)
+        {
+          sanitizedMask.Append (pos, percent-pos);
+          sanitizedMask.Append ("%%");
+          pos = percent + 1;
+        }
+        else
+        {
+          sanitizedMask.Append (pos);
+          pos = 0;
+        }
       }
     }
     // scan for the rightmost string of digits
     // and create an appropriate format string
     {
       uint formatNumberDigits = 0;
-  
-      size_t end = sanitizedMask.Length();
+
+      // we should not replace digits in extension (e.g. mp4 should not became mp0)
+      size_t end = sanitizedMask.FindLast ('.');
+      if (end == (size_t)-1) // if there is no extension then search in the whole string
+        end = sanitizedMask.Length();
       while ((end > 0) && (!isdigit (sanitizedMask[end-1])))
       {
-	end--;
+        end--;
       }
       if (end > 0)
       {
-	while ((end > 0) && (isdigit (sanitizedMask[end-1])))
-	{
-	  formatNumberDigits++; 
-	  end--;
-	}
+        while ((end > 0) && (isdigit (sanitizedMask[end-1])))
+        {
+          formatNumberDigits++; 
+          end--;
+        }
 	
-	csString nameForm;
-	nameForm.Format ("%%0%uu", formatNumberDigits);
+        csString nameForm;
+        nameForm.Format ("%%0%uu", formatNumberDigits);
 
-	format.Replace (sanitizedMask, end);
-	format.Append (nameForm);
-	format.Append (sanitizedMask.Slice (end+formatNumberDigits));
+        format.Replace (sanitizedMask, end);
+        format.Append (nameForm);
+        format.Append (sanitizedMask.Slice (end+formatNumberDigits));
       }
       else
       {
-	format = sanitizedMask;
+        format = sanitizedMask;
         size_t dot = sanitizedMask.FindLast ('.');
         if (dot != (size_t)-1)
         {

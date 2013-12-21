@@ -98,6 +98,16 @@ public:
 
   /// Unregister a previously registered callback component 
   virtual bool UnregisterCallback(iSndSysRendererCallback *pCallback);
+  
+  /// Is this loopback interface?
+  virtual bool IsLoopback();
+
+   /// Get format used by FillDriverBuffer()
+  virtual void GetLoopbackFormat(csSndSysSoundFormat* pFormat);
+
+  /// Get sound data
+  virtual size_t FillDriverBuffer(void *buf1, size_t buf1_len,
+      void *buf2, size_t buf2_len);
 
   /*
    * iSndSysRendererOpenAL interface
@@ -141,6 +151,9 @@ private:
   /// Configuration access
   csConfigAccess m_Config;
 
+  /// Application should extract sound by itself (using FillDriverBuffer())
+  bool m_IsLoopback;
+  
   /// ID of the 'Open' event fired on system startup
   csEventID evSystemOpen;
   /// ID of the 'Close' event fired on system shutdown

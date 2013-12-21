@@ -89,6 +89,20 @@ struct iSndSysRenderer : public virtual iBase
 
   /// Unregister a previously registered callback component 
   virtual bool UnregisterCallback(iSndSysRendererCallback *pCallback) = 0;
+
+  /// If this is loopback then sound is not rendered and
+  /// application should use FillDriverBuffer() to get sound samples.
+  /// This is used by videorecorder to record sound.
+  virtual bool IsLoopback() = 0;
+
+  /// Get format used by FillDriverBuffer()
+  virtual void GetLoopbackFormat(csSndSysSoundFormat* pFormat) = 0;
+
+  /// Get sound data. In software renderer it is called by the driver
+  /// thread to request sound data. Videorecorder use it to grab sound.
+  /// Second buffer is necessary if you want to read in circullar buffer.
+  virtual size_t FillDriverBuffer(void *buf1, size_t buf1_len,
+    void *buf2, size_t buf2_len) = 0;
 };
 
 

@@ -47,7 +47,29 @@
 
 #include "al_stringlists.h"
 
+#if defined CS_HAVE_ALEXT_H
+  #if defined(CS_OPENAL_PATH)
+    #include CS_HEADER_GLOBAL(CS_OPENAL_PATH,alext.h)
+  #else
+    #include <AL/alext.h>
+  #endif
+#endif
+
 extern "C" int libopenal_is_present;
+
+#ifndef ALC_FORMAT_CHANNELS_SOFT
+  typedef ALCdevice* (ALC_APIENTRY*LPALCLOOPBACKOPENDEVICESOFT)(const ALCchar*);
+  typedef ALCboolean (ALC_APIENTRY*LPALCISRENDERFORMATSUPPORTEDSOFT)(ALCdevice*,ALCsizei,ALCenum,ALCenum);
+  typedef void (ALC_APIENTRY*LPALCRENDERSAMPLESSOFT)(ALCdevice*,ALCvoid*,ALCsizei);
+  #define ALC_FORMAT_CHANNELS_SOFT                 0x1990
+  #define ALC_FORMAT_TYPE_SOFT                     0x1991
+  #define ALC_SHORT_SOFT                           0x1402
+  #define ALC_STEREO_SOFT                          0x1501
+#endif
+// functions for OpenAL extesnion ALC_SOFT_loopback
+LPALCLOOPBACKOPENDEVICESOFT palcLoopbackOpenDeviceSOFT = NULL;
+LPALCISRENDERFORMATSUPPORTEDSOFT palcIsRenderFormatSupportedSOFT = NULL;
+LPALCRENDERSAMPLESSOFT palcRenderSamplesSOFT = NULL;
 
 SCF_IMPLEMENT_FACTORY (csSndSysRendererOpenAL)
 
@@ -83,6 +105,20 @@ bool csSndSysRendererOpenAL::Initialize (iObjectRegistry *obj_reg)
   // Read the config file
   m_Config.AddConfig (obj_reg, "/config/sound.cfg");
 
+  m_IsLoopback = m_Config->GetBool ("SndSys.Loopback", false);
+  
+  if (m_IsLoopback)
+  {    
+    palcLoopbackOpenDeviceSOFT = (LPALCLOOPBACKOPENDEVICESOFT)alcGetProcAddress(NULL, "alcLoopbackOpenDeviceSOFT");
+    palcIsRenderFormatSupportedSOFT = (LPALCISRENDERFORMATSUPPORTEDSOFT)alcGetProcAddress(NULL, "alcIsRenderFormatSupportedSOFT");
+    palcRenderSamplesSOFT = (LPALCRENDERSAMPLESSOFT)alcGetProcAddress(NULL, "alcRenderSamplesSOFT");
+    if (!palcLoopbackOpenDeviceSOFT || !palcIsRenderFormatSupportedSOFT || !palcRenderSamplesSOFT)
+    {
+      Report (CS_REPORTER_SEVERITY_ERROR, "Loopback is required but ALC_SOFT_loopback is not supported");
+      return false;
+    }
+  }
+
   // Get a list of OpenAL devices:
   // The spec says it's an ALCchar, but my headers include no such type.
   // The format is a series of strings separatrd by nulls, teminated by a
@@ -109,7 +145,10 @@ bool csSndSysRendererOpenAL::Initialize (iObjectRegistry *obj_reg)
     Report (CS_REPORTER_SEVERITY_DEBUG, "No device specified");
   } else {
     // Attempt to open the spcified device
-    m_Device = alcOpenDevice (device);
+    if (m_IsLoopback)
+      m_Device = palcLoopbackOpenDeviceSOFT(device);
+    else
+      m_Device = alcOpenDevice (device);
     if (m_Device == 0) {
       // Failed to open the device
       Report (CS_REPORTER_SEVERITY_WARNING, "Unable to open device %s", device);
@@ -119,7 +158,10 @@ bool csSndSysRendererOpenAL::Initialize (iObjectRegistry *obj_reg)
   // If we still don't have a device, try the default:
   if (m_Device == 0) {
     Report (CS_REPORTER_SEVERITY_DEBUG, "Falling back on default device");
-    m_Device = alcOpenDevice (0);
+    if (m_IsLoopback)
+      m_Device = palcLoopbackOpenDeviceSOFT(0);
+    else
+      m_Device = alcOpenDevice (0);
     if (m_Device == 0) {
       // Even that failed, give up.
       Report (CS_REPORTER_SEVERITY_ERROR, "Unable to open device");
@@ -430,7 +472,7 @@ void csSndSysRendererOpenAL::Open()
   alcGetError (m_Device);
 
   // Setup the attribute list for the OpenAL context
-  const ALCint attr[] =
+  const ALCint attrReal[] =
   {
     ALC_REFRESH,   m_Config->GetInt ("SndSys.OpenALRefresh", 10),    // How often do we update the mixahead buffer (hz).
     ALC_SYNC,      AL_FALSE,                                         // We want an asynchronous context.
@@ -438,6 +480,17 @@ void csSndSysRendererOpenAL::Open()
     ALC_MONO_SOURCES, 120,
     0
   };
+
+  const ALCint attrLoopback[] =
+  {
+    ALC_FORMAT_CHANNELS_SOFT,  ALC_STEREO_SOFT,
+    ALC_FORMAT_TYPE_SOFT, ALC_SHORT_SOFT,
+    ALC_FREQUENCY,  44100,
+    ALC_STEREO_SOURCES, 12,
+    ALC_MONO_SOURCES, 120,
+     0,
+  };
+
   // Note: If the sound is choppy, it may be because your OpenAL
   //       implementation does not implement async (threaded) contexts and
   //       your framerate is below SndSys.OpenALRefresh. If this is the case,
@@ -446,7 +499,7 @@ void csSndSysRendererOpenAL::Open()
   //       you may attempt to implement the async operation in CS.
 
   // Get an OpenAL context
-  m_Context = alcCreateContext (m_Device, attr);
+  m_Context = alcCreateContext (m_Device, m_IsLoopback? attrLoopback :  attrReal);
   if (m_Context == 0)
   {
     Report (CS_REPORTER_SEVERITY_ERROR, "Unable to get OpenAL context");
@@ -540,4 +593,26 @@ void csSndSysRendererOpenAL::QueryExtensions ()
   
 #undef EXT
 #undef EXTS_TO_QUERY
+}
+
+// Is this loopback interface?
+bool csSndSysRendererOpenAL::IsLoopback()
+{
+  return m_IsLoopback;
+}
+
+void csSndSysRendererOpenAL::GetLoopbackFormat(csSndSysSoundFormat* pFormat)
+{
+  pFormat->Freq = 44100;
+  pFormat->Bits = 16;
+  pFormat->Channels = 2;
+  pFormat->Flags = 0;
+}
+
+/// Get sound data. It is also called by the driver thread to request sound data.
+size_t csSndSysRendererOpenAL::FillDriverBuffer(void *buf1, size_t buf1_len, void *buf2, size_t buf2_len)
+{
+  palcRenderSamplesSOFT(m_Device, buf1, buf1_len);
+  palcRenderSamplesSOFT(m_Device, buf2, buf2_len);
+  return buf1_len + buf2_len;
 }

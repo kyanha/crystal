@@ -765,6 +765,12 @@ namespace CS
         return ss;
       }
 
+      bool Graphics2DCommon::ScreenShot (unsigned char* buffer)
+	  {
+        glReadPixels (0, 0, vpWidth, vpHeight, GL_RGBA, GL_UNSIGNED_BYTE, buffer);
+		return true;
+	  }
+
       bool Graphics2DCommon::PerformExtensionV (char const* command, va_list args)
       {
         if (!strcasecmp (command, "flush"))

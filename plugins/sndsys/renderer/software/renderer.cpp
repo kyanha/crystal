@@ -275,6 +275,8 @@ bool csSndSysRendererSoftware::Initialize (iObjectRegistry *obj_reg)
     drv = m_Config->GetStr ("SndSys.Driver", drv);
   }
 
+  m_IsLoopback = m_Config->GetBool ("SndSys.Loopback", false);
+
   // Override for explicit recorder plugin request
   const char *eventrecordername = cmdline->GetOption ("soundeventrecorder");
   if (!eventrecordername)
@@ -305,33 +307,35 @@ bool csSndSysRendererSoftware::Initialize (iObjectRegistry *obj_reg)
   RecordEvent(SSEL_DEBUG, "Event log started");
 
 
-
-  csStringBase DriverFullName;
-
-  // Try to load the specified driver exactly as specified
-  DriverFullName=drv;
-  RecordEvent(SSEL_DEBUG, "Attempting to load driver plugin [%s]", DriverFullName.GetData());
-  m_pSoundDriver = csLoadPlugin<iSndSysSoftwareDriver> (plugin_mgr,
-    DriverFullName.GetData());
-
-  // Try to load the driver with "crystalspace.sndsys.software.driver." prepended
-  if (!m_pSoundDriver)
+  if (!m_IsLoopback)
   {
-    DriverFullName.Format("crystalspace.sndsys.software.driver.%s", drv);
-    RecordEvent(SSEL_DEBUG, "Attempting to load driver plugin [%s]", DriverFullName.GetData());
-    m_pSoundDriver = csLoadPlugin<iSndSysSoftwareDriver> (plugin_mgr,
-      DriverFullName.GetData());
-  }
+      csStringBase DriverFullName;
 
-  // If we still failed, report an error
-  if (!m_pSoundDriver)
-  {
-    Report (CS_REPORTER_SEVERITY_ERROR,
-      "Failed to load driver as [%s] or [%s].", drv, DriverFullName.GetData());
-    return false;
+      // Try to load the specified driver exactly as specified
+      DriverFullName=drv;
+      RecordEvent(SSEL_DEBUG, "Attempting to load driver plugin [%s]", DriverFullName.GetData());
+      m_pSoundDriver = csLoadPlugin<iSndSysSoftwareDriver> (plugin_mgr,
+        DriverFullName.GetData());
+
+      // Try to load the driver with "crystalspace.sndsys.software.driver." prepended
+      if (!m_pSoundDriver)
+      {
+        DriverFullName.Format("crystalspace.sndsys.software.driver.%s", drv);
+        RecordEvent(SSEL_DEBUG, "Attempting to load driver plugin [%s]", DriverFullName.GetData());
+        m_pSoundDriver = csLoadPlugin<iSndSysSoftwareDriver> (plugin_mgr,
+          DriverFullName.GetData());
+      }
+
+      // If we still failed, report an error
+      if (!m_pSoundDriver)
+      {
+        Report (CS_REPORTER_SEVERITY_ERROR,
+          "Failed to load driver as [%s] or [%s].", drv, DriverFullName.GetData());
+        return false;
+      }
+      // Success
+      RecordEvent(SSEL_DEBUG, "Loaded driver plugin [%s]", DriverFullName.GetData());
   }
-  // Success
-  RecordEvent(SSEL_DEBUG, "Loaded driver plugin [%s]", DriverFullName.GetData());
 
 
   // set event callback
@@ -360,7 +364,7 @@ bool csSndSysRendererSoftware::Open ()
 
   CS_ASSERT (m_Config != 0);
 
-  if (!m_pSoundDriver) 
+  if (!m_IsLoopback && !m_pSoundDriver) 
   {
     // The sound driver probably failed to start for some reason
     RecordEvent(SSEL_ERROR, "No sound driver loaded!");
@@ -382,7 +386,7 @@ bool csSndSysRendererSoftware::Open ()
   RecordEvent(SSEL_DEBUG, "Calling SoundDriver->Open() with Freq=%dhz Channels=%d Bits per sample=%d",
                m_PlaybackFormat.Freq, m_PlaybackFormat.Channels, m_PlaybackFormat.Bits);
 
-  if (!m_pSoundDriver->Open(this, &m_PlaybackFormat))
+  if (!m_IsLoopback && !m_pSoundDriver->Open(this, &m_PlaybackFormat))
   {
     RecordEvent(SSEL_ERROR, "SoundDriver->Open() failed!");
     return false;
@@ -418,7 +422,7 @@ bool csSndSysRendererSoftware::Open ()
 
   RecordEvent(SSEL_DEBUG, "Global Volume set to %.2f (0.0 - 1.0)", m_GlobalVolume);
 
-  return m_pSoundDriver->StartThread();
+  return m_IsLoopback? true : m_pSoundDriver->StartThread();
 }
 
 void csSndSysRendererSoftware::Close ()
@@ -822,6 +826,18 @@ void csSndSysRendererSoftware::AdvanceStreams(size_t Frames)
     // This stream is still playing, advance its position
     str->AdvancePosition(Frames);
   }
+}
+
+// Is this loopback interface?
+bool csSndSysRendererSoftware::IsLoopback()
+{
+  return m_IsLoopback;
+}
+
+// Get format used by FillDriverBuffer()
+void csSndSysRendererSoftware::GetLoopbackFormat(csSndSysSoundFormat* pFormat)
+{
+  *pFormat = m_PlaybackFormat;
 }
 
 size_t csSndSysRendererSoftware::FillDriverBuffer(void *buf1, size_t buf1_frames,
