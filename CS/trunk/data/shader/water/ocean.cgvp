@@ -16,11 +16,14 @@ struct app2vert
 
 struct vert2frag
 {
-	float4 Position    	: POSITION;	
-	float4 Color	   	: COLOR;
-	float3 CamVec		: TEXCOORD0;
-	float4 TexCoord2	: TEXCOORD1;
-	float4 TexCoord3	: TEXCOORD2;
+	float4 Position      : POSITION;	
+	float4 Color	   	 : COLOR;
+	float4 PosRefl       : TEXCOORD0;
+	float4 PosRefr       : TEXCOORD1;
+	float2 NormalTC		 : TEXCOORD2; 
+	float3 Normal;
+	float4 Pos;
+	float2 o2wPos;
 };
 
 /**
@@ -47,20 +50,22 @@ float WaveDispVert(float2 k, float amp, float2 pos, float freq, float phase, flo
 
 vert2frag main (app2vert IN, 
 			 uniform float time,
+			 uniform float4 colorVer,
 			 uniform float3 amps,
 			 uniform float3 kxs,
 			 uniform float3 kys,
 			 uniform float3 freqs,
-			 uniform float3 phases,
-			 uniform float4x4 ModelViewIT : state.matrix.modelview.invtrans,
+			 uniform float3 phases, 
 			 uniform float4x4 ModelViewProj : state.matrix.mvp,
-			 uniform float4x4 o2w)
+			 uniform float4x4 o2w,
+			 uniform float4 reflectXform,
+			 uniform float4 refractXform,
+			 uniform float3 foamPoints[1000],
+			 uniform sampler2D Heightmap)
 {
     vert2frag OUT;
 
 	float4 inPos = IN.Position;
-	
-  	float4 camera = ModelViewIT[3];
 
 	//Grab xz position
 	float2 xzpos = mul(o2w, IN.Position).xz;
@@ -81,32 +86,35 @@ vert2frag main (app2vert IN,
 	float wdy3 = WaveDispVert(k, amps.z, xzpos, freqs.z, phases.z, time);
 
 	//Add all the displacements
-	inPos.x -= wdxz1.x + wdxz2.x + wdxz3.x;
-	inPos.z -= wdxz1.y + wdxz2.y + wdxz3.y;
-	inPos.y = wdy1 + wdy2 + wdy3;
-
-	//Get real position again.
-	OUT.Position = mul (ModelViewProj, inPos);
-
-	OUT.Color = IN.Color;
-	OUT.CamVec = (camera - IN.Position).xzy;
-	//OUT.CamVec = inPos.xyz;
-
-	float s1, cs1, s2, cs2;
-	float4 texCoord = mul(o2w, float4(IN.TexCoord.x, 0, IN.TexCoord.y, 1));
-	sincos (time, s1, cs1);
-	sincos (time + 1.41, s2, cs2);
-
-	OUT.TexCoord2.x = texCoord.x  - s1 * 0.1;
-	OUT.TexCoord2.y = texCoord.z  + cs1 * 0.1;
-	OUT.TexCoord2.z = 0.0;
-	OUT.TexCoord2.w = 1.0;
+	//inPos.x -= wdxz1.x + wdxz2.x + wdxz3.x;
+	//inPos.z -= wdxz1.y + wdxz2.y + wdxz3.y;
+	//inPos.y = wdy1 + wdy2 + wdy3; 
+	
+	float2 Texcord = IN.TexCoord + time;
+	inPos.y +=  tex2D(Heightmap, Texcord/256).r * 10.0  ; 
+	
+	//Get real position
+	float4 reflrefrTC = mul(ModelViewProj, inPos); 
+	float4 frTC = mul(ModelViewProj, IN.Position); 
+	OUT.Position = reflrefrTC;
+	OUT.Pos = reflrefrTC;
+	OUT.o2wPos = xzpos;
+	OUT.Normal = normalize(reflrefrTC.xyz - frTC.xyz);
+	
+	float3 reflScale = float3 (reflectXform.xy, 0.5);
+	float3 reflXlate = float3 (reflectXform.zw, -0.5) * reflrefrTC.w;
+	
+	float3 refrScale = float3 (refractXform.xy, 0.5);
+	float3 refrXlate = float3 (refractXform.zw, -0.5) * reflrefrTC.w;
 		
-	OUT.TexCoord3.x = texCoord.x + s2 * 0.1;
-	OUT.TexCoord3.y = texCoord.z - cs2 * 0.1;
-	OUT.TexCoord3.z = 0.0;
-	OUT.TexCoord3.w = 1.0;
-		
+	OUT.PosRefl.xy = reflrefrTC.xy * reflScale.xy + reflXlate.xy;
+	OUT.PosRefl.wz = reflrefrTC.wz;
+	OUT.PosRefr.xy = reflrefrTC.xy * refrScale.xy + refrXlate.xy;
+	OUT.PosRefr.wz = reflrefrTC.wz;
+
+	OUT.NormalTC = IN.TexCoord;
+	OUT.Color = colorVer;	
+	
     return OUT;
 }
 

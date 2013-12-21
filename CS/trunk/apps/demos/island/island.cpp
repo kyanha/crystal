@@ -47,7 +47,7 @@ void IslandDemo::Frame ()
   if ((inWater && camera->GetTransform ().GetOrigin ().y > WATER_LEVEL)
       || (!inWater && camera->GetTransform ().GetOrigin ().y < WATER_LEVEL))
   {
-    inWater = !inWater;
+    //inWater = !inWater;
 
     if (inWater)
       room->SetFog (0.001f, csColor (0.3f, 0.3, 0.9f));

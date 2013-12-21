@@ -13,14 +13,19 @@
   
   <shaders>
     <shader>
-      <file>/shader/water/water.xml</file>
+        <file>/shader/water/water.xml</file>
     </shader>
     <shader>
         <file>/shader/lighting/fullbright.xml</file>
     </shader>
   </shaders>
   
-  <textures>    
+  <textures> 
+
+    <texture name="bricks">
+        <file>/water/bricks.png</file>
+    </texture>
+   
     <texture name="normal map 1">
       <file>/water/723-normal.jpg</file>
     </texture>
@@ -28,10 +33,14 @@
     <texture name="normal map 2">
       <file>/water/w_normalmap.png</file>
     </texture>
-    
-    <texture name="normal map 3">
+	
+	<texture name="normal map 3">
       <file>/water/940-bump.jpg</file>
     </texture>
+    
+    <texture name="foam">
+		<file>/water/foam.jpg</file>
+	</texture>
     
     <texture name="clouds">
       <file>/lev/terrainf/clouddome.jpg</file>
@@ -60,7 +69,10 @@
   <materials>
     <material name="oceanMat">
       <shader type="standard">water</shader>
-      <shadervar name="tex normal" type="texture">normal map 2</shadervar>
+	  <shadervar name="tex normal" type="texture">normal map 3</shadervar>
+      <shadervar name="tex height" type="texture">normal map 1</shadervar>
+	  <shadervar name="tex foam" type="texture">foam</shadervar>
+	  <shadervar name="specular" type="vector4">0.7,0.85,1.0,1.0</shadervar>
     </material>
     
     <material name="clouds">
@@ -91,6 +103,11 @@
       <texture>sky_back</texture>
       <shader type="base">lighting_fullbright</shader>
      </material>
+
+   <material name="Walls">
+            <texture>bricks</texture>
+            <shader type="base">lighting_fullbright</shader>            
+      </material>
   </materials>
 
   <meshfact name="skydome">
@@ -101,6 +118,49 @@
           </sphere>
       </params>
   </meshfact>
+
+
+<meshfact name="Box01FACT">
+        <plugin>genmeshFactory</plugin>
+        <params>
+            <numtri>12</numtri>
+            <numvt>20</numvt>
+            <v x="-19.881" y="19.863" z="29.876" u="1.000" v="0.000" />
+            <v x="19.919" y="19.863" z="29.876" u="0.000" v="0.000" />
+            <v x="-19.881" y="-19.937" z="29.876" u="1.000" v="1.000" />
+            <v x="19.919" y="-19.937" z="29.876" u="0.000" v="1.000" />
+            <v x="19.919" y="-19.937" z="-9.924" u="1.000" v="1.000" />
+            <v x="19.919" y="19.863" z="-9.924" u="1.000" v="0.000" />
+            <v x="-19.881" y="-19.937" z="-9.924" u="0.000" v="1.000" />
+            <v x="-19.881" y="19.863" z="-9.924" u="0.000" v="0.000" />
+            <v x="19.919" y="-19.937" z="29.876" u="1.000" v="1.000" />
+            <v x="19.919" y="-19.937" z="-9.924" u="1.000" v="0.000" />
+            <v x="-19.881" y="-19.937" z="29.876" u="0.000" v="1.000" />
+            <v x="-19.881" y="-19.937" z="-9.924" u="0.000" v="0.000" />
+            <v x="19.919" y="19.863" z="29.876" u="1.000" v="1.000" />
+            <v x="19.919" y="-19.937" z="-9.924" u="0.000" v="0.000" />
+            <v x="-19.881" y="19.863" z="29.876" u="1.000" v="1.000" />
+            <v x="-19.881" y="19.863" z="-9.924" u="1.000" v="0.000" />
+            <v x="19.919" y="19.863" z="29.876" u="0.000" v="1.000" />
+            <v x="19.919" y="19.863" z="-9.924" u="0.000" v="0.000" />
+            <v x="-19.881" y="-19.937" z="-9.924" u="1.000" v="0.000" />
+            <v x="-19.881" y="19.863" z="29.876" u="0.000" v="1.000" />
+            <t v1="0" v2="1" v3="2" />
+            <t v1="3" v2="2" v3="1" />
+            <t v1="4" v2="5" v3="6" />
+            <t v1="7" v2="6" v3="5" />
+            <t v1="8" v2="9" v3="10" />
+            <t v1="11" v2="10" v3="9" />
+            <t v1="12" v2="5" v3="3" />
+            <t v1="13" v2="3" v3="5" />
+            <t v1="14" v2="15" v3="16" />
+            <t v1="17" v2="16" v3="15" />
+            <t v1="2" v2="18" v3="19" />
+            <t v1="7" v2="19" v3="18" />
+            <autonormals />
+        </params>
+    </meshfact>
+
 
   <meshfact name="factory_room_sky">
       <plugin>crystalspace.mesh.loader.factory.genmesh</plugin>
@@ -258,9 +318,12 @@
 	  <isocean>yes</isocean>
     </params>
   </meshfact>
-    
+
+
   <sector name="room">
-    
+  
+  
+
     <meshobj name="ocean">
       <plugin>water</plugin>
       <params>
@@ -268,6 +331,19 @@
         <material>oceanMat</material>
       </params>
     </meshobj>
+
+<meshobj name="Box01">
+            <plugin>genmesh</plugin>
+            <params>
+                <factory>Box01FACT</factory>
+                <material>Walls</material>
+            </params>
+            <priority>wall</priority>
+		<move>
+                <v x="0.0" y="-10.0" z="40.0" />
+        </move>
+
+</meshobj>
     
     <meshobj name="clouds">
         <plugin>genmesh</plugin>
@@ -301,30 +377,13 @@
         <priority>sky</priority>
     </meshobj>
     <key name="cmd_AnimateSky" value="clouds,y,.005" />
-    
-    <light>
-    	<center x="1" y="3" z="1"/>
-    	<radius>10</radius>
-    	<color red="1" green="0" blue="0"/>
+	
+	<light name="sun">
+            <center x="00" y="10" z="1000" />
+            <color red="1.25903" green="1.20995" blue="1.10420" />
+            <radius>1000</radius>
     </light>
-    
-    <light>
-    	<center x="1" y="3" z="9"/>
-    	<radius>10</radius>
-    	<color red="0" green="0" blue="1"/>
-    </light>
-    
-    <light>
-    	<center x="19" y="3" z="1"/>
-    	<radius>10</radius>
-    	<color red="0" green="1" blue="0"/>
-    </light>
-    
-    <light>
-    	<center x="19" y="3" z="9"/>
-    	<radius>10</radius>
-    	<color red="1" green="1" blue="1"/>
-    </light>
+	
   </sector>
   <start>
   	<sector>room</sector>

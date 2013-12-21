@@ -32,6 +32,7 @@ Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 #include "csgfx/shadervarcontext.h"
 #include "csgfx/shadervar.h"
 #include "csgfx/imagecubemapmaker.h"
+#include "csgfx/imagememory.h"
 #include "cstool/rviewclipper.h"
 #include "iengine/camera.h"
 #include "iengine/material.h"
@@ -52,17 +53,20 @@ Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 #include "ivideo/fontserv.h"
 #include "ivideo/shader/shader.h"
 #include "ivideo/txtmgr.h"
+#include "csutil/dirtyaccessarray.h"
 
 #include "watermesh.h"
 
-#define OCEAN_BBOX_RADIUS 50000.0f
+// #include <csutil/sysfunc.h> // provides csPrintf();
+
+#define OCEAN_BBOX_RADIUS 500000.0f
 #define OCEAN_NP_WID  40
 #define OCEAN_NP_LEN  40
 
-#define CELL_WID    20.0f
-#define CELL_LEN    20.0f
+#define CELL_WID    512.0f
+#define CELL_LEN    512.0f
 
-#define MAX_OCEAN_DISTANCE 200.0f
+#define MAX_OCEAN_DISTANCE 8000.0f
 
 using namespace CS::Plugins::WaterMesh;
 
@@ -131,7 +135,7 @@ void csWaterMeshObject::SetupBufferHolder ()
     bufferHolder.AttachNew (new csRenderBufferHolder);
 
   // When creating buffers we basically have two ways. Either
-  // we can create the buffer immediatelly and supply it in the context.
+  // we can create the buffer immediately and supply it in the context.
   // Or else we create an accessor for the buffer so that the
   // shader/renderer can fetch the buffer later. The first approach
   // is best in case of buffers that are almost always needed. For
@@ -173,7 +177,8 @@ void csWaterMeshObject::SetupVertexBuffer()
 }
 
 void csWaterMeshObject::SetupObject ()
-{  
+{
+
   if (!initialized || vertsChanged)
   {
     initialized = true;
@@ -191,11 +196,9 @@ void csWaterMeshObject::SetupObject ()
     else if(vertsChanged)
     {
       verts.DeleteAll();
-      norms.DeleteAll();
       for(uint i = 0; i < factory->verts.GetSize(); i++)
       {
         verts.Push(factory->verts[i]);
-        norms.Push(factory->norms[i]);
       }
 
       SetupVertexBuffer ();
@@ -204,6 +207,104 @@ void csWaterMeshObject::SetupObject ()
 
       SetupBufferHolder ();
     }
+
+	// Setting Height 
+	csVector3 coord = logparent->GetMovable()->GetPosition();
+	waterHeight = coord.y;
+
+	// Generates foam points
+	csRef<iMeshWrapper> terrainWrapper = engine->FindMeshObject ("Terrain");
+	//if (terrainWrapper)
+	if(0)
+	{
+		csDirtyAccessArray<csVector3> foampointsTemp;  // Store all the collision points Temperately 
+
+		csRef<iMovable> terrainMovable = terrainWrapper->GetMovable();
+		
+		csRef<iTerrainSystem> terrain = scfQueryInterface<iTerrainSystem> (terrainWrapper->GetMeshObject ());
+		size_t cellIndexMax = terrain->GetCellCount();
+
+		csVector3 terrainPos = terrainMovable->GetPosition();
+
+		//csPrintf("x = %f and y = %f",terrainPos.x,terrainPos.z);
+
+		for (size_t i = 0; i < cellIndexMax ; i++)
+		{
+			csRef<iTerrainCell> terraincell = terrain->GetCell(i,true);
+			int gridWidth = terraincell->GetGridWidth();
+			int gridHeight = terraincell->GetGridHeight();
+
+			csVector2 cellPos = terraincell->GetPosition();
+			csVector3 cellSize = terraincell->GetSize();
+
+			// Speedy Lookup
+			csLockedHeightData cellval = terraincell->GetHeightData();
+			int pitchval = cellval.pitch;
+
+			for (int x = 0 ; x < gridWidth ; x++ )
+			{
+				for (int y = 0 ; y < gridHeight ; y++ )
+				{
+				    float height = cellval.data[y * pitchval + x];
+
+					if (waterHeight-0.1 < (height) && (height) < waterHeight+0.1)
+					{
+						int Ty = gridHeight - y; 
+						foampointsTemp.Push(csVector3(cellPos.x + cellSize.x*x/(float)(gridWidth - 1) + terrainPos.x,waterHeight, cellPos.y + cellSize.z*Ty/(float)(gridHeight - 1) + terrainPos.z));
+					}
+				}
+			}			 
+		} 
+
+        const int foammap_w = 512, foammap_h = 512;
+        csRef<csImageMemory> image;
+        image.AttachNew (new csImageMemory (foammap_w, foammap_h, CS_IMGFMT_TRUECOLOR));
+
+        csRGBpixel* colorArray = reinterpret_cast<csRGBpixel*> (image->GetImagePtr ());
+
+		for (int y = 0 ; y < foammap_h ; y++)
+ 		{
+			for ( int x = 0 ; x < foammap_w ; x++)
+ 			{
+				float distanceFoam = csSquaredDist::PointPoint(csVector3(x,waterHeight,y), foampointsTemp.Get(0) ) ;
+ 
+ 				for (int k = 1 ; k < (int)foampointsTemp.GetSize() ; k++)
+ 				{
+					float distanceFoamT = csSquaredDist::PointPoint(csVector3(x,waterHeight,y), foampointsTemp.Get(k) ) ;
+					if(distanceFoamT < distanceFoam)
+					{
+						distanceFoam = distanceFoamT;
+					}
+				}
+
+				if (distanceFoam < 100.0)
+				{
+					distanceFoam=100-distanceFoam;
+					distanceFoam/=100.0;
+					distanceFoam*=255;
+				}
+				else
+				{
+					distanceFoam = 0;
+				}
+                              
+				colorArray[x+(foammap_h-1-y)*foammap_w].Set ((int)distanceFoam, 0, 0);
+			}
+		}
+	
+		csRef<iTextureHandle> foamTextMap;
+		foamTextMap = g3d->GetTextureManager()->RegisterTexture(image, CS_TEXTURE_2D );
+
+		csShaderVariable *foam_dist = variableContext->GetVariableAdd(svStrings->Request("foam dist"));
+		foam_dist->SetType(csShaderVariable::TEXTURE);
+		foam_dist->SetValue(foamTextMap);
+	}
+
+	// Plane of Reflection 
+	csShaderVariable *PlaneReflection = variableContext->GetVariableAdd(svStrings->Request("plane reflection"));
+	PlaneReflection->SetType(csShaderVariable::VECTOR4);
+	PlaneReflection->SetValue(csVector4(0.0, -1.0, 0.0, 1.0));
+
   }
 
   if(factory->murkChanged)
@@ -254,55 +355,88 @@ void csWaterMeshObject::SetupObject ()
 
     factory->directions_changed = false;
   }
+
 }
 
-void csWaterMeshObject::AddNode(csOceanNode start, float dist)
+int csWaterMeshObject::CalculateLOD(float distCam)
+{
+	if(distCam < (CELL_WID * CELL_WID * 4))
+		return(LOD_LEVEL_5);
+	else if(distCam < (CELL_WID * CELL_WID * 9))
+		return(LOD_LEVEL_4);
+	else if(distCam < (CELL_WID * CELL_WID * 16))
+		return(LOD_LEVEL_3);
+	else if(distCam < (CELL_WID * CELL_WID * 25))
+		return(LOD_LEVEL_2);
+	else
+		return(LOD_LEVEL_1);
+}
+
+bool csWaterMeshObject::SelectBoundary(int nextCell, csOceanNode position, const csVector3 camPos)
+{
+	int useCell;
+	csVector3 startcenter = position.GetCenter();
+	float distFromCam_sq = csSquaredDist::PointPoint ( csVector3(startcenter.x,0,startcenter.z), csVector3(camPos.x,0,camPos.z) );
+
+	useCell = CalculateLOD(distFromCam_sq);
+
+	if( useCell < nextCell)
+		return true;    // Low res boundary
+	else
+		return false;   // High res boundary
+}
+
+/*
+ * This function distributes Levels of Details to OceanNodes and Pushes the renderCell to meshQueue.
+ * "dist_sq" is actually squared distance between camera's position and center of oceanNode.
+ * Nearer the OceanCell Higher the LOD level and visa-versa. 
+ */
+void csWaterMeshObject::AddNode(csOceanNode start, float dist_sq, const csVector3 camPos)
 {
   int useCell;
-  if(dist < (CELL_WID * 2))
-    useCell = 4;
-  else if(dist < (CELL_WID * 3))
-    useCell = 3;
-  else if(dist < (CELL_WID * 4))
-    useCell = 2;
-  else if(dist < (CELL_WID * 5))
-    useCell = 1;
-  else
-    useCell = 0;
-  
+
+  useCell = CalculateLOD(dist_sq);
+
   csRenderCell nextCell;
   nextCell.cell = useCell;
   nextCell.pos = start.gc;
-  
+
+  // Calculating boundaries LOD Levels  
+  nextCell.boundary.Push( SelectBoundary(nextCell.cell, start.GetUp(), camPos)    );
+  nextCell.boundary.Push( SelectBoundary(nextCell.cell, start.GetRight(), camPos) );
+  nextCell.boundary.Push( SelectBoundary(nextCell.cell, start.GetDown(), camPos)  );
+  nextCell.boundary.Push( SelectBoundary(nextCell.cell, start.GetLeft(), camPos)  );
+
   meshQueue.Push(nextCell);
 }
 
 void csWaterMeshObject::DrawFromNode(csOceanNode start, const csVector3 camPos, csPlane3 *planes, uint32 frustum_mask)
 {
   uint32 out_mask;
-  float distFromCam = csSquaredDist::PointPoint (start.GetCenter(), camPos);
-  if(distFromCam > MAX_OCEAN_DISTANCE*MAX_OCEAN_DISTANCE)
+  csVector3 startcenter = start.GetCenter();
+  float distFromCam_sq = csSquaredDist::PointPoint ( csVector3(startcenter.x,0,startcenter.z), csVector3(camPos.x,0,camPos.z) );
+  if(distFromCam_sq > MAX_OCEAN_DISTANCE*MAX_OCEAN_DISTANCE)
     return;
   else if(csIntersect3::BoxFrustum (start.GetBBox(), planes, frustum_mask, out_mask))
   {
-    AddNode(start, distFromCam);
+    AddNode(start, distFromCam_sq, camPos);
   }
-  
+
   DrawRightFromNode(start.GetRight(), camPos, planes, frustum_mask);
   DrawLeftFromNode(start.GetLeft(), camPos, planes, frustum_mask);
   DrawBottomFromNode(start.GetDown(), camPos, planes, frustum_mask);
   DrawTopFromNode(start.GetUp(), camPos, planes, frustum_mask);
 }
-
 void csWaterMeshObject::DrawTopFromNode(csOceanNode start, const csVector3 camPos, csPlane3 *planes, uint32 frustum_mask)
 {
   uint32 out_mask;
-  float distFromCam = csSquaredDist::PointPoint (start.GetCenter(), camPos);
-  if(distFromCam > MAX_OCEAN_DISTANCE*MAX_OCEAN_DISTANCE)
+  csVector3 startcenter = start.GetCenter();
+  float distFromCam_sq = csSquaredDist::PointPoint ( csVector3(startcenter.x,0,startcenter.z), csVector3(camPos.x,0,camPos.z) );
+  if(distFromCam_sq > MAX_OCEAN_DISTANCE*MAX_OCEAN_DISTANCE)
     return;
   else if(csIntersect3::BoxFrustum (start.GetBBox(), planes, frustum_mask, out_mask))
   {
-    AddNode(start, distFromCam);
+    AddNode(start, distFromCam_sq, camPos);
   }
   
   DrawRightFromNode(start.GetRight(), camPos, planes, frustum_mask);
@@ -313,12 +447,13 @@ void csWaterMeshObject::DrawTopFromNode(csOceanNode start, const csVector3 camPo
 void csWaterMeshObject::DrawBottomFromNode(csOceanNode start, const csVector3 camPos, csPlane3 *planes, uint32 frustum_mask)
 {
   uint32 out_mask;
-  float distFromCam = csSquaredDist::PointPoint (start.GetCenter(), camPos);
-  if(distFromCam > MAX_OCEAN_DISTANCE*MAX_OCEAN_DISTANCE)
+  csVector3 startcenter = start.GetCenter();
+  float distFromCam_sq = csSquaredDist::PointPoint ( csVector3(startcenter.x,0,startcenter.z), csVector3(camPos.x,0,camPos.z) );
+  if(distFromCam_sq > MAX_OCEAN_DISTANCE*MAX_OCEAN_DISTANCE)
     return;
   else if(csIntersect3::BoxFrustum (start.GetBBox(), planes, frustum_mask, out_mask))
   {
-    AddNode(start, distFromCam);
+    AddNode(start, distFromCam_sq, camPos);
   }  
   DrawRightFromNode(start.GetRight(), camPos, planes, frustum_mask);
   DrawLeftFromNode(start.GetLeft(), camPos, planes, frustum_mask);
@@ -328,12 +463,13 @@ void csWaterMeshObject::DrawBottomFromNode(csOceanNode start, const csVector3 ca
 void csWaterMeshObject::DrawRightFromNode(csOceanNode start, const csVector3 camPos, csPlane3 *planes, uint32 frustum_mask)
 {
   uint32 out_mask;
-  float distFromCam = csSquaredDist::PointPoint (start.GetCenter(), camPos);
-  if(distFromCam > MAX_OCEAN_DISTANCE*MAX_OCEAN_DISTANCE)
+  csVector3 startcenter = start.GetCenter();
+  float distFromCam_sq = csSquaredDist::PointPoint ( csVector3(startcenter.x,0,startcenter.z), csVector3(camPos.x,0,camPos.z) );
+  if(distFromCam_sq > MAX_OCEAN_DISTANCE*MAX_OCEAN_DISTANCE)
     return;
   else if(csIntersect3::BoxFrustum (start.GetBBox(), planes, frustum_mask, out_mask))
   {
-    AddNode(start, distFromCam);
+    AddNode(start, distFromCam_sq, camPos);
   }
   DrawRightFromNode(start.GetRight(), camPos, planes, frustum_mask);
 }
@@ -341,12 +477,13 @@ void csWaterMeshObject::DrawRightFromNode(csOceanNode start, const csVector3 cam
 void csWaterMeshObject::DrawLeftFromNode(csOceanNode start, const csVector3 camPos, csPlane3 *planes, uint32 frustum_mask)
 {
   uint32 out_mask;
-  float distFromCam = csSquaredDist::PointPoint (start.GetCenter(), camPos);
-  if(distFromCam > MAX_OCEAN_DISTANCE*MAX_OCEAN_DISTANCE)
+  csVector3 startcenter = start.GetCenter();
+  float distFromCam_sq = csSquaredDist::PointPoint ( csVector3(startcenter.x,0,startcenter.z), csVector3(camPos.x,0,camPos.z) );
+  if(distFromCam_sq > MAX_OCEAN_DISTANCE*MAX_OCEAN_DISTANCE)
     return;
   else if(csIntersect3::BoxFrustum (start.GetBBox(), planes, frustum_mask, out_mask))
   {
-    AddNode(start, distFromCam);
+    AddNode(start, distFromCam_sq, camPos);
   }  
   DrawLeftFromNode(start.GetLeft(), camPos, planes, frustum_mask);
 }
@@ -402,21 +539,23 @@ csRenderMesh** csWaterMeshObject::GetRenderMeshes (
     mesh_colors_dirty_flag = true;
   }
 
-  logparent->SetZBufMode(CS_ZBUF_TEST);
-  logparent->SetRenderPriority (factory->engine->GetRenderPriority ("alpha"));
+  //Commenting these 2 lines are switching these values to default
+  //logparent->SetZBufMode(CS_ZBUF_TEST);
+  //logparent->SetRenderPriority (factory->engine->GetRenderPriority ("alpha"));
 
   const uint currentFrame = rview->GetCurrentFrameNumber ();
   bool meshesCreated;
   csDirtyAccessArray<csRenderMesh*>& renderMeshes =
     meshesHolder.GetUnusedData (meshesCreated, currentFrame);
 
-  csShaderVariable *o2wtVar;
+  //csShaderVariable *o2wtVar;
 
   if(factory->isOcean())
   {
     csOrthoTransform c2ot = rview->GetCamera ()->GetTransform ();
+
     if (!o2wt.IsIdentity ())
-      c2ot /= o2wt;
+         c2ot /= o2wt;
 
     csPlane3 planes[10];
 
@@ -428,12 +567,12 @@ csRenderMesh** csWaterMeshObject::GetRenderMeshes (
     int camXB = (int)floor(camPos.x);
     int camZB = (int)floor(camPos.z);
     
-    float nearX = camXB - (camXB % 10);
-    float nearZ = camZB - (camZB % 10);
+    float nearX = /*camXB - (camXB % (int)CELL_LEN)*/ - (int)CELL_LEN/2;
+    float nearZ = /*camZB - (camZB % (int)CELL_WID)*/ - (int)CELL_WID/2;
     
     renderMeshes.DeleteAll();
     
-    csOceanNode start (csVector2(nearX, nearZ), CELL_LEN, CELL_WID);
+	csOceanNode start (csVector2(nearX, nearZ), CELL_LEN, CELL_WID, waterHeight);
     
     DrawFromNode(start, camPos, planes, frustum_mask);
     
@@ -441,7 +580,13 @@ csRenderMesh** csWaterMeshObject::GetRenderMeshes (
     while(!(meshQueue.IsEmpty()))
     {
       csRenderCell nextCell = meshQueue.Pop();
-      trans.Identity();
+
+	  uint k = 0;
+
+	  k = (nextCell.boundary[0] ? 0 : 8) | (nextCell.boundary[1] ? 0 : 4) | 
+		  (nextCell.boundary[2] ? 0 : 2) | (nextCell.boundary[3] ? 0 : 1);
+
+	  trans.Identity();
       trans.Translate(csVector3(nextCell.pos.x, 0.0, nextCell.pos.y));
       
       bool rmCreated;
@@ -455,31 +600,32 @@ csRenderMesh** csWaterMeshObject::GetRenderMeshes (
       renderMeshes[i]->do_mirror = camera->IsMirrored ();
       renderMeshes[i]->meshtype = CS_MESHTYPE_TRIANGLES;
       renderMeshes[i]->indexstart = 0;
-      renderMeshes[i]->indexend = factory->cells[nextCell.cell].GetNumIndexes();
+      renderMeshes[i]->indexend = factory->cells[nextCell.cell].GetNumIndexes(k);
       renderMeshes[i]->material = material;    
       renderMeshes[i]->worldspace_origin = wo;
 
       renderMeshes[i]->geometryInstance = (void*)factory;
 
-      renderMeshes[i]->buffers = factory->cells[nextCell.cell].bufferHolder;
-      
-      //Clone shader variable to provide each mesh with its own o2wt       
-      csRef<csShaderVariableContext> newVarCtxt;
-      newVarCtxt.AttachNew (new csShaderVariableContext);
-        
-      csRefArray<csShaderVariable> vars = variableContext->GetShaderVariables();
-      for(uint j = 0; j < vars.GetSize(); j++)
-      {
-        newVarCtxt->AddVariable(vars[j]);
-      }
+	  renderMeshes[i]->buffers = factory->cells[nextCell.cell].bufferHolderARR[k];
 
+	  //Clone shader variable to provide each mesh with its own o2wt       
+	  csRef<csShaderVariableContext> newVarCtxt;
+	  newVarCtxt.AttachNew (new csShaderVariableContext);
+
+	  csRefArray<csShaderVariable> vars = variableContext->GetShaderVariables();
+
+	  for(uint j = 0; j < vars.GetSize(); j++)
+	  {
+		  newVarCtxt->AddVariable(vars[j]);
+	  }
+      
       renderMeshes[i]->variablecontext = newVarCtxt;
       renderMeshes[i]->object2world = o2world * trans;
       
-      //update mesh-specific shader variable
-      o2wtVar = renderMeshes[i]->variablecontext->GetVariableAdd(svStrings->Request("o2w transform"));
+      //update mesh-specific shader variable  // Provided by engine using "object2world transform"
+    /*o2wtVar = renderMeshes[i]->variablecontext->GetVariableAdd(svStrings->Request("o2w transform"));
       o2wtVar->SetType(csShaderVariable::MATRIX);
-      o2wtVar->SetValue(renderMeshes[i]->object2world);
+      o2wtVar->SetValue(renderMeshes[i]->object2world); */
     
       i++;
     }
@@ -513,10 +659,10 @@ csRenderMesh** csWaterMeshObject::GetRenderMeshes (
 
     renderMeshes[0]->object2world = o2world * trans;
 
-    //update shader variable
-    o2wtVar = variableContext->GetVariableAdd(svStrings->Request("o2w transform"));
+    //update shader variable  // Provided by engine using "object2world transform"
+  /*o2wtVar = variableContext->GetVariableAdd(svStrings->Request("o2w transform"));
     o2wtVar->SetType(csShaderVariable::MATRIX);
-    o2wtVar->SetValue(renderMeshes[0]->object2world);
+    o2wtVar->SetValue(renderMeshes[0]->object2world);  */
   }
   n = (int)renderMeshes.GetSize();
 
@@ -559,15 +705,14 @@ bool csWaterMeshObject::HitBeamOutline (const csVector3& start,
 }
 
 bool csWaterMeshObject::HitBeamObject (const csVector3& start,
-                                       const csVector3& end, csVector3& isect,
-				       float *pr, int* polygon_idx,
+                                       const csVector3& end, csVector3& isect, float *pr, int* polygon_idx,
                                        iMaterialWrapper** material, bool bf)
 {
   
   if (material) *material = csWaterMeshObject::material;
   if (polygon_idx) *polygon_idx = -1;
   // This is the slow version. Use for an accurate hit on the object.
-  // It will cycle through every triangle in the mesh serching for the
+  // It will cycle through every triangle in the mesh searching for the
   // closest intersection. Slower, but returns the closest hit.
   // Usage is optional.
 
@@ -581,14 +726,8 @@ bool csWaterMeshObject::HitBeamObject (const csVector3& start,
   csTriangle *tr = factory->tris.GetArray();
   for (i = 0 ; i < max ; i++)
   {
-    bool hit;
-    if (bf)
-      hit = csIntersect3::SegmentTriangleBF (seg, vrt[tr[i].a], vrt[tr[i].b],
-      	vrt[tr[i].c], tmp);
-    else
-      hit = csIntersect3::SegmentTriangle (seg, vrt[tr[i].a], vrt[tr[i].b],
-      	vrt[tr[i].c], tmp);
-    if (hit)
+    if (csIntersect3::SegmentTriangle (seg, vrt[tr[i].a], vrt[tr[i].b],
+      vrt[tr[i].c], tmp))
     {
       temp = csSquaredDist::PointPoint (start, tmp);
       if (temp < dist)
@@ -633,45 +772,6 @@ void csWaterMeshObject::PreGetBuffer (csRenderBufferHolder *holder,
 {
   if(factory->isOcean())
   return;
-  
-  if (buffer == CS_BUFFER_COLOR)
-  {
-    if (mesh_colors_dirty_flag)
-    {
-      if (!color_buffer)
-      {
-        color_buffer = csRenderBuffer::CreateRenderBuffer (
-          factory->numVerts, CS_BUF_STATIC,
-          CS_BUFCOMP_FLOAT, 3);
-      }
-      mesh_colors_dirty_flag = false;
-      const csColor* factory_colors = factory->cols.GetArray();
-      int i;
-      csColor* colors = new csColor[factory->numVerts];
-      for (i = 0 ; i < factory->numVerts ; i++)
-        colors[i] = factory_colors[i]+color;
-      // Copy the data into the render buffer
-      // since we don't keep a local copy of the color buffer here.
-      color_buffer->CopyInto (colors, factory->numVerts);
-      delete [] colors;
-    }
-    holder->SetRenderBuffer (CS_BUFFER_COLOR, color_buffer);
-  } 
-  else if (buffer == CS_BUFFER_NORMAL)
-  {
-    if (vertsChanged)
-    {
-      if (!normal_buffer)
-      {
-        normal_buffer = csRenderBuffer::CreateRenderBuffer (
-          factory->numVerts, CS_BUF_STATIC,
-          CS_BUFCOMP_FLOAT, 3);
-      }
-      // Don't copy the data, have the buffer store a pointer instead.
-      normal_buffer->SetData (norms.GetArray());
-    }
-    holder->SetRenderBuffer (CS_BUFFER_NORMAL, normal_buffer);
-  }
 }
 
 //----------------------------------------------------------------------
@@ -681,6 +781,12 @@ csWaterMeshObjectFactory::csWaterMeshObjectFactory (
   : scfImplementationType (this, pParent)
 {
   csWaterMeshObjectFactory::object_reg = object_reg;
+
+  csStringID base_mesh_id = GetBaseID (object_reg);
+  csRef<csTriangleMeshPointer> trimesh_base;
+  trimesh_base.AttachNew (new csTriangleMeshPointer (
+  verts.GetArray(), numVerts, tris.GetArray(), numTris));
+  SetTriangleData (base_mesh_id, trimesh_base);
 
   logparent = 0;
   water_type = pParent;
@@ -719,14 +825,6 @@ csWaterMeshObjectFactory::csWaterMeshObjectFactory (
 
   waterAlpha = 0.3f;
   murkChanged = true;
-
-/*
-  csStringID base_mesh_id = GetBaseID (object_reg);
-  csRef<csTriangleMeshPointer> trimesh_base;
-  trimesh_base.AttachNew (new csTriangleMeshPointer (
-  verts.GetArray(), numVerts, tris.GetArray(), numTris));
-  SetTriangleData (base_mesh_id, trimesh_base);
-*/
 }
 
 csWaterMeshObjectFactory::~csWaterMeshObjectFactory ()
@@ -797,7 +895,7 @@ void csWaterMeshObjectFactory::SetObjectBoundingBox (const csBox3& bbox)
 void csWaterMeshObjectFactory::SetWaterType(waterMeshType waterType)
 {
   type = waterType;
-  if(type == WATER_TYPE_OCEAN)
+  //if(type == WATER_TYPE_OCEAN)
   {
     wid = OCEAN_NP_WID;
     len = OCEAN_NP_LEN;
@@ -806,7 +904,7 @@ void csWaterMeshObjectFactory::SetWaterType(waterMeshType waterType)
     SetMurkiness(0.2f);
     
     //Setup Ocean defaults
-    SetAmplitudes(0.1f, 0.03f, 0.05f);
+    SetAmplitudes(0.19f, 0.13f, 0.45f);
     SetFrequencies(2.0f, 1.7f, 1.6f);
     SetPhases(0.0f, 1.0f, 1.41f);
     
@@ -818,6 +916,7 @@ void csWaterMeshObjectFactory::SetWaterType(waterMeshType waterType)
 
 void csWaterMeshObjectFactory::SetupFactory ()
 {
+
   if (!initialized || size_changed)
   {
     initialized = true;
@@ -833,35 +932,27 @@ void csWaterMeshObjectFactory::SetupFactory ()
       cells.Push(csOceanCell(CELL_LEN, CELL_WID, LOD_LEVEL_3));
       cells.Push(csOceanCell(CELL_LEN, CELL_WID, LOD_LEVEL_4));
       cells.Push(csOceanCell(CELL_LEN, CELL_WID, LOD_LEVEL_5));
-    
+
       for(uint i = 0; i < cells.GetSize(); i++)
       {
         cells[i].SetupVertices();
       }
+
     }
     else //TODO: Move this stuff into a single ocean cell w/o ocean attributes
     {
       verts.DeleteAll();
-      norms.DeleteAll();
-      cols.DeleteAll();
       texs.DeleteAll();
       tris.DeleteAll();
 
       float offx, offz;
       offx = offz = 0.0;
-      if(type == WATER_TYPE_OCEAN)
-      {
-        offx = (wid * gran) / 2;
-        offz = (len * gran) / 2;
-      }
-    
-      for(uint j = 0; j < len * gran; j++)
+     
+	  for(uint j = 0; j < len * gran; j++)
       {
         for(uint i = 0; i < wid * gran; i++)
         {
           verts.Push(csVector3 ((i / gran) - offx, 0, (j / gran) - offz));
-          norms.Push(csVector3 (0, 1, 0));
-          cols.Push(csColor (0.17f, 0.27f, 0.26f));
           texs.Push(csVector2((i / gran) / (1.5 * detail), (j / gran) / (1.5 * detail)));
         }
       }
@@ -881,11 +972,11 @@ void csWaterMeshObjectFactory::SetupFactory ()
 
       numVerts = (int)verts.GetSize();
       numTris = (int)tris.GetSize();
-    }
-  
-    for(uint i = 0; i < children.GetSize(); i++)
-    {
-      children[i]->vertsChanged = true;
+
+	  for(uint i = 0; i < children.GetSize(); i++)
+	  {
+		  children[i]->vertsChanged = true;
+	  }
     }
     
     Invalidate();

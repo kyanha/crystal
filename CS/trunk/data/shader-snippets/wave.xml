@@ -1,0 +1,283 @@
+<snippet>
+	<technique priority="100">
+		<combiner name="cg" plugin="crystalspace.graphics3d.shader.combiner.glcg" />
+		<combiner name="glsl" plugin="crystalspace.graphics3d.shader.combiner.glsl"/>
+     
+		<input name="Hposition" type="position4_object" default="complex">
+			<block location="cg:vertexIn">
+				<varying type="position4" name="Hposition" binding="POSITION" />
+			</block>
+			<block location="cg:vertexMain">Hposition = vertexIn.Hposition;</block>
+			<block location="glsl:inputs">
+				<!-- varying type="position4" name="gl_Position"/ -->
+			</block>
+			<block location="glsl:vertexMain">Hposition = gl_Vertex;</block>  
+		</input>
+    
+		<!-- Slightly dirty: float4x4 is no weaver type, so gets written out 
+		verbatim -->
+		<input file="/shader-snippets/ModelViewProj.inp" private="yes" />
+		<input file="/shader-snippets/ModelView.inp" private="yes" />
+		<input file="/shader-snippets/texCoord.inp"	/>
+	
+		
+		<input name="texHeight" type="tex2d" default="complex">
+			<block location="cg:pass">
+				<texture name="tex height" destination="vertexIn.texHeight" />
+			</block>
+			<block location="glsl:pass">
+				<texture name="tex height" destination="in_texHeight" />
+			</block>
+      
+			<block location="cg:vertexIn">
+				<uniform type="tex2d" name="texHeight" />
+			</block>
+
+			<block location="glsl:inputs">
+				<uniform type="tex2d" name="in_texHeight" />
+			</block>
+
+			<block location="cg:vertexMain">
+				texHeight = vertexIn.texHeight;
+			</block>
+
+			<block location="glsl:vertexMain">
+				#sampler_assign texHeight in_texHeight
+			</block>
+		</input>
+	
+		<input name="objectToWorld" type="float4x4" default="complex" private="yes">
+			<block location="cg:vertexIn">
+				<uniform type="float4x4" name="objectToWorld"/>
+			</block>
+			<block location="glsl:inputs">
+				<uniform type="float4x4" name="in_objectToWorld"/>
+			</block>
+			<block location="cg:fragmentIn">
+				<uniform type="float4x4" name="objectToWorld"/>
+			</block>
+			<block location="cg:vertexMain">objectToWorld = vertexIn.objectToWorld;</block>
+			<block location="glsl:vertexMain">objectToWorld = in_objectToWorld;</block>
+			<block location="cg:fragmentMain">objectToWorld = fragmentIn.objectToWorld;</block>
+			<block location="glsl:fragmentMain">objectToWorld = in_objectToWorld;</block>
+			<block location="cg:variablemap">
+				<variablemap variable="object2world transform" destination="vertexIn.objectToWorld"/>
+				<variablemap variable="object2world transform" destination="fragmentIn.objectToWorld"/>
+			</block>
+			<block location="glsl:variablemap">
+				<variablemap variable="object2world transform" destination="in_objectToWorld"/>
+			</block>
+		</input>
+	
+		<block location="cg:variablemap">
+			<variablemap variable="standard time" destination="waveInput.time" />
+		</block>
+		
+		<block location="glsl:variablemap">
+			<variablemap variable="standard time" destination="waveInput.time" />
+		</block>
+		
+		<block location="cg:vertexToFragment">
+			<varying type="position4" name="position" binding="POSITION" />
+			<!-- This is needed since POSITION semantics can't be used for input in an FP -->
+			<varying type="position4" name="position_screen" />
+			<varying type="position4" name="position_object"/>
+			<varying type="position4" name="position_world"/>
+			<varying type="position4" name="position_camera"/>
+			<varying type="texcoord4" name="texCoordw" />
+			<varying type="float3" name="Normalw" />
+		</block>
+		
+		<block location="glsl:vertexToFragment">
+			<varying type="position4" name="position"/>
+			<varying type="position4" name="position_screen"/>
+			<varying type="position4" name="position_object"/>
+			<varying type="position4" name="position_world"/>
+			<varying type="position4" name="position_camera"/>
+			<varying type="texcoord4" name="texCoordw" />
+			<varying type="float3" name="Normalw" />
+		</block>
+		
+		<block location="cg:clips">
+			<!-- Clip for reflection/refraction rendering -->
+			<clip space="world">
+				<plane type="shadervar">clip plane reflection</plane>
+			</clip>
+		</block>
+		
+		<block location="cg:vertexCompilerArgs">
+			-posinv
+		</block>
+		
+		<block location="cg:definitions">
+			<?Include /shader-snippets/cg-global_objectToWorld.cginc?> 
+			struct WaveIn
+			{
+				float time;
+			};
+			uniform WaveIn waveInput;
+		</block>
+		
+		<block location="glsl:definitions">
+			<?Include /shader-snippets/glsl-global_objectToWorld.glsli?>	  
+		
+			struct WaveIn
+			{
+				float time;
+			};
+			uniform WaveIn waveInput;
+		</block>
+		
+		<block location="cg:vertexMain">
+			position_object = Hposition;
+		
+			//Grab xz position
+			float2 xzpos = mul(objectToWorld, position_object).xz;
+			
+			float2 Texcord = texCoord + waveInput.time * 10.0;
+			position_object.y +=  tex2D(texHeight, Texcord/128).r * 2.0;	
+			
+			
+			float s01;
+			float s21;
+			float s10;
+			float s12;
+			float2 size = float2(2.0,0.0);
+	
+			{
+				float2 Texcord2 = Texcord;
+				Texcord2.x -= 1.0;
+				s01 = tex2D(texHeight, Texcord2/128.0).r * 2.0;
+			}
+			
+			{
+				float2 Texcord2 = Texcord;
+				Texcord2.x += 1.0;
+				s21 = tex2D(texHeight, Texcord2/128.0).r * 2.0;
+			}
+			
+			{
+				float2 Texcord2 = Texcord;
+				Texcord2.y -= 1.0;
+				s10 = tex2D(texHeight, Texcord2/128.0).r * 2.0;
+			}
+			
+			{
+				float2 Texcord2 = Texcord;
+				Texcord2.y += 1.0;
+				s12 = tex2D(texHeight, Texcord2/128.0).r * 2.0;
+			}
+			
+			float3 va = normalize(float3(size.xy,s21-s01));
+			float3 vb = normalize(float3(size.yx,s12-s10));
+			
+			Normalw = vec3(cross(va,vb));
+			//Normalw = vec3(0.0,1.0,0.0);
+			
+			
+			float s1, cs1;
+			sincos (waveInput.time*2.0, s1, cs1);
+			
+			Normalw = float3(0.0,1.0,0.0);
+
+			texCoordw.x = texCoord.x  - s1 * 0.5;
+			texCoordw.y = texCoord.y  + cs1 * 0.5;
+			texCoordw.z = 0.0;
+			texCoordw.w = 0.0;
+			
+			position_screen = position = mul (ModelViewProj, position_object);
+			position_camera = mul (ModelView, position_object);
+			position_world = mul (objectToWorld, position_object);
+			
+			APPLY_CLIPPING_VP_POSINV(position_camera, position_world, position_object);
+		
+			/* The objectToWorld transform is needed in other places, so there is a 
+			global variable for it. Set that */
+			SetGlobalObjectToWorld (objectToWorld);
+		</block>
+		
+		<block location="glsl:vertexMain">
+			position_object = Hposition;
+		
+			//Grab xz position
+			vec2 xzpos = (objectToWorld * position_object).xz;
+			
+			vec2 Texcord = texCoord + waveInput.time * 10.0;
+			position_object.y +=  texture2D(texHeight, Texcord/128).r * 2.0;	
+			
+			float s01;
+			float s21;
+			float s10;
+			float s12;
+			vec2 size = vec2(2.0,0.0);
+	
+			{
+				vec2 Texcord2 = Texcord;
+				Texcord2.x += 1.0;
+				s01 = texture2D(texHeight, Texcord2/128.0).r * 2.0;
+			}
+			
+			{
+				vec2 Texcord2 = Texcord;
+				Texcord2.x -= 1.0;
+				s21 = texture2D(texHeight, Texcord2/128.0).r * 2.0;
+			}
+			
+			{
+				vec2 Texcord2 = Texcord;
+				Texcord2.y += 1.0;
+				s10 = texture2D(texHeight, Texcord2/128.0).r * 2.0;
+			}
+			
+			{
+				vec2 Texcord2 = Texcord;
+				Texcord2.y -= 1.0;
+				s12 = texture2D(texHeight, Texcord2/128.0).r * 2.0;
+			}
+			
+			vec3 va = normalize(vec3(size.xy,s21-s01));
+			vec3 vb = normalize(vec3(size.yx,s12-s10));
+			
+			Normalw = vec3(cross(va,vb));
+			//Normalw = vec3(0.0,1.0,0.0);
+			
+			
+			float s1, cs1;
+			
+			s1 = sin(waveInput.time*2.0);
+			cs1 = cos(waveInput.time*2.0);
+			
+			texCoordw.x = texCoord.x  - s1 * 0.5;
+			texCoordw.y = texCoord.y  + cs1 * 0.5;
+			texCoordw.z = 0.0;
+			texCoordw.w = 0.0;
+			
+			gl_Position = position_screen = position = (ModelViewProj * position_object);
+			position_camera = ModelView * position_object;
+			position_world = objectToWorld * position_object;
+			
+			//APPLY_CLIPPING_VP_POSINV(position_camera, position_world, position_object);
+		
+			/* The objectToWorld transform is needed in other places, so there is a 
+			global variable for it. Set that */
+			SetGlobalObjectToWorld (objectToWorld);
+		</block>
+		
+		<block location="cg:fragmentMain">
+			APPLY_CLIPPING_FP_POSINV; /* The objectToWorld transform is needed in other places, so there is a global variable for it. Set that */ SetGlobalObjectToWorld (objectToWorld); position = position_screen;
+		</block>
+		<block location="glsl:fragmentMain">
+			//APPLY_CLIPPING_FP_POSINV; /* The objectToWorld transform is needed in other places, so there is a global variable for it. Set that */ SetGlobalObjectToWorld (objectToWorld); position = position_screen;
+		</block>
+		
+		<output name="position" type="position4_screen" />
+		<!-- @@@ FIXME: Other blocks may need the world space input as well... 
+			Pass through. But is there a better (ie automatic) way? -->
+		<output name="position_world" type="position4_world" />
+		<output name="position_object" type="position4_object" />
+		<output name="position_camera" type="position4_camera" />
+		<output name="texCoordw" type="texcoord4" />
+		<!--output name="Normalw" type="normal_tangent" /-->
+		
+	</technique>
+</snippet>
