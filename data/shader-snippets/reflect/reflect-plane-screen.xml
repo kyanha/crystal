@@ -22,10 +22,10 @@
     <combiner name="cg" plugin="crystalspace.graphics3d.shader.combiner.glcg" />
     <combiner name="glsl" plugin="crystalspace.graphics3d.shader.combiner.glsl" />
 
-    <!--input id="reflectXform" type="translateScale2" default="shadervar" defsv="reflection coord xform" /-->
     <!-- Factor applied to perturbance scaling.
 	 The closer the value to 0 is, the larger is the area at which perturbance is scaled. -->
-    <input id="perturbFadeScale" type="float" default="value" defval="1" />
+    <input id="perturbFadeScale" type="float" default="value" defval="0.5" />
+	<input id="perturb" type="float2" default="value" defval="0.0,0.0" />
     
     <!-- Put the computation of the reflection TC into a separate snippet
 	 so weaver only emits it once. -->
@@ -43,12 +43,17 @@
 	    <uniform type="float4" name="reflectXform" />
 	  </block>
 
+	  <block location="cg:fragmentIn">
+		<uniform type="float4" name="reflectXform" />
+	  </block>
+	  
 	  <block location="glsl:inputs">
 	    <uniform type="float4" name="in_reflectXform" />
 	  </block>
 	  
 	  <block location="cg:variablemap">
 	    <variablemap variable="reflection coord xform" destination="vertexIn.reflectXform" />
+		<variablemap variable="reflection coord xform" destination="fragmentIn.reflectXform" />		
 	  </block>
 
 	  <block location="glsl:variablemap">
@@ -60,6 +65,14 @@
 	  </block>
 
 	  <block location="glsl:vertexMain">
+	    reflectXform = in_reflectXform;
+	  </block>
+	  
+	  <block location="cg:fragmentMain">
+	    reflectXform = fragmentIn.reflectXform;
+	  </block>
+
+	  <block location="glsl:fragmentMain">
 	    reflectXform = in_reflectXform;
 	  </block>
 	</input>
@@ -188,8 +201,8 @@
 	<input name="reflTC" type="texcoord4" />
 	<input name="reflTC2screen" type="translateScale2" />
 	
-	<input name="perturb" type="float2" default="value" defval="0,0" />
-	<input name="perturbFadeScale" type="float" />
+	<input name="perturb" type="float2" />
+	<input name="perturbFadeScale" type="float"/>
 	
 	<block location="cg:vertexMain">
 	  surfaceColor = float4 (0, 0, 0, 1);
@@ -265,7 +278,10 @@
       </technique>
     </snippet>
     
-    <connection from="reflTC" to="actualReflect" />
-    <connection from="perturbFadeScale" to="actualReflect" />
+  
+	<connection from="reflTC" to="actualReflect" />
+	<connection from="perturbFadeScale" to="actualReflect"/>
+	<connection from="perturb" to="actualReflect" />
+	
   </technique>
 </snippet>

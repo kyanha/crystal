@@ -6,24 +6,13 @@ struct vert2frag
 {
 	float4 Position    	: POSITION;
 	float4 Color	   	: COLOR;
-	float3 CamVec		: TEXCOORD0;
-	float4 TexCoord2	: TEXCOORD1;
-	float4 TexCoord3	: TEXCOORD2;
+	float4 PosRefl      : TEXCOORD0;
+	float4 PosRefr      : TEXCOORD1;
+	float2 NormalTC		: TEXCOORD2; 
+	float3 Normal;
+	float4 Pos;
+	float2 o2wPos;
 };
-
-// Calculated from 1.3333, which is approx. refraction index for water
-// R0 is: 
-// float const R0 =  pow(1.0-refractionIndexRatio, 2.0)  
-//                 / pow(1.0+refractionIndexRatio, 2.0); 
-const float R0 = 0.02040781341208;
-
-// Copied this from a NVidia doc
-// http://developer.nvidia.com/object/fresnel_wp.html
-float fresnel(float3 view, float3 normal) 
-{ 
-    // light and normal are assumed to be normalized  
-    return saturate(R0 + (1.0-R0) * pow(1.0-dot(view, normal), 5.0));
-}
 
 // Water color
 const float3 watCol = float3(0.05, 0.15, 0.4);
@@ -37,32 +26,75 @@ float4 main (vert2frag IN,
 			 uniform float4 lightCol,
 			 uniform float shininess,
 			 uniform float waterAlpha,
-			 uniform sampler2D TexNormal) : COLOR        
+			 uniform sampler2D TexNormal,
+			 uniform sampler2D TexFoam,
+			 uniform sampler2D TexReflect,
+			 uniform sampler2D TexRefract,	 
+			 uniform sampler2D foamDist,
+			 uniform float4x4 ModelViewIT : state.matrix.modelview.invtrans) : COLOR        
 {     
-    float3 N = normalize(tex2D(TexNormal, IN.TexCoord2.xy).xyz 
-						- tex2D(TexNormal, IN.TexCoord3.xy).xyz);
+   
+	float4 color;
+	float4 camera_pos = ModelViewIT[3];
 	
-	//reset light position
-	float3 lightVector = -lightPos.xyz;
+	float3 light_vector = normalize(lightPos.xyz - IN.Pos.xyz);
 	
-	float3 tsCamVec = IN.CamVec;
-	tsCamVec.x += N.x;
-	tsCamVec.y += N.y;
-	tsCamVec = normalize(tsCamVec);
-	
-	//Get Specular reflection (computed in object coordinates)
-	float3 eyeDir = normalize(IN.CamVec);
-	float3 halfDir = normalize(lightVector + eyeDir);
-	float specularLight = pow(max(0.0, dot(N.xzy, halfDir)), shininess);
-	
-	float4 specularColor = {0.9, 0.8, 0.4, 1.0};
-	float4 specular = specularColor * specularLight;
+	float3 eye_vector = normalize(camera_pos.xyz - IN.Pos.xyz);   
 
-	float4 reflection = IN.Color + specular;
+	float3 N = normalize( tex2D(TexNormal, IN.NormalTC).xyz );    
+
+	N.xyz = normalize(N.xyz*2-1) * 0.09;
 	
-	float fresnelFactor = fresnel(tsCamVec, N);
-    return float4(reflection.rgb, 1) * fresnelFactor + float4(watCol.rgb, 1) * (1 - fresnelFactor);
-//	return float4(IN.CamVec.xyz, 1);
+	// Add Distortion 
+	float4 DisRefl = IN.PosRefl;
+	float4 DisRefr = IN.PosRefr;
+	
+	DisRefl.xy += N.xy;
+	DisRefr.xy += N.xy;	
+	
+	N = normalize(N + IN.Normal);
+	
+	float4 reflColor = tex2Dproj(TexReflect, DisRefl);
+	float4 refrColor = tex2Dproj(TexRefract, DisRefr);
+	
+	float3 light_reflection = normalize(reflect(-light_vector, N));      
+	
+	float3 sunlight = max(pow(dot(light_reflection,eye_vector),shininess),0);
+	
+	float3 specularColor = {2.0, 4.0, 8.0};
+	float3 ambientColor  = {0.2, 0.2, 0.3};
+	
+	float3 light = sunlight * specularColor + ambientColor;
+		
+	// Fresnel effect
+    const float R = 0.20373;
+    const float distVar = 150;
+ 
+    float facing = 1.0 - max( dot(eye_vector, N ) ,0);
+    float fresnelWeight = max (R + (1.0 - R) * pow( facing ,3.0) , 0.0);
+    fresnelWeight = min (( fresnelWeight + max(IN.Pos.z / distVar , fresnelWeight ))*0.5 , 1);
+ 
+    reflColor *=  fresnelWeight;
+    refrColor *= (1-fresnelWeight);
+	
+	float4 foam = tex2D(TexFoam,IN.NormalTC);
+	
+	float2 Inposition = IN.o2wPos; 
+	float4 distanceFoamcolor = float4(0.0,0.0,0.0,0.0);
+	
+	{
+		Inposition.y = 512 - Inposition.y;
+		Inposition.x /= 512;
+		Inposition.y /= 512;		
+		distanceFoamcolor = tex2D(foamDist, Inposition);
+	}
+	
+	foam = foam * 0.5 * distanceFoamcolor.x;
+	
+    color.xyz = light + reflColor.xyz + refrColor.xyz + foam.xyz;
+	//color.xyz += vec3(0,0,0.5);
+	color.a = 1.0;
+	return color;
 }
 
 //---------------------------------------------------------------------------------

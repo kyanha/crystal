@@ -28,6 +28,7 @@ Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 #include "imesh/objmodel.h"
 #include "iutil/comp.h"
 #include "imesh/watermesh.h"
+#include "imesh/terrain2.h"
 #include "imesh/object.h"
 #include "ivideo/graph3d.h"
 #include "csutil/flags.h"
@@ -63,6 +64,7 @@ class csWaterMeshObject :
                             iWaterMeshState>
 {
 private:
+
   // The render mesh holder is used by GetRenderMeshes() to supply
   // render meshes that can be returned by that function.
   csFrameDataHolder<csDirtyAccessArray<csRenderMesh*> > meshesHolder;
@@ -132,6 +134,8 @@ private:
   uint32 current_features;
   csFlags flags;
 
+  float waterHeight;
+
   float fuzz;
 
   // This flag is set to false initially and will be set to true
@@ -158,7 +162,9 @@ private:
   void DrawBottomFromNode(csOceanNode start, const csVector3 camPos, 
     csPlane3 *planes, uint32 frustum_mask);
 
-  void AddNode(csOceanNode start, float dist);
+  void AddNode(csOceanNode start, float dist, const csVector3 camPos);
+  bool SelectBoundary(int nextCell, csOceanNode position, const csVector3 camPos );
+  int CalculateLOD(float distCam);
 
 public:
   /// Constructor.
@@ -200,7 +206,7 @@ public:
     csVector3& isect, float *pr);
   virtual bool HitBeamObject (const csVector3& start, const csVector3& end,
     csVector3& isect, float* pr, int* polygon_idx = 0,
-    iMaterialWrapper** material = 0, bool bf = false);
+  iMaterialWrapper** material = 0, bool bf = false);
   virtual void SetMeshWrapper (iMeshWrapper* lp)
   {
     logparent = lp;
@@ -281,9 +287,7 @@ private:
   // The actual data.
   //Near patch and local water
   csDirtyAccessArray<csVector3> verts;
-  csDirtyAccessArray<csVector3> norms;
   csDirtyAccessArray<csVector2> texs;
-  csDirtyAccessArray<csColor>  cols;
   csDirtyAccessArray<csTriangle> tris;
   
   //Ocean cells
@@ -400,7 +404,7 @@ public:
   float GetMurkiness();
   
   void SetWaterType(waterMeshType waterType);
-  
+
   void SetAmplitudes(float amp1, float amp2, float amp3);  
   void SetFrequencies(float freq1, float freq2, float freq3);  
   void SetPhases(float phase1, float phase2, float phase3);  

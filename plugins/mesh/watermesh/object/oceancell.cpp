@@ -18,6 +18,7 @@
 
 #include "oceancell.h"
 
+
 using namespace CS::Plugins::WaterMesh;
 
 csOceanCell::csOceanCell(float len, float wid, OceanLOD level)
@@ -39,63 +40,278 @@ csOceanCell::csOceanCell(float len, float wid, OceanLOD level)
 
 csOceanCell::~csOceanCell()
 {
-  
+    
 }
 
+
+// This method creates Vertices of ocean node 
+// Nvidia's ocean demo gives more details on how it's actually created. 
+// This page also explains it :- http://www.crystalspace3d.org/blog/naman22
 void csOceanCell::SetupVertices()
 {
+	csDirtyAccessArray<csVector3> verts[16];
+	csDirtyAccessArray<csVector2> texs[16];
+	csDirtyAccessArray<csTriangle> tris[16];
+
   if(!isSetup)
   {
-    float gran;
-    switch(type)
-    {
-      default:
-      case LOD_LEVEL_1:
-        gran = 0.1f;
-        break;
-      case LOD_LEVEL_2:
-        gran = 0.2f;
-        break;
-      case LOD_LEVEL_3:
-        gran = 0.5f;
-        break;
-      case LOD_LEVEL_4:
-        gran = 1.0f;
-        break;
-      case LOD_LEVEL_5:
-        gran = 2.0f;
-        break;
-    }
 
-    uint maxj = (uint) (len * gran);
-    uint maxjd = maxj - 1;
-    uint maxi = (uint) (wid * gran);
-    uint maxid = maxi - 1;
+    float gran = pow(2.0,(double)type)/64.0f;
 
-    for(uint j = 0; j < maxj; ++j)
-    {
-      for(uint i = 0; i < maxi; ++i)
-      {
-        verts.Push(csVector3 ((i * wid / maxid), oHeight, (j * len / maxjd)));
-        norms.Push(csVector3 (0, 1, 0));
-        cols.Push(csColor (0.17f,0.27f,0.26f));
-        texs.Push(csVector2((i * wid / maxid) / 1.5, (j * len / maxjd) / 1.5));
-      }
-    }
+    uint maxjd = (uint) (len * gran);
+    uint maxj = maxjd + 1;
+    uint maxid = (uint) (wid * gran);
+    uint maxi = maxid + 1;
+	
+	for (uint k = 0; k < 16 ; k++)
+	{
+	    for(uint j = 0; j < maxj ; ++j)
+		{
+		   for(uint i = 0; i < maxi  ; ++i)
+		   {
+		     verts[k].Push(csVector3 ((i * wid / maxid), oHeight, (j * len / maxjd)));
+		     texs[k].Push(csVector2((i * wid / maxid), (j * len / maxjd)));
+		   }
+        }
+		
+		// The Inner mesh
+        for(uint j = 1; j <  maxjd-1  ; ++j)
+        {
+            for(uint i = 1; i < maxid-1 ; ++i)
+            {
+				 tris[k].Push(csTriangle ((int)(j * maxi + i), 
+						 (int)((j + 1) * maxi + i), 
+						 (int)(j * maxi + i + 1)));
+				 tris[k].Push(csTriangle ((int)(j * maxi + i + 1),
+						 (int)((j + 1) * maxi + i),
+						 (int)((j + 1) * maxi + i + 1)));	
+	        }
+	    }
+	}
 
-    for(uint j = 0; j < maxjd; ++j)
-    {
-      for(uint i = 0; i < maxid; ++i)
-      {
-        tris.Push(csTriangle ((int)(j * maxi + i), 
-                    (int)((j + 1) * maxi + i), 
-                    (int)(j * maxi + i + 1)));
-        tris.Push(csTriangle ((int)(j * maxi + i + 1),
-                    (int)((j + 1) * maxi + i),
-                    (int)((j + 1) * maxi + i + 1)));
-      }
-    }
-  
+	//Outer mesh
+	for (uint k = 0; k < 16 ; k++)
+	{
+		// The top mesh
+		for ( uint j=maxid-1, i=1; i < maxid ; i++)
+		{
+			if(k/8)
+			{
+				// High res boundary
+				if(i%2)
+				{
+					tris[k].Push(csTriangle ((int)(j * maxi + i),
+						(int)((j + 1) * maxi + i - 1),
+						(int)((j + 1) * maxi + i )));
+					tris[k].Push(csTriangle ((int)(j * maxi + i),
+						(int)((j + 1) * maxi + i),
+						(int)((j + 1) * maxi + i + 1)));
+					if (i!=maxid-1)
+					{
+						tris[k].Push(csTriangle ((int)(j * maxi + i ), 
+							(int)((j + 1) * maxi + i + 1), 
+							(int)(j * maxi + i + 1)));
+					}
+				}
+				else 
+				{
+					tris[k].Push(csTriangle ((int)(j * maxi + i), 
+						(int)((j + 1) * maxi + i), 
+						(int)(j * maxi + i + 1)));
+				}
+			}
+			else
+			{
+				// Low res boundary
+				if(i%2)
+				{
+					tris[k].Push(csTriangle ((int)(j * maxi + i),
+						(int)((j + 1) * maxi + i - 1),
+						(int)((j + 1) * maxi + i + 1)));
+
+					if (i!=maxid-1)
+					{
+						tris[k].Push(csTriangle ((int)(j * maxi + i ), 
+							(int)((j + 1) * maxi + i + 1), 
+							(int)(j * maxi + i + 1)));
+					}
+
+				}
+				else
+				{
+					tris[k].Push(csTriangle ((int)(j * maxi + i), 
+						(int)((j + 1) * maxi + i), 
+						(int)(j * maxi + i + 1))); 
+				}
+			}
+		}
+
+		// The Right mesh
+		for(uint j=1, i=maxid -1  ; j < maxjd ; j++ )
+		{
+			if((k/4)%2)
+			{
+				// High res boundary
+				if (j%2)
+				{
+					tris[k].Push(csTriangle ((int)(j * maxi + i), 
+						(int)(j * maxi + i + 1), 
+						(int)((j - 1) * maxi + i + 1)));
+					tris[k].Push(csTriangle ((int)(j * maxi + i), 
+						(int)((j + 1) * maxi + i + 1), 
+						(int)(j * maxi + i + 1)));
+					if (j!=maxjd-1)
+					{
+						tris[k].Push(csTriangle ((int)(j * maxi + i), 
+							(int)((j + 1) * maxi + i), 
+							(int)((j + 1) * maxi + i + 1)));
+					}
+				}
+				else
+				{
+					tris[k].Push(csTriangle ((int)(j * maxi + i), 
+						(int)((j + 1) * maxi + i), 
+						(int)(j * maxi + i + 1)));
+				}
+			}
+			else
+			{
+
+				// Low res boundary
+				if (j%2)
+				{
+					tris[k].Push(csTriangle ((int)(j * maxi + i), 
+						(int)((j + 1) * maxi + i + 1), 
+						(int)((j - 1) * maxi + i + 1)));
+					if (j!=maxjd-1)
+					{
+						tris[k].Push(csTriangle ((int)(j * maxi + i), 
+							(int)((j + 1) * maxi + i), 
+							(int)((j + 1) * maxi + i + 1)));
+					}
+				}
+				else
+				{
+					tris[k].Push(csTriangle ((int)(j * maxi + i), 
+						(int)((j + 1) * maxi + i), 
+						(int)(j * maxi + i + 1)));
+				}
+			}
+		}
+
+		// Bottom mesh
+		for(uint j=0, i=1 ; i < maxid ; i++ )
+		{	
+			if((k/2)%2)
+			{
+				// High res boundary
+				if(i%2)
+				{
+					tris[k].Push(csTriangle ((int)(j * maxi + i - 1),
+						(int)((j + 1) * maxi + i),
+						(int)(j * maxi + i )));
+
+					tris[k].Push(csTriangle ((int)(j * maxi + i ),
+						(int)((j + 1) * maxi + i),
+						(int)(j * maxi + i + 1)));
+					if (i!=maxid-1)
+					{
+						tris[k].Push(csTriangle ((int)(j * maxi + i + 1), 
+							(int)((j + 1) * maxi + i ), 
+							(int)((j + 1) * maxi + i + 1)));
+					}
+				}
+				else
+				{
+					tris[k].Push(csTriangle ((int)(j * maxi + i), 
+						(int)((j + 1) * maxi + i), 
+						(int)((j + 1) * maxi + i + 1)));  
+				}
+			}
+			else
+			{
+				// Low res boundary
+				if(i%2)
+				{
+					tris[k].Push(csTriangle ((int)(j * maxi + i - 1),
+						(int)((j + 1) * maxi + i),
+						(int)(j * maxi + i + 1)));
+					if (i!=maxid-1)
+					{
+						tris[k].Push(csTriangle ((int)(j * maxi + i + 1), 
+							(int)((j + 1) * maxi + i ), 
+							(int)((j + 1) * maxi + i + 1)));
+					}
+				}
+				else
+				{
+					tris[k].Push(csTriangle ((int)(j * maxi + i), 
+						(int)((j + 1) * maxi + i), 
+						(int)((j + 1) * maxi + i + 1)));  
+				}
+			}
+		}
+
+		// Left mesh
+		for(uint j=1, i=0 ; j < maxjd ; j++ )
+		{
+			if(k%2)
+			{
+				// High res boundary
+				if (j%2)
+				{
+					tris[k].Push(csTriangle ((int)( (j-1) * maxi + i ), 
+						(int)(j * maxi + i), 
+						(int)(j * maxi + i + 1)));	
+					tris[k].Push(csTriangle ((int)(j * maxi + i ), 
+						(int)((j+1) * maxi + i ), 
+						(int)( j * maxi + i +1 )));	
+					if (j!=maxjd-1)
+					{
+						tris[k].Push(csTriangle ((int)(j * maxi + i + 1),
+							(int)((j + 1) * maxi + i),
+							(int)((j + 1) * maxi + i + 1)));
+					}
+				}
+				else
+				{
+					tris[k].Push(csTriangle ((int)(j * maxi + i),
+						(int)((j + 1) * maxi + i + 1),
+						(int)(j * maxi + i + 1)));
+				}
+			}
+			else
+			{
+				// Low res boundary
+				if (j%2)
+				{
+					tris[k].Push(csTriangle ((int)( (j-1) * maxi + i ), 
+						(int)((j + 1) * maxi + i), 
+						(int)(j * maxi + i + 1)));	
+					if (j!=maxjd-1)
+					{
+						tris[k].Push(csTriangle ((int)(j * maxi + i + 1),
+							(int)((j + 1) * maxi + i),
+							(int)((j + 1) * maxi + i + 1)));
+					}
+				}
+				else
+				{
+					tris[k].Push(csTriangle ((int)(j * maxi + i),
+						(int)((j + 1) * maxi + i + 1),
+						(int)(j * maxi + i + 1)));
+				}
+			}
+		}
+	}
+
+	for (uint k = 0 ; k < 16 ; k++)
+	{
+		vertsARR.Push(verts[k]);
+		texsARR.Push(texs[k]);
+		trisARR.Push(tris[k]);
+	}
+
     buffersNeedSetup = true;
     isSetup = true;
   }
@@ -106,50 +322,47 @@ void csOceanCell::SetupBuffers()
   if(!buffersNeedSetup)
     return;
   
-  if (!vertex_buffer)
+  if (!vertex_bufferARR.GetSize())
   {
-    // Create a buffer that doesn't copy the data.
-    vertex_buffer = csRenderBuffer::CreateRenderBuffer (
-      verts.GetSize(), CS_BUF_STATIC, CS_BUFCOMP_FLOAT,
-      3);
-  }
-  vertex_buffer->CopyInto (verts.GetArray(), verts.GetSize());
+	  for(uint i = 0; i < 16; i++)
+	  {
+		 // Create a buffer that doesn't copy the data.
+		 vertex_bufferARR.Push( csRenderBuffer::CreateRenderBuffer (
+		 vertsARR[i].GetSize(), CS_BUF_STATIC, CS_BUFCOMP_FLOAT,
+		 3));
 
-  if (!texel_buffer)
+		 vertex_bufferARR[i]->CopyInto (vertsARR[i].GetArray(), vertsARR[i].GetSize());
+		}
+  }
+
+
+  if (!texel_bufferARR.GetSize())
   {
-    // Create a buffer that doesn't copy the data.
-    texel_buffer = csRenderBuffer::CreateRenderBuffer (
-      verts.GetSize(), CS_BUF_STATIC, CS_BUFCOMP_FLOAT,
-      2);
-  }
-  texel_buffer->CopyInto (texs.GetArray(), verts.GetSize());
+	  for(uint i = 0; i < 16; i++)
+	  {
+		// Create a buffer that doesn't copy the data.
+		texel_bufferARR.Push( csRenderBuffer::CreateRenderBuffer (
+		vertsARR[i].GetSize(), CS_BUF_STATIC, CS_BUFCOMP_FLOAT,
+		2));
 
-  if (!index_buffer)
+		texel_bufferARR[i]->CopyInto (texsARR[i].GetArray(), vertsARR[i].GetSize());
+	  }
+  }
+  
+
+  if (!index_bufferARR.GetSize())
   {
-      index_buffer = csRenderBuffer::CreateIndexRenderBuffer (
-        tris.GetSize()*3,
-        CS_BUF_STATIC, CS_BUFCOMP_UNSIGNED_INT,
-        0, verts.GetSize()-1);
-  }
-  index_buffer->CopyInto (tris.GetArray(), tris.GetSize()*3);
+	 for(uint i = 0; i < 16; i++)
+	 {
+		  // Create a buffer that doesn't copy the data.
+		  index_bufferARR.Push(  csRenderBuffer::CreateIndexRenderBuffer (
+		  (trisARR[i].GetSize()*3),
+		   CS_BUF_STATIC, CS_BUFCOMP_UNSIGNED_INT,
+		   0, vertsARR[i].GetSize()-1) );
 
-  if (!normal_buffer)
-  {            
-    // Create a buffer that doesn't copy the data.
-      normal_buffer = csRenderBuffer::CreateRenderBuffer (
-        norms.GetSize(), CS_BUF_STATIC, CS_BUFCOMP_FLOAT,
-        3);
+		  index_bufferARR[i]->CopyInto (trisARR[i].GetArray(), trisARR[i].GetSize()*3);
+	 }
   }
-  normal_buffer->CopyInto (norms.GetArray(), norms.GetSize());
-
-  if (!color_buffer)
-  {            
-    // Create a buffer that doesn't copy the data.
-      color_buffer = csRenderBuffer::CreateRenderBuffer (
-        cols.GetSize(), CS_BUF_STATIC, CS_BUFCOMP_FLOAT,
-        3);
-  }
-  color_buffer->CopyInto (cols.GetArray(), cols.GetSize());
 
   buffersNeedSetup = false;
 }
@@ -159,31 +372,35 @@ void csOceanCell::SetupBufferHolder()
   if(!bufferHoldersNeedSetup)
     return;
   
-  if(bufferHolder == 0)
-    bufferHolder.AttachNew(new csRenderBufferHolder);
+  for(uint i = 0; i < 16; i++)
+  {
+	  csRef<csRenderBufferHolder> bufferHolder;
 
-  bufferHolder->SetRenderBuffer(CS_BUFFER_INDEX, index_buffer);
-  bufferHolder->SetRenderBuffer(CS_BUFFER_POSITION, vertex_buffer);
-  bufferHolder->SetRenderBuffer(CS_BUFFER_TEXCOORD0, texel_buffer);
-  
-  //Ocean color and normals shouldn't change..
-  bufferHolder->SetRenderBuffer(CS_BUFFER_NORMAL, normal_buffer);
-  bufferHolder->SetRenderBuffer(CS_BUFFER_COLOR, color_buffer);
-  
+	  if(bufferHolder == 0)
+		  bufferHolder.AttachNew(new csRenderBufferHolder);
+
+	  bufferHolder->SetRenderBuffer(CS_BUFFER_INDEX, index_bufferARR[i]);
+	  bufferHolder->SetRenderBuffer(CS_BUFFER_POSITION, vertex_bufferARR[i]);
+	  bufferHolder->SetRenderBuffer(CS_BUFFER_TEXCOORD0, texel_bufferARR[i]);
+
+	  bufferHolderARR.Push(bufferHolder);
+  }
   bufferHoldersNeedSetup = false;
 }
 
 ////////////// csOceanNode //////////////////
 
 
-csOceanNode::csOceanNode(csVector2 pos, float len, float wid)
+csOceanNode::csOceanNode(csVector2 pos, float len, float wid, float height)
 {
   gc = pos;
   this->len = len;
   this->wid = wid;
-  oHeight = 0;
+  oHeight = 0.0;
   
   bbox = csBox3(gc.x, oHeight - 1.0, gc.y, gc.x + len, oHeight + 1.0, gc.y + wid);
+
+  oHeight = height;
 }
 
 csOceanNode::~csOceanNode()
@@ -193,22 +410,22 @@ csOceanNode::~csOceanNode()
 
 csOceanNode csOceanNode::GetLeft() const
 {
-  return csOceanNode(csVector2(gc.x + len, gc.y), len, wid);
+  return csOceanNode(csVector2(gc.x - len, gc.y), len, wid, oHeight);
 }
 
 csOceanNode csOceanNode::GetRight() const
 {
-  return csOceanNode(csVector2(gc.x - len, gc.y), len, wid);
+  return csOceanNode(csVector2(gc.x + len, gc.y), len, wid, oHeight);
 }
 
 csOceanNode csOceanNode::GetUp() const
 {
-  return csOceanNode(csVector2(gc.x, gc.y + wid), len, wid);
+  return csOceanNode(csVector2(gc.x, gc.y + wid), len, wid, oHeight);
 }
 
 csOceanNode csOceanNode::GetDown() const
 {
-  return csOceanNode(csVector2(gc.x, gc.y - wid), len, wid);
+  return csOceanNode(csVector2(gc.x, gc.y - wid), len, wid, oHeight);
 }
 
 csVector3 csOceanNode::GetCenter() const

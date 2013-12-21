@@ -23,7 +23,8 @@
     <combiner name="glsl" plugin="crystalspace.graphics3d.shader.combiner.glsl" />
     
     <input file="/shader-snippets/texCoord.inp" />
-    
+	<input name="texCoordww" type="texcoord4" />
+	
     <input name="texNormal" type="tex2d" default="complex">
       <block location="cg:pass">
 	<texture name="tex normal" destination="fragmentIn.texNormal" />
@@ -77,9 +78,6 @@
     </input>
 
     <input name="texture_scale" type="scale2" default="complex">
-      <block location="shadervars">
-	  <shadervar name="texture scale" type="vector2">1,1</shadervar>
-      </block>
       
       <block location="cg:variablemap">
 	  <variablemap variable="texture scale" destination="fragmentIn.texture_scale" />
@@ -112,7 +110,10 @@
       normal.z = sqrt (1 - dot (normal.xy, normal.xy));
       normal_attr_perfragment = true;
     <?elsif vars."tex normal".texture ?>
-      normal = normalize (h4tex2D (texNormal, texCoord*texture_scale).xyz*2-1);
+	 float2 texCoord2w;
+	 texCoord2w.x = texCoordww.x;
+     texCoord2w.y = texCoordww.y;
+      normal = normalize (h4tex2D (texNormal, texCoord2w*texture_scale).xyz*2-1);
       normal_attr_perfragment = true;
     <?else?>
       normal = half3 (0, 0, 1);
@@ -126,7 +127,10 @@
       normal.z = sqrt (1.0 - dot (normal.xy, normal.xy));
       normal_attr_perfragment = true;
     <?elsif vars."tex normal".texture ?>
-      normal = normalize (texture2D (texNormal, texCoord*texture_scale).xyz*2.0-1.0);
+	  vec2 texCoord2w;
+	  texCoord2w.x = texCoordww.x;
+      texCoord2w.y = texCoordww.y;
+      normal = normalize (texture2D (texNormal, texCoord2w*texture_scale).xyz*2.0-1.0);
       normal_attr_perfragment = true;
     <?else?>
       normal = vec3 (0.0, 0.0, 1.0);
