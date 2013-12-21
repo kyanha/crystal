@@ -226,6 +226,13 @@ struct iGraphics2D : public virtual iGraphicsCanvas
   virtual csPtr<iImage> ScreenShot () = 0;
 
   /**
+   * Do a screenshot in preallocated buffer.
+   * Buffer should have size width*height*4.
+   * Returns true on success or false on failure.
+   */
+  virtual bool ScreenShot (unsigned char* buffer) = 0;
+
+  /**
    * Write a text string into the back buffer. A value of -1 for \p bg
    * color will not draw the background.
    * \remarks For transparent backgrounds, it is recommended to obtain a color

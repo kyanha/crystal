@@ -1288,6 +1288,43 @@ AS_IF([test "$cs_cv_libvorbis" = yes],
 	[$cs_cv_libogg_libs $cs_cv_libvorbis_libs])])
 
 
+	
+#------------------------------------------------------------------------------
+# Check for libavcodec, libavformat & libavtutil.
+#------------------------------------------------------------------------------
+CS_NOTABLE([avcodec], [], [], [$cs_cv_libavcodec],
+    [CS_CHECK_LIB_WITH([avcodec],
+	[AC_LANG_PROGRAM(
+	    [[#include <libavcodec/avcodec.h>]],
+	    [avcodec_register_all();])],
+	[], [],
+	[CS_EMIT_BUILD_RESULT([cs_cv_libavcodec], [AVCODEC])])])
+
+CS_NOTABLE([avformat], [], [], [$cs_cv_libavformat],
+    [AS_IF([test "$cs_cv_libavcodec" = yes],
+	[CS_CHECK_LIB_WITH([avformat],
+	    [AC_LANG_PROGRAM(
+	      [[#include <libavformat/avformat.h>]],
+	      [av_register_all();])],
+	    [], [],
+	    [CS_EMIT_BUILD_RESULT([cs_cv_libavformat], [AVFORMAT])], [],
+	    [$cs_cv_libavcodec_cflags],
+	    [$cs_cv_libavcodec_lflags],
+	    [$cs_cv_libavcodec_libs])])])
+
+CS_NOTABLE([avutil], [], [], [$cs_cv_libavutil],
+    [AS_IF([test "$cs_cv_libavformat" = yes],
+	[CS_CHECK_LIB_WITH([avutil],
+	    [AC_LANG_PROGRAM(
+	      [[#include <libavutil/avutil.h>]],
+	      [avutil_version();])],
+	    [], [],
+	    [CS_EMIT_BUILD_RESULT([cs_cv_libavutil], [FFMPEG])], [],
+	    [$cs_cv_libavcodec_cflags $cs_cv_libavformat_cflags],
+	    [$cs_cv_libavcodec_lflags $cs_cv_libavformat_lflags],
+	    [$cs_cv_libavcodec_libs $cs_cv_libavformat_libs])])])
+
+
 
 #------------------------------------------------------------------------------
 # Check for the Theora Video Compression Codec decoder library

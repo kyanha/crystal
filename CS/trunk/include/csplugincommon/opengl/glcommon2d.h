@@ -194,6 +194,9 @@ namespace CS
         /// Do a screenshot: return a new iImage object
         virtual csPtr<iImage> ScreenShot ();
 
+		/// Do a screenshot in preallocated buffer, return success or failure
+        virtual bool ScreenShot (unsigned char* buffer);
+
         /// Get the double buffer state
         virtual bool GetDoubleBufferState ()
         { return false; }

@@ -94,6 +94,7 @@ public:
   { return 0; }
   
   virtual csPtr<iImage> ScreenShot() { return 0; }
+  virtual bool ScreenShot (unsigned char* buffer) { return false; }
 };
 
 #endif // __CS_NULL2D_H__

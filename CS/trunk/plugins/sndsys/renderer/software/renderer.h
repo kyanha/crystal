@@ -90,9 +90,6 @@ public:
   csSndSysRendererSoftware(iBase *piBase);
   virtual ~csSndSysRendererSoftware();
 
-  /// Called by the driver thread to request sound data
-  virtual size_t FillDriverBuffer(void *buf1, size_t buf1_len,
-    void *buf2, size_t buf2_len);
 
   /// Send a message to the sound system event recorder
   //   This version may be called by other components that have a reference to the renderer
@@ -115,6 +112,9 @@ public:
 protected:
   /// Interface to the Configuration file
   csConfigAccess m_Config;
+
+  /// There is no driver and application should extract sound by itself (using FillDriverBuffer())
+  bool m_IsLoopback;
 
   /// Interface to the low level sound driver
   csRef<iSndSysSoftwareDriver> m_pSoundDriver;
@@ -392,7 +392,17 @@ public:
   virtual bool RegisterCallback(iSndSysRendererCallback *pCallback);
 
   /// Unregister a previously registered callback component 
-  virtual bool UnregisterCallback(iSndSysRendererCallback *pCallback);
+  virtual bool UnregisterCallback(iSndSysRendererCallback *pCallback); 
+  
+  /// Is this loopback interface?
+  virtual bool IsLoopback();
+
+  /// Get format used by FillDriverBuffer()
+  virtual void GetLoopbackFormat(csSndSysSoundFormat* pFormat);
+
+  /// Get sound data
+  virtual size_t FillDriverBuffer(void *buf1, size_t buf1_len,
+    void *buf2, size_t buf2_len);
 };
 
 #endif // #ifndef SNDSYS_RENDERER_SOFTWARE_RENDERER_H
