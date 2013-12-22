@@ -8147,6 +8147,112 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_iSndSysRenderer_IsLoopback(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  iSndSysRenderer *arg1 = (iSndSysRenderer *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  bool result;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"iSndSysRenderer_IsLoopback",1,1,&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_iSndSysRenderer, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "iSndSysRenderer_IsLoopback" "', argument " "1"" of type '" "iSndSysRenderer *""'"); 
+  }
+  arg1 = reinterpret_cast< iSndSysRenderer * >(argp1);
+  result = (bool)(arg1)->IsLoopback();
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_iSndSysRenderer_GetLoopbackFormat(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  iSndSysRenderer *arg1 = (iSndSysRenderer *) 0 ;
+  csSndSysSoundFormat *arg2 = (csSndSysSoundFormat *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"iSndSysRenderer_GetLoopbackFormat",2,2,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_iSndSysRenderer, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "iSndSysRenderer_GetLoopbackFormat" "', argument " "1"" of type '" "iSndSysRenderer *""'"); 
+  }
+  arg1 = reinterpret_cast< iSndSysRenderer * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_csSndSysSoundFormat, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "iSndSysRenderer_GetLoopbackFormat" "', argument " "2"" of type '" "csSndSysSoundFormat *""'"); 
+  }
+  arg2 = reinterpret_cast< csSndSysSoundFormat * >(argp2);
+  (arg1)->GetLoopbackFormat(arg2);
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_iSndSysRenderer_FillDriverBuffer(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  iSndSysRenderer *arg1 = (iSndSysRenderer *) 0 ;
+  void *arg2 = (void *) 0 ;
+  size_t arg3 ;
+  void *arg4 = (void *) 0 ;
+  size_t arg5 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int res2 ;
+  size_t val3 ;
+  int ecode3 = 0 ;
+  int res4 ;
+  size_t val5 ;
+  int ecode5 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  PyObject * obj3 = 0 ;
+  PyObject * obj4 = 0 ;
+  size_t result;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"iSndSysRenderer_FillDriverBuffer",5,5,&obj0,&obj1,&obj2,&obj3,&obj4)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_iSndSysRenderer, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "iSndSysRenderer_FillDriverBuffer" "', argument " "1"" of type '" "iSndSysRenderer *""'"); 
+  }
+  arg1 = reinterpret_cast< iSndSysRenderer * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1,SWIG_as_voidptrptr(&arg2), 0, 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "iSndSysRenderer_FillDriverBuffer" "', argument " "2"" of type '" "void *""'"); 
+  }
+  ecode3 = SWIG_AsVal_size_t(obj2, &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "iSndSysRenderer_FillDriverBuffer" "', argument " "3"" of type '" "size_t""'");
+  } 
+  arg3 = static_cast< size_t >(val3);
+  res4 = SWIG_ConvertPtr(obj3,SWIG_as_voidptrptr(&arg4), 0, 0);
+  if (!SWIG_IsOK(res4)) {
+    SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "iSndSysRenderer_FillDriverBuffer" "', argument " "4"" of type '" "void *""'"); 
+  }
+  ecode5 = SWIG_AsVal_size_t(obj4, &val5);
+  if (!SWIG_IsOK(ecode5)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode5), "in method '" "iSndSysRenderer_FillDriverBuffer" "', argument " "5"" of type '" "size_t""'");
+  } 
+  arg5 = static_cast< size_t >(val5);
+  result = (arg1)->FillDriverBuffer(arg2,arg3,arg4,arg5);
+  resultobj = SWIG_From_size_t(static_cast< size_t >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_iSndSysRenderer_scfGetVersion(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   int result;
@@ -8881,6 +8987,9 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"iSndSysRenderer_GetListener", _wrap_iSndSysRenderer_GetListener, METH_VARARGS, NULL},
 	 { (char *)"iSndSysRenderer_RegisterCallback", _wrap_iSndSysRenderer_RegisterCallback, METH_VARARGS, NULL},
 	 { (char *)"iSndSysRenderer_UnregisterCallback", _wrap_iSndSysRenderer_UnregisterCallback, METH_VARARGS, NULL},
+	 { (char *)"iSndSysRenderer_IsLoopback", _wrap_iSndSysRenderer_IsLoopback, METH_VARARGS, NULL},
+	 { (char *)"iSndSysRenderer_GetLoopbackFormat", _wrap_iSndSysRenderer_GetLoopbackFormat, METH_VARARGS, NULL},
+	 { (char *)"iSndSysRenderer_FillDriverBuffer", _wrap_iSndSysRenderer_FillDriverBuffer, METH_VARARGS, NULL},
 	 { (char *)"iSndSysRenderer_scfGetVersion", _wrap_iSndSysRenderer_scfGetVersion, METH_VARARGS, NULL},
 	 { (char *)"iSndSysRenderer_scfGetName", _wrap_iSndSysRenderer_scfGetName, METH_VARARGS, NULL},
 	 { (char *)"delete_iSndSysRenderer", _wrap_delete_iSndSysRenderer, METH_VARARGS, NULL},

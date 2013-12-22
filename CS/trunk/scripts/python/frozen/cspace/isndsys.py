@@ -422,6 +422,9 @@ class iSndSysRenderer(core.iBase):
     def GetListener(*args): return _isndsys.iSndSysRenderer_GetListener(*args)
     def RegisterCallback(*args): return _isndsys.iSndSysRenderer_RegisterCallback(*args)
     def UnregisterCallback(*args): return _isndsys.iSndSysRenderer_UnregisterCallback(*args)
+    def IsLoopback(*args): return _isndsys.iSndSysRenderer_IsLoopback(*args)
+    def GetLoopbackFormat(*args): return _isndsys.iSndSysRenderer_GetLoopbackFormat(*args)
+    def FillDriverBuffer(*args): return _isndsys.iSndSysRenderer_FillDriverBuffer(*args)
     scfGetVersion = staticmethod(_isndsys.iSndSysRenderer_scfGetVersion)
     scfGetName = staticmethod(_isndsys.iSndSysRenderer_scfGetName)
     __swig_destroy__ = _isndsys.delete_iSndSysRenderer
