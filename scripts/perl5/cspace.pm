@@ -6551,6 +6551,9 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *GetListener = *cspacec::iSndSysRenderer_GetListener;
 *RegisterCallback = *cspacec::iSndSysRenderer_RegisterCallback;
 *UnregisterCallback = *cspacec::iSndSysRenderer_UnregisterCallback;
+*IsLoopback = *cspacec::iSndSysRenderer_IsLoopback;
+*GetLoopbackFormat = *cspacec::iSndSysRenderer_GetLoopbackFormat;
+*FillDriverBuffer = *cspacec::iSndSysRenderer_FillDriverBuffer;
 *scfGetVersion = *cspacec::iSndSysRenderer_scfGetVersion;
 *scfGetName = *cspacec::iSndSysRenderer_scfGetName;
 sub DESTROY {
