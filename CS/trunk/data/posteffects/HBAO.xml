@@ -1,0 +1,44 @@
+<posteffect>
+
+	<layer name="hbao" shader="/shader/postproc/hbao/HBAO.xml" downsample="0">
+	
+		<parameter name="angle bias" type="float">0.1</parameter> <!-- 5.72 degrees -->
+		<parameter name="sqr radius" type="float">0.01</parameter>
+		<parameter name="inv radius" type="float">10</parameter>
+		<parameter name="radius" type="float">0.1</parameter>
+		<parameter name="num steps" type="float">16</parameter>
+		<parameter name="num directions" type="float">16</parameter>
+		<parameter name="contrast" type="float">1.5</parameter>
+		<parameter name="attenuation" type="float">1.0</parameter>
+		
+		<input source="/data/posteffects/CosSinJitter.bmp" texname="tex csj"/>
+		<output name="out" format="argb8" />
+	</layer>
+
+	<layer name="blurX" shader="/shader/postproc/hbao/BilateralBlurX.xml">
+	
+		<parameter name="blur radius" type="float">7</parameter>
+		<parameter name="blur falloff" type="float">0.010204081632</parameter> <!-- 1 / (2*radius*radius)-->
+		<parameter name="sharpness" type="float">1000000</parameter>
+		
+		<input layer="hbao.out" texname="tex diffuse"/>
+		<output name="out" format="argb8" />
+	</layer>
+	
+	<layer name="blurY" shader="/shader/postproc/hbao/BilateralBlurY.xml">
+	
+		<parameter name="blur radius" type="float">7</parameter>
+		<parameter name="blur falloff" type="float">0.010204081632</parameter> <!-- 1 / (2*radius*radius)-->
+		<parameter name="sharpness" type="float">1000000</parameter>
+		
+		<input layer="blurX.out" texname="tex diffuse"/>
+		<output name="out" format="argb8" />
+	</layer>
+	
+	<layer name="combine" shader="/shader/postproc/hbao/combine.xml">
+		<parameter name="debug show ao" type="float">0</parameter>
+		<input layer="*screen" texname="tex diffuse"/>
+		<input layer="blurY.out" texname="tex ao"/>
+	</layer>
+
+</posteffect>

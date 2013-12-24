@@ -1,5 +1,6 @@
 /*
     Copyright (C) 2007-2008 by Marten Svanfeldt
+                  2013 by Pedro SOUZA
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Library General Public
@@ -25,6 +26,8 @@
 
 #include "csgfx/shadervarcontext.h"
 #include "csplugincommon/rendermanager/rendertree.h"
+#include "csutil/scf.h"
+#include "csutil/scf_implementation.h"
 #include "csutil/array.h"
 #include "csutil/dirtyaccessarray.h"
 #include "csutil/genericresourcecache.h"
@@ -40,457 +43,409 @@ struct iShader;
 struct iSyntaxService;
 struct iTextureHandle;
 struct iView;
+struct iRenderManagerPostEffects;
 
 namespace CS
 {
-namespace RenderManager
-{
-  /**
-   * Helper for post processing effects usage in render managers.
-   * Provides a simple way to render the screen to a texture and then use
-   * a number of full screen passes with settable shader to get the desired
-   * effect.
-   *
-   * To use post processing effects, rendering of the main context has to be
-   * redirected to a target managed by the post processing manager. After
-   * drawing the scene another call applies the effects.
-   * Example:
-   * \code
-   * // Set up post processing manager for the given view
-   * postEffects.SetupView (renderView);
-   *
-   * // Set up start context,
-   * RenderTreeType::ContextNode* startContext = renderTree.CreateContext (renderView);
-   * // render to a target for later postprocessing
-   * startContext->renderTargets[rtaColor0].texHandle = postEffects.GetScreenTarget ();
-   *
-   * // ... draw stuff ...
-   *
-   * // Apply post processing effects
-   * postEffects.DrawPostEffects ();
-   * \endcode
-   *
-   * Post processing setups are a graph of effects (with nodes called "layers"
-   * for historic reasons). Each node has one output and multiple inputs.
-   * Inputs can be the output of another node or the render of the current
-   * scene.
-   *
-   * Post processing setups are usually read from an external source
-   * by using PostEffectLayersParser.
-   * Example:
-   * \code
-   * const char* effectsFile = cfg->GetStr ("MyRenderManager.Effects", 0);
-   * if (effectsFile)
-   * {
-   *   PostEffectLayersParser postEffectsParser (objectReg);
-   *   postEffectsParser.AddLayersFromFile (effectsFile, postEffects);
-   * }
-   * \endcode
-   * A setup is not required to use a post processing manager. If no setup is
-   * provided the scene will just be drawn to the screen.
-   *
-   * Post processing managers can be "chained" which means the output of a
-   * manager serves as the input of the following, "chained" post processing
-   * manager instead of the normal rendered scene. Notably, using HDR exposure
-   * effects involved chaining an post processing manager for HDR to a
-   * another post processing manager. Example:
-   * \code
-   * hdr.Setup (...);
-   * // Chain HDR post processing effects to normal effects
-   * postEffects.SetChainedOutput (hdr.GetHDRPostEffects());
-   * // Just use postEffects as usual, chained effects are applied transparently
-   * \endcode
-   */
-  class CS_CRYSTALSPACE_EXPORT PostEffectManager :
-    public CS::Memory::CustomAllocatedDerived<csRefCount>
+  namespace RenderManager
   {
-    struct DimensionData;
-  public:
-    class Layer;
-    /**
-     * Options for a postprocessing layer
+    struct iPostEffectLayer;
+
+    /*
+     * Downsample axis specifies in wich axis the 
+     * output texture will be downsampled.
      */
-    struct LayerOptions
+    enum DownsampleAxis
+    {
+      /// Downsample in x axis
+      AXIS_X = 1,
+      /// Downsample in y axis
+      AXIS_Y = 2,
+      /// Downsample in both axis
+      AXIS_XY = (AXIS_X | AXIS_Y)
+    };
+
+    struct TextureAllocationInfo
     {
       /// Generate mipmaps for this layer
       bool mipmap;
+
       /// Highest mipmap level to generate
       int maxMipmap;
+
       /**
        * Reduce output size. Each downsample step reduces the output by half 
-       * in each dimensions.
+       * in the specified axis.
        */
       int downsample;
+
+      /// The axis to downsample
+      DownsampleAxis axis;
+
       /// Prevent texture reuse. Useful for readback or feedback effects.
-      bool noTextureReuse;
-      /**
-       * Manually provide a texture to render on.
-       * Means mipmap, maxMipmap, downsample and noTextureReuse are ignored.
-       */
-      csRef<iTextureHandle> manualTarget;
-      /// If not empty render to this rectangle of the target texture
-      csRect targetRect;
-      /**
-       * If given renders onto the specified layer as well.
-       * This means all other options except targetRect are ignored.
-       */
-      Layer* renderOn;
-      /**
-       * This layer will later be read back. Sets the #CSDRAW_READBACK draw
-       * flag.
-       */
-      bool readback;
-      
-      LayerOptions() : mipmap (false), maxMipmap (-1), downsample (0),
-        noTextureReuse (false), renderOn (0), readback (false) {}
-      
-      bool operator==(const LayerOptions& other) const
+      bool reusable;
+
+      /// The render target texture format
+      csString format;
+
+      TextureAllocationInfo() : mipmap (false), maxMipmap (-1), downsample (0), axis(AXIS_XY), reusable (true), format ("argb8") {}
+
+      bool operator==(const TextureAllocationInfo& other) const
       { 
         return (mipmap == other.mipmap)
           && (maxMipmap == other.maxMipmap)
           && (downsample == other.downsample)
-          && (noTextureReuse == other.noTextureReuse)
-          && (manualTarget == other.manualTarget)
-          && (targetRect == other.targetRect)
-          && (renderOn == other.renderOn)
-          && (readback == other.readback);
+          && (axis == other.axis)
+          && (reusable == other.reusable)
+          && (format == other.format);
       }
     };
 
-    /// Custom input mapping for a layer
-    struct LayerInputMap
+    /**
+     * Options for a post processing layer
+     */
+    struct PostEffectLayerOptions
     {
-      /**
-       * Shader variable for manually specifying an inout texture.
-       * Takes precedence over inputLayer and textureName if given.
-       */
-      csRef<csShaderVariable> manualInput;
-      /// Input layer
-      Layer* inputLayer;
+      TextureAllocationInfo info;
+
+      ///Manual render target
+      csRef<iTextureHandle> renderTarget;
+
+      /// If not empty render to this rectangle of the target texture
+      csRect targetRect;
+
+      /// RenderTarget name
+      csString name;
+
+      bool operator==(const PostEffectLayerOptions& other) const
+      { 
+        return (info == other.info)
+          && (renderTarget == other.renderTarget)
+          && (targetRect == other.targetRect)
+          && (name == other.name);
+      }
+    };
+
+    /// Defines the type of input
+    enum LayerInputType
+    {
+      /// uses layers output
+      AUTO,
+      /// texture loaded from a file
+      STATIC,
+      /// custom input
+      MANUAL
+    };
+
+    /// Custom input mapping for a post processing layer
+    struct PostEffectLayerInputMap
+    {
+      /// the input type
+      LayerInputType type;
+
+      csRef<iTextureHandle> inputTexture;
+
+      /// name used to setup or load the input texture
+      csString sourceName;
+
       /// Name of the shader variable to provide the input layer texture in
-      csString textureName;
+      csString svTextureName;
+
       /**
        * Name of the shader variable to provide the texture coordinates for the
        * input layer texture in
        */
-      csString texcoordName;
+      csString svTexcoordName;
+
       /**
        * If not empty the SV with that name receives the 'pixel size'
        * (values to add to X/Y to get next input pixel) for this input.
        */
-      csString inputPixelSizeName;
+      csString svPixelSizeName;
+
       /**
        * If not empty specifies the rectangle of the input texture, in pixels,
        * the be used as input for the layer.
        */
       csRect sourceRect;
-      
-      LayerInputMap() : inputLayer (0), textureName ("tex diffuse"),
-        texcoordName ("texture coordinate 0") {}
+
+      PostEffectLayerInputMap () : type (AUTO), svTextureName ("tex diffuse"),
+        svTexcoordName ("texture coordinate 0") {}
     };
-    
-    /// An effect layer.
-    class Layer
+
+    /*
+     * Custom layer processor interface
+     *
+     * This interface is intended to perform custom
+     * pre/post processing and also update shaders
+     * variables if needed.
+     */
+    class iCustomProcessor : public virtual iBase
     {
-    private:
-      friend class PostEffectManager;
-      friend struct DimensionData;
-      
-      csRef<iShader> effectShader;
-      int outTextureNum;
-      csArray<LayerInputMap> inputs;
-      csRef<iShaderVariableContext> svContext;
-      LayerOptions options;
-      
-      Layer()
-      {
-        svContext.AttachNew (new csShaderVariableContext);
-      }
-      bool IsInput (const Layer* layer) const;
     public:
-      /// Get the shader variables for this layer.
-      iShaderVariableContext* GetSVContext() const { return svContext; }
-      /// Get inputs to this layer
-      const csArray<LayerInputMap>& GetInputs() const { return inputs; }
-      
-      /// Get layer options
-      const LayerOptions& GetOptions() const { return options; }
-      /// Set layer options
-      void SetOptions (const LayerOptions& opt) { options = opt; }
+      SCF_INTERFACE (iCustomProcessor, 1, 0, 0);
 
-      /// Get layer shader
-      void SetShader (iShader* shader) { effectShader = shader; }
-      /// Set layer shader
-      iShader* GetShader () const { return effectShader; }
-      /// @@@ Document me?
-      int GetOutTextureNum () const { return outTextureNum; }
-    };
-  
-    PostEffectManager ();
-    ~PostEffectManager ();
-
-    /// Initialize
-    void Initialize (iObjectRegistry* objectReg);
-    
-    /// Set the texture format for the intermediate textures used.
-    void SetIntermediateTargetFormat (const char* textureFmt);
-    /// Get the texture format for the intermediate textures used.
-    const char* GetIntermediateTargetFormat ();
-
-    //@{
-    /**
-     * Set up post processing manager for a view.
-     * \returns Whether the manager has changed. If \c true some values,
-     *   such as the screen texture, must be reobtained from the manager.
-     *   \a perspectiveFixup returns a matrix that should be applied
-     *   after the normal perspective matrix (this is needed as the
-     *   screen texture may be larger than the desired viewport and thus
-     *   the projection must be corrected for that).
-     */
-    bool SetupView (iView* view, CS::Math::Matrix4& perspectiveFixup);
-    bool SetupView (uint width, uint height,
-      CS::Math::Matrix4& perspectiveFixup);
-    //@}
-
-    /**
-     * Discard (and thus cause recreation of) all intermediate textures.
-     */
-    void ClearIntermediates();
-
-    /// Get the texture to render a scene to for post processing.
-    iTextureHandle* GetScreenTarget ();
-
-    /**
-     * Draw post processing effects after the scene was rendered to
-     * the handle returned by GetScreenTarget().
-     */
-    void DrawPostEffects (RenderTreeBase& renderTree);
-    
-    //@{
-    /// Add an effect pass. Uses last added layer as the input
-    Layer* AddLayer (iShader* shader);
-    Layer* AddLayer (iShader* shader, const LayerOptions& opt);
-    //@}
-    //@{
-    /// Add an effect pass with custom input mappings.
-    Layer* AddLayer (iShader* shader, size_t numMaps, const LayerInputMap* maps);
-    Layer* AddLayer (iShader* shader, const LayerOptions& opt, size_t numMaps,
-      const LayerInputMap* maps);
-    //@}
-    /// Remove a layer
-    bool RemoveLayer (Layer* layer);
-    /// Remove all layers
-    void ClearLayers();
-    
-    /// Get the layer representing the "screen" a scene is rendered to.
-    Layer* GetScreenLayer() { return postLayers[0]; }
-    
-    /// Get the layer that was added last
-    Layer* GetLastLayer() { return lastLayer; }
-    
-    /// Get the output texture of a layer.
-    iTextureHandle* GetLayerOutput (const Layer* layer);
-    
-    /**
-     * Get SV context used for rendering.
-     */
-    void GetLayerRenderSVs (const Layer* layer, csShaderVariableStack& svStack) const;
-    
-    /**
-     * Set the render target used to ultimatively render to.
-     * Setting this on a post effects manager in a chain effectively sets
-     * the output target of the last chain member.
-     */
-    void SetEffectsOutputTarget (iTextureHandle* tex)
-    {
-      if (chainedEffects)
-	chainedEffects->SetEffectsOutputTarget (tex);
-      else
-	target = tex;
-    }
-    /// Get the render target used to ultimatively render to.
-    iTextureHandle* GetEffectsOutputTarget () const
-    {
-      if (chainedEffects) return chainedEffects->GetEffectsOutputTarget ();
-      return target;
-    }
-
-    //@{
-    /**
-     * Chain another post effects manager to the this one. The output of
-     * this manager is automatically used as input to the next.
-     */
-    void SetChainedOutput (PostEffectManager* nextEffects);
-    void SetChainedOutput (PostEffectManager& nextEffects)
-    { SetChainedOutput (&nextEffects); }
-    //@}
-    
-    /**
-     * Returns whether the screen space is flipped in Y direction. This usually
-     * happens when rendering to a texture due post effects.
-     */
-    bool ScreenSpaceYFlipped ();
-  private:
-    uint frameNum;
-    csRef<iGraphics3D> graphics3D;
-    csRef<iShaderVarStringSet> svStrings;
-    bool keepAllIntermediates;
-    csRef<iRenderBuffer> indices;
-    csRef<iTextureHandle> target;
-    PostEffectManager* chainedEffects;
-    uint dbgIntermediateTextures;
-
-    void SetupScreenQuad ();
-    const Layer& GetRealOutputLayer (const Layer& layer) const
-    { 
-      return layer.options.renderOn 
-        ? GetRealOutputLayer (*(layer.options.renderOn))
-        : layer;
-    }
-
-    struct Dimensions
-    {
-      uint x, y;
-    };
-    /// All the data needed for one target dimension
-    struct DimensionData
-    {
-      Dimensions dim;
-      /**
-       * Textures which have the same properties are managed
-       * in one "bucket"
+      /*
+       * Pre process function.
+       * Everything that needs to be done before drawing goes here.
        */
-      struct TexturesBucket
-      {
-        /// Textures in this bucket
-	csRefArray<iTextureHandle> textures;
-	/**
-	 * Maximum X/Y coords (normalized for 2D textures, unnormalized for
-	 * RECT textures)
-	 */
-	float texMaxX, texMaxY;
-	
-	TexturesBucket() : texMaxX (1), texMaxY (1) { }
-      };
-      csArray<TexturesBucket> buckets;
-      
-      struct LayerRenderInfo
-      {
-        /// 'Pixel size' (values to add to X/Y to get next input pixel)
-	csRef<csShaderVariable> svPixelSize;
-	/// Input vertices for layer
-	csRef<iRenderBuffer> vertBuf;
-	/// Shader vars
-	csRef<iShaderVariableContext> layerSVs;
-	/// Render buffers
-	csRef<csRenderBufferHolder> buffers;
-	/// Render mesh for layer
-        csSimpleRenderMesh fullscreenQuad;
-      };
-      /// Render information for all layers
-      csArray<LayerRenderInfo> layerRenderInfos;
+      virtual bool PreProcess (PostEffectLayerInputMap* inputs, size_t count) = 0;
 
-      bool AllocatePingpongTextures (PostEffectManager& pfx);
-      void UpdateSVContexts (PostEffectManager& pfx);
-    
-      void SetupRenderInfo (PostEffectManager& pfx);
-    protected:
-      csPtr<iRenderBuffer> ComputeTexCoords (iTextureHandle* tex,
-        const csRect& rect, const csRect& targetRect,
-        float& pixSizeX, float& pixSizeY);
+      /*
+       * Post process function.
+       * Everything that needs to be done after drawing goes here.
+       */
+      virtual bool PostProcess (iTextureHandle * output, uint id) = 0;
     };
-    
-    struct DimensionCacheSorting
+
+    /// Layer descriptor
+    struct LayerDesc
     {
-      typedef Dimensions KeyType;
+      csDirtyAccessArray<PostEffectLayerInputMap> inputs;
+      csDirtyAccessArray<PostEffectLayerOptions> outputs;
+      csRef<iShader> layerShader;
+      csRef<iCustomProcessor> layerProcessor;
+      csString name;
 
-      static bool IsLargerEqual (const DimensionData& b1, 
-                                 const DimensionData& b2)
+      LayerDesc () {}
+
+      LayerDesc (iShader* shader, const char * layerName = ""): layerShader(shader), name(layerName)
       {
-	return (b1.dim.x >= b2.dim.x) && (b1.dim.y >= b2.dim.y);
+        inputs.Push(PostEffectLayerInputMap());
+        outputs.Push(PostEffectLayerOptions());
       }
-    
-      static bool IsEqual (const DimensionData& b1, 
-                           const DimensionData& b2)
+
+      void AddInput (PostEffectLayerInputMap& inp)
       {
-	return (b1.dim.x == b2.dim.x) && (b1.dim.y == b2.dim.y);
+        inputs.Push(inp);
       }
-    
-      static bool IsLargerEqual (const DimensionData& b1, 
-                                 const Dimensions& b2)
+
+      void AddOutput (PostEffectLayerOptions& opt)
       {
-	return (b1.dim.x >= b2.x) && (b1.dim.y >= b2.y);
+        outputs.Push(opt);
       }
-    
-      static bool IsEqual (const DimensionData& b1, 
-                           const Dimensions& b2)
-      {
-	return (b1.dim.x == b2.x) && (b1.dim.y == b2.y);
-      }
-    
-      static bool IsLargerEqual (const Dimensions& b1, 
-                                 const DimensionData& b2)
-      {
-	return (b1.x >= b2.dim.x) && (b1.y >= b2.dim.y);
-      }
+
     };
-    CS::Utility::GenericResourceCache<DimensionData,
-      uint, DimensionCacheSorting, 
-      CS::Utility::ResourceCache::ReuseConditionFlagged> dimCache;
-    DimensionData* currentDimData;
-      
-    uint currentWidth, currentHeight;
 
-    bool textureDistributionDirty;
-    void UpdateTextureDistribution();
-      
-    csString textureFmt;
-    Layer* lastLayer;
-    csPDelArray<Layer> postLayers;
-    bool layersDirty;
-    void UpdateLayers();
-    
-    struct BucketsCommon
+    /*
+     *  A post effect layer.
+     */
+    struct iPostEffectLayer : public virtual iBase
     {
-      LayerOptions options;
-      size_t textureNum;
-    };
-    csArray<BucketsCommon> buckets;
-    size_t GetBucketIndex (const LayerOptions& options);
-    BucketsCommon& GetBucket (const LayerOptions& options)
-    { return buckets[GetBucketIndex (options)]; }
-  };
-  
-  // @@@ TODO: give a simple example
-  /// Helper to parse post processing effect configurations.
-  class CS_CRYSTALSPACE_EXPORT PostEffectLayersParser :
-    public CS::Memory::CustomAllocated
-  {
-    csStringHash xmltokens;
-    iObjectRegistry* objReg;
-    csRef<iSyntaxService> synldr;
-    
-    typedef csHash<PostEffectManager::Layer*, csString> ParsedLayers;
-    typedef csDirtyAccessArray<PostEffectManager::LayerInputMap> InputsArray;
-    typedef csHash<csRef<iShader>, csString> ShadersLayers;
-    
-    bool ParseInputs (iDocumentNode* node, PostEffectManager& effects,
-                      ParsedLayers& layers, ShadersLayers& shaders,
-                      InputsArray& inputs);
-    bool ParseLayer (iDocumentNode* node, PostEffectManager& effects,
-                     ParsedLayers& layers, ShadersLayers& shaders);
-  public:
-    /// Create.
-    PostEffectLayersParser (iObjectRegistry* objReg);
-    ~PostEffectLayersParser();
-  
-    /// Parse from a document node,
-    bool AddLayersFromDocument (iDocumentNode* node, PostEffectManager& effects);
-    /// Parse from XML file. Document root node must be "posteffect"
-    bool AddLayersFromFile (const char* filename, PostEffectManager& effects);
-  };
+      SCF_INTERFACE (iPostEffectLayer, 1, 0, 0);
 
-}
-}
+      /// Get the shader variable context of this layer.
+      virtual iShaderVariableContext* GetSVContext () const = 0;
+
+      /// Get the inputs to this layer
+      virtual const PostEffectLayerInputMap * GetInputs (size_t& size) const = 0;
+
+      /// Get the layer options
+      virtual const PostEffectLayerOptions * GetOptions (size_t& size) const = 0;
+
+      ///Get the layer name
+      virtual const char * GetName () const = 0;
+
+      ///Set the layer descriptor
+      virtual void SetLayerDesc (LayerDesc &desc) = 0;
+
+      ///Get the layer descriptor
+      virtual LayerDesc& GetLayerDesc () = 0;
+
+      ///Adds the given variable to default sv context
+      virtual void AddDefaultVar(csShaderVariable *var) = 0;
+    };
+
+    /*
+     * SetupView callback
+     */
+    class iSetupViewCallback : public virtual iBase
+    {
+    public:
+      SCF_INTERFACE (iSetupViewCallback, 1, 0, 0);
+
+      /// calback
+      virtual bool operator () (int width, int height) = 0;
+    };
+
+    /// Describes where the posteffect output will be drawn
+    enum PostEffectDrawTarget
+    {
+      /// uses the specified target texture
+      TARGET,
+      /// draws to the monitor screen
+      SCREEN,
+      /// draws to the internal posteffect's texture
+      NONE
+    };
+
+    /**
+     * Interface for post processing effects.
+     *
+     * Post processing effects provide a simple way to render the screen to a texture
+     * and then use a number of full screen passes with settable shader to get the desired
+     * effect.
+     *
+     * To use post processing effects, you need to create a iPostEffect,
+     * setup it, usually from an external xml file and then add it to the post effect manager.
+     * Can be added as many effects as you want, the post effect manager will take care of
+     * chaining correctly the effects.
+     * Example:
+     * \code
+     * postMgr = scfQueryInterface<iRenderManagerPostEffects> (rm);
+     * csPtr<iPostEffect> effect = postMgr->CreatePostEffect ("example effect");
+     * effect->LoadFromFile ("/data/myeffect.xml");
+     * postMgr->AddPostEffect (pEffect1);
+     * \endcode
+     *
+     * Post processing setups are a graph of effects (with nodes called "layers"
+     * for historic reasons). Each node has one or more outputs and multiple inputs.
+     * Inputs can be the output of another node, statics textures or a custom 
+     * texture input.
+     */
+    struct iPostEffect : public virtual iBase
+    {
+      SCF_INTERFACE (iPostEffect, 1, 0, 0);
+
+      /// Get the name of this post pocessing effect
+      virtual const char* GetName () = 0;
+
+      /**
+       * Set up the post processing management for a view.
+       * \returns Whether the manager has changed. If \c true some values,
+       *   such as the screen texture, must be reobtained from the manager.
+       */
+      virtual bool SetupView (uint width, uint height) = 0;
+
+
+      /// Get the texture to render a scene to for post processing.
+      virtual iTextureHandle* GetScreenTarget () = 0;
+
+      /**
+       * Draw post processing effects to the specified
+       * target.
+       */
+      virtual void DrawPostEffect (RenderTreeBase& renderTree, PostEffectDrawTarget flag = TARGET) = 0;
+
+      /// Add an effect pass.
+      virtual iPostEffectLayer* AddLayer (const LayerDesc &desc) = 0;
+
+      /// Remove the given layer
+      virtual bool RemoveLayer (iPostEffectLayer* layer) = 0;
+
+      /// Get the layer by name
+      virtual iPostEffectLayer* GetLayer (const char * name) = 0;
+
+      /// Get the layer by index
+      virtual iPostEffectLayer* GetLayer (int num) = 0;
+
+      /// Remove all layers
+      virtual void ClearLayers () = 0;
+
+      /// Get the layer representing the "screen" a scene is rendered to.
+      virtual iPostEffectLayer* GetScreenLayer () = 0;
+
+      /// Get the layer shader variable stack
+      virtual void GetLayerRenderSVs (iPostEffectLayer* layer, csShaderVariableStack& svStack) = 0;
+
+      /// Get the output texture of a layer.
+      virtual iTextureHandle* GetLayerOutput (const iPostEffectLayer* layer) = 0;
+
+      /// Set the effect's output render target.
+      virtual void SetOutputTarget (iTextureHandle* tex) = 0;
+
+      /// Get the effect's output render target.
+      virtual iTextureHandle* GetOutputTarget () const = 0; 
+
+      /// Set the effect's input texture.
+      virtual void SetInputTexture (iTextureHandle* tex) = 0;
+
+      /// Get the effect's input texture.
+      virtual iTextureHandle* GetInputTexture () const  = 0;
+
+      /**
+       * Returns whether the screen space is flipped in Y direction. This usually
+       * happens when rendering to a texture due post effects.
+       */
+      virtual bool ScreenSpaceYFlipped () = 0;
+
+      /// Loads the effect from the given file
+      virtual bool LoadFromFile (const char * fileName) = 0;
+
+      /// Setup the effect
+      virtual bool Construct(bool forced) = 0;
+
+      /// Clean up all allocated textures (references)
+      virtual void Clear() = 0;
+
+      /// callback for setupview function
+      virtual void SetSetupViewCallback(iSetupViewCallback * pCallback) = 0;
+    };
+
+    /**
+     * Factory for post-effects.
+     */
+    // TODO: iPostEffectFactory/System/Component
+    struct iPostEffectManager : public virtual iBase
+    {
+      SCF_INTERFACE (iPostEffectManager, 1, 0, 0);
+
+      /// Creates a post-effect
+      virtual csPtr<iPostEffect> CreatePostEffect (const char* name) = 0;
+
+      /// Request a texture with the given info
+      virtual csPtr<iTextureHandle> RequestTexture(TextureAllocationInfo& info, int num) = 0;
+
+      /// Setup the view
+      virtual bool SetupView (uint width, uint height) = 0;
+
+      /// Get the shader variable context shared between all effects
+      virtual iShaderVariableContext* GetSharedSVs () = 0;
+
+      /// Get the string id value
+      virtual CS::StringIDValue GetStringID(const char * str) const = 0;
+    };
+
+    // @@@ TODO: give a simple example
+    /// Helper class to parse post processing effect configurations.
+    class CS_CRYSTALSPACE_EXPORT PostEffectLayersParser :
+      public CS::Memory::CustomAllocated
+    {
+      csStringHash xmltokens;
+      iObjectRegistry* objReg;
+      csRef<iSyntaxService> synldr;
+
+      typedef csHash<csRef<iShader>, csString> ShadersLayers;
+
+      bool ParseLayer (iDocumentNode* layerNode, iPostEffectLayer* layer, ShadersLayers& shaders) const;
+      bool GetLayerAttributes (iDocumentNode* layerNode, csString& name, csString& shader, int& downsample, DownsampleAxis& axis, bool& mip, int& maxmip) const;
+      bool ParseInput (iDocumentNode* inputNode, PostEffectLayerInputMap& inp) const;
+      bool ParseOutput (iDocumentNode* outputNode, PostEffectLayerOptions& opt, bool default_mip, int default_maxmip) const;
+
+    public:
+      /// Constructor
+      PostEffectLayersParser (iObjectRegistry* objReg);
+      ~PostEffectLayersParser ();
+
+      /**
+       * Parse the post-effect layers from the given document node, and add them to
+       * the given post effect.
+       * \param node The document node to parse the layers from.
+       * \param effect The post-effect where the layers will be added
+       */
+      bool AddLayersFromDocument (iDocumentNode* node, iPostEffect* effect) const;
+
+      /**
+       * Parse the post-effect layers from the given XML file, and add them to
+       * the given post effect.
+       * \param filename A VFS path to the XML file containing the definition of the
+       * post effect layers. The XML root node of the file must be "posteffect".
+       * \param effect The post-effect where the layers will be added
+       */
+      bool AddLayersFromFile (const char* filename, iPostEffect* effect) const;
+    };
+
+  } // namespace RenderManager
+} // namespace CS
 
 #endif

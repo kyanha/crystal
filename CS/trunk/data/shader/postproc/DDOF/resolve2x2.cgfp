@@ -1,0 +1,45 @@
+<include>
+<![CDATA[
+/*
+	This shader resolves a 2x2 system
+	
+	The uv and bound variables are for X axis:
+		uv1 = float2(0.25, texUV.y)
+		(...)
+		bound = texUV.x - g_InvResolution.x
+	The g_Axis multiplication / dot trick are used to reuse
+	the code for both x/y axis.
+*/
+uniform sampler2D g_TexY;
+uniform sampler2D g_TexABC;
+
+float2 g_Resolution;
+float2 g_InvResolution;
+
+
+float4 main(float2 texUV: TEXCOORD0) : COLOR
+{
+	float2 uv1 = g_Axis.yx*texUV + g_Axis*0.25;
+	float2 uv2 = g_Axis.yx*texUV + g_Axis*0.75;
+	
+	float bound = dot(texUV - g_InvResolution, g_Axis);
+	
+	float3 abc1 = tex2D (g_TexABC, uv1).xyz;
+	float3 abc2 = tex2D (g_TexABC, uv2).xyz;
+	
+	float3 y1 = tex2D (g_TexY, uv1).xyz;
+	float3 y2 = tex2D (g_TexY, uv2).xyz;
+	
+	float inv_det = 1.0 / (abc1.y*abc2.y - abc1.z*abc2.x);
+	float3 color;
+	
+	if (bound < 0.0 )
+		color = inv_det*(abc2.y*y1 - abc1.z*y2);
+	else
+		color = inv_det*(abc1.y*y2 - abc2.x*y1);
+	
+	return float4(color, 1.0);
+}
+
+]]>
+</include>

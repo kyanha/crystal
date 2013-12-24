@@ -1,0 +1,224 @@
+<shader compiler="xmlshader" name="hbao_shader">
+  <technique priority="200">
+    <pass>
+      <buffer source="texture coordinate 0" destination="texture coordinate 0" />
+      <!-- vp plugin="glfixed" / -->
+	  <texture destination="texDepth" name="tex depth" />
+	  <texture destination="texCSJ" name="tex csj" />
+      <fp plugin="glcg">
+	<cgfp>
+	  <variablemap variable="inv focal length" destination="g_InvFocalLen" />
+	  <variablemap variable="focal length" destination="g_FocalLen" />
+	  <variablemap variable="resolution" destination="g_Resolution" />
+	  <variablemap variable="inv resolution" destination="g_InvResolution" />
+	  <variablemap variable="angle bias" destination="g_AngleBias" />
+	  <variablemap variable="sqr radius" destination="g_sqr_R" />
+	  <variablemap variable="inv radius" destination="g_inv_R" />
+	  <variablemap variable="radius" destination="g_R" />
+	  <variablemap variable="num steps" destination="g_NumSteps" />
+	  <variablemap variable="num directions" destination="g_NumDir" />
+	  <variablemap variable="contrast" destination="g_Contrast" />
+	  <variablemap variable="attenuation" destination="g_Attenuation" />
+	  <variablemap variable="matrix inv projection" destination="g_InvProj" />
+	  <program>
+
+	      <![CDATA[
+
+		  
+#define M_PI 3.14159265f
+
+float2 g_InvFocalLen;
+float2 g_FocalLen;
+float2 g_Resolution;
+float2 g_InvResolution;
+float g_AngleBias;
+float g_sqr_R;
+float g_inv_R;
+float g_R;
+float g_NumSteps;
+float g_NumDir;
+float g_Contrast;
+float g_Attenuation;
+
+float4x4 g_InvProj;
+
+uniform sampler2D texDepth;
+uniform sampler2D texCSJ;
+
+
+float tangent(float3 P, float3 S)
+{
+    return (P.z - S.z) / length(S.xy - P.xy);
+}
+float3 uv_to_eye(float2 uv, float eye_z)
+{
+	uv = uv*float2(2, -2) - float2(1, -1);
+	float4 pos =  mul(g_InvProj, float4(uv.x, uv.y, 1 - eye_z, 1.0));
+	return pos.xyz / pos.w;
+}
+float3 fetch_eye_pos(float2 uv)
+{
+	float z = tex2D (texDepth, uv).x;
+    return uv_to_eye(uv, z);
+}
+float3 tangent_eye_pos(float2 uv, float4 tangentPlane)
+{
+    // view vector going through the surface point at uv
+    float3 V = fetch_eye_pos(uv);
+    float NdotV = dot(tangentPlane.xyz, V);
+    // intersect with tangent plane except for silhouette edges
+    if (NdotV < 0.0) V *= (tangentPlane.w / NdotV);
+    return V;
+}
+
+float length2(float3 v) { return dot(v, v); } 
+float3 min_diff(float3 P, float3 Pr, float3 Pl)
+{
+    float3 V1 = Pr - P;
+    float3 V2 = P - Pl;
+    return (length2(V1) < length2(V2)) ? V1 : V2;
+}
+float falloff(float r)
+{
+    return 1.0f - g_Attenuation*r*r;
+}
+float2 snap_uv_offset(float2 uv)
+{
+    return round(uv * g_Resolution) * g_InvResolution;
+}
+
+float2 snap_uv_coord(float2 uv)
+{
+    return uv - (frac(uv * g_Resolution) - 0.5f) * g_InvResolution;
+}
+float tan_to_sin(float x)
+{
+    return x * rsqrt(x*x + 1.0f);
+}
+float3 tangent_vector(float2 deltaUV, float3 dPdu, float3 dPdv)
+{
+    return deltaUV.x * dPdu + deltaUV.y * dPdv;
+}
+float invlength(float2 v)
+{
+    return rsqrt(dot(v,v));
+}
+float tangent(float3 T)
+{
+    return -T.z * invlength(T.xy);
+}
+float biased_tangent(float3 T)
+{
+    float phi = atan(tangent(T)) + g_AngleBias;
+    return tan(min(phi, M_PI*0.5));
+}
+float2 rotate_direction(float2 Dir, float2 CosSin)
+{
+    return float2(Dir.x*CosSin.x - Dir.y*CosSin.y, 
+                  Dir.x*CosSin.y + Dir.y*CosSin.x);
+}
+
+
+float AccumulatedHorizonOcclusion(float2 deltaUV, 
+                                  float2 uv0, 
+                                  float3 P, 
+                                  float numSteps, 
+                                  float randstep,
+                                  float3 dPdu,
+                                  float3 dPdv )
+{
+    // Randomize starting point within the first sample distance
+    float2 uv = uv0 + snap_uv_offset( randstep * deltaUV );
+    
+    // Snap increments to pixels to avoid disparities between xy 
+    // and z sample locations and sample along a line
+    deltaUV = snap_uv_offset( deltaUV );
+
+    // Compute tangent vector using the tangent plane
+    float3 T = deltaUV.x * dPdu + deltaUV.y * dPdv;
+
+    float tanH = biased_tangent(T);
+    float sinH = tanH / sqrt(1.0f + tanH*tanH);
+
+    float ao = 0;
+    for(float j = 1; j <= numSteps; ++j) {
+        uv += deltaUV;
+        float3 S = fetch_eye_pos(uv);
+        
+        // Ignore any samples outside the radius of influence
+        float d2  = length2(S - P);
+        if (d2 < g_sqr_R) {
+            float tanS = tangent(P, S);
+
+            if(tanS > tanH) {
+                // Accumulate AO between the horizon and the sample
+                float sinS = tanS / sqrt(1.0f + tanS*tanS);
+                float r = sqrt(d2) * g_inv_R;
+                ao += falloff(r) * (sinS - sinH);
+                
+                // Update the current horizon angle
+                tanH = tanS;
+                sinH = sinS;
+            }
+        } 
+    }
+
+    return ao;
+}
+
+float4 main(float2 texUV: TEXCOORD0): COLOR
+{
+    float3 P = fetch_eye_pos(texUV);
+    
+    // Project the radius of influence g_R from eye space to texture space.
+    // The scaling by 0.5 is to go from [-1,1] to [0,1].
+    float2 step_size = 0.5 * g_R  * g_FocalLen / P.z;
+
+    // Early out if the projected radius is smaller than 1 pixel.
+    float numSteps = min ( g_NumSteps, min(step_size.x * g_Resolution.x, step_size.y * g_Resolution.y));
+    if( numSteps < 1.0 ) return 1.0;
+    step_size = step_size / ( numSteps + 1 );
+
+    // Nearest neighbor pixels on the tangent plane
+    float3 Pr, Pl, Pt, Pb;
+    float4 tangentPlane;
+    
+	Pr = fetch_eye_pos(texUV + float2(g_InvResolution.x, 0));
+	Pl = fetch_eye_pos(texUV + float2(-g_InvResolution.x, 0));
+	Pt = fetch_eye_pos(texUV + float2(0, g_InvResolution.y));
+	Pb = fetch_eye_pos(texUV + float2(0, -g_InvResolution.y));
+	float3 N = normalize(cross(Pr - Pl, Pt - Pb));
+	tangentPlane = float4(N, dot(P, N));
+
+    
+    // Screen-aligned basis for the tangent plane
+    float3 dPdu = min_diff(P, Pr, Pl);
+    float3 dPdv = min_diff(P, Pt, Pb) * (g_Resolution.y * g_InvResolution.x);
+	
+
+    float ao = 0;
+    float d;
+    float alpha = 2.0f * M_PI / g_NumDir;
+	float3 rand = tex2D (texCSJ, texUV*g_Resolution*0.015625).xyz;
+	rand.xy = rand.xy*2 - float2(1);
+
+
+	for (d = 0; d < g_NumDir; d++) {
+		float angle = alpha * d;
+		float2 dir = float2(cos(angle), sin(angle));
+		float2 deltaUV = rotate_direction(dir, rand.xy) * step_size.xy;
+		ao += AccumulatedHorizonOcclusion(deltaUV, texUV, P, numSteps, rand.z, dPdu, dPdv);
+	}
+
+
+    return 1.0 - ao / g_NumDir * g_Contrast;
+}
+
+	      ]]>
+
+	  </program>
+	</cgfp>
+      </fp>
+    </pass>
+  </technique>
+</shader>

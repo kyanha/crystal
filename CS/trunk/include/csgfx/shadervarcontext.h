@@ -114,6 +114,44 @@ namespace CS
 	return ShaderVariableContextImpl::RemoveVariable (name); 
       }
     };
+
+    /**
+     * iShaderVariableContext implementation that stacks sv contexts 
+     * based on the given priority.
+     */
+    class PriorityShaderVariableContextImpl :
+      public CS::Graphics::ShaderVariableContextImpl
+    {
+      struct psvc 
+      {
+        csRef<iShaderVariableContext> svContext;
+        int priority;
+        psvc(iShaderVariableContext* svc, int p) : svContext(svc), priority(p) {}
+
+        bool operator == (const psvc &other) const {return priority == other.priority;}
+        bool operator < (const psvc &other) const {return priority < other.priority;}
+        bool operator > (const psvc &other) const {return priority > other.priority;}
+      };
+      csArray<psvc> contexts;
+    public:
+      PriorityShaderVariableContextImpl (iShaderVariableContext* parent = nullptr, int priority = 0)
+      {
+        AddContext (parent, priority);
+      }
+
+      void AddContext (iShaderVariableContext* parent, int priority)
+      {
+        if (parent != nullptr)
+          contexts.InsertSorted (psvc(parent, priority));
+      }
+
+      void PushVariables (csShaderVariableStack& stacks) const
+      { 
+        for (uint i = 0; i < contexts.GetSize (); ++i)
+          contexts[i].svContext->PushVariables(stacks);
+        ShaderVariableContextImpl::PushVariables (stacks); 
+      }
+    };
   } // namespace Graphics
   
   // Deprecated in 1.3
@@ -136,5 +174,7 @@ public:
   csShaderVariableContext (const csShaderVariableContext& other);
   virtual ~csShaderVariableContext ();
 };
+
+
 
 #endif // __CS_CSGFX_SHADERVARCONTEXT_H__

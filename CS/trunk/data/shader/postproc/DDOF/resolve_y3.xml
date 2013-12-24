@@ -1,0 +1,26 @@
+<shader compiler="xmlshader" name="reduce">
+  <technique priority="200">
+    <pass>
+      <buffer source="texture coordinate 0" destination="texture coordinate 0" />
+
+	  <texture destination="g_TexY" name="tex color" />
+	  <texture destination="g_TexABC" name="tex coef" />
+      <fp plugin="glcg">
+	<cgfp>
+	  <variablemap variable="resolution" destination="g_Resolution" />
+	  <variablemap variable="inv resolution" destination="g_InvResolution" />
+	  <variablemap variable="pixel size" destination="g_InputInvRes" />
+	  <program>
+
+	      <![CDATA[
+float2 g_Axis = float2(0, 1);
+	      ]]>
+		  
+		<?Include resolve3x3.cgfp ?>
+
+	  </program>
+	</cgfp>
+      </fp>
+    </pass>
+  </technique>
+</shader>

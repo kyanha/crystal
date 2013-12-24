@@ -1,0 +1,68 @@
+<include>
+<![CDATA[
+
+/*
+	This shader resolves a tridiagonal 3x3 system using
+	the TDMA algorithm.
+	
+	The uv and bound variables are for X axis:
+		uv1 = float2(0.1666, texUV.y)
+		(...)
+		bound = texUV.x - g_InvResolution.x
+	The g_Axis multiplication/ dot trick are used to reuse
+	the code for both x/y axis.
+*/
+
+
+uniform sampler2D g_TexY;
+uniform sampler2D g_TexABC;
+
+float2 g_Resolution;
+float2 g_InvResolution;
+
+
+float4 main(float2 texUV: TEXCOORD0) : COLOR
+{
+	float2 uv1 = g_Axis.yx*texUV + g_Axis*0.16666666;
+	float2 uv2 = g_Axis.yx*texUV + g_Axis*0.50;
+	float2 uv3 = g_Axis.yx*texUV + g_Axis*0.83333333;
+	
+
+	float bound1 = dot(texUV - g_InvResolution, g_Axis);
+	float bound2 = dot(texUV + g_InvResolution, g_Axis);
+	
+	float3 color;
+	float3 abc1 = tex2D (g_TexABC, uv1).xyz;
+	float3 abc2 = tex2D (g_TexABC, uv2).xyz;
+	float3 abc3 = tex2D (g_TexABC, uv3).xyz;
+	
+	float3 y1 = tex2D (g_TexY, uv1).xyz;
+	float3 y2 = tex2D (g_TexY, uv2).xyz;
+	float3 y3 = tex2D (g_TexY, uv3).xyz;
+	
+	abc1.z = abc1.z / abc1.y;
+	y1 = y1 / abc1.y;
+	
+	float m = abc2.y - abc1.z*abc2.x;
+	abc2.z = abc2.z / m;
+	y2 = (y2 - y1* abc2.x) / m;
+	
+	m = abc3.y - abc2.z*abc3.x;
+	abc3.z = abc3.z / m;
+	y3 = (y3 - y2* abc3.x) / m;
+	
+	y2 = y2 - y3*abc2.z;
+	y1 = y1 - y2*abc1.z;
+	
+	if (bound1 < 0.0 )
+		color = y1;
+	else if (bound2 > 1.0 )
+		color = y3;
+	else
+		color = y2;
+	
+	return float4(color, 1.0);
+}
+
+]]>
+</include>

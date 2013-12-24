@@ -1315,12 +1315,12 @@ namespace RenderManager
 	// create context
 	typename RenderTreeType::ContextNode* context = renderTree.CreateContext(shadowView);
 	context->drawFlags = CSDRAW_CLEARSCREEN | CSDRAW_CLEARZBUFFER;
-	context->postEffects = persist.settings.postEffects;
+	context->postEffect = persist.settings.postEffect;
 
 	// setup post-effects if required
-	if(context->postEffects.IsValid())
+	if(context->postEffect.IsValid())
 	{
-	  context->postEffects->SetupView(mapSize, mapSize, context->perspectiveFixup);
+	  context->postEffect->SetupView(mapSize, mapSize);
 	}
 
 	// setup rendertargets

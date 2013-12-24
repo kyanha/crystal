@@ -24,7 +24,6 @@
  */
 
 #include "iengine/rendermanager.h"
-
 #include "csplugincommon/rendermanager/posteffects.h"
 
 namespace CS
@@ -43,30 +42,69 @@ namespace CS
      */
     class CS_CRYSTALSPACE_EXPORT PostEffectsSupport : public virtual iRenderManagerPostEffects
     {
-      CS::RenderManager::PostEffectLayersParser* postEffectsParser;
     protected:
-      CS::RenderManager::PostEffectManager       postEffects;
+      csRef<iPostEffectManager> postEffectManager;
+      csRefArray<iPostEffect> postEffects;
+      csRef<iTextureHandle> pingPong[2];
+      csRef<iTextureHandle> depthHook;
+      bool autoHook;
+      bool changed, enabled;
+      CS::StringIDValue matProjID, invMatProjID, focalLenID, invFocalLenID, texDepthID;
+
     public:
-      PostEffectsSupport();
-      virtual ~PostEffectsSupport();
-      
+      PostEffectsSupport ();
+      virtual ~PostEffectsSupport ();
+
       /**
        * Initialize post processing effects support.
-       * \param objectReg Object registry.
-       * \param configKey Configuration key for initial effects to load.
-       *   Will read a file name for a post effects layers file from the config
-       *   key <tt>&lt;configKey&gt;.Effects</tt>.
+       * \param objectReg Object registry. 
+       * \param configKey Render manager configuration key. 
        */
       void Initialize (iObjectRegistry* objectReg, const char* configKey);
-    
+
       /**\name iRenderManagerPostEffects implementation
-      * @{ */
-      void ClearLayers() { postEffects.ClearLayers(); }
-      bool AddLayersFromDocument (iDocumentNode* node);
-      bool AddLayersFromFile (const char* filename);
+       * @{ */
+
+      csPtr<iPostEffect> CreatePostEffect (const char* name) const;
+      void AddPostEffect (iPostEffect* effect);      
+      bool InsertPostEffect (iPostEffect* effect, size_t index);
+
+      size_t FindPostEffect (const char* name) const;
+
+      bool RemovePostEffect (size_t index);
+      bool RemovePostEffect (iPostEffect* effect);
+
+      size_t GetPostEffectCount () const;
+      iPostEffect* GetPostEffect (size_t index);
+
+      iTextureHandle* GetScreenTarget () const;
+      iTextureHandle* GetDepthTarget () const;
+
+      void SetEffectsOutputTarget (iTextureHandle* tex);  
+      iTextureHandle* GetEffectsOutputTarget () const;
+
+      void DrawPostEffects (RenderTreeBase& renderTree);
+
+      bool SetupView (iView* view, CS::Math::Matrix4& perspectiveFixup);
+
+      bool ScreenSpaceYFlipped () const;
+
+      void SetPostEffectsEnabled(bool status);
+
+      /**
+       * Sets the depth buffer so that the post effect can access the depth.
+       * If passed a nullptr(or not set) the manager will automatically allocate 
+       * and provide one.
+       */
+      void SetDepthBuffer (iTextureHandle * depth);
       /** @} */
+
+    private:
+      bool SetupView (uint width, uint height, CS::Math::Matrix4& perspectiveFixup);
+
+      bool SetupCommonSVs (iView* view);
     };
-    
+
   } // namespace RenderManager
 } // namespace CS
 

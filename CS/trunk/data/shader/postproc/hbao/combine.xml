@@ -1,0 +1,35 @@
+<shader compiler="xmlshader" name="postproc_blur">
+  <technique priority="200">
+    <pass>
+      <buffer source="texture coordinate 0" destination="texture coordinate 0" />
+      <!-- vp plugin="glfixed" / -->
+	  <texture destination="texDiff" name="tex diffuse" />
+      <texture destination="texAO" name="tex ao" />
+      <fp plugin="glcg">
+	<cgfp>
+	  <variablemap variable="pixel size" destination="pixelSize" />
+	  <program>
+
+	      <![CDATA[
+
+	      float4 main (in float2 TexCoord : TEXCOORD0,
+			uniform sampler2D texDiff,
+			uniform sampler2D texAO) : COLOR
+	      {
+				float ao = tex2D (texAO, TexCoord).x;
+		]]>
+		<?if vars."debug show ao".int != 0 ?>
+			return float4 (ao);
+		<?endif?>
+		<![CDATA[
+				float3 color = tex2D (texDiff, TexCoord).xyz*ao;
+				return float4(color.x, color.y, color.z, 1.0);
+	      }
+	      ]]>
+
+	  </program>
+	</cgfp>
+      </fp>
+    </pass>
+  </technique>
+</shader>

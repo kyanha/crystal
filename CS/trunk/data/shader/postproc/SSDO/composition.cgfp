@@ -1,0 +1,35 @@
+<include>
+<program>
+
+<![CDATA[
+
+const float EPSILON = 0.001f;
+
+struct vertex2fragment 
+{
+  float2 TexCoord : TEXCOORD0;
+  float4 ScreenPos : TEXCOORD1;
+};
+
+float4 main(float2 texUV: TEXCOORD0,            
+            uniform sampler2D ColorTexture,
+            uniform sampler2D SSDOTexture) : COLOR
+{
+  //float2 texCoord = float2(IN.TexCoord.x, -IN.TexCoord.y);
+  float3 color = tex2D (ColorTexture, texUV).rgb;  
+  float4 radiance = tex2D (SSDOTexture, texUV);
+
+]]>
+<?if vars."debug show ambocc".int != 0 ?>
+    return float4 (radiance.a);
+<?elsif vars."debug show indirect light".int != 0 ?>
+    return float4 (radiance.rgb, 1.0f);
+<?endif?>
+<![CDATA[
+
+    return float4 (color*radiance.a + radiance.rgb, 1.0f);
+}
+
+]]>
+</program>
+</include>

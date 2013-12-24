@@ -1,0 +1,53 @@
+<posteffect>
+
+	<layer name="ssdo" shader="/shader/postproc/SSDO/ssdo.xml" downsample="0">
+		
+		<parameter name="far clip distance" type="float">100</parameter>
+		<parameter name="sample radius" type="float">0.1</parameter>
+		<parameter name="detail sample radius" type="float">0.6</parameter>
+		<parameter name="num passes" type="float">2</parameter>
+		<parameter name="self occlusion" type="float">0.0</parameter>
+		<parameter name="occlusion strength" type="float">0.7</parameter>
+		<parameter name="max occluder distance" type="float">0.8</parameter>
+		<parameter name="bounce strength" type="float">6</parameter>
+		
+		<!-- change to 0 to disable ao/indirect light-->
+		<parameter name="enable ambient occlusion" type="float">1</parameter>
+		<parameter name="enable indirect light" type="float">0</parameter>
+		
+		<input layer="*screen" texname="tex diffuse"/>
+		<input source="/shader/postproc/SSDO/random_normals64.png" texname="tex random normals"/>
+		<output name="out" format="argb8" />
+	</layer>
+
+	<layer name="horizontalBlur" shader="/shader/postproc/SSDO/horizontal_blur.xml">
+	
+        <parameter name="ssao blur kernelsize" type="float">3</parameter>
+        <parameter name="ssao blur position threshold" type="float">0.5</parameter>
+        <parameter name="ssao blur normal threshold" type="float">0.1</parameter>
+		<input layer="ssdo.out" texname="tex ssdo"/>
+		<output name="out" format="argb8" />
+	</layer>
+
+	<layer name="verticalBlur" shader="/shader/postproc/SSDO/vertical_blur.xml">
+	
+
+		<parameter name="ssao blur kernelsize" type="float">3</parameter>
+        <parameter name="ssao blur position threshold" type="float">0.5</parameter>
+        <parameter name="ssao blur normal threshold" type="float">0.1</parameter>
+		<input layer="horizontalBlur.out" texname="tex ssdo"/>
+		<output name="out" format="argb8" />
+	</layer>
+
+	<layer name="composition" shader="/shader/postproc/SSDO/composition.xml">
+	
+		<!-- change to 1 to view the final ao texture or global illum texture -->
+		<parameter name="debug show ambocc" type="float">0</parameter>
+        <parameter name="debug show indirect light" type="float">0</parameter>
+		
+		<input layer="*screen" texname="tex color"/>
+		<input layer="verticalBlur.out" texname="tex final ssdo"/>
+	</layer>
+
+
+</posteffect>

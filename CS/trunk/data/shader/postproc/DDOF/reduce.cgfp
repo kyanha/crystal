@@ -1,0 +1,93 @@
+<include>
+<![CDATA[
+/*
+		Reduce shader uses the Cyclic Reduction algorithm to reduce
+	a tridiagonal system to a new system with half variables. In this
+	implementation the variables with even indices are eliminated.
+	
+	Example:
+	
+	a1*x1 + b1*x2 + c1*x3                 = y1		(eq 1)(abc_left)
+	        a2*x2 + b2*x3 + c2*x4         = y2		(eq 2)(abc)
+	                a3*x3 + b3*x4 + c3*x5 = y3		(eq 3)(abc_right)
+	
+	let
+		k1 = - a2 / b1
+		k2 = - c2 / b3
+	
+	multiplying eq 1 by k1 and eq 3 by k2 and summing the three eqs,
+	x2 and x4 are eliminated.
+	Thus :
+		a'*x1 + b'*x3 + c'*x5 = y'
+	
+	where:
+	a' = a1*k1
+	b' = c1*k1 + b2 + a3*k2
+	c' = c3*k2
+	y' = y1*k1 + y2 + y3*k2
+	
+*/
+
+uniform sampler2D g_TexABC;
+uniform sampler2D g_TexY;
+
+float2 g_Resolution;
+float2 g_InvResolution;
+float2 g_InputInvRes;
+
+
+float2 getTexCoord(float2 uv)
+{
+	int i = (int)dot(uv * g_Resolution, g_Axis);
+	i = i << 1;
+	float2 c = i*g_InputInvRes + 0.5*g_InputInvRes;
+	return uv + c*g_Axis - uv*g_Axis;
+}
+
+void main(float2 texUV: TEXCOORD0, out float4 outABC : COLOR1, out float4 outY : COLOR0)
+{
+	float2 offset;
+	float2 uv;
+	float bound;
+
+	offset = g_InputInvRes * g_Axis;
+	uv = getTexCoord(texUV) + offset;
+	bound = dot(g_Axis, texUV + offset);
+
+
+	float3 abc = tex2D (g_TexABC, uv).xyz;
+	float3 abc_left = tex2D (g_TexABC, uv - offset).xyz;
+	float3 abc_right = tex2D (g_TexABC, uv + offset).xyz;
+	
+	float3 Y = tex2D (g_TexY, uv).xyz;
+	float3 Y_left = tex2D (g_TexY, uv - offset).xyz;
+	float3 Y_right = tex2D (g_TexY, uv + offset).xyz;
+	
+	
+	float a, b, c;
+	float3 y;
+	float k1, k2;
+
+	
+	k1 = - abc.x / abc_left.y;
+	
+	a = abc_left.x * k1;
+	b = abc_left.z * k1 + abc.y;
+	c = 0.0;
+	y = Y_left * k1 + Y;
+	
+	if (bound < 1.0)
+	{
+		k2 = - abc.z / abc_right.y;
+		b += abc_right.x * k2;
+		c += abc_right.z * k2;
+		y += Y_right * k2;
+	}
+	
+	
+	outABC = float4(a, b, c, 1.0);
+	outY = float4(y, 1.0);
+}
+
+]]>
+</include>

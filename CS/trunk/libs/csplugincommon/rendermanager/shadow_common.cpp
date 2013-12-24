@@ -25,6 +25,7 @@
 #include "iutil/objreg.h"
 
 #include "csutil/cfgacc.h"
+#include "csutil/plugmgr.h"
 
 namespace CS
 {
@@ -50,19 +51,28 @@ namespace CS
   shadowDefaultShader = loader->LoadShader (defaultShader);
       }
       
-      const char* postEffectsLayers = cfg->GetStr (
+      const char* postEffectLayers = cfg->GetStr (
         csString().Format ("RenderManager.Shadows.%s.PostProcess", shadowType),
         0);
-      if (postEffectsLayers != 0)
+      if (postEffectLayers != 0)
       {
-	postEffects.AttachNew (new PostEffectManager);
-	postEffects->Initialize (objReg);
-	PostEffectLayersParser layerParser (objReg);
-	layerParser.AddLayersFromFile (postEffectsLayers, *postEffects);
+	   // Create a new post-effect
+	   csRef<iPluginManager> pluginManager = 
+	   csQueryRegistry<iPluginManager> (objReg);
+
+	   csRef<iPostEffectManager> postEffectManager = csLoadPlugin<iPostEffectManager>
+	   (pluginManager, "crystalspace.rendermanager.posteffect");
+
+	    if (postEffectManager)
+	    {
+	      postEffect = postEffectManager->CreatePostEffect (postEffectLayers);
+	      PostEffectLayersParser layerParser (objReg);
+	      layerParser.AddLayersFromFile (postEffectLayers, postEffect);
+	    }
       }
             
       csRef<iShaderManager> shaderManager =
-	csQueryRegistry<iShaderManager> (objReg);
+	  csQueryRegistry<iShaderManager> (objReg);
       iShaderVarStringSet* svStrings = shaderManager->GetSVNameStringset();
       
       ReadTargets (targets, cfg,
@@ -124,11 +134,12 @@ namespace CS
             else
               return false;
               
-            if (postEffects.IsValid())
+            if (postEffect.IsValid())
             {
               if (attachment == rtaColor0)
               {
-                postEffects->SetIntermediateTargetFormat (formatStr);
+				//TODO: fix HDR code to work with the changes made in postprocessing code
+                //postEffect->SetOutputFormat (formatStr);
               }
             }
               

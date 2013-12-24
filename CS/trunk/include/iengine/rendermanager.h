@@ -26,6 +26,9 @@
 #include "csutil/scf_interface.h"
 #include "ivaria/view.h"
 
+#include "csplugincommon/rendermanager/posteffects.h"
+#include "csplugincommon/rendermanager/rendertree.h"
+
 struct iTextureHandle;
 struct iVisibilityCuller;
 
@@ -104,20 +107,71 @@ struct iRenderManagerPostEffects : public virtual iBase
 {
   SCF_INTERFACE(iRenderManagerPostEffects,1,0,0);
 
-  /// Clear all active post effect layers
-  virtual void ClearLayers() = 0;
+  /**
+   * Create a new post effect. You must still add it to the chain of effects
+   * through AddPostEffect() or InsertPostEffect().
+   */
+  virtual csPtr<CS::RenderManager::iPostEffect> CreatePostEffect (const char* name) const = 0;
+
+  /// Add an effect at the end of the chain of effects.
+  virtual void AddPostEffect (CS::RenderManager::iPostEffect* effect) = 0;
+  /// Insert an effect before the effect at position \a index.
+  virtual bool InsertPostEffect (CS::RenderManager::iPostEffect* effect, size_t index) = 0;  
+
+  /// Remove the effect at the given position.
+  virtual bool RemovePostEffect (size_t index) = 0;
+
+  /// Remove the given effect from the chain of effects.
+  virtual bool RemovePostEffect (CS::RenderManager::iPostEffect* effect) = 0;
 
   /**
-   * Add the post effect layers defined in the given document node to the
-   * list of active layers
+   * Find the index of the post effect with the given name, or (size_t) ~0
+   * if it is not found.
    */
-  virtual bool AddLayersFromDocument (iDocumentNode* node) = 0;
+  virtual size_t FindPostEffect (const char* name) const = 0;
+
+  /// Get the total number of effects.
+  virtual size_t GetPostEffectCount () const = 0;
+  /// Get the effect at the given position.
+  virtual CS::RenderManager::iPostEffect* GetPostEffect (size_t index) = 0;
+
+  /// Get the texture to render a scene to for post processing.
+  virtual iTextureHandle* GetScreenTarget () const = 0;
+
+  /// Get the depth texture to render.
+  virtual iTextureHandle* GetDepthTarget () const = 0;
+
+  /// Draw all the effects in the chain of effects.
+  virtual void DrawPostEffects (CS::RenderManager::RenderTreeBase& renderTree) = 0;
+
+  /// Set the render target used to ultimatively render to.
+  virtual void SetEffectsOutputTarget (iTextureHandle* tex) = 0;
+  
+  /// Get the render target used to ultimatively render to.
+  virtual iTextureHandle* GetEffectsOutputTarget () const = 0;
+    
+  /**
+    * Set up post processing manager for a view.
+    * \returns Whether the manager has changed. If \c true some values,
+    * such as the screen texture, must be reobtained from the manager.
+    * \a perspectiveFixup returns a matrix that should be applied
+    * after the normal perspective matrix (this is needed as the
+    * screen texture may be larger than the desired viewport and thus
+    * the projection must be corrected for that).
+    */
+  virtual bool SetupView (iView* view, CS::Math::Matrix4& perspectiveFixup) = 0;
 
   /**
-   * Add the post effect layers defined in the given file to the list of
-   * active layers
-   */
-  virtual bool AddLayersFromFile (const char* filename) = 0;
+    * Returns whether the screen space is flipped in Y direction. This usually
+    * happens when rendering to a texture due post effects.
+    */
+  virtual bool ScreenSpaceYFlipped () const = 0;
+
+  /// Enables/Disables the post effects  
+  virtual void SetPostEffectsEnabled(bool status) = 0;
+
+  /// Sets the depth buffer so that the post effect can access the depth
+  virtual void SetDepthBuffer (iTextureHandle * depth) = 0;
 };
 
 /**
