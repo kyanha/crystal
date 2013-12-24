@@ -20,6 +20,7 @@
 
 #include "csplugincommon/rendermanager/hdrhelper.h"
 
+#include "iengine/rendermanager.h"
 #include "iutil/cfgfile.h"
 
 namespace CS
@@ -27,9 +28,13 @@ namespace CS
   namespace RenderManager
   {
     bool HDRHelper::Setup (iObjectRegistry* objectReg, 
-      Quality quality, int colorRange)
+      Quality quality, int colorRange,
+	  iRenderManagerPostEffects* postEffectManager)
     {
-      postEffects.Initialize (objectReg);
+      this->postEffectManager = postEffectManager;
+      postEffect = postEffectManager->CreatePostEffect ("hdr");
+      if (!postEffect) return false;
+      postEffectManager->AddPostEffect (postEffect);
 
       const char* textureFmt;
       switch (quality)
@@ -54,7 +59,7 @@ namespace CS
 	case qualFloat32: textureFmt = "bgr32_f"; break;
 	default: return false;
       }
-      postEffects.SetIntermediateTargetFormat (textureFmt);
+      //postEffect->SetOutputFormat (textureFmt);
       this->quality = quality;
       
       csRef<iShaderManager> shaderManager =
@@ -78,20 +83,23 @@ namespace CS
       if (!loader) return false;
       csRef<iShader> map = loader->LoadShader ("/shader/postproc/hdr/default-map.xml");
       if (!map) return false;
-      measureLayer = postEffects.GetLastLayer();
-      mappingLayer = postEffects.AddLayer (map);
+	  //TODO: Fix hdr code to work with the new implementation of posteffects
+      //measureLayer = postEffect->GetLastLayer();
+      mappingLayer = postEffect->AddLayer (LayerDesc (map));
     
       return true;
     }
 
     void HDRHelper::SetMappingShader (iShader* shader)
     {
-      mappingLayer->SetShader (shader);
+      LayerDesc &desc = mappingLayer->GetLayerDesc();
+	  desc.layerShader = shader;
+	  mappingLayer->SetLayerDesc(desc);
     }
 
     iShader* HDRHelper::GetMappingShader ()
     {
-      return mappingLayer->GetShader();
+      return mappingLayer->GetLayerDesc().layerShader;
     }
 
     iShaderVariableContext* HDRHelper::GetMappingShaderVarContext()

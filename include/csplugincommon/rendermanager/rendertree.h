@@ -37,7 +37,7 @@ namespace CS
 {
 namespace RenderManager
 {
-  class PostEffectManager;
+  struct iPostEffect;
   
   /**
    * Helper class containing stuff which doesn't require any of the template
@@ -428,7 +428,7 @@ namespace RenderManager
       CS::RenderPriorityGrouping renderGrouping;
       
       /// Post processing effects to apply after rendering the context
-      csRef<PostEffectManager> postEffects;
+      csRef<iPostEffect> postEffect;
 
       /// Sub-tree of mesh nodes
       MeshNodeTreeType meshNodes;
@@ -637,7 +637,7 @@ namespace RenderManager
       newCtx->sector = context->sector;
       newCtx->svFogplane = context->svFogplane; // should that be copied?
       newCtx->shadervars = context->shadervars; // should that be copied?
-      newCtx->postEffects = context->postEffects; // should that be copied?
+      newCtx->postEffect = context->postEffect; // should that be copied?
 
       size_t n = contexts.Find (context);
       CS_ASSERT(n != csArrayItemNotFound);

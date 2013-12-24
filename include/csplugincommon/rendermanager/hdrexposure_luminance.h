@@ -38,7 +38,7 @@ namespace CS
 	  
 	  const char* intermediateTextureFormat;
 	  CS::StructuredTextureFormat readbackFmt;
-	  PostEffectManager::Layer* measureLayer;
+	  iPostEffectLayer* measureLayer;
 	  HDRHelper* hdr;
 	  csRef<iGraphics3D> graphics3D;
 	  csRef<iShaderVarStringSet> svNameStringSet;
@@ -48,7 +48,7 @@ namespace CS
 	  csRef<iShader> computeShaderN;
 	  struct LuminanceComputeStage
 	  {
-	    csArray<PostEffectManager::Layer*> layers;
+	    csArray<iPostEffectLayer*> layers;
 	    csRef<csShaderVariable> svInput;
 	    csRef<csShaderVariable> svWeightCoeff;
 	    csRef<iTextureHandle> target;
@@ -57,7 +57,7 @@ namespace CS
 	    LuminanceComputeStage() {}
 	  };
 	  csArray<LuminanceComputeStage> computeStages;
-	  PostEffectManager computeFX;
+	  csRef<iPostEffect> computeFX;
 	  
 	  int lastTargetW, lastTargetH;
 	  csRef<iDataBuffer> lastData;

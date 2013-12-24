@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!--  
+  (C) 2013 by Pedro SOUZA
+
+  This library is free software; you can redistribute it and/or
+  modify it under the terms of the GNU Library General Public
+  License as published by the Free Software Foundation; either
+  version 2 of the License, or (at your option) any later version.
+
+  This library is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+  Library General Public License for more details.
+
+  You should have received a copy of the GNU Library General Public
+  License along with this library; if not, write to the Free
+  Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+-->
+
+<shader compiler="xmlshader" name="reduce">
+  <technique priority="200">
+    <pass>
+      <buffer source="texture coordinate 0" destination="texture coordinate 0" />
+
+	  <texture destination="g_TexABC" name="tex coef" />
+	  <texture destination="g_TexY" name="tex color" />
+      <fp plugin="glcg">
+	<cgfp>
+	  <variablemap variable="resolution" destination="g_Resolution" />
+	  <variablemap variable="inv resolution" destination="g_InvResolution" />
+	  <variablemap variable="pixel size" destination="g_InputInvRes" />
+	  <program>
+
+	      <![CDATA[
+
+float2 g_Axis = float2(1, 0);
+
+	      ]]>
+		<?Include reduce.cgfp ?>
+	  </program>
+	</cgfp>
+      </fp>
+    </pass>
+  </technique>
+</shader>

@@ -786,7 +786,7 @@ bool CommandHandler (const char *cmd, const char *arg)
     csRef<iRenderManagerPostEffects> pe = scfQueryInterface<iRenderManagerPostEffects>(rm);
     if (pe)
     {
-      pe->ClearLayers();
+      pe->SetPostEffectsEnabled(false);
     }
   }
   else if (!csStrCaseCmp (cmd, "coordsave"))

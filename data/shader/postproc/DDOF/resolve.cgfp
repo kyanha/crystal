@@ -1,0 +1,77 @@
+<include>
+<![CDATA[
+
+/*
+		Resolve shader perform the backsubstitution using the result
+	of the previous resolve layer.
+		Supposed is known the value of the  variables with odd indices
+	The even variables can be computed based on the following eq:
+	
+		a1*x1 + b1*x2 + c1*x3 = y1
+		
+		x2 = (y1 - a1*x1 - c1*x3) / b1
+	
+	Thus the even indices must be resolved and the odds only copied back.
+*/
+
+uniform sampler2D g_TexX;
+
+uniform sampler2D g_TexY;
+uniform sampler2D g_TexABC;
+
+float2 g_Resolution;
+float2 g_InvResolution;
+float2 g_InputInvRes;
+
+
+float2 getTexCoord(float2 uv)
+{
+	int i = (int)(dot(uv * g_Resolution, g_Axis));
+	i = i>>1;
+	float2 c = i*g_InputInvRes + g_InputInvRes*0.5;
+	return uv + c*g_Axis - uv*g_Axis;
+}
+
+float isEven(float u)
+{
+	int i = (int)(u*(g_Resolution.x*g_Axis.x + g_Resolution.y*g_Axis.y));
+	return (i&1) != 0 ? 0.0 : 1.0;
+}
+
+float4 main(float2 texUV: TEXCOORD0) : COLOR
+{
+	float2 offset;
+	float2 uv;
+	float pixelCoord;
+	float leftCoord;
+	float rightCoord;
+
+	offset = g_InputInvRes * g_Axis;
+	uv = getTexCoord(texUV);
+	pixelCoord = dot(texUV, g_Axis);
+	leftCoord = dot(uv - offset, g_Axis);
+	rightCoord = dot(uv, g_Axis);
+
+
+
+	float3 color;
+	
+	
+	if (isEven(pixelCoord))
+	{	
+		float3 abc = tex2D (g_TexABC, texUV).xyz;
+		float3 color_left = (leftCoord < 0.0) ? float3(0.0) : tex2D (g_TexX, uv - offset).xyz;
+		float3 color_right = (rightCoord > 1.0) ? float3(0.0) : tex2D (g_TexX, uv).xyz;
+		float3 Y = tex2D (g_TexY, texUV).xyz;
+		
+		color = (Y - abc.x*color_left - abc.z * color_right) / abc.y;
+	}
+	else
+		color = tex2D (g_TexX, uv).xyz;
+
+	
+	return float4(color, 1.0);
+}
+
+]]>
+</include>

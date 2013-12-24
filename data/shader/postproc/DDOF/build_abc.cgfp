@@ -1,0 +1,53 @@
+<include>
+<![CDATA[
+
+/*
+		Build abc shader constructs the tridiagonal matrix with
+	each row(or column) being a whole matrix. The matrix coefficients
+	(a, b, c) are stored respectively in the (x, y, z) component.
+	According to the heat trasnfer equation using the ADI method to solve
+	the equation one knows that:
+	
+	Color(i, t) = (1 + s(i-1) + s(i))*Color(i, t+1) + s(i)*(Color(i-1,t+1) + Color(i+1,t+1))
+	
+	where:
+		Color(i, t): is the color in position i and time t. Thus the color with i+-1 is adjacent
+			to color i, and color in time t is the input color, with t+1 being the final color.
+		s: is defined as beta*(dt/dx^2), using dt=dx=1 then s=beta, with beta being the 
+		heat conductivity in this case the square of CoC (Circle of Confusion).
+		
+	Notice that for this shader the render target must be of floating point type.
+*/
+uniform sampler2D g_TexDepth;
+
+float g_CoCScale;
+float2 g_InvResolution;
+
+
+float4 main(float2 texUV: TEXCOORD0) : COLOR
+{
+	float2 texUV2;
+	float bound;
+
+	texUV2 = texUV - g_InvResolution * g_Axis;
+	bound = dot(g_Axis, texUV2);
+
+
+	float depth0 = 1.0 / (1.0 - tex2D (g_TexDepth, texUV).x);
+	float depth1 = 1.0 / (1.0 - tex2D (g_TexDepth, texUV2).x);
+	float bias = 1.0 / (1.0 - tex2D (g_TexDepth, float2(0.5, 0.5)).x);
+	
+	float CoC0 = g_CoCScale*abs(depth0 - bias);
+	float CoC1 = g_CoCScale*abs(depth1 - bias);
+	CoC1 = bound < 0.0 ? 0.0 : CoC1;
+	
+	CoC0 = clamp(CoC0, 0.0, g_CoCScale);
+	CoC1 = clamp(CoC1, 0.0, g_CoCScale);
+	
+	CoC0 *= CoC0;
+	CoC1 *= CoC1;
+	
+	return float4(-CoC1, 1.0 + CoC0 + CoC1, -CoC0, 1.0);
+}
+]]>
+</include>

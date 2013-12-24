@@ -95,10 +95,11 @@ namespace CS
        *   color space is used. This can be changed with SetMappingShader().
        */
       bool Setup (iObjectRegistry* objectReg, 
-        Quality quality, int colorRange);
+        Quality quality, int colorRange,
+	    iRenderManagerPostEffects* postEffectManager);
 
       /// Get the post processing effects manager which applies HDR tone mapping.
-      PostEffectManager& GetHDRPostEffects() { return postEffects; }
+      iPostEffect* GetHDRPostEffects() { return postEffect; }
 
       /// Set the shader used for tonemapping the final image.
       void SetMappingShader (iShader* shader);
@@ -111,17 +112,23 @@ namespace CS
        * Get the post processing effects layer that can be used for measuring
        * image colors (before tonemapping).
        */
-      PostEffectManager::Layer* GetMeasureLayer() const
+      iPostEffectLayer* GetMeasureLayer() const
       { return measureLayer; }
+
+      iRenderManagerPostEffects* GetPostEffectManager ()
+      {
+        return postEffectManager;
+      }
       
       bool IsRangeLimited() const
       { return (quality == qualInt8) || (quality == qualInt10)
           || (quality == qualInt16); }
     private:
       Quality quality;
-      PostEffectManager postEffects;
-      PostEffectManager::Layer* measureLayer;
-      PostEffectManager::Layer* mappingLayer;
+	  iRenderManagerPostEffects* postEffectManager;
+      csRef<iPostEffect> postEffect;
+      iPostEffectLayer* measureLayer;
+      iPostEffectLayer* mappingLayer;
     };
   
     /// Read HDR settings from a config file

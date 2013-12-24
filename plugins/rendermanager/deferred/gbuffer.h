@@ -136,7 +136,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(RMDeferred)
 	accumBufferSVNames.Push(stringSet->Request(svName.GetDataSafe()));
       }
 
-      const char *depthFmt[] = { "d24s8", "d32", "d16" };
+      const char *depthFmt[] = { /*"d24s8", */ "d32", "d16" };
       const size_t fmtCount = sizeof(depthFmt) / sizeof(const char *);
 
       // Iterate through the depth formats until we find a valid format.

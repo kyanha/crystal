@@ -86,12 +86,12 @@ namespace RenderManager
 	/* @@@ Checking for rtaColor0 is ugly. Eventually, PostEffects
 	    should act on multiple targets at the same time */
         if ((csRenderTargetAttachment (a) == rtaColor0)
-            && (context.postEffects.IsValid()))
+            && (context.postEffect.IsValid()))
         {
-          context.postEffects->SetEffectsOutputTarget (
+          context.postEffect->SetOutputTarget (
             context.renderTargets[a].texHandle);
 	  g3d->SetRenderTarget (
-	    context.postEffects->GetScreenTarget (), false,
+	    context.postEffect->GetScreenTarget (), false,
 	    context.renderTargets[a].subtexture, 
 	    csRenderTargetAttachment (a));
         }
@@ -486,8 +486,8 @@ namespace RenderManager
 
       contextStack.Empty ();
       
-      if (context->postEffects.IsValid())
-        context->postEffects->DrawPostEffects (context->owner);
+      if (context->postEffect.IsValid())
+        context->postEffect->DrawPostEffect (context->owner);
     }
 
     void RenderGroupedByLayer (RenderView* rview, size_t firstContext, size_t lastContext)

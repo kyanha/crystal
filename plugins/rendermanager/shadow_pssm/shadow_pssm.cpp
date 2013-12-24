@@ -397,14 +397,15 @@ bool RMShadowedPSSM::RenderView (iView* view, bool recursePortals)
     return false;
 
   CS::Math::Matrix4 perspectiveFixup;
-  postEffects.SetupView (view, perspectiveFixup);
+  PostEffectsSupport::SetupView (view, perspectiveFixup);
 
   // Pre-setup culling graph
   RenderTreeType renderTree (treePersistent);
 
   RenderTreeType::ContextNode* startContext = renderTree.CreateContext (rview);
   startContext->drawFlags |= (CSDRAW_CLEARSCREEN | CSDRAW_CLEARZBUFFER);
-  startContext->renderTargets[rtaColor0].texHandle = postEffects.GetScreenTarget ();
+  startContext->renderTargets[rtaColor0].texHandle = PostEffectsSupport::GetScreenTarget ();
+  startContext->renderTargets[rtaDepth].texHandle = PostEffectsSupport::GetDepthTarget ();
   startContext->perspectiveFixup = perspectiveFixup;
 
   // Setup the main context
@@ -438,7 +439,7 @@ bool RMShadowedPSSM::RenderView (iView* view, bool recursePortals)
     ForEachContextReverse (renderTree, render);
   }
 
-  postEffects.DrawPostEffects (renderTree);
+  PostEffectsSupport::DrawPostEffects (renderTree);
   
   
   if (doHDRExposure) hdrExposure.ApplyExposure (renderTree, view);
@@ -457,8 +458,7 @@ bool RMShadowedPSSM::PrecacheView (iView* view)
 {
   if (!RenderView (view, false)) return false;
 
-  postEffects.ClearIntermediates();
-  hdr.GetHDRPostEffects().ClearIntermediates();
+  //PostEffectsSupport::ClearIntermediates();
 
   /* @@@ Other ideas for precache drawing:
     - No frame advancement?
@@ -586,9 +586,8 @@ bool RMShadowedPSSM::Initialize(iObjectRegistry* objectReg)
     
     hdr.Setup (objectReg, 
       hdrSettings.GetQuality(), 
-      hdrSettings.GetColorRange());
-    postEffects.SetChainedOutput (hdr.GetHDRPostEffects());
-  
+      hdrSettings.GetColorRange(),
+	  this);
     hdrExposure.Initialize (objectReg, hdr, hdrSettings);
   }
   
@@ -597,9 +596,9 @@ bool RMShadowedPSSM::Initialize(iObjectRegistry* objectReg)
   lightPersistent.Initialize (objectReg, treePersistent.debugPersist);
   lightPersistent_unshadowed.Initialize (objectReg, treePersistent.debugPersist);
   reflectRefractPersistent.Initialize (objectReg, treePersistent.debugPersist,
-    &postEffects);
+    this);
   framebufferTexPersistent.Initialize (objectReg,
-    &postEffects);
+    this);
     
   refrRefrShadows = 0;
   if (cfg->GetBool ("RenderManager.ShadowPSSM.ShadowsInReflections", true))

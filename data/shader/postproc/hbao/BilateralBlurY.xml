@@ -1,0 +1,68 @@
+<shader compiler="xmlshader" name="postproc_blur">
+  <technique priority="200">
+    <pass>
+      <buffer source="texture coordinate 0" destination="texture coordinate 0" />
+	  <texture destination="texAO" name="tex diffuse" />
+      <texture destination="texDepth" name="tex depth" />
+      <fp plugin="glcg">
+	<cgfp>
+	  <variablemap variable="inv resolution" destination="g_InvResolution" />
+	  <variablemap variable="blur radius" destination="g_BlurRadius" />
+	  <variablemap variable="blur falloff" destination="g_BlurFalloff" />
+	  <variablemap variable="sharpness" destination="g_Sharpness" />
+	  <program>
+
+	      <![CDATA[
+		  
+float2 g_InvResolution;
+float g_BlurRadius;
+float g_BlurFalloff;
+float g_Sharpness;
+
+uniform sampler2D texAO;
+uniform sampler2D texDepth;
+		  
+float fetch_eye_z(float2 uv)
+{
+    float z = 1 / (1 - tex2D (texDepth, uv).x);
+    return z;
+}
+
+float BlurFunction(float2 uv, float r, float center_c, float center_d, inout float w_total)
+{
+    float c = tex2D (texAO, uv).x;
+    float d = fetch_eye_z(uv);
+
+    float ddiff = d - center_d;
+    float w = exp(-r*r*g_BlurFalloff - ddiff*ddiff*g_Sharpness);
+    w_total += w;
+
+    return w*c;
+}
+		  
+//blur Y		  
+float4 main(float2 texUV: TEXCOORD0): COLOR
+{
+    float b = 0;
+    float w_total = 0;
+    float center_c = tex2D (texAO, texUV).x;
+    float center_d = fetch_eye_z(texUV);
+    
+    for (float r = -g_BlurRadius; r <= g_BlurRadius; ++r)
+    {
+        float2 uv = texUV + float2(0, r*g_InvResolution.y);
+        b += BlurFunction(uv, r, center_c, center_d, w_total);	
+    }
+
+    return b/w_total;
+}
+		  
+		  
+		  	      ]]>
+
+	  </program>
+	</cgfp>
+      </fp>
+    </pass>
+  </technique>
+</shader>

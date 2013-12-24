@@ -34,7 +34,7 @@ namespace CS
 {
   namespace RenderManager
   {
-    class PostEffectManager;
+    struct iPostEffect;
   
     /// Helper to read shadow handler settings
     class CS_CRYSTALSPACE_EXPORT ShadowSettings
@@ -74,7 +74,7 @@ namespace CS
       CS::ShaderVarStringID svMeshIDName;
       
       /// Post processing effects to apply to shadow map
-      csRef<PostEffectManager> postEffects;
+      csRef<iPostEffect> postEffect;
       
       /**
        * Read settings from configuration (such as targets, default shader etc.).

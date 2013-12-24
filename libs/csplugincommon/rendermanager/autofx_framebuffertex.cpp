@@ -24,6 +24,8 @@
 #include "csutil/objreg.h"
 #include "imap/loader.h"
 
+#include "iengine/rendermanager.h"
+
 namespace CS
 {
   namespace RenderManager
@@ -48,7 +50,7 @@ namespace CS
       }
   
       void FTBPD::Initialize (iObjectRegistry* objReg,
-				PostEffectManager* postEffects)
+				iRenderManagerPostEffects* postEffectManager)
       {
 	csRef<iShaderManager> shaderManager =
 	  csQueryRegistry<iShaderManager> (objReg);
@@ -62,9 +64,8 @@ namespace CS
 	  svTexFramebuffer[i] = strings->Request (svName);
 	}
 	svFramebufferCoordXform = strings->Request ("framebuffer coord xform");
-	
-	if (postEffects)
-	  texCacheColor.SetFormat (postEffects->GetIntermediateTargetFormat());
+
+
 	csRef<iGraphics3D> g3d = csQueryRegistry<iGraphics3D> (objReg);
 	  
 	texCacheColor.SetG3D (g3d);

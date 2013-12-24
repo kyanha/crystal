@@ -453,16 +453,15 @@ bool RMDeferred::Initialize(iObjectRegistry *registry)
     
     hdr.Setup (registry, 
       hdrSettings.GetQuality(), 
-      hdrSettings.GetColorRange());
-    postEffects.SetChainedOutput (hdr.GetHDRPostEffects());
-  
+      hdrSettings.GetColorRange(),
+	  this);
     hdrExposure.Initialize (registry, hdr, hdrSettings);
   }
 
   // initialize reflect/refract
   dbgFlagClipPlanes = treePersistent.debugPersist.RegisterDebugFlag ("draw.clipplanes.view");
-  reflectRefractPersistent.Initialize (registry, treePersistent.debugPersist, &postEffects);
-  framebufferTexPersistent.Initialize (registry, &postEffects);
+  reflectRefractPersistent.Initialize (registry, treePersistent.debugPersist, this);
+  framebufferTexPersistent.Initialize (registry, this);
 
   RMViscullCommon::Initialize (objRegistry, "RenderManager.Deferred");
   
@@ -517,8 +516,10 @@ bool RMDeferred::RenderView(iView *view, bool recursePortals)
   if (showGBuffer)
     ShowGBuffer (renderTree, &gbuffer);
 
-  postEffects.SetupView (view, startContext->perspectiveFixup);
-  startContext->renderTargets[rtaColor0].texHandle = postEffects.GetScreenTarget ();
+  PostEffectsSupport::SetDepthBuffer (gbuffer.GetDepthBuffer ());
+  PostEffectsSupport::SetupView (view, startContext->perspectiveFixup);
+  startContext->renderTargets[rtaColor0].texHandle = PostEffectsSupport::GetScreenTarget ();
+  startContext->renderTargets[rtaDepth].texHandle = PostEffectsSupport::GetDepthTarget ();
 
   // Setup the main context
   {
@@ -551,7 +552,7 @@ bool RMDeferred::RenderView(iView *view, bool recursePortals)
     ForEachContextReverse (renderTree, render);
   }
 
-  postEffects.DrawPostEffects (renderTree);
+  PostEffectsSupport::DrawPostEffects (renderTree);
 
   if (doHDRExposure) hdrExposure.ApplyExposure (renderTree, view);
 
@@ -570,8 +571,7 @@ bool RMDeferred::PrecacheView(iView *view)
 {
   return RenderView (view, false);
 
-  postEffects.ClearIntermediates ();
-  hdr.GetHDRPostEffects().ClearIntermediates();
+  //PostEffectsSupport::ClearIntermediates ();
 }
 
 //----------------------------------------------------------------------
