@@ -38,9 +38,25 @@ namespace Threading
 
   ThreadedJobQueue::ThreadedJobQueue (size_t numWorkers, ThreadPriority priority,
     const char* name)
-    : scfImplementationType (this), 
+    : scfImplementationType (this),
+    objectReg (nullptr),
     numWorkerThreads (numWorkers), 
     outstandingJobs (0), name (name)
+  {
+    Init (priority);
+  }
+
+  ThreadedJobQueue::ThreadedJobQueue (iObjectRegistry* objectReg,
+    size_t numWorkers, ThreadPriority priority, const char* name)
+    : scfImplementationType (this),
+    objectReg (objectReg),
+    numWorkerThreads (numWorkers), 
+    outstandingJobs (0), name (name)
+  {
+    Init (priority);
+  }
+
+  void ThreadedJobQueue::Init (ThreadPriority priority)
   {
     if (this->name.IsEmpty())
       this->name.Format ("Queue [%p]", this);
@@ -145,8 +161,24 @@ namespace Threading
     return NotEnqueued;
   }
 
-
   iJobQueue::JobStatus ThreadedJobQueue::PullAndRun (iJob* job, bool waitForCompletion)
+  {
+    if (!objectReg) return InternalPullAndRunImpl (job, waitForCompletion);
+
+    csRef<iThreadReturn> ret (InternalPullAndRun (job, waitForCompletion));
+    return static_cast<iJobQueue::JobStatus> (
+      reinterpret_cast<uintptr_t> (ret->GetResultPtr()));
+  }
+
+  THREADED_CALLABLE_IMPL2(ThreadedJobQueue, InternalPullAndRun,
+    csRef<iJob> job, bool waitForCompletion)
+  {
+    ret->SetResult (reinterpret_cast<void*> (
+      static_cast<uintptr_t> (InternalPullAndRunImpl (job, waitForCompletion))));
+    return true;
+  }
+
+  iJobQueue::JobStatus ThreadedJobQueue::InternalPullAndRunImpl (iJob* job, bool waitForCompletion)
   {
     bool removedJob = PullFromQueues (job);
 

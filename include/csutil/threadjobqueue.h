@@ -28,6 +28,7 @@
 #include "csextern.h"
 #include "csutil/fifo.h"
 #include "csutil/scf_implementation.h"
+#include "csutil/threadmanager.h"
 #include "csutil/csstring.h"
 #include "iutil/job.h"
 
@@ -41,6 +42,7 @@ namespace Threading
 {
 
 class CS_CRYSTALSPACE_EXPORT ThreadedJobQueue :
+  public ThreadedCallable<ThreadedJobQueue>,
   public scfImplementation1<ThreadedJobQueue, iJobQueue>
 {
 public:
@@ -54,6 +56,20 @@ public:
    */
   ThreadedJobQueue (size_t numWorkers = 1, ThreadPriority priority = THREAD_PRIO_NORMAL,
     const char* name = 0);
+  /**
+   * Construct job queue.
+   * \param objectReg Object registry.
+   * \param numWorkers Number of worker threads to use.
+   * \param priority Priority of worker threads.
+   * \param name Optional name of the queue.
+   *   Used in worker thread naming and shows up in the debugger,
+   *   if supported.
+   * \remarks A job queue constructed with an object registry can interact
+   *  with the thread manager which can avoid deadlocks in certain scenarios.
+   */
+  ThreadedJobQueue (iObjectRegistry* objectReg,
+    size_t numWorkers = 1, ThreadPriority priority = THREAD_PRIO_NORMAL,
+    const char* name = 0);
   virtual ~ThreadedJobQueue ();
 
   virtual void Enqueue (iJob* job);
@@ -66,6 +82,13 @@ public:
   /// Get name of this queue
   const char* GetName () const { return name; }
 private:
+  iObjectRegistry* GetObjectRegistry() const { return objectReg; }
+
+  void Init (ThreadPriority priority);
+
+  THREADED_CALLABLE_DECL2(ThreadedJobQueue, InternalPullAndRun, csThreadReturn,
+    csRef<iJob>, job, bool, waitForCompletion, HIGH, true, true);
+  JobStatus InternalPullAndRunImpl (iJob* job, bool waitForCompletion);
 
   bool PullFromQueues (iJob* job);
   JobStatus CheckCompletion (iJob* job, bool waitForCompletion);
@@ -110,6 +133,7 @@ private:
     csFIFO<csRef<iJob> > jobQueue;
   };
 
+  iObjectRegistry* objectReg;
   csRef<ThreadState>* allThreadState;
   ThreadGroup allThreads;
 
