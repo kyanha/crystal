@@ -31,6 +31,7 @@ LIGHTER2.PLUGINLIST =
   csopcode
   csparser
   cssynldr
+  cstgaimg
   docpreproc
   dsplex
   particles
@@ -60,7 +61,6 @@ LIGHTER2.PLUGINLIST =
   rm_null
   sequence
   shadermgr
-  shaderweaver
   simpleformer
   simpleformerldr
   sndmanager
@@ -76,7 +76,6 @@ LIGHTER2.PLUGINLIST =
   bruteblock
   terrainldr
   xmlread
-  xmlshader
   xmltiny
   ;
 
@@ -96,9 +95,11 @@ if $(CAL3D.AVAILABLE) = "yes"
 {
   ;LIGHTER2.PLUGINLIST += sprcal3d sprcal3dldr ;
 }
+# FIXME: Ideally, we wouldn't need to pull in shader plugins at all
+LIGHTER2.PLUGINLIST += shaderweaver slcombiner xmlshader ;
 if $(GL.AVAILABLE) = "yes"
 {
-  LIGHTER2.PLUGINLIST += glshader_arb glshader_fixed ;
+  LIGHTER2.PLUGINLIST += glshader_arb glshader_fixed glshader_glsl ;
   if $(CG.AVAILABLE) = "yes" { LIGHTER2.PLUGINLIST += glshader_cg ; }
 }
 
