@@ -470,26 +470,26 @@ csPtr<iJob> QueueEvent(csRef<iThreadManager> tm, ThreadedCallable<T>* object, bo
 }
 
 #define THREADED_CALLABLE_DECL1(type, function, returnClass, T1, A1, queueType, wait, forceQueue) \
-  bool function##TC(csRef<iThreadReturn> ret, bool sync, T1 A1); \
-  inline csRef<iThreadReturn> function##Wait(T1 A1) \
+  bool function##TC(csRef<iThreadReturn> ret, bool sync, T1 a1); \
+  inline csRef<iThreadReturn> function##Wait(T1 a1) \
 { \
   const type* objTC = const_cast<const type*>(this); \
-  return objTC->function##Wait(A1); \
+  return objTC->function##Wait(a1); \
 } \
-  inline csRef<iThreadReturn> function##Wait(T1 A1) const \
+  inline csRef<iThreadReturn> function##Wait(T1 a1) const \
 { \
-  return function##T(true, A1); \
+  return function##T(true, a1); \
 } \
-  inline csRef<iThreadReturn> function(T1 A1) \
+  inline csRef<iThreadReturn> function(T1 a1) \
 { \
   const type* objTC = const_cast<const type*>(this); \
-  return objTC->function(A1); \
+  return objTC->function(a1); \
 } \
-  inline csRef<iThreadReturn> function(T1 A1) const \
+  inline csRef<iThreadReturn> function(T1 a1) const \
 { \
-  return function##T(false, A1); \
+  return function##T(false, a1); \
 } \
-  inline csRef<iThreadReturn> function##T(bool Wait, T1 A1) const \
+  inline csRef<iThreadReturn> function##T(bool Wait, T1 a1) const \
 { \
   csRef<iThreadManager> tm = csQueryRegistry<iThreadManager>(GetObjectRegistry()); \
   csRef<iThreadReturn> ret; \
@@ -502,7 +502,7 @@ csPtr<iJob> QueueEvent(csRef<iThreadManager> tm, ThreadedCallable<T>* object, bo
   if(tm->RunNow(queueType, Wait || wait, forceQueue)) \
   { \
     type* objTC = const_cast<type*>(this); \
-    if(objTC->function##TC(ret, Wait || wait, A1)) \
+    if(objTC->function##TC(ret, Wait || wait, a1)) \
     { \
       ret->MarkSuccessful(); \
     } \
@@ -515,7 +515,7 @@ csPtr<iJob> QueueEvent(csRef<iThreadManager> tm, ThreadedCallable<T>* object, bo
   argsTC[0] = mempool; \
   argsTC[1] = mempool->Store<csRef<iThreadReturn> >(&ret); \
   argsTC[2] = mempool->Store<bool>(&sync); \
-  argsTC[3] = mempool->Store<T1>(&A1); \
+  argsTC[3] = mempool->Store<T1>(&a1); \
   csRef<iJob> job = QueueEvent<type, csRef<iThreadReturn>, bool, T1>(tm, (ThreadedCallable<type>*)this, &type::function##TC, argsTC, queueType); \
   ret->SetJob(job); \
   if(Wait || wait) \
@@ -526,26 +526,26 @@ csPtr<iJob> QueueEvent(csRef<iThreadManager> tm, ThreadedCallable<T>* object, bo
 }
 
 #define THREADED_CALLABLE_DECL2(type, function, returnClass, T1, A1, T2, A2, queueType, wait, forceQueue) \
-  bool function##TC(csRef<iThreadReturn> ret, bool sync, T1 A1, T2 A2); \
-  inline csRef<iThreadReturn> function##Wait(T1 A1, T2 A2) \
+  bool function##TC(csRef<iThreadReturn> ret, bool sync, T1 a1, T2 a2); \
+  inline csRef<iThreadReturn> function##Wait(T1 a1, T2 a2) \
 { \
   const type* objTC = const_cast<const type*>(this); \
-  return objTC->function##Wait(A1, A2); \
+  return objTC->function##Wait(a1, a2); \
 } \
-  inline csRef<iThreadReturn> function##Wait(T1 A1, T2 A2) const \
+  inline csRef<iThreadReturn> function##Wait(T1 a1, T2 a2) const \
 { \
-  return function##T(true, A1, A2); \
+  return function##T(true, a1, a2); \
 } \
-  inline csRef<iThreadReturn> function(T1 A1, T2 A2) \
+  inline csRef<iThreadReturn> function(T1 a1, T2 a2) \
 { \
   const type* objTC = const_cast<const type*>(this); \
-  return objTC->function(A1, A2); \
+  return objTC->function(a1, a2); \
 } \
-  inline csRef<iThreadReturn> function(T1 A1, T2 A2) const \
+  inline csRef<iThreadReturn> function(T1 a1, T2 a2) const \
 { \
-  return function##T(false, A1, A2); \
+  return function##T(false, a1, a2); \
 } \
-  inline csRef<iThreadReturn> function##T(bool Wait, T1 A1, T2 A2) const \
+  inline csRef<iThreadReturn> function##T(bool Wait, T1 a1, T2 a2) const \
 { \
   csRef<iThreadManager> tm = csQueryRegistry<iThreadManager>(GetObjectRegistry()); \
   csRef<iThreadReturn> ret; \
@@ -558,7 +558,7 @@ csPtr<iJob> QueueEvent(csRef<iThreadManager> tm, ThreadedCallable<T>* object, bo
   if(tm->RunNow(queueType, Wait || wait, forceQueue)) \
   { \
     type* objTC = const_cast<type*>(this); \
-    if(objTC->function##TC(ret, Wait || wait, A1, A2)) \
+    if(objTC->function##TC(ret, Wait || wait, a1, a2)) \
     { \
       ret->MarkSuccessful(); \
     } \
@@ -571,8 +571,8 @@ csPtr<iJob> QueueEvent(csRef<iThreadManager> tm, ThreadedCallable<T>* object, bo
   argsTC[0] = mempool; \
   argsTC[1] = mempool->Store<csRef<iThreadReturn> >(&ret); \
   argsTC[2] = mempool->Store<bool>(&sync); \
-  argsTC[3] = mempool->Store<T1>(&A1); \
-  argsTC[4] = mempool->Store<T2>(&A2); \
+  argsTC[3] = mempool->Store<T1>(&a1); \
+  argsTC[4] = mempool->Store<T2>(&a2); \
   csRef<iJob> job = QueueEvent<type, csRef<iThreadReturn>, bool, T1, T2>(tm, (ThreadedCallable<type>*)this, &type::function##TC, argsTC, queueType); \
   ret->SetJob(job); \
   if(Wait || wait) \
@@ -583,26 +583,26 @@ csPtr<iJob> QueueEvent(csRef<iThreadManager> tm, ThreadedCallable<T>* object, bo
 }
 
 #define THREADED_CALLABLE_DECL3(type, function, returnClass, T1, A1, T2, A2, T3, A3, queueType, wait, forceQueue) \
-  bool function##TC(csRef<iThreadReturn> ret, bool sync, T1 A1, T2 A2, T3 A3); \
-  inline csRef<iThreadReturn> function##Wait(T1 A1, T2 A2, T3 A3) \
+  bool function##TC(csRef<iThreadReturn> ret, bool sync, T1 a1, T2 a2, T3 a3); \
+  inline csRef<iThreadReturn> function##Wait(T1 a1, T2 a2, T3 a3) \
 { \
   const type* objTC = const_cast<const type*>(this); \
-  return objTC->function##Wait(A1, A2, A3); \
+  return objTC->function##Wait(a1, a2, a3); \
 } \
-  inline csRef<iThreadReturn> function##Wait(T1 A1, T2 A2, T3 A3) const \
+  inline csRef<iThreadReturn> function##Wait(T1 a1, T2 a2, T3 a3) const \
 { \
-  return function##T(true, A1, A2, A3); \
+  return function##T(true, a1, a2, a3); \
 } \
-  inline csRef<iThreadReturn> function(T1 A1, T2 A2, T3 A3) \
+  inline csRef<iThreadReturn> function(T1 a1, T2 a2, T3 a3) \
 { \
   const type* objTC = const_cast<const type*>(this); \
-  return objTC->function(A1, A2, A3); \
+  return objTC->function(a1, a2, a3); \
 } \
-  inline csRef<iThreadReturn> function(T1 A1, T2 A2, T3 A3) const \
+  inline csRef<iThreadReturn> function(T1 a1, T2 a2, T3 a3) const \
 { \
-  return function##T(false, A1, A2, A3); \
+  return function##T(false, a1, a2, a3); \
 } \
-  inline csRef<iThreadReturn> function##T(bool Wait, T1 A1, T2 A2, T3 A3) const \
+  inline csRef<iThreadReturn> function##T(bool Wait, T1 a1, T2 a2, T3 a3) const \
 { \
   csRef<iThreadManager> tm = csQueryRegistry<iThreadManager>(GetObjectRegistry()); \
   csRef<iThreadReturn> ret; \
@@ -615,7 +615,7 @@ csPtr<iJob> QueueEvent(csRef<iThreadManager> tm, ThreadedCallable<T>* object, bo
   if(tm->RunNow(queueType, Wait || wait, forceQueue)) \
   { \
     type* objTC = const_cast<type*>(this); \
-    if(objTC->function##TC(ret, Wait || wait, A1, A2, A3)) \
+    if(objTC->function##TC(ret, Wait || wait, a1, a2, a3)) \
     { \
       ret->MarkSuccessful(); \
     } \
@@ -628,9 +628,9 @@ csPtr<iJob> QueueEvent(csRef<iThreadManager> tm, ThreadedCallable<T>* object, bo
   argsTC[0] = mempool; \
   argsTC[1] = mempool->Store<csRef<iThreadReturn> >(&ret); \
   argsTC[2] = mempool->Store<bool>(&sync); \
-  argsTC[3] = mempool->Store<T1>(&A1); \
-  argsTC[4] = mempool->Store<T2>(&A2); \
-  argsTC[5] = mempool->Store<T3>(&A3); \
+  argsTC[3] = mempool->Store<T1>(&a1); \
+  argsTC[4] = mempool->Store<T2>(&a2); \
+  argsTC[5] = mempool->Store<T3>(&a3); \
   csRef<iJob> job = QueueEvent<type, csRef<iThreadReturn>, bool, T1, T2, T3>(tm, (ThreadedCallable<type>*)this, &type::function##TC, argsTC, queueType); \
   ret->SetJob(job); \
   if(Wait || wait) \
@@ -641,26 +641,26 @@ csPtr<iJob> QueueEvent(csRef<iThreadManager> tm, ThreadedCallable<T>* object, bo
 }
 
 #define THREADED_CALLABLE_DECL4(type, function, returnClass, T1, A1, T2, A2, T3, A3, T4, A4, queueType, wait, forceQueue) \
-  bool function##TC(csRef<iThreadReturn> ret, bool sync, T1 A1, T2 A2, T3 A3, T4 A4); \
-  inline csRef<iThreadReturn> function##Wait(T1 A1, T2 A2, T3 A3, T4 A4) \
+  bool function##TC(csRef<iThreadReturn> ret, bool sync, T1 a1, T2 a2, T3 a3, T4 a4); \
+  inline csRef<iThreadReturn> function##Wait(T1 a1, T2 a2, T3 a3, T4 a4) \
 { \
   const type* objTC = const_cast<const type*>(this); \
-  return objTC->function##Wait(A1, A2, A3, A4); \
+  return objTC->function##Wait(a1, a2, a3, a4); \
 } \
-  inline csRef<iThreadReturn> function##Wait(T1 A1, T2 A2, T3 A3, T4 A4) const \
+  inline csRef<iThreadReturn> function##Wait(T1 a1, T2 a2, T3 a3, T4 a4) const \
 { \
-  return function##T(true, A1, A2, A3, A4); \
+  return function##T(true, a1, a2, a3, a4); \
 } \
-  inline csRef<iThreadReturn> function(T1 A1, T2 A2, T3 A3, T4 A4) \
+  inline csRef<iThreadReturn> function(T1 a1, T2 a2, T3 a3, T4 a4) \
 { \
   const type* objTC = const_cast<const type*>(this); \
-  return objTC->function(A1, A2, A3, A4); \
+  return objTC->function(a1, a2, a3, a4); \
 } \
-  inline csRef<iThreadReturn> function(T1 A1, T2 A2, T3 A3, T4 A4) const \
+  inline csRef<iThreadReturn> function(T1 a1, T2 a2, T3 a3, T4 a4) const \
 { \
-  return function##T(false, A1, A2, A3, A4); \
+  return function##T(false, a1, a2, a3, a4); \
 } \
-  inline csRef<iThreadReturn> function##T(bool Wait, T1 A1, T2 A2, T3 A3, T4 A4) const \
+  inline csRef<iThreadReturn> function##T(bool Wait, T1 a1, T2 a2, T3 a3, T4 a4) const \
 { \
   csRef<iThreadManager> tm = csQueryRegistry<iThreadManager>(GetObjectRegistry()); \
   csRef<iThreadReturn> ret; \
@@ -673,7 +673,7 @@ csPtr<iJob> QueueEvent(csRef<iThreadManager> tm, ThreadedCallable<T>* object, bo
   if(tm->RunNow(queueType, Wait || wait, forceQueue)) \
   { \
     type* objTC = const_cast<type*>(this); \
-    if(objTC->function##TC(ret, Wait || wait, A1, A2, A3, A4)) \
+    if(objTC->function##TC(ret, Wait || wait, a1, a2, a3, a4)) \
     { \
       ret->MarkSuccessful(); \
     } \
@@ -686,10 +686,10 @@ csPtr<iJob> QueueEvent(csRef<iThreadManager> tm, ThreadedCallable<T>* object, bo
   argsTC[0] = mempool; \
   argsTC[1] = mempool->Store<csRef<iThreadReturn> >(&ret); \
   argsTC[2] = mempool->Store<bool>(&sync); \
-  argsTC[3] = mempool->Store<T1>(&A1); \
-  argsTC[4] = mempool->Store<T2>(&A2); \
-  argsTC[5] = mempool->Store<T3>(&A3); \
-  argsTC[6] = mempool->Store<T4>(&A4); \
+  argsTC[3] = mempool->Store<T1>(&a1); \
+  argsTC[4] = mempool->Store<T2>(&a2); \
+  argsTC[5] = mempool->Store<T3>(&a3); \
+  argsTC[6] = mempool->Store<T4>(&a4); \
   csRef<iJob> job = QueueEvent<type, csRef<iThreadReturn>, bool, T1, T2, T3, T4>(tm, (ThreadedCallable<type>*)this, &type::function##TC, argsTC, queueType); \
   ret->SetJob(job); \
   if(Wait || wait) \
@@ -700,26 +700,26 @@ csPtr<iJob> QueueEvent(csRef<iThreadManager> tm, ThreadedCallable<T>* object, bo
 }
 
 #define THREADED_CALLABLE_DECL5(type, function, returnClass, T1, A1, T2, A2, T3, A3, T4, A4, T5, A5, queueType, wait, forceQueue) \
-  bool function##TC(csRef<iThreadReturn> ret, bool sync, T1 A1, T2 A2, T3 A3, T4 A4, T5 A5); \
-  inline csRef<iThreadReturn> function##Wait(T1 A1, T2 A2, T3 A3, T4 A4, T5 A5) \
+  bool function##TC(csRef<iThreadReturn> ret, bool sync, T1 a1, T2 a2, T3 a3, T4 a4, T5 a5); \
+  inline csRef<iThreadReturn> function##Wait(T1 a1, T2 a2, T3 a3, T4 a4, T5 a5) \
 { \
   const type* objTC = const_cast<const type*>(this); \
-  return objTC->function##Wait(A1, A2, A3, A4, A5); \
+  return objTC->function##Wait(a1, a2, a3, a4, a5); \
 } \
-  inline csRef<iThreadReturn> function##Wait(T1 A1, T2 A2, T3 A3, T4 A4, T5 A5) const \
+  inline csRef<iThreadReturn> function##Wait(T1 a1, T2 a2, T3 a3, T4 a4, T5 a5) const \
 { \
-  return function##T(true, A1, A2, A3, A4, A5); \
+  return function##T(true, a1, a2, a3, a4, a5); \
 } \
-  inline csRef<iThreadReturn> function(T1 A1, T2 A2, T3 A3, T4 A4, T5 A5) \
+  inline csRef<iThreadReturn> function(T1 a1, T2 a2, T3 a3, T4 a4, T5 a5) \
 { \
   const type* objTC = const_cast<const type*>(this); \
-  return objTC->function(A1, A2, A3, A4, A5); \
+  return objTC->function(a1, a2, a3, a4, a5); \
 } \
-  inline csRef<iThreadReturn> function(T1 A1, T2 A2, T3 A3, T4 A4, T5 A5) const \
+  inline csRef<iThreadReturn> function(T1 a1, T2 a2, T3 a3, T4 a4, T5 a5) const \
 { \
-  return function##T(false, A1, A2, A3, A4, A5); \
+  return function##T(false, a1, a2, a3, a4, a5); \
 } \
-  inline csRef<iThreadReturn> function##T(bool Wait, T1 A1, T2 A2, T3 A3, T4 A4, T5 A5) const \
+  inline csRef<iThreadReturn> function##T(bool Wait, T1 a1, T2 a2, T3 a3, T4 a4, T5 a5) const \
 { \
   csRef<iThreadManager> tm = csQueryRegistry<iThreadManager>(GetObjectRegistry()); \
   csRef<iThreadReturn> ret; \
@@ -732,7 +732,7 @@ csPtr<iJob> QueueEvent(csRef<iThreadManager> tm, ThreadedCallable<T>* object, bo
   if(tm->RunNow(queueType, Wait || wait, forceQueue)) \
   { \
     type* objTC = const_cast<type*>(this); \
-    if(objTC->function##TC(ret, Wait || wait, A1, A2, A3, A4, A5)) \
+    if(objTC->function##TC(ret, Wait || wait, a1, a2, a3, a4, a5)) \
     { \
       ret->MarkSuccessful(); \
     } \
@@ -745,11 +745,11 @@ csPtr<iJob> QueueEvent(csRef<iThreadManager> tm, ThreadedCallable<T>* object, bo
   argsTC[0] = mempool; \
   argsTC[1] = mempool->Store<csRef<iThreadReturn> >(&ret); \
   argsTC[2] = mempool->Store<bool>(&sync); \
-  argsTC[3] = mempool->Store<T1>(&A1); \
-  argsTC[4] = mempool->Store<T2>(&A2); \
-  argsTC[5] = mempool->Store<T3>(&A3); \
-  argsTC[6] = mempool->Store<T4>(&A4); \
-  argsTC[7] = mempool->Store<T5>(&A5); \
+  argsTC[3] = mempool->Store<T1>(&a1); \
+  argsTC[4] = mempool->Store<T2>(&a2); \
+  argsTC[5] = mempool->Store<T3>(&a3); \
+  argsTC[6] = mempool->Store<T4>(&a4); \
+  argsTC[7] = mempool->Store<T5>(&a5); \
   csRef<iJob> job = QueueEvent<type, csRef<iThreadReturn>, bool, T1, T2, T3, T4, T5>(tm, (ThreadedCallable<type>*)this, &type::function##TC, argsTC, queueType); \
   ret->SetJob(job); \
   if(Wait || wait) \
@@ -760,26 +760,26 @@ csPtr<iJob> QueueEvent(csRef<iThreadManager> tm, ThreadedCallable<T>* object, bo
 }
 
 #define THREADED_CALLABLE_DECL6(type, function, returnClass, T1, A1, T2, A2, T3, A3, T4, A4, T5, A5, T6, A6, queueType, wait, forceQueue) \
-  bool function##TC(csRef<iThreadReturn> ret, bool sync, T1 A1, T2 A2, T3 A3, T4 A4, T5 A5, T6 A6); \
-  inline csRef<iThreadReturn> function##Wait(T1 A1, T2 A2, T3 A3, T4 A4, T5 A5, T6 A6) \
+  bool function##TC(csRef<iThreadReturn> ret, bool sync, T1 a1, T2 a2, T3 a3, T4 a4, T5 a5, T6 a6); \
+  inline csRef<iThreadReturn> function##Wait(T1 a1, T2 a2, T3 a3, T4 a4, T5 a5, T6 a6) \
 { \
   const type* objTC = const_cast<const type*>(this); \
-  return objTC->function##Wait(A1, A2, A3, A4, A5, A6); \
+  return objTC->function##Wait(a1, a2, a3, a4, a5, a6); \
 } \
-  inline csRef<iThreadReturn> function##Wait(T1 A1, T2 A2, T3 A3, T4 A4, T5 A5, T6 A6) const \
+  inline csRef<iThreadReturn> function##Wait(T1 a1, T2 a2, T3 a3, T4 a4, T5 a5, T6 a6) const \
 { \
-  return function##T(true, A1, A2, A3, A4, A5, A6); \
+  return function##T(true, a1, a2, a3, a4, a5, a6); \
 } \
-  inline csRef<iThreadReturn> function(T1 A1, T2 A2, T3 A3, T4 A4, T5 A5, T6 A6) \
+  inline csRef<iThreadReturn> function(T1 a1, T2 a2, T3 a3, T4 a4, T5 a5, T6 a6) \
 { \
   const type* objTC = const_cast<const type*>(this); \
-  return objTC->function(A1, A2, A3, A4, A5, A6); \
+  return objTC->function(a1, a2, a3, a4, a5, a6); \
 } \
-  inline csRef<iThreadReturn> function(T1 A1, T2 A2, T3 A3, T4 A4, T5 A5, T6 A6) const \
+  inline csRef<iThreadReturn> function(T1 a1, T2 a2, T3 a3, T4 a4, T5 a5, T6 a6) const \
 { \
-  return function##T(false, A1, A2, A3, A4, A5, A6); \
+  return function##T(false, a1, a2, a3, a4, a5, a6); \
 } \
-  inline csRef<iThreadReturn> function##T(bool Wait, T1 A1, T2 A2, T3 A3, T4 A4, T5 A5, T6 A6) const \
+  inline csRef<iThreadReturn> function##T(bool Wait, T1 a1, T2 a2, T3 a3, T4 a4, T5 a5, T6 a6) const \
 { \
   csRef<iThreadManager> tm = csQueryRegistry<iThreadManager>(GetObjectRegistry()); \
   csRef<iThreadReturn> ret; \
@@ -792,7 +792,7 @@ csPtr<iJob> QueueEvent(csRef<iThreadManager> tm, ThreadedCallable<T>* object, bo
   if(tm->RunNow(queueType, Wait || wait, forceQueue)) \
   { \
     type* objTC = const_cast<type*>(this); \
-    if(objTC->function##TC(ret, Wait || wait, A1, A2, A3, A4, A5, A6)) \
+    if(objTC->function##TC(ret, Wait || wait, a1, a2, a3, a4, a5, a6)) \
     { \
       ret->MarkSuccessful(); \
     } \
@@ -805,12 +805,12 @@ csPtr<iJob> QueueEvent(csRef<iThreadManager> tm, ThreadedCallable<T>* object, bo
   argsTC[0] = mempool; \
   argsTC[1] = mempool->Store<csRef<iThreadReturn> >(&ret); \
   argsTC[2] = mempool->Store<bool>(&sync); \
-  argsTC[3] = mempool->Store<T1>(&A1); \
-  argsTC[4] = mempool->Store<T2>(&A2); \
-  argsTC[5] = mempool->Store<T3>(&A3); \
-  argsTC[6] = mempool->Store<T4>(&A4); \
-  argsTC[7] = mempool->Store<T5>(&A5); \
-  argsTC[8] = mempool->Store<T6>(&A6); \
+  argsTC[3] = mempool->Store<T1>(&a1); \
+  argsTC[4] = mempool->Store<T2>(&a2); \
+  argsTC[5] = mempool->Store<T3>(&a3); \
+  argsTC[6] = mempool->Store<T4>(&a4); \
+  argsTC[7] = mempool->Store<T5>(&a5); \
+  argsTC[8] = mempool->Store<T6>(&a6); \
   csRef<iJob> job = QueueEvent<type, csRef<iThreadReturn>, bool, T1, T2, T3, T4, T5, T6>(tm, (ThreadedCallable<type>*)this, &type::function##TC, argsTC, queueType); \
   ret->SetJob(job); \
   if(Wait || wait) \
@@ -821,26 +821,26 @@ csPtr<iJob> QueueEvent(csRef<iThreadManager> tm, ThreadedCallable<T>* object, bo
 }
 
 #define THREADED_CALLABLE_DECL7(type, function, returnClass, T1, A1, T2, A2, T3, A3, T4, A4, T5, A5, T6, A6, T7, A7, queueType, wait, forceQueue) \
-  bool function##TC(csRef<iThreadReturn> ret, bool sync, T1 A1, T2 A2, T3 A3, T4 A4, T5 A5, T6 A6, T7 A7); \
-  inline csRef<iThreadReturn> function##Wait(T1 A1, T2 A2, T3 A3, T4 A4, T5 A5, T6 A6, T7 A7) \
+  bool function##TC(csRef<iThreadReturn> ret, bool sync, T1 a1, T2 a2, T3 a3, T4 a4, T5 a5, T6 a6, T7 a7); \
+  inline csRef<iThreadReturn> function##Wait(T1 a1, T2 a2, T3 a3, T4 a4, T5 a5, T6 a6, T7 a7) \
 { \
   const type* objTC = const_cast<const type*>(this); \
-  return objTC->function##Wait(A1, A2, A3, A4, A5, A6, A7); \
+  return objTC->function##Wait(a1, a2, a3, a4, a5, a6, a7); \
 } \
-  inline csRef<iThreadReturn> function##Wait(T1 A1, T2 A2, T3 A3, T4 A4, T5 A5, T6 A6, T7 A7) const \
+  inline csRef<iThreadReturn> function##Wait(T1 a1, T2 a2, T3 a3, T4 a4, T5 a5, T6 a6, T7 a7) const \
 { \
-  return function##T(true, A1, A2, A3, A4, A5, A6, A7); \
+  return function##T(true, a1, a2, a3, a4, a5, a6, a7); \
 } \
-  inline csRef<iThreadReturn> function(T1 A1, T2 A2, T3 A3, T4 A4, T5 A5, T6 A6, T7 A7) \
+  inline csRef<iThreadReturn> function(T1 a1, T2 a2, T3 a3, T4 a4, T5 a5, T6 a6, T7 a7) \
 { \
   const type* objTC = const_cast<const type*>(this); \
-  return objTC->function(A1, A2, A3, A4, A5, A6, A7); \
+  return objTC->function(a1, a2, a3, a4, a5, a6, a7); \
 } \
-  inline csRef<iThreadReturn> function(T1 A1, T2 A2, T3 A3, T4 A4, T5 A5, T6 A6, T7 A7) const \
+  inline csRef<iThreadReturn> function(T1 a1, T2 a2, T3 a3, T4 a4, T5 a5, T6 a6, T7 a7) const \
 { \
-  return function##T(false, A1, A2, A3, A4, A5, A6, A7); \
+  return function##T(false, a1, a2, a3, a4, a5, a6, a7); \
 } \
-  inline csRef<iThreadReturn> function##T(bool Wait, T1 A1, T2 A2, T3 A3, T4 A4, T5 A5, T6 A6, T7 A7) const \
+  inline csRef<iThreadReturn> function##T(bool Wait, T1 a1, T2 a2, T3 a3, T4 a4, T5 a5, T6 a6, T7 a7) const \
 { \
   csRef<iThreadManager> tm = csQueryRegistry<iThreadManager>(GetObjectRegistry()); \
   csRef<iThreadReturn> ret; \
@@ -853,7 +853,7 @@ csPtr<iJob> QueueEvent(csRef<iThreadManager> tm, ThreadedCallable<T>* object, bo
   if(tm->RunNow(queueType, Wait || wait, forceQueue)) \
   { \
     type* objTC = const_cast<type*>(this); \
-    if(objTC->function##TC(ret, Wait || wait, A1, A2, A3, A4, A5, A6, A7)) \
+    if(objTC->function##TC(ret, Wait || wait, a1, a2, a3, a4, a5, a6, a7)) \
     { \
       ret->MarkSuccessful(); \
     } \
@@ -866,13 +866,13 @@ csPtr<iJob> QueueEvent(csRef<iThreadManager> tm, ThreadedCallable<T>* object, bo
   argsTC[0] = mempool; \
   argsTC[1] = mempool->Store<csRef<iThreadReturn> >(&ret); \
   argsTC[2] = mempool->Store<bool>(&sync); \
-  argsTC[3] = mempool->Store<T1>(&A1); \
-  argsTC[4] = mempool->Store<T2>(&A2); \
-  argsTC[5] = mempool->Store<T3>(&A3); \
-  argsTC[6] = mempool->Store<T4>(&A4); \
-  argsTC[7] = mempool->Store<T5>(&A5); \
-  argsTC[8] = mempool->Store<T6>(&A6); \
-  argsTC[9] = mempool->Store<T7>(&A7); \
+  argsTC[3] = mempool->Store<T1>(&a1); \
+  argsTC[4] = mempool->Store<T2>(&a2); \
+  argsTC[5] = mempool->Store<T3>(&a3); \
+  argsTC[6] = mempool->Store<T4>(&a4); \
+  argsTC[7] = mempool->Store<T5>(&a5); \
+  argsTC[8] = mempool->Store<T6>(&a6); \
+  argsTC[9] = mempool->Store<T7>(&a7); \
   csRef<iJob> job = QueueEvent<type, csRef<iThreadReturn>, bool, T1, T2, T3, T4, T5, T6, T7>(tm, (ThreadedCallable<type>*)this, &type::function##TC, argsTC, queueType); \
   ret->SetJob(job); \
   if(Wait || wait) \
@@ -883,26 +883,26 @@ csPtr<iJob> QueueEvent(csRef<iThreadManager> tm, ThreadedCallable<T>* object, bo
 }
 
 #define THREADED_CALLABLE_DECL8(type, function, returnClass, T1, A1, T2, A2, T3, A3, T4, A4, T5, A5, T6, A6, T7, A7, T8, A8, queueType, wait, forceQueue) \
-  bool function##TC(csRef<iThreadReturn> ret, bool sync, T1 A1, T2 A2, T3 A3, T4 A4, T5 A5, T6 A6, T7 A7, T8 A8); \
-  inline csRef<iThreadReturn> function##Wait(T1 A1, T2 A2, T3 A3, T4 A4, T5 A5, T6 A6, T7 A7, T8 A8) \
+  bool function##TC(csRef<iThreadReturn> ret, bool sync, T1 a1, T2 a2, T3 a3, T4 a4, T5 a5, T6 a6, T7 a7, T8 a8); \
+  inline csRef<iThreadReturn> function##Wait(T1 a1, T2 a2, T3 a3, T4 a4, T5 a5, T6 a6, T7 a7, T8 a8) \
 { \
   const type* objTC = const_cast<const type*>(this); \
-  return objTC->function##Wait(A1, A2, A3, A4, A5, A6, A7, A8); \
+  return objTC->function##Wait(a1, a2, a3, a4, a5, a6, a7, a8); \
 } \
-  inline csRef<iThreadReturn> function##Wait(T1 A1, T2 A2, T3 A3, T4 A4, T5 A5, T6 A6, T7 A7, T8 A8) const \
+  inline csRef<iThreadReturn> function##Wait(T1 a1, T2 a2, T3 a3, T4 a4, T5 a5, T6 a6, T7 a7, T8 a8) const \
 { \
-  return function##T(true, A1, A2, A3, A4, A5, A6, A7, A8); \
+  return function##T(true, a1, a2, a3, a4, a5, a6, a7, a8); \
 } \
-  inline csRef<iThreadReturn> function(T1 A1, T2 A2, T3 A3, T4 A4, T5 A5, T6 A6, T7 A7, T8 A8) \
+  inline csRef<iThreadReturn> function(T1 a1, T2 a2, T3 a3, T4 a4, T5 a5, T6 a6, T7 a7, T8 a8) \
 { \
   const type* objTC = const_cast<const type*>(this); \
-  return objTC->function(A1, A2, A3, A4, A5, A6, A7, A8); \
+  return objTC->function(a1, a2, a3, a4, a5, a6, a7, a8); \
 } \
-  inline csRef<iThreadReturn> function(T1 A1, T2 A2, T3 A3, T4 A4, T5 A5, T6 A6, T7 A7, T8 A8) const \
+  inline csRef<iThreadReturn> function(T1 a1, T2 a2, T3 a3, T4 a4, T5 a5, T6 a6, T7 a7, T8 a8) const \
 { \
-  return function##T(false, A1, A2, A3, A4, A5, A6, A7, A8); \
+  return function##T(false, a1, a2, a3, a4, a5, a6, a7, a8); \
 } \
-  inline csRef<iThreadReturn> function##T(bool Wait, T1 A1, T2 A2, T3 A3, T4 A4, T5 A5, T6 A6, T7 A7, T8 A8) const \
+  inline csRef<iThreadReturn> function##T(bool Wait, T1 a1, T2 a2, T3 a3, T4 a4, T5 a5, T6 a6, T7 a7, T8 a8) const \
 { \
   csRef<iThreadManager> tm = csQueryRegistry<iThreadManager>(GetObjectRegistry()); \
   csRef<iThreadReturn> ret; \
@@ -915,7 +915,7 @@ csPtr<iJob> QueueEvent(csRef<iThreadManager> tm, ThreadedCallable<T>* object, bo
   if(tm->RunNow(queueType, Wait || wait, forceQueue)) \
   { \
     type* objTC = const_cast<type*>(this); \
-    if(objTC->function##TC(ret, Wait || wait, A1, A2, A3, A4, A5, A6, A7, A8)) \
+    if(objTC->function##TC(ret, Wait || wait, a1, a2, a3, a4, a5, a6, a7, a8)) \
     { \
       ret->MarkSuccessful(); \
     } \
@@ -928,14 +928,14 @@ csPtr<iJob> QueueEvent(csRef<iThreadManager> tm, ThreadedCallable<T>* object, bo
   argsTC[0] = mempool; \
   argsTC[1] = mempool->Store<csRef<iThreadReturn> >(&ret); \
   argsTC[2] = mempool->Store<bool>(&sync); \
-  argsTC[3] = mempool->Store<T1>(&A1); \
-  argsTC[4] = mempool->Store<T2>(&A2); \
-  argsTC[5] = mempool->Store<T3>(&A3); \
-  argsTC[6] = mempool->Store<T4>(&A4); \
-  argsTC[7] = mempool->Store<T5>(&A5); \
-  argsTC[8] = mempool->Store<T6>(&A6); \
-  argsTC[9] = mempool->Store<T7>(&A7); \
-  argsTC[10] = mempool->Store<T8>(&A8); \
+  argsTC[3] = mempool->Store<T1>(&a1); \
+  argsTC[4] = mempool->Store<T2>(&a2); \
+  argsTC[5] = mempool->Store<T3>(&a3); \
+  argsTC[6] = mempool->Store<T4>(&a4); \
+  argsTC[7] = mempool->Store<T5>(&a5); \
+  argsTC[8] = mempool->Store<T6>(&a6); \
+  argsTC[9] = mempool->Store<T7>(&a7); \
+  argsTC[10] = mempool->Store<T8>(&a8); \
   csRef<iJob> job = QueueEvent<type, csRef<iThreadReturn>, bool, T1, T2, T3, T4, T5, T6, T7, T8>(tm, (ThreadedCallable<type>*)this, &type::function##TC, argsTC, queueType); \
   ret->SetJob(job); \
   if(Wait || wait) \
@@ -946,26 +946,26 @@ csPtr<iJob> QueueEvent(csRef<iThreadManager> tm, ThreadedCallable<T>* object, bo
 }
 
 #define THREADED_CALLABLE_DECL9(type, function, returnClass, T1, A1, T2, A2, T3, A3, T4, A4, T5, A5, T6, A6, T7, A7, T8, A8, T9, A9, queueType, wait, forceQueue) \
-  bool function##TC(csRef<iThreadReturn> ret, bool sync, T1 A1, T2 A2, T3 A3, T4 A4, T5 A5, T6 A6, T7 A7, T8 A8, T9 A9); \
-  inline csRef<iThreadReturn> function##Wait(T1 A1, T2 A2, T3 A3, T4 A4, T5 A5, T6 A6, T7 A7, T8 A8, T9 A9) \
+  bool function##TC(csRef<iThreadReturn> ret, bool sync, T1 a1, T2 a2, T3 a3, T4 a4, T5 a5, T6 a6, T7 a7, T8 a8, T9 a9); \
+  inline csRef<iThreadReturn> function##Wait(T1 a1, T2 a2, T3 a3, T4 a4, T5 a5, T6 a6, T7 a7, T8 a8, T9 a9) \
 { \
   const type* objTC = const_cast<const type*>(this); \
-  return objTC->function##Wait(A1, A2, A3, A4, A5, A6, A7, A8, A9); \
+  return objTC->function##Wait(a1, a2, a3, a4, a5, a6, a7, a8, a9); \
 } \
-  inline csRef<iThreadReturn> function##Wait(T1 A1, T2 A2, T3 A3, T4 A4, T5 A5, T6 A6, T7 A7, T8 A8, T9 A9) const \
+  inline csRef<iThreadReturn> function##Wait(T1 a1, T2 a2, T3 a3, T4 a4, T5 a5, T6 a6, T7 a7, T8 a8, T9 a9) const \
 { \
-  return function##T(true, A1, A2, A3, A4, A5, A6, A7, A8, A9); \
+  return function##T(true, a1, a2, a3, a4, a5, a6, a7, a8, a9); \
 } \
-  inline csRef<iThreadReturn> function(T1 A1, T2 A2, T3 A3, T4 A4, T5 A5, T6 A6, T7 A7, T8 A8, T9 A9) \
+  inline csRef<iThreadReturn> function(T1 a1, T2 a2, T3 a3, T4 a4, T5 a5, T6 a6, T7 a7, T8 a8, T9 a9) \
 { \
   const type* objTC = const_cast<const type*>(this); \
-  return objTC->function(A1, A2, A3, A4, A5, A6, A7, A8, A9); \
+  return objTC->function(a1, a2, a3, a4, a5, a6, a7, a8, a9); \
 } \
-  inline csRef<iThreadReturn> function(T1 A1, T2 A2, T3 A3, T4 A4, T5 A5, T6 A6, T7 A7, T8 A8, T9 A9) const \
+  inline csRef<iThreadReturn> function(T1 a1, T2 a2, T3 a3, T4 a4, T5 a5, T6 a6, T7 a7, T8 a8, T9 a9) const \
 { \
-  return function##T(false, A1, A2, A3, A4, A5, A6, A7, A8, A9); \
+  return function##T(false, a1, a2, a3, a4, a5, a6, a7, a8, a9); \
 } \
-  inline csRef<iThreadReturn> function##T(bool Wait, T1 A1, T2 A2, T3 A3, T4 A4, T5 A5, T6 A6, T7 A7, T8 A8, T9 A9) const \
+  inline csRef<iThreadReturn> function##T(bool Wait, T1 a1, T2 a2, T3 a3, T4 a4, T5 a5, T6 a6, T7 a7, T8 a8, T9 a9) const \
 { \
   csRef<iThreadManager> tm = csQueryRegistry<iThreadManager>(GetObjectRegistry()); \
   csRef<iThreadReturn> ret; \
@@ -978,7 +978,7 @@ csPtr<iJob> QueueEvent(csRef<iThreadManager> tm, ThreadedCallable<T>* object, bo
   if(tm->RunNow(queueType, Wait || wait, forceQueue)) \
   { \
     type* objTC = const_cast<type*>(this); \
-    if(objTC->function##TC(ret, Wait || wait, A1, A2, A3, A4, A5, A6, A7, A8, A9)) \
+    if(objTC->function##TC(ret, Wait || wait, a1, a2, a3, a4, a5, a6, a7, a8, a9)) \
     { \
       ret->MarkSuccessful(); \
     } \
@@ -991,15 +991,15 @@ csPtr<iJob> QueueEvent(csRef<iThreadManager> tm, ThreadedCallable<T>* object, bo
   argsTC[0] = mempool; \
   argsTC[1] = mempool->Store<csRef<iThreadReturn> >(&ret); \
   argsTC[2] = mempool->Store<bool>(&sync); \
-  argsTC[3] = mempool->Store<T1>(&A1); \
-  argsTC[4] = mempool->Store<T2>(&A2); \
-  argsTC[5] = mempool->Store<T3>(&A3); \
-  argsTC[6] = mempool->Store<T4>(&A4); \
-  argsTC[7] = mempool->Store<T5>(&A5); \
-  argsTC[8] = mempool->Store<T6>(&A6); \
-  argsTC[9] = mempool->Store<T7>(&A7); \
-  argsTC[10] = mempool->Store<T8>(&A8); \
-  argsTC[11] = mempool->Store<T9>(&A9); \
+  argsTC[3] = mempool->Store<T1>(&a1); \
+  argsTC[4] = mempool->Store<T2>(&a2); \
+  argsTC[5] = mempool->Store<T3>(&a3); \
+  argsTC[6] = mempool->Store<T4>(&a4); \
+  argsTC[7] = mempool->Store<T5>(&a5); \
+  argsTC[8] = mempool->Store<T6>(&a6); \
+  argsTC[9] = mempool->Store<T7>(&a7); \
+  argsTC[10] = mempool->Store<T8>(&a8); \
+  argsTC[11] = mempool->Store<T9>(&a9); \
   csRef<iJob> job = QueueEvent<type, csRef<iThreadReturn>, bool, T1, T2, T3, T4, T5, T6, T7, T8, T9>(tm, (ThreadedCallable<type>*)this, &type::function##TC, argsTC, queueType); \
   ret->SetJob(job); \
   if(Wait || wait) \
@@ -1010,26 +1010,26 @@ csPtr<iJob> QueueEvent(csRef<iThreadManager> tm, ThreadedCallable<T>* object, bo
 }
 
 #define THREADED_CALLABLE_DECL10(type, function, returnClass, T1, A1, T2, A2, T3, A3, T4, A4, T5, A5, T6, A6, T7, A7, T8, A8, T9, A9, T10, A10, queueType, wait, forceQueue) \
-  bool function##TC(csRef<iThreadReturn> ret, bool sync, T1 A1, T2 A2, T3 A3, T4 A4, T5 A5, T6 A6, T7 A7, T8 A8, T9 A9, T10 A10); \
-  inline csRef<iThreadReturn> function##Wait(T1 A1, T2 A2, T3 A3, T4 A4, T5 A5, T6 A6, T7 A7, T8 A8, T9 A9, T10 A10) \
+  bool function##TC(csRef<iThreadReturn> ret, bool sync, T1 a1, T2 a2, T3 a3, T4 a4, T5 a5, T6 a6, T7 a7, T8 a8, T9 a9, T10 a10); \
+  inline csRef<iThreadReturn> function##Wait(T1 a1, T2 a2, T3 a3, T4 a4, T5 a5, T6 a6, T7 a7, T8 a8, T9 a9, T10 a10) \
 { \
   const type* objTC = const_cast<const type*>(this); \
-  return objTC->function##Wait(A1, A2, A3, A4, A5, A6, A7, A8, A9, A10); \
+  return objTC->function##Wait(a1, a2, a3, a4, a5, a6, a7, a8, a9, a10); \
 } \
-  inline csRef<iThreadReturn> function##Wait(T1 A1, T2 A2, T3 A3, T4 A4, T5 A5, T6 A6, T7 A7, T8 A8, T9 A9, T10 A10) const \
+  inline csRef<iThreadReturn> function##Wait(T1 a1, T2 a2, T3 a3, T4 a4, T5 a5, T6 a6, T7 a7, T8 a8, T9 a9, T10 a10) const \
 { \
-  return function##T(true, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10); \
+  return function##T(true, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10); \
 } \
-  inline csRef<iThreadReturn> function(T1 A1, T2 A2, T3 A3, T4 A4, T5 A5, T6 A6, T7 A7, T8 A8, T9 A9, T10 A10) \
+  inline csRef<iThreadReturn> function(T1 a1, T2 a2, T3 a3, T4 a4, T5 a5, T6 a6, T7 a7, T8 a8, T9 a9, T10 a10) \
 { \
   const type* objTC = const_cast<const type*>(this); \
-  return objTC->function(A1, A2, A3, A4, A5, A6, A7, A8, A9, A10); \
+  return objTC->function(a1, a2, a3, a4, a5, a6, a7, a8, a9, a10); \
 } \
-  inline csRef<iThreadReturn> function(T1 A1, T2 A2, T3 A3, T4 A4, T5 A5, T6 A6, T7 A7, T8 A8, T9 A9, T10 A10) const \
+  inline csRef<iThreadReturn> function(T1 a1, T2 a2, T3 a3, T4 a4, T5 a5, T6 a6, T7 a7, T8 a8, T9 a9, T10 a10) const \
 { \
-  return function##T(false, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10); \
+  return function##T(false, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10); \
 } \
-  inline csRef<iThreadReturn> function##T(bool Wait, T1 A1, T2 A2, T3 A3, T4 A4, T5 A5, T6 A6, T7 A7, T8 A8, T9 A9, T10 A10) const \
+  inline csRef<iThreadReturn> function##T(bool Wait, T1 a1, T2 a2, T3 a3, T4 a4, T5 a5, T6 a6, T7 a7, T8 a8, T9 a9, T10 a10) const \
 { \
   csRef<iThreadManager> tm = csQueryRegistry<iThreadManager>(GetObjectRegistry()); \
   csRef<iThreadReturn> ret; \
@@ -1042,7 +1042,7 @@ csPtr<iJob> QueueEvent(csRef<iThreadManager> tm, ThreadedCallable<T>* object, bo
   if(tm->RunNow(queueType, Wait || wait, forceQueue)) \
   { \
     type* objTC = const_cast<type*>(this); \
-    if(objTC->function##TC(ret, Wait || wait, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10)) \
+    if(objTC->function##TC(ret, Wait || wait, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10)) \
     { \
       ret->MarkSuccessful(); \
     } \
@@ -1055,16 +1055,16 @@ csPtr<iJob> QueueEvent(csRef<iThreadManager> tm, ThreadedCallable<T>* object, bo
   argsTC[0] = mempool; \
   argsTC[1] = mempool->Store<csRef<iThreadReturn> >(&ret); \
   argsTC[2] = mempool->Store<bool>(&sync); \
-  argsTC[3] = mempool->Store<T1>(&A1); \
-  argsTC[4] = mempool->Store<T2>(&A2); \
-  argsTC[5] = mempool->Store<T3>(&A3); \
-  argsTC[6] = mempool->Store<T4>(&A4); \
-  argsTC[7] = mempool->Store<T5>(&A5); \
-  argsTC[8] = mempool->Store<T6>(&A6); \
-  argsTC[9] = mempool->Store<T7>(&A7); \
-  argsTC[10] = mempool->Store<T8>(&A8); \
-  argsTC[11] = mempool->Store<T9>(&A9); \
-  argsTC[12] = mempool->Store<T10>(&A10); \
+  argsTC[3] = mempool->Store<T1>(&a1); \
+  argsTC[4] = mempool->Store<T2>(&a2); \
+  argsTC[5] = mempool->Store<T3>(&a3); \
+  argsTC[6] = mempool->Store<T4>(&a4); \
+  argsTC[7] = mempool->Store<T5>(&a5); \
+  argsTC[8] = mempool->Store<T6>(&a6); \
+  argsTC[9] = mempool->Store<T7>(&a7); \
+  argsTC[10] = mempool->Store<T8>(&a8); \
+  argsTC[11] = mempool->Store<T9>(&a9); \
+  argsTC[12] = mempool->Store<T10>(&a10); \
   csRef<iJob> job = QueueEvent<type, csRef<iThreadReturn>, bool, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(tm, (ThreadedCallable<type>*)this, &type::function##TC, argsTC, queueType); \
   ret->SetJob(job); \
   if(Wait || wait) \
@@ -1075,26 +1075,26 @@ csPtr<iJob> QueueEvent(csRef<iThreadManager> tm, ThreadedCallable<T>* object, bo
 }
 
 #define THREADED_CALLABLE_DECL11(type, function, returnClass, T1, A1, T2, A2, T3, A3, T4, A4, T5, A5, T6, A6, T7, A7, T8, A8, T9, A9, T10, A10, T11, A11, queueType, wait, forceQueue) \
-  bool function##TC(csRef<iThreadReturn> ret, bool sync, T1 A1, T2 A2, T3 A3, T4 A4, T5 A5, T6 A6, T7 A7, T8 A8, T9 A9, T10 A10, T11 A11); \
-  inline csRef<iThreadReturn> function##Wait(T1 A1, T2 A2, T3 A3, T4 A4, T5 A5, T6 A6, T7 A7, T8 A8, T9 A9, T10 A10, T11 A11) \
+  bool function##TC(csRef<iThreadReturn> ret, bool sync, T1 a1, T2 a2, T3 a3, T4 a4, T5 a5, T6 a6, T7 a7, T8 a8, T9 a9, T10 a10, T11 a11); \
+  inline csRef<iThreadReturn> function##Wait(T1 a1, T2 a2, T3 a3, T4 a4, T5 a5, T6 a6, T7 a7, T8 a8, T9 a9, T10 a10, T11 a11) \
 { \
   const type* objTC = const_cast<const type*>(this); \
-  return objTC->function##Wait(A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11); \
+  return objTC->function##Wait(a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11); \
 } \
-  inline csRef<iThreadReturn> function##Wait(T1 A1, T2 A2, T3 A3, T4 A4, T5 A5, T6 A6, T7 A7, T8 A8, T9 A9, T10 A10, T11 A11) const \
+  inline csRef<iThreadReturn> function##Wait(T1 a1, T2 a2, T3 a3, T4 a4, T5 a5, T6 a6, T7 a7, T8 a8, T9 a9, T10 a10, T11 a11) const \
 { \
-  return function##T(true, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11); \
+  return function##T(true, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11); \
 } \
-  inline csRef<iThreadReturn> function(T1 A1, T2 A2, T3 A3, T4 A4, T5 A5, T6 A6, T7 A7, T8 A8, T9 A9, T10 A10, T11 A11) \
+  inline csRef<iThreadReturn> function(T1 a1, T2 a2, T3 a3, T4 a4, T5 a5, T6 a6, T7 a7, T8 a8, T9 a9, T10 a10, T11 a11) \
 { \
   const type* objTC = const_cast<const type*>(this); \
-  return objTC->function(A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11); \
+  return objTC->function(a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11); \
 } \
-  inline csRef<iThreadReturn> function(T1 A1, T2 A2, T3 A3, T4 A4, T5 A5, T6 A6, T7 A7, T8 A8, T9 A9, T10 A10, T11 A11) const \
+  inline csRef<iThreadReturn> function(T1 a1, T2 a2, T3 a3, T4 a4, T5 a5, T6 a6, T7 a7, T8 a8, T9 a9, T10 a10, T11 a11) const \
 { \
-  return function##T(false, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11); \
+  return function##T(false, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11); \
 } \
-  inline csRef<iThreadReturn> function##T(bool Wait, T1 A1, T2 A2, T3 A3, T4 A4, T5 A5, T6 A6, T7 A7, T8 A8, T9 A9, T10 A10, T11 A11) const \
+  inline csRef<iThreadReturn> function##T(bool Wait, T1 a1, T2 a2, T3 a3, T4 a4, T5 a5, T6 a6, T7 a7, T8 a8, T9 a9, T10 a10, T11 a11) const \
 { \
   csRef<iThreadManager> tm = csQueryRegistry<iThreadManager>(GetObjectRegistry()); \
   csRef<iThreadReturn> ret; \
@@ -1107,7 +1107,7 @@ csPtr<iJob> QueueEvent(csRef<iThreadManager> tm, ThreadedCallable<T>* object, bo
   if(tm->RunNow(queueType, Wait || wait, forceQueue)) \
   { \
     type* objTC = const_cast<type*>(this); \
-    if(objTC->function##TC(ret, Wait || wait, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11)) \
+    if(objTC->function##TC(ret, Wait || wait, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11)) \
     { \
       ret->MarkSuccessful(); \
     } \
@@ -1120,17 +1120,17 @@ csPtr<iJob> QueueEvent(csRef<iThreadManager> tm, ThreadedCallable<T>* object, bo
   argsTC[0] = mempool; \
   argsTC[1] = mempool->Store<csRef<iThreadReturn> >(&ret); \
   argsTC[2] = mempool->Store<bool>(&sync); \
-  argsTC[3] = mempool->Store<T1>(&A1); \
-  argsTC[4] = mempool->Store<T2>(&A2); \
-  argsTC[5] = mempool->Store<T3>(&A3); \
-  argsTC[6] = mempool->Store<T4>(&A4); \
-  argsTC[7] = mempool->Store<T5>(&A5); \
-  argsTC[8] = mempool->Store<T6>(&A6); \
-  argsTC[9] = mempool->Store<T7>(&A7); \
-  argsTC[10] = mempool->Store<T8>(&A8); \
-  argsTC[11] = mempool->Store<T9>(&A9); \
-  argsTC[12] = mempool->Store<T10>(&A10); \
-  argsTC[13] = mempool->Store<T11>(&A11); \
+  argsTC[3] = mempool->Store<T1>(&a1); \
+  argsTC[4] = mempool->Store<T2>(&a2); \
+  argsTC[5] = mempool->Store<T3>(&a3); \
+  argsTC[6] = mempool->Store<T4>(&a4); \
+  argsTC[7] = mempool->Store<T5>(&a5); \
+  argsTC[8] = mempool->Store<T6>(&a6); \
+  argsTC[9] = mempool->Store<T7>(&a7); \
+  argsTC[10] = mempool->Store<T8>(&a8); \
+  argsTC[11] = mempool->Store<T9>(&a9); \
+  argsTC[12] = mempool->Store<T10>(&a10); \
+  argsTC[13] = mempool->Store<T11>(&a11); \
   csRef<iJob> job = QueueEvent<type, csRef<iThreadReturn>, bool, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(tm, (ThreadedCallable<type>*)this, &type::function##TC, argsTC, queueType); \
   ret->SetJob(job); \
   if(Wait || wait) \
@@ -1141,26 +1141,26 @@ csPtr<iJob> QueueEvent(csRef<iThreadManager> tm, ThreadedCallable<T>* object, bo
 }
 
 #define THREADED_CALLABLE_DECL12(type, function, returnClass, T1, A1, T2, A2, T3, A3, T4, A4, T5, A5, T6, A6, T7, A7, T8, A8, T9, A9, T10, A10, T11, A11, T12, A12, queueType, wait, forceQueue) \
-  bool function##TC(csRef<iThreadReturn> ret, bool sync, T1 A1, T2 A2, T3 A3, T4 A4, T5 A5, T6 A6, T7 A7, T8 A8, T9 A9, T10 A10, T11 A11, T12 A12); \
-  inline csRef<iThreadReturn> function##Wait(T1 A1, T2 A2, T3 A3, T4 A4, T5 A5, T6 A6, T7 A7, T8 A8, T9 A9, T10 A10, T11 A11, T12 A12) \
+  bool function##TC(csRef<iThreadReturn> ret, bool sync, T1 a1, T2 a2, T3 a3, T4 a4, T5 a5, T6 a6, T7 a7, T8 a8, T9 a9, T10 a10, T11 a11, T12 a12); \
+  inline csRef<iThreadReturn> function##Wait(T1 a1, T2 a2, T3 a3, T4 a4, T5 a5, T6 a6, T7 a7, T8 a8, T9 a9, T10 a10, T11 a11, T12 a12) \
 { \
   const type* objTC = const_cast<const type*>(this); \
-  return objTC->function##Wait(A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12); \
+  return objTC->function##Wait(a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12); \
 } \
-  inline csRef<iThreadReturn> function##Wait(T1 A1, T2 A2, T3 A3, T4 A4, T5 A5, T6 A6, T7 A7, T8 A8, T9 A9, T10 A10, T11 A11, T12 A12) const \
+  inline csRef<iThreadReturn> function##Wait(T1 a1, T2 a2, T3 a3, T4 a4, T5 a5, T6 a6, T7 a7, T8 a8, T9 a9, T10 a10, T11 a11, T12 a12) const \
 { \
-  return function##T(true, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12); \
+  return function##T(true, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12); \
 } \
-  inline csRef<iThreadReturn> function(T1 A1, T2 A2, T3 A3, T4 A4, T5 A5, T6 A6, T7 A7, T8 A8, T9 A9, T10 A10, T11 A11, T12 A12) \
+  inline csRef<iThreadReturn> function(T1 a1, T2 a2, T3 a3, T4 a4, T5 a5, T6 a6, T7 a7, T8 a8, T9 a9, T10 a10, T11 a11, T12 a12) \
 { \
   const type* objTC = const_cast<const type*>(this); \
-  return objTC->function(A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12); \
+  return objTC->function(a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12); \
 } \
-  inline csRef<iThreadReturn> function(T1 A1, T2 A2, T3 A3, T4 A4, T5 A5, T6 A6, T7 A7, T8 A8, T9 A9, T10 A10, T11 A11, T12 A12) const \
+  inline csRef<iThreadReturn> function(T1 a1, T2 a2, T3 a3, T4 a4, T5 a5, T6 a6, T7 a7, T8 a8, T9 a9, T10 a10, T11 a11, T12 a12) const \
 { \
-  return function##T(false, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12); \
+  return function##T(false, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12); \
 } \
-  inline csRef<iThreadReturn> function##T(bool Wait, T1 A1, T2 A2, T3 A3, T4 A4, T5 A5, T6 A6, T7 A7, T8 A8, T9 A9, T10 A10, T11 A11, T12 A12) const \
+  inline csRef<iThreadReturn> function##T(bool Wait, T1 a1, T2 a2, T3 a3, T4 a4, T5 a5, T6 a6, T7 a7, T8 a8, T9 a9, T10 a10, T11 a11, T12 a12) const \
 { \
   csRef<iThreadManager> tm = csQueryRegistry<iThreadManager>(GetObjectRegistry()); \
   csRef<iThreadReturn> ret; \
@@ -1173,7 +1173,7 @@ csPtr<iJob> QueueEvent(csRef<iThreadManager> tm, ThreadedCallable<T>* object, bo
   if(tm->RunNow(queueType, Wait || wait, forceQueue)) \
   { \
     type* objTC = const_cast<type*>(this); \
-    if(objTC->function##TC(ret, Wait || wait, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12)) \
+    if(objTC->function##TC(ret, Wait || wait, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12)) \
     { \
       ret->MarkSuccessful(); \
     } \
@@ -1186,18 +1186,18 @@ csPtr<iJob> QueueEvent(csRef<iThreadManager> tm, ThreadedCallable<T>* object, bo
   argsTC[0] = mempool; \
   argsTC[1] = mempool->Store<csRef<iThreadReturn> >(&ret); \
   argsTC[2] = mempool->Store<bool>(&sync); \
-  argsTC[3] = mempool->Store<T1>(&A1); \
-  argsTC[4] = mempool->Store<T2>(&A2); \
-  argsTC[5] = mempool->Store<T3>(&A3); \
-  argsTC[6] = mempool->Store<T4>(&A4); \
-  argsTC[7] = mempool->Store<T5>(&A5); \
-  argsTC[8] = mempool->Store<T6>(&A6); \
-  argsTC[9] = mempool->Store<T7>(&A7); \
-  argsTC[10] = mempool->Store<T8>(&A8); \
-  argsTC[11] = mempool->Store<T9>(&A9); \
-  argsTC[12] = mempool->Store<T10>(&A10); \
-  argsTC[13] = mempool->Store<T11>(&A11); \
-  argsTC[14] = mempool->Store<T12>(&A12); \
+  argsTC[3] = mempool->Store<T1>(&a1); \
+  argsTC[4] = mempool->Store<T2>(&a2); \
+  argsTC[5] = mempool->Store<T3>(&a3); \
+  argsTC[6] = mempool->Store<T4>(&a4); \
+  argsTC[7] = mempool->Store<T5>(&a5); \
+  argsTC[8] = mempool->Store<T6>(&a6); \
+  argsTC[9] = mempool->Store<T7>(&a7); \
+  argsTC[10] = mempool->Store<T8>(&a8); \
+  argsTC[11] = mempool->Store<T9>(&a9); \
+  argsTC[12] = mempool->Store<T10>(&a10); \
+  argsTC[13] = mempool->Store<T11>(&a11); \
+  argsTC[14] = mempool->Store<T12>(&a12); \
   csRef<iJob> job = QueueEvent<type, csRef<iThreadReturn>, bool, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(tm, (ThreadedCallable<type>*)this, &type::function##TC, argsTC, queueType); \
   ret->SetJob(job); \
   if(Wait || wait) \
@@ -1208,26 +1208,26 @@ csPtr<iJob> QueueEvent(csRef<iThreadManager> tm, ThreadedCallable<T>* object, bo
 }
 
 #define THREADED_CALLABLE_DECL13(type, function, returnClass, T1, A1, T2, A2, T3, A3, T4, A4, T5, A5, T6, A6, T7, A7, T8, A8, T9, A9, T10, A10, T11, A11, T12, A12, T13, A13, queueType, wait, forceQueue) \
-  bool function##TC(csRef<iThreadReturn> ret, bool sync, T1 A1, T2 A2, T3 A3, T4 A4, T5 A5, T6 A6, T7 A7, T8 A8, T9 A9, T10 A10, T11 A11, T12 A12, T13 A13); \
-  inline csRef<iThreadReturn> function##Wait(T1 A1, T2 A2, T3 A3, T4 A4, T5 A5, T6 A6, T7 A7, T8 A8, T9 A9, T10 A10, T11 A11, T12 A12, T13 A13) \
+  bool function##TC(csRef<iThreadReturn> ret, bool sync, T1 a1, T2 a2, T3 a3, T4 a4, T5 a5, T6 a6, T7 a7, T8 a8, T9 a9, T10 a10, T11 a11, T12 a12, T13 a13); \
+  inline csRef<iThreadReturn> function##Wait(T1 a1, T2 a2, T3 a3, T4 a4, T5 a5, T6 a6, T7 a7, T8 a8, T9 a9, T10 a10, T11 a11, T12 a12, T13 a13) \
 { \
   const type* objTC = const_cast<const type*>(this); \
-  return objTC->function##Wait(A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13); \
+  return objTC->function##Wait(a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13); \
 } \
-  inline csRef<iThreadReturn> function##Wait(T1 A1, T2 A2, T3 A3, T4 A4, T5 A5, T6 A6, T7 A7, T8 A8, T9 A9, T10 A10, T11 A11, T12 A12, T13 A13) const \
+  inline csRef<iThreadReturn> function##Wait(T1 a1, T2 a2, T3 a3, T4 a4, T5 a5, T6 a6, T7 a7, T8 a8, T9 a9, T10 a10, T11 a11, T12 a12, T13 a13) const \
 { \
-  return function##T(true, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13); \
+  return function##T(true, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13); \
 } \
-  inline csRef<iThreadReturn> function(T1 A1, T2 A2, T3 A3, T4 A4, T5 A5, T6 A6, T7 A7, T8 A8, T9 A9, T10 A10, T11 A11, T12 A12, T13 A13) \
+  inline csRef<iThreadReturn> function(T1 a1, T2 a2, T3 a3, T4 a4, T5 a5, T6 a6, T7 a7, T8 a8, T9 a9, T10 a10, T11 a11, T12 a12, T13 a13) \
 { \
   const type* objTC = const_cast<const type*>(this); \
-  return objTC->function(A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13); \
+  return objTC->function(a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13); \
 } \
-  inline csRef<iThreadReturn> function(T1 A1, T2 A2, T3 A3, T4 A4, T5 A5, T6 A6, T7 A7, T8 A8, T9 A9, T10 A10, T11 A11, T12 A12, T13 A13) const \
+  inline csRef<iThreadReturn> function(T1 a1, T2 a2, T3 a3, T4 a4, T5 a5, T6 a6, T7 a7, T8 a8, T9 a9, T10 a10, T11 a11, T12 a12, T13 a13) const \
 { \
-  return function##T(false, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13); \
+  return function##T(false, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13); \
 } \
-  inline csRef<iThreadReturn> function##T(bool Wait, T1 A1, T2 A2, T3 A3, T4 A4, T5 A5, T6 A6, T7 A7, T8 A8, T9 A9, T10 A10, T11 A11, T12 A12, T13 A13) const \
+  inline csRef<iThreadReturn> function##T(bool Wait, T1 a1, T2 a2, T3 a3, T4 a4, T5 a5, T6 a6, T7 a7, T8 a8, T9 a9, T10 a10, T11 a11, T12 a12, T13 a13) const \
 { \
   csRef<iThreadManager> tm = csQueryRegistry<iThreadManager>(GetObjectRegistry()); \
   csRef<iThreadReturn> ret; \
@@ -1240,7 +1240,7 @@ csPtr<iJob> QueueEvent(csRef<iThreadManager> tm, ThreadedCallable<T>* object, bo
   if(tm->RunNow(queueType, Wait || wait, forceQueue)) \
   { \
     type* objTC = const_cast<type*>(this); \
-    if(objTC->function##TC(ret, Wait || wait, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13)) \
+    if(objTC->function##TC(ret, Wait || wait, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13)) \
     { \
       ret->MarkSuccessful(); \
     } \
@@ -1253,19 +1253,19 @@ csPtr<iJob> QueueEvent(csRef<iThreadManager> tm, ThreadedCallable<T>* object, bo
   argsTC[0] = mempool; \
   argsTC[1] = mempool->Store<csRef<iThreadReturn> >(&ret); \
   argsTC[2] = mempool->Store<bool>(&sync); \
-  argsTC[3] = mempool->Store<T1>(&A1); \
-  argsTC[4] = mempool->Store<T2>(&A2); \
-  argsTC[5] = mempool->Store<T3>(&A3); \
-  argsTC[6] = mempool->Store<T4>(&A4); \
-  argsTC[7] = mempool->Store<T5>(&A5); \
-  argsTC[8] = mempool->Store<T6>(&A6); \
-  argsTC[9] = mempool->Store<T7>(&A7); \
-  argsTC[10] = mempool->Store<T8>(&A8); \
-  argsTC[11] = mempool->Store<T9>(&A9); \
-  argsTC[12] = mempool->Store<T10>(&A10); \
-  argsTC[13] = mempool->Store<T11>(&A11); \
-  argsTC[14] = mempool->Store<T12>(&A12); \
-  argsTC[15] = mempool->Store<T13>(&A13); \
+  argsTC[3] = mempool->Store<T1>(&a1); \
+  argsTC[4] = mempool->Store<T2>(&a2); \
+  argsTC[5] = mempool->Store<T3>(&a3); \
+  argsTC[6] = mempool->Store<T4>(&a4); \
+  argsTC[7] = mempool->Store<T5>(&a5); \
+  argsTC[8] = mempool->Store<T6>(&a6); \
+  argsTC[9] = mempool->Store<T7>(&a7); \
+  argsTC[10] = mempool->Store<T8>(&a8); \
+  argsTC[11] = mempool->Store<T9>(&a9); \
+  argsTC[12] = mempool->Store<T10>(&a10); \
+  argsTC[13] = mempool->Store<T11>(&a11); \
+  argsTC[14] = mempool->Store<T12>(&a12); \
+  argsTC[15] = mempool->Store<T13>(&a13); \
   csRef<iJob> job = QueueEvent<type, csRef<iThreadReturn>, bool, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(tm, (ThreadedCallable<type>*)this, &type::function##TC, argsTC, queueType); \
   ret->SetJob(job); \
   if(Wait || wait) \
@@ -1276,26 +1276,26 @@ csPtr<iJob> QueueEvent(csRef<iThreadManager> tm, ThreadedCallable<T>* object, bo
 }
 
 #define THREADED_CALLABLE_DECL14(type, function, returnClass, T1, A1, T2, A2, T3, A3, T4, A4, T5, A5, T6, A6, T7, A7, T8, A8, T9, A9, T10, A10, T11, A11, T12, A12, T13, A13, T14, A14, queueType, wait, forceQueue) \
-  bool function##TC(csRef<iThreadReturn> ret, bool sync, T1 A1, T2 A2, T3 A3, T4 A4, T5 A5, T6 A6, T7 A7, T8 A8, T9 A9, T10 A10, T11 A11, T12 A12, T13 A13, T14 A14); \
-  inline csRef<iThreadReturn> function##Wait(T1 A1, T2 A2, T3 A3, T4 A4, T5 A5, T6 A6, T7 A7, T8 A8, T9 A9, T10 A10, T11 A11, T12 A12, T13 A13, T14 A14) \
+  bool function##TC(csRef<iThreadReturn> ret, bool sync, T1 a1, T2 a2, T3 a3, T4 a4, T5 a5, T6 a6, T7 a7, T8 a8, T9 a9, T10 a10, T11 a11, T12 a12, T13 a13, T14 a14); \
+  inline csRef<iThreadReturn> function##Wait(T1 a1, T2 a2, T3 a3, T4 a4, T5 a5, T6 a6, T7 a7, T8 a8, T9 a9, T10 a10, T11 a11, T12 a12, T13 a13, T14 a14) \
 { \
   const type* objTC = const_cast<const type*>(this); \
-  return objTC->function##Wait(A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14); \
+  return objTC->function##Wait(a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14); \
 } \
-  inline csRef<iThreadReturn> function##Wait(T1 A1, T2 A2, T3 A3, T4 A4, T5 A5, T6 A6, T7 A7, T8 A8, T9 A9, T10 A10, T11 A11, T12 A12, T13 A13, T14 A14) const \
+  inline csRef<iThreadReturn> function##Wait(T1 a1, T2 a2, T3 a3, T4 a4, T5 a5, T6 a6, T7 a7, T8 a8, T9 a9, T10 a10, T11 a11, T12 a12, T13 a13, T14 a14) const \
 { \
-  return function##T(true, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14); \
+  return function##T(true, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14); \
 } \
-  inline csRef<iThreadReturn> function(T1 A1, T2 A2, T3 A3, T4 A4, T5 A5, T6 A6, T7 A7, T8 A8, T9 A9, T10 A10, T11 A11, T12 A12, T13 A13, T14 A14) \
+  inline csRef<iThreadReturn> function(T1 a1, T2 a2, T3 a3, T4 a4, T5 a5, T6 a6, T7 a7, T8 a8, T9 a9, T10 a10, T11 a11, T12 a12, T13 a13, T14 a14) \
 { \
   const type* objTC = const_cast<const type*>(this); \
-  return objTC->function(A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14); \
+  return objTC->function(a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14); \
 } \
-  inline csRef<iThreadReturn> function(T1 A1, T2 A2, T3 A3, T4 A4, T5 A5, T6 A6, T7 A7, T8 A8, T9 A9, T10 A10, T11 A11, T12 A12, T13 A13, T14 A14) const \
+  inline csRef<iThreadReturn> function(T1 a1, T2 a2, T3 a3, T4 a4, T5 a5, T6 a6, T7 a7, T8 a8, T9 a9, T10 a10, T11 a11, T12 a12, T13 a13, T14 a14) const \
 { \
-  return function##T(false, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14); \
+  return function##T(false, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14); \
 } \
-  inline csRef<iThreadReturn> function##T(bool Wait, T1 A1, T2 A2, T3 A3, T4 A4, T5 A5, T6 A6, T7 A7, T8 A8, T9 A9, T10 A10, T11 A11, T12 A12, T13 A13, T14 A14) const \
+  inline csRef<iThreadReturn> function##T(bool Wait, T1 a1, T2 a2, T3 a3, T4 a4, T5 a5, T6 a6, T7 a7, T8 a8, T9 a9, T10 a10, T11 a11, T12 a12, T13 a13, T14 a14) const \
 { \
   csRef<iThreadManager> tm = csQueryRegistry<iThreadManager>(GetObjectRegistry()); \
   csRef<iThreadReturn> ret; \
@@ -1308,7 +1308,7 @@ csPtr<iJob> QueueEvent(csRef<iThreadManager> tm, ThreadedCallable<T>* object, bo
   if(tm->RunNow(queueType, Wait || wait, forceQueue))) \
   { \
     type* objTC = const_cast<type*>(this); \
-    if(objTC->function##TC(ret, Wait || wait, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14)) \
+    if(objTC->function##TC(ret, Wait || wait, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14)) \
     { \
       ret->MarkSuccessful(); \
     } \
@@ -1321,20 +1321,20 @@ csPtr<iJob> QueueEvent(csRef<iThreadManager> tm, ThreadedCallable<T>* object, bo
   argsTC[0] = mempool; \
   argsTC[1] = mempool->Store<csRef<iThreadReturn> >(ret); \
   argsTC[2] = mempool->Store<bool>(&sync); \
-  argsTC[3] = mempool->Store<T1>(&A1); \
-  argsTC[4] = mempool->Store<T2>(&A2); \
-  argsTC[5] = mempool->Store<T3>(&A3); \
-  argsTC[6] = mempool->Store<T4>(&A4); \
-  argsTC[7] = mempool->Store<T5>(&A5); \
-  argsTC[8] = mempool->Store<T6>(&A6); \
-  argsTC[9] = mempool->Store<T7>(&A7); \
-  argsTC[10] = mempool->Store<T8>(&A8); \
-  argsTC[11] = mempool->Store<T9>(&A9); \
-  argsTC[12] = mempool->Store<T10>(&A10); \
-  argsTC[13] = mempool->Store<T11>(&A11); \
-  argsTC[14] = mempool->Store<T12>(&A12); \
-  argsTC[15] = mempool->Store<T13>(&A13); \
-  argsTC[16] = mempool->Store<T14>(&A14); \
+  argsTC[3] = mempool->Store<T1>(&a1); \
+  argsTC[4] = mempool->Store<T2>(&a2); \
+  argsTC[5] = mempool->Store<T3>(&a3); \
+  argsTC[6] = mempool->Store<T4>(&a4); \
+  argsTC[7] = mempool->Store<T5>(&a5); \
+  argsTC[8] = mempool->Store<T6>(&a6); \
+  argsTC[9] = mempool->Store<T7>(&a7); \
+  argsTC[10] = mempool->Store<T8>(&a8); \
+  argsTC[11] = mempool->Store<T9>(&a9); \
+  argsTC[12] = mempool->Store<T10>(&a10); \
+  argsTC[13] = mempool->Store<T11>(&a11); \
+  argsTC[14] = mempool->Store<T12>(&a12); \
+  argsTC[15] = mempool->Store<T13>(&a13); \
+  argsTC[16] = mempool->Store<T14>(&a14); \
   csRef<iJob> job = QueueEvent<type, csRef<iThreadReturn>, bool, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(tm, (ThreadedCallable<type>*)this, &type::function##TC, argsTC, queueType); \
   ret->SetJob(job); \
   if(Wait || wait) \
@@ -1345,26 +1345,26 @@ csPtr<iJob> QueueEvent(csRef<iThreadManager> tm, ThreadedCallable<T>* object, bo
 }
 
 #define THREADED_CALLABLE_DECL15(type, function, returnClass, T1, A1, T2, A2, T3, A3, T4, A4, T5, A5, T6, A6, T7, A7, T8, A8, T9, A9, T10, A10, T11, A11, T12, A12, T13, A13, T14, A14, T15, A15, queueType, wait, forceQueue) \
-  bool function##TC(csRef<iThreadReturn> ret, bool sync, T1 A1, T2 A2, T3 A3, T4 A4, T5 A5, T6 A6, T7 A7, T8 A8, T9 A9, T10 A10, T11 A11, T12 A12, T13 A13, T14 A14, T15 A15); \
-  inline csRef<iThreadReturn> function##Wait(T1 A1, T2 A2, T3 A3, T4 A4, T5 A5, T6 A6, T7 A7, T8 A8, T9 A9, T10 A10, T11 A11, T12 A12, T13 A13, T14 A14, T15 A15) \
+  bool function##TC(csRef<iThreadReturn> ret, bool sync, T1 a1, T2 a2, T3 a3, T4 a4, T5 a5, T6 a6, T7 a7, T8 a8, T9 a9, T10 a10, T11 a11, T12 a12, T13 a13, T14 a14, T15 a15); \
+  inline csRef<iThreadReturn> function##Wait(T1 a1, T2 a2, T3 a3, T4 a4, T5 a5, T6 a6, T7 a7, T8 a8, T9 a9, T10 a10, T11 a11, T12 a12, T13 a13, T14 a14, T15 a15) \
 { \
   const type* objTC = const_cast<const type*>(this); \
-  return objTC->function##Wait(A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15); \
+  return objTC->function##Wait(a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15); \
 } \
-  inline csRef<iThreadReturn> function##Wait(T1 A1, T2 A2, T3 A3, T4 A4, T5 A5, T6 A6, T7 A7, T8 A8, T9 A9, T10 A10, T11 A11, T12 A12, T13 A13, T14 A14, T15 A15) const \
+  inline csRef<iThreadReturn> function##Wait(T1 a1, T2 a2, T3 a3, T4 a4, T5 a5, T6 a6, T7 a7, T8 a8, T9 a9, T10 a10, T11 a11, T12 a12, T13 a13, T14 a14, T15 a15) const \
 { \
-  return function##T(true, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15); \
+  return function##T(true, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15); \
 } \
-  inline csRef<iThreadReturn> function(T1 A1, T2 A2, T3 A3, T4 A4, T5 A5, T6 A6, T7 A7, T8 A8, T9 A9, T10 A10, T11 A11, T12 A12, T13 A13, T14 A14, T15 A15) \
+  inline csRef<iThreadReturn> function(T1 a1, T2 a2, T3 a3, T4 a4, T5 a5, T6 a6, T7 a7, T8 a8, T9 a9, T10 a10, T11 a11, T12 a12, T13 a13, T14 a14, T15 a15) \
 { \
   const type* objTC = const_cast<const type*>(this); \
-  return objTC->function(A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15); \
+  return objTC->function(a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15); \
 } \
-  inline csRef<iThreadReturn> function(T1 A1, T2 A2, T3 A3, T4 A4, T5 A5, T6 A6, T7 A7, T8 A8, T9 A9, T10 A10, T11 A11, T12 A12, T13 A13, T14 A14, T15 A15) const \
+  inline csRef<iThreadReturn> function(T1 a1, T2 a2, T3 a3, T4 a4, T5 a5, T6 a6, T7 a7, T8 a8, T9 a9, T10 a10, T11 a11, T12 a12, T13 a13, T14 a14, T15 a15) const \
 { \
-  return function##T(false, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15); \
+  return function##T(false, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15); \
 } \
-  inline csRef<iThreadReturn> function##T(bool Wait, T1 A1, T2 A2, T3 A3, T4 A4, T5 A5, T6 A6, T7 A7, T8 A8, T9 A9, T10 A10, T11 A11, T12 A12, T13 A13, T14 A14, T15 A15) const \
+  inline csRef<iThreadReturn> function##T(bool Wait, T1 a1, T2 a2, T3 a3, T4 a4, T5 a5, T6 a6, T7 a7, T8 a8, T9 a9, T10 a10, T11 a11, T12 a12, T13 a13, T14 a14, T15 a15) const \
 { \
   csRef<iThreadManager> tm = csQueryRegistry<iThreadManager>(GetObjectRegistry()); \
   csRef<iThreadReturn> ret; \
@@ -1377,7 +1377,7 @@ csPtr<iJob> QueueEvent(csRef<iThreadManager> tm, ThreadedCallable<T>* object, bo
   if(tm->RunNow(queueType, Wait || wait, forceQueue))) \
   { \
     type* objTC = const_cast<type*>(this); \
-    if(objTC->function##TC(ret, Wait || wait, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15)) \
+    if(objTC->function##TC(ret, Wait || wait, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15)) \
     { \
       ret->MarkSuccessful(); \
     } \
@@ -1390,21 +1390,21 @@ csPtr<iJob> QueueEvent(csRef<iThreadManager> tm, ThreadedCallable<T>* object, bo
   argsTC[0] = mempool; \
   argsTC[1] = mempool->Store<csRef<iThreadReturn> >(ret); \
   argsTC[2] = mempool->Store<bool>(&sync); \
-  argsTC[3] = mempool->Store<T1>(&A1); \
-  argsTC[4] = mempool->Store<T2>(&A2); \
-  argsTC[5] = mempool->Store<T3>(&A3); \
-  argsTC[6] = mempool->Store<T4>(&A4); \
-  argsTC[7] = mempool->Store<T5>(&A5); \
-  argsTC[8] = mempool->Store<T6>(&A6); \
-  argsTC[9] = mempool->Store<T7>(&A7); \
-  argsTC[10] = mempool->Store<T8>(&A8); \
-  argsTC[11] = mempool->Store<T9>(&A9); \
-  argsTC[12] = mempool->Store<T10>(&A10); \
-  argsTC[13] = mempool->Store<T11>(&A11); \
-  argsTC[14] = mempool->Store<T12>(&A12); \
-  argsTC[15] = mempool->Store<T13>(&A13); \
-  argsTC[16] = mempool->Store<T14>(&A14); \
-  argsTC[17] = mempool->Store<T15>(&A15); \
+  argsTC[3] = mempool->Store<T1>(&a1); \
+  argsTC[4] = mempool->Store<T2>(&a2); \
+  argsTC[5] = mempool->Store<T3>(&a3); \
+  argsTC[6] = mempool->Store<T4>(&a4); \
+  argsTC[7] = mempool->Store<T5>(&a5); \
+  argsTC[8] = mempool->Store<T6>(&a6); \
+  argsTC[9] = mempool->Store<T7>(&a7); \
+  argsTC[10] = mempool->Store<T8>(&a8); \
+  argsTC[11] = mempool->Store<T9>(&a9); \
+  argsTC[12] = mempool->Store<T10>(&a10); \
+  argsTC[13] = mempool->Store<T11>(&a11); \
+  argsTC[14] = mempool->Store<T12>(&a12); \
+  argsTC[15] = mempool->Store<T13>(&a13); \
+  argsTC[16] = mempool->Store<T14>(&a14); \
+  argsTC[17] = mempool->Store<T15>(&a15); \
   csRef<iJob> job = QueueEvent<type, csRef<iThreadReturn>, bool, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(tm, (ThreadedCallable<type>*)this, &type::function##TC, argsTC, queueType); \
   ret->SetJob(job); \
   if(Wait || wait) \
