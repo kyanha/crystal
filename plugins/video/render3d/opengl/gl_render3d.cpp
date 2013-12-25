@@ -123,9 +123,86 @@ csGLGraphics3D::csGLGraphics3D (iBase *parent) :
   defaultBufferMapping[CS_VATTRIB_COLOR] = CS_BUFFER_COLOR;
 //  lastUsedShaderpass = 0;
 
-  scrapIndicesSize = 0;
   scrapVerticesSize = 0;
+  scrapIndicesSize = 0;
   scrapBufferHolder.AttachNew (new csRenderBufferHolder);
+
+  // create buffer set for pixmap drawing
+  // create buffer holder
+  pixmapBufferHolder.AttachNew (new csRenderBufferHolder);
+
+  // create index buffer
+  {
+    csRef<iRenderBuffer> buffer = csRenderBuffer::CreateIndexRenderBuffer (4, CS_BUF_STATIC, CS_BUFCOMP_UNSIGNED_INT, 0, 3);
+    uint indices[] = {0,1,2,3};
+    buffer->CopyInto (indices, 4);
+    pixmapBufferHolder->SetRenderBuffer (CS_BUFFER_INDEX, buffer);
+  }
+
+  // create vertex buffer
+  {
+    csRef<iRenderBuffer> buffer = csRenderBuffer::CreateRenderBuffer (4, CS_BUF_STATIC, CS_BUFCOMP_FLOAT, 2);
+    float vertices[] = {
+     -1.0, 1.0,
+      1.0, 1.0,
+      1.0,-1.0,
+     -1.0,-1.0
+    };
+    buffer->CopyInto (vertices, 4);
+    pixmapBufferHolder->SetRenderBuffer (CS_BUFFER_POSITION, buffer);
+  }
+
+  // create texture coordinate buffer
+  {
+    csRef<iRenderBuffer> buffer = csRenderBuffer::CreateRenderBuffer (4, CS_BUF_STATIC, CS_BUFCOMP_FLOAT, 2);
+    float tcs[] = {
+      0.0, 1.0,
+      1.0, 1.0,
+      1.0, 0.0,
+      0.0, 0.0
+    };
+    buffer->CopyInto (tcs, 4);
+    pixmapBufferHolder->SetRenderBuffer (CS_BUFFER_TEXCOORD0, buffer);
+  }
+
+  // Create buffer set for stencil drawing
+  // Create buffer holder
+  stencilBufferHolder.AttachNew (new csRenderBufferHolder);
+
+  // create index buffer
+  {
+    csRef<iRenderBuffer> buffer = csRenderBuffer::CreateIndexRenderBuffer (4, CS_BUF_STATIC, CS_BUFCOMP_UNSIGNED_INT, 0, 3);
+    uint indices[] = {0,1,2,3};
+    buffer->CopyInto (indices, 4);
+    pixmapBufferHolder->SetRenderBuffer (CS_BUFFER_INDEX, buffer);
+  }
+
+  // create vertex buffer
+  {
+    csRef<iRenderBuffer> buffer = csRenderBuffer::CreateRenderBuffer (4, CS_BUF_STATIC, CS_BUFCOMP_FLOAT, 2);
+    float vertices[] = {
+     -1.0, 1.0,
+      1.0, 1.0,
+      1.0,-1.0,
+     -1.0,-1.0
+    };
+    buffer->CopyInto (vertices, 4);
+    stencilBufferHolder->SetRenderBuffer (CS_BUFFER_POSITION, buffer);
+  }
+
+  // create texture coordinate buffer
+  {
+    csRef<iRenderBuffer> buffer = csRenderBuffer::CreateRenderBuffer (4, CS_BUF_STATIC, CS_BUFCOMP_FLOAT, 2);
+    float tcs[] = {
+      0.0, 1.0,
+      1.0, 1.0,
+      1.0, 0.0,
+      0.0, 0.0
+    };
+    buffer->CopyInto (tcs, 4);
+    stencilBufferHolder->SetRenderBuffer (CS_BUFFER_TEXCOORD0, buffer);
+  }
+
 
   shadow_stencil_enabled = false;
   clipping_stencil_enabled = false;
@@ -1136,56 +1213,6 @@ bool csGLGraphics3D::Open ()
     Report (CS_REPORTER_SEVERITY_NOTIFY, "Delayed buffer swapping: %s",
       enableDelaySwap ? "enabled" : "disabled");
 
-  drawPixmapAFP = config->GetBool ("Video.OpenGL.AFPDrawPixmap", false)
-    && ext->CS_GL_ARB_fragment_program;
-  if (verbose)
-    Report (CS_REPORTER_SEVERITY_NOTIFY, "AFP DrawPixmap() workaround: %s",
-      drawPixmapAFP ? "enabled" : "disabled");
-
-  if (drawPixmapAFP)
-  {
-    static const char drawPixmapProgramStr[] = 
-      "!!ARBfp1.0\n"
-      "TEMP texel;\n"
-      "TEX texel, fragment.texcoord[0], texture[0], 2D;\n"
-      "MUL result.color, texel, fragment.color.primary;\n"
-      "END\n";
-
-    ext->glGenProgramsARB (1, &drawPixmapProgram);
-    ext->glBindProgramARB (GL_FRAGMENT_PROGRAM_ARB, drawPixmapProgram);
-    ext->glProgramStringARB(GL_FRAGMENT_PROGRAM_ARB, 
-      GL_PROGRAM_FORMAT_ASCII_ARB, 
-      (GLsizei)(sizeof (drawPixmapProgramStr) - 1), 
-      (void*)drawPixmapProgramStr);
-
-    const GLubyte * programErrorString = glGetString (GL_PROGRAM_ERROR_STRING_ARB);
-
-    GLint errorpos;
-    glGetIntegerv (GL_PROGRAM_ERROR_POSITION_ARB, &errorpos);
-    if(errorpos != -1)
-    {
-      if (verbose)
-      {
-        Report (CS_REPORTER_SEVERITY_WARNING, 
-          "Couldn't load fragment program for text drawing");
-        Report (CS_REPORTER_SEVERITY_WARNING, "Program error at position %d", errorpos);
-        Report (CS_REPORTER_SEVERITY_WARNING, "Error string: %s", 
-          CS::Quote::Single ((const char*)programErrorString));
-        ext->glDeleteProgramsARB (1, &drawPixmapProgram);
-        drawPixmapAFP = false;
-      }
-    }
-    else
-    {
-      if (verbose && (programErrorString != 0) && (*programErrorString != 0))
-      {
-        Report (CS_REPORTER_SEVERITY_WARNING, 
-	  "Warning for DrawPixmap() fragment program: %s", 
-	  CS::Quote::Single ((const char*)programErrorString));
-      }
-    }
-  }
-
 #define LQUOT   "\xE2\x80\x9c"
 #define RQUOT   "\xE2\x80\x9d"
   fixedFunctionForcefulEnable = 
@@ -1349,9 +1376,6 @@ void csGLGraphics3D::Close ()
   if (!isOpen) return;
 
   glFinish ();
-
-  if (drawPixmapAFP)
-    ext->glDeleteProgramsARB (1, &drawPixmapProgram);
 
   if (ext->CS_GL_ARB_query_buffer_object || ext->CS_GL_AMD_query_buffer_object)
   {
@@ -1654,6 +1678,7 @@ bool csGLGraphics3D::BeginDraw (int drawflags)
         statecache->ActivateTCUnit (csGLStateCache::activateTexCoord);
       }
       statecache->Disable_GL_POLYGON_OFFSET_FILL ();
+      statecache->Disable_GL_CULL_FACE ();
       if (ext->CS_GL_ARB_multisample)
 	statecache->Disable_GL_SAMPLE_ALPHA_TO_COVERAGE_ARB ();
 
@@ -2330,6 +2355,8 @@ void csGLGraphics3D::DrawPixmap (iTextureHandle *hTex,
   int sx, int sy, int sw, int sh, 
   int tx, int ty, int tw, int th, uint8 Alpha)
 {
+  GLRENDER3D_OUTPUT_LOCATION_MARKER;
+
   SwapIfNeeded();
 
   /*
@@ -2340,100 +2367,153 @@ void csGLGraphics3D::DrawPixmap (iTextureHandle *hTex,
    */
   G2D->PerformExtension ("glflushtext");
 
+  // disable depth buffer usage and use flat shading model
+  statecache->SetShadeModel (GL_FLAT);
+  SetZModeInternal (CS_ZBUF_NONE);
   if (current_drawflags & CSDRAW_3DGRAPHICS)
   {
     DeactivateBuffers (0, 0);
     ApplyBufferChanges();
   }
 
-  if (drawPixmapAFP)
-  {
-    ext->glBindProgramARB (GL_FRAGMENT_PROGRAM_ARB, drawPixmapProgram);
-    glEnable (GL_FRAGMENT_PROGRAM_ARB);
-  }
-
-  // If original dimensions are different from current dimensions (because
-  // image has been scaled to conform to OpenGL texture size restrictions)
-  // we correct the input coordinates here.
-  int bitmapwidth = 0, bitmapheight = 0;
-  hTex->GetRendererDimensions (bitmapwidth, bitmapheight);
-  csGLBasicTextureHandle *txt_mm = static_cast<csGLBasicTextureHandle*> (
-    (iTextureHandle*)hTex);
-  int owidth = txt_mm->orig_width;
-  int oheight = txt_mm->orig_height;
-  if (owidth != bitmapwidth || oheight != bitmapheight)
-  {
-    tx = (int)(tx * (float)bitmapwidth  / (float)owidth );
-    ty = (int)(ty * (float)bitmapheight / (float)oheight);
-    tw = (int)(tw * (float)bitmapwidth  / (float)owidth );
-    th = (int)(th * (float)bitmapheight / (float)oheight);
-  }
-
   // cache the texture if we haven't already.
   hTex->Precache ();
 
-  // as we are drawing in 2D, we disable some of the commonly used features
-  // for fancy 3D drawing
-  statecache->SetShadeModel (GL_FLAT);
-  SetZModeInternal (CS_ZBUF_NONE);
-  //@@@???statecache->SetDepthMask (GL_FALSE);
+  // set mixmode to alpha if we're in 2d mode or the texture uses alpha
+  // or an alpha value was specified, else to copy
+  uint mode = (hTex->GetKeyColor() || Alpha) || (current_drawflags & CSDRAW_2DGRAPHICS)
+    ? CS_FX_ALPHA : CS_FX_COPY;
+  SetMixMode (mode, hTex->GetAlphaType(), CS::Graphics::AlphaTestOptions());
 
-  // if the texture has transparent bits, we have to tweak the
-  // OpenGL blend mode so that it handles the transparent pixels correctly
-  if ((hTex->GetKeyColor () || Alpha) ||
-    (current_drawflags & CSDRAW_2DGRAPHICS)) // In 2D mode we always want to blend
-    SetMixMode (CS_FX_ALPHA, hTex->GetAlphaType(),
-      CS::Graphics::AlphaTestOptions());
-  else
-    SetMixMode (CS_FX_COPY, hTex->GetAlphaType(),
-      CS::Graphics::AlphaTestOptions());
-
+  // set color
   glColor4f (1.0, 1.0, 1.0, Alpha ? (1.0 - BYTE_TO_FLOAT (Alpha)) : 1.0);
+
+  // get internal texture handle
+  csGLBasicTextureHandle *txt_mm = static_cast<csGLBasicTextureHandle*> (hTex);
+
+  // get original dimensions
+  int originalWidth = txt_mm->orig_width;
+  int originalHeight = txt_mm->orig_height;
+
+  // get render dimensions
+  int renderWidth, renderHeight;
+  hTex->GetRendererDimensions (renderWidth, renderHeight);
+
+  // check whether we have a rendertarget - if so flip y
+  bool hasRenderTarget = currentAttachments != 0;
+
+  // check whether it's a full-screen quad
+  bool fullScreen = sx == 0 && sy == 0 && sw == viewwidth && sh == viewheight;
+
+  // check whether we'll use normalized device coordinates for texture coordinates
+  bool ndc = txt_mm->texType != iTextureHandle::texTypeRect;
+
+  // if we don't have NDCs or we don't have an identity transform for TCs we need a new TC buffer
+  bool needTextureMatrix = !ndc || tx || ty || tw != originalWidth || th != originalHeight;
+  if (needTextureMatrix)
+  {
+    // scale for new texture coordinates
+    float xscale = float (ndc ? 1.0f : renderWidth) / originalWidth;
+    float yscale = float (ndc ? 1.0f : renderHeight) / originalHeight;
+
+    // quad rectangle
+    float rect[4] = { xscale * tx, xscale * (tx + tw), yscale * ty, yscale * (ty + th) };
+
+    // calculate new left and right so that left/right maps to 0 and not -1
+    rect[0] = 2.0f*rect[0] - rect[1];
+    rect[2] = 2.0f*rect[2] - rect[3];
+
+    // invert
+    float rectInv[4] = {
+     -(rect[0] + rect[1] + 2.0f)/(rect[1] - rect[0]),
+      (2.0f - rect[0] - rect[1])/(rect[1] - rect[0]),
+     -(rect[2] + rect[3] + 2.0f)/(rect[3] - rect[2]),
+      (2.0f - rect[2] - rect[3])/(rect[3] - rect[2])
+    };
+
+    // load it
+    statecache->SetMatrixMode (GL_TEXTURE);
+    glPushMatrix ();
+    glLoadIdentity ();
+    glOrtho (rectInv[0], rectInv[1], rectInv[2], rectInv[3], 1.0f, -1.0f);
+  }
+
+  // check whether we need a custom matrix
+  // if not we'll use identity
+  statecache->SetMatrixMode (GL_PROJECTION);
+  glPushMatrix ();
+  glLoadIdentity ();
+  if (!fullScreen || hasRenderTarget)
+  {
+    // get inverse target rectangle
+    float rectInv[4] = { -1.0f, 1.0f, -1.0f, 1.0f };
+
+    // if it's not a fullscreen rectangle we have to calculate the transform
+    if (!fullScreen)
+    {
+      // get normalized rectangle
+      float rect[4] = { sx << 1, (sx + sw) << 1, sy << 1, (sy + sh) << 1 };
+      rect[0] = rect[0] / viewwidth  - 1.0f;
+      rect[1] = rect[1] / viewwidth  - 1.0f;
+      rect[2] = rect[2] / viewheight - 1.0f;
+      rect[3] = rect[3] / viewheight - 1.0f;
+
+      // invert
+      rectInv[0] = -(rect[0] + rect[1] + 2)/(rect[1] - rect[0]);
+      rectInv[1] =  (2 - rect[0] - rect[1])/(rect[1] - rect[0]);
+      rectInv[2] = -(rect[2] + rect[3] + 2)/(rect[3] - rect[2]);
+      rectInv[3] =  (2 - rect[2] - rect[3])/(rect[3] - rect[2]);
+    }
+
+    // if we have a render target we have to flip the y coordinates
+    if (hasRenderTarget)
+    {
+      glOrtho (rectInv[0], rectInv[1], rectInv[2], rectInv[3], 1.0f, -1.0f);
+    }
+    else
+    {
+      glOrtho (rectInv[0], rectInv[1], rectInv[3], rectInv[2], 1.0f, -1.0f);
+    }
+  }
+
+  // activate buffers
+  ActivateBuffers (pixmapBufferHolder, defaultBufferMapping);
+  ApplyBufferChanges ();
+
+  // activate texture
   ActivateTexture (hTex);
   ApplyTextureChanges();
 
-  // convert texture coords given above to normalized (0-1.0) texture
-  // coordinates
-  float ntx1,nty1,ntx2,nty2;
-  ntx1 = ((float)tx            );
-  ntx2 = ((float)tx + (float)tw);
-  nty1 = ((float)ty            );
-  nty2 = ((float)ty + (float)th);
-  if (txt_mm->texType != iTextureHandle::texTypeRect)
+  // lock index buffer
+  iRenderBuffer* indexBuffer = pixmapBufferHolder->GetRenderBuffer (CS_BUFFER_INDEX);
+  void* bufData = RenderLock (indexBuffer, CS_GLBUF_RENDERLOCK_ELEMENTS);
+  statecache->ApplyBufferBinding (csGLStateCacheContext::boIndexArray);
+
+  // draw quad
+  if (bufData != (void*)-1)
   {
-    ntx1 /= bitmapwidth;
-    ntx2 /= bitmapwidth;
-    nty1 /= bitmapheight;
-    nty2 /= bitmapheight;
+    glDrawRangeElements (GL_QUADS, 0, 3, 4, compGLtypes[CS_BUFCOMP_UNSIGNED_INT], (uint8*)bufData);
   }
 
-  // draw the bitmap
-  glBegin (GL_QUADS);
-  //    glTexCoord2f (ntx1, nty1);
-  //    glVertex2i (sx, height - sy - 1);
-  //    glTexCoord2f (ntx2, nty1);
-  //    glVertex2i (sx + sw, height - sy - 1);
-  //    glTexCoord2f (ntx2, nty2);
-  //    glVertex2i (sx + sw, height - sy - sh - 1);
-  //    glTexCoord2f (ntx1, nty2);
-  //    glVertex2i (sx, height - sy - sh - 1);
+  // release buffer
+  RenderRelease (indexBuffer);
 
-  // smgh: This works in software opengl.
-  // wouter: removed height-sy-1 to be height-sy.
-  //    this is because on opengl y=0.0 is off screen, as is y=height.
-  //    using height-sy gives output on screen which is identical to 
-  //    using the software canvas.
-  glTexCoord2f (ntx1, nty1);
-  glVertex2i (sx, viewheight - sy);
-  glTexCoord2f (ntx2, nty1);
-  glVertex2i (sx + sw, viewheight - sy);
-  glTexCoord2f (ntx2, nty2);
-  glVertex2i (sx + sw, viewheight - (sy + sh));
-  glTexCoord2f (ntx1, nty2);
-  glVertex2i (sx, viewheight - (sy + sh));
-  glEnd ();
+  // deactivate texture and buffers
+  DeactivateTexture ();
+  DeactivateBuffers (0,0);
 
-  // Restore.
+  // restore projection matrix
+  statecache->SetMatrixMode (GL_PROJECTION);
+  glPopMatrix ();
+
+  // restore texture matrix if we set one
+  if (needTextureMatrix)
+  {
+    statecache->SetMatrixMode (GL_TEXTURE);
+    glPopMatrix ();
+  }
+
+  // restore zmode
   SetZModeInternal (current_zmode);
   DeactivateTexture ();
   ApplyTextureChanges();
