@@ -116,8 +116,9 @@ iJobQueue* WeaverCompiler::GetSynthQueue()
   if (!synthQueue.IsValid())
   {
     CS::Threading::ThreadedJobQueue* newQueue =
-      new CS::Threading::ThreadedJobQueue (CS::Platform::GetProcessorCount(),
-      CS::Threading::THREAD_PRIO_NORMAL, "weaver synth");
+      new CS::Threading::ThreadedJobQueue (objectreg,
+        CS::Platform::GetProcessorCount(),
+        CS::Threading::THREAD_PRIO_NORMAL, "weaver synth");
     synthQueue.AttachNew (newQueue);
   }
   return synthQueue;
