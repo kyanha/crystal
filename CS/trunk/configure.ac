@@ -1097,6 +1097,12 @@ CS_CHECK_GLX
 CS_CHECK_GLXEXT([], [CS_HEADER_PROPERTY([CSGL_EXT_STATIC_ASSERTION])])
 
 
+#------------------------------------------------------------------------------
+# Check for EGL/OpenGL ES.
+#------------------------------------------------------------------------------
+CS_NOTABLE([opengles], [rendering], [], [$cs_cv_libegl],
+    [CS_CHECK_EGL])
+
 
 #------------------------------------------------------------------------------
 # Check for DirectDraw.  At least one user (Jorrit) has a strange installation

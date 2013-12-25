@@ -130,6 +130,21 @@ AC_DEFUN([CS_CHECK_OPENGL],
 
 
 #------------------------------------------------------------------------------
+# CS_CHECK_EGL
+#	Check for Embedded GL (OpenGL ES).
+#------------------------------------------------------------------------------
+AC_DEFUN([CS_CHECK_EGL],
+    [CS_CHECK_BUILD([for EGL], [cs_cv_libegl],
+	[AC_LANG_PROGRAM([CS_GL_INCLUDE([CS_EGL_PATH],[EGL],[egl.h])],[eglBindAPI(EGL_OPENGL_ES_API)])],
+	[$cs_win32_gl \
+        $cs_osx_gl \
+        CS_CREATE_TUPLE([],[],[-lEGL]) \
+        CS_CREATE_TUPLE([],[],[-legl]) \
+        $cs_mesa_gl], [],
+        [CS_EMIT_BUILD_RESULT([cs_cv_libegl], [EGL])], [], [],
+        [$cs_egl_plat_cflags], [$cs_egl_plat_lflags], [$cs_egl_plat_libs])])
+
+#------------------------------------------------------------------------------
 # CS_CHECK_GLU
 #	Check for GLU.
 #------------------------------------------------------------------------------
@@ -159,7 +174,6 @@ AC_DEFUN([CS_CHECK_GLU],
 	    $cs_mesa_glu], [],
 	    [CS_EMIT_BUILD_RESULT([cs_cv_libglu], [GLU])], [], [],
 	    [$cs_cv_libgl_cflags], [$cs_cv_libgl_lflags], [$cs_cv_libgl_libs])])])
-
 
 #------------------------------------------------------------------------------
 # CS_CHECK_GLX
