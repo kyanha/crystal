@@ -19,6 +19,7 @@
 #include "cssysdef.h"
 #include "csutil/platform.h"
 #include "csutil/sysfunc.h"
+#include "csutil/threadjobqueue.h"
 #include "csutil/threadmanager.h"
 #include "iengine/engine.h"
 #include "iutil/cfgmgr.h"
@@ -272,3 +273,18 @@ void csThreadManager::ProcessAll ()
   listQueue->ProcessAll ();  
 }
 
+void csThreadManager::PushToThreadedQueue(iJob* job)
+{
+  CS::Threading::MutexScopedLock lock(waitingThreadsLock);
+  threadQueue->Enqueue(job);
+
+  for(size_t i=0; i<waitingThreads.GetSize(); ++i)
+  {
+    waitingThreads[i]->NotifyAll();
+  }
+}
+
+int32 csThreadManager::GetThreadQueueCount()
+{
+  return threadQueue->GetQueueCount();
+}

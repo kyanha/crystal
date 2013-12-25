@@ -20,9 +20,10 @@
 #define __CS_CSUTIL_THREADMANAGER_H__
 
 #include "csutil/eventhandlers.h"
+#include "csutil/fifo.h"
 #include "csutil/objreg.h"
 #include "csutil/threadevent.h"
-#include "csutil/threadjobqueue.h"
+#include "csutil/threading/thread.h"
 #include "iengine/engine.h"
 #include "imap/loader.h"
 #include "iutil/event.h"
@@ -31,6 +32,14 @@
 #include "iutil/threadmanager.h"
 
 struct iEvent;
+
+namespace CS
+{
+  namespace Threading
+  {
+    class ThreadedJobQueue;
+  } // namespace Threading
+} // namespace CS
 
 class CS_CRYSTALSPACE_EXPORT csThreadManager : public scfImplementation1<csThreadManager,
   iThreadManager>
@@ -73,13 +82,7 @@ public:
   {
     if(queueType == THREADED || queueType == THREADEDL)
     {
-      CS::Threading::MutexScopedLock lock(waitingThreadsLock);
-      threadQueue->Enqueue(job);
-
-      for(size_t i=0; i<waitingThreads.GetSize(); ++i)
-      {
-        waitingThreads[i]->NotifyAll();
-      }
+      PushToThreadedQueue (job);
     }
     else
     {
@@ -99,7 +102,7 @@ public:
 
     // True if we're executing something to not be run in the main thread, while all other threads are busy.
     bool runNow = noThread || (!forceQueue && (queueType == THREADED || queueType == THREADEDL) && !IsMainThread()
-      && ((waiting >= threadCount-1) || (threadQueue->GetQueueCount() > 2*threadCount-1) || wait));
+      && ((waiting >= threadCount-1) || (GetThreadQueueCount() > 2*threadCount-1) || wait));
 
     return runNow;
   }
@@ -135,6 +138,10 @@ private:
   {
     return tid == CS::Threading::Thread::GetThreadID();
   }
+
+  // Wrappers to csThreadedJobQueue methods (so we can forward-declare it)
+  void PushToThreadedQueue(iJob* job);
+  int32 GetThreadQueueCount();
 
   CS::Threading::Mutex waitingMainLock;
   CS::Threading::Condition waitingMain;
