@@ -494,8 +494,10 @@ public:
   inline static size_t funcName (toType* dest, size_t destSize, 	\
     const fromType* source, size_t srcSize = (size_t)-1)		\
   {									\
-    if ((srcSize == 0) || (source == 0))				\
+    if (source == 0)				                        \
       return 0;								\
+    /* Continue even without input to process so dest buffer */         \
+    /* always gets null terminated */                                   \
 									\
     size_t bufRemaining = (destSize > 0) ? destSize - 1 : 0;		\
     size_t encodedLen = 0;						\
