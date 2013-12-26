@@ -72,12 +72,12 @@ bool csPathsUtilities::PathsIdentical (const char* path1, const char* path2)
   size_t path1Wlen (path1len+1);
   CS_ALLOC_STACK_ARRAY(wchar_t, path1W, path1Wlen);
   csUnicodeTransform::UTF8toWC (path1W, path1Wlen,
-                                (utf8_char*)path1, path1Wlen);
+                                (utf8_char*)path1, path1len);
   size_t path2len (strlen (path2));
   size_t path2Wlen (path2len+1);
   CS_ALLOC_STACK_ARRAY(wchar_t, path2W, path2Wlen);
   csUnicodeTransform::UTF8toWC (path2W, path2Wlen,
-                                (utf8_char*)path2, path2Wlen);
+                                (utf8_char*)path2, path2len);
 
   CharUpperBuffW (path1W, DWORD (wcslen (path1W)));
   CharUpperBuffW (path2W, DWORD (wcslen (path2W)));
