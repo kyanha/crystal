@@ -812,7 +812,9 @@ def ObjectAsCS(self, func, depth=0, **kwargs):
         import math
         rotationX = mathutils.Matrix.Rotation(math.radians(90.0), 4, 'X')
         origin = matrix.to_translation()
-        matrix = rotationX * matrix.inverted()
+        # Isolate the rotation part of the initial matrix in order to ensure that it
+        # is invertible
+        matrix = rotationX * matrix.to_quaternion().inverted().to_matrix().to_4x4()
         matrix.translation = origin
 
         # Shadow properties
