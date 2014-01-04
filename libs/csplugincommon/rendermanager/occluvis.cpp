@@ -882,7 +882,8 @@ namespace CS
       }
 
       // ensure the object was found
-      CS_ASSERT(found);
+      if(!found)
+          return;
 
       // get all mesh lists for the various render views
       csArray<csRefArray<NodeMeshList>*> nodeMeshLists = nodeMeshHash.GetAll();
