@@ -123,7 +123,7 @@ namespace CS
       return true;
     }
 
-    bool DDOFHelper::ConstructReduce(LayerDesc * desc, DownsampleAxis axis, int num, char * color, char * abc)
+    bool DDOFHelper::ConstructReduce(LayerDesc * desc, DownsampleAxis axis, int num, const char * color, const char * abc)
     {
       *desc = LayerDesc();
 
@@ -153,7 +153,7 @@ namespace CS
       return true;
     }
 
-    bool DDOFHelper::ConstructResolve(LayerDesc * desc, DownsampleAxis axis, int num, char * color, char * abc)
+    bool DDOFHelper::ConstructResolve(LayerDesc * desc, DownsampleAxis axis, int num, const char * color, const char * abc)
     {
       *desc = LayerDesc();
 

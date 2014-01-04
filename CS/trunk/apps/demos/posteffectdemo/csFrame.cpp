@@ -313,6 +313,8 @@ bool csFrame::LoadInterface ()
 bool csFrame::LoadWorld ()
 {
   bool b = vfs->ChDir ("lev/castle");
+  if (!b)
+    return false;
 
   if (!loader->LoadMapFile ("world"))
   {
@@ -512,7 +514,7 @@ void csFrame::OnCheckHBAO (wxCommandEvent& ev)
   size_t pos = postMgr->FindPostEffect (HBAO_EFFECT_NAME);
   if (ev.IsChecked ())
   {
-    if (pos == -1)
+    if (pos == (size_t)-1)
       postMgr->InsertPostEffect (hbao, 0);
   } else
     postMgr->RemovePostEffect (pos);
@@ -523,7 +525,7 @@ void csFrame::OnCheckSSDO_AO (wxCommandEvent& ev)
   bool b = ssdoParams->SetAOEnable (ev.IsChecked ());
   if (ev.IsChecked())
   {
-    if (pos == -1)
+    if (pos == (size_t)-1)
       postMgr->InsertPostEffect(ssdo, 0);
   } else
   {
@@ -538,7 +540,7 @@ void csFrame::OnCheckSSDO_IL (wxCommandEvent& ev)
   bool b = ssdoParams->SetILEnable (ev.IsChecked ());
   if (ev.IsChecked())
   {
-    if (pos == -1)
+    if (pos == (size_t)-1)
       postMgr->InsertPostEffect(ssdo, 0);
   } else
   {
@@ -551,7 +553,7 @@ void csFrame::OnCheckDDOF (wxCommandEvent& ev)
   size_t pos = postMgr->FindPostEffect (DDOF_EFFECT_NAME);
   if (ev.IsChecked ())
   {
-    if (pos == -1)
+    if (pos == (size_t)-1)
       postMgr->AddPostEffect (ddof);
   } else
     postMgr->RemovePostEffect (pos);

@@ -500,7 +500,7 @@ CS_PLUGIN_NAMESPACE_BEGIN (PostEffect)
 
   iPostEffectLayer * PostEffect::GetLayer (int  num)
   {
-    if ((num >= 0) && (num < postLayers.GetSize()))
+    if ((size_t)num < postLayers.GetSize())
       return postLayers[num];
     return nullptr;
   }
@@ -542,7 +542,7 @@ CS_PLUGIN_NAMESPACE_BEGIN (PostEffect)
   {
     if (desc.layerProcessor.IsValid())
     {
-      for (int i = 0; i < outputTextures.GetSize(); ++i)
+      for (size_t i = 0; i < outputTextures.GetSize(); ++i)
         desc.layerProcessor->PostProcess(textures[outputTextures[i]], i);
     }
   }
@@ -775,7 +775,7 @@ CS_PLUGIN_NAMESPACE_BEGIN (PostEffect)
     size_t pos = name.Find (".");
     csString layerName, outName;
     name.SubString (layerName, 0, pos);
-    if (pos != -1)
+    if (pos != (size_t)-1)
       name.SubString (outName, pos+1);
     for (uint i = 0; i < layers.GetSize (); ++i)
     {

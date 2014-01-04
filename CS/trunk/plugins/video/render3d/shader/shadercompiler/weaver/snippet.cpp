@@ -1770,11 +1770,6 @@ CS_PLUGIN_NAMESPACE_BEGIN(ShaderWeaver)
   {
     CS::Utility::ScopedDelete<BasicIterator<const Snippet::Technique*> > techIter (
       snip->GetTechniques());
-    size_t snipNum = (size_t)~0;
-    if (techIter->GetTotal() > 1)
-    {
-      snipNum = snipNums.GetSnippetNumber (snip);
-    }
     while (techIter->HasNext())
     {
       const Snippet::Technique* tech = techIter->Next();

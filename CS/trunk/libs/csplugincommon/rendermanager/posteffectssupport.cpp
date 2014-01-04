@@ -209,7 +209,7 @@ namespace CS
       
 
       bool effectsDataChanged = changed;
-      for (int i = 0; i < pfxCount ; ++i)
+      for (size_t i = 0; i < pfxCount ; ++i)
       {
         iPostEffect* effect = postEffects.Get (i);
         if (changed)
@@ -268,7 +268,6 @@ namespace CS
 
     bool PostEffectsSupport::SetupCommonSVs (iView* view)
     {
-      iPerspectiveCamera *pcam = view->GetPerspectiveCamera();
       iCamera * cam = view->GetCamera();
       const CS::Math::Matrix4& proj = cam->GetProjectionMatrix();
       const CS::Math::Matrix4& inv_proj = cam->GetInvProjectionMatrix();

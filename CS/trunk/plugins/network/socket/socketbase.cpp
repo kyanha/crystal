@@ -116,6 +116,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(Socket)
     // no need for initialization on unix
     bool Initialize()
     {
+        return true;
     }
 
     // no need for cleanup on unix

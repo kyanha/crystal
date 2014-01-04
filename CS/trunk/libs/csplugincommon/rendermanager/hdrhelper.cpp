@@ -36,6 +36,7 @@ namespace CS
       if (!postEffect) return false;
       postEffectManager->AddPostEffect (postEffect);
 
+#if 0
       const char* textureFmt;
       switch (quality)
       {
@@ -59,7 +60,8 @@ namespace CS
 	case qualFloat32: textureFmt = "bgr32_f"; break;
 	default: return false;
       }
-      //postEffect->SetOutputFormat (textureFmt);
+      postEffect->SetOutputFormat (textureFmt);
+#endif
       this->quality = quality;
       
       csRef<iShaderManager> shaderManager =
