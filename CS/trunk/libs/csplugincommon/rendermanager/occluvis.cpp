@@ -831,10 +831,8 @@ namespace CS
       // ensure the object is valid
       CS_ASSERT(visobj);
 
-#     ifdef CS_DEBUG
       // keep track whether this object belongs to us
       bool found = false;
-#     endif
 
       // find the wrapper for this object and delete it
       for(size_t i = 0; i < visObjects.GetSize(); ++i)
@@ -846,10 +844,8 @@ namespace CS
 	// check whether it belongs to our object
         if(visobjWrap->GetVisObject() == visobj)
         {
-#	  ifdef CS_DEBUG
 	  // found it
 	  found = true;
-#	  endif
 
 	  // get the tree node
 	  VisTreeNode* node = visobjWrap->GetNode();
