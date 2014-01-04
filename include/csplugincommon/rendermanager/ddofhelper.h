@@ -82,12 +82,12 @@ namespace CS
       /**
        * Setup a reduction LayerDesc based on the given parameters
        */
-      bool ConstructReduce(LayerDesc * desc, DownsampleAxis axis, int num, char * color = NULL, char * abc = NULL);
+      bool ConstructReduce(LayerDesc * desc, DownsampleAxis axis, int num, const char * color = NULL, const char * abc = NULL);
 
       /**
        * Setup a resolve LayerDesc based on the given parameters
        */
-      bool ConstructResolve(LayerDesc * desc, DownsampleAxis axis, int num, char * color = NULL, char * abc = NULL);
+      bool ConstructResolve(LayerDesc * desc, DownsampleAxis axis, int num, const char * color = NULL, const char * abc = NULL);
 
       /**
        * Setup a resolve LayerDesc based on the given parameters.

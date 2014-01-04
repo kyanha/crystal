@@ -2452,7 +2452,8 @@ void csGLGraphics3D::DrawPixmap (iTextureHandle *hTex,
     if (!fullScreen)
     {
       // get normalized rectangle
-      float rect[4] = { sx << 1, (sx + sw) << 1, sy << 1, (sy + sh) << 1 };
+      float rect[4] = { (float)(sx << 1), (float)((sx + sw) << 1),
+                        (float)(sy << 1), (float)((sy + sh) << 1) };
       rect[0] = rect[0] / viewwidth  - 1.0f;
       rect[1] = rect[1] / viewwidth  - 1.0f;
       rect[2] = rect[2] / viewheight - 1.0f;
@@ -3823,10 +3824,10 @@ void csGLGraphics3D::OQVisibleQueries(unsigned int* queries, bool* results, int 
     statecache->SetBufferARB(GL_QUERY_BUFFER_ARB, queryBuffer, true);
 
     // grow storage if needed
-    if (num_queries > queryBufferSize)
+    if ((size_t)num_queries > queryBufferSize)
     {
       ext->glBufferData(GL_QUERY_BUFFER_ARB, num_queries*sizeof(GLuint), NULL, GL_DYNAMIC_READ);
-      queryBufferSize = num_queries;
+      queryBufferSize = (size_t)num_queries;
     }
 
     // query results
@@ -4535,6 +4536,7 @@ void csGLGraphics3D::DrawMeshBasic(const csCoreRenderMesh* mymesh,
 
   // Based on the kind of clipping we need we set or clip mask.
   // @@@ TODO: use clip values
+#if 0
   int clip_mask, clip_value;
   if (clipportal_floating)
   {
@@ -4551,6 +4553,7 @@ void csGLGraphics3D::DrawMeshBasic(const csCoreRenderMesh* mymesh,
     clip_mask = 0;
     clip_value = 0;
   }
+#endif
     
   GLenum cullFace;
   statecache->GetCullFace (cullFace);

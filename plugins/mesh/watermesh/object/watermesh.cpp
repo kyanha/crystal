@@ -564,8 +564,8 @@ csRenderMesh** csWaterMeshObject::GetRenderMeshes (
     
     csVector3 camPos = camera->GetTransform().GetOrigin();
     
-    int camXB = (int)floor(camPos.x);
-    int camZB = (int)floor(camPos.z);
+    //int camXB = (int)floor(camPos.x);
+    //int camZB = (int)floor(camPos.z);
     
     float nearX = /*camXB - (camXB % (int)CELL_LEN)*/ - (int)CELL_LEN/2;
     float nearZ = /*camZB - (camZB % (int)CELL_WID)*/ - (int)CELL_WID/2;
