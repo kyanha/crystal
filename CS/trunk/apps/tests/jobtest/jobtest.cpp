@@ -161,7 +161,7 @@ void PrintResult ()
 
 int main(int argc, char* argv[])
 {
-  csInitializer::InitializeSCF(argc, argv);
+  iObjectRegistry* object_reg = csInitializer::CreateEnvironment (argc, argv);
 
   srand(12341);
 
@@ -175,6 +175,7 @@ int main(int argc, char* argv[])
   
   PrintResult ();
 
+  csInitializer::DestroyApplication(object_reg);
   return 0;
 }
 
