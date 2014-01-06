@@ -1046,6 +1046,7 @@ class csPrintfFormatter
 	T v;
 	Tbase vB[sizeof(T)/sizeof(Tbase)];
       } toBase;
+      memset (&toBase, 0, sizeof (toBase)); 
       toBase.v = val;
   #ifdef CS_LITTLE_ENDIAN
       const int hi = (sizeof (T) / sizeof (Tbase)) - 1;
