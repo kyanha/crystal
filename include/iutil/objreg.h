@@ -131,7 +131,7 @@ struct iObjectRegistryIterator : public virtual iBase
 {
   SCF_INTERFACE(iObjectRegistryIterator, 2,0,0);
   /**
-   * Restart the iterator. Returns false if there are no ellements
+   * Restart the iterator. Returns false if there are no elements
    * in it.
    */
   virtual bool Reset () = 0;
@@ -147,7 +147,7 @@ struct iObjectRegistryIterator : public virtual iBase
   virtual bool HasNext () = 0;
 
   /**
-   * Proceed with next element. Return the element is there is one.
+   * Proceed with next element. Return the element if there is one.
    */
   virtual iBase* Next () = 0;
 };
