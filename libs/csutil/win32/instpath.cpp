@@ -228,7 +228,7 @@ static inline char* FindConfigPath ()
   wchar_t* slash = wcsrchr (apppath, '\\');
   if (slash) *(slash+1) = 0;
 
-  wchar_t testfn[MAX_PATH];
+  wchar_t testfn[MAX_PATH + 1 + 8];
   wcscpy(testfn, apppath);
   wcscat(testfn, L"vfs.cfg");
 

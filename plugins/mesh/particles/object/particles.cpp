@@ -778,6 +778,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(Particles)
     particleAllocatedSize = 0;
 
     delete[] rawBuffer;
+    rawBuffer = 0;
 
     ReserveNewParticles (maxParticles);
 

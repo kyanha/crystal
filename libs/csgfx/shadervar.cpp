@@ -105,10 +105,12 @@ csShaderVariable::csShaderVariable (const csShaderVariable& other)
     break;
 
   case TRANSFORM:
+    // @@@ Check this? According to Coverity this branch leaks memory.
     TransformPtr = TransformAlloc()->Alloc (*other.TransformPtr);
     break;
 
   case ARRAY:
+    // @@@ Check this? According to Coverity this branch leaks memory.
     ShaderVarArray = ShaderVarArrayAlloc()->Alloc ();
     *ShaderVarArray = *other.ShaderVarArray;
     break;

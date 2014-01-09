@@ -562,20 +562,20 @@ void HairTest::SwitchDynamics()
 void HairTest::SwitchScenes()
 {
   delete avatarScene;
+  avatarScene = 0;
 
   if (avatarSceneType == MODEL_FRANKIE)
   {
     avatarSceneType = MODEL_KRYSTAL;
     avatarScene = new KrystalScene (this);
   }
-
   else if (avatarSceneType == MODEL_KRYSTAL)
   {
     avatarSceneType = MODEL_FRANKIE;
     avatarScene = new FrankieScene (this);
   }
 
-  if (!avatarScene->CreateAvatar ())
+  if ((!avatarScene) || !avatarScene->CreateAvatar ())
   {
     csPrintfErr ("Problem loading scene. Exiting.\n");
     csRef<iEventQueue> q (csQueryRegistry<iEventQueue> (GetObjectRegistry ()));

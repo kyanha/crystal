@@ -83,7 +83,8 @@ void csSchedule::TimePassed(int elapsed_time)
     /// unlink, possibly relink
     first = part->next;
     if(part->period != 0)
-      InsertCall(part, part->period); // play it again, Sam!
+      if (!InsertCall(part, part->period)) // play it again, Sam!
+	return;
 
     /// do the callback
     /// now that it has been relinked/unlinked etc, the callback can
@@ -187,7 +188,7 @@ void csSchedule::RemoveCallback(void *arg)
 
 /// internal helping functions
 
-void csSchedule::InsertCall(csSchedulePart *part, int afternow)
+bool csSchedule::InsertCall(csSchedulePart *part, int afternow)
 {
   csSchedulePart *p = first;
   csSchedulePart *prev= 0;
@@ -201,7 +202,7 @@ void csSchedule::InsertCall(csSchedulePart *part, int afternow)
   if(afterprev < 0)
   {
     delete part;
-    return;
+    return false;
   }
   /// Link the part into the list
   if(prev==0)
@@ -218,6 +219,7 @@ void csSchedule::InsertCall(csSchedulePart *part, int afternow)
   part->after = afterprev;
   if(part->next)
     part->next->after -= afterprev;
+  return true;
 }
 
 

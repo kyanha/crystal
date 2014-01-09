@@ -297,7 +297,7 @@ csRef<iImage> csImageManipulate::Mipmap2D (iImage* source, int steps,
         {
           mipmap_1_a (cur_w, cur_h, (uint8*)simg->GetAlpha (), Alpha);
         }
-      break;
+        break;
       case CS_IMGFMT_TRUECOLOR:
         if (!transp)
           mipmap_1 (cur_w, cur_h, (csRGBpixel*)simg->GetImageData (), mipmap);
@@ -305,7 +305,10 @@ csRef<iImage> csImageManipulate::Mipmap2D (iImage* source, int steps,
           mipmap_1_t (cur_w, cur_h, (csRGBpixel*)simg->GetImageData (),
             mipmap, *transp);
         nimg->ConvertFromRGBA (mipmap);
-      break;
+        break;
+      default:
+        delete[] mipmap;
+	break;
     }
 
     simg = nimg;

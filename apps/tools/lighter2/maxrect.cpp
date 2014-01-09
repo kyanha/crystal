@@ -358,8 +358,8 @@ void MaxRectangles::Dump (iObjectRegistry* object_reg, const char* tag)
   uint8* data2 = (uint8*)img2->GetImageData ();
   memset (data2, 0, w * h);
 
-  newpal = new csRGBpixel[256];
-  memcpy (newpal, pal, sizeof (pal));
+  //newpal = new csRGBpixel[256];
+  //memcpy (newpal, pal, sizeof (pal));
 
   int c = 0;
 

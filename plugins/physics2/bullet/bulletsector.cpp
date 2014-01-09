@@ -1070,7 +1070,10 @@ CS_PLUGIN_NAMESPACE_BEGIN (Bullet2)
 
     if (fwrite (serializer->getBufferPointer (), serializer->getCurrentBufferSize (), 1, file)
       != 1)
+    {
+      fclose (file);
       return false;
+    }
 
     if (fclose (file) == EOF) return false;
 

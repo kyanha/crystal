@@ -1393,7 +1393,7 @@ bool csDynaVis::TestObjectVisibility (csVisibilityObjectWrapper* obj,
   // For coverage test.
   csBox2 sbox;
   float min_depth = 0;
-  float max_depth;
+  float max_depth = 0;
 
   const csBox3& obj_bbox = obj->child->GetBBox ();
   const csVector3& pos = data->pos;
@@ -3062,6 +3062,7 @@ bool csDynaVis::DebugCommand (const char* cmd)
         }
       }
     }
+    delete excul;
     csReport (object_reg, CS_REPORTER_SEVERITY_NOTIFY, "crystalspace.dynavis",
     	"Exact visibility freezing!");
     return true;

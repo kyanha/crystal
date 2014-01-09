@@ -233,7 +233,7 @@ void csBulletCollisionTerrain::OnCellUnload (iTerrainCell *cell)
 
 void csBulletCollisionTerrain::CreateCellCollider (iTerrainCell *cell)
 {
-  float minHeight, maxHeight;
+  float minHeight = 0.0, maxHeight = 0.0;
   csLockedHeightData cellData = cell->GetHeightData ();
 
   // Check if the min/max have to be computed

@@ -210,7 +210,8 @@ struct csHitBeamResult
    */
   bool hit;
 
-  csHitBeamResult() : material(0), hit(false)
+  csHitBeamResult() : r(0.0), polygon_idx(-1),material(0),
+    facehit(-1), hit(false)
   {
   }
 };

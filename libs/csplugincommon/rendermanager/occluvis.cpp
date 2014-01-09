@@ -1056,7 +1056,7 @@ namespace CS
       iShader* lastShader = nullptr;
 
       // we'll keep track of the last used ticket
-      size_t lastTicket;
+      size_t lastTicket = 0;
 
       // backup current z-buffer mode
       csZBufMode oldZMode = g3d->GetZMode();

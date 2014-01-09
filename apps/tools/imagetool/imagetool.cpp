@@ -428,6 +428,7 @@ static csRef<iImage> open_file (const char *fname)
     {
       csPrintf ("%s: unexpected EOF while reading file %s\n", programname, fname);
       delete [] buffer;
+      fclose (f);
       return 0;
     }
     buf.AttachNew (new csDataBuffer (buffer, fsize, true));

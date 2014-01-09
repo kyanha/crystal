@@ -84,8 +84,11 @@ private:
   /// first part of the scheduled callbacks
   csSchedulePart *first;
 
-  /// internal, insert part given msec after now into list
-  void InsertCall(csSchedulePart *part, int afternow);
+  /**
+   * Internal, insert part given msec after now into list
+   * Return false on failure (part will be deleted in that case).
+   */
+  bool InsertCall(csSchedulePart *part, int afternow);
   /// internal, unlink part from list given prev. (prev can be 0)
   void RemoveCall(csSchedulePart *prev, csSchedulePart *part);
 

@@ -815,6 +815,7 @@ void csPagingSampler::CachePositions ()
 
     }
   }
+  delete [] maps;
 }
 
 
@@ -1154,6 +1155,7 @@ const int *csPagingSampler::SampleInteger (csStringID type)
           copyx*sizeof(int));
       }
     }
+    delete[] maps;
     return map;
   }
   else

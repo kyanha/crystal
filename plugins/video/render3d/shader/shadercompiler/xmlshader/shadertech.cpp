@@ -266,7 +266,9 @@ bool csXMLShaderTech::LoadPass (iDocumentNode *node, ShaderPass* pass,
 struct PassActionPrecache
 {
   PassActionPrecache (int passIndex, csXMLShaderTech* tech, size_t variant,
-    iHierarchicalCache* cacheTo, const char* cacheType) : passIndex (passIndex),
+    iHierarchicalCache* cacheTo, const char* cacheType) :
+    oneComboWorked (false),
+    passIndex (passIndex),
     tech (tech), variant (variant), cacheTo (cacheTo)
   {
     if (cacheTo)

@@ -585,6 +585,7 @@ bool MD3Model::LoadSkin(char *skinFile)
 	  while (line.GetAt(k) != '/' && line.GetAt(k) != '\\')
 	    k--;
 	  strcpy(fileName, (line.GetData() + k + 1));
+	  delete[] name;
 	}
       line.Clear();
     }
@@ -691,6 +692,7 @@ void MD32spr::Write()
       if (!out->Mount(vfspath, outZipName.GetData()))
       {
         ReportError("Error mounting output zip file.\n");
+	delete[] fileName;
         return;
       }
     }
@@ -810,7 +812,8 @@ void MD32spr::Write()
     }
   }
   WriteTextures(mountPath.GetData(),vfspath);
-  if(weaponDir) {
+  if(weaponDir)
+  {
     csString weaponInPath(mountPath.GetData());
     csString weaponOutPath(vfspath);
     weaponInPath += weaponDir;
@@ -819,6 +822,7 @@ void MD32spr::Write()
     weaponOutPath += "/";
     WriteTextures(weaponInPath.GetData(), weaponOutPath.GetData());
   }
+  delete[] fileName;
 }
 
 void MD32spr::WriteXMLTags(md3Model * model,
@@ -1193,8 +1197,8 @@ char *basename(const char *path, char *base)
     return 0;
   if(!strlen(path))
     return 0;
-  dir = new char[strlen(path)];
-  file = new char[strlen(path)];
+  dir = new char[strlen(path)+1];
+  file = new char[strlen(path)+1];
   splitpath(path, dir, strlen(path), file, strlen(path));
   point = stristr(file, ".");
   ptr = file;
