@@ -385,6 +385,10 @@ void csImageMemory::InternalConvertFromPal8 (iDataBuffer* imageData,
       delete[] iPalette;
       break;
     }
+    default:
+      delete[] iPalette;
+      delete[] alpha;
+      break;
   }
   if ((Format & CS_IMGFMT_ALPHA)
    && ((Format & CS_IMGFMT_MASK) != CS_IMGFMT_TRUECOLOR)

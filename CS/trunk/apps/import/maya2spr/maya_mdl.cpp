@@ -225,6 +225,7 @@ bool Maya4Model::WriteSPR(const char* spritename, csArray<Animation*>& anims)
   if (!anims.GetSize())
   {
     setError("At least one action animation is required.");  
+    fclose (f);
     return false;
   }
 

@@ -675,7 +675,10 @@ const char* csGenmeshAnimationControlFactory::ParseGroup (iDocumentNode* node,
 	  int from_idx = child->GetAttributeValueAsInt ("from");
 	  int to_idx = child->GetAttributeValueAsInt ("to");
 	  if (to_idx < from_idx)
+	  {
+	    delete group;
 	    return "Bad range in group definition!";
+	  }
 	  float weight = child->GetAttributeValueAsFloat ("weight");
 	  float col_weight = child->GetAttributeValueAsFloat ("col_weight");
 	  int i;
@@ -694,7 +697,11 @@ const char* csGenmeshAnimationControlFactory::ParseGroup (iDocumentNode* node,
       case XMLTOKEN_GROUP:
         {
 	  const char* err = ParseGroup (child, group);
-	  if (err != 0) return err;
+	  if (err != 0)
+	  {
+	    delete group;
+	    return err;
+	  }
 	}
         break;
       default:

@@ -794,7 +794,11 @@ CS_PLUGIN_NAMESPACE_BEGIN(XMLShader)
     if (!readFromCache)
     {
       // shaderweaver wants us to fail loading so it can re-weave
-      if (forceCacheLoad) return false;
+      if (forceCacheLoad)
+      {
+	delete condReader;
+	return false;
+      }
 
       // Getting from cache failed, so prep for writing to cache
       cacheFile.AttachNew (new csMemFile ());

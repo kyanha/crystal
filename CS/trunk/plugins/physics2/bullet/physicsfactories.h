@@ -333,7 +333,7 @@ CS_PLUGIN_NAMESPACE_BEGIN (Bullet2)
   BulletSoftClothFactory (csBulletSystem* system) : scfImplementationType (this, system),
       withDiagonals (false)
     {
-      for (size_t i; i < 4; ++i) corners[i] = csVector3 (i);
+      for (size_t i = 0; i < 4; ++i) corners[i] = csVector3 (i);
       counts[0] = counts[1] = 10;
     }
 

@@ -173,7 +173,7 @@ void WalkTestRecorder::SaveRecording (iVFS* vfs, const char* fName)
     else
     {
       size_t _len = strlen (reccam->sector->QueryObject ()->GetName ());
-      len = (_len > 255) ? 255 : (unsigned char)len;
+      len = (_len > 255) ? 255 : (unsigned char)_len;
       cf->Write ((char*)&len, 1);
       cf->Write (reccam->sector->QueryObject ()->GetName (),
       	1+len);
@@ -182,7 +182,7 @@ void WalkTestRecorder::SaveRecording (iVFS* vfs, const char* fName)
     if (reccam->cmd)
     {
       size_t _len = strlen (reccam->cmd);
-      len = (_len > 255) ? 255 : (unsigned char)len;
+      len = (_len > 255) ? 255 : (unsigned char)_len;
       cf->Write ((char*)&len, 1);
       cf->Write (reccam->cmd, 1+len);
     }

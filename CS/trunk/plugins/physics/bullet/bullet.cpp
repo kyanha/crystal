@@ -1177,7 +1177,10 @@ bool csBulletDynamicsSystem::SaveBulletWorld (const char* filename)
 
   if (fwrite (serializer->getBufferPointer (), serializer->getCurrentBufferSize (), 1, file)
       != 1)
+  {
+    fclose (file);
     return false;
+  }
 
   if (fclose(file) == EOF) return false;
 

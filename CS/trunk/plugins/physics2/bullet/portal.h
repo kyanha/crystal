@@ -53,6 +53,7 @@ class SoftBodySynchronizer : public PhysObjSynchronizer
 
 public:
   SoftBodySynchronizer () {}
+  virtual ~SoftBodySynchronizer () { }
 
   void SetupSynchronizer (csBulletSoftBody* cloneObj);
 

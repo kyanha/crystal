@@ -340,7 +340,10 @@ bool ImageBMPFile::LoadWindowsBitmap (uint8* iBuffer, size_t iSize)
       } /* endwhile */
     }
     else
+    {
+      delete[] buffer;
       return false;
+    }
 
     ConvertFromPal8 (buffer, 0, palette, 16);
     return true;

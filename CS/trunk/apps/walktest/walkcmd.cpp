@@ -420,7 +420,7 @@ char* LookForMaterialName(const char* value)
    * name.
    */
 
-  char* matName = new char[strlen(value)];
+  char* matName = new char[strlen(value) + 1];
   int i;
 
   for (i = 0; i < (int)strlen(value) ; i++)
@@ -442,7 +442,7 @@ char* LookForTextureFileName(const char* value)
   // the texture file name.
   int i = 0;
   int j;
-  char* textFileName = new char[strlen(value)];
+  char* textFileName = new char[strlen(value) + 1];
   while (i < (int)strlen(value) && value[i] != ',') i++;
   j = i+1;
   int spaces = 0;

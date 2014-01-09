@@ -189,7 +189,7 @@ bool csConsoleInput::HandleEvent (iEvent &Event)
 	      Callback->Execute (line);
 	    if (line.Length () > 0)
 	    {
-	      HistoryPos = History.Push (csStrNew (line)) + 1;
+	      HistoryPos = History.Push (line) + 1;
 	      while (History.GetSize () > MaxLines)
 		History.DeleteIndex (0);
   	      if(HistoryPos >= History.GetSize ())

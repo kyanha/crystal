@@ -218,6 +218,8 @@ namespace lighter
           case CS_AXIS_Z :
             distance = sideOffset - lightPos.z;
             break;
+	  default:
+	    CS_ASSERT (false);
         }
         if (distance < 0) distance *= -1;
 

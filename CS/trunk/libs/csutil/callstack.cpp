@@ -87,7 +87,7 @@ namespace Impl
   {
     if (callstackHeap == 0)
     {
-      callstackHeap = (CS::Memory::Heap*)malloc (sizeof (CS::Memory::Heap*));
+      callstackHeap = (CS::Memory::Heap*)malloc (sizeof (CS::Memory::Heap));
       new (callstackHeap) CS::Memory::Heap ();
     }
     return callstackHeap;

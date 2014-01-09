@@ -469,6 +469,7 @@ long		i, Count, Bright;
 		Bright = VectList[i].Sum();
 		pSortList[i].OrigIndex = i;
 		pSortList[i].Key = Bright;
+		pTempCounts[i] = 0;
 	}
 
 	qsort(pSortList, Count, sizeof(SortKey), CompareKeys);

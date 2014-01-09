@@ -611,7 +611,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(FurMesh)
     aTRT = - 3 * aR / 2;
 
     bR = 5;
-    bTT = bTT / 2;
+    bTT = bR / 2;
     bTRT = 2 * bTT;
 
     // Fiber properties

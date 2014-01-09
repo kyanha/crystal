@@ -88,7 +88,10 @@ bool csCursorConverter::ConvertTo1bpp (iImage* image, uint8*& bitmap,
     if (dist == 0) break;
   }
   if (fgIndex == -1)
+  {
+    delete[] palPtr;
     return false;
+  }
 
   bool res = InternalConvertTo1bpp (myImage, quantizer, bitmap, mask, 
     fgIndex, transp, palPtr, maxcolors, XbitOrder);

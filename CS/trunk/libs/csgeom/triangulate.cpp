@@ -116,6 +116,7 @@ bool csTriangulate2::Process(const csContour2 &contour, csTriangleMesh &result, 
     if (0 >= (count--))
     {
       //** Triangulate: ERROR - probable bad polygon!
+      delete [] V;
       return false;
     }
 
