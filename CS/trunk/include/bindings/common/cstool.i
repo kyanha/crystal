@@ -20,6 +20,7 @@
 %include "cstool/primitives.h"
 
 %include "cstool/genmeshbuilder.h"
+%include "cstool/procmesh.h"
 
 %ignore csPen::Rotate;
 
