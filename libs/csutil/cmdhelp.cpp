@@ -190,6 +190,7 @@ void csCommandLineHelper::AddCommandLineOption (const char* name, const char* de
   opdescription.name = name;
   opdescription.description = description;
   opdescription.type = value.GetType ();
+  opdescription.id = commandSections[section].commandOptions.GetSize();
 
   Option option;
   option.value = value;
