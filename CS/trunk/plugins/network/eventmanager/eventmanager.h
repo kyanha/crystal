@@ -95,7 +95,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(EventManager)
     typedef csHash<iSocket *, csRef<iAddress> > SocketHash;
 
     // main object registry
-    csRef<iObjectRegistry> objectRegistry;
+    iObjectRegistry* objectRegistry;
 
     // the queue we belong to
     csRef<iEventQueue> queue;

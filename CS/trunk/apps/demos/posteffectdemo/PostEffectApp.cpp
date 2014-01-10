@@ -19,7 +19,7 @@ csFrame * csFrame::m_pInstance = NULL;
 
 IMPLEMENT_APP(PostEffectApp)
 
-csRef<iObjectRegistry>  reg;
+iObjectRegistry*  reg;
 
 bool PostEffectApp::OnInit()
 {
