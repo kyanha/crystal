@@ -265,7 +265,8 @@ bool SndTest::Application()
     return false;
 
   cur_angle = 0;
-  sndrenderer->GetListener ()->SetPosition (csVector3 (0, 0, 0));
+  if (sndrenderer->GetListener ())
+    sndrenderer->GetListener ()->SetPosition (csVector3 (0, 0, 0));
 
   // This calls the default runloop. This will basically just keep
   // broadcasting process events to keep the game going.
