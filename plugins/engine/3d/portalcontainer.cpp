@@ -201,12 +201,12 @@ void csPortalContainer::Prepare ()
     prt->SetObjectPlane (poly.ComputePlane ());
   }
   delete[] vt;
-  object_bbox.StartBoundingBox ();
+  boundingbox.StartBoundingBox ();
   for (i = 0 ; i < vertices.GetSize () ; i++)
-    object_bbox.AddBoundingVertex (vertices[i]);
+    boundingbox.AddBoundingVertex (vertices[i]);
 
   object_radius = csQsqrt (csSquaredDist::PointPoint (
-  	object_bbox.Max (), object_bbox.Min ())) * 0.5f;
+  	boundingbox.Max (), boundingbox.Min ())) * 0.5f;
 
 }
 
@@ -786,7 +786,7 @@ void csPortalContainer::GetBoundingSpheres (iRenderView* rview,
   }
 
   csSphere sphere;
-  sphere.SetCenter (object_bbox.GetCenter ());
+  sphere.SetCenter (boundingbox.GetCenter ());
   sphere.SetRadius (object_radius);
 
   uint8 local_t2c[sizeof(csReversibleTransform)];
@@ -887,7 +887,7 @@ bool csPortalContainer::HitBeamObject (const csVector3& start,
 void csPortalContainer::GetRadius (float& radius, csVector3& center)
 {
   Prepare ();
-  center = object_bbox.GetCenter ();
+  center = boundingbox.GetCenter ();
   radius = object_radius;
 }
 

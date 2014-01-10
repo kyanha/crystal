@@ -117,7 +117,7 @@ private:
 
   // Object space data.
   csDirtyAccessArray<csVector3> vertices;
-  csBox3 object_bbox;
+  // csBox3 boundingbox; // defined in csMeshObject
   float object_radius;
 
   csRef<iShaderManager> shader_man;
@@ -209,11 +209,11 @@ public:
   virtual const csBox3& GetObjectBoundingBox ()
   {
     Prepare ();
-    return object_bbox;
+    return boundingbox;
   }
   virtual void SetObjectBoundingBox (const csBox3& bbox)
   {
-    object_bbox = bbox;
+    boundingbox = bbox;
     ShapeChanged ();
   }
   virtual void GetRadius (float& radius, csVector3& center);
