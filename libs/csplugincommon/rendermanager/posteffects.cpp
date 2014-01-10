@@ -234,7 +234,7 @@ bool PostEffectLayersParser::GetLayerAttributes (iDocumentNode* layerNode,
   }
   mip = layerNode->GetAttributeValueAsBool ("mipmap", false);
   maxmip = layerNode->GetAttributeValueAsInt ("maxmipmap", -1);
-  if (name.Find(".") != -1)
+  if (name.Find(".") != (size_t)-1)
   {
     csReport (objReg, CS_REPORTER_SEVERITY_ERROR, messageID,
       "Invalid layer name: %s, character \'.\' is not allowed!", CS::Quote::Single (name));

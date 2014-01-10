@@ -269,8 +269,6 @@ bool csFrame::LoadInterface ()
     return false;
   }
 
-  iGraphics2D *g2d = g3d->GetDriver2D ();
-
   SetSize(1024, 768);
   canvasPanel = wxXmlResource::Get ()->LoadPanel (this, wxT ("Canvas"));
   optionsPanel = wxXmlResource::Get ()->LoadPanel (this, wxT ("effectUI"));

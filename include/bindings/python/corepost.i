@@ -83,7 +83,7 @@
     %}
 }
 
-%extend csKeyModifiers {
+%extend _csKeyModifiers {
   unsigned int __getitem__ (size_t i) const
   {
       if (i<csKeyModifierTypeLast)
