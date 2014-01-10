@@ -36,7 +36,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(DocPreproc)
                                                          iComponent>
   {
   public:
-    csRef<iObjectRegistry> objectreg;
+    iObjectRegistry* objectreg;
     bool do_verbose;
     bool debugInstrProcessing;
 

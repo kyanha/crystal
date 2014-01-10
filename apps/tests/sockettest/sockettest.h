@@ -28,7 +28,7 @@ struct TCPTest : public ThreadedCallable<TCPTest>
   csRef<iSocket> server;
   csRef<iSocket> serverClient;
   csRef<iAddress> address;
-  csRef<iObjectRegistry> objReg;
+  iObjectRegistry* objReg;
 
   TCPTest(iObjectRegistry* objReg) : objReg(objReg)
   {
@@ -54,7 +54,7 @@ struct UDPTest : public ThreadedCallable<UDPTest>
   csRef<iAddress> clientAddress;
   csRef<iSocket> server;
   csRef<iAddress> serverAddress;
-  csRef<iObjectRegistry> objReg;
+  iObjectRegistry* objReg;
 
   UDPTest(iObjectRegistry* objReg) : objReg(objReg)
   {

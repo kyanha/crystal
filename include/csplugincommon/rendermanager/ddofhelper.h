@@ -63,7 +63,7 @@ namespace CS
       csHash<csRef<iShader>, csString> shaders;
       static const char * messageID;
 
-      csRef<iObjectRegistry> objReg;
+      iObjectRegistry* objReg;
       /**
        * Load the given shader and sets the layer name
        */

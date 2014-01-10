@@ -266,7 +266,7 @@ CS_PLUGIN_NAMESPACE_BEGIN (PostEffect)
     uint curWidth, curHeight;
     PostEffectLayersParser* postEffectParser;
     csRef<iShaderVariableContext> svSharedContext;
-    csRef<iObjectRegistry> reg;
+    iObjectRegistry* reg;
     bool keepAllIntermediates;
 
   public:

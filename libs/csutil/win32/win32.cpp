@@ -85,7 +85,7 @@ private:
   HINSTANCE ModuleHandle;
   int ApplicationShow;
 
-  csRef<iObjectRegistry> registry;
+  iObjectRegistry* registry;
   /// is a console window to be displayed?
   bool console_window;
   /// is the binary linked as GUI or console app?

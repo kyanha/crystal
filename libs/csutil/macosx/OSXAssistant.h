@@ -56,7 +56,7 @@ private:
   bool should_shutdown;			// csevQuit was received.
   bool run_always;		        // Does the run loop process events
                                         // when the app is not focused?
-  csRef<iObjectRegistry> get_registry();
+  iObjectRegistry* get_registry();
   csRef<iEventQueue> get_event_queue();
   csRef<iVirtualClock> get_virtual_clock();
   void init_menu(iConfigFile*);
