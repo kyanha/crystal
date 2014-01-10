@@ -318,17 +318,19 @@ namespace CS
 	    stage.targetH = csMax (stage.targetH, finalParts[l].destRect.ymax);
 	  }
 	  bool lastStage = (stage.targetW <= minSize) && (stage.targetH <= minSize);
+#if 0
 	  uint texFlags =
 	    CS_TEXTURE_3D | CS_TEXTURE_NPOTS | CS_TEXTURE_CLAMP | CS_TEXTURE_SCALE_UP | CS_TEXTURE_NOMIPMAPS;
 
 	  //TODO: fix HDR code to work with the changes made in postprocessing code
-	  /*csString stageFormat;
+	  csString stageFormat;
 	  if (lastStage)
 	    stageFormat = readbackFmt.GetCanonical();
 	  else
 	    stageFormat = computeFX->GetOutputFormat();
 	  stage.target = graphics3D->GetTextureManager ()->CreateTexture (stage.targetW,
-	    stage.targetH, csimg2D, stageFormat, texFlags);*/
+	    stage.targetH, csimg2D, stageFormat, texFlags);
+#endif
 	  
 	  
 	  int targetPixels = stage.targetW * maxBlockSizeX 
@@ -340,14 +342,14 @@ namespace CS
 	  
 	  // Set measureTex as input to first layer of computeFX
 	  stage.svInput->SetValue (inputTex);
-	  
+
+#if 0
+          //TODO: Fix hdr to work with the new implementation of posteffects
 	  iPostEffectLayer* outputLayer = 0;
 	  for (size_t l = 0; l < finalParts.GetSize(); l++)
 	  {
 	    iPostEffectLayer* layer;
 	    PostEffectLayerInputMap inputMap;
-		//TODO: Fix hdr to work with the new implementation of posteffects
-		/*
 	    inputMap.manualInput = stage.svInput;
 	    inputMap.sourceRect = finalParts[l].sourceRect;
 	    inputMap.inputPixelSizeName = "input pixel size";
@@ -370,6 +372,7 @@ namespace CS
 	    if (outputLayer == 0) outputLayer = layer;
 		*/
 	  }
+#endif
 	  return !lastStage;
 	}
 	

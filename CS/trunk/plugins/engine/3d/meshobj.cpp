@@ -659,7 +659,6 @@ CS::Graphics::RenderMesh** csMeshWrapper::GetExtraRenderMeshes (size_t& num,
   // So if multiple portals arrive in a sector containing this object the
   // object will be rendered at the first portal and not clipped to that
   // portal (as is usually the case).
-  csRenderContext* old_ctxt = 0;
 
   if (flags.Check (CS_ENTITY_NOCLIP))
   {
@@ -675,7 +674,6 @@ CS::Graphics::RenderMesh** csMeshWrapper::GetExtraRenderMeshes (size_t& num,
     }
     last_camera = ctxt->icamera;
     last_frame_number = rview->GetCurrentFrameNumber ();
-    old_ctxt = ctxt;
     // Go back to top-level context.
     while (ctxt->previous) ctxt = ctxt->previous;
     csrview->SetCsRenderContext (ctxt);
