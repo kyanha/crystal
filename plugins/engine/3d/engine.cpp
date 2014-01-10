@@ -2956,19 +2956,32 @@ csPtr<iMeshWrapper> csEngine::CreatePortal (
     mesh = sourceSector->GetMeshes ()->FindByName (name);
     if (mesh)
     {
-      pc = 
-  	scfQueryInterface<iPortalContainer> (mesh->GetMeshObject ());
+      pc = scfQueryInterface<iPortalContainer> (mesh->GetMeshObject ());
       if (!pc) mesh = 0;
     }
   }
   if (!mesh)
   {
-    mesh = CreatePortalContainer (name, sourceSector, pos);
-    pc = 
-  	scfQueryInterface<iPortalContainer> (mesh->GetMeshObject ());
+    // Avoid registering the portal container until a portal is added
+    // and a bounding box is defined.
+    mesh = CreatePortalContainer (name, NULL, pos);
+    pc = scfQueryInterface<iPortalContainer> (mesh->GetMeshObject ());
+    portal = pc->CreatePortal (vertices, num_vertices);
+    portal->SetSector (destSector);
+    if (sourceSector)
+    {
+      iMeshWrapper* meshwrap = mesh;
+      csMeshWrapper *csmesh = static_cast<csMeshWrapper *> (meshwrap);
+      (csmesh->GetCsMovable ()).BaseMovable::SetSector (sourceSector);
+      (csmesh->GetCsMovable ()).BaseMovable::SetPosition (pos);
+      (csmesh->GetCsMovable ()).BaseMovable::UpdateMove ();
+    }
   }
-  portal = pc->CreatePortal (vertices, num_vertices);
-  portal->SetSector (destSector);
+  else
+  {
+    portal = pc->CreatePortal (vertices, num_vertices);
+    portal->SetSector (destSector);
+  }
   return csPtr<iMeshWrapper> (mesh);
 }
 
