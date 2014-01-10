@@ -560,13 +560,20 @@ void csInitializer::DestroyApplication (iObjectRegistry* r)
   // make SCF queries as they are destroyed, so this must occur before SCF is
   // finalized (see below).
   r->Clear ();
-  r->DecRef (); // @@@ Why is this being done? !!!
 
   // Destroy all static variables created by CS_IMPLEMENT_STATIC_VAR() or one
   // of its cousins.
   CS_STATIC_VARIABLE_CLEANUP
 
   iSCF::SCF->Finish();
+
+#ifdef CS_DEBUG
+  // Warn user about unreleased references to iObjectRegistry
+  if (r->GetRefCount() != 1)
+    csPrintfErr("WARNING: %d unreleased references to iObjectRegistry!\n",
+                r->GetRefCount());
+#endif
+  delete r;
 
   config_done = false;
   installed_event_handler = 0;
