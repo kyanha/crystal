@@ -23358,6 +23358,48 @@ sub ACQUIRE {
 }
 
 
+############# Class : cspace::csMeshOnTexture ##############
+
+package cspace::csMeshOnTexture;
+use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
+@ISA = qw( cspace );
+%OWNER = ();
+%ITERATORS = ();
+sub new {
+    my $pkg = shift;
+    my $self = cspacec::new_csMeshOnTexture(@_);
+    bless $self, $pkg if defined($self);
+}
+
+sub DESTROY {
+    return unless $_[0]->isa('HASH');
+    my $self = tied(%{$_[0]});
+    return unless defined $self;
+    delete $ITERATORS{$self};
+    if (exists $OWNER{$self}) {
+        cspacec::delete_csMeshOnTexture($self);
+        delete $OWNER{$self};
+    }
+}
+
+*GetView = *cspacec::csMeshOnTexture_GetView;
+*ScaleCamera = *cspacec::csMeshOnTexture_ScaleCamera;
+*Render = *cspacec::csMeshOnTexture_Render;
+*PrepareRender = *cspacec::csMeshOnTexture_PrepareRender;
+*DoRender = *cspacec::csMeshOnTexture_DoRender;
+sub DISOWN {
+    my $self = shift;
+    my $ptr = tied(%$self);
+    delete $OWNER{$ptr};
+}
+
+sub ACQUIRE {
+    my $self = shift;
+    my $ptr = tied(%$self);
+    $OWNER{$ptr} = 1;
+}
+
+
 ############# Class : cspace::csPenCoordinate ##############
 
 package cspace::csPenCoordinate;

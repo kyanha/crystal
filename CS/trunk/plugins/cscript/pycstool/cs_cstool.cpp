@@ -2592,272 +2592,273 @@ SWIG_Python_MustGetPtr(PyObject *obj, swig_type_info *ty, int argnum, int flags)
 #define SWIGTYPE_p_csImageBase swig_types[69]
 #define SWIGTYPE_p_csImageMemory swig_types[70]
 #define SWIGTYPE_p_csIntersectingTriangle swig_types[71]
-#define SWIGTYPE_p_csObject swig_types[72]
-#define SWIGTYPE_p_csPen swig_types[73]
-#define SWIGTYPE_p_csPen3D swig_types[74]
-#define SWIGTYPE_p_csPen3DCoordinatePair swig_types[75]
-#define SWIGTYPE_p_csPenCache swig_types[76]
-#define SWIGTYPE_p_csPenCoordinate swig_types[77]
-#define SWIGTYPE_p_csPenCoordinatePair swig_types[78]
-#define SWIGTYPE_p_csPixmap swig_types[79]
-#define SWIGTYPE_p_csPrimitives swig_types[80]
-#define SWIGTYPE_p_csProcAnimated swig_types[81]
-#define SWIGTYPE_p_csProcTexture swig_types[82]
-#define SWIGTYPE_p_csRefArrayT_iObject_t swig_types[83]
-#define SWIGTYPE_p_csRefArrayT_iThreadReturn_t swig_types[84]
-#define SWIGTYPE_p_csRefT_iBase_t swig_types[85]
-#define SWIGTYPE_p_csReversibleTransform swig_types[86]
-#define SWIGTYPE_p_csScreenTargetResult swig_types[87]
-#define SWIGTYPE_p_csSetT_csPtrKeyT_iMeshWrapper_t_CS__Memory__AllocatorMalloc_t swig_types[88]
-#define SWIGTYPE_p_csShortestDistanceResult swig_types[89]
-#define SWIGTYPE_p_csSimplePixmap swig_types[90]
-#define SWIGTYPE_p_csSimpleRenderMesh swig_types[91]
-#define SWIGTYPE_p_csStringArray swig_types[92]
-#define SWIGTYPE_p_csThreadManager swig_types[93]
-#define SWIGTYPE_p_csThreadReturn swig_types[94]
-#define SWIGTYPE_p_csTraceBeamResult swig_types[95]
-#define SWIGTYPE_p_csVector2 swig_types[96]
-#define SWIGTYPE_p_csVector3 swig_types[97]
-#define SWIGTYPE_p_csView swig_types[98]
-#define SWIGTYPE_p_iAnimatedImage swig_types[99]
-#define SWIGTYPE_p_iArrayChangeAllT_csCollisionPair_t swig_types[100]
-#define SWIGTYPE_p_iArrayChangeAllT_csShaderVariable_p_t swig_types[101]
-#define SWIGTYPE_p_iArrayChangeElementsT_csCollisionPair_t swig_types[102]
-#define SWIGTYPE_p_iArrayChangeElementsT_csShaderVariable_p_t swig_types[103]
-#define SWIGTYPE_p_iArrayReadOnlyT_csCollisionPair_t swig_types[104]
-#define SWIGTYPE_p_iArrayReadOnlyT_csShaderVariable_p_t swig_types[105]
-#define SWIGTYPE_p_iArrayReadOnlyT_iCollection_p_t swig_types[106]
-#define SWIGTYPE_p_iArrayReadOnlyT_iSceneNode_p_t swig_types[107]
-#define SWIGTYPE_p_iBase swig_types[108]
-#define SWIGTYPE_p_iBlob swig_types[109]
-#define SWIGTYPE_p_iBlobImage swig_types[110]
-#define SWIGTYPE_p_iBlobManager swig_types[111]
-#define SWIGTYPE_p_iBlobViewPort swig_types[112]
-#define SWIGTYPE_p_iBodyGroup swig_types[113]
-#define SWIGTYPE_p_iBugPlug swig_types[114]
-#define SWIGTYPE_p_iBugPlugRenderObject swig_types[115]
-#define SWIGTYPE_p_iCacheManager swig_types[116]
-#define SWIGTYPE_p_iCamera swig_types[117]
-#define SWIGTYPE_p_iCameraListener swig_types[118]
-#define SWIGTYPE_p_iCameraPosition swig_types[119]
-#define SWIGTYPE_p_iCameraPositionList swig_types[120]
-#define SWIGTYPE_p_iCameraSectorListener swig_types[121]
-#define SWIGTYPE_p_iClipper2D swig_types[122]
-#define SWIGTYPE_p_iCollection swig_types[123]
-#define SWIGTYPE_p_iCollideSystem swig_types[124]
-#define SWIGTYPE_p_iCollider swig_types[125]
-#define SWIGTYPE_p_iCommandLineParser swig_types[126]
-#define SWIGTYPE_p_iComponent swig_types[127]
-#define SWIGTYPE_p_iConfigFile swig_types[128]
-#define SWIGTYPE_p_iConfigIterator swig_types[129]
-#define SWIGTYPE_p_iConfigManager swig_types[130]
-#define SWIGTYPE_p_iConsoleExecCallback swig_types[131]
-#define SWIGTYPE_p_iConsoleInput swig_types[132]
-#define SWIGTYPE_p_iConsoleOutput swig_types[133]
-#define SWIGTYPE_p_iConsoleWatcher swig_types[134]
-#define SWIGTYPE_p_iCustomMatrixCamera swig_types[135]
-#define SWIGTYPE_p_iDataBuffer swig_types[136]
-#define SWIGTYPE_p_iDebugHelper swig_types[137]
-#define SWIGTYPE_p_iDecalManager swig_types[138]
-#define SWIGTYPE_p_iDecalTemplate swig_types[139]
-#define SWIGTYPE_p_iDocument swig_types[140]
-#define SWIGTYPE_p_iDocumentAttribute swig_types[141]
-#define SWIGTYPE_p_iDocumentAttributeIterator swig_types[142]
-#define SWIGTYPE_p_iDocumentNode swig_types[143]
-#define SWIGTYPE_p_iDocumentNodeIterator swig_types[144]
-#define SWIGTYPE_p_iDocumentSystem swig_types[145]
-#define SWIGTYPE_p_iDynamicSystem swig_types[146]
-#define SWIGTYPE_p_iDynamics swig_types[147]
-#define SWIGTYPE_p_iDynamicsColliderCollisionCallback swig_types[148]
-#define SWIGTYPE_p_iDynamicsCollisionCallback swig_types[149]
-#define SWIGTYPE_p_iDynamicsMoveCallback swig_types[150]
-#define SWIGTYPE_p_iDynamicsStepCallback swig_types[151]
-#define SWIGTYPE_p_iDynamicsSystemCollider swig_types[152]
-#define SWIGTYPE_p_iEngine swig_types[153]
-#define SWIGTYPE_p_iEngineFrameCallback swig_types[154]
-#define SWIGTYPE_p_iEngineSectorCallback swig_types[155]
-#define SWIGTYPE_p_iEngineSequenceManager swig_types[156]
-#define SWIGTYPE_p_iEngineSequenceParameters swig_types[157]
-#define SWIGTYPE_p_iEvent swig_types[158]
-#define SWIGTYPE_p_iEventAttributeIterator swig_types[159]
-#define SWIGTYPE_p_iEventCord swig_types[160]
-#define SWIGTYPE_p_iEventHandler swig_types[161]
-#define SWIGTYPE_p_iEventHandlerRegistry swig_types[162]
-#define SWIGTYPE_p_iEventNameRegistry swig_types[163]
-#define SWIGTYPE_p_iEventOutlet swig_types[164]
-#define SWIGTYPE_p_iEventPlug swig_types[165]
-#define SWIGTYPE_p_iEventQueue swig_types[166]
-#define SWIGTYPE_p_iFactory swig_types[167]
-#define SWIGTYPE_p_iFile swig_types[168]
-#define SWIGTYPE_p_iFont swig_types[169]
-#define SWIGTYPE_p_iFontDeleteNotify swig_types[170]
-#define SWIGTYPE_p_iFontServer swig_types[171]
-#define SWIGTYPE_p_iFrameEventSignpost swig_types[172]
-#define SWIGTYPE_p_iGeneralFactoryState swig_types[173]
-#define SWIGTYPE_p_iGeom swig_types[174]
-#define SWIGTYPE_p_iGraphics2D swig_types[175]
-#define SWIGTYPE_p_iGraphics3D swig_types[176]
-#define SWIGTYPE_p_iGraphicsCanvas swig_types[177]
-#define SWIGTYPE_p_iHalo swig_types[178]
-#define SWIGTYPE_p_iImage swig_types[179]
-#define SWIGTYPE_p_iImageIO swig_types[180]
-#define SWIGTYPE_p_iImageModifier swig_types[181]
-#define SWIGTYPE_p_iJob swig_types[182]
-#define SWIGTYPE_p_iJoint swig_types[183]
-#define SWIGTYPE_p_iJoystickDriver swig_types[184]
-#define SWIGTYPE_p_iKeyComposer swig_types[185]
-#define SWIGTYPE_p_iKeyboardDriver swig_types[186]
-#define SWIGTYPE_p_iLODControl swig_types[187]
-#define SWIGTYPE_p_iLight swig_types[188]
-#define SWIGTYPE_p_iLightCallback swig_types[189]
-#define SWIGTYPE_p_iLightFactory swig_types[190]
-#define SWIGTYPE_p_iLightFactoryList swig_types[191]
-#define SWIGTYPE_p_iLightIterator swig_types[192]
-#define SWIGTYPE_p_iLightList swig_types[193]
-#define SWIGTYPE_p_iLightVisibleCallback swig_types[194]
-#define SWIGTYPE_p_iMapNode swig_types[195]
-#define SWIGTYPE_p_iMaterial swig_types[196]
-#define SWIGTYPE_p_iMaterialEngine swig_types[197]
-#define SWIGTYPE_p_iMaterialList swig_types[198]
-#define SWIGTYPE_p_iMaterialWrapper swig_types[199]
-#define SWIGTYPE_p_iMeshDrawCallback swig_types[200]
-#define SWIGTYPE_p_iMeshFactoryList swig_types[201]
-#define SWIGTYPE_p_iMeshFactoryWrapper swig_types[202]
-#define SWIGTYPE_p_iMeshFactoryWrapperIterator swig_types[203]
-#define SWIGTYPE_p_iMeshList swig_types[204]
-#define SWIGTYPE_p_iMeshWrapper swig_types[205]
-#define SWIGTYPE_p_iMeshWrapperIterator swig_types[206]
-#define SWIGTYPE_p_iMouseDriver swig_types[207]
-#define SWIGTYPE_p_iMovable swig_types[208]
-#define SWIGTYPE_p_iMovableListener swig_types[209]
-#define SWIGTYPE_p_iMovieRecorder swig_types[210]
-#define SWIGTYPE_p_iMovingObject swig_types[211]
-#define SWIGTYPE_p_iNativeWindow swig_types[212]
-#define SWIGTYPE_p_iNativeWindowManager swig_types[213]
-#define SWIGTYPE_p_iODEAMotorJoint swig_types[214]
-#define SWIGTYPE_p_iODEBallJoint swig_types[215]
-#define SWIGTYPE_p_iODEDynamicState swig_types[216]
-#define SWIGTYPE_p_iODEDynamicSystemState swig_types[217]
-#define SWIGTYPE_p_iODEFrameUpdateCallback swig_types[218]
-#define SWIGTYPE_p_iODEGeneralJointState swig_types[219]
-#define SWIGTYPE_p_iODEHinge2Joint swig_types[220]
-#define SWIGTYPE_p_iODEHingeJoint swig_types[221]
-#define SWIGTYPE_p_iODEJointState swig_types[222]
-#define SWIGTYPE_p_iODESliderJoint swig_types[223]
-#define SWIGTYPE_p_iODEUniversalJoint swig_types[224]
-#define SWIGTYPE_p_iObject swig_types[225]
-#define SWIGTYPE_p_iObjectIterator swig_types[226]
-#define SWIGTYPE_p_iObjectNameChangeListener swig_types[227]
-#define SWIGTYPE_p_iObjectRegistry swig_types[228]
-#define SWIGTYPE_p_iObjectRegistryIterator swig_types[229]
-#define SWIGTYPE_p_iParameterESM swig_types[230]
-#define SWIGTYPE_p_iPath swig_types[231]
-#define SWIGTYPE_p_iPerspectiveCamera swig_types[232]
-#define SWIGTYPE_p_iPluginIterator swig_types[233]
-#define SWIGTYPE_p_iPluginManager swig_types[234]
-#define SWIGTYPE_p_iPortal swig_types[235]
-#define SWIGTYPE_p_iPortalCallback swig_types[236]
-#define SWIGTYPE_p_iPortalContainer swig_types[237]
-#define SWIGTYPE_p_iProcTexCallback swig_types[238]
-#define SWIGTYPE_p_iProcTexture swig_types[239]
-#define SWIGTYPE_p_iRenderManager swig_types[240]
-#define SWIGTYPE_p_iRenderManagerPostEffects swig_types[241]
-#define SWIGTYPE_p_iRenderManagerTargets swig_types[242]
-#define SWIGTYPE_p_iRenderManagerVisCull swig_types[243]
-#define SWIGTYPE_p_iReporter swig_types[244]
-#define SWIGTYPE_p_iReporterIterator swig_types[245]
-#define SWIGTYPE_p_iReporterListener swig_types[246]
-#define SWIGTYPE_p_iRigidBody swig_types[247]
-#define SWIGTYPE_p_iSCF swig_types[248]
-#define SWIGTYPE_p_iSceneNode swig_types[249]
-#define SWIGTYPE_p_iSceneNodeArray swig_types[250]
-#define SWIGTYPE_p_iScript swig_types[251]
-#define SWIGTYPE_p_iScriptObject swig_types[252]
-#define SWIGTYPE_p_iScriptValue swig_types[253]
-#define SWIGTYPE_p_iSector swig_types[254]
-#define SWIGTYPE_p_iSectorCallback swig_types[255]
-#define SWIGTYPE_p_iSectorIterator swig_types[256]
-#define SWIGTYPE_p_iSectorList swig_types[257]
-#define SWIGTYPE_p_iSectorMeshCallback swig_types[258]
-#define SWIGTYPE_p_iSequence swig_types[259]
-#define SWIGTYPE_p_iSequenceCondition swig_types[260]
-#define SWIGTYPE_p_iSequenceManager swig_types[261]
-#define SWIGTYPE_p_iSequenceOperation swig_types[262]
-#define SWIGTYPE_p_iSequenceTimedOperation swig_types[263]
-#define SWIGTYPE_p_iSequenceTrigger swig_types[264]
-#define SWIGTYPE_p_iSequenceWrapper swig_types[265]
-#define SWIGTYPE_p_iShader swig_types[266]
-#define SWIGTYPE_p_iShaderCompiler swig_types[267]
-#define SWIGTYPE_p_iShaderManager swig_types[268]
-#define SWIGTYPE_p_iShaderPassesActivator swig_types[269]
-#define SWIGTYPE_p_iShaderPriorityList swig_types[270]
-#define SWIGTYPE_p_iShaderVarStringSet swig_types[271]
-#define SWIGTYPE_p_iShaderVariableAccessor swig_types[272]
-#define SWIGTYPE_p_iShaderVariableContext swig_types[273]
-#define SWIGTYPE_p_iSimpleFormerState swig_types[274]
-#define SWIGTYPE_p_iStandardReporterListener swig_types[275]
-#define SWIGTYPE_p_iString swig_types[276]
-#define SWIGTYPE_p_iStringArray swig_types[277]
-#define SWIGTYPE_p_iStringSet swig_types[278]
-#define SWIGTYPE_p_iStringSetBaseT_CS__StringSetTag__General_t swig_types[279]
-#define SWIGTYPE_p_iStringSetBaseT_CS__StringSetTag__ShaderVar_t swig_types[280]
-#define SWIGTYPE_p_iTerraFormer swig_types[281]
-#define SWIGTYPE_p_iTerraSampler swig_types[282]
-#define SWIGTYPE_p_iTerrainSystem swig_types[283]
-#define SWIGTYPE_p_iTextureCallback swig_types[284]
-#define SWIGTYPE_p_iTextureHandle swig_types[285]
-#define SWIGTYPE_p_iTextureList swig_types[286]
-#define SWIGTYPE_p_iTextureManager swig_types[287]
-#define SWIGTYPE_p_iTextureWrapper swig_types[288]
-#define SWIGTYPE_p_iThreadManager swig_types[289]
-#define SWIGTYPE_p_iThreadReturn swig_types[290]
-#define SWIGTYPE_p_iTranslator swig_types[291]
-#define SWIGTYPE_p_iTriangleMesh swig_types[292]
-#define SWIGTYPE_p_iVFS swig_types[293]
-#define SWIGTYPE_p_iView swig_types[294]
-#define SWIGTYPE_p_iVirtualClock swig_types[295]
-#define SWIGTYPE_p_iVisibilityCuller swig_types[296]
-#define SWIGTYPE_p_iVisibilityCullerListener swig_types[297]
-#define SWIGTYPE_p_iVisibilityObject swig_types[298]
-#define SWIGTYPE_p_iVisibilityObjectIterator swig_types[299]
-#define SWIGTYPE_p_int swig_types[300]
-#define SWIGTYPE_p_int16_t swig_types[301]
-#define SWIGTYPE_p_int64_t swig_types[302]
-#define SWIGTYPE_p_int8_t swig_types[303]
-#define SWIGTYPE_p_long_long swig_types[304]
-#define SWIGTYPE_p_p_csReversibleTransform swig_types[305]
-#define SWIGTYPE_p_p_iCollider swig_types[306]
-#define SWIGTYPE_p_p_iMeshWrapper swig_types[307]
-#define SWIGTYPE_p_p_iSector swig_types[308]
-#define SWIGTYPE_p_p_void swig_types[309]
-#define SWIGTYPE_p_scfFakeInterfaceT_csColliderWrapper_t swig_types[310]
-#define SWIGTYPE_p_scfImplementation1T_FrameBegin3DDraw_iEventHandler_t swig_types[311]
-#define SWIGTYPE_p_scfImplementation1T_FramePrinter_iEventHandler_t swig_types[312]
-#define SWIGTYPE_p_scfImplementation1T_csConfigFile_iConfigFile_t swig_types[313]
-#define SWIGTYPE_p_scfImplementation1T_csEventHandlerRegistry_iEventHandlerRegistry_t swig_types[314]
-#define SWIGTYPE_p_scfImplementation1T_csImageBase_iImage_t swig_types[315]
-#define SWIGTYPE_p_scfImplementation1T_csObject_iObject_t swig_types[316]
-#define SWIGTYPE_p_scfImplementation1T_csView_iView_t swig_types[317]
-#define SWIGTYPE_p_scfImplementation2T_FrameSignpost_2DConsole_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_t swig_types[318]
-#define SWIGTYPE_p_scfImplementation2T_FrameSignpost_3D2D_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_t swig_types[319]
-#define SWIGTYPE_p_scfImplementation2T_FrameSignpost_ConsoleDebug_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_t swig_types[320]
-#define SWIGTYPE_p_scfImplementation2T_FrameSignpost_DebugFrame_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_t swig_types[321]
-#define SWIGTYPE_p_scfImplementation2T_FrameSignpost_Logic3D_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_t swig_types[322]
-#define SWIGTYPE_p_scfImplementationExt0T_csImageMemory_csImageBase_t swig_types[323]
-#define SWIGTYPE_p_scfImplementationExt1T_csColliderWrapper_csObject_scfFakeInterfaceT_csColliderWrapper_t_t swig_types[324]
-#define SWIGTYPE_p_scfImplementationExt1T_csPath_csObject_iPath_t swig_types[325]
-#define SWIGTYPE_p_scfImplementationExt3T_csProcTexture_csObject_iTextureWrapper_iProcTexture_iSelfDet swig_types[326]
-#define SWIGTYPE_p_scfInterfaceMetadataList swig_types[327]
-#define SWIGTYPE_p_uint16_t swig_types[328]
-#define SWIGTYPE_p_uint32_t swig_types[329]
-#define SWIGTYPE_p_uint64_t swig_types[330]
-#define SWIGTYPE_p_uint8_t swig_types[331]
-#define SWIGTYPE_p_unsigned_int swig_types[332]
-#define SWIGTYPE_p_unsigned_long swig_types[333]
-#define SWIGTYPE_p_unsigned_long_long swig_types[334]
-#define SWIGTYPE_p_void swig_types[335]
-static swig_type_info *swig_types[337];
-static swig_module_info swig_module = {swig_types, 336, 0, 0, 0, 0};
+#define SWIGTYPE_p_csMeshOnTexture swig_types[72]
+#define SWIGTYPE_p_csObject swig_types[73]
+#define SWIGTYPE_p_csPen swig_types[74]
+#define SWIGTYPE_p_csPen3D swig_types[75]
+#define SWIGTYPE_p_csPen3DCoordinatePair swig_types[76]
+#define SWIGTYPE_p_csPenCache swig_types[77]
+#define SWIGTYPE_p_csPenCoordinate swig_types[78]
+#define SWIGTYPE_p_csPenCoordinatePair swig_types[79]
+#define SWIGTYPE_p_csPixmap swig_types[80]
+#define SWIGTYPE_p_csPrimitives swig_types[81]
+#define SWIGTYPE_p_csProcAnimated swig_types[82]
+#define SWIGTYPE_p_csProcTexture swig_types[83]
+#define SWIGTYPE_p_csRefArrayT_iObject_t swig_types[84]
+#define SWIGTYPE_p_csRefArrayT_iThreadReturn_t swig_types[85]
+#define SWIGTYPE_p_csRefT_iBase_t swig_types[86]
+#define SWIGTYPE_p_csReversibleTransform swig_types[87]
+#define SWIGTYPE_p_csScreenTargetResult swig_types[88]
+#define SWIGTYPE_p_csSetT_csPtrKeyT_iMeshWrapper_t_CS__Memory__AllocatorMalloc_t swig_types[89]
+#define SWIGTYPE_p_csShortestDistanceResult swig_types[90]
+#define SWIGTYPE_p_csSimplePixmap swig_types[91]
+#define SWIGTYPE_p_csSimpleRenderMesh swig_types[92]
+#define SWIGTYPE_p_csStringArray swig_types[93]
+#define SWIGTYPE_p_csThreadManager swig_types[94]
+#define SWIGTYPE_p_csThreadReturn swig_types[95]
+#define SWIGTYPE_p_csTraceBeamResult swig_types[96]
+#define SWIGTYPE_p_csVector2 swig_types[97]
+#define SWIGTYPE_p_csVector3 swig_types[98]
+#define SWIGTYPE_p_csView swig_types[99]
+#define SWIGTYPE_p_iAnimatedImage swig_types[100]
+#define SWIGTYPE_p_iArrayChangeAllT_csCollisionPair_t swig_types[101]
+#define SWIGTYPE_p_iArrayChangeAllT_csShaderVariable_p_t swig_types[102]
+#define SWIGTYPE_p_iArrayChangeElementsT_csCollisionPair_t swig_types[103]
+#define SWIGTYPE_p_iArrayChangeElementsT_csShaderVariable_p_t swig_types[104]
+#define SWIGTYPE_p_iArrayReadOnlyT_csCollisionPair_t swig_types[105]
+#define SWIGTYPE_p_iArrayReadOnlyT_csShaderVariable_p_t swig_types[106]
+#define SWIGTYPE_p_iArrayReadOnlyT_iCollection_p_t swig_types[107]
+#define SWIGTYPE_p_iArrayReadOnlyT_iSceneNode_p_t swig_types[108]
+#define SWIGTYPE_p_iBase swig_types[109]
+#define SWIGTYPE_p_iBlob swig_types[110]
+#define SWIGTYPE_p_iBlobImage swig_types[111]
+#define SWIGTYPE_p_iBlobManager swig_types[112]
+#define SWIGTYPE_p_iBlobViewPort swig_types[113]
+#define SWIGTYPE_p_iBodyGroup swig_types[114]
+#define SWIGTYPE_p_iBugPlug swig_types[115]
+#define SWIGTYPE_p_iBugPlugRenderObject swig_types[116]
+#define SWIGTYPE_p_iCacheManager swig_types[117]
+#define SWIGTYPE_p_iCamera swig_types[118]
+#define SWIGTYPE_p_iCameraListener swig_types[119]
+#define SWIGTYPE_p_iCameraPosition swig_types[120]
+#define SWIGTYPE_p_iCameraPositionList swig_types[121]
+#define SWIGTYPE_p_iCameraSectorListener swig_types[122]
+#define SWIGTYPE_p_iClipper2D swig_types[123]
+#define SWIGTYPE_p_iCollection swig_types[124]
+#define SWIGTYPE_p_iCollideSystem swig_types[125]
+#define SWIGTYPE_p_iCollider swig_types[126]
+#define SWIGTYPE_p_iCommandLineParser swig_types[127]
+#define SWIGTYPE_p_iComponent swig_types[128]
+#define SWIGTYPE_p_iConfigFile swig_types[129]
+#define SWIGTYPE_p_iConfigIterator swig_types[130]
+#define SWIGTYPE_p_iConfigManager swig_types[131]
+#define SWIGTYPE_p_iConsoleExecCallback swig_types[132]
+#define SWIGTYPE_p_iConsoleInput swig_types[133]
+#define SWIGTYPE_p_iConsoleOutput swig_types[134]
+#define SWIGTYPE_p_iConsoleWatcher swig_types[135]
+#define SWIGTYPE_p_iCustomMatrixCamera swig_types[136]
+#define SWIGTYPE_p_iDataBuffer swig_types[137]
+#define SWIGTYPE_p_iDebugHelper swig_types[138]
+#define SWIGTYPE_p_iDecalManager swig_types[139]
+#define SWIGTYPE_p_iDecalTemplate swig_types[140]
+#define SWIGTYPE_p_iDocument swig_types[141]
+#define SWIGTYPE_p_iDocumentAttribute swig_types[142]
+#define SWIGTYPE_p_iDocumentAttributeIterator swig_types[143]
+#define SWIGTYPE_p_iDocumentNode swig_types[144]
+#define SWIGTYPE_p_iDocumentNodeIterator swig_types[145]
+#define SWIGTYPE_p_iDocumentSystem swig_types[146]
+#define SWIGTYPE_p_iDynamicSystem swig_types[147]
+#define SWIGTYPE_p_iDynamics swig_types[148]
+#define SWIGTYPE_p_iDynamicsColliderCollisionCallback swig_types[149]
+#define SWIGTYPE_p_iDynamicsCollisionCallback swig_types[150]
+#define SWIGTYPE_p_iDynamicsMoveCallback swig_types[151]
+#define SWIGTYPE_p_iDynamicsStepCallback swig_types[152]
+#define SWIGTYPE_p_iDynamicsSystemCollider swig_types[153]
+#define SWIGTYPE_p_iEngine swig_types[154]
+#define SWIGTYPE_p_iEngineFrameCallback swig_types[155]
+#define SWIGTYPE_p_iEngineSectorCallback swig_types[156]
+#define SWIGTYPE_p_iEngineSequenceManager swig_types[157]
+#define SWIGTYPE_p_iEngineSequenceParameters swig_types[158]
+#define SWIGTYPE_p_iEvent swig_types[159]
+#define SWIGTYPE_p_iEventAttributeIterator swig_types[160]
+#define SWIGTYPE_p_iEventCord swig_types[161]
+#define SWIGTYPE_p_iEventHandler swig_types[162]
+#define SWIGTYPE_p_iEventHandlerRegistry swig_types[163]
+#define SWIGTYPE_p_iEventNameRegistry swig_types[164]
+#define SWIGTYPE_p_iEventOutlet swig_types[165]
+#define SWIGTYPE_p_iEventPlug swig_types[166]
+#define SWIGTYPE_p_iEventQueue swig_types[167]
+#define SWIGTYPE_p_iFactory swig_types[168]
+#define SWIGTYPE_p_iFile swig_types[169]
+#define SWIGTYPE_p_iFont swig_types[170]
+#define SWIGTYPE_p_iFontDeleteNotify swig_types[171]
+#define SWIGTYPE_p_iFontServer swig_types[172]
+#define SWIGTYPE_p_iFrameEventSignpost swig_types[173]
+#define SWIGTYPE_p_iGeneralFactoryState swig_types[174]
+#define SWIGTYPE_p_iGeom swig_types[175]
+#define SWIGTYPE_p_iGraphics2D swig_types[176]
+#define SWIGTYPE_p_iGraphics3D swig_types[177]
+#define SWIGTYPE_p_iGraphicsCanvas swig_types[178]
+#define SWIGTYPE_p_iHalo swig_types[179]
+#define SWIGTYPE_p_iImage swig_types[180]
+#define SWIGTYPE_p_iImageIO swig_types[181]
+#define SWIGTYPE_p_iImageModifier swig_types[182]
+#define SWIGTYPE_p_iJob swig_types[183]
+#define SWIGTYPE_p_iJoint swig_types[184]
+#define SWIGTYPE_p_iJoystickDriver swig_types[185]
+#define SWIGTYPE_p_iKeyComposer swig_types[186]
+#define SWIGTYPE_p_iKeyboardDriver swig_types[187]
+#define SWIGTYPE_p_iLODControl swig_types[188]
+#define SWIGTYPE_p_iLight swig_types[189]
+#define SWIGTYPE_p_iLightCallback swig_types[190]
+#define SWIGTYPE_p_iLightFactory swig_types[191]
+#define SWIGTYPE_p_iLightFactoryList swig_types[192]
+#define SWIGTYPE_p_iLightIterator swig_types[193]
+#define SWIGTYPE_p_iLightList swig_types[194]
+#define SWIGTYPE_p_iLightVisibleCallback swig_types[195]
+#define SWIGTYPE_p_iMapNode swig_types[196]
+#define SWIGTYPE_p_iMaterial swig_types[197]
+#define SWIGTYPE_p_iMaterialEngine swig_types[198]
+#define SWIGTYPE_p_iMaterialList swig_types[199]
+#define SWIGTYPE_p_iMaterialWrapper swig_types[200]
+#define SWIGTYPE_p_iMeshDrawCallback swig_types[201]
+#define SWIGTYPE_p_iMeshFactoryList swig_types[202]
+#define SWIGTYPE_p_iMeshFactoryWrapper swig_types[203]
+#define SWIGTYPE_p_iMeshFactoryWrapperIterator swig_types[204]
+#define SWIGTYPE_p_iMeshList swig_types[205]
+#define SWIGTYPE_p_iMeshWrapper swig_types[206]
+#define SWIGTYPE_p_iMeshWrapperIterator swig_types[207]
+#define SWIGTYPE_p_iMouseDriver swig_types[208]
+#define SWIGTYPE_p_iMovable swig_types[209]
+#define SWIGTYPE_p_iMovableListener swig_types[210]
+#define SWIGTYPE_p_iMovieRecorder swig_types[211]
+#define SWIGTYPE_p_iMovingObject swig_types[212]
+#define SWIGTYPE_p_iNativeWindow swig_types[213]
+#define SWIGTYPE_p_iNativeWindowManager swig_types[214]
+#define SWIGTYPE_p_iODEAMotorJoint swig_types[215]
+#define SWIGTYPE_p_iODEBallJoint swig_types[216]
+#define SWIGTYPE_p_iODEDynamicState swig_types[217]
+#define SWIGTYPE_p_iODEDynamicSystemState swig_types[218]
+#define SWIGTYPE_p_iODEFrameUpdateCallback swig_types[219]
+#define SWIGTYPE_p_iODEGeneralJointState swig_types[220]
+#define SWIGTYPE_p_iODEHinge2Joint swig_types[221]
+#define SWIGTYPE_p_iODEHingeJoint swig_types[222]
+#define SWIGTYPE_p_iODEJointState swig_types[223]
+#define SWIGTYPE_p_iODESliderJoint swig_types[224]
+#define SWIGTYPE_p_iODEUniversalJoint swig_types[225]
+#define SWIGTYPE_p_iObject swig_types[226]
+#define SWIGTYPE_p_iObjectIterator swig_types[227]
+#define SWIGTYPE_p_iObjectNameChangeListener swig_types[228]
+#define SWIGTYPE_p_iObjectRegistry swig_types[229]
+#define SWIGTYPE_p_iObjectRegistryIterator swig_types[230]
+#define SWIGTYPE_p_iParameterESM swig_types[231]
+#define SWIGTYPE_p_iPath swig_types[232]
+#define SWIGTYPE_p_iPerspectiveCamera swig_types[233]
+#define SWIGTYPE_p_iPluginIterator swig_types[234]
+#define SWIGTYPE_p_iPluginManager swig_types[235]
+#define SWIGTYPE_p_iPortal swig_types[236]
+#define SWIGTYPE_p_iPortalCallback swig_types[237]
+#define SWIGTYPE_p_iPortalContainer swig_types[238]
+#define SWIGTYPE_p_iProcTexCallback swig_types[239]
+#define SWIGTYPE_p_iProcTexture swig_types[240]
+#define SWIGTYPE_p_iRenderManager swig_types[241]
+#define SWIGTYPE_p_iRenderManagerPostEffects swig_types[242]
+#define SWIGTYPE_p_iRenderManagerTargets swig_types[243]
+#define SWIGTYPE_p_iRenderManagerVisCull swig_types[244]
+#define SWIGTYPE_p_iReporter swig_types[245]
+#define SWIGTYPE_p_iReporterIterator swig_types[246]
+#define SWIGTYPE_p_iReporterListener swig_types[247]
+#define SWIGTYPE_p_iRigidBody swig_types[248]
+#define SWIGTYPE_p_iSCF swig_types[249]
+#define SWIGTYPE_p_iSceneNode swig_types[250]
+#define SWIGTYPE_p_iSceneNodeArray swig_types[251]
+#define SWIGTYPE_p_iScript swig_types[252]
+#define SWIGTYPE_p_iScriptObject swig_types[253]
+#define SWIGTYPE_p_iScriptValue swig_types[254]
+#define SWIGTYPE_p_iSector swig_types[255]
+#define SWIGTYPE_p_iSectorCallback swig_types[256]
+#define SWIGTYPE_p_iSectorIterator swig_types[257]
+#define SWIGTYPE_p_iSectorList swig_types[258]
+#define SWIGTYPE_p_iSectorMeshCallback swig_types[259]
+#define SWIGTYPE_p_iSequence swig_types[260]
+#define SWIGTYPE_p_iSequenceCondition swig_types[261]
+#define SWIGTYPE_p_iSequenceManager swig_types[262]
+#define SWIGTYPE_p_iSequenceOperation swig_types[263]
+#define SWIGTYPE_p_iSequenceTimedOperation swig_types[264]
+#define SWIGTYPE_p_iSequenceTrigger swig_types[265]
+#define SWIGTYPE_p_iSequenceWrapper swig_types[266]
+#define SWIGTYPE_p_iShader swig_types[267]
+#define SWIGTYPE_p_iShaderCompiler swig_types[268]
+#define SWIGTYPE_p_iShaderManager swig_types[269]
+#define SWIGTYPE_p_iShaderPassesActivator swig_types[270]
+#define SWIGTYPE_p_iShaderPriorityList swig_types[271]
+#define SWIGTYPE_p_iShaderVarStringSet swig_types[272]
+#define SWIGTYPE_p_iShaderVariableAccessor swig_types[273]
+#define SWIGTYPE_p_iShaderVariableContext swig_types[274]
+#define SWIGTYPE_p_iSimpleFormerState swig_types[275]
+#define SWIGTYPE_p_iStandardReporterListener swig_types[276]
+#define SWIGTYPE_p_iString swig_types[277]
+#define SWIGTYPE_p_iStringArray swig_types[278]
+#define SWIGTYPE_p_iStringSet swig_types[279]
+#define SWIGTYPE_p_iStringSetBaseT_CS__StringSetTag__General_t swig_types[280]
+#define SWIGTYPE_p_iStringSetBaseT_CS__StringSetTag__ShaderVar_t swig_types[281]
+#define SWIGTYPE_p_iTerraFormer swig_types[282]
+#define SWIGTYPE_p_iTerraSampler swig_types[283]
+#define SWIGTYPE_p_iTerrainSystem swig_types[284]
+#define SWIGTYPE_p_iTextureCallback swig_types[285]
+#define SWIGTYPE_p_iTextureHandle swig_types[286]
+#define SWIGTYPE_p_iTextureList swig_types[287]
+#define SWIGTYPE_p_iTextureManager swig_types[288]
+#define SWIGTYPE_p_iTextureWrapper swig_types[289]
+#define SWIGTYPE_p_iThreadManager swig_types[290]
+#define SWIGTYPE_p_iThreadReturn swig_types[291]
+#define SWIGTYPE_p_iTranslator swig_types[292]
+#define SWIGTYPE_p_iTriangleMesh swig_types[293]
+#define SWIGTYPE_p_iVFS swig_types[294]
+#define SWIGTYPE_p_iView swig_types[295]
+#define SWIGTYPE_p_iVirtualClock swig_types[296]
+#define SWIGTYPE_p_iVisibilityCuller swig_types[297]
+#define SWIGTYPE_p_iVisibilityCullerListener swig_types[298]
+#define SWIGTYPE_p_iVisibilityObject swig_types[299]
+#define SWIGTYPE_p_iVisibilityObjectIterator swig_types[300]
+#define SWIGTYPE_p_int swig_types[301]
+#define SWIGTYPE_p_int16_t swig_types[302]
+#define SWIGTYPE_p_int64_t swig_types[303]
+#define SWIGTYPE_p_int8_t swig_types[304]
+#define SWIGTYPE_p_long_long swig_types[305]
+#define SWIGTYPE_p_p_csReversibleTransform swig_types[306]
+#define SWIGTYPE_p_p_iCollider swig_types[307]
+#define SWIGTYPE_p_p_iMeshWrapper swig_types[308]
+#define SWIGTYPE_p_p_iSector swig_types[309]
+#define SWIGTYPE_p_p_void swig_types[310]
+#define SWIGTYPE_p_scfFakeInterfaceT_csColliderWrapper_t swig_types[311]
+#define SWIGTYPE_p_scfImplementation1T_FrameBegin3DDraw_iEventHandler_t swig_types[312]
+#define SWIGTYPE_p_scfImplementation1T_FramePrinter_iEventHandler_t swig_types[313]
+#define SWIGTYPE_p_scfImplementation1T_csConfigFile_iConfigFile_t swig_types[314]
+#define SWIGTYPE_p_scfImplementation1T_csEventHandlerRegistry_iEventHandlerRegistry_t swig_types[315]
+#define SWIGTYPE_p_scfImplementation1T_csImageBase_iImage_t swig_types[316]
+#define SWIGTYPE_p_scfImplementation1T_csObject_iObject_t swig_types[317]
+#define SWIGTYPE_p_scfImplementation1T_csView_iView_t swig_types[318]
+#define SWIGTYPE_p_scfImplementation2T_FrameSignpost_2DConsole_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_t swig_types[319]
+#define SWIGTYPE_p_scfImplementation2T_FrameSignpost_3D2D_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_t swig_types[320]
+#define SWIGTYPE_p_scfImplementation2T_FrameSignpost_ConsoleDebug_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_t swig_types[321]
+#define SWIGTYPE_p_scfImplementation2T_FrameSignpost_DebugFrame_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_t swig_types[322]
+#define SWIGTYPE_p_scfImplementation2T_FrameSignpost_Logic3D_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_t swig_types[323]
+#define SWIGTYPE_p_scfImplementationExt0T_csImageMemory_csImageBase_t swig_types[324]
+#define SWIGTYPE_p_scfImplementationExt1T_csColliderWrapper_csObject_scfFakeInterfaceT_csColliderWrapper_t_t swig_types[325]
+#define SWIGTYPE_p_scfImplementationExt1T_csPath_csObject_iPath_t swig_types[326]
+#define SWIGTYPE_p_scfImplementationExt3T_csProcTexture_csObject_iTextureWrapper_iProcTexture_iSelfDet swig_types[327]
+#define SWIGTYPE_p_scfInterfaceMetadataList swig_types[328]
+#define SWIGTYPE_p_uint16_t swig_types[329]
+#define SWIGTYPE_p_uint32_t swig_types[330]
+#define SWIGTYPE_p_uint64_t swig_types[331]
+#define SWIGTYPE_p_uint8_t swig_types[332]
+#define SWIGTYPE_p_unsigned_int swig_types[333]
+#define SWIGTYPE_p_unsigned_long swig_types[334]
+#define SWIGTYPE_p_unsigned_long_long swig_types[335]
+#define SWIGTYPE_p_void swig_types[336]
+static swig_type_info *swig_types[338];
+static swig_module_info swig_module = {swig_types, 337, 0, 0, 0, 0};
 #define SWIG_TypeQuery(name) SWIG_TypeQueryModule(&swig_module, &swig_module, name)
 #define SWIG_MangledTypeQuery(name) SWIG_MangledTypeQueryModule(&swig_module, &swig_module, name)
 
@@ -17399,6 +17400,705 @@ SWIGINTERN PyObject *GeneralMeshBuilder_swigregister(PyObject *SWIGUNUSEDPARM(se
   return SWIG_Py_Void();
 }
 
+SWIGINTERN PyObject *_wrap_new_csMeshOnTexture(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  iObjectRegistry *arg1 = (iObjectRegistry *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  csMeshOnTexture *result = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"new_csMeshOnTexture",1,1,&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_iObjectRegistry, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "new_csMeshOnTexture" "', argument " "1"" of type '" "iObjectRegistry *""'"); 
+  }
+  arg1 = reinterpret_cast< iObjectRegistry * >(argp1);
+  result = (csMeshOnTexture *)new csMeshOnTexture(arg1);
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_csMeshOnTexture, SWIG_POINTER_NEW |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_delete_csMeshOnTexture(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  csMeshOnTexture *arg1 = (csMeshOnTexture *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"delete_csMeshOnTexture",1,1,&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_csMeshOnTexture, SWIG_POINTER_DISOWN |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_csMeshOnTexture" "', argument " "1"" of type '" "csMeshOnTexture *""'"); 
+  }
+  arg1 = reinterpret_cast< csMeshOnTexture * >(argp1);
+  delete arg1;
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_csMeshOnTexture_GetView(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  csMeshOnTexture *arg1 = (csMeshOnTexture *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  csView *result = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"csMeshOnTexture_GetView",1,1,&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_csMeshOnTexture, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "csMeshOnTexture_GetView" "', argument " "1"" of type '" "csMeshOnTexture const *""'"); 
+  }
+  arg1 = reinterpret_cast< csMeshOnTexture * >(argp1);
+  result = (csView *)((csMeshOnTexture const *)arg1)->GetView();
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_csView, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_csMeshOnTexture_ScaleCamera__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  csMeshOnTexture *arg1 = (csMeshOnTexture *) 0 ;
+  iMeshWrapper *arg2 = (iMeshWrapper *) 0 ;
+  int arg3 ;
+  int arg4 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  int val3 ;
+  int ecode3 = 0 ;
+  int val4 ;
+  int ecode4 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  PyObject * obj3 = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"csMeshOnTexture_ScaleCamera",4,4,&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_csMeshOnTexture, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "csMeshOnTexture_ScaleCamera" "', argument " "1"" of type '" "csMeshOnTexture *""'"); 
+  }
+  arg1 = reinterpret_cast< csMeshOnTexture * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_iMeshWrapper, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "csMeshOnTexture_ScaleCamera" "', argument " "2"" of type '" "iMeshWrapper *""'"); 
+  }
+  arg2 = reinterpret_cast< iMeshWrapper * >(argp2);
+  ecode3 = SWIG_AsVal_int(obj2, &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "csMeshOnTexture_ScaleCamera" "', argument " "3"" of type '" "int""'");
+  } 
+  arg3 = static_cast< int >(val3);
+  ecode4 = SWIG_AsVal_int(obj3, &val4);
+  if (!SWIG_IsOK(ecode4)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "csMeshOnTexture_ScaleCamera" "', argument " "4"" of type '" "int""'");
+  } 
+  arg4 = static_cast< int >(val4);
+  (arg1)->ScaleCamera(arg2,arg3,arg4);
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_csMeshOnTexture_ScaleCamera__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  csMeshOnTexture *arg1 = (csMeshOnTexture *) 0 ;
+  iMeshWrapper *arg2 = (iMeshWrapper *) 0 ;
+  float arg3 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  float val3 ;
+  int ecode3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"csMeshOnTexture_ScaleCamera",3,3,&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_csMeshOnTexture, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "csMeshOnTexture_ScaleCamera" "', argument " "1"" of type '" "csMeshOnTexture *""'"); 
+  }
+  arg1 = reinterpret_cast< csMeshOnTexture * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_iMeshWrapper, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "csMeshOnTexture_ScaleCamera" "', argument " "2"" of type '" "iMeshWrapper *""'"); 
+  }
+  arg2 = reinterpret_cast< iMeshWrapper * >(argp2);
+  ecode3 = SWIG_AsVal_float(obj2, &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "csMeshOnTexture_ScaleCamera" "', argument " "3"" of type '" "float""'");
+  } 
+  arg3 = static_cast< float >(val3);
+  (arg1)->ScaleCamera(arg2,arg3);
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_csMeshOnTexture_ScaleCamera(PyObject *self, PyObject *args) {
+  int argc;
+  PyObject *argv[5];
+  int ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = (int)PyObject_Length(args);
+  for (ii = 0; (ii < argc) && (ii < 4); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 3) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_csMeshOnTexture, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      void *vptr = 0;
+      int res = SWIG_ConvertPtr(argv[1], &vptr, SWIGTYPE_p_iMeshWrapper, 0);
+      _v = SWIG_CheckState(res);
+      if (_v) {
+        {
+          int res = SWIG_AsVal_float(argv[2], NULL);
+          _v = SWIG_CheckState(res);
+        }
+        if (_v) {
+          return _wrap_csMeshOnTexture_ScaleCamera__SWIG_1(self, args);
+        }
+      }
+    }
+  }
+  if (argc == 4) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_csMeshOnTexture, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      void *vptr = 0;
+      int res = SWIG_ConvertPtr(argv[1], &vptr, SWIGTYPE_p_iMeshWrapper, 0);
+      _v = SWIG_CheckState(res);
+      if (_v) {
+        {
+          int res = SWIG_AsVal_int(argv[2], NULL);
+          _v = SWIG_CheckState(res);
+        }
+        if (_v) {
+          {
+            int res = SWIG_AsVal_int(argv[3], NULL);
+            _v = SWIG_CheckState(res);
+          }
+          if (_v) {
+            return _wrap_csMeshOnTexture_ScaleCamera__SWIG_0(self, args);
+          }
+        }
+      }
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number of arguments for overloaded function 'csMeshOnTexture_ScaleCamera'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    ScaleCamera(csMeshOnTexture *,iMeshWrapper *,int,int)\n"
+    "    ScaleCamera(csMeshOnTexture *,iMeshWrapper *,float)\n");
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_csMeshOnTexture_Render__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  csMeshOnTexture *arg1 = (csMeshOnTexture *) 0 ;
+  iMeshWrapper *arg2 = (iMeshWrapper *) 0 ;
+  iTextureHandle *arg3 = (iTextureHandle *) 0 ;
+  bool arg4 ;
+  int arg5 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  void *argp3 = 0 ;
+  int res3 = 0 ;
+  bool val4 ;
+  int ecode4 = 0 ;
+  int val5 ;
+  int ecode5 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  PyObject * obj3 = 0 ;
+  PyObject * obj4 = 0 ;
+  bool result;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"csMeshOnTexture_Render",5,5,&obj0,&obj1,&obj2,&obj3,&obj4)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_csMeshOnTexture, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "csMeshOnTexture_Render" "', argument " "1"" of type '" "csMeshOnTexture *""'"); 
+  }
+  arg1 = reinterpret_cast< csMeshOnTexture * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_iMeshWrapper, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "csMeshOnTexture_Render" "', argument " "2"" of type '" "iMeshWrapper *""'"); 
+  }
+  arg2 = reinterpret_cast< iMeshWrapper * >(argp2);
+  res3 = SWIG_ConvertPtr(obj2, &argp3,SWIGTYPE_p_iTextureHandle, 0 |  0 );
+  if (!SWIG_IsOK(res3)) {
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "csMeshOnTexture_Render" "', argument " "3"" of type '" "iTextureHandle *""'"); 
+  }
+  arg3 = reinterpret_cast< iTextureHandle * >(argp3);
+  ecode4 = SWIG_AsVal_bool(obj3, &val4);
+  if (!SWIG_IsOK(ecode4)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "csMeshOnTexture_Render" "', argument " "4"" of type '" "bool""'");
+  } 
+  arg4 = static_cast< bool >(val4);
+  ecode5 = SWIG_AsVal_int(obj4, &val5);
+  if (!SWIG_IsOK(ecode5)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode5), "in method '" "csMeshOnTexture_Render" "', argument " "5"" of type '" "int""'");
+  } 
+  arg5 = static_cast< int >(val5);
+  result = (bool)(arg1)->Render(arg2,arg3,arg4,arg5);
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_csMeshOnTexture_Render__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  csMeshOnTexture *arg1 = (csMeshOnTexture *) 0 ;
+  iMeshWrapper *arg2 = (iMeshWrapper *) 0 ;
+  iTextureHandle *arg3 = (iTextureHandle *) 0 ;
+  bool arg4 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  void *argp3 = 0 ;
+  int res3 = 0 ;
+  bool val4 ;
+  int ecode4 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  PyObject * obj3 = 0 ;
+  bool result;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"csMeshOnTexture_Render",4,4,&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_csMeshOnTexture, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "csMeshOnTexture_Render" "', argument " "1"" of type '" "csMeshOnTexture *""'"); 
+  }
+  arg1 = reinterpret_cast< csMeshOnTexture * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_iMeshWrapper, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "csMeshOnTexture_Render" "', argument " "2"" of type '" "iMeshWrapper *""'"); 
+  }
+  arg2 = reinterpret_cast< iMeshWrapper * >(argp2);
+  res3 = SWIG_ConvertPtr(obj2, &argp3,SWIGTYPE_p_iTextureHandle, 0 |  0 );
+  if (!SWIG_IsOK(res3)) {
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "csMeshOnTexture_Render" "', argument " "3"" of type '" "iTextureHandle *""'"); 
+  }
+  arg3 = reinterpret_cast< iTextureHandle * >(argp3);
+  ecode4 = SWIG_AsVal_bool(obj3, &val4);
+  if (!SWIG_IsOK(ecode4)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "csMeshOnTexture_Render" "', argument " "4"" of type '" "bool""'");
+  } 
+  arg4 = static_cast< bool >(val4);
+  result = (bool)(arg1)->Render(arg2,arg3,arg4);
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_csMeshOnTexture_Render__SWIG_2(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  csMeshOnTexture *arg1 = (csMeshOnTexture *) 0 ;
+  iMeshWrapper *arg2 = (iMeshWrapper *) 0 ;
+  iTextureHandle *arg3 = (iTextureHandle *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  void *argp3 = 0 ;
+  int res3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  bool result;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"csMeshOnTexture_Render",3,3,&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_csMeshOnTexture, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "csMeshOnTexture_Render" "', argument " "1"" of type '" "csMeshOnTexture *""'"); 
+  }
+  arg1 = reinterpret_cast< csMeshOnTexture * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_iMeshWrapper, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "csMeshOnTexture_Render" "', argument " "2"" of type '" "iMeshWrapper *""'"); 
+  }
+  arg2 = reinterpret_cast< iMeshWrapper * >(argp2);
+  res3 = SWIG_ConvertPtr(obj2, &argp3,SWIGTYPE_p_iTextureHandle, 0 |  0 );
+  if (!SWIG_IsOK(res3)) {
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "csMeshOnTexture_Render" "', argument " "3"" of type '" "iTextureHandle *""'"); 
+  }
+  arg3 = reinterpret_cast< iTextureHandle * >(argp3);
+  result = (bool)(arg1)->Render(arg2,arg3);
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_csMeshOnTexture_Render(PyObject *self, PyObject *args) {
+  int argc;
+  PyObject *argv[6];
+  int ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = (int)PyObject_Length(args);
+  for (ii = 0; (ii < argc) && (ii < 5); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 3) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_csMeshOnTexture, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      void *vptr = 0;
+      int res = SWIG_ConvertPtr(argv[1], &vptr, SWIGTYPE_p_iMeshWrapper, 0);
+      _v = SWIG_CheckState(res);
+      if (_v) {
+        void *vptr = 0;
+        int res = SWIG_ConvertPtr(argv[2], &vptr, SWIGTYPE_p_iTextureHandle, 0);
+        _v = SWIG_CheckState(res);
+        if (_v) {
+          return _wrap_csMeshOnTexture_Render__SWIG_2(self, args);
+        }
+      }
+    }
+  }
+  if (argc == 4) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_csMeshOnTexture, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      void *vptr = 0;
+      int res = SWIG_ConvertPtr(argv[1], &vptr, SWIGTYPE_p_iMeshWrapper, 0);
+      _v = SWIG_CheckState(res);
+      if (_v) {
+        void *vptr = 0;
+        int res = SWIG_ConvertPtr(argv[2], &vptr, SWIGTYPE_p_iTextureHandle, 0);
+        _v = SWIG_CheckState(res);
+        if (_v) {
+          {
+            int res = SWIG_AsVal_bool(argv[3], NULL);
+            _v = SWIG_CheckState(res);
+          }
+          if (_v) {
+            return _wrap_csMeshOnTexture_Render__SWIG_1(self, args);
+          }
+        }
+      }
+    }
+  }
+  if (argc == 5) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_csMeshOnTexture, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      void *vptr = 0;
+      int res = SWIG_ConvertPtr(argv[1], &vptr, SWIGTYPE_p_iMeshWrapper, 0);
+      _v = SWIG_CheckState(res);
+      if (_v) {
+        void *vptr = 0;
+        int res = SWIG_ConvertPtr(argv[2], &vptr, SWIGTYPE_p_iTextureHandle, 0);
+        _v = SWIG_CheckState(res);
+        if (_v) {
+          {
+            int res = SWIG_AsVal_bool(argv[3], NULL);
+            _v = SWIG_CheckState(res);
+          }
+          if (_v) {
+            {
+              int res = SWIG_AsVal_int(argv[4], NULL);
+              _v = SWIG_CheckState(res);
+            }
+            if (_v) {
+              return _wrap_csMeshOnTexture_Render__SWIG_0(self, args);
+            }
+          }
+        }
+      }
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number of arguments for overloaded function 'csMeshOnTexture_Render'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    Render(csMeshOnTexture *,iMeshWrapper *,iTextureHandle *,bool,int)\n"
+    "    Render(csMeshOnTexture *,iMeshWrapper *,iTextureHandle *,bool)\n"
+    "    Render(csMeshOnTexture *,iMeshWrapper *,iTextureHandle *)\n");
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_csMeshOnTexture_PrepareRender(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  csMeshOnTexture *arg1 = (csMeshOnTexture *) 0 ;
+  iTextureHandle *arg2 = (iTextureHandle *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"csMeshOnTexture_PrepareRender",2,2,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_csMeshOnTexture, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "csMeshOnTexture_PrepareRender" "', argument " "1"" of type '" "csMeshOnTexture *""'"); 
+  }
+  arg1 = reinterpret_cast< csMeshOnTexture * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_iTextureHandle, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "csMeshOnTexture_PrepareRender" "', argument " "2"" of type '" "iTextureHandle *""'"); 
+  }
+  arg2 = reinterpret_cast< iTextureHandle * >(argp2);
+  (arg1)->PrepareRender(arg2);
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_csMeshOnTexture_DoRender__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  csMeshOnTexture *arg1 = (csMeshOnTexture *) 0 ;
+  iTextureHandle *arg2 = (iTextureHandle *) 0 ;
+  bool arg3 ;
+  int arg4 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  bool val3 ;
+  int ecode3 = 0 ;
+  int val4 ;
+  int ecode4 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  PyObject * obj3 = 0 ;
+  bool result;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"csMeshOnTexture_DoRender",4,4,&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_csMeshOnTexture, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "csMeshOnTexture_DoRender" "', argument " "1"" of type '" "csMeshOnTexture *""'"); 
+  }
+  arg1 = reinterpret_cast< csMeshOnTexture * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_iTextureHandle, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "csMeshOnTexture_DoRender" "', argument " "2"" of type '" "iTextureHandle *""'"); 
+  }
+  arg2 = reinterpret_cast< iTextureHandle * >(argp2);
+  ecode3 = SWIG_AsVal_bool(obj2, &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "csMeshOnTexture_DoRender" "', argument " "3"" of type '" "bool""'");
+  } 
+  arg3 = static_cast< bool >(val3);
+  ecode4 = SWIG_AsVal_int(obj3, &val4);
+  if (!SWIG_IsOK(ecode4)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "csMeshOnTexture_DoRender" "', argument " "4"" of type '" "int""'");
+  } 
+  arg4 = static_cast< int >(val4);
+  result = (bool)(arg1)->DoRender(arg2,arg3,arg4);
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_csMeshOnTexture_DoRender__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  csMeshOnTexture *arg1 = (csMeshOnTexture *) 0 ;
+  iTextureHandle *arg2 = (iTextureHandle *) 0 ;
+  bool arg3 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  bool val3 ;
+  int ecode3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  bool result;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"csMeshOnTexture_DoRender",3,3,&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_csMeshOnTexture, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "csMeshOnTexture_DoRender" "', argument " "1"" of type '" "csMeshOnTexture *""'"); 
+  }
+  arg1 = reinterpret_cast< csMeshOnTexture * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_iTextureHandle, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "csMeshOnTexture_DoRender" "', argument " "2"" of type '" "iTextureHandle *""'"); 
+  }
+  arg2 = reinterpret_cast< iTextureHandle * >(argp2);
+  ecode3 = SWIG_AsVal_bool(obj2, &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "csMeshOnTexture_DoRender" "', argument " "3"" of type '" "bool""'");
+  } 
+  arg3 = static_cast< bool >(val3);
+  result = (bool)(arg1)->DoRender(arg2,arg3);
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_csMeshOnTexture_DoRender__SWIG_2(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  csMeshOnTexture *arg1 = (csMeshOnTexture *) 0 ;
+  iTextureHandle *arg2 = (iTextureHandle *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  bool result;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"csMeshOnTexture_DoRender",2,2,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_csMeshOnTexture, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "csMeshOnTexture_DoRender" "', argument " "1"" of type '" "csMeshOnTexture *""'"); 
+  }
+  arg1 = reinterpret_cast< csMeshOnTexture * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_iTextureHandle, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "csMeshOnTexture_DoRender" "', argument " "2"" of type '" "iTextureHandle *""'"); 
+  }
+  arg2 = reinterpret_cast< iTextureHandle * >(argp2);
+  result = (bool)(arg1)->DoRender(arg2);
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_csMeshOnTexture_DoRender(PyObject *self, PyObject *args) {
+  int argc;
+  PyObject *argv[5];
+  int ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = (int)PyObject_Length(args);
+  for (ii = 0; (ii < argc) && (ii < 4); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 2) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_csMeshOnTexture, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      void *vptr = 0;
+      int res = SWIG_ConvertPtr(argv[1], &vptr, SWIGTYPE_p_iTextureHandle, 0);
+      _v = SWIG_CheckState(res);
+      if (_v) {
+        return _wrap_csMeshOnTexture_DoRender__SWIG_2(self, args);
+      }
+    }
+  }
+  if (argc == 3) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_csMeshOnTexture, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      void *vptr = 0;
+      int res = SWIG_ConvertPtr(argv[1], &vptr, SWIGTYPE_p_iTextureHandle, 0);
+      _v = SWIG_CheckState(res);
+      if (_v) {
+        {
+          int res = SWIG_AsVal_bool(argv[2], NULL);
+          _v = SWIG_CheckState(res);
+        }
+        if (_v) {
+          return _wrap_csMeshOnTexture_DoRender__SWIG_1(self, args);
+        }
+      }
+    }
+  }
+  if (argc == 4) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_csMeshOnTexture, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      void *vptr = 0;
+      int res = SWIG_ConvertPtr(argv[1], &vptr, SWIGTYPE_p_iTextureHandle, 0);
+      _v = SWIG_CheckState(res);
+      if (_v) {
+        {
+          int res = SWIG_AsVal_bool(argv[2], NULL);
+          _v = SWIG_CheckState(res);
+        }
+        if (_v) {
+          {
+            int res = SWIG_AsVal_int(argv[3], NULL);
+            _v = SWIG_CheckState(res);
+          }
+          if (_v) {
+            return _wrap_csMeshOnTexture_DoRender__SWIG_0(self, args);
+          }
+        }
+      }
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number of arguments for overloaded function 'csMeshOnTexture_DoRender'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    DoRender(csMeshOnTexture *,iTextureHandle *,bool,int)\n"
+    "    DoRender(csMeshOnTexture *,iTextureHandle *,bool)\n"
+    "    DoRender(csMeshOnTexture *,iTextureHandle *)\n");
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *csMeshOnTexture_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *obj;
+  if (!PyArg_UnpackTuple(args,(char*)"swigregister", 1, 1,&obj)) return NULL;
+  SWIG_TypeNewClientData(SWIGTYPE_p_csMeshOnTexture, SWIG_NewClientData(obj));
+  return SWIG_Py_Void();
+}
+
 SWIGINTERN PyObject *_wrap_csPenCoordinate_x_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   csPenCoordinate *arg1 = (csPenCoordinate *) 0 ;
@@ -24876,6 +25576,14 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"new_GeneralMeshBuilder", _wrap_new_GeneralMeshBuilder, METH_VARARGS, NULL},
 	 { (char *)"delete_GeneralMeshBuilder", _wrap_delete_GeneralMeshBuilder, METH_VARARGS, NULL},
 	 { (char *)"GeneralMeshBuilder_swigregister", GeneralMeshBuilder_swigregister, METH_VARARGS, NULL},
+	 { (char *)"new_csMeshOnTexture", _wrap_new_csMeshOnTexture, METH_VARARGS, NULL},
+	 { (char *)"delete_csMeshOnTexture", _wrap_delete_csMeshOnTexture, METH_VARARGS, NULL},
+	 { (char *)"csMeshOnTexture_GetView", _wrap_csMeshOnTexture_GetView, METH_VARARGS, NULL},
+	 { (char *)"csMeshOnTexture_ScaleCamera", _wrap_csMeshOnTexture_ScaleCamera, METH_VARARGS, NULL},
+	 { (char *)"csMeshOnTexture_Render", _wrap_csMeshOnTexture_Render, METH_VARARGS, NULL},
+	 { (char *)"csMeshOnTexture_PrepareRender", _wrap_csMeshOnTexture_PrepareRender, METH_VARARGS, NULL},
+	 { (char *)"csMeshOnTexture_DoRender", _wrap_csMeshOnTexture_DoRender, METH_VARARGS, NULL},
+	 { (char *)"csMeshOnTexture_swigregister", csMeshOnTexture_swigregister, METH_VARARGS, NULL},
 	 { (char *)"csPenCoordinate_x_set", _wrap_csPenCoordinate_x_set, METH_VARARGS, NULL},
 	 { (char *)"csPenCoordinate_x_get", _wrap_csPenCoordinate_x_get, METH_VARARGS, NULL},
 	 { (char *)"csPenCoordinate_y_set", _wrap_csPenCoordinate_y_set, METH_VARARGS, NULL},
@@ -25952,6 +26660,7 @@ static swig_type_info _swigt__p_csDirtyAccessArrayT_csVector3_csArrayElementHand
 static swig_type_info _swigt__p_csEllipsoid = {"_p_csEllipsoid", "csEllipsoid *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_csEngineTools = {"_p_csEngineTools", "csEngineTools *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_csIntersectingTriangle = {"_p_csIntersectingTriangle", "csIntersectingTriangle *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_csMeshOnTexture = {"_p_csMeshOnTexture", "csMeshOnTexture *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_csObject = {"_p_csObject", "csObject *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_csPen = {"_p_csPen", "csPen *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_csPen3D = {"_p_csPen3D", "csPen3D *", 0, 0, (void*)0, 0};
@@ -26300,6 +27009,7 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_csImageBase,
   &_swigt__p_csImageMemory,
   &_swigt__p_csIntersectingTriangle,
+  &_swigt__p_csMeshOnTexture,
   &_swigt__p_csObject,
   &_swigt__p_csPen,
   &_swigt__p_csPen3D,
@@ -26628,6 +27338,7 @@ static swig_cast_info _swigc__p_csDirtyAccessArrayT_csVector3_csArrayElementHand
 static swig_cast_info _swigc__p_csEllipsoid[] = {  {&_swigt__p_csEllipsoid, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_csEngineTools[] = {  {&_swigt__p_csEngineTools, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_csIntersectingTriangle[] = {  {&_swigt__p_csIntersectingTriangle, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_csMeshOnTexture[] = {  {&_swigt__p_csMeshOnTexture, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_csObject[] = {  {&_swigt__p_csProcAnimated, _p_csProcAnimatedTo_p_csObject, 0, 0},  {&_swigt__p_scfImplementationExt1T_csPath_csObject_iPath_t, _p_scfImplementationExt1T_csPath_csObject_iPath_tTo_p_csObject, 0, 0},  {&_swigt__p_scfImplementationExt3T_csProcTexture_csObject_iTextureWrapper_iProcTexture_iSelfDet, _p_scfImplementationExt3T_csProcTexture_csObject_iTextureWrapper_iProcTexture_iSelfDetTo_p_csObject, 0, 0},  {&_swigt__p_csObject, 0, 0, 0},  {&_swigt__p_csColliderWrapper, _p_csColliderWrapperTo_p_csObject, 0, 0},  {&_swigt__p_csProcTexture, _p_csProcTextureTo_p_csObject, 0, 0},  {&_swigt__p_scfImplementationExt1T_csColliderWrapper_csObject_scfFakeInterfaceT_csColliderWrapper_t_t, _p_scfImplementationExt1T_csColliderWrapper_csObject_scfFakeInterfaceT_csColliderWrapper_t_tTo_p_csObject, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_csPen[] = {  {&_swigt__p_csPen, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_csPen3D[] = {  {&_swigt__p_csPen3D, 0, 0, 0},{0, 0, 0, 0}};
@@ -26976,6 +27687,7 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_csImageBase,
   _swigc__p_csImageMemory,
   _swigc__p_csIntersectingTriangle,
+  _swigc__p_csMeshOnTexture,
   _swigc__p_csObject,
   _swigc__p_csPen,
   _swigc__p_csPen3D,

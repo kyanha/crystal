@@ -528,6 +528,23 @@ GeneralMeshBuilder_CreateFactory = _cstool.GeneralMeshBuilder_CreateFactory
 GeneralMeshBuilder_CreateMesh = _cstool.GeneralMeshBuilder_CreateMesh
 GeneralMeshBuilder_CreateFactoryAndMesh = _cstool.GeneralMeshBuilder_CreateFactoryAndMesh
 
+class csMeshOnTexture(object):
+    thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+    def __init__(self, *args): 
+        this = _cstool.new_csMeshOnTexture(*args)
+        try: self.this.append(this)
+        except: self.this = this
+    __swig_destroy__ = _cstool.delete_csMeshOnTexture
+    __del__ = lambda self : None;
+    def GetView(*args): return _cstool.csMeshOnTexture_GetView(*args)
+    def ScaleCamera(*args): return _cstool.csMeshOnTexture_ScaleCamera(*args)
+    def Render(*args): return _cstool.csMeshOnTexture_Render(*args)
+    def PrepareRender(*args): return _cstool.csMeshOnTexture_PrepareRender(*args)
+    def DoRender(*args): return _cstool.csMeshOnTexture_DoRender(*args)
+csMeshOnTexture_swigregister = _cstool.csMeshOnTexture_swigregister
+csMeshOnTexture_swigregister(csMeshOnTexture)
+
 CS_PEN_TA_TOP = _cstool.CS_PEN_TA_TOP
 CS_PEN_TA_BOT = _cstool.CS_PEN_TA_BOT
 CS_PEN_TA_LEFT = _cstool.CS_PEN_TA_LEFT
