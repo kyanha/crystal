@@ -713,6 +713,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(SLCombiner)
     else
     {
       CS_ASSERT_MSG ("Unsupported program output target", false);
+      return;
     }
 
     outputAssign[target].Empty();
