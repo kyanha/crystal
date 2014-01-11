@@ -2905,6 +2905,7 @@ void csGLGraphics3D::ApplyBufferChanges()
         {
           //none, assert...
           CS_ASSERT_MSG("Unknown vertex attribute", 0);
+          return;
         }
       }
     }
@@ -2952,6 +2953,7 @@ void csGLGraphics3D::ApplyBufferChanges()
         {
           //none, assert...
           CS_ASSERT_MSG("Unknown vertex attribute", 0);
+          return;
         }
       }
       if (CS_VATTRIB_IS_GENERIC (att))
