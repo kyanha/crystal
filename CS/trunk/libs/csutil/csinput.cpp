@@ -861,7 +861,7 @@ void csJoystickDriver::DoMotion (uint number, const int32 *axes, uint numAxes)
   Axes [number] = numAxes;
 
   uint32 buttonMask = 0;
-  for (int i=31 ; i>=0 ; i--)
+  for (int i = CS_MAX_MOUSE_BUTTONS - 1; i>=0 ; i--)
   {
     buttonMask <<= 1;
     if (Button[number][i])
