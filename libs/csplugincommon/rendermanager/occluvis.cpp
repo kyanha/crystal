@@ -1046,7 +1046,10 @@ namespace CS
 
       // we cannot render without a mesh list
       // @@@RlyDontKnow: how does this happen if it does at all?
-      CS_ASSERT(nodeMeshLists);
+      // It happens when you run deferreddemo.
+      //CS_ASSERT(nodeMeshLists);
+      if (!nodeMeshLists)
+        return false;
 
       // disable frame buffer writes
       // @@@NOTE: this may be overwritten by shaders
