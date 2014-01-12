@@ -213,7 +213,7 @@ namespace lighter
     }
     
     int unit = 0;
-    while ((size > unitThreshold * CONST_UINT64(1024)) && (unit < numUnits))
+    while ((size > unitThreshold * CONST_UINT64(1024)) && (unit < numUnits-1))
     {
       size /= CONST_UINT64(1024);
       unit++;
