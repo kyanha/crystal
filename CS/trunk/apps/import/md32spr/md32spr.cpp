@@ -1226,8 +1226,8 @@ char *filename(char *path, char *file)
     return 0;
   if(!strlen(path))
     return 0;
-  dir = new char[strlen(path)];
-  fname = new char[strlen(path)];
+  dir = new char[strlen(path) + 1];
+  fname = new char[strlen(path) + 1];
   splitpath(path, dir, strlen(path), fname, strlen(path));
   sz = strlen(fname);
   memcpy (file, fname, sz);
