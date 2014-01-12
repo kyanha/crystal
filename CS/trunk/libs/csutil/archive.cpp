@@ -243,7 +243,7 @@ void csArchive::ReadZipDirectory (iFile* infile)
                 goto rebuild_cdr;       /* Broken central directory */
             }
             if ((!ReadCDFH (cdfh, infile))
-             || (cdfh.filename_length > sizeof (buff))
+             || (cdfh.filename_length >= sizeof (buff))
              || (infile->Read (buff, cdfh.filename_length) <
 	     	cdfh.filename_length))
               return;           /* Broken zipfile? */
@@ -280,7 +280,7 @@ void csArchive::ReadZipEntries (iFile* infile)
   {
     new_offs = cur_offs + sizeof (hdr_local) + ZIP_LOCAL_FILE_HEADER_SIZE +
       lfh.filename_length + lfh.extra_field_length + lfh.csize;
-    if ((lfh.filename_length > sizeof (buff))
+    if ((lfh.filename_length >= sizeof (buff))
         || (infile->Read (buff, lfh.filename_length) < lfh.filename_length))
       return;                   /* Broken zipfile? */
     buff[lfh.filename_length] = 0;
