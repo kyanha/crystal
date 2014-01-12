@@ -196,8 +196,11 @@ bool NetworkEventServerTest::OnInitialize(int /*argc*/, char* /*argv*/ [])
   // on the commandline.
   if (!csInitializer::RequestPlugins(GetObjectRegistry(),
     CS_REQUEST_VFS,
-    CS_REQUEST_OPENGL3D,
     CS_REQUEST_FONTSERVER,
+    CS_REQUEST_OPENGL3D,
+    CS_REQUEST_ENGINE,
+    CS_REQUEST_IMAGELOADER,
+    CS_REQUEST_LEVELLOADER,
     CS_REQUEST_PLUGIN("crystalspace.network.socket.manager", iSocketManager),
     CS_REQUEST_PLUGIN("crystalspace.network.event.manager", iEventManager),
     CS_REQUEST_END))
