@@ -156,7 +156,7 @@ void csTerraFormerCollider::UpdateOPCODEModel (const csVector3 &other_pos,
 
 void csTerraFormerCollider::InitOPCODEModel ()
 {
-  delete indexholder;
+  delete[] indexholder;
   delete opcode_model;
   indexholder = new unsigned int[3* 2 * (resolution-1) * (resolution-1)];
   vertices.SetSize (resolution*resolution);
