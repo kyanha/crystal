@@ -1049,6 +1049,22 @@ NodeAnimCurveTL::NodeAnimCurveTL(int vertices)
   animX = new float* [ vertices ];
   animY = new float* [ vertices ];
   animZ = new float* [ vertices ];
+  memset(animX, 0, sizeof(float*) * vertices);
+  memset(animY, 0, sizeof(float*) * vertices);
+  memset(animZ, 0, sizeof(float*) * vertices);
+}
+
+NodeAnimCurveTL::~NodeAnimCurveTL()
+{
+  for (int i=0; i<expected_verts; i++)
+  {
+    delete [] animX[i];
+    delete [] animY[i];
+    delete [] animZ[i];
+  }
+  delete [] animX;
+  delete [] animY;
+  delete [] animZ;
 }
 
 void NodeAnimCurveTL::PrintStats(FILE *s,int level)
