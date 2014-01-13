@@ -237,6 +237,7 @@ public:
   float   **animX,**animY,**animZ;
 
   NodeAnimCurveTL(int vertices);
+  ~NodeAnimCurveTL();
   void CreateDefault();
   virtual bool Load(MayaInputFile& file);
   virtual void PrintStats(FILE *s,int level);
