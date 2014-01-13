@@ -176,6 +176,11 @@ public:
     img = new uint8 [width * height];
   }
 
+  ~GIFOutput ()
+  {
+    delete img;
+  }
+
   uint8& operator* () const
   { return *(img + y * w + x); }
 
