@@ -54,7 +54,28 @@ Mdl::Mdl(const char* mdlfile)
 
 Mdl::~Mdl()
 {
-  // @@@ FIXME: Unimplemented :-)
+  int i, j;
+
+  for (i = 0; i < nbskins; i++)
+  {
+      for (j = 0; j < skins[i].nbtexs; j++)
+        delete [] skins[i].texs[j];
+      delete [] skins[i].texs;
+      delete [] skins[i].timebtwskin;
+  }
+  for (i = 0; i < nbframesets; i++)
+  {
+      for (j = 0; j < framesets[i].nbframes; j++)
+      {
+        delete [] framesets[i].frames[j].trivert;
+      }
+      delete [] framesets[i].delay;
+      delete [] framesets[i].frames;
+  }
+  delete [] skins;
+  delete [] vertices;
+  delete [] triangles;
+  delete [] framesets;
 }
 
 void Mdl::Clear()
@@ -139,6 +160,7 @@ bool Mdl::ReadMDLFile(const char* mdlfile)
   skinwidth = header.skinwidth;
   nbskins = header.numskins;
   skins = new skin_t[nbskins];
+  memset(skins, 0, sizeof(skin_t) * nbskins);
   for (i = 0; i < nbskins; i++)
   {
     int32 group = 0;
@@ -182,6 +204,7 @@ bool Mdl::ReadMDLFile(const char* mdlfile)
 
       // read all texture of group
       skins[i].texs = new unsigned char *[skins[i].nbtexs];
+      memset(skins[i].texs, 0, sizeof(unsigned char *) * skins[i].nbtexs);
       for (j = 0; j < skins[i].nbtexs; j++)
       {
         skins[i].texs[j] = new unsigned char [skinheight * skinwidth];
@@ -221,6 +244,7 @@ bool Mdl::ReadMDLFile(const char* mdlfile)
   // frames ops
   nbframesets = header.numframes;
   framesets = new frameset_t [nbframesets];
+  memset(framesets, 0, sizeof(frameset_t) * nbframesets);
   // check all framessets
   for (i = 0; i < nbframesets; i++)
   {
@@ -269,6 +293,7 @@ bool Mdl::ReadMDLFile(const char* mdlfile)
 
       framesets[i].delay = new float[framesets[i].nbframes];
       framesets[i].frames = new frame_t[framesets[i].nbframes];
+      memset(framesets[i].frames, 0, sizeof(frame_t) * framesets[i].nbframes);
 
       // read general min bound
       if (fread(&framesets[i].min, sizeof(trivertx_t), 1, f) != 1)
@@ -305,7 +330,6 @@ bool Mdl::ReadMDLFile(const char* mdlfile)
           return setError("Error reading mdl file", f);
 
         // frame name
-        memset(framesets[i].frames[j].name, 0, MDL_FRAME_NAME_MAX + 1);
         if (fread(framesets[i].frames[j].name, MDL_FRAME_NAME_MAX, 1, f) != 1)
           return setError("Error reading mdl file", f);
 
