@@ -596,7 +596,7 @@ FuncAttr void Name (void (*p)())                                       \
   thread concurrently requests the value, it's ensured that the value is
   consistent (both the returned and stored value).
 */
-#define CS_STATIC_VAR_GETTER_COMMON(Type, Ptr, initParam, Val, kill_how)\
+#define CS_STATIC_VAR_GETTER_COMMON(Type, Ptr, initParam, Val, arr, kill_how)\
   while (true)								\
   {									\
     Ptr = reinterpret_cast<Type*> (					\
@@ -607,7 +607,10 @@ FuncAttr void Name (void (*p)())                                       \
     if (CS::Threading::AtomicOperations::CompareAndSet (		\
 	reinterpret_cast<void**> (&Val), Ptr, 0) != 0)			\
     {									\
-      delete Ptr;							\
+      if (arr)								\
+        delete [] Ptr;							\
+      else								\
+        delete Ptr;							\
     }									\
     else								\
     {									\
@@ -629,7 +632,7 @@ FuncAttr void Name (void (*p)())                                       \
  */
 
 #ifndef CS_IMPLEMENT_STATIC_VAR_EXT
-#define CS_IMPLEMENT_STATIC_VAR_EXT(getterFunc,Type,initParam,kill_how) \
+#define CS_IMPLEMENT_STATIC_VAR_EXT(getterFunc,Type,initParam,arr,kill_how) \
 namespace {                                                             \
 static Type* getterFunc ## _v = 0;                                      \
 static Type* getterFunc ();                                             \
@@ -651,7 +654,7 @@ Type* getterFunc ()                                                     \
 {                                                                       \
   Type* p;								\
   CS_STATIC_VAR_GETTER_COMMON(Type, p, initParam, getterFunc ## _v,	\
-    getterFunc ## kill_how);						\
+    arr, getterFunc ## kill_how);					\
   return p;								\
 }                                                                       \
 }
@@ -659,12 +662,12 @@ Type* getterFunc ()                                                     \
 
 #ifndef CS_IMPLEMENT_STATIC_VAR
 #define CS_IMPLEMENT_STATIC_VAR(getterFunc,Type,initParam) \
- CS_IMPLEMENT_STATIC_VAR_EXT(getterFunc,Type,initParam,_kill)    
+ CS_IMPLEMENT_STATIC_VAR_EXT(getterFunc,Type,initParam,0,_kill)    
 #endif
 
 #ifndef CS_IMPLEMENT_STATIC_VAR_ARRAY
 #define CS_IMPLEMENT_STATIC_VAR_ARRAY(getterFunc,Type,initParam) \
- CS_IMPLEMENT_STATIC_VAR_EXT(getterFunc,Type,initParam,_kill_array)    
+ CS_IMPLEMENT_STATIC_VAR_EXT(getterFunc,Type,initParam,1,_kill_array)    
 #endif
 
 /**\def CS_DECLARE_STATIC_CLASSVAR(var,getterFunc,Type)
@@ -702,7 +705,7 @@ static void getterFunc ## _kill_array ();
  */
 #ifndef CS_IMPLEMENT_STATIC_CLASSVAR_EXT
 #define CS_IMPLEMENT_STATIC_CLASSVAR_EXT(Class,var,getterFunc,Type,initParam,\
-  kill_how)                                                    	\
+  arr,kill_how)                                                    	\
 Type* Class::var = 0;                                          	\
 void Class::getterFunc ## _kill ()               	        \
 {                                                              	\
@@ -717,7 +720,7 @@ void Class::getterFunc ## _kill_array ()         	        \
 Type* Class::getterFunc ()                                     	\
 {                                                              	\
   Type* p;							\
-  CS_STATIC_VAR_GETTER_COMMON(Type, p, initParam, var,		\
+  CS_STATIC_VAR_GETTER_COMMON(Type, p, initParam, var, arr,	\
     getterFunc ## kill_how);					\
   return p;							\
 }
@@ -725,19 +728,19 @@ Type* Class::getterFunc ()                                     	\
 
 #ifndef CS_IMPLEMENT_STATIC_CLASSVAR
 #define CS_IMPLEMENT_STATIC_CLASSVAR(Class,var,getterFunc,Type,initParam) \
-  CS_IMPLEMENT_STATIC_CLASSVAR_EXT(Class,var,getterFunc,Type,initParam,_kill)
+  CS_IMPLEMENT_STATIC_CLASSVAR_EXT(Class,var,getterFunc,Type,initParam,0,_kill)
 #endif
 
 #ifndef CS_IMPLEMENT_STATIC_CLASSVAR_ARRAY
 #define CS_IMPLEMENT_STATIC_CLASSVAR_ARRAY(Class,var,getterFunc,Type,\
   initParam) \
   CS_IMPLEMENT_STATIC_CLASSVAR_EXT(Class,var,getterFunc,Type,initParam,\
-    _kill_array)
+    1,_kill_array)
 #endif
 
 #ifndef CS_IMPLEMENT_STATIC_CLASSVAR_REF_EXT
 #define CS_IMPLEMENT_STATIC_CLASSVAR_REF_EXT(Class,var,getterFunc,Type,\
-  initParam,kill_how) \
+  initParam,arr,kill_how) \
 Type *Class::var = 0;                                          \
 void Class::getterFunc ## _kill ()                             \
 {                                                              \
@@ -752,7 +755,7 @@ void Class::getterFunc ## _kill ()                             \
 Type &Class::getterFunc ()                                     \
 {                                                              \
   Type* p;							\
-  CS_STATIC_VAR_GETTER_COMMON(Type, p, initParam, var,		\
+  CS_STATIC_VAR_GETTER_COMMON(Type, p, initParam, var, arr,	\
     getterFunc ## kill_how);					\
   return *p;							\
 }
@@ -761,14 +764,14 @@ Type &Class::getterFunc ()                                     \
 #ifndef CS_IMPLEMENT_STATIC_CLASSVAR_REF
 #define CS_IMPLEMENT_STATIC_CLASSVAR_REF(Class,var,getterFunc,Type,initParam)\
   CS_IMPLEMENT_STATIC_CLASSVAR_REF_EXT(Class,var,getterFunc,Type,\
-    initParam,_kill)
+    initParam,0,_kill)
 #endif
 
 #ifndef CS_IMPLEMENT_STATIC_CLASSVAR_REF_ARRAY
 #define CS_IMPLEMENT_STATIC_CLASSVAR_REF_ARRAY(Class,var,getterFunc,Type,\
   initParam) \
   CS_IMPLEMENT_STATIC_CLASSVAR_REF_EXT(Class,var,getterFunc,Type,initParam,\
-    _kill_array)
+    1,_kill_array)
 #endif
 
 /**\def CS_FUNCTION_NAME
