@@ -71,7 +71,17 @@ namespace Utility
     /// Dereference underlying pointer.
     T& operator* () const
     { return *ptr; }
-  
+
+    /**
+     * Detach underlying pointer, i.e. ownership is dropped,
+     * and the caller will have to delete the pointer.
+     */
+    T* Detach()
+    {
+      T* p (ptr);
+      ptr = nullptr;
+      return p;
+    }
   };
 
   /**
@@ -116,6 +126,17 @@ namespace Utility
     /// Dereference underlying pointer.
     T& operator* () const
     { return *ptr; }
+
+    /**
+     * Detach underlying pointer, i.e. ownership is dropped,
+     * and the caller will have to delete the pointer.
+     */
+    T* Detach()
+    {
+      T* p (ptr);
+      ptr = nullptr;
+      return p;
+    }
   };
 
 } // namespace Utility
