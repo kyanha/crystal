@@ -17,6 +17,7 @@
 */
 
 #include "cssysdef.h"
+#include "csutil/scopedpointer.h"
 #include <math.h>
 #include <stdlib.h>
 #include <string.h>
@@ -163,7 +164,7 @@ int GIFStream::nextcode(uint8 codesize)
 class GIFOutput
 {
 private:
-  uint8 *img;
+  CS::Utility::ScopedArrayPointer<uint8> img;
   int w, h, x, y;
   bool interlaced;
   int pass;
@@ -173,12 +174,11 @@ public:
   GIFOutput (int width, int height, bool ilace = false) : w (width), h (height),
     x (0), y (0), interlaced (ilace), pass (0)
   {
-    img = new uint8 [width * height];
+    img.Reset (new uint8 [width * height]);
   }
 
   ~GIFOutput ()
   {
-    delete img;
   }
 
   uint8& operator* () const
@@ -206,7 +206,10 @@ public:
     return *this;
   }
 
-  uint8 *get_image () { return img; }
+  uint8 *detach ()
+  {
+    return img.Detach();
+  }
 };
 
 //---------------------------------------------------------------------------
@@ -427,7 +430,7 @@ int ImageGifFile::decode_gif (uint8* iBuffer, size_t iSize, int* Prefix,
   }
 
   Format &= ~CS_IMGFMT_ALPHA;
-  ConvertFromPal8 (optr.get_image (), 0, palette.get_palette ());
+  ConvertFromPal8 (optr.detach (), 0, palette.get_palette ());
 
   return 0;
 }
