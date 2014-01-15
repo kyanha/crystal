@@ -363,36 +363,23 @@ bool PhysDemo::OnMouseDown (iEvent &event)
   if (button == 0)
   {
     // Find the rigid body that was clicked on
-    // Compute the end beam points
     HitBeamResult hitResult;
     if (PickCursorObject (hitResult) && IsDynamic (hitResult.object))
     {
       csRef<CS::Physics::iPhysicalBody> physicalBody = hitResult.object->QueryPhysicalBody ();
 
-      // Add a force at the point clicked
-      csVector3 force = hitResult.isect - GetActorPos ();
-      force.Normalize ();
+      // Add an impulse at the point clicked
+      csVector3 impulse = hitResult.isect - view->GetCamera ()->GetTransform ().GetOrigin ();
+      impulse.Normalize ();
 
-      force *= 20.f;
-      force *= physicalBody->GetMass ();
+      // Scale the impulse to the total mass of the body
+      impulse *= physicalBody->GetMass ();
 
       if (physicalBody->QueryRigidBody ())
-      {
-        csOrthoTransform trans = physicalBody->GetTransform ();
-        // Check if the body hit is not static or kinematic
-        csRef<CS::Physics::iRigidBody> bulletBody = physicalBody->QueryRigidBody ();
-        physicalBody->QueryRigidBody ()->AddForceAtPos (force, hitResult.isect);
+	physicalBody->QueryRigidBody ()->ApplyImpulse (impulse, hitResult.isect);
 
-        // This would work too
-        //csOrthoTransform transform (hitResult.body->QueryRigidBody ()->GetTransform ());
-        //csVector3 relativePosition = transform.Other2This (hitResult.isect);
-        //hitResult.body->QueryRigidBody ()->AddForceAtRelPos (force, relativePosition);
-      }
       else
-      {
-        force *= 200.f;
-        physicalBody->QuerySoftBody ()->AddForce (force, hitResult.vertexIndex);
-      }
+        physicalBody->QuerySoftBody ()->ApplyImpulse (impulse, hitResult.vertexIndex);
     }
     else
       return false;

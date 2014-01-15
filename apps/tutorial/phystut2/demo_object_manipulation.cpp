@@ -127,16 +127,16 @@ void PhysDemo::PullObject (CS::Collisions::iCollisionObject* obj)
 
   csVector3 posCorrection (2  * UpVector);
 
-  csVector3 force (GetActorPos () - from - posCorrection);
-  force.Normalize ();
-  force *= 30 * pb->GetMass ();
+  csVector3 impulse (GetActorPos () - from - posCorrection);
+  impulse.Normalize ();
+  impulse *= 30 * pb->GetMass ();
 
   // prevent sliding problem
   csOrthoTransform trans = pb->GetTransform ();
   trans.SetOrigin (trans.GetOrigin () + posCorrection);
   pb->SetTransform (trans);
 
-  pb->QueryRigidBody ()->AddForce (force);
+  pb->ApplyImpulse (impulse);
 }
 
 void PhysDemo::DeleteObject (CS::Collisions::iCollisionObject* obj)
