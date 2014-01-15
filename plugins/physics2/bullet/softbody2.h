@@ -114,6 +114,8 @@ public:
   { return dynamic_cast<CS::Physics::iSoftBody*>(this); }
 
   virtual void AddForce (const csVector3& force);
+  virtual void ApplyImpulse (const csVector3& impulse);
+  virtual void ApplyImpulse (const csVector3& impulse, size_t vertexIndex);
 
   virtual void SetAngularVelocity (const csVector3& vel)
   { /* does nothing for now */ }

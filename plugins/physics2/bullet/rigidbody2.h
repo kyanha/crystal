@@ -46,12 +46,6 @@ class csBulletRigidBody : public scfVirtImplementationExt1<csBulletRigidBody,
   friend class csBulletJoint;
   friend class csBulletSector;
   friend class CollisionPortal;
-  
-  using csPhysicalBody::GetFriction;
-  using csPhysicalBody::SetFriction;
-  
-  using csPhysicalBody::SetEnabled;
-  using csPhysicalBody::GetEnabled;
 
 protected:
   csRef<BulletRigidBodyFactory> factory;
@@ -130,6 +124,10 @@ public:
       const csVector3& pos);
   virtual void AddRelForceAtRelPos (const csVector3& force,
       const csVector3& pos);
+
+  virtual void ApplyImpulse (const csVector3& impulse);
+  virtual void ApplyImpulse (const csVector3& impulse, const csVector3& position);
+  virtual void ApplyTorque (const csVector3& torque);
 
   virtual csVector3 GetTotalForce () const;
   virtual csVector3 GetTotalTorque () const;
