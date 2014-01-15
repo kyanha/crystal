@@ -281,7 +281,7 @@ public:
    * The location of the actor's head, i.e. the location of the camera
    */
   csVector3 GetActorPos () const
-  { return player.GetObject ()->GetTransform ().GetOrigin (); }
+  { return view->GetCamera ()->GetTransform ().GetOrigin (); }
 
   /**
    * The location where the actor stands
@@ -336,7 +336,7 @@ public:
 
   /// Find the ground contact point above pos
   bool GetPointOnGroundAbovePos (const csVector3& pos, csVector3& groundPos) const;
-  
+
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   // Geometry utilities
 
