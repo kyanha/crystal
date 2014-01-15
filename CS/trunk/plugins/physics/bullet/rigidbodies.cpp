@@ -1014,26 +1014,31 @@ void csBulletRigidBody::AddForceAtPos (const csVector3& force,
   btVector3 btForce (force.x * dynSys->internalScale,
 		     force.y * dynSys->internalScale,
 		     force.z * dynSys->internalScale);
-  csOrthoTransform trans = GetTransform ();
-  csVector3 relPos = trans.Other2This (pos);
+  btVector3 btPos (pos.x * dynSys->internalScale,
+		   pos.y * dynSys->internalScale,
+		   pos.z * dynSys->internalScale);
+  btVector3 btRelPos = btPos - body->getCenterOfMassPosition ();
 
-  body->applyImpulse (btForce, btVector3 (relPos.x * dynSys->internalScale,
-					  relPos.y * dynSys->internalScale,
-					  relPos.z * dynSys->internalScale));
+  body->applyImpulse (btForce, btRelPos);
   body->setActivationState(ACTIVE_TAG);
 }
 
 void csBulletRigidBody::AddForceAtRelPos (const csVector3& force,
-                                          const csVector3& pos)
+                                          const csVector3& relPos)
 {
   if (body)
   {
+    csOrthoTransform trans = GetTransform ();
+    csVector3 pos = trans.This2Other (relPos);
+    btVector3 btPos (pos.x * dynSys->internalScale,
+		     pos.y * dynSys->internalScale,
+		     pos.z * dynSys->internalScale);
+    btVector3 btRelPos = btPos - body->getCenterOfMassPosition ();
+
     body->applyImpulse (btVector3 (force.x * dynSys->internalScale,
 				   force.y * dynSys->internalScale,
 				   force.z * dynSys->internalScale),
-			btVector3 (pos.x * dynSys->internalScale,
-				   pos.y * dynSys->internalScale,
-				   pos.z * dynSys->internalScale));
+			btRelPos);
     body->setActivationState(ACTIVE_TAG);
   }
 }
@@ -1046,30 +1051,36 @@ void csBulletRigidBody::AddRelForceAtPos (const csVector3& force,
 
   csOrthoTransform trans = GetTransform ();
   csVector3 absForce = trans.This2Other (force);
-  csVector3 relPos = trans.Other2This (pos);
+  btVector3 btPos (pos.x * dynSys->internalScale,
+		   pos.y * dynSys->internalScale,
+		   pos.z * dynSys->internalScale);
+  btVector3 btRelPos = btPos - body->getCenterOfMassPosition ();
+
   body->applyImpulse (btVector3 (absForce.x * dynSys->internalScale,
 				 absForce.y * dynSys->internalScale,
 				 absForce.z * dynSys->internalScale),
-		      btVector3 (relPos.x * dynSys->internalScale,
-				 relPos.y * dynSys->internalScale,
-				 relPos.z * dynSys->internalScale));
+		      btRelPos);
   body->setActivationState(ACTIVE_TAG);
 }
 
 void csBulletRigidBody::AddRelForceAtRelPos (const csVector3& force,
-                                             const csVector3& pos)
+                                             const csVector3& relPos)
 {
   if (!body)
     return;
 
   csOrthoTransform trans = GetTransform ();
   csVector3 absForce = trans.This2Other (force);
+  csVector3 pos = trans.This2Other (relPos);
+  btVector3 btPos (pos.x * dynSys->internalScale,
+		   pos.y * dynSys->internalScale,
+		   pos.z * dynSys->internalScale);
+  btVector3 btRelPos = btPos - body->getCenterOfMassPosition ();
+
   body->applyImpulse (btVector3 (absForce.x * dynSys->internalScale,
 				 absForce.y * dynSys->internalScale,
 				 absForce.z * dynSys->internalScale),
-		      btVector3 (pos.x * dynSys->internalScale,
-				 pos.y * dynSys->internalScale,
-				 pos.z * dynSys->internalScale));
+		      btRelPos);
   body->setActivationState(ACTIVE_TAG);
 }
 
