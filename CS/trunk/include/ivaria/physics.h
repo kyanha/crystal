@@ -135,7 +135,7 @@ struct iPhysicalObjectFactory : public virtual CS::Collisions::iCollisionObjectF
  */
 struct iPhysicalBody : public virtual CS::Collisions::iCollisionObject
 {
-  SCF_INTERFACE (CS::Physics::iPhysicalBody, 1, 0, 1);
+  SCF_INTERFACE (CS::Physics::iPhysicalBody, 1, 0, 2);
 
   /// Get the type of this physical body.
   virtual PhysicalObjectType GetPhysicalObjectType () const = 0;
@@ -190,6 +190,7 @@ struct iPhysicalBody : public virtual CS::Collisions::iCollisionObject
   virtual float GetVolume () const = 0;
   
   /// Add a force to the whole body.
+  CS_DEPRECATED_METHOD_MSG("Deprecated in 2.2. Use ApplyImpulse() instead.")
   virtual void AddForce (const csVector3& force) = 0;
   
   /// Get the linear velocity (translational velocity component).
@@ -210,6 +211,18 @@ struct iPhysicalBody : public virtual CS::Collisions::iCollisionObject
   virtual void SetGravityEnabled (bool enabled) = 0;
   /// Whether this object is affected by gravity
   virtual bool GetGravityEnabled () const = 0;
+
+  /**
+   * Apply an impulse on the physical body. The impulse is applied on the center
+   * of gravity of the body.
+   *
+   * The impulse will be applied for the next simulation step. If you want a continuous
+   * impulse, then you need to apply it manually at each step.
+   *
+   * \param impulse The impulse vector, in world coordinates.
+   * \sa CS::Physics::iRigidBody::ApplyImpulse(), CS::Physics::iSoftBody::ApplyImpulse()
+   */
+  virtual void ApplyImpulse (const csVector3& impulse) = 0;
 };
 
 // TODO: There are a lot more configurable parameters - See btRigidBodyConstructionInfo:
@@ -287,7 +300,6 @@ struct iRigidBodyFactory : public virtual iPhysicalObjectFactory
  * 
  *  Main ways to get pointers to this interface:
  * - iPhysicalSector::GetRigidBody()
- * - iPhysicalSector::FindRigidBody()
  * 
  * Main users of this interface:
  * - iPhysicalSector
@@ -296,7 +308,7 @@ struct iRigidBodyFactory : public virtual iPhysicalObjectFactory
  */
 struct iRigidBody : public virtual iPhysicalBody
 {
-  SCF_INTERFACE (CS::Physics::iRigidBody, 1, 0, 0);
+  SCF_INTERFACE (CS::Physics::iRigidBody, 1, 0, 1);
 
   /// Get the current state of the body.
   virtual RigidBodyState GetState () const = 0;
@@ -315,18 +327,22 @@ struct iRigidBody : public virtual iPhysicalBody
   virtual void SetAngularVelocity (const csVector3& vel) = 0;
 
   /// Add a torque (world space) (active for one timestep).
+  CS_DEPRECATED_METHOD_MSG("Deprecated in 2.2. Use ApplyTorque() instead.")
   virtual void AddTorque (const csVector3& torque) = 0;
 
   /// Add a force (local space) (active for one timestep).
+  CS_DEPRECATED_METHOD_MSG("Deprecated in 2.2. Use ApplyImpulse() instead.")
   virtual void AddRelForce (const csVector3& force) = 0;
 
   /// Add a torque (local space) (active for one timestep).
+  CS_DEPRECATED_METHOD_MSG("Deprecated in 2.2. Use ApplyTorque() instead.")
   virtual void AddRelTorque (const csVector3& torque) = 0;
 
   /**
    * Add a force (world space) at a specific position (world space)
    * (active for one timestep)
    */
+  CS_DEPRECATED_METHOD_MSG("Deprecated in 2.2. Use ApplyImpulse() instead.")
   virtual void AddForceAtPos (const csVector3& force,
       const csVector3& pos) = 0;
 
@@ -334,6 +350,7 @@ struct iRigidBody : public virtual iPhysicalBody
    * Add a force (world space) at a specific position (local space)
    * (active for one timestep)
    */
+  CS_DEPRECATED_METHOD_MSG("Deprecated in 2.2. Use ApplyImpulse() instead.")
   virtual void AddForceAtRelPos (const csVector3& force,
       const csVector3& pos) = 0;
 
@@ -341,6 +358,7 @@ struct iRigidBody : public virtual iPhysicalBody
    * Add a force (local space) at a specific position (world space)
    * (active for one timestep)
    */
+  CS_DEPRECATED_METHOD_MSG("Deprecated in 2.2. Use ApplyImpulse() instead.")
   virtual void AddRelForceAtPos (const csVector3& force,
       const csVector3& pos) = 0;
 
@@ -348,13 +366,14 @@ struct iRigidBody : public virtual iPhysicalBody
    * Add a force (local space) at a specific position (local space)
    * (active for one timestep)
    */
+  CS_DEPRECATED_METHOD_MSG("Deprecated in 2.2. Use ApplyImpulse() instead.")
   virtual void AddRelForceAtRelPos (const csVector3& force,
       const csVector3& pos) = 0;
 
-  /// Get the total force currently applied on this body (in world space).
+  /// Get the total force currently applied on this body (in world coordinates).
   virtual csVector3 GetTotalForce () const = 0;
 
-  /// Get the total torque currently applied on this body (in world space).
+  /// Get the total torque currently applied on this body (in world coordinates).
   virtual csVector3 GetTotalTorque () const = 0;
 
   /**
@@ -401,6 +420,29 @@ struct iRigidBody : public virtual iPhysicalBody
    * \todo Document me
    */
   virtual void SetAngularFactor (const csVector3& f) = 0;
+
+  /**
+   * Apply an impulse on the rigid body at the specified position.
+   *
+   * The impulse will be applied for the next simulation step. If you want a continuous
+   * impulse, then you need to apply it manually at each step.
+   *
+   * \param impulse The impulse vector, in world coordinates.
+   * \param position The position where the impulse is applied, in world coordinates.
+   * \sa CS::Physics::iPhysicalBody::ApplyImpulse(), CS::Physics::iRigidBody::ApplyTorque()
+   */
+  virtual void ApplyImpulse (const csVector3& impulse, const csVector3& position) = 0;
+
+  /**
+   * Apply a rotational torque on the rigid body.
+   *
+   * The torque will be applied for the next simulation step. If you want a continuous
+   * torque, then you need to apply it manually at each step.
+   *
+   * \param torque The torque vector, in world coordinates.
+   * \sa CS::Physics::iPhysicalBody::ApplyImpulse(), CS::Physics::iRigidBody::ApplyImpulse()
+   */
+  virtual void ApplyTorque (const csVector3& torque) = 0;
 };
 
 /**
@@ -606,7 +648,6 @@ struct iSoftMeshFactory : public virtual iSoftBodyFactory
  * 
  * Main ways to get pointers to this interface: 
  * - iPhysicalSector::GetSoftBody()
- * - iPhysicalSector::FindSoftBody()
  * 
  * Main users of this interface:
  * - iPhysicalSector
@@ -615,7 +656,7 @@ struct iSoftMeshFactory : public virtual iSoftBodyFactory
  */
 struct iSoftBody : public virtual iPhysicalBody
 {
-  SCF_INTERFACE (CS::Physics::iSoftBody, 1, 0, 0);
+  SCF_INTERFACE (CS::Physics::iSoftBody, 1, 0, 1);
 
   /// Set the mass of a node by index.
   virtual void SetVertexMass (float mass, size_t index) = 0;
@@ -797,6 +838,7 @@ struct iSoftBody : public virtual iPhysicalBody
   virtual const csVector3 GetWindVelocity () const = 0;
 
   /// Add a force at the given vertex of the body.
+  CS_DEPRECATED_METHOD_MSG("Deprecated in 2.2. Use ApplyImpulse() instead.")
   virtual void AddForce (const csVector3& force, size_t vertexIndex) = 0;
 
   /**
@@ -804,6 +846,19 @@ struct iSoftBody : public virtual iPhysicalBody
    * at each frame, and will add 2D lines on top of the rendered scene.
    */
   virtual void DebugDraw (iView* rView) = 0;
+
+  /**
+   * Apply an impulse on the soft body at the position of the specified vertex.
+   *
+   * The impulse will be applied for the next simulation step. If you want a continuous
+   * impulse, then you need to apply it manually at each step.
+   *
+   * \param impulse The impulse vector, in world coordinates.
+   * \param vertexIndex The index of the vertex where the impulse is applied,
+   * in world coordinates.
+   * \sa CS::Physics::iPhysicalBody::ApplyImpulse()
+   */
+  virtual void ApplyImpulse (const csVector3& impulse, size_t vertexIndex) = 0;
 };
 
 /**

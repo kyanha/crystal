@@ -81,6 +81,7 @@ public:
   virtual void SetGravityEnabled (bool enabled) {}
 
   virtual void AddForce (const csVector3& force) = 0;
+  virtual void ApplyImpulse (const csVector3& impulse) = 0;
   
   virtual csPtr<CS::Collisions::iCollisionObject> ClonePassivePortalObject ();
 };

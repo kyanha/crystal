@@ -76,7 +76,7 @@ csBulletSoftBody::csBulletSoftBody (csBulletSystem* phySys, btSoftBody* body)
   :scfImplementationType (this, phySys), btBody (body), anchorCount (0), gravityEnabled (true)
 {
   btObject = body;
-  btBody->setUserPointer (dynamic_cast<CS::Collisions::iCollisionObject*>(this));
+  btBody->setUserPointer (dynamic_cast<CS::Collisions::iCollisionObject*> (this));
 }
 
 csBulletSoftBody::~csBulletSoftBody ()
@@ -168,7 +168,7 @@ bool csBulletSoftBody::AddBulletObject ()
       static_cast<btSoftRigidDynamicsWorld*> (sector->bulletWorld);
 
     softWorld->addSoftBody (btBody, group->value, group->mask);
-    btBody->setUserPointer (dynamic_cast<CS::Collisions::iCollisionObject*>(this));
+    btBody->setUserPointer (dynamic_cast<CS::Collisions::iCollisionObject*> (this));
     insideWorld = true;
   }
   return true;
@@ -227,6 +227,30 @@ void csBulletSoftBody::AddForce (const csVector3& force)
   btBody->addForce (CSToBullet (force, system->GetInternalScale ()));
 }
 
+void csBulletSoftBody::AddForce (const csVector3& force, size_t vertexIndex)
+{
+  CS_ASSERT (vertexIndex < (size_t) btBody->m_nodes.size ());
+  // TODO: Why a correction factor on the force?
+  btVector3 correctedForce = CSToBullet (force / btBody->m_nodes[vertexIndex].m_im * 1000.f,
+					 system->GetInternalScale ());
+  btBody->addForce (correctedForce, int (vertexIndex));
+}
+
+void csBulletSoftBody::ApplyImpulse (const csVector3& impulse)
+{
+  CS_ASSERT (btBody);
+  btBody->addForce (CSToBullet (impulse, system->GetInternalScale ()));
+}
+
+void csBulletSoftBody::ApplyImpulse (const csVector3& impulse, size_t vertexIndex)
+{
+  CS_ASSERT (vertexIndex < (size_t) btBody->m_nodes.size ());
+  // TODO: Why a correction factor on the impulse?
+  btVector3 correctedImpulse = CSToBullet (impulse / btBody->m_nodes[vertexIndex].m_im * 1000.f,
+					   system->GetInternalScale ());
+  btBody->addForce (correctedImpulse, int (vertexIndex));
+}
+
 void csBulletSoftBody::SetLinearVelocity (const csVector3& vel)
 {
   CS_ASSERT (btBody);
@@ -235,7 +259,7 @@ void csBulletSoftBody::SetLinearVelocity (const csVector3& vel)
 
 csVector3 csBulletSoftBody::GetLinearVelocity () const
 {
-  CS_ASSERT ( btBody );
+  CS_ASSERT (btBody);
 
   // Weighted sum of of all node velocities
   btVector3 vel = btVector3 (0, 0, 0);
@@ -248,7 +272,7 @@ csVector3 csBulletSoftBody::GetLinearVelocity () const
 
 csVector3 csBulletSoftBody::GetLinearVelocity (size_t index /* = 0 */) const
 {
-  CS_ASSERT ( btBody && index < (size_t) btBody->m_nodes.size ());
+  CS_ASSERT (btBody && index < (size_t) btBody->m_nodes.size ());
 
   return BulletToCS (btBody->m_nodes[int (index)].m_v, system->GetInverseInternalScale ());
 }
@@ -411,14 +435,6 @@ const csVector3 csBulletSoftBody::GetWindVelocity () const
   CS_ASSERT (btBody);
   csVector3 velo = BulletToCS (btBody->getWindVelocity (), system->GetInternalScale ());
   return velo;
-}
-
-void csBulletSoftBody::AddForce (const csVector3& force, size_t vertexIndex)
-{
-  CS_ASSERT (vertexIndex < (size_t) btBody->m_nodes.size ());
-  //TODO: in softbodies.cpp the force was multiplied by 100, why?
-  btBody->addForce (CSToBullet (force, system->GetInternalScale () * system->GetInternalScale ()),
-    int (vertexIndex));
 }
 
 void csBulletSoftBody::SetLinearStiffness (float stiffness)
