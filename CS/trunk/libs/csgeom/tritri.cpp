@@ -739,7 +739,7 @@ static inline bool HandleCoplanar (const csPlane3& plane,
   size_t l = CS::Math::NextModulo3 (k);
 
   // Check verts against tris 
-  for (size_t tidx = 0; tidx < 1; ++tidx)
+  for (size_t tidx = 0; tidx < 2; ++tidx)
   {
     numPoints += HandlePointsInTriangle ( (tidx ? tri1 : tri2),
       (tidx ? tri2 : tri1), k, l, points[0+numPoints], points[1+numPoints]);
