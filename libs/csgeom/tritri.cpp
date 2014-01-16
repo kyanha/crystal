@@ -683,7 +683,7 @@ static inline void ComputeIntervals (const csVector3 tri[3], float d[3],
 }
 
 static inline size_t HandlePointsInTriangle (const csVector3 tri1[3], 
-                                             const csVector3 tri2[2],
+                                             const csVector3 tri2[3],
                                              size_t k, size_t l,
                                              csVector3& point0,
                                              csVector3& point1)
@@ -725,7 +725,7 @@ static inline size_t HandlePointsInTriangle (const csVector3 tri1[3],
 
 static inline bool HandleCoplanar (const csPlane3& plane, 
                                    const csVector3 tri1[3], 
-                                   const csVector3 tri2[2], 
+                                   const csVector3 tri2[3], 
                                    csSegment3& isectline)
 {
   // All tests here run until we have two points
