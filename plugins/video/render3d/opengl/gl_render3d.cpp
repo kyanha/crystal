@@ -2443,7 +2443,6 @@ void csGLGraphics3D::DrawPixmap (iTextureHandle *hTex,
   statecache->SetMatrixMode (GL_PROJECTION);
   glPushMatrix ();
   glLoadIdentity ();
-  if (!fullScreen || hasRenderTarget)
   {
     // get inverse target rectangle
     float rectInv[4] = { -1.0f, 1.0f, -1.0f, 1.0f };
