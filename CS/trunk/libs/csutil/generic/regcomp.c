@@ -3537,10 +3537,5 @@ duplicate_tree (src, dfa)
     new_node_idx = src->type;
 
   new_tree = create_tree (left, right, src->type, new_node_idx);
-  if (BE (new_tree == NULL, 0))
-    {
-      free_bin_tree (left);
-      free_bin_tree (right);
-    }
   return new_tree;
 }
