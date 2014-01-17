@@ -139,6 +139,7 @@ WalkTest::~WalkTest ()
   delete fsfx;
   delete missiles;
   delete lights;
+  delete bots;
 }
 
 void WalkTest::Report (int severity, const char* msg, ...)
