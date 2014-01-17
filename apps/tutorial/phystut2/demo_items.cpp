@@ -105,7 +105,7 @@ void PhysDemo::CreateItemTemplates ()
 
     AddItemFunction (Secondary, PullObject, "Pull object", physDemo.PullObject ());
     AddItemFunction (Secondary, DeleteObject, "Delete object", physDemo.DeleteObject ());
-    AddItemFunction (Secondary, ToggleObjectDynamic, "Toggle dynamic", physDemo.ToggleObjectDynamic ());
+    AddItemFunction (Secondary, ToggleObjectState, "Toggle dynamic", physDemo.ToggleObjectState ());
   }
 
   {
