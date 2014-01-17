@@ -34,27 +34,6 @@
 using namespace CS::Collisions;
 using namespace CS::Physics;
 
-void PhysDemo::PrintHelp ()
-{
-  csCommandLineHelper commandLineHelper;
-
-  // Command line options
-  commandLineHelper.AddCommandLineOption
-    ("phys_engine", "Specify which physics plugin to use", csVariant ("bullet2"));
-  commandLineHelper.AddCommandLineOption
-    ("soft", "Enable the soft bodies", csVariant (true));
-  commandLineHelper.AddCommandLineOption
-    ("mapfile", csString ().Format ("The path to the map file to be loaded (try: )"), csVariant (""));
-  commandLineHelper.AddCommandLineOption
-    ("convexdecompose", csString ().Format ("Whether to perform convex decomposition on all render meshes"), csVariant (false));
-
-  // Printing help
-  commandLineHelper.PrintApplicationHelp
-    (GetObjectRegistry (), "phystut2",
-    "phystut2 <OPTIONS>",
-    "Physics tutorial 2 for Crystal Space. ");
-}
-
 void PhysDemo::Frame ()
 {
   // Update the demo's state information

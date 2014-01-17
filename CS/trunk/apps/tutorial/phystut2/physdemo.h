@@ -362,7 +362,7 @@ public:
   void PullObject (CS::Collisions::iCollisionObject* obj = nullptr);
 
   /// Toggles between DYNAMIC/STATIC state of the given object. If not given, picks currently targeted object.
-  void ToggleObjectDynamic (CS::Collisions::iCollisionObject* obj = nullptr);
+  void ToggleObjectState (CS::Collisions::iCollisionObject* obj = nullptr);
 
   /// Deletes the given object. If not given, picks currently targeted object.
   void DeleteObject (CS::Collisions::iCollisionObject* obj = nullptr);

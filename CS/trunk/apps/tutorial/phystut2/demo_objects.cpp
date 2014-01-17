@@ -429,8 +429,7 @@ CS::Physics::iRigidBody* PhysDemo::SpawnCapsule (float length, float radius, boo
 CS::Collisions::iCollisionObject* PhysDemo::SpawnConcaveMesh ()
 {
   // Find the 'star' mesh factory
-  csRef<iMeshFactoryWrapper> starFact;
-  starFact = engine->FindMeshFactory ("genstar");
+  csRef<iMeshFactoryWrapper> starFact = engine->FindMeshFactory ("genstar");
   if (!starFact)
   {
     loader->Load ("/lib/std/star.xml");
@@ -451,37 +450,58 @@ CS::Collisions::iCollisionObject* PhysDemo::SpawnConcaveMesh ()
   star->GetMovable ()->SetTransform (tc);
   star->GetMovable ()->UpdateMove ();
 
+  // The first time that this method is called, we create a simple 'concave mesh' collider
   csRef<CS::Collisions::iCollider> starCollider;
-  if (mainCollider == nullptr)
+  float scale = 0.f;
+  if (!mainCollider)
   {
     mainCollider = physicalSystem->CreateColliderConcaveMesh
-      (collisionHelper.FindCollisionMesh (star));
+      (collisionHelper.FindCollisionMesh (star), true);
     starCollider = mainCollider;
   }
+
+  // If this method has already been called, then we create a 'scaled concave mesh' static
+  // collider instead (the only purpose of this being to test them)
   else
   {
+    scale = 2.f;
     starCollider = csRef<CS::Collisions::iColliderConcaveMeshScaled>
-      (physicalSystem->CreateColliderConcaveMeshScaled (mainCollider, 1.0f));
+      (physicalSystem->CreateColliderConcaveMeshScaled (mainCollider, scale));
   }  
 
-  // create body
+  // Create the rigid body
   csRef<iRigidBodyFactory> factory = physicalSystem->CreateRigidBodyFactory (starCollider);
   factory->SetDensity (DefaultDensity);
   factory->SetElasticity (DefaultElasticity);
   factory->SetFriction (DefaultFriction);
 
-  csRef<CS::Physics::iRigidBody> co = factory->CreateRigidBody ();
+  csRef<CS::Physics::iRigidBody> body = factory->CreateRigidBody ();
 
-  // set transform
+  // Attach the star mesh and set its transform
   csOrthoTransform trans = tc;
   trans.SetOrigin (tc.GetOrigin () + tc.GetT2O () * csVector3 (0, 0, 2));
-  co->SetAttachedSceneNode (star->QuerySceneNode ());
-  co->QueryObject ()->SetObjectParent (star->QueryObject ());
-  co->SetTransform (trans);
-  
-  GetCurrentSector ()->AddCollisionObject (co);
+  body->SetAttachedSceneNode (star->QuerySceneNode ());
+  body->QueryObject ()->SetObjectParent (star->QueryObject ());
+  body->SetTransform (trans);
 
-  return co;
+  // Add the rigid body to the collision sector
+  GetCurrentSector ()->AddCollisionObject (body);
+
+  // If we spawn a scaled concave collider, then scale the mesh too.
+  if (scale > EPSILON)
+  {
+    csMatrix3 scaling;
+    scaling.Identity ();
+    scaling *= scale;
+
+    csOrthoTransform transform = star->GetMovable ()->GetFullTransform ();
+    transform.SetT2O (scaling * transform.GetT2O ());
+
+    star->GetMovable ()->SetFullTransform (transform);
+    star->GetMovable ()->UpdateMove ();
+  }
+
+  return body;
 }
 
 CS::Physics::iRigidBody* PhysDemo::SpawnConvexMesh (bool setVelocity /* = true */)
@@ -559,7 +579,8 @@ CS::Physics::iRigidBody* PhysDemo::SpawnCompound (bool setVelocity /* = true */)
 
   csRef<iMeshWrapper> mesh (engine->CreateMeshWrapper (meshFact, "mesh"));
 
-  // Perform the convex decomposition of the mesh
+  // Perform the convex decomposition of the mesh (or fallback to a concave mesh if
+  // there are no decomposer)
   csRef<CS::Collisions::iCollider> rootCollider;
   if (convexDecomposer)
   {

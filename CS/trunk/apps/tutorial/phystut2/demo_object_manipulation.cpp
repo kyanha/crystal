@@ -161,7 +161,7 @@ void PhysDemo::DeleteObject (CS::Collisions::iCollisionObject* obj)
   }
 }
 
-void PhysDemo::ToggleObjectDynamic (CS::Collisions::iCollisionObject* obj)
+void PhysDemo::ToggleObjectState (CS::Collisions::iCollisionObject* obj)
 {
   if (!obj)
   {
@@ -171,44 +171,21 @@ void PhysDemo::ToggleObjectDynamic (CS::Collisions::iCollisionObject* obj)
     obj = result.object;
   }
 
-  if (!obj->QueryPhysicalBody ())
-  {
-    // must be physical in order to be toggled
+  // The object must be a rigid body in order to be toggled
+  if (!obj->QueryPhysicalBody () || !obj->QueryPhysicalBody ()->QueryRigidBody ())
     return;
-  }
 
-  iPhysicalBody* physObj = obj->QueryPhysicalBody ();
-  bool isDynamic = physObj->GetDensity () != 0;
-  csRef<CS::Collisions::iCollider> oldCollider = obj->GetCollider ();
-  if (isDynamic)
-  {
-    // Set mass to 0 (makes it static)
-    physObj->SetDensity (0);
-  }
+  iRigidBody* body = obj->QueryPhysicalBody ()->QueryRigidBody ();
+  RigidBodyState state = body->GetState ();
+
+  // Don't toggle kinematic objects
+  if (state == STATE_KINEMATIC) return;
+
+  // Toggle the state of the object
+  if (state == STATE_STATIC)
+    body->SetState (STATE_DYNAMIC);
   else
-  {
-    // Give it mass (makes it dynamic)
-    if (physObj->GetCollider ()->GetColliderType () == COLLIDER_CONCAVE_MESH && obj->GetAttachedSceneNode () && convexDecomposer)
-    {
-      // First decompose it into its convex parts
-      csPrintf ("Performing convex decomposition on object: \"%s\"...\n", obj->QueryObject ()->GetName ());
-
-      csRef<CS::Collisions::iCollider> collider =
-	csRef<CS::Collisions::iCollider> (physicalSystem->CreateCollider ());
-      collisionHelper.DecomposeConcaveMesh (obj->GetAttachedSceneNode ()->QueryMesh (), collider, convexDecomposer);
-      obj->SetCollider (collider);
-
-      csPrintf ("Done - Performed convex decomposition on object: \"%s\".\n", obj->QueryObject ()->GetName ());
-    }
-    
-    physObj->SetDensity (DefaultDensity);
-  }
-
-  if ((physObj->GetDensity () != 0) == isDynamic)
-  {
-    obj->SetCollider (oldCollider);
-    ReportWarning ("Cannot make object \"%s\" %s.\n", physObj->QueryObject ()->GetName (), isDynamic ? "STATIC" : "DYNAMIC");
-  }
+    body->SetState (STATE_STATIC);
 }
 
 void PhysDemo::TeleportObject (CS::Collisions::iCollisionObject* obj, iCameraPosition* pos)

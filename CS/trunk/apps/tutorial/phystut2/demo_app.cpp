@@ -53,6 +53,29 @@ PhysDemo::~PhysDemo ()
 {
 }
 
+void PhysDemo::PrintHelp ()
+{
+  csCommandLineHelper commandLineHelper;
+
+  // Command line options
+  commandLineHelper.AddCommandLineOption
+    ("phys_engine", "Specify which physics plugin to use", csVariant ("bullet2"));
+  commandLineHelper.AddCommandLineOption
+    ("concave", "Enable the dynamic concave objects", csVariant (true));
+  commandLineHelper.AddCommandLineOption
+    ("soft", "Enable the soft bodies", csVariant (true));
+  commandLineHelper.AddCommandLineOption
+    ("mapfile", csString ().Format ("Specify a map file to be loaded"), csVariant (""));
+  commandLineHelper.AddCommandLineOption
+    ("convexdecompose", csString ().Format ("Whether to perform convex decomposition on all render meshes"), csVariant (false));
+
+  // Printing help
+  commandLineHelper.PrintApplicationHelp
+    (GetObjectRegistry (), "phystut2",
+    "phystut2 <OPTIONS>",
+    "Tutorial for the physics2 plugin for Crystal Space. ");
+}
+
 bool PhysDemo::OnInitialize (int argc, char* argv[])
 {
   // Default behavior from DemoApplication
@@ -78,16 +101,19 @@ bool PhysDemo::OnInitialize (int argc, char* argv[])
     ReportWarning ("Could not load the convex decomposition plugin!");
   }
   
+  // Check whether or not the dynamic concave objects are enabled
+  bool dynamicConcave = clp->GetBoolOption ("concave", true);
+  physicalSystem->SetDynamicConcaveEnabled (dynamicConcave);
+
+  // Check whether or not the soft bodies are enabled
+  isSoftBodyWorld = clp->GetBoolOption ("soft", true);
+  physicalSystem->SetSoftBodyEnabled (isSoftBodyWorld);
+
   // Initialize the collision helper
   collisionHelper.Initialize (GetObjectRegistry (), physicalSystem);
 
-  // Get commandline parser
+  // Get the commandline parser
   csRef<iCommandLineParser> clp = csQueryRegistry<iCommandLineParser> (GetObjectRegistry ());
-
-  // Check whether the soft bodies are enabled or not
-  isSoftBodyWorld = clp->GetBoolOption ("soft", true);
-  if (isSoftBodyWorld)
-    physicalSystem->SetSoftBodyEnabled (true);
 
   // Load the soft body animation control plugin & factory
   if (isSoftBodyWorld)
