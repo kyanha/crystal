@@ -39,6 +39,7 @@
 
 #include "btBulletDynamicsCommon.h"
 #include "btBulletCollisionCommon.h"
+#include "BulletCollision/Gimpact/btGImpactCollisionAlgorithm.h"
 #include "BulletSoftBody/btSoftBody.h"
 #include "BulletSoftBody/btSoftRigidDynamicsWorld.h"
 #include "BulletSoftBody/btSoftBodyRigidBodyCollisionConfiguration.h"
@@ -191,6 +192,9 @@ CS_PLUGIN_NAMESPACE_BEGIN (Bullet2)
       bulletWorld = new btDiscreteDynamicsWorld
         (dispatcher, broadphase, solver, configuration);
     }
+
+    if (system->GetDynamicConcaveEnabled ())
+      btGImpactCollisionAlgorithm::registerAlgorithm (dispatcher);
 
     btContactSolverInfo& info = bulletWorld->getSolverInfo ();
     info.m_numIterations = system->stepIterations;

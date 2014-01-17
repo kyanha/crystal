@@ -699,7 +699,7 @@ struct iCollisionSector : public virtual iBase
 // TODO: global collision callback
 struct iCollisionSystem : public virtual iBase
 {
-  SCF_INTERFACE (CS::Collisions::iCollisionSystem, 2, 0, 1);
+  SCF_INTERFACE (CS::Collisions::iCollisionSystem, 3, 0, 0);
 
   /**\name General methods
    * @{ */
@@ -740,14 +740,36 @@ struct iCollisionSystem : public virtual iBase
    */
   virtual csPtr<iCollider> CreateCollider () = 0;
 
-  /// Create a convex mesh collider.
-  // TODO: what is simplify?
-  virtual csPtr<iColliderConvexMesh> CreateColliderConvexMesh (iTriangleMesh* mesh, bool simplify = false) = 0;
+  /**
+   * Create a convex mesh collider.
+   *
+   * \param mesh The triangle mesh defining the geometry of the collider.
+   */
+  virtual csPtr<iColliderConvexMesh> CreateColliderConvexMesh
+    (iTriangleMesh* mesh) = 0;
 
-  /// Create a static concave mesh collider.
-  virtual csPtr<iColliderConcaveMesh> CreateColliderConcaveMesh (iTriangleMesh* mesh) = 0;
+  /**
+   * Create a concave mesh collider.
+   *
+   * \param mesh The triangle mesh defining the geometry of the collider.
+   * \param dynamicEnabled Whether or not this collider can be used for dynamic
+   * concave rigid bodies. The simulation of dynamic concave objects must have
+   * been enabled through iPhysicalSystem::SetDynamicConcaveEnabled(), otherwise
+   * this parameter has no effect.
+   */
+  virtual csPtr<iColliderConcaveMesh> CreateColliderConcaveMesh
+    (iTriangleMesh* mesh, bool dynamicEnabled = false) = 0;
 
-  /// Create a static, scaled concave mesh collider.
+  /**
+   * Create a static scaled concave mesh collider. This collider is quite memory efficient
+   * since it re-uses the data defined by an original CS::Collider::iColliderConcaveMesh
+   * (which remains untouched).
+   *
+   * This collider is always static and cannot be toggled dynamic.
+   *
+   * \param collider The original collider that will be scaled by this collider.
+   * \param scale The scale to apply on the original collider.
+   */
   virtual csPtr<iColliderConcaveMeshScaled> CreateColliderConcaveMeshScaled (
     iColliderConcaveMesh* collider, const csVector3& scale) = 0;
 

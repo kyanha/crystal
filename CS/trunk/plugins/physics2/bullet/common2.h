@@ -20,7 +20,6 @@
     License along with this library; if not, write to the Free
     Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
-
 #ifndef __CS_BULLET_COMMON2_H__
 #define __CS_BULLET_COMMON2_H__
 
@@ -36,7 +35,6 @@
 #include "csutil/cscolor.h"
 #include "btBulletCollisionCommon.h"
 #include "motionstates.h"
-
 
 CS_PLUGIN_NAMESPACE_BEGIN (Bullet2)
 {
@@ -111,18 +109,6 @@ static inline btVector3 CSToBullet (const csVector3& v,
 		    v.z * internalScale);
 }
 
-//----------------------- DowncastPtr ----------------------------
-
-/**
- * Very ugly and inefficient work-around to easily cast between two known-to-be-compatible types
- */
-// TODO: remove that
-template<typename T, typename T2>
-inline csPtr<T> DowncastPtr (csPtr<T2> ptr)
-{
-  return csPtr<T>(csRef<T>(csRef<T2>(ptr)));
-}
-
 //----------------------- csBulletDebugDraw ----------------------------
 
 struct csBulletDebugLine
@@ -139,109 +125,28 @@ private:
   float inverseInternalScale;
 
 public:
-  csBulletDebugDraw (float inverseInternalScale)
-    : mode (DBG_DrawWireframe | DBG_DrawConstraints | DBG_DrawConstraintLimits),
-    inverseInternalScale (inverseInternalScale)
-  {
-  }
-
+  csBulletDebugDraw (float inverseInternalScale);
   virtual ~csBulletDebugDraw () { }
 
   virtual void drawLine (const btVector3& from, const btVector3& to,
-    const btVector3& color)
-  {
-    csBulletDebugLine l;
-    l.p1.Set (BulletToCS (from, inverseInternalScale));
-    l.p2.Set (BulletToCS (to, inverseInternalScale));
-    l.color.Set (color.getX (), color.getY (), color.getZ ());
-    lines.Push (l);
-  }
-
+			 const btVector3& color);
   virtual void drawContactPoint (const btVector3 &PointOnB,
-    const btVector3 &normalOnB,
-    btScalar distance, int lifeTime,
-    const btVector3 &color)
-  {
-    btVector3 to = PointOnB+normalOnB*1;//distance;
-    const btVector3& from = PointOnB;
-    csBulletDebugLine l;
-    l.p1.Set (BulletToCS (from, inverseInternalScale));
-    l.p2.Set (BulletToCS (to, inverseInternalScale));
-    l.color.Set (color.getX (), color.getY (), color.getZ ());
-    lines.Push (l);
-  }
+				 const btVector3 &normalOnB,
+				 btScalar distance, int lifeTime,
+				 const btVector3 &color);
+  virtual void reportErrorWarning (const char *warningString);
+  virtual void draw3dText (const btVector3 &location, const char *textString);
 
-  virtual void reportErrorWarning (const char *warningString)
-  {
-    printf ("%s", warningString);
-  }
+  virtual void SetDebugMode (CS::Physics::DebugMode mode);
+  virtual CS::Physics::DebugMode GetDebugMode ();
 
-  virtual void draw3dText (const btVector3 &location, const char *textString)
-  {}
+  virtual void StartProfile ();
+  virtual void StopProfile ();
 
-  void SetDebugMode (CS::Physics::DebugMode mode)
-  {
-    this->mode = 0;
-    if (mode & CS::Physics::DEBUG_COLLIDERS)
-      this->mode |= DBG_DrawWireframe;
-    if (mode & CS::Physics::DEBUG_AABB)
-      this->mode |= DBG_DrawAabb;
-    if (mode & CS::Physics::DEBUG_JOINTS)
-      this->mode |= DBG_DrawConstraints | DBG_DrawConstraintLimits;
-  }
+  virtual void setDebugMode (int m);
+  virtual int getDebugMode () const;
 
-  CS::Physics::DebugMode GetDebugMode ()
-  {
-    CS::Physics::DebugMode mode = CS::Physics::DEBUG_NOTHING;
-    if (this->mode & DBG_DrawWireframe)
-      mode = (CS::Physics::DebugMode) (mode | CS::Physics::DEBUG_COLLIDERS);
-    if (this->mode & DBG_DrawAabb)
-      mode = (CS::Physics::DebugMode) (mode | CS::Physics::DEBUG_AABB);
-    if (this->mode & DBG_DrawConstraints)
-      mode = (CS::Physics::DebugMode) (mode | CS::Physics::DEBUG_JOINTS);
-    return mode;
-  }
-
-  virtual void StartProfile ()
-  {
-    this->mode |= DBG_ProfileTimings;
-  }
-
-  virtual void StopProfile ()
-  {
-    this->mode &= this->mode & ~DBG_ProfileTimings;
-  }
-
-  virtual void setDebugMode (int m)
-  {
-    mode = m;
-  }
-
-  virtual int getDebugMode () const
-  {
-    return mode;
-  }
-
-  void DebugDraw (iGraphics3D* g3d, iCamera* camera)
-  {
-    iGraphics2D* g2d = g3d->GetDriver2D ();
-    csTransform tr_w2c = camera->GetTransform ();
-    const CS::Math::Matrix4& projection (camera->GetProjectionMatrix ());
-
-    if (!g3d->BeginDraw (CSDRAW_2DGRAPHICS))
-      return;
-
-    for (size_t i = 0 ; i < lines.GetSize () ; i++)
-    {
-      csBulletDebugLine& l = lines[i];
-      int color = g2d->FindRGB (int (l.color.red * 255),
-        int (l.color.green * 255),
-        int (l.color.blue * 255));
-      g2d->DrawLineProjected (tr_w2c * l.p1, tr_w2c * l.p2, projection, color);
-    }
-
-    lines.Empty ();
-  }
+  void DebugDraw (iGraphics3D* g3d, iCamera* camera);
 };
 
 }

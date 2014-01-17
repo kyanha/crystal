@@ -46,7 +46,7 @@ CS_PLUGIN_NAMESPACE_BEGIN (Bullet2)
 
     // Build the bullet object
     btCollisionShape* shape = collider->GetOrCreateBulletShape ();
-    btScalar mass = factory->mass;
+    btScalar mass = factory->GetMass ();//mass;
     btTransform trans = CSToBullet (factory->GetColliderTransform (), system->GetInternalScale ())
 			 * collider->GetPrincipalAxisTransform ();
     // TODO: share the construction info at the factory level
@@ -150,7 +150,10 @@ CS_PLUGIN_NAMESPACE_BEGIN (Bullet2)
     }
   }
 
-  bool csBulletRigidBody::DoesGravityApply () const { return GetGravityEnabled () && btBody->getGravity ().length2 () != 0; }
+  bool csBulletRigidBody::DoesGravityApply () const
+  {
+    return GetGravityEnabled () && btBody->getGravity ().length2 () > SMALL_EPSILON;
+  }
   
   bool csBulletRigidBody::IsMovingUpward () const 
   { 
@@ -165,16 +168,11 @@ CS_PLUGIN_NAMESPACE_BEGIN (Bullet2)
 
   void csBulletRigidBody::SetMass (btScalar mass)
   {
-    // SetMassInternal (mass); SetState calls SetMassInternal
-
-    if (mass == 0)
-    {
+    if (mass < SMALL_EPSILON)
       SetState (STATE_STATIC);
-    }
+
     else
-    {
       SetState (STATE_DYNAMIC);
-    }
   }
   
   void csBulletRigidBody::SetMassInternal (btScalar mass)

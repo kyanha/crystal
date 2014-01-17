@@ -135,7 +135,7 @@ struct iPhysicalObjectFactory : public virtual CS::Collisions::iCollisionObjectF
  */
 struct iPhysicalBody : public virtual CS::Collisions::iCollisionObject
 {
-  SCF_INTERFACE (CS::Physics::iPhysicalBody, 1, 0, 2);
+  SCF_INTERFACE (CS::Physics::iPhysicalBody, 1, 0, 3);
 
   /// Get the type of this physical body.
   virtual PhysicalObjectType GetPhysicalObjectType () const = 0;
@@ -1426,7 +1426,7 @@ struct iPhysicalSector : public virtual CS::Collisions::iCollisionSector
 // TODO: step callback
 struct iPhysicalSystem : public virtual CS::Collisions::iCollisionSystem
 {
-  SCF_INTERFACE (CS::Physics::iPhysicalSystem, 1, 0, 0);
+  SCF_INTERFACE (CS::Physics::iPhysicalSystem, 1, 0, 1);
   
   /**
    * Set the parameters of the constraint solver. Use this if you want to find a
@@ -1663,6 +1663,28 @@ struct iPhysicalSystem : public virtual CS::Collisions::iCollisionSystem
    * the dumping.
    */
   virtual void DumpProfile (bool resetProfile = true) = 0;
+
+  /**
+   * Set whether or not this physical system can handle dynamic concave objects. The
+   * default value is \a false.
+   *
+   * If set to \a false then all rigid bodies containing at least a
+   * CS::Collisions::iColliderConcaveMesh or a
+   * CS::Collisions::iColliderConcaveMeshScaled will remain static in all cases.
+   *
+   * Enabling dynamic concave object simulation may lead to performance or stability
+   * issues. You might consider trying to use only convex colliders insteads, eg
+   * obtained through the interface CS::Collisions::iConvexDecomposer.
+   *
+   * \warning You have to call this method before creating any collision sectors or
+   * object factories.
+   */
+  virtual void SetDynamicConcaveEnabled (bool enabled) = 0; 
+
+  /**
+   * Return whether or not this physical system can handle dynamic concave objects.
+   */
+  virtual bool GetDynamicConcaveEnabled () const = 0;
 };
 
 }

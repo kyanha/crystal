@@ -60,6 +60,8 @@ using namespace CS::Physics;
 CS_PLUGIN_NAMESPACE_BEGIN (Bullet2)
 {
 
+  //----------------------- BulletCollisionObjectFactory -----------------------
+
   BulletCollisionObjectFactory::BulletCollisionObjectFactory
     (csBulletSystem* system, CS::Collisions::iCollider* collider)
     : scfImplementationType (this), system (system), collider (collider),
@@ -87,20 +89,57 @@ CS_PLUGIN_NAMESPACE_BEGIN (Bullet2)
     return transform;
   }
 
+  //----------------------- BulletPhysicalObjectFactory -----------------------
+
+  float BulletPhysicalObjectFactory::GetDensity () const
+  {
+    if (mass < SMALL_EPSILON)
+      return 0.0f;
+    return mass / collider->GetVolume ();
+  }
+
+  void BulletPhysicalObjectFactory::SetDensity (float density)
+  {
+    if (collider && collider->IsDynamic ())
+      mass = density * collider->GetVolume ();
+  }
+
+  void BulletPhysicalObjectFactory::SetCollider
+    (CS::Collisions::iCollider* collider,
+     const csOrthoTransform& transform)
+  {
+    this->collider = collider;
+    this->transform = transform;
+    // TODO: keep that?
+    if (!collider || !collider->IsDynamic ())
+      mass = 0.0f;
+  }
+
+  //----------------------- BulletRigidBodyFactory -----------------------
+
   csPtr<CS::Collisions::iCollisionObject> BulletRigidBodyFactory::CreateCollisionObject () 
-  { 
-    return DowncastPtr<CS::Collisions::iCollisionObject, CS::Physics::iRigidBody> (CreateRigidBody ()); 
+  {
+    csRef<CS::Physics::iRigidBody> body = CreateRigidBody ();
+    return csPtr<CS::Collisions::iCollisionObject> (body);
   }
 
   csPtr<CS::Physics::iRigidBody> BulletRigidBodyFactory::CreateRigidBody ()
   {
-    CS_ASSERT (collider);
+    if (!collider)
+    {
+      system->ReportError ("No collider supplied when creating a rigid body");
+      return csPtr<CS::Physics::iRigidBody> (nullptr);
+    }
+
     return new csBulletRigidBody (this);
   }
 
+  //----------------------- BulletSoftBodyFactory -----------------------
+
   csPtr<CS::Collisions::iCollisionObject> BulletSoftBodyFactory::CreateCollisionObject () 
   { 
-    return DowncastPtr<CS::Collisions::iCollisionObject, CS::Physics::iSoftBody> (CreateSoftBody ()); 
+    csRef<CS::Physics::iSoftBody> body = CreateSoftBody ();
+    return csRef<CS::Collisions::iCollisionObject> (body);
   }
 
   csPtr<CS::Physics::iSoftBody> BulletSoftRopeFactory::CreateSoftBody ()

@@ -125,7 +125,6 @@ CS_PLUGIN_NAMESPACE_BEGIN(Bullet2)
     
     rb->kinematicCb->GetBodyTransform (rb, transform);
     trans = CSToBullet (principalAxis * transform, body->system->GetInternalScale ());
-    
   }
 
 }

@@ -78,6 +78,9 @@ public:
   virtual ColliderType GetColliderType () const
   { return COLLIDER_TERRAIN_CELL; }
 
+  virtual inline bool IsBaseDynamic () const
+  { return false; }
+
   //-- CS::Collisions::iColliderTerrainCell
   virtual iTerrainCell* GetCell () const { return cell; }
 };
