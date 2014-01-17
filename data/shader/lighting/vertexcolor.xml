@@ -22,13 +22,19 @@
   <technique priority="250">
     <pass>
       <combiner plugin="crystalspace.graphics3d.shader.combiner.glsl" />
+      
+      <mixmode>
+        <blendop src="one" dst="srcalpha_inv" />
+        <alphatest>disable</alphatest>
+      </mixmode>
 
       <!-- Snippets - the building blocks of this shader. -->
       <snippet id="position" file="/shader-snippets/position.xml" />
       <snippet id="surface" file="/shader-snippets/surface/surface-classic.xml" />
       <snippet id="apply_mixmode_alpha" file="/shader-snippets/mixmode-alpha.xml" />
       <snippet id="vertex_color" file="/shader-snippets/primary_color.xml" />
-      <snippet id="apply_lighting" file="/shader-snippets/modulate.xml" />
+      <snippet id="apply_color" file="/shader-snippets/modulate.xml" />
+      <snippet id="apply_alpha" file="/shader-snippets/surface/alpha-premult.xml" />
       <snippet id="sectorfog" file="/shader-snippets/fog/fog-sector.xml" />
       <snippet id="hdrscale" file="/shader-snippets/hdr-postscale.xml" />
       <!-- "connections" describe what snippets take input from what other
@@ -36,9 +42,10 @@
 	   what output is linked to what input is done automatically. -->
       <connection from="position" to="surface" />
       <connection from="surface" to="apply_mixmode_alpha" />
-      <connection from="apply_mixmode_alpha" to="apply_lighting" />
-      <connection from="vertex_color" to="apply_lighting" />
-      <connection from="apply_lighting" to="sectorfog" />
+      <connection from="apply_mixmode_alpha" to="apply_color" />
+      <connection from="vertex_color" to="apply_color" />
+      <connection from="apply_color" to="apply_alpha" />
+      <connection from="apply_alpha" to="sectorfog" />
       <connection from="sectorfog" to="hdrscale" />
     </pass>
   </technique>
@@ -47,12 +54,18 @@
     <pass>
       <combiner plugin="crystalspace.graphics3d.shader.combiner.glcg" />
 
+      <mixmode>
+        <blendop src="one" dst="srcalpha_inv" />
+        <alphatest>disable</alphatest>
+      </mixmode>
+
       <!-- Snippets - the building blocks of this shader. -->
       <snippet id="position" file="/shader-snippets/position.xml" />
       <snippet id="surface" file="/shader-snippets/surface/surface-classic.xml" />
       <snippet id="apply_mixmode_alpha" file="/shader-snippets/mixmode-alpha.xml" />
       <snippet id="vertex_color" file="/shader-snippets/primary_color.xml" />
-      <snippet id="apply_lighting" file="/shader-snippets/modulate.xml" />
+      <snippet id="apply_color" file="/shader-snippets/modulate.xml" />
+      <snippet id="apply_alpha" file="/shader-snippets/surface/alpha-premult.xml" />
       <snippet id="sectorfog" file="/shader-snippets/fog/fog-sector.xml" />
       <snippet id="hdrscale" file="/shader-snippets/hdr-postscale.xml" />
       <!-- "connections" describe what snippets take input from what other
@@ -60,9 +73,10 @@
            what output is linked to what input is done automatically. -->
       <connection from="position" to="surface" />
       <connection from="surface" to="apply_mixmode_alpha" />
-      <connection from="apply_mixmode_alpha" to="apply_lighting" />
-      <connection from="vertex_color" to="apply_lighting" />
-      <connection from="apply_lighting" to="sectorfog" />
+      <connection from="apply_mixmode_alpha" to="apply_color" />
+      <connection from="vertex_color" to="apply_color" />
+      <connection from="apply_color" to="apply_alpha" />
+      <connection from="apply_alpha" to="sectorfog" />
       <connection from="sectorfog" to="hdrscale" />
     </pass>
   </technique>
