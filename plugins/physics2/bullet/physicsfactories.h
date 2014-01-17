@@ -86,54 +86,27 @@ CS_PLUGIN_NAMESPACE_BEGIN (Bullet2)
     BulletPhysicalObjectFactory, BulletCollisionObjectFactory, CS::Physics::iPhysicalObjectFactory>
   {
   protected:
-    float density, mass;
-    bool densityDefined;
+    float mass;
     float friction;
     bool gravityEnabled;
 
   public:
     BulletPhysicalObjectFactory (csBulletSystem* system, CS::Collisions::iCollider* collider = nullptr) : 
     scfImplementationType (this, system, collider),
-      density (0.0f), mass (1.0f), densityDefined (false), friction (10.0f),
+      mass (1.0f), friction (10.0f),
       gravityEnabled (true)
-    {
-/*
-      if (!collider || !collider->IsDynamic ())
-	mass = 0.0f;
-*/
-    }
+    {}
 
-    virtual float GetDensity () const
-    {
-      if (densityDefined)
-	return density;
-      if (mass < SMALL_EPSILON)
-	return 0.0f;
-      return mass / collider->GetVolume ();
-    }
-    virtual void SetDensity (float value)
-    {
-      density = value;
-      densityDefined = true;
-      if (collider && collider->IsDynamic ())
-	mass = density * collider->GetVolume ();
-    }
+    virtual float GetDensity () const;
+    virtual void SetDensity (float value);
     
-    virtual float GetMass () const { return mass; }
+    virtual float GetMass () const
+    { return mass; }
     virtual void SetMass (float value)
-    {
-      mass = value;
-      densityDefined = false;
-    }
+    { mass = value; }
 
     virtual void SetCollider (CS::Collisions::iCollider* collider,
-			      const csOrthoTransform& transform = csOrthoTransform ())
-    {
-      this->collider = collider;
-      this->transform = transform;
-      if (!collider || !collider->IsDynamic ())
-	mass = 0.0f;
-    }
+			      const csOrthoTransform& transform = csOrthoTransform ());
  
     virtual void SetFriction (float value) { friction = value; }
     virtual float GetFriction () const { return friction; }

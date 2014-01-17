@@ -129,6 +129,7 @@ private:
   int stepIterations;
 
   bool isSoftWorld;
+  bool concaveEnabled;
 
   float linearDampening;
   float angularDampening;
@@ -159,9 +160,9 @@ public:
 
   virtual csPtr<CS::Collisions::iCollider> CreateCollider ();
   virtual csPtr<CS::Collisions::iColliderConvexMesh> CreateColliderConvexMesh
-    (iTriangleMesh* mesh, bool simplify = false);
-  virtual csPtr<CS::Collisions::iColliderConcaveMesh> CreateColliderConcaveMesh
     (iTriangleMesh* mesh);
+  virtual csPtr<CS::Collisions::iColliderConcaveMesh> CreateColliderConcaveMesh
+    (iTriangleMesh* mesh, bool dynamicEnabled = false);
   virtual csPtr<CS::Collisions::iColliderConcaveMeshScaled> CreateColliderConcaveMeshScaled
       (CS::Collisions::iColliderConcaveMesh* collider, const csVector3& scale);
   virtual csPtr<CS::Collisions::iColliderCylinder> CreateColliderCylinder
@@ -179,7 +180,7 @@ public:
   virtual CS::Collisions::iCollisionSector* GetCollisionSector (size_t index) 
   {
     return csRef<CS::Collisions::iCollisionSector>
-      (scfQueryInterface<CS::Collisions::iCollisionSector>(collSectors.Get (index)));
+      (scfQueryInterface<CS::Collisions::iCollisionSector> (collSectors.Get (index)));
   }
   virtual CS::Collisions::iCollisionSector* FindCollisionSector (const iSector* sceneSector);
   virtual CS::Collisions::iCollisionSector* FindCollisionSector (const char* name);
@@ -196,6 +197,9 @@ public:
   virtual void SetSoftBodyEnabled (bool enabled);
   virtual bool GetSoftBodyEnabled () const { return isSoftWorld; }
 
+  virtual void SetDynamicConcaveEnabled (bool enabled);
+  virtual bool GetDynamicConcaveEnabled () const { return concaveEnabled; }
+
   virtual void SetInternalScale (float scale);
   virtual float GetInternalScale () const { return internalScale; }
 
@@ -205,8 +209,7 @@ public:
   virtual void SetAngularDamping (float d);
   virtual float GetAngularDamping () const { return angularDampening; }
 
-  virtual void SetAutoDisableParams (float linear,
-    float angular, float time);
+  virtual void SetAutoDisableParams (float linear, float angular, float time);
 
   // Factories
   virtual csPtr<CS::Collisions::iCollisionObjectFactory> CreateCollisionObjectFactory

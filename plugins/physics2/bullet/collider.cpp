@@ -71,13 +71,14 @@ CS_PLUGIN_NAMESPACE_BEGIN (Bullet2)
       for (size_t i = 0; i < children->colliders.GetSize (); i++)
       {
         iCollider* icoll = children->colliders[i];
-        csBulletCollider* coll = dynamic_cast<csBulletCollider*>(icoll);
+        csBulletCollider* coll = dynamic_cast<csBulletCollider*> (icoll);
         isDirty |= coll->IsDirty ();
       }
     }
     return isDirty;
   }
 
+  // TODO: is it really working?
   csVector3 csBulletCollider::GetLocalScale () const
   {
     if (shape)
@@ -128,6 +129,16 @@ CS_PLUGIN_NAMESPACE_BEGIN (Bullet2)
     return margin;
   }
 
+  float csBulletCollider::GetVolume () const
+  {
+    float volume = ComputeShapeVolume ();
+    if (children)
+      for (size_t i = 0; i < children->colliders.GetSize (); i++)
+	volume += children->colliders[i]->GetVolume ();
+
+    return volume;
+  }
+
   btCollisionShape* csBulletCollider::GetOrCreateBulletShape ()
   {
     if (!IsDirty ()) return usedShape;
@@ -139,6 +150,7 @@ CS_PLUGIN_NAMESPACE_BEGIN (Bullet2)
       children->staticColliderCount = 0;
     }
 
+    bool isDynamic = IsDynamic ();
     if (children && children->colliders.GetSize () > 0)
     {
       // create a new shape
@@ -150,7 +162,7 @@ CS_PLUGIN_NAMESPACE_BEGIN (Bullet2)
         compound.removeChildShapeByIndex (i);
       }
 
-      volume = 0;
+      volume = 0.f;
       int start = shape ? 1 : 0;
       int totalShapeCount = int (children->colliders.GetSize ()) + start;
 
@@ -172,7 +184,7 @@ CS_PLUGIN_NAMESPACE_BEGIN (Bullet2)
       for (size_t i = 0; i < children->colliders.GetSize (); i++)
       {
         iCollider* icoll = children->colliders[i];
-        csBulletCollider* coll = dynamic_cast<csBulletCollider*>(icoll);
+        csBulletCollider* coll = dynamic_cast<csBulletCollider*> (icoll);
         btTransform relaTrans = CSToBullet (children->transforms[i], collSystem->GetInternalScale ());
         btCollisionShape* childShape = coll->GetOrCreateBulletShape ();
         compound.addChildShape (relaTrans, childShape);
@@ -193,7 +205,7 @@ CS_PLUGIN_NAMESPACE_BEGIN (Bullet2)
       }
 
       // compute principal axis
-      if (IsDynamic ())
+      if (isDynamic)
       {
         btVector3 principalInertia;
         children->compoundShape.calculatePrincipalAxisTransform
@@ -210,6 +222,7 @@ CS_PLUGIN_NAMESPACE_BEGIN (Bullet2)
 
       usedShape = &children->compoundShape;
     }
+
     else
     {
       principalAxisTransform.setIdentity ();
@@ -217,29 +230,23 @@ CS_PLUGIN_NAMESPACE_BEGIN (Bullet2)
       volume = ComputeShapeVolume ();
     }
 
-    if (usedShape && volume != 0 && IsDynamic ())
+    if (usedShape && volume > SMALL_EPSILON && isDynamic)
     {
       usedShape->calculateLocalInertia (1, localInertia);      // inertia is proportional to mass
     }
+
     return usedShape;
   }
 
   bool csBulletCollider::IsDynamic () const
   {
-    CS::Collisions::ColliderType type = GetColliderType ();
-    if (type == CS::Collisions::COLLIDER_CONCAVE_MESH
-	|| type == CS::Collisions::COLLIDER_CONCAVE_MESH_SCALED
-	|| type == CS::Collisions::COLLIDER_PLANE
-	|| type == CS::Collisions::COLLIDER_TERRAIN_CELL)
-    {
-      return false;
-    }
+    if (!IsBaseDynamic ()) return false;
     return !children || children->staticColliderCount == 0;
   }
 
   void csBulletCollider::AddChild (CS::Collisions::iCollider* iColl, const csOrthoTransform& relaTrans)
   {
-    csRef<csBulletCollider> coll (dynamic_cast<csBulletCollider*>(iColl));
+    csRef<csBulletCollider> coll (dynamic_cast<csBulletCollider*> (iColl));
 
     csColliderCollection* children = GetOrCreateChildren ();
 

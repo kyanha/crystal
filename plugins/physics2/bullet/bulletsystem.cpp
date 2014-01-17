@@ -99,12 +99,12 @@ bool CollisionGroup::GetCollisionEnabled (iCollisionGroup* other)
 
 //--------------------------------- csBulletSystem ---------------------------------
 
-// TODO: listen to the 'Frame' event in order to step automatically the simulation
-
 csBulletSystem::csBulletSystem (iBase* iParent)
-  : scfImplementationType (this, iParent), internalScale (1.0f), inverseInternalScale (1.0f),
+  : scfImplementationType (this, iParent),
+  internalScale (1.0f), inverseInternalScale (1.0f),
   simulationSpeed (1.0f), worldTimeStep (1.0f / 60.0f), worldMaxSteps (1),
-  stepIterations (10), isSoftWorld (true), linearDampening (0.1f), angularDampening (0.1f),
+  stepIterations (10), isSoftWorld (true), concaveEnabled (false),
+  linearDampening (0.1f), angularDampening (0.1f),
   linearDisableThreshold (0.8f), angularDisableThreshold (1.0f),
   timeDisableThreshold (0.0f), debugDraw (nullptr)
 {
@@ -192,8 +192,26 @@ void csBulletSystem::StepSimulation (float duration)
 
 void csBulletSystem::SetSoftBodyEnabled (bool enabled)
 {
-  CS_ASSERT (!collSectors.GetSize ());
+  if (collSectors.GetSize ())
+  {
+    ReportError ("Could not toggle soft body simulation if there is"
+		 " any active collision sectors");
+    return;
+  }
+
   isSoftWorld = enabled;
+}
+
+void csBulletSystem::SetDynamicConcaveEnabled (bool enabled)
+{
+  if (collSectors.GetSize ())
+  {
+    ReportError ("Could not toggle dynamic concave simulation if there is"
+		 " any active collision sectors");
+    return;
+  }
+
+  concaveEnabled = enabled;
 }
 
 void csBulletSystem::SetInternalScale (float scale)
@@ -223,74 +241,86 @@ void csBulletSystem::SetAutoDisableParams (float linear, float angular,
 
 csPtr<CS::Collisions::iCollider> csBulletSystem::CreateCollider ()
 {
-  return csPtr<CS::Collisions::iCollider> (new csBulletCollider (this));
+  return new csBulletCollider (this);
 }
 
-csPtr<CS::Collisions::iColliderConvexMesh> csBulletSystem::CreateColliderConvexMesh (
-  iTriangleMesh* triMesh, bool simplify)
+csPtr<CS::Collisions::iColliderConvexMesh> csBulletSystem::CreateColliderConvexMesh
+  (iTriangleMesh* mesh)
 {
-  btTriangleMesh* btTriMesh = CreateBulletTriMesh (triMesh);
-  csRef<csBulletColliderConvexMesh> collider;
-  collider.AttachNew (new csBulletColliderConvexMesh (triMesh, btTriMesh, this, simplify));
-  return csPtr<iColliderConvexMesh> (collider);
+  if (!mesh)
+  {
+    ReportError ("No triangle mesh supplied for the creation of a convex collider");
+    return csPtr<CS::Collisions::iColliderConvexMesh> (nullptr);
+  }
+
+  if (!mesh->GetVertexCount ())
+  {
+    ReportError ("No vertices in the mesh supplied for the creation of a convex collider");
+    return csPtr<CS::Collisions::iColliderConvexMesh> (nullptr);
+  }
+
+  return new csBulletColliderConvexMesh (mesh, this);
 }
 
-csPtr<CS::Collisions::iColliderConcaveMesh> csBulletSystem::CreateColliderConcaveMesh (iTriangleMesh* mesh)
+csPtr<CS::Collisions::iColliderConcaveMesh> csBulletSystem::CreateColliderConcaveMesh
+  (iTriangleMesh* mesh, bool dynamicEnabled)
 {
+  if (!mesh)
+  {
+    ReportError ("No triangle mesh supplied for the creation of a concave collider");
+    return csPtr<CS::Collisions::iColliderConcaveMesh> (nullptr);
+  }
+
+  if (!mesh->GetTriangleCount ())
+  {
+    ReportError ("No triangles in the mesh supplied for the creation of a concave collider");
+    return csPtr<CS::Collisions::iColliderConcaveMesh> (nullptr);
+  }
+
   btTriangleMesh* btTriMesh = CreateBulletTriMesh (mesh);
-  csRef<csBulletColliderConcaveMesh> collider = csPtr<csBulletColliderConcaveMesh>
-    (new csBulletColliderConcaveMesh (mesh, btTriMesh, this));
-  return csPtr<iColliderConcaveMesh> (collider);
+  return new csBulletColliderConcaveMesh (mesh, btTriMesh, this, dynamicEnabled);
 }
 
 csPtr<CS::Collisions::iColliderConcaveMeshScaled> csBulletSystem::CreateColliderConcaveMeshScaled (
   CS::Collisions::iColliderConcaveMesh* collider, const csVector3& scale)
 {
-  csRef<csBulletColliderConcaveMeshScaled> coll = csPtr<csBulletColliderConcaveMeshScaled>
-    (new csBulletColliderConcaveMeshScaled (collider, scale, this));
-  return csPtr<iColliderConcaveMeshScaled> (coll);
+  if (!collider)
+  {
+    ReportError ("No concave collider supplied for the creation of a scaled concave collider");
+    return csPtr<CS::Collisions::iColliderConcaveMeshScaled> (nullptr);
+  }
+
+  return new csBulletColliderConcaveMeshScaled (collider, scale, this);
 }
 
 csPtr<CS::Collisions::iColliderCylinder> csBulletSystem::CreateColliderCylinder (float length, float radius)
 {
-  csRef<csBulletColliderCylinder> collider = csPtr<csBulletColliderCylinder>
-    (new csBulletColliderCylinder (length, radius, this));
-  return csPtr<iColliderCylinder> (collider);
+  return new csBulletColliderCylinder (length, radius, this);
 }
 
 csPtr<CS::Collisions::iColliderBox> csBulletSystem::CreateColliderBox (const csVector3& size)
 {
-  csRef<CS::Collisions::iColliderBox> collider = csPtr<CS::Collisions::iColliderBox>
-    (new csBulletColliderBox (size, this));
-  return csPtr<CS::Collisions::iColliderBox> (collider);
+  return new csBulletColliderBox (size, this);
 } 
 
 csPtr<CS::Collisions::iColliderSphere> csBulletSystem::CreateColliderSphere (float radius)
 {
-  csRef<csBulletColliderSphere> collider = csPtr<csBulletColliderSphere>
-    (new csBulletColliderSphere (radius, this));
-  return csPtr<CS::Collisions::iColliderSphere> (collider);
+  return new csBulletColliderSphere (radius, this);
 }
 
 csPtr<CS::Collisions::iColliderCapsule> csBulletSystem::CreateColliderCapsule (float length, float radius)
 {
-  csRef<csBulletColliderCapsule> collider = csPtr<csBulletColliderCapsule>
-    (new csBulletColliderCapsule (length, radius, this));
-  return csPtr<CS::Collisions::iColliderCapsule> (collider);
+  return new csBulletColliderCapsule (length, radius, this);
 }
 
 csPtr<CS::Collisions::iColliderCone> csBulletSystem::CreateColliderCone (float length, float radius)
 {
-  csRef<csBulletColliderCone> collider = csPtr<csBulletColliderCone>
-    (new csBulletColliderCone (length, radius, this));
-  return csPtr<iColliderCone> (collider);
+  return new csBulletColliderCone (length, radius, this);
 }
 
 csPtr<CS::Collisions::iColliderPlane> csBulletSystem::CreateColliderPlane (const csPlane3& plane)
 {
-  csRef<csBulletColliderPlane> collider = csPtr<csBulletColliderPlane>
-    (new csBulletColliderPlane (plane, this));
-  return csPtr<iColliderPlane> (collider);
+  return new csBulletColliderPlane (plane, this);
 }
 
 CS::Collisions::iCollisionSector* csBulletSystem::CreateCollisionSector (iSector* sector)
@@ -672,23 +702,6 @@ btTriangleMesh* csBulletSystem::CreateBulletTriMesh (iTriangleMesh* triMesh)
   }
 
   return btMesh;
-}
-
-bool csBulletSystem::ReportError (const char* msg, ...)
-{
-  va_list arg;
-  va_start (arg, msg);
-  csReportV (object_reg, CS_REPORTER_SEVERITY_ERROR, msgid, msg, arg);
-  va_end (arg);
-  return false;
-}
-
-void csBulletSystem::ReportWarning (const char* msg, ...)
-{
-  va_list arg;
-  va_start (arg, msg);
-  csReportV (object_reg, CS_REPORTER_SEVERITY_WARNING, msgid, msg, arg);
-  va_end (arg);
 }
 
 }

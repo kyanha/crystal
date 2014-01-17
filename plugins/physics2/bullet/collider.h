@@ -47,7 +47,6 @@ class csBulletSector;
 class csBulletSystem;
 class csBulletCollider;
 
-
 /**
  * A collection of colliders that belong to another collider
  */
@@ -59,17 +58,16 @@ struct csColliderCollection
   csRefArray<csBulletCollider> colliders;
   csArray<csOrthoTransform> transforms;
 
-  csColliderCollection () :
-    staticColliderCount (0)
-  {
-  }
+  csColliderCollection ()
+  : staticColliderCount (0)
+  {}
 };
 
 /**
  * Implementation of iCollider. Supports hierarchy of colliders.
  */
-class csBulletCollider : public scfVirtImplementation1<csBulletCollider, CS::Collisions::iCollider>
-  //public virtual CS::Collisions::iCollider
+class csBulletCollider
+  : public scfVirtImplementation1<csBulletCollider, CS::Collisions::iCollider>
 {
   friend class csBulletCollisionObject;
   friend class BulletCollisionActor;
@@ -110,17 +108,17 @@ public:
 
   virtual CS::Collisions::ColliderType GetColliderType () const
   { return CS::Collisions::COLLIDER_COMPOUND; }
+
   virtual void SetLocalScale (const csVector3& scale);
   virtual csVector3 GetLocalScale () const;
 
   virtual void SetMargin (float margin);
   virtual float GetMargin () const;
-  virtual float GetVolume () const { return volume; }
+  virtual float GetVolume () const;
 
-  /**
-   * Whether this collider (and all its children) can be used in a dynamic environment
-   */
   virtual bool IsDynamic () const;
+  virtual inline bool IsBaseDynamic () const
+  { return true; }
 
   virtual void AddChild (CS::Collisions::iCollider* collider,
 			    const csOrthoTransform& relaTrans = csOrthoTransform ());
