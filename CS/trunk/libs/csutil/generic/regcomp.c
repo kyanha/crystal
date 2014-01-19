@@ -3353,6 +3353,7 @@ build_word_op (dfa, not, err)
     bitset_not (sbcset);
 
   /* Build a tree for simple bracket.  */
+  memset(&br_token, 0, sizeof(br_token));
   br_token.type = SIMPLE_BRACKET;
   br_token.opr.sbcset = sbcset;
   new_idx = re_dfa_add_node (dfa, br_token, 0);
@@ -3374,6 +3375,7 @@ build_word_op (dfa, not, err)
       if (BE (new_idx == -1 || mbc_tree == NULL, 0))
 	goto build_word_op_espace;
       /* Then join them by ALT node.  */
+      memset(&alt_token, 0, sizeof(br_token));
       alt_token.type = OP_ALT;
       new_idx = re_dfa_add_node (dfa, alt_token, 0);
       tree = create_tree (tree, mbc_tree, 0, new_idx);
