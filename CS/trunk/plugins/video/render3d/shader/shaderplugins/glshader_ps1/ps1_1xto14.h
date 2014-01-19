@@ -60,6 +60,11 @@ protected:
 public:
   const char* GetNewInstructions (
     const csArray<csPSProgramInstruction>*& instrs);
+
+  csPS1xTo14Converter()
+  {
+    ResetState();
+  }
 };
 
 }
