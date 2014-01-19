@@ -729,7 +729,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(EventManager)
     }
     else
     {
-      ServerData &data = datagramServers.GetOrCreate(socket);
+      (void) datagramServers.GetOrCreate(socket);
     }
 
     // add the address to our lookup table
