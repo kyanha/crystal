@@ -127,12 +127,19 @@ bpy.types.Material.GetDependencies = MaterialDependencies
 
 #===== static method ExportMaterials ==============================
 
-def ExportMaterials(func, depth, dependencies, use_imposter):
+def ExportMaterials(func, depth, dependencies):
     """ Write an xml description of the materials/textures/shaders
         param dependencies: list of textures ('T' key) and
               materials ('M' key)
-        use_imposter: indicates if an imposter shader is defined
     """
+    # Export shaders
+    if len(dependencies['S'].keys()) > 0:
+        func(' ' * depth + "<shaders>")
+        for name, file in dependencies['S'].items():
+            func(
+                ' ' * depth + "  <shader><file>" + file + "</file></shader>")
+            func(' ' * depth + "</shaders>")
+
     # Export textures
     if len(dependencies['T'].keys()) > 0:
         func(' ' * depth + "<textures>")
@@ -153,17 +160,3 @@ def ExportMaterials(func, depth, dependencies, use_imposter):
                  (name))
             func(' ' * depth + '  </material>')
         func(' ' * depth + "</materials>")
-
-    # Export shaders
-    if use_imposter:
-        func(' ' * depth + "<shaders>")
-        func(
-            ' ' * depth + "  <shader><file>/shader/lighting/lighting_imposter.xml</file></shader>")
-        func(' ' * depth + "</shaders>")
-    else:
-        if len(dependencies['S'].keys()) > 0:
-            func(' ' * depth + "<shaders>")
-            for name, file in dependencies['S'].items():
-                func(
-                    ' ' * depth + "  <shader><file>" + file + "</file></shader>")
-            func(' ' * depth + "</shaders>")

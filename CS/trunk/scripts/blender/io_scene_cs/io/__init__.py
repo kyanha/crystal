@@ -112,13 +112,7 @@ def ExportWorld(path):
         fmt = open(Join(path, 'materials'), 'w')
         Write(fmt)('<?xml version="1.0" encoding="UTF-8"?>')
         Write(fmt)('<library xmlns=\"http://crystalspace3d.org/xml/library\">')
-        use_imposter = False
-        for scene in scenes:
-            for ob in scene.objects:
-                if ob.HasImposter():
-                    use_imposter = True
-                    break
-        ExportMaterials(Write(fmt), 2, deps, use_imposter)
+        ExportMaterials(Write(fmt), 2, deps)
         Write(fmt)('</library>')
         fmt.close()
         Write(f)(' ' * 2 + '<library>%s</library>' % ('materials'))
@@ -216,13 +210,7 @@ def ExportLibrary(path):
                      (mat.b2cs.csMaterialVfs))
 
     # Export the textures/materials/shaders of the objects
-    use_imposter = False
-    for scene in bpy.data.exportable_scenes:
-        for ob in scene.objects:
-            if ob.HasImposter():
-                use_imposter = True
-                break
-    ExportMaterials(Write(f), 2, deps, use_imposter)
+    ExportMaterials(Write(f), 2, deps)
 
     # Export the objects composing the Blender world
     for typ in deps:
