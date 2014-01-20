@@ -1478,6 +1478,8 @@ peek_token (token, input, syntax)
 {
   unsigned char c;
 
+  memset(token, 0, sizeof(re_token_t));
+
   if (re_string_eoi (input))
     {
       token->type = END_OF_RE;
@@ -1488,7 +1490,6 @@ peek_token (token, input, syntax)
   token->opr.c = c;
 
 #ifdef RE_ENABLE_I18N
-  token->mb_partial = 0;
   if (MB_CUR_MAX > 1 &&
       !re_string_first_byte (input, re_string_cur_idx (input)))
     {
