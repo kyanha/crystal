@@ -100,7 +100,8 @@ enum
   XMLTOKEN_LINEARSTIFFNESS,
   XMLTOKEN_ANGULARSTIFFNESS,
   XMLTOKEN_LINEARDAMPING,
-  XMLTOKEN_ANGULARDAMPING
+  XMLTOKEN_ANGULARDAMPING,
+  XMLTOKEN_DESIREDVELOCITY
 };
 
 bool CollisionHelper::Initialize
@@ -172,6 +173,7 @@ bool CollisionHelper::Initialize
   xmltokens.Register ("angularstiffness", XMLTOKEN_ANGULARSTIFFNESS);
   xmltokens.Register ("lineardamping", XMLTOKEN_LINEARDAMPING);
   xmltokens.Register ("angulardamping", XMLTOKEN_ANGULARDAMPING);
+  xmltokens.Register ("desiredvelocity", XMLTOKEN_DESIREDVELOCITY);
 
   return true;
 }
@@ -1027,6 +1029,13 @@ csPtr<CS::Physics::iJointFactory> CollisionHelper::ParseJointFactory
       csVector3 v;
       synldr->ParseVector (child, v);
       factory->SetAngularDamping (v);
+      break;
+    }
+    case XMLTOKEN_DESIREDVELOCITY:
+    {
+      csVector3 v;
+      synldr->ParseVector (child, v);
+      factory->SetDesiredVelocity (v);
       break;
     }
     case XMLTOKEN_MOVE:
