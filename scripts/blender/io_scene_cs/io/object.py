@@ -181,8 +181,7 @@ class Hierarchy:
         self.WriteCSLibHeader(Write(fa), animesh)
         if not GetPreferences().sharedMaterial:
             objectDeps = self.object.GetDependencies()
-            use_imposter = not animesh and self.object.data.b2cs.use_imposter
-            ExportMaterials(Write(fa), 2, objectDeps, use_imposter)
+            ExportMaterials(Write(fa), 2, objectDeps)
 
         if self.object.b2cs.type == 'DEFAULT':
             if animesh:

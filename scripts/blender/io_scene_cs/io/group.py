@@ -72,7 +72,7 @@ def GroupAsCSLib(self, path=''):
     use_imposter = self.HasImposter()
     if not GetPreferences().sharedMaterial:
         groupDeps = self.GetDependencies()
-        ExportMaterials(Write(fa), 2, groupDeps, use_imposter)
+        ExportMaterials(Write(fa), 2, groupDeps)
     self.WriteCSGroup(Write(fa), 2, use_imposter, dontClose=False)
     fa.close()
 
