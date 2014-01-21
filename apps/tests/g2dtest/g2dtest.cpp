@@ -465,6 +465,7 @@ void G2DTestSystemDriver::StateFrame (appState state)
     default:
       break;
   }
+  myG3D->FinishDraw ();
 }
 
 void G2DTestSystemDriver::SetupFrame ()
