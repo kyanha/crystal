@@ -2419,23 +2419,17 @@ void csGLGraphics3D::DrawPixmap (iTextureHandle *hTex,
     // quad rectangle
     float rect[4] = { xscale * tx, xscale * (tx + tw), yscale * ty, yscale * (ty + th) };
 
-    // calculate new left and right so that left/right maps to 0 and not -1
-    rect[0] = 2.0f*rect[0] - rect[1];
-    rect[2] = 2.0f*rect[2] - rect[3];
-
-    // invert
-    float rectInv[4] = {
-     -(rect[0] + rect[1] + 2.0f)/(rect[1] - rect[0]),
-      (2.0f - rect[0] - rect[1])/(rect[1] - rect[0]),
-     -(rect[2] + rect[3] + 2.0f)/(rect[3] - rect[2]),
-      (2.0f - rect[2] - rect[3])/(rect[3] - rect[2])
-    };
-
     // load it
     statecache->SetMatrixMode (GL_TEXTURE);
     glPushMatrix ();
-    glLoadIdentity ();
-    glOrtho (rectInv[0], rectInv[1], rectInv[2], rectInv[3], 1.0f, -1.0f);
+    const GLfloat m[16] =
+    {
+      rect[2] - rect[0], 0, 0, 0,
+      0, rect[3] - rect[1], 0, 0,
+      0, 0, 1, 0,
+      rect[0], rect[1], 0, 1
+    };
+    glLoadMatrixf (m);
   }
 
   // check whether we need a custom matrix
