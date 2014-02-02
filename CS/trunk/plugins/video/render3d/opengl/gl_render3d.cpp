@@ -2416,18 +2416,15 @@ void csGLGraphics3D::DrawPixmap (iTextureHandle *hTex,
     float xscale = float (ndc ? 1.0f : renderWidth) / originalWidth;
     float yscale = float (ndc ? 1.0f : renderHeight) / originalHeight;
 
-    // quad rectangle
-    float rect[4] = { xscale * tx, xscale * (tx + tw), yscale * ty, yscale * (ty + th) };
-
     // load it
     statecache->SetMatrixMode (GL_TEXTURE);
     glPushMatrix ();
     const GLfloat m[16] =
     {
-      rect[2] - rect[0], 0, 0, 0,
-      0, rect[3] - rect[1], 0, 0,
+      tw * xscale, 0, 0, 0,
+      0, th * yscale, 0, 0,
       0, 0, 1, 0,
-      rect[0], rect[1], 0, 1
+      tx * xscale, ty * yscale, 0, 1
     };
     glLoadMatrixf (m);
   }
