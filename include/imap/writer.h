@@ -45,8 +45,6 @@ struct iSaverPlugin : public virtual iBase
   	iStreamSource* ssource) = 0;
 };
 
-/** } */
-
 /**
  * This is a binary plugin to save with.
  */
