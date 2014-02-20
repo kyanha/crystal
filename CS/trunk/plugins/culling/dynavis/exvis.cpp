@@ -185,6 +185,9 @@ void csExactCuller::InsertPolygon (csVector2* tr_verts, size_t num_verts,
           uint32* scr_buf = scr_buffer + width * screenY + xL;
           float* z_buf = z_buffer + width * screenY + xL;
 	  float invz = M * (xL-width/2) + N * (sy-height/2) + O;
+	  // TODO: the following statement seem more correct (see the comments
+	  // in AddObject())
+	  //float z = M * (xL-width/2) + N * (sy-height/2) + O;
 
 	  int xx = xR - xL;
 	  if (xx > 0)
@@ -205,6 +208,8 @@ void csExactCuller::InsertPolygon (csVector2* tr_verts, size_t num_verts,
 	      z_buf++;
 	      scr_buf++;
 	      invz += M;
+	      // TODO: the following statement seem more correct
+	      //z += M;
 	      xx--;
 	    }
 	    while (xx);
@@ -220,12 +225,13 @@ void csExactCuller::InsertPolygon (csVector2* tr_verts, size_t num_verts,
   }
 }
 
-static void Perspective (const csVector3& v, csVector2& p, float fov,
-    	float sx, float sy)
+void Perspective (const csVector3& v, csVector2& p,
+        const CS::Math::Matrix4& proj, int screenWidth, int screenHeight)
 {
-  float iz = fov / v.z;
-  p.x = v.x * iz + sx;
-  p.y = v.y * iz + sy;
+  csVector4 v_proj (proj * csVector4 (v, 1));
+  float inv_w = 1.0f/v_proj.w;
+  p.x = (v_proj.x * inv_w + 1) * screenWidth/2;
+  p.y = (v_proj.y * inv_w + 1) * screenHeight/2;
 }
 
 void csExactCuller::AddObject (void* obj,
@@ -256,20 +262,21 @@ void csExactCuller::AddObject (void* obj,
   csReversibleTransform movtrans = movable->GetFullTransform ();
   const csReversibleTransform& camtrans = camera->GetTransform ();
   csReversibleTransform trans = camtrans / movtrans;
-  float fov, sx, sy;
+
+  // TODO: This won't work correctly for custom matrix cameras
+  float fov, aspect;
+  const CS::Math::Matrix4& projection = camera->GetProjectionMatrix ();
   csRef<iPerspectiveCamera> pcam =
     scfQueryInterface<iPerspectiveCamera> (camera);
   if (pcam)
   {
-    fov = pcam->GetFOV ();
-    sx = pcam->GetShiftX ();
-    sy = pcam->GetShiftY ();
+    fov = pcam->GetVerticalFOV ();
+    aspect = pcam->GetAspectRatio ();
   }
   else
   {
     fov = 1.0f;
-    sx = 0.0f;
-    sy = 0.0f;
+    aspect = 1.0f;
   }
 
   // Calculate camera position in object space.
@@ -315,7 +322,8 @@ void csExactCuller::AddObject (void* obj,
       out_box.StartBoundingBox ();
       for (size_t k = 0 ; k < spoly->GetVertexCount () ; k++)
       {
-        Perspective ((*spoly)[k], clipped[k], fov, sx, sy);
+        Perspective ((*spoly)[k], clipped[k], projection, width, height);
+	//Perspective ((*spoly)[k], clipped[k], fov, aspect, sx, sy);
 	out_box.AddBoundingVertex (clipped[k]);
       }
       if (boxclip->ClipInPlace (clipped, num_clipped, out_box)
@@ -331,14 +339,27 @@ void csExactCuller::AddObject (void* obj,
 //camplane.A (), camplane.B (), camplane.C (), camplane.D ());
 	if (ABS (camplane.D ()) < 0.001)
 	  continue;
+
+	// TODO: the M, N, O values seem to be used in order to compute z
+	// as z = Mx + Ny + O. However, from the equations, the following
+	// values seem more correct than the ones encoded here: M = -A/C,
+	// N = -B/C, O = -D/C. See also the other comments in InsertPolygon().
 	float M, N, O;
 	float inv_D = 1.0 / camplane.D ();
-	M = -camplane.A () * inv_D / fov;
+	M = -camplane.A () * inv_D * aspect / fov;
 	N = -camplane.B () * inv_D / fov;
 	O = -camplane.C () * inv_D;
-//csPrintf ("    MNO %g,%g,%g\n", M, N, O);
+csPrintf ("    MNO1 %g,%g,%g\n", M, N, O);
 //fflush (stdout);
-
+/*
+	// TODO: As noted above, this seem a priori more correct:
+	camplane = projection_t * camplane;
+	float M, N, O;
+	float inv_C = -1.0f / camplane.C ();
+	M = camplane.A () * inv_C / fov;
+	N = camplane.B () * inv_C / fov;
+	O = camplane.D () * inv_C;
+*/
         int totpix;
         InsertPolygon (clipped, num_clipped, M, N, O,
 		num_objects-1, totpix);

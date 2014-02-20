@@ -64,8 +64,7 @@ private:
    * Insert a polygon in the buffer.
    * This function will not do any backface culling and it will work
    * perfectly in all orientations. Polygon has to be convex.
-   * Returns the total number of pixels in totpix and the number
-   * of visible pixels (z-buf) in vispix.
+   * Returns the total number of pixels in totpix.
    * M, N, and O are used for getting the Z value at every pixel.
    */
   void InsertPolygon (csVector2* tr_verts, size_t num_verts,
