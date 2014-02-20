@@ -169,7 +169,10 @@ namespace CS
         virtual void DrawLine (float x1, float y1, float x2, float y2, int color);
         /// Draw a line in camera space
         virtual void DrawLineProjected (const csVector3& v1, const csVector3& v2,
-          float fov, int color);
+          float viewHeight, int color);
+        /// Draw a line in camera space
+        virtual void DrawLineProjected (const csVector3& v1, const csVector3& v2,
+          float fov, float aspect, int color);
         /// Draw a line in camera space
         virtual void DrawLineProjected (const csVector3& v1, const csVector3& v2,
           const CS::Math::Matrix4& projection, int color);

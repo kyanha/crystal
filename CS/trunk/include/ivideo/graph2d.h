@@ -96,7 +96,7 @@ struct csPixelCoord
  */
 struct iGraphics2D : public virtual iGraphicsCanvas
 {
-  SCF_INTERFACE (iGraphics2D, 5, 0, 0);
+  SCF_INTERFACE (iGraphics2D, 5, 0, 1);
   
   /// Open the device.
   virtual bool Open () = 0;
@@ -127,14 +127,14 @@ struct iGraphics2D : public virtual iGraphicsCanvas
   virtual void GetRGB (int color, int& r, int& g, int& b, int& a) = 0;
   
   /**
-   * Set clipping rectangle.
+   * Set the clipping rectangle.
    * The clipping rectangle is inclusive the top and left edges and exclusive
    * for the right and bottom borders.
    */
   virtual void SetClipRect (int nMinX, int nMinY, int nMaxX, int nMaxY) = 0;
 
-  /// Retrieve clipping rectangle
-  virtual void GetClipRect(int& nMinX, int& nMinY, int& nMaxX, int& nMaxY) = 0;
+  /// Retrieve the clipping rectangle
+  virtual void GetClipRect (int& nMinX, int& nMinY, int& nMaxX, int& nMaxY) = 0;
 
   /**
    * This routine should be called before any draw operations.
@@ -152,7 +152,7 @@ struct iGraphics2D : public virtual iGraphicsCanvas
   virtual void ClearAll (int color) = 0;
 
   /// Draw a line.
-  virtual void DrawLine(float x1, float y1, float x2, float y2, int color) = 0;
+  virtual void DrawLine (float x1, float y1, float x2, float y2, int color) = 0;
 
   /// Draw a box
   virtual void DrawBox (int x, int y, int w, int h, int color) = 0;
@@ -168,7 +168,7 @@ struct iGraphics2D : public virtual iGraphicsCanvas
   virtual void DrawPixel (int x, int y, int color) = 0;
 
   /// Draw an array of pixel coordinates with the given color.
-  virtual void DrawPixels(csPixelCoord const* pixels, int num_pixels,
+  virtual void DrawPixels (csPixelCoord const* pixels, int num_pixels,
      int color) = 0;
 
   /// Blit a memory block.  Format of the image is RGBA in bytes. Row by row.
@@ -191,7 +191,6 @@ struct iGraphics2D : public virtual iGraphicsCanvas
    */
   virtual void Write (iFont *font, int x, int y, int fg, int bg,
     const char *str, uint flags = 0) = 0;
-
 
   /// Resize the canvas
   virtual bool Resize (int w, int h) = 0;
@@ -268,10 +267,14 @@ struct iGraphics2D : public virtual iGraphicsCanvas
    *
    * \param v1 Start point of the line.
    * \param v2 End point of the line.
-   * \param fov Field of View to use for the projection. Typically, you would
-   * want to use the one returned by iPerspectiveCamera::GetFOV().
-   * \param color Color of the line.
+   * \param fov Field of view in pixels. Typically, you would
+   * want to use the one returned by iPerspectiveCamera::GetVerticalFOV() times
+   * iGraphics2D::GetHeight().
+   * \param color Color of the line. The color value can be obtained through
+   * FindRGB().
+   * \deprecated Deprecated in 2.2. Use the other versions of DrawLineProjected() instead
    */
+  CS_DEPRECATED_METHOD_MSG("Deprecated in 2.2. Use the other versions of DrawLineProjected() instead")
   virtual void DrawLineProjected (const csVector3& v1, const csVector3& v2,
     float fov, int color) = 0;
 
@@ -281,7 +284,8 @@ struct iGraphics2D : public virtual iGraphicsCanvas
    * \param v2 End point of the line.
    * \param projection Projection matrix to use for the camera. Typically, you
    * would want to use the one returned by iCamera::GetProjectionMatrix().
-   * \param color Color of the line.
+   * \param color Color of the line. The color value can be obtained through
+   * FindRGB().
    */
   virtual void DrawLineProjected (const csVector3& v1, const csVector3& v2,
     const CS::Math::Matrix4& projection, int color) = 0;
@@ -292,10 +296,29 @@ struct iGraphics2D : public virtual iGraphicsCanvas
    * \param v2 object2camera The transform from the box space to the camera space.
    * \param projection Projection matrix to use for the camera. Typically, you
    * would want to use the one returned by iCamera::GetProjectionMatrix().
-   * \param color Color of the line.
+   * \param color Color of the line. The color value can be obtained through
+   * FindRGB().
    */
   virtual void DrawBoxProjected (const csBox3& box, const csTransform& object2camera,
     const CS::Math::Matrix4& projection, int color) = 0;
+
+  /**
+   * Draw a line between two points expressed in camera space.
+   *
+   * \warning This version of the method will only work for iPerspectiveCamera's.
+   * For other camera's, you should use the other DrawLineProjected() method.
+   *
+   * \param v1 Start point of the line.
+   * \param v2 End point of the line.
+   * \param fov Field of View to use for the projection. Typically, you would
+   * want to use the one returned by iPerspectiveCamera::GetVerticalFOV().
+   * \param aspect Aspect ratio to use for the projection. Typically, you would
+   * want to use the one returned by iPerspectiveCamera::GetAspectRatio().
+   * \param color Color of the line. The color value can be obtained through
+   * FindRGB().
+   */
+  virtual void DrawLineProjected (const csVector3& v1, const csVector3& v2,
+    float fov, float aspect, int color) = 0;
 };
 
 /** @} */
