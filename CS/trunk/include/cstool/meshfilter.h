@@ -27,34 +27,70 @@ namespace CS
 {
 namespace Utility
 {
-
+  /// Filtering modes for a CS::Utility::MeshFilter
   enum MeshFilterMode
   {
-    MESH_FILTER_EXCLUDE,
+    /**
+     * The meshes in this filter must be excluded from the scene
+     * when rendering
+     */
+    MESH_FILTER_EXCLUDE,  
+    /**
+     * Only the meshes in this filter must be included when rendering
+     */
     MESH_FILTER_INCLUDE
   };
 
+  /**
+   * Structure holding filtering data in order to restrict the
+   * list of meshes from a scene that must be rendered.
+   *
+   * This is basically a list of iMeshWrapper's that can be either 
+   * included or excluded from rendering (depending on the selected
+   * MeshFilterMode).
+   *
+   * Main ways to get pointers to this interface:
+   * - iView::GetMeshFilter()
+   */
   class CS_CRYSTALSPACE_EXPORT MeshFilter
   {
   public:
     MeshFilter();
     ~MeshFilter();
-    
+
+    /**
+     * Add a mesh to this filter.
+     * \param mesh The mesh to be added
+     * \param addChildren Whether or not the children of this mesh
+     * must be considered too.
+     */
     void AddFilterMesh (iMeshWrapper* mesh, bool addChildren=false);
+    /// Remove a mesh from this filter.
     void RemoveFilterMesh (iMeshWrapper* mesh);
 
+    /**
+     * Return wheter or not this mesh should be rendered.
+     * \return \a true if the mesh should be excluded, \a false
+     * otherwise.
+     */
     bool IsMeshFiltered (iMeshWrapper* mesh) const;
 
+    /**
+     * Set the filtering mode for this filter. The default value is
+     * CS::Utility::MESH_FILTER_EXCLUDE.
+     */
     void SetFilterMode (MeshFilterMode mode)
     {
       filterMode = mode;
     }
 
+    /// Get the filtering mode for this filter
     MeshFilterMode GetFilterMode () const
     {
       return filterMode;
     }
 
+    /// Clear all meshes in this list
     void Clear ();
 
   private:
