@@ -19,6 +19,7 @@
 #include "cssysdef.h"
 #include "csqint.h"
 #include "csgeom/polyclip.h"
+#include "cstool/enginetools.h"
 #include "csutil/sysfunc.h"
 #include "iengine/material.h"
 #include "iengine/texture.h"
@@ -165,27 +166,13 @@ bool csLightHalo::IsVisible (iCamera* camera, csEngine* Engine, csVector3 &v)
 {
   if (v.z > SMALL_Z)
   {
-    float fov, sx, sy;
-    csRef<iPerspectiveCamera> pcam =
-      scfQueryInterface<iPerspectiveCamera> (camera);
-    if (pcam)
-    {
-      fov = pcam->GetFOV ();
-      sx = pcam->GetShiftX ();
-      sy = pcam->GetShiftY ();
-    }
-    else
-    {
-      fov = 1.0f;
-      sx = 0.0f;
-      sy = 0.0f;
-    }
-    float iz = fov / v.z;
-    v.x = v.x * iz + sx;
-    v.y = Engine->frameHeight - 1 - (v.y * iz + sy);
+    // Project v into the screen plane
+    csVector2 v2d = camera->Project (v);
+    iGraphics2D* g2d = Engine->GetTopLevelClipper ()->GetGraphics2D ();
+    v2d = csEngineTools::NormalizedToScreen (v2d, g2d->GetWidth (), g2d->GetHeight ());
 
-    if (Engine->GetTopLevelClipper ()->GetClipper ()->IsInside (
-    	csVector2 (v.x, v.y)))
+    // Test the visibility
+    if (Engine->GetTopLevelClipper ()->GetClipper ()->IsInside (v2d))
     {
         csSectorHitBeamResult hbresult;
         hbresult = camera->GetSector ()->HitBeamPortals (

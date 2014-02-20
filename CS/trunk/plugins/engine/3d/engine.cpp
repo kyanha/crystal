@@ -24,8 +24,9 @@
 #include "csgeom/sphere.h"
 #include "csgfx/imagememory.h"
 #include "csqint.h"
-#include "cstool/vfsdirchange.h"
+#include "cstool/enginetools.h"
 #include "cstool/objectcomment.h"
+#include "cstool/vfsdirchange.h"
 #include "csutil/cfgacc.h"
 #include "csutil/databuf.h"
 #include "csutil/scf.h"
@@ -507,14 +508,13 @@ SCF_IMPLEMENT_FACTORY (csEngine)
 csEngine::csEngine (iBase *iParent) :
   scfImplementationType (this, iParent), objectRegistry (0),
   envTexHolder (this), enableEnvTex (true),
-  frameWidth (0), frameHeight (0), 
   lightAmbientRed (CS_DEFAULT_LIGHT_LEVEL),
   lightAmbientGreen (CS_DEFAULT_LIGHT_LEVEL),
   lightAmbientBlue (CS_DEFAULT_LIGHT_LEVEL),
   sectors (this), textures (new csTextureList (this)), 
   materials (new csMaterialList), sharedVariables (new csSharedVariableList),
   topLevelClipper (0),
-  worldSaveable (false), defaultKeepImage (false), maxAspectRatio (0),
+  worldSaveable (false), defaultKeepImage (false),
   nextframePending (0), currentFrameNumber (0), 
   currentRenderContext (0), weakEventHandler(0),
   bAdaptiveLODsEnabled(false), adaptiveLODsTargetFPS(30.f), adaptiveLODsMultiplier(1.0f),
@@ -641,22 +641,13 @@ bool csEngine::HandleEvent (iEvent &Event)
 {
   if (Event.Name == SystemOpen)
   {
+    // Setup the default camera FOV and aspect ratio
+    float aspect = 1.f;
     if (G3D)
-    {
-      maxAspectRatio = 4096;
-      frameWidth = G3D->GetWidth ();
-      frameHeight = G3D->GetHeight ();
-    }
-    else
-    {
-      maxAspectRatio = 4096;
-      frameWidth = 640;
-      frameHeight = 480;
-    }
+      aspect = ((float) G3D->GetWidth ()) / ((float) G3D->GetHeight ());
+    PerspectiveImpl::SetDefaultFOV (1.f, aspect);
 
-    if (PerspectiveImpl::GetDefaultFOV () == 0)
-      PerspectiveImpl::SetDefaultFOV (frameHeight/(float)frameWidth, 1.0f);
-
+    // Start the engine
     StartEngine ();
 
     return true;
@@ -1154,30 +1145,6 @@ void csEngine::StartDraw (iCamera *c, iClipper2D* /*view*/,
   topLevelClipper = &rview;
 
   rview.GetClipPlane ().Set (0, 0, -1, 0);
-
-  // Calculate frustum for screen dimensions (at z=1).
-  c->SetViewportSize (rview.GetGraphics3D()->GetWidth(),
-    rview.GetGraphics3D()->GetHeight());
-  float ifov, sx, sy;
-  csRef<iPerspectiveCamera> pcam =
-    scfQueryInterface<iPerspectiveCamera> (c);
-  if (pcam)
-  {
-    ifov = pcam->GetInvFOV ();
-    sx = pcam->GetShiftX ();
-    sy = pcam->GetShiftY ();
-  }
-  else
-  {
-    ifov = 1.0f;
-    sx = 0.0f;
-    sy = 0.0f;
-  }
-  float leftx = -sx * ifov;
-  float rightx = (frameWidth - sx) * ifov;
-  float topy = -sy * ifov;
-  float boty = (frameHeight - sy) * ifov;
-  rview.SetFrustum (leftx, rightx, topy, boty);
 }
 
 csRef<iShader> csEngine::LoadShader (iDocumentSystem* docsys,
@@ -1242,6 +1209,7 @@ csRef<iShader> csEngine::LoadShader (iDocumentSystem* docsys,
   return shader;
 }
 
+// TODO: This method is not called anymore, hence halo's are deactivated
 void csEngine::AddHalo (iCamera* camera, csLight *Light)
 {
   if (!Light->GetHalo () || Light->flags.Check (CS_LIGHT_ACTIVEHALO))
@@ -1255,29 +1223,13 @@ void csEngine::AddHalo (iCamera* camera, csLight *Light)
   // Check if light is behind us
   if (v.z <= SMALL_Z) return ;
 
-  float fov, sx, sy;
-  csRef<iPerspectiveCamera> pcam =
-    scfQueryInterface<iPerspectiveCamera> (camera);
-  if (pcam)
-  {
-    fov = pcam->GetFOV ();
-    sx = pcam->GetShiftX ();
-    sy = pcam->GetShiftY ();
-  }
-  else
-  {
-    fov = 1.0f;
-    sx = 0.0f;
-    sy = 0.0f;
-  }
-
-  // Project X,Y into screen plane
-  float iz = fov / v.z;
-  v.x = v.x * iz + sx;
-  v.y = frameHeight - 1 - (v.y * iz + sy);
+  // Project v into the screen plane
+  csVector2 v2d = camera->Project (v);
+  iGraphics2D* g2d = topLevelClipper->GetGraphics2D ();
+  v2d = csEngineTools::NormalizedToScreen (v2d, g2d->GetWidth (), g2d->GetHeight ());
 
   // If halo is not inside visible region, return
-  if (!topLevelClipper->GetClipper ()->IsInside (csVector2 (v.x, v.y))) return ;
+  if (!topLevelClipper->GetClipper ()->IsInside (v2d)) return ;
 
   // Check if light is not obscured by anything
   csSectorHitBeamResult hbresult = camera->GetSector ()->HitBeamPortals (camera->GetTransform().GetOrigin(), light_pos );
@@ -1287,7 +1239,7 @@ void csEngine::AddHalo (iCamera* camera, csLight *Light)
     return; // hit a polygon
 
   // Halo size is 1/4 of the screen height; also we make sure its odd
-  int hs = (frameHeight / 4) | 1;
+  int hs = 0;//(frameHeight / 4) | 1;
 
   if (((csHalo*)Light->GetHalo ())->Type == cshtFlare)
   {
@@ -3115,25 +3067,11 @@ bool csEngine::RemoveObject (iBase *object)
 
 void csEngine::Resize ()
 {
-  frameWidth = G3D->GetWidth ();
-  frameHeight = G3D->GetHeight ();
 }
 
 void csEngine::SetContext (iTextureHandle *txthandle)
 {
-  if (currentRenderContext != txthandle)
-  {
-    currentRenderContext = txthandle;
-    if (currentRenderContext)
-    {
-      currentRenderContext->GetRendererDimensions (frameWidth, frameHeight);
-    }
-    else
-    {
-      frameWidth = G3D->GetWidth ();
-      frameHeight = G3D->GetHeight ();
-    }
-  }
+  currentRenderContext = txthandle;
 }
 
 iTextureHandle *csEngine::GetContext () const
@@ -3215,7 +3153,8 @@ bool csEngine::SetOption (int id, csVariant *value)
   switch (id)
   {
     case 0:
-      PerspectiveImpl::SetDefaultFOV ((float)value->GetLong (), G3D->GetWidth ());
+      PerspectiveImpl::SetDefaultFOV
+	((float)value->GetLong (), ((float) G3D->GetWidth ()) / ((float) G3D->GetHeight ()));
       break;
     default:
       return false;
