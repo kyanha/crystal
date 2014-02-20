@@ -23,6 +23,7 @@
 #include "csgeom/poly2d.h"
 #include "ivideo/graph3d.h"
 #include "cstool/csview.h"
+#include "cstool/enginetools.h"
 #include "iengine/camera.h"
 #include "iengine/engine.h"
 #include "iengine/rendermanager.h"
@@ -30,19 +31,23 @@
 
 csView::csView (iEngine *e, iGraphics3D* ig3d) 
   : scfImplementationType (this),
-  Engine (e), G3D (ig3d), RectView (0), PolyView (0), AutoResize (true)
+    Engine (e), G3D (ig3d), RectView (nullptr), PolyView (nullptr),
+    normalizedRectView (nullptr), normalizedPolyView (nullptr),
+    AutoResize (true)
 {
   csRef<iPerspectiveCamera> pcam = e->CreatePerspectiveCamera ();
   SetPerspectiveCamera(pcam);
 
-  viewWidth = OldWidth = G3D->GetWidth ();
-  viewHeight = OldHeight = G3D->GetHeight ();
+  viewWidth = G3D->GetWidth ();
+  viewHeight = G3D->GetHeight ();
 }
 
 csView::~csView ()
 {
   delete RectView;
   delete PolyView;
+  delete normalizedRectView;
+  delete normalizedPolyView;
 }
 
 iEngine* csView::GetEngine ()
@@ -86,7 +91,7 @@ iCustomMatrixCamera* csView::GetCustomMatrixCamera ()
 
 void csView::SetCustomMatrixCamera (iCustomMatrixCamera* c)
 {
-  CS_ASSERT_MSG("Null camera not allowed.", c != 0); 
+  CS_ASSERT_MSG("Null camera not allowed.", c != nullptr); 
   Camera = c->GetCamera();
 }
 
@@ -102,84 +107,102 @@ void csView::SetContext (iGraphics3D *ig3d)
 
 void csView::SetRectangle (int x, int y, int w, int h, bool restrictToScreen)
 {
-  OldWidth = G3D->GetWidth ();
-  OldHeight = G3D->GetHeight ();
-  delete PolyView; PolyView = 0;
-  Clipper = 0;
+  delete PolyView; PolyView = nullptr;
+  delete normalizedPolyView; normalizedPolyView = nullptr;
+  Clipper = nullptr;
 
-  if(restrictToScreen)
+  if (restrictToScreen)
   {
     // Do not allow the rectangle to go out of the screen
     if (x < 0) { w += x; x = 0; }
     if (y < 0) { h += y; y = 0; }
-    if (x + w > OldWidth) { w = OldWidth - x; }
-    if (y + h > OldHeight) { h = OldHeight - y; }
+    if (x + w > viewWidth) { w = viewWidth - x; }
+    if (y + h > viewHeight) { h = viewHeight - y; }
   }
 
   if (RectView)
+  {
     RectView->Set (x, y, x + w, y + h);
+    normalizedRectView->Set (((float) x) / ((float) viewWidth),
+			     ((float) y) / ((float) viewHeight),
+			     ((float) x + w) / ((float) viewWidth),
+			     ((float) y + h) / ((float) viewHeight));
+  }
   else
+  {
     RectView = new csBox2 (x, y, x + w, y + h);
+    normalizedRectView = new csBox2 (((float) x) / ((float) viewWidth),
+				     ((float) y) / ((float) viewHeight),
+				     ((float) x + w) / ((float) viewWidth),
+				     ((float) y + h) / ((float) viewHeight));
+  }
 }
 
 void csView::ClearView ()
 {
-  OldWidth = G3D->GetWidth ();
-  OldHeight = G3D->GetHeight ();
+  Clipper = nullptr;
+  delete RectView; RectView = nullptr;
+  delete normalizedRectView; normalizedRectView = nullptr;
 
-  Clipper = 0;
-  delete RectView; RectView = 0;
-
-  if (PolyView) PolyView->MakeEmpty ();
+  if (PolyView)
+  {
+    PolyView->MakeEmpty ();
+    normalizedPolyView->MakeEmpty ();
+  }
 }
 
 void csView::AddViewVertex (int x, int y)
 {
   if (!PolyView)
+  {
     PolyView = new csPoly2D ();
-  PolyView->AddVertex (x, y);
+    normalizedPolyView = new csPoly2D ();
+  }
 
-  Clipper = 0;
-  delete RectView; RectView = 0;
+  PolyView->AddVertex (x, y);
+  normalizedPolyView->AddVertex (((float) x) / ((float) viewWidth),
+				 ((float) y) / ((float) viewHeight));
+
+  Clipper = nullptr;
+  delete RectView; RectView = nullptr;
+  delete normalizedRectView; normalizedRectView = nullptr;
 }
 
 void csView::UpdateView ()
 {
-  if (OldWidth == G3D->GetWidth () && OldHeight == G3D->GetHeight ())
+  if (viewWidth == G3D->GetWidth () && viewHeight == G3D->GetHeight ())
     return;
 
-  float scale_x = ((float)G3D->GetWidth ())  / ((float)OldWidth);
-  float scale_y = ((float)G3D->GetHeight ()) / ((float)OldHeight);
+  viewWidth = G3D->GetWidth ();
+  viewHeight = G3D->GetHeight ();
 
-  GetPerspectiveCamera()->SetPerspectiveCenter (GetPerspectiveCamera()->GetShiftX() * scale_x,
-                                GetPerspectiveCamera()->GetShiftY() * scale_y);
+  iPerspectiveCamera* pcamera = GetPerspectiveCamera ();
+  if (pcamera)
+    pcamera->SetAspectRatio ((float) viewWidth / (float) viewHeight);
 
-  GetPerspectiveCamera()->SetFOVAngle (GetPerspectiveCamera()->GetFOVAngle(), G3D->GetWidth());
-
-  viewWidth = OldWidth = G3D->GetWidth ();
-  viewHeight = OldHeight = G3D->GetHeight ();
-  
   if (PolyView)
   {
     size_t i;
     csVector2 *pverts = PolyView->GetVertices ();
+    csVector2 *npverts = normalizedPolyView->GetVertices ();
     size_t InCount = PolyView->GetVertexCount ();
-    // scale poly
+
+    // Scale the poly
     for (i = 0; i < InCount; i++)
     {
-      pverts[i].x *= scale_x;
-      pverts[i].y *= scale_y;
+      pverts[i].x = npverts[i].x * viewWidth;
+      pverts[i].y = npverts[i].y * viewHeight;
     }
   }
   else if (RectView)
   {
-    RectView->Set (csQround (scale_x * RectView->MinX()),
-		   csQround (scale_y * RectView->MinY()),
-		   csQround (scale_x * RectView->MaxX()),
-		   csQround (scale_y * RectView->MaxY()) );
+    RectView->Set (csQround (normalizedRectView->MinX () * viewWidth),
+		   csQround (normalizedRectView->MinY () * viewHeight),
+		   csQround (normalizedRectView->MaxX () * viewWidth),
+		   csQround (normalizedRectView->MaxY () * viewHeight));
   }
 
-  Clipper = 0;
+  Clipper = nullptr;
 }
 
 void csView::Draw (iMeshWrapper* mesh)
@@ -190,14 +213,6 @@ void csView::Draw (iMeshWrapper* mesh)
 void csView::UpdateClipper ()
 {
   if (AutoResize) UpdateView ();
-  else
-  {
-    if (OldWidth != G3D->GetWidth () || OldHeight != G3D->GetHeight ())
-    {
-      viewWidth = OldWidth = G3D->GetWidth ();
-      viewHeight = OldHeight = G3D->GetHeight ();
-    }
-  }
 
   if (!Clipper)
   {
@@ -206,7 +221,10 @@ void csView::UpdateClipper ()
     else
     {
       if (!RectView)
-        RectView = new csBox2 (0, 0, OldWidth - 1, OldHeight - 1);
+      {
+        RectView = new csBox2 (0, 0, viewWidth, viewHeight);
+        normalizedRectView = new csBox2 (0.f, 0.f, 1.f, 1.f);
+      }
       Clipper.AttachNew (new csBoxClipper (*RectView));
     }
   }
@@ -218,17 +236,29 @@ void csView::RestrictClipperToScreen ()
   // so we only have to update polygon-based views
   if (PolyView)
   {
-    size_t InCount = PolyView->GetVertexCount (), OutCount;
-    csBoxClipper bc (0., 0., (float)G3D->GetWidth (), (float)G3D->GetHeight());
+    // Clip the normalized polygon
+    size_t InCount = normalizedPolyView->GetVertexCount (), OutCount;
+    csBoxClipper bc (0.f, 0.f, 1.f, 1.f);
     csVector2 *TempPoly = new csVector2[InCount + 5];
-    uint8 rc = bc.Clip (PolyView->GetVertices (), InCount , TempPoly, OutCount);
+    uint8 rc = bc.Clip (normalizedPolyView->GetVertices (), InCount , TempPoly, OutCount);
     if (rc != CS_CLIP_OUTSIDE)
     {
-      PolyView->MakeRoom (OutCount);
-      PolyView->SetVertices (TempPoly, OutCount);
-      //@@@PolyView->UpdateBoundingBox ();
+      normalizedPolyView->MakeRoom (OutCount);
+      normalizedPolyView->SetVertices (TempPoly, OutCount);
+      //@@@normalizedPolyView->UpdateBoundingBox ();
     }
     delete [] TempPoly;
+
+    // Copy and scale into the actual polygon
+    InCount = normalizedPolyView->GetVertexCount ();
+    PolyView->SetVertexCount (InCount);
+    csVector2 *pverts = PolyView->GetVertices ();
+    csVector2 *npverts = normalizedPolyView->GetVertices ();
+     for (size_t i = 0; i < InCount; i++)
+    {
+      pverts[i].x = npverts[i].x * viewWidth;
+      pverts[i].y = npverts[i].y * viewHeight;
+    }
   }
 }
 
@@ -236,4 +266,16 @@ iClipper2D* csView::GetClipper ()
 {
   UpdateClipper ();
   return Clipper;
+}
+
+csVector2 csView::Project (const csVector3& v) const
+{
+  return csEngineTools::NormalizedToScreen
+    (Camera->Project (v), viewWidth, viewHeight);
+}
+
+csVector3 csView::InvProject (const csVector2& p, float z) const
+{
+  return Camera->InvProject
+    (csEngineTools::ScreenToNormalized (p, viewWidth, viewHeight), z);
 }

@@ -36,9 +36,29 @@ struct iMeshWrapper;
 struct iPerspectiveCamera;
 
 /**
- * The iView class encapsulates the top-level Crystal Space
- * renderer interface. It is basically a camera and a clipper.
- * 
+ * The iView class represents a viewport and encapsulates the top-level renderer
+ * interface.
+ *
+ * It is basically a camera and a clipper, and is used to define how the view
+ * from the camera must be rendered into the render target.
+ *
+ * The clipper is used to speed up the rendering process by excluding the objects
+ * that are not visible. It is returned by GetClipper() and can be defined either
+ * through a rectangle (methods SetWidth(), SetHeight() and SetRectangle())
+ * or through a custom polygon (methods ClearView(), AddViewVertex() and
+ * RestrictClipperToScreen()).
+ *
+ * The clipper and view dimensions doesn't need to be updated if
+ * SetAutoResize() is set to \a true. If no clipper is provided and SetAutoResize()
+ * is set to \a true, then a rectangular one will be used with the size of the full
+ * screen.
+ *
+ * The list of meshes to be rendered from the scene can also be restricted
+ * using the method GetMeshFilter().
+ *
+ * \remarks The view coordinates are vertically mirrored in comparison to screen
+ * space, i.e. y=0 is at the bottom of the viewport, y=GetHeight() at the top.
+ *
  * Main creators of instances implementing this interface:
  * - Applications using csView.
  *   
@@ -51,100 +71,145 @@ struct iPerspectiveCamera;
  */
 struct iView : public virtual iBase
 {
-  SCF_INTERFACE(iView, 3,0,1);
-  /// Get engine handle.
+  SCF_INTERFACE(iView, 3,0,2);
+
+  /// Get the engine handle.
   virtual iEngine* GetEngine () = 0;
-  /// Set engine handle.
+  /// Set the engine handle.
   virtual void SetEngine (iEngine* e) = 0;
 
-  /// Get current camera.
+  /// Get the current camera.
   virtual iCamera* GetCamera () = 0;
-  /// Set current camera.
+  /// Set the current camera.
   virtual void SetCamera (iCamera* c) = 0;
 
   /**
-   * Get current perspective camera.
-   * Can return 0 if the current camera is not a perspective camera.
+   * Get the current perspective camera.
+   * Can return nullptr if the current camera is not a perspective camera.
    */
   virtual iPerspectiveCamera* GetPerspectiveCamera () = 0;
-  /// Set current perspective camera.
+  /// Set the current camera as a perspective camera.
   virtual void SetPerspectiveCamera (iPerspectiveCamera* c) = 0;
 
-  /// Get Context
+  /// Get the iGraphics3d context of this view
   virtual iGraphics3D* GetContext () = 0;
-  /// Set Context
+  /// Set the iGraphics3d context of this view
   virtual void SetContext (iGraphics3D *ig3d) = 0;
 
   /**
-   * Set clipping rectangle.
-   * \remarks The coordinates are vertically mirrored in comparison to screen
-   *   space, i.e. y=0 is at the bottom of the viewport, y=GetHeight() at the 
-   *   top.
-   * \param restrict Restrict the rectangle to be no bigger than the screen size.
+   * Set the clipper as a clipping rectangle.
+   * \param x The left position of the rectangle, in pixels.
+   * \param y The bottom position of the rectangle, in pixels.
+   * \param w The width of the rectangle, in pixels.
+   * \param h The height of the rectangle, in pixels.
+   * \param restrictToScreen Restrict the rectangle to not be bigger
+   * than the screen size.
    */
   virtual void SetRectangle (int x, int y, int w, int h, bool restrictToScreen = true) = 0;
-  /// Clear clipper in order to start building a polygon-based clipper.
+  /// Clear the clipper in order to start building a new polygon-based clipper.
   virtual void ClearView () = 0;
-  /// Add a vertex to clipping polygon (non-rectangular clipping).
+  /**
+   * Add a vertex to the clipping polygon (non-rectangular clipping).
+   * If the current clipper was a rectangle, then it will be deleted.
+   * \param x The X coordinate of the vertex, in pixels.
+   * \param y The Y coordinate of the vertex, in pixels.
+   */
   virtual void AddViewVertex (int x, int y) = 0;
-  /// Clip the view clipper to the screen boundaries
+  /// Clip the polygon clipper to the screen boundaries
   virtual void RestrictClipperToScreen () = 0;
 
-  /// Update the Clipper. This is usually called from Draw.
+  /// Update the Clipper. This is called automatically by GetClipper().
   virtual void UpdateClipper () = 0;
-  /// Return the current clipper. This function may call UpdateClipper ().
+  /// Return the current clipper. This function may call UpdateClipper().
   virtual iClipper2D* GetClipper () = 0;
+
   /**
-   * Draw 3D world as seen from the camera.
-   * If a mesh is given then only that single mesh is rendered.
-   * Note that in that case the mesh will only be rendered if it
-   * is in the same sector as the camera!
+   * Render the scene as seen from the camera.
+   * \param mesh This parameter was previously used to restrict the
+   * rendering of the view to a single mesh, but it is not used anymore.
+   * You should use GetMeshFilter() instead.
    */
   virtual void Draw (iMeshWrapper* mesh = 0) = 0;
   
   /**
-   * Enable / Disable automatic resizing. When this
+   * Enable or disable automatic resizing. When this
    * is true (default) then the view will detect automatically
-   * when the window size changes and adapt the view
+   * when the canvas size changes and adapt the view
    * and camera automatically (i.e. it will change the view
-   * rectangle and perspective center). If you don't want that
-   * then you can disable this.
+   * rectangle, the clipper coordinates and the camera aspect ratio).
+   * If you don't want that then you can disable this.
    */
   virtual void SetAutoResize (bool state) = 0;
 
+  /**
+   * Get the mesh filter used to restrict the meshes that are visible in this
+   * view.
+   */
   virtual CS::Utility::MeshFilter& GetMeshFilter () = 0;
 
   /**
-   * Get current custom matrix camera.
-   * Can return 0 if the current camera is not a custom matrix camera.
+   * Get the current custom matrix camera.
+   * Can return nullptr if the current camera is not a custom matrix camera.
    */
   virtual iCustomMatrixCamera* GetCustomMatrixCamera () = 0;
-  /// Set current perspective camera.
+  /// Set the current camera as a custom matrix camera.
   virtual void SetCustomMatrixCamera (iCustomMatrixCamera* c) = 0;
 
-  // Get the view width.
+  /// Get the view width, in pixels.
   virtual int GetWidth () const = 0;
 
-  // Get the view height.
+  /// Get the view height, in pixels.
   virtual int GetHeight () const = 0;
 
-  // Set the view width.
+  /// Set the view width, in pixels.
   virtual void SetWidth (int w) = 0;
 
-  // Set the view height.
+  /// Set the view height, in pixels.
   virtual void SetHeight (int h) = 0;
 
   /**
-   * Transform a normalized screenspace coordinate (-1 to 1) to real pixels in this
+   * Transform a normalized screen space coordinate (-1 to 1) to real pixels in this
    * viewport.
+   *
+   * \remarks Unlike csEngineTools::NormalizedToScreen(), this method works in
+   * view space, not in screen space. That is, the view coordinates are
+   * vertically mirrored in comparison to screen space, i.e. y=0 is at the
+   * bottom of the viewport, and y=GetHeight() at the top.
    */
   virtual csVector2 NormalizedToScreen (const csVector2& pos) = 0;
 
   /**
-   * Transform a screenspace coordinate in pixels to a normalized screen
+   * Transform a screen space coordinate in pixels to a normalized screen
    * coordinate (-1 to 1).
+   *
+   * \remarks Unlike csEngineTools::NormalizedToScreen(), this method works in
+   * view space, not in screen space. That is, the view coordinates are
+   * vertically mirrored in comparison to screen space, i.e. y=0 is at the
+   * bottom of the viewport, and y=GetHeight() at the top.
    */
   virtual csVector2 ScreenToNormalized (const csVector2& pos) = 0;
+
+  /**
+   * Calculate a projection corrected point for this view, that is the
+   * projection of a 3D point expressed in camera space into the 2D
+   * screen space.
+   * \param v The 3D point to be projected, in camera space coordinates.
+   * \return The 2D projection into the screen, in pixels.
+   * \sa InvProject() iCamera::Project()
+   */
+  virtual csVector2 Project (const csVector3& v) const = 0;
+
+  /**
+   * Calculate an inverse projection corrected point for this view,
+   * that is the inverse projection of a 2D point expressed in screen space
+   * into the 3D camera space.
+   * \param p The 2D point on the screen, in pixels.
+   * \param z The Z component of the projection point, that is the
+   * distance between the camera and the plane where the point is projected.
+   * \return The 3D projection point, in camera space coordinates.
+   * \sa Project() iCamera::InvProject()
+   */
+  virtual csVector3 InvProject (const csVector2& p, float z) const = 0;
 };
 
 #endif // __CS_IVARIA_VIEW_H__
