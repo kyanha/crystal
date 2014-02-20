@@ -44,13 +44,13 @@ bool PhysDemo::PickCursorObject (CS::Collisions::HitBeamResult& result)
 
   // Compute the end beam points
   csRef<iCamera> camera = view->GetCamera ();
-  csVector2 v2d (mouse->GetLastX (), g2d->GetHeight () - mouse->GetLastY ());
-  csVector3 v3d = camera->InvPerspective (v2d, 10000);
+  csVector2 v2d (mouse->GetLastX (), mouse->GetLastY ());
+  csVector3 v3d = view->InvProject (v2d, 10000);
   csVector3 startBeam = camera->GetTransform ().GetOrigin ();
   csVector3 endBeam = camera->GetTransform ().This2Other (v3d);
 
   // Trace the physical beam
-  result = GetCurrentSector ()->HitBeamPortal (startBeam, endBeam);
+  result = GetCurrentSector ()->HitBeamPortals (startBeam, endBeam);
 
   // Print the name of the object and its relations on standard output
   if (result.hasHit)

@@ -160,13 +160,7 @@ void PhysDemo::CreateGhostCylinder ()
   GetCurrentSector ()->AddCollisionObject (ghostObject);
 }
 
-CS::Physics::iRigidBody* PhysDemo::SpawnSphere (bool setVelocity /* = true */)
-{
-  return SpawnSphere (view->GetCamera ()->GetTransform ().GetOrigin () + GetCameraDirection (), rand ()%5/10. + .2, setVelocity);
-}
-
-CS::Physics::iRigidBody* PhysDemo::SpawnSphere
-(const csVector3& pos, float radiusf, bool setVelocity)
+CS::Physics::iRigidBody* PhysDemo::SpawnSphere ()
 {
   // Use the camera transform.
   const csOrthoTransform& tc = view->GetCamera ()->GetTransform ();
@@ -183,6 +177,7 @@ CS::Physics::iRigidBody* PhysDemo::SpawnSphere
   csRef<iGeneralFactoryState> gmstate = scfQueryInterface<
     iGeneralFactoryState> (ballFact->GetMeshObjectFactory ());
 
+  float radiusf = rand () %5 / 10.f + .2f;
   csVector3 radius (radiusf, radiusf, radiusf);
   csEllipsoid ellips (csVector3 (0), radius);
   gmstate->GenerateSphere (ellips, 16);
@@ -226,15 +221,12 @@ CS::Physics::iRigidBody* PhysDemo::SpawnSphere
   rb->QueryObject ()->SetObjectParent (mesh->QueryObject ());
 
   csOrthoTransform trans = tc;
-  trans.SetOrigin (pos);
+  trans.SetOrigin (view->GetCamera ()->GetTransform ().GetOrigin () + GetCameraDirection ());
   rb->SetTransform (artificialTransform.GetInverse () * trans);
   
-  if (setVelocity)
-  {
-    // Fling the body.
-    rb->SetLinearVelocity (tc.GetT2O () * csVector3 (0, 0, 5));
-    rb->SetAngularVelocity (tc.GetT2O () * csVector3 (5, 0, 0));
-  }
+  // Fling the body.
+  rb->SetLinearVelocity (tc.GetT2O () * csVector3 (0, 0, 5));
+  rb->SetAngularVelocity (tc.GetT2O () * csVector3 (5, 0, 0));
 
   GetCurrentSector ()->AddCollisionObject (rb);
 
