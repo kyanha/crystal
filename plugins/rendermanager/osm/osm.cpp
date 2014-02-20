@@ -169,26 +169,18 @@ struct WrapShadowParams<RMOSM::ShadowType>
   bool RMOSM::RenderView (iView* view, bool recursePortals)
   {
     // Setup a rendering view
-    view->UpdateClipper ();
-
     csRef<CS::RenderManager::RenderView> rview;
     rview = treePersistent.renderViews.GetRenderView (view);
     rview->SetOriginalCamera (view->GetCamera ());
     iGraphics3D* G3D = rview->GetGraphics3D ();
     int frameWidth = G3D->GetWidth ();
     int frameHeight = G3D->GetHeight ();
-    view->GetCamera () ->SetViewportSize (frameWidth, frameHeight);
+#include "csutil/deprecated_warn_off.h"
+    view->GetCamera ()->SetViewportSize (frameWidth, frameHeight);
+#include "csutil/deprecated_warn_on.h"
+
     view->GetEngine ()->UpdateNewFrame ();  
     view->GetEngine ()->FireStartFrame (rview);
-
-    // Computes the left, right, top, and bottom of the view frustum.
-    iPerspectiveCamera *camera = view->GetPerspectiveCamera ();
-    float invFov = camera->GetInvFOV ();
-    float l = -invFov * camera->GetShiftX ();
-    float r =  invFov * (frameWidth - camera->GetShiftX ());
-    float t = -invFov * camera->GetShiftY ();
-    float b =  invFov * (frameHeight - camera->GetShiftY ());
-    rview->SetFrustum (l, r, t, b);
 
     lightPersistent.UpdateNewFrame ();
 
