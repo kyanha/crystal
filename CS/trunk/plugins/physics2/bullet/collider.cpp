@@ -64,18 +64,18 @@ CS_PLUGIN_NAMESPACE_BEGIN (Bullet2)
 
   bool csBulletCollider::IsDirty () const
   {
-    // recursively check if the collider tree has been changed
-    bool isDirty = dirty;
-    if (children && !dirty)
-    {
-      for (size_t i = 0; i < children->colliders.GetSize (); i++)
-      {
-        iCollider* icoll = children->colliders[i];
-        csBulletCollider* coll = dynamic_cast<csBulletCollider*> (icoll);
-        isDirty |= coll->IsDirty ();
-      }
-    }
-    return isDirty;
+    if (dirty) return true;
+
+    // Recursively check if the collider tree has been changed
+    if (children)
+       for (size_t i = 0; i < children->colliders.GetSize (); i++)
+       {
+        csBulletCollider* collider =
+	  dynamic_cast<csBulletCollider*> (children->colliders[i]);
+	if (collider->IsDirty ()) return true;
+       }
+
+    return false;
   }
 
   // TODO: is it really working?
@@ -141,6 +141,9 @@ CS_PLUGIN_NAMESPACE_BEGIN (Bullet2)
 
   btCollisionShape* csBulletCollider::GetOrCreateBulletShape ()
   {
+    // TODO: Add methods iCollider::SetMass/SetTotalMass/SetDensity/SetTotalDensity
+    // and revamp this code
+
     if (!IsDirty ()) return usedShape;
 
     dirty = false;
@@ -166,7 +169,6 @@ CS_PLUGIN_NAMESPACE_BEGIN (Bullet2)
       int start = shape ? 1 : 0;
       int totalShapeCount = int (children->colliders.GetSize ()) + start;
 
-      // TODO: Add density ratio to colliders to allow for non-uniform density
       CS_ALLOC_STACK_ARRAY (float, masses, totalShapeCount);
 
       // add this collider's own shape
