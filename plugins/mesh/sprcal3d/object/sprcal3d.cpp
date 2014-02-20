@@ -1141,8 +1141,6 @@ bool csSpriteCal3DMeshObject::HitBeamOutline (const csVector3& start,
   {
     // This routine is slow, but it is intended to be accurate.
     csSegment3 seg (start, end);
-    float dist, max;
-    dist = max = csSquaredDist::PointPoint (start, end);
     csVector3 tsect;
 
     size_t m;
