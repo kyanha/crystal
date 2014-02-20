@@ -169,50 +169,65 @@ void csCameraBase::Correct (int n, float *vals[])
 
 //---------------------------------------------------------------------------
 
-float PerspectiveImpl:: default_aspect = 0;
-float PerspectiveImpl:: default_inv_aspect = 0;
-float PerspectiveImpl:: default_fov_angle = 90;
+float PerspectiveImpl:: default_aspect_ratio = 1.f;
+float PerspectiveImpl:: default_inv_aspect_ratio = 1.f;
+float PerspectiveImpl:: default_fov_ratio = 1.f;
+float PerspectiveImpl:: default_inv_fov_ratio = 1.f;
 
 PerspectiveImpl::PerspectiveImpl (csEngine* engine)
   : nearClip (engine->csEngine::GetDefaultNearClipDistance()),
     matrixDirty (true), invMatrixDirty (true)
 {
-  aspect = default_aspect;
-  inv_aspect = default_inv_aspect;
-  fov_angle = default_fov_angle;
+  aspect_ratio = default_aspect_ratio;
+  inv_aspect_ratio = default_inv_aspect_ratio;
+  fov_ratio = default_fov_ratio;
+  inv_fov_ratio = default_inv_fov_ratio;
   shift_x = 0.5f;
   shift_y = 0.5f;
 }
 
-void PerspectiveImpl::SetDefaultFOVAngle (float a, float width)
+void PerspectiveImpl::SetDefaultFOV (float fov, float aspect)
 {
-  // make sure we have valid angles
-  if (a >= 180)
+  // Make sure we have valid angles
+  if (fov < SMALL_EPSILON)
   {
-    a = 180 - SMALL_EPSILON;
-  }
-  else if (a <= 0)
-  {
-    a = SMALL_EPSILON;
+    fov = SMALL_EPSILON;
   }
 
-  // This is our reference point.
-  // It must be somewhere on the function graph.
-  // This reference point was composed by testing.
-  // If anyone knows a 100 percent correct reference point, please put it here.
-  // But for now it's about 99% correct
-  float vRefFOVAngle = 53;
-  float vRefFOV = width;
-
-  // We calculate the new aspect relative to a reference point
-  default_aspect = ((tan((vRefFOVAngle * 0.5) / 180 * PI) * vRefFOV) /
-      tan((a * 0.5)  / 180 * PI));
-
-  // set the other neccessary variables
-  default_inv_aspect = 1.0f / default_aspect;
-  default_fov_angle = a;
+  default_fov_ratio = fov;
+  default_inv_fov_ratio = 1.0f / default_fov_ratio;
+  default_aspect_ratio = aspect;
+  default_inv_aspect_ratio = 1.0f / aspect;
 }
 
+void PerspectiveImpl::SetDefaultFOVAngle (float fov, float aspect)
+{
+  // Make sure we have valid angles
+  if (fov >= 180.f)
+  {
+    fov = 180.f - SMALL_EPSILON;
+  }
+  else if (fov < SMALL_EPSILON)
+  {
+    fov = SMALL_EPSILON;
+  }
+
+  // The FOV ratio is the tangent of the half fov angle (in radiant).
+  default_fov_ratio = tan ((fov * 0.5f * PI) / 180.f);
+
+  // Set the other necessary variables
+  default_inv_fov_ratio = 1.0f / default_fov_ratio;
+  default_aspect_ratio = aspect;
+  default_inv_aspect_ratio = 1.0f / aspect;
+}
+
+void PerspectiveImpl::SetFOV (float a, float width)
+{
+  inv_fov_ratio = 1.0f;
+  fov_ratio = 1.0f;
+  aspect_ratio = 1.0f / a;
+  inv_aspect_ratio = a;
+}
 
 void PerspectiveImpl::SetFOVAngle (float a, float width)
 {
@@ -226,52 +241,75 @@ void PerspectiveImpl::SetFOVAngle (float a, float width)
     a = SMALL_EPSILON;
   }
 
-  // This is our reference point.
-  // It must be somewhere on the function graph.
-  // This reference point was composed by testing.
-  // If anyone knows a 100 percent correct reference point, please put it here.
-  // But for now it's about 99% correct
-  float vRefFOVAngle = 53;
-  float vRefFOV = width;
+  // We calculate the new aspect relative to the reference height of 0.5
+  inv_fov_ratio = (0.5f * width) / tan ((a * 0.5f) / 180.f * PI);
 
-  // We calculate the new aspect relative to a reference point
-  aspect = ((tan((vRefFOVAngle * 0.5) / 180 * PI) * vRefFOV) /
-           tan((a * 0.5)  / 180 * PI));
+  // Set the other necessary variables
+  fov_ratio = 1.0f / fov_ratio;
+  aspect_ratio = width;
+  inv_aspect_ratio = 1.0f / aspect_ratio;
 
-  // set the other neccessary variables
-  inv_aspect = 1.0f / aspect;
-  fov_angle = a;
   Dirtify();
 }
 
-void PerspectiveImpl::ComputeAngle (float width)
+void PerspectiveImpl::SetVerticalFOV (float fov)
 {
-  float rview_fov = (float)GetFOV () * 0.5f;
-  float disp_width = (float)width * 0.5f;
-  float inv_disp_radius = csQisqrt (
-      rview_fov * rview_fov + disp_width * disp_width);
-  fov_angle = 2.0f * (float)acos (disp_width * inv_disp_radius)
-  	* (360.0f / TWO_PI);
+  // Make sure we have valid angles
+  if (fov < SMALL_EPSILON)
+  {
+    fov = SMALL_EPSILON;
+  }
+
+  fov_ratio = fov;
+  inv_fov_ratio = 1.0f / fov_ratio;
+
   Dirtify();
 }
 
-void PerspectiveImpl::ComputeDefaultAngle (float width)
+void PerspectiveImpl::SetVerticalFOVAngle (float fov)
 {
-  float rview_fov = (float)GetDefaultFOV () * 0.5f;
-  float disp_width = (float)width * 0.5f;
-  float inv_disp_radius = csQisqrt (
-      rview_fov * rview_fov + disp_width * disp_width);
-  default_fov_angle = 2.0f * (float)acos (disp_width * inv_disp_radius)
-  	* (360.0f / TWO_PI);
+  // Make sure we have valid angles
+  if (fov >= 180.f)
+  {
+    fov = 180.f - SMALL_EPSILON;
+  }
+  else if (fov < SMALL_EPSILON)
+  {
+    fov = SMALL_EPSILON;
+  }
+
+  // The FOV ratio is the tangent of the half FOV angle (in radiant).
+  fov_ratio = tan ((fov * 0.5f * PI) / 180.f);
+  inv_fov_ratio = 1.0f / fov_ratio;
+
+  Dirtify ();
+}
+
+float PerspectiveImpl::GetFOVAngle () const
+{
+  return atan (fov_ratio) * 360.f / PI;
+}
+
+float PerspectiveImpl::GetVerticalFOVAngle () const
+{
+  return atan (fov_ratio) * 360.f / PI;
+}
+
+void PerspectiveImpl::SetAspectRatio (float aspect)
+{
+  aspect_ratio = aspect;
+  inv_aspect_ratio = 1.0f / aspect;
+
+  Dirtify ();
 }
 
 void PerspectiveImpl::UpdateMatrix ()
 {
   if (!matrixDirty) return;
-  
-  matrix = CS::Math::Projections::CSPerspective (1.0f, 
-    aspect, shift_x, shift_y*aspect, inv_aspect, nearClip);
-  
+
+  matrix = CS::Math::Projections::CSPerspective
+    (aspect_ratio, 1.0f, shift_x * aspect_ratio, shift_y, fov_ratio, nearClip);
+
   matrixDirty = false;
   invMatrixDirty = true;
 }
@@ -285,6 +323,42 @@ void PerspectiveImpl::UpdateInvMatrix ()
   invMatrixDirty = false;
 }
 
+csVector2 PerspectiveImpl::Perspective (const csVector3& v) const
+{
+  csVector2 p;
+  float iz = fov_ratio / v.z;
+  p.x = v.x * inv_aspect_ratio * iz + shift_x;
+  p.y = v.y * iz + shift_y;
+  return p;
+}
+
+csVector3 PerspectiveImpl::InvPerspective (const csVector2& p, float z) const
+{
+  csVector3 v;
+  v.z = z;
+  v.x = (p.x - shift_x) * z * inv_fov_ratio * aspect_ratio;
+  v.y = (p.y - shift_y) * z * inv_fov_ratio;
+  return v;
+}
+
+csVector2 PerspectiveImpl::Project (const csVector3& v) const
+{
+  csVector2 p;
+  float iz = fov_ratio / v.z;
+  p.x = (v.x * inv_aspect_ratio * iz + shift_x) * 2.f - 1.f;
+  p.y = (v.y * iz + shift_y) * 2.f - 1.f;
+  return p;
+}
+
+csVector3 PerspectiveImpl::InvProject (const csVector2& p, float z) const
+{
+  csVector3 v;
+  v.z = z;
+  v.x = (p.x * 0.5f + 0.5f - shift_x) * z * inv_fov_ratio * aspect_ratio;
+  v.y = (p.y * 0.5f + 0.5f - shift_y) * z * inv_fov_ratio;
+  return v;
+}  
+
 //---------------------------------------------------------------------------
 
 void csCameraPerspective::UpdateClipPlanes()
@@ -292,10 +366,10 @@ void csCameraPerspective::UpdateClipPlanes()
   if (!clipPlanesDirty) return;
   
   float lx, rx, ty, by;
-  lx = -shift_x * inv_aspect;
-  rx = (1.0f - shift_x) * inv_aspect;
-  ty = -shift_y;
-  by = (1.0f - shift_y);
+  lx = -shift_x * inv_fov_ratio * aspect_ratio;
+  rx = (1.0f - shift_x) * inv_fov_ratio * aspect_ratio;
+  ty = -shift_y * inv_fov_ratio;
+  by = (1.0f - shift_y) * inv_fov_ratio;
   
   csPlane3* frust = clipPlanes;
   csVector3 v1 (lx, ty, 1);
@@ -327,20 +401,11 @@ void csCameraPerspective::UpdateClipPlanes()
 //---------------------------------------------------------------------------
 
 csCameraCustomMatrix::csCameraCustomMatrix (csCameraBase* other)
-  : scfImplementationType (this, other), invMatrixDirty (true),
-    clipPlanesDirty (true)
+  : scfImplementationType (this, other), clipPlanesDirty (true)
 {
   // csCameraBase copy ctor already bumped the cam
   matrix = other->GetProjectionMatrix();
-}
-
-void csCameraCustomMatrix::UpdateInvMatrix ()
-{
-  if (!invMatrixDirty) return;
-  
-  invMatrix = matrix.GetInverse();
-  
-  invMatrixDirty = false;
+  invMatrix = other->GetInvProjectionMatrix();
 }
 
 const csPlane3* csCameraCustomMatrix::GetVisibleVolume (uint32& mask)
@@ -389,6 +454,25 @@ const csPlane3* csCameraCustomMatrix::GetVisibleVolume (uint32& mask)
     
   mask = clipPlanesMask;
   return clipPlanes;
+}
+
+csVector2 csCameraCustomMatrix::Project (const csVector3& v) const
+{
+  csVector4 v_proj (matrix * csVector4 (v, 1.f));
+  float inv_w = 1.f / v_proj.w;
+  csVector2 p;
+  p.x = v_proj.x * inv_w;
+  p.y = v_proj.y * inv_w;
+  return p;
+}
+
+csVector3 csCameraCustomMatrix::InvProject (const csVector2& p, float z) const
+{
+  csVector4 v_proj =
+    invMatrix * csVector4 (p.x, p.y, 0.f, 1.f);
+  float scale = z / v_proj[2];
+  csVector3 v (scale * v_proj[0], scale * v_proj[1], z);
+  return v;
 }
 
 }

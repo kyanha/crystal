@@ -28,8 +28,9 @@
  * @{ */
 
 #include "csgeom/matrix4.h"
+#include "csgeom/vector2.h"
 #include "csutil/scf.h"
-#include "csgeom/matrix4.h"
+//#include "csgeom/matrix4.h"
 
 #define CS_VEC_FORWARD   csVector3(0,0,1)
 #define CS_VEC_BACKWARD  csVector3(0,0,-1)
@@ -47,7 +48,6 @@
 
 class csOrthoTransform;
 class csPlane3;
-class csVector2;
 class csVector3;
 
 struct iSector;
@@ -80,6 +80,8 @@ struct iCameraListener : public virtual iBase
  *
  * This callback is used by:
  * - iCamera
+ *
+ * \deprecated Use iCameraListener instead
  */
 struct CS_DEPRECATED_TYPE_MSG("Use iCameraListener instead")
 iCameraSectorListener : public iCameraListener
@@ -97,27 +99,44 @@ iCameraSectorListener : public iCameraListener
 
 /**
  * Camera class. This class represents camera objects which can be used to
- * render a world in the engine. A camera has the following properties:
+ * render a world in the engine.
+ *
+ * A camera has the following properties:
  * - Home sector: The sector in which rendering starts.
  * - Transformation: This is an orthonormal transformation which is applied
  *   to all rendered objects to move them from world space to camera space.
- *   It is the mathematical representation of position and direction of the
- *   camera. The position should be inside the home sector.
- * - Field of View: Controls the size on screen of the rendered objects and
- *   can be used for zooming effects. The FOV can be given either in pixels
- *   or as an angle in degrees.
- * - Shift amount: The projection center in screen coordinates.
+ *   It is the mathematical representation of the position and direction of
+ *   the camera. This transform is relative to the home sector.
+ * - Projection matrix: The matrix being used to project objects in 3D
+ *   camera space into normalized screen coordinates.
  * - Mirrored Flag: Should be set to true if the transformation is mirrored.
  * - Far Plane: A distant plane that is orthogonal to the view direction. It
  *   is used to clip away all objects that are farther away than a certain
  *   distance, usually to improve rendering speed.
- * - Camera number: An identifier for a camera transformation, used
+ * - Camera number: An identifier for the state of the camera, used
  *   internally in the engine to detect outdated vertex buffers.
  * - Only Portals Flag: If this is true then no collisions are detected for
  *   camera movement except for portals.
  *
- * Main creators of instances implementing this interface:
+ * iCamera is the base abstract interface for all camera types. Practically,
+ * all cameras will also implement either the iPerspectiveCamera or the
+ * iCustomMatrixCamera interfaces depending on the desired camera projection.
+ *
+ * The cameras work in normalized screen coordinates, that is, with the
+ * visible portion of the screen being mapped in the range [-1, 1], with the
+ * top-left corner of the screen being at the coordinates (-1, -1), and the
+ * bottom-right corner being at (1, 1).
+ *
+ * Normalized screen coordinates are independant on the size of the viewport
+ * (that is, the iView). If you want to manipulate coordinates expressed in
+ * pixels (that is, in screen space coordinates), then you can use the methods
+ * iView::Project(), iView::InvProject(), csEngineTools::NormalizedToScreen()
+ * and csEngineTools::ScreenToNormalized().
+ *
+ * Main ways to create instances implementing this interface:
  * - iEngine::CreateCamera()
+ * - iEngine::CreatePerspectiveCamera()
+ * - iEngine::CreateCustomMatrixCamera()
  * - csView
  * 
  * Main ways to get pointers to this interface:
@@ -126,10 +145,13 @@ iCameraSectorListener : public iCameraListener
  * Main users of this interface:
  * - csView
  * - iView
+ *
+ * \sa iCameraPosition
  */
 struct iCamera : public virtual iBase
 {
-  SCF_INTERFACE(iCamera, 3,0,0);
+  SCF_INTERFACE(iCamera, 4,0,0);
+
   /**
    * Create a clone of this camera. Note that the array of listeners
    * is not cloned.
@@ -253,6 +275,7 @@ struct iCamera : public virtual iBase
   /**
    * Eliminate roundoff error by snapping the camera orientation to a
    * grid of density n
+   * \deprecated Don't use it anymore
    */
   CS_DEPRECATED_METHOD_MSG("Don't use it anymore")
   virtual void Correct (int n) = 0;
@@ -264,7 +287,7 @@ struct iCamera : public virtual iBase
 
   /**
    * Get the 3D far plane that should be used to clip all geometry.
-   * If this function returns 0 no far clipping is required.
+   * If this function returns 0 then no far clipping is required.
    * Otherwise it must be used to clip the object before
    * drawing.
    */
@@ -283,14 +306,36 @@ struct iCamera : public virtual iBase
   /**
    * Get the camera number. This number is changed for every new camera
    * instance and it is also updated whenever the camera transformation
-   * changes. This number can be used to cache camera vertex arrays, for
-   * example.
+   * or projection matrix changes. This number can be used to cache camera
+   * vertex arrays, for example.
    */
   virtual long GetCameraNumber () const = 0;
 
-  /// Calculate perspective corrected point for this camera.
+  /**
+   * Calculate a perspective corrected point for this camera, that is the
+   * projection of a 3D point expressed in camera space into the 2D camera
+   * screen.
+   * \param v The 3D point to be projected, in camera space coordinates.
+   * \return The 2D projection into the screen, in pixels.
+   * \sa InvPerspective()
+   * \deprecated Deprecated in 2.2. Use Project() instead
+   */
+  CS_DEPRECATED_METHOD_MSG("Deprecated in 2.2. Use Project() instead")
   virtual csVector2 Perspective (const csVector3& v) const = 0;
-  /// Calculate inverse perspective corrected point for this camera.
+
+  /**
+   * Calculate an inverse perspective corrected point for this camera,
+   * that is the inverse projection of a 2D point expressed in screen space
+   * into the 3D camera space.
+   * \param p The 2D point on the screen, in pixels.
+   * \param z The Z component of the projection point, that is the
+   * distance between the camera and the plane where the point was
+   * projected from.
+   * \return The 3D projection point, in camera space coordinates.
+   * \sa Perspective()
+   * \deprecated Deprecated in 2.2. Use InvProject() instead
+   */
+  CS_DEPRECATED_METHOD_MSG("Deprecated in 2.2. Use InvProject() instead")
   virtual csVector3 InvPerspective (const csVector2& p, float z) const = 0;
 
   /**
@@ -321,7 +366,13 @@ struct iCamera : public virtual iBase
   /// Remove a listener from this camera.
   virtual void RemoveCameraListener (iCameraListener* listener) = 0;
   
-  /// Get the projection matrix for this camera
+  /**
+   * Get the projection matrix for this camera. This matrix will project
+   * points in 3D camera space into normalized screen coordinates (that
+   * is, with the visible portion of the screen being mapped in the range
+   * [-1, 1]).
+   * \sa GetInvProjectionMatrix() csEngineTools::NormalizedToScreen()
+   */
   virtual const CS::Math::Matrix4& GetProjectionMatrix () = 0;
   
   /**
@@ -330,17 +381,59 @@ struct iCamera : public virtual iBase
    */
   virtual const csPlane3* GetVisibleVolume (uint32& mask) = 0;
   
-  /// Set the size of the viewport this camera is associated with.
+  /**
+   * Set the size of the viewport this camera is associated with.
+   * \deprecated Deprecated in 2.2. Use iView instead
+   */
+  CS_DEPRECATED_METHOD_MSG("Deprecated in 2.2. Use iView instead")
   virtual void SetViewportSize (int width, int height) = 0;
   
-  /// Get the inverse projection matrix for this camera
+  /**
+   * Get the inverse projection matrix for this camera. This matrix will
+   * project points in normalized screen coordinates (that is, with the
+   * visible portion of the screen being mapped in the range [-1, 1]) into
+   * 3D camera space.
+   * \sa GetProjectionMatrix() csEngineTools::ScreenToNormalized()
+   */
   virtual const CS::Math::Matrix4& GetInvProjectionMatrix () = 0;
+
+  /**
+   * Calculate a projection corrected point for this camera, that is the
+   * projection of a 3D point expressed in camera space into the 2D camera
+   * screen.
+   * \param v The 3D point to be projected, in camera space coordinates.
+   * \return The 2D projection into the screen, in normalized screen
+   * coordinates.
+   * \sa InvProject() csEngineTools::NormalizedToScreen()
+   */
+  virtual csVector2 Project (const csVector3& v) const = 0;
+
+  /**
+   * Calculate an inverse projection corrected point for this camera,
+   * that is the inverse projection of a 2D point expressed in normalized
+   * screen coordinates into the 3D camera space.
+   * \param p The 2D point on the screen, in normalized screen coordinates.
+   * \param z The Z component of the projection point, that is the
+   * distance between the camera and the plane where the point is projected.
+   * \return The 3D projection point, in camera space coordinates.
+   * \sa Project() csEngineTools::ScreenToNormalized()
+   */
+  virtual csVector3 InvProject (const csVector2& p, float z) const = 0;
 };
 
 /**
  * An implementation of iCamera that renders a world with a classical 
  * perspective.
  * 
+ * A perspective camera has the following properties:
+ * - Field of View (FOV): Controls the size on screen of the rendered objects
+ *   and can be used for zooming effects. The FOV can be defined either as a
+ *   global scale or as an angle in degrees.
+ * - Aspect ratio: The aspect ratio between the horizontal and the vertical
+ *   FOVs.
+ * - Shift amount: The projection center of the perspective, that is, the
+ *   position of the vanishing point of the perspective.
+ *
  * Main creators of instances implementing this interface:
  * - iEngine::CreatePerspectiveCamera()
  * 
@@ -349,42 +442,74 @@ struct iCamera : public virtual iBase
  */
 struct iPerspectiveCamera : public virtual iBase
 {
-  SCF_INTERFACE(iPerspectiveCamera, 1, 0, 1);
+  SCF_INTERFACE(iPerspectiveCamera, 1, 0, 2);
   
   /// Get the iCamera interface for this camera.
   virtual iCamera* GetCamera() = 0;
   
-  /// Return the normalized FOV (field of view)
+  /**
+   * Return the vertical FOV (field of view) in normalized screen
+   * coordinates.
+   * \deprecated Deprecated in 2.2. Use GetVerticalFOV() and GetAspectRatio() instead
+   */
+  CS_DEPRECATED_METHOD_MSG("Deprecated in 2.2. Use GetVerticalFOV() and GetAspectRatio() instead")
   virtual float GetFOV () const = 0;
-  /// Return the inverse of normalized field of view (1/FOV)
+  /**
+   * Return the inverse of the normalized vertical field of view
+   * (1/FOV)
+   * \deprecated Deprecated in 2.2. Use GetVerticalFOV() and
+   * GetAspectRatio() instead
+   */
+  CS_DEPRECATED_METHOD_MSG("Deprecated in 2.2. Use GetVerticalFOV() and GetAspectRatio() instead")
   virtual float GetInvFOV () const = 0;
-  /// Return the FOV (field of view) in degrees.
+  /**
+   * Return the vertical FOV (field of view) in degrees.
+   * \deprecated Deprecated in 2.2. Use GetVerticalFOVAngle() and
+   * GetAspectRatio() instead
+   */
+  CS_DEPRECATED_METHOD_MSG("Deprecated in 2.2. Use GetVerticalFOVAngle() and GetAspectRatio() instead")
   virtual float GetFOVAngle () const = 0;
   /**
    * Set the FOV. \a fov is the desired FOV in normalized screen coordinates.
    * \a width is the display width, also normalized.
+   * \deprecated Deprecated in 2.2. Use SetVerticalFOV() and
+   * SetAspectRatio() instead
    */
+  CS_DEPRECATED_METHOD_MSG("Deprecated in 2.2. Use SetVerticalFOV() and SetAspectRatio() instead")
   virtual void SetFOV (float fov, float width) = 0;
   
   /**
    * Set the FOV in degrees. \a fov is the desired FOV in degrees. \a width is
    * the display width in normalized screen coordinates.
+   * \deprecated Deprecated in 2.2. Use SetVerticalFOVAngle() and
+   * SetAspectRatio() instead
    */
-  virtual void SetFOVAngle (float fov, float width) = 0;
+  CS_DEPRECATED_METHOD_MSG("Deprecated in 2.2. Use SetVerticalFOVAngle() and SetAspectRatio() instead")
+  virtual void SetFOVAngle (float fov, float aspect) = 0;
 
   /**
-   * Get the X shift amount. The parameter specified the desired X coordinate
+   * Get the X shift amount. The parameter specifies the X coordinate
    * on the normalized screen of the projection center of the camera.
+   * \sa SetPerspectiveCenter()
    */
   virtual float GetShiftX () const = 0;
   /**
-   * Get the Y shift amount. The parameter specified the desired Y coordinate
+   * Get the Y shift amount. The parameter specifies the Y coordinate
    * on the normalized screen of the projection center of the camera.
+   * \sa SetPerspectiveCenter()
    */
   virtual float GetShiftY () const = 0;
   /**
-   * Set the shift amount. The parameter specified the desired projection
-   * center of the camera on the normalized screen.
+   * Set the X and Y shift amounts. Those parameters specify the desired
+   * projection center of the camera on the normalized screen, that is, the
+   * position of the vanishing point of the perspective.
+   *
+   * The default values for both \a x and \a y are 0.5, this corresponds to the
+   * vanishing point being at the center of the screen. A value of 0 sets the
+   * vanishing point respectively on the left and bottom of the screen, while a
+   * value of 1 sets it respectively at the right and top of the screen.
+   *
+   * \sa GetShiftX() GetShiftY()
    */
   virtual void SetPerspectiveCenter (float x, float y) = 0;
   
@@ -401,11 +526,55 @@ struct iPerspectiveCamera : public virtual iBase
    */
   virtual float GetNearClipDistance() const = 0;
   /**
-   * Set near clip distance of this camera.
+   * Set the near clip distance of this camera.
    * 
    * The default near clipping distance is controlled by the engine.
    */
   virtual void SetNearClipDistance (float dist) = 0;
+
+  /// Return the vertical FOV (field of view) in normalized screen coordinates.
+  virtual float GetVerticalFOV () const = 0;
+
+  /**
+   * Set the vertical FOV (field of view) in normalized screen coordinates.
+   * This corresponds to the global scale that the camera applies on its
+   * view. The horizontal FOV will be computed using the value set in
+   * SetAspectRatio().
+   *
+   * The default value is 1.0. Bigger values result in wide angle views,
+   * while lower values result in zoom effects.
+   */
+  virtual void SetVerticalFOV (float fov) = 0;
+  
+  /// Return the vertical FOV (field of view) in degrees.
+  virtual float GetVerticalFOVAngle () const = 0;
+
+  /**
+   * Set the vertical FOV (field of view) as an angle in degrees. This is
+   * the angle seen by the camera between the top and the bottom edges of
+   * the screen. The horizontal FOV will be computed using the value set in
+   * SetAspectRatio().
+   *
+   * The default value is 90. Bigger values result in wide angle views,
+   * while lower values result in zoom effects.
+   */
+  virtual void SetVerticalFOVAngle (float fov) = 0;
+
+  /**
+   * Get the aspect ratio between the horizontal and the vertical FOVs.
+   */
+  virtual float GetAspectRatio () const = 0;
+
+  /**
+   * Set the aspect ratio between the horizontal and the vertical FOVs.
+   *
+   * If you use a different aspect ratio than the one of your window size
+   * (that is, its width divided by its height), then it will result in some
+   * stretching of the image. The default value is controlled by the engine
+   * and is set to the aspect ratio of the 2D canvas at initialization time 
+   * (that is, usually 4:3).
+   */
+  virtual void SetAspectRatio (float aspect) = 0;
 };
 
 /**
@@ -425,7 +594,10 @@ struct iCustomMatrixCamera : public virtual iBase
   /// Get the iCamera interface for this camera.
   virtual iCamera* GetCamera() = 0;
   
-  /// Set the projection matrix.
+  /**
+   * Set the projection matrix of this camera.
+   * \sa iCamera::GetProjectionMatrix() iCamera::GetInvProjectionMatrix()
+   */
   virtual void SetProjectionMatrix (const CS::Math::Matrix4& mat) = 0;
 };
 
