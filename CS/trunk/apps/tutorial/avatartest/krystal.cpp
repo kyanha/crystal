@@ -142,9 +142,8 @@ void KrystalScene::Frame ()
   {
     // Keep the 'IKMesh' mesh at the same distance to the camera
     csRef<iCamera> camera = avatarTest->view->GetCamera ();
-    csVector2 v2d (avatarTest->mouse->GetLastX (),
-		   avatarTest->g2d->GetHeight () - avatarTest->mouse->GetLastY ());
-    csVector3 v3d = camera->InvPerspective (v2d, 10000);
+    csVector2 v2d (avatarTest->mouse->GetLastX (), avatarTest->mouse->GetLastY ());
+    csVector3 v3d = avatarTest->view->InvProject (v2d, 1000.0f);
     csVector3 startBeam = camera->GetTransform ().GetOrigin ();
     csVector3 endBeam = camera->GetTransform ().This2Other (v3d);
 
@@ -238,8 +237,8 @@ bool KrystalScene::OnMouseDown (iEvent &ev)
     int mouseY = csMouseEventHelper::GetY (&ev);
 
     csRef<iCamera> camera = avatarTest->view->GetCamera ();
-    csVector2 v2d (mouseX, avatarTest->g2d->GetHeight () - mouseY);
-    csVector3 v3d = camera->InvPerspective (v2d, 10000);
+    csVector2 v2d (mouseX, mouseY);
+    csVector3 v3d = avatarTest->view->InvProject (v2d, 1000.0f);
     csVector3 startBeam = camera->GetTransform ().GetOrigin ();
     csVector3 endBeam = camera->GetTransform ().This2Other (v3d);
 
@@ -332,9 +331,8 @@ bool KrystalScene::OnMouseDown (iEvent &ev)
     // Trace a beam to see if the IK box was really clicked
     // Compute the end beam points
     csRef<iCamera> camera = avatarTest->view->GetCamera ();
-    csVector2 v2d (avatarTest->mouse->GetLastX (),
-		   avatarTest->g2d->GetHeight () - avatarTest->mouse->GetLastY ());
-    csVector3 v3d = camera->InvPerspective (v2d, 10000);
+    csVector2 v2d (avatarTest->mouse->GetLastX (), avatarTest->mouse->GetLastY ());
+    csVector3 v3d = avatarTest->view->InvProject (v2d, 1000.0f);
     csVector3 startBeam = camera->GetTransform ().GetOrigin ();
     csVector3 endBeam = camera->GetTransform ().This2Other (v3d);
     startBeam = IKMesh->GetMovable ()->GetTransform ().Other2This (startBeam);
