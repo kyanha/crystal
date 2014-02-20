@@ -162,6 +162,9 @@ CS_PLUGIN_NAMESPACE_BEGIN(RMDeferred)
     GBuffer gbuffer;
     GBuffer::Description gbufferDescription;
 
+    int viewWidth;
+    int viewHeight;
+
     size_t deferredLayer;
     size_t lightingLayer;
     size_t zonlyLayer;

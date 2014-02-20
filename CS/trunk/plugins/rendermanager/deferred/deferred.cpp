@@ -433,6 +433,9 @@ bool RMDeferred::Initialize(iObjectRegistry *registry)
     return false;
   }
 
+  viewWidth = graphics2D->GetWidth ();
+  viewHeight = graphics2D->GetHeight ();
+
   treePersistent.Initialize (shaderManager);
   portalPersistent.Initialize (objRegistry, treePersistent.debugPersist);
   lightPersistent.shadowPersist.SetConfigPrefix ("RenderManager.Deferred");
@@ -473,25 +476,37 @@ bool RMDeferred::RenderView(iView *view, bool recursePortals)
 {
   iGraphics3D *graphics3D = view->GetContext ();
 
-  view->UpdateClipper ();
-
   int frameWidth = graphics3D->GetWidth ();
   int frameHeight = graphics3D->GetHeight ();
+#include "csutil/deprecated_warn_off.h"
   view->GetCamera ()->SetViewportSize (frameWidth, frameHeight);
+#include "csutil/deprecated_warn_on.h"
 
-  // Setup renderview
+  // Check if the size of the render view has changed
+  if (viewWidth != frameWidth && viewHeight != frameHeight)
+  {
+    gbufferDescription.width = frameWidth;
+    gbufferDescription.height = frameHeight;
+
+    // Reallocate the gbuffers (this might much probably be done more
+    // efficiently)
+    gbuffer.Invalidate ();
+    if (!gbuffer.Initialize (gbufferDescription, 
+			     graphics3D, 
+			     shaderManager->GetSVNameStringset (), 
+			     objRegistry))
+    {
+      return false;
+    }
+
+    viewWidth = frameWidth;
+    viewHeight = frameHeight;
+  }
+
+  // Setup the render view
   csRef<CS::RenderManager::RenderView> rview;
   rview = treePersistent.renderViews.GetRenderView (view);
   rview->SetOriginalCamera (view->GetCamera ());
-
-  // Computes the left, right, top, and bottom of the view frustum.
-  iPerspectiveCamera *camera = view->GetPerspectiveCamera ();
-  float invFov = camera->GetInvFOV ();
-  float l = -invFov * camera->GetShiftX ();
-  float r =  invFov * (frameWidth - camera->GetShiftX ());
-  float t = -invFov * camera->GetShiftY ();
-  float b =  invFov * (frameHeight - camera->GetShiftY ());
-  rview->SetFrustum (l, r, t, b);
 
   contextsScannedForTargets.Empty ();
   portalPersistent.UpdateNewFrame ();
