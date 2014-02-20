@@ -918,7 +918,7 @@ bool csGLGraphics3D::Open ()
   viewheight = G2D->GetHeight();
   SetPerspectiveAspect (viewheight);
   SetPerspectiveCenter (viewwidth/2, viewheight/2);
-  
+
   object_reg->Register( G2D, "iGraphics2D");
 
   G2D->PerformExtension ("getstatecache", &statecache);
@@ -1769,7 +1769,8 @@ void csGLGraphics3D::DrawLine (const csVector3 & v1, const csVector3 & v2,
 	float fov, int color)
 {
   SwapIfNeeded();
-  G2D->DrawLineProjected (v1, v2, fov, color);
+  G2D->DrawLineProjected
+    (v1, v2, fov, ((float) G2D->GetWidth ()) / ((float) G2D->GetHeight ()), color);
 }
 
 bool csGLGraphics3D::ActivateBuffers (csRenderBufferHolder *holder, 
@@ -3448,7 +3449,6 @@ void csGLGraphics3D::DrawSimpleMesh (const csSimpleRenderMesh& mesh,
 void csGLGraphics3D::DrawSimpleMeshes (const csSimpleRenderMesh* meshes,
 				       size_t numMeshes, uint flags)
 {  
-  
   if (current_drawflags & CSDRAW_2DGRAPHICS)
   {
     // Try to be compatible with 2D drawing mode
@@ -3992,6 +3992,7 @@ void csOpenGLHalo::Draw (float x, float y, float w, float h, float iIntensity,
   // the screen setup does not seem to be like in DrawPixmap,
   // so vx, vy (nice DrawPixmap coords) need to be transformed.
   // magic constant .86 that make halos align properly, with this formula.
+  // TODO: this doesn't take into account the FOV and aspect ratio of the camera
   float aspectw = .86* (float)G3D->GetWidth() / G3D->GetAspect();
   float aspecth = .86* (float)G3D->GetHeight() / G3D->GetAspect(); 
   float hw = (float)G3D->GetWidth() * 0.5f;

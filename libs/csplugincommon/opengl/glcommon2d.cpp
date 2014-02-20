@@ -549,9 +549,31 @@ namespace CS
         float iz1 = fov / v1.z;
         int px1 = csQint (v1.x * iz1 + (vpWidth / 2));
         int py1 = vpHeight - 1 - csQint (v1.y * iz1 + (vpHeight / 2));
+	// The equations commented in are if the fov is aquired through
+	// iPerspectiveCamera::GetVerticalFOV()
+        //int px1 = csQint (v1.x * iz1 * vpWidth + (vpWidth / 2));
+        //int py1 = vpHeight - 1 - csQint (v1.y * iz1 * vpHeight + (vpHeight / 2));
         float iz2 = fov / v2.z;
         int px2 = csQint (v2.x * iz2 + (vpWidth / 2));
         int py2 = vpHeight - 1 - csQint (v2.y * iz2 + (vpHeight / 2));
+        //int px2 = csQint (v2.x * iz2 * vpWidth + (vpWidth / 2));
+        //int py2 = vpHeight - 1 - csQint (v2.y * iz2 * vpHeight + (vpHeight / 2));
+
+        DrawLine (px1, py1, px2, py2, color);
+      }
+
+      void Graphics2DCommon::DrawLineProjected
+        (const csVector3& _v1, const csVector3& _v2, float fov, float aspect, int color)
+      {
+        csVector3 v1 (_v1), v2 (_v2);
+        if (!DrawLineNearClip (v1, v2)) return;
+
+        float iz1 = fov / v1.z;
+        int px1 = csQint (v1.x * iz1 * vpWidth / aspect + (vpWidth / 2));
+        int py1 = vpHeight - 1 - csQint (v1.y * iz1 * vpHeight + (vpHeight / 2));
+        float iz2 = fov / v2.z;
+        int px2 = csQint (v2.x * iz2 * vpWidth / aspect + (vpWidth / 2));
+        int py2 = vpHeight - 1 - csQint (v2.y * iz2 * vpHeight + (vpHeight / 2));
 
         DrawLine (px1, py1, px2, py2, color);
       }

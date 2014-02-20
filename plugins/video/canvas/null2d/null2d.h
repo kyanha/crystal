@@ -71,6 +71,10 @@ public:
   { }
   /// Draw a line in camera space
   virtual void DrawLineProjected (const csVector3& v1, const csVector3& v2,
+    float fov, float aspect, int color)
+  { }
+  /// Draw a line in camera space
+  virtual void DrawLineProjected (const csVector3& v1, const csVector3& v2,
     const CS::Math::Matrix4& projection, int color)
   { }
   /// Draw a box in camera space
