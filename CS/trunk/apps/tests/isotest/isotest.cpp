@@ -147,16 +147,18 @@ void IsoTest::Frame ()
   if (!g3d->BeginDraw (CSDRAW_2DGRAPHICS))
     return;
 
-  csVector2 lpos(0,0);
-  lpos = view->GetCamera()->Perspective(
+  csVector2 lpos (0,0);
+  lpos = view->GetCamera()->Project (
     view->GetCamera()->GetTransform ().Other2This(csVector3 (-4.7f, 1.0f, 5.5f)));
+  lpos = csEngineTools::NormalizedToScreen
+    (lpos, g3d->GetDriver2D ()->GetWidth (), g3d->GetDriver2D ()->GetHeight ());
+
   // display a helpful little text.
   int txtw=0, txth=0;
   font->GetMaxSize(txtw, txth);
   if(txth == -1) txth = 20;
   int white = g3d->GetDriver2D ()->FindRGB (255, 255, 255);
-  g3d->GetDriver2D ()->DrawBox((int)lpos.x-2,
-    g3d->GetDriver2D ()->GetHeight()-(int)lpos.y-2,4,4,white);
+  g3d->GetDriver2D ()->DrawBox((int)lpos.x-2, (int)lpos.y-2,4,4,white);
   int ypos = g3d->GetDriver2D ()->GetHeight () - txth*4 - 1;
   g3d->GetDriver2D ()->Write (font, 1, ypos, white, -1, 
     "Isometric demo keys (esc to exit):");
@@ -203,17 +205,19 @@ bool IsoTest::OnKeyboard(iEvent& ev)
 void IsoTest::CameraIsoLookat(iCustomMatrixCamera* customCam, const IsoView& isoview,
                               const csVector3& lookat)
 {
-  iCamera* cam = customCam->GetCamera();
-  cam->SetViewportSize (g3d->GetWidth(), g3d->GetHeight());
-  // set center and lookat
+  iCamera* cam = customCam->GetCamera ();
+
+  // set the transform of the camera (center and lookat)
   csOrthoTransform& cam_trans = cam->GetTransform ();
   cam_trans.SetOrigin (lookat + isoview.camera_offset);
   cam_trans.LookAt (lookat-cam_trans.GetOrigin (), csVector3 (0, 1, 0));
 
+  // set an orthographic projection matrix for the camera
+  float aspect = ((float) g3d->GetWidth ()) / ((float) g3d->GetHeight ());
   CS::Math::Matrix4 orthoMatrix (
     CS::Math::Projections::Ortho (
+      -aspect*isoview.zoom, aspect*isoview.zoom,
       -1.0f*isoview.zoom, 1.0f*isoview.zoom,
-      -0.75*isoview.zoom, 0.75*isoview.zoom,
       -100, csVector3::Norm (cam_trans.GetOrigin ())*isoview.zoom));
   customCam->SetProjectionMatrix (orthoMatrix);
 }
@@ -326,6 +330,7 @@ bool IsoTest::SetupModules ()
   csRef<iCustomMatrixCamera> customCam (engine->CreateCustomMatrixCamera());
   view->SetCustomMatrixCamera (customCam);
   iGraphics2D* g2d = g3d->GetDriver2D ();
+
   // We use the full window to draw the world.
   view->SetRectangle (0, 0, g2d->GetWidth (), g2d->GetHeight ());
 
