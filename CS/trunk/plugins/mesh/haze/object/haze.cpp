@@ -490,7 +490,7 @@ void csHazeMeshObject::GetTransformedBoundingBox (long cameranr,
 
   cbox = camera_bbox;
 }
-
+/*
 static void Perspective (const csVector3& v, csVector2& p, float fov,
         float sx, float sy)
 {
@@ -536,7 +536,7 @@ float csHazeMeshObject::GetScreenBoundingBox (long cameranr,
 
   return cbox.MaxZ ();
 }
-
+*/
 
 
 CS_IMPLEMENT_STATIC_VAR(GetTempVertices, csDirtyAccessArray<csVector3>, ())
@@ -626,9 +626,11 @@ csRenderMesh** csHazeMeshObject::GetRenderMeshes (int &n, iRenderView* rview,
   float fov, shx, shy;
   csRef<iPerspectiveCamera> pcamera =
     scfQueryInterface<iPerspectiveCamera> (camera);
+  // TODO: this won't work correctly for custom matrix cameras
+  // nor with a perspective aspect ratio
   if (pcamera)
   {
-    fov = pcamera->GetFOV ();
+    fov = pcamera->GetVerticalFOV ();
     shx = pcamera->GetShiftX ();
     shy = pcamera->GetShiftY ();
   }

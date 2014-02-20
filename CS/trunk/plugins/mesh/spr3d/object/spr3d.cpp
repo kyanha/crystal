@@ -937,7 +937,7 @@ void csSprite3DMeshObject::GetTransformedBoundingBox (
 
   cbox = camera_bbox;
 }
-
+/*
 static void Perspective (const csVector3& v, csVector2& p, float fov,
     	float sx, float sy)
 {
@@ -983,7 +983,7 @@ float csSprite3DMeshObject::GetScreenBoundingBox (
 
   return cbox.MaxZ ();
 }
-
+*/
 const csBox3& csSprite3DMeshObject::GetObjectBoundingBox ()
 {
   CS_ASSERT (cur_action != 0);
@@ -1133,7 +1133,7 @@ csRenderMesh** csSprite3DMeshObject::GetRenderMeshes (int& n,
 
     // reduce LOD based on field-of-view
     csRef<iPerspectiveCamera> pcam = scfQueryInterfaceSafe<iPerspectiveCamera>(camera);
-    float aspect = 2 * (float) tan (pcam->GetFOVAngle () * PI / 360);
+    float aspect = pcam->GetVerticalFOV ();
     level_of_detail *= aspect;
 
     if (level_of_detail < 0) level_of_detail = 0;
