@@ -840,9 +840,6 @@ public:
    */
   csRef<iVFS> VFS;
 
-  /// Remember dimensions of display.
-  int frameWidth, frameHeight;
-
   /** 
    * Config value: light ambient red value.
    */
@@ -986,9 +983,6 @@ private:
   
   /// Default 'keep image' flag
   bool defaultKeepImage;
-
-  /// Maximum texture aspect ratio
-  int maxAspectRatio;
 
   /**
    * If the following flag is dirty then the render_priority_xxx values are

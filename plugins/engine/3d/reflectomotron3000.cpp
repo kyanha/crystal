@@ -128,12 +128,12 @@ CS_PLUGIN_NAMESPACE_BEGIN(Engine)
         csRef<iView> sideView;
         sideView.AttachNew (new csView (engine, engine->G3D));
         iPerspectiveCamera* cam = sideView->GetPerspectiveCamera();
-        cam->GetCamera()->SetViewportSize (textureSize, textureSize);
         cam->GetCamera()->SetSector (meshSector);
         cam->GetCamera()->GetTransform().SetOrigin (meshPos);
-        cam->SetFOVAngle (90, textureSize);
-        cam->SetPerspectiveCenter (textureSize / 2, textureSize/ 2);
-        sideView->SetRectangle (0, 0, textureSize, textureSize);
+        cam->SetVerticalFOV (1.f);
+        cam->SetAspectRatio (1.f);
+	sideView->SetWidth (textureSize);
+	sideView->SetHeight (textureSize);
         sideView->GetMeshFilter ().AddFilterMesh (meshwrap);
 
         csOrthoTransform& camTF = cam->GetCamera()->GetTransform();
