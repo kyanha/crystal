@@ -29,10 +29,17 @@
 #include "csgeom/vector3.h"
 
 class csVector2;
-struct iSector;
 struct iCamera;
-struct iMeshWrapper;
 struct iCollideSystem;
+struct iMeshWrapper;
+struct iSector;
+struct iView;
+
+namespace CS {
+namespace Collisions {
+  struct iCollisionSystem;
+}
+}
 
 /**
  * Result structure for csEngineTools::FindShortestDistance().
@@ -141,7 +148,48 @@ public:
   /**
    * Given a screen space coordinate (with (0,0) being top-left
    * corner of screen) this will try to find the closest mesh there.
-   * \param pos is the screen coordinate position.
+   * \param position is the screen coordinate position, in pixels.
+   * \param maxdist is the maximum distance to check.
+   * \param camera is the camera.
+   * \param cdsys if 0 then this function will use
+   * iSector->HitBeamPortals() which is more accurate. Otherwise this
+   * function will use csColliderHelper::TraceBeam() which is faster
+   * but less accurate since it depends on collider information.
+   * \return an instance of csScreenTargetResult with the mesh that
+   * was possibly hit and an intersection point.
+   * \deprecated Deprecated in 2.2. Use one of the other versions of FindScreenTarget() instead
+   */
+  CS_DEPRECATED_METHOD_MSG("Deprecated in 2.2. Use one of the other versions of FindScreenTarget() instead")
+  static csScreenTargetResult FindScreenTarget (const csVector2& position,
+      float maxdist, iCamera* camera, iCollideSystem* cdsys = nullptr);
+
+
+  /**
+   * Given a screen space coordinate (with (0,0) being top-left
+   * corner of screen) this will try to find the closest mesh there.
+   * \param position is the screen coordinate position, in pixels.
+   * \param maxdist is the maximum distance to check.
+   * \param camera is the camera.
+   * \param screenWidth The width of the screen, in pixels. This should
+   * usually be the value returned by iGraphics2D::GetWidth().
+   * \param screenHeight The height of the screen, in pixels. This should
+   * usually be the value returned by iGraphics2D::GetHeight().
+   * \param cdsys if 0 then this function will use
+   * iSector->HitBeamPortals() which is more accurate. Otherwise this
+   * function will use csColliderHelper::TraceBeam() which is faster
+   * but less accurate since it depends on collider information.
+   * \return an instance of csScreenTargetResult with the mesh that
+   * was possibly hit and an intersection point.
+   */
+  static csScreenTargetResult FindScreenTarget (const csVector2& position,
+						float maxdist, iCamera* camera,
+						size_t screenWidth, size_t screenHeight,
+						iCollideSystem* cdsys = nullptr);
+
+  /**
+   * Given a screen space coordinate (with (0,0) being top-left
+   * corner of screen) this will try to find the closest mesh there.
+   * \param position is the screen coordinate position, in pixels.
    * \param maxdist is the maximum distance to check.
    * \param camera is the camera.
    * \param cdsys if 0 then this function will use
@@ -151,8 +199,63 @@ public:
    * \return an instance of csScreenTargetResult with the mesh that
    * was possibly hit and an intersection point.
    */
-  static csScreenTargetResult FindScreenTarget (const csVector2& pos,
-      float maxdist, iCamera* camera, iCollideSystem* cdsys = 0);
+  static csScreenTargetResult FindScreenTarget (const csVector2& position,
+      float maxdist, iView* view, iCollideSystem* cdsys = nullptr);
+
+  /**
+   * Given a screen space coordinate (with (0,0) being top-left
+   * corner of screen) this will try to find the closest mesh there.
+   * \param position is the screen coordinate position, in pixels.
+   * \param maxdist is the maximum distance to check.
+   * \param camera is the camera.
+   * \param collisionSystem if nullptr then this function will use
+   * iSector->HitBeamPortals() which is more accurate. Otherwise this
+   * function will use CS::Collisions::iCollisionSector::TraceBeam() which is faster
+   * but less accurate since it depends on collider information.
+   * \return an instance of csScreenTargetResult with the mesh that
+   * was possibly hit and an intersection point.
+   */
+  static csScreenTargetResult FindScreenTarget (const csVector2& position,
+      float maxdist, iView* view,
+      CS::Collisions::iCollisionSystem* collisionSystem);
+
+  /**
+   * Transform a normalized screen space coordinate (-1 to 1) as used by
+   * a iCamera into screen space (i.e. real pixels).
+   *
+   * \remarks Unlike iView::NormalizedToScreen(), this method works in
+   * screen space, not in view space. That is, the screen coordinates are
+   * vertically mirrored in comparison to view space, i.e. y=0 is at the
+   * top of the viewport, and y=GetHeight() at the bottom.
+   *
+   * \param position A position in normalized screen space coordinates.
+   * \param screenWidth The width of the screen, in pixels. This should
+   * usually be the value returned by iGraphics2D::GetWidth().
+   * \param screenHeight The height of the screen, in pixels. This should
+   * usually be the value returned by iGraphics2D::GetHeight().
+   * \sa ScreenToNormalized()
+   */
+  static csVector2 NormalizedToScreen
+    (const csVector2& position, float screenWidth, float screenHeight);
+
+  /**
+   * Transform a screen space coordinate (in pixels) into a normalized
+   * screen coordinate (-1 to 1) as used by a iCamera.
+   *
+   * \remarks Unlike iView::NormalizedToScreen(), this method works in
+   * screen space, not in view space. That is, the screen coordinates are
+   * vertically mirrored in comparison to view space, i.e. y=0 is at the
+   * top of the viewport, and y=GetHeight() at the bottom.
+   *
+   * \param position A position in pixel coordinates.
+   * \param screenWidth The width of the screen, in pixels. This should
+   * usually be the value returned by iGraphics2D::GetWidth().
+   * \param screenHeight The height of the screen, in pixels. This should
+   * usually be the value returned by iGraphics2D::GetHeight().
+   * \sa NormalizedToScreen()
+   */
+  static csVector2 ScreenToNormalized
+    (const csVector2& position, float screenWidth, float screenHeight);
 };
 
 #endif // __CS_ENGINETOOLS_H__
