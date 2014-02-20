@@ -210,15 +210,12 @@ public:
   void UpdateActorMode (ActorMode newActorMode);
 
   // Spawning objects
-  bool SpawnStarCollider ();
-
   void CreateBoxCollider (csRef<CS::Collisions::iColliderBox>& colliderPtr, csRef<iMeshWrapper>& meshPtr, const csVector3& extents);
 
   csRef<CS::Physics::iRigidBody> SpawnBox (bool setVelocity = true);
   csRef<CS::Physics::iRigidBody> SpawnBox (const csVector3& extents, const csVector3& pos, bool setVelocity = true);
   CS::Physics::iRigidBody* SpawnBox (const RenderMeshColliderPair& pair, const csVector3& pos, bool setVelocity = true);
-  CS::Physics::iRigidBody* SpawnSphere (bool setVelocity = true);
-  CS::Physics::iRigidBody* SpawnSphere (const csVector3& pos, float radius, bool setVelocity = true);
+  CS::Physics::iRigidBody* SpawnSphere ();
   CS::Physics::iRigidBody* SpawnCone (bool setVelocity = true);
   CS::Physics::iRigidBody* SpawnCylinder (bool setVelocity = true);
   CS::Physics::iRigidBody* SpawnCapsule (float length = rand () % 3 / 50.f + .7f,
@@ -438,7 +435,8 @@ public:
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   // Other
 
-  bool IsGravityOff () { return GetCurrentSector ()->GetGravity ().SquaredNorm () == 0; }
+  bool IsGravityOff ()
+  { return GetCurrentSector ()->GetGravity ().SquaredNorm () > SMALL_EPSILON; }
 };
 
 class MouseAnchorAnimationControl : public scfImplementation1

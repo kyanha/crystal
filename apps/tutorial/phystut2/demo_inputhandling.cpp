@@ -216,13 +216,13 @@ bool PhysDemo::OnKeyboard (iEvent &event)
   {
     // Trace a beam to find if a rigid body was under the mouse cursor
     csRef<iCamera> camera = view->GetCamera ();
-    csVector2 v2d (mouse->GetLastX (), g2d->GetHeight () - mouse->GetLastY ());
-    csVector3 v3d = camera->InvPerspective (v2d, 10000);
+    csVector2 v2d (mouse->GetLastX (), mouse->GetLastY ());
+    csVector3 v3d = view->InvProject (v2d, 1000.f);
     csVector3 startBeam = camera->GetTransform ().GetOrigin ();
     csVector3 endBeam = camera->GetTransform ().This2Other (v3d);
 
     CS::Collisions::HitBeamResult hitResult =
-      GetCurrentSector ()->HitBeamPortal (startBeam, endBeam);
+      GetCurrentSector ()->HitBeamPortals (startBeam, endBeam);
     if (hitResult.hasHit && IsDynamic (hitResult.object))
     {
       // Remove the body and the mesh from the simulation, and put them in the clipboard
@@ -257,8 +257,8 @@ bool PhysDemo::OnKeyboard (iEvent &event)
   {
     // Compute the new position of the body
     csRef<iCamera> camera = view->GetCamera ();
-    csVector2 v2d (mouse->GetLastX (), g2d->GetHeight () - mouse->GetLastY ());
-    csVector3 v3d = camera->InvPerspective (v2d, 10000);
+    csVector2 v2d (mouse->GetLastX (), mouse->GetLastY ());
+    csVector3 v3d = view->InvProject (v2d, 1000.f);
     csVector3 startBeam = camera->GetTransform ().GetOrigin ();
     csVector3 endBeam = camera->GetTransform ().This2Other (v3d);
 
@@ -392,13 +392,14 @@ bool PhysDemo::OnMouseDown (iEvent &event)
     // Find the rigid body that was clicked on
     // Compute the end beam points
     csRef<iCamera> camera = view->GetCamera ();
-    csVector2 v2d (mouse->GetLastX (), g2d->GetHeight () - mouse->GetLastY ());
-    csVector3 v3d = camera->InvPerspective (v2d, 10000);
+    csVector2 v2d (mouse->GetLastX (), mouse->GetLastY ());
+    csVector3 v3d = view->InvProject (v2d, 1000.f);
     csVector3 startBeam = camera->GetTransform ().GetOrigin ();
     csVector3 endBeam = camera->GetTransform ().This2Other (v3d);
 
     // Trace the physical beam
-    CS::Collisions::HitBeamResult hitResult = GetCurrentSector ()->HitBeamPortal (startBeam, endBeam);
+    CS::Collisions::HitBeamResult hitResult =
+      GetCurrentSector ()->HitBeamPortals (startBeam, endBeam);
     if (!hitResult.hasHit || !hitResult.object) return false;
 
     if (IsDynamic (hitResult.object))
@@ -474,14 +475,13 @@ bool PhysDemo::OnMouseUp (iEvent &event)
   return false;
 }
 
-
 // This method updates the position of the dragging for soft bodies
 csVector3 MouseAnchorAnimationControl::GetAnchorPosition () const
 {
   // Keep the drag joint at the same distance to the camera
   csRef<iCamera> camera = simple->view->GetCamera ();
-  csVector2 v2d (simple->mouse->GetLastX (), simple->g2d->GetHeight () - simple->mouse->GetLastY ());
-  csVector3 v3d = camera->InvPerspective (v2d, 10000);
+  csVector2 v2d (simple->mouse->GetLastX (), simple->mouse->GetLastY ());
+  csVector3 v3d = simple->view->InvProject (v2d, 1000.f);
   csVector3 startBeam = camera->GetTransform ().GetOrigin ();
   csVector3 endBeam = camera->GetTransform ().This2Other (v3d);
 

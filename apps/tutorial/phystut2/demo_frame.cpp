@@ -132,8 +132,8 @@ void PhysDemo::UpdateDragging ()
     csOrthoTransform& camTrans = cam->GetTransform ();
 
     // Keep the drag joint at the same distance to the camera
-    csVector2 v2d (mouse->GetLastX (), g2d->GetHeight () - mouse->GetLastY ());
-    csVector3 v3d = cam->InvPerspective (v2d, 10000);
+    csVector2 v2d (mouse->GetLastX (), mouse->GetLastY ());
+    csVector3 v3d = view->InvProject (v2d, 1000.f);
     csVector3 startBeam = camTrans.GetOrigin ();
     csVector3 endBeam = camTrans.This2Other (v3d);
 
