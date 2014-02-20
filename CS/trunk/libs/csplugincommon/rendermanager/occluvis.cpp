@@ -329,7 +329,7 @@ namespace CS
 	    csVector3* portalVerts = allPortalVerts3d.GetArray();
 
 	    // go over all portals to create their render meshes and draw them
-            for(int p = 0; p < portalCount; ++p)
+            for(size_t p = 0; p < portalCount; ++p)
             {
 	      // get vertex count for this portal
               size_t count = allPortalVertsNums[p];
@@ -1526,7 +1526,7 @@ namespace CS
 	// get mesh for this object
 	iMeshWrapper* mesh = visobj->GetMeshWrapper();
 
-	// check if mesh is valid and whether it shall be hit be hitbeams
+	// check if mesh is valid and whether it shall be hit by hitbeams
 	if(mesh == nullptr || mesh->GetFlags().Check(CS_ENTITY_NOHITBEAM))
 	{
 	  // nope, continue with next one
@@ -1629,7 +1629,7 @@ namespace CS
 	      // update polygon index for the hit
 	      data.polygon_idx = polyIndex;
 
-	      // check whether the itnersection point has to be transformed
+	      // check whether the intersection point has to be transformed
 	      if(identity)
 	      {
 		// no, just update it
