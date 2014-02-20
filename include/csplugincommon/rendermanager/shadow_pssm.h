@@ -884,14 +884,12 @@ namespace RenderManager
 	  slices.SetSize(persist.numSplits);
 
 	  // get corners of our view
-	  int viewWidth = persist.graphics3D->GetWidth();
-	  int viewHeight = persist.graphics3D->GetHeight();
 	  csVector2 view[4] =
 	  {
-	    csVector2(0, 0),
-	    csVector2(viewWidth, 0),
-	    csVector2(viewWidth, viewHeight),
-	    csVector2(0, viewHeight)
+	    csVector2(-1.f, -1.f),
+	    csVector2(1.f, -1.f),
+	    csVector2(1.f, 1.f),
+	    csVector2(-1.f, 1.f)
 	  };
 
 	  // get transform with This == Frustum and Other == View
@@ -899,9 +897,6 @@ namespace RenderManager
 
 	  // get original camera for inverse perspective
 	  iCamera* origCam = rview->GetOriginalCamera();
-
-	  CS_ASSERT_MSG("PSSM shadow implementation requires a perspective camera",
-	    csRef<iPerspectiveCamera>(scfQueryInterface<iPerspectiveCamera>(origCam)));
 
 	  // set the slice data
 	  for(size_t s = 0; s < slices.GetSize(); ++s)
@@ -919,10 +914,7 @@ namespace RenderManager
 	      for(int side = 0; side < 2; ++side)
 	      {
 		// get corner in view space
-		// @@@FIXME: this doesn't work with portals because iCustomMatrixCamera
-		//           is used for portals which doesn't implement InvPerspective
-                //           so we get 0 for all points
-		csVector3 vVS(origCam->InvPerspective(corner, persist.splitDists[s+side]));
+		csVector3 vVS(origCam->InvProject(corner, persist.splitDists[s+side]));
 
 		// transform to frustum space
 		csVector3 vFS(frust2view * vVS);
