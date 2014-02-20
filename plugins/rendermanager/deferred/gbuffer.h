@@ -305,6 +305,15 @@ CS_PLUGIN_NAMESPACE_BEGIN(RMDeferred)
       h = height;
     }
 
+    void Invalidate ()
+    {
+      colorBuffers.DeleteAll ();
+      accumBuffers.DeleteAll ();
+      depthBuffer.Invalidate ();
+      colorBufferSVNames.DeleteAll ();
+      accumBufferSVNames.DeleteAll ();
+    }
+
   private:
     int width, height;
 
