@@ -328,8 +328,8 @@ bool FrankieScene::OnMouseDown (iEvent &ev)
     int mouseY = csMouseEventHelper::GetY (&ev);
 
     csRef<iCamera> camera = avatarTest->view->GetCamera ();
-    csVector2 v2d (mouseX, avatarTest->g2d->GetHeight () - mouseY);
-    csVector3 v3d = camera->InvPerspective (v2d, 10000);
+    csVector2 v2d (mouseX, mouseY);
+    csVector3 v3d = avatarTest->view->InvProject (v2d, 1000.0f);
     csVector3 startBeam = camera->GetTransform ().GetOrigin ();
     csVector3 endBeam = camera->GetTransform ().This2Other (v3d);
 
