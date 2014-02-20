@@ -252,10 +252,12 @@ private:
    * on-screen. If the haze is not on-screen, the X and Y values are not
    * valid.
    */
+/*
+  // TODO: has it any use?
   float GetScreenBoundingBox (long cameranr, long movablenr, float fov,
         float sx, float sy,
         const csReversibleTransform& trans, csBox2& sbox, csBox3& cbox);
-
+*/
 public:
   /// Constructor.
   csHazeMeshObject (csHazeMeshObjectFactory* factory);
