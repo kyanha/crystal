@@ -155,23 +155,26 @@ bool TextHUDManager::HandleEvent (iEvent& event)
     maxKeys = (uint) ((g2d->GetHeight () - 2 * margin
 		       - (stateDescriptions->GetSize () + 5) * lineSize)
 		      / lineSize);
-    if (keyDescriptions->GetSize () < maxKeys)
+    if (maxKeys)
     {
-      currentKeyPage = 0;
-      WriteShadow (margin, y, textColor, "Keys available:");
-    }
-    else
-      WriteShadow (margin, y, textColor, "Keys available (%i/%i):",
-		   currentKeyPage + 1, keyDescriptions->GetSize () / maxKeys + 1);
-    y += lineSize;
-
-    // Write all keys
-    for (size_t i = 0; i < keyDescriptions->GetSize (); i++)
-    {
-      if (i / maxKeys == currentKeyPage)
+      if (keyDescriptions->GetSize () < maxKeys)
       {
-	WriteShadow (margin + 5, y, textColor, keyDescriptions->Get (i));
-	y += lineSize;
+	currentKeyPage = 0;
+	WriteShadow (margin, y, textColor, "Keys available:");
+      }
+      else
+	WriteShadow (margin, y, textColor, "Keys available (%i/%i):",
+		     currentKeyPage + 1, keyDescriptions->GetSize () / maxKeys + 1);
+      y += lineSize;
+
+      // Write all keys
+      for (size_t i = 0; i < keyDescriptions->GetSize (); i++)
+      {
+	if (i / maxKeys == currentKeyPage)
+	{
+	  WriteShadow (margin + 5, y, textColor, keyDescriptions->Get (i));
+	  y += lineSize;
+	}
       }
     }
 
