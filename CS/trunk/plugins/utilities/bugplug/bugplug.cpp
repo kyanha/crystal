@@ -105,9 +105,6 @@
 #include "bugplug.h"
 #include "shadow.h"
 
-
-
-
 CS_PLUGIN_NAMESPACE_BEGIN(BugPlug)
 {
 
@@ -523,7 +520,8 @@ void csBugPlug::MouseButtonRight (iCamera* camera)
 {
   csRef<iCollideSystem> cdsys = csQueryRegistry<iCollideSystem> (object_reg);
   csScreenTargetResult result = csEngineTools::FindScreenTarget (
-      csVector2 (mouse_x, mouse_y), 100.0f, camera, cdsys);
+    csVector2 (mouse_x, mouse_y), 100.0f, camera,
+    G2D->GetWidth (), G2D->GetHeight (), cdsys);
   if (result.mesh)
   {
     float sqdist = csSquaredDist::PointPoint (
@@ -543,7 +541,8 @@ void csBugPlug::MouseButtonRight (iCamera* camera)
 void csBugPlug::MouseButtonLeft (iCamera* camera)
 {
   csScreenTargetResult result = csEngineTools::FindScreenTarget (
-      csVector2 (mouse_x, mouse_y), 100.0f, camera);
+    csVector2 (mouse_x, mouse_y), 100.0f, camera,
+    G2D->GetWidth (), G2D->GetHeight ());
   iMeshWrapper* sel = result.mesh;
 
   csVector3 vw = result.isect;
@@ -912,7 +911,7 @@ bool csBugPlug::ExecCommand (int cmd, const csString& args)
 	  if (pcamera)
 	    {
 	      csString buf;
-	      float fov = pcamera->GetFOV ();
+	      float fov = pcamera->GetVerticalFOV ();
 	      buf.Format ("%f", fov);
 	      EnterEditMode (cmd, "Enter new fov value:", buf);
 	    }
@@ -926,7 +925,7 @@ bool csBugPlug::ExecCommand (int cmd, const csString& args)
 	  if (pcamera)
 	    {
 	      csString buf;
-	      float fov = pcamera->GetFOVAngle ();
+	      float fov = pcamera->GetVerticalFOVAngle ();
 	      buf.Format ("%g", fov);
 	      EnterEditMode (cmd, "Enter new fov angle:", buf);
 	    }
@@ -2114,7 +2113,7 @@ void csBugPlug::ExitEditMode ()
 	  csRef<iPerspectiveCamera> pcamera =
 	    scfQueryInterface<iPerspectiveCamera> (catcher->camera);
 	  if (pcamera)
-	    pcamera->SetFOV (f, 1.0f);
+	    pcamera->SetVerticalFOV (f);
 	}
       break;
     case DEBUGCMD_FOVANGLE:
@@ -2124,7 +2123,7 @@ void csBugPlug::ExitEditMode ()
 	  csRef<iPerspectiveCamera> pcamera =
 	    scfQueryInterface<iPerspectiveCamera> (catcher->camera);
 	  if (pcamera)
-	    pcamera->SetFOVAngle (f, 1.0f);
+	    pcamera->SetVerticalFOVAngle (f);
 	}
       break;
     case DEBUGCMD_SELECTMESH:
@@ -2634,9 +2633,10 @@ void csBugPlug::Dump (iCamera* c)
     {
       Report (CS_REPORTER_SEVERITY_DEBUG,
 	      "Camera: %s (mirror=%d, fov=%g, fovangle=%g,",
-	      sn, (int)c->IsMirrored (), pcamera->GetFOV (), pcamera->GetFOVAngle ());
-      Report (CS_REPORTER_SEVERITY_DEBUG, "    shiftx=%g shifty=%g camnr=%ld)",
-	      pcamera->GetShiftX (), pcamera->GetShiftY (), c->GetCameraNumber ());
+	      sn, (int)c->IsMirrored (), pcamera->GetVerticalFOV (), pcamera->GetVerticalFOVAngle ());
+      Report (CS_REPORTER_SEVERITY_DEBUG, "    ratio=%f shiftx=%g shifty=%g camnr=%ld)",
+	      pcamera->GetAspectRatio (), pcamera->GetShiftX (), pcamera->GetShiftY (),
+	      c->GetCameraNumber ());
     }
 
   else
