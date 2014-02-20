@@ -217,7 +217,7 @@ csDynaVis::csDynaVis (iBase *iParent) :
 
   do_freeze_vis = false;
 
-  cfg_view_mode = VIEWMODE_STATS;
+  cfg_view_mode = VIEWMODE_OUTLINES;//VIEWMODE_STATS;
   do_state_dump = false;
   debug_origin_z = 50;
 }
@@ -2567,20 +2567,10 @@ void csDynaVis::Dump (iGraphics3D* g3d)
       }
       csReversibleTransform trans = debug_camera->GetTransform ();
       trans = csTransform (csYRotMatrix3 (-HALF_PI), csVector3 (0)) * trans;
-      float fov = g3d->GetPerspectiveAspect ();
-      int sx, sy;
-      g3d->GetPerspectiveCenter (sx, sy);
 
-      csVector3 view_origin;
+      csVector3 view_origin (0.f);
       // This is the z at which we want to view the origin.
       view_origin.z = debug_origin_z;
-      // The x,y values are then calculated with inverse perspective
-      // projection given that we want the view origin to be visualized
-      // at view_persp_x and view_persp_y.
-      float view_persp_x = sx;
-      float view_persp_y = sy;
-      view_origin.x = (view_persp_x-sx) * view_origin.z / fov;
-      view_origin.y = (view_persp_y-sy) * view_origin.z / fov;
       trans.SetOrigin (trans.This2Other (-view_origin));
 
       csVector3 trans_origin = trans.Other2This (
@@ -2598,46 +2588,13 @@ void csDynaVis::Dump (iGraphics3D* g3d)
         csVisibilityObjectWrapper* visobj_wrap = visobj_vector[i];
         int col = reason_cols[visobj_wrap->history->reason];
         const csBox3& b = visobj_wrap->child->GetBBox ();
-        g2d->DrawLineProjected (
-      	  trans.Other2This (b.GetCorner (CS_BOX_CORNER_xyz)),
-      	  trans.Other2This (b.GetCorner (CS_BOX_CORNER_Xyz)), fov, col);
-        g2d->DrawLineProjected (
-      	  trans.Other2This (b.GetCorner (CS_BOX_CORNER_xyz)),
-      	  trans.Other2This (b.GetCorner (CS_BOX_CORNER_xYz)), fov, col);
-        g2d->DrawLineProjected (
-      	  trans.Other2This (b.GetCorner (CS_BOX_CORNER_xyz)),
-      	  trans.Other2This (b.GetCorner (CS_BOX_CORNER_xyZ)), fov, col);
-        g2d->DrawLineProjected (
-      	  trans.Other2This (b.GetCorner (CS_BOX_CORNER_XYZ)),
-      	  trans.Other2This (b.GetCorner (CS_BOX_CORNER_xYZ)), fov, col);
-        g2d->DrawLineProjected (
-      	  trans.Other2This (b.GetCorner (CS_BOX_CORNER_XYZ)),
-      	  trans.Other2This (b.GetCorner (CS_BOX_CORNER_XyZ)), fov, col);
-        g2d->DrawLineProjected (
-      	  trans.Other2This (b.GetCorner (CS_BOX_CORNER_XYZ)),
-      	  trans.Other2This (b.GetCorner (CS_BOX_CORNER_XYz)), fov, col);
-        g2d->DrawLineProjected (
-      	  trans.Other2This (b.GetCorner (CS_BOX_CORNER_Xyz)),
-      	  trans.Other2This (b.GetCorner (CS_BOX_CORNER_XYz)), fov, col);
-        g2d->DrawLineProjected (
-      	  trans.Other2This (b.GetCorner (CS_BOX_CORNER_Xyz)),
-      	  trans.Other2This (b.GetCorner (CS_BOX_CORNER_XyZ)), fov, col);
-        g2d->DrawLineProjected (
-      	  trans.Other2This (b.GetCorner (CS_BOX_CORNER_xYz)),
-      	  trans.Other2This (b.GetCorner (CS_BOX_CORNER_xYZ)), fov, col);
-        g2d->DrawLineProjected (
-      	  trans.Other2This (b.GetCorner (CS_BOX_CORNER_xYz)),
-      	  trans.Other2This (b.GetCorner (CS_BOX_CORNER_XYz)), fov, col);
-        g2d->DrawLineProjected (
-      	  trans.Other2This (b.GetCorner (CS_BOX_CORNER_xyZ)),
-      	  trans.Other2This (b.GetCorner (CS_BOX_CORNER_XyZ)), fov, col);
-        g2d->DrawLineProjected (
-      	  trans.Other2This (b.GetCorner (CS_BOX_CORNER_xyZ)),
-      	  trans.Other2This (b.GetCorner (CS_BOX_CORNER_xYZ)), fov, col);
+        g2d->DrawBoxProjected (b, trans, debug_camera->GetProjectionMatrix (), col);
       }
     }
     else if (cfg_view_mode == VIEWMODE_OUTLINES)
     {
+      csRef<iPerspectiveCamera> pcam = scfQueryInterfaceSafe<iPerspectiveCamera>(debug_camera);
+
       size_t i;
       for (i = 0 ; i < visobj_vector.GetSize () ; i++)
       {
@@ -2666,15 +2623,10 @@ void csDynaVis::Dump (iGraphics3D* g3d)
 	    {
 	      size_t vt1 = *e++;
 	      size_t vt2 = *e++;
-	      csVector3 camv1 = trans.Other2This (verts[vt1]);
-	      if (camv1.z <= 0.0) continue;
-	      csVector3 camv2 = trans.Other2This (verts[vt2]);
-	      if (camv2.z <= 0.0) continue;
-	      csVector2 tr_vert1, tr_vert2;
-	      Perspective (camv1, tr_vert1, camProj, scr_width, scr_height);
-	      Perspective (camv2, tr_vert2, camProj, scr_width, scr_height);
-	      g2d->DrawLine (tr_vert1.x,  g2d->GetHeight ()-tr_vert1.y,
-	    	  tr_vert2.x,  g2d->GetHeight ()-tr_vert2.y, col_bgtext);
+	      g2d->DrawLineProjected (trans.Other2This (verts[vt1]),
+				      trans.Other2This (verts[vt2]),
+				      debug_camera->GetProjectionMatrix (),
+				      col_bgtext);
 	    }
           }
 	}
