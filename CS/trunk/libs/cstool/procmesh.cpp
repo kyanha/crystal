@@ -52,25 +52,59 @@ void csMeshOnTexture::ScaleCamera (iMeshWrapper* mesh, int txtw, int txth)
   UpdateView (txtw, txth);
   const csBox3 mesh_box = mesh->GetWorldBoundingBox ();
   const csVector3 mesh_center = mesh_box.GetCenter ();
-  const iPerspectiveCamera* camera = view->GetPerspectiveCamera ();
-  const float aspect = camera->GetFOV ();
-  const float shift_x = camera->GetShiftX ();
-  const float shift_y = camera->GetShiftY ();
-  int i;
-  float maxz = -100000000.0f;
-  for (i = 0 ; i < 8 ; i++)
+  const CS::Math::Matrix4& invProjection = view->GetCamera ()->GetInvProjectionMatrix ();
+
+  float maxz = 0.f;
+
+#if 0
+  // This code works supposedly for all types of projections but is much
+  // slower
+  for (int i = 0 ; i < 8 ; i++)
   {
     csVector3 corner = mesh_box.GetCorner (i) - mesh_center;
-    float z = (corner.x * aspect) / (1.0f - shift_x);
-    if (z < 0) z = (corner.x * aspect) / (float (txtw) - shift_x);
-    z += corner.z;
+
+    csVector4 cornerProjected = invProjection * csVector4 (1.f, 0.f, 0.f, 1.f);
+    float z = corner.x * cornerProjected.z / cornerProjected.x;
+    z -= corner.z;
     if (z > maxz) maxz = z;
 
-    z = (corner.y * aspect) / (1.0f - shift_y);
-    if (z < 0) z = (corner.y * aspect) / (float (txth) - shift_y);
-    z += corner.z;
+    cornerProjected = invProjection * csVector4 (-1.f, 0.f, 0.f, 1.f);
+    z = corner.x * cornerProjected.z / cornerProjected.x;
+    z -= corner.z;
+    if (z > maxz) maxz = z;
+
+    cornerProjected = invProjection * csVector4 (0.f, 1.f, 0.f, 1.f);
+    z = corner.y * cornerProjected.z / cornerProjected.y;
+    z -= corner.z;
+    if (z > maxz) maxz = z;
+
+    cornerProjected = invProjection * csVector4 (0.f, -1.f, 0.f, 1.f);
+    z = corner.y * cornerProjected.z / cornerProjected.y;
+    z -= corner.z;
     if (z > maxz) maxz = z;
   }
+#endif
+
+  // This code works well for regular camera projections and is much faster
+  const csVector3 mesh_size = mesh_box.GetSize () * 0.5f;
+
+  csVector4 point = invProjection * csVector4 (1.f, 0.f, 0.f, 1.f);
+  float z = mesh_size.x * point.z / point.x;
+  if (z > maxz) maxz = z;
+
+  point = invProjection * csVector4 (-1.f, 0.f, 0.f, 1.f);
+  z = mesh_size.x * point.z / point.x;
+  if (z > maxz) maxz = z;
+
+  point = invProjection * csVector4 (0.f, 1.f, 0.f, 1.f);
+  z = mesh_size.y * point.z / point.y;
+  if (z > maxz) maxz = z;
+
+  point = invProjection * csVector4 (0.f, -1.f, 0.f, 1.f);
+  z = mesh_size.y * point.z / point.y;
+  if (z > maxz) maxz = z;
+
+  maxz += mesh_size.z;
 
   csVector3 cam_pos = mesh_center;
   cam_pos.z -= maxz;
@@ -100,8 +134,7 @@ void csMeshOnTexture::UpdateView (int w, int h)
     view->SetWidth(w);
     view->SetHeight(h);
     view->SetRectangle (0, 0, w, h, false);
-    view->GetCamera ()->SetViewportSize (w, h);
-    view->GetPerspectiveCamera ()->SetFOV (1, 1);
+    view->GetPerspectiveCamera ()->SetAspectRatio ((float) w / (float) h);
     cur_w = w;
     cur_h = h;
   }
