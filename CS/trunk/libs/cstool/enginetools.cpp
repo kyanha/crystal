@@ -29,8 +29,11 @@
 #include "iengine/movable.h"
 #include "iengine/portal.h"
 #include "iengine/portalcontainer.h"
+#include "iengine/scenenode.h"
 #include "iengine/sector.h"
 #include "iengine/camera.h"
+#include "ivaria/collisions.h"
+#include "ivaria/view.h"
 
 static bool TestPortalSphere (iPortal* portal, float radius,
 	const csVector3& pos, csSet<csPtrKey<iSector> >& visited_sectors)
@@ -225,6 +228,180 @@ csScreenTargetResult csEngineTools::FindScreenTarget (const csVector2& pos,
   return result;
 }
 #include "csutil/deprecated_warn_on.h"
+
+csScreenTargetResult csEngineTools::FindScreenTarget (const csVector2& pos,
+	float maxdist, iCamera* camera, size_t screenWidth, size_t screenHeight,
+        iCollideSystem* cdsys)
+{
+  iSector* sector = camera->GetSector ();
+  if (!sector) return csScreenTargetResult ();
+
+  csVector2 p = ScreenToNormalized (pos, screenWidth, screenHeight);
+  csVector3 v = camera->InvProject (p, 1.0f);
+
+  csVector3 end = camera->GetTransform ().This2Other (v);
+  csVector3 origin = camera->GetTransform ().GetO2TTranslation ();
+
+  // Now move the end until it is at the right distance.
+  csVector3 rel = (end-origin).Unit ();
+  end = origin + rel * maxdist;
+  // Slightly move the origin for safety.
+  origin = origin + rel * 0.03f;
+
+  csScreenTargetResult result;
+  if (cdsys == 0)
+  {
+    csSectorHitBeamResult hr = sector->HitBeamPortals (origin, end);
+    result.mesh = hr.mesh;
+    if (hr.mesh == 0)
+    {
+      result.isect = end;
+      result.polygon_idx = -1;
+    }
+    else
+    {
+      result.isect = hr.isect;
+      result.polygon_idx = hr.polygon_idx;
+    }
+  }
+  else
+  {
+    csTraceBeamResult tr = csColliderHelper::TraceBeam (cdsys,
+	sector, origin, end, true);
+    result.mesh = tr.closest_mesh;
+    if (tr.closest_mesh == 0) result.isect = end;
+    else result.isect = tr.closest_isect;
+    result.polygon_idx = -1;
+  }
+  return result;
+}
+
+csScreenTargetResult csEngineTools::FindScreenTarget (const csVector2& pos,
+      float maxdist, iView* view, iCollideSystem* cdsys)
+{
+  iCamera* camera = view->GetCamera ();
+
+  iSector* sector = camera->GetSector ();
+  if (!sector) return csScreenTargetResult ();
+
+  csVector2 p = ScreenToNormalized (pos, view->GetWidth (), view->GetHeight ());
+  csVector3 v = camera->InvProject (p, 1.0f);
+
+  csVector3 end = camera->GetTransform ().This2Other (v);
+  csVector3 origin = camera->GetTransform ().GetO2TTranslation ();
+
+  // Now move the end until it is at the right distance.
+  csVector3 rel = (end-origin).Unit ();
+  end = origin + rel * maxdist;
+  // Slightly move the origin for safety.
+  origin = origin + rel * 0.03f;
+
+  csScreenTargetResult result;
+  if (cdsys == 0)
+  {
+    csSectorHitBeamResult hr = sector->HitBeamPortals (origin, end);
+    result.mesh = hr.mesh;
+    if (hr.mesh == 0)
+    {
+      result.isect = end;
+      result.polygon_idx = -1;
+    }
+    else
+    {
+      result.isect = hr.isect;
+      result.polygon_idx = hr.polygon_idx;
+    }
+  }
+  else
+  {
+    csTraceBeamResult tr = csColliderHelper::TraceBeam (cdsys,
+	sector, origin, end, true);
+    result.mesh = tr.closest_mesh;
+    if (tr.closest_mesh == 0) result.isect = end;
+    else result.isect = tr.closest_isect;
+    result.polygon_idx = -1;
+  }
+  return result;
+}
+
+csScreenTargetResult csEngineTools::FindScreenTarget
+(const csVector2& pos, float maxdist, iView* view,
+ CS::Collisions::iCollisionSystem* collisionSystem)
+{
+  iCamera* camera = view->GetCamera ();
+
+  iSector* sector = camera->GetSector ();
+  if (!sector) return csScreenTargetResult ();
+
+  csVector2 p = ScreenToNormalized (pos, view->GetWidth (), view->GetHeight ());
+  csVector3 v = camera->InvProject (p, 1.0f);
+
+  csVector3 end = camera->GetTransform ().This2Other (v);
+  csVector3 origin = camera->GetTransform ().GetO2TTranslation ();
+
+  // Now move the end until it is at the right distance.
+  csVector3 rel = (end-origin).Unit ();
+  end = origin + rel * maxdist;
+  // Slightly move the origin for safety.
+  origin = origin + rel * 0.03f;
+
+  csScreenTargetResult result;
+  if (!collisionSystem)
+  {
+    csSectorHitBeamResult hr = sector->HitBeamPortals (origin, end);
+    result.mesh = hr.mesh;
+    if (hr.mesh == 0)
+    {
+      result.isect = end;
+      result.polygon_idx = -1;
+    }
+    else
+    {
+      result.isect = hr.isect;
+      result.polygon_idx = hr.polygon_idx;
+    }
+  }
+  else
+  {
+    result.polygon_idx = -1;
+
+    CS::Collisions::iCollisionSector* collisionSector =
+      collisionSystem->FindCollisionSector (sector);
+    if (!collisionSector) return result;
+
+    CS::Collisions::HitBeamResult hr =
+      collisionSector->HitBeamPortals (origin, end);
+    if (!hr.hasHit) return result;
+
+    result.isect = hr.isect;
+    if (!hr.object) return result;
+
+    iSceneNode* node = hr.object->GetAttachedSceneNode ();
+    if (!node) return result;
+
+    result.mesh = node->QueryMesh ();
+  }
+
+  return result;
+}
+
+csVector2 csEngineTools::NormalizedToScreen
+(const csVector2& pos, float screenWidth, float screenHeight)
+{
+  return csVector2 (
+    (pos.x + 1.0f) * screenWidth * 0.5f,
+    (1.0f - pos.y) * screenHeight * 0.5f
+    );
+}
+
+csVector2 csEngineTools::ScreenToNormalized
+(const csVector2& pos, float screenWidth, float screenHeight)
+{
+  return csVector2 (
+    pos.x * 2.0f / screenWidth - 1.0f,
+    1.0f - pos.y * 2.0f / screenHeight
+    );
+}
 
 //----------------------------------------------------------------------
 
