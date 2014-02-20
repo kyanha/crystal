@@ -1868,7 +1868,8 @@ bool CommandHandler (const char *cmd, const char *arg)
     sideView.AttachNew (new csView (Sys->Engine, Sys->myG3D));
     sideView->GetCamera()->SetSector (Sys->views->GetCamera()->GetSector());
     sideView->GetCamera()->SetTransform (Sys->views->GetCamera()->GetTransform());
-    sideView->GetPerspectiveCamera()->SetFOVAngle (90, 1.0f);
+    sideView->GetPerspectiveCamera()->SetVerticalFOVAngle (90);
+    sideView->GetPerspectiveCamera()->SetAspectRatio (1.0f);
     
     sideView->SetRectangle (0, 0, dim, dim);
     int cMinX, cMinY, cMaxX, xMaxY;

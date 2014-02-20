@@ -220,10 +220,8 @@ bool csFrame::OnInitialize()
 
   engine->Prepare ();
   view->SetAutoResize (false);
-  view->GetPerspectiveCamera ()->SetFOV ((float) (y) / (float) (x), y);
+  view->GetPerspectiveCamera ()->SetAspectRatio ((float) (x) / (float) (y));
   view->SetRectangle (0, 0, x, y);
-
-  
 
   printer.AttachNew (new FramePrinter (registry));
 
@@ -475,7 +473,7 @@ void csFrame::OnSize (wxSizeEvent& ev)
   wxwindow->GetWindow ()->SetSize (size);
   canvasPanel->SetSize (size);
 
-  view->GetPerspectiveCamera ()->SetFOV ((float) (size.y) / (float) (size.x), size.x);
+  view->GetPerspectiveCamera ()->SetAspectRatio ((float) (size.x) / (float) (size.y));
   view->SetRectangle (0, 0, size.x, size.y, false);
 }
 

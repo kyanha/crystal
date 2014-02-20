@@ -467,7 +467,8 @@ bool Simple::Initialize ()
 
   view = csPtr<iView> (new csView (engine, g3d));
   view->SetAutoResize (false);
-  view->GetPerspectiveCamera ()->SetFOV ((float) (g2d->GetHeight ()) / (float) (g2d->GetWidth ()), g2d->GetWidth ());
+  view->GetPerspectiveCamera ()->SetAspectRatio
+    ((float) (g2d->GetWidth ()) / (float) (g2d->GetHeight ()));
   view->GetCamera ()->SetSector (room);
   view->GetCamera ()->GetTransform ().SetOrigin (csVector3 (0, 5, -3));
   view->SetRectangle (0, 0, g2d->GetWidth (), g2d->GetHeight ());
@@ -496,7 +497,8 @@ void Simple::OnSize (wxSizeEvent& event)
   wxSize size = event.GetSize();
   wxwindow->GetWindow ()->SetSize (size);
 
-  view->GetPerspectiveCamera ()->SetFOV ((float) (size.y) / (float) (size.x), 1.0f);
+  view->GetPerspectiveCamera ()->SetAspectRatio
+    ((float) (size.x) / (float) (size.y));
   view->SetRectangle (0, 0, size.x, size.y, false);
 }
 

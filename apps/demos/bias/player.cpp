@@ -94,7 +94,7 @@ void Player::Fire(int x, int y)
   {
     csRef<iView> view (csQueryRegistry<iView> (object_reg));
     csScreenTargetResult result = csEngineTools::FindScreenTarget (
-      csVector2 (x, y), 1000.0f, view->GetCamera ());
+      csVector2 (x, y), 1000.0f, view);
 
     if (weapon->Fire() && result.mesh)
     {

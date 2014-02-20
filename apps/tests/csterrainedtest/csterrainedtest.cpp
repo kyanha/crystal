@@ -162,7 +162,7 @@ bool TerrainEd::OnKeyboard (iEvent& ev)
 void TerrainEd::UpdateModifier(iEvent& ev)
 {
   csScreenTargetResult result = csEngineTools::FindScreenTarget (
-    csVector2 (mouse_x, mouse_y), 10000.0f, view->GetCamera ());
+    csVector2 (mouse_x, mouse_y), 10000.0f, view);
 
   if (result.mesh)
   {
