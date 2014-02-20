@@ -225,8 +225,6 @@ RMUnshadowed::RMUnshadowed (iBase* parent)
 bool RMUnshadowed::RenderView (iView* view, bool recursePortals)
 {
   // Setup a rendering view
-  view->UpdateClipper ();
-
   csRef<CS::RenderManager::RenderView> rview;
   rview = treePersistent.renderViews.GetRenderView (view);
   iCamera* c = view->GetCamera ();
@@ -234,36 +232,18 @@ bool RMUnshadowed::RenderView (iView* view, bool recursePortals)
   iGraphics3D* G3D = rview->GetGraphics3D ();
   int frameWidth = G3D->GetWidth ();
   int frameHeight = G3D->GetHeight ();
+#include "csutil/deprecated_warn_off.h"
   c->SetViewportSize (frameWidth, frameHeight);
-  view->GetEngine ()->UpdateNewFrame ();  
-  view->GetEngine ()->FireStartFrame (rview);
-
-  float ifov, sx, sy;
-  iPerspectiveCamera* pcam = view->GetPerspectiveCamera ();
-  if (pcam)
-  {
-    ifov = pcam->GetInvFOV ();
-    sx = pcam->GetShiftX ();
-    sy = pcam->GetShiftY ();
-  }
-  else
-  {
-    ifov = 1.0f;
-    sx = 0.0f;
-    sy = 0.0f;
-  }
-
-  float leftx = -sx * ifov;
-  float rightx = (frameWidth - sx) * ifov;
-  float topy = -sy * ifov;
-  float boty = (frameHeight - sy) * ifov;
-  rview->SetFrustum (leftx, rightx, topy, boty);
+#include "csutil/deprecated_warn_on.h"
 
   contextsScannedForTargets.Empty ();
   portalPersistent.UpdateNewFrame ();
   lightPersistent.UpdateNewFrame ();
   reflectRefractPersistent.UpdateNewFrame ();
   framebufferTexPersistent.UpdateNewFrame ();
+
+  view->GetEngine ()->UpdateNewFrame ();  
+  view->GetEngine ()->FireStartFrame (rview);
 
   iSector* startSector = rview->GetThisSector ();
 

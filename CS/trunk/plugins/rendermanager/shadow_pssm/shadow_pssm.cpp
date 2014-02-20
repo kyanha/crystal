@@ -367,23 +367,18 @@ RMShadowedPSSM::RMShadowedPSSM (iBase* parent)
 bool RMShadowedPSSM::RenderView (iView* view, bool recursePortals)
 {
   // Setup a rendering view
-  view->UpdateClipper ();
   csRef<CS::RenderManager::RenderView> rview;
   rview = treePersistent.renderViews.GetRenderView (view);
   rview->SetOriginalCamera (view->GetCamera ());
-  iPerspectiveCamera* c = view->GetPerspectiveCamera ();
   iGraphics3D* G3D = rview->GetGraphics3D ();
   int frameWidth = G3D->GetWidth ();
   int frameHeight = G3D->GetHeight ();
-  c->GetCamera()->SetViewportSize (frameWidth, frameHeight);
+#include "csutil/deprecated_warn_off.h"
+  view->GetCamera ()->SetViewportSize (frameWidth, frameHeight);
+#include "csutil/deprecated_warn_on.h"
+
   view->GetEngine ()->UpdateNewFrame ();  
   view->GetEngine ()->FireStartFrame (rview);
-
-  float leftx = -c->GetShiftX () * c->GetInvFOV ();
-  float rightx = (frameWidth - c->GetShiftX ()) * c->GetInvFOV ();
-  float topy = -c->GetShiftY () * c->GetInvFOV ();
-  float boty = (frameHeight - c->GetShiftY ()) * c->GetInvFOV ();
-  rview->SetFrustum (leftx, rightx, topy, boty);
 
   contextsScannedForTargets.Empty ();
   portalPersistent.UpdateNewFrame ();
