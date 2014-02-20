@@ -40,7 +40,7 @@ private:
   CS::ShaderVarStringID svTexDiffuse;
   csRef<iTextureHandle> targetTex;
   csRef<iMaterialWrapper> targetMat;
-  csRef<iView> targetView;
+  csRef<csView> targetView;
 
   void CreatePolygon (iGeneralFactoryState *th, int v1, int v2, int v3, int v4);
 
@@ -66,7 +66,7 @@ private:
   size_t numAvailableformats;
   bool renderTargetState;
   
-  void CreateTextures ();
+  void CreateTextures (size_t width, size_t height);
   void CycleTarget();
 public:
   bool SetupModules ();

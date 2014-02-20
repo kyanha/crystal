@@ -35,6 +35,11 @@ static float frand (float range)
   return r * range / 1000.0;
 }
 
+/**
+ * Create the mesh that will be using the procedural texture. Although
+ * globally a plane, this mesh is setup using a high density grid of
+ * vertices in order to be able to animate them separately.
+ */
 bool Simple::CreateGenMesh (iMaterialWrapper* mat)
 {
   csRef<iMeshFactoryWrapper> genmesh_fact (
@@ -136,6 +141,10 @@ bool Simple::CreateGenMesh (iMaterialWrapper* mat)
   return true;
 }
 
+/**
+ * Animate the vertices of the mesh that is using the procedural
+ * texture.
+ */
 void Simple::AnimateGenMesh (csTicks elapsed)
 {
   csVector3* verts = factstate->GetVertices ();
@@ -180,7 +189,7 @@ static const char* AttachmentToStr (csRenderTargetAttachment a)
   }
 }
 
-void Simple::CreateTextures ()
+void Simple::CreateTextures (size_t width, size_t height)
 {
   numAvailableformats = 0;
   for (size_t n = 0; n < sizeof(targetsToUse)/sizeof(targetsToUse[0]); n++)
@@ -196,7 +205,7 @@ void Simple::CreateTextures ()
     }
       
     csRef<iTextureHandle> texHandle = 
-      g3d->GetTextureManager()->CreateTexture (256, 256, csimg2D, 
+      g3d->GetTextureManager()->CreateTexture (width, height, csimg2D, 
         targetsToUse[n].format, CS_TEXTURE_3D);
     if (!texHandle) continue;
     
@@ -289,16 +298,28 @@ void Simple::Frame ()
   int fontHeight = font->GetTextHeight();
   int y = g3d->GetDriver2D()->GetHeight() - fontHeight;
   int white = g3d->GetDriver2D()->FindRGB (255, 255, 255);
-  if (numAvailableformats > 1)
-  {
-    g3d->GetDriver2D()->Write (font, 0, y, white, -1,
-      csString().Format ("SPACE to cycle formats: %s",
-      availableFormatsStr.GetData()));
-  }
+
+  iPerspectiveCamera* pcam = targetView->GetPerspectiveCamera ();
+  float fov = pcam->GetVerticalFOVAngle ();
+  g3d->GetDriver2D()->Write (font, 0, y, white, -1,
+    csString().Format ("current FOV: %.2f", fov));
+
   y -= fontHeight;
   g3d->GetDriver2D()->Write (font, 0, y, white, -1,
     csString().Format ("current target: %s",
     currentTargetStr.GetData()));
+
+  y -= 2 * fontHeight;
+  g3d->GetDriver2D()->Write (font, 0, y, white, -1, "p/m to zoom in/out");
+
+  if (numAvailableformats > 1)
+  {
+    y -= fontHeight;
+    g3d->GetDriver2D()->Write (font, 0, y, white, -1,
+      csString().Format ("SPACE to cycle formats: %s",
+      availableFormatsStr.GetData()));
+  }
+
   g3d->FinishDraw ();
 }
 
@@ -316,6 +337,30 @@ bool Simple::OnKeyboard (iEvent& ev)
     (csKeyEventHelper::GetCookedCode (&ev) == CSKEY_SPACE))
   {
     CycleTarget ();
+    return true;
+  }
+
+  else if ((ev.Name == csevKeyboardDown(object_reg)) && 
+	   csKeyEventHelper::GetRawCode (&ev) == 'p')
+  {
+    // Zoom in
+    iPerspectiveCamera* pcam = targetView->GetPerspectiveCamera ();
+    float fov = pcam->GetVerticalFOV ();
+    fov *= 0.9f;
+    if (fov < SMALL_EPSILON) fov = SMALL_EPSILON;
+    pcam->SetVerticalFOV (fov);
+
+    return true;
+  }
+  else if ((ev.Name == csevKeyboardDown(object_reg)) && 
+	   csKeyEventHelper::GetRawCode (&ev) == 'm')
+  {
+    // Zoom out
+    iPerspectiveCamera* pcam = targetView->GetPerspectiveCamera ();
+    float fov = pcam->GetVerticalFOV ();
+    fov *= 1.1f;
+    pcam->SetVerticalFOV (fov);
+
     return true;
   }
 
@@ -432,12 +477,9 @@ bool Simple::SetupModules ()
     return false;
   }
 
-  // We need a View to the virtual world.
-  view.AttachNew(new csView (engine, g3d));
-  iGraphics2D* g2d = g3d->GetDriver2D ();
-  // We use the full window to draw the world.
-  view->SetRectangle (0, 0, g2d->GetWidth (), g2d->GetHeight ());
-  
+  // We need a iView to the virtual world.
+  view.AttachNew (new csView (engine, g3d));
+
   // Grab string ID for "tex diffuse" SV name
   csRef<iShaderVarStringSet> svstrings =
     csQueryRegistryTagInterface<iShaderVarStringSet> (
@@ -471,8 +513,6 @@ bool Simple::CreateRoom ()
   // Create our world.
   ReportInfo ("Creating world!...");
 
-  // Create the procedural texture and a material for it
-  //ProcTexture = new csEngineProcTex ();
   // Find the pointer to VFS.
   csRef<iVFS> VFS (csQueryRegistry<iVFS> (object_reg));
   if (!VFS)
@@ -486,19 +526,23 @@ bool Simple::CreateRoom ()
   bool Success = (loader->LoadMapFile ("world", false));
   VFS->PopDir ();
 
+  float viewWidth = 340;
+  float viewHeight = 256;
+
+  // Create the procedural texture and a material for it
+  //ProcTexture = new csEngineProcTex ();
   targetMat = engine->CreateMaterial ("rendertarget", nullptr);
-  CreateTextures ();
+  CreateTextures (viewWidth, viewHeight);
   targetMat->GetMaterial()->GetVariableAdd (svTexDiffuse)->SetValue (targetTex);
   {
+    // Create the view that will be rendered on the procedural texture
     iSector *room = engine->GetSectors ()->FindByName ("room");
-    targetView = csPtr<iView> (new csView (engine, g3d));
-    targetView->GetCamera ()->SetViewportSize (256, 256);
+    targetView = csPtr<csView> (new csView (engine, g3d));
     targetView->GetCamera ()->GetTransform ().SetOrigin (csVector3 (-0.5,0,0));
     targetView->GetCamera ()->SetSector (room);
-    targetView->SetRectangle (0, 0, 256, 256);
-    iPerspectiveCamera* pcam = targetView->GetPerspectiveCamera ();
-    pcam->SetPerspectiveCenter (0.5f, 0.5f);
-    pcam->SetFOVAngle (pcam->GetFOVAngle (), 1.0f);
+    targetView->SetWidth (viewWidth);
+    targetView->SetHeight (viewHeight);
+    targetView->GetPerspectiveCamera ()->SetAspectRatio (viewWidth / viewHeight);
 
     csRef<iRenderManagerTargets> targets =
       scfQueryInterface<iRenderManagerTargets> (rm);
@@ -513,7 +557,8 @@ bool Simple::CreateRoom ()
     ReportError ("Error loading %s texture!",
 		 CS::Quote::Single ("stone4"));
   iMaterialWrapper* tm = engine->GetMaterialList ()->FindByName ("stone");
-  
+
+  // Create the sector and the mesh factory for the main wall
   room = engine->CreateSector ("proctex-room");
   csRef<iMeshWrapper> walls = CS::Geometry::GeneralMeshBuilder
     ::CreateFactoryAndMesh (engine, room, "walls", "walls_factory");
@@ -523,20 +568,24 @@ bool Simple::CreateRoom ()
 	walls_factory->GetMeshObjectFactory ());
   walls->GetMeshObject ()->SetMaterialWrapper (tm);
 
+  float scale = 0.01f;
+  float wallWidth = viewWidth * scale;
+  float wallHeight = viewHeight * scale;
+
   csColor4 black (0, 0, 0);
   walls_state->AddVertex (csVector3 (-8, -8, -5), csVector2 (0, 0),
       csVector3 (0), black);
-  walls_state->AddVertex (csVector3 (-3, -3, +8), csVector2 (1, 0),
+  walls_state->AddVertex (csVector3 (-wallWidth, -wallHeight, +8), csVector2 (1, 0),
       csVector3 (0), black);
-  walls_state->AddVertex (csVector3 (+3, -3, +8), csVector2 (1, 0),
+  walls_state->AddVertex (csVector3 (+wallWidth, -wallHeight, +8), csVector2 (1, 0),
       csVector3 (0), black);
   walls_state->AddVertex (csVector3 (+8, -8, -5), csVector2 (0, 0),
       csVector3 (0), black);
   walls_state->AddVertex (csVector3 (-8, +8, -5), csVector2 (0, 1),
       csVector3 (0), black);
-  walls_state->AddVertex (csVector3 (-3, +3, +8), csVector2 (1, 1),
+  walls_state->AddVertex (csVector3 (-wallWidth, +wallHeight, +8), csVector2 (1, 1),
       csVector3 (0), black);
-  walls_state->AddVertex (csVector3 (+3, +3, +8), csVector2 (1, 1),
+  walls_state->AddVertex (csVector3 (+wallWidth, +wallHeight, +8), csVector2 (1, 1),
       csVector3 (0), black);
   walls_state->AddVertex (csVector3 (+8, +8, -5), csVector2 (0, 1),
       csVector3 (0), black);
@@ -548,10 +597,12 @@ bool Simple::CreateRoom ()
   CreatePolygon (walls_state, 7, 6, 5, 4);
   walls_state->CalculateNormals ();
 
+  // Create the mesh that will be using the procedural texture.
   genmesh_resolution = 15;
-  genmesh_scale.Set (6, 6, 0);
+  genmesh_scale.Set (wallWidth * 2.f, wallHeight * 2.f, 0);
   CreateGenMesh (/*ProcMat*/targetMat);
 
+  // Add some lighting
   csRef<iLight> light;
   light = engine->CreateLight (0, csVector3 (0, 0, 0), 20,
   	csColor (1, 1, 1));
