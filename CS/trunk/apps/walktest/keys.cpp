@@ -555,7 +555,7 @@ void WalkTest::MouseClick2Handler(iEvent &Event)
   int mx = csMouseEventHelper::GetX (&Event);
   int my = csMouseEventHelper::GetY (&Event);
   csScreenTargetResult result = csEngineTools::FindScreenTarget (
-      csVector2 (mx, my), 100.0f, views->GetCamera ());
+    csVector2 (mx, my), 100.0f, views->GetView ());
   iMeshWrapper* mesh = result.mesh;
   int sel = result.polygon_idx;
 
@@ -610,7 +610,7 @@ void WalkTest::MouseClick3Handler(iEvent &Event)
   screenPoint.x = csMouseEventHelper::GetX(&Event);
   screenPoint.y = csMouseEventHelper::GetY(&Event);
   csScreenTargetResult st = csEngineTools::FindScreenTarget (
-      screenPoint, 100.0f, views->GetCamera ());
+    screenPoint, 100.0f, views->GetView ());
   closestMesh = st.mesh;
   if (closestMesh)
     Sys->Report (CS_REPORTER_SEVERITY_NOTIFY,

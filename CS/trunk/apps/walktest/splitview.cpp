@@ -51,15 +51,6 @@ WalkTestViews::WalkTestViews (WalkTest* walktest)
   views[0] = csPtr<iView> (new csView (walktest->Engine, walktest->myG3D));
   views[1] = csPtr<iView> (new csView (walktest->Engine, walktest->myG3D));
   view = views[0];
-
-  int w3d = walktest->myG3D->GetWidth ();
-  int h3d = walktest->myG3D->GetHeight ();
-#ifdef CS_DEBUG
-  view->SetRectangle (2, 2, w3d - 4, h3d - 4);
-#else
-  view->SetRectangle (0, 0, w3d, h3d);
-#endif
-
 }
 
 bool WalkTestViews::SetupViewStart ()
@@ -99,8 +90,6 @@ bool WalkTestViews::SplitView ()
     int width = csQint(bbox.MaxX() - bbox.MinX());
     int height = csQint(bbox.MaxY() - bbox.MinY());
     views[0]->SetRectangle((int)bbox.MinX(), (int)bbox.MinY(), width / 2, height);
-    views[0]->GetCamera()->SetViewportSize (width, height);
-    views[1]->GetCamera()->SetViewportSize (width, height);
     views[1]->SetRectangle((int)bbox.MinX() + (width / 2), (int)bbox.MinY(), 
                                     width / 2, height);
     split = (view == views[0]) ? 0 : 1;
@@ -120,7 +109,6 @@ bool WalkTestViews::UnsplitView ()
 
     int width = csQint(bbox2.MaxX() - bbox1.MinX());
     int height = csQint(bbox1.MaxY() - bbox1.MinY());
-    view->GetCamera()->SetViewportSize (width, height);
     view->SetRectangle((int)bbox1.MinX(), (int)bbox1.MinY(), width, height);
     split = -1;
     walktest->Report(CS_REPORTER_SEVERITY_NOTIFY, "Unsplitting view");
