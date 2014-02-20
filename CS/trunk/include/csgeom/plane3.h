@@ -197,7 +197,7 @@ public:
   inline void Normalize ()
   {
     float f = norm.Norm ();
-    if (f) { norm /= f;  DD /= f; }
+    if (fabsf (f) > SMALL_EPSILON) { norm /= f;  DD /= f; }
   }
 
   /**
