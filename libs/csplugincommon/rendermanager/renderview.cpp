@@ -313,7 +313,7 @@ void RenderView::SetFrustum (float lx, float rx, float ty, float by)
   topy = ty;
   boty = by;
  
-  //SetFrustumFromBox (csBox2 (lx, ty, rx, by));
+  SetFrustumFromBox (csBox2 (lx, ty, rx, by));
 }
 
 void RenderView::CreateRenderContext ()
