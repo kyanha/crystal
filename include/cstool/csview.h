@@ -37,8 +37,7 @@ class csBox2;
 class csPoly2D;
 
 /**
- * The csView class encapsulates the top-level Crystal Space
- * renderer interface. It is basically a camera and a clipper.
+ * Default implementation of a iView.
  */
 class CS_CRYSTALSPACE_EXPORT csView : 
   public scfImplementation1<csView, iView>
@@ -48,8 +47,6 @@ private:
   csRef<iEngine> Engine;
   /// rendering context
   csRef<iGraphics3D> G3D;
-  /// context size at the time the clipper was created
-  int OldWidth, OldHeight;
 
   /// the camera
   csRef<iCamera> Camera;
@@ -58,6 +55,10 @@ private:
   csBox2* RectView;
   /// Poly clipping region (0 if this is a rectangular clipper)
   csPoly2D* PolyView;
+  /// Normalized rect clipping region (0 if this is a polygon-based clipper)
+  csBox2* normalizedRectView;
+  /// Normalized poly clipping region (0 if this is a rectangular clipper)
+  csPoly2D* normalizedPolyView;
   /// The prepared clipper
   csRef<iClipper2D> Clipper;
 
@@ -81,14 +82,10 @@ public:
   /// Destructor.
   virtual ~csView ();
 
-  /// Get engine handle.
   virtual iEngine* GetEngine ();
-  /// Set engine handle.
   virtual void SetEngine (iEngine* e);
 
-  /// Get current camera.
   virtual iCamera* GetCamera ();
-  /// Set current camera.
   virtual void SetCamera (iCamera* c);
 
   virtual iPerspectiveCamera* GetPerspectiveCamera ();
@@ -97,55 +94,41 @@ public:
   virtual iCustomMatrixCamera* GetCustomMatrixCamera ();
   virtual void SetCustomMatrixCamera (iCustomMatrixCamera* c);
 
-  /// Get Context
   virtual iGraphics3D* GetContext ();
-  /// Set Context
   virtual void SetContext (iGraphics3D *ig3d);
 
-  /// Set clipping rectangle.
   virtual void SetRectangle (int x, int y, int w, int h, bool restrictToScreen = true);
-  /// Clear clipper in order to start building a polygon-based clipper.
   virtual void ClearView ();
-  /// Add a vertex to clipping polygon (non-rectangular clipping).
   virtual void AddViewVertex (int x, int y);
-  /// Clip the view clipper to the screen boundaries
   virtual void RestrictClipperToScreen ();
 
-  /// Enable / Disable automatic resizing.
   virtual void SetAutoResize (bool state) { AutoResize = state; }
 
-  /// Update the Clipper. This is usually called from Draw.
   virtual void UpdateClipper();
-  /// Return the clipper.
   virtual iClipper2D* GetClipper ();
-  /// Draw 3D world as seen from the camera.
-  virtual void Draw (iMeshWrapper* mesh = 0);
 
+  virtual void Draw (iMeshWrapper* mesh = 0);
 
   virtual CS::Utility::MeshFilter& GetMeshFilter ()
   {
     return meshFilter;
   }
 
-  // Get the view width.
   virtual int GetWidth () const
   {
     return viewWidth;
   }
 
-  // Get the view height.
   virtual int GetHeight () const
   {
     return viewHeight;
   }
 
-  // Set the view width.
   virtual void SetWidth (int w)
   {
     viewWidth = w;
   }
 
-  // Set the view height.
   virtual void SetHeight (int h)
   {
     viewHeight = h;
@@ -154,18 +137,21 @@ public:
   virtual csVector2 NormalizedToScreen (const csVector2& pos)
   {
     return csVector2 (
-	(pos.x + 1.0f) * float (viewWidth) / 2.0f,
-	(pos.y + 1.0f) * float (viewHeight) / 2.0f
+        (pos.x + 1.0f) * float (viewWidth) * 0.5f,
+        (pos.y + 1.0f) * float (viewHeight) * 0.5f
 	);
   }
 
   virtual csVector2 ScreenToNormalized (const csVector2& pos)
   {
     return csVector2 (
-	pos.x * 2.0f / float (viewWidth) - 1.0f,
-	pos.y * 2.0f / float (viewHeight) - 1.0f
+        pos.x * 2.0f / float (viewWidth) - 1.0f,
+        pos.y * 2.0f / float (viewHeight) - 1.0f
 	);
   }
+
+  virtual csVector2 Project (const csVector3& v) const;
+  virtual csVector3 InvProject (const csVector2& p, float z) const;
 };
 
 #endif // __CS_CSVIEW_H__
