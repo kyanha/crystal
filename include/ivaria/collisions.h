@@ -537,12 +537,12 @@ struct iCollisionActor : public virtual iCollisionObject
   virtual float GetJumpSpeed () const = 0;
   /// Set the jump speed of this actor
   virtual void SetJumpSpeed (float s) = 0;
-  
+/*  
   /// Determines how much the actor can control movement when free falling
   //virtual float GetAirControlFactor () const = 0;
   /// Determines how much the actor can control movement when free falling
   //virtual void SetAirControlFactor (float f) = 0;
-
+  */
   /**
    * Apply the given delta rotation on this actor.
    * \param yaw Is the delta angle to be applied around the Y axis
@@ -670,8 +670,18 @@ struct iCollisionSector : public virtual iBase
    * will cross any portal hit and continue the the hit test on the other side of it.
    * \param start The start of the beam
    * \param end The end of the beam
+   * \deprecated Deprecated in 2.2. Use HitBeamPortals() instead
    */
+  CS_DEPRECATED_METHOD_MSG("Deprecated in 2.2. Use HitBeamPortals() instead")
   virtual HitBeamResult HitBeamPortal (const csVector3& start, const csVector3& end) const = 0;
+
+  /**
+   * Follow a beam from start to end and return the first body that is hit. This version
+   * will cross any portal hit and continue the the hit test on the other side of it.
+   * \param start The start of the beam
+   * \param end The end of the beam
+   */
+  virtual HitBeamResult HitBeamPortals (const csVector3& start, const csVector3& end) const = 0;
 
   /**
    * Perform a discrete collision test against all objects in this iCollisionSector,

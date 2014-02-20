@@ -162,7 +162,10 @@ public:
 
   virtual CS::Collisions::HitBeamResult HitBeam
     (const csVector3& start, const csVector3& end) const;
-  virtual CS::Collisions::HitBeamResult HitBeamPortal
+  inline virtual CS::Collisions::HitBeamResult HitBeamPortal
+    (const csVector3& start, const csVector3& end) const
+  { return HitBeamPortals (start, end); }
+  virtual CS::Collisions::HitBeamResult HitBeamPortals
     (const csVector3& start, const csVector3& end) const;
 
   const btGhostObject* HitBeam (const csVector3& start, const csVector3& end,

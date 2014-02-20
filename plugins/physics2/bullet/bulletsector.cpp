@@ -655,7 +655,7 @@ CS_PLUGIN_NAMESPACE_BEGIN (Bullet2)
     return result;
   }
 
-  CS::Collisions::HitBeamResult csBulletSector::HitBeamPortal
+  CS::Collisions::HitBeamResult csBulletSector::HitBeamPortals
     (const csVector3& start, const csVector3& end) const
   {
     // TODO: warp transform the end vector when crossing a portal
