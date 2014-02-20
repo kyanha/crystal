@@ -90,10 +90,18 @@ class CS_CRYSTALSPACE_EXPORT CollisionHelper
     (iDocumentNode *node, bool& x, bool& y, bool& z, csVector3& min, csVector3& max) const;
 
 public:
+  /**\name Global initialization
+   * @{ */
+
   /// Initialize this collision helper
   bool Initialize (iObjectRegistry* objectRegistry,
 		   CS::Collisions::iCollisionSystem* collisionSystem = nullptr,
 		   CS::Collisions::iConvexDecomposer* decomposer = nullptr);
+
+  /** @} */
+
+  /**\name Automated setup of the objects of the collision system from a scene
+   * @{ */
 
   /// Creates and adds all collision objects of all meshes in the given engine to the collision system
   void InitializeCollisionObjects (iEngine* engine, 
@@ -106,6 +114,11 @@ public:
   /// Recursively creates and adds all collision objects of the mesh and it's children to the collision system
   void InitializeCollisionObjects (iSector* sector, 
 				   iMeshWrapper* mesh) const;
+
+  /** @} */
+
+  /**\name Finding the collision mesh
+   * @{ */
 
   /**
    * Search for the collision iTriangleMesh of the given mesh. Return nullptr in case
@@ -120,6 +133,11 @@ public:
   iTriangleMesh* FindCollisionMesh (iMeshFactoryWrapper* meshFactory) const;
 
   // TODO: find coll/physical factory
+
+  /** @} */
+
+  /**\name Concave mesh decomposition
+   * @{ */
 
   /**
    * Perform a convex decomposition on the given concave triangle mesh and compound the
@@ -137,8 +155,12 @@ public:
   void DecomposeConcaveMesh (iMeshWrapper* mesh, CS::Collisions::iCollider* collider,
 			     CS::Collisions::iConvexDecomposer* decomposer) const;
 
+  /** @} */
+
+  /**\name Collision data parsing
+   * @{ */
+
   // TODO: in another tool class, eg CollisionParser?
-  // TODO: parse soft body factories
 
   /**
    * Parse a collider. Return nullptr if none are found.
@@ -188,6 +210,8 @@ public:
   csPtr<CS::Physics::iJointFactory> ParseJointFactory
     (iDocumentNode* node, csTransform& transform, iLoaderContext* loaderContext,
      iBase* context) const;
+
+  /** @} */
 };
 
 } // namespace Collisions
