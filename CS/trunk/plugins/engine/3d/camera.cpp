@@ -326,7 +326,7 @@ void PerspectiveImpl::UpdateInvMatrix ()
 csVector2 PerspectiveImpl::Perspective (const csVector3& v) const
 {
   csVector2 p;
-  float iz = fov_ratio / v.z;
+  float iz = inv_fov_ratio / v.z;
   p.x = v.x * inv_aspect_ratio * iz + shift_x;
   p.y = v.y * iz + shift_y;
   return p;
@@ -336,15 +336,15 @@ csVector3 PerspectiveImpl::InvPerspective (const csVector2& p, float z) const
 {
   csVector3 v;
   v.z = z;
-  v.x = (p.x - shift_x) * z * inv_fov_ratio * aspect_ratio;
-  v.y = (p.y - shift_y) * z * inv_fov_ratio;
+  v.x = (p.x - shift_x) * z * fov_ratio * aspect_ratio;
+  v.y = (p.y - shift_y) * z * fov_ratio;
   return v;
 }
 
 csVector2 PerspectiveImpl::Project (const csVector3& v) const
 {
   csVector2 p;
-  float iz = fov_ratio / v.z;
+  float iz = inv_fov_ratio / v.z;
   p.x = (v.x * inv_aspect_ratio * iz + shift_x) * 2.f - 1.f;
   p.y = (v.y * iz + shift_y) * 2.f - 1.f;
   return p;
@@ -354,8 +354,8 @@ csVector3 PerspectiveImpl::InvProject (const csVector2& p, float z) const
 {
   csVector3 v;
   v.z = z;
-  v.x = (p.x * 0.5f + 0.5f - shift_x) * z * inv_fov_ratio * aspect_ratio;
-  v.y = (p.y * 0.5f + 0.5f - shift_y) * z * inv_fov_ratio;
+  v.x = (p.x * 0.5f + 0.5f - shift_x) * z * fov_ratio * aspect_ratio;
+  v.y = (p.y * 0.5f + 0.5f - shift_y) * z * fov_ratio;
   return v;
 }  
 
