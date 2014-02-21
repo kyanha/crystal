@@ -124,8 +124,8 @@ iCameraSectorListener : public iCameraListener
  *
  * The cameras work in normalized screen coordinates, that is, with the
  * visible portion of the screen being mapped in the range [-1, 1], with the
- * top-left corner of the screen being at the coordinates (-1, -1), and the
- * bottom-right corner being at (1, 1).
+ * top-left corner of the screen being at the coordinates (-1, 1), and the
+ * bottom-right corner being at (1, -1).
  *
  * Normalized screen coordinates are independant on the size of the viewport
  * (that is, the iView). If you want to manipulate coordinates expressed in
@@ -540,6 +540,9 @@ struct iPerspectiveCamera : public virtual iBase
    * This corresponds to the global scale that the camera applies on its
    * view. The horizontal FOV will be computed using the value set in
    * SetAspectRatio().
+   *
+   * Mathematically, the FOV is the tangent of the half of the FOV angle
+   * defined by SetVerticalFOVAngle().
    *
    * The default value is 1.0. Bigger values result in wide angle views,
    * while lower values result in zoom effects.
