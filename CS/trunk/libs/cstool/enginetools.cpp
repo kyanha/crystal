@@ -187,6 +187,8 @@ csShortestDistanceResult csEngineTools::FindShortestDistance (
 csScreenTargetResult csEngineTools::FindScreenTarget (const csVector2& pos,
       float maxdist, iCamera* camera, iCollideSystem* cdsys)
 {
+  // Note that using "camera->GetShiftY () * 2" to evaluate the height of
+  // the view will only work if the perspective center is at the center
   csVector2 p (pos.x, camera->GetShiftY () * 2 - pos.y);
   csVector3 v = camera->InvPerspective (p, 1.0f);
   csVector3 end = camera->GetTransform ().This2Other (v);
@@ -239,14 +241,14 @@ csScreenTargetResult csEngineTools::FindScreenTarget (const csVector2& pos,
   csVector2 p = ScreenToNormalized (pos, screenWidth, screenHeight);
   csVector3 v = camera->InvProject (p, 1.0f);
 
-  csVector3 end = camera->GetTransform ().This2Other (v);
-  csVector3 origin = camera->GetTransform ().GetO2TTranslation ();
+  csVector3 direction = camera->GetTransform ().This2OtherRelative (v);
+  direction.Normalize ();
 
-  // Now move the end until it is at the right distance.
-  csVector3 rel = (end-origin).Unit ();
-  end = origin + rel * maxdist;
+  csVector3 origin = camera->GetTransform ().GetOrigin ();
+  csVector3 end = origin + direction * maxdist;
+
   // Slightly move the origin for safety.
-  origin = origin + rel * 0.03f;
+  origin += direction * 0.03f;
 
   csScreenTargetResult result;
   if (cdsys == 0)
@@ -284,17 +286,16 @@ csScreenTargetResult csEngineTools::FindScreenTarget (const csVector2& pos,
   iSector* sector = camera->GetSector ();
   if (!sector) return csScreenTargetResult ();
 
-  csVector2 p = ScreenToNormalized (pos, view->GetWidth (), view->GetHeight ());
-  csVector3 v = camera->InvProject (p, 1.0f);
+  csVector3 v = view->InvProject (pos, 1.0f);
 
-  csVector3 end = camera->GetTransform ().This2Other (v);
-  csVector3 origin = camera->GetTransform ().GetO2TTranslation ();
+  csVector3 direction = camera->GetTransform ().This2OtherRelative (v);
+  direction.Normalize ();
 
-  // Now move the end until it is at the right distance.
-  csVector3 rel = (end-origin).Unit ();
-  end = origin + rel * maxdist;
+  csVector3 origin = camera->GetTransform ().GetOrigin ();
+  csVector3 end = origin + direction * maxdist;
+
   // Slightly move the origin for safety.
-  origin = origin + rel * 0.03f;
+  origin += direction * 0.03f;
 
   csScreenTargetResult result;
   if (cdsys == 0)
@@ -333,17 +334,16 @@ csScreenTargetResult csEngineTools::FindScreenTarget
   iSector* sector = camera->GetSector ();
   if (!sector) return csScreenTargetResult ();
 
-  csVector2 p = ScreenToNormalized (pos, view->GetWidth (), view->GetHeight ());
-  csVector3 v = camera->InvProject (p, 1.0f);
+  csVector3 v = view->InvProject (pos, 1.0f);
 
-  csVector3 end = camera->GetTransform ().This2Other (v);
-  csVector3 origin = camera->GetTransform ().GetO2TTranslation ();
+  csVector3 direction = camera->GetTransform ().This2OtherRelative (v);
+  direction.Normalize ();
 
-  // Now move the end until it is at the right distance.
-  csVector3 rel = (end-origin).Unit ();
-  end = origin + rel * maxdist;
+  csVector3 origin = camera->GetTransform ().GetOrigin ();
+  csVector3 end = origin + direction * maxdist;
+
   // Slightly move the origin for safety.
-  origin = origin + rel * 0.03f;
+  origin += direction * 0.03f;
 
   csScreenTargetResult result;
   if (!collisionSystem)
@@ -388,19 +388,15 @@ csScreenTargetResult csEngineTools::FindScreenTarget
 csVector2 csEngineTools::NormalizedToScreen
 (const csVector2& pos, float screenWidth, float screenHeight)
 {
-  return csVector2 (
-    (pos.x + 1.0f) * screenWidth * 0.5f,
-    (1.0f - pos.y) * screenHeight * 0.5f
-    );
+  return csVector2 ((pos.x + 1.0f) * screenWidth * 0.5f,
+		    (1.0f - pos.y) * screenHeight * 0.5f);
 }
 
 csVector2 csEngineTools::ScreenToNormalized
 (const csVector2& pos, float screenWidth, float screenHeight)
 {
-  return csVector2 (
-    pos.x * 2.0f / screenWidth - 1.0f,
-    1.0f - pos.y * 2.0f / screenHeight
-    );
+  return csVector2 (pos.x * 2.0f / screenWidth - 1.0f,
+		    1.0f - pos.y * 2.0f / screenHeight);
 }
 
 //----------------------------------------------------------------------
