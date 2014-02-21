@@ -229,6 +229,8 @@ class csView(scfView):
     def SetHeight(*args): return _cstool.csView_SetHeight(*args)
     def NormalizedToScreen(*args): return _cstool.csView_NormalizedToScreen(*args)
     def ScreenToNormalized(*args): return _cstool.csView_ScreenToNormalized(*args)
+    def Project(*args): return _cstool.csView_Project(*args)
+    def InvProject(*args): return _cstool.csView_InvProject(*args)
 csView_swigregister = _cstool.csView_swigregister
 csView_swigregister(csView)
 
@@ -315,6 +317,8 @@ class csEngineTools(object):
     __repr__ = _swig_repr
     FindShortestDistance = staticmethod(_cstool.csEngineTools_FindShortestDistance)
     FindScreenTarget = staticmethod(_cstool.csEngineTools_FindScreenTarget)
+    NormalizedToScreen = staticmethod(_cstool.csEngineTools_NormalizedToScreen)
+    ScreenToNormalized = staticmethod(_cstool.csEngineTools_ScreenToNormalized)
     def __init__(self, *args): 
         this = _cstool.new_csEngineTools(*args)
         try: self.this.append(this)
@@ -325,6 +329,8 @@ csEngineTools_swigregister = _cstool.csEngineTools_swigregister
 csEngineTools_swigregister(csEngineTools)
 csEngineTools_FindShortestDistance = _cstool.csEngineTools_FindShortestDistance
 csEngineTools_FindScreenTarget = _cstool.csEngineTools_FindScreenTarget
+csEngineTools_NormalizedToScreen = _cstool.csEngineTools_NormalizedToScreen
+csEngineTools_ScreenToNormalized = _cstool.csEngineTools_ScreenToNormalized
 
 class TextureMapper(object):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')

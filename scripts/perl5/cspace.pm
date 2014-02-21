@@ -7176,6 +7176,8 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *SetHeight = *cspacec::iView_SetHeight;
 *NormalizedToScreen = *cspacec::iView_NormalizedToScreen;
 *ScreenToNormalized = *cspacec::iView_ScreenToNormalized;
+*Project = *cspacec::iView_Project;
+*InvProject = *cspacec::iView_InvProject;
 *scfGetVersion = *cspacec::iView_scfGetVersion;
 *scfGetName = *cspacec::iView_scfGetName;
 sub DESTROY {
@@ -10731,8 +10733,8 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *GetHWRenderer = *cspacec::iGraphics2D_GetHWRenderer;
 *GetHWGLVersion = *cspacec::iGraphics2D_GetHWGLVersion;
 *GetHWVendor = *cspacec::iGraphics2D_GetHWVendor;
-*DrawLineProjected = *cspacec::iGraphics2D_DrawLineProjected;
 *DrawBoxProjected = *cspacec::iGraphics2D_DrawBoxProjected;
+*DrawLineProjected = *cspacec::iGraphics2D_DrawLineProjected;
 *scfGetVersion = *cspacec::iGraphics2D_scfGetVersion;
 *scfGetName = *cspacec::iGraphics2D_scfGetName;
 sub DESTROY {
@@ -20688,6 +20690,8 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *GetVisibleVolume = *cspacec::iCamera_GetVisibleVolume;
 *SetViewportSize = *cspacec::iCamera_SetViewportSize;
 *GetInvProjectionMatrix = *cspacec::iCamera_GetInvProjectionMatrix;
+*Project = *cspacec::iCamera_Project;
+*InvProject = *cspacec::iCamera_InvProject;
 *scfGetVersion = *cspacec::iCamera_scfGetVersion;
 *scfGetName = *cspacec::iCamera_scfGetName;
 sub DESTROY {
@@ -20732,6 +20736,12 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *SetPerspectiveCenter = *cspacec::iPerspectiveCamera_SetPerspectiveCenter;
 *GetNearClipDistance = *cspacec::iPerspectiveCamera_GetNearClipDistance;
 *SetNearClipDistance = *cspacec::iPerspectiveCamera_SetNearClipDistance;
+*GetVerticalFOV = *cspacec::iPerspectiveCamera_GetVerticalFOV;
+*SetVerticalFOV = *cspacec::iPerspectiveCamera_SetVerticalFOV;
+*GetVerticalFOVAngle = *cspacec::iPerspectiveCamera_GetVerticalFOVAngle;
+*SetVerticalFOVAngle = *cspacec::iPerspectiveCamera_SetVerticalFOVAngle;
+*GetAspectRatio = *cspacec::iPerspectiveCamera_GetAspectRatio;
+*SetAspectRatio = *cspacec::iPerspectiveCamera_SetAspectRatio;
 sub DESTROY {
     return unless $_[0]->isa('HASH');
     my $self = tied(%{$_[0]});
@@ -22626,6 +22636,8 @@ sub DESTROY {
 *SetHeight = *cspacec::csView_SetHeight;
 *NormalizedToScreen = *cspacec::csView_NormalizedToScreen;
 *ScreenToNormalized = *cspacec::csView_ScreenToNormalized;
+*Project = *cspacec::csView_Project;
+*InvProject = *cspacec::csView_InvProject;
 sub DISOWN {
     my $self = shift;
     my $ptr = tied(%$self);
@@ -22817,6 +22829,8 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 %ITERATORS = ();
 *FindShortestDistance = *cspacec::csEngineTools_FindShortestDistance;
 *FindScreenTarget = *cspacec::csEngineTools_FindScreenTarget;
+*NormalizedToScreen = *cspacec::csEngineTools_NormalizedToScreen;
+*ScreenToNormalized = *cspacec::csEngineTools_ScreenToNormalized;
 sub new {
     my $pkg = shift;
     my $self = cspacec::new_csEngineTools(@_);

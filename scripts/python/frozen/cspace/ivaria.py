@@ -316,6 +316,8 @@ class iView(core.iBase):
     def SetHeight(*args): return _ivaria.iView_SetHeight(*args)
     def NormalizedToScreen(*args): return _ivaria.iView_NormalizedToScreen(*args)
     def ScreenToNormalized(*args): return _ivaria.iView_ScreenToNormalized(*args)
+    def Project(*args): return _ivaria.iView_Project(*args)
+    def InvProject(*args): return _ivaria.iView_InvProject(*args)
     scfGetVersion = staticmethod(_ivaria.iView_scfGetVersion)
     scfGetName = staticmethod(_ivaria.iView_scfGetName)
     __swig_destroy__ = _ivaria.delete_iView

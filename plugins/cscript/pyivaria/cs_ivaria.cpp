@@ -9721,6 +9721,83 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_iView_Project(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  iView *arg1 = (iView *) 0 ;
+  csVector3 *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  csVector2 result;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"iView_Project",2,2,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_iView, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "iView_Project" "', argument " "1"" of type '" "iView const *""'"); 
+  }
+  arg1 = reinterpret_cast< iView * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_csVector3,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "iView_Project" "', argument " "2"" of type '" "csVector3 const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "iView_Project" "', argument " "2"" of type '" "csVector3 const &""'"); 
+  }
+  arg2 = reinterpret_cast< csVector3 * >(argp2);
+  result = ((iView const *)arg1)->Project((csVector3 const &)*arg2);
+  resultobj = SWIG_NewPointerObj((new csVector2(static_cast< const csVector2& >(result))), SWIGTYPE_p_csVector2, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_iView_InvProject(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  iView *arg1 = (iView *) 0 ;
+  csVector2 *arg2 = 0 ;
+  float arg3 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  float val3 ;
+  int ecode3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  csVector3 result;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"iView_InvProject",3,3,&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_iView, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "iView_InvProject" "', argument " "1"" of type '" "iView const *""'"); 
+  }
+  arg1 = reinterpret_cast< iView * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_csVector2,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "iView_InvProject" "', argument " "2"" of type '" "csVector2 const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "iView_InvProject" "', argument " "2"" of type '" "csVector2 const &""'"); 
+  }
+  arg2 = reinterpret_cast< csVector2 * >(argp2);
+  ecode3 = SWIG_AsVal_float(obj2, &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "iView_InvProject" "', argument " "3"" of type '" "float""'");
+  } 
+  arg3 = static_cast< float >(val3);
+  result = ((iView const *)arg1)->InvProject((csVector2 const &)*arg2,arg3);
+  resultobj = SWIG_NewPointerObj((new csVector3(static_cast< const csVector3& >(result))), SWIGTYPE_p_csVector3, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_iView_scfGetVersion(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   int result;
@@ -45946,6 +46023,8 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"iView_SetHeight", _wrap_iView_SetHeight, METH_VARARGS, NULL},
 	 { (char *)"iView_NormalizedToScreen", _wrap_iView_NormalizedToScreen, METH_VARARGS, NULL},
 	 { (char *)"iView_ScreenToNormalized", _wrap_iView_ScreenToNormalized, METH_VARARGS, NULL},
+	 { (char *)"iView_Project", _wrap_iView_Project, METH_VARARGS, NULL},
+	 { (char *)"iView_InvProject", _wrap_iView_InvProject, METH_VARARGS, NULL},
 	 { (char *)"iView_scfGetVersion", _wrap_iView_scfGetVersion, METH_VARARGS, NULL},
 	 { (char *)"iView_scfGetName", _wrap_iView_scfGetName, METH_VARARGS, NULL},
 	 { (char *)"delete_iView", _wrap_delete_iView, METH_VARARGS, NULL},

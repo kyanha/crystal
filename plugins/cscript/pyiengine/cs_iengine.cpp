@@ -22772,6 +22772,83 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_iCamera_Project(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  iCamera *arg1 = (iCamera *) 0 ;
+  csVector3 *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  csVector2 result;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"iCamera_Project",2,2,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_iCamera, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "iCamera_Project" "', argument " "1"" of type '" "iCamera const *""'"); 
+  }
+  arg1 = reinterpret_cast< iCamera * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_csVector3,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "iCamera_Project" "', argument " "2"" of type '" "csVector3 const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "iCamera_Project" "', argument " "2"" of type '" "csVector3 const &""'"); 
+  }
+  arg2 = reinterpret_cast< csVector3 * >(argp2);
+  result = ((iCamera const *)arg1)->Project((csVector3 const &)*arg2);
+  resultobj = SWIG_NewPointerObj((new csVector2(static_cast< const csVector2& >(result))), SWIGTYPE_p_csVector2, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_iCamera_InvProject(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  iCamera *arg1 = (iCamera *) 0 ;
+  csVector2 *arg2 = 0 ;
+  float arg3 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  float val3 ;
+  int ecode3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  csVector3 result;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"iCamera_InvProject",3,3,&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_iCamera, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "iCamera_InvProject" "', argument " "1"" of type '" "iCamera const *""'"); 
+  }
+  arg1 = reinterpret_cast< iCamera * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_csVector2,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "iCamera_InvProject" "', argument " "2"" of type '" "csVector2 const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "iCamera_InvProject" "', argument " "2"" of type '" "csVector2 const &""'"); 
+  }
+  arg2 = reinterpret_cast< csVector2 * >(argp2);
+  ecode3 = SWIG_AsVal_float(obj2, &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "iCamera_InvProject" "', argument " "3"" of type '" "float""'");
+  } 
+  arg3 = static_cast< float >(val3);
+  result = ((iCamera const *)arg1)->InvProject((csVector2 const &)*arg2,arg3);
+  resultobj = SWIG_NewPointerObj((new csVector3(static_cast< const csVector3& >(result))), SWIGTYPE_p_csVector3, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_iCamera_scfGetVersion(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   int result;
@@ -23120,6 +23197,162 @@ SWIGINTERN PyObject *_wrap_iPerspectiveCamera_SetNearClipDistance(PyObject *SWIG
   } 
   arg2 = static_cast< float >(val2);
   (arg1)->SetNearClipDistance(arg2);
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_iPerspectiveCamera_GetVerticalFOV(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  iPerspectiveCamera *arg1 = (iPerspectiveCamera *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  float result;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"iPerspectiveCamera_GetVerticalFOV",1,1,&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_iPerspectiveCamera, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "iPerspectiveCamera_GetVerticalFOV" "', argument " "1"" of type '" "iPerspectiveCamera const *""'"); 
+  }
+  arg1 = reinterpret_cast< iPerspectiveCamera * >(argp1);
+  result = (float)((iPerspectiveCamera const *)arg1)->GetVerticalFOV();
+  resultobj = SWIG_From_float(static_cast< float >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_iPerspectiveCamera_SetVerticalFOV(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  iPerspectiveCamera *arg1 = (iPerspectiveCamera *) 0 ;
+  float arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  float val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"iPerspectiveCamera_SetVerticalFOV",2,2,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_iPerspectiveCamera, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "iPerspectiveCamera_SetVerticalFOV" "', argument " "1"" of type '" "iPerspectiveCamera *""'"); 
+  }
+  arg1 = reinterpret_cast< iPerspectiveCamera * >(argp1);
+  ecode2 = SWIG_AsVal_float(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "iPerspectiveCamera_SetVerticalFOV" "', argument " "2"" of type '" "float""'");
+  } 
+  arg2 = static_cast< float >(val2);
+  (arg1)->SetVerticalFOV(arg2);
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_iPerspectiveCamera_GetVerticalFOVAngle(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  iPerspectiveCamera *arg1 = (iPerspectiveCamera *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  float result;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"iPerspectiveCamera_GetVerticalFOVAngle",1,1,&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_iPerspectiveCamera, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "iPerspectiveCamera_GetVerticalFOVAngle" "', argument " "1"" of type '" "iPerspectiveCamera const *""'"); 
+  }
+  arg1 = reinterpret_cast< iPerspectiveCamera * >(argp1);
+  result = (float)((iPerspectiveCamera const *)arg1)->GetVerticalFOVAngle();
+  resultobj = SWIG_From_float(static_cast< float >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_iPerspectiveCamera_SetVerticalFOVAngle(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  iPerspectiveCamera *arg1 = (iPerspectiveCamera *) 0 ;
+  float arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  float val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"iPerspectiveCamera_SetVerticalFOVAngle",2,2,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_iPerspectiveCamera, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "iPerspectiveCamera_SetVerticalFOVAngle" "', argument " "1"" of type '" "iPerspectiveCamera *""'"); 
+  }
+  arg1 = reinterpret_cast< iPerspectiveCamera * >(argp1);
+  ecode2 = SWIG_AsVal_float(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "iPerspectiveCamera_SetVerticalFOVAngle" "', argument " "2"" of type '" "float""'");
+  } 
+  arg2 = static_cast< float >(val2);
+  (arg1)->SetVerticalFOVAngle(arg2);
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_iPerspectiveCamera_GetAspectRatio(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  iPerspectiveCamera *arg1 = (iPerspectiveCamera *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  float result;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"iPerspectiveCamera_GetAspectRatio",1,1,&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_iPerspectiveCamera, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "iPerspectiveCamera_GetAspectRatio" "', argument " "1"" of type '" "iPerspectiveCamera const *""'"); 
+  }
+  arg1 = reinterpret_cast< iPerspectiveCamera * >(argp1);
+  result = (float)((iPerspectiveCamera const *)arg1)->GetAspectRatio();
+  resultobj = SWIG_From_float(static_cast< float >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_iPerspectiveCamera_SetAspectRatio(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  iPerspectiveCamera *arg1 = (iPerspectiveCamera *) 0 ;
+  float arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  float val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"iPerspectiveCamera_SetAspectRatio",2,2,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_iPerspectiveCamera, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "iPerspectiveCamera_SetAspectRatio" "', argument " "1"" of type '" "iPerspectiveCamera *""'"); 
+  }
+  arg1 = reinterpret_cast< iPerspectiveCamera * >(argp1);
+  ecode2 = SWIG_AsVal_float(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "iPerspectiveCamera_SetAspectRatio" "', argument " "2"" of type '" "float""'");
+  } 
+  arg2 = static_cast< float >(val2);
+  (arg1)->SetAspectRatio(arg2);
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
@@ -39977,6 +40210,8 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"iCamera_GetVisibleVolume", _wrap_iCamera_GetVisibleVolume, METH_VARARGS, NULL},
 	 { (char *)"iCamera_SetViewportSize", _wrap_iCamera_SetViewportSize, METH_VARARGS, NULL},
 	 { (char *)"iCamera_GetInvProjectionMatrix", _wrap_iCamera_GetInvProjectionMatrix, METH_VARARGS, NULL},
+	 { (char *)"iCamera_Project", _wrap_iCamera_Project, METH_VARARGS, NULL},
+	 { (char *)"iCamera_InvProject", _wrap_iCamera_InvProject, METH_VARARGS, NULL},
 	 { (char *)"iCamera_scfGetVersion", _wrap_iCamera_scfGetVersion, METH_VARARGS, NULL},
 	 { (char *)"iCamera_scfGetName", _wrap_iCamera_scfGetName, METH_VARARGS, NULL},
 	 { (char *)"delete_iCamera", _wrap_delete_iCamera, METH_VARARGS, NULL},
@@ -39992,6 +40227,12 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"iPerspectiveCamera_SetPerspectiveCenter", _wrap_iPerspectiveCamera_SetPerspectiveCenter, METH_VARARGS, NULL},
 	 { (char *)"iPerspectiveCamera_GetNearClipDistance", _wrap_iPerspectiveCamera_GetNearClipDistance, METH_VARARGS, NULL},
 	 { (char *)"iPerspectiveCamera_SetNearClipDistance", _wrap_iPerspectiveCamera_SetNearClipDistance, METH_VARARGS, NULL},
+	 { (char *)"iPerspectiveCamera_GetVerticalFOV", _wrap_iPerspectiveCamera_GetVerticalFOV, METH_VARARGS, NULL},
+	 { (char *)"iPerspectiveCamera_SetVerticalFOV", _wrap_iPerspectiveCamera_SetVerticalFOV, METH_VARARGS, NULL},
+	 { (char *)"iPerspectiveCamera_GetVerticalFOVAngle", _wrap_iPerspectiveCamera_GetVerticalFOVAngle, METH_VARARGS, NULL},
+	 { (char *)"iPerspectiveCamera_SetVerticalFOVAngle", _wrap_iPerspectiveCamera_SetVerticalFOVAngle, METH_VARARGS, NULL},
+	 { (char *)"iPerspectiveCamera_GetAspectRatio", _wrap_iPerspectiveCamera_GetAspectRatio, METH_VARARGS, NULL},
+	 { (char *)"iPerspectiveCamera_SetAspectRatio", _wrap_iPerspectiveCamera_SetAspectRatio, METH_VARARGS, NULL},
 	 { (char *)"delete_iPerspectiveCamera", _wrap_delete_iPerspectiveCamera, METH_VARARGS, NULL},
 	 { (char *)"iPerspectiveCamera_swigregister", iPerspectiveCamera_swigregister, METH_VARARGS, NULL},
 	 { (char *)"iCustomMatrixCamera_GetCamera", _wrap_iCustomMatrixCamera_GetCamera, METH_VARARGS, NULL},

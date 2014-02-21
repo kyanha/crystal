@@ -672,6 +672,8 @@ class iCamera(core.iBase):
     def GetVisibleVolume(*args): return _iengine.iCamera_GetVisibleVolume(*args)
     def SetViewportSize(*args): return _iengine.iCamera_SetViewportSize(*args)
     def GetInvProjectionMatrix(*args): return _iengine.iCamera_GetInvProjectionMatrix(*args)
+    def Project(*args): return _iengine.iCamera_Project(*args)
+    def InvProject(*args): return _iengine.iCamera_InvProject(*args)
     scfGetVersion = staticmethod(_iengine.iCamera_scfGetVersion)
     scfGetName = staticmethod(_iengine.iCamera_scfGetName)
     __swig_destroy__ = _iengine.delete_iCamera
@@ -696,6 +698,12 @@ class iPerspectiveCamera(core.iBase):
     def SetPerspectiveCenter(*args): return _iengine.iPerspectiveCamera_SetPerspectiveCenter(*args)
     def GetNearClipDistance(*args): return _iengine.iPerspectiveCamera_GetNearClipDistance(*args)
     def SetNearClipDistance(*args): return _iengine.iPerspectiveCamera_SetNearClipDistance(*args)
+    def GetVerticalFOV(*args): return _iengine.iPerspectiveCamera_GetVerticalFOV(*args)
+    def SetVerticalFOV(*args): return _iengine.iPerspectiveCamera_SetVerticalFOV(*args)
+    def GetVerticalFOVAngle(*args): return _iengine.iPerspectiveCamera_GetVerticalFOVAngle(*args)
+    def SetVerticalFOVAngle(*args): return _iengine.iPerspectiveCamera_SetVerticalFOVAngle(*args)
+    def GetAspectRatio(*args): return _iengine.iPerspectiveCamera_GetAspectRatio(*args)
+    def SetAspectRatio(*args): return _iengine.iPerspectiveCamera_SetAspectRatio(*args)
     __swig_destroy__ = _iengine.delete_iPerspectiveCamera
     __del__ = lambda self : None;
 iPerspectiveCamera_swigregister = _iengine.iPerspectiveCamera_swigregister

@@ -6889,82 +6889,6 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_iGraphics2D_DrawLineProjected(PyObject *self, PyObject *args) {
-  int argc;
-  PyObject *argv[6];
-  int ii;
-  
-  if (!PyTuple_Check(args)) SWIG_fail;
-  argc = (int)PyObject_Length(args);
-  for (ii = 0; (ii < argc) && (ii < 5); ii++) {
-    argv[ii] = PyTuple_GET_ITEM(args,ii);
-  }
-  if (argc == 5) {
-    int _v;
-    void *vptr = 0;
-    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_iGraphics2D, 0);
-    _v = SWIG_CheckState(res);
-    if (_v) {
-      int res = SWIG_ConvertPtr(argv[1], 0, SWIGTYPE_p_csVector3, 0);
-      _v = SWIG_CheckState(res);
-      if (_v) {
-        int res = SWIG_ConvertPtr(argv[2], 0, SWIGTYPE_p_csVector3, 0);
-        _v = SWIG_CheckState(res);
-        if (_v) {
-          int res = SWIG_ConvertPtr(argv[3], 0, SWIGTYPE_p_CS__Math__Matrix4, 0);
-          _v = SWIG_CheckState(res);
-          if (_v) {
-            {
-              int res = SWIG_AsVal_int(argv[4], NULL);
-              _v = SWIG_CheckState(res);
-            }
-            if (_v) {
-              return _wrap_iGraphics2D_DrawLineProjected__SWIG_1(self, args);
-            }
-          }
-        }
-      }
-    }
-  }
-  if (argc == 5) {
-    int _v;
-    void *vptr = 0;
-    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_iGraphics2D, 0);
-    _v = SWIG_CheckState(res);
-    if (_v) {
-      int res = SWIG_ConvertPtr(argv[1], 0, SWIGTYPE_p_csVector3, 0);
-      _v = SWIG_CheckState(res);
-      if (_v) {
-        int res = SWIG_ConvertPtr(argv[2], 0, SWIGTYPE_p_csVector3, 0);
-        _v = SWIG_CheckState(res);
-        if (_v) {
-          {
-            int res = SWIG_AsVal_float(argv[3], NULL);
-            _v = SWIG_CheckState(res);
-          }
-          if (_v) {
-            {
-              int res = SWIG_AsVal_int(argv[4], NULL);
-              _v = SWIG_CheckState(res);
-            }
-            if (_v) {
-              return _wrap_iGraphics2D_DrawLineProjected__SWIG_0(self, args);
-            }
-          }
-        }
-      }
-    }
-  }
-  
-fail:
-  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number of arguments for overloaded function 'iGraphics2D_DrawLineProjected'.\n"
-    "  Possible C/C++ prototypes are:\n"
-    "    DrawLineProjected(iGraphics2D *,csVector3 const &,csVector3 const &,float,int)\n"
-    "    DrawLineProjected(iGraphics2D *,csVector3 const &,csVector3 const &,CS::Math::Matrix4 const &,int)\n");
-  return NULL;
-}
-
-
 SWIGINTERN PyObject *_wrap_iGraphics2D_DrawBoxProjected(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   iGraphics2D *arg1 = (iGraphics2D *) 0 ;
@@ -7027,6 +6951,190 @@ SWIGINTERN PyObject *_wrap_iGraphics2D_DrawBoxProjected(PyObject *SWIGUNUSEDPARM
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_iGraphics2D_DrawLineProjected__SWIG_2(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  iGraphics2D *arg1 = (iGraphics2D *) 0 ;
+  csVector3 *arg2 = 0 ;
+  csVector3 *arg3 = 0 ;
+  float arg4 ;
+  float arg5 ;
+  int arg6 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  void *argp3 = 0 ;
+  int res3 = 0 ;
+  float val4 ;
+  int ecode4 = 0 ;
+  float val5 ;
+  int ecode5 = 0 ;
+  int val6 ;
+  int ecode6 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  PyObject * obj3 = 0 ;
+  PyObject * obj4 = 0 ;
+  PyObject * obj5 = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"iGraphics2D_DrawLineProjected",6,6,&obj0,&obj1,&obj2,&obj3,&obj4,&obj5)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_iGraphics2D, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "iGraphics2D_DrawLineProjected" "', argument " "1"" of type '" "iGraphics2D *""'"); 
+  }
+  arg1 = reinterpret_cast< iGraphics2D * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_csVector3,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "iGraphics2D_DrawLineProjected" "', argument " "2"" of type '" "csVector3 const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "iGraphics2D_DrawLineProjected" "', argument " "2"" of type '" "csVector3 const &""'"); 
+  }
+  arg2 = reinterpret_cast< csVector3 * >(argp2);
+  res3 = SWIG_ConvertPtr(obj2, &argp3, SWIGTYPE_p_csVector3,  0  | 0);
+  if (!SWIG_IsOK(res3)) {
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "iGraphics2D_DrawLineProjected" "', argument " "3"" of type '" "csVector3 const &""'"); 
+  }
+  if (!argp3) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "iGraphics2D_DrawLineProjected" "', argument " "3"" of type '" "csVector3 const &""'"); 
+  }
+  arg3 = reinterpret_cast< csVector3 * >(argp3);
+  ecode4 = SWIG_AsVal_float(obj3, &val4);
+  if (!SWIG_IsOK(ecode4)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "iGraphics2D_DrawLineProjected" "', argument " "4"" of type '" "float""'");
+  } 
+  arg4 = static_cast< float >(val4);
+  ecode5 = SWIG_AsVal_float(obj4, &val5);
+  if (!SWIG_IsOK(ecode5)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode5), "in method '" "iGraphics2D_DrawLineProjected" "', argument " "5"" of type '" "float""'");
+  } 
+  arg5 = static_cast< float >(val5);
+  ecode6 = SWIG_AsVal_int(obj5, &val6);
+  if (!SWIG_IsOK(ecode6)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode6), "in method '" "iGraphics2D_DrawLineProjected" "', argument " "6"" of type '" "int""'");
+  } 
+  arg6 = static_cast< int >(val6);
+  (arg1)->DrawLineProjected((csVector3 const &)*arg2,(csVector3 const &)*arg3,arg4,arg5,arg6);
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_iGraphics2D_DrawLineProjected(PyObject *self, PyObject *args) {
+  int argc;
+  PyObject *argv[7];
+  int ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = (int)PyObject_Length(args);
+  for (ii = 0; (ii < argc) && (ii < 6); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 5) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_iGraphics2D, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      int res = SWIG_ConvertPtr(argv[1], 0, SWIGTYPE_p_csVector3, 0);
+      _v = SWIG_CheckState(res);
+      if (_v) {
+        int res = SWIG_ConvertPtr(argv[2], 0, SWIGTYPE_p_csVector3, 0);
+        _v = SWIG_CheckState(res);
+        if (_v) {
+          int res = SWIG_ConvertPtr(argv[3], 0, SWIGTYPE_p_CS__Math__Matrix4, 0);
+          _v = SWIG_CheckState(res);
+          if (_v) {
+            {
+              int res = SWIG_AsVal_int(argv[4], NULL);
+              _v = SWIG_CheckState(res);
+            }
+            if (_v) {
+              return _wrap_iGraphics2D_DrawLineProjected__SWIG_1(self, args);
+            }
+          }
+        }
+      }
+    }
+  }
+  if (argc == 5) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_iGraphics2D, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      int res = SWIG_ConvertPtr(argv[1], 0, SWIGTYPE_p_csVector3, 0);
+      _v = SWIG_CheckState(res);
+      if (_v) {
+        int res = SWIG_ConvertPtr(argv[2], 0, SWIGTYPE_p_csVector3, 0);
+        _v = SWIG_CheckState(res);
+        if (_v) {
+          {
+            int res = SWIG_AsVal_float(argv[3], NULL);
+            _v = SWIG_CheckState(res);
+          }
+          if (_v) {
+            {
+              int res = SWIG_AsVal_int(argv[4], NULL);
+              _v = SWIG_CheckState(res);
+            }
+            if (_v) {
+              return _wrap_iGraphics2D_DrawLineProjected__SWIG_0(self, args);
+            }
+          }
+        }
+      }
+    }
+  }
+  if (argc == 6) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_iGraphics2D, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      int res = SWIG_ConvertPtr(argv[1], 0, SWIGTYPE_p_csVector3, 0);
+      _v = SWIG_CheckState(res);
+      if (_v) {
+        int res = SWIG_ConvertPtr(argv[2], 0, SWIGTYPE_p_csVector3, 0);
+        _v = SWIG_CheckState(res);
+        if (_v) {
+          {
+            int res = SWIG_AsVal_float(argv[3], NULL);
+            _v = SWIG_CheckState(res);
+          }
+          if (_v) {
+            {
+              int res = SWIG_AsVal_float(argv[4], NULL);
+              _v = SWIG_CheckState(res);
+            }
+            if (_v) {
+              {
+                int res = SWIG_AsVal_int(argv[5], NULL);
+                _v = SWIG_CheckState(res);
+              }
+              if (_v) {
+                return _wrap_iGraphics2D_DrawLineProjected__SWIG_2(self, args);
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number of arguments for overloaded function 'iGraphics2D_DrawLineProjected'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    DrawLineProjected(iGraphics2D *,csVector3 const &,csVector3 const &,float,int)\n"
+    "    DrawLineProjected(iGraphics2D *,csVector3 const &,csVector3 const &,CS::Math::Matrix4 const &,int)\n"
+    "    DrawLineProjected(iGraphics2D *,csVector3 const &,csVector3 const &,float,float,int)\n");
   return NULL;
 }
 
@@ -26001,8 +26109,8 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"iGraphics2D_GetHWRenderer", _wrap_iGraphics2D_GetHWRenderer, METH_VARARGS, NULL},
 	 { (char *)"iGraphics2D_GetHWGLVersion", _wrap_iGraphics2D_GetHWGLVersion, METH_VARARGS, NULL},
 	 { (char *)"iGraphics2D_GetHWVendor", _wrap_iGraphics2D_GetHWVendor, METH_VARARGS, NULL},
-	 { (char *)"iGraphics2D_DrawLineProjected", _wrap_iGraphics2D_DrawLineProjected, METH_VARARGS, NULL},
 	 { (char *)"iGraphics2D_DrawBoxProjected", _wrap_iGraphics2D_DrawBoxProjected, METH_VARARGS, NULL},
+	 { (char *)"iGraphics2D_DrawLineProjected", _wrap_iGraphics2D_DrawLineProjected, METH_VARARGS, NULL},
 	 { (char *)"iGraphics2D_scfGetVersion", _wrap_iGraphics2D_scfGetVersion, METH_VARARGS, NULL},
 	 { (char *)"iGraphics2D_scfGetName", _wrap_iGraphics2D_scfGetName, METH_VARARGS, NULL},
 	 { (char *)"delete_iGraphics2D", _wrap_delete_iGraphics2D, METH_VARARGS, NULL},
