@@ -323,7 +323,6 @@ void csExactCuller::AddObject (void* obj,
       for (size_t k = 0 ; k < spoly->GetVertexCount () ; k++)
       {
         Perspective ((*spoly)[k], clipped[k], projection, width, height);
-	//Perspective ((*spoly)[k], clipped[k], fov, aspect, sx, sy);
 	out_box.AddBoundingVertex (clipped[k]);
       }
       if (boxclip->ClipInPlace (clipped, num_clipped, out_box)
@@ -346,8 +345,8 @@ void csExactCuller::AddObject (void* obj,
 	// N = -B/C, O = -D/C. See also the other comments in InsertPolygon().
 	float M, N, O;
 	float inv_D = 1.0 / camplane.D ();
-	M = -camplane.A () * inv_D * aspect / fov;
-	N = -camplane.B () * inv_D / fov;
+	M = -camplane.A () * inv_D * aspect * fov;
+	N = -camplane.B () * inv_D * fov;
 	O = -camplane.C () * inv_D;
 csPrintf ("    MNO1 %g,%g,%g\n", M, N, O);
 //fflush (stdout);

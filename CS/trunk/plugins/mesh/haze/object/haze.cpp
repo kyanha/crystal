@@ -630,7 +630,7 @@ csRenderMesh** csHazeMeshObject::GetRenderMeshes (int &n, iRenderView* rview,
   // nor with a perspective aspect ratio
   if (pcamera)
   {
-    fov = pcamera->GetVerticalFOV ();
+    fov = 1.f / pcamera->GetVerticalFOV ();
     shx = pcamera->GetShiftX ();
     shy = pcamera->GetShiftY ();
   }
