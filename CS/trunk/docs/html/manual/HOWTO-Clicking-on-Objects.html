@@ -69,30 +69,31 @@ has clicked.
 
 <p>Best way to explain this is by showing code:
 </p>
-<table><tr><td>&nbsp;</td><td><pre class="example">iMeshWrapper* ClickedObject (iCamera* camera, iGraphics2D* g2d, int mousex, int mousey)
+<table><tr><td>&nbsp;</td><td><pre class="example">iMeshWrapper* ClickedObject (iView* view, iGraphics2D* g2d, int mousex, int mousey)
 {
-  // Setup a 2D vector with our mouse position.  We invert the y
-  // (based on vertical screen dimension) because CS assumes y=0
-  // is down for 3D calculations.
-  csVector2 v2d (mousex, g2d-&gt;GetHeight () - mousey);
+  // Setup a 2D vector with our mouse position.
+  csVector2 v2d (mousex, mousey);
 
   // We calculate the inverse perspective of this 2D point at
   // z=100.  This results in a 3D position in camera space at
   // z=100 that directly corresponds to the 2D position we
   // clicked on.  We use z=100 to ensure that we will at least
   // hit all objects that are before that distance.
-  csVector3 v3d = camera-&gt;InvPerspective (v2d, 100);
+  csVector3 v3d = view-&gt;InvProject (v2d, 100);
 
   // We are going to cast a beam in the current sector of the
   // camera from our camera position in the direction of the
   // 'v3d' point.  First we transform the v3d camera space
   // location to world space.
+  iCamera* camera = view-&gt;GetCamera ();
   csVector3 startbeam = camera-&gt;GetTransform ().GetOrigin ();
   csVector3 endbeam = camera-&gt;GetTransform ().This2Other (v3d);
   iSector* beamsector = camera-&gt;GetSector ();
+
   // Now do the actual intersection.
   csSectorHitBeamResult result =
-   beamsector-&gt;HitBeamPortals(startbeam, endbeam);
+   beamsector-&gt;HitBeamPortals (startbeam, endbeam);
+
   //From the result object, return the intersected mesh.
   iMeshWrapper* mesh = result.mesh;
   return mesh;
