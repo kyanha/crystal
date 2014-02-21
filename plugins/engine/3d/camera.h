@@ -496,20 +496,21 @@ public:
   { 
     CS_ASSERT_MSG("SetViewportSize() not called",
 		  (vp_width > 0) && (vp_height > 0));
-    return Persp().PerspectiveImpl::GetShiftX ();
+    return Persp().PerspectiveImpl::GetShiftX () * vp_width;
   }
   float GetShiftY () const
   { 
     CS_ASSERT_MSG("SetViewportSize() not called",
 		  (vp_width > 0) && (vp_height > 0));
-    return Persp().PerspectiveImpl::GetShiftY ();
+    return Persp().PerspectiveImpl::GetShiftY () * vp_height;
   }
 
   void SetPerspectiveCenter (float x, float y)
   {
     CS_ASSERT_MSG("SetViewportSize() not called",
 		  (vp_width > 0) && (vp_height > 0));
-    Persp().PerspectiveImpl::SetPerspectiveCenter (x, y);
+    Persp().PerspectiveImpl::SetPerspectiveCenter (x/(float)vp_width,
+      y/(float)vp_height);
     BumpCamera();
   }
   csVector2 Perspective (const csVector3& v) const
