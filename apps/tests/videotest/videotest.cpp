@@ -247,6 +247,13 @@ bool VideoTest::CreateScene ()
   cameraManager->SetCameraMode (CS::Utility::CAMERA_MOVE_FREE);
   cameraManager->SetMotionSpeed (10.0f);
 
+  // Set the video texture as the background as well
+  int w, h;
+  logoTex->GetOriginalDimensions (w, h);
+  view->SetBackgroundTexture
+    (logoTex, 0, 0, view->GetWidth (), view->GetHeight (),
+     0, 0, w, h, 1.f, false);
+
   printf ("Precaching data...\n");
   engine->PrecacheDraw ();
 
