@@ -234,14 +234,7 @@ iEngine* RenderView::GetEngine ()
 
 void RenderView::UpdateFrustum ()
 {
-  size_t i;
-  csBox2 bbox;
-  iClipper2D* clip = ctxt->iview;
-  const csVector2 *poly = clip->GetClipPoly ();
-  bbox.StartBoundingBox (poly[0]);
-  for (i = 1; i < clip->GetVertexCount (); i++)
-    bbox.AddBoundingVertexSmart (poly[i]);
-
+  csBox2 bbox = ctxt->iview->GetBoundingBox ();
   SetFrustumFromBox (bbox);
 }
 
