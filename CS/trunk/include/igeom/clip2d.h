@@ -93,7 +93,8 @@ enum
  */
 struct iClipper2D : public virtual iBase
 {
-  SCF_INTERFACE(iClipper2D, 2, 0, 0);
+  SCF_INTERFACE(iClipper2D, 2, 0, 1);
+
   /**
    * Clip a set of 2D points and return in 'OutPolygon' which is expected
    * to contain space at least for #MAX_OUTPUT_VERTICES elements.
@@ -162,6 +163,11 @@ struct iClipper2D : public virtual iBase
    * Retrieve the type of this clipper.
    */
   virtual ClipperType GetClipperType() const = 0;
+
+  /**
+   * Get the bounding box of this clipper.
+   */
+  virtual csBox2 GetBoundingBox () const = 0;
 };
 
 /** @} */

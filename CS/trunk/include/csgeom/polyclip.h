@@ -127,6 +127,8 @@ public:
   { return ClipBox; }
 
   virtual ClipperType GetClipperType() const { return clipperBox; }
+
+  virtual csBox2 GetBoundingBox () const { return region; }
 };
 
 /**
@@ -191,6 +193,8 @@ public:
   { return ClipPoly; }
 
   virtual ClipperType GetClipperType() const { return clipperPoly; }
+
+  virtual csBox2 GetBoundingBox () const { return ClipBox; }
 };
 /** @} */
 
