@@ -34,6 +34,7 @@ struct iEngine;
 struct iGraphics3D;
 struct iMeshWrapper;
 struct iPerspectiveCamera;
+struct iTextureHandle;
 
 /**
  * The iView class represents a viewport and encapsulates the top-level renderer
@@ -56,6 +57,16 @@ struct iPerspectiveCamera;
  * The list of meshes to be rendered from the scene can also be restricted
  * using the method GetMeshFilter().
  *
+ * A background can be defined for the view, it will be displayed before any other
+ * graphics when the view is rendered. The background can be a combination of a
+ * color (SetBackgroundColor()) and a texture that can be tiled
+ * (SetBackgroundTexture()). The background is clipped against the current clipper,
+ * or against the rectangular bounding box of the clipper if it is a custom polygon.
+ *
+ * If you don't want the current 2D canvas to be overwritten when rendering this
+ * view, eg if you want to superpose the rendering of several views, then you can
+ * set a null background by calling SetBackgroundColor() with a null pointer.
+ *
  * \remarks The view coordinates are vertically mirrored in comparison to screen
  * space, i.e. y=0 is at the bottom of the viewport, y=GetHeight() at the top.
  *
@@ -71,7 +82,7 @@ struct iPerspectiveCamera;
  */
 struct iView : public virtual iBase
 {
-  SCF_INTERFACE(iView, 3,0,2);
+  SCF_INTERFACE(iView, 3,0,3);
 
   /// Get the engine handle.
   virtual iEngine* GetEngine () = 0;
@@ -210,6 +221,84 @@ struct iView : public virtual iBase
    * \sa Project() iCamera::InvProject()
    */
   virtual csVector3 InvProject (const csVector2& p, float z) const = 0;
+
+  /**
+   * Set the background color of this view. This will be displayed before
+   * any other graphics when this view is rendered.
+   *
+   * If it is set to \a nullptr, then no background color will be displayed
+   * and the 2D canvas won't be cleared before the view is rendered. This
+   * can be used e.g. in order to superpose the rendering of several views.
+   *
+   * The default is a black, non transparent, background color.
+   */
+  virtual void SetBackgroundColor (csColor4* color) = 0;
+
+  /**
+   * Get the background color of this view. This will be displayed before
+   * any other graphics when this view is rendered.
+   */
+  virtual const csColor4* GetBackgroundColor () const = 0;
+
+  /**
+   * Set the background texture of this view. This will be displayed before
+   * any other graphics when this view is rendered (but just after the
+   * background color).
+   *
+   * \remark Unlike the other methods of iView that uses flipped vertical
+   * coordinates, this method uses the same logic as iGraphics2D::DrawPixmap(),
+   * that is, y=0 is at the top of the screen while y=GetHeight() is at the
+   * bottom.
+   *
+   * \param texture The background texture.
+   * \param sx The X coordinate of the left of the texture on screen.
+   * \param sy The Y coordinate of the top of the texture on screen.
+   * \param sw The width of the texture on screen.
+   * \param sh The height of the texture on screen.
+   * \param tx The X coordinate of the left of the displayed texture area.
+   * \param ty The Y coordinate of the top of the displayed texture area.
+   * \param tw The width of the displayed texture area.
+   * \param th The height of the displayed texture area.
+   * \param alpha The transparency of the texture.
+   * \param tiled Whether the texture should be displayed once or repeated
+   * in order to cover the whole screen.
+   */
+  virtual void SetBackgroundTexture
+    (iTextureHandle* texture,
+     int sx, int sy, int sw, int sh,
+     int tx, int ty, int tw, int th,
+     uint8 alpha, bool tiled) = 0;
+
+  /**
+   * Get the background texture of this view. This will be displayed before
+   * any other graphics when this view is rendered (but just after the
+   * background color).
+   *
+   * \param sx The X coordinate of the left of the texture on screen.
+   * \param sy The Y coordinate of the top of the texture on screen.
+   * \param sw The width of the texture on screen.
+   * \param sh The height of the texture on screen.
+   * \param tx The X coordinate of the left of the displayed texture area.
+   * \param ty The Y coordinate of the top of the displayed texture area.
+   * \param tw The width of the displayed texture area.
+   * \param th The height of the displayed texture area.
+   * \param alpha The transparency of the texture.
+   * \param tiled Whether the texture should be displayed once or repeated
+   * in order to cover the whole screen.
+   * \return The background texture.
+   */
+  virtual iTextureHandle* GetBackgroundTexture
+    (int& sx, int& sy, int& sw, int& sh,
+     int& tx, int& ty, int& tw, int& th,
+     uint8& alpha, bool& tiled) const = 0;
+
+  /**
+   * Draw the background of this view. This is usually the responsability of
+   * the iRenderManager to call this method, hence you shouldn't need to call
+   * it manually.
+   * \param g3d The 3D canvas where to render the background.
+   */
+  virtual void DrawBackground (iGraphics3D* g3d) = 0;
 };
 
 #endif // __CS_IVARIA_VIEW_H__

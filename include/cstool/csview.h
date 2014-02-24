@@ -76,6 +76,15 @@ private:
   // View height.
   int viewHeight;
 
+  // Background
+  bool hasBackgroundColor;
+  csColor4 backgroundColor;
+  csRef<iTextureHandle> backgroundTexture;
+  int sx, sy, sw, sh;
+  int tx, ty, tw, th;
+  uint8 alpha;
+  bool tiled;
+
 public:
   /// Constructor.
   csView (iEngine *iEngine, iGraphics3D* ig3d);
@@ -152,6 +161,21 @@ public:
 
   virtual csVector2 Project (const csVector3& v) const;
   virtual csVector3 InvProject (const csVector2& p, float z) const;
+
+  virtual void SetBackgroundColor (csColor4* color);
+  virtual const csColor4* GetBackgroundColor () const;
+
+  virtual void SetBackgroundTexture
+    (iTextureHandle* texture,
+     int sx, int sy, int sw, int sh,
+     int tx, int ty, int tw, int th,
+     uint8 alpha, bool tiled);
+  virtual iTextureHandle* GetBackgroundTexture
+    (int& sx, int& sy, int& sw, int& sh,
+     int& tx, int& ty, int& tw, int& th,
+     uint8& alpha, bool& tiled) const;
+
+  virtual void DrawBackground (iGraphics3D* g3d);
 };
 
 #endif // __CS_CSVIEW_H__

@@ -21,6 +21,7 @@
 #include "csqint.h"
 #include "csgeom/polyclip.h"
 #include "csgeom/poly2d.h"
+#include "ivideo/graph2d.h"
 #include "ivideo/graph3d.h"
 #include "cstool/csview.h"
 #include "cstool/enginetools.h"
@@ -33,7 +34,8 @@ csView::csView (iEngine *e, iGraphics3D* ig3d)
   : scfImplementationType (this),
     Engine (e), G3D (ig3d), RectView (nullptr), PolyView (nullptr),
     normalizedRectView (nullptr), normalizedPolyView (nullptr),
-    AutoResize (true)
+    AutoResize (true), hasBackgroundColor (true),
+    backgroundColor (0.f, 0.f, 0.f, 1.f)
 {
   csRef<iPerspectiveCamera> pcam = e->CreatePerspectiveCamera ();
   SetPerspectiveCamera(pcam);
@@ -278,4 +280,171 @@ csVector3 csView::InvProject (const csVector2& p, float z) const
 {
   return Camera->InvProject
     (csEngineTools::ScreenToNormalized (p, viewWidth, viewHeight), z);
+}
+
+void csView::SetBackgroundColor (csColor4* color)
+{
+  hasBackgroundColor = color;
+  if (color) backgroundColor = *color;
+}
+
+const csColor4* csView::GetBackgroundColor () const
+{
+  if (!hasBackgroundColor) return nullptr;
+  return &backgroundColor;
+}
+
+void csView::SetBackgroundTexture
+    (iTextureHandle* texture,
+     int sx, int sy, int sw, int sh,
+     int tx, int ty, int tw, int th,
+     uint8 alpha, bool tiled)
+{
+  backgroundTexture = texture;
+  this->sx = sx;
+  this->sy = sy;
+  this->sw = sw;
+  this->sh = sh;
+  this->tx = tx;
+  this->ty = ty;
+  this->tw = tw;
+  this->th = th;
+  this->alpha = alpha;
+  this->tiled = tiled;
+}
+
+iTextureHandle* csView::GetBackgroundTexture
+    (int& sx, int& sy, int& sw, int& sh,
+     int& tx, int& ty, int& tw, int& th,
+     uint8& alpha, bool& tiled) const
+{
+  sx = this->sx;
+  sy = this->sy;
+  sw = this->sw;
+  sh = this->sh;
+  tx = this->tx;
+  ty = this->ty;
+  tw = this->tw;
+  th = this->th;
+  alpha = this->alpha;
+  tiled = this->tiled;
+  return backgroundTexture;
+}
+
+/// Clip a texture before drawing it
+inline void DrawClippedTexture (iGraphics3D* g3d, iTextureHandle* texture,
+				int vx, int vy, int vw, int vh,
+				int sx, int sy, int sw, int sh,
+				int tx, int ty, int tw, int th,
+				uint8 alpha)
+{
+  // Clip on the left
+  if (sx < vx)
+  {
+    int delta = vx - sx;
+    float ratio = (float) delta / (float) sw;
+    sx = vx;
+    sw -= delta;
+    int tdelta = csQround (ratio * (float) tw);
+    tx += tdelta;
+    tw -= tdelta;
+  }
+
+  // Clip on the right
+  if (sx + sw > vx + vw)
+  {
+    int delta = sx + sw - vx - vw;
+    float ratio = (float) delta / (float) sw;
+    sw -= delta;
+    int tdelta = csQround (ratio * (float) tw);
+    tw -= tdelta;
+  }
+
+  // Clip on the top
+  if (sy < vy)
+  {
+    int delta = vy - sy;
+    float ratio = (float) delta / (float) sh;
+    sy = vy;
+    sh -= delta;
+    int tdelta = csQround (ratio * (float) th);
+    tx += tdelta;
+    th -= tdelta;
+  }
+
+  // Clip on the bottom
+  if (sy + sh > vy + vh)
+  {
+    int delta = sy + sh - vy - vh;
+    float ratio = (float) delta / (float) sh;
+    sh -= delta;
+    int tdelta = csQround (ratio * (float) th);
+    th -= tdelta;
+  }
+
+  // Draw the pixmap
+  g3d->DrawPixmap (texture, sx, sy, sw, sh, tx, ty, tw, th, alpha);
+}
+
+void csView::DrawBackground (iGraphics3D* g3d)
+{
+  if (!hasBackgroundColor && !backgroundTexture) return;
+
+  // Compute the coordinates of the background area
+  int vx, vy, vw, vh;
+  csBox2 box = GetClipper ()->GetBoundingBox ();
+
+  vx = box.MinX ();
+  vy = viewHeight - box.MaxY ();
+  vw = box.MaxX () - box.MinX ();
+  vh = box.MaxY () - box.MinY ();
+
+  // Draw the background color
+  if (hasBackgroundColor)
+  {
+    g3d->BeginDraw (CSDRAW_2DGRAPHICS);
+    int color = g3d->GetDriver2D ()->FindRGB ((int) (backgroundColor[0] * 255.f),
+					      (int) (backgroundColor[1] * 255.f),
+					      (int) (backgroundColor[2] * 255.f));
+    g3d->GetDriver2D ()->DrawBox (vx, vy, vw, vh, color);
+  }
+
+  // Draw the background texture
+  if (backgroundTexture)
+  {
+    g3d->BeginDraw (CSDRAW_3DGRAPHICS);
+
+    // Non-tiled mode
+    if (!tiled) DrawClippedTexture (g3d, backgroundTexture,
+				    vx, vy, vw, vh,
+				    sx, sy, sw, sh,
+				    tx, ty, tw, th, alpha);
+
+    // Tiled mode
+    else
+    {
+      int startx = sx;
+      int starty = sy;
+
+      while (startx + sw < vx) startx += sw;
+      while (starty + sh < vy) starty += sh;
+
+      while (startx < vx + vw)
+      {
+	int x = startx;
+	int y = starty;
+
+	while (y < vy + vh)
+	{
+	  DrawClippedTexture (g3d, backgroundTexture,
+			      vx, vy, vw, vh,
+			      x, y, sw, sh,
+			      tx, ty, tw, th, alpha);
+	  y += sh;
+	}
+
+	startx += sw;
+      }
+    }
+  }
 }
