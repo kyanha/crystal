@@ -163,6 +163,11 @@ public:
   void SetSize (const csVector2& s);
 
   /**
+   * Get the size of the box 
+   */
+  inline csVector2 GetSize () const { return (maxbox-minbox); }
+
+  /**
    * Given an edge index (#CS_BOX_EDGE_xy_Xy etc.) return the two vertices
    * (index #CS_BOX_CORNER_xy etc.).
    */
