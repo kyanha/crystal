@@ -184,6 +184,9 @@ struct WrapShadowParams<RMOSM::ShadowType>
 
     lightPersistent.UpdateNewFrame ();
 
+    // Draw the background
+    view->DrawBackground (G3D);
+
     iSector* startSector = rview->GetThisSector ();
 
     if (!startSector)
@@ -194,7 +197,7 @@ struct WrapShadowParams<RMOSM::ShadowType>
 
     RenderTreeType::ContextNode* startContext = 
       renderTree.CreateContext (rview);
-    startContext->drawFlags |= (CSDRAW_CLEARSCREEN | CSDRAW_CLEARZBUFFER);
+    startContext->drawFlags |= CSDRAW_CLEARZBUFFER;
 
     // Setup the main context
     {

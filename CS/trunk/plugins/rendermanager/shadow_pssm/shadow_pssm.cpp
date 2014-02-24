@@ -386,6 +386,9 @@ bool RMShadowedPSSM::RenderView (iView* view, bool recursePortals)
   lightPersistent_unshadowed.UpdateNewFrame ();
   reflectRefractPersistent.UpdateNewFrame ();
 
+  // Draw the background
+  view->DrawBackground (G3D);
+
   iSector* startSector = rview->GetThisSector ();
 
   if (!startSector)
@@ -398,7 +401,7 @@ bool RMShadowedPSSM::RenderView (iView* view, bool recursePortals)
   RenderTreeType renderTree (treePersistent);
 
   RenderTreeType::ContextNode* startContext = renderTree.CreateContext (rview);
-  startContext->drawFlags |= (CSDRAW_CLEARSCREEN | CSDRAW_CLEARZBUFFER);
+  startContext->drawFlags |= CSDRAW_CLEARZBUFFER;
   startContext->renderTargets[rtaColor0].texHandle = PostEffectsSupport::GetScreenTarget ();
   startContext->renderTargets[rtaDepth].texHandle = PostEffectsSupport::GetDepthTarget ();
   startContext->perspectiveFixup = perspectiveFixup;
