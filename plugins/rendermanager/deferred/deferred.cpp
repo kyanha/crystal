@@ -519,13 +519,15 @@ bool RMDeferred::RenderView(iView *view, bool recursePortals)
   engine->UpdateNewFrame ();
   engine->FireStartFrame (rview);
 
+  // Draw the background
+  view->DrawBackground (view->GetContext ());
+
   iSector *startSector = rview->GetThisSector ();
   if (!startSector)
     return false;
 
   RenderTreeType renderTree (treePersistent);
   RenderTreeType::ContextNode *startContext = renderTree.CreateContext (rview);
-  startContext->drawFlags |= CSDRAW_CLEARSCREEN;
 
   // Add gbuffer textures to be visualized.
   if (showGBuffer)
