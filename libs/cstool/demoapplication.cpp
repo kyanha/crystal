@@ -21,8 +21,6 @@
 #include "cssysdef.h"
 
 #include "cstool/csview.h"
-#include "cstool/genmeshbuilder.h"
-#include "cstool/materialbuilder.h"
 #include "cstool/demoapplication.h"
 
 #include "iengine/campos.h"
@@ -188,38 +186,14 @@ bool DemoApplication::CreateRoom ()
   view->GetCamera ()->SetSector (room);
   cameraManager->SetCamera (view->GetCamera ());
 
-  // Creating the background
-  // First we make a primitive for our geometry.
-  CS::Geometry::DensityTextureMapper bgMapper (0.3f);
-  CS::Geometry::TesselatedBox bgBox (csVector3 (-4000.0f), csVector3 (4000.0f));
-  bgBox.SetMapper (&bgMapper);
-  bgBox.SetFlags (CS::Geometry::Primitives::CS_PRIMBOX_INSIDE);
-  
-  // Now we make a factory and a mesh at once.
-  csRef<iMeshWrapper> background =
-    CS::Geometry::GeneralMeshBuilder::CreateFactoryAndMesh (engine, room,
-				   "background", "background_factory", &bgBox);
-  background->SetRenderPriority (engine->GetRenderPriority ("sky"));
-
-  // Do not use shadow casting for the background otherwise it will
-  // push the far plane farther and that will reduce needlessly the quality
-  // of the shadow map.
-  background->GetFlags ().Set (CS_ENTITY_NOSHADOWCAST, CS_ENTITY_NOSHADOWCAST);
-  background->GetFlags ().Set (CS_ENTITY_NOSHADOWRECEIVE, CS_ENTITY_NOSHADOWRECEIVE);
-
-  csRef<iMaterialWrapper> bgMaterial =
-    CS::Material::MaterialBuilder::CreateColorMaterial
-    (GetObjectRegistry (), "background", csColor (0.398f));
-  background->GetMeshObject()->SetMaterialWrapper (bgMaterial);
+  // Set a background color
+  float value = 0.298f;
+  csColor4 color (value, value, value, 1.f);
+  view->SetBackgroundColor (&color);
 
   // Creating lights
   csRef<iLight> light;
   iLightList* lightList = room->GetLights ();
-
-  // This light is for the background
-  light = engine->CreateLight (0, csVector3 (-1, -1, 0), 9000, csColor (1));
-  light->SetAttenuationMode (CS_ATTN_NONE);
-  lightList->Add (light);
 
   // Other lights
   light = engine->CreateLight (0, csVector3 (1, 0, 0), 8, csColor4 (1, 1, 1, 1));
