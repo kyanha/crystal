@@ -350,6 +350,12 @@ bool ViewMesh::CreateRoom ()
   cameraManager->SetCameraMode (CS::Utility::CAMERA_ROTATE);
   cameraManager->SetCamera (view->GetCamera ());
 
+  // Set a background color
+  float value = 0.298f;
+  csColor4 color (value, value, value, 1.f);
+  view->SetBackgroundColor (&color);
+
+  // Create the lights
   csRef<iLight> light;
   light = engine->CreateLight
     (0, csVector3 (0.0f), 100.0f, csColor(1, 1, 1));
@@ -362,6 +368,10 @@ bool ViewMesh::CreateRoom ()
   light = engine->CreateLight
     (0, csVector3(0.0f), 100.0f, csColor(1, 1, 1));
   room->GetLights ()->Add (light);
+
+  // Display the origin of the coordinate system in order to provide
+  // some feedback around the size and position of the mesh.
+  visualDebugger->DebugTransform (csReversibleTransform (), true, 1.f);
 
   return true;
 }
@@ -760,11 +770,11 @@ void ViewMesh::AttachMesh (const char* file)
 
 void ViewMesh::ScaleSprite (float newScale)
 {
-  csMatrix3 scaling; scaling.Identity(); scaling *= newScale;
+  csMatrix3 scaling; scaling.Identity (); scaling *= newScale;
   csReversibleTransform rT;
   rT.SetT2O (scaling);
-  if (asset->GetMesh())
-    asset->GetMesh()->GetMovable()->SetTransform(rT);
+  if (asset->GetMesh ())
+    asset->GetMesh ()->GetMovable ()->SetTransform (rT);
 
   scale = newScale;
 
