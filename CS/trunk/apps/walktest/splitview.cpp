@@ -51,6 +51,12 @@ WalkTestViews::WalkTestViews (WalkTest* walktest)
   views[0] = csPtr<iView> (new csView (walktest->Engine, walktest->myG3D));
   views[1] = csPtr<iView> (new csView (walktest->Engine, walktest->myG3D));
   view = views[0];
+
+  // Set a background color
+  float value = 0.298f;
+  csColor4 color (value, value, value, 1.f);
+  views[0]->SetBackgroundColor (&color);
+  views[1]->SetBackgroundColor (&color);
 }
 
 bool WalkTestViews::SetupViewStart ()

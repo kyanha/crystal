@@ -147,8 +147,13 @@ bool PhysDemo::Application ()
   if (!DemoApplication::Application ())
     return false;
 
-  // Set camera
+  // Setup the camera
   cameraManager->SetCamera (view->GetCamera ());
+
+  // Set a background color
+  float value = 0.298f;
+  csColor4 color (value, value, value, 1.f);
+  view->SetBackgroundColor (&color);
 
   // Disable the camera manager
   cameraManager->SetCameraMode (CS::Utility::CAMERA_NO_MOVE);
