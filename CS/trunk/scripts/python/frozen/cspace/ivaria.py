@@ -318,6 +318,11 @@ class iView(core.iBase):
     def ScreenToNormalized(*args): return _ivaria.iView_ScreenToNormalized(*args)
     def Project(*args): return _ivaria.iView_Project(*args)
     def InvProject(*args): return _ivaria.iView_InvProject(*args)
+    def SetBackgroundColor(*args): return _ivaria.iView_SetBackgroundColor(*args)
+    def GetBackgroundColor(*args): return _ivaria.iView_GetBackgroundColor(*args)
+    def SetBackgroundTexture(*args): return _ivaria.iView_SetBackgroundTexture(*args)
+    def GetBackgroundTexture(*args): return _ivaria.iView_GetBackgroundTexture(*args)
+    def DrawBackground(*args): return _ivaria.iView_DrawBackground(*args)
     scfGetVersion = staticmethod(_ivaria.iView_scfGetVersion)
     scfGetName = staticmethod(_ivaria.iView_scfGetName)
     __swig_destroy__ = _ivaria.delete_iView

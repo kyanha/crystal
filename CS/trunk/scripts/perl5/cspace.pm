@@ -3570,6 +3570,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *clipperPoly = *cspacec::iClipper2D_clipperPoly;
 *clipperBox = *cspacec::iClipper2D_clipperBox;
 *GetClipperType = *cspacec::iClipper2D_GetClipperType;
+*GetBoundingBox = *cspacec::iClipper2D_GetBoundingBox;
 sub DESTROY {
     return unless $_[0]->isa('HASH');
     my $self = tied(%{$_[0]});
@@ -7178,6 +7179,11 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *ScreenToNormalized = *cspacec::iView_ScreenToNormalized;
 *Project = *cspacec::iView_Project;
 *InvProject = *cspacec::iView_InvProject;
+*SetBackgroundColor = *cspacec::iView_SetBackgroundColor;
+*GetBackgroundColor = *cspacec::iView_GetBackgroundColor;
+*SetBackgroundTexture = *cspacec::iView_SetBackgroundTexture;
+*GetBackgroundTexture = *cspacec::iView_GetBackgroundTexture;
+*DrawBackground = *cspacec::iView_DrawBackground;
 *scfGetVersion = *cspacec::iView_scfGetVersion;
 *scfGetName = *cspacec::iView_scfGetName;
 sub DESTROY {
@@ -14391,6 +14397,7 @@ use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
 *GetCenter = *cspacec::csBox2_GetCenter;
 *SetCenter = *cspacec::csBox2_SetCenter;
 *SetSize = *cspacec::csBox2_SetSize;
+*GetSize = *cspacec::csBox2_GetSize;
 *GetEdgeInfo = *cspacec::csBox2_GetEdgeInfo;
 *GetEdge = *cspacec::csBox2_GetEdge;
 *Intersect = *cspacec::csBox2_Intersect;
@@ -22638,6 +22645,11 @@ sub DESTROY {
 *ScreenToNormalized = *cspacec::csView_ScreenToNormalized;
 *Project = *cspacec::csView_Project;
 *InvProject = *cspacec::csView_InvProject;
+*SetBackgroundColor = *cspacec::csView_SetBackgroundColor;
+*GetBackgroundColor = *cspacec::csView_GetBackgroundColor;
+*SetBackgroundTexture = *cspacec::csView_SetBackgroundTexture;
+*GetBackgroundTexture = *cspacec::csView_GetBackgroundTexture;
+*DrawBackground = *cspacec::csView_DrawBackground;
 sub DISOWN {
     my $self = shift;
     my $ptr = tied(%$self);

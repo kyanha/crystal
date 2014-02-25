@@ -231,6 +231,11 @@ class csView(scfView):
     def ScreenToNormalized(*args): return _cstool.csView_ScreenToNormalized(*args)
     def Project(*args): return _cstool.csView_Project(*args)
     def InvProject(*args): return _cstool.csView_InvProject(*args)
+    def SetBackgroundColor(*args): return _cstool.csView_SetBackgroundColor(*args)
+    def GetBackgroundColor(*args): return _cstool.csView_GetBackgroundColor(*args)
+    def SetBackgroundTexture(*args): return _cstool.csView_SetBackgroundTexture(*args)
+    def GetBackgroundTexture(*args): return _cstool.csView_GetBackgroundTexture(*args)
+    def DrawBackground(*args): return _cstool.csView_DrawBackground(*args)
 csView_swigregister = _cstool.csView_swigregister
 csView_swigregister(csView)
 
