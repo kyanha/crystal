@@ -22,8 +22,6 @@
 
 #include "tabbase.h"
 
-#include <ivaria/reporter.h>
-
 class GeneralTab : public TabBase
 {
 private:
@@ -33,6 +31,7 @@ private:
   bool CameraModeRotate (const CEGUI::EventArgs& e);
   bool CameraModeMoveOrigin (const CEGUI::EventArgs& e);
   bool CameraModeMoveNormal (const CEGUI::EventArgs& e);
+  bool DisplayOrigin (const CEGUI::EventArgs& e);
   bool LightThreePoint (const CEGUI::EventArgs& e);
   bool LightFrontBackTop (const CEGUI::EventArgs& e);
   bool LightUnlit (const CEGUI::EventArgs& e);
@@ -43,7 +42,6 @@ private:
   bool SaveButton (const CEGUI::EventArgs& e);
   bool SaveBinaryButton (const CEGUI::EventArgs& e);
   bool SetScaleSprite (const CEGUI::EventArgs& e);
-
 
 public:
   GeneralTab(ViewMesh* viewmesh, iObjectRegistry* obj_reg, AssetBase* ass);
@@ -135,7 +133,12 @@ GeneralTab::GeneralTab(ViewMesh* viewmesh, iObjectRegistry* obj_reg, AssetBase* 
   btn = winMgr->getWindow("General/ScaleSprite");
   btn->subscribeEvent(CEGUI::Editbox::EventTextAccepted,
     CEGUI::Event::Subscriber(&GeneralTab::SetScaleSprite, this));
- 
+
+  btn = winMgr->getWindow("General/DisplayOrigin");
+  btn->subscribeEvent(CEGUI::Checkbox::EventCheckStateChanged,
+    CEGUI::Event::Subscriber(&GeneralTab::DisplayOrigin, this));
+  CEGUI::Checkbox* checkbox = static_cast<CEGUI::Checkbox*> (btn);
+  checkbox->setSelected (false);
 }
 
 GeneralTab::~GeneralTab() 
@@ -175,6 +178,18 @@ bool GeneralTab::CameraModeMoveNormal (const CEGUI::EventArgs& e)
 
   if (radio->getSelectedButtonInGroup () == radio)
     viewmesh->cameraManager->SetCameraMode (CS::Utility::CAMERA_MOVE_FREE);
+  return true;
+}
+
+bool GeneralTab::DisplayOrigin (const CEGUI::EventArgs& e)
+{
+  CEGUI::WindowManager* winMgr = cegui->GetWindowManagerPtr ();
+
+  CEGUI::Checkbox* checkbox = 
+    (CEGUI::Checkbox*) winMgr->getWindow("General/DisplayOrigin");
+
+  viewmesh->DisplayOrigin (checkbox->isSelected ());
+
   return true;
 }
 
