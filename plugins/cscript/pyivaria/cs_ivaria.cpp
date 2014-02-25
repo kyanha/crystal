@@ -2721,42 +2721,43 @@ SWIG_Python_MustGetPtr(PyObject *obj, swig_type_info *ty, int argnum, int flags)
 #define SWIGTYPE_p_iTerraFormer swig_types[198]
 #define SWIGTYPE_p_iTerraSampler swig_types[199]
 #define SWIGTYPE_p_iTerrainSystem swig_types[200]
-#define SWIGTYPE_p_iThreadManager swig_types[201]
-#define SWIGTYPE_p_iThreadReturn swig_types[202]
-#define SWIGTYPE_p_iTranslator swig_types[203]
-#define SWIGTYPE_p_iTriangleMesh swig_types[204]
-#define SWIGTYPE_p_iVFS swig_types[205]
-#define SWIGTYPE_p_iView swig_types[206]
-#define SWIGTYPE_p_iVirtualClock swig_types[207]
-#define SWIGTYPE_p_int swig_types[208]
-#define SWIGTYPE_p_int16_t swig_types[209]
-#define SWIGTYPE_p_int64_t swig_types[210]
-#define SWIGTYPE_p_int8_t swig_types[211]
-#define SWIGTYPE_p_long_long swig_types[212]
-#define SWIGTYPE_p_p_csVector3 swig_types[213]
-#define SWIGTYPE_p_p_int swig_types[214]
-#define SWIGTYPE_p_scfImplementation1T_FrameBegin3DDraw_iEventHandler_t swig_types[215]
-#define SWIGTYPE_p_scfImplementation1T_FramePrinter_iEventHandler_t swig_types[216]
-#define SWIGTYPE_p_scfImplementation1T_csConfigFile_iConfigFile_t swig_types[217]
-#define SWIGTYPE_p_scfImplementation1T_csEventHandlerRegistry_iEventHandlerRegistry_t swig_types[218]
-#define SWIGTYPE_p_scfImplementation1T_csObject_iObject_t swig_types[219]
-#define SWIGTYPE_p_scfImplementation2T_FrameSignpost_2DConsole_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_t swig_types[220]
-#define SWIGTYPE_p_scfImplementation2T_FrameSignpost_3D2D_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_t swig_types[221]
-#define SWIGTYPE_p_scfImplementation2T_FrameSignpost_ConsoleDebug_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_t swig_types[222]
-#define SWIGTYPE_p_scfImplementation2T_FrameSignpost_DebugFrame_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_t swig_types[223]
-#define SWIGTYPE_p_scfImplementation2T_FrameSignpost_Logic3D_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_t swig_types[224]
-#define SWIGTYPE_p_scfImplementationExt1T_csPath_csObject_iPath_t swig_types[225]
-#define SWIGTYPE_p_size_t swig_types[226]
-#define SWIGTYPE_p_uint16_t swig_types[227]
-#define SWIGTYPE_p_uint32_t swig_types[228]
-#define SWIGTYPE_p_uint64_t swig_types[229]
-#define SWIGTYPE_p_uint8_t swig_types[230]
-#define SWIGTYPE_p_unsigned_int swig_types[231]
-#define SWIGTYPE_p_unsigned_long swig_types[232]
-#define SWIGTYPE_p_unsigned_long_long swig_types[233]
-#define SWIGTYPE_p_void swig_types[234]
-static swig_type_info *swig_types[236];
-static swig_module_info swig_module = {swig_types, 235, 0, 0, 0, 0};
+#define SWIGTYPE_p_iTextureHandle swig_types[201]
+#define SWIGTYPE_p_iThreadManager swig_types[202]
+#define SWIGTYPE_p_iThreadReturn swig_types[203]
+#define SWIGTYPE_p_iTranslator swig_types[204]
+#define SWIGTYPE_p_iTriangleMesh swig_types[205]
+#define SWIGTYPE_p_iVFS swig_types[206]
+#define SWIGTYPE_p_iView swig_types[207]
+#define SWIGTYPE_p_iVirtualClock swig_types[208]
+#define SWIGTYPE_p_int swig_types[209]
+#define SWIGTYPE_p_int16_t swig_types[210]
+#define SWIGTYPE_p_int64_t swig_types[211]
+#define SWIGTYPE_p_int8_t swig_types[212]
+#define SWIGTYPE_p_long_long swig_types[213]
+#define SWIGTYPE_p_p_csVector3 swig_types[214]
+#define SWIGTYPE_p_p_int swig_types[215]
+#define SWIGTYPE_p_scfImplementation1T_FrameBegin3DDraw_iEventHandler_t swig_types[216]
+#define SWIGTYPE_p_scfImplementation1T_FramePrinter_iEventHandler_t swig_types[217]
+#define SWIGTYPE_p_scfImplementation1T_csConfigFile_iConfigFile_t swig_types[218]
+#define SWIGTYPE_p_scfImplementation1T_csEventHandlerRegistry_iEventHandlerRegistry_t swig_types[219]
+#define SWIGTYPE_p_scfImplementation1T_csObject_iObject_t swig_types[220]
+#define SWIGTYPE_p_scfImplementation2T_FrameSignpost_2DConsole_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_t swig_types[221]
+#define SWIGTYPE_p_scfImplementation2T_FrameSignpost_3D2D_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_t swig_types[222]
+#define SWIGTYPE_p_scfImplementation2T_FrameSignpost_ConsoleDebug_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_t swig_types[223]
+#define SWIGTYPE_p_scfImplementation2T_FrameSignpost_DebugFrame_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_t swig_types[224]
+#define SWIGTYPE_p_scfImplementation2T_FrameSignpost_Logic3D_iFrameEventSignpost_scfFakeInterfaceT_iEventHandler_t_t swig_types[225]
+#define SWIGTYPE_p_scfImplementationExt1T_csPath_csObject_iPath_t swig_types[226]
+#define SWIGTYPE_p_size_t swig_types[227]
+#define SWIGTYPE_p_uint16_t swig_types[228]
+#define SWIGTYPE_p_uint32_t swig_types[229]
+#define SWIGTYPE_p_uint64_t swig_types[230]
+#define SWIGTYPE_p_uint8_t swig_types[231]
+#define SWIGTYPE_p_unsigned_int swig_types[232]
+#define SWIGTYPE_p_unsigned_long swig_types[233]
+#define SWIGTYPE_p_unsigned_long_long swig_types[234]
+#define SWIGTYPE_p_void swig_types[235]
+static swig_type_info *swig_types[237];
+static swig_module_info swig_module = {swig_types, 236, 0, 0, 0, 0};
 #define SWIG_TypeQuery(name) SWIG_TypeQueryModule(&swig_module, &swig_module, name)
 #define SWIG_MangledTypeQuery(name) SWIG_MangledTypeQueryModule(&swig_module, &swig_module, name)
 
@@ -9792,6 +9793,358 @@ SWIGINTERN PyObject *_wrap_iView_InvProject(PyObject *SWIGUNUSEDPARM(self), PyOb
   arg3 = static_cast< float >(val3);
   result = ((iView const *)arg1)->InvProject((csVector2 const &)*arg2,arg3);
   resultobj = SWIG_NewPointerObj((new csVector3(static_cast< const csVector3& >(result))), SWIGTYPE_p_csVector3, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_iView_SetBackgroundColor(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  iView *arg1 = (iView *) 0 ;
+  csColor4 *arg2 = (csColor4 *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"iView_SetBackgroundColor",2,2,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_iView, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "iView_SetBackgroundColor" "', argument " "1"" of type '" "iView *""'"); 
+  }
+  arg1 = reinterpret_cast< iView * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_csColor4, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "iView_SetBackgroundColor" "', argument " "2"" of type '" "csColor4 *""'"); 
+  }
+  arg2 = reinterpret_cast< csColor4 * >(argp2);
+  (arg1)->SetBackgroundColor(arg2);
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_iView_GetBackgroundColor(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  iView *arg1 = (iView *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  csColor4 *result = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"iView_GetBackgroundColor",1,1,&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_iView, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "iView_GetBackgroundColor" "', argument " "1"" of type '" "iView const *""'"); 
+  }
+  arg1 = reinterpret_cast< iView * >(argp1);
+  result = (csColor4 *)((iView const *)arg1)->GetBackgroundColor();
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_csColor4, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_iView_SetBackgroundTexture(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  iView *arg1 = (iView *) 0 ;
+  iTextureHandle *arg2 = (iTextureHandle *) 0 ;
+  int arg3 ;
+  int arg4 ;
+  int arg5 ;
+  int arg6 ;
+  int arg7 ;
+  int arg8 ;
+  int arg9 ;
+  int arg10 ;
+  uint8 arg11 ;
+  bool arg12 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  int val3 ;
+  int ecode3 = 0 ;
+  int val4 ;
+  int ecode4 = 0 ;
+  int val5 ;
+  int ecode5 = 0 ;
+  int val6 ;
+  int ecode6 = 0 ;
+  int val7 ;
+  int ecode7 = 0 ;
+  int val8 ;
+  int ecode8 = 0 ;
+  int val9 ;
+  int ecode9 = 0 ;
+  int val10 ;
+  int ecode10 = 0 ;
+  void *argp11 ;
+  int res11 = 0 ;
+  bool val12 ;
+  int ecode12 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  PyObject * obj3 = 0 ;
+  PyObject * obj4 = 0 ;
+  PyObject * obj5 = 0 ;
+  PyObject * obj6 = 0 ;
+  PyObject * obj7 = 0 ;
+  PyObject * obj8 = 0 ;
+  PyObject * obj9 = 0 ;
+  PyObject * obj10 = 0 ;
+  PyObject * obj11 = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"iView_SetBackgroundTexture",12,12,&obj0,&obj1,&obj2,&obj3,&obj4,&obj5,&obj6,&obj7,&obj8,&obj9,&obj10,&obj11)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_iView, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "iView_SetBackgroundTexture" "', argument " "1"" of type '" "iView *""'"); 
+  }
+  arg1 = reinterpret_cast< iView * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_iTextureHandle, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "iView_SetBackgroundTexture" "', argument " "2"" of type '" "iTextureHandle *""'"); 
+  }
+  arg2 = reinterpret_cast< iTextureHandle * >(argp2);
+  ecode3 = SWIG_AsVal_int(obj2, &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "iView_SetBackgroundTexture" "', argument " "3"" of type '" "int""'");
+  } 
+  arg3 = static_cast< int >(val3);
+  ecode4 = SWIG_AsVal_int(obj3, &val4);
+  if (!SWIG_IsOK(ecode4)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "iView_SetBackgroundTexture" "', argument " "4"" of type '" "int""'");
+  } 
+  arg4 = static_cast< int >(val4);
+  ecode5 = SWIG_AsVal_int(obj4, &val5);
+  if (!SWIG_IsOK(ecode5)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode5), "in method '" "iView_SetBackgroundTexture" "', argument " "5"" of type '" "int""'");
+  } 
+  arg5 = static_cast< int >(val5);
+  ecode6 = SWIG_AsVal_int(obj5, &val6);
+  if (!SWIG_IsOK(ecode6)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode6), "in method '" "iView_SetBackgroundTexture" "', argument " "6"" of type '" "int""'");
+  } 
+  arg6 = static_cast< int >(val6);
+  ecode7 = SWIG_AsVal_int(obj6, &val7);
+  if (!SWIG_IsOK(ecode7)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode7), "in method '" "iView_SetBackgroundTexture" "', argument " "7"" of type '" "int""'");
+  } 
+  arg7 = static_cast< int >(val7);
+  ecode8 = SWIG_AsVal_int(obj7, &val8);
+  if (!SWIG_IsOK(ecode8)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode8), "in method '" "iView_SetBackgroundTexture" "', argument " "8"" of type '" "int""'");
+  } 
+  arg8 = static_cast< int >(val8);
+  ecode9 = SWIG_AsVal_int(obj8, &val9);
+  if (!SWIG_IsOK(ecode9)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode9), "in method '" "iView_SetBackgroundTexture" "', argument " "9"" of type '" "int""'");
+  } 
+  arg9 = static_cast< int >(val9);
+  ecode10 = SWIG_AsVal_int(obj9, &val10);
+  if (!SWIG_IsOK(ecode10)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode10), "in method '" "iView_SetBackgroundTexture" "', argument " "10"" of type '" "int""'");
+  } 
+  arg10 = static_cast< int >(val10);
+  {
+    res11 = SWIG_ConvertPtr(obj10, &argp11, SWIGTYPE_p_uint8_t,  0  | 0);
+    if (!SWIG_IsOK(res11)) {
+      SWIG_exception_fail(SWIG_ArgError(res11), "in method '" "iView_SetBackgroundTexture" "', argument " "11"" of type '" "uint8""'"); 
+    }  
+    if (!argp11) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "iView_SetBackgroundTexture" "', argument " "11"" of type '" "uint8""'");
+    } else {
+      uint8 * temp = reinterpret_cast< uint8 * >(argp11);
+      arg11 = *temp;
+      if (SWIG_IsNewObj(res11)) delete temp;
+    }
+  }
+  ecode12 = SWIG_AsVal_bool(obj11, &val12);
+  if (!SWIG_IsOK(ecode12)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode12), "in method '" "iView_SetBackgroundTexture" "', argument " "12"" of type '" "bool""'");
+  } 
+  arg12 = static_cast< bool >(val12);
+  (arg1)->SetBackgroundTexture(arg2,arg3,arg4,arg5,arg6,arg7,arg8,arg9,arg10,arg11,arg12);
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_iView_GetBackgroundTexture(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  iView *arg1 = (iView *) 0 ;
+  int *arg2 = 0 ;
+  int *arg3 = 0 ;
+  int *arg4 = 0 ;
+  int *arg5 = 0 ;
+  int *arg6 = 0 ;
+  int *arg7 = 0 ;
+  int *arg8 = 0 ;
+  int *arg9 = 0 ;
+  uint8 *arg10 = 0 ;
+  bool *arg11 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  void *argp3 = 0 ;
+  int res3 = 0 ;
+  void *argp4 = 0 ;
+  int res4 = 0 ;
+  void *argp5 = 0 ;
+  int res5 = 0 ;
+  void *argp6 = 0 ;
+  int res6 = 0 ;
+  void *argp7 = 0 ;
+  int res7 = 0 ;
+  void *argp8 = 0 ;
+  int res8 = 0 ;
+  void *argp9 = 0 ;
+  int res9 = 0 ;
+  void *argp10 = 0 ;
+  int res10 = 0 ;
+  void *argp11 = 0 ;
+  int res11 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  PyObject * obj3 = 0 ;
+  PyObject * obj4 = 0 ;
+  PyObject * obj5 = 0 ;
+  PyObject * obj6 = 0 ;
+  PyObject * obj7 = 0 ;
+  PyObject * obj8 = 0 ;
+  PyObject * obj9 = 0 ;
+  PyObject * obj10 = 0 ;
+  iTextureHandle *result = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"iView_GetBackgroundTexture",11,11,&obj0,&obj1,&obj2,&obj3,&obj4,&obj5,&obj6,&obj7,&obj8,&obj9,&obj10)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_iView, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "iView_GetBackgroundTexture" "', argument " "1"" of type '" "iView const *""'"); 
+  }
+  arg1 = reinterpret_cast< iView * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_int,  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "iView_GetBackgroundTexture" "', argument " "2"" of type '" "int &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "iView_GetBackgroundTexture" "', argument " "2"" of type '" "int &""'"); 
+  }
+  arg2 = reinterpret_cast< int * >(argp2);
+  res3 = SWIG_ConvertPtr(obj2, &argp3, SWIGTYPE_p_int,  0 );
+  if (!SWIG_IsOK(res3)) {
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "iView_GetBackgroundTexture" "', argument " "3"" of type '" "int &""'"); 
+  }
+  if (!argp3) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "iView_GetBackgroundTexture" "', argument " "3"" of type '" "int &""'"); 
+  }
+  arg3 = reinterpret_cast< int * >(argp3);
+  res4 = SWIG_ConvertPtr(obj3, &argp4, SWIGTYPE_p_int,  0 );
+  if (!SWIG_IsOK(res4)) {
+    SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "iView_GetBackgroundTexture" "', argument " "4"" of type '" "int &""'"); 
+  }
+  if (!argp4) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "iView_GetBackgroundTexture" "', argument " "4"" of type '" "int &""'"); 
+  }
+  arg4 = reinterpret_cast< int * >(argp4);
+  res5 = SWIG_ConvertPtr(obj4, &argp5, SWIGTYPE_p_int,  0 );
+  if (!SWIG_IsOK(res5)) {
+    SWIG_exception_fail(SWIG_ArgError(res5), "in method '" "iView_GetBackgroundTexture" "', argument " "5"" of type '" "int &""'"); 
+  }
+  if (!argp5) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "iView_GetBackgroundTexture" "', argument " "5"" of type '" "int &""'"); 
+  }
+  arg5 = reinterpret_cast< int * >(argp5);
+  res6 = SWIG_ConvertPtr(obj5, &argp6, SWIGTYPE_p_int,  0 );
+  if (!SWIG_IsOK(res6)) {
+    SWIG_exception_fail(SWIG_ArgError(res6), "in method '" "iView_GetBackgroundTexture" "', argument " "6"" of type '" "int &""'"); 
+  }
+  if (!argp6) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "iView_GetBackgroundTexture" "', argument " "6"" of type '" "int &""'"); 
+  }
+  arg6 = reinterpret_cast< int * >(argp6);
+  res7 = SWIG_ConvertPtr(obj6, &argp7, SWIGTYPE_p_int,  0 );
+  if (!SWIG_IsOK(res7)) {
+    SWIG_exception_fail(SWIG_ArgError(res7), "in method '" "iView_GetBackgroundTexture" "', argument " "7"" of type '" "int &""'"); 
+  }
+  if (!argp7) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "iView_GetBackgroundTexture" "', argument " "7"" of type '" "int &""'"); 
+  }
+  arg7 = reinterpret_cast< int * >(argp7);
+  res8 = SWIG_ConvertPtr(obj7, &argp8, SWIGTYPE_p_int,  0 );
+  if (!SWIG_IsOK(res8)) {
+    SWIG_exception_fail(SWIG_ArgError(res8), "in method '" "iView_GetBackgroundTexture" "', argument " "8"" of type '" "int &""'"); 
+  }
+  if (!argp8) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "iView_GetBackgroundTexture" "', argument " "8"" of type '" "int &""'"); 
+  }
+  arg8 = reinterpret_cast< int * >(argp8);
+  res9 = SWIG_ConvertPtr(obj8, &argp9, SWIGTYPE_p_int,  0 );
+  if (!SWIG_IsOK(res9)) {
+    SWIG_exception_fail(SWIG_ArgError(res9), "in method '" "iView_GetBackgroundTexture" "', argument " "9"" of type '" "int &""'"); 
+  }
+  if (!argp9) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "iView_GetBackgroundTexture" "', argument " "9"" of type '" "int &""'"); 
+  }
+  arg9 = reinterpret_cast< int * >(argp9);
+  res10 = SWIG_ConvertPtr(obj9, &argp10, SWIGTYPE_p_uint8_t,  0 );
+  if (!SWIG_IsOK(res10)) {
+    SWIG_exception_fail(SWIG_ArgError(res10), "in method '" "iView_GetBackgroundTexture" "', argument " "10"" of type '" "uint8 &""'"); 
+  }
+  if (!argp10) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "iView_GetBackgroundTexture" "', argument " "10"" of type '" "uint8 &""'"); 
+  }
+  arg10 = reinterpret_cast< uint8 * >(argp10);
+  res11 = SWIG_ConvertPtr(obj10, &argp11, SWIGTYPE_p_bool,  0 );
+  if (!SWIG_IsOK(res11)) {
+    SWIG_exception_fail(SWIG_ArgError(res11), "in method '" "iView_GetBackgroundTexture" "', argument " "11"" of type '" "bool &""'"); 
+  }
+  if (!argp11) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "iView_GetBackgroundTexture" "', argument " "11"" of type '" "bool &""'"); 
+  }
+  arg11 = reinterpret_cast< bool * >(argp11);
+  result = (iTextureHandle *)((iView const *)arg1)->GetBackgroundTexture(*arg2,*arg3,*arg4,*arg5,*arg6,*arg7,*arg8,*arg9,*arg10,*arg11);
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_iTextureHandle, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_iView_DrawBackground(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  iView *arg1 = (iView *) 0 ;
+  iGraphics3D *arg2 = (iGraphics3D *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"iView_DrawBackground",2,2,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_iView, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "iView_DrawBackground" "', argument " "1"" of type '" "iView *""'"); 
+  }
+  arg1 = reinterpret_cast< iView * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_iGraphics3D, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "iView_DrawBackground" "', argument " "2"" of type '" "iGraphics3D *""'"); 
+  }
+  arg2 = reinterpret_cast< iGraphics3D * >(argp2);
+  (arg1)->DrawBackground(arg2);
+  resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
   return NULL;
@@ -46025,6 +46378,11 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"iView_ScreenToNormalized", _wrap_iView_ScreenToNormalized, METH_VARARGS, NULL},
 	 { (char *)"iView_Project", _wrap_iView_Project, METH_VARARGS, NULL},
 	 { (char *)"iView_InvProject", _wrap_iView_InvProject, METH_VARARGS, NULL},
+	 { (char *)"iView_SetBackgroundColor", _wrap_iView_SetBackgroundColor, METH_VARARGS, NULL},
+	 { (char *)"iView_GetBackgroundColor", _wrap_iView_GetBackgroundColor, METH_VARARGS, NULL},
+	 { (char *)"iView_SetBackgroundTexture", _wrap_iView_SetBackgroundTexture, METH_VARARGS, NULL},
+	 { (char *)"iView_GetBackgroundTexture", _wrap_iView_GetBackgroundTexture, METH_VARARGS, NULL},
+	 { (char *)"iView_DrawBackground", _wrap_iView_DrawBackground, METH_VARARGS, NULL},
 	 { (char *)"iView_scfGetVersion", _wrap_iView_scfGetVersion, METH_VARARGS, NULL},
 	 { (char *)"iView_scfGetName", _wrap_iView_scfGetName, METH_VARARGS, NULL},
 	 { (char *)"delete_iView", _wrap_delete_iView, METH_VARARGS, NULL},
@@ -47551,6 +47909,7 @@ static swig_type_info _swigt__p_iStandardReporterListener = {"_p_iStandardReport
 static swig_type_info _swigt__p_iTerraFormer = {"_p_iTerraFormer", "iTerraFormer *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_iTerraSampler = {"_p_iTerraSampler", "iTerraSampler *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_iTerrainSystem = {"_p_iTerrainSystem", "iTerrainSystem *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_iTextureHandle = {"_p_iTextureHandle", "iTextureHandle *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_iTranslator = {"_p_iTranslator", "iTranslator *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_iTriangleMesh = {"_p_iTriangleMesh", "iTriangleMesh *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_iView = {"_p_iView", "iView *", 0, 0, (void*)0, 0};
@@ -47773,6 +48132,7 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_iTerraFormer,
   &_swigt__p_iTerraSampler,
   &_swigt__p_iTerrainSystem,
+  &_swigt__p_iTextureHandle,
   &_swigt__p_iThreadManager,
   &_swigt__p_iThreadReturn,
   &_swigt__p_iTranslator,
@@ -48025,6 +48385,7 @@ static swig_cast_info _swigc__p_iStandardReporterListener[] = {  {&_swigt__p_iSt
 static swig_cast_info _swigc__p_iTerraFormer[] = {  {&_swigt__p_iTerraFormer, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_iTerraSampler[] = {  {&_swigt__p_iTerraSampler, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_iTerrainSystem[] = {  {&_swigt__p_iTerrainSystem, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_iTextureHandle[] = {  {&_swigt__p_iTextureHandle, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_iTranslator[] = {  {&_swigt__p_iTranslator, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_iTriangleMesh[] = {  {&_swigt__p_iTriangleMesh, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_iView[] = {  {&_swigt__p_iView, 0, 0, 0},{0, 0, 0, 0}};
@@ -48247,6 +48608,7 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_iTerraFormer,
   _swigc__p_iTerraSampler,
   _swigc__p_iTerrainSystem,
+  _swigc__p_iTextureHandle,
   _swigc__p_iThreadManager,
   _swigc__p_iThreadReturn,
   _swigc__p_iTranslator,

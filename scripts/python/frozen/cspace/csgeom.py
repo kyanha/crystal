@@ -1196,6 +1196,7 @@ class csBox2(object):
     def GetCenter(*args): return _csgeom.csBox2_GetCenter(*args)
     def SetCenter(*args): return _csgeom.csBox2_SetCenter(*args)
     def SetSize(*args): return _csgeom.csBox2_SetSize(*args)
+    def GetSize(*args): return _csgeom.csBox2_GetSize(*args)
     def GetEdgeInfo(*args): return _csgeom.csBox2_GetEdgeInfo(*args)
     def GetEdge(*args): return _csgeom.csBox2_GetEdge(*args)
     def Intersect(*args): return _csgeom.csBox2_Intersect(*args)

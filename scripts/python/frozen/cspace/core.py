@@ -1854,6 +1854,7 @@ class iClipper2D(iBase):
     clipperPoly = _core.iClipper2D_clipperPoly
     clipperBox = _core.iClipper2D_clipperBox
     def GetClipperType(*args): return _core.iClipper2D_GetClipperType(*args)
+    def GetBoundingBox(*args): return _core.iClipper2D_GetBoundingBox(*args)
     __swig_destroy__ = _core.delete_iClipper2D
     __del__ = lambda self : None;
 iClipper2D_swigregister = _core.iClipper2D_swigregister

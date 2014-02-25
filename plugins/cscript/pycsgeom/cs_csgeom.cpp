@@ -34178,6 +34178,28 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_csBox2_GetSize(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  csBox2 *arg1 = (csBox2 *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  csVector2 result;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"csBox2_GetSize",1,1,&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_csBox2, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "csBox2_GetSize" "', argument " "1"" of type '" "csBox2 const *""'"); 
+  }
+  arg1 = reinterpret_cast< csBox2 * >(argp1);
+  result = ((csBox2 const *)arg1)->GetSize();
+  resultobj = SWIG_NewPointerObj((new csVector2(static_cast< const csVector2& >(result))), SWIGTYPE_p_csVector2, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_csBox2_GetEdgeInfo(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   csBox2 *arg1 = (csBox2 *) 0 ;
@@ -50435,6 +50457,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"csBox2_GetCenter", _wrap_csBox2_GetCenter, METH_VARARGS, NULL},
 	 { (char *)"csBox2_SetCenter", _wrap_csBox2_SetCenter, METH_VARARGS, NULL},
 	 { (char *)"csBox2_SetSize", _wrap_csBox2_SetSize, METH_VARARGS, NULL},
+	 { (char *)"csBox2_GetSize", _wrap_csBox2_GetSize, METH_VARARGS, NULL},
 	 { (char *)"csBox2_GetEdgeInfo", _wrap_csBox2_GetEdgeInfo, METH_VARARGS, NULL},
 	 { (char *)"csBox2_GetEdge", _wrap_csBox2_GetEdge, METH_VARARGS, NULL},
 	 { (char *)"csBox2_Intersect", _wrap_csBox2_Intersect, METH_VARARGS, NULL},

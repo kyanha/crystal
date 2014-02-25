@@ -43250,6 +43250,28 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_iClipper2D_GetBoundingBox(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  iClipper2D *arg1 = (iClipper2D *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  csBox2 result;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"iClipper2D_GetBoundingBox",1,1,&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_iClipper2D, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "iClipper2D_GetBoundingBox" "', argument " "1"" of type '" "iClipper2D const *""'"); 
+  }
+  arg1 = reinterpret_cast< iClipper2D * >(argp1);
+  result = ((iClipper2D const *)arg1)->GetBoundingBox();
+  resultobj = SWIG_NewPointerObj((new csBox2(static_cast< const csBox2& >(result))), SWIGTYPE_p_csBox2, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_delete_iClipper2D(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   iClipper2D *arg1 = (iClipper2D *) 0 ;
@@ -64820,6 +64842,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"iClipper2D_GetVertexCount", _wrap_iClipper2D_GetVertexCount, METH_VARARGS, NULL},
 	 { (char *)"iClipper2D_GetClipPoly", _wrap_iClipper2D_GetClipPoly, METH_VARARGS, NULL},
 	 { (char *)"iClipper2D_GetClipperType", _wrap_iClipper2D_GetClipperType, METH_VARARGS, NULL},
+	 { (char *)"iClipper2D_GetBoundingBox", _wrap_iClipper2D_GetBoundingBox, METH_VARARGS, NULL},
 	 { (char *)"delete_iClipper2D", _wrap_delete_iClipper2D, METH_VARARGS, NULL},
 	 { (char *)"iClipper2D_swigregister", iClipper2D_swigregister, METH_VARARGS, NULL},
 	 { (char *)"iPath_Length", _wrap_iPath_Length, METH_VARARGS, NULL},
