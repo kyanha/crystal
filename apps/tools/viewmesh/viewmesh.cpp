@@ -56,7 +56,8 @@ CS_IMPLEMENT_APPLICATION
 
 ViewMesh::ViewMesh () : 
   DemoApplication ("CrystalSpace.ViewMesh"), lightMode (THREE_POINT), scale (1.0f),
-  lod_level (0), max_lod_level (0), auto_lod (false), mouseMove (false)
+  lod_level (0), max_lod_level (0), auto_lod (false), displayOrigin (false),
+  mouseMove (false)  
 {
 }
 
@@ -72,7 +73,12 @@ void ViewMesh::Frame()
   if (loading)
     LoadSprite(reloadFilename, reloadFilePath, loadingFactoryName);
 
-  cegui->Render();
+  // Display the origin of the coordinate system in order to provide
+  // some feedback around the size and position of the mesh.
+  if (displayOrigin)
+    visualDebugger->DebugTransform (csReversibleTransform (), false, 1.f);
+
+  cegui->Render ();
 }
 
 bool ViewMesh::OnKeyboard(iEvent& ev)
@@ -368,10 +374,6 @@ bool ViewMesh::CreateRoom ()
   light = engine->CreateLight
     (0, csVector3(0.0f), 100.0f, csColor(1, 1, 1));
   room->GetLights ()->Add (light);
-
-  // Display the origin of the coordinate system in order to provide
-  // some feedback around the size and position of the mesh.
-  visualDebugger->DebugTransform (csReversibleTransform (), true, 1.f);
 
   return true;
 }

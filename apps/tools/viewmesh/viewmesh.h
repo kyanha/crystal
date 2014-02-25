@@ -71,6 +71,8 @@ class ViewMesh : public CS::Utility::DemoApplication
   int max_lod_level;
   bool auto_lod;
 
+  bool displayOrigin;
+
   bool OnKeyboard (iEvent&);
   bool OnMouseDown (iEvent &event);
   bool OnMouseUp (iEvent &event);
@@ -90,6 +92,9 @@ class ViewMesh : public CS::Utility::DemoApplication
   void ScaleSprite (float newScale);
   void MoveLights (const csVector3 &a, const csVector3 &b, const csVector3 &c);
   
+  void DisplayOrigin (bool display)
+  { displayOrigin = display; }
+
   // Tabs
   csRef<GeneralTab> generalTab;
   friend class GeneralTab;
