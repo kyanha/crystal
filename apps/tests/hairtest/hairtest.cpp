@@ -49,7 +49,7 @@ void HairTest::PrintHelp ()
 
   // Command line options
   commandLineHelper.AddCommandLineOption
-    ("scene", "Set the starting scene", csVariant ("krystal"));
+    ("scene", "Set the starting scene (krystal, frankie)", csVariant ("krystal"));
 
   // Printing help
   commandLineHelper.PrintApplicationHelp
@@ -1063,17 +1063,9 @@ bool HairTest::Application ()
     }
   }
 
-  // Background doesn't receive or cast shadows
-  csRef<iMeshWrapper> background = engine -> FindMeshObject("background");
-  if (!background) 
-    ReportError ("Can't find background!");
-  else
-    background->SetFlagsRecursive(CS_ENTITY_NOSHADOWCAST);
-
   // Set lights
   room->GetLights()->RemoveAll();
 
-  // This light is for the background
   csRef<iLight> light = 
     engine->CreateLight(0, csVector3(10, 10, 0), 100, csColor (1));
   light->SetAttenuationMode (CS_ATTN_NONE);
@@ -1082,13 +1074,7 @@ bool HairTest::Application ()
   csMatrix3 matrixX (1, 0, 0, 0, cos(PI/2), -sin(PI/2), 0, sin(PI/2), cos(PI/2)); 
   light->GetMovable()->Transform(matrixX * matrixY);
   room->GetLights()->Add (light);
-  /*
-  // This light is for the background
-  csRef<iLight> light = 
-    engine->CreateLight(0, csVector3(10, 10, -10), 9000, csColor (1));
-  light->SetAttenuationMode (CS_ATTN_NONE);
-  room->GetLights()->Add (light);
-  */
+
   // Create avatar
   if (avatarSceneType == MODEL_KRYSTAL)
     avatarScene = new KrystalScene (this);
