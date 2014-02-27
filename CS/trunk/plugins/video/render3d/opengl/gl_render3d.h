@@ -451,6 +451,8 @@ private:
 
   //void ApplyObjectToCamera ();
   void SetupProjection ();
+  /// Load a specific projection matrix
+  void LoadProjectionMatrix (const CS::Math::Matrix4& m);
 
   csZBufMode GetZModePass2 (csZBufMode mode);
 

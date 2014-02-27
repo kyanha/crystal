@@ -140,10 +140,10 @@ csGLGraphics3D::csGLGraphics3D (iBase *parent) :
   {
     csRef<iRenderBuffer> buffer = csRenderBuffer::CreateRenderBuffer (4, CS_BUF_STATIC, CS_BUFCOMP_FLOAT, 2);
     float vertices[] = {
-     -1.0, 1.0,
-      1.0, 1.0,
-      1.0,-1.0,
-     -1.0,-1.0
+      0.0f, 1.0f,
+      1.0f, 1.0f,
+      1.0f, 0.0f,
+      0.0f, 0.0f
     };
     buffer->CopyInto (vertices, 4);
     pixmapBufferHolder->SetRenderBuffer (CS_BUFFER_POSITION, buffer);
@@ -153,10 +153,10 @@ csGLGraphics3D::csGLGraphics3D (iBase *parent) :
   {
     csRef<iRenderBuffer> buffer = csRenderBuffer::CreateRenderBuffer (4, CS_BUF_STATIC, CS_BUFCOMP_FLOAT, 2);
     float tcs[] = {
-      0.0, 1.0,
-      1.0, 1.0,
-      1.0, 0.0,
-      0.0, 0.0
+      0.0f, 0.0f,
+      1.0f, 0.0f,
+      1.0f, 1.0f,
+      0.0f, 1.0f
     };
     buffer->CopyInto (tcs, 4);
     pixmapBufferHolder->SetRenderBuffer (CS_BUFFER_TEXCOORD0, buffer);
@@ -834,22 +834,24 @@ void csGLGraphics3D::SetupProjection ()
 {
   if (!needProjectionUpdate) return;
 
-  GLRENDER3D_OUTPUT_LOCATION_MARKER;
-  
-  CS::Math::Matrix4 actualProjection;
-  if (currentAttachments != 0)
-    actualProjection = r2tbackend->FixupProjection (
-      csGLGraphics3D::GetProjectionMatrix());
-  else
-    actualProjection = csGLGraphics3D::GetProjectionMatrix();
-
   statecache->SetMatrixMode (GL_PROJECTION);
-  GLfloat matrixholder[16];
-  CS::PluginCommon::MakeGLMatrix4x4 (actualProjection, matrixholder);
-  glLoadMatrixf (matrixholder);
-    
+  LoadProjectionMatrix (csGLGraphics3D::GetProjectionMatrix());
   statecache->SetMatrixMode (GL_MODELVIEW);
   needProjectionUpdate = false;
+}
+
+void csGLGraphics3D::LoadProjectionMatrix (const CS::Math::Matrix4& m)
+{
+  GLRENDER3D_OUTPUT_LOCATION_MARKER;
+  
+  GLfloat matrixholder[16];
+  if (currentAttachments != 0)
+    CS::PluginCommon::MakeGLMatrix4x4 (r2tbackend->FixupProjection (m),
+                                       matrixholder);
+  else
+    CS::PluginCommon::MakeGLMatrix4x4 (m, matrixholder);
+
+  glLoadMatrixf (matrixholder);
 }
 
 void csGLGraphics3D::ParseByteSize (const char* sizeStr, size_t& size)
@@ -2353,7 +2355,8 @@ void csGLGraphics3D::DrawPixmap (iTextureHandle *hTex,
   int sx, int sy, int sw, int sh, 
   int tx, int ty, int tw, int th, uint8 Alpha)
 {
-  GLRENDER3D_OUTPUT_LOCATION_MARKER;
+  GLRENDER3D_OUTPUT_STRING_MARKER(("scr: %d,%d %dx%d  tex: %d,%d %dx%d",
+                                   sx, sy, sw, sh, tx, ty, tw, th));
 
   SwapIfNeeded();
 
@@ -2397,11 +2400,30 @@ void csGLGraphics3D::DrawPixmap (iTextureHandle *hTex,
   int renderWidth, renderHeight;
   hTex->GetRendererDimensions (renderWidth, renderHeight);
 
-  // check whether we have a rendertarget - if so flip y
-  bool hasRenderTarget = currentAttachments != 0;
+  // 3D mode: temporarily use a different projection matrix
+  if (current_drawflags & CSDRAW_3DGRAPHICS)
+  {
+    statecache->SetMatrixMode (GL_PROJECTION);
+    glPushMatrix ();
 
-  // check whether it's a full-screen quad
-  bool fullScreen = sx == 0 && sy == 0 && sw == viewwidth && sh == viewheight;
+    const float vwf = (float)(viewwidth);
+    const float vhf = (float)(viewheight);
+    LoadProjectionMatrix (
+      CS::Math::Projections::Ortho (0, vwf, vhf, 0, -1.0, 10.0));
+  }
+  // Compute an appropriate model view matrix
+  statecache->SetMatrixMode (GL_MODELVIEW);
+  glPushMatrix ();
+  {
+    const GLfloat m[16] =
+    {
+      float (sw), 0, 0, 0,
+      0, float (sh), 0, 0,
+      0, 0, 1, 0,
+      float (sx), float (viewheight - (sy + sh)), 0, 1
+    };
+    glLoadMatrixf (m);
+  }
 
   // check whether we'll use normalized device coordinates for texture coordinates
   bool ndc = txt_mm->texType != iTextureHandle::texTypeRect;
@@ -2425,44 +2447,6 @@ void csGLGraphics3D::DrawPixmap (iTextureHandle *hTex,
       tx * xscale, ty * yscale, 0, 1
     };
     glLoadMatrixf (m);
-  }
-
-  // check whether we need a custom matrix
-  // if not we'll use identity
-  statecache->SetMatrixMode (GL_PROJECTION);
-  glPushMatrix ();
-  glLoadIdentity ();
-  {
-    // get inverse target rectangle
-    float rectInv[4] = { -1.0f, 1.0f, -1.0f, 1.0f };
-
-    // if it's not a fullscreen rectangle we have to calculate the transform
-    if (!fullScreen)
-    {
-      // get normalized rectangle
-      float rect[4] = { (float)(sx << 1), (float)((sx + sw) << 1),
-                        (float)(sy << 1), (float)((sy + sh) << 1) };
-      rect[0] = rect[0] / viewwidth  - 1.0f;
-      rect[1] = rect[1] / viewwidth  - 1.0f;
-      rect[2] = rect[2] / viewheight - 1.0f;
-      rect[3] = rect[3] / viewheight - 1.0f;
-
-      // invert
-      rectInv[0] = -(rect[0] + rect[1] + 2)/(rect[1] - rect[0]);
-      rectInv[1] =  (2 - rect[0] - rect[1])/(rect[1] - rect[0]);
-      rectInv[2] = -(rect[2] + rect[3] + 2)/(rect[3] - rect[2]);
-      rectInv[3] =  (2 - rect[2] - rect[3])/(rect[3] - rect[2]);
-    }
-
-    // if we have a render target we have to flip the y coordinates
-    if (hasRenderTarget)
-    {
-      glOrtho (rectInv[0], rectInv[1], rectInv[2], rectInv[3], 1.0f, -1.0f);
-    }
-    else
-    {
-      glOrtho (rectInv[0], rectInv[1], rectInv[3], rectInv[2], 1.0f, -1.0f);
-    }
   }
 
   // activate buffers
@@ -2491,16 +2475,20 @@ void csGLGraphics3D::DrawPixmap (iTextureHandle *hTex,
   DeactivateTexture ();
   DeactivateBuffers (0,0);
 
-  // restore projection matrix
-  statecache->SetMatrixMode (GL_PROJECTION);
-  glPopMatrix ();
-
   // restore texture matrix if we set one
   if (needTextureMatrix)
   {
     statecache->SetMatrixMode (GL_TEXTURE);
     glPopMatrix ();
   }
+  // restore projection matrix
+  if (current_drawflags & CSDRAW_3DGRAPHICS)
+  {
+    statecache->SetMatrixMode (GL_PROJECTION);
+    glPopMatrix ();
+  }
+  statecache->SetMatrixMode (GL_MODELVIEW);
+  glPopMatrix ();
 
   // restore zmode
   SetZModeInternal (current_zmode);
