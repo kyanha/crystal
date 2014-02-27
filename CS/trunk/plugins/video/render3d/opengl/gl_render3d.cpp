@@ -76,11 +76,8 @@ CS_DECLARE_PROFILER_ZONE(csGLGraphics3D_DrawMesh_DrawElements);
 csGLStateCache* csGLGraphics3D::statecache = 0;
 csGLExtensionManager* csGLGraphics3D::ext = 0;
 
-CS_IMPLEMENT_STATIC_CLASSVAR(MakeAString, scratch, GetScratch, csString, ())
-CS_IMPLEMENT_STATIC_CLASSVAR_ARRAY(MakeAString, formatter, GetFormatter,
-                                   char, [sizeof(MakeAString::Formatter)])
-CS_IMPLEMENT_STATIC_CLASSVAR_ARRAY(MakeAString, reader, GetReader,
-                                   char, [sizeof(MakeAString::Reader)])
+CS_IMPLEMENT_STATIC_CLASSVAR(MakeAString, formatterData, GetFormatterData, 
+                             CS::Threading::ThreadLocal<MakeAString::FormatterData>, ())
 
 SCF_IMPLEMENT_FACTORY (csGLGraphics3D)
 
