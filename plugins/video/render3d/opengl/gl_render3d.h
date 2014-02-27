@@ -44,6 +44,7 @@
 #include "csutil/scopedpointer.h"
 #include "csutil/weakref.h"
 #include "csutil/weakrefarr.h"
+#include "csutil/threading/tls.h"
 
 #include "csplugincommon/opengl/glextmanager.h"
 #include "csplugincommon/opengl/glstates.h"
@@ -103,9 +104,30 @@ public:
   typedef csPrintfFormatter<csStringFmtWriter, csFmtDefaultReader<utf8_char> > 
     Formatter;
   typedef csFmtDefaultReader<utf8_char> Reader;
-  CS_DECLARE_STATIC_CLASSVAR(scratch, GetScratch, csString)
-  CS_DECLARE_STATIC_CLASSVAR(reader, GetReader, char)
-  CS_DECLARE_STATIC_CLASSVAR(formatter, GetFormatter, char)
+  struct FormatterData
+  {
+    csString scratch;
+    union
+    {
+      char reader[sizeof(Reader)];
+      CS::Meta::TypeWithAlignment<CS::Meta::AlignmentOf<Reader>::value> align_reader;
+    };
+    union
+    {
+      char formatter[sizeof(Formatter)];
+      CS::Meta::TypeWithAlignment<CS::Meta::AlignmentOf<Formatter>::value> align_formatter;
+    };
+  };
+  CS_DECLARE_STATIC_CLASSVAR(formatterData, GetFormatterData, 
+                             CS::Threading::ThreadLocal<FormatterData>)
+  Reader* GetReader()
+  {
+    return reinterpret_cast<Reader*> ((*GetFormatterData())->reader);
+  }
+  Formatter* GetFormatter()
+  {
+    return reinterpret_cast<Formatter*> ((*GetFormatterData())->formatter);
+  }
 
   MakeAString (const char* fmt, ...)
   {
@@ -115,7 +137,7 @@ public:
     new (GetReader()) Reader ((utf8_char*)fmt, strlen (fmt));
     va_list args;
     va_start (args, fmt);
-    new ((Formatter*)GetFormatter()) Formatter ((Reader*)GetReader(), args);
+    new (GetFormatter()) Formatter (GetReader(), args);
     va_end (args);
 #ifdef CS_EXTENSIVE_MEMDEBUG_NEW
 #define new CS_EXTENSIVE_MEMDEBUG_NEW
@@ -123,15 +145,16 @@ public:
   }
   ~MakeAString()
   {
-    ((Formatter*)GetFormatter())->~csPrintfFormatter<csStringFmtWriter,
+    (GetFormatter())->~csPrintfFormatter<csStringFmtWriter,
 	csFmtDefaultReader<utf8_char> >();
+    GetReader()->~Reader();
   }
   const char* GetStr()
   {
-    csString& scratch = *(GetScratch());
+    csString& scratch = (*GetFormatterData())->scratch;
     scratch.Empty();
     csStringFmtWriter writer (scratch);
-    ((Formatter*)GetFormatter())->Format (writer);
+    GetFormatter()->Format (writer);
     if (!scratch.IsEmpty())
       scratch.Truncate (scratch.Length() - 1);
     return scratch.GetData();
