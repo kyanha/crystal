@@ -222,6 +222,7 @@ RMUnshadowed::RMUnshadowed (iBase* parent)
   SetTreePersistent (treePersistent);
 }
 
+#include "csutil/deprecated_warn_off.h"
 bool RMUnshadowed::RenderView (iView* view, bool recursePortals)
 {
   // Setup a rendering view
@@ -232,9 +233,7 @@ bool RMUnshadowed::RenderView (iView* view, bool recursePortals)
   iGraphics3D* G3D = rview->GetGraphics3D ();
   int frameWidth = G3D->GetWidth ();
   int frameHeight = G3D->GetHeight ();
-#include "csutil/deprecated_warn_off.h"
   c->SetViewportSize (frameWidth, frameHeight);
-#include "csutil/deprecated_warn_on.h"
 
   contextsScannedForTargets.Empty ();
   portalPersistent.UpdateNewFrame ();
@@ -304,6 +303,7 @@ bool RMUnshadowed::RenderView (iView* view, bool recursePortals)
 
   return true;
 }
+#include "csutil/deprecated_warn_on.h"
 
 bool RMUnshadowed::RenderView (iView* view)
 {
