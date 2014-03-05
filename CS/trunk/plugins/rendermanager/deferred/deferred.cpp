@@ -472,15 +472,14 @@ bool RMDeferred::Initialize(iObjectRegistry *registry)
 }
 
 //----------------------------------------------------------------------
+#include "csutil/deprecated_warn_off.h"
 bool RMDeferred::RenderView(iView *view, bool recursePortals)
 {
   iGraphics3D *graphics3D = view->GetContext ();
 
   int frameWidth = graphics3D->GetWidth ();
   int frameHeight = graphics3D->GetHeight ();
-#include "csutil/deprecated_warn_off.h"
   view->GetCamera ()->SetViewportSize (frameWidth, frameHeight);
-#include "csutil/deprecated_warn_on.h"
 
   // Check if the size of the render view has changed
   if (viewWidth != frameWidth && viewHeight != frameHeight)
@@ -577,6 +576,7 @@ bool RMDeferred::RenderView(iView *view, bool recursePortals)
 
   return true;
 }
+#include "csutil/deprecated_warn_on.h"
 
 bool RMDeferred::RenderView(iView *view)
 {

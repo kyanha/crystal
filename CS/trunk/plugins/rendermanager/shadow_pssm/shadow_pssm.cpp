@@ -364,6 +364,7 @@ RMShadowedPSSM::RMShadowedPSSM (iBase* parent)
   SetTreePersistent (treePersistent);
 }
 
+#include "csutil/deprecated_warn_off.h"
 bool RMShadowedPSSM::RenderView (iView* view, bool recursePortals)
 {
   // Setup a rendering view
@@ -373,9 +374,7 @@ bool RMShadowedPSSM::RenderView (iView* view, bool recursePortals)
   iGraphics3D* G3D = rview->GetGraphics3D ();
   int frameWidth = G3D->GetWidth ();
   int frameHeight = G3D->GetHeight ();
-#include "csutil/deprecated_warn_off.h"
   view->GetCamera ()->SetViewportSize (frameWidth, frameHeight);
-#include "csutil/deprecated_warn_on.h"
 
   view->GetEngine ()->UpdateNewFrame ();  
   view->GetEngine ()->FireStartFrame (rview);
@@ -446,6 +445,7 @@ bool RMShadowedPSSM::RenderView (iView* view, bool recursePortals)
 
   return true;
 }
+#include "csutil/deprecated_warn_on.h"
 
 bool RMShadowedPSSM::RenderView (iView* view)
 {

@@ -166,6 +166,7 @@ struct WrapShadowParams<RMOSM::ShadowType>
     SetTreePersistent (treePersistent);
   }
 
+#include "csutil/deprecated_warn_off.h"
   bool RMOSM::RenderView (iView* view, bool recursePortals)
   {
     // Setup a rendering view
@@ -175,9 +176,7 @@ struct WrapShadowParams<RMOSM::ShadowType>
     iGraphics3D* G3D = rview->GetGraphics3D ();
     int frameWidth = G3D->GetWidth ();
     int frameHeight = G3D->GetHeight ();
-#include "csutil/deprecated_warn_off.h"
     view->GetCamera ()->SetViewportSize (frameWidth, frameHeight);
-#include "csutil/deprecated_warn_on.h"
 
     view->GetEngine ()->UpdateNewFrame ();  
     view->GetEngine ()->FireStartFrame (rview);
@@ -222,6 +221,7 @@ struct WrapShadowParams<RMOSM::ShadowType>
 
     return true;
   }
+#include "csutil/deprecated_warn_on.h"
 
   bool RMOSM::RenderView (iView* view)
   {
