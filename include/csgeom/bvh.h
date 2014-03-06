@@ -295,8 +295,7 @@ public:
     {
       // nothing to distribute
       // check that we are not a leaf - leaves must have objects
-      CS_ASSERT(this->child1 != nullptr);
-      CS_ASSERT(this->child2 != nullptr);
+      CS_ASSERT(((this->child1 != nullptr) && (this->child2 != nullptr)) || (parent == nullptr));
       return;
     }
 
