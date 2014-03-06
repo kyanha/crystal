@@ -453,8 +453,8 @@ public:
     if(this->numObjects == 0)
     {
       // nothing to distribute
-      // check that we are a leaf - leaves must have objects
-      CS_ASSERT(splitAxis != CS_BIH_AXISINVALID);
+      // check that we are not leaf - leaves must have objects
+      CS_ASSERT((splitAxis != CS_BIH_AXISINVALID) || (parent == nullptr));
       return;
     }
 
