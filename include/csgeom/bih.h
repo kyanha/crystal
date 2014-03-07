@@ -454,7 +454,7 @@ public:
     {
       // nothing to distribute
       // check that we are not leaf - leaves must have objects
-      CS_ASSERT((splitAxis != CS_BIH_AXISINVALID) || (parent == nullptr));
+      CS_ASSERT((splitAxis != CS_BIH_AXISINVALID) || (this->parent == nullptr));
       return;
     }
 
