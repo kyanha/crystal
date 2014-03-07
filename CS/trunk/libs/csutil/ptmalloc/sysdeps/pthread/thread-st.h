@@ -56,6 +56,7 @@ thread_create(struct thread_st *st)
 	st->flags = 0;
 	{
 		pthread_attr_t* attr_p = 0;
+		int ret;
 #if USE_PTHREADS_STACKS
 		pthread_attr_t attr;
 
@@ -71,7 +72,11 @@ thread_create(struct thread_st *st)
 		/*printf("create %p\n", st->sp);*/
 		attr_p = &attr;
 #endif
-		return pthread_create(&st->id, attr_p, thread_wrapper, st);
+		ret = pthread_create(&st->id, attr_p, thread_wrapper, st);
+#if USE_PTHREADS_STACKS
+		pthread_attr_destroy(&attr);
+#endif
+		return ret;
 	}
 	return 0;
 }
