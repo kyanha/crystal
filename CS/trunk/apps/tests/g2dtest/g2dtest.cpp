@@ -701,8 +701,8 @@ void G2DTestSystemDriver::DrawWindowScreen ()
   WriteCentered (0,-16*2, white, -1, "The window's title should read:");
   WriteCentered (0,-16*1, green, -1, APP_TITLE);
 
-// By default context resizing should be disabled
-//myG2D->AllowResize (false);
+  myG2D->AllowResize (false);
+
   WriteCentered (0, 16*1, white, -1, "Try to resize this window, you should either be");
   WriteCentered (0, 16*2, white, -1, "unable to do it, or the window contents should");
   WriteCentered (0, 16*3, white, -1, "rescale along width window (e.g. the resolution");
