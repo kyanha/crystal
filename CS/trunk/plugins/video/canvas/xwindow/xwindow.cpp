@@ -378,11 +378,6 @@ bool csXWindow::Open ()
       break;
   }
 
-  // Now disable window resizes.
-  // Note that if we do this before expose event, with some window managers
-  // (e.g. Window Maker) it will be unable to resize the window at all.
-  Canvas->AllowResize (false);
-  
   // Tell event queue to call us on every frame
   if (!scfiEventHandler)
     scfiEventHandler.AttachNew (new EventHandler (this));

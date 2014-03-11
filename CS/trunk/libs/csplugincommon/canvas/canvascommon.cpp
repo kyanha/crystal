@@ -49,7 +49,7 @@ namespace CS
       FullScreen = false;
       canvas_open = false;
       win_title = "Crystal Space Application";
-      AllowResizing = false;
+      AllowResizing = true;
       refreshRate = 0;
       vsync = false;
 
