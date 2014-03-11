@@ -82,7 +82,8 @@ public:
 };
 
 template <class T, class K, 
-  class ArrayMemoryAlloc, class ArrayElementHandler> class csHash;
+  class ArrayMemoryAlloc, class ArrayElementHandler,
+  typename Hash> class csHash;
 
 namespace CS
 {
@@ -98,7 +99,7 @@ namespace CS
     {
     private:
       template <class _T, class _K, class ArrayMemoryAlloc,
-        class ArrayElementHandler> friend class csHash;
+        class ArrayElementHandler, typename Hash> friend class csHash;
       
       K key;
       T value;
@@ -116,20 +117,29 @@ namespace CS
 /**
  * A generic hash table class,
  * which grows dynamically and whose buckets are unsorted arrays.
- * The hash value of a key is computed using csHashComputer<>, two keys are
- * compared using csComparator<>. You need to provide appropriate 
+ * The hash value of a key is computed using the \a Hash template argument,
+ * two keys are compared using csComparator<>. You need to provide appropriate
  * specializations of those templates if you want use non-integral types 
  * (other than const char* and csString for which appropriate specializations
- * are already provided) or special hash algorithms. 
+ * are already provided) or special hash algorithms.
+ * \tparam T Value type to store.
+ * \tparam K Key type to store.
+ * \tparam ArrayMemoryAlloc Allocator type used for allocating the internal
+ *   arrays.
+ * \tparam ArrayElementHandler Array element handler for the internal arrays.
+ * \tparam Hash Unary function returning an \c uint to compute the hash value
+ *   of a key.
  */
 template <class T, class K = unsigned int, 
   class ArrayMemoryAlloc = CS::Memory::AllocatorMalloc,
   class ArrayElementHandler = csArrayElementHandler<
-    CS::Container::HashElement<T, K> > > 
+    CS::Container::HashElement<T, K> >,
+  typename Hash = CS::HashFunction<K> >
 class csHash
 {
 public:
-  typedef csHash<T, K, ArrayMemoryAlloc, ArrayElementHandler> ThisType;
+  typedef csHash<T, K, ArrayMemoryAlloc, ArrayElementHandler,
+    Hash> ThisType;
   typedef T ValueType;
   typedef K KeyType;
   typedef ArrayMemoryAlloc AllocatorType;
@@ -176,7 +186,7 @@ protected:
       {
         const Element& srcElem = src[j - 1];
         ElementArray& dst = 
-	  Elements.Get (csHashComputer<K>::ComputeHash (srcElem.key) % Modulo);
+	  Elements.Get (Hash() (srcElem.key) % Modulo);
         if (&src != &dst)
         {
           dst.Push (srcElem);
@@ -208,7 +218,8 @@ public:
   }
 
   /// Copy constructor.
-  csHash (const csHash<T, K, ArrayMemoryAlloc, ArrayElementHandler> &o) : 
+  csHash (const csHash<T, K, ArrayMemoryAlloc, ArrayElementHandler,
+          Hash> &o) : 
     Elements (o.Elements),
     Modulo (o.Modulo), Size(o.Size), InitModulo (o.InitModulo),
     GrowRate (o.GrowRate), MaxSize (o.MaxSize) {}
@@ -224,7 +235,7 @@ public:
   {
     if (Elements.GetSize() == 0) Elements.SetSize (Modulo);
     ElementArray& values = 
-      Elements[csHashComputer<K>::ComputeHash (key) % Modulo];
+      Elements[Hash() (key) % Modulo];
     size_t idx = values.Push (Element (key, value));
     Size++;
     if (values.GetSize () > Elements.GetSize () / GrowRate
@@ -266,7 +277,7 @@ public:
   {
     if (Elements.GetSize() == 0) return csArray<T> ();
     const ElementArray& values = 
-      Elements[csHashComputer<K>::ComputeHash (key) % Modulo];
+      Elements[Hash() (key) % Modulo];
     csArray<T> ret (values.GetSize () / 2);
     const size_t len = values.GetSize ();
     for (size_t i = 0; i < len; ++i)
@@ -283,7 +294,7 @@ public:
   {
     if (Elements.GetSize() == 0) Elements.SetSize (Modulo);
     ElementArray& values = 
-      Elements[csHashComputer<K>::ComputeHash (key) % Modulo];
+      Elements[Hash() (key) % Modulo];
     const size_t len = values.GetSize ();
     for (size_t i = 0; i < len; ++i)
     {
@@ -313,7 +324,7 @@ public:
   {
     if (Elements.GetSize() == 0) return false;
     const ElementArray& values = 
-      Elements[csHashComputer<K>::ComputeHash (key) % Modulo];
+      Elements[Hash() (key) % Modulo];
     const size_t len = values.GetSize ();
     for (size_t i = 0; i < len; ++i)
       if (csComparator<K, K>::Compare (values[i].key, key) == 0) 
@@ -337,7 +348,7 @@ public:
   {
     if (Elements.GetSize() == 0) return 0;
     const ElementArray& values = 
-      Elements[csHashComputer<K>::ComputeHash (key) % Modulo];
+      Elements[Hash() (key) % Modulo];
     const size_t len = values.GetSize ();
     for (size_t i = 0; i < len; ++i)
     {
@@ -357,7 +368,7 @@ public:
   {
     if (Elements.GetSize() == 0) return 0;
     ElementArray& values = 
-      Elements[csHashComputer<K>::ComputeHash (key) % Modulo];
+      Elements[Hash() (key) % Modulo];
     const size_t len = values.GetSize ();
     for (size_t i = 0; i < len; ++i)
     {
@@ -385,7 +396,7 @@ public:
   {
     if (Elements.GetSize() == 0) return fallback;
     const ElementArray& values = 
-      Elements[csHashComputer<K>::ComputeHash (key) % Modulo];
+      Elements[Hash() (key) % Modulo];
     const size_t len = values.GetSize ();
     for (size_t i = 0; i < len; ++i)
     {
@@ -405,7 +416,7 @@ public:
   {
     if (Elements.GetSize() == 0) return fallback;
     ElementArray& values = 
-      Elements[csHashComputer<K>::ComputeHash (key) % Modulo];
+      Elements[Hash() (key) % Modulo];
     const size_t len = values.GetSize ();
     for (size_t i = 0; i < len; ++i)
     {
@@ -426,7 +437,7 @@ public:
     if (Elements.GetSize() != 0)
     {
       ElementArray& values = 
-        Elements[csHashComputer<K>::ComputeHash (key) % Modulo];
+        Elements[Hash() (key) % Modulo];
       const size_t len = values.GetSize ();
       for (size_t i = 0; i < len; ++i)
       {
@@ -456,7 +467,7 @@ public:
     bool ret = false;
     if (Elements.GetSize() == 0) return ret;
     ElementArray& values = 
-      Elements[csHashComputer<K>::ComputeHash (key) % Modulo];
+      Elements[Hash() (key) % Modulo];
     for (size_t i = values.GetSize (); i > 0; i--)
     {
       const size_t idx = i - 1;
@@ -476,7 +487,7 @@ public:
     bool ret = false;
     if (Elements.GetSize() == 0) return ret;
     ElementArray& values = 
-      Elements[csHashComputer<K>::ComputeHash (key) % Modulo];
+      Elements[Hash() (key) % Modulo];
     for (size_t i = values.GetSize (); i > 0; i--)
     {
       const size_t idx = i - 1;
@@ -511,7 +522,7 @@ public:
   class Iterator
   {
   private:
-    csHash<T, K, ArrayMemoryAlloc, ArrayElementHandler>* hash;
+    csHash<T, K, ArrayMemoryAlloc, ArrayElementHandler, Hash>* hash;
     const K key;
     size_t bucket, size, element;
 
@@ -524,15 +535,15 @@ public:
     }
 
   protected:
-    Iterator (csHash<T, K, ArrayMemoryAlloc, ArrayElementHandler>* hash0, 
+    Iterator (csHash<T, K, ArrayMemoryAlloc, ArrayElementHandler, Hash>* hash0, 
       const K& key0) :
       hash(hash0),
       key(key0), 
-      bucket(csHashComputer<K>::ComputeHash (key) % hash->Modulo),
+      bucket(Hash() (key) % hash->Modulo),
       size((hash->Elements.GetSize() > 0) ? hash->Elements[bucket].GetSize () : 0)
       { Reset (); }
 
-    friend class csHash<T, K, ArrayMemoryAlloc, ArrayElementHandler>;
+    friend class csHash<T, K, ArrayMemoryAlloc, ArrayElementHandler, Hash>;
   public:
     /// Copy constructor.
     Iterator (const Iterator &o) :
@@ -577,7 +588,7 @@ public:
   class GlobalIterator
   {
   private:
-    csHash<T, K, ArrayMemoryAlloc, ArrayElementHandler> *hash;
+    csHash<T, K, ArrayMemoryAlloc, ArrayElementHandler, Hash> *hash;
     size_t bucket, size, element;
 
     void Zero () { bucket = element = 0; }
@@ -604,7 +615,7 @@ public:
     }
 
   protected:
-    GlobalIterator (csHash<T, K, ArrayMemoryAlloc, ArrayElementHandler> *hash0)
+    GlobalIterator (csHash<T, K, ArrayMemoryAlloc, ArrayElementHandler, Hash> *hash0)
     : hash (hash0) 
     { 
       Zero (); 
@@ -612,7 +623,7 @@ public:
       FindItem ();
     }
 
-    friend class csHash<T, K, ArrayMemoryAlloc, ArrayElementHandler>;
+    friend class csHash<T, K, ArrayMemoryAlloc, ArrayElementHandler, Hash>;
   public:
     /// Empty constructor.
     GlobalIterator () : hash (0), size (0) { Zero (); }
@@ -694,7 +705,7 @@ public:
   class ConstIterator
   {
   private:
-    const csHash<T, K, ArrayMemoryAlloc, ArrayElementHandler>* hash;
+    const csHash<T, K, ArrayMemoryAlloc, ArrayElementHandler, Hash>* hash;
     const K key;
     size_t bucket, size, element;
 
@@ -707,15 +718,15 @@ public:
     }
 
   protected:
-    ConstIterator (const csHash<T, K, ArrayMemoryAlloc, ArrayElementHandler>* 
+    ConstIterator (const csHash<T, K, ArrayMemoryAlloc, ArrayElementHandler, Hash>* 
 	hash0, const K& key0) :
       hash(hash0),
       key(key0), 
-      bucket(csHashComputer<K>::ComputeHash (key) % hash->Modulo),
+      bucket(Hash() (key) % hash->Modulo),
       size((hash->Elements.GetSize() > 0) ? hash->Elements[bucket].GetSize () : 0)
       { Reset (); }
 
-    friend class csHash<T, K, ArrayMemoryAlloc, ArrayElementHandler>;
+    friend class csHash<T, K, ArrayMemoryAlloc, ArrayElementHandler, Hash>;
   public:
     /// Copy constructor.
     ConstIterator (const ConstIterator &o) :
@@ -760,7 +771,7 @@ public:
   class ConstGlobalIterator
   {
   private:
-    const csHash<T, K, ArrayMemoryAlloc, ArrayElementHandler> *hash;
+    const csHash<T, K, ArrayMemoryAlloc, ArrayElementHandler, Hash> *hash;
     size_t bucket, size, element;
 
     void Zero () { bucket = element = 0; }
@@ -788,14 +799,14 @@ public:
 
   protected:
     ConstGlobalIterator (const csHash<T, K, ArrayMemoryAlloc,
-      ArrayElementHandler> *hash0) : hash (hash0) 
+      ArrayElementHandler, Hash> *hash0) : hash (hash0) 
     { 
       Zero (); 
       Init (); 
       FindItem ();
     }
 
-    friend class csHash<T, K, ArrayMemoryAlloc, ArrayElementHandler>;
+    friend class csHash<T, K, ArrayMemoryAlloc, ArrayElementHandler, Hash>;
   public:
     /// Empty constructor.
     ConstGlobalIterator () : hash (0), size (0) { Zero (); }
