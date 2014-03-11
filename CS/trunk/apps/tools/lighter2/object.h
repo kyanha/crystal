@@ -335,6 +335,11 @@ namespace lighter
       GroupAndLight (Light* light, uint groupID) : light (light),
         groupID (groupID) {}
         
+      bool operator== (const GroupAndLight& other) const
+      {
+        return (light == other.light)
+          && (groupID == other.groupID);
+      }
       bool operator< (const GroupAndLight& other) const
       {
         if (light < other.light) return true;

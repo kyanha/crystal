@@ -132,6 +132,11 @@ CS_PLUGIN_NAMESPACE_BEGIN(Skeleton2)
     {
       CS::Animation::StateID fromState, toState;
 
+      bool operator== (const StateTransitionKey& other) const
+      {
+        return (fromState == other.fromState)
+          && (toState == other.toState);
+      }
       bool operator< (const StateTransitionKey& other) const
       {
         return (fromState < other.fromState) || 

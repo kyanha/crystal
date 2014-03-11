@@ -365,6 +365,10 @@ public:
   /// Returns a number indicating the relation of the two definitions.
   int Compare (csInputDefinition const &) const;
 
+  /// Check two input definitions for equality
+  bool operator== (csInputDefinition const& other) const
+  { return Compare (other) == 0; }
+
   /**
    * Helper function to parse a string (eg. "Ctrl+A") into values describing
    * a keyboard event, returning both raw and cooked key codes.

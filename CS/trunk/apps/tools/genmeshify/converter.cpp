@@ -346,6 +346,10 @@ namespace genmeshify
     size_t slm;
 
     uint GetHash () const { return (uintptr_t)material ^ (uint)slm; }
+    inline friend bool operator == (const PolyHashKey& r1, const PolyHashKey& r2)
+    {
+      return (r1.material == r2.material) && (r1.slm == r2.slm);
+    }
     inline friend bool operator < (const PolyHashKey& r1, const PolyHashKey& r2)
     { 
       if (r1.material < r2.material) return true;
