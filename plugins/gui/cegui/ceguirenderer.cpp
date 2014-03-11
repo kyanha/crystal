@@ -212,7 +212,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(cegui)
   bool Renderer::Initialize (iScript* script)
   {
     // Load the configuration file and the path for the log file
-    csString logFile = "/tmp/CEGUI.log";
+    csString logFile = "CEGUI.log";
     csRef<iVFS> vfs = csQueryRegistry<iVFS> (obj_reg);
     if (vfs)
     {
@@ -221,10 +221,16 @@ CS_PLUGIN_NAMESPACE_BEGIN(cegui)
       cfg->AddDomain ("/config/cegui.cfg", vfs, iConfigManager::ConfigPriorityPlugin);
       logFile = cfg->GetStr ("CEGUI.LogFile", logFile);
 
+      // TODO: Make sure that the filename provided is valid (e.g. all
+      // characters are allowed)
+
       // Convert the virtual path of the log file in a physical path
-      csRef<iDataBuffer> buffer (vfs->GetRealPath (logFile));
-      if (buffer)
-	logFile = (char *) buffer->GetData ();
+      if (logFile.StartsWith ("VFS:"))
+      {
+	logFile.DeleteAt (0, 4);
+	csRef<iDataBuffer> buffer (vfs->GetRealPath (logFile));
+	if (buffer) logFile = (char *) buffer->GetData ();
+      }
     }
 
     // Find the 3D renderer
@@ -262,7 +268,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(cegui)
     }
     else
     {
-       CEGUI::System::create (*this, rp, 0, ic, nullptr, "", logFile.GetData ());
+      CEGUI::System::create (*this, rp, 0, ic, nullptr, "", logFile.GetData ());
     }
 
     settingsSliderFact.obj_reg = obj_reg;
