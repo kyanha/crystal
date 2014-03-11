@@ -24,6 +24,23 @@ this and the last release, it makes it difficult to document all changes.
 
 @itemize @bullet
 
+@item
+@code{csHash<>} allows to specify the hash function as a template argument,
+thus no longer forces a specialization of @code{csHashComputer<>}.
+However, as the default hash function is @code{CS::HashFunction<>}, which in
+turn uses @code{csHashComputer<>}, existing code does not change it's
+behaviour.
+
+@item
+The equality predicate @code{csHash<>} uses is now a customizable template
+argument. The default predicate is @code{std::equal_to<>} for key and value
+comparisons; previously, @code{csComparator<>} was used for that.
+
+This may break existing source code if only a @code{csComparator<>} specialization
+is provided and the key type itself not providing an @code{operator==()}
+implementatation. The previous behaviour can be restored by using
+@code{CS::EqualComparator<>} as the comparison predicate.
+
 @end itemize
 
 @strong{Removals:}
