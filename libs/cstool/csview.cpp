@@ -405,7 +405,8 @@ void csView::DrawBackground (iGraphics3D* g3d)
     g3d->BeginDraw (CSDRAW_2DGRAPHICS);
     int color = g3d->GetDriver2D ()->FindRGB ((int) (backgroundColor[0] * 255.f),
 					      (int) (backgroundColor[1] * 255.f),
-					      (int) (backgroundColor[2] * 255.f));
+					      (int) (backgroundColor[2] * 255.f),
+					      (int) (backgroundColor[3] * 255.f));
     g3d->GetDriver2D ()->DrawBox (vx, vy, vw, vh, color);
   }
 
