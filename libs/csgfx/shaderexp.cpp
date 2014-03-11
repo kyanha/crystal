@@ -974,7 +974,11 @@ bool csShaderExpression::optimize_cse (oper_array& ops)
    * and add an entry to the accumulator substitution table so any instance
    * of the 'old' output value is replaced with the new.
    */
-  csHashReversible<int, oper> previousOps;
+  csHashReversible<int, oper,
+    CS::HashFunction<oper>,
+    CS::HashFunction<int>,
+    CS::EqualComparator<oper>,
+    std::equal_to<int> > previousOps;
   csHashReversible<int, int> accumSubstitutions;
   int nextAcc (0);
   size_t i (0);
