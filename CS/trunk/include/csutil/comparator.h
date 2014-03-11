@@ -125,6 +125,30 @@ public:
   }
 };
 
+namespace CS
+{
+  /**
+  * A template providing equality comparison.
+  */
+  template <typename T>
+  class EqualComparator
+  {
+  public:
+    /**
+    * Compare two objects of the same type.
+    * \param r1 Reference to first object.
+    * \param r2 Reference to second object.
+    * \return Whether the objects are equal.
+    * \remarks Default implementation uses csComparator<>, which in turn
+    *   requires operator<.
+    */
+    bool operator() (T const &r1, T const &r2) const
+    {
+      return csComparator<T>::Compare (r1, r2) == 0;
+    }
+  };
+} // namespace CS
+
 /** @} */
 
 #endif // __CSUTIL_COMPARATOR_H__
