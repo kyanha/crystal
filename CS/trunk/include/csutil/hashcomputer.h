@@ -206,6 +206,18 @@ namespace CS
   }
 
   /**
+   * Unary function for computing a hash.
+   */
+  template<typename T>
+  struct HashFunction
+  {
+    uint operator() (const T& val) const
+    {
+      return HashCompute (val);
+    }
+  };
+
+  /**
    * Combine two hash values into one.
    * Convenient when e.g. hashing an array, or when explicitly hashing over the
    * fields of a struct.
