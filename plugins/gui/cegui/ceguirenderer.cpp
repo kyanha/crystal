@@ -341,16 +341,20 @@ CS_PLUGIN_NAMESPACE_BEGIN(cegui)
   //----------------------------------------------------------------------------//
   void Renderer::setDisplaySize(const CEGUI::Size& sz)
   {
-    if (sz != d_displaySize)
+    // Check if the size has changed
+    if (fabs (sz.d_width - d_displaySize.d_width) > EPSILON
+      || fabs (sz.d_height - d_displaySize.d_height) > EPSILON)
     {
       d_displaySize = sz;
 
-      // FIXME: This is probably not the right thing to do in all cases.
+      // Update the drawing area
       CEGUI::Rect area(d_defaultTarget->getArea());
       area.setSize(sz);
       d_defaultTarget->setArea(area);
-    }
 
+      // Notify the CEGUI system that the display has changed
+      CEGUI::System::getSingletonPtr()->notifyDisplaySizeChanged(sz);
+    }
   }
 
   //----------------------------------------------------------------------------//
