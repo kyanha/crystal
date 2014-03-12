@@ -25,6 +25,7 @@
 #include "ceguicsimagecodec.h"
 #include "ceguiresourceprovider.h"
 
+#define DEFAULT_TEXTURE_SIZE 128
 
 CS_PLUGIN_NAMESPACE_BEGIN(cegui)
 {
@@ -72,10 +73,10 @@ CS_PLUGIN_NAMESPACE_BEGIN(cegui)
   //----------------------------------------------------------------------------//
   CEGUI::TextureTarget* Renderer::createTextureTarget()
   {
-    //TextureTarget* tt = new TextureTarget(*this, obj_reg);
-    //d_textureTargets.push_back(tt);
-    //return tt;
-    return 0;
+    Texture* texture = static_cast<Texture*> (&createTexture());
+    TextureTarget* tt = new TextureTarget(*this, obj_reg, texture);
+    d_textureTargets.push_back(tt);
+    return tt;
   }
 
   //----------------------------------------------------------------------------//
@@ -103,6 +104,10 @@ CS_PLUGIN_NAMESPACE_BEGIN(cegui)
   CEGUI::Texture& Renderer::createTexture()
   {
     Texture* t = new Texture(this, obj_reg);
+    csRef<iTextureHandle> texHandle = g3d->GetTextureManager()->CreateTexture
+      (DEFAULT_TEXTURE_SIZE, DEFAULT_TEXTURE_SIZE, csimg2D,
+       "rgb8", CS_TEXTURE_2D | CS_TEXTURE_NPOTS);
+    t->SetTexHandle(texHandle);
     d_textures.push_back(t);
     return *t;
   }
@@ -120,9 +125,10 @@ CS_PLUGIN_NAMESPACE_BEGIN(cegui)
   //----------------------------------------------------------------------------//
   CEGUI::Texture& Renderer::createTexture(const CEGUI::Size& size)
   {
-    /// TODO
-    //Texture* t = new Texture(size); TODO
     Texture* t = new Texture(this, obj_reg);
+    csRef<iTextureHandle> texHandle = g3d->GetTextureManager()->CreateTexture
+      (size.d_width, size.d_height, csimg2D, "rgb8", CS_TEXTURE_2D | CS_TEXTURE_NPOTS);
+    t->SetTexHandle(texHandle);
     d_textures.push_back(t);
     return *t;
   }
@@ -160,15 +166,13 @@ CS_PLUGIN_NAMESPACE_BEGIN(cegui)
   //----------------------------------------------------------------------------//
   void Renderer::beginRendering()
   {
-    //if (!g3d->BeginDraw(engine->GetBeginDrawFlags() | CSDRAW_3DGRAPHICS))
-      //return;
+    // Nothing to be done here
   }
 
   //----------------------------------------------------------------------------//
   void Renderer::endRendering()
   {
-    //g3d->FinishDraw ();
-    //g3d->Print (0);
+    // Nothing to be done here
   }
 
   //----------------------------------------------------------------------------//
@@ -203,9 +207,15 @@ CS_PLUGIN_NAMESPACE_BEGIN(cegui)
     obj_reg(0),
     events(0),
     scriptModule(0)
+  {}
+
+  //----------------------------------------------------------------------------//
+  bool Renderer::Initialize (iObjectRegistry *reg) 
   {
+    obj_reg = reg; 
     d_defaultTarget = new WindowTarget(*this, obj_reg);
     d_defaultRoot = new CEGUI::RenderingRoot(*d_defaultTarget);
+    return true;
   }
 
   //----------------------------------------------------------------------------//
@@ -339,7 +349,8 @@ CS_PLUGIN_NAMESPACE_BEGIN(cegui)
   }
 
   //----------------------------------------------------------------------------//
-  void Renderer::setDisplaySize(const CEGUI::Size& sz)
+
+  void Renderer::setDisplaySize (const CEGUI::Size& sz)
   {
     // Check if the size has changed
     if (fabs (sz.d_width - d_displaySize.d_width) > EPSILON

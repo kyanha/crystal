@@ -19,17 +19,19 @@
 #include "ceguitexturetarget.h"
 #include "ceguitexture.h"
 
+#include "ivideo/txtmgr.h"
 
 CS_PLUGIN_NAMESPACE_BEGIN(cegui)
 {
   //----------------------------------------------------------------------------//
-  const float TextureTarget::DEFAULT_SIZE = 128.0f;
-
-  //----------------------------------------------------------------------------//
-  TextureTarget::TextureTarget(Renderer& owner, iObjectRegistry* reg) :
+  TextureTarget::TextureTarget(Renderer& owner, iObjectRegistry* reg, Texture* texture) :
     RenderTarget(owner, reg),
-    d_CEGUITexture(0)
+    d_CEGUITexture(texture)
   {
+    d_renderTarget = texture->GetTexHandle();
+    int w, h;
+    d_renderTarget->GetRendererDimensions(w, h);
+    setArea(CEGUI::Rect(0, 0, w, h));
   }
 
   //----------------------------------------------------------------------------//
@@ -47,8 +49,6 @@ CS_PLUGIN_NAMESPACE_BEGIN(cegui)
   //----------------------------------------------------------------------------//
   void TextureTarget::clear()
   {
-    if (!d_viewportValid)
-      updateViewport();
   }
 
   //----------------------------------------------------------------------------//
@@ -60,6 +60,17 @@ CS_PLUGIN_NAMESPACE_BEGIN(cegui)
   //----------------------------------------------------------------------------//
   void TextureTarget::declareRenderSize(const CEGUI::Size& sz)
   {
+    // exit if current size is enough
+    if ((d_area.getWidth() >= sz.d_width) && (d_area.getHeight() >=sz.d_height))
+        return;
+
+    d_renderTarget = g3d->GetTextureManager()->CreateTexture
+      (sz.d_width, sz.d_height, csimg2D, "rgb8", CS_TEXTURE_2D | CS_TEXTURE_NPOTS);
+    d_CEGUITexture->SetTexHandle(d_renderTarget);
+
+    int w, h;
+    d_renderTarget->GetRendererDimensions(w, h);
+    setArea(CEGUI::Rect(0, 0, w, h));
   }
 
   //----------------------------------------------------------------------------//

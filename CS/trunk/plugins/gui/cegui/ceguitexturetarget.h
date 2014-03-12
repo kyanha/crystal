@@ -29,7 +29,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(cegui)
   {
   public:
     /// Constructor.
-    TextureTarget(Renderer& owner, iObjectRegistry* reg);
+    TextureTarget(Renderer& owner, iObjectRegistry* reg, Texture* texture);
     /// Destructor.
     virtual ~TextureTarget();
 

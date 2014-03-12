@@ -45,6 +45,10 @@ struct iCEGUI : public virtual iBase
    */
   virtual bool Initialize (iScript* script=0) = 0;
 
+  /**
+   * Return whether or not Initialize() has been called and executed
+   * correctly.
+   */
   virtual bool IsInitialized () = 0;
 
   /// Render the GUI.

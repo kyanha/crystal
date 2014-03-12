@@ -24,20 +24,17 @@ CS_PLUGIN_NAMESPACE_BEGIN(cegui)
 {
   //----------------------------------------------------------------------------//
   RenderTarget::RenderTarget(Renderer& owner, iObjectRegistry* reg) :
+    obj_reg (reg),
     d_owner(owner),
     d_area(0, 0, 0, 0),
-    //d_renderTarget(0),
-    //d_viewport(0),
-    d_matrix(),
-    d_matrixValid(false),
-    d_viewportValid(false)
+    d_renderTarget(0)
   {
+    g3d = csQueryRegistry<iGraphics3D> (obj_reg);
   }
 
   //----------------------------------------------------------------------------//
   RenderTarget::~RenderTarget()
   {
-    //delete d_viewport;
   }
 
   //----------------------------------------------------------------------------//
@@ -56,8 +53,6 @@ CS_PLUGIN_NAMESPACE_BEGIN(cegui)
   void RenderTarget::setArea(const CEGUI::Rect& area)
   {
     d_area = area;
-    d_matrixValid = false;
-    d_viewportValid = false;
   }
 
   //----------------------------------------------------------------------------//
@@ -69,36 +64,27 @@ CS_PLUGIN_NAMESPACE_BEGIN(cegui)
   //----------------------------------------------------------------------------//
   void RenderTarget::activate()
   {
-    if (!d_matrixValid)
-      updateMatrix();
+    if (!d_renderTarget) return;
 
-    if (!d_viewportValid)
-      updateViewport();
-
-    //d_renderSystem._setViewport(d_viewport);
-    //d_renderSystem._setProjectionMatrix(d_matrix);
-    //d_renderSystem._setViewMatrix(CS::Matrix4::IDENTITY);
+    // Activate the rendering to target
+    previousTarget = g3d->GetRenderTarget ();
+    g3d->SetRenderTarget (d_renderTarget);
+    g3d->BeginDraw (CSDRAW_2DGRAPHICS | CSDRAW_CLEARSCREEN);
   }
 
   //----------------------------------------------------------------------------//
   void RenderTarget::deactivate()
   {
-    // currently nothing to do in the basic case
+    if (!d_renderTarget) return;
+
+    // Deactivate the rendering to target and restore the previous target
+    g3d->FinishDraw ();
+    g3d->SetRenderTarget (previousTarget);
   }
 
   //----------------------------------------------------------------------------//
   void RenderTarget::unprojectPoint(const CEGUI::GeometryBuffer& buff,
                                     const CEGUI::Vector2& p_in, CEGUI::Vector2& p_out) const
-  {
-  }
-
-  //----------------------------------------------------------------------------//
-  void RenderTarget::updateMatrix() const
-  {
-  }
-
-  //----------------------------------------------------------------------------//
-  void RenderTarget::updateViewport()
   {
   }
 

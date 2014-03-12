@@ -18,6 +18,7 @@
 
 #include "cssysdef.h"
 #include "csgfx/imagememory.h"
+#include "csqint.h"
 #include "iengine/texture.h"
 #include "imap/loader.h"
 #include "iutil/objreg.h"
@@ -89,8 +90,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(cegui)
     // this should never happen as CEGUI itself will only ask for RGBA
     if (pixFmt != CEGUI::Texture::PF_RGBA)
       return;
-    // TODO: need to round to the closer 'int'?
-    image.AttachNew(new csImageMemory ((int) buffer_size.d_width, (int)buffer_size.d_height,
+    image.AttachNew(new csImageMemory (csQround (buffer_size.d_width), csQround (buffer_size.d_height),
 				       buffPtr, CS_IMGFMT_TRUECOLOR | CS_IMGFMT_ALPHA));
 
     iTextureManager* txtmgr = g3d->GetTextureManager();
