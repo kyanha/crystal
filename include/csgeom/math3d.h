@@ -293,6 +293,11 @@ public:
 
   /**
    * Intersect a 3D segment with a triangle.
+   * \param seg The segment to be be tested
+   * \param tr1 The first corner of the of the triangle
+   * \param tr2 The second corner of the of the triangle
+   * \param tr3 The third corner of the of the triangle
+   * \param isect The intersection point
    * \return true if there is an intersection. In that case the intersection
    * point will be in 'isect'.
    */
@@ -303,6 +308,11 @@ public:
 
   /**
    * Intersect a 3D segment with a triangle and also do backface culling.
+   * \param seg The segment to be be tested
+   * \param tr1 The first corner of the of the triangle
+   * \param tr2 The second corner of the of the triangle
+   * \param tr3 The third corner of the of the triangle
+   * \param isect The intersection point
    * \return true if there is an intersection. In that case the intersection
    * point will be in 'isect'.
    */
