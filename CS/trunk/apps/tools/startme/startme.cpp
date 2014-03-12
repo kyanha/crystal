@@ -33,8 +33,8 @@ CS_IMPLEMENT_APPLICATION
 //---------------------------------------------------------------------------
 
 StartMe::StartMe ()
-  : position (0.0f), lastPosition (-100.0f), rotationStatus (ROTATE_NORMAL),
-    rotationSpeed (DEFAULT_ROTATION_SPEED)
+  : logoTime (0), position (0.0f), lastPosition (-100.0f),
+    rotationStatus (ROTATE_NORMAL), rotationSpeed (DEFAULT_ROTATION_SPEED)
 {
   SetApplicationName ("CrystalSpace.StartMe");
 }
@@ -67,6 +67,14 @@ void StartMe::Frame ()
 
   /* CEGUI rendering is done by the CEGUI plugin itself since
      we called SetAutoRender (true). */
+
+  // Rotate the main wheel
+  if (rotationStatus != OVER_EXIT)
+  {
+    logoTime += vc->GetElapsedTicks ();
+    float logoAngle = logoTime * DEFAULT_ROTATION_SPEED * 3.f;
+    logo->setRotation (CEGUI::Vector3 (0.f, 0.f, logoAngle));
+  }
 
   // TODO: don't rotate if demos.GetSize () too small
 
@@ -255,7 +263,7 @@ bool StartMe::Application()
   // Set up window transparency. Must happen _before_ system is opened!
   csRef<iGraphics2D> g2d = csQueryRegistry<iGraphics2D> (GetObjectRegistry ());
   if (!g2d) return ReportError ("Failed to obtain canvas!");
-  natwin = scfQueryInterface<iNativeWindow> (g2d);
+  csRef<iNativeWindow> natwin = scfQueryInterface<iNativeWindow> (g2d);
   if (natwin)
   {
     natwin->SetWindowTransparent (true);
@@ -338,7 +346,8 @@ bool StartMe::Application()
 
   LoadConfig ();
 
-  CEGUI::Window* logo = winMgr->getWindow("Logo");
+  // Find the main wheel logo and subscribe to mouse events for it
+  logo = winMgr->getWindow("Logo");
   logo->subscribeEvent(CEGUI::Window::EventMouseClick,
       CEGUI::Event::Subscriber(&StartMe::OnLogoClicked, this));
 
@@ -349,6 +358,7 @@ bool StartMe::Application()
   logo->subscribeEvent(CEGUI::Window::EventMouseLeaves,
       CEGUI::Event::Subscriber(&StartMe::OnLeaveLogo, this));
 
+  // Create the CEGUI windows for all demo objects
   vfs->ChDir ("/lib/startme");
 
   CEGUI::Window* root = winMgr->getWindow("root");
