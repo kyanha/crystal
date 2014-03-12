@@ -21,16 +21,17 @@
 #define __CS_RENDERMANAGER_OCCLUVIS_H__
 
 // set acceleration structure to use:
-// csKDTree: 0
-// csBIH: 1
-// csBVH: 2
-#define OCCLUVIS_TREETYPE 1
+#define OCCLUVIS_TREETYPE_KD    0
+#define OCCLUVIS_TREETYPE_BIH   1
+#define OCCLUVIS_TREETYPE_BVH   2
 
-#if (OCCLUVIS_TREETYPE == 0)
+#define OCCLUVIS_TREETYPE OCCLUVIS_TREETYPE_BIH
+
+#if (OCCLUVIS_TREETYPE == OCCLUVIS_TREETYPE_KD)
 #  include "csgeom/kdtree.h"
-#elif (OCCLUVIS_TREETYPE == 1)
+#elif (OCCLUVIS_TREETYPE == OCCLUVIS_TREETYPE_BIH)
 #  include "csgeom/bih.h"
-#elif (OCCLUVIS_TREETYPE == 2)
+#elif (OCCLUVIS_TREETYPE == OCCLUVIS_TREETYPE_BVH)
 #  include "csgeom/bvh.h"
 #else
 #  error Unknown occluvis tree type
@@ -172,11 +173,11 @@ namespace CS
       csDirtyAccessArray<unsigned> queries;
     };
 
-#if (OCCLUVIS_TREETYPE == 0)
+#if (OCCLUVIS_TREETYPE == OCCLUVIS_TREETYPE_KD)
     typedef csKDTree VisTree;
-#elif (OCCLUVIS_TREETYPE == 1)
+#elif (OCCLUVIS_TREETYPE == OCCLUVIS_TREETYPE_BIH)
     typedef csBIH VisTree;
-#elif (OCCLUVIS_TREETYPE == 2)
+#elif (OCCLUVIS_TREETYPE == OCCLUVIS_TREETYPE_BVH)
     typedef csBVH VisTree;
 #endif
     typedef VisTree::Child VisTreeNode;
@@ -354,7 +355,7 @@ namespace CS
        */
       template<bool bDoFrustumCulling>
       static bool TraverseTreeF2B(VisTree* node, Front2BackData& f2bData,
-#	if (OCCLUVIS_TREETYPE == 0)
+#	if (OCCLUVIS_TREETYPE == OCCLUVIS_TREETYPE_KD)
 	uint32 timestamp,
 #	endif
 	uint32& frustum_mask);
@@ -364,7 +365,7 @@ namespace CS
        */
       template<bool sloppy>
       static bool TraverseIntersectSegment(VisTree* node, IntersectSegmentFront2BackData& data,
-#	if (OCCLUVIS_TREETYPE == 0)
+#	if (OCCLUVIS_TREETYPE == OCCLUVIS_TREETYPE_KD)
 	uint32 timestamp,
 #	endif
 	uint32& frustumMask);
