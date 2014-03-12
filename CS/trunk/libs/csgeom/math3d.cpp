@@ -42,8 +42,8 @@ void csMath3::Between (
   float pct,
   float wid)
 {
-  if (pct != -1)
-    pct /= 100.;
+  if (pct > EPSILON)
+    pct *= 0.01;
   else
   {
     float sqdist = (v1 - v2) * (v1 - v2);
@@ -511,7 +511,7 @@ bool csIntersect3::SegmentPlanes (
     float tempdist;
     if (SegmentPlane(u,v,planes[i],tempisect,tempdist))
     {
-      if(dist == -1||tempdist<dist)
+      if(dist<-EPSILON||tempdist<dist)
       {
         bool inside = true;
         int j;
@@ -531,7 +531,7 @@ bool csIntersect3::SegmentPlanes (
       }
     }
   }
-  if(dist == -1)
+  if(dist<-EPSILON)
   {
     return false;
   }
@@ -547,7 +547,7 @@ bool csIntersect3::SegmentPlane (
   float &dist)
 {
   float divider = normal * (v - u);
-  if (divider == 0)
+  if (fabsf (divider) < SMALL_EPSILON)
   {
     isect = v;
     return false;
@@ -570,7 +570,7 @@ bool csIntersect3::SegmentPlane (
   csVector3 uv = u - v;
 
   denom = p.norm * uv;
-  if (denom == 0)
+  if (fabsf (denom) < SMALL_EPSILON)
   {
     // they are parallel
     dist = 0; //'dist' is an output arg, so it must be initialized.
@@ -646,7 +646,7 @@ bool csIntersect3::ThreePlanes (
               p3.B (),
               p3.C ());
   float det = mdet.Determinant ();
-  if (det == 0) return false; //some planes are parallel.
+  if (fabsf (det) < SMALL_EPSILON) return false; //some planes are parallel.
   csMatrix3 mx (
               -p1.D (),
               p1.B (),
