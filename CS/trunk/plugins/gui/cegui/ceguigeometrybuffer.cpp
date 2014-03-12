@@ -48,10 +48,19 @@ CS_PLUGIN_NAMESPACE_BEGIN(cegui)
   //----------------------------------------------------------------------------//
   void GeometryBuffer::draw() const
   {
-    // Set up clipping for this buffer
-    // TODO: need to round to the closer 'int'?
-    g2d->SetClipRect((int) d_clipRect.d_left, (int) d_clipRect.d_top,
-                     (int) d_clipRect.d_right, (int) d_clipRect.d_bottom);
+    // Set up clipping for this buffer (vertical coordinates need to be inverted
+    // if we are rendering to a RTT
+    if (g3d->GetRenderTarget ())
+      g2d->SetClipRect(csQround (d_clipRect.d_left),
+		       g2d->GetHeight () - csQround (d_clipRect.d_top),
+		       csQround (d_clipRect.d_right),
+		       g2d->GetHeight () - csQround (d_clipRect.d_bottom));
+
+    else
+      g2d->SetClipRect(csQround (d_clipRect.d_left),
+		       csQround (d_clipRect.d_top),
+		       csQround (d_clipRect.d_right),
+		       csQround (d_clipRect.d_bottom));
 
     if (!d_sync)
       syncHardwareBuffer();
@@ -235,7 +244,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(cegui)
       -d_pivot.d_z));
 
     // calculate final matrix
-    d_matrix = trans * rot * inv_pivot_trans;
+    d_matrix = inv_pivot_trans * rot * trans;
 
     // Update mesh transforms
     for (size_t i = 0; i != renderMeshes.GetSize(); i++)
