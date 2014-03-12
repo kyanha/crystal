@@ -50,7 +50,12 @@ class StringSet
  private:
   typedef CS::Threading::OptionalMutex<Locked> MutexType;
   StringHash<Tag> registry;
-  csHash<const char*, CS::StringID<Tag> > reverse; // ID to string mapping.
+  csHash<const char*, CS::StringID<Tag>, 
+    Memory::AllocatorMalloc,
+    csArrayElementHandler<Container::HashElement<const char*, StringID<Tag> > >,
+    HashFunction<CS::StringID<Tag> >,
+    std::equal_to<CS::StringID<Tag> >,
+    EqualComparator<const char*> > reverse; // ID to string mapping.
   /* Inherit from OptionalMutex<> to avoid spending extra memory if locking
      is disabled */
   struct LockAndId : public MutexType

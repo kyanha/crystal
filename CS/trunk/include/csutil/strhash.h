@@ -43,7 +43,11 @@ template<typename Tag>
 class CS_CRYSTALSPACE_EXPORT StringHash
 {
 private:
-  typedef csHash<StringID<Tag>, char const*> HashType;
+  typedef csHash<StringID<Tag>, char const*,
+    Memory::AllocatorMalloc,
+    csArrayElementHandler<Container::HashElement<StringID<Tag>, const char*> >,
+    HashFunction<const char*>,
+    EqualComparator<const char*> > HashType;
   HashType registry;
   csMemoryPool pool;
 
