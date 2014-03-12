@@ -89,16 +89,13 @@ CS_PLUGIN_NAMESPACE_BEGIN(cegui)
 
     virtual bool IsInitialized () { return initialized; }
 
-    /// Initialize with an iObjectRegistry pointer (called by plugin loader).
-    virtual bool Initialize (iObjectRegistry *reg) 
-    {
-      obj_reg = reg; 
-      return true;
-    }
+    /// Initialize with an iObjectRegistry pointer (called by the plugin loader).
+    virtual bool Initialize (iObjectRegistry *reg);
 
     /// Render the GUI.
     virtual void Render () const
     {
+      //if (CEGUI::System::getSingletonPtr()->isRedrawRequested())
       CEGUI::System::getSingletonPtr()->renderGUI();
     }
 
@@ -160,12 +157,14 @@ CS_PLUGIN_NAMESPACE_BEGIN(cegui)
     void destroyTextureTarget(CEGUI::TextureTarget* target);
     void destroyAllTextureTargets();
     CEGUI::Texture& createTexture();
-    CEGUI::Texture& createTexture(const CEGUI::String& filename, const CEGUI::String& resourceGroup);
+    CEGUI::Texture& createTexture(const CEGUI::String& filename,
+				  const CEGUI::String& resourceGroup);
     CEGUI::Texture& createTexture(const CEGUI::Size& size);
     // iCEGUI interface
     CEGUI::Texture& CreateTexture(iTextureHandle* htxt);
     void destroyTexture(CEGUI::Texture& texture);
     void destroyAllTextures();
+
     void beginRendering();
     void endRendering();
     void setDisplaySize(const CEGUI::Size& sz);

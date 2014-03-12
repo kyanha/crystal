@@ -71,7 +71,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(cegui)
     iTextureHandle* GetTexHandle() const;
 
     /// Set a handle to the texture.
-    void SetTexHandle( iTextureHandle*);
+    void SetTexHandle(iTextureHandle*);
 
   private:
     /// Returns the renderer

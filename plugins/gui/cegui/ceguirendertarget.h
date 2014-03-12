@@ -46,27 +46,16 @@ CS_PLUGIN_NAMESPACE_BEGIN(cegui)
       const CEGUI::Vector2& p_in, CEGUI::Vector2& p_out) const;
 
   protected:
-    /// helper that initialises the cached matrix
-    void updateMatrix() const;
-    /// helper that initialises the viewport
-    void updateViewport();
-
+    iObjectRegistry* obj_reg;
+    csRef<iGraphics3D> g3d;
     /// Renderer object that owns this RenderTarget
     Renderer& d_owner;
     /// holds defined area for the RenderTarget
     CEGUI::Rect d_area;
     /// CS render target that we are effectively wrapping
-    //CS::RenderTarget* d_renderTarget;
-    /// CS viewport used for this target.
-    //CS::Viewport* d_viewport;
-    /// projection / view matrix cache
-    mutable CS::Math::Matrix4 d_matrix;
-    /// true when d_matrix is valid and up to date
-    mutable bool d_matrixValid;
-    /// tracks viewing distance (this is set up at the same time as d_matrix)
-    mutable float d_viewDistance;
-    /// true when d_viewport is up to date and valid.
-    bool d_viewportValid;
+    csRef<iTextureHandle> d_renderTarget;
+    /// The render target that was active before we start drawing
+    csRef<iTextureHandle> previousTarget;
   };
 
 } CS_PLUGIN_NAMESPACE_END(cegui)
