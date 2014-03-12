@@ -12035,56 +12035,6 @@ sub ACQUIRE {
 }
 
 
-############# Class : cspace::csRefShaderStringIDHash ##############
-
-package cspace::csRefShaderStringIDHash;
-use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
-@ISA = qw( cspace );
-%OWNER = ();
-%ITERATORS = ();
-sub new {
-    my $pkg = shift;
-    my $self = cspacec::new_csRefShaderStringIDHash(@_);
-    bless $self, $pkg if defined($self);
-}
-
-*Put = *cspacec::csRefShaderStringIDHash_Put;
-*GetAll = *cspacec::csRefShaderStringIDHash_GetAll;
-*PutUnique = *cspacec::csRefShaderStringIDHash_PutUnique;
-*Contains = *cspacec::csRefShaderStringIDHash_Contains;
-*In = *cspacec::csRefShaderStringIDHash_In;
-*GetElementPointer = *cspacec::csRefShaderStringIDHash_GetElementPointer;
-*Get = *cspacec::csRefShaderStringIDHash_Get;
-*GetOrCreate = *cspacec::csRefShaderStringIDHash_GetOrCreate;
-*Empty = *cspacec::csRefShaderStringIDHash_Empty;
-*DeleteAll = *cspacec::csRefShaderStringIDHash_DeleteAll;
-*Delete = *cspacec::csRefShaderStringIDHash_Delete;
-*GetSize = *cspacec::csRefShaderStringIDHash_GetSize;
-*IsEmpty = *cspacec::csRefShaderStringIDHash_IsEmpty;
-sub DESTROY {
-    return unless $_[0]->isa('HASH');
-    my $self = tied(%{$_[0]});
-    return unless defined $self;
-    delete $ITERATORS{$self};
-    if (exists $OWNER{$self}) {
-        cspacec::delete_csRefShaderStringIDHash($self);
-        delete $OWNER{$self};
-    }
-}
-
-sub DISOWN {
-    my $self = shift;
-    my $ptr = tied(%$self);
-    delete $OWNER{$ptr};
-}
-
-sub ACQUIRE {
-    my $self = shift;
-    my $ptr = tied(%$self);
-    $OWNER{$ptr} = 1;
-}
-
-
 ############# Class : cspace::iShaderArray ##############
 
 package cspace::iShaderArray;
