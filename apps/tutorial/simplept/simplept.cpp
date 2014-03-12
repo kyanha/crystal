@@ -203,10 +203,10 @@ void Simple::CreateTextures (size_t width, size_t height)
           AttachmentToStr (targetsToUse[n].attachment));
       continue;
     }
-      
+
     csRef<iTextureHandle> texHandle = 
       g3d->GetTextureManager()->CreateTexture (width, height, csimg2D, 
-        targetsToUse[n].format, CS_TEXTURE_3D);
+        targetsToUse[n].format, CS_TEXTURE_2D);
     if (!texHandle) continue;
     
     Target target;
