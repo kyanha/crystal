@@ -81,8 +81,6 @@ private:
   /// A pointer to the configuration manager.
   csRef<iConfigManager> confman;
 
-  csRef<iNativeWindow> natwin;
-
   /// A pointer to the sector the camera will be in.
   iSector* room;
 
@@ -91,6 +89,10 @@ private:
 
   /// The frame printer responsible of the display of each frame.
   csRef<FramePrinter> printer;
+
+  /// The wheel logo
+  CEGUI::Window* logo;
+  csTicks logoTime;
 
   virtual bool OnKeyboard (iEvent&);
 
