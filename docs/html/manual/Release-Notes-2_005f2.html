@@ -11,10 +11,10 @@ Send bugs and suggestions to <users@texi2html.cvshome.org>
 
 -->
 <head>
-<title>Crystal Space 2.1.0: C.5.3 iPolygonMesh deprecation</title>
+<title>Crystal Space 2.1.0: C.1 Release Notes from 2.0 to 2.2</title>
 
-<meta name="description" content="Crystal Space 2.1.0: C.5.3 iPolygonMesh deprecation">
-<meta name="keywords" content="Crystal Space 2.1.0: C.5.3 iPolygonMesh deprecation">
+<meta name="description" content="Crystal Space 2.1.0: C.1 Release Notes from 2.0 to 2.2">
+<meta name="keywords" content="Crystal Space 2.1.0: C.1 Release Notes from 2.0 to 2.2">
 <meta name="resource-type" content="document">
 <meta name="distribution" content="global">
 <meta name="Generator" content="texi2html 1.76">
@@ -40,14 +40,14 @@ ul.toc {list-style: none}
 
 <body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
 
-<a name="Api1_005f2-iPolygonMesh"></a>
+<a name="Release-Notes-2_005f2"></a>
 <a name="0"></a>
 <table cellpadding="1" cellspacing="1" border="0">
-<tr><td valign="middle" align="left">[<a href="Api1_005f2-Rendering.html#0" title="Previous section in reading order"> &lt; </a>]</td>
-<td valign="middle" align="left">[<a href="Api1_005f2-Renamings.html#0" title="Next section in reading order"> &gt; </a>]</td>
+<tr><td valign="middle" align="left">[<a href="Release-Notes.html#0" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="Release-Notes-2_005f0.html#0" title="Next section in reading order"> &gt; </a>]</td>
 <td valign="middle" align="left"> &nbsp; </td>
 <td valign="middle" align="left">[<a href="Release-Notes.html#0" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
-<td valign="middle" align="left">[<a href="Release-Notes-1_005f2.html#0" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="Release-Notes.html#0" title="Up section"> Up </a>]</td>
 <td valign="middle" align="left">[<a href="Licenses.html#0" title="Next chapter"> &gt;&gt; </a>]</td>
 <td valign="middle" align="left"> &nbsp; </td>
 <td valign="middle" align="left"> &nbsp; </td>
@@ -59,47 +59,61 @@ ul.toc {list-style: none}
 <td valign="middle" align="left">[<a href="cs_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
 </tr></table>
 <hr size="1">
-<h3 class="subsection"> C.5.3 iPolygonMesh deprecation </h3>
+<h2 class="appendixsec"> C.1 Release Notes from 2.0 to 2.2 </h2>
 
-<p>The <code>iPolygonMesh</code> interface and everything related to that interface
-has been deprecated. This implies that the following classes, interfaces,
-and methods are now deprecated:
+<p>This section documents the major changes between versions 2.0 and 2.2 of
+Crystal Space.
 </p>
-<ul class="toc">
-<li> <code>iPolygonMesh</code>
-Use <code>iTriangleMesh</code> instead.
-</li><li> <code>csPolygonMeshTools</code>
-Use <code>csTriangleMeshTools</code> instead.
-</li><li> <code>csPolygonMesh</code>
-Use <code>csTriangleMesh</code> instead.
-</li><li> <code>csPolygonMeshBox</code>
-Use <code>csTriangleMeshBox</code> instead.
-</li><li> <code>iObjectModel</code>
-All methods related to <code>iPolygonMesh</code> are deprecated. Use the
-ones with <code>iTriangleMesh</code> instead.
-</li><li> <code>csColliderWrapper</code>
-All methods related to <code>iPolygonMesh</code> are deprecated. Use the
-ones with <code>iTriangleMesh</code> instead.
+<p>Version 2.2 is a major release, covering a significant time of continuous
+effort. As such, not all changes are documented. Below details the major
+changes since the last release. This will continue to be updated as time
+progresses.
+</p>
+<p>This list will not be as complete as wished, but due to timescale between
+this and the last release, it makes it difficult to document all changes.
+</p>
+<p><strong>New features/enhancements:</strong>
+</p>
+<ul>
+</ul>
+
+<p><strong>API changes:</strong>
+</p>
+<ul>
+<li>
+<code>csHash&lt;&gt;</code> allows to specify the hash function as a template argument,
+thus no longer forces a specialization of <code>csHashComputer&lt;&gt;</code>.
+However, as the default hash function is <code>CS::HashFunction&lt;&gt;</code>, which in
+turn uses <code>csHashComputer&lt;&gt;</code>, existing code does not change it's
+behaviour.
+
+</li><li>
+The equality predicate <code>csHash&lt;&gt;</code> uses is now a customizable template
+argument. The default predicate is <code>std::equal_to&lt;&gt;</code> for key and value
+comparisons; previously, <code>csComparator&lt;&gt;</code> was used for that.
+
+<p>This may break existing source code if only a <code>csComparator&lt;&gt;</code> specialization
+is provided and the key type itself not providing an <code>operator==()</code>
+implementatation. The previous behaviour can be restored by using
+<code>CS::EqualComparator&lt;&gt;</code> as the comparison predicate.
+</p>
 </li></ul>
 
-<p>In addition the <samp>&lsquo;polymesh&rsquo;</samp> keyword in world files has been
-deprecated. Instead use <samp>&lsquo;trimesh&rsquo;</samp>:
+<p><strong>Removals:</strong>
 </p>
-<table><tr><td>&nbsp;</td><td><pre class="example">&lt;trimesh&gt;
-  ...
-  &lt;id&gt;colldet&lt;/id&gt;
-  &lt;id&gt;viscull&lt;/id&gt;
-  ...
-&lt;/trimesh&gt;
-</pre></td></tr></table>
-<p>Here is an example on how to fetch the collision detection triangle
-mesh:
+<ul>
+</ul>
+
+<p><strong>Fixes that apply to tickets in Trac:</strong>
 </p>
-<table><tr><td>&nbsp;</td><td><pre class="example">iObjectModel* model = ...;
-csRef&lt;iStringSet&gt; strset = csQueryRegistry&lt;iStringSet&gt; (object_reg);
-csStringID id = strset-&gt;Request (&quot;colldet&quot;);
-iTriangleMesh* trimesh = model-&gt;GetTriangleData (id);
-</pre></td></tr></table>
+<ul>
+<li>
+<strong>Other changes:</strong>
+
+<ul>
+</ul>
+
+</li></ul>
 <hr size="1">
 <p>
  <font size="-1">
