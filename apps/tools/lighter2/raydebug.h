@@ -37,10 +37,6 @@ namespace lighter
       csRef<Object> obj;
 
       LightObjectPair (Light* light, Object* obj);
-      bool operator== (const LightObjectPair& other) const
-      {
-        return (light == other.light) && (obj == other.obj);
-      }
     };
   private:
     csRegExpMatcher* reMatcher;

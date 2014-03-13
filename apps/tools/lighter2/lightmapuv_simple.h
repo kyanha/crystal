@@ -142,11 +142,6 @@ namespace lighter
 
       Sector* sector;
       csBitArray pdBits;
-
-      bool operator== (const SectorAndPDBits& other) const
-      {
-        return (sector == other.sector) && (pdBits == other.pdBits);
-      }
     };
   protected:
     struct LayoutTransform

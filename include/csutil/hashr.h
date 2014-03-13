@@ -30,23 +30,10 @@
  * @{ */
 
 /// A csHash<> that maintains a reverse hash for indexing keys by values.
-template <class T, class K = unsigned int,
-  typename KeyHashFunction = CS::HashFunction<K>,
-  typename ValueHashFunction = CS::HashFunction<T>,
-  typename KeyPred = std::equal_to<K>,
-  typename ValuePred = std::equal_to<T> >
-class csHashReversible :
-  public csHash<T, K, CS::Memory::AllocatorMalloc,
-                csArrayElementHandler<CS::Container::HashElement<T, K> >,
-                KeyHashFunction, KeyPred, ValuePred>
+template <class T, class K = unsigned int> 
+class csHashReversible : public csHash<T, K>
 {
-  typedef csHash<T, K, CS::Memory::AllocatorMalloc,
-                 csArrayElementHandler<CS::Container::HashElement<T, K> >,
-                 KeyHashFunction, KeyPred, ValuePred> BaseHash;
-  csHash<K, T, CS::Memory::AllocatorMalloc,
-    csArrayElementHandler<CS::Container::HashElement<K, T> >,
-    ValueHashFunction,
-    ValuePred, KeyPred> reverse;
+  csHash<K, T> reverse;
 public:
   /**
    * Construct a hash table with an array of the given size,
@@ -62,7 +49,7 @@ public:
    * For a bigger list go to http://www.utm.edu/research/primes/
    */
   csHashReversible (int size = 23, int grow_rate = 5, int max_size = 20000) :
-    BaseHash (size, grow_rate, max_size), 
+    csHash<T, K> (size, grow_rate, max_size), 
     reverse (size, grow_rate, max_size)
   {
   }
@@ -71,7 +58,7 @@ public:
     */
   void Put (const K& key, const T &value)
   {
-    BaseHash::Put (key, value);
+    csHash<T, K>::Put (key, value);
     reverse.Put (value, key);
   }
 
@@ -81,7 +68,7 @@ public:
     */
   void PutUnique (const K& key, const T &value)
   {
-    BaseHash::PutUnique (key, value);
+    csHash<T, K>::PutUnique (key, value);
     reverse.PutUnique (value, key);
   }
 
@@ -90,7 +77,7 @@ public:
    */
   bool Delete (const K& key, const T &value)
   {
-    bool ret = BaseHash::Delete (key, value);
+    bool ret = csHash<T, K>::Delete (key, value);
     ret &= reverse.Delete (value, key);
     return ret;
   }
@@ -100,8 +87,8 @@ public:
    */
   bool DeleteAll (const K& key)
   {
-    csArray<T> values = BaseHash::GetAll (key);
-    bool ret = BaseHash::DeleteAll (key);
+    csArray<T> values = csHash<T,K>::GetAll (key);
+    bool ret = csHash<T,K>::DeleteAll (key);
     for(size_t i=0; i<values.GetSize (); i++)
     {
       ret &= reverse.Delete (values[i], key);
@@ -112,7 +99,7 @@ public:
   /// Delete all the elements.
   void DeleteAll ()
   {
-    BaseHash::DeleteAll ();
+    csHash<T,K>::DeleteAll ();
     reverse.DeleteAll ();
   }
   

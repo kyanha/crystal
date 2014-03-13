@@ -71,11 +71,6 @@ namespace lighter
       iMaterialWrapper* material;
 
       Submesh() : material (0) {}
-      bool operator== (const Submesh& other) const
-      {
-        return (sourceSubmesh == other.sourceSubmesh)
-          && (material == other.material);
-      }
     };
   protected:
     friend class Object_Genmesh;

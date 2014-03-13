@@ -72,7 +72,7 @@ struct csVertexTexel
   csVertexTexel (const csVertexTexel& other)
   	: vt (other.vt), texel (other.texel) { }
 
-  bool operator== (const csVertexTexel& other) const
+  bool operator== (const csVertexTexel& other)
   {
     return other.vt == vt && other.texel == texel;
   }
