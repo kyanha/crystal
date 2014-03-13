@@ -351,11 +351,6 @@ struct TriEdge
       flipped = false;
     }
   }
-
-  bool operator== (const TriEdge& other) const
-  {
-    return (v1 == other.v1) && (v2 == other.v2);
-  }
 };
 
 struct AdjacencyCounter

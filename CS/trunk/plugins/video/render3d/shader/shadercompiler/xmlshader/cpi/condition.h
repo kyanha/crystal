@@ -127,8 +127,6 @@ CS_PLUGIN_NAMESPACE_BEGIN(XMLShader)
 
     CondOperation () : left (23), right (42)
     { memset (this, 0, sizeof (*this)); }
-
-    inline bool operator== (const CondOperation& other) const;
   };
 
   static bool IsOpCommutative (ConditionOp op)
@@ -230,26 +228,6 @@ public:
       return (int)op1.operation - (int)op2.operation;
   }
 };
-
-CS_PLUGIN_NAMESPACE_BEGIN(XMLShader)
-{
-  bool CondOperation::operator== (const CondOperation& other) const
-  {
-    if (operation != other.operation) return false;
-
-    bool result;
-    result = (left == other.left)
-      && (right == other.right);
-    if (NS_XMLSHADER::IsOpCommutative (operation))
-    {
-      result = result 
-        || ((left == other.right)
-          && (right == other.left));
-    }
-    return result;
-  }
-}
-CS_PLUGIN_NAMESPACE_END(XMLShader)
 
 #undef NS_XMLSHADER
 
