@@ -894,6 +894,37 @@ class iShaderCompiler(core.iBase):
 iShaderCompiler_swigregister = _ivideo.iShaderCompiler_swigregister
 iShaderCompiler_swigregister(iShaderCompiler)
 
+class csRefShaderStringIDHash(object):
+    thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+    def __init__(self, *args): 
+        this = _ivideo.new_csRefShaderStringIDHash(*args)
+        try: self.this.append(this)
+        except: self.this = this
+    def Put(*args): return _ivideo.csRefShaderStringIDHash_Put(*args)
+    def GetAll(*args): return _ivideo.csRefShaderStringIDHash_GetAll(*args)
+    def PutUnique(*args): return _ivideo.csRefShaderStringIDHash_PutUnique(*args)
+    def Contains(*args): return _ivideo.csRefShaderStringIDHash_Contains(*args)
+    def In(*args): return _ivideo.csRefShaderStringIDHash_In(*args)
+    def GetElementPointer(*args): return _ivideo.csRefShaderStringIDHash_GetElementPointer(*args)
+    def Get(*args): return _ivideo.csRefShaderStringIDHash_Get(*args)
+    def GetOrCreate(*args): return _ivideo.csRefShaderStringIDHash_GetOrCreate(*args)
+    def Empty(*args): return _ivideo.csRefShaderStringIDHash_Empty(*args)
+    def DeleteAll(*args): return _ivideo.csRefShaderStringIDHash_DeleteAll(*args)
+    def Delete(*args): return _ivideo.csRefShaderStringIDHash_Delete(*args)
+    def GetSize(*args): return _ivideo.csRefShaderStringIDHash_GetSize(*args)
+    def IsEmpty(*args): return _ivideo.csRefShaderStringIDHash_IsEmpty(*args)
+    def __getitem__(*args): return _ivideo.csRefShaderStringIDHash___getitem__(*args)
+    def __delitem__(*args): return _ivideo.csRefShaderStringIDHash___delitem__(*args)
+    def clear(*args): return _ivideo.csRefShaderStringIDHash_clear(*args)
+    def __nonzero__(*args): return _ivideo.csRefShaderStringIDHash___nonzero__(*args)
+    def __setitem__(*args): return _ivideo.csRefShaderStringIDHash___setitem__(*args)
+    def __len__(*args): return _ivideo.csRefShaderStringIDHash___len__(*args)
+    __swig_destroy__ = _ivideo.delete_csRefShaderStringIDHash
+    __del__ = lambda self : None;
+csRefShaderStringIDHash_swigregister = _ivideo.csRefShaderStringIDHash_swigregister
+csRefShaderStringIDHash_swigregister(csRefShaderStringIDHash)
+
 class iShaderArray(core.CustomAllocated):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
     __repr__ = _swig_repr
