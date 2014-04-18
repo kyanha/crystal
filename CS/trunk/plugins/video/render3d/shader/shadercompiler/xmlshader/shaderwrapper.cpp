@@ -29,7 +29,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(XMLShader)
 
   static const char wrapperProgType[] = "*wrapper";
 
-CS_LEAKGUARD_IMPLEMENT (csXMLShaderWrapper);
+CS_LEAKGUARD_IMPLEMENT (csXMLShaderPluginWrapper);
 
 csXMLShaderPluginWrapper::csXMLShaderPluginWrapper (iDocumentNode *node, csXMLShaderTech* tech, size_t variant)
  : scfImplementationType (this), tech (tech), variant (variant)
