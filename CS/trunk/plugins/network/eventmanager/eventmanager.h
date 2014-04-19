@@ -57,7 +57,7 @@ CS_PLUGIN_NAMESPACE_BEGIN(EventManager)
   public:
     Buffer(char *buffer, size_t size) :
       csRefCount(),
-      ScopedArrayPointer(buffer),
+      ScopedArrayPointer<char>(buffer),
       size(size)
     {
     }
