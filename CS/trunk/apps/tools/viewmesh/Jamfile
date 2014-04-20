@@ -7,13 +7,14 @@ if $(CEGUI.AVAILABLE) = "yes"
   {
     VIEWMESH.SOURCES += cal3dasset.cpp ;
   }
-  
+
   Description viewmesh : "mesh viewing utility" ;
   Application viewmesh : $(VIEWMESH.SOURCES) ;
   LinkWith viewmesh : crystalspace ;
   CFlags viewmesh : $(COMPILER.C++FLAGS.EXCEPTIONS.ENABLE) ;
   MsvcCFlags viewmesh : "/D CS_HAVE_CAL3D" ;
   ExternalLibs viewmesh : CEGUI ;
+
   if $(CAL3D.AVAILABLE) = yes
   {
     CFlags viewmesh : [ FDefines CS_HAVE_CAL3D ] ;
@@ -110,18 +111,22 @@ if $(CEGUI.AVAILABLE) = "yes"
   {
     VIEWMESH.PLUGINLIST += vfs ;
   }
+
   if $(JPEG.AVAILABLE) = "yes"
   {
     VIEWMESH.PLUGINLIST += csjpgimg ;
   }
+
   if $(MNG.AVAILABLE) = "yes" && $(JPEG.AVAILABLE) = "yes" && $(ZLIB.AVAILABLE) = "yes"
   {
     VIEWMESH.PLUGINLIST += csjngimg ;
   }
+
   if $(PNG.AVAILABLE) = "yes"
   {
     VIEWMESH.PLUGINLIST += cspngimg ;
   }
+
   if $(CAL3D.AVAILABLE) = "yes"
   {
     VIEWMESH.PLUGINLIST += sprcal3d sprcal3dldr ;
@@ -135,6 +140,7 @@ if $(CEGUI.AVAILABLE) = "yes"
     VIEWMESH.PLUGINLIST += xwin ;
     if $(XFREE86VM.AVAILABLE) = "yes" { VIEWMESH.PLUGINLIST += xext86vm ; }
   }
+
   if $(GL.AVAILABLE) = "yes"
   {
     VIEWMESH.PLUGINLIST += gl3d glshader_arb glshader_fixed glshader_glsl ;
