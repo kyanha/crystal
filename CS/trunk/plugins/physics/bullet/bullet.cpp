@@ -306,9 +306,9 @@ void csBulletDynamicsSystem::CheckCollisions ()
     if (contactManifold->getNumContacts ())
     {
       btCollisionObject* obA =
-	static_cast<btCollisionObject*> (contactManifold->getBody0 ());
+        (btCollisionObject*) (contactManifold->getBody0 ());
       btCollisionObject* obB =
-	static_cast<btCollisionObject*> (contactManifold->getBody1 ());
+        (btCollisionObject*) (contactManifold->getBody1 ());
 
       iBody* cs_obA = static_cast<iBody*> (obA->getUserPointer ());
       iBody* cs_obB = static_cast<iBody*> (obB->getUserPointer ());
@@ -736,7 +736,7 @@ CS::Physics::Bullet::HitBeamResult csBulletDynamicsSystem::HitBeam
 
       case CS::Physics::Bullet::SOFT_BODY:
 	{
-	btSoftBody* body = btSoftBody::upcast (rayCallback.m_collisionObject);
+	btSoftBody* body = (btSoftBody*) btSoftBody::upcast (rayCallback.m_collisionObject);
 	btSoftBody::sRayCast ray;
 	if (body->rayTest (rayFrom, rayTo, ray))
 	{
