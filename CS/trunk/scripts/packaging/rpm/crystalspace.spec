@@ -63,7 +63,7 @@ Summary: Data files for Crystal Space SDK.
 Provides: %{name}-data = %{version}-%{release}
 Requires: %{name} = %{version}-%{release}
 %description -n %{name}-data
-Data files for Crystal Space 3D SDK.
+Data files for Crystal Space SDK.
 
 # Documentation package.
 %package -n %{name}-doc
