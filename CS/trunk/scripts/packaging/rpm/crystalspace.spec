@@ -1,7 +1,7 @@
 Name: crystalspace
 Summary: 2D/3D application Software Development Kit (SDK)
 Version: 2.1
-Release: 1%{?dist}
+Release: 2%{?dist}
 License: LGPL with exceptions
 URL: http://www.crystalspace3d.org
 Source0: %{name}-src-%{version}.tar.gz
@@ -15,10 +15,11 @@ BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 # Required build packages.
 BuildRequires: alsa-lib-devel
 BuildRequires: assimp-devel
-#BuildRequires: bullet-devel
+BuildRequires: bullet-devel
 BuildRequires: freetype-devel
 BuildRequires: jam
 BuildRequires: lcms-devel
+BuildRequires: lib3ds-devel
 BuildRequires: libX11-devel
 BuildRequires: libjpeg-turbo-devel
 BuildRequires: libmng-devel
@@ -174,5 +175,9 @@ DESTDIR=%{buildroot} jam install
 # Changelog entries begin below. Newest goes at the top.
 #
 %changelog
+* Wed Apr 23 2014 Phil Wyett <aura.yoda@gmail.com> - 2.1-2
+- Enable bullet-devel in build requires.
+- Add lib3ds-devel to build requires.
+
 * Wed Apr 23 2014 Phil Wyett <aura.yoda@gmail.com> - 2.1-1
 - Spec file creation/example entry.
