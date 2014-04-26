@@ -175,7 +175,7 @@ DESTDIR=%{buildroot} jam install
 # Changelog entries begin below. Newest goes at the top.
 #
 %changelog
-* Wed Apr 23 2014 Phil Wyett <aura.yoda@gmail.com> - 2.1-2
+* Sat Apr 26 2014 Phil Wyett <aura.yoda@gmail.com> - 2.1-2
 - Enable bullet-devel in build requires.
 - Add lib3ds-devel to build requires.
 
