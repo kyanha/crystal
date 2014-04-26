@@ -1384,7 +1384,7 @@ CS_CHECK_LIB3DS_PREPARE
 CS_CHECK_LIB_WITH([3ds],
     [AC_LANG_PROGRAM([[#include <lib3ds/file.h>]],[lib3ds_file_new();])],
     [$srcdir/libs/lib3ds*], [], [], [], [], [], [$cs_cv_libm_libs],
-    [lib3ds, lib3ds-120])
+    [lib3ds])
 
 CS_NOTABLE([3ds], [models], [], [$cs_cv_lib3ds_recent],
     [AS_IF([test $cs_cv_lib3ds = yes],
