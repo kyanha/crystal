@@ -134,15 +134,17 @@ rule WriteFileListEntry
   
   DESTNAME on $(listfile_gristed) = $(destname) ;
   LOCATE on $(srcfile) = [ on $(srcfile) GetVar SEARCH ] ;
-  if $($(listfile)_CREATED) != "yes"
+  if "$($(listfile)_PREV)" = ""
   {
     WriteFileListEntry1 $(listfile_gristed) : $(srcfile) ;
-    $(listfile)_CREATED = yes ;
   }
   else
   {
     WriteFileListEntry2 $(listfile_gristed) : $(srcfile) ;
+    # This dependency forces the list entries to be written sequentially
+    Depends $(listfile_gristed) : $($(listfile)_PREV) ;
   }
+  $(listfile)_PREV = $(listfile_gristed) ;
   Depends $(listfile) : $(listfile_gristed) ;
 }
 
