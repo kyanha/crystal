@@ -244,6 +244,7 @@ void csBulletDynamicsSystem::CheckCollision (csBulletRigidBody& cs_obA,
 					     btCollisionObject *obB,
 					     btPersistentManifold &contactManifold)
 {
+#if (CS_BULLET_VERSION == 278)
   // @@@ TODO: make both calls in just one pass
   if (cs_obA.lastContactObjects.Contains(obB) == csArrayItemNotFound)
   {
@@ -274,10 +275,12 @@ void csBulletDynamicsSystem::CheckCollision (csBulletRigidBody& cs_obA,
   {
     cs_obA.contactObjects.Push(obB);
   }
+#endif
 }
 
 void csBulletDynamicsSystem::CheckCollisions ()
 {
+#if (CS_BULLET_VERSION == 278)
   // TODO: use gContactAddedCallback instead?
 
   int numManifolds = bulletWorld->getDispatcher()->getNumManifolds();
@@ -322,6 +325,7 @@ void csBulletDynamicsSystem::CheckCollisions ()
       }
     }
   }
+#endif
 }
 
 void csBulletDynamicsSystem::Step (float stepsize)
@@ -736,10 +740,8 @@ CS::Physics::Bullet::HitBeamResult csBulletDynamicsSystem::HitBeam
 
       case CS::Physics::Bullet::SOFT_BODY:
 	{
-	btSoftBody* body = (btSoftBody*) btSoftBody::upcast (rayCallback.m_collisionObject);
-	btSoftBody::sRayCast ray;
-	if (body->rayTest (rayFrom, rayTo, ray))
-	{
+	  const btSoftBody* body = btSoftBody::upcast (rayCallback.m_collisionObject);
+
 	  result.hasHit = true;
 	  result.body = bulletBody;
 	  result.isect = BulletToCS (rayCallback.m_hitPointWorld,
@@ -747,38 +749,18 @@ CS::Physics::Bullet::HitBeamResult csBulletDynamicsSystem::HitBeam
 	  result.normal = BulletToCS (rayCallback.m_hitNormalWorld,
 				      inverseInternalScale);	
 
-	  // Find the closest vertex that was hit
-	  // TODO: there must be something more efficient than a second ray test
-	  btVector3 impact = rayFrom + (rayTo - rayFrom) * ray.fraction;
-	  switch (ray.feature)
+	  // Search the index of the closest vertex being hit
+	  float closestDistance = 10000.f;
+	  for (int i = 0; i < body->m_nodes.size (); i++)
 	  {
-	  case btSoftBody::eFeature::Face:
+	    const btSoftBody::Node& node = body->m_nodes[i];
+	    float distance = (node.m_x - rayCallback.m_hitPointWorld).length2 ();
+	    if (distance < closestDistance)
 	    {
-	      btSoftBody::Face& face = body->m_faces[ray.index];
-	      btSoftBody::Node* node = face.m_n[0];
-	      float distance = (node->m_x - impact).length2 ();
-
-	      for (int i = 1; i < 3; i++)
-	      {
-		float nodeDistance = (face.m_n[i]->m_x - impact).length2 ();
-		if (nodeDistance < distance)
-		{
-		  node = face.m_n[i];
-		  distance = nodeDistance;
-		}
-	      }
-
-	      result.vertexIndex = size_t (node - &body->m_nodes[0]);
+	      closestDistance = distance;
+	      result.vertexIndex = i;
 	    }
-	    break;
-
-	  default:
-	    // TODO: may need other types?
-	    break;
 	  }
-
-	  return result;
-	}
 	}
 
 	break;
