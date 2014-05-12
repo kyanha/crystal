@@ -30,12 +30,14 @@
 #include "iutil/strset.h"
 
 // Bullet includes.
+#include "csutil/custom_new_disable.h"
 #include "btBulletDynamicsCommon.h"
 #include "btBulletCollisionCommon.h"
 #include "BulletSoftBody/btSoftBody.h"
 #include "BulletSoftBody/btSoftRigidDynamicsWorld.h"
 #include "BulletSoftBody/btSoftBodyRigidBodyCollisionConfiguration.h"
 #include "BulletSoftBody/btSoftBodyHelpers.h"
+#include "csutil/custom_new_enable.h"
 
 #include "softbody2.h"
 #include "rigidbody2.h"
