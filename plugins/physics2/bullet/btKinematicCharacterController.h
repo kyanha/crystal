@@ -37,6 +37,20 @@ subject to the following restrictions:
 #include "BulletCollision/BroadphaseCollision/btCollisionAlgorithm.h"
 
 
+#include "csconfig.h"
+#if (CS_BULLET_VERSION == 282)
+// Suppress stupid compiler warning
+#include "csutil/custom_new_disable.h"
+#include "LinearMath/btScalar.h"
+#include "csutil/custom_new_enable.h"
+
+inline int btGetInfinityMask ()
+{
+  return btInfinityMask;
+}
+#endif
+
+
 class btCollisionShape;
 class btConvexShape;
 class btRigidBody;
@@ -44,10 +58,10 @@ class btCollisionWorld;
 class btCollisionDispatcher;
 class btPairCachingGhostObject;
 
-///btKinematicCharacterController is an object that supports a sliding motion in a world.
+///csbtKinematicCharacterController is an object that supports a sliding motion in a world.
 ///It uses a ghost object and convex sweep test to test for upcoming collisions. This is combined with discrete collision detection to recover from penetrations.
-///Interaction between btKinematicCharacterController and dynamic rigid bodies needs to be explicity implemented by the user.
-ATTRIBUTE_ALIGNED16(class) btKinematicCharacterController : public btCharacterControllerInterface
+///Interaction between csbtKinematicCharacterController and dynamic rigid bodies needs to be explicity implemented by the user.
+ATTRIBUTE_ALIGNED16(class) csbtKinematicCharacterController : public btCharacterControllerInterface
 {
 protected:
 
@@ -108,8 +122,8 @@ public:
 
 	BT_DECLARE_ALIGNED_ALLOCATOR();
 
-	btKinematicCharacterController (btPairCachingGhostObject* ghostObject,btConvexShape* convexShape,btScalar stepHeight, int upAxis = 1);
-	~btKinematicCharacterController ();
+	csbtKinematicCharacterController (btPairCachingGhostObject* ghostObject,btConvexShape* convexShape,btScalar stepHeight, int upAxis = 1);
+	~csbtKinematicCharacterController ();
 	
 
 	///btActionInterface interface

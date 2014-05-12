@@ -56,6 +56,18 @@ struct btSoftBodyWorldInfo;
 class btBroadphaseInterface;
 class btTriangleMesh;
 
+#if (CS_BULLET_VERSION == 282)
+// Suppress stupid compiler warning
+#include "csutil/custom_new_disable.h"
+#include "LinearMath/btScalar.h"
+#include "csutil/custom_new_enable.h"
+
+inline int btGetInfinityMask ()
+{
+  return btInfinityMask;
+}
+#endif
+
 CS_PLUGIN_NAMESPACE_BEGIN (Bullet2)
 {
   

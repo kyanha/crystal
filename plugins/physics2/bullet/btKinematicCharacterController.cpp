@@ -36,7 +36,6 @@ subject to the following restrictions:
 #include "LinearMath/btDefaultMotionState.h"
 #include "btKinematicCharacterController.h"
 
-
 // static helper method
 static btVector3
 getNormalizedVector(const btVector3& v)
@@ -122,7 +121,7 @@ protected:
  *
  * from: http://www-cs-students.stanford.edu/~adityagp/final/node3.html
  */
-btVector3 btKinematicCharacterController::computeReflectionDirection (const btVector3& direction, const btVector3& normal)
+btVector3 csbtKinematicCharacterController::computeReflectionDirection (const btVector3& direction, const btVector3& normal)
 {
 	return direction - (btScalar(2.0) * direction.dot(normal)) * normal;
 }
@@ -130,7 +129,7 @@ btVector3 btKinematicCharacterController::computeReflectionDirection (const btVe
 /*
  * Returns the portion of 'direction' that is parallel to 'normal'
  */
-btVector3 btKinematicCharacterController::parallelComponent (const btVector3& direction, const btVector3& normal)
+btVector3 csbtKinematicCharacterController::parallelComponent (const btVector3& direction, const btVector3& normal)
 {
 	btScalar magnitude = direction.dot(normal);
 	return normal * magnitude;
@@ -139,12 +138,12 @@ btVector3 btKinematicCharacterController::parallelComponent (const btVector3& di
 /*
  * Returns the portion of 'direction' that is perpindicular to 'normal'
  */
-btVector3 btKinematicCharacterController::perpindicularComponent (const btVector3& direction, const btVector3& normal)
+btVector3 csbtKinematicCharacterController::perpindicularComponent (const btVector3& direction, const btVector3& normal)
 {
 	return direction - parallelComponent(direction, normal);
 }
 
-btKinematicCharacterController::btKinematicCharacterController (btPairCachingGhostObject* ghostObject,btConvexShape* convexShape,btScalar stepHeight, int upAxis)
+csbtKinematicCharacterController::csbtKinematicCharacterController (btPairCachingGhostObject* ghostObject,btConvexShape* convexShape,btScalar stepHeight, int upAxis)
 {
 	m_upAxis = upAxis;
 	m_addedMargin = 0.02;
@@ -166,16 +165,16 @@ btKinematicCharacterController::btKinematicCharacterController (btPairCachingGho
 	setMaxSlope(btRadians(45.0));
 }
 
-btKinematicCharacterController::~btKinematicCharacterController ()
+csbtKinematicCharacterController::~csbtKinematicCharacterController ()
 {
 }
 
-btPairCachingGhostObject* btKinematicCharacterController::getGhostObject()
+btPairCachingGhostObject* csbtKinematicCharacterController::getGhostObject()
 {
 	return m_ghostObject;
 }
 
-bool btKinematicCharacterController::recoverFromPenetration ( btCollisionWorld* collisionWorld)
+bool csbtKinematicCharacterController::recoverFromPenetration ( btCollisionWorld* collisionWorld)
 {
 	// Here we must refresh the overlapping paircache as the penetrating movement itself or the
 	// previous recovery iteration might have used setWorldTransform and pushed us into an object
@@ -249,7 +248,7 @@ bool btKinematicCharacterController::recoverFromPenetration ( btCollisionWorld* 
 	return penetration;
 }
 
-void btKinematicCharacterController::stepUp ( btCollisionWorld* world)
+void csbtKinematicCharacterController::stepUp ( btCollisionWorld* world)
 {
 	// phase 1: up
 	btTransform start, end;
@@ -292,7 +291,7 @@ void btKinematicCharacterController::stepUp ( btCollisionWorld* world)
 	}
 }
 
-void btKinematicCharacterController::updateTargetPositionBasedOnCollision (const btVector3& hitNormal, btScalar tangentMag, btScalar normalMag)
+void csbtKinematicCharacterController::updateTargetPositionBasedOnCollision (const btVector3& hitNormal, btScalar tangentMag, btScalar normalMag)
 {
 	btVector3 movementDirection = m_targetPosition - m_currentPosition;
 	btScalar movementLength = movementDirection.length();
@@ -328,7 +327,7 @@ void btKinematicCharacterController::updateTargetPositionBasedOnCollision (const
 	}
 }
 
-void btKinematicCharacterController::stepForwardAndStrafe ( btCollisionWorld* collisionWorld, const btVector3& walkMove)
+void csbtKinematicCharacterController::stepForwardAndStrafe ( btCollisionWorld* collisionWorld, const btVector3& walkMove)
 {
 	// printf("m_normalizedDirection=%f,%f,%f\n",
 	// 	m_normalizedDirection[0],m_normalizedDirection[1],m_normalizedDirection[2]);
@@ -417,7 +416,7 @@ void btKinematicCharacterController::stepForwardAndStrafe ( btCollisionWorld* co
 	}
 }
 
-void btKinematicCharacterController::stepDown ( btCollisionWorld* collisionWorld, btScalar dt)
+void csbtKinematicCharacterController::stepDown ( btCollisionWorld* collisionWorld, btScalar dt)
 {
 	btTransform start, end;
 
@@ -475,7 +474,7 @@ void btKinematicCharacterController::stepDown ( btCollisionWorld* collisionWorld
 
 
 
-void btKinematicCharacterController::setWalkDirection
+void csbtKinematicCharacterController::setWalkDirection
 (
 const btVector3& walkDirection
 )
@@ -487,7 +486,7 @@ const btVector3& walkDirection
 
 
 
-void btKinematicCharacterController::setVelocityForTimeInterval
+void csbtKinematicCharacterController::setVelocityForTimeInterval
 (
 const btVector3& velocity,
 btScalar timeInterval
@@ -506,14 +505,14 @@ btScalar timeInterval
 
 
 
-void btKinematicCharacterController::reset ()
+void csbtKinematicCharacterController::reset ()
 {
   m_wasOnGround = false;
   m_wasJumping = true;
   m_verticalOffset = 1.0f;
 }
 
-void btKinematicCharacterController::warp (const btVector3& origin)
+void csbtKinematicCharacterController::warp (const btVector3& origin)
 {
 	btTransform xform;
 	xform.setIdentity();
@@ -522,7 +521,7 @@ void btKinematicCharacterController::warp (const btVector3& origin)
 }
 
 
-void btKinematicCharacterController::preStep (  btCollisionWorld* collisionWorld)
+void csbtKinematicCharacterController::preStep (  btCollisionWorld* collisionWorld)
 {
 	
 	int numPenetrationLoops = 0;
@@ -547,7 +546,7 @@ void btKinematicCharacterController::preStep (  btCollisionWorld* collisionWorld
 
 #include <stdio.h>
 
-void btKinematicCharacterController::playerStep (  btCollisionWorld* collisionWorld, btScalar dt)
+void csbtKinematicCharacterController::playerStep (  btCollisionWorld* collisionWorld, btScalar dt)
 {
 //	printf("playerStep(): ");
 //	printf("  dt = %f", dt);
@@ -605,27 +604,27 @@ void btKinematicCharacterController::playerStep (  btCollisionWorld* collisionWo
 	m_ghostObject->setWorldTransform (xform);
 }
 
-void btKinematicCharacterController::setFallSpeed (btScalar fallSpeed)
+void csbtKinematicCharacterController::setFallSpeed (btScalar fallSpeed)
 {
 	m_fallSpeed = fallSpeed;
 }
 
-void btKinematicCharacterController::setJumpSpeed (btScalar jumpSpeed)
+void csbtKinematicCharacterController::setJumpSpeed (btScalar jumpSpeed)
 {
 	m_jumpSpeed = jumpSpeed;
 }
 
-void btKinematicCharacterController::setMaxJumpHeight (btScalar maxJumpHeight)
+void csbtKinematicCharacterController::setMaxJumpHeight (btScalar maxJumpHeight)
 {
 	m_maxJumpHeight = maxJumpHeight;
 }
 
-bool btKinematicCharacterController::canJump () const
+bool csbtKinematicCharacterController::canJump () const
 {
 	return onGround();
 }
 
-void btKinematicCharacterController::jump ()
+void csbtKinematicCharacterController::jump ()
 {
 	if (!canJump())
 		return;
@@ -644,50 +643,50 @@ void btKinematicCharacterController::jump ()
 #endif
 }
 
-void btKinematicCharacterController::setGravity(btScalar gravity)
+void csbtKinematicCharacterController::setGravity(btScalar gravity)
 {
 	m_gravity = gravity;
 }
 
-btScalar btKinematicCharacterController::getGravity() const
+btScalar csbtKinematicCharacterController::getGravity() const
 {
 	return m_gravity;
 }
 
-void btKinematicCharacterController::setStepHeight(btScalar stepHeight)
+void csbtKinematicCharacterController::setStepHeight(btScalar stepHeight)
 {
         m_stepHeight = stepHeight;
 }
 
-btScalar btKinematicCharacterController::getStepHeight() const
+btScalar csbtKinematicCharacterController::getStepHeight() const
 {
         return m_stepHeight;
 }
 
-void btKinematicCharacterController::setMaxSlope(btScalar slopeRadians)
+void csbtKinematicCharacterController::setMaxSlope(btScalar slopeRadians)
 {
 	m_maxSlopeRadians = slopeRadians;
 	m_maxSlopeCosine = btCos(slopeRadians);
 }
 
-btScalar btKinematicCharacterController::getMaxSlope() const
+btScalar csbtKinematicCharacterController::getMaxSlope() const
 {
 	return m_maxSlopeRadians;
 }
 
-bool btKinematicCharacterController::onGround () const
+bool csbtKinematicCharacterController::onGround () const
 {
 	return m_verticalVelocity == 0.0 && m_verticalOffset == 0.0;
 }
 
 
-btVector3* btKinematicCharacterController::getUpAxisDirections()
+btVector3* csbtKinematicCharacterController::getUpAxisDirections()
 {
 	static btVector3 sUpAxisDirection[3] = { btVector3(1.0f, 0.0f, 0.0f), btVector3(0.0f, 1.0f, 0.0f), btVector3(0.0f, 0.0f, 1.0f) };
 	
 	return sUpAxisDirection;
 }
 
-void btKinematicCharacterController::debugDraw(btIDebugDraw* debugDrawer)
+void csbtKinematicCharacterController::debugDraw(btIDebugDraw* debugDrawer)
 {
 }
