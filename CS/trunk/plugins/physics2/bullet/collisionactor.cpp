@@ -54,7 +54,7 @@ CS_PLUGIN_NAMESPACE_BEGIN (Bullet2)
 
     btPairCachingGhostObject* ghost = GetPairCachingGhostObject ();
     btConvexShape* convShape = (btConvexShape*) (ghost->getCollisionShape ());
-    controller = new btKinematicCharacterController
+    controller = new KinematicCharacterController
       (ghost, convShape, factory->stepHeight, 1);
     controller->setMaxSlope (factory->maximumSlope);
     controller->setJumpSpeed (factory->jumpSpeed);
@@ -97,8 +97,8 @@ CS_PLUGIN_NAMESPACE_BEGIN (Bullet2)
       RemoveBulletObject ();
     insideWorld = true;
 
-    controller->setGravity (- sector->bulletWorld->getGravity ()[1] * 3);
-    controller->reset ();
+    controller->setGravity (sector->bulletWorld->getGravity ()[1] * -3.f);
+    controller->reset (sector->bulletWorld);
     sector->bulletWorld->addCollisionObject (btObject, group->value, group->mask);
     sector->bulletWorld->addAction (this);
 
@@ -118,7 +118,7 @@ CS_PLUGIN_NAMESPACE_BEGIN (Bullet2)
   void BulletCollisionActor::SetTransform (const csOrthoTransform& trans)
   {
     csBulletCollisionObject::SetTransform (trans);
-    controller->reset ();
+    if (sector) controller->reset (sector->bulletWorld);
   }
 
   void BulletCollisionActor::SetStepHeight (float height)
@@ -174,8 +174,8 @@ CS_PLUGIN_NAMESPACE_BEGIN (Bullet2)
   void BulletCollisionActor::SetGravity (float gravity)
   {
     // For some reason, the actor controller needs a 3G acceleration
-    controller->setGravity (- gravity * 3);
-    controller->reset ();
+    controller->setGravity (gravity * -3.f);
+    if (sector) controller->reset (sector->bulletWorld);
   }
 
   void BulletCollisionActor::updateAction (btCollisionWorld* collisionWorld, btScalar deltaTime)

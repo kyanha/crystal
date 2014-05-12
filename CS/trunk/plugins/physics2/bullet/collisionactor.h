@@ -25,9 +25,54 @@
 #include "common2.h"
 #include "collisionghost.h"
 
+#if (CS_BULLET_VERSION >= 281)
+
+#include "csutil/custom_new_disable.h"
+#include "BulletDynamics/Character/btKinematicCharacterController.h"
+#include "csutil/custom_new_enable.h"
+
+class KinematicCharacterController : public btKinematicCharacterController
+{
+public:
+  KinematicCharacterController
+    (btPairCachingGhostObject* ghostObject, btConvexShape* convexShape, btScalar stepHeight, int upAxis = 1)
+    : btKinematicCharacterController (ghostObject, convexShape, stepHeight, upAxis)
+  {}
+
+  void setGravity (btScalar gravity)
+  { m_gravity = gravity; }
+
+  void setStepHeight (btScalar stepHeight)
+  { m_stepHeight = stepHeight; }
+
+  btScalar getStepHeight() const
+  { return m_stepHeight; }
+
+#if (CS_BULLET_VERSION == 281)
+  void reset (btCollisionWorld*)
+  { btKinematicCharacterController::reset (); }
+#endif
+};
+
+#else
+
 #include "csutil/custom_new_disable.h"
 #include "btKinematicCharacterController.h"
 #include "csutil/custom_new_enable.h"
+
+class KinematicCharacterController : public csbtKinematicCharacterController
+{
+public:
+  KinematicCharacterController
+    (btPairCachingGhostObject* ghostObject, btConvexShape* convexShape, btScalar stepHeight, int upAxis = 1)
+    : csbtKinematicCharacterController (ghostObject, convexShape, stepHeight, upAxis)
+  {}
+
+  void reset (btCollisionWorld*)
+  { csbtKinematicCharacterController::reset (); }
+};
+
+#endif
 
 CS_PLUGIN_NAMESPACE_BEGIN (Bullet2)
 {
@@ -72,7 +117,7 @@ class BulletCollisionActor : public scfVirtImplementationExt1<BulletCollisionAct
     csBulletGhostCollisionObject, CS::Collisions::iCollisionActor>,
     public btActionInterface
 {
-  btKinematicCharacterController* controller;
+  KinematicCharacterController* controller;
   //float airControlFactor;
 
 public:

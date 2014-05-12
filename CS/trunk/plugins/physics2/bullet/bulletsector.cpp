@@ -79,11 +79,31 @@ CS_PLUGIN_NAMESPACE_BEGIN (Bullet2)
     {
     }
 
-    // TODO: new signature in Bullet 2.81:
-    //btScalar addSingleResult (btManifoldPoint& cp, const btCollisionObjectWrapper* colObj0Wrap,
-    //                          int partId0, int index0, const btCollisionObjectWrapper* colObj1Wrap,
-    //                          int partId1, int index1)
+#if (CS_BULLET_VERSION >= 281)
+    virtual btScalar addSingleResult (btManifoldPoint& cp,
+				      const btCollisionObjectWrapper* colObj0, int partId0, int index0,
+				      const btCollisionObjectWrapper* colObj1, int partId1, int index1)
+    {
+      if (!data)
+      {
+	data.AttachNew (new CollisionData ());
+	data->objectA = static_cast<CS::Collisions::iCollisionObject*>
+	  (colObj0->getCollisionObject ()->getUserPointer ());
+	data->objectB = static_cast<CS::Collisions::iCollisionObject*>
+	  (colObj1->getCollisionObject ()->getUserPointer ());
+      }
 
+      csRef<CollisionContact> contact;
+      contact.AttachNew (new CollisionContact ());
+      contact->positionOnA = BulletToCS (cp.m_positionWorldOnA, system->GetInverseInternalScale ());
+      contact->positionOnB = BulletToCS (cp.m_positionWorldOnB, system->GetInverseInternalScale ());
+      contact->normalOnB = BulletToCS (cp.m_normalWorldOnB, system->GetInverseInternalScale ());
+      contact->penetration = cp.m_distance1 * system->GetInverseInternalScale ();
+      data->contacts.Push (contact);
+
+      return 0;
+    }
+#else
     virtual btScalar addSingleResult (btManifoldPoint& cp, const btCollisionObject* colObj0,
 				      int partId0, int index0, const btCollisionObject* colObj1,
 				      int partId1, int index1)
@@ -105,6 +125,7 @@ CS_PLUGIN_NAMESPACE_BEGIN (Bullet2)
 
       return 0;
     }
+#endif
   };
 
   struct PointContactResultMulti : public btCollisionWorld::ContactResultCallback
@@ -118,6 +139,31 @@ CS_PLUGIN_NAMESPACE_BEGIN (Bullet2)
       collisions.AttachNew (new CollisionDataList ());
     }
 
+#if (CS_BULLET_VERSION >= 281)
+    virtual btScalar addSingleResult (btManifoldPoint& cp,
+				      const btCollisionObjectWrapper* colObj0, int partId0, int index0,
+				      const btCollisionObjectWrapper* colObj1, int partId1, int index1)
+    {
+      csRef<CollisionData> data;
+      data.AttachNew (new CollisionData ());
+      data->objectA = static_cast<CS::Collisions::iCollisionObject*>
+	(colObj0->getCollisionObject ()->getUserPointer ());
+      data->objectB = static_cast<CS::Collisions::iCollisionObject*>
+	(colObj1->getCollisionObject ()->getUserPointer ());
+
+      csRef<CollisionContact> contact;
+      contact.AttachNew (new CollisionContact ());
+      contact->positionOnA = BulletToCS (cp.m_positionWorldOnA, system->GetInverseInternalScale ());
+      contact->positionOnB = BulletToCS (cp.m_positionWorldOnB, system->GetInverseInternalScale ());
+      contact->normalOnB = BulletToCS (cp.m_normalWorldOnB, system->GetInverseInternalScale ());
+      contact->penetration = cp.m_distance1 * system->GetInverseInternalScale ();
+
+      data->contacts.Push (contact);
+      collisions->collisions.Push (data);
+
+      return 0;
+    }
+#else
     virtual btScalar addSingleResult (btManifoldPoint& cp, const btCollisionObject* colObj0,
 				      int partId0, int index0, const btCollisionObject* colObj1,
 				      int partId1, int index1)
@@ -139,6 +185,7 @@ CS_PLUGIN_NAMESPACE_BEGIN (Bullet2)
 
       return 0;
     }
+#endif
   };
 
   //----------------------------------- csBulletSector -----------------------------------
@@ -736,47 +783,26 @@ CS_PLUGIN_NAMESPACE_BEGIN (Bullet2)
       else if (rayCallback.m_collisionObject->getInternalType () == btCollisionObject::CO_SOFT_BODY)
       {
         // hit a soft body
-        btSoftBody* body = btSoftBody::upcast (rayCallback.m_collisionObject);
-        btSoftBody::sRayCast ray;
+        const btSoftBody* body = btSoftBody::upcast (rayCallback.m_collisionObject);
 
-        if (body->rayTest (rayFrom, rayTo, ray))
-        {
-          result.object = collObject;
-          result.isect = BulletToCS (rayCallback.m_hitPointWorld,
-            system->GetInverseInternalScale ());
-          result.normal = BulletToCS (rayCallback.m_hitNormalWorld,
-            system->GetInverseInternalScale ());	
+	result.object = collObject;
+	result.isect = BulletToCS (rayCallback.m_hitPointWorld,
+				   system->GetInverseInternalScale ());
+	result.normal = BulletToCS (rayCallback.m_hitNormalWorld,
+				    system->GetInverseInternalScale ());	
 
-          // Find the closest vertex that was hit
-          // TODO: there must be something more efficient than a second ray test
-          btVector3 impact = rayFrom + (rayTo - rayFrom) * ray.fraction;
-          switch (ray.feature)
-          {
-          case btSoftBody::eFeature::Face:
-            {
-              const btSoftBody::Face& face = body->m_faces[ray.index];
-              const btSoftBody::Node* node = face.m_n[0];
-              float distance = (node->m_x - impact).length2 ();
-
-              for (int i = 1; i < 3; i++)
-              {
-                float nodeDistance = (face.m_n[i]->m_x - impact).length2 ();
-                if (nodeDistance < distance)
-                {
-                  node = face.m_n[i];
-                  distance = nodeDistance;
-                }
-              }
-
-              result.vertexIndex = size_t (node - &body->m_nodes[0]);
-              break;
-            }
-          default:
-            break;
-          }
-
-          return nullptr;
-        } //has hit softbody
+	// Search the index of the closest vertex being hit
+	float closestDistance = 10000.f;
+	for (int i = 0; i < body->m_nodes.size (); i++)
+	{
+	  const btSoftBody::Node& node = body->m_nodes[i];
+	  float distance = (node.m_x - rayCallback.m_hitPointWorld).length2 ();
+	  if (distance < closestDistance)
+	  {
+	    closestDistance = distance;
+	    result.vertexIndex = i;
+	  }
+	}
       } //softBody
 
       else

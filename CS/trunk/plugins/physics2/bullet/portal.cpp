@@ -431,7 +431,8 @@ CS_PLUGIN_NAMESPACE_BEGIN (Bullet2)
     btRigidBody* btObj = obj->GetBulletRigidPointer ();
     btRigidBody* btCloneObj = cloneObj->GetBulletRigidPointer ();
 
-    // Sync rigid body
+#if (CS_BULLET_VERSION == 278)
+    // Sync both rigid bodies
     btVector3 deltaVelLin = btCloneObj->getDeltaLinearVelocity ();
     btVector3 deltaVelAng = btCloneObj->getDeltaAngularVelocity ();
     
@@ -442,8 +443,16 @@ CS_PLUGIN_NAMESPACE_BEGIN (Bullet2)
     btObj->setAngularVelocity (velAng);
     btCloneObj->setLinearVelocity (velLin);
     btCloneObj->setAngularVelocity (velAng);
+#else
+    // TODO: real synchronization
+    // Maybe it can be done by forwarding the collision contacts into both objects?
+
+    // Sync the rigid body velocities
+    btCloneObj->setLinearVelocity (btObj->getLinearVelocity ());
+    btCloneObj->setAngularVelocity (btObj->getAngularVelocity ());
+#endif
     
-    // New transform is that of the original object
+    // Sync the transforms
     cloneObj->SetTransform (obj->GetTransform ());
   }
 
@@ -474,7 +483,7 @@ CS_PLUGIN_NAMESPACE_BEGIN (Bullet2)
       oldCloneVels.Put (i, btCloneObj->m_nodes[i].m_v);
     }
 
-    // New transform is that of the original object
+    // Sync the transforms
     cloneObj->SetTransform (obj->GetTransform ());
   }
 
