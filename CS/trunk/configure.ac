@@ -1558,6 +1558,30 @@ AS_IF([test $cs_cv_libbullet = yes],
 	[$cs_cv_libbullet_lflags],
 	[$cs_cv_libbullet_libs])])
 
+AS_IF([test $cs_cv_libbullet = yes],
+    [CS_CHECK_BUILD([compatibility with bullet 2.78], [cs_cv_bullet_278],
+	[AC_LANG_PROGRAM(
+            [[#include "LinearMath/btVector3.h"
+	      #include "BulletCollision/CollisionDispatch/btCollisionWorld.h"]],
+	    [btVector3 v;
+             btCollisionWorld::ClosestRayResultCallback cb (v, v);
+             btCollisionObject* o = cb.m_collisionObject; ])],
+	[], [C++],
+	[CS_HEADER_PROPERTY([CS_BULLET_VERSION], 278)],
+            [CS_CHECK_BUILD([compatibility with bullet 2.82], [cs_cv_bullet_280],
+	    [AC_LANG_PROGRAM(
+                [[#include "LinearMath/btScalar.h"]],
+                [int value = btInfinityMask;])],
+	    [], [C++],
+	    [CS_HEADER_PROPERTY([CS_BULLET_VERSION], 282)],
+ 	        [CS_HEADER_PROPERTY([CS_BULLET_VERSION], 281)], [],
+	    [$cs_cv_libbullet_cflags],
+	    [$cs_cv_libbullet_lflags],
+	    [$cs_cv_libbullet_libs])],
+        [],
+	[$cs_cv_libbullet_cflags],
+	[$cs_cv_libbullet_lflags],
+	[$cs_cv_libbullet_libs])])
 
 
 #------------------------------------------------------------------------------
