@@ -115,11 +115,9 @@ rm -rf %{buildroot}
 DESTDIR=%{buildroot} jam install
 
 # Post install elements.
-%post
--p /sbin/ldconfig
+%post -p /sbin/ldconfig
 
-%postun
--p /sbin/ldconfig
+%postun -p /sbin/ldconfig
 
 # Files for 'crystalspace' package.
 %files -n %{name}
