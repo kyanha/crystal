@@ -1,7 +1,7 @@
 Name: crystalspace
 Summary: 2D/3D application Software Development Kit (SDK)
 Version: 2.1
-Release: 2%{?dist}
+Release: 3%{?dist}
 License: LGPL with exceptions
 URL: http://www.crystalspace3d.org
 Source0: %{name}-src-%{version}.tar.gz
@@ -106,7 +106,7 @@ Debug information for applications package.
 
 # Configure and build elements.
 %build
-%configure
+%configure --disable-make-emulation
 jam -q %{?_smp_mflags}
 
 # Installation elements.
@@ -116,10 +116,10 @@ DESTDIR=%{buildroot} jam install
 
 # Post install elements.
 %post
-/sbin/ldconfig
+-p /sbin/ldconfig
 
 %postun
-/sbin/ldconfig
+-p /sbin/ldconfig
 
 # Files for 'crystalspace' package.
 %files -n %{name}
@@ -175,6 +175,10 @@ DESTDIR=%{buildroot} jam install
 # Changelog entries begin below. Newest goes at the top.
 #
 %changelog
+* Fri May 16 2014 Phil Wyett <aura.yoda@gmail.com> - 2.1-3
+- Disable makefile emulation layer creation at configure time.
+- Add '-p' to 'sbin/ldconfig' call in 'post' and 'postun'.
+
 * Sat Apr 26 2014 Phil Wyett <aura.yoda@gmail.com> - 2.1-2
 - Enable bullet-devel in build requires.
 - Add lib3ds-devel to build requires.
