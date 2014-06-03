@@ -108,11 +108,11 @@ void TerrainBlock::SetupGeometry ()
     csLockedNormalData cellNData = renderData->cell->GetNormalData ();
 
     // Temporary data holder
-    float minX = centerPos.x - size.x/2.0f;
-    float maxX = centerPos.x + size.x/2.0f;
+    float minX = centerPos.x - size.x * 0.5f;
+    float maxX = centerPos.x + size.x * 0.5f;
 
-    float minZ = centerPos.y - size.y/2.0f;
-    float maxZ = centerPos.y + size.y/2.0f;
+    float minZ = centerPos.y - size.y * 0.5f;
+    float maxZ = centerPos.y + size.y * 0.5f;
 
     float xStep = size.x / (float)(numVerts - 1);
     float zStep = size.y / (float)(numVerts - 1);
@@ -152,11 +152,11 @@ void TerrainBlock::SetupGeometry ()
    
     const csVector2 offs2 = 2*(centerPos - cellPosition);
 
-    float minU = (offs2.x - size.x) / (2*cellSize.x);
-    float maxU = (offs2.x + size.x) / (2*cellSize.x);
+    float minU = (offs2.x - size.x) / (2.0f * cellSize.x);
+    float maxU = (offs2.x + size.x) / (2.0f * cellSize.x);
 
-    float minV = (2*cellSize.z - offs2.y - size.y) / (2*cellSize.z);
-    float maxV = (2*cellSize.z - offs2.y + size.y) / (2*cellSize.z);
+    float minV = (2.0f * cellSize.z - offs2.y - size.y) / (2.0f * cellSize.z);
+    float maxV = (2.0f * cellSize.z - offs2.y + size.y) / (2.0f * cellSize.z);
 
     float uStep = (maxU - minU) / (float)(numVerts - 1);
     float vStep = (maxV - minV) / (float)(numVerts - 1);
