@@ -19,6 +19,24 @@
 #============================================================================
 # all private
 
+# Remove all characters invalid in an identifier from the given string
+rule FilterInvalidIdentifierChars
+{
+  local name = $(1) ;
+  local filtered = "" ;
+  while "$(name)" != ""
+  {
+    local char = "_" ;
+    switch $(name)
+    {
+    case [A-Za-z0-9]* : char = [ MATCH "(.)" : $(name) ] ;
+    }
+    filtered = "$(filtered)$(char:J=)" ;
+    name = [ MATCH ".(.*)" : $(name) ] ;
+  }
+  return $(filtered) ;
+}
+
 rule GenerateStaticPluginBoilerplate
 {
   local tag = $(>) ;
@@ -46,9 +64,14 @@ rule GenerateStaticPluginBoilerplate
 
 rule GenerateStaticPluginInstantiation
 {
+  local idents ;
+  for plugin in $(>)
+  {
+    idents += [ FilterInvalidIdentifierChars $(plugin:B) ] ;
+  }
   local tag = $(3) ;
   GenerateStaticPluginBoilerplate $(<) : $(tag) ;
-  ResponseFile $(<) : "SCF_USE_STATIC_PLUGIN($(>:B))" : notfile ;
+  ResponseFile $(<) : "SCF_USE_STATIC_PLUGIN($(idents))" : notfile ;
 }
 
 rule GenerateStaticPluginRegistration
@@ -64,7 +87,7 @@ rule GenerateStaticPluginRegistration
   {
     grist = $(grist_base)_$(meta) ;
     target = $(<:G=$(grist)) ;
-    local ident = $(meta:B) ;
+    local ident = [ FilterInvalidIdentifierChars $(meta:B) ] ;
     NotFile $(ident) ;
     IDENTIFIER on $(target) = $(ident) ;
     GenerateStaticPluginRegistration1 $(target) : $(meta) ;
