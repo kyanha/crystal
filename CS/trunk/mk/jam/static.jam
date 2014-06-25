@@ -53,8 +53,26 @@ rule GenerateStaticPluginInstantiation
 
 rule GenerateStaticPluginRegistration
 {
-  GenerateStaticPluginBoilerplate $(<) ;
-  GenerateStaticPluginRegistration1 $(<) : $(>) ;
+  local locate = [ on $(<) GetVar LOCATE ] ;
+  local grist_base = $(SOURCE_GRIST:E)! ;
+  local grist = $(grist_base)_init ;
+  local target = $(<:G=$(grist)) ;
+  GenerateStaticPluginBoilerplate $(target) ;
+  MakeLocate $(target) : $(locate) ;
+  local prev_target = $(target) ;
+  for meta in $(>)
+  {
+    grist = $(grist_base)_$(meta) ;
+    target = $(<:G=$(grist)) ;
+    local ident = $(meta:B) ;
+    NotFile $(ident) ;
+    IDENTIFIER on $(target) = $(ident) ;
+    GenerateStaticPluginRegistration1 $(target) : $(meta) ;
+    MakeLocate $(target) : $(locate) ;
+    Depends $(target) : $(prev_target) ;
+    prev_target = $(target) ;
+  }
+  Depends $(<) : $(prev_target) ;
 }
 
 rule BuildStaticRegFile
@@ -580,13 +598,13 @@ STATICPLUGIN.$(>).RELAYLFLAGS.$(RELAYDEP) = $(RELAYLFLAGS) ;
 EOT
 }
 
-actions piecemeal GenerateStaticPluginRegistration1
+actions piecemeal GenerateStaticPluginRegistration1 bind IDENTIFIER
 {
   echo 'namespace csStaticPluginInit' >> $(<)
   echo '{' >> $(<)
   for x in $(>)
   do
-    n=`basename $x $(SUFMETA)`
+    n="$(IDENTIFIER)"
     echo "static char const metainfo_${n}[] =" >> $(<)
     $(SED) 's:\\:\\\\:g;s:":\\":g;s:\(.*\):"\1":' < $x >>$(<)
     echo ";" >> $(<)
@@ -598,7 +616,7 @@ actions piecemeal GenerateStaticPluginRegistration1
   echo '' >> $(<)
   for x in $(>)
   do
-    n=`basename $x $(SUFMETA)`
+    n="$(IDENTIFIER)"
     echo "class ${n}" >> $(<)
     echo "{" >> $(<)
     echo "SCF_REGISTER_STATIC_LIBRARY($n,metainfo_${n})" >>$(<)
