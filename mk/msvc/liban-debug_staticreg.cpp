@@ -15,36 +15,36 @@
 
 namespace csStaticPluginInit
 {
-static char const metainfo_medialoader[] =
+static char const metainfo_an_debug[] =
 "<?xml version=\"1.0\"?>"
-"<!-- medialoader.csplugin -->"
+"<!-- debug.csplugin -->"
 "<plugin>"
 "  <scf>"
 "    <classes>"
 "      <class>"
-"        <name>crystalspace.videodecode.loader</name>"
-"        <implementation>csVplLoader</implementation>"
-"        <description>Generic Media Loader</description>"
+"        <name>crystalspace.mesh.animesh.animnode.debug</name>"
+"        <implementation>DebugNodeManager</implementation>"
+"        <description>Crystal Space debug animation nodes of an animated mesh</description>"
 "      </class>"
 "    </classes>"
 "  </scf>"
 "</plugin>"
 ;
-  #ifndef csVplLoader_FACTORY_REGISTER_DEFINED 
-  #define csVplLoader_FACTORY_REGISTER_DEFINED 
-    SCF_DEFINE_FACTORY_FUNC_REGISTRATION(csVplLoader) 
+  #ifndef DebugNodeManager_FACTORY_REGISTER_DEFINED 
+  #define DebugNodeManager_FACTORY_REGISTER_DEFINED 
+    SCF_DEFINE_FACTORY_FUNC_REGISTRATION(DebugNodeManager) 
   #endif
 
-class medialoader
+class an_debug
 {
-SCF_REGISTER_STATIC_LIBRARY(medialoader,metainfo_medialoader)
-  #ifndef csVplLoader_FACTORY_REGISTERED 
-  #define csVplLoader_FACTORY_REGISTERED 
-    csVplLoader_StaticInit csVplLoader_static_init__; 
+SCF_REGISTER_STATIC_LIBRARY(an_debug,metainfo_an_debug)
+  #ifndef DebugNodeManager_FACTORY_REGISTERED 
+  #define DebugNodeManager_FACTORY_REGISTERED 
+    DebugNodeManager_StaticInit DebugNodeManager_static_init__; 
   #endif
 public:
- medialoader();
+ an_debug();
 };
-medialoader::medialoader() {}
+an_debug::an_debug() {}
 
 }

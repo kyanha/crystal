@@ -22,9 +22,9 @@ static char const metainfo_vplplayer[] =
 "  <scf>"
 "    <classes>"
 "      <class>"
-"        <name>crystalspace.videodecode.player</name>\","
-"        <implementation>csVplPlayer</implementation>\","
-"        <description>Generic Media Player</description>\","
+"        <name>crystalspace.videodecode.player</name>"
+"        <implementation>csVplPlayer</implementation>"
+"        <description>Generic Media Player</description>"
 "      </class>"
 "    </classes>"
 "  </scf>"
@@ -33,7 +33,7 @@ static char const metainfo_vplplayer[] =
   #ifndef csVplPlayer_FACTORY_REGISTER_DEFINED 
   #define csVplPlayer_FACTORY_REGISTER_DEFINED 
     SCF_DEFINE_FACTORY_FUNC_REGISTRATION(csVplPlayer) 
-  #endif",
+  #endif
 
 class vplplayer
 {
@@ -41,7 +41,7 @@ SCF_REGISTER_STATIC_LIBRARY(vplplayer,metainfo_vplplayer)
   #ifndef csVplPlayer_FACTORY_REGISTERED 
   #define csVplPlayer_FACTORY_REGISTERED 
     csVplPlayer_StaticInit csVplPlayer_static_init__; 
-  #endif",
+  #endif
 public:
  vplplayer();
 };

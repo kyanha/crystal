@@ -15,36 +15,36 @@
 
 namespace csStaticPluginInit
 {
-static char const metainfo_medialoader[] =
+static char const metainfo_an_speed[] =
 "<?xml version=\"1.0\"?>"
-"<!-- medialoader.csplugin -->"
+"<!-- speed.csplugin -->"
 "<plugin>"
 "  <scf>"
 "    <classes>"
 "      <class>"
-"        <name>crystalspace.videodecode.loader</name>"
-"        <implementation>csVplLoader</implementation>"
-"        <description>Generic Media Loader</description>"
+"        <name>crystalspace.mesh.animesh.animnode.speed</name>"
+"        <implementation>SpeedNodeManager</implementation>"
+"        <description>Crystal Space speed animation nodes of an animated mesh</description>"
 "      </class>"
 "    </classes>"
 "  </scf>"
 "</plugin>"
 ;
-  #ifndef csVplLoader_FACTORY_REGISTER_DEFINED 
-  #define csVplLoader_FACTORY_REGISTER_DEFINED 
-    SCF_DEFINE_FACTORY_FUNC_REGISTRATION(csVplLoader) 
+  #ifndef SpeedNodeManager_FACTORY_REGISTER_DEFINED 
+  #define SpeedNodeManager_FACTORY_REGISTER_DEFINED 
+    SCF_DEFINE_FACTORY_FUNC_REGISTRATION(SpeedNodeManager) 
   #endif
 
-class medialoader
+class an_speed
 {
-SCF_REGISTER_STATIC_LIBRARY(medialoader,metainfo_medialoader)
-  #ifndef csVplLoader_FACTORY_REGISTERED 
-  #define csVplLoader_FACTORY_REGISTERED 
-    csVplLoader_StaticInit csVplLoader_static_init__; 
+SCF_REGISTER_STATIC_LIBRARY(an_speed,metainfo_an_speed)
+  #ifndef SpeedNodeManager_FACTORY_REGISTERED 
+  #define SpeedNodeManager_FACTORY_REGISTERED 
+    SpeedNodeManager_StaticInit SpeedNodeManager_static_init__; 
   #endif
 public:
- medialoader();
+ an_speed();
 };
-medialoader::medialoader() {}
+an_speed::an_speed() {}
 
 }
