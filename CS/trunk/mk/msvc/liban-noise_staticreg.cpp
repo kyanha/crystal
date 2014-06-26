@@ -15,36 +15,36 @@
 
 namespace csStaticPluginInit
 {
-static char const metainfo_medialoader[] =
+static char const metainfo_an_noise[] =
 "<?xml version=\"1.0\"?>"
-"<!-- medialoader.csplugin -->"
+"<!-- noise.csplugin -->"
 "<plugin>"
 "  <scf>"
 "    <classes>"
 "      <class>"
-"        <name>crystalspace.videodecode.loader</name>"
-"        <implementation>csVplLoader</implementation>"
-"        <description>Generic Media Loader</description>"
+"        <name>crystalspace.mesh.animesh.animnode.noise</name>"
+"        <implementation>NoiseNodeManager</implementation>"
+"        <description>Crystal Space noise animation nodes of an animated mesh</description>"
 "      </class>"
 "    </classes>"
 "  </scf>"
 "</plugin>"
 ;
-  #ifndef csVplLoader_FACTORY_REGISTER_DEFINED 
-  #define csVplLoader_FACTORY_REGISTER_DEFINED 
-    SCF_DEFINE_FACTORY_FUNC_REGISTRATION(csVplLoader) 
+  #ifndef NoiseNodeManager_FACTORY_REGISTER_DEFINED 
+  #define NoiseNodeManager_FACTORY_REGISTER_DEFINED 
+    SCF_DEFINE_FACTORY_FUNC_REGISTRATION(NoiseNodeManager) 
   #endif
 
-class medialoader
+class an_noise
 {
-SCF_REGISTER_STATIC_LIBRARY(medialoader,metainfo_medialoader)
-  #ifndef csVplLoader_FACTORY_REGISTERED 
-  #define csVplLoader_FACTORY_REGISTERED 
-    csVplLoader_StaticInit csVplLoader_static_init__; 
+SCF_REGISTER_STATIC_LIBRARY(an_noise,metainfo_an_noise)
+  #ifndef NoiseNodeManager_FACTORY_REGISTERED 
+  #define NoiseNodeManager_FACTORY_REGISTERED 
+    NoiseNodeManager_StaticInit NoiseNodeManager_static_init__; 
   #endif
 public:
- medialoader();
+ an_noise();
 };
-medialoader::medialoader() {}
+an_noise::an_noise() {}
 
 }
