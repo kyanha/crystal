@@ -375,9 +375,6 @@ public:
 	    this->child2->AddObject(this->objects[buffer[i].idx]);
 	  }
 
-	  // free our buffer as we don't need it anymore
-	  cs_free(buffer);
-
 	  // truncate our object list as we distributed all childs
 	  this->numObjects = 0;
 
@@ -393,6 +390,9 @@ public:
 	  // bad split - let's wait a bit before we try again
 	  this->block = this->blockTime;
 	}
+
+        // free our buffer as we don't need it anymore
+	cs_free(buffer);
       }
     }
     else // yep, there's a split
