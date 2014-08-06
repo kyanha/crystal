@@ -533,10 +533,6 @@ public:
 	    object->ReplaceLeaf(this, this->child2);
 	  }
 
-	  // free our buffers as we don't need them anymore
-	  cs_free(buffers[0]);
-	  cs_free(buffers[1]);
-
 	  // truncate our object list as we distributed all childs
 	  this->numObjects = 0;
 
@@ -560,6 +556,10 @@ public:
 	  this->block = this->blockTime;
 	  splitAxis = CS_BIH_AXISINVALID;
 	}
+
+        // free our buffers as we don't need them anymore
+	cs_free(buffers[0]);
+	cs_free(buffers[1]);
       }
     }
     else // yep, there's a split
