@@ -55,14 +55,14 @@ namespace CS
     {
       BfdModuleHelper modHelper (addr);
       uint64 base = modHelper.GetBaseAddress ();
-      if (base == 0) return false;
+      if (base == 0) return 0;
       
       BfdSymbols* bfd = moduleBfds.Get (base, 0);
       if (bfd == 0)
       {
 	const char* moduleFN = modHelper.GetFileName ();
 	if (!moduleFN || !*moduleFN)
-	  return false;
+	  return 0;
 	
 	uintptr_t addrOffs = modHelper.GetAddrOffset ();
 	bfd = new BfdSymbols (moduleFN, addrOffs);
