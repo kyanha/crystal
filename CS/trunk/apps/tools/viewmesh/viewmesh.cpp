@@ -156,7 +156,7 @@ void ViewMesh::PrintHelp ()
 
   // Usage examples
   commandLineHelper.AddCommandLineExample ("viewmesh data/frankie/frankie.xml");
-  commandLineHelper.AddCommandLineExample ("viewmesh -R=data/kwartz.zip kwartz.lib");
+  commandLineHelper.AddCommandLineExample ("viewmesh -factory=kwartz_fact -R=data/kwartz.zip kwartz.lib");
   commandLineHelper.AddCommandLineExample ("viewmesh -R=data/seymour.zip Seymour.dae");
 
   // Command line options
@@ -461,7 +461,8 @@ void ViewMesh::LoadSprite (const char* filename, const char* path, const char* f
 
   if (!loading)
   {
-    printf ("Loading model %s from vfs dir %s\n",
+    printf ("Loading %s from %s in vfs dir %s\n",
+      CS::Quote::Single (factoryName),
       CS::Quote::Single (filename), CS::Quote::Single (vfs->GetCwd ()));
     fflush (stdout);
 
