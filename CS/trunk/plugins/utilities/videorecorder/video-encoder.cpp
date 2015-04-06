@@ -668,12 +668,12 @@ void VideoEncoder::SaveAudio()
 void VideoEncoder::DeliverSoundData (const csSoundSample *SampleBuffer, size_t NumSamples)
 {
   // read current queue status
-  int read, written;  
+  int /*read,*/ written;  
   {
     if (!recordAudio)
 	  return;
     MutexScopedLock lock (mutex);
-	read = audioQueueRead;
+	//read = audioQueueRead;
 	written = audioQueueWritten;
   }
 
@@ -710,12 +710,12 @@ void VideoEncoder::DeliverSoundData (const csSoundSample *SampleBuffer, size_t N
 void VideoEncoder::DeliverSoundData (const uint16 *SampleBuffer, size_t NumSamples)
 {
   // read current queue status
-  int read, written;  
+  int /*read,*/ written;  
   {
     if (!recordAudio)
 	  return;
     MutexScopedLock lock (mutex);
-	read = audioQueueRead;
+	//read = audioQueueRead;
 	written = audioQueueWritten;
   }
 
