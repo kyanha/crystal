@@ -103,7 +103,7 @@ CS_PLUGIN_NAMESPACE_BEGIN (PostEffect)
     if (!ds.Solve (postLayers, result))
     {
       csReport (manager->reg, CS_REPORTER_SEVERITY_ERROR, messageID,
-        ds.GetLastError ());
+        "%s", ds.GetLastError ());
       return false;
     }
 
