@@ -351,7 +351,7 @@ bool csGraphics2DWX::Open()
   {
     Display* dpy = (Display*) wxGetDisplay ();
     GLXContext active_GLContext = glXGetCurrentContext();
-    XVisualInfo *xvis = (XVisualInfo*)theCanvas->m_vi;
+    XVisualInfo *xvis = theCanvas->GetXVisualInfo();
 
     Report (CS_REPORTER_SEVERITY_NOTIFY, "Video driver GL/X version %s",
       glXIsDirect (dpy, active_GLContext) ? "(direct renderer)" :
